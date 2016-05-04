@@ -114,6 +114,10 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index.text">mil.nga.giat.geowave.core.store.index.text</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.encoding">mil.nga.giat.geowave.datastore.accumulo.encoding</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -207,17 +211,21 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">AbstractAdapterPersistenceEncoding</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">AdapterPersistenceEncoding</a></strong></code>
 <div class="block">This is an implementation of persistence encoding that also contains all of
  the extended data values used to form the native type supported by this
  adapter.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/FitToIndexPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">FitToIndexPersistenceEncoding</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></strong></code>
 <div class="block">This is an implements of persistence encoding that also contains all of the
@@ -263,17 +271,17 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">DataIdQueryFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DataIdQueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+<td class="colLast"><span class="strong">PrefixIdQueryFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/PrefixIdQueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">RowIdQueryFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/RowIdQueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+<td class="colLast"><span class="strong">DataIdQueryFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DataIdQueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">PrefixIdQueryFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/PrefixIdQueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+<td class="colLast"><span class="strong">RowIdQueryFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/RowIdQueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -283,13 +291,13 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">FilterList.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/FilterList.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;entry)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">DedupeFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">DedupeFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">FilterList.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/FilterList.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -362,6 +370,27 @@
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="strong">LikeFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/text/LikeFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.encoding">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.encoding</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.encoding</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/AccumuloCommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.datastore.accumulo.encoding">AccumuloCommonIndexedPersistenceEncoding</a></strong></code>
+<div class="block">Consults adapter to lookup field readers based on bitmasked fieldIds when
+ converting unknown data to adapter extended values</div>
+</td>
 </tr>
 </tbody>
 </table>

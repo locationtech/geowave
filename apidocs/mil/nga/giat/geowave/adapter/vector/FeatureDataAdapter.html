@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html" title="interface in mil.nga.giat.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">DataWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/HadoopDataAdapter.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureWritable.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureWritable</a>&gt;</dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html" title="interface in mil.nga.giat.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">DataWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/HadoopDataAdapter.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureWritable.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureWritable</a>&gt;</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -110,7 +110,7 @@
 <br>
 <pre>public class <span class="strong">FeatureDataAdapter</span>
 extends <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in mil.nga.giat.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;
-implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/HadoopDataAdapter.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureWritable.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureWritable</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</pre>
+implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/HadoopDataAdapter.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureWritable.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureWritable</a>&gt;, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</pre>
 <div class="block">This data adapter will handle all reading/writing concerns for storing and
  retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
  store in Accumulo.
@@ -263,6 +263,16 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getDefaultTypeMatchingHandlers(java.lang.Object)">getDefaultTypeMatchingHandlers</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;typeObj)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getFieldIdForPosition(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20int)">getFieldIdForPosition</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                     int&nbsp;position)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getPositionOfOrderedField(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getPositionOfOrderedField</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                         <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
@@ -644,7 +654,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsIds()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html#getSupportedStatisticsIds()">getSupportedStatisticsIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatisticsIds()">getSupportedStatisticsIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -657,7 +667,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;createDataStatistics(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -670,7 +680,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html#getVisibilityHandler(mil.nga.giat.geowave.core.index.ByteArrayId)">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getVisibilityHandler(mil.nga.giat.geowave.core.index.ByteArrayId)">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html#getVisibilityHandler(mil.nga.giat.geowave.core.index.ByteArrayId)">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 </dl>
@@ -683,6 +693,10 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <li class="blockList">
 <h4>hasTemporalConstraints</h4>
 <pre>public&nbsp;boolean&nbsp;hasTemporalConstraints()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html#hasTemporalConstraints()">hasTemporalConstraints</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="resetTimeDescriptors()">
@@ -734,13 +748,41 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <a name="getSupportedSecondaryIndices()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getSupportedSecondaryIndices</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;getSupportedSecondaryIndices()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html#getSupportedSecondaryIndices()">getSupportedSecondaryIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getPositionOfOrderedField(mil.nga.giat.geowave.core.store.index.CommonIndexModel, mil.nga.giat.geowave.core.index.ByteArrayId)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPositionOfOrderedField</h4>
+<pre>public&nbsp;int&nbsp;getPositionOfOrderedField(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                            <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getPositionOfOrderedField(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getPositionOfOrderedField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldIdForPosition(mil.nga.giat.geowave.core.store.index.CommonIndexModel, int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getFieldIdForPosition</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getFieldIdForPosition(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                int&nbsp;position)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getFieldIdForPosition(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20int)">getFieldIdForPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 </dl>
 </li>
 </ul>

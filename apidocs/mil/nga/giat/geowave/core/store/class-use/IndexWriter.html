@@ -75,19 +75,27 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.kafka">mil.nga.giat.geowave.core.ingest.kafka</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.local">mil.nga.giat.geowave.core.ingest.local</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store">mil.nga.giat.geowave.core.store</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase">mil.nga.giat.geowave.datastore.hbase</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -95,6 +103,25 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.kafka">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/package-summary.html">mil.nga.giat.geowave.core.ingest.kafka</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/package-summary.html">mil.nga.giat.geowave.core.ingest.kafka</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
+<td class="colLast"><span class="strong">KafkaIngestRunData.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaIngestRunData.html#getIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">getIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;requiredIndices)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.local">
 <!--   -->
 </a>
@@ -107,8 +134,61 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="strong">LocalIngestRunData.IndexWriterFactory.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#create(mil.nga.giat.geowave.core.store.AdapterToIndexMapping)">create</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="strong">IngestRunData.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html#getIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">getIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">LocalIngestRunData.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html#getIndexWriter(mil.nga.giat.geowave.core.store.AdapterToIndexMapping)">getIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>
+<div class="block">Return an index writer from the pool.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></td>
+<td class="colLast"><span class="strong">LocalIngestRunData.IndexWriterFactory.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#wrap(mil.nga.giat.geowave.core.store.IndexWriter)">wrap</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;writer)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">LocalIngestRunData.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html#releaseIndexWriter(mil.nga.giat.geowave.core.store.AdapterToIndexMapping,%20mil.nga.giat.geowave.core.store.IndexWriter)">releaseIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;writer)</code>
+<div class="block">Return the index writer to the pool</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></td>
+<td class="colLast"><span class="strong">LocalIngestRunData.IndexWriterFactory.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#wrap(mil.nga.giat.geowave.core.store.IndexWriter)">wrap</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;writer)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">LocalIngestRunData.IndexWriterFactory.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#destroyObject(mil.nga.giat.geowave.core.store.AdapterToIndexMapping,%20org.apache.commons.pool2.PooledObject)">destroyObject</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;key,
+             org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;&nbsp;p)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -117,6 +197,23 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">mil.nga.giat.geowave.core.store</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">mil.nga.giat.geowave.core.store</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store">IndependentAdapterIndexWriter</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexCompositeWriter.html" title="class in mil.nga.giat.geowave.core.store">IndexCompositeWriter</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">mil.nga.giat.geowave.core.store</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -126,10 +223,26 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="strong">DataStore.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">createIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>
+<td class="colLast"><span class="strong">DataStore.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">createWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;index)</code>
 <div class="block">Returns an index writer to perform batched write operations</div>
 </td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">mil.nga.giat.geowave.core.store</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndependentAdapterIndexWriter.html#IndependentAdapterIndexWriter(mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.IndexWriter)">IndependentAdapterIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;adapter,
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;writer)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexCompositeWriter.html#IndexCompositeWriter(mil.nga.giat.geowave.core.store.IndexWriter[])">IndexCompositeWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;[]&nbsp;writers)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -147,8 +260,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="strong">MemoryDataStore.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">createIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">MemoryDataStore.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">createWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -166,7 +279,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloIndexWriter</a></strong></code>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloIndexWriter</a>&lt;T&gt;</strong></code>
 <div class="block">This class can write many entries for a single index by retaining a single
  open writer.</div>
 </td>
@@ -181,9 +294,41 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="strong">AccumuloDataStore.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">createIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="strong">AccumuloDataStore.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">createWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a> in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseIndexWriter</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseDataStore.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">createWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

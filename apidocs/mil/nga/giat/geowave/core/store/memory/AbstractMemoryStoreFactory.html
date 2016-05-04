@@ -63,13 +63,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_summary">Method</a></li>
+<li><a href="#methods_inherited_from_class_mil.nga.giat.geowave.core.store.memory.AbstractMemoryFactory">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip-navbar_top">
@@ -104,7 +104,7 @@
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryAdapterStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryAdapterStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStatisticsStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryDataStatisticsStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryDataStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryIndexStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemorySecondaryIndexStoreFactory</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryAdapterIndexMappingStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryAdapterIndexMappingStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryAdapterStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryAdapterStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStatisticsStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryDataStatisticsStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryDataStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryIndexStoreFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">MemorySecondaryIndexStoreFactory</a></dd>
 </dl>
 <hr>
 <br>
@@ -140,23 +140,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/Generic
 <!--   -->
 </a>
 <h3>Method Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryStoreFactory.html#getOptions()">getOptions</a></strong>()</code>&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.memory.AbstractMemoryFactory">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.memory.<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">AbstractMemoryFactory</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getDescription()">getDescription</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getName()">getName</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#createOptionsInstance()">createOptionsInstance</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getDescription()">getDescription</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getName()">getName</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -170,7 +159,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/Generic
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore(java.util.Map,%20java.lang.String)">createStore</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createOptionsInstance()">createOptionsInstance</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">createStore</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.GenericFactory">
@@ -200,27 +189,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/Generic
 <li class="blockList">
 <h4>AbstractMemoryStoreFactory</h4>
 <pre>public&nbsp;AbstractMemoryStoreFactory()</pre>
-</li>
-</ul>
-</li>
-</ul>
-<!-- ============ METHOD DETAIL ========== -->
-<ul class="blockList">
-<li class="blockList"><a name="method_detail">
-<!--   -->
-</a>
-<h3>Method Detail</h3>
-<a name="getOptions()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]&nbsp;getOptions()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#getOptions()">getOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryStoreFactory.html" title="type parameter in AbstractMemoryStoreFactory">T</a>&gt;</code></dd>
-</dl>
 </li>
 </ul>
 </li>
@@ -277,13 +245,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/Generic
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_summary">Method</a></li>
+<li><a href="#methods_inherited_from_class_mil.nga.giat.geowave.core.store.memory.AbstractMemoryFactory">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip-navbar_bottom">

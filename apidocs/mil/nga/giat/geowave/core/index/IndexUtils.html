@@ -133,17 +133,27 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexUtils.html#getBitsFromTheRightPerDimension(mil.nga.giat.geowave.core.index.dimension.bin.BinRange[][],%20double[])">getBitsFromTheRightPerDimension</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/dimension/bin/BinRange.html" title="class in mil.nga.giat.geowave.core.index.dimension.bin">BinRange</a>[][]&nbsp;binsPerDimension,
+                               double[]&nbsp;cellRangePerDimension)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexUtils.html#getDimensionalBitsUsed(mil.nga.giat.geowave.core.index.NumericIndexStrategy,%20double[])">getDimensionalBitsUsed</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
                       double[]&nbsp;dataRangePerDimension)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexUtils.html#getFullBounds(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition[])">getFullBounds</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexUtils.html#getFullBounds(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">getFullBounds</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static double[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexUtils.html#inflateRange(double[],%20double[])">inflateRange</a></strong>(double[]&nbsp;cellRangePerDimension,
+            double[]&nbsp;dataRangePerDimension)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -205,11 +215,31 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="getDimensionalBitsUsed(mil.nga.giat.geowave.core.index.NumericIndexStrategy, double[])">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getDimensionalBitsUsed</h4>
 <pre>public static final&nbsp;double&nbsp;getDimensionalBitsUsed(<a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
                             double[]&nbsp;dataRangePerDimension)</pre>
+</li>
+</ul>
+<a name="inflateRange(double[], double[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>inflateRange</h4>
+<pre>public static&nbsp;double[]&nbsp;inflateRange(double[]&nbsp;cellRangePerDimension,
+                    double[]&nbsp;dataRangePerDimension)</pre>
+</li>
+</ul>
+<a name="getBitsFromTheRightPerDimension(mil.nga.giat.geowave.core.index.dimension.bin.BinRange[][], double[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getBitsFromTheRightPerDimension</h4>
+<pre>public static&nbsp;double[][]&nbsp;getBitsFromTheRightPerDimension(<a href="../../../../../../mil/nga/giat/geowave/core/index/dimension/bin/BinRange.html" title="class in mil.nga.giat.geowave.core.index.dimension.bin">BinRange</a>[][]&nbsp;binsPerDimension,
+                                         double[]&nbsp;cellRangePerDimension)</pre>
 </li>
 </ul>
 </li>

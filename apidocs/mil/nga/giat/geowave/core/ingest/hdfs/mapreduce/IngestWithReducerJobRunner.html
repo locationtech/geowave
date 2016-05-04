@@ -89,7 +89,7 @@
 <li>org.apache.hadoop.conf.Configured</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&gt;</li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;?,?,?,?&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducerJobRunner</li>
@@ -110,7 +110,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">IngestWithReducerJobRunner</span>
-extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&gt;</pre>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;?,?,?,?&gt;&gt;</pre>
 <div class="block">This class will run the ingestion process by using a mapper to aggregate key
  value pairs and a reducer to ingest data into GeoWave.</div>
 </li>
@@ -130,7 +130,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/m
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#dataStoreOptions">dataStoreOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#GLOBAL_VISIBILITY_KEY">GLOBAL_VISIBILITY_KEY</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#INGEST_PLUGIN_KEY">INGEST_PLUGIN_KEY</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#ingestOptions">ingestOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#ingestPlugin">ingestPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#inputFile">inputFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#parentPlugin">parentPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#PRIMARY_INDEX_IDS_KEY">PRIMARY_INDEX_IDS_KEY</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#typeName">typeName</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#dataStoreOptions">dataStoreOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#GLOBAL_VISIBILITY_KEY">GLOBAL_VISIBILITY_KEY</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#indexOptions">indexOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#INGEST_PLUGIN_KEY">INGEST_PLUGIN_KEY</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#ingestOptions">ingestOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#ingestPlugin">ingestPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#inputFile">inputFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#parentPlugin">parentPlugin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#PRIMARY_INDEX_IDS_KEY">PRIMARY_INDEX_IDS_KEY</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#typeName">typeName</a></code></li>
 </ul>
 </li>
 </ul>
@@ -146,8 +146,9 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/m
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducerJobRunner.html#IngestWithReducerJobRunner(mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions,%20mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions,%20org.apache.hadoop.fs.Path,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin,%20mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer)">IngestWithReducerJobRunner</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a>&nbsp;dataStoreOptions,
-                          <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest">IngestCommandLineOptions</a>&nbsp;ingestOptions,
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducerJobRunner.html#IngestWithReducerJobRunner(mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions,%20java.util.List,%20mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions,%20org.apache.hadoop.fs.Path,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin,%20mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer)">IngestWithReducerJobRunner</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
                           org.apache.hadoop.fs.Path&nbsp;inputFile,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                           <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&nbsp;parentPlugin,
@@ -223,14 +224,15 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/m
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="IngestWithReducerJobRunner(mil.nga.giat.geowave.core.cli.DataStoreCommandLineOptions, mil.nga.giat.geowave.core.ingest.IngestCommandLineOptions, org.apache.hadoop.fs.Path, java.lang.String, mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin, mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer)">
+<a name="IngestWithReducerJobRunner(mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions, java.util.List, mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions, org.apache.hadoop.fs.Path, java.lang.String, mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin, mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IngestWithReducerJobRunner</h4>
-<pre>public&nbsp;IngestWithReducerJobRunner(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a>&nbsp;dataStoreOptions,
-                          <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest">IngestCommandLineOptions</a>&nbsp;ingestOptions,
+<pre>public&nbsp;IngestWithReducerJobRunner(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
                           org.apache.hadoop.fs.Path&nbsp;inputFile,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                           <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&nbsp;parentPlugin,
@@ -254,7 +256,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/m
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIngestDescription()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#getIngestDescription()">getIngestDescription</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#getIngestDescription()">getIngestDescription</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;?,?,?,?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -267,7 +269,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/m
 <pre>protected&nbsp;void&nbsp;setupMapper(org.apache.hadoop.mapreduce.Job&nbsp;job)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#setupMapper(org.apache.hadoop.mapreduce.Job)">setupMapper</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#setupMapper(org.apache.hadoop.mapreduce.Job)">setupMapper</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;?,?,?,?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -280,7 +282,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/m
 <pre>protected&nbsp;void&nbsp;setupReducer(org.apache.hadoop.mapreduce.Job&nbsp;job)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#setupReducer(org.apache.hadoop.mapreduce.Job)">setupReducer</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#setupReducer(org.apache.hadoop.mapreduce.Job)">setupReducer</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;?,?,?,?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>

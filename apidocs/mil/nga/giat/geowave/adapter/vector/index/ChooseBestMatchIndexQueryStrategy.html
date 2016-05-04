@@ -158,9 +158,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ind
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.CloseableIterator)">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex[])">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
           <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;query,
-          <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;indices)</code>&nbsp;</td>
+          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
@@ -255,7 +255,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ind
 <dt><span class="strong">Returns:</span></dt><dd>true if any one dimension is unbounded</dd></dl>
 </li>
 </ul>
-<a name="getIndices(java.util.Map, mil.nga.giat.geowave.core.store.query.BasicQuery, mil.nga.giat.geowave.core.store.CloseableIterator)">
+<a name="getIndices(java.util.Map, mil.nga.giat.geowave.core.store.query.BasicQuery, mil.nga.giat.geowave.core.store.index.PrimaryIndex[])">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -263,10 +263,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ind
 <h4>getIndices</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
                                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;query,
-                                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;indices)</pre>
+                                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.CloseableIterator)">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.index">IndexQueryStrategySPI</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex[])">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.index">IndexQueryStrategySPI</a></code></dd>
 </dl>
 </li>
 </ul>

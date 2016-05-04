@@ -104,7 +104,7 @@
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloAdapterStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloAdapterStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloDataStatisticsStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloIndexStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.index.secondary">AccumuloSecondaryIndexDataStoreFactory</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloAdapterIndexMappingStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloAdapterIndexMappingStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloAdapterStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloAdapterStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloDataStatisticsStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloIndexStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AccumuloIndexStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo.index.secondary">AccumuloSecondaryIndexDataStoreFactory</a></dd>
 </dl>
 <hr>
 <br>
@@ -148,12 +148,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericSto
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html#createOperations(java.util.Map,%20java.lang.String)">createOperations</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html#getOptions()">getOptions</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html#createOperations(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">createOperations</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -161,7 +156,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericSto
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloFactory</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getDescription()">getDescription</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getName()">getName</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#createOptionsInstance()">createOptionsInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getDescription()">getDescription</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getName()">getName</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -175,7 +170,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericSto
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore(java.util.Map,%20java.lang.String)">createStore</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createOptionsInstance()">createOptionsInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">createStore</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.GenericFactory">
@@ -215,27 +210,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericSto
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getOptions()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]&nbsp;getOptions()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#getOptions()">getOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html" title="type parameter in AbstractAccumuloStoreFactory">T</a>&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="createOperations(java.util.Map, java.lang.String)">
+<a name="createOperations(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createOperations</h4>
-<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;createOperations(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;createOperations(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)</pre>
 </li>
 </ul>
 </li>

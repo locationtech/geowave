@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/cli/debug/CQLQuery.html" title="class in mil.nga.giat.geowave.cli.debug"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/cli/debug/FullTableScan.html" title="class in mil.nga.giat.geowave.cli.debug"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/cli/debug/DebugSection.html" title="class in mil.nga.giat.geowave.cli.debug"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/cli/debug/DebugOperationsProvider.html" target="_top">Frames</a></li>
@@ -95,13 +95,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationProviderSpi</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/core/cli/spi/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli.spi">CLIOperationProviderSpi</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">DebugOperationsProvider</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationProviderSpi</a></pre>
+implements <a href="../../../../../../mil/nga/giat/geowave/core/cli/spi/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli.spi">CLIOperationProviderSpi</a></pre>
 </li>
 </ul>
 </div>
@@ -138,11 +138,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperation
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationCategory.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationCategory</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/debug/DebugOperationsProvider.html#getCategory()">getCategory</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperation.html" title="class in mil.nga.giat.geowave.core.cli">CLIOperation</a>[]</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/debug/DebugOperationsProvider.html#getOperations()">getOperations</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
@@ -187,26 +183,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperation
 <a name="getOperations()">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getOperations</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperation.html" title="class in mil.nga.giat.geowave.core.cli">CLIOperation</a>[]&nbsp;getOperations()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationProviderSpi.html#getOperations()">getOperations</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationProviderSpi</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="getCategory()">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getCategory</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationCategory.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationCategory</a>&nbsp;getCategory()</pre>
+<h4>getOperations</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]&nbsp;getOperations()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationProviderSpi.html#getCategory()">getCategory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationProviderSpi</a></code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/cli/spi/CLIOperationProviderSpi.html#getOperations()">getOperations</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/cli/spi/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli.spi">CLIOperationProviderSpi</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -237,7 +220,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/cli/CLIOperation
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/cli/debug/CQLQuery.html" title="class in mil.nga.giat.geowave.cli.debug"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/cli/debug/FullTableScan.html" title="class in mil.nga.giat.geowave.cli.debug"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/cli/debug/DebugSection.html" title="class in mil.nga.giat.geowave.cli.debug"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/cli/debug/DebugOperationsProvider.html" target="_top">Frames</a></li>

@@ -79,7 +79,7 @@
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.mapreduce.output</div>
-<h2 title="Class GeoWaveOutputKey" class="title">Class GeoWaveOutputKey</h2>
+<h2 title="Class GeoWaveOutputKey" class="title">Class GeoWaveOutputKey&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
@@ -89,7 +89,7 @@
 <li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.mapreduce">mil.nga.giat.geowave.mapreduce.GeoWaveKey</a></li>
 <li>
 <ul class="inheritance">
-<li>mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey</li>
+<li>mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
@@ -104,7 +104,7 @@
 </dl>
 <hr>
 <br>
-<pre>public class <span class="strong">GeoWaveOutputKey</span>
+<pre>public class <span class="strong">GeoWaveOutputKey&lt;T&gt;</span>
 extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveKey</a></pre>
 <div class="block">This class encapsulates the unique identifier for GeoWave to ingest data
  using a map-reduce GeoWave output format. The record writer must have bother
@@ -157,6 +157,11 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.util.Collection)">GeoWaveOutputKey</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20java.util.Collection)">GeoWaveOutputKey</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;adapter,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -181,18 +186,22 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#getAdapter(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">getAdapter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterCache)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#getIndexIds()">getIndexIds</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#hashCode()">hashCode</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#readFields(java.io.DataInput)">readFields</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html#write(java.io.DataOutput)">write</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataOutput.html?is-external=true" title="class or interface in java.io">DataOutput</a>&nbsp;output)</code>&nbsp;</td>
 </tr>
@@ -247,10 +256,20 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <a name="GeoWaveOutputKey(mil.nga.giat.geowave.core.index.ByteArrayId, java.util.Collection)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>GeoWaveOutputKey</h4>
 <pre>public&nbsp;GeoWaveOutputKey(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</pre>
+</li>
+</ul>
+<a name="GeoWaveOutputKey(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>GeoWaveOutputKey</h4>
+<pre>public&nbsp;GeoWaveOutputKey(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;adapter,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</pre>
 </li>
 </ul>
@@ -269,6 +288,15 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <li class="blockList">
 <h4>getIndexIds</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getIndexIds()</pre>
+</li>
+</ul>
+<a name="getAdapter(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAdapter</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;getAdapter(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterCache)</pre>
 </li>
 </ul>
 <a name="compareTo(mil.nga.giat.geowave.mapreduce.GeoWaveKey)">

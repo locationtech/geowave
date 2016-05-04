@@ -138,12 +138,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#getConstraintsFor(java.lang.String)">getConstraintsFor</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#getConstraintsForRange(java.lang.String,%20java.lang.String)">getConstraintsForRange</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startName,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#getSet()">getSet</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#hasConstraintsFor(java.lang.String)">hasConstraintsFor</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;propertyName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#hasConstraintsForRange(java.lang.String,%20java.lang.String)">hasConstraintsForRange</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startName,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -152,6 +162,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#removeAllConstraintsExcept(java.lang.String...)">removeAllConstraintsExcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;names)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#removeConstraints(java.lang.String...)">removeConstraints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;names)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -192,6 +206,26 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="hasConstraintsForRange(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasConstraintsForRange</h4>
+<pre>public&nbsp;boolean&nbsp;hasConstraintsForRange(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startName,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endName)</pre>
+</li>
+</ul>
+<a name="getConstraintsForRange(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getConstraintsForRange</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;getConstraintsForRange(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startName,
+                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endName)</pre>
+</li>
+</ul>
 <a name="getConstraintsFor(java.lang.String)">
 <!--   -->
 </a>
@@ -199,6 +233,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getConstraintsFor</h4>
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;getConstraintsFor(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+</li>
+</ul>
+<a name="removeConstraints(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeConstraints</h4>
+<pre>public&nbsp;void&nbsp;removeConstraints(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;names)</pre>
 </li>
 </ul>
 <a name="removeAllConstraintsExcept(java.lang.String...)">

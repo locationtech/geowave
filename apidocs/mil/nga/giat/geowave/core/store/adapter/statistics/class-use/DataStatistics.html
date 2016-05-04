@@ -111,23 +111,31 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store">mil.nga.giat.geowave.core.store</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.adapter.statistics">mil.nga.giat.geowave.core.store.adapter.statistics</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query.aggregate">mil.nga.giat.geowave.core.store.query.aggregate</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.metadata">mil.nga.giat.geowave.datastore.accumulo.metadata</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.metadata">mil.nga.giat.geowave.datastore.hbase.metadata</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -196,7 +204,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">KryoFeatureDataAdapter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/KryoFeatureDataAdapter.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">WholeFeatureDataAdapter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;</div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
@@ -218,21 +228,21 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">ChooseHeuristicMatchIndexQueryStrategy.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.CloseableIterator)">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
+<td class="colLast"><span class="strong">ChooseHeuristicMatchIndexQueryStrategy.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex[])">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
           <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;query,
-          <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;indices)</code>&nbsp;</td>
+          <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">ChooseBestMatchIndexQueryStrategy.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.CloseableIterator)">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
+<td class="colLast"><span class="strong">ChooseBestMatchIndexQueryStrategy.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex[])">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
           <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;query,
-          <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;indices)</code>&nbsp;</td>
+          <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
-<td class="colLast"><span class="strong">IndexQueryStrategySPI.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.CloseableIterator)">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
+<td class="colLast"><span class="strong">IndexQueryStrategySPI.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html#getIndices(java.util.Map,%20mil.nga.giat.geowave.core.store.query.BasicQuery,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex[])">getIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
           <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;query,
-          <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;indices)</code>&nbsp;</td>
+          <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -536,6 +546,24 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">mil.nga.giat.geowave.core.store</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">mil.nga.giat.geowave.core.store</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></td>
+<td class="colLast"><span class="strong">DataStoreStatisticsProvider.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.store.adapter.statistics">
 <!--   -->
 </a>
@@ -586,22 +614,18 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStoreStatsAdapterWrapper.html" title="type parameter in DataStoreStatsAdapterWrapper">T</a>&gt;</code></td>
-<td class="colLast"><span class="strong">DataStoreStatsAdapterWrapper.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStoreStatsAdapterWrapper.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="type parameter in StatisticsProvider">T</a>&gt;</code></td>
+<td class="colLast"><span class="strong">StatisticsProvider.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html" title="type parameter in StatisticalDataAdapter">T</a>&gt;</code></td>
-<td class="colLast"><span class="strong">StatisticalDataAdapter.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticalDataAdapter.html#createDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId)">createDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="type parameter in RowRangeHistogramStatistics">T</a>&gt;</code></td>
 <td class="colLast"><span class="strong">RowRangeHistogramStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="type parameter in AbstractDataStatistics">T</a>&gt;</code></td>
 <td class="colLast"><span class="strong">AbstractDataStatistics.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate()">duplicate</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;</code></td>
 <td class="colLast"><span class="strong">DataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                  <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
@@ -778,6 +802,36 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/package-summary.html">mil.nga.giat.geowave.core.store.query.aggregate</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/package-summary.html">mil.nga.giat.geowave.core.store.query.aggregate</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="type parameter in DataStatisticsAggregation">T</a>&gt;</code></td>
+<td class="colLast"><span class="strong">DataStatisticsAggregation.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html#getParameters()">getParameters</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="type parameter in DataStatisticsAggregation">T</a>&gt;</code></td>
+<td class="colLast"><span class="strong">DataStatisticsAggregation.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html#getResult()">getResult</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/package-summary.html">mil.nga.giat.geowave.core.store.query.aggregate</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">DataStatisticsAggregation.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html#setParameters(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">setParameters</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="type parameter in DataStatisticsAggregation">T</a>&gt;&nbsp;parameters)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructors in <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/package-summary.html">mil.nga.giat.geowave.core.store.query.aggregate</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -861,6 +915,87 @@
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">AccumuloDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloDataStatisticsStore.html#setStatistics(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">setStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.metadata">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/package-summary.html">mil.nga.giat.geowave.datastore.hbase.metadata</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/package-summary.html">mil.nga.giat.geowave.datastore.hbase.metadata</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#entryToValue(org.apache.hadoop.hbase.Cell)">entryToValue</a></strong>(org.apache.hadoop.hbase.Cell&nbsp;entry)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#getDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+                 <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/package-summary.html">mil.nga.giat.geowave.datastore.hbase.metadata</a> that return types with arguments of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#getAllDataStatistics(java.lang.String...)">getAllDataStatistics</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#getDataStatistics(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getDataStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#getNativeIteratorWrapper(java.util.Iterator)">getNativeIteratorWrapper</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;resultIterator)</code>
+<div class="block">This function converts results and merges data statistic elements
+ together that have the same id.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/package-summary.html">mil.nga.giat.geowave.datastore.hbase.metadata</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#getPrimaryId(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">getPrimaryId</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;persistedObject)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#getRowId(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">getRowId</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;object)</code>
+<div class="block">This function will append a UUID to the record that's inserted into the
+ database.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#getSecondaryId(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">getSecondaryId</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;persistedObject)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#incorporateStatistics(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">incorporateStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">HBaseDataStatisticsStore.</span><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/HBaseDataStatisticsStore.html#setStatistics(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">setStatistics</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

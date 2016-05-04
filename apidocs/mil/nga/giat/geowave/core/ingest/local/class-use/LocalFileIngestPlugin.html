@@ -79,15 +79,23 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest">mil.nga.giat.geowave.core.ingest</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.local">mil.nga.giat.geowave.core.ingest.local</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.operations.options">mil.nga.giat.geowave.core.ingest.operations.options</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.spi">mil.nga.giat.geowave.core.ingest.spi</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.format.avro">mil.nga.giat.geowave.format.avro</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -149,29 +157,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#getLocalFileIngestPlugin()">getLocalFileIngestPlugin</a></strong>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
-<td class="colLast"><span class="strong">IngestFormatPluginProviderSpi.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getLocalFileIngestPlugin()">getLocalFileIngestPlugin</a></strong>()</code>
-<div class="block">This plugin will be used by the ingestion framework to read data from a
- local file system, and translate supported files into the data entries
- that will be written directly in GeoWave.</div>
-</td>
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createLocalFileIngestPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createLocalFileIngestPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -202,6 +188,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> with type parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">LocalFileIngestDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#ingestPlugins">ingestPlugins</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -211,10 +210,87 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="strong">LocalFileIngestDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#processFile(java.io.File,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin,%20mil.nga.giat.geowave.core.ingest.local.IngestRunData)">processFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
+<td class="colLast"><span class="strong">LocalFileIngestDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#processFile(java.io.File,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin,%20mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData)">processFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
            <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
-           <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestRunData</a>&nbsp;ingestRunData)</code>&nbsp;</td>
+           <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">mil.nga.giat.geowave.core.ingest.local</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#LocalFileIngestDriver(mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions,%20java.util.List,%20java.util.Map,%20mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions,%20mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions,%20int)">LocalFileIngestDriver</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;ingestPlugins,
+                     <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
+                     <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;inputOptions,
+                     int&nbsp;threads)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.operations.options">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/package-summary.html">mil.nga.giat.geowave.core.ingest.operations.options</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/package-summary.html">mil.nga.giat.geowave.core.ingest.operations.options</a> that return types with arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">IngestFormatPluginOptions.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html#createLocalIngestPlugins()">createLocalIngestPlugins</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.spi">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/package-summary.html">mil.nga.giat.geowave.core.ingest.spi</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/package-summary.html">mil.nga.giat.geowave.core.ingest.spi</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
+<td class="colLast"><span class="strong">IngestFormatPluginProviderSpi.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createLocalFileIngestPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createLocalFileIngestPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>
+<div class="block">This plugin will be used by the ingestion framework to read data from a
+ local file system, and translate supported files into the data entries
+ that will be written directly in GeoWave.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.format.avro">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/format/avro/package-summary.html">mil.nga.giat.geowave.format.avro</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/format/avro/package-summary.html">mil.nga.giat.geowave.format.avro</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/avro/AvroIngestPlugin.html" title="class in mil.nga.giat.geowave.format.avro">AvroIngestPlugin</a></strong></code>
+<div class="block">This plugin is used for ingesting any GPX formatted data from a local file
+ system into GeoWave as GeoTools' SimpleFeatures.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -284,7 +360,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></td>
-<td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html#getLocalFileIngestPlugin()">getLocalFileIngestPlugin</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html#createLocalFileIngestPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createLocalFileIngestPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -318,7 +394,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getLocalFileIngestPlugin()">getLocalFileIngestPlugin</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#createLocalFileIngestPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createLocalFileIngestPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -370,7 +446,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="strong">Stanag4676IngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestFormat.html#getLocalFileIngestPlugin()">getLocalFileIngestPlugin</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><span class="strong">Stanag4676IngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestFormat.html#createLocalFileIngestPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createLocalFileIngestPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

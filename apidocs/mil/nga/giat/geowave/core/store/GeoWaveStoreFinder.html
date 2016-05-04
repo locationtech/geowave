@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html" target="_top">Frames</a></li>
@@ -116,7 +116,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/config/StringConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">StringConfigOption</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#STORE_HINT_OPTION">STORE_HINT_OPTION</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -152,77 +152,40 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createAdapterIndexMappingStore(java.util.Map)">createAdapterIndexMappingStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createAdapterStore(java.util.Map,%20java.lang.String)">createAdapterStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createAdapterStore(java.util.Map)">createAdapterStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createDataStatisticsStore(java.util.Map,%20java.lang.String)">createDataStatisticsStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createDataStatisticsStore(java.util.Map)">createDataStatisticsStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createDataStore(java.util.Map,%20java.lang.String)">createDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createDataStore(java.util.Map)">createDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createIndexStore(java.util.Map,%20java.lang.String)">createIndexStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createIndexStore(java.util.Map)">createIndexStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createSecondaryIndexDataStore(java.util.Map,%20java.lang.String)">createSecondaryIndexDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStoreFactorySpi</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#findAdapterStoreFactory(java.util.Map)">findAdapterStoreFactory</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createSecondaryIndexDataStore(java.util.Map)">createSecondaryIndexDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStoreFactorySpi</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#findDataStatisticsStoreFactory(java.util.Map)">findDataStatisticsStoreFactory</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#findStoreFamily(java.util.Map)">findStoreFamily</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreFactorySpi</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#findDataStoreFactory(java.util.Map)">findDataStoreFactory</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStoreFactorySpi</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#findIndexStoreFactory(java.util.Map)">findIndexStoreFactory</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStoreFactorySpi</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#findSecondaryIndexDataStoreFactory(java.util.Map)">findSecondaryIndexDataStoreFactory</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]</code></td>
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#getAllOptions()">getAllOptions</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]</code></td>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#getAllOptions(mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi)">getAllOptions</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a>&nbsp;storeFactoryFamily)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStoreFactorySpi</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#getRegisteredAdapterStoreFactories()">getRegisteredAdapterStoreFactories</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStoreFactorySpi</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#getRegisteredDataStatisticsStoreFactories()">getRegisteredDataStatisticsStoreFactories</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreFactorySpi</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#getRegisteredDataStoreFactories()">getRegisteredDataStoreFactories</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStoreFactorySpi</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#getRegisteredIndexStoreFactories()">getRegisteredIndexStoreFactories</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStoreFactorySpi</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#getRegisteredSecondaryIndexDataStoreFactories()">getRegisteredSecondaryIndexDataStoreFactories</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a>&gt;</code></td>
@@ -256,7 +219,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>STORE_HINT_OPTION</h4>
-<pre>public static final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/StringConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">StringConfigOption</a> STORE_HINT_OPTION</pre>
+<pre>public static final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a> STORE_HINT_OPTION</pre>
 </li>
 </ul>
 </li>
@@ -284,108 +247,67 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createDataStatisticsStore(java.util.Map, java.lang.String)">
+<a name="createDataStatisticsStore(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createDataStatisticsStore</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;createDataStatisticsStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;createDataStatisticsStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</pre>
 </li>
 </ul>
-<a name="createDataStore(java.util.Map, java.lang.String)">
+<a name="createDataStore(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createDataStore</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;createDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;createDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</pre>
 </li>
 </ul>
-<a name="createAdapterStore(java.util.Map, java.lang.String)">
+<a name="createAdapterStore(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createAdapterStore</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;createAdapterStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;createAdapterStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</pre>
 </li>
 </ul>
-<a name="createIndexStore(java.util.Map, java.lang.String)">
+<a name="createAdapterIndexMappingStore(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createAdapterIndexMappingStore</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;createAdapterIndexMappingStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</pre>
+</li>
+</ul>
+<a name="createIndexStore(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createIndexStore</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;createIndexStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;createIndexStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</pre>
 </li>
 </ul>
-<a name="createSecondaryIndexDataStore(java.util.Map, java.lang.String)">
+<a name="createSecondaryIndexDataStore(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createSecondaryIndexDataStore</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;createSecondaryIndexDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;createSecondaryIndexDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</pre>
 </li>
 </ul>
-<a name="findDataStoreFactory(java.util.Map)">
+<a name="findStoreFamily(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>findDataStoreFactory</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreFactorySpi</a>&nbsp;findDataStoreFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</pre>
-</li>
-</ul>
-<a name="findIndexStoreFactory(java.util.Map)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>findIndexStoreFactory</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStoreFactorySpi</a>&nbsp;findIndexStoreFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</pre>
-</li>
-</ul>
-<a name="findSecondaryIndexDataStoreFactory(java.util.Map)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>findSecondaryIndexDataStoreFactory</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStoreFactorySpi</a>&nbsp;findSecondaryIndexDataStoreFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</pre>
-</li>
-</ul>
-<a name="findAdapterStoreFactory(java.util.Map)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>findAdapterStoreFactory</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStoreFactorySpi</a>&nbsp;findAdapterStoreFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</pre>
-</li>
-</ul>
-<a name="findDataStatisticsStoreFactory(java.util.Map)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>findDataStatisticsStoreFactory</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStoreFactorySpi</a>&nbsp;findDataStatisticsStoreFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</pre>
-</li>
-</ul>
-<a name="getRegisteredDataStoreFactories()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRegisteredDataStoreFactories</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreFactorySpi</a>&gt;&nbsp;getRegisteredDataStoreFactories()</pre>
+<h4>findStoreFamily</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a>&nbsp;findStoreFamily(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</pre>
 </li>
 </ul>
 <a name="getRegisteredStoreFactoryFamilies()">
@@ -397,49 +319,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a>&gt;&nbsp;getRegisteredStoreFactoryFamilies()</pre>
 </li>
 </ul>
-<a name="getRegisteredDataStatisticsStoreFactories()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRegisteredDataStatisticsStoreFactories</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStoreFactorySpi</a>&gt;&nbsp;getRegisteredDataStatisticsStoreFactories()</pre>
-</li>
-</ul>
-<a name="getRegisteredAdapterStoreFactories()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRegisteredAdapterStoreFactories</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStoreFactorySpi</a>&gt;&nbsp;getRegisteredAdapterStoreFactories()</pre>
-</li>
-</ul>
-<a name="getRegisteredSecondaryIndexDataStoreFactories()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRegisteredSecondaryIndexDataStoreFactories</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStoreFactorySpi</a>&gt;&nbsp;getRegisteredSecondaryIndexDataStoreFactories()</pre>
-</li>
-</ul>
-<a name="getRegisteredIndexStoreFactories()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRegisteredIndexStoreFactories</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStoreFactorySpi</a>&gt;&nbsp;getRegisteredIndexStoreFactories()</pre>
-</li>
-</ul>
 <a name="getAllOptions(mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAllOptions</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]&nbsp;getAllOptions(<a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a>&nbsp;storeFactoryFamily)</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a>[]&nbsp;getAllOptions(<a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a>&nbsp;storeFactoryFamily)</pre>
 </li>
 </ul>
 <a name="getAllOptions()">
@@ -448,7 +334,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getAllOptions</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]&nbsp;getAllOptions()</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a>[]&nbsp;getAllOptions()</pre>
 </li>
 </ul>
 </li>
@@ -478,7 +364,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html" target="_top">Frames</a></li>

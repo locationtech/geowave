@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureUtils.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/AvroFeatureReader.html" target="_top">Frames</a></li>
@@ -138,13 +138,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/data/field
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureReader.html#deserializeAvroSimpleFeature(byte[])">deserializeAvroSimpleFeature</a></strong>(byte[]&nbsp;avroData)</code>
-<div class="block">Deserialize byte array into an AvroSimpleFeature then convert to a
- SimpleFeature</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureReader.html#readField(byte[])">readField</a></strong>(byte[]&nbsp;fieldData)</code>
 <div class="block">Deserializes the field from binary data</div>
@@ -192,7 +185,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/data/field
 <a name="readField(byte[])">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>readField</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;readField(byte[]&nbsp;fieldData)</pre>
@@ -203,26 +196,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/data/field
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html#readField(byte[])">readField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>fieldData</code> - The binary serialization of the data object</dd>
 <dt><span class="strong">Returns:</span></dt><dd>The deserialization of the entry</dd></dl>
-</li>
-</ul>
-<a name="deserializeAvroSimpleFeature(byte[])">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>deserializeAvroSimpleFeature</h4>
-<pre>public&nbsp;org.opengis.feature.simple.SimpleFeature&nbsp;deserializeAvroSimpleFeature(byte[]&nbsp;avroData)
-                                                                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
-                                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a>,
-                                                                             com.vividsolutions.jts.io.ParseException</pre>
-<div class="block">Deserialize byte array into an AvroSimpleFeature then convert to a
- SimpleFeature</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>avroData</code> - serialized bytes of a AvroSimpleFeature</dd>
-<dt><span class="strong">Returns:</span></dt><dd>Collection of GeoTools SimpleFeature instances.</dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
-<dd><code>com.vividsolutions.jts.io.ParseException</code></dd></dl>
 </li>
 </ul>
 </li>
@@ -252,7 +225,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/data/field
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureWriter.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureUtils.html" title="class in mil.nga.giat.geowave.adapter.vector"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/AvroFeatureReader.html" target="_top">Frames</a></li>

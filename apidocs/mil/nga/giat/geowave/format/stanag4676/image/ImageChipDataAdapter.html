@@ -184,6 +184,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChipDataAdapter.html#getDataId(mil.nga.giat.geowave.format.stanag4676.image.ImageChip)">getDataId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChip.html" title="class in mil.nga.giat.geowave.format.stanag4676.image">ImageChip</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChipDataAdapter.html#getFieldIdForPosition(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20int)">getFieldIdForPosition</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                     int&nbsp;position)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChipDataAdapter.html#getPositionOfOrderedField(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getPositionOfOrderedField</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChipDataAdapter.html#getReader(mil.nga.giat.geowave.core.index.ByteArrayId)">getReader</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Get a reader for an individual field</div>
@@ -382,7 +392,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <a name="getWriter(mil.nga.giat.geowave.core.index.ByteArrayId)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getWriter</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChip.html" title="class in mil.nga.giat.geowave.format.stanag4676.image">ImageChip</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
@@ -393,6 +403,34 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html#getWriter(mil.nga.giat.geowave.core.index.ByteArrayId)">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">DataWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChip.html" title="class in mil.nga.giat.geowave.format.stanag4676.image">ImageChip</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>fieldId</code> - the unique field ID</dd>
 <dt><span class="strong">Returns:</span></dt><dd>the writer for the given field</dd></dl>
+</li>
+</ul>
+<a name="getPositionOfOrderedField(mil.nga.giat.geowave.core.store.index.CommonIndexModel, mil.nga.giat.geowave.core.index.ByteArrayId)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPositionOfOrderedField</h4>
+<pre>public&nbsp;int&nbsp;getPositionOfOrderedField(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                            <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getPositionOfOrderedField(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getPositionOfOrderedField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChip.html" title="class in mil.nga.giat.geowave.format.stanag4676.image">ImageChip</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldIdForPosition(mil.nga.giat.geowave.core.store.index.CommonIndexModel, int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getFieldIdForPosition</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getFieldIdForPosition(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                int&nbsp;position)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getFieldIdForPosition(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20int)">getFieldIdForPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/image/ImageChip.html" title="class in mil.nga.giat.geowave.format.stanag4676.image">ImageChip</a>&gt;</code></dd>
+</dl>
 </li>
 </ul>
 </li>

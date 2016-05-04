@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" target="_top">Frames</a></li>
@@ -86,7 +86,12 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">mil.nga.giat.geowave.core.ingest.kafka.KafkaCommandLineOptions</a></li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -96,7 +101,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">KafkaConsumerCommandLineOptions</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaCommandLineOptions</a></pre>
 </li>
 </ul>
 </div>
@@ -115,9 +120,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#KafkaConsumerCommandLineOptions(java.util.Properties,%20boolean,%20int)">KafkaConsumerCommandLineOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;kafkaProperties,
-                               boolean&nbsp;flushAndReconnect,
-                               int&nbsp;batchSize)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#KafkaConsumerCommandLineOptions()">KafkaConsumerCommandLineOptions</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -135,26 +138,73 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#applyOptions(org.apache.commons.cli.Options)">applyOptions</a></strong>(org.apache.commons.cli.Options&nbsp;allOptions)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#getAutoOffsetReset()">getAutoOffsetReset</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#getBatchSize()">getBatchSize</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#getProperties()">getProperties</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#getConsumerTimeoutMs()">getConsumerTimeoutMs</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#getFetchMessageMaxBytes()">getFetchMessageMaxBytes</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#getGroupId()">getGroupId</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#getZookeeperConnect()">getZookeeperConnect</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#isFlushAndReconnect()">isFlushAndReconnect</a></strong>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#isReconnectOnTimeout()">isReconnectOnTimeout</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaConsumerCommandLineOptions</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#parseOptions(org.apache.commons.cli.CommandLine)">parseOptions</a></strong>(org.apache.commons.cli.CommandLine&nbsp;commandLine)</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#setAutoOffsetReset(java.lang.String)">setAutoOffsetReset</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;autoOffsetReset)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#setBatchSize(int)">setBatchSize</a></strong>(int&nbsp;batchSize)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#setConsumerTimeoutMs(java.lang.String)">setConsumerTimeoutMs</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;consumerTimeoutMs)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#setFetchMessageMaxBytes(java.lang.String)">setFetchMessageMaxBytes</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fetchMessageMaxBytes)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#setGroupId(java.lang.String)">setGroupId</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#setReconnectOnTimeout(boolean)">setReconnectOnTimeout</a></strong>(boolean&nbsp;reconnectOnTimeout)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html#setZookeeperConnect(java.lang.String)">setZookeeperConnect</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperConnect)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.kafka.KafkaCommandLineOptions">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.kafka.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaCommandLineOptions</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#getProperties()">getProperties</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#initProperties()">initProperties</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html#setKafkaPropertyFile(java.lang.String)">setKafkaPropertyFile</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -176,15 +226,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="KafkaConsumerCommandLineOptions(java.util.Properties, boolean, int)">
+<a name="KafkaConsumerCommandLineOptions()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>KafkaConsumerCommandLineOptions</h4>
-<pre>public&nbsp;KafkaConsumerCommandLineOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;kafkaProperties,
-                               boolean&nbsp;flushAndReconnect,
-                               int&nbsp;batchSize)</pre>
+<pre>public&nbsp;KafkaConsumerCommandLineOptions()</pre>
 </li>
 </ul>
 </li>
@@ -195,15 +243,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getProperties()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getProperties</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;getProperties()</pre>
-</li>
-</ul>
 <a name="isFlushAndReconnect()">
 <!--   -->
 </a>
@@ -222,25 +261,121 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;int&nbsp;getBatchSize()</pre>
 </li>
 </ul>
-<a name="applyOptions(org.apache.commons.cli.Options)">
+<a name="getGroupId()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>applyOptions</h4>
-<pre>public static&nbsp;void&nbsp;applyOptions(org.apache.commons.cli.Options&nbsp;allOptions)</pre>
+<h4>getGroupId</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getGroupId()</pre>
 </li>
 </ul>
-<a name="parseOptions(org.apache.commons.cli.CommandLine)">
+<a name="setGroupId(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setGroupId</h4>
+<pre>public&nbsp;void&nbsp;setGroupId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupId)</pre>
+</li>
+</ul>
+<a name="getZookeeperConnect()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getZookeeperConnect</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getZookeeperConnect()</pre>
+</li>
+</ul>
+<a name="setZookeeperConnect(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setZookeeperConnect</h4>
+<pre>public&nbsp;void&nbsp;setZookeeperConnect(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperConnect)</pre>
+</li>
+</ul>
+<a name="getAutoOffsetReset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAutoOffsetReset</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getAutoOffsetReset()</pre>
+</li>
+</ul>
+<a name="setAutoOffsetReset(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAutoOffsetReset</h4>
+<pre>public&nbsp;void&nbsp;setAutoOffsetReset(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;autoOffsetReset)</pre>
+</li>
+</ul>
+<a name="getFetchMessageMaxBytes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFetchMessageMaxBytes</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFetchMessageMaxBytes()</pre>
+</li>
+</ul>
+<a name="setFetchMessageMaxBytes(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFetchMessageMaxBytes</h4>
+<pre>public&nbsp;void&nbsp;setFetchMessageMaxBytes(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fetchMessageMaxBytes)</pre>
+</li>
+</ul>
+<a name="getConsumerTimeoutMs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getConsumerTimeoutMs</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getConsumerTimeoutMs()</pre>
+</li>
+</ul>
+<a name="setConsumerTimeoutMs(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setConsumerTimeoutMs</h4>
+<pre>public&nbsp;void&nbsp;setConsumerTimeoutMs(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;consumerTimeoutMs)</pre>
+</li>
+</ul>
+<a name="isReconnectOnTimeout()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isReconnectOnTimeout</h4>
+<pre>public&nbsp;boolean&nbsp;isReconnectOnTimeout()</pre>
+</li>
+</ul>
+<a name="setReconnectOnTimeout(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setReconnectOnTimeout</h4>
+<pre>public&nbsp;void&nbsp;setReconnectOnTimeout(boolean&nbsp;reconnectOnTimeout)</pre>
+</li>
+</ul>
+<a name="setBatchSize(int)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>parseOptions</h4>
-<pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaConsumerCommandLineOptions</a>&nbsp;parseOptions(org.apache.commons.cli.CommandLine&nbsp;commandLine)
-                                                    throws org.apache.commons.cli.ParseException</pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
+<h4>setBatchSize</h4>
+<pre>public&nbsp;void&nbsp;setBatchSize(int&nbsp;batchSize)</pre>
 </li>
 </ul>
 </li>
@@ -270,7 +405,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" target="_top">Frames</a></li>

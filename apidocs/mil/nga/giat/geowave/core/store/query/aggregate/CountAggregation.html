@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" target="_top">Frames</a></li>
@@ -95,13 +95,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;T&gt;</dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>,T&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">CountAggregation&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;T&gt;</pre>
+implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>,T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -139,29 +139,36 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#aggregate(T)">aggregate</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&nbsp;entry)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#aggregate(T)">aggregate</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&nbsp;entry)</code>
+<div class="block">Update the aggregation result using the new entry provided</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#clearResult()">clearResult</a></strong>()</code>
+<div class="block">this will be called if the result should be reset to its default value</div>
+</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#getCount()">getCount</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#getParameters()">getParameters</a></strong>()</code>
+<div class="block">Returns a persistable object for any parameters that must be persisted to
+ properly compute the aggregation</div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#isSet()">isSet</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#getResult()">getResult</a></strong>()</code>
+<div class="block">Get the current result of the aggregation.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#setParameters(mil.nga.giat.geowave.core.index.Persistable)">setParameters</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&nbsp;parameters)</code>
+<div class="block">Sets the parameters based on what has been persisted</div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#toString()">toString</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -204,63 +211,6 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="isSet()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isSet</h4>
-<pre>public&nbsp;boolean&nbsp;isSet()</pre>
-</li>
-</ul>
-<a name="getCount()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCount</h4>
-<pre>public&nbsp;long&nbsp;getCount()</pre>
-</li>
-</ul>
-<a name="toBinary()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toBinary</h4>
-<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary()">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="fromBinary(byte[])">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>fromBinary</h4>
-<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary(byte[])">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="merge(mil.nga.giat.geowave.core.index.Mergeable)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>merge</h4>
-<pre>public&nbsp;void&nbsp;merge(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="toString()">
 <!--   -->
 </a>
@@ -279,13 +229,80 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 </a><a name="aggregate(T)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>aggregate</h4>
 <pre>public&nbsp;void&nbsp;aggregate(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&nbsp;entry)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#aggregate(T)">Aggregation</a></code></strong></div>
+<div class="block">Update the aggregation result using the new entry provided</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#aggregate(T)">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#aggregate(T)">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>entry</code> - the new entry to compute an updated aggregation result on</dd></dl>
+</li>
+</ul>
+<a name="getParameters()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getParameters</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&nbsp;getParameters()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#getParameters()">Aggregation</a></code></strong></div>
+<div class="block">Returns a persistable object for any parameters that must be persisted to
+ properly compute the aggregation</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#getParameters()">getParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&gt;</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>A persistable object for any parameters that must be persisted to
+         properly compute the aggregation</dd></dl>
+</li>
+</ul>
+<a name="getResult()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getResult</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>&nbsp;getResult()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#getResult()">Aggregation</a></code></strong></div>
+<div class="block">Get the current result of the aggregation. This must be mergeable and it
+ is the responsibility of the caller to merge separate results if desired.
+ It is the responsibility of the aggregation to start with a new instance
+ of the result at the beginning of any aggregation.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#getResult()">getResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&gt;</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the current result of the aggregation</dd></dl>
+</li>
+</ul>
+<a name="setParameters(mil.nga.giat.geowave.core.index.Persistable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setParameters</h4>
+<pre>public&nbsp;void&nbsp;setParameters(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&nbsp;parameters)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#setParameters(P)">Aggregation</a></code></strong></div>
+<div class="block">Sets the parameters based on what has been persisted</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#setParameters(P)">setParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>parameters</code> - the persisted parameters for this aggregation function</dd></dl>
+</li>
+</ul>
+<a name="clearResult()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>clearResult</h4>
+<pre>public&nbsp;void&nbsp;clearResult()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#clearResult()">Aggregation</a></code></strong></div>
+<div class="block">this will be called if the result should be reset to its default value</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html#clearResult()">clearResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="type parameter in CountAggregation">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -316,7 +333,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" target="_top">Frames</a></li>

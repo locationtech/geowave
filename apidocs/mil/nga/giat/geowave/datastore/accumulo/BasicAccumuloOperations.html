@@ -127,22 +127,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 <td class="colFirst"><code>protected org.apache.accumulo.core.client.Connector</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#connector">connector</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#INSTANCE_CONFIG_NAME">INSTANCE_CONFIG_NAME</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#PASSWORD_CONFIG_NAME">PASSWORD_CONFIG_NAME</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#USER_CONFIG_NAME">USER_CONFIG_NAME</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#ZOOKEEPER_CONFIG_NAME">ZOOKEEPER_CONFIG_NAME</a></strong></code>&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -246,8 +230,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#createOperations(java.util.Map,%20java.lang.String)">createOperations</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#createOperations(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">createOperations</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.apache.accumulo.core.client.Scanner</code></td>
@@ -339,7 +322,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static org.apache.accumulo.core.client.Connector</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getConnector(java.util.Map)">getConnector</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getConnector(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">getConnector</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -354,46 +337,42 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getNumThreads()">getNumThreads</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getOptions()">getOptions</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getPassword()">getPassword</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getPassword(java.util.Map)">getPassword</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getPassword(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">getPassword</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getRowCount(java.lang.String,%20java.lang.String...)">getRowCount</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getTableNameSpace()">getTableNameSpace</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getTimeoutMillis()">getTimeoutMillis</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getUsername()">getUsername</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getUsername(java.util.Map)">getUsername</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#getUsername(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">getUsername</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#insureAuthorization(java.lang.String,%20java.lang.String...)">insureAuthorization</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;clientUser,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Insure user has the given operations.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#localityGroupExists(java.lang.String,%20byte[])">localityGroupExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                    byte[]&nbsp;localityGroup)</code>
@@ -401,11 +380,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
  within the table of the given name</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#setCacheTimeoutMillis(long)">setCacheTimeoutMillis</a></strong>(long&nbsp;cacheTimeoutMillis)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#tableExists(java.lang.String)">tableExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Checks for the existence of the table with the given name</div>
@@ -433,46 +412,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="ZOOKEEPER_CONFIG_NAME">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ZOOKEEPER_CONFIG_NAME</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> ZOOKEEPER_CONFIG_NAME</pre>
-<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.ZOOKEEPER_CONFIG_NAME">Constant Field Values</a></dd></dl>
-</li>
-</ul>
-<a name="INSTANCE_CONFIG_NAME">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>INSTANCE_CONFIG_NAME</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> INSTANCE_CONFIG_NAME</pre>
-<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.INSTANCE_CONFIG_NAME">Constant Field Values</a></dd></dl>
-</li>
-</ul>
-<a name="USER_CONFIG_NAME">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>USER_CONFIG_NAME</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> USER_CONFIG_NAME</pre>
-<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.USER_CONFIG_NAME">Constant Field Values</a></dd></dl>
-</li>
-</ul>
-<a name="PASSWORD_CONFIG_NAME">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>PASSWORD_CONFIG_NAME</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> PASSWORD_CONFIG_NAME</pre>
-<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations.PASSWORD_CONFIG_NAME">Constant Field Values</a></dd></dl>
-</li>
-</ul>
 <a name="connector">
 <!--   -->
 </a>
@@ -1058,23 +997,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code> - The table does not exist in this Accumulo instance</dd></dl>
 </li>
 </ul>
-<a name="getOptions()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getOptions</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/config/AbstractConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">AbstractConfigOption</a>&lt;?&gt;[]&nbsp;getOptions()</pre>
-</li>
-</ul>
-<a name="createOperations(java.util.Map, java.lang.String)">
+<a name="createOperations(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createOperations</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;createOperations(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;createOperations(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)
                                                 throws org.apache.accumulo.core.client.AccumuloException,
                                                        org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl><dt><span class="strong">Throws:</span></dt>
@@ -1082,13 +1011,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 <dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
 </li>
 </ul>
-<a name="getConnector(java.util.Map)">
+<a name="getConnector(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getConnector</h4>
-<pre>public static&nbsp;org.apache.accumulo.core.client.Connector&nbsp;getConnector(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)
+<pre>public static&nbsp;org.apache.accumulo.core.client.Connector&nbsp;getConnector(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)
                                                               throws org.apache.accumulo.core.client.AccumuloException,
                                                                      org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl><dt><span class="strong">Throws:</span></dt>
@@ -1096,13 +1025,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 <dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
 </li>
 </ul>
-<a name="getUsername(java.util.Map)">
+<a name="getUsername(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getUsername</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getUsername(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getUsername(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)
                           throws org.apache.accumulo.core.client.AccumuloException,
                                  org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl><dt><span class="strong">Throws:</span></dt>
@@ -1110,13 +1039,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Ac
 <dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
 </li>
 </ul>
-<a name="getPassword(java.util.Map)">
+<a name="getPassword(mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getPassword</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPassword(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions)
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPassword(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>&nbsp;options)
                           throws org.apache.accumulo.core.client.AccumuloException,
                                  org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl><dt><span class="strong">Throws:</span></dt>

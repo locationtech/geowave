@@ -79,38 +79,50 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest">mil.nga.giat.geowave.core.ingest</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.operations">mil.nga.giat.geowave.core.ingest.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.operations.options">mil.nga.giat.geowave.core.ingest.operations.options</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.spi">mil.nga.giat.geowave.core.ingest.spi</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.format.avro">mil.nga.giat.geowave.format.avro</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.gdelt">mil.nga.giat.geowave.format.gdelt</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geolife">mil.nga.giat.geowave.format.geolife</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.raster">mil.nga.giat.geowave.format.geotools.raster</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.geotools.vector">mil.nga.giat.geowave.format.geotools.vector</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.gpx">mil.nga.giat.geowave.format.gpx</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.stanag4676">mil.nga.giat.geowave.format.stanag4676</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.tdrive">mil.nga.giat.geowave.format.tdrive</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -136,24 +148,6 @@
 <td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/IngestWithMapper.html#mil.nga.giat.geowave.adapter.vector.ingest">IngestWithMapper</a>
 <div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
  within a mapper only.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest">
-<!--   -->
-</a>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/IngestFromHdfsPlugin.html#mil.nga.giat.geowave.core.ingest">IngestFromHdfsPlugin</a>
-<div class="block">This is the main plugin interface for ingesting intermediate data into
- Geowave that has previously been staged in HDFS.</div>
 </td>
 </tr>
 </tbody>
@@ -203,6 +197,91 @@
 <td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/MapReduceCommandLineOptions.html#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">MapReduceCommandLineOptions</a>
 <div class="block">This class encapsulates all of the options and parsed values specific to
  setting up the GeoWave ingestion framework to run on hadoop map-reduce.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.operations">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/package-summary.html">mil.nga.giat.geowave.core.ingest.operations</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/MapReduceCommandLineOptions.html#mil.nga.giat.geowave.core.ingest.operations">MapReduceCommandLineOptions</a>
+<div class="block">This class encapsulates all of the options and parsed values specific to
+ setting up the GeoWave ingestion framework to run on hadoop map-reduce.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.operations.options">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/package-summary.html">mil.nga.giat.geowave.core.ingest.operations.options</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/IngestFromHdfsPlugin.html#mil.nga.giat.geowave.core.ingest.operations.options">IngestFromHdfsPlugin</a>
+<div class="block">This is the main plugin interface for ingesting intermediate data into
+ Geowave that has previously been staged in HDFS.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.spi">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/package-summary.html">mil.nga.giat.geowave.core.ingest.spi</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/IngestFromHdfsPlugin.html#mil.nga.giat.geowave.core.ingest.spi">IngestFromHdfsPlugin</a>
+<div class="block">This is the main plugin interface for ingesting intermediate data into
+ Geowave that has previously been staged in HDFS.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.format.avro">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/format/avro/package-summary.html">mil.nga.giat.geowave.format.avro</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/IngestFromHdfsPlugin.html#mil.nga.giat.geowave.format.avro">IngestFromHdfsPlugin</a>
+<div class="block">This is the main plugin interface for ingesting intermediate data into
+ Geowave that has previously been staged in HDFS.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/IngestWithMapper.html#mil.nga.giat.geowave.format.avro">IngestWithMapper</a>
+<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
+ within a mapper only.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/class-use/IngestWithReducer.html#mil.nga.giat.geowave.format.avro">IngestWithReducer</a>
+<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
+ with a mapper to aggregate key value pairs and a reducer to ingest data into
+ GeoWave.</div>
 </td>
 </tr>
 </tbody>

@@ -100,13 +100,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a>, org.apache.hadoop.conf.Configurable, org.apache.hadoop.util.Tool</dd>
+<dd>org.apache.hadoop.conf.Configurable, org.apache.hadoop.util.Tool</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">RasterTileResizeJobRunner</span>
 extends org.apache.hadoop.conf.Configured
-implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a></pre>
+implements org.apache.hadoop.util.Tool</pre>
 </li>
 </ul>
 </div>
@@ -126,31 +126,15 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/gi
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/cli/AdapterStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">AdapterStoreCommandLineOptions</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#inputAdapterStoreOptions">inputAdapterStoreOptions</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#inputDataStoreOptions">inputDataStoreOptions</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/cli/IndexStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">IndexStoreCommandLineOptions</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#inputIndexStoreOptions">inputIndexStoreOptions</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#NEW_ADAPTER_ID_KEY">NEW_ADAPTER_ID_KEY</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#OLD_ADAPTER_ID_KEY">OLD_ADAPTER_ID_KEY</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#outputDataStoreOptions">outputDataStoreOptions</a></strong></code>&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html" title="class in mil.nga.giat.geowave.adapter.raster.resize">RasterTileResizeCommandLineOptions</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in mil.nga.giat.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#rasterResizeOptions">rasterResizeOptions</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -168,7 +152,9 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/gi
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#RasterTileResizeJobRunner()">RasterTileResizeJobRunner</a></strong>()</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#RasterTileResizeJobRunner(mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions,%20mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions,%20mil.nga.giat.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions)">RasterTileResizeJobRunner</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                         <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in mil.nga.giat.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;rasterResizeOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -198,10 +184,6 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/gi
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#runJob()">runJob</a></strong>()</code>
 <div class="block">Main method to execute the MapReduce analytic.</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#runOperation(java.lang.String[])">runOperation</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -259,49 +241,13 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/gi
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.adapter.raster.resize.RasterTileResizeJobRunner.OLD_ADAPTER_ID_KEY">Constant Field Values</a></dd></dl>
 </li>
 </ul>
-<a name="inputDataStoreOptions">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>inputDataStoreOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a> inputDataStoreOptions</pre>
-</li>
-</ul>
-<a name="outputDataStoreOptions">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>outputDataStoreOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/cli/DataStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">DataStoreCommandLineOptions</a> outputDataStoreOptions</pre>
-</li>
-</ul>
-<a name="inputAdapterStoreOptions">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>inputAdapterStoreOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/cli/AdapterStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">AdapterStoreCommandLineOptions</a> inputAdapterStoreOptions</pre>
-</li>
-</ul>
-<a name="inputIndexStoreOptions">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>inputIndexStoreOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/cli/IndexStoreCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.cli">IndexStoreCommandLineOptions</a> inputIndexStoreOptions</pre>
-</li>
-</ul>
 <a name="rasterResizeOptions">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>rasterResizeOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/resize/RasterTileResizeCommandLineOptions.html" title="class in mil.nga.giat.geowave.adapter.raster.resize">RasterTileResizeCommandLineOptions</a> rasterResizeOptions</pre>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in mil.nga.giat.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a> rasterResizeOptions</pre>
 </li>
 </ul>
 </li>
@@ -312,13 +258,15 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/gi
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="RasterTileResizeJobRunner()">
+<a name="RasterTileResizeJobRunner(mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions, mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions, mil.nga.giat.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>RasterTileResizeJobRunner</h4>
-<pre>public&nbsp;RasterTileResizeJobRunner()</pre>
+<pre>public&nbsp;RasterTileResizeJobRunner(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                         <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in mil.nga.giat.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;rasterResizeOptions)</pre>
 </li>
 </ul>
 </li>
@@ -357,7 +305,7 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/gi
 <a name="run(java.lang.String[])">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>run</h4>
 <pre>public&nbsp;int&nbsp;run(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
@@ -367,21 +315,6 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../../../mil/nga/gi
 <dd><code>run</code>&nbsp;in interface&nbsp;<code>org.apache.hadoop.util.Tool</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
-</li>
-</ul>
-<a name="runOperation(java.lang.String[])">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>runOperation</h4>
-<pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)
-                     throws org.apache.commons.cli.ParseException</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html#runOperation(java.lang.String[])">runOperation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a></code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
 </li>
 </ul>
 </li>

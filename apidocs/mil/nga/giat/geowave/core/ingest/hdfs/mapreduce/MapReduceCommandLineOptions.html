@@ -119,7 +119,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#MapReduceCommandLineOptions(java.lang.String)">MapReduceCommandLineOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerHostPort)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#MapReduceCommandLineOptions()">MapReduceCommandLineOptions</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -137,16 +137,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#applyOptions(org.apache.commons.cli.Options)">applyOptions</a></strong>(org.apache.commons.cli.Options&nbsp;allOptions)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#getJobTrackerHostPort()">getJobTrackerHostPort</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#getJobTrackerOrResourceManagerHostPort()">getJobTrackerOrResourceManagerHostPort</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">MapReduceCommandLineOptions</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#parseOptions(org.apache.commons.cli.CommandLine)">parseOptions</a></strong>(org.apache.commons.cli.CommandLine&nbsp;commandLine)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#getResourceManager()">getResourceManager</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#setJobTrackerHostPort(java.lang.String)">setJobTrackerHostPort</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerHostPort)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html#setResourceManager(java.lang.String)">setResourceManager</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;resourceManager)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -170,13 +178,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="MapReduceCommandLineOptions(java.lang.String)">
+<a name="MapReduceCommandLineOptions()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MapReduceCommandLineOptions</h4>
-<pre>public&nbsp;MapReduceCommandLineOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerHostPort)</pre>
+<pre>public&nbsp;MapReduceCommandLineOptions()</pre>
 </li>
 </ul>
 </li>
@@ -187,34 +195,49 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="applyOptions(org.apache.commons.cli.Options)">
+<a name="getJobTrackerHostPort()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>applyOptions</h4>
-<pre>public static&nbsp;void&nbsp;applyOptions(org.apache.commons.cli.Options&nbsp;allOptions)</pre>
+<h4>getJobTrackerHostPort</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getJobTrackerHostPort()</pre>
+</li>
+</ul>
+<a name="setJobTrackerHostPort(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setJobTrackerHostPort</h4>
+<pre>public&nbsp;void&nbsp;setJobTrackerHostPort(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerHostPort)</pre>
+</li>
+</ul>
+<a name="getResourceManager()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getResourceManager</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getResourceManager()</pre>
+</li>
+</ul>
+<a name="setResourceManager(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResourceManager</h4>
+<pre>public&nbsp;void&nbsp;setResourceManager(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;resourceManager)</pre>
 </li>
 </ul>
 <a name="getJobTrackerOrResourceManagerHostPort()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getJobTrackerOrResourceManagerHostPort</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getJobTrackerOrResourceManagerHostPort()</pre>
-</li>
-</ul>
-<a name="parseOptions(org.apache.commons.cli.CommandLine)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>parseOptions</h4>
-<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">MapReduceCommandLineOptions</a>&nbsp;parseOptions(org.apache.commons.cli.CommandLine&nbsp;commandLine)
-                                                throws org.apache.commons.cli.ParseException</pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
 </li>
 </ul>
 </li>

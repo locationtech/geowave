@@ -79,23 +79,31 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest">mil.nga.giat.geowave.core.ingest</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.avro">mil.nga.giat.geowave.core.ingest.avro</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.hdfs">mil.nga.giat.geowave.core.ingest.hdfs</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.kafka">mil.nga.giat.geowave.core.ingest.kafka</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.operations.options">mil.nga.giat.geowave.core.ingest.operations.options</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.ingest.spi">mil.nga.giat.geowave.core.ingest.spi</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.format.avro">mil.nga.giat.geowave.format.avro</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -157,29 +165,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></strong>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/package-summary.html">mil.nga.giat.geowave.core.ingest</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">I</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
-<td class="colLast"><span class="strong">IngestFormatPluginProviderSpi.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></strong>()</code>
-<div class="block">This plugin will be used by the ingestion framework to stage intermediate
- data from a local filesystem (for example to HDFS for map reduce ingest
- or to kafka for kafka ingest).</div>
-</td>
+<td class="colLast"><span class="strong">AbstractSimpleFeatureIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createAvroFormatPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createAvroFormatPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -230,6 +216,20 @@
 </tr>
 </tbody>
 </table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/package-summary.html">mil.nga.giat.geowave.core.ingest.hdfs</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageToHdfsDriver.html#StageToHdfsDriver(java.util.Map,%20java.lang.String,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions)">StageToHdfsDriver</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath,
+                 <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;inputOptions)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">
 <!--   -->
@@ -266,16 +266,16 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="strong">IngestFromKafkaDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeFromTopic(java.lang.String,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin,%20mil.nga.giat.geowave.core.ingest.local.IngestRunData,%20java.util.List)">consumeFromTopic</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
+<td class="colLast"><span class="strong">IngestFromKafkaDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeFromTopic(java.lang.String,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin,%20mil.nga.giat.geowave.core.ingest.kafka.KafkaIngestRunData,%20java.util.List)">consumeFromTopic</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
                 <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;T,?&gt;&nbsp;avroFormatPlugin,
-                <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestRunData</a>&nbsp;ingestRunData,
+                <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaIngestRunData</a>&nbsp;ingestRunData,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;queue)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="strong">IngestFromKafkaDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeMessages(java.lang.String,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin,%20mil.nga.giat.geowave.core.ingest.local.IngestRunData,%20kafka.consumer.KafkaStream)">consumeMessages</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
+<td class="colLast"><span class="strong">IngestFromKafkaDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeMessages(java.lang.String,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin,%20mil.nga.giat.geowave.core.ingest.kafka.KafkaIngestRunData,%20kafka.consumer.KafkaStream)">consumeMessages</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
                <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;T,?&gt;&nbsp;avroFormatPlugin,
-               <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestRunData</a>&nbsp;ingestRunData,
+               <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaIngestRunData</a>&nbsp;ingestRunData,
                kafka.consumer.KafkaStream&lt;byte[],byte[]&gt;&nbsp;stream)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -292,9 +292,90 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="strong">IngestFromKafkaDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#processMessage(T,%20mil.nga.giat.geowave.core.ingest.local.IngestRunData,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin)">processMessage</a></strong>(T&nbsp;dataRecord,
-              <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestRunData</a>&nbsp;ingestRunData,
+<td class="colLast"><span class="strong">IngestFromKafkaDriver.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#processMessage(T,%20mil.nga.giat.geowave.core.ingest.kafka.KafkaIngestRunData,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin)">processMessage</a></strong>(T&nbsp;dataRecord,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaIngestRunData</a>&nbsp;ingestRunData,
               <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;T,?&gt;&nbsp;plugin)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/package-summary.html">mil.nga.giat.geowave.core.ingest.kafka</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#IngestFromKafkaDriver(mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions,%20java.util.List,%20java.util.Map,%20mil.nga.giat.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions,%20mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions)">IngestFromKafkaDriver</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
+                     <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaConsumerCommandLineOptions</a>&nbsp;kafkaOptions,
+                     <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">VisibilityOptions</a>&nbsp;ingestOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#StageToKafkaDriver(mil.nga.giat.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions,%20java.util.Map,%20mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions)">StageToKafkaDriver</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaProducerCommandLineOptions</a>&nbsp;kafkaOptions,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localOptions)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.operations.options">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/package-summary.html">mil.nga.giat.geowave.core.ingest.operations.options</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/package-summary.html">mil.nga.giat.geowave.core.ingest.operations.options</a> that return types with arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;</code></td>
+<td class="colLast"><span class="strong">IngestFormatPluginOptions.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html#createAvroPlugins()">createAvroPlugins</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.ingest.spi">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/package-summary.html">mil.nga.giat.geowave.core.ingest.spi</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/package-summary.html">mil.nga.giat.geowave.core.ingest.spi</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">I</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
+<td class="colLast"><span class="strong">IngestFormatPluginProviderSpi.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createAvroFormatPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createAvroFormatPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>
+<div class="block">This plugin will be used by the ingestion framework to stage intermediate
+ data from a local filesystem (for example to HDFS for map reduce ingest
+ or to kafka for kafka ingest).</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.format.avro">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a> in <a href="../../../../../../../../mil/nga/giat/geowave/format/avro/package-summary.html">mil.nga.giat.geowave.format.avro</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/format/avro/package-summary.html">mil.nga.giat.geowave.format.avro</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/avro/AvroIngestPlugin.html" title="class in mil.nga.giat.geowave.format.avro">AvroIngestPlugin</a></strong></code>
+<div class="block">This plugin is used for ingesting any GPX formatted data from a local file
+ system into GeoWave as GeoTools' SimpleFeatures.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -348,7 +429,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></td>
-<td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><span class="strong">GeoToolsRasterDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html#createAvroFormatPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createAvroFormatPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -366,7 +447,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><span class="strong">GeoToolsVectorDataStoreIngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#createAvroFormatPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createAvroFormatPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -418,7 +499,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="strong">Stanag4676IngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestFormat.html#getAvroFormatPlugin()">getAvroFormatPlugin</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><span class="strong">Stanag4676IngestFormat.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestFormat.html#createAvroFormatPlugin(mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider)">createAvroFormatPlugin</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

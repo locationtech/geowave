@@ -111,35 +111,27 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.store">mil.nga.giat.geowave.analytic.store</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.cli.stats">mil.nga.giat.geowave.cli.stats</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.cli">mil.nga.giat.geowave.core.cli</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.geotime.store.statistics">mil.nga.giat.geowave.core.geotime.store.statistics</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store">mil.nga.giat.geowave.core.store</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.adapter.statistics">mil.nga.giat.geowave.core.store.adapter.statistics</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.operations.remote.options">mil.nga.giat.geowave.core.store.operations.remote.options</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -159,10 +151,22 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce">mil.nga.giat.geowave.mapreduce</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase">mil.nga.giat.geowave.datastore.hbase</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.mapreduce">mil.nga.giat.geowave.datastore.hbase.mapreduce</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.metadata">mil.nga.giat.geowave.datastore.hbase.metadata</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce">mil.nga.giat.geowave.mapreduce</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.input">mil.nga.giat.geowave.mapreduce.input</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -182,9 +186,9 @@
 <td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatistics.html#mil.nga.giat.geowave.adapter.raster.adapter">DataStatistics</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/StatisticalDataAdapter.html#mil.nga.giat.geowave.adapter.raster.adapter">StatisticalDataAdapter</a>
-<div class="block">This interface allows for a data adapter to define a set of statistics that
- it would like to track</div>
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/StatisticsProvider.html#mil.nga.giat.geowave.adapter.raster.adapter">StatisticsProvider</a>
+<div class="block">This interface defines the set of statistics to capture for a specific
+ adapter.</div>
 </td>
 </tr>
 </tbody>
@@ -239,9 +243,9 @@
 <td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatistics.html#mil.nga.giat.geowave.adapter.vector">DataStatistics</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/StatisticalDataAdapter.html#mil.nga.giat.geowave.adapter.vector">StatisticalDataAdapter</a>
-<div class="block">This interface allows for a data adapter to define a set of statistics that
- it would like to track</div>
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/StatisticsProvider.html#mil.nga.giat.geowave.adapter.vector">StatisticsProvider</a>
+<div class="block">This interface defines the set of statistics to capture for a specific
+ adapter.</div>
 </td>
 </tr>
 </tbody>
@@ -339,63 +343,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.store">
-<!--   -->
-</a>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/analytic/store/package-summary.html">mil.nga.giat.geowave.analytic.store</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.analytic.store">DataStatisticsStore</a>
-<div class="block">This is responsible for persisting data statistics (either in memory or to
- disk depending on the implementation).</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.cli.stats">
-<!--   -->
-</a>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/cli/stats/package-summary.html">mil.nga.giat.geowave.cli.stats</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.cli.stats">DataStatisticsStore</a>
-<div class="block">This is responsible for persisting data statistics (either in memory or to
- disk depending on the implementation).</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.cli">
-<!--   -->
-</a>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/package-summary.html">mil.nga.giat.geowave.core.cli</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.core.cli">DataStatisticsStore</a>
-<div class="block">This is responsible for persisting data statistics (either in memory or to
- disk depending on the implementation).</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStoreFactorySpi.html#mil.nga.giat.geowave.core.cli">DataStatisticsStoreFactorySpi</a>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.geotime.store.statistics">
 <!--   -->
 </a>
@@ -427,13 +374,19 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatistics.html#mil.nga.giat.geowave.core.store">DataStatistics</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.core.store">DataStatisticsStore</a>
 <div class="block">This is responsible for persisting data statistics (either in memory or to
  disk depending on the implementation).</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStoreFactorySpi.html#mil.nga.giat.geowave.core.store">DataStatisticsStoreFactorySpi</a>&nbsp;</td>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/StatisticsProvider.html#mil.nga.giat.geowave.core.store">StatisticsProvider</a>
+<div class="block">This interface defines the set of statistics to capture for a specific
+ adapter.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -460,9 +413,9 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/StatisticalDataAdapter.html#mil.nga.giat.geowave.core.store.adapter.statistics">StatisticalDataAdapter</a>
-<div class="block">This interface allows for a data adapter to define a set of statistics that
- it would like to track</div>
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/StatisticsProvider.html#mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>
+<div class="block">This interface defines the set of statistics to capture for a specific
+ adapter.</div>
 </td>
 </tr>
 </tbody>
@@ -501,8 +454,23 @@
  disk depending on the implementation).</div>
 </td>
 </tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.operations.remote.options">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/package-summary.html">mil.nga.giat.geowave.core.store.operations.remote.options</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStoreFactorySpi.html#mil.nga.giat.geowave.core.store.memory">DataStatisticsStoreFactorySpi</a>&nbsp;</td>
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.core.store.operations.remote.options">DataStatisticsStore</a>
+<div class="block">This is responsible for persisting data statistics (either in memory or to
+ disk depending on the implementation).</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -536,9 +504,6 @@
 <div class="block">This is responsible for persisting data statistics (either in memory or to
  disk depending on the implementation).</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStoreFactorySpi.html#mil.nga.giat.geowave.datastore.accumulo">DataStatisticsStoreFactorySpi</a>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -585,8 +550,68 @@
  disk depending on the implementation).</div>
 </td>
 </tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStoreFactorySpi.html#mil.nga.giat.geowave.datastore.accumulo.metadata">DataStatisticsStoreFactorySpi</a>&nbsp;</td>
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.datastore.hbase">DataStatisticsStore</a>
+<div class="block">This is responsible for persisting data statistics (either in memory or to
+ disk depending on the implementation).</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.mapreduce">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/mapreduce/package-summary.html">mil.nga.giat.geowave.datastore.hbase.mapreduce</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.datastore.hbase.mapreduce">DataStatisticsStore</a>
+<div class="block">This is responsible for persisting data statistics (either in memory or to
+ disk depending on the implementation).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/RowRangeHistogramStatistics.html#mil.nga.giat.geowave.datastore.hbase.mapreduce">RowRangeHistogramStatistics</a>
+<div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
+ numeric attribute.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.metadata">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/package-summary.html">mil.nga.giat.geowave.core.store.adapter.statistics</a> used by <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/metadata/package-summary.html">mil.nga.giat.geowave.datastore.hbase.metadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatistics.html#mil.nga.giat.geowave.datastore.hbase.metadata">DataStatistics</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/class-use/DataStatisticsStore.html#mil.nga.giat.geowave.datastore.hbase.metadata">DataStatisticsStore</a>
+<div class="block">This is responsible for persisting data statistics (either in memory or to
+ disk depending on the implementation).</div>
+</td>
 </tr>
 </tbody>
 </table>

@@ -61,13 +61,13 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>
@@ -93,40 +93,16 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></dd>
-</dl>
 <hr>
 <br>
 <pre>public class <span class="strong">DataStoreCallbackManager</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html#FLUSH_STATS_THRESHOLD">FLUSH_STATS_THRESHOLD</a></strong></code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_summary">
@@ -139,8 +115,9 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html#DataStoreCallbackManager(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore)">DataStoreCallbackManager</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-                        <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html#DataStoreCallbackManager(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20boolean)">DataStoreCallbackManager</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                        <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore,
+                        boolean&nbsp;captureAdapterStats)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -191,38 +168,21 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="FLUSH_STATS_THRESHOLD">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>FLUSH_STATS_THRESHOLD</h4>
-<pre>public static final&nbsp;int FLUSH_STATS_THRESHOLD</pre>
-<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.core.store.DataStoreCallbackManager.FLUSH_STATS_THRESHOLD">Constant Field Values</a></dd></dl>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_detail">
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="DataStoreCallbackManager(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore)">
+<a name="DataStoreCallbackManager(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore, boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DataStoreCallbackManager</h4>
 <pre>public&nbsp;DataStoreCallbackManager(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-                        <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore)</pre>
+                        <a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore,
+                        boolean&nbsp;captureAdapterStats)</pre>
 </li>
 </ul>
 </li>
@@ -270,10 +230,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 <h4>close</h4>
 <pre>public&nbsp;void&nbsp;close()
            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close()" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
-<dt><span class="strong">Throws:</span></dt>
+<dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
@@ -329,13 +286,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>

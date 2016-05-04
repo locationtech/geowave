@@ -142,10 +142,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/Generic
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#createOptionsInstance()">createOptionsInstance</a></strong>()</code>
+<div class="block">Return the default options instance.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getDescription()">getDescription</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getName()">getName</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -204,7 +210,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/Generic
 <a name="getDescription()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getDescription</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDescription()</pre>
@@ -212,6 +218,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/Generic
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html#getDescription()">getDescription</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="createOptionsInstance()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>createOptionsInstance</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;createOptionsInstance()</pre>
+<div class="block">Return the default options instance. This is actually a method that
+ should be implemented by the individual factories, but is placed here
+ since it's the same.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 </li>

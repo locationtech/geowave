@@ -181,29 +181,29 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfigu
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getIndex(java.lang.Class,%20org.apache.hadoop.conf.Configuration)">getIndex</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+        org.apache.hadoop.conf.Configuration&nbsp;config)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getMaximumSplitCount(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getMaximumSplitCount</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getMinimumSplitCount(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getMinimumSplitCount</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getQuery(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
         org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getQueryOptions(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getQueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputConfigurator.html#searchForIndices(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">searchForIndices</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-                org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
@@ -235,7 +235,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfigu
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveConfiguratorBase</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#addDataAdapter(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">addDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#addIndex(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">addIndex</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey(java.lang.Class,%20java.lang.Enum)">enumToConfKey</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey(java.lang.Class,%20java.lang.Enum,%20java.lang.String)">enumToConfKey</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getAdapterStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getAdapterStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getAdapterStoreName(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getAdapterStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getConfiguration(org.apache.hadoop.mapreduce.JobContext)">getConfiguration</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapter(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapters(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataAdapters</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStatisticsStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataStatisticsStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStatisticsStoreName(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataStatisticsStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStoreName(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getGeoWaveNamespace(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getGeoWaveNamespace</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndex(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getIndex</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndexStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getIndexStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndexStoreName(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getIndexStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndices(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getIndices</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance(java.lang.Class,%20java.lang.Enum,%20org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class)">getInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance(java.lang.Class,%20java.lang.Enum,%20org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class,%20java.lang.Class)">getInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextAdapterStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getJobContextAdapterStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextIndexStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getJobContextIndexStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getStoreConfigOptions(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getStoreConfigOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setAdapterStoreName(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.String)">setAdapterStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setDataStatisticsStoreName(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.String)">setDataStatisticsStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setDataStoreName(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.String)">setDataStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setGeoWaveNamespace(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.String)">setGeoWaveNamespace</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setIndexStoreName(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.String)">setIndexStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setRemoteInvocationParams(java.lang.String,%20java.lang.String,%20org.apache.hadoop.conf.Configuration)">setRemoteInvocationParams</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setStoreConfigOptions(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.util.Map)">setStoreConfigOptions</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#addDataAdapter(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">addDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#addIndex(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">addIndex</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey(java.lang.Class,%20java.lang.Enum)">enumToConfKey</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey(java.lang.Class,%20java.lang.Enum,%20java.lang.String)">enumToConfKey</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getConfiguration(org.apache.hadoop.mapreduce.JobContext)">getConfiguration</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapter(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getDataAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapters(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataAdapters</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStatisticsStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataStatisticsStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStoreName(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getDataStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndex(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getIndex</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndices(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getIndices</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance(java.lang.Class,%20java.lang.Enum,%20org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class)">getInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance(java.lang.Class,%20java.lang.Enum,%20org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class,%20java.lang.Class)">getInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextAdapterStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getJobContextAdapterStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextIndexStore(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getJobContextIndexStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#getStoreConfigOptions(java.lang.Class,%20org.apache.hadoop.mapreduce.JobContext)">getStoreConfigOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setDataStoreName(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.lang.String)">setDataStoreName</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setRemoteInvocationParams(java.lang.String,%20java.lang.String,%20org.apache.hadoop.conf.Configuration)">setRemoteInvocationParams</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html#setStoreConfigOptions(java.lang.Class,%20org.apache.hadoop.conf.Configuration,%20java.util.Map)">setStoreConfigOptions</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -275,6 +275,16 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfigu
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getIndex(java.lang.Class, org.apache.hadoop.conf.Configuration)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIndex</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;getIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                    org.apache.hadoop.conf.Configuration&nbsp;config)</pre>
+</li>
+</ul>
 <a name="getQuery(java.lang.Class, org.apache.hadoop.mapreduce.JobContext)">
 <!--   -->
 </a>
@@ -351,22 +361,12 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveConfigu
 <a name="setMaximumSplitCount(java.lang.Class, org.apache.hadoop.conf.Configuration, java.lang.Integer)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>setMaximumSplitCount</h4>
 <pre>public static&nbsp;void&nbsp;setMaximumSplitCount(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                         org.apache.hadoop.conf.Configuration&nbsp;config,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)</pre>
-</li>
-</ul>
-<a name="searchForIndices(java.lang.Class, org.apache.hadoop.mapreduce.JobContext)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>searchForIndices</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;searchForIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-                              org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
 </li>
 </ul>
 </li>

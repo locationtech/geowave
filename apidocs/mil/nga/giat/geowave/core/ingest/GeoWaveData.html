@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveCLIOptionsProvider.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestCLIOperationProvider.html" title="class in mil.nga.giat.geowave.core.ingest"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/ingest/GeoWaveData.html" target="_top">Frames</a></li>
@@ -147,14 +147,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html#getAdapter(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">getAdapter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterCache)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html#getAdapterId()">getAdapterId</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html#getIndexIds()">getIndexIds</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html#getKey()">getKey</a></strong>()</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="type parameter in GeoWaveData">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html#getOutputKey()">getOutputKey</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="type parameter in GeoWaveData">T</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html#getValue()">getValue</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -232,22 +236,31 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getIndexIds()</pre>
 </li>
 </ul>
-<a name="getKey()">
+<a name="getValue()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getKey</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>&nbsp;getKey()</pre>
+<h4>getValue</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="type parameter in GeoWaveData">T</a>&nbsp;getValue()</pre>
 </li>
 </ul>
-<a name="getValue()">
+<a name="getAdapterId()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAdapterId</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getAdapterId()</pre>
+</li>
+</ul>
+<a name="getOutputKey()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getValue</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="type parameter in GeoWaveData">T</a>&nbsp;getValue()</pre>
+<h4>getOutputKey</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="type parameter in GeoWaveData">T</a>&gt;&nbsp;getOutputKey()</pre>
 </li>
 </ul>
 </li>
@@ -276,8 +289,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveCLIOptionsProvider.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestCLIOperationProvider.html" title="class in mil.nga.giat.geowave.core.ingest"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/ingest/GeoWaveData.html" target="_top">Frames</a></li>

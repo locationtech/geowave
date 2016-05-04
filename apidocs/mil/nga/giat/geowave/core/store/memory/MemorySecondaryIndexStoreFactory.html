@@ -105,13 +105,12 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStoreFactorySpi</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">MemorySecondaryIndexStoreFactory</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">AbstractMemoryStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;
-implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStoreFactorySpi</a></pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">AbstractMemoryStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -149,8 +148,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexStoreFactory.html#createStore(java.util.Map,%20java.lang.String)">createStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexStoreFactory.html#createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">createStore</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;configOptions)</code>
+<div class="block">Create the store, w/the options instance that was returned and populated
+ w/createOptionsInstance().</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
@@ -158,18 +159,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.memory.AbstractMemoryStoreFactory">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.memory.<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">AbstractMemoryStoreFactory</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryStoreFactory.html#getOptions()">getOptions</a></code></li>
-</ul>
-<ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.memory.AbstractMemoryFactory">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.memory.<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html" title="class in mil.nga.giat.geowave.core.store.memory">AbstractMemoryFactory</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getDescription()">getDescription</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getName()">getName</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#createOptionsInstance()">createOptionsInstance</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getDescription()">getDescription</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/AbstractMemoryFactory.html#getName()">getName</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -183,7 +177,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#getOptions()">getOptions</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createOptionsInstance()">createOptionsInstance</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.GenericFactory">
@@ -223,18 +217,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createStore(java.util.Map, java.lang.String)">
+<a name="createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createStore</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;createStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore(java.util.Map,%20java.lang.String)">createStore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</code></dd>
-</dl>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;createStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;configOptions)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">GenericStoreFactory</a></code></strong></div>
+<div class="block">Create the store, w/the options instance that was returned and populated
+ w/createOptionsInstance().</div>
 </li>
 </ul>
 <a name="createStore(java.lang.String)">

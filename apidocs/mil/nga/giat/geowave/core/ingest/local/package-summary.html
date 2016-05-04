@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/ingest/local/package-summary.html" target="_top">Frames</a></li>
@@ -108,10 +108,11 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestRunData</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/IngestTask.html" title="class in mil.nga.giat.geowave.core.ingest.local">IngestTask</a></td>
 <td class="colLast">
-<div class="block">A class to hold intermediate run data that must be used throughout the life
- of an ingest process.</div>
+<div class="block">An IngestTask is a thread which listens to items from a blocking queue, and
+ writes those items to IndexWriter objects obtained from LocalIngestRunData
+ (where they are constructed but also cached from the DataStore object).</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -122,6 +123,12 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a></td>
+<td class="colLast">
+<div class="block">This class maintains a pool of index writers keyed by the primary index.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a></td>
 <td class="colLast">
 <div class="block">This class encapsulates all of the options and parsed values specific to
@@ -129,6 +136,10 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.SplitConverter.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions.SplitConverter</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginFileVisitor.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalPluginFileVisitor</a>&lt;P extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>,R&gt;</td>
 <td class="colLast">
 <div class="block">This class is used by any local file driver to recurse a directory of files.</div>
@@ -159,7 +170,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/ingest/local/package-summary.html" target="_top">Frames</a></li>

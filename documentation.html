@@ -433,7 +433,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#what-is-geowave">What is GeoWave</a>
 <ul class="sectlevel2">
 <li><a href="#origin">Origin</a></li>
-<li><a href="#pull-requests">Pull Requests</a></li>
 <li><a href="#intent">Intent</a></li>
 </ul>
 </li>
@@ -443,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#theorydecomposition">Decomposition</a></li>
 </ul>
 </li>
-<li><a href="#screenshots-2">Screenshots</a>
+<li><a href="#example-screenshots">Example screenshots</a>
 <ul class="sectlevel2">
 <li><a href="#geolife">GeoLife</a></li>
 <li><a href="#openstreetmap-gpx-tracks">OpenStreetMap GPX Tracks</a></li>
@@ -458,29 +457,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#architecture-accumulo">Accumulo Key Structure</a></li>
 </ul>
 </li>
-<li><a href="#statistics">Statistics</a>
+<li><a href="#statistics-2">Statistics</a>
 <ul class="sectlevel2">
 <li><a href="#table-structure-in-accumulo">Table Structure in Accumulo</a></li>
-</ul>
-</li>
-<li><a href="#ingest-overview">Ingest</a>
-<ul class="sectlevel2">
-<li><a href="#overview-2">Overview</a></li>
 </ul>
 </li>
 <li><a href="#tools-framework">Tools Framework</a>
 <ul class="sectlevel2">
 <li><a href="#building">Building</a></li>
-<li><a href="#geowave-clear">geowave -clear</a></li>
-<li><a href="#geowave-hdfsingest">geowave -hdfsingest</a></li>
-<li><a href="#geowave-hdfsstage">geowave -hdfsstage</a></li>
-<li><a href="#geowave-kafkastage">geowave -kafkastage</a></li>
-<li><a href="#geowave-localingest">geowave -localingest</a></li>
-<li><a href="#geowave-poststage">geowave -poststage</a></li>
-<li><a href="#geowave-stats">geowave -stats</a></li>
-<li><a href="#geowave-statsdump">geowave -statsdump</a></li>
+<li><a href="#config-commands">Config Commands</a></li>
+</ul>
+</li>
+<li><a href="#ingest">Ingest</a>
+<ul class="sectlevel2">
+<li><a href="#overview-2">Overview</a></li>
+<li><a href="#ingest-commands">Ingest Commands</a></li>
 <li><a href="#ingest-example">Ingest Example</a></li>
-<li><a href="#ingest-plugins">Ingest plugins</a></li>
+<li><a href="#ingest-plugins">Ingest Plugins</a></li>
 <li><a href="#ingest-statistics">Ingest Statistics and Time Dimension Configuration</a></li>
 <li><a href="#ingest-new-formats">New Formats</a></li>
 </ul>
@@ -490,11 +483,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#overview-3">Overview</a></li>
 <li><a href="#building-2">Building</a></li>
 <li><a href="#running">Running</a></li>
+<li><a href="#analytic-commands">Analytic Commands</a></li>
 </ul>
 </li>
 <li><a href="#query">Query</a>
 <ul class="sectlevel2">
 <li><a href="#overview-4">Overview</a></li>
+</ul>
+</li>
+<li><a href="#remotesoverview">Remotes</a>
+<ul class="sectlevel2">
+<li><a href="#remote-commands">Remote Commands</a></li>
 </ul>
 </li>
 <li><a href="#third-party">Third Party</a>
@@ -553,22 +552,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#pdal-plugin-configuration">PDAL Plugin Configuration</a></li>
 </ul>
 </li>
-<li><a href="#documentation-2">Documentation</a>
-<ul class="sectlevel2">
-<li><a href="#overview-8">Overview</a></li>
-<li><a href="#ordering">Ordering</a></li>
-<li><a href="#preview">Preview</a></li>
-<li><a href="#transformation">Transformation</a></li>
-<li><a href="#site">Site</a></li>
-</ul>
-</li>
 <li><a href="#puppet-2">Puppet</a>
 <ul class="sectlevel2">
-<li><a href="#overview-9">Overview</a></li>
+<li><a href="#overview-8">Overview</a></li>
 <li><a href="#options">Options</a></li>
 <li><a href="#examples-2">Examples</a></li>
 <li><a href="#clustered">Clustered</a></li>
 <li><a href="#puppet-script-management">Puppet script management</a></li>
+</ul>
+</li>
+<li><a href="#documentation-2">Documentation</a>
+<ul class="sectlevel2">
+<li><a href="#overview-9">Overview</a></li>
+<li><a href="#ordering">Ordering</a></li>
+<li><a href="#preview">Preview</a></li>
+<li><a href="#transformation">Transformation</a></li>
+<li><a href="#site">Site</a></li>
 </ul>
 </li>
 <li><a href="#appendices-2">Appendices</a>
@@ -613,12 +612,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>GeoWave is a library for storage, index, and search of multi-dimensional data on top of a sorted key-value datastore.
 GeoWave includes specific tailored implementations that have advanced support for OGC spatial types (up to 3 dimensions),
 and both bounded and unbounded temporal values. Both single and ranged values are supported on all axes. GeoWave’s
-geospatial support is built on top of the GeoTools extensibility model, so it plugins natively to GeoServer, uDig, and
-any other GeoTools compatible project – and can ingest GeoTools compatible data sources. GeoWave comes out of the box
-with an Accumulo implementation.</p>
+geospatial support is built on top of the GeoTools extensibility model. This means that it can integrate natively with
+any GeoTools compatible project (such as GeoServer and UDig), and can ingest GeoTools compatible data sources. GeoWave provides out-of-the-box
+support for the <a href="http://projects.apache.org/projects/accumulo.html" target="_blank">Apache Accumulo</a> distributed key/value store.</p>
 </div>
 <div class="paragraph">
-<p>Features:</p>
+<p>GeoWave Features:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -629,7 +628,7 @@ with an Accumulo implementation.</p>
 <p>Adds support for geographic objects and geospatial operators to <a href="http://projects.apache.org/projects/accumulo.html" target="_blank">Apache Accumulo</a></p>
 </li>
 <li>
-<p>Contains a <a href="http://geoserver.org/" target="_blank">GeoServer</a> plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services</p>
+<p>Provides a <a href="http://geoserver.org/" target="_blank">GeoServer</a> plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services</p>
 </li>
 <li>
 <p>Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data</p>
@@ -651,39 +650,28 @@ The software use, modification, and distribution rights are stipulated within th
 </div>
 </div>
 <div class="sect2">
-<h3 id="pull-requests"><a class="anchor" href="#pull-requests"></a>Pull Requests</h3>
-<div class="paragraph">
-<p>All pull request contributions to this project will be released under the Apache 2.0 license.</p>
-</div>
-<div class="paragraph">
-<p>Software source code previously released under an open source license and then modified by NGA staff is considered a
-"joint work" (see <em>17 USC 101</em>); it is partially copyrighted, partially public domain, and as a whole is protected by
-the copyrights of the non-government authors and must be released according to the terms of the original open source license.</p>
-</div>
-</div>
-<div class="sect2">
 <h3 id="intent"><a class="anchor" href="#intent"></a>Intent</h3>
 <div class="sect3">
 <h4 id="pluggable-backend"><a class="anchor" href="#pluggable-backend"></a>Pluggable Backend</h4>
 <div class="paragraph">
 <p>GeoWave is intended to be a multidimensional indexing layer that can be added on top of any sorted key-value store.
-Accumulo was chosen as the target architecture – but HBase would be a relatively straightforward swap – and any
-datastore which allows prefix based range scans should be trivial extensions.</p>
+Accumulo was chosen as the initial target architecture. Support for <a href="https://hbase.apache.org/" target="_blank">Apache HBase</a> is currently in work, and any
+datastore which allows prefix based range scans should be straightforward extensions.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="modular-design"><a class="anchor" href="#modular-design"></a>Modular Design</h4>
 <div class="paragraph">
-<p>The architecture itself is designed to be extremely extensible – with most of the functionality units defined by
-interfaces, with default implementations of these interfaces to cover most use cases. It is expected that the out of the
-box functionality should satisfy 90% of use cases – at least that is the intent – but the modular architecture allows
+<p>The architecture itself is designed to be extremely extensible with most of the functionality units defined by
+interfaces, and with default implementations of these interfaces to cover most use cases. The intent is that the out of the
+box functionality should satisfy 90% of use cases but the modular architecture allows
 for easy feature extension as well as integration into other platforms.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="self-describing-data"><a class="anchor" href="#self-describing-data"></a>Self-Describing Data</h4>
 <div class="paragraph">
-<p>GeoWave also targets keeping data configuration, format, and other information needed to manipulate data in the database
+<p>GeoWave stores the information needed to manipulate data (such as configuration and format), in the database
 itself. This allows software to programmatically interrogate all the data stored in a single or set of GeoWave instances
 without needing bits of configuration from clients, application servers, or other external stores.</p>
 </div>
@@ -698,14 +686,31 @@ without needing bits of configuration from clients, application servers, or othe
 <div class="sect2">
 <h3 id="spatial-index"><a class="anchor" href="#spatial-index"></a>Spatial Index</h3>
 <div class="paragraph">
-<p>The core of the issue is that we need to represent multi-dimensional data (could be (latitude, longitude),
-(latitude, longitude, time), (latitude, longitude, altitude, time) – or even (feature vector1, feature vector 2 (…)
-feature vector n)) in a manner that can be reduced to a series of ranges on a 1 dimensional number line. This is due
-to the way Accumulo (and any big table based database really) stores the data – as a sorted set of key/value pairs.</p>
+<p>GeoWave creates a spatial index to represent multi-dimensional data in a manner that can be reduced to a series of ranges on a 1 dimensional number line.
+Examples of these include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>latitude, longitude</p>
+</li>
+<li>
+<p>latitude, longitude, time</p>
+</li>
+<li>
+<p>latitude, longitude, altitude, time</p>
+</li>
+<li>
+<p>feature vector1, feature vector 2 (…), feature vector n</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>What we want is a property that ensures values close in n-dimensional space are still close in 1-dimensional space.
-There are a few reasons for this – but primarily it’s so we can represent a n-dimensional range selector(bbox typically
+<p>This is due to the way Accumulo (and any big table based database really) stores the data – as a sorted set of key/value pairs.</p>
+</div>
+<div class="paragraph">
+<p>The goal is to provide a property that ensures values close in n-dimensional space are still close in 1-dimensional space.
+There are a few reasons for this, but primarily it’s so we can represent an n-dimensional range selector (bbox typically
 – but can be abstracted to a hyper-rectangle) as a smaller number of highly contiguous 1d ranges.</p>
 </div>
 <div class="imageblock">
@@ -718,8 +723,8 @@ There are a few reasons for this – but primarily it’s so we can represent a 
 </div>
 <div class="paragraph">
 <p>Fortunately there is already a type of transform that describes this operation in mathematics – it’s called a “Space
-Filling Curve” – or SFC for short. Different space filling curves have different properties - what they all do is take
-a n-dimensional space and describe a set of steps to trace all points in a single sequence.</p>
+Filling Curve” – or SFC for short. Different space filling curves have different properties, but they all take
+an n-dimensional space and describe a set of steps to trace all points in a single sequence.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -734,18 +739,18 @@ a n-dimensional space and describe a set of steps to trace all points in a singl
 an excellent starting point to start learning about these curves.</p>
 </div>
 <div class="paragraph">
-<p>For the purposes of GeoWave we have implemented two space fillings curves:</p>
+<p>GeoWave has implemented two space filling curves: Z-Order and Hilbert.</p>
 </div>
 <div class="sect3">
 <h4 id="z-order-sfc"><a class="anchor" href="#z-order-sfc"></a>Z-Order SFC</h4>
 <div class="paragraph">
 <p>This is also commonly called a GeoHash, or Morton order (and sometimes incorrectly called a Peano curve). This is the
 most popular SFC used for multi-dimensional &#8594; 1-dimensional mappings – primarily because it is both intuitive and very
-easy to implement in code. There are two common ways to implement this – ideally a bit-interleaving is used (that is
-what gives rise to the diagram in figure 2) – imagine we had two numbers, A and B. Let the binary representation of
+easy to implement in code. There are two common ways to implement this. Ideally a bit-interleaving approach is used (that is
+what gives rise to the diagram in figure 2). Imagine we had two numbers, A and B. Let the binary representation of
 those numbers be A1A2A3 and B1B2B3. The “bit interleaved” version would be A1B1A2B2A3B3. Since we are working with
-binary numbers this gives a “unit cell” of 2x2. If we added dimensions just image the same interleaving, but another
-term - C1C2C3, etc. + This is sometimes implemented in base 10 instead of base 2. This implementation reduces somewhat
+binary numbers this gives a “unit cell” of 2x2. If we added dimensions, just imagine the same interleaving, but another
+term - C1C2C3, etc. This is sometimes implemented in base 10 instead of base 2. This implementation reduces somewhat
 the locality (“packing property” – or the measure of how close numbers in n-dimensional space are to numbers in 1-dimensional
 space). As you might expect a two dimensional version of this gives a unit cell of 10x10 (for two dimensions) – hence the
 worse packing.</p>
@@ -757,7 +762,7 @@ worse packing.</p>
 decomposition – hence it is less commonly used. Nevertheless it is popular in other areas in computer science where
 multiple variables need to be set in a linear order – process scheduling for one. A simplistic view of a standard
 projections of the earth mapped to a Hilbert curve would look something like this – with 4 bits of cardinality per
-dimension (how many buckets we have)</p>
+dimension (how many buckets we have).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -768,10 +773,10 @@ dimension (how many buckets we have)</p>
 <p><em>Figure: Hilbert space filling curve superimposed over a projection of the earth</em></p>
 </div>
 <div class="paragraph">
-<p>Note that there are the cardinality (number of buckets per dimensions) has an impact on the resolution of our Hilbert
+<p>Note that the cardinality (number of buckets per dimensions) has an impact on the resolution of our Hilbert
 index. Here we map from -180 to +180 over 16 buckets – so we have resolution of no better than 360/16, or 22.5 degrees
 for longitude (and incidentally 11.25 degrees for latitude). This doesn’t mean we can’t represent values more precisely
-than this – it just means our initial (coarse) index – based on SFC ranges – can’t provide resolution any better than
+than this. It just means that our initial (coarse) index (based on SFC ranges) can’t provide resolution any better than
 this. Adding more bits per dimensions will increase the precision of the SFC based index.</p>
 </div>
 </div>
@@ -780,7 +785,7 @@ this. Adding more bits per dimensions will increase the precision of the SFC bas
 <div class="sect2">
 <h3 id="theorydecomposition"><a class="anchor" href="#theorydecomposition"></a>Decomposition</h3>
 <div class="paragraph">
-<p>Core to the concept of SFC based indexing is range decomposition. This is when we take a range described in multiple
+<p>Range decomposition is core to the concept of SFC based indexing. This is when we take a range described in multiple
 dimensions and turn it into a series of 1d ranges.</p>
 </div>
 <div class="imageblock">
@@ -793,17 +798,17 @@ dimensions and turn it into a series of 1d ranges.</p>
 </div>
 <div class="paragraph">
 <p>In the figure above we show that we mean by this. The bounding box described by the blue selection window – or
-(2,9) &#8594; (5,13) will “fully” decompose to 3 ranges – 70-75, 92&#8594;99, and 116&#8594;121.</p>
+(2,9) &#8594; (5,13) will “fully” decompose to 3 ranges – 70&#8594;75, 92&#8594;99, and 116&#8594;121.</p>
 </div>
 <div class="paragraph">
 <p>It should be noted that sometimes more simplistic algorithms will not fully decompose – but would instead represent
-this as 70-121, or even 64&#8594;127 (the smallest “unit cell” this box fits in). As you can see this would result in
+this as 70&#8594;121, or even 64&#8594;127 (the smallest “unit cell” this box fits in). As you can see, this would result in
 scanning many extraneous cells.</p>
 </div>
 <div class="paragraph">
-<p>At some point – with high precision high dimensionality curves – the number of possible unit cells can become to large
-too deal with – in this case GeoWaves optimizes this by treating the curve as a “lower cardinality” curve than it
-actually is – so the unit cell size might not be 1, but instead 64, 128, 1024, etc. This allows the user to still
+<p>At some point, with high precision high dimensionality curves, the number of possible unit cells can become too large
+to deal with. In such a case, GeoWave optimizes this by treating the curve as a “lower cardinality” curve than it
+actually is. So the unit cell size might not be 1, but instead 64, 128, 1024, etc. This allows the user to still
 achieve high precision when selection windows are small, but not spend an inordinate amount of time fully decomposing
 for large selection windows.</p>
 </div>
@@ -885,11 +890,11 @@ regions which are contiguous.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="screenshots-2"><a class="anchor" href="#screenshots-2"></a>Screenshots</h2>
+<h2 id="example-screenshots"><a class="anchor" href="#example-screenshots"></a>Example screenshots</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The screenshots below are of data loaded from the various attributed data sets into a Geowave instance, processed
-(in some cases) by a Geowave analytic process, and rendered by Geoserver.</p>
+<p>The screenshots below are of data loaded from various attributed data sets into a GeoWave instance, processed
+(in some cases) by a GeoWave analytic process, and rendered by Geoserver.</p>
 </div>
 <div class="sect2">
 <h3 id="geolife"><a class="anchor" href="#geolife"></a>GeoLife</h3>
@@ -903,7 +908,7 @@ year period (April 2007 to August 2012). There are 17,621 trajectories in this d
 <div class="sect3">
 <h4 id="geolife-at-city-scale"><a class="anchor" href="#geolife-at-city-scale"></a>GeoLife at city scale</h4>
 <div class="paragraph">
-<p>Below are renderings of GeoLife data. They display both the raw points, as well as the results of a GeoWave kernel
+<p>Below are renderings of GeoLife data. They display the raw points as well as the results of a GeoWave kernel
 density analytic. The data corresponds to Mapbox zoom level 13.</p>
 </div>
 <div class="imageblock">
@@ -989,7 +994,7 @@ Beijing, China and surrounding areas over  a one week period. There are approxim
 <div class="sect3">
 <h4 id="t-drive-at-city-scale"><a class="anchor" href="#t-drive-at-city-scale"></a>T-drive at city scale</h4>
 <div class="paragraph">
-<p>Below are renderings of the t-drive data. They display both the raw points, as well as the results of a Geowave kernel
+<p>Below are renderings of the t-drive data. They display the raw points along with the results of a GeoWave kernel
 density analytic. The data corresponds to Mapbox zoom level 12.</p>
 </div>
 <div class="imageblock">
@@ -1064,11 +1069,11 @@ density analytic. The data corresponds to Mapbox zoom level 12.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>At the core of the GeoWave architecture concept is getting data in, and pulling data out – or Ingest and Query. There
-are also two types of data persisted in the system – feature data, and metadata. Feature data is the actual set of
+<p>The core of the GeoWave architecture concept is getting data in, and pulling data out – or Ingest and Query. There
+are also two types of data persisted in the system: feature data, and metadata. Feature data is the actual set of
 attributes and geometries that are stored for later retrieval. Metadata describes how the data is persisted in the
-database. The intent is to store the information needed for data discovery and retrieval in the database – so an
-existing data store isn’t tied to a bit of configuration on a particular external server or client – but instead is
+database. The intent is to store the information needed for data discovery and retrieval in the database. This means that an
+existing data store isn’t tied to a bit of configuration on a particular external server or client, but instead is
 “self-describing.”</p>
 </div>
 </div>
@@ -1098,7 +1103,7 @@ configured with several different parameters:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>More on each of these properties will be described later; this list here is just to give the reader a notion of what
+<p>More on each of these properties will be described later; the intent of this list is to provide a notion of what
 type of configuration information is persisted.</p>
 </div>
 <div class="paragraph">
@@ -1112,12 +1117,12 @@ though).</p>
 <div class="sect2">
 <h3 id="architecture-adapters"><a class="anchor" href="#architecture-adapters"></a>Adapters</h3>
 <div class="paragraph">
-<p>To store geometry, attributes, and other information a format is needed that describes how to serialize and deserialize.
-An interface is provided that handles the serialization and deserialization of features. A default implementation
-supporting the GeoTools simple feature type is also included by default. More on this specific implementation as well
-as the interface will be detailed later. In the Adapter persistence table a pointer to the java class (expected to be on
-the classpath) is stored. This is loaded dynamically when the data is queried and results are translated to the native
-data type</p>
+<p>In order to store geometry, attributes, and other information, a format is required that describes how to serialize and deserialize the data.
+GeoWave provides an interface that handles the serialization and deserialization of feature data. A default implementation
+supporting the GeoTools simple feature type is included by default. More on this specific implementation, as well
+as the interface, will be detailed later in this document. A pointer to the java class (expected to be on
+the classpath) is stored in the Adapter persistence table. This is loaded dynamically when the data is queried and the
+results are translated to the native data type</p>
 </div>
 <div class="sect3">
 <h4 id="feature-serialization"><a class="anchor" href="#feature-serialization"></a>Feature Serialization</h4>
@@ -1127,19 +1132,19 @@ data type</p>
 </div>
 </div>
 <div class="paragraph">
-<p>GeoWave allows the user to create their own data adapters - these not only determine how the data is actually stored
+<p>GeoWave allows developers to create their own data adapters. Adapters not only determine how the data is actually stored
 (serialization/deserialization), but also contain a hierarchy of attribute types. The reason for this hierarchy has to
 do with extensibility vs. optimization. A data adapter could theoretically take a dependency on ffmpeg, store the
 feature as metadata in a video stream, and persist that value to the database. All questions of sanity of this solution
 aside, there are some additional specific issues with the way fine grain filtering is done - specifically due to the
 iterators. Iterators are part of the Accumulo extensibility module and allow for arbitrary code to be plugged in directly
-at the tablet server level into the core accumulo kernel. With more code in the iterators there is both a greater chance
-of crashing (and taking down a tablet server - and possibly an accumulo instance), greater use of memory (memory used by
+at the tablet server level into the core Accumulo kernel. With more code in the iterators there is both a greater chance
+of crashing (and taking down a tablet server - and possibly an Accumulo instance), greater use of memory (memory used by
 the iterator / class loader isn&#8217;t available for caching, etc., and a greater O&amp;M debt - the iterators have to be
-distributed to each client out of band - and require impersonating the accumulo user (possibly root).</p>
+distributed to each client out of band - and require impersonating the Accumulo user (possibly root).</p>
 </div>
 <div class="paragraph">
-<p>Based on this our target was to minimize the code, and standardize on as few iterators as possible. This conflicted with
+<p>Based on this, our goal was to minimize the code, and standardize on as few iterators as possible. This conflicted with
 the desire to allow maximum flexibility with arbitrary DataAdapters. A middle ground was found, and this hierarchy was
 created. Some standardization was put in place around how certain data types would be stored and serialized, but a
 "native data" portion was still left in place for arbitrary data - with the caveat that native data cannot be used in
@@ -1159,7 +1164,7 @@ They cannot be null.</p>
 <div class="paragraph">
 <p>These are a collection of attributes. There can be any number of attributes, but they must conform to the DimensionField
 interface - the attribute type must have a FieldReader and a FieldWriter that is within the classpath of the tablet
-servers. We provide a basic implementation for these attribute types:</p>
+servers. GeoWave provides a basic implementation for these attribute types:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1219,39 +1224,6 @@ serialize and deserialize these items in the form of Field Readers and Writers, 
 methods on the classpath of any Accumulo nodes.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h4>
-<div class="paragraph">
-<p>Adapters provide a set of statistics stored within a statistic store.  The set of available statistics is specific to each adapter and
-the set of attributes for those data items managed by the adapter. Statistics include:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Ranges over an attribute, including time.</p>
-</li>
-<li>
-<p>Enveloping bounding box over all geometries.</p>
-</li>
-<li>
-<p>Cardinality of the number of stored items.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Optional statistics include:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Histograms over the range of values for an attribute.</p>
-</li>
-<li>
-<p>Cardinality of discrete values of an attribute.</p>
-</li>
-</ul>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="architecture-accumulo"><a class="anchor" href="#architecture-accumulo"></a>Accumulo Key Structure</h3>
@@ -1264,18 +1236,19 @@ the set of attributes for those data items managed by the adapter. Statistics in
 <p>The above diagram describes the default structure of entries in the Accumulo data store. The index ID comes directly
 from the tiered space filling curve implementation. We do not impose a requirement that data IDs are globally unique
 but they should be unique for the adapter. Therefore, the pairing of Adapter ID and Data ID define a unique identifier
-for a data element. The lengths are stored within the row ID as 4 byte integers - this enables fully reading the row ID
+for a data element. The lengths are stored within the row ID as 4 byte integers. This enables fully reading the row ID
 because these IDs can be of variable length. The number of duplicates is stored within the row ID as well to inform the
-de-duplication filter whether this element needs to be temporarily stored to ensure no duplicates are sent to the caller.
+de-duplication filter whether this element needs to be temporarily stored in order to ensure no duplicates are sent to the caller.
 The adapter ID is within the Row ID to enforce unique row IDs as a whole row iterator is used to aggregate fields for the
 distributable filters. The adapter ID is also used as the column family as the mechanism for adapter-specific queries to
 fetch only the appropriate column families.</p>
 </div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h2>
+<h2 id="statistics-2"><a class="anchor" href="#statistics-2"></a>Statistics</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Adapters provide a set of statistics stored within a statistic store.  The set of available statistics is specific to each adapter and
@@ -1302,7 +1275,7 @@ the set of attributes for those data items managed by the adapter. Statistics in
 </div>
 <div class="paragraph">
 <p>Statistics are updated during data ingest and deletion.  Range and bounding box statistics reflect the largest range over time.
-Those statistics are not updated during deletion. Cardinality-based statistics are updated upon deletion.</p>
+Those statistics are not updated during deletion. Statistics based on cardinality are updated upon deletion.</p>
 </div>
 <div class="paragraph">
 <p>Statistics retain the same visibility constraints as the associated attributes.  Thus, there is a set of statistics for each unique constraint.
@@ -1340,43 +1313,12 @@ contains an attribute that represents the minimum or maximum value for the popul
 </li>
 </ol>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="ingest-overview"><a class="anchor" href="#ingest-overview"></a>Ingest</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-2"><a class="anchor" href="#overview-2"></a>Overview</h3>
-<div class="imageblock">
-<div class="content">
-<img src="./images/ingestoverview1.png" alt="Ingest Architecture">
-</div>
-</div>
 <div class="paragraph">
-<p>In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format
-that can be persisted into the data store. Also, the ingest process requires an Index which is a definition of all the
-configured parameters that defines how data translates to row IDs (how it is indexed) and what common fields need to
-be maintained within the table to be used by fine-grained and secondary filters.</p>
+<p>\\\\
+TODO: figure out why the list above causes formatting issues with the next section
+\\\\</p>
 </div>
-<div class="paragraph">
-<p>The logic within the ingest process immediately ensures that the index and data adapter are persisted within the Index
-Store and the Adapter Store to support self-described data discovery, although in memory implementations of both of these
-stores are provided for cases when connections to Accumulo are undesirable in the ingest process (such as if ingesting
-bulk data in a Map-Reduce job). Then the flow determines the set of row IDs that the data will need to be inserted in -
-duplication is essential under certain circumstances and therefore data may be inserted in multiple locations
-(for example, polygons that cross the dateline, or date ranges that cross binning boundaries such as
-December 31-January 1 when binning by year). De-duplication is always performed as a client filter when querying the
-data. This will be combined with the actual data in a persistable format (after a translation has been performed by the
-adapter) to create a set of mutations.</p>
-</div>
-<div class="paragraph">
-<p>There is a Writer interface that the data store&#8217;s AccumuloOperations will instantiate which specifies how the mutations
-will actually be written. The default implementation will wrap an Accumulo BatchWriter with this interface, but in some
-cases it could make sense to provide a custom implementation of the writer - if performing a bulk ingest within the
-mapper or reducer of a job, it would be appropriate to define a writer to add the mutations to the context of the bulk
-ingest rather than writing live to Accumulo.</p>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -1385,7 +1327,7 @@ ingest rather than writing live to Accumulo.</p>
 <h2 id="tools-framework"><a class="anchor" href="#tools-framework"></a>Tools Framework</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A plugin framework (using SPI based injection) is provided with several input formats and utilities supported out of the box.</p>
+<p>A plugin framework (using Service Provider Interface (SPI) based injection) is provided with several input formats and utilities supported out of the box.</p>
 </div>
 <div class="paragraph">
 <p>First we&#8217;ll show how to build and use the built in formats, and after that describe how to create a new plugin.</p>
@@ -1393,7 +1335,7 @@ ingest rather than writing live to Accumulo.</p>
 <div class="sect2">
 <h3 id="building"><a class="anchor" href="#building"></a>Building</h3>
 <div class="paragraph">
-<p>First build the main project after specifynig the dependency versions you&#8217;d like to build against.</p>
+<p>First build the main project after specifying the dependency versions you&#8217;d like to build against.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1434,702 +1376,970 @@ containing the tools jar and any needed plugin jars and use with something like 
 </div>
 </div>
 <div class="sect2">
-<h3 id="geowave-clear"><a class="anchor" href="#geowave-clear"></a>geowave -clear</h3>
+<h3 id="config-commands"><a class="anchor" href="#config-commands"></a>Config Commands</h3>
+<div class="paragraph">
+<p>Commands that affect local configuration only</p>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-addindex"><a class="anchor" href="#geowave-config-addindex"></a>geowave config addindex</h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave-clear - Delete existing GeoWave content from Accumulo</p>
+<p>geowave config addindex - creates an index configuration for use in GeoWave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p><strong>geowave -clear</strong> &lt;options&gt;</p>
+<p><strong>geowave config addindex</strong> [options] &lt;name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave -clear(1) operator will delete ALL data from a GeoWave namespace, this actually deletes Accumulo tables prefixed by the given namespace</p>
+<p>The geowave config addindex operator will create a local index configuration
+that can be reused but is not associated with a store until data is ingested.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">-c, --clear</dt>
+<dt class="hdlist1">-d, --default</dt>
 <dd>
-<p>Clear ALL data stored with the same prefix as this namespace (optional; default is to append data to the namespace if it exists)</p>
+<p>Make this the default index  for creating stores</p>
 </dd>
-<dt class="hdlist1">-dim, --dimensionality &lt;arg&gt;</dt>
+<dt class="hdlist1">-np, --numPartitions &lt;arg&gt;</dt>
 <dd>
-<p>The dimensionality type for the index, either 'spatial' or 'spatial-temporal' (optional; default is 'spatial')</p>
+<p>The number of partitions</p>
+<div class="literalblock">
+<div class="content">
+<pre>Default: 1</pre>
+</div>
+</div>
 </dd>
-<dt class="hdlist1">-f,--formats &lt;arg&gt;</dt>
+<dt class="hdlist1">-ps, --partitionStrategy &lt;arg&gt;</dt>
 <dd>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+<p>The partition strategy to use</p>
+<div class="literalblock">
+<div class="content">
+<pre>Default: NONE</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Possible Values: NONE, HASH, ROUND_ROBIN</pre>
+</div>
+</div>
 </dd>
-<dt class="hdlist1">-h, --help</dt>
+<dt class="hdlist1">*-t, --type &lt;arg&gt;</dt>
 <dd>
-<p>Display help</p>
+<p>The type of index, such as spatial or spatial_temporal</p>
 </dd>
-<dt class="hdlist1">-i, --instance-id &lt;arg&gt;</dt>
+</dl>
+</div>
+<div class="paragraph">
+<p>Required options: -t, --type</p>
+</div>
+<div class="paragraph">
+<p>When -t, --type is spatial, the following options are available</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>--allTiers
+   The index will represent all tiers.  Typically for vector data we only
+   need a subset of the tiers to minimize query decomposition, but for raster
+   data typically all tiers is better.
+   Default: false</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-d, --default
+   Make this the default index creating stores</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-np, --numPartitions
+   The number of partitions.  Default partitions will be 1.
+   Default: 1</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-ps, --partitionStrategy
+   The partition strategy to use.  Default will be none.
+   Default: NONE
+   Possible Values: [NONE, HASH, ROUND_ROBIN]</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>--pointOnly
+   The index will only be good at handling pointsand will not be optimized
+   for handling lines/polys.  The default behavior is to handle any geometry.
+   Default: false</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When -t, --type is spatial_temporal, the following options are available</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>--bias
+   The bias of the spatial-temporal index. There can be more precision given
+   to time or space if necessary.
+   Default: BALANCED
+   Possible Values: [TEMPORAL, BALANCED, SPATIAL]</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-d, --default
+   Make this the default index creating stores</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-np, --numPartitions
+   The number of partitions.  Default partitions will be 1.
+   Default: 1</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-ps, --partitionStrategy
+   The partition strategy to use.  Default will be none.
+   Default: NONE
+   Possible Values: [NONE, HASH, ROUND_ROBIN]</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>--period
+   The periodicity of the temporal dimension.  Because time is continuous,
+   it is binned at this interval.
+   Default: YEAR
+   Possible Values: [DAY, MONTH, YEAR]</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>--pointTimestampOnly
+   The index will only be good at handling points and timestamps and will
+   not be optimized for handling lines/polys or time ranges.  The default
+   behavior is to handle any geometry and time ranges well.
+   Default: false</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-addindexgrp"><a class="anchor" href="#geowave-config-addindexgrp"></a>geowave config addindexgrp</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config addindexgrp - Group multiple index configurations together given a name
+SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config addindexgrp</strong> [options] &lt;name&gt; &lt;comma separated list of indexes&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config addindexgrp operator will group multiple index configurations together given a name.
+This acts as a convenience for re-using multiple indices together on ingest.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-addstore"><a class="anchor" href="#geowave-config-addstore"></a>geowave config addstore</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config addstore - creates a new store in GeoWave</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config addstore</strong> [options] &lt;name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config addstore operator will create a new store in GeoWave.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-d, --default</dt>
 <dd>
-<p>The Accumulo instance ID</p>
+<p>Make this the default store in all operations</p>
 </dd>
-<dt class="hdlist1">-l, --list</dt>
+<dt class="hdlist1">*-t, --type &lt;arg&gt;</dt>
 <dd>
-<p>List the available ingest types</p>
+<p>The type of store, such as accumulo, memory, etc.</p>
 </dd>
-<dt class="hdlist1">-n, --namespace &lt;arg&gt;</dt>
+</dl>
+</div>
+<div class="paragraph">
+<p>Required options: -t, --type</p>
+</div>
+<div class="paragraph">
+<p>When -t accummulo option is used, additional options are:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>--gwNamespace
+    The geowave namespace (optional; default is no namespace)</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-i, --instance
+The Accumulo instance ID</p>
+</li>
+<li>
+<p>-p, --password
+The password for the user</p>
+</li>
+<li>
+<p>-u, --user
+A valid Accumulo user ID</p>
+</li>
+<li>
+<p>-z, --zookeeper
+A comma-separated list of zookeeper servers that an Accumulo instance is
+using</p>
+<div class="literalblock">
+<div class="content">
+<pre>The following options are required: -u, --user -i, --instance -p, --password -z, --zookeeper</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When -t, --type hbase option is used, additional options are:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-d, --default
+    Make this the default index creating stores</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-np, --numPartitions
+    The number of partitions.  Default partitions will be 1.
+    Default: 1</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-ps, --partitionStrategy
+    The partition strategy to use.  Default will be none.
+    Default: NONE
+    Possible Values: [NONE, HASH, ROUND_ROBIN]</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>-t, --type
+    The type of index, such as spatial, or spatial_temporal
+    Default: hbase</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-cpindex"><a class="anchor" href="#geowave-config-cpindex"></a>geowave config cpindex</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config cpindex - copies and modifies an existing index configuration</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config cpindex</strong> [options] &lt;name&gt; &lt;new name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config cpindex operator will copy and modify an existing index configuration.
+It is possible to override values as you copy, such as cpindex old new --gwNamespace new_namespace.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-d, --default</dt>
 <dd>
-<p>The table namespace (optional; default is no namespace)</p>
+<p>Make this the default index creating stores</p>
 </dd>
-<dt class="hdlist1">-p, --password &lt;arg&gt;</dt>
+<dt class="hdlist1">-np, numPartitions</dt>
 <dd>
-<p>The password for the user</p>
+<p>The number of partitions. Default partitions will be 1.
+Default: 1</p>
 </dd>
-<dt class="hdlist1">-u, --user &lt;arg&gt;</dt>
+<dt class="hdlist1">-ps, --partitionStrategy</dt>
 <dd>
-<p>A valid Accumulo user ID</p>
-</dd>
-<dt class="hdlist1">-v, --visibility &lt;arg&gt;</dt>
-<dd>
-<p>The visibility of the data ingested (optional; default is 'public')</p>
-</dd>
-<dt class="hdlist1">-z, --zookeepers &lt;arg&gt;</dt>
-<dd>
-<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
+<p>The partition strategy to use. Default will be none.
+Default: NONE
+Possible Values: [NONE, HASH, ROUND ROBIN]</p>
 </dd>
 </dl>
 </div>
 </div>
-<div class="sect2">
-<h3 id="geowave-hdfsingest"><a class="anchor" href="#geowave-hdfsingest"></a>geowave -hdfsingest</h3>
+<div class="sect3">
+<h4 id="geowave-config-cpstore"><a class="anchor" href="#geowave-config-cpstore"></a>geowave config cpstore</h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave-hdfsingest - Load content from an HDFS file system</p>
+<p>geowave config cpstore - copies and modifies an existing GeoWave store</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p><strong>geowave -hdfsingest</strong> &lt;options&gt;</p>
+<p><strong>geowave config cpstore</strong> [options] &lt;name&gt; &lt;new name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave -hdfsingest(1) operator first copies the local files to an Avro record in HDFS, then executes the
-ingest process as a map-reduce job. Data is ingested into Geowave using the GeowaveInputFormat. This is likely to be
-the fastest ingest method overall for data sets of any notable size (or if they have a large ingest/transform cost).</p>
+<p>The geowave cpstore operator will copy and modify an existing GeoWave store.
+It is possible to override values as you copy, such as cpstore old new --gwNamespace new_namespace.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS
+-d, --default::</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Makes this the default store in all operations</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-list"><a class="anchor" href="#geowave-config-list"></a>geowave config list</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config list - will list all properties in local config</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config list</strong> [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config list operator will list all properties in local config.
+-f or --filter will allow you to give a regex to filter the list by
+(useful regexes may be 'store' or 'index' to isolate properties for one or the other or a particular store/index name to further isolate the list).</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">-b, --base &lt;arg&gt;</dt>
+<dt class="hdlist1">-f or --filter &lt;arg&gt;</dt>
 <dd>
-<p>Base input file or directory to crawl with one of the supported ingest types</p>
+<p>Filter list by a regex</p>
 </dd>
-<dt class="hdlist1">-c, --clear</dt>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-rmindex"><a class="anchor" href="#geowave-config-rmindex"></a>geowave config rmindex</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config rmindex - removes an index configuration from GeoWave configuration</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config rmindex</strong> [options] &lt;name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config rmindex operator will remove an index configuration from GeoWave configuration</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-rmindexgrp"><a class="anchor" href="#geowave-config-rmindexgrp"></a>geowave config rmindexgrp</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config rmindexgrp - removes an index group from GeoWave configuration</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config rmindexgrp</strong> [options] &lt;name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config rmindexgrp operator will remove an index group from GeoWave configuration</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-rmstore"><a class="anchor" href="#geowave-config-rmstore"></a>geowave config rmstore</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config rmstore - removes an existing store from GeoWave configuration</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config rmstore</strong> [options] &lt;name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config rmstore operator will remove an existing store from GeoWave configuration GeoWave store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-config-set"><a class="anchor" href="#geowave-config-set"></a>geowave config set</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config set - will set a valid property name within the cache</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config set</strong> [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config set operator will set a valid property name within the cache.
+This can be useful if you want to update a particular property of a index or store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ingest"><a class="anchor" href="#ingest"></a>Ingest</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="overview-2"><a class="anchor" href="#overview-2"></a>Overview</h3>
+<div class="paragraph">
+<p>In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format
+that can be persisted into the data store. Also, the ingest process requires an Index which is a definition of all the
+configured parameters that define how data is translated to row IDs (how it is indexed) and what common fields need to
+be maintained within the table to be used by fine-grained and secondary filters.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/ingestoverview1.png" alt="Ingest Architecture">
+</div>
+</div>
+<div class="paragraph">
+<p>The logic within the ingest process immediately ensures that the index and data adapter are persisted within the Index
+Store and the Adapter Store to support self-described data discovery. In-memory implementations of both of these
+stores are provided for cases when connections to Accumulo are undesirable in the ingest process (such as ingesting
+bulk data in a Map-Reduce job). Then the flow determines the set of row IDs that the data will need to be inserted into.
+Duplication is essential under certain circumstances and therefore data may be inserted in multiple locations
+(for example, polygons that cross the dateline, or date ranges that cross binning boundaries such as
+December 31-January 1 when binning by year). De-duplication is always performed as a client filter when querying the
+data. This will be combined with the actual data in a persistable format (after a translation has been performed by the
+adapter) to create a set of mutations.</p>
+</div>
+<div class="paragraph">
+<p>There is a Writer interface that the data store&#8217;s AccumuloOperations will instantiate which specifies how the mutations
+will actually be written. The default implementation will wrap an Accumulo BatchWriter with this interface, but in some
+cases it could make sense to provide a custom implementation of the writer. When performing a bulk ingest within the
+mapper or reducer of a job, it would be appropriate to define a writer to add the mutations to the context of the bulk
+ingest rather than writing live to Accumulo.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ingest-commands"><a class="anchor" href="#ingest-commands"></a>Ingest Commands</h3>
+<div class="paragraph">
+<p>Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave</p>
+</div>
+<div class="sect3">
+<h4 id="geowave-ingest-listformat"><a class="anchor" href="#geowave-ingest-listformat"></a>geowave ingest listformat</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config cpindex - copies and modifies an existing index configuration</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave config cpindex</strong> [options] &lt;name&gt; &lt;new name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave config cpindex operator will copy and modify an existing index configuration.
+It is possible to override values as you copy, such as cpindex old new --gwNamespace new_namespace.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-d, --default</dt>
 <dd>
-<p>Clear ALL data stored with the same prefix as this namespace (optional; default is to append data to the namespace if it exists)</p>
+<p>Make this the default index creating stores</p>
 </dd>
-<dt class="hdlist1">-dim, --dimensionality &lt;arg&gt;</dt>
+<dt class="hdlist1">-np, numPartitions</dt>
 <dd>
-<p>The dimensionality type for the index, either 'spatial' or 'spatial-temporal' (optional; default is 'spatial')</p>
+<p>The number of partitions. Default partitions will be 1.
+Default: 1</p>
 </dd>
-<dt class="hdlist1">-f,--formats &lt;arg&gt;</dt>
+<dt class="hdlist1">-ps, --partitionStrategy</dt>
 <dd>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+<p>The partition strategy to use. Default will be none.
+Default: NONE
+Possible Values: [NONE, HASH, ROUND ROBIN]</p>
 </dd>
-<dt class="hdlist1">-h, --help</dt>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-ingest-localtogw"><a class="anchor" href="#geowave-ingest-localtogw"></a>geowave ingest localToGW</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToGW - Ingest supported files in local file system directly, without using HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave ingest localToGW</strong> [options] &lt;file or directory&gt; &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest localToGW operator will run the ingest code (parse to features, load features to geowave) against local file system content.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-x, --extension</dt>
 <dd>
-<p>Display help</p>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
 </dd>
-<dt class="hdlist1">-hdfs &lt;arg&gt;</dt>
+<dt class="hdlist1">-f, --formats</dt>
 <dd>
-<p>HDFS hostname and port in the format hostname:port</p>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited
+formats), if not set all available ingest formats will be used</p>
 </dd>
-<dt class="hdlist1">-hdfsbase &lt;arg&gt;</dt>
+<dt class="hdlist1">-t, --threads</dt>
 <dd>
-<p>The fully qualified path to the base directory in HDFS</p>
+<p>number of threads to use for ingest, default to 1 (optional)
+Default: 1</p>
 </dd>
-<dt class="hdlist1">-instance &lt;arg&gt;</dt>
+<dt class="hdlist1">-v, --visibility</dt>
 <dd>
-<p>The Accumulo instance ID</p>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
 </dd>
-<dt class="hdlist1">-jobtracker &lt;arg&gt;</dt>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-ingest-localtomrgw"><a class="anchor" href="#geowave-ingest-localtomrgw"></a>geowave ingest localToMrGW</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToMrGW - Copy supported files from local file system to HDFS and ingest from HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave ingest localToMrGW</strong> [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest localToMrGW operator will Copy supported files from local file system to HDFS and ingest from HDFS</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-x, --extension</dt>
+<dd>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
+</dd>
+<dt class="hdlist1">-f, --formats</dt>
+<dd>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited
+formats), if not set all available ingest formats will be used</p>
+</dd>
+<dt class="hdlist1">--jobtracker</dt>
 <dd>
 <p>Hadoop job tracker hostname and port in the format hostname:port</p>
 </dd>
-<dt class="hdlist1">-l, --list</dt>
+<dt class="hdlist1">--resourceman</dt>
 <dd>
-<p>List the available ingest types</p>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
 </dd>
-<dt class="hdlist1">-gwNamespace &lt;arg&gt;</dt>
-<dd>
-<p>The table namespace (optional; default is no namespace)</p>
-</dd>
-<dt class="hdlist1">-password &lt;arg&gt;</dt>
-<dd>
-<p>The password for the user</p>
-</dd>
-<dt class="hdlist1">-resourceman &lt;arg&gt;</dt>
-<dd>
-<p>YARN resource manager hostname and port in the format hostname:port</p>
-</dd>
-<dt class="hdlist1">-user &lt;arg&gt;</dt>
-<dd>
-<p>A valid Accumulo user ID</p>
-</dd>
-<dt class="hdlist1">-v, --visibility &lt;arg&gt;</dt>
+<dt class="hdlist1">-v, --visibility</dt>
 <dd>
 <p>The visibility of the data ingested (optional; default is 'public')</p>
 </dd>
-<dt class="hdlist1">-x, --extension &lt;arg&gt;</dt>
-<dd>
-<p>Individual or comma-delimited set of file extensions to accept (optional)</p>
-</dd>
-<dt class="hdlist1">-zookeeper &lt;arg&gt;</dt>
-<dd>
-<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
-</dd>
 </dl>
 </div>
-<div class="paragraph">
-<p>ADDITIONAL</p>
 </div>
-<div class="paragraph">
-<p>The options here are, for the most part, same as for <strong>geowave -localingest</strong>, with a few additions.</p>
-</div>
-<div class="paragraph">
-<p>The hdfs argument should be the hostname and port, so something like "hdfs-namenode.cluster1.com:8020".</p>
-</div>
-<div class="paragraph">
-<p>The hdfsbase argument is the root path in hdfs that will serve as the base for the stage location. If the directory
-doesn&#8217;t exist it will be created. The actual ingest file will be created in a "type" (plugin type - seen with the --list
-option) subdirectory under this base directory.</p>
-</div>
-<div class="paragraph">
-<p>The jobtracker argument is the hostname and port for the jobtracker, so something like mapreduce-namenode.cluster1.com:8021</p>
-</div>
-<div class="paragraph">
-<p>The hdfsstage and poststage options will just be subsets of this comment; the first creating an avro file in hdfs,
-the second reading this avro file and ingesting into GeoWave</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="geowave-hdfsstage"><a class="anchor" href="#geowave-hdfsstage"></a>geowave -hdfsstage</h3>
+<div class="sect3">
+<h4 id="geowave-ingest-localtohdfs"><a class="anchor" href="#geowave-ingest-localtohdfs"></a>geowave ingest localToHdfs</h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave-hdfsstage - Load supported content from a local file system into HDFS</p>
+<p>geowave ingest localToHdfs - Stage supported files in local file system to HDFS</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p><strong>geowave -hdfsstage</strong> &lt;options&gt;</p>
+<p><strong>geowave ingest localToHdfs</strong> [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave -hdfsstage(1) operator copies the local files to an Avro record in HDFS</p>
+<p>The geowave ingest localToHdfs operator will stage supported files in the local file system to HDFS</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">-b,--base &lt;arg&gt;</dt>
+<dt class="hdlist1">-x, --extension</dt>
 <dd>
-<p>Base input file or directory to crawl with one of the supported ingest types</p>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
 </dd>
-<dt class="hdlist1">-f,--formats &lt;arg&gt;</dt>
+<dt class="hdlist1">-f, --formats</dt>
 <dd>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
-</dd>
-<dt class="hdlist1">-h,--help</dt>
-<dd>
-<p>Display help</p>
-</dd>
-<dt class="hdlist1">-hdfs &lt;arg&gt;</dt>
-<dd>
-<p>HDFS hostname and port in the format hostname:port</p>
-</dd>
-<dt class="hdlist1">-hdfsbase &lt;arg&gt;</dt>
-<dd>
-<p>Fully qualified path to the base directory in hdfs</p>
-</dd>
-<dt class="hdlist1">-l, --list</dt>
-<dd>
-<p>List the available ingest types</p>
-</dd>
-<dt class="hdlist1">-x, --extension &lt;arg&gt;</dt>
-<dd>
-<p>Individual or comma-delimited set of file extensions to accept (optional)</p>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited
+formats), if not set all available ingest formats will be used</p>
 </dd>
 </dl>
 </div>
 </div>
-<div class="sect2">
-<h3 id="geowave-kafkastage"><a class="anchor" href="#geowave-kafkastage"></a>geowave -kafkastage</h3>
+<div class="sect3">
+<h4 id="geowave-ingest-localtokafka"><a class="anchor" href="#geowave-ingest-localtokafka"></a>geowave ingest localToKafka</h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave-kafkastage - Stage supported files in local file system to a Kafka topic</p>
+<p>geowave ingest localToKafka - Stage supported files in local file system to a Kafka topic</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p><strong>geowave -kafkastage</strong> &lt;options&gt;</p>
+<p><strong>geowave ingest localToKafka</strong> [options] &lt;file or directory&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave -kafkastage(1) operator will stage supported files in local file system to a Kafka topic</p>
+<p>The geowave ingest localToKafka operator will stage supported files in the local file system to a Kafka topic</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">-b, --base &lt;arg&gt;</dt>
+<dt class="hdlist1">-x, --extension</dt>
 <dd>
-<p>Base input file or directory to crawl with one of the supported ingest types</p>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
 </dd>
-<dt class="hdlist1">-f,--formats &lt;arg&gt;</dt>
+<dt class="hdlist1">-f, --formats</dt>
 <dd>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited
+formats), if not set all available ingest formats will be used</p>
 </dd>
-<dt class="hdlist1">-h, --help</dt>
-<dd>
-<p>Display help</p>
-</dd>
-<dt class="hdlist1">-kafkaprops &lt;arg&gt;</dt>
+<dt class="hdlist1">* --kafkaprops</dt>
 <dd>
 <p>Properties file containing Kafka properties</p>
 </dd>
-<dt class="hdlist1">-kafkatopic &lt;arg&gt;</dt>
+<dt class="hdlist1">--metadataBrokerList</dt>
 <dd>
-<p>Kafka topic name where data will be emitted to</p>
+<p>This is for bootstrapping and the producer will only use it for getting
+metadata (topics, partitions and replicas). The socket connections for sending the
+actual data will be established based on the broker information returned in the
+metadata. The format is host1:port1,host2:port2, and the list can be a subset of
+brokers or a VIP pointing to a subset of brokers.</p>
 </dd>
-<dt class="hdlist1">-l, --list</dt>
+<dt class="hdlist1">--producerType</dt>
 <dd>
-<p>List the available ingest types</p>
+<p>This parameter specifies whether the messages are sent asynchronously in
+a background thread. Valid values are (1) async for asynchronous send and
+(2) sync for synchronous send. By setting the producer to async we allow
+batching together of requests (which is great for throughput) but open the
+possibility of a failure of the client machine dropping unsent data.</p>
 </dd>
-<dt class="hdlist1">-x, --extension &lt;arg&gt;</dt>
+<dt class="hdlist1">--requestRequiredAcks</dt>
 <dd>
-<p>Individual or comma-delimited set of file extensions to accept (optional)</p>
+<p>This value controls when a produce request is considered completed.
+Specifically, how many other brokers must have committed the data to their log and
+acknowledged this to the leader?</p>
+</dd>
+<dt class="hdlist1">--retryBackoffMs</dt>
+<dd>
+<p>The amount of time to wait before attempting to retry a failed produce
+request to a given topic partition. This avoids repeated sending-and-failing in a
+tight loop.</p>
+</dd>
+<dt class="hdlist1">--serializerClass</dt>
+<dd>
+<p>The serializer class for messages. The default encoder takes a byte[] and
+returns the same byte[].</p>
 </dd>
 </dl>
 </div>
 </div>
-<div class="sect2">
-<h3 id="geowave-localingest"><a class="anchor" href="#geowave-localingest"></a>geowave -localingest</h3>
+<div class="sect3">
+<h4 id="geowave-ingest-kafkatogw"><a class="anchor" href="#geowave-ingest-kafkatogw"></a>geowave ingest kafkaToGW</h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave-localingest - Load content from local file system</p>
+<p>geowave ingest kafkaToGW - Subscribe to a Kafka topic and ingest into GeoWave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p><strong>geowave -localingest</strong> &lt;options&gt;</p>
+<p><strong>geowave ingest kafkaToGW</strong> [options] &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave -localingest(1) operator will run the ingest code (parse to features, load features to accumulo) against local file system content.</p>
+<p>The geowave ingest kafkaToGW operator will ingest supported files that already exist in HDFS</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">-b, --base &lt;arg&gt;</dt>
+<dt class="hdlist1">--autoOffsetReset</dt>
 <dd>
-<p>Base input file or directory to crawl with one of the supported ingest types</p>
+<p>What to do when there is no initial offset in ZooKeeper or if an offset
+is out of range:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>smallest : automatically reset the offset to the
+smallest offset</p>
+</li>
+<li>
+<p>largest : automatically reset the offset to the largest
+offset</p>
+</li>
+<li>
+<p>anything else: throw exception to the consumer</p>
+</li>
+</ul>
+</div>
 </dd>
-<dt class="hdlist1">-c, --clear</dt>
+<dt class="hdlist1">--batchSize</dt>
 <dd>
-<p>Clear ALL data stored with the same prefix as this namespace (optional; default is to append data to the namespace if it exists)</p>
+<p>The data will automatically flush after this number of entries
+Default: 10000</p>
 </dd>
-<dt class="hdlist1">-dim, --dimensionality &lt;arg&gt;</dt>
+<dt class="hdlist1">--consumerTimeoutMs</dt>
 <dd>
-<p>The dimensionality type for the index, either 'spatial' or 'spatial-temporal' (optional; default is 'spatial')</p>
+<p>By default, this value is -1 and a consumer blocks indefinitely if no new
+message is available for consumption. By setting the value to a positive integer,
+a timeout exception is thrown to the consumer if no message is available
+for consumption after the specified timeout value.</p>
 </dd>
-<dt class="hdlist1">-f,--formats &lt;arg&gt;</dt>
+<dt class="hdlist1">-x, --extension</dt>
 <dd>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
 </dd>
-<dt class="hdlist1">-h, --help</dt>
+<dt class="hdlist1">--fetchMessageMaxBytes</dt>
 <dd>
-<p>Display help</p>
+<p>The number of bytes of messages to attempt to fetch for each
+topic-partition in each fetch request. These bytes will be read into memory for each
+partition, so this helps control the memory used by the consumer. The fetch request
+size must be at least as large as the maximum message size the server allows
+or else it is possible for the producer to send messages larger than the
+consumer can fetch.</p>
 </dd>
-<dt class="hdlist1">-i, --instance-id &lt;arg&gt;</dt>
+<dt class="hdlist1">-f, --formats</dt>
 <dd>
-<p>The Accumulo instance ID</p>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited
+formats), if not set all available ingest formats will be used</p>
 </dd>
-<dt class="hdlist1">-l, --list</dt>
+<dt class="hdlist1">--groupId</dt>
 <dd>
-<p>List the available ingest types</p>
+<p>A string that uniquely identifies the group of consumer processes to
+which this consumer belongs. By setting the same group id multiple processes
+indicate that they are all part of the same consumer group.</p>
 </dd>
-<dt class="hdlist1">-gwNamespace &lt;arg&gt;</dt>
+<dt class="hdlist1">* --kafkaprops</dt>
 <dd>
-<p>The table namespace (optional; default is no namespace)</p>
+<p>Properties file containing Kafka properties</p>
 </dd>
-<dt class="hdlist1">-password &lt;arg&gt;</dt>
+<dt class="hdlist1">--reconnectOnTimeout</dt>
 <dd>
-<p>The password for the user</p>
+<p>This flag will flush when the consumer timeout occurs (based on kafka
+property 'consumer.timeout.ms') and immediately reconnect
+Default: false</p>
 </dd>
-<dt class="hdlist1">-user &lt;arg&gt;</dt>
-<dd>
-<p>A valid Accumulo user ID</p>
-</dd>
-<dt class="hdlist1">-v, --visibility &lt;arg&gt;</dt>
+<dt class="hdlist1">-v, --visibility</dt>
 <dd>
 <p>The visibility of the data ingested (optional; default is 'public')</p>
 </dd>
-<dt class="hdlist1">-x, --extension &lt;arg&gt;</dt>
+<dt class="hdlist1">--zookeeperConnect</dt>
 <dd>
-<p>Individual or comma-delimited set of file extensions to accept (optional)</p>
-</dd>
-<dt class="hdlist1">-zookeeper &lt;arg&gt;</dt>
-<dd>
-<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>ADDITIONAL</p>
-</div>
-<div class="paragraph">
-<p>The index type uses one of the two predefined index implementations. You can perform temporal lookup/filtering with
-either, but the spatial-temporal includes indexing in the primary index - so will be more performant if spatial extents
-are commonly used when querying data.</p>
-</div>
-<div class="paragraph">
-<p>Visibility is passed to Accumulo as a string, so you should put whatever you want in here.</p>
-</div>
-<div class="paragraph">
-<p>The namespace option is the GeoWave namespace; this will be the prefix of the GeoWave tables in Accumulo. There are a
-few rules for this that derive from geotools/geoserver as well as Accumulo. To keep it simple if you only use alphabet
-characters and "_" (underscore) you will be fine.</p>
-</div>
-<div class="paragraph">
-<p>The extensions argument allows you to override the plugin types, narrowing the scope of what is passed to the plugins</p>
-</div>
-<div class="paragraph">
-<p>Finally, the base directory is the root directory that will be scanned on the local system for files to ingest. The
-process will scan all subdirectories under the provided directory.</p>
-</div>
-<div class="paragraph">
-<p>EXAMPLES</p>
-</div>
-<div class="paragraph">
-<p>List all of the currently registered as ingest type plugins:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>geowave -localingest --list</strong></dt>
-<dd>
-<p>geotools-vector:
-     all file-based vector datastores supported within geotools</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>tdrive:
-     files from Microsoft Research T-Drive trajectory data set</p>
-</div>
-<div class="paragraph">
-<p>geolife:
-     files from Microsoft Research GeoLife trajectory data set</p>
-</div>
-<div class="paragraph">
-<p>gpx:
-     xml files adhering to the schema of gps exchange format</p>
-</div>
-<div class="paragraph">
-<p>geotools-raster:
-     all file-based raster formats supported within geotools</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Load some load data</dt>
-<dd>
-<p>geowave -localingest \
-      -b ./ingest \
-      -gwNamespace geowave.50m_admin_0_countries \ &lt;1&gt;
-      -f geotools-vector \ &lt;2&gt;
-	  -datastore accumulo \
-      -user USERNAME \
-      -password PASSWORD \
-	  -instance ACCUMULO_INSTANCE_NAME \
-      -zookeeper ZOOKEEPER_HOST_NAME:2181</p>
+<p>Specifies the ZooKeeper connection string in the form hostname:port where
+host and port are the host and port of a ZooKeeper server. To allow connecting
+through other ZooKeeper nodes when that ZooKeeper machine is down you can also
+specify multiple hosts in the form
+hostname1:port1,hostname2:port2,hostname3:port3.</p>
 </dd>
 </dl>
 </div>
 </div>
-<div class="sect2">
-<h3 id="geowave-poststage"><a class="anchor" href="#geowave-poststage"></a>geowave -poststage</h3>
+<div class="sect3">
+<h4 id="geowave-ingest-mrtogw"><a class="anchor" href="#geowave-ingest-mrtogw"></a>geowave ingest mrToGW</h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave-poststage - Ingest supported content that has already been staged in HDFS</p>
+<p>geowave ingest mrToGW - Ingest supported files that already exist in HDFS</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p><strong>geowave -poststage</strong> &lt;options&gt;</p>
+<p><strong>geowave ingest mrToGW</strong> [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave -poststage(1) operator executes the ingest process as a map-reduce job using data that has already
-been staged in an HDFS file system</p>
+<p>The geowave ingest mrToGW operator will ingest supported files that already exist in HDFS</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">-c, --clear</dt>
+<dt class="hdlist1">-x, --extension</dt>
 <dd>
-<p>Clear ALL data stored with the same prefix as this namespace (optional; default is to append data to the namespace if it exists)</p>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
 </dd>
-<dt class="hdlist1">-dim, --dimensionality &lt;arg&gt;</dt>
+<dt class="hdlist1">-f, --formats</dt>
 <dd>
-<p>The dimensionality type for the index, either 'spatial' or 'spatial-temporal' (optional; default is 'spatial')</p>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited
+formats), if not set all available ingest formats will be used</p>
 </dd>
-<dt class="hdlist1">-f,--formats &lt;arg&gt;</dt>
-<dd>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
-</dd>
-<dt class="hdlist1">-h, --help</dt>
-<dd>
-<p>Display help</p>
-</dd>
-<dt class="hdlist1">-hdfs &lt;arg&gt;</dt>
-<dd>
-<p>HDFS hostname and port in the format hostname:port</p>
-</dd>
-<dt class="hdlist1">-hdfsbase &lt;arg&gt;</dt>
-<dd>
-<p>Fully qualified path to the base directory in HDFS</p>
-</dd>
-<dt class="hdlist1">-instance &lt;arg&gt;</dt>
-<dd>
-<p>The Accumulo instance ID</p>
-</dd>
-<dt class="hdlist1">-jobtracker &lt;arg&gt;</dt>
+<dt class="hdlist1">--jobtracker</dt>
 <dd>
 <p>Hadoop job tracker hostname and port in the format hostname:port</p>
 </dd>
-<dt class="hdlist1">-l, --list</dt>
+<dt class="hdlist1">--resourceman</dt>
 <dd>
-<p>List the available ingest types</p>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
 </dd>
-<dt class="hdlist1">-gwNamespace &lt;arg&gt;</dt>
-<dd>
-<p>The table namespace (optional; default is no namespace)</p>
-</dd>
-<dt class="hdlist1">-password &lt;arg&gt;</dt>
-<dd>
-<p>The password for the user</p>
-</dd>
-<dt class="hdlist1">-resourceman &lt;arg&gt;</dt>
-<dd>
-<p>YARN resource manager hostname and port in the format hostname:port</p>
-</dd>
-<dt class="hdlist1">-user &lt;arg&gt;</dt>
-<dd>
-<p>A valid Accumulo user ID</p>
-</dd>
-<dt class="hdlist1">-v, --visibility &lt;arg&gt;</dt>
+<dt class="hdlist1">-v, --visibility</dt>
 <dd>
 <p>The visibility of the data ingested (optional; default is 'public')</p>
 </dd>
-<dt class="hdlist1">-zookeeper &lt;arg&gt;</dt>
-<dd>
-<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
-</dd>
 </dl>
 </div>
-</div>
-<div class="sect2">
-<h3 id="geowave-stats"><a class="anchor" href="#geowave-stats"></a>geowave -stats</h3>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave-stats - Calculate the statistics of an existing GeoWave dataset</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p><strong>geowave -stats</strong> &lt;options&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave -stats(1) operator will remove all statistics for an adapter, scan the entire data set and reconstruct statistics.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">-instance &lt;arg&gt;</dt>
-<dd>
-<p>The Accumulo instance ID</p>
-</dd>
-<dt class="hdlist1">-gwNamespace &lt;arg&gt;</dt>
-<dd>
-<p>The table namespace (optional; default is no namespace)</p>
-</dd>
-<dt class="hdlist1">-password &lt;arg&gt;</dt>
-<dd>
-<p>The password for the user</p>
-</dd>
-<dt class="hdlist1">-user &lt;arg&gt;</dt>
-<dd>
-<p>A valid Accumulo user ID</p>
-</dd>
-<dt class="hdlist1">-v, --visibility &lt;arg&gt;</dt>
-<dd>
-<p>The visibility of the data ingested (optional; default is 'public')</p>
-</dd>
-<dt class="hdlist1">-zookeeper &lt;arg&gt;</dt>
-<dd>
-<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
-</dd>
-<dt class="hdlist1">-type &lt;arg&gt;</dt>
-<dd>
-<p>The name of the feature type to run stats on</p>
-</dd>
-<dt class="hdlist1">-auth &lt;arg&gt;</dt>
-<dd>
-<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>EXAMPLES</p>
-</div>
-<div class="paragraph">
-<p>Given the data we loaded in the geowave -localingest example we could look at the GeoServer Layers list to obtain the feature type name and
-recalculate statistics using a command such as the one shown below.</p>
-</div>
-<div class="paragraph">
-<p>geowave -stats \
-    -gwNamespace geowave.50m_admin_0_countries \
-    -type ne_50m_admin_0_countries \
-	-datastore accumulo \
-    -user USERNAME \
-    -password PASSWORD \
-	-instance ACCUMULO_INSTANCE_NAME \
-    -zookeeper ZOOKEEPER_HOST_NAME:2181</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="geowave-statsdump"><a class="anchor" href="#geowave-statsdump"></a>geowave -statsdump</h3>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave-statsdump - Dump the statistics of an existing GeoWave dataset to standard output</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p><strong>geowave -statsdump</strong> &lt;options&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave -statsdump(1) operator will remove all statistics for an adapter, scan the entire data set and reconstruct statistics.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">-instance &lt;arg&gt;</dt>
-<dd>
-<p>The Accumulo instance ID</p>
-</dd>
-<dt class="hdlist1">-gwNamespace &lt;arg&gt;</dt>
-<dd>
-<p>The table namespace (optional; default is no namespace)</p>
-</dd>
-<dt class="hdlist1">-password &lt;arg&gt;</dt>
-<dd>
-<p>The password for the user</p>
-</dd>
-<dt class="hdlist1">-user &lt;arg&gt;</dt>
-<dd>
-<p>A valid Accumulo user ID</p>
-</dd>
-<dt class="hdlist1">-v, --visibility &lt;arg&gt;</dt>
-<dd>
-<p>The visibility of the data ingested (optional; default is 'public')</p>
-</dd>
-<dt class="hdlist1">-zookeeper &lt;arg&gt;</dt>
-<dd>
-<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
-</dd>
-<dt class="hdlist1">-type &lt;arg&gt;</dt>
-<dd>
-<p>The name of the feature type to run stats on (optional; default is all types)</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>EXAMPLES</p>
-</div>
-<div class="paragraph">
-<p>Given the data we loaded in the geowave -localingest example we could look at the GeoServer Layers list to obtain the feature type name and
-dump statistics using a command such as the one shown below.</p>
-</div>
-<div class="paragraph">
-<p>geowave -statsdump \
-    -gwNamespace geowave.50m_admin_0_countries \
-    -type ne_50m_admin_0_countries \
-	-datastore accumulo \
-    -user USERNAME \
-    -password PASSWORD \
-	-instance ACCUMULO_INSTANCE_NAME \
-    -zookeeper ZOOKEEPER_HOST_NAME:2181</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="ingest-example"><a class="anchor" href="#ingest-example"></a>Ingest Example</h3>
 <div class="paragraph">
-<p>We can ingest any data type that has been listed as an ingest plugin. Let&#8217;s start out with the GeoTools datastore; this
-wraps a bunch of GeoTools supported formats. We will use the shapefile capability for our example here.</p>
+<p>GeoWave can ingest any data type that has been listed as an ingest plugin. Let&#8217;s start out with the GeoTools datastore; this
+wraps a bunch of GeoTools supported formats. This includes all file-based datastores supported within GeoTools.
+We will use the shapefile capability for our example here.</p>
 </div>
 <div class="sect3">
 <h4 id="something-recognizable"><a class="anchor" href="#something-recognizable"></a>Something recognizable</h4>
@@ -2178,7 +2388,7 @@ $ geowave -localingest \
 </div>
 </div>
 <div class="sect2">
-<h3 id="ingest-plugins"><a class="anchor" href="#ingest-plugins"></a>Ingest plugins</h3>
+<h3 id="ingest-plugins"><a class="anchor" href="#ingest-plugins"></a>Ingest Plugins</h3>
 <div class="paragraph">
 <p>The geowave command line utility comes with several plugins out of the box</p>
 </div>
@@ -2216,7 +2426,7 @@ the configuration.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Configuration consists of two parts:</p>
+<p>Configuration consists of several parts:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2226,10 +2436,20 @@ the configuration.</p>
 <li>
 <p>Assigning to each attribute the type of statistics to be captured within the Statistics Store</p>
 </li>
+<li>
+<p>Determining which attributes should be indexed in a secondary index.</p>
+</li>
+<li>
+<p>Determining which attribute contains visibility information for other attributes</p>
+</li>
+<li>
+<p>Setting the names of the indices to update in WFS-T transactions via the GeoServer plug-in.</p>
+</li>
 </ol>
 </div>
 <div class="paragraph">
-<p>The JSON file is made up of configurations.   Each configuration is defined by a class name and a set of attributes</p>
+<p>The JSON file is made up of configurations.   Each configuration is defined by a class name and a set of attributes.
+Configurations are grouped by the Simple Feature Type name.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2259,7 +2479,7 @@ names of the simple feature type attributes that define start and end time value
 <div class="sect3">
 <h4 id="statistics-configuration"><a class="anchor" href="#statistics-configuration"></a>Statistics Configuration</h4>
 <div class="paragraph">
-<p>Each simple feature type attribute may have several assigned statistics.  Bounding box and range statistics are automatically captured for Geometry and temporal attributes.</p>
+<p>Each simple feature type attribute may have several assigned statistics.  Bounding box and range statistics are automatically captured for geometry and temporal attributes.</p>
 </div>
 <table class="tableblock frame-topbot grid-all spread">
 <colgroup>
@@ -2308,35 +2528,76 @@ names of the simple feature type attributes that define start and end time value
 </table>
 </div>
 <div class="sect3">
+<h4 id="visibility-configuration"><a class="anchor" href="#visibility-configuration"></a>Visibility Configuration</h4>
+<div class="paragraph">
+<p>Visibility configuration has two attributes: the visibility manager class and the visibility attribute name.</p>
+</div>
+<div class="paragraph">
+<p>A Visibility manager extends mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement.  An instance of this class
+interprets the contents of a visibility attribute, within a simple feature, to determine the visibility constraints of
+the other attributes in that simple feature.  The default visibility management class is mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="secondary-index-configuration"><a class="anchor" href="#secondary-index-configuration"></a>Secondary Index Configuration</h4>
+<div class="paragraph">
+<p>Secondary Index Configurations is made up of one of three classes:
+. mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration
+. mil.nga.giat.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration
+. mil.nga.giat.geowave.adapter.vector.index.TextSecondaryIndexConfiguration</p>
+</div>
+<div class="paragraph">
+<p>Each of this configurations maintains a set of simple feature attribute names to index in a secondary index.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
+<div class="paragraph">
+<p>The class mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration is used to maintain the configuration of
+primary indices used for adding or updating simple features via the GeoServer plug-in (FeatureWriter).</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="example-2"><a class="anchor" href="#example-2"></a>Example</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>{
-  "configurations": [
-     {"@class":"mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors$TimeDescriptorConfiguration",
-      "startRangeName":null,
-      "endRangeName":null,
-      "timeName":"captureTime"
-     },
-     {"@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
-      "attConfig" : {
-        "population" : {
-          "configurationsForAttribute" :  [
-            {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24}
-           ]
-          },
-        "country" : {
-          "configurationsForAttribute" :  [
-           {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
-            "probabilityOfCorrectness" : 0.98,
-            "errorFactor" :0.001
-           },
-           {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"}
-          ]
+  "configurations": {
+     "myFeatureTypeName" : [
+       {"@class":"mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors$TimeDescriptorConfiguration",
+        "startRangeName":null,
+        "endRangeName":null,
+        "timeName":"captureTime"
+       },
+       { "@class": "mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration",
+         "attributes" : ["pop"]
+       },
+       { "@class": "mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
+         "attributeName" : "vis"
+       },
+       { "@class": "mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
+         "indexNames": ["SPATIAL_IDX"]
+       }
+       {"@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+        "attConfig" : {
+          "population" : {
+            "configurationsForAttribute" :  [
+              {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24}
+             ]
+            },
+          "country" : {
+            "configurationsForAttribute" :  [
+             {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
+              "probabilityOfCorrectness" : 0.98,
+              "errorFactor" :0.001
+             },
+             {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"}
+            ]
+          }
         }
       }
-    }
-  ]
+    ]
+  }
 }</code></pre>
 </div>
 </div>
@@ -2346,7 +2607,7 @@ names of the simple feature type attributes that define start and end time value
 <h3 id="ingest-new-formats"><a class="anchor" href="#ingest-new-formats"></a>New Formats</h3>
 <div class="paragraph">
 <p>There are multiple ways to get data into GeoWave. In other sections we will discuss higher order frameworks, mapreduce
-interfaces, etc. The intent here is "just the basics" - what&#8217;s the least framework intensive way that one can load
+interfaces, etc. The intent here is "just the basics" - the least framework intensive way that one can load
 geospatial data.</p>
 </div>
 <div class="paragraph">
@@ -2461,7 +2722,7 @@ protected BasicAccumuloOperations getAccumuloInstance(String zookeepers, String 
 <div class="sect3">
 <h4 id="simple-feature-type"><a class="anchor" href="#simple-feature-type"></a>Simple Feature Type</h4>
 <div class="paragraph">
-<p>We know fore sure we need a geometry field. Everything else is really optional. It&#8217;s often convenient to add a text
+<p>A geometry field is required. Everything else is really optional. It&#8217;s often convenient to add a text
 latitude and longitude field for ease of display values (getFeatureInfo, etc.).</p>
 </div>
 <div class="listingblock">
@@ -2484,7 +2745,7 @@ protected SimpleFeatureType createPointFeatureType(){
     builder.setName("Point");
 
     //The data is persisted in a sparse format, so if data is nullable it will not take up any space if no values are persisted.
-    //Data which is included in the primary index (in this example lattitude/longtiude) can not be null
+    //Data which is included in the primary index (in this example lattitude/longtiude) cannot be null
     //Calling out latitude an longitude separately is not strictly needed, as the geometry contains that information.  But it's
     //convienent in many use cases to get a text representation without having to handle geometries.
     builder.add(ab.binding(Geometry.class).nillable(false).buildDescriptor("geometry"));
@@ -2616,7 +2877,7 @@ protected FeatureDataAdapter createDataAdapter(SimpleFeatureType sft){
 <div class="sect3">
 <h4 id="other-methods"><a class="anchor" href="#other-methods"></a>Other methods</h4>
 <div class="paragraph">
-<p>There are other patterns that can be used - see the various classes in the geowave-examples project. The method displayed
+<p>There are other patterns that can be used. See the various classes in the geowave-examples project. The method displayed
 above is the suggested pattern - it&#8217;s demonstrated in SimpleIngestIndexWriter.java</p>
 </div>
 <div class="paragraph">
@@ -2675,6 +2936,10 @@ from the set of features associated the same centroid from the previous level.</
 <td class="tableblock halign-left valign-top"><p class="tableblock">Uses KMeans++ over a range of k, choosing an optimal k using an information theoretic based measurement.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">KMeans Parallel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Performs a KMeans Parallel Cluster</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">DBScan</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Density Based Scanner algorithm produces a set of convex polygons for each region meeting density criteria.
 Density of region is measured by a minimum cardinality of enclosed features within a specified distance from each other.</p></td>
@@ -2719,121 +2984,743 @@ mvn package -P analytics-singlejar -Dfindbugs.skip=true -DskipFormat=true -Dskip
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-analytic-mapreduce-0.8.8-SNAPSHOT-analytics-singlejar.jar  -dbscan  -n rwgdrummer.gpx -u rwgdrummer -p rwgdrummer -z zookeeper-master:2181 -i accumulo -emn 2 -emx 6 -pd 1000 -pc mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner -cms 10 -orc 4 -hdfsbase /user/rwgdrummer -b bdb4 -eit gpxpoint</code></pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h5>
-<div class="paragraph">
-<p>This set of parameters is not complete. There are many parameters that permit customizations such as distance functions, partitioning and sampling.</p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 80%;">
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 83%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Argument</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-gwNamespace</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Namespace</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo User</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-password</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo User Password</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-zookeeper</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Zookeeper host and port</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-instance</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo instance name</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-emn</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum input splits</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-emx</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum input splits (controls the number of Hadoop Mappers).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-eit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The type name of the input features to analyze.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-eot</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The type name of the output features (e.g. cluster polygons and points).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-eq</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A CQL query string to constrain the extracted data from GeoWave for analysis.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-pd</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum distance in meters for features in a cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-pc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Partitioning algorithm for Nearest Neighbors and DBScan algorithms.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-sms</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum sample size (e.g. for choosing K)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-sxs</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum sample size (e.g. for choosing K.)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-ssi</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Minumum number of sample iterations.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-jrc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated range of centroids (e.g. 2,10) for KMeans-Jump.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-jkp</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The minimum sample size (within the range provide by jrc parameter, where KMeans++ performs sampling, rather than using a single random sample.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-cms</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum density of a cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-cmi</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of KMeans clustering iterations.  KMeans usually converges on a solution with this constraint.  A value of between 3 and 10 is often sufficient.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-crc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of reducers to process extracted data in KMeans.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-orc</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of reducers to load clusters into GeoWave.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-hdfsbase</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Location in HBase to store intermediate results.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-b</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Batch Identifier.  Each algorithm can be run within multiple configurations, each representing a different batch.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-zl</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The number of 'zoom' levels in KMeans Clustering algorithms.</p></td>
-</tr>
-</tbody>
-</table>
+<div class="sect2">
+<h3 id="analytic-commands"><a class="anchor" href="#analytic-commands"></a>Analytic Commands</h3>
+<div class="paragraph">
+<p>Commands that run mapreduce or spark processing to enhance an existing GeoWave dataset</p>
+</div>
+<div class="paragraph">
+<p>Subcommands:</p>
+</div>
+<div class="sect3">
+<h4 id="geowave-analytic-dbscan"><a class="anchor" href="#geowave-analytic-dbscan"></a>geowave analytic dbscan</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic dbscan - Density Based Scanner</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave analytic dbscan</strong> [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic dbscan operator will run a density based scanner analytic on GeoWave data</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-dt, --clusteringDistanceThresholds</dt>
+<dd>
+<p>Comma separated list of distance thresholds, per dimension</p>
+</dd>
+<dt class="hdlist1">-du, --clusteringGeometricDistanceUnit</dt>
+<dd>
+<p>Geometric distance unit (m=meters,km=kilometers, see symbols for
+javax.units.BaseUnit)</p>
+</dd>
+<dt class="hdlist1">-cmi, --clusteringMaxIterations</dt>
+<dd>
+<p>Maximum number of iterations when finding optimal clusters</p>
+</dd>
+<dt class="hdlist1">-cms, --clusteringMinimumSize</dt>
+<dd>
+<p>Minimum Cluster Size</p>
+</dd>
+<dt class="hdlist1">-cdf, --commonDistanceFunctionClass</dt>
+<dd>
+<p>Distance Function Class implements
+mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</dd>
+<dt class="hdlist1">-eit, --extractAdapterId</dt>
+<dd>
+<p>Input Data Type ID</p>
+</dd>
+<dt class="hdlist1">-ei, --extractIndexId</dt>
+<dd>
+<p>Extract from a specific index</p>
+</dd>
+<dt class="hdlist1">-emx, --extractMaxInputSplit</dt>
+<dd>
+<p>Maximum input split size</p>
+</dd>
+<dt class="hdlist1">-emn, --extractMinInputSplit</dt>
+<dd>
+<p>Minimum input split size</p>
+</dd>
+<dt class="hdlist1">-eq, --extractQuery</dt>
+<dd>
+<p>Query</p>
+</dd>
+<dt class="hdlist1">-b, --globalBatchId</dt>
+<dd>
+<p>Batch ID</p>
+</dd>
+<dt class="hdlist1">-hdt, --hullDataTypeId</dt>
+<dd>
+<p>Data Type ID for a centroid item</p>
+</dd>
+<dt class="hdlist1">-hhb, --hullHullBuilder</dt>
+<dd>
+<p>Hull Builder</p>
+</dd>
+<dt class="hdlist1">-hpe, --hullProjectionClass</dt>
+<dd>
+<p>Class to project on to 2D space. Implements
+mil.nga.giat.geowave.analytics.tools.Projection</p>
+</dd>
+<dt class="hdlist1">-conf, --mapReduceConfigFile</dt>
+<dd>
+<p>MapReduce Configuration</p>
+</dd>
+<dt class="hdlist1">-hdfsbase, --mapReduceHdfsBaseDir</dt>
+<dd>
+<p>Fully qualified path to the base directory in hdfs</p>
+</dd>
+<dt class="hdlist1">-hdfs, --mapReduceHdfsHostPort</dt>
+<dd>
+<p>HDFS hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-jobtracker, --mapReduceJobtrackerHostPort</dt>
+<dd>
+<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-resourceman, --mapReduceYarnResourceManager</dt>
+<dd>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-ons, --outputDataNamespaceUri</dt>
+<dd>
+<p>Output namespace for objects that will be written to GeoWave</p>
+</dd>
+<dt class="hdlist1">-odt, --outputDataTypeId</dt>
+<dd>
+<p>Output Data ID assigned to objects that will be written to GeoWave</p>
+</dd>
+<dt class="hdlist1">-oid, --outputIndexId</dt>
+<dd>
+<p>Output Index ID for objects that will be written to GeoWave</p>
+</dd>
+<dt class="hdlist1">-ofc, --outputOutputFormat</dt>
+<dd>
+<p>Output Format Class</p>
+</dd>
+<dt class="hdlist1">--oop, --outputHdfsOutputPath</dt>
+<dd>
+<p>Output HDFS File Path when used with a output format "SequenceFileOutputFormatConfiguration"</p>
+</dd>
+<dt class="hdlist1">-orc, --outputReducerCount</dt>
+<dd>
+<p>Number of Reducers For Output</p>
+</dd>
+<dt class="hdlist1">-pmd, --partitionMaxDistance</dt>
+<dd>
+<p>Maximum Partition Distance</p>
+</dd>
+<dt class="hdlist1">-pms, --partitionMaxMemberSelection</dt>
+<dd>
+<p>Maximum number of members selected from a partition</p>
+</dd>
+<dt class="hdlist1">-pdr, --partitionPartitionDecreaseRate</dt>
+<dd>
+<p>Rate of decrease for precision(within (0,1])</p>
+</dd>
+<dt class="hdlist1">-pd, --partitionPartitionDistance</dt>
+<dd>
+<p>Partition Distance</p>
+</dd>
+<dt class="hdlist1">-pdt, --partitionDistanceThresholds</dt>
+<dd>
+<p>Partition Distance Threshold</p>
+</dd>
+<dt class="hdlist1">-pdu, --partitionGeometricDistanceUnit</dt>
+<dd>
+<p>Partition Geometric Distance Unit</p>
+</dd>
+<dt class="hdlist1">-pp, --partitionPartitionPrecision</dt>
+<dd>
+<p>Partition Precision</p>
+</dd>
+<dt class="hdlist1">-pc, --partitionPartitionerClass</dt>
+<dd>
+<p>Index Identifier for Centroids</p>
+</dd>
+<dt class="hdlist1">-psp, --partitionSecondaryPartitionerClass</dt>
+<dd>
+<p>Perform secondary partitioning with the provided class</p>
+</dd>
+<dt class="hdlist1">--query.adapters</dt>
+<dd>
+<p>Comma-separated data adapters to query; by default all are used</p>
+</dd>
+<dt class="hdlist1">--query.auth</dt>
+<dd>
+<p>The comma-separated list of authorizations used during extract; by default all authorizations are used.</p>
+</dd>
+<dt class="hdlist1">--query.fields</dt>
+<dd>
+<p>The comma-separated set of field names to extract; by default all are extracted</p>
+</dd>
+<dt class="hdlist1">--query.index</dt>
+<dd>
+<p>==== geowave analytic kde</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kde - Kernel Density Estimate</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave analytic kde</strong> [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic kde operator will run a Kernel Density Estimate analytic on GeoWave data</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">--coverageName</dt>
+<dd>
+<p>The coverage name</p>
+</dd>
+<dt class="hdlist1">--cqlFilter</dt>
+<dd>
+<p>An optional CQL filter applied to the input data</p>
+</dd>
+<dt class="hdlist1">--featureType</dt>
+<dd>
+<p>The name of the feature type to run a KDE on</p>
+</dd>
+<dt class="hdlist1">--hdfsHostPort</dt>
+<dd>
+<p>The hdfs host port</p>
+</dd>
+<dt class="hdlist1">--indexId</dt>
+<dd>
+<p>An optional index ID to filter the input data</p>
+</dd>
+<dt class="hdlist1">--jobSubmissionHostPort</dt>
+<dd>
+<p>The job submission tracker</p>
+</dd>
+<dt class="hdlist1">--maxLevel</dt>
+<dd>
+<p>The max level to run a KDE at</p>
+</dd>
+<dt class="hdlist1">--maxSplits</dt>
+<dd>
+<p>The max partitions for the input data</p>
+</dd>
+<dt class="hdlist1">--minLevel</dt>
+<dd>
+<p>The min level to run a KDE at</p>
+</dd>
+<dt class="hdlist1">--minSplits</dt>
+<dd>
+<p>The min partitions for the input data</p>
+</dd>
+<dt class="hdlist1">--tileSize</dt>
+<dd>
+<p>The tile size</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-analytic-kmeansjump"><a class="anchor" href="#geowave-analytic-kmeansjump"></a>geowave analytic kmeansjump</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kmeansjump - KMeans Clustering using Jump Method</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave analytic kmeansjump</strong> [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic kmeansjump operator will execute a KMeans Clustering analytic using a Jump Method</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-cce, --centroidExtractorClass</dt>
+<dd>
+<p>Centroid Exractor Class implements
+mil.nga.giat.geowave.analytics.extract.CentroidExtractor</p>
+</dd>
+<dt class="hdlist1">-cid, --centroidIndexId</dt>
+<dd>
+<p>Index Identifier for Centroids</p>
+</dd>
+<dt class="hdlist1">-cfc, --centroidWrapperFactoryClass</dt>
+<dd>
+<p>A factory class that implements
+mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</dd>
+<dt class="hdlist1">-czl, --centroidZoomLevel</dt>
+<dd>
+<p>Zoom Level Number</p>
+</dd>
+<dt class="hdlist1">-cct, --clusteringConverganceTolerance</dt>
+<dd>
+<p>Convergence Tolerance</p>
+</dd>
+<dt class="hdlist1">-cmi, --clusteringMaxIterations</dt>
+<dd>
+<p>Maximum number of iterations when finding optimal clusters</p>
+</dd>
+<dt class="hdlist1">-crc, --clusteringMaxReducerCount</dt>
+<dd>
+<p>Maximum Clustering Reducer Count</p>
+</dd>
+<dt class="hdlist1">-zl, --clusteringZoomLevels</dt>
+<dd>
+<p>Number of Zoom Levels to Process</p>
+</dd>
+<dt class="hdlist1">-dde, --commonDimensionExtractClass</dt>
+<dd>
+<p>Dimension Extractor Class implements
+mil.nga.giat.geowave.analytics.extract.DimensionExtractor</p>
+</dd>
+<dt class="hdlist1">-cdf, --commonDistanceFunctionClass</dt>
+<dd>
+<p>Distance Function Class implements
+mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</dd>
+<dt class="hdlist1">-eit, --extractAdapterId</dt>
+<dd>
+<p>Input Data Type ID</p>
+</dd>
+<dt class="hdlist1">-ens, --extractDataNamespaceUri</dt>
+<dd>
+<p>Output Data Namespace URI</p>
+</dd>
+<dt class="hdlist1">-ede, --extractDimensionExtractClass</dt>
+<dd>
+<p>Class to extract dimensions into a simple feature output</p>
+</dd>
+<dt class="hdlist1">-ei, --extractIndexId</dt>
+<dd>
+<p>Extract from a specific index</p>
+</dd>
+<dt class="hdlist1">-emx, --extractMaxInputSplit</dt>
+<dd>
+<p>Maximum input split size</p>
+</dd>
+<dt class="hdlist1">-emn, --extractMinInputSplit</dt>
+<dd>
+<p>Minimum input split size</p>
+</dd>
+<dt class="hdlist1">-eot, --extractOutputDataTypeId</dt>
+<dd>
+<p>Output Data Type ID</p>
+</dd>
+<dt class="hdlist1">-eq, --extractQuery</dt>
+<dd>
+<p>Query</p>
+</dd>
+<dt class="hdlist1">-erc, --extractReducerCount</dt>
+<dd>
+<p>Number of Reducers For initial data extraction and de-duplication</p>
+</dd>
+<dt class="hdlist1">-b, --globalBatchId</dt>
+<dd>
+<p>Batch ID</p>
+</dd>
+<dt class="hdlist1">-pb, --globalParentBatchId</dt>
+<dd>
+<p>Batch ID</p>
+</dd>
+<dt class="hdlist1">-hns, --hullDataNamespaceUri</dt>
+<dd>
+<p>Data Type Namespace for a centroid item</p>
+</dd>
+<dt class="hdlist1">-hdt, --hullDataTypeId</dt>
+<dd>
+<p>Data Type ID for a centroid item</p>
+</dd>
+<dt class="hdlist1">-hid, --hullIndexId</dt>
+<dd>
+<p>Index Identifier for Centroids</p>
+</dd>
+<dt class="hdlist1">-hpe, --hullProjectionClass</dt>
+<dd>
+<p>Class to project on to 2D space. Implements
+mil.nga.giat.geowave.analytics.tools.Projection</p>
+</dd>
+<dt class="hdlist1">-hrc, --hullReducerCount</dt>
+<dd>
+<p>Centroid Reducer Count</p>
+</dd>
+<dt class="hdlist1">-hfc, --hullWrapperFactoryClass</dt>
+<dd>
+<p>Class to create analytic item to capture hulls. Implements
+mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</dd>
+<dt class="hdlist1">-jkp, --jumpKplusplusMin</dt>
+<dd>
+<p>The minimum k when K means ++ takes over sampling</p>
+</dd>
+<dt class="hdlist1">-jrc, --jumpRangeOfCentroids</dt>
+<dd>
+<p>Comma-separated range of centroids (e.g. 2,100)</p>
+</dd>
+<dt class="hdlist1">-conf, --mapReduceConfigFile</dt>
+<dd>
+<p>MapReduce Configuration</p>
+</dd>
+<dt class="hdlist1">-hdfsbase, --mapReduceHdfsBaseDir</dt>
+<dd>
+<p>Fully qualified path to the base directory in hdfs</p>
+</dd>
+<dt class="hdlist1">-hdfs, --mapReduceHdfsHostPort</dt>
+<dd>
+<p>HDFS hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-jobtracker, --mapReduceJobtrackerHostPort</dt>
+<dd>
+<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-resourceman, --mapReduceYarnResourceManager</dt>
+<dd>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-ofc, --outputOutputFormat</dt>
+<dd>
+<p>Output Format Class</p>
+</dd>
+<dt class="hdlist1">-orc, --outputReducerCount</dt>
+<dd>
+<p>Number of Reducers For Output</p>
+</dd>
+<dt class="hdlist1">--query.adapters</dt>
+<dd>
+<p>Comma-separated data adapters to query; by default all are used</p>
+</dd>
+<dt class="hdlist1">--query.auth</dt>
+<dd>
+<p>The comma-separated list of authorizations used during extract; by default all authorizations are used.</p>
+</dd>
+<dt class="hdlist1">--query.fields</dt>
+<dd>
+<p>The comma-separated set of field names to extract; by default all are extracted</p>
+</dd>
+<dt class="hdlist1">--query.index</dt>
+<dt class="hdlist1">-sxs, --sampleMaxSampleSize</dt>
+<dd>
+<p>Max Sample Size</p>
+</dd>
+<dt class="hdlist1">-sms, --sampleMinSampleSize</dt>
+<dd>
+<p>Minimum Sample Size</p>
+</dd>
+<dt class="hdlist1">-ssi, --sampleSampleIterations</dt>
+<dd>
+<p>Minimum number of sample iterations</p>
+</dd>
+<dt class="hdlist1">-srf, --sampleSampleRankFunction</dt>
+<dd>
+<p>The rank function used when sampling the first N highest rank items</p>
+</dd>
+<dt class="hdlist1">-sss, --sampleSampleSize</dt>
+<dd>
+<p>Sample Size</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-analytic-kmeansparallel"><a class="anchor" href="#geowave-analytic-kmeansparallel"></a>geowave analytic kmeansparallel</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kmeansparallel - KMeans Parallel Clustering</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave analytic kmeansparallel</strong> [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic kmeansparallel operator will execute a KMeans Parallel Clustering analytic</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-cce, --centroidExtractorClass</dt>
+<dd>
+<p>Centroid Exractor Class implements
+mil.nga.giat.geowave.analytics.extract.CentroidExtractor</p>
+</dd>
+<dt class="hdlist1">-cid, --centroidIndexId</dt>
+<dd>
+<p>Index Identifier for Centroids</p>
+</dd>
+<dt class="hdlist1">-cfc, --centroidWrapperFactoryClass</dt>
+<dd>
+<p>A factory class that implements
+mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</dd>
+<dt class="hdlist1">-czl, --centroidZoomLevel</dt>
+<dd>
+<p>Zoom Level Number</p>
+</dd>
+<dt class="hdlist1">-cct, --clusteringConverganceTolerance</dt>
+<dd>
+<p>Convergence Tolerance</p>
+</dd>
+<dt class="hdlist1">-cmi, --clusteringMaxIterations</dt>
+<dd>
+<p>Maximum number of iterations when finding optimal clusters</p>
+</dd>
+<dt class="hdlist1">-crc, --clusteringMaxReducerCount</dt>
+<dd>
+<p>Maximum Clustering Reducer Count</p>
+</dd>
+<dt class="hdlist1">-zl, --clusteringZoomLevels</dt>
+<dd>
+<p>Number of Zoom Levels to Process</p>
+</dd>
+<dt class="hdlist1">-dde, --commonDimensionExtractClass</dt>
+<dd>
+<p>Dimension Extractor Class implements
+mil.nga.giat.geowave.analytics.extract.DimensionExtractor</p>
+</dd>
+<dt class="hdlist1">-cdf, --commonDistanceFunctionClass</dt>
+<dd>
+<p>Distance Function Class implements
+mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</dd>
+<dt class="hdlist1">-eit, --extractAdapterId</dt>
+<dd>
+<p>Input Data Type ID</p>
+</dd>
+<dt class="hdlist1">-ens, --extractDataNamespaceUri</dt>
+<dd>
+<p>Output Data Namespace URI</p>
+</dd>
+<dt class="hdlist1">-ede, --extractDimensionExtractClass</dt>
+<dd>
+<p>Class to extract dimensions into a simple feature output</p>
+</dd>
+<dt class="hdlist1">-ei, --extractIndexId</dt>
+<dd>
+<p>Extract from a specific index</p>
+</dd>
+<dt class="hdlist1">-emx, --extractMaxInputSplit</dt>
+<dd>
+<p>Maximum input split size</p>
+</dd>
+<dt class="hdlist1">-emn, --extractMinInputSplit</dt>
+<dd>
+<p>Minimum input split size</p>
+</dd>
+<dt class="hdlist1">-eot, --extractOutputDataTypeId</dt>
+<dd>
+<p>Output Data Type ID</p>
+</dd>
+<dt class="hdlist1">-eq, --extractQuery</dt>
+<dd>
+<p>Query</p>
+</dd>
+<dt class="hdlist1">-erc, --extractReducerCount</dt>
+<dd>
+<p>Number of Reducers For initial data extraction and de-duplication</p>
+</dd>
+<dt class="hdlist1">-b, --globalBatchId</dt>
+<dd>
+<p>Batch ID</p>
+</dd>
+<dt class="hdlist1">-pb, --globalParentBatchId</dt>
+<dd>
+<p>Batch ID</p>
+</dd>
+<dt class="hdlist1">-hns, --hullDataNamespaceUri</dt>
+<dd>
+<p>Data Type Namespace for a centroid item</p>
+</dd>
+<dt class="hdlist1">-hdt, --hullDataTypeId</dt>
+<dd>
+<p>Data Type ID for a centroid item</p>
+</dd>
+<dt class="hdlist1">-hid, --hullIndexId</dt>
+<dd>
+<p>Index Identifier for Centroids</p>
+</dd>
+<dt class="hdlist1">-hpe, --hullProjectionClass</dt>
+<dd>
+<p>Class to project on to 2D space. Implements
+mil.nga.giat.geowave.analytics.tools.Projection</p>
+</dd>
+<dt class="hdlist1">-hrc, --hullReducerCount</dt>
+<dd>
+<p>Centroid Reducer Count</p>
+</dd>
+<dt class="hdlist1">-hfc, --hullWrapperFactoryClass</dt>
+<dd>
+<p>Class to create analytic item to capture hulls. Implements
+mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</dd>
+<dt class="hdlist1">-conf, --mapReduceConfigFile</dt>
+<dd>
+<p>MapReduce Configuration</p>
+</dd>
+<dt class="hdlist1">-hdfsbase, --mapReduceHdfsBaseDir</dt>
+<dd>
+<p>Fully qualified path to the base directory in hdfs</p>
+</dd>
+<dt class="hdlist1">-hdfs, --mapReduceHdfsHostPort</dt>
+<dd>
+<p>HDFS hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-jobtracker, --mapReduceJobtrackerHostPort</dt>
+<dd>
+<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-resourceman, --mapReduceYarnResourceManager</dt>
+<dd>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
+</dd>
+<dt class="hdlist1">-ofc, --outputOutputFormat</dt>
+<dd>
+<p>Output Format Class</p>
+</dd>
+<dt class="hdlist1">-orc, --outputReducerCount</dt>
+<dd>
+<p>Number of Reducers For Output</p>
+</dd>
+<dt class="hdlist1">-sxs, --sampleMaxSampleSize</dt>
+<dd>
+<p>Max Sample Size</p>
+</dd>
+<dt class="hdlist1">-sms, --sampleMinSampleSize</dt>
+<dd>
+<p>Minimum Sample Size</p>
+</dd>
+<dt class="hdlist1">-ssi, --sampleSampleIterations</dt>
+<dd>
+<p>Minimum number of sample iterations</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-analytic-nn"><a class="anchor" href="#geowave-analytic-nn"></a>geowave analytic nn</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic nn - Nearest Neighbors</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave analytic nn</strong> [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic nn operator will execute a Nearest Neighbors analytic.
+Analytic 'nn' is similar to DBScan, with less arguments.
+'nn' just dumps all near neighbors for every feature id in a list of pairs.
+Most developers will want to extend the framework to add their own extensions.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">-cdf, --commonDistanceFunctionClass</dt>
+<dd>
+<p>Distance Function Class implements
+mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</dd>
+<dt class="hdlist1">-eit, --extractAdapterId</dt>
+<dd>
+<p>Input Data Type ID</p>
+</dd>
+<dt class="hdlist1">-ei, --extractIndexId</dt>
+<dd>
+<p>Extract from a specific index</p>
+</dd>
+<dt class="hdlist1">-emx, --extractMaxInputSplit</dt>
+<dd>
+<p>Maximum input split size</p>
+</dd>
+<dt class="hdlist1">-emn, --extractMinInputSplit</dt>
+<dd>
+<p>Minimum input split size</p>
+</dd>
+<dt class="hdlist1">-eq, --extractQuery</dt>
+<dd>
+<p>Query</p>
+</dd>
+<dt class="hdlist1">-oop, --outputHdfsOutputPath</dt>
+<dd>
+<p>Output HDFS File Path</p>
+</dd>
+<dt class="hdlist1">-ofc, --outputOutputFormat</dt>
+<dd>
+<p>Output Format Class</p>
+</dd>
+<dt class="hdlist1">-orc, --outputReducerCount</dt>
+<dd>
+<p>Number of Reducers For Output</p>
+</dd>
+<dt class="hdlist1">-pms, --partitionMaxMemberSelection</dt>
+<dd>
+<p>Maximum number of members selected from a partition</p>
+</dd>
+<dt class="hdlist1">-pd, --partitionPartitionDistance</dt>
+<dd>
+<p>Partition Distance</p>
+</dd>
+<dt class="hdlist1">-pc, --partitionPartitionerClass</dt>
+<dd>
+<p>Index Identifier for Centroids</p>
+</dd>
+<dt class="hdlist1">-psp, --partitionSecondaryPartitionerClass</dt>
+<dd>
+<p>Perform secondary partitioning with the provided class</p>
+</dd>
+</dl>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -2871,10 +3758,227 @@ include additional features. Think "AND" operators - not "OR".</p>
 </div>
 <div class="paragraph">
 <p>A final filter is possible on the client set - after all the returned results have been aggregated together. Currently
-this is only used for final deduplication. Whenever possible the distributed filter options should be used - as it splits
+this is only used for final de-duplication. Whenever possible the distributed filter options should be used - as it splits
 the work load among all the tablet servers.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="remotesoverview"><a class="anchor" href="#remotesoverview"></a>Remotes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="remote-commands"><a class="anchor" href="#remote-commands"></a>Remote Commands</h3>
+<div class="paragraph">
+<p>Operations to manage a remote store</p>
+</div>
+<div class="sect3">
+<h4 id="geowave-remote-calcstat"><a class="anchor" href="#geowave-remote-calcstat"></a>geowave remote calcstat</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote calcstat - Calculate a specific statistic in the remote store, given adapter ID and statistic ID</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave remote calcstat</strong> [options] &lt;store name&gt; &lt;adapterId&gt; &lt;statId&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave remote calcstat operator will calculate a specific statistic in the remote store, given adapter ID and statistic ID.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">--auth</dt>
+<dd>
+<p>The authorizations used for the statistics calculation as a subset of the
+accumulo user authorization; by default all authorizations are used.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-remote-clear"><a class="anchor" href="#geowave-remote-clear"></a>geowave remote clear</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote clear - Clear ALL data from a GeoWave store and delete tables</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave remote clear</strong> [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave remote clear operator will clear ALL data from a GeoWave store and delete tables</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-remote-listadapter"><a class="anchor" href="#geowave-remote-listadapter"></a>geowave remote listadapter</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest listadapter - display all adapters in this remote store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave ingest listadapter</strong> [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest listadapter operator will display all adapters in this remote store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-remote-listindex"><a class="anchor" href="#geowave-remote-listindex"></a>geowave remote listindex</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote listindex - Display all indices in this remote store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave remote listindex</strong> [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave remote listindex operator will display all indices in a specific remote store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-remote-liststats"><a class="anchor" href="#geowave-remote-liststats"></a>geowave remote liststats</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote liststats - Print statistics of an existing GeoWave dataset to standard output</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave remote liststats</strong> [options] &lt;store name&gt; [&lt;adapter name&gt;]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave remote liststats operator will print statistics of an existing GeoWave dataset to standard output</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS
+--auth
+   The authorizations used for the statistics calculation as a subset of the
+   accumulo user authorization; by default all authorizations are used.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-remote-recalcstats"><a class="anchor" href="#geowave-remote-recalcstats"></a>geowave remote recalcstats</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote recalcstats - Calculate the statistics of an existing GeoWave dataset</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave remote recalcstats</strong> [options] &lt;store name&gt; &lt;adapterId&gt; &lt;statId&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave remote recalcstats operator will calculate the statistics of an existing GeoWave dataset</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">--auth</dt>
+<dd>
+<p>The authorizations used for the statistics calculation as a subset of the
+accumulo user authorization; by default all authorizations are used.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geowave-remote-rmstat"><a class="anchor" href="#geowave-remote-rmstat"></a>geowave remote rmstat</h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote rmstat - Remove a statistic from the remote store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p><strong>geowave remote rmstat</strong> [options] &lt;store name&gt; &lt;adapterId&gt; &lt;statId&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave remote rmstat operator will Remove a statistic from the remote store.
+You will be prompted with "Are you sure?"</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS
+--auth::</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>The authorizations used for the statistics calculation as a subset of the
+accumulo user authorization; by default all authorizations are used.</pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -2889,7 +3993,7 @@ the work load among all the tablet servers.</p>
 <div class="sect3">
 <h4 id="wfs-t"><a class="anchor" href="#wfs-t"></a>WFS-T</h4>
 <div class="paragraph">
-<p>Extending Geotools, Geowave supports WFS-T for vector data. After following the deployment steps, Geowave appears as a
+<p>Geowave supports WFS-T for vector data by extending GeoTools. After following the deployment steps, Geowave appears as a
 data store type called 'GeoWave Datastore'.</p>
 </div>
 <div class="paragraph">
@@ -2963,32 +4067,32 @@ data store type called 'GeoWave Datastore'.</p>
 WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent
 use of a provided lock ID. The Geowave implementation supports
 transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a
-transaction may leave the affected data in an intermediary state&#8212;&#8203;some deletions, updates or insertions may not be
-processed. The client application must implement its on compensation logic upon receiving a commit-time error response.
+transaction may leave the affected data in an intermediary state. Some deletions, updates or insertions may not be
+processed in such a case. The client application must implement its own compensation logic upon receiving a commit-time error response.
 As expected with Accumulo, operations on a single feature instances are atomic.</p>
 </div>
 <div class="paragraph">
 <p>Inserted features are buffered prior to commit.  The features are bulk fed to the data store
 when the buffer size is exceeded and when the transaction is committed.  In support of atomicity and isolation,
 flushed features, prior to commit, are marked in a transient state, only visible to the controlling
-transaction.   Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided
+transaction. Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided
 by increasing the buffer size to avoid pre-commit flushes.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="lock-management"><a class="anchor" href="#lock-management"></a>Lock Management</h5>
 <div class="paragraph">
-<p>Lock management supports life-limited locks on feature instances. There are only two supported lock managers: in memory
-and Zookeeper. Memory is suitable for single Geoserver instance installations.</p>
+<p>Lock management supports life-limited locks on feature instances. There are only two supported lock managers: in-memory
+and Zookeeper. In-memory is suitable for single Geoserver instance installations.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="index-selection"><a class="anchor" href="#index-selection"></a>Index Selection</h5>
 <div class="paragraph">
 <p>Data written through WFS-T is indexed within a single index.  The adapter inspects existing indices, finding one that matches
-the data requirements.  A geo-temporal index is chosen for features with temporal attributes.  The adapter creates a geo-spatial index
-upon failure of finding a suitable index.  Geo-temporal index is not created, regardless of the existence of temporal attributes.  Currently,
-geo-temporal indices lead to poor performance for queries requesting vectors over large spans of time.</p>
+the data requirements.  A geo-temporal index is chosen for features with temporal attributes.  The adapter creates a geospatial index
+upon failure of finding a suitable index. A geotemporal index is not created, regardless of the existence of temporal attributes.  Currently,
+geotemporal indices lead to poor performance for queries requesting vectors over large spans of time.</p>
 </div>
 </div>
 </div>
@@ -3024,7 +4128,7 @@ authorizations from a JSON file. The location of the JSON file is determined by 
 <div class="sect3">
 <h4 id="visibility-management"><a class="anchor" href="#visibility-management"></a>Visibility Management</h4>
 <div class="paragraph">
-<p>Visibility constraints, applied to feature instances during insertions, are ultimately determined a
+<p>Visibility constraints, applied to feature instances during insertions, are ultimately determined in
 <code>mil.nga.giat.geowave.store.data.field.FieldWriter</code>, of which there are writers for each supported data type in
 Geoserver. By default, the set visibility expression attached to each feature property is empty. Visibility Management
 supports selection of a strategy by wrapping each writer to provide visibility. This alleviates the need to extend the
@@ -3065,10 +4169,10 @@ of an alternate property is achieved by setting the associated attribute descrip
 </div>
 </div>
 <div class="sect3">
-<h4 id="statistics-2"><a class="anchor" href="#statistics-2"></a>Statistics</h4>
+<h4 id="statistics-3"><a class="anchor" href="#statistics-3"></a>Statistics</h4>
 <div class="paragraph">
 <p>The adapter captures statistics for each numeric, temporal and geo-spatial attribute.  Statistics are used to constrain queries and
-answer inquiries by GeoServer for data ranges, as required for map requests and calibration of zoom levels in Open Layers.</p>
+answer inquiries by GeoServer for data ranges, as required for map requests and calibration of zoom levels in OpenLayers.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3181,7 +4285,7 @@ Current `best' version is /usr/local/geowave-0.9.0-hdp2.</code></pre>
 <p>geowave-*-accumulo: This RPM will install the GeoWave Accumulo iterator into the local file system and then upload
 it into HDFS using the <code>hadoop fs -put</code> command. This means of deployment requires that the RPM is installed on a node that
 has the correct binaries and configuration in place to push files to HDFS, like your namenode. We also need to set the ownership
-and permissions correctly within HDFS and as such need to execute the script as a user that has superuser permisisons in HDFS.
+and permissions correctly within HDFS and as such need to execute the script as a user that has superuser permissions in HDFS.
 This user varies by Hadoop distribution vendor. If the Accumulo RPM installation fails, check the install log located at
 <code>/usr/local/geowave/accumulo/geowave-to-hdfs.log</code> for errors. The script can be re-run manually if there was a problem that
 can be corrected like the HDFS service was not started. If a non-default user was used to install Hadoop you can specify a user
@@ -3202,7 +4306,7 @@ the rest of the RPMs all on a single node for development use or a mix of nodes 
 <div class="sect2">
 <h3 id="overview-6"><a class="anchor" href="#overview-6"></a>Overview</h3>
 <div class="paragraph">
-<p>There are public maven repositories available for both release and snapshot geowave artifacts (no transitive dependencies).
+<p>There are public maven repositories available for both release and snapshot GeoWave artifacts (no transitive dependencies).
 Automated deployment is available, but requires a S3 access key (typically added to your ~/.m2/settings.xml)</p>
 </div>
 </div>
@@ -3346,7 +4450,7 @@ version in the BUILD_ARGS environment variable</p>
 <h3 id="provisioning"><a class="anchor" href="#provisioning"></a>Provisioning</h3>
 <div class="paragraph">
 <p>The configuration files needed to use GeoWave from EMR are stored under the deploy/emr/4 directory. EMR expects that all
-config files are available from S3 so the first step would be to create a bucket if needed and then copy the two scripts
+config files are available from S3 so the first step would be to create an S3 bucket and then copy the two scripts
 into the S3 bucket adjusting the path used in the command as needed.</p>
 </div>
 <div class="paragraph">
@@ -3371,7 +4475,7 @@ in quickly setting up a cluster to test some capability.</p>
   --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
   --ec2-attributes "KeyName=YOUR_KEYNAME,SubnetId=YOUR_SUBNET_ID" \
   --region YOUR_REGION \
-  --release-label emr-4.2.0 \
+  --release-label emr-4.3.0 \
   --applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
   --use-default-roles \
   --no-auto-terminate \
@@ -3507,7 +4611,7 @@ exit</code></pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Link the namespace with the application classpath, adjust the labels as needed if you&#8217;ve used different user or appilcation names</td>
+<td>Link the namespace with the application classpath, adjust the labels as needed if you&#8217;ve used different user or application names</td>
 </tr>
 </table>
 </div>
@@ -3676,7 +4780,7 @@ only required for certain functions (distributed rendering) - so this may be ski
 <div class="sect2">
 <h3 id="build-process"><a class="anchor" href="#build-process"></a>Build Process</h3>
 <div class="paragraph">
-<p>Checkout geowave, set your preferred dependencies as build arguments and then run maven install.</p>
+<p>Checkout GeoWave, set your preferred dependencies as build arguments and then run maven install.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3714,7 +4818,7 @@ mvn install $BUILD_ARGS <i class="conum" data-value="3"></i><b>(3)</b></code></p
 </div>
 <div class="paragraph">
 <p>Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the
-location of the cygpath binary provided by cygwin then is should work. Eclipse and Avro generated files</p>
+location of the cygpath binary provided by cygwin then this should work.</p>
 </div>
 </td>
 </tr>
@@ -3759,7 +4863,9 @@ useful for a number of different situations:</p>
 <div class="sect2">
 <h3 id="prepackaged-source-and-binaries"><a class="anchor" href="#prepackaged-source-and-binaries"></a>Prepackaged Source and Binaries</h3>
 <div class="paragraph">
-<p>There is a public <a href="http://ngageoint.github.io/geowave/packages.html">GeoWave RPM Repo</a> where you can download a tarball for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.</p>
+<p>There is a public <a href="http://ngageoint.github.io/geowave/packages.html">GeoWave RPM Repo</a> where you can download a tarball
+for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball
+which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3871,7 +4977,8 @@ GeoWave is supported as a plugin for Mapnik for reading vector data from Accumul
 <div class="sect3">
 <h4 id="configure-scons-for-mapnik"><a class="anchor" href="#configure-scons-for-mapnik"></a>Configure Scons for Mapnik</h4>
 <div class="paragraph">
-<p>To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
+<p>To configure Mapnik to run with GeoWave, there are a few SCons options which need to be configured.
+Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -3956,7 +5063,9 @@ and writing data to Accumulo.</p>
 <div class="sect3">
 <h4 id="configure-cmake-for-pdal"><a class="anchor" href="#configure-cmake-for-pdal"></a>Configure CMake for PDAL</h4>
 <div class="paragraph">
-<p>To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.  While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
+<p>To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.
+While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.
+Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -4041,96 +5150,10 @@ and writing data to Accumulo.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="documentation-2"><a class="anchor" href="#documentation-2"></a>Documentation</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-8"><a class="anchor" href="#overview-8"></a>Overview</h3>
-<div class="paragraph">
-<p>The documentation is writen in <a href="http://en.wikipedia.org/wiki/AsciiDoc" target="_blank">AsciiDoc</a> which is a plain-text markup format that
-can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.</p>
-</div>
-<div class="paragraph">
-<p>Helpful Links:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="http://asciidoctor.org/docs/what-is-asciidoc/" target="_blank">What is Asciidoc?</a></p>
-</li>
-<li>
-<p><a href="http://asciidoctor.org/docs/asciidoc-writers-guide/" target="_blank">Writer&#8217;s Guide</a></p>
-</li>
-<li>
-<p><a href="http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/" target="_blank">AsciiDoc Syntax Reference</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="ordering"><a class="anchor" href="#ordering"></a>Ordering</h3>
-<div class="paragraph">
-<p>All of the content stored in the <code>docs/content</code> directory of this project will be rendered into a single web page with
-an auto-generated table of contents and a PDF. The order in which the pages appear is determined by the sort order of
-the file names given to the ASCIIDOC files in the <code>docs/content</code> directory so a numeric prefix has been given to each
-file. Gaps can be left in between the numbers (only the sort order is important) to allow for future edits without having
-to renumber other documents that will appear after the new content.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="preview"><a class="anchor" href="#preview"></a>Preview</h3>
-<div class="paragraph">
-<p>To preview markup as HTML before making a commit there are plugins available various text editors and IDEs that
-can be used while editing. If your preferred text editor has no plugin available there&#8217;s a
-<a href="https://github.com/asciidoctor/asciidoctor-firefox-addon" target="_blank">Firefox AsciiDoc Plugin</a> available which allows for previewing
-with a quick refresh of the browser.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="transformation"><a class="anchor" href="#transformation"></a>Transformation</h3>
-<div class="paragraph">
-<p>To preview the entire finished page web page or see the generated PDF you&#8217;ll need to run the transformation process.</p>
-</div>
-<div class="listingblock">
-<div class="title">Generate Documentation</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"> cd geowave
- mvn -P docs -pl docs install <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>-pl docs = Process <em>only</em> the docs module. Skips the javadoc generation step.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The source documents will be transformed and will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="site"><a class="anchor" href="#site"></a>Site</h3>
-<div class="paragraph">
-<p>To build all the content used for the <a href="https://ngageoint.github.io/geowave/">GeoWave website</a> use the following command. The
-entire site, including both docs and javadocs, will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
-</div>
-<div class="listingblock">
-<div class="title">Generate Website</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd geowave
-mvn -P docs install</code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="puppet-2"><a class="anchor" href="#puppet-2"></a>Puppet</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="overview-9"><a class="anchor" href="#overview-9"></a>Overview</h3>
+<h3 id="overview-8"><a class="anchor" href="#overview-8"></a>Overview</h3>
 <div class="paragraph">
 <p>A GeoWave <a href="http://puppetlabs.com/" target="_blank">Puppet module</a> has been provided as part of both the tar.gz archive bundle and as an
 RPM. This module can be used to install the various GeoWave services onto separate nodes in a cluster or all onto a single
@@ -4148,7 +5171,7 @@ Puppet runs to do the initial install.</p>
 <dl>
 <dt class="hdlist1">geowave_version</dt>
 <dd>
-<p>The desired version of GeoWave to install, ex: '0.9.0' we support concurrent installs but only one will be active at a time</p>
+<p>The desired version of GeoWave to install, ex: '0.9.1'. We support concurrent installs but only one will be active at a time.</p>
 </dd>
 <dt class="hdlist1">hadoop_vendor_version</dt>
 <dd>
@@ -4169,7 +5192,7 @@ Puppet runs to do the initial install.</p>
 </dd>
 <dt class="hdlist1">http_port</dt>
 <dd>
-<p>The port on which the Jetty application server will run, defaults to 8080.</p>
+<p>The port on which the Jetty application server will run - defaults to 8080.</p>
 </dd>
 <dt class="hdlist1">repo_base_url</dt>
 <dd>
@@ -4286,13 +5309,99 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="documentation-2"><a class="anchor" href="#documentation-2"></a>Documentation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="overview-9"><a class="anchor" href="#overview-9"></a>Overview</h3>
+<div class="paragraph">
+<p>The documentation is writen in <a href="http://en.wikipedia.org/wiki/AsciiDoc" target="_blank">AsciiDoc</a> which is a plain-text markup format that
+can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.</p>
+</div>
+<div class="paragraph">
+<p>Helpful Links:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://asciidoctor.org/docs/what-is-asciidoc/" target="_blank">What is Asciidoc?</a></p>
+</li>
+<li>
+<p><a href="http://asciidoctor.org/docs/asciidoc-writers-guide/" target="_blank">Writer&#8217;s Guide</a></p>
+</li>
+<li>
+<p><a href="http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/" target="_blank">AsciiDoc Syntax Reference</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ordering"><a class="anchor" href="#ordering"></a>Ordering</h3>
+<div class="paragraph">
+<p>All of the content stored in the <code>docs/content</code> directory of this project will be rendered into a single web page with
+an auto-generated table of contents and a PDF. The order in which the pages appear is determined by the sort order of
+the file names given to the ASCIIDOC files in the <code>docs/content</code> directory so a numeric prefix has been given to each
+file. Gaps can be left in between the numbers (only the sort order is important) to allow for future edits without having
+to renumber other documents that will appear after the new content.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="preview"><a class="anchor" href="#preview"></a>Preview</h3>
+<div class="paragraph">
+<p>To preview markup as HTML before making a commit there are plugins available various text editors and IDEs that
+can be used while editing. If your preferred text editor has no plugin available there&#8217;s a
+<a href="https://github.com/asciidoctor/asciidoctor-firefox-addon" target="_blank">Firefox AsciiDoc Plugin</a> available which allows for previewing
+with a quick refresh of the browser.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transformation"><a class="anchor" href="#transformation"></a>Transformation</h3>
+<div class="paragraph">
+<p>To preview the entire finished page web page or see the generated PDF you&#8217;ll need to run the transformation process.</p>
+</div>
+<div class="listingblock">
+<div class="title">Generate Documentation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash"> cd geowave
+ mvn -P docs -pl docs install <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>-pl docs = Process <em>only</em> the docs module. Skips the javadoc generation step.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The source documents will be transformed and will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="site"><a class="anchor" href="#site"></a>Site</h3>
+<div class="paragraph">
+<p>To build all the content used for the <a href="https://ngageoint.github.io/geowave/">GeoWave website</a> use the following command. The
+entire site, including both docs and javadocs, will be available for inspection in the <code>geowave/target/site/</code> directory.</p>
+</div>
+<div class="listingblock">
+<div class="title">Generate Website</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd geowave
+mvn -P docs install</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="appendices-2"><a class="anchor" href="#appendices-2"></a>Appendices</h2>
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.1-SNAPSHOT from commit 98360bf6916a7dfd6c5d1fee2bcceb3ddffe03de.</p>
+<p>This documentation was generated for GeoWave version 0.9.1-SNAPSHOT from commit f62718a5cfdcbc2eb5d0395636720d8ff73d788b.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -4344,7 +5453,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-08 12:46:01 UTC
+Last updated 2016-05-04 16:20:06 UTC
 </div>
 </div>
 </body>

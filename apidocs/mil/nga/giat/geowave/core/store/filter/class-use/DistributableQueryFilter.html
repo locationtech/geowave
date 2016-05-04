@@ -130,6 +130,14 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.query">mil.nga.giat.geowave.datastore.accumulo.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.index.secondary">mil.nga.giat.geowave.datastore.hbase.index.secondary</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.query">mil.nga.giat.geowave.datastore.hbase.query</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -509,11 +517,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;</code></td>
-<td class="colLast"><span class="strong">BasicQuery.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryQueryFilter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">DistributableQuery.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html#getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryQueryFilter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;</code></td>
-<td class="colLast"><span class="strong">DistributableQuery.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html#getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryQueryFilter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">BasicQuery.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryQueryFilter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -554,6 +562,46 @@
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;</code></td>
 <td class="colLast"><span class="strong">AccumuloConstraintsQuery.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#distributableFilters">distributableFilters</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.index.secondary">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/package-summary.html">mil.nga.giat.geowave.datastore.hbase.index.secondary</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/package-summary.html">mil.nga.giat.geowave.datastore.hbase.index.secondary</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseSecondaryIndexDataStore.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStore.html#query(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20java.util.List,%20java.util.List,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">query</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;ranges,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;&nbsp;constraints,
+     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;visibility)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/package-summary.html">mil.nga.giat.geowave.datastore.hbase.query</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/package-summary.html">mil.nga.giat.geowave.datastore.hbase.query</a> with type parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseConstraintsQuery.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseConstraintsQuery.html#distributableFilters">distributableFilters</a></strong></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

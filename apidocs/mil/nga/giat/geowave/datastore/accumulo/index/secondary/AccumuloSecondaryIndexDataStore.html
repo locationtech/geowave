@@ -95,13 +95,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Closable</a></dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">AccumuloSecondaryIndexDataStore</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Closable</a></pre>
+implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a></pre>
 </li>
 </ul>
 </div>
@@ -123,8 +123,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">AccumuloSecondaryIndexDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions)">AccumuloSecondaryIndexDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                               <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions)">AccumuloSecondaryIndexDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
+                               <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -143,18 +143,22 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#close()">close</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#clearCache()">clearCache</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#close()">close</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#delete(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20java.util.List)">delete</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#flush()">flush</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#query(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20java.util.List,%20java.util.List,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">query</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;ranges,
@@ -162,7 +166,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
      <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;visibility)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#store(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.util.List)">store</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
      <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
@@ -200,14 +204,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <pre>public&nbsp;AccumuloSecondaryIndexDataStore(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations)</pre>
 </li>
 </ul>
-<a name="AccumuloSecondaryIndexDataStore(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions)">
+<a name="AccumuloSecondaryIndexDataStore(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloSecondaryIndexDataStore</h4>
 <pre>public&nbsp;AccumuloSecondaryIndexDataStore(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                               <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions)</pre>
+                               <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions)</pre>
 </li>
 </ul>
 </li>
@@ -248,6 +252,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 </dl>
 </li>
 </ul>
+<a name="clearCache()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearCache</h4>
+<pre>public&nbsp;void&nbsp;clearCache()</pre>
+</li>
+</ul>
 <a name="query(mil.nga.giat.geowave.core.store.index.SecondaryIndex, java.util.List, java.util.List, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String...)">
 <!--   -->
 </a>
@@ -274,7 +287,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html#close()">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/Closable.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Closable</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/Closable.html#close()">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a></code></dd>
 </dl>
 </li>
 </ul>

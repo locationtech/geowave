@@ -166,8 +166,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(java.util.List,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">QueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20java.lang.String[])">QueryOptions</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(java.util.List)">QueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(java.util.List,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">QueryOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">QueryOptions</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
@@ -191,23 +198,35 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getAdapterIds(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">getAdapterIds</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getAdapters(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">getAdapters</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getAdaptersArray(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">getAdaptersArray</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getAdaptersWithMinimalSetOfIndices(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore,%20mil.nga.giat.geowave.core.store.index.IndexStore)">getAdaptersWithMinimalSetOfIndices</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
+                                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)</code>
+<div class="block">Return a set list adapter/index associations.</div>
+</td>
+</tr>
 <tr class="altColor">
-<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getAggregation()">getAggregation</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -215,8 +234,20 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getAuthorizations()">getAuthorizations</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getIndices(mil.nga.giat.geowave.core.store.index.IndexStore)">getIndices</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)</code>&nbsp;</td>
+<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getFieldIdsAdapterPair()">getFieldIdsAdapterPair</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getIndex()">getIndex</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getIndicesForAdapters(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore,%20mil.nga.giat.geowave.core.store.index.IndexStore)">getIndicesForAdapters</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)</code>
+<div class="block">Return the set of adapter/index associations.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
@@ -231,28 +262,28 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getScanCallback()">getScanCallback</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getSerialversionuid()">getSerialversionuid</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#hashCode()">hashCode</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#isAllAdaptersAndIndices()">isAllAdaptersAndIndices</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#isAllAdapters()">isAllAdapters</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#isDedupAcrossIndices()">isDedupAcrossIndices</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setAdapter(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">setAdapter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setAdapter(java.util.List)">setAdapter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapters)</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setAdapterIds(java.util.List)">setAdapterIds</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setAdapters(java.util.List)">setAdapters</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setAggregation(mil.nga.giat.geowave.core.store.query.aggregate.Aggregation,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">setAggregation</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?&gt;&nbsp;aggregation,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setAggregation(mil.nga.giat.geowave.core.store.query.aggregate.Aggregation,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">setAggregation</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&nbsp;aggregation,
               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -261,7 +292,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setDedupAcrosssIndices(boolean)">setDedupAcrosssIndices</a></strong>(boolean&nbsp;dedupAcrossIndices)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setFieldIds(java.util.List,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">setFieldIds</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+           <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -269,7 +301,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setIndices(mil.nga.giat.geowave.core.store.index.Index[])">setIndices</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;[]&nbsp;indices)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setIndexId(mil.nga.giat.geowave.core.index.ByteArrayId)">setIndexId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -299,7 +331,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -325,15 +357,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
 </li>
 </ul>
-<a name="QueryOptions(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>QueryOptions</h4>
-<pre>public&nbsp;QueryOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
-</li>
-</ul>
 <a name="QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
 <!--   -->
 </a>
@@ -341,6 +364,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <li class="blockList">
 <h4>QueryOptions</h4>
 <pre>public&nbsp;QueryOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
+</li>
+</ul>
+<a name="QueryOptions(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>QueryOptions</h4>
+<pre>public&nbsp;QueryOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
 <a name="QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
@@ -353,14 +385,23 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="QueryOptions(java.util.List, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<a name="QueryOptions(java.util.List)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>QueryOptions</h4>
-<pre>public&nbsp;QueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+<pre>public&nbsp;QueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</pre>
+</li>
+</ul>
+<a name="QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter, java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>QueryOptions</h4>
+<pre>public&nbsp;QueryOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
 </li>
 </ul>
 <a name="QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.lang.String[])">
@@ -398,6 +439,17 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
             of results to the provided limit.</dd><dd><code>scanCallback</code> - </dd><dd><code>authorizations</code> - </dd></dl>
 </li>
 </ul>
+<a name="QueryOptions(java.util.List, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>QueryOptions</h4>
+<pre>public&nbsp;QueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldIds</code> - the subset of fieldIds to be included with each query result</dd><dd><code>adapter</code> - the associated data adapter</dd></dl>
+</li>
+</ul>
 <a name="QueryOptions()">
 <!--   -->
 </a>
@@ -415,22 +467,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="isDedupAcrossIndices()">
+<a name="setAdapters(java.util.List)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isDedupAcrossIndices</h4>
-<pre>public&nbsp;boolean&nbsp;isDedupAcrossIndices()</pre>
-</li>
-</ul>
-<a name="setAdapterIds(java.util.List)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setAdapterIds</h4>
-<pre>public&nbsp;void&nbsp;setAdapterIds(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds)</pre>
+<h4>setAdapters</h4>
+<pre>public&nbsp;void&nbsp;setAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</pre>
 </li>
 </ul>
 <a name="setAdapter(mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
@@ -440,6 +483,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <li class="blockList">
 <h4>setAdapter</h4>
 <pre>public&nbsp;void&nbsp;setAdapter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
+</li>
+</ul>
+<a name="setAdapter(java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAdapter</h4>
+<pre>public&nbsp;void&nbsp;setAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapters)</pre>
 </li>
 </ul>
 <a name="setMaxResolutionSubsamplingPerDimension(double[])">
@@ -470,22 +522,23 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - </dd></dl>
 </li>
 </ul>
-<a name="setDedupAcrosssIndices(boolean)">
+<a name="setIndexId(mil.nga.giat.geowave.core.index.ByteArrayId)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setDedupAcrosssIndices</h4>
-<pre>public&nbsp;void&nbsp;setDedupAcrosssIndices(boolean&nbsp;dedupAcrossIndices)</pre>
+<h4>setIndexId</h4>
+<pre>public&nbsp;void&nbsp;setIndexId(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - </dd></dl>
 </li>
 </ul>
-<a name="setIndices(mil.nga.giat.geowave.core.store.index.Index[])">
+<a name="getIndex()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setIndices</h4>
-<pre>public&nbsp;void&nbsp;setIndices(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;[]&nbsp;indices)</pre>
+<h4>getIndex</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;getIndex()</pre>
 </li>
 </ul>
 <a name="getLimit()">
@@ -509,13 +562,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>limit</code> - </dd></dl>
 </li>
 </ul>
-<a name="isAllAdaptersAndIndices()">
+<a name="isAllAdapters()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isAllAdaptersAndIndices</h4>
-<pre>public&nbsp;boolean&nbsp;isAllAdaptersAndIndices()</pre>
+<h4>isAllAdapters</h4>
+<pre>public&nbsp;boolean&nbsp;isAllAdapters()</pre>
 </li>
 </ul>
 <a name="getScanCallback()">
@@ -558,13 +611,52 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <pre>public&nbsp;void&nbsp;setAuthorizations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
 </li>
 </ul>
-<a name="getIndices(mil.nga.giat.geowave.core.store.index.IndexStore)">
+<a name="getIndicesForAdapters(mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore, mil.nga.giat.geowave.core.store.index.IndexStore)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIndices</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)</pre>
+<h4>getIndicesForAdapters</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&gt;&gt;&nbsp;getIndicesForAdapters(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                                                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
+                                                                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
+                                                                                                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Return the set of adapter/index associations. If the adapters are not
+ provided, then look up all of them. If the index is not provided, then
+ look up all of them.
+ 
+ DataStores are responsible for selecting a single adapter/index per
+ query. For deletions, the Data Stores are interested in all the
+ associations.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>adapterStore</code> - </dd><dd><code></code> - </dd><dd><code>indexStore</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getAdaptersWithMinimalSetOfIndices(mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore, mil.nga.giat.geowave.core.store.index.IndexStore)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAdaptersWithMinimalSetOfIndices</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&gt;&gt;&nbsp;getAdaptersWithMinimalSetOfIndices(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                                                                                                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
+                                                                                                                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
+                                                                                                                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Return a set list adapter/index associations. If the adapters are not
+ provided, then look up all of them. If the index is not provided, then
+ look up all of them. The full set of adapter/index associations is
+ reduced so that a single index is queried per adapter and the number
+ indices queried is minimized.
+ 
+ DataStores are responsible for selecting a single adapter/index per
+ query. For deletions, the Data Stores are interested in all the
+ associations.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>adapterStore</code> - </dd><dd><code>adapterIndexMappingStore</code> - </dd><dd><code>indexStore</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
 <a name="getAdapters(mil.nga.giat.geowave.core.store.adapter.AdapterStore)">
@@ -600,13 +692,26 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="getSerialversionuid()">
+<a name="getFieldIdsAdapterPair()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSerialversionuid</h4>
-<pre>public static&nbsp;long&nbsp;getSerialversionuid()</pre>
+<h4>getFieldIdsAdapterPair</h4>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;getFieldIdsAdapterPair()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a paring of fieldIds and their associated data adapter >>>>>>>
+         wip: bitmask approach</dd></dl>
+</li>
+</ul>
+<a name="setFieldIds(java.util.List, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFieldIds</h4>
+<pre>public&nbsp;void&nbsp;setFieldIds(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldIds</code> - the subset of fieldIds to be included with each query result</dd><dd><code>adapter</code> - the associated data adapter</dd></dl>
 </li>
 </ul>
 <a name="toBinary()">
@@ -641,7 +746,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <ul class="blockList">
 <li class="blockList">
 <h4>getAggregation</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?&gt;&gt;&nbsp;getAggregation()</pre>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&gt;&nbsp;getAggregation()</pre>
 </li>
 </ul>
 <a name="setAggregation(mil.nga.giat.geowave.core.store.query.aggregate.Aggregation, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
@@ -650,20 +755,46 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <ul class="blockList">
 <li class="blockList">
 <h4>setAggregation</h4>
-<pre>public&nbsp;void&nbsp;setAggregation(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?&gt;&nbsp;aggregation,
+<pre>public&nbsp;void&nbsp;setAggregation(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&nbsp;aggregation,
                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
 </li>
 </ul>
 <a name="toString()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;equals(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>

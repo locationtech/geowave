@@ -86,9 +86,6 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver</a></li>
-<li>
-<ul class="inheritance">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</li>
 <li>
 <ul class="inheritance">
@@ -98,15 +95,9 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/cli/CLIOperationDriver.html" title="interface in mil.nga.giat.geowave.core.cli">CLIOperationDriver</a></dd>
-</dl>
 <hr>
 <br>
 <pre>public class <span class="strong">StageToKafkaDriver&lt;T extends org.apache.avro.specific.SpecificRecordBase&gt;</span>
@@ -132,13 +123,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.local.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a></h3>
 <code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#localInput">localInput</a></code></li>
 </ul>
-<ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">AbstractIngestCommandLineDriver</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#pluginProviderRegistry">pluginProviderRegistry</a></code></li>
-</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -153,7 +137,9 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#StageToKafkaDriver(java.lang.String)">StageToKafkaDriver</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;operation)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#StageToKafkaDriver(mil.nga.giat.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions,%20java.util.Map,%20mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions)">StageToKafkaDriver</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaProducerCommandLineOptions</a>&nbsp;kafkaOptions,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -172,24 +158,14 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#applyOptionsInternal(org.apache.commons.cli.Options)">applyOptionsInternal</a></strong>(org.apache.commons.cli.Options&nbsp;allOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#parseOptionsInternal(org.apache.commons.cli.Options,%20org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></strong>(org.apache.commons.cli.Options&nbsp;options,
-                    org.apache.commons.cli.CommandLine&nbsp;commandLine)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#processFile(java.io.File,%20java.lang.String,%20mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin,%20mil.nga.giat.geowave.core.ingest.kafka.StageKafkaData)">processFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&nbsp;runData)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#runInternal(java.lang.String[],%20java.util.List)">runInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;?,?&gt;&gt;&nbsp;pluginProviders)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageToKafkaDriver.html#runOperation(java.lang.String)">runOperation</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -197,14 +173,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.local.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processInput(java.util.Map,%20R)">processInput</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.ingest.AbstractIngestCommandLineDriver">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">AbstractIngestCommandLineDriver</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#applyArguments(java.lang.String[])">applyArguments</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#runOperation(java.lang.String[])">runOperation</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#checkIndexesAgainstProvider(java.lang.String,%20mil.nga.giat.geowave.core.ingest.DataAdapterProvider,%20java.util.List)">checkIndexesAgainstProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processInput(java.lang.String,%20java.util.Map,%20R)">processInput</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -227,13 +196,15 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="StageToKafkaDriver(java.lang.String)">
+<a name="StageToKafkaDriver(mil.nga.giat.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions, java.util.Map, mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>StageToKafkaDriver</h4>
-<pre>public&nbsp;StageToKafkaDriver(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;operation)</pre>
+<pre>public&nbsp;StageToKafkaDriver(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaProducerCommandLineOptions</a>&nbsp;kafkaOptions,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localOptions)</pre>
 </li>
 </ul>
 </li>
@@ -244,35 +215,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="parseOptionsInternal(org.apache.commons.cli.Options, org.apache.commons.cli.CommandLine)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>parseOptionsInternal</h4>
-<pre>protected&nbsp;void&nbsp;parseOptionsInternal(org.apache.commons.cli.Options&nbsp;options,
-                        org.apache.commons.cli.CommandLine&nbsp;commandLine)
-                             throws org.apache.commons.cli.ParseException</pre>
-<dl>
-<dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#parseOptionsInternal(org.apache.commons.cli.Options,%20org.apache.commons.cli.CommandLine)">parseOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
-</li>
-</ul>
-<a name="applyOptionsInternal(org.apache.commons.cli.Options)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>applyOptionsInternal</h4>
-<pre>protected&nbsp;void&nbsp;applyOptionsInternal(org.apache.commons.cli.Options&nbsp;allOptions)</pre>
-<dl>
-<dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#applyOptionsInternal(org.apache.commons.cli.Options)">applyOptionsInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/StageKafkaData.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
-</dl>
-</li>
-</ul>
 <a name="processFile(java.io.File, java.lang.String, mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin, mil.nga.giat.geowave.core.ingest.kafka.StageKafkaData)">
 <!--   -->
 </a>
@@ -289,18 +231,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 </dl>
 </li>
 </ul>
-<a name="runInternal(java.lang.String[], java.util.List)">
+<a name="runOperation(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>runInternal</h4>
-<pre>protected&nbsp;boolean&nbsp;runInternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestFormatPluginProviderSpi</a>&lt;?,?&gt;&gt;&nbsp;pluginProviders)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html#runInternal(java.lang.String[],%20java.util.List)">runInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/AbstractIngestCommandLineDriver.html" title="class in mil.nga.giat.geowave.core.ingest">AbstractIngestCommandLineDriver</a></code></dd>
-</dl>
+<h4>runOperation</h4>
+<pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath)</pre>
 </li>
 </ul>
 </li>

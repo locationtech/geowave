@@ -482,14 +482,6 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">FixedBinNumericStatistics.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">NumericRangeDataStatistics.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">RowRangeHistogramStatistics.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -500,6 +492,14 @@
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">CountDataStatistics.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/CountDataStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">FixedBinNumericStatistics.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">NumericRangeDataStatistics.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -507,8 +507,8 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/package-summary.html">mil.nga.giat.geowave.core.store.query.aggregate</a></h3>
-<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
-<caption><span>Subinterfaces of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/package-summary.html">mil.nga.giat.geowave.core.store.query.aggregate</a></span><span class="tabEnd">&nbsp;</span></caption>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/package-summary.html">mil.nga.giat.geowave.core.store.query.aggregate</a> with type parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Interface and Description</th>
@@ -516,7 +516,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;T&gt;</strong></code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/Aggregation.html" title="interface in mil.nga.giat.geowave.core.store.query.aggregate">Aggregation</a>&lt;P extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>,R extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>,T&gt;</strong></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -529,11 +529,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountAggregation</a>&lt;T&gt;</strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">DataStatisticsAggregation</a>&lt;T&gt;</strong></code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html" title="class in mil.nga.giat.geowave.core.store.query.aggregate">CountResult</a></strong></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -546,11 +542,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">DataStatisticsAggregation.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/DataStatisticsAggregation.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;merge)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="strong">CountAggregation.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountAggregation.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">CountResult.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;result)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

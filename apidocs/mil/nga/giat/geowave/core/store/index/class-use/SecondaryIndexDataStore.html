@@ -87,11 +87,23 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.operations.remote.options">mil.nga.giat.geowave.core.store.operations.remote.options</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.index.secondary">mil.nga.giat.geowave.datastore.accumulo.index.secondary</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase">mil.nga.giat.geowave.datastore.hbase</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.index.secondary">mil.nga.giat.geowave.datastore.hbase.index.secondary</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -112,8 +124,20 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
-<td class="colLast"><span class="strong">GeoWaveStoreFinder.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createSecondaryIndexDataStore(java.util.Map,%20java.lang.String)">createSecondaryIndexDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">GeoWaveStoreFinder.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createSecondaryIndexDataStore(java.util.Map)">createSecondaryIndexDataStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/package-summary.html">mil.nga.giat.geowave.core.store</a> that return types with arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</code></td>
+<td class="colLast"><span class="strong">StoreFactoryFamilySpi.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getSecondaryIndexDataStore()">getSecondaryIndexDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -124,8 +148,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html#DataStoreCallbackManager(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore)">DataStoreCallbackManager</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-                        <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html#DataStoreCallbackManager(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20boolean)">DataStoreCallbackManager</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                        <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore,
+                        boolean&nbsp;captureAdapterStats)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -177,12 +202,24 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
-<td class="colLast"><span class="strong">MemorySecondaryIndexStoreFactory.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexStoreFactory.html#createStore(java.util.Map,%20java.lang.String)">createStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">MemorySecondaryIndexStoreFactory.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexStoreFactory.html#createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">createStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
 <td class="colLast"><span class="strong">MemorySecondaryIndexStoreFactory.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexStoreFactory.html#createStore(java.lang.String)">createStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a> that return types with arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</code></td>
+<td class="colLast"><span class="strong">MemoryStoreFactoryFamily.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreFactoryFamily.html#getSecondaryIndexDataStore()">getSecondaryIndexDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -193,10 +230,33 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#MemoryDataStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore)">MemoryDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#MemoryDataStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore)">MemoryDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-               <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore)</code>&nbsp;</td>
+               <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+               <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.operations.remote.options">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/package-summary.html">mil.nga.giat.geowave.core.store.operations.remote.options</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/package-summary.html">mil.nga.giat.geowave.core.store.operations.remote.options</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
+<td class="colLast"><span class="strong">StoreLoader.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StoreLoader.html#createSecondaryIndexStore()">createSecondaryIndexStore</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
+<td class="colLast"><span class="strong">DataStorePluginOptions.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html#createSecondaryIndexStore()">createSecondaryIndexStore</a></strong>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -231,6 +291,19 @@
 </tr>
 </tbody>
 </table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> that return types with arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</code></td>
+<td class="colLast"><span class="strong">AccumuloStoreFactoryFamily.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getSecondaryIndexDataStore()">getSecondaryIndexDataStore</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -238,36 +311,21 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">AccumuloDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations)">AccumuloDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;indexMappingStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions)">AccumuloDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#AccumuloDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions)">AccumuloDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;indexMappingStore,
                  <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOptions,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloOptions</a>&nbsp;accumuloOptions,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>&nbsp;dataStore,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
+                 <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -298,8 +356,94 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
-<td class="colLast"><span class="strong">AccumuloSecondaryIndexDataStoreFactory.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStoreFactory.html#createStore(java.util.Map,%20java.lang.String)">createStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;configOptions,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">AccumuloSecondaryIndexDataStoreFactory.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStoreFactory.html#createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">createStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> declared as <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
+<td class="colLast"><span class="strong">HBaseDataStore.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html#secondaryIndexDataStore">secondaryIndexDataStore</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> that return types with arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</code></td>
+<td class="colLast"><span class="strong">HBaseStoreFactoryFamily.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseStoreFactoryFamily.html#getSecondaryIndexDataStore()">getSecondaryIndexDataStore</a></strong>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html#HBaseDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations)">HBaseDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;indexMappingStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html#HBaseDataStore(mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations,%20mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions)">HBaseDataStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;indexMappingStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+              <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
+              <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.index.secondary">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/package-summary.html">mil.nga.giat.geowave.datastore.hbase.index.secondary</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/package-summary.html">mil.nga.giat.geowave.datastore.hbase.index.secondary</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase.index.secondary">HBaseSecondaryIndexDataStore</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/package-summary.html">mil.nga.giat.geowave.datastore.hbase.index.secondary</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
+<td class="colLast"><span class="strong">HBaseSecondaryIndexDataStoreFactory.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStoreFactory.html#createStore(mil.nga.giat.geowave.core.store.StoreFactoryOptions)">createStore</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

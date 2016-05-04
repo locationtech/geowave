@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li>Next Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestUtils.html" title="class in mil.nga.giat.geowave.test.kafka"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html" target="_top">Frames</a></li>
@@ -60,15 +60,15 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested_classes_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>
 </div>
@@ -79,97 +79,35 @@
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.test.kafka</div>
-<h2 title="Class KafkaTestEnvironment" class="title">Class KafkaTestEnvironment&lt;I&gt;</h2>
+<h2 title="Class KafkaTestEnvironment" class="title">Class KafkaTestEnvironment</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">mil.nga.giat.geowave.test.GeoWaveTestEnvironment</a></li>
-<li>
-<ul class="inheritance">
-<li>mil.nga.giat.geowave.test.kafka.KafkaTestEnvironment&lt;I&gt;</li>
-</ul>
-</li>
+<li>mil.nga.giat.geowave.test.kafka.KafkaTestEnvironment</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></dd>
+</dl>
 <hr>
 <br>
-<pre>public abstract class <span class="strong">KafkaTestEnvironment&lt;I&gt;</span>
-extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></pre>
+<pre>public class <span class="strong">KafkaTestEnvironment</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="nested_class_summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a name="nested_classes_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">
-<!--   -->
-</a>
-<h3>Nested classes/interfaces inherited from class&nbsp;mil.nga.giat.geowave.test.<a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.DimensionalityType.html" title="enum in mil.nga.giat.geowave.test">GeoWaveTestEnvironment.DimensionalityType</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.ExpectedResults.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment.ExpectedResults</a></code></li>
-</ul>
-</li>
-</ul>
-<!-- =========== FIELD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#DEFAULT_LOG_DIR">DEFAULT_LOG_DIR</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static kafka.server.KafkaServerStartable</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#kafkaServer">kafkaServer</a></strong></code>&nbsp;</td>
-</tr>
-</table>
-<ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.test.<a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloInstance">accumuloInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloOperations">accumuloOperations</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloPassword">accumuloPassword</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloUser">accumuloUser</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_ALLTIER_SPATIAL_INDEX">DEFAULT_ALLTIER_SPATIAL_INDEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_MINI_ACCUMULO_PASSWORD">DEFAULT_MINI_ACCUMULO_PASSWORD</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_SPATIAL_INDEX">DEFAULT_SPATIAL_INDEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_SPATIAL_TEMPORAL_INDEX">DEFAULT_SPATIAL_TEMPORAL_INDEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFER_CLEANUP">DEFER_CLEANUP</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#HADOOP_WINDOWS_UTIL">HADOOP_WINDOWS_UTIL</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#miniAccumulo">miniAccumulo</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#MUTEX">MUTEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEMP_DIR">TEMP_DIR</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_CASE_BASE">TEST_CASE_BASE</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_FILTER_END_TIME_ATTRIBUTE_NAME">TEST_FILTER_END_TIME_ATTRIBUTE_NAME</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_FILTER_START_TIME_ATTRIBUTE_NAME">TEST_FILTER_START_TIME_ATTRIBUTE_NAME</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_NAMESPACE">TEST_NAMESPACE</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_RESOURCE_PACKAGE">TEST_RESOURCE_PACKAGE</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#zookeeper">zookeeper</a></code></li>
-</ul>
-</li>
-</ul>
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="constructor_summary">
-<!--   -->
-</a>
-<h3>Constructor Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
-<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#KafkaTestEnvironment()">KafkaTestEnvironment</a></strong>()</code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method_summary">
@@ -183,30 +121,22 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#setupKafkaServer()">setupKafkaServer</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#getDependentEnvironments()">getDependentEnvironments</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#stopKafkaServer()">stopKafkaServer</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html" title="class in mil.nga.giat.geowave.test.kafka">KafkaTestEnvironment</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#getInstance()">getInstance</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#testKafkaIngest(boolean,%20java.lang.String)">testKafkaIngest</a></strong>(boolean&nbsp;spatialTemporal,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#setup()">setup</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#testKafkaStage(java.lang.String)">testKafkaStage</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html#tearDown()">tearDown</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.test.<a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#addAuthorization(java.lang.String)">addAuthorization</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#addAuthorization(java.lang.String,%20mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations)">addAuthorization</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#cleanup()">cleanup</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#featureToQuery(org.opengis.feature.simple.SimpleFeature)">featureToQuery</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#getExpectedResults(mil.nga.giat.geowave.core.store.CloseableIterator)">getExpectedResults</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#getExpectedResults(java.net.URL[])">getExpectedResults</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#hashCentroid(com.vividsolutions.jts.geom.Geometry)">hashCentroid</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#isSet(java.lang.String)">isSet</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#isYarn()">isYarn</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#replaceParameters(java.util.Map,%20java.io.File)">replaceParameters</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#resourceToFeature(java.net.URL)">resourceToFeature</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#resourceToQuery(java.net.URL)">resourceToQuery</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#setup()">setup</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#testLocalIngest(mil.nga.giat.geowave.test.GeoWaveTestEnvironment.DimensionalityType,%20java.lang.String)">testLocalIngest</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#unZipFile(java.io.File,%20java.lang.String)">unZipFile</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -222,96 +152,62 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="kafkaServer">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>kafkaServer</h4>
-<pre>protected static&nbsp;kafka.server.KafkaServerStartable kafkaServer</pre>
-</li>
-</ul>
-<a name="DEFAULT_LOG_DIR">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>DEFAULT_LOG_DIR</h4>
-<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> DEFAULT_LOG_DIR</pre>
-</li>
-</ul>
-</li>
-</ul>
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="constructor_detail">
-<!--   -->
-</a>
-<h3>Constructor Detail</h3>
-<a name="KafkaTestEnvironment()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>KafkaTestEnvironment</h4>
-<pre>public&nbsp;KafkaTestEnvironment()</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method_detail">
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="testKafkaStage(java.lang.String)">
+<a name="getInstance()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>testKafkaStage</h4>
-<pre>protected&nbsp;void&nbsp;testKafkaStage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</pre>
+<h4>getInstance</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html" title="class in mil.nga.giat.geowave.test.kafka">KafkaTestEnvironment</a>&nbsp;getInstance()</pre>
 </li>
 </ul>
-<a name="testKafkaIngest(boolean, java.lang.String)">
+<a name="setup()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>testKafkaIngest</h4>
-<pre>protected&nbsp;void&nbsp;testKafkaIngest(boolean&nbsp;spatialTemporal,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</pre>
-</li>
-</ul>
-<a name="setupKafkaServer()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setupKafkaServer</h4>
-<pre>public static&nbsp;void&nbsp;setupKafkaServer()
-                             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()
+           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#setup()">setup</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="stopKafkaServer()">
+<a name="tearDown()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>tearDown</h4>
+<pre>public&nbsp;void&nbsp;tearDown()
+              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#tearDown()">tearDown</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="getDependentEnvironments()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>stopKafkaServer</h4>
-<pre>public static&nbsp;void&nbsp;stopKafkaServer()
-                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+<h4>getDependentEnvironments</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a>[]&nbsp;getDependentEnvironments()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#getDependentEnvironments()">getDependentEnvironments</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -341,7 +237,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li>Next Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/test/kafka/KafkaTestUtils.html" title="class in mil.nga.giat.geowave.test.kafka"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/test/kafka/KafkaTestEnvironment.html" target="_top">Frames</a></li>
@@ -365,15 +261,15 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironm
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested_classes_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>
 </div>

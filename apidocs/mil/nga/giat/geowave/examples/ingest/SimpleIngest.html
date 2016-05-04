@@ -156,7 +156,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#createDataAdapter(org.opengis.feature.simple.SimpleFeatureType)">createDataAdapter</a></strong>(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft)</code>
 <div class="block">The dataadapter interface describes how to serialize a data type.</div>
 </td>
@@ -181,6 +181,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloGeowaveDataStore(mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations)">getAccumuloGeowaveDataStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;instance)</code>
+<div class="block">DataStore is essentially the controller that take the accumulo
+ information, geowave configuration, and data type, and inserts/queries
+ from accumulo</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloOperationsInstance(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String)">getAccumuloOperationsInstance</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeepers,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloInstance,
@@ -189,14 +197,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>
 <div class="block">The class tells geowave about the accumulo instance it should connect to,
  as well as what tables it should create/store it's data in</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getGeowaveDataStore(mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations)">getGeowaveDataStore</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;instance)</code>
-<div class="block">DataStore is essentially the controller that take the accumulo
- information, geowave configuration, and data type, and inserts/queries
- from accumulo</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -271,13 +271,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                 int&nbsp;firstFeatureId)</pre>
 </li>
 </ul>
-<a name="getGeowaveDataStore(mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations)">
+<a name="getAccumuloGeowaveDataStore(mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getGeowaveDataStore</h4>
-<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;getGeowaveDataStore(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;instance)</pre>
+<h4>getAccumuloGeowaveDataStore</h4>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;getAccumuloGeowaveDataStore(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;instance)</pre>
 <div class="block">DataStore is essentially the controller that take the accumulo
  information, geowave configuration, and data type, and inserts/queries
  from accumulo</div>
@@ -316,7 +316,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>createDataAdapter</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;createDataAdapter(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft)</pre>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;createDataAdapter(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft)</pre>
 <div class="block">The dataadapter interface describes how to serialize a data type. Here we
  are using an implementation that understands how to serialize OGC
  SimpleFeature types.</div>

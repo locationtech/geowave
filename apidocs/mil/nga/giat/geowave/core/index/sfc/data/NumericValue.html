@@ -95,7 +95,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></dd>
 </dl>
 <hr>
 <br>
@@ -139,10 +139,16 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colOne" scope="col">Constructor and Description</th>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colLast" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#NumericValue(double)">NumericValue</a></strong>(double&nbsp;value)</code>
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#NumericValue()">NumericValue</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#NumericValue(double)">NumericValue</a></strong>(double&nbsp;value)</code>
 <div class="block">Constructor used to create a new NumericValue object</div>
 </td>
 </tr>
@@ -166,26 +172,34 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#getCentroid()">getCentroid</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#getMax()">getMax</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#getMin()">getMin</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#hashCode()">hashCode</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#isRange()">isRange</a></strong>()</code>
 <div class="block">Determines if this object is a range or not</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericValue.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -231,6 +245,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="NumericValue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>NumericValue</h4>
+<pre>protected&nbsp;NumericValue()</pre>
+</li>
+</ul>
 <a name="NumericValue(double)">
 <!--   -->
 </a>
@@ -332,13 +355,39 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <a name="equals(java.lang.Object)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
 <pre>public&nbsp;boolean&nbsp;equals(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="toBinary()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toBinary</h4>
+<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary()">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="fromBinary(byte[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromBinary</h4>
+<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary(byte[])">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
 </dl>
 </li>
 </ul>

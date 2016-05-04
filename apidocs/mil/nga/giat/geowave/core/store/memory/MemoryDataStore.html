@@ -123,10 +123,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#MemoryDataStore()">MemoryDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#MemoryDataStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore)">MemoryDataStore</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#MemoryDataStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore)">MemoryDataStore</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore)</code>&nbsp;</td>
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -145,8 +146,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">createIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;visibilityWriter)</code>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">createWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</code>
 <div class="block">Returns an index writer to perform batched write operations</div>
 </td>
 </tr>
@@ -211,7 +212,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <pre>public&nbsp;MemoryDataStore()</pre>
 </li>
 </ul>
-<a name="MemoryDataStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.index.IndexStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore)">
+<a name="MemoryDataStore(mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.index.IndexStore, mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore, mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore, mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -220,7 +221,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <pre>public&nbsp;MemoryDataStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore)</pre>
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexDataStore,
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)</pre>
 </li>
 </ul>
 </li>
@@ -231,22 +233,26 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+<a name="createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>createIndexWriter</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;createIndexWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                                <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;visibilityWriter)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">DataStore</a></code></strong></div>
+<h4>createWriter</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;createWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)
+                         throws <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in mil.nga.giat.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">DataStore</a></code></strong></div>
 <div class="block">Returns an index writer to perform batched write operations</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createIndexWriter(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">createIndexWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - The configuration information for the primary index to use.</dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">createWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>adapter</code> - The adapter that describes the data written to the set of
+            indices.</dd><dd><code>indices</code> - The configuration information for the primary index to use.</dd>
 <dt><span class="strong">Returns:</span></dt><dd>Returns the index writer which can be used for batch write
-         operations</dd></dl>
+         operations</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in mil.nga.giat.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></code></dd></dl>
 </li>
 </ul>
 <a name="delete(mil.nga.giat.geowave.core.store.query.QueryOptions, mil.nga.giat.geowave.core.store.query.Query)">
@@ -263,10 +269,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
  (the same adapter ID as the ID ingested). All data that matches the
  query, adapter ID, and is in the index ID will be deleted.
  
- For ({@link  mil.nga.giat.geowave.core.store.query.AdapterIdQuery), all supporting statistics
- and secondary indices are also deleted.
+ For ({@link mil.nga.giat.geowave.core.store.query.AdapterIdQuery), all
+ supporting statistics and secondary indices are also deleted.
  
- Statistics and secondary indices are updated as required for all other types of queries.</div>
+ Statistics and secondary indices are updated as required for all other
+ types of queries.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#delete(mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.query.Query)">delete</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></dd>

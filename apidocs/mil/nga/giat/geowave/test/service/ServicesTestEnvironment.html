@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li>Next Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestUtils.html" title="class in mil.nga.giat.geowave.test.service"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html" target="_top">Frames</a></li>
@@ -60,7 +60,7 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested_classes_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
@@ -86,48 +86,28 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">mil.nga.giat.geowave.test.GeoWaveTestEnvironment</a></li>
-<li>
-<ul class="inheritance">
-<li><a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html" title="class in mil.nga.giat.geowave.test.mapreduce">mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment</a></li>
-<li>
-<ul class="inheritance">
 <li>mil.nga.giat.geowave.test.service.ServicesTestEnvironment</li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></dd>
+</dl>
 <hr>
 <br>
-<pre>public abstract class <span class="strong">ServicesTestEnvironment</span>
-extends <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html" title="class in mil.nga.giat.geowave.test.mapreduce">MapReduceTestEnvironment</a></pre>
+<pre>public class <span class="strong">ServicesTestEnvironment</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="nested_class_summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a name="nested_classes_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">
-<!--   -->
-</a>
-<h3>Nested classes/interfaces inherited from class&nbsp;mil.nga.giat.geowave.test.<a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.DimensionalityType.html" title="enum in mil.nga.giat.geowave.test">GeoWaveTestEnvironment.DimensionalityType</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.ExpectedResults.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment.ExpectedResults</a></code></li>
-</ul>
-</li>
-</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field_summary">
@@ -189,40 +169,50 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduce
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#JETTY_PORT">JETTY_PORT</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected static org.mortbay.jetty.Server</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#jettyServer">jettyServer</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected static int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#MAX_FORM_CONTENT_SIZE">MAX_FORM_CONTENT_SIZE</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#MAX_IDLE_TIME">MAX_IDLE_TIME</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#SO_LINGER_TIME">SO_LINGER_TIME</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_SLD_MAJOR_SUBSAMPLE_FILE">TEST_SLD_MAJOR_SUBSAMPLE_FILE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_SLD_MINOR_SUBSAMPLE_FILE">TEST_SLD_MINOR_SUBSAMPLE_FILE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_SLD_NO_DIFFERENCE_FILE">TEST_SLD_NO_DIFFERENCE_FILE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_STYLE_NAME_MAJOR_SUBSAMPLE">TEST_STYLE_NAME_MAJOR_SUBSAMPLE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_STYLE_NAME_MINOR_SUBSAMPLE">TEST_STYLE_NAME_MINOR_SUBSAMPLE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_STYLE_NAME_NO_DIFFERENCE">TEST_STYLE_NAME_NO_DIFFERENCE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_STYLE_PATH">TEST_STYLE_PATH</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#TEST_WORKSPACE">TEST_WORKSPACE</a></strong></code>&nbsp;</td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.test.mapreduce.<a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html" title="class in mil.nga.giat.geowave.test.mapreduce">MapReduceTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#DEFAULT_JOB_TRACKER">DEFAULT_JOB_TRACKER</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#EXPECTED_RESULTS_KEY">EXPECTED_RESULTS_KEY</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#hdfs">hdfs</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#HDFS_BASE_DIRECTORY">HDFS_BASE_DIRECTORY</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#hdfsBaseDirectory">hdfsBaseDirectory</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#hdfsProtocol">hdfsProtocol</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#jobtracker">jobtracker</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#MAX_INPUT_SPLITS">MAX_INPUT_SPLITS</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#MIN_INPUT_SPLITS">MIN_INPUT_SPLITS</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.test.<a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloInstance">accumuloInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloOperations">accumuloOperations</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloPassword">accumuloPassword</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#accumuloUser">accumuloUser</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_ALLTIER_SPATIAL_INDEX">DEFAULT_ALLTIER_SPATIAL_INDEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_MINI_ACCUMULO_PASSWORD">DEFAULT_MINI_ACCUMULO_PASSWORD</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_SPATIAL_INDEX">DEFAULT_SPATIAL_INDEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFAULT_SPATIAL_TEMPORAL_INDEX">DEFAULT_SPATIAL_TEMPORAL_INDEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#DEFER_CLEANUP">DEFER_CLEANUP</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#HADOOP_WINDOWS_UTIL">HADOOP_WINDOWS_UTIL</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#miniAccumulo">miniAccumulo</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#MUTEX">MUTEX</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEMP_DIR">TEMP_DIR</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_CASE_BASE">TEST_CASE_BASE</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_FILTER_END_TIME_ATTRIBUTE_NAME">TEST_FILTER_END_TIME_ATTRIBUTE_NAME</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_FILTER_START_TIME_ATTRIBUTE_NAME">TEST_FILTER_START_TIME_ATTRIBUTE_NAME</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_NAMESPACE">TEST_NAMESPACE</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#TEST_RESOURCE_PACKAGE">TEST_RESOURCE_PACKAGE</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#zookeeper">zookeeper</a></code></li>
-</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -255,36 +245,22 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduce
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#getAccumuloConfig()">getAccumuloConfig</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#getDependentEnvironments()">getDependentEnvironments</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#startServices()">startServices</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html" title="class in mil.nga.giat.geowave.test.service">ServicesTestEnvironment</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#getInstance()">getInstance</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#stopServices()">stopServices</a></strong>()</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#setup()">setup</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#writeConfigFile(java.io.File)">writeConfigFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html#tearDown()">tearDown</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.test.mapreduce.<a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html" title="class in mil.nga.giat.geowave.test.mapreduce">MapReduceTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#cleanupHdfsFiles()">cleanupHdfsFiles</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#filterConfiguration(org.apache.hadoop.conf.Configuration)">filterConfiguration</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#getAccumuloConfigOptions()">getAccumuloConfigOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#getConfiguration()">getConfiguration</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#setVariables()">setVariables</a>, <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduceTestEnvironment.html#testMapReduceIngest(mil.nga.giat.geowave.test.GeoWaveTestEnvironment.DimensionalityType,%20java.lang.String)">testMapReduceIngest</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.test.<a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html" title="class in mil.nga.giat.geowave.test">GeoWaveTestEnvironment</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#addAuthorization(java.lang.String)">addAuthorization</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#addAuthorization(java.lang.String,%20mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations)">addAuthorization</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#cleanup()">cleanup</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#featureToQuery(org.opengis.feature.simple.SimpleFeature)">featureToQuery</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#getExpectedResults(mil.nga.giat.geowave.core.store.CloseableIterator)">getExpectedResults</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#getExpectedResults(java.net.URL[])">getExpectedResults</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#hashCentroid(com.vividsolutions.jts.geom.Geometry)">hashCentroid</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#isSet(java.lang.String)">isSet</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#isYarn()">isYarn</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#replaceParameters(java.util.Map,%20java.io.File)">replaceParameters</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#resourceToFeature(java.net.URL)">resourceToFeature</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#resourceToQuery(java.net.URL)">resourceToQuery</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#setup()">setup</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#testLocalIngest(mil.nga.giat.geowave.test.GeoWaveTestEnvironment.DimensionalityType,%20java.lang.String)">testLocalIngest</a>, <a href="../../../../../../mil/nga/giat/geowave/test/GeoWaveTestEnvironment.html#unZipFile(java.io.File,%20java.lang.String)">unZipFile</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -465,13 +441,74 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduce
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.GEOWAVE_WORKSPACE_PATH">Constant Field Values</a></dd></dl>
 </li>
 </ul>
-<a name="jettyServer">
+<a name="TEST_STYLE_NAME_NO_DIFFERENCE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>TEST_STYLE_NAME_NO_DIFFERENCE</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TEST_STYLE_NAME_NO_DIFFERENCE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="TEST_STYLE_NAME_MINOR_SUBSAMPLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>TEST_STYLE_NAME_MINOR_SUBSAMPLE</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TEST_STYLE_NAME_MINOR_SUBSAMPLE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="TEST_STYLE_NAME_MAJOR_SUBSAMPLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>TEST_STYLE_NAME_MAJOR_SUBSAMPLE</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TEST_STYLE_NAME_MAJOR_SUBSAMPLE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="TEST_STYLE_PATH">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>TEST_STYLE_PATH</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TEST_STYLE_PATH</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.TEST_STYLE_PATH">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="TEST_SLD_NO_DIFFERENCE_FILE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>TEST_SLD_NO_DIFFERENCE_FILE</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TEST_SLD_NO_DIFFERENCE_FILE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="TEST_SLD_MINOR_SUBSAMPLE_FILE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>TEST_SLD_MINOR_SUBSAMPLE_FILE</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TEST_SLD_MINOR_SUBSAMPLE_FILE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="TEST_SLD_MAJOR_SUBSAMPLE_FILE">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>jettyServer</h4>
-<pre>protected static&nbsp;org.mortbay.jetty.Server jettyServer</pre>
+<h4>TEST_SLD_MAJOR_SUBSAMPLE_FILE</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TEST_SLD_MAJOR_SUBSAMPLE_FILE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.test.service.ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE">Constant Field Values</a></dd></dl>
 </li>
 </ul>
 </li>
@@ -499,40 +536,56 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduce
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="writeConfigFile(java.io.File)">
+<a name="getInstance()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>writeConfigFile</h4>
-<pre>protected static&nbsp;void&nbsp;writeConfigFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</pre>
+<h4>getInstance</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html" title="class in mil.nga.giat.geowave.test.service">ServicesTestEnvironment</a>&nbsp;getInstance()</pre>
 </li>
 </ul>
-<a name="startServices()">
+<a name="setup()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>startServices</h4>
-<pre>public static&nbsp;void&nbsp;startServices()</pre>
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()
+           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#setup()">setup</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="getAccumuloConfig()">
+<a name="tearDown()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getAccumuloConfig</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getAccumuloConfig()</pre>
+<h4>tearDown</h4>
+<pre>public&nbsp;void&nbsp;tearDown()
+              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#tearDown()">tearDown</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="stopServices()">
+<a name="getDependentEnvironments()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>stopServices</h4>
-<pre>public static&nbsp;void&nbsp;stopServices()</pre>
+<h4>getDependentEnvironments</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a>[]&nbsp;getDependentEnvironments()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#getDependentEnvironments()">getDependentEnvironments</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -562,7 +615,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduce
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li>Next Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/test/service/ServicesTestUtils.html" title="class in mil.nga.giat.geowave.test.service"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/test/service/ServicesTestEnvironment.html" target="_top">Frames</a></li>
@@ -586,7 +639,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/test/mapreduce/MapReduce
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested_classes_inherited_from_class_mil.nga.giat.geowave.test.GeoWaveTestEnvironment">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>

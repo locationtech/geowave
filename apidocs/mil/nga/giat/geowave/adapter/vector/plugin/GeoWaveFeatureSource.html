@@ -192,47 +192,51 @@ extends org.geotools.data.store.ContentFeatureStore</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canLock()">canLock</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canFilter()">canFilter</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canTransact()">canTransact</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canLock()">canLock</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#canTransact()">canTransact</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#doLockInternal(java.lang.String,%20org.opengis.feature.simple.SimpleFeature)">doLockInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
               org.opengis.feature.simple.SimpleFeature&nbsp;feature)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#doUnlockInternal(java.lang.String,%20org.opengis.feature.simple.SimpleFeature)">doUnlockInternal</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                 org.opengis.feature.simple.SimpleFeature&nbsp;feature)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected org.geotools.geometry.jts.ReferencedEnvelope</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getBoundsInternal(org.geotools.data.Query)">getBoundsInternal</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveDataStoreComponents</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getComponents()">getComponents</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getCountInternal(org.geotools.data.Query)">getCountInternal</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveGTDataStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getDataStore()">getDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getFeatureType()">getFeatureType</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getReaderInternal(org.geotools.data.Query)">getReaderInternal</a></strong>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected org.geotools.data.FeatureWriter&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html#getWriterInternal(org.geotools.data.Query,%20int)">getWriterInternal</a></strong>(org.geotools.data.Query&nbsp;query,
                  int&nbsp;flags)</code>&nbsp;</td>
@@ -250,7 +254,7 @@ extends org.geotools.data.store.ContentFeatureStore</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.geotools.data.store.ContentFeatureSource</h3>
-<code>accepts, addFeatureListener, addHints, buildQueryCapabilities, canEvent, canFilter, canLimit, canOffset, canReproject, canRetype, canSort, getAbsoluteSchema, getBounds, getBounds, getCount, getEntry, getFeatures, getFeatures, getFeatures, getInfo, getName, getQueryCapabilities, getReader, getReader, getReader, getSchema, getState, getSupportedHints, getTransaction, getView, getView, handleVisitor, isView, joinQuery, lockFeatures, lockFeatures, lockFeatures, processLock, removeFeatureListener, resolvePropertyNames, resolvePropertyNames, setFeatureLock, setTransaction, unLockFeatures, unLockFeatures, unLockFeatures</code></li>
+<code>accepts, addFeatureListener, addHints, buildQueryCapabilities, canEvent, canLimit, canOffset, canReproject, canRetype, canSort, getAbsoluteSchema, getBounds, getBounds, getCount, getEntry, getFeatures, getFeatures, getFeatures, getInfo, getName, getQueryCapabilities, getReader, getReader, getReader, getSchema, getState, getSupportedHints, getTransaction, getView, getView, handleVisitor, isView, joinQuery, lockFeatures, lockFeatures, lockFeatures, processLock, removeFeatureListener, resolvePropertyNames, resolvePropertyNames, setFeatureLock, setTransaction, unLockFeatures, unLockFeatures, unLockFeatures</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -453,6 +457,19 @@ extends org.geotools.data.store.ContentFeatureStore</pre>
 <dl>
 <dt><strong>Overrides:</strong></dt>
 <dd><code>canLock</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
+</dl>
+</li>
+</ul>
+<a name="canFilter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>canFilter</h4>
+<pre>protected&nbsp;boolean&nbsp;canFilter()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>canFilter</code>&nbsp;in class&nbsp;<code>org.geotools.data.store.ContentFeatureSource</code></dd>
 </dl>
 </li>
 </ul>

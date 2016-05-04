@@ -91,7 +91,7 @@
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/analytic/param/AdapterStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">AdapterStoreParameterHelper</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/param/BasicParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">BasicParameterHelper</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStatisticsStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">DataStatisticsStoreParameterHelper</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/param/DataStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">DataStoreParameterHelper</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/param/IndexStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">IndexStoreParameterHelper</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/analytic/param/BasicParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">BasicParameterHelper</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/param/InputStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">InputStoreParameterHelper</a>, <a href="../../../../../../mil/nga/giat/geowave/analytic/param/OutputStoreParameterHelper.html" title="class in mil.nga.giat.geowave.analytic.param">OutputStoreParameterHelper</a></dd>
 </dl>
 <hr>
 <br>
@@ -120,19 +120,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html#getBaseClass()">getBaseClass</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.apache.commons.cli.Option[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html#getOptions()">getOptions</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html#getValue(org.apache.hadoop.mapreduce.JobContext,%20java.lang.Class,%20T)">getValue</a></strong>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;scope,
         <a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a>&nbsp;defaultValue)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/cli/CommandLineResult.html" title="class in mil.nga.giat.geowave.core.cli">CommandLineResult</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html#getValue(org.apache.commons.cli.Options,%20org.apache.commons.cli.CommandLine)">getValue</a></strong>(org.apache.commons.cli.Options&nbsp;allOptions,
-        org.apache.commons.cli.CommandLine&nbsp;commandline)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a></code></td>
@@ -171,28 +162,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 <li class="blockList">
 <h4>getBaseClass</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a>&gt;&nbsp;getBaseClass()</pre>
-</li>
-</ul>
-<a name="getOptions()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getOptions</h4>
-<pre>org.apache.commons.cli.Option[]&nbsp;getOptions()</pre>
-</li>
-</ul>
-<a name="getValue(org.apache.commons.cli.Options, org.apache.commons.cli.CommandLine)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getValue</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/core/cli/CommandLineResult.html" title="class in mil.nga.giat.geowave.core.cli">CommandLineResult</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/param/ParameterHelper.html" title="type parameter in ParameterHelper">T</a>&gt;&nbsp;getValue(org.apache.commons.cli.Options&nbsp;allOptions,
-                            org.apache.commons.cli.CommandLine&nbsp;commandline)
-                              throws org.apache.commons.cli.ParseException</pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.commons.cli.ParseException</code></dd></dl>
 </li>
 </ul>
 <a name="getValue(mil.nga.giat.geowave.analytic.PropertyManagement)">

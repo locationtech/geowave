@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/spi/package-summary.html">Prev Package</a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
@@ -75,21 +75,21 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;E&gt;</td>
 <td class="colLast">
 <div class="block">This interface wraps both the Iterator interface and the Closeable interface.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></td>
 <td class="colLast">
 <div class="block">A DataStore can both ingest and query data based on persisted indices and
  data adapters.</div>
 </td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactorySpi.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreFactorySpi</a></td>
-<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store">DeleteCallback</a>&lt;T&gt;</td>
@@ -111,7 +111,7 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -155,6 +155,16 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a></td>
+<td class="colLast">
+<div class="block">Meta-data for retaining Adapter to Index association</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/CastIterator.html" title="class in mil.nga.giat.geowave.core.store">CastIterator</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.Empty.html" title="class in mil.nga.giat.geowave.core.store">CloseableIterator.Empty</a>&lt;E&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -171,15 +181,23 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html" title="class in mil.nga.giat.geowave.core.store">DataStoreCallbackManager</a></td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataAdapterAndIndexCache.html" title="class in mil.nga.giat.geowave.core.store">DataAdapterAndIndexCache</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></td>
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreCallbackManager.html" title="class in mil.nga.giat.geowave.core.store">DataStoreCallbackManager</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="class in mil.nga.giat.geowave.core.store">DataStoreStatisticsProvider</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -188,6 +206,14 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html" title="class in mil.nga.giat.geowave.core.store">GeoWaveStoreFinder</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store">IndependentAdapterIndexWriter</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexCompositeWriter.html" title="class in mil.nga.giat.geowave.core.store">IndexCompositeWriter</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -206,6 +232,13 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/ScanCallbackList.html" title="class in mil.nga.giat.geowave.core.store">ScanCallbackList</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a></td>
+<td class="colLast">
+<div class="block">This interface doesn't actually do anything, is just used for tracking during
+ development.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -231,7 +264,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/local/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/ingest/spi/package-summary.html">Prev Package</a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
