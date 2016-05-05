@@ -59,7 +59,7 @@ public class CompoundIndexStrategy implements
 	public byte[] toBinary() {
 		final byte[] delegateBinary1 = PersistenceUtils.toBinary(subStrategy1);
 		final byte[] delegateBinary2 = PersistenceUtils.toBinary(subStrategy2);
-		final ByteBuffer buf = ByteBuffer.allocate(8 + delegateBinary1.length + delegateBinary2.length);
+		final ByteBuffer buf = ByteBuffer.allocate(4 + delegateBinary1.length + delegateBinary2.length);
 		buf.putInt(delegateBinary1.length);
 		buf.put(delegateBinary1);
 		buf.put(delegateBinary2);
@@ -538,6 +538,15 @@ public class CompoundIndexStrategy implements
 
 	}
 
+	/**
+	 * 
+	 *  Delegate Metadata item for an underlying index.
+	 *  For CompoundIndexStrategy, this delegate wraps the meta data
+	 *  for one of the two indices.  The primary function of this class
+	 *  is to extract out the parts of the ByteArrayId that are specific
+	 *  to each index during an 'update' operation.
+	 *
+	 */
 	private static class CompoundIndexMetaDataWrapper implements
 			IndexMetaData,
 			Persistable

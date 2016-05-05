@@ -85,21 +85,25 @@ public class IndexMetaDataSet<T> extends
 		return buffer.array();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void fromBinary(
 			byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		final byte[] metaBytes = new byte[buffer.remaining()];
 		buffer.get(metaBytes);
-		metaData = Lists.transform(
-				PersistenceUtils.fromBinary(metaBytes),
-				new Function<Persistable, IndexMetaData>() {
-					@Override
-					public IndexMetaData apply(
-							Persistable input ) {
-						return (IndexMetaData) input;
-					}
-				});
+		
+		metaData = (List) PersistenceUtils.fromBinary(metaBytes);
+		// Stupid transform to get out of type conversion!
+	//	metaData = Lists.transform(
+	//			PersistenceUtils.fromBinary(metaBytes),
+	//			new Function<Persistable, IndexMetaData>() {
+	//				@Override
+	///				public IndexMetaData apply(
+	//						Persistable input ) {
+	//					return (IndexMetaData) input;
+	//				}
+	//			});
 
 	}
 
