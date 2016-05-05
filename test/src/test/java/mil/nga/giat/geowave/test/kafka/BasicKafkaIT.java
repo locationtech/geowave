@@ -83,8 +83,7 @@ public class BasicKafkaIT
 				dataStorePluginOptions,
 				false,
 				OSM_GPX_INPUT_DIR);
-		// wait a sufficient time for consumers to ingest all of the data
-		Thread.sleep(60000);
+
 		final DataStatisticsStore statsStore = dataStorePluginOptions.createDataStatisticsStore();
 		final AdapterStore adapterStore = dataStorePluginOptions.createAdapterStore();
 		int adapterCount = 0;

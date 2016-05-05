@@ -37,7 +37,8 @@ public class IngestCallbackList<T> implements
 	}
 
 	@Override
-	public void flush() throws IOException {
+	public void flush()
+			throws IOException {
 		for (final IngestCallback<T> callback : callbacks) {
 			if (callback instanceof Flushable) ((Flushable) callback).flush();
 		}
