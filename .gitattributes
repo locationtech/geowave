@@ -2,6 +2,9 @@
 # and leave all files detected as binary untouched.
 * text=auto
 
+# Never modify line endings of our bash scripts
+*.sh -crlf
+
 #
 # The above will handle all files NOT found below
 #
@@ -16,7 +19,6 @@
 *.jsp           text
 *.jspf          text
 *.properties    text
-*.sh            text
 *.tld           text
 *.txt           text
 *.xml           text
