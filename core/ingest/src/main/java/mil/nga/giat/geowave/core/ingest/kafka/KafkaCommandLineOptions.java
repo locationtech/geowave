@@ -43,8 +43,8 @@ public class KafkaCommandLineOptions
 					throw new ParameterException(
 							"Unable to read properties file");
 				}
-				applyOverrides(properties);
 			}
+			applyOverrides(properties);
 			kafkaProperties = properties;
 		}
 	}
