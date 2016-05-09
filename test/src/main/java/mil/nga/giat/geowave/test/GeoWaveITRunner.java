@@ -427,7 +427,7 @@ public class GeoWaveITRunner extends
 			if (!DEFER_CLEANUP.get()) {
 				// Tearodwn in reverse
 				List<TestEnvironment> envs = Arrays.asList(testEnvs);
-				ListIterator<TestEnvironment> it = envs.listIterator();
+				ListIterator<TestEnvironment> it = envs.listIterator(envs.size());
 				while (it.hasPrevious()) {
 					it.previous().tearDown();
 				}
