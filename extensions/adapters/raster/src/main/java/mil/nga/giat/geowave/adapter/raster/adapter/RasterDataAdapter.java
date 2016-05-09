@@ -673,7 +673,7 @@ public class RasterDataAdapter implements
 								tileInterpolation = Interpolation.getInstance(Interpolation.INTERP_NEAREST);
 							}
 						}
-						final GridCoverage resampledCoverage = (GridCoverage) getResampleOperations().resample(
+						final GridCoverage resampledCoverage = (GridCoverage) RasterUtils.getResampleOperations().resample(
 								originalData,
 								GeoWaveGTRasterFormat.DEFAULT_CRS,
 								insertionIdGeometry,
@@ -750,32 +750,6 @@ public class RasterDataAdapter implements
 				}
 			};
 		}
-	}
-
-	private static synchronized Operations getResampleOperations() {
-		if (resampleOperations == null) {
-			final RenderingHints resampleHints = new RenderingHints(
-					RenderingHints.KEY_RENDERING,
-					RenderingHints.VALUE_RENDER_QUALITY);
-			resampleHints.put(
-					RenderingHints.KEY_ALPHA_INTERPOLATION,
-					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-			resampleHints.put(
-					RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			resampleHints.put(
-					RenderingHints.KEY_COLOR_RENDERING,
-					RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-			resampleHints.put(
-					RenderingHints.KEY_DITHERING,
-					RenderingHints.VALUE_DITHER_ENABLE);
-			resampleHints.put(
-					JAI.KEY_BORDER_EXTENDER,
-					BorderExtender.createInstance(BorderExtender.BORDER_COPY));
-			resampleOperations = new Operations(
-					resampleHints);
-		}
-		return resampleOperations;
 	}
 
 	@Override
