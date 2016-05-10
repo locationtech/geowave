@@ -1,87 +1,43 @@
 package mil.nga.giat.geowave.datastore.accumulo.mapreduce;
 
-import java.io.Closeable;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.PartialKey;
 import org.apache.accumulo.core.data.Range;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.log4j.Logger;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterators;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.mapreduce.input.RangeLocationPair;
 import mil.nga.giat.geowave.datastore.accumulo.query.InputFormatAccumuloRangeQuery;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader;
+import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
+import mil.nga.giat.geowave.mapreduce.splits.SplitsProvider;
 
 /**
  * This class is used by the GeoWaveInputFormat to read data from an Accumulo
  * data store.
- * 
+ *
  * @param <T>
  *            The native type for the reader
  */
 public class GeoWaveAccumuloRecordReader<T> extends
-		RecordReader<GeoWaveInputKey, T>
+		GeoWaveRecordReader<T>
 {
 
-	protected static class ProgressPerRange
-	{
-		private final float startProgress;
-		private final float deltaProgress;
-
-		public ProgressPerRange(
-				final float startProgress,
-				final float endProgress ) {
-			this.startProgress = startProgress;
-			this.deltaProgress = endProgress - startProgress;
-		}
-
-		public float getOverallProgress(
-				final float rangeProgress ) {
-			return startProgress + (rangeProgress * deltaProgress);
-		}
-	}
-
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveAccumuloRecordReader.class);
-	protected long numKeysRead;
-	protected CloseableIterator<?> iterator;
 	protected Key currentAccumuloKey = null;
-	protected Map<RangeLocationPair, ProgressPerRange> progressPerRange;
-	protected GeoWaveInputKey currentGeoWaveKey = null;
-	protected RangeLocationPair currentGeoWaveRangeIndexPair = null;
-	protected T currentValue = null;
-	protected GeoWaveAccumuloInputSplit split;
-	protected DistributableQuery query;
-	protected QueryOptions queryOptions;
-	protected boolean isOutputWritable;
-	protected AdapterStore adapterStore;
 	protected AccumuloOperations accumuloOperations;
 
 	public GeoWaveAccumuloRecordReader(
@@ -90,123 +46,31 @@ public class GeoWaveAccumuloRecordReader<T> extends
 			final boolean isOutputWritable,
 			final AdapterStore adapterStore,
 			final AccumuloOperations accumuloOperations ) {
-		this.query = query;
-		this.queryOptions = queryOptions;
-		this.isOutputWritable = isOutputWritable;
-		this.adapterStore = adapterStore;
+		super(
+				query,
+				queryOptions,
+				isOutputWritable,
+				adapterStore);
 		this.accumuloOperations = accumuloOperations;
 	}
 
-	/**
-	 * Initialize a scanner over the given input split using this task attempt
-	 * configuration.
-	 */
 	@Override
-	public void initialize(
-			final InputSplit inSplit,
-			final TaskAttemptContext attempt )
-			throws IOException {
-		split = (GeoWaveAccumuloInputSplit) inSplit;
-
-		numKeysRead = 0;
-
-		final Map<RangeLocationPair, CloseableIterator<?>> iteratorsPerRange = new LinkedHashMap<RangeLocationPair, CloseableIterator<?>>();
-
-		final Set<PrimaryIndex> indices = split.getIndices();
-		BigDecimal sum = BigDecimal.ZERO;
-
-		final Map<RangeLocationPair, BigDecimal> incrementalRangeSums = new LinkedHashMap<RangeLocationPair, BigDecimal>();
-
-		for (final PrimaryIndex i : indices) {
-			final List<RangeLocationPair> ranges = split.getRanges(i);
-			List<QueryFilter> queryFilters = null;
-			if (query != null) {
-				queryFilters = query.createFilters(i.getIndexModel());
-			}
-			for (final RangeLocationPair r : ranges) {
-				final QueryOptions rangeQueryOptions = new QueryOptions(
-						queryOptions);
-				rangeQueryOptions.setIndex(i);
-				iteratorsPerRange.put(
-						r,
-						new InputFormatAccumuloRangeQuery(
-								adapterStore,
-								i,
-								r.getRange(),
-								queryFilters,
-								isOutputWritable,
-								rangeQueryOptions).query(
-								accumuloOperations,
-								adapterStore,
-								rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-								rangeQueryOptions.getLimit()));
-				incrementalRangeSums.put(
-						r,
-						sum);
-				sum = sum.add(BigDecimal.valueOf(r.getCardinality()));
-			}
-		}
-
-		// finally we can compute percent progress
-		progressPerRange = new LinkedHashMap<RangeLocationPair, ProgressPerRange>();
-		RangeLocationPair prevRangeIndex = null;
-		float prevProgress = 0f;
-		for (final Entry<RangeLocationPair, BigDecimal> entry : incrementalRangeSums.entrySet()) {
-			final BigDecimal value = entry.getValue();
-			final float progress = value.divide(
-					sum,
-					RoundingMode.HALF_UP).floatValue();
-			if (prevRangeIndex != null) {
-				progressPerRange.put(
-						prevRangeIndex,
-						new ProgressPerRange(
-								prevProgress,
-								progress));
-			}
-			prevRangeIndex = entry.getKey();
-			prevProgress = progress;
-		}
-		progressPerRange.put(
-				prevRangeIndex,
-				new ProgressPerRange(
-						prevProgress,
-						1f));
-		// concatenate iterators
-		iterator = new CloseableIteratorWrapper<Object>(
-				new Closeable() {
-					@Override
-					public void close()
-							throws IOException {
-						for (final CloseableIterator<?> it : iteratorsPerRange.values()) {
-							it.close();
-						}
-					}
-				},
-				concatenateWithCallback(
-						iteratorsPerRange.entrySet().iterator(),
-						new NextRangeCallback() {
-
-							@Override
-							public void setRange(
-									final RangeLocationPair indexPair ) {
-								currentGeoWaveRangeIndexPair = indexPair;
-							}
-						}));
-
-	}
-
-	@Override
-	public void close() {
-		if (iterator != null) {
-			try {
-				iterator.close();
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to close iterator",
-						e);
-			}
-		}
+	protected CloseableIterator<?> queryRange(
+			PrimaryIndex i,
+			GeoWaveRowRange range,
+			List<QueryFilter> queryFilters,
+			QueryOptions rangeQueryOptions ) {
+		return new InputFormatAccumuloRangeQuery(
+				adapterStore,
+				i,
+				AccumuloSplitsProvider.unwrapRange(range),
+				queryFilters,
+				isOutputWritable,
+				rangeQueryOptions).query(
+				accumuloOperations,
+				adapterStore,
+				rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				rangeQueryOptions.getLimit());
 	}
 
 	@Override
@@ -249,11 +113,11 @@ public class GeoWaveAccumuloRecordReader<T> extends
 		final ProgressPerRange progress = progressPerRange.get(currentGeoWaveRangeIndexPair);
 		if (progress == null) {
 			return getProgressForRange(
-					currentGeoWaveRangeIndexPair.getRange(),
+					AccumuloSplitsProvider.unwrapRange(currentGeoWaveRangeIndexPair.getRange()),
 					currentAccumuloKey);
 		}
 		return getOverallProgress(
-				currentGeoWaveRangeIndexPair.getRange(),
+				AccumuloSplitsProvider.unwrapRange(currentGeoWaveRangeIndexPair.getRange()),
 				currentAccumuloKey,
 				progress);
 	}
@@ -278,16 +142,16 @@ public class GeoWaveAccumuloRecordReader<T> extends
 						start.length()),
 				position.length());
 		final BigInteger startBI = new BigInteger(
-				AccumuloMRUtils.extractBytes(
-						start,
+				SplitsProvider.extractBytes(
+						start.getBackingArray(),
 						maxDepth));
 		final BigInteger endBI = new BigInteger(
-				AccumuloMRUtils.extractBytes(
-						end,
+				SplitsProvider.extractBytes(
+						end.getBackingArray(),
 						maxDepth));
 		final BigInteger positionBI = new BigInteger(
-				AccumuloMRUtils.extractBytes(
-						position,
+				SplitsProvider.extractBytes(
+						position.getBackingArray(),
 						maxDepth));
 		return (float) (positionBI.subtract(
 				startBI).doubleValue() / endBI.subtract(
@@ -331,70 +195,5 @@ public class GeoWaveAccumuloRecordReader<T> extends
 		}
 		// if we can't figure it out, then claim no progress
 		return 0f;
-	}
-
-	@Override
-	public GeoWaveInputKey getCurrentKey()
-			throws IOException,
-			InterruptedException {
-		return currentGeoWaveKey;
-	}
-
-	@Override
-	public T getCurrentValue()
-			throws IOException,
-			InterruptedException {
-		return currentValue;
-	}
-
-	private static interface NextRangeCallback
-	{
-		public void setRange(
-				RangeLocationPair indexPair );
-	}
-
-	/**
-	 * Mostly guava's concatenate method, but there is a need for a callback
-	 * between iterators
-	 */
-	private static Iterator<Object> concatenateWithCallback(
-			final Iterator<Entry<RangeLocationPair, CloseableIterator<?>>> inputs,
-			final NextRangeCallback nextRangeCallback ) {
-		Preconditions.checkNotNull(inputs);
-		return new Iterator<Object>() {
-			Iterator<?> currentIterator = Iterators.emptyIterator();
-			Iterator<?> removeFrom;
-
-			@Override
-			public boolean hasNext() {
-				boolean currentHasNext;
-				while (!(currentHasNext = Preconditions.checkNotNull(
-						currentIterator).hasNext()) && inputs.hasNext()) {
-					final Entry<RangeLocationPair, CloseableIterator<?>> entry = inputs.next();
-					nextRangeCallback.setRange(entry.getKey());
-					currentIterator = entry.getValue();
-				}
-				return currentHasNext;
-			}
-
-			@Override
-			public Object next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}
-				removeFrom = currentIterator;
-				return currentIterator.next();
-			}
-
-			@SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH", justification = "Precondition catches null")
-			@Override
-			public void remove() {
-				Preconditions.checkState(
-						removeFrom != null,
-						"no calls to next() since last call to remove()");
-				removeFrom.remove();
-				removeFrom = null;
-			}
-		};
 	}
 }

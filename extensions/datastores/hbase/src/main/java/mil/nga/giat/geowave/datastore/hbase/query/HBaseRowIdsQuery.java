@@ -59,29 +59,6 @@ public class HBaseRowIdsQuery<T> extends
 		this.rows = rows;
 	}
 
-	// @Override
-	// protected Integer getScannerLimit() {
-	// return 1;
-	// }
-	//
-	// @Override
-	// protected Object queryResultFromIterator(
-	// final HBaseCloseableIteratorWrapper<?> it ) {
-	// Object retVal = null;
-	// if (it.hasNext()) {
-	// retVal = it.next();
-	// }
-	// try {
-	// it.close();
-	// }
-	// catch (final IOException e) {
-	// LOGGER.warn(
-	// "Unable to close single row ID query iterator",
-	// e);
-	// }
-	// return retVal;
-	// }
-
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();

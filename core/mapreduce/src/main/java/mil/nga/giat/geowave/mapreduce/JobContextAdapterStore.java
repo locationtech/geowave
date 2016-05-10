@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.collections.Transformer;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
 
 /**
  * This class implements an adapter store by first checking the job context for
@@ -83,6 +83,11 @@ public class JobContextAdapterStore implements
 					adapter);
 		}
 		return adapter;
+	}
+
+	@Override
+	public void removeAll() {
+		adapterCache.clear();
 	}
 
 	@Override

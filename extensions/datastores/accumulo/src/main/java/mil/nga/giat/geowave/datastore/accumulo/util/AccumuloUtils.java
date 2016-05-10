@@ -45,6 +45,7 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.ScanCallback;
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -56,6 +57,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -73,7 +75,6 @@ import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
-import mil.nga.giat.geowave.datastore.accumulo.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
@@ -89,7 +90,6 @@ import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 public class AccumuloUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloUtils.class);
-	public final static String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
 	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
 	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
 	private static final int ROW_MERGING_COMBINER_PRIORITY = 4;
@@ -150,7 +150,7 @@ public class AccumuloUtils
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback ) {
-		final AccumuloRowId rowId = new AccumuloRowId(
+		final GeowaveRowId rowId = new GeowaveRowId(
 				key.getRow().copyBytes());
 		return (T) decodeRowObj(
 				key,
@@ -166,7 +166,7 @@ public class AccumuloUtils
 	public static Object decodeRow(
 			final Key key,
 			final Value value,
-			final AccumuloRowId rowId,
+			final GeowaveRowId rowId,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
@@ -184,7 +184,7 @@ public class AccumuloUtils
 	private static <T> Object decodeRowObj(
 			final Key key,
 			final Value value,
-			final AccumuloRowId rowId,
+			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -207,7 +207,7 @@ public class AccumuloUtils
 	public static <T> Pair<T, DataStoreEntryInfo> decodeRow(
 			final Key k,
 			final Value v,
-			final AccumuloRowId rowId,
+			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,

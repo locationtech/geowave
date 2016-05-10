@@ -2,11 +2,14 @@ package mil.nga.giat.geowave.datastore.accumulo.operations.config;
 
 import com.beust.jcommander.Parameter;
 
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
+
 /**
  * This class can be used to modify the behavior of the Accumulo Data Store.
  * 
  */
-public class AccumuloOptions
+public class AccumuloOptions implements
+		DataStoreOptions
 {
 	@Parameter(names = "--persistAdapter", hidden = true, arity = 1)
 	protected boolean persistAdapter = true;

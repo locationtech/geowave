@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -25,6 +26,7 @@ import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.util.TransformerWriter;
 import mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer;
 
@@ -59,7 +61,8 @@ public class TransformWriterTest
 			String cf,
 			String cq,
 			String vis,
-			String value ) {
+			String value )
+			throws IOException {
 		Mutation m = new Mutation(
 				new Text(
 						id.getBytes(StringUtils.GEOWAVE_CHAR_SET)));
@@ -124,7 +127,8 @@ public class TransformWriterTest
 	@Test
 	public void test()
 			throws TableNotFoundException,
-			MutationsRejectedException {
+			MutationsRejectedException,
+			IOException {
 		Writer w = operations.createWriter("test_table");
 		write(
 				w,

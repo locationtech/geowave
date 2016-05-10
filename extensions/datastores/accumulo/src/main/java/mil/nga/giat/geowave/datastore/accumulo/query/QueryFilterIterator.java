@@ -24,10 +24,10 @@ import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
@@ -108,7 +108,7 @@ public class QueryFilterIterator extends
 			final List<Key> keys,
 			final List<Value> values ) {
 		if ((filter != null) && (model != null)) {
-			final AccumuloRowId rowId = new AccumuloRowId(
+			final GeowaveRowId rowId = new GeowaveRowId(
 					currentRow.getBytes());
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 			final List<AccumuloFieldInfo> unknownData = new ArrayList<AccumuloFieldInfo>();

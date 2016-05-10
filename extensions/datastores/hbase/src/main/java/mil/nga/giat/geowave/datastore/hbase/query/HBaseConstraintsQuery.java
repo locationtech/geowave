@@ -142,9 +142,8 @@ public class HBaseConstraintsQuery extends
 		}
 		queryFiltersEnabled = true;
 		if (isAggregation()) {
-			// TODO because aggregations are done client-side make sure to set
+			// Because aggregations are done client-side make sure to set
 			// the adapter ID here
-
 			this.adapterIds = Collections.singletonList(aggregation.getLeft().getAdapterId());
 		}
 	}

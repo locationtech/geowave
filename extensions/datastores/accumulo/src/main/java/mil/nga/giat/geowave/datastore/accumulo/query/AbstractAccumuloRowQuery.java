@@ -11,7 +11,7 @@ import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 /**
@@ -51,7 +51,7 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 		return new CloseableIteratorWrapper<T>(
 				new ScannerClosableWrapper(
 						scanner),
-				new EntryIteratorWrapper(
+				new AccumuloEntryIteratorWrapper(
 						adapterStore,
 						index,
 						scanner.iterator(),

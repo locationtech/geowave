@@ -13,6 +13,8 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
+import mil.nga.giat.geowave.core.store.Writer;
 
 /**
  * This interface is used as a basis for establishing connections for queries
@@ -20,7 +22,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
  * 
  * Operations are configured to a specific 'table' name space.
  */
-public interface AccumuloOperations
+public interface AccumuloOperations extends
+		DataStoreOperations
 {
 
 	/**
@@ -40,11 +43,6 @@ public interface AccumuloOperations
 			final String tableName,
 			final String... additionalAuthorizations )
 			throws TableNotFoundException;
-
-	/**
-	 * @return Table Name Space, Empty string if not applicable.
-	 */
-	public String getTableNameSpace();
 
 	/**
 	 * Creates a new batch scanner that can be used by an index
@@ -243,18 +241,6 @@ public interface AccumuloOperations
 			final String tableName );
 
 	/**
-	 * Checks for the existence of the table with the given name
-	 * 
-	 * @param tableName
-	 *            The basic name of the table. Note that that basic
-	 *            implementation of the factory will allow for a table namespace
-	 *            to prefix this name
-	 * @return Returns true if the table was found, false if it was not found
-	 */
-	public boolean tableExists(
-			final String tableName );
-
-	/**
 	 * Checks for the existence of the locality group with the given name,
 	 * within the table of the given name
 	 * 
@@ -293,15 +279,6 @@ public interface AccumuloOperations
 			AccumuloSecurityException;
 
 	/**
-	 * Drops all tables in the instance namespace. If no tables are found in the
-	 * namespace no operation occurs.
-	 */
-	public void deleteAll()
-			throws TableNotFoundException,
-			AccumuloException,
-			AccumuloSecurityException;
-
-	/**
 	 * Drops the specified row from the specified table. Returns whether the
 	 * operation completed successfully.
 	 * 
@@ -315,6 +292,8 @@ public interface AccumuloOperations
 	 * @param columnQualifier
 	 *            the column qualifier for a given column family to delete, this
 	 *            can be null to delete the whole column family
+	 * @param additionalAuthorizations
+	 *            checks authorizations
 	 * @return Returns true if the row deletion didn't encounter any errors,
 	 *         false if nothing was found or the row was not dropped
 	 *         successfully
@@ -322,8 +301,9 @@ public interface AccumuloOperations
 	public boolean delete(
 			final String tableName,
 			final ByteArrayId rowId,
-			String columnFamily,
-			String columnQualifier );
+			final String columnFamily,
+			final String columnQualifier,
+			final String... additionalAuthorizations );
 
 	/**
 	 * Drops the specified row from the specified table. Returns whether the

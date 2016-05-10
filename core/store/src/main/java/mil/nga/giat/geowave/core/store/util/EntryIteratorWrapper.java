@@ -1,11 +1,7 @@
-package mil.nga.giat.geowave.datastore.accumulo.util;
+package mil.nga.giat.geowave.core.store.util;
 
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
-
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
 
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -21,33 +17,21 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  * @param <T>
  *            The type for the entry
  */
-public class EntryIteratorWrapper<T> implements
+public abstract class EntryIteratorWrapper<T> implements
 		Iterator<T>
 {
-	private final AdapterStore adapterStore;
+	protected final AdapterStore adapterStore;
 	private final PrimaryIndex index;
-	private final Iterator<Entry<Key, Value>> scannerIt;
+	private final Iterator scannerIt;
 	private final QueryFilter clientFilter;
-	private final ScanCallback<T> scanCallback;
+	protected final ScanCallback<T> scanCallback;
 
 	private T nextValue;
 
 	public EntryIteratorWrapper(
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
-			final Iterator<Entry<Key, Value>> scannerIt,
-			final QueryFilter clientFilter ) {
-		this.adapterStore = adapterStore;
-		this.index = index;
-		this.scannerIt = scannerIt;
-		this.clientFilter = clientFilter;
-		this.scanCallback = null;
-	}
-
-	public EntryIteratorWrapper(
-			final AdapterStore adapterStore,
-			final PrimaryIndex index,
-			final Iterator<Entry<Key, Value>> scannerIt,
+			final Iterator scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T> scanCallback ) {
 		this.adapterStore = adapterStore;
@@ -59,7 +43,7 @@ public class EntryIteratorWrapper<T> implements
 
 	private void findNext() {
 		while ((nextValue == null) && scannerIt.hasNext()) {
-			final Entry<Key, Value> row = scannerIt.next();
+			final Object row = scannerIt.next();
 			final T decodedValue = decodeRow(
 					row,
 					clientFilter,
@@ -71,18 +55,23 @@ public class EntryIteratorWrapper<T> implements
 		}
 	}
 
-	private T decodeRow(
-			final Entry<Key, Value> row,
+	protected abstract T decodeRow(
+			final Object row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
-		return AccumuloUtils.decodeRow(
-				row.getKey(),
-				row.getValue(),
-				adapterStore,
-				clientFilter,
-				index,
-				scanCallback);
-	}
+			final PrimaryIndex index );
+
+	// private T decodeRow(
+	// final Object row,
+	// final QueryFilter clientFilter,
+	// final PrimaryIndex index ) {
+	// return AccumuloUtils.decodeRow(
+	// row.getKey(),
+	// row.getValue(),
+	// adapterStore,
+	// clientFilter,
+	// index,
+	// scanCallback);
+	// }
 
 	@Override
 	public boolean hasNext() {

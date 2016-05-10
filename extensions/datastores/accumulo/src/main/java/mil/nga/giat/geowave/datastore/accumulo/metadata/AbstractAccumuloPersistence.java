@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -26,74 +24,39 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
-import mil.nga.giat.geowave.datastore.accumulo.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 /**
  * This abstract class does most of the work for storing persistable objects in
  * Accumulo and can be easily extended for any object that needs to be
  * persisted.
- * 
+ *
  * There is an LRU cache associated with it so staying in sync with external
  * updates is not practical - it assumes the objects are not updated often or at
  * all. The objects are stored in their own table.
- * 
+ *
  * @param <T>
  *            The type of persistable object that this stores
  */
-abstract public class AbstractAccumuloPersistence<T extends Persistable>
+abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
+		AbstractGeowavePersistence<T>
 {
-	public final static String METADATA_TABLE = "GEOWAVE_METADATA";
 	private final static Logger LOGGER = Logger.getLogger(AbstractAccumuloPersistence.class);
 	protected final AccumuloOperations accumuloOperations;
-
-	// TODO: should we concern ourselves with multiple distributed processes
-	// updating and looking up objects simultaneously that would require some
-	// locking/synchronization mechanism, and even possibly update
-	// notifications?
-	private static final int MAX_ENTRIES = 100;
-	protected final Map<ByteArrayId, T> cache = Collections.synchronizedMap(new LinkedHashMap<ByteArrayId, T>(
-			MAX_ENTRIES + 1,
-			.75F,
-			true) {
-		/**
-				 *
-				 */
-		private static final long serialVersionUID = 1L;
-
-		// This method is called just after a new entry has been added
-		@Override
-		public boolean removeEldestEntry(
-				final Map.Entry<ByteArrayId, T> eldest ) {
-			return size() > MAX_ENTRIES;
-		}
-	});
 
 	// just attach iterators once per instance
 	private boolean iteratorsAttached = false;
 
 	public AbstractAccumuloPersistence(
 			final AccumuloOperations accumuloOperations ) {
+		super(
+				accumuloOperations);
 		this.accumuloOperations = accumuloOperations;
 	}
-
-	protected String getAccumuloTablename() {
-		return METADATA_TABLE;
-	}
-
-	abstract protected String getPersistenceTypeName();
-
-	protected ByteArrayId getSecondaryId(
-			final T persistedObject ) {
-		// this is the default implementation, if the persistence store requires
-		// secondary indices,
-		return null;
-	}
-
-	abstract protected ByteArrayId getPrimaryId(
-			T persistedObject );
 
 	private static Text getSafeText(
 			final String text ) {
@@ -104,11 +67,6 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		else {
 			return new Text();
 		}
-	}
-
-	protected String getAccumuloColumnQualifier(
-			final T persistedObject ) {
-		return getAccumuloColumnQualifier(getSecondaryId(persistedObject));
 	}
 
 	protected ByteArrayId getSecondaryId(
@@ -138,47 +96,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		return null;
 	}
 
-	protected String getAccumuloColumnQualifier(
-			final ByteArrayId secondaryId ) {
-		if (secondaryId != null) {
-			return secondaryId.getString();
-		}
-		return null;
-	}
-
-	protected byte[] getAccumuloVisibility(
-			final T entry ) {
-		return null;
-	}
-
-	protected String getAccumuloColumnFamily() {
-		return getPersistenceTypeName();
-	}
-
-	protected ByteArrayId getCombinedId(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
-		// the secondaryId is optional so check for null
-		if (secondaryId != null) {
-			return new ByteArrayId(
-					this.accumuloOperations.getTableNameSpace() + "_" + primaryId.getString() + "_"
-							+ secondaryId.getString());
-		}
-		return primaryId;
-	}
-
-	public void clearCache() {
-		cache.clear();
-	}
-
-	protected void addObject(
-			final T object ) {
-		addObject(
-				getPrimaryId(object),
-				getSecondaryId(object),
-				object);
-	}
-
+	@Override
 	protected void addObject(
 			final ByteArrayId id,
 			final ByteArrayId secondaryId,
@@ -191,7 +109,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		try {
 
 			final Writer writer = accumuloOperations.createWriter(
-					getAccumuloTablename(),
+					getTablename(),
 					true);
 			synchronized (this) {
 				if (!iteratorsAttached) {
@@ -199,7 +117,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 					final IteratorConfig[] configs = getIteratorConfig();
 					if ((configs != null) && (configs.length > 0)) {
 						accumuloOperations.attachIterators(
-								getAccumuloTablename(),
+								getTablename(),
 								true,
 								configs);
 					}
@@ -209,9 +127,9 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 			final Mutation mutation = new Mutation(
 					new Text(
 							id.getBytes()));
-			final Text cf = getSafeText(getAccumuloColumnFamily());
-			final Text cq = getSafeText(getAccumuloColumnQualifier(object));
-			final byte[] visibility = getAccumuloVisibility(object);
+			final Text cf = getSafeText(getColumnFamily());
+			final Text cq = getSafeText(getColumnQualifier(object));
+			final byte[] visibility = getVisibility(object);
 			if (visibility != null) {
 				mutation.put(
 						cf,
@@ -236,36 +154,6 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 					"Unable add object",
 					e);
 		}
-	}
-
-	protected void addObjectToCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
-			final T object ) {
-		final ByteArrayId combinedId = getCombinedId(
-				primaryId,
-				secondaryId);
-		cache.put(
-				combinedId,
-				object);
-	}
-
-	protected Object getObjectFromCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
-		final ByteArrayId combinedId = getCombinedId(
-				primaryId,
-				secondaryId);
-		return cache.get(combinedId);
-	}
-
-	protected boolean deleteObjectFromCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
-		final ByteArrayId combinedId = getCombinedId(
-				primaryId,
-				secondaryId);
-		return (cache.remove(combinedId) != null);
 	}
 
 	protected IteratorConfig[] getIteratorConfig() {
@@ -293,7 +181,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		}
 		catch (final TableNotFoundException e) {
 			LOGGER.error(
-					"Unable to find objects, table '" + getAccumuloTablename() + "' does not exist",
+					"Unable to find objects, table '" + getTablename() + "' does not exist",
 					e);
 		}
 		return new CloseableIterator.Empty<T>();
@@ -353,7 +241,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		}
 		catch (final TableNotFoundException e) {
 			LOGGER.warn(
-					"Unable to find objects, table '" + getAccumuloTablename() + "' does not exist",
+					"Unable to find objects, table '" + getTablename() + "' does not exist",
 					e);
 		}
 		return new CloseableIterator.Empty<T>();
@@ -389,7 +277,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 			final String... authorizations )
 			throws TableNotFoundException {
 		final BatchScanner scanner = accumuloOperations.createBatchScanner(
-				getAccumuloTablename(),
+				getTablename(),
 				authorizations);
 		final IteratorSetting[] settings = getScanSettings();
 		if ((settings != null) && (settings.length > 0)) {
@@ -397,8 +285,8 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 				scanner.addScanIterator(setting);
 			}
 		}
-		final String columnFamily = getAccumuloColumnFamily();
-		final String columnQualifier = getAccumuloColumnQualifier(secondaryId);
+		final String columnFamily = getColumnFamily();
+		final String columnQualifier = getColumnQualifier(secondaryId);
 		if (columnFamily != null) {
 			if (columnQualifier != null) {
 				scanner.fetchColumn(
@@ -425,23 +313,30 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		return scanner;
 	}
 
-	protected boolean deleteObject(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
-			final String... authorizations ) {
-		return deleteObjectFromCache(
-				primaryId,
-				secondaryId) && accumuloOperations.delete(
-				getAccumuloTablename(),
-				Arrays.asList(primaryId),
-				getAccumuloColumnFamily(),
-				getAccumuloColumnQualifier(secondaryId),
-				authorizations);
-	}
-
 	public boolean deleteObjects(
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
+		return deleteObjects(
+				null,
+				secondaryId,
+				authorizations);
+	}
+
+	@Override
+	public boolean deleteObjects(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId,
+			final String... authorizations ) {
+
+		if (primaryId != null) {
+			return accumuloOperations.delete(
+					getTablename(),
+					primaryId,
+					getColumnFamily(),
+					getColumnQualifier(secondaryId),
+					authorizations);
+		}
+
 		try {
 			final BatchScanner scanner = getScanner(
 					null,
@@ -468,7 +363,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		}
 		catch (final TableNotFoundException e) {
 			LOGGER.error(
-					"Unable to find objects, table '" + getAccumuloTablename() + "' does not exist",
+					"Unable to find objects, table '" + getTablename() + "' does not exist",
 					e);
 		}
 
@@ -537,7 +432,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		public T next() {
 			final Map.Entry<Key, Value> entry = it.next();
 			accumuloOperations.delete(
-					getAccumuloTablename(),
+					getTablename(),
 					Arrays.asList(new ByteArrayId(
 							entry.getKey().getRowData().getBackingArray())),
 					entry.getKey().getColumnFamily().toString(),

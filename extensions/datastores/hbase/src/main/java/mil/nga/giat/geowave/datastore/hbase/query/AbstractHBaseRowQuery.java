@@ -6,15 +6,14 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper.ScannerClosableWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.ScannerClosableWrapper;
 
 abstract public class AbstractHBaseRowQuery<T> extends
 		HBaseQuery
@@ -50,7 +49,7 @@ abstract public class AbstractHBaseRowQuery<T> extends
 		 * getScanner( accumuloOperations, getScannerLimit());
 		 * addScanIteratorSettings(scanner);
 		 */
-		final HBaseCloseableIteratorWrapper<Object> it = new HBaseCloseableIteratorWrapper<Object>(
+		final CloseableIteratorWrapper<Object> it = new CloseableIteratorWrapper<Object>(
 				new ScannerClosableWrapper(
 						results),
 				new HBaseEntryIteratorWrapper(
@@ -64,5 +63,5 @@ abstract public class AbstractHBaseRowQuery<T> extends
 	abstract protected Integer getScannerLimit();
 
 	abstract protected T queryResultFromIterator(
-			final HBaseCloseableIteratorWrapper<?> it );
+			final CloseableIteratorWrapper<?> it );
 }
