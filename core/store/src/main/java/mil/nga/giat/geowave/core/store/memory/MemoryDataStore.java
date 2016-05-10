@@ -49,7 +49,7 @@ public class MemoryDataStore implements
 		DataStore
 {
 	private final static Logger LOGGER = Logger.getLogger(MemoryDataStore.class);
-	private final Map<ByteArrayId, TreeSet<EntryRow>> storeData = new HashMap<ByteArrayId, TreeSet<EntryRow>>();
+	private final Map<ByteArrayId, TreeSet<EntryRow>> storeData = Collections.synchronizedMap(new HashMap<ByteArrayId, TreeSet<EntryRow>>());
 	private final AdapterStore adapterStore;
 	private final IndexStore indexStore;
 	private final DataStatisticsStore statsStore;
