@@ -19,9 +19,9 @@ import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
-@GeowaveOperation(name = "listformat", parentOperation = IngestSection.class)
-@Parameters(commandDescription = "List supported ingest formats")
-public class ListFormatCommand extends
+@GeowaveOperation(name = "listplugins", parentOperation = IngestSection.class)
+@Parameters(commandDescription = "List supported data store types, index types, and ingest formats")
+public class ListPluginsCommand extends
 		DefaultOperation implements
 		Command
 {
