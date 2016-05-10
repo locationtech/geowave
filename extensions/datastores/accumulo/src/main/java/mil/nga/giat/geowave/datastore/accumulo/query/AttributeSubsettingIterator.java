@@ -7,18 +7,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import org.apache.accumulo.core.client.IteratorSetting;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.PartialKey;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.IteratorEnvironment;
-import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.apache.accumulo.core.iterators.user.TransformingIterator;
-import org.apache.hadoop.io.Text;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -27,11 +20,20 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.datastore.accumulo.util.BitmaskUtils;
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.PartialKey;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorEnvironment;
+import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
+import org.apache.accumulo.core.iterators.user.TransformingIterator;
+import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.hadoop.io.Text;
 
 public class AttributeSubsettingIterator extends
 		TransformingIterator
 {
-	private static final int ITERATOR_PRIORITY = QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY - 1;
+	private static final int ITERATOR_PRIORITY = QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY + 1;
 	private static final String ITERATOR_NAME = "ATTRIBUTE_SUBSETTING_ITERATOR";
 
 	private static final String FIELD_SUBSET_BITMASK = "fieldsBitmask";
@@ -39,7 +41,7 @@ public class AttributeSubsettingIterator extends
 
 	@Override
 	protected PartialKey getKeyPrefix() {
-		return PartialKey.ROW_COLFAM;
+		return PartialKey.ROW;
 	}
 
 	@Override
@@ -48,31 +50,53 @@ public class AttributeSubsettingIterator extends
 			final KVBuffer output )
 			throws IOException {
 		while (input.hasTop()) {
-			final Key currKey = input.getTopKey();
-			final Value currVal = input.getTopValue();
-			final byte[] originalBitmask = currKey.getColumnQualifierData().getBackingArray();
-			final byte[] newBitmask = BitmaskUtils.generateANDBitmask(
-					originalBitmask,
-					fieldSubsetBitmask);
-			if (BitmaskUtils.isAnyBitSet(newBitmask)) {
-				if (!Arrays.equals(
-						newBitmask,
-						originalBitmask)) {
-					output.append(
-							replaceColumnQualifier(
-									currKey,
-									new Text(
-											newBitmask)),
-							constructNewValue(
-									currVal,
-									originalBitmask,
-									newBitmask));
+			final Key wholeRowKey = input.getTopKey();
+			final Value wholeRowVal = input.getTopValue();
+			final SortedMap<Key, Value> rowMapping = WholeRowIterator.decodeRow(
+					wholeRowKey,
+					wholeRowVal);
+			final List<Key> keyList = new ArrayList<>();
+			final List<Value> valList = new ArrayList<>();
+			Text adapterId = null;
+
+			for (final Entry<Key, Value> row : rowMapping.entrySet()) {
+				final Key currKey = row.getKey();
+				final Value currVal = row.getValue();
+				if(adapterId == null) {
+					adapterId = currKey.getColumnFamily();
 				}
-				else {
-					output.append(
-							currKey,
-							currVal);
+				final byte[] originalBitmask = currKey.getColumnQualifierData().getBackingArray();
+				final byte[] newBitmask = BitmaskUtils.generateANDBitmask(
+						originalBitmask,
+						fieldSubsetBitmask);
+				if (BitmaskUtils.isAnyBitSet(newBitmask)) {
+					if (!Arrays.equals(
+							newBitmask,
+							originalBitmask)) {
+						keyList.add(replaceColumnQualifier(
+								currKey,
+								new Text(
+										newBitmask)));
+						valList.add(constructNewValue(
+								currVal,
+								originalBitmask,
+								newBitmask));
+					}
+					else {
+						// pass along unmodified
+						keyList.add(currKey);
+						valList.add(currVal);
+					}
 				}
+			}
+			if (!keyList.isEmpty() && !valList.isEmpty()) {
+				final Key outputKey = new Key(wholeRowKey.getRow(), adapterId);
+				final Value outputVal = WholeRowIterator.encodeRow(
+						keyList,
+						valList);
+				output.append(
+						outputKey,
+						outputVal);
 			}
 			input.next();
 		}
