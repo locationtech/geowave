@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 
@@ -47,6 +50,7 @@ public class IngestFromKafkaDriver
 	private final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins;
 	private final KafkaConsumerCommandLineOptions kafkaOptions;
 	private final VisibilityOptions ingestOptions;
+	private final List<Future<?>> futures = new ArrayList<Future<?>>();
 
 	public IngestFromKafkaDriver(
 			DataStorePluginOptions storeOptions,
@@ -132,11 +136,11 @@ public class IngestFromKafkaDriver
 							adapters,
 							dataStore);
 
-					launchTopicConsumer(
+					futures.add(launchTopicConsumer(
 							pluginProvider.getKey(),
 							avroFormatPlugin,
 							runData,
-							queue);
+							queue));
 				}
 				catch (final UnsupportedOperationException e) {
 					LOGGER.warn(
@@ -155,20 +159,22 @@ public class IngestFromKafkaDriver
 
 	private ConsumerConnector buildKafkaConsumer() {
 
+		Properties kafkaProperties = kafkaOptions.getProperties();
+
 		final ConsumerConnector consumer = Consumer.createJavaConsumerConnector(new ConsumerConfig(
-				kafkaOptions.getProperties()));
+				kafkaProperties));
 
 		return consumer;
 	}
 
-	private void launchTopicConsumer(
+	private Future<?> launchTopicConsumer(
 			final String formatPluginName,
 			final AvroFormatPlugin<?, ?> avroFormatPlugin,
 			final KafkaIngestRunData ingestRunData,
 			final List<String> queue )
 			throws Exception {
 		final ExecutorService executorService = Executors.newFixedThreadPool(queue.size());
-		executorService.execute(new Runnable() {
+		return executorService.submit(new Runnable() {
 
 			@Override
 			public void run() {
@@ -245,6 +251,11 @@ public class IngestFromKafkaDriver
 								ingestRunData,
 								avroFormatPlugin);
 						if (++currentBatchId > batchSize) {
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug(String.format(
+										"Flushing %d items",
+										currentBatchId));
+							}
 							ingestRunData.flush();
 							currentBatchId = 0;
 						}
@@ -258,13 +269,20 @@ public class IngestFromKafkaDriver
 			}
 		}
 		catch (final ConsumerTimeoutException te) {
+			// Flush any outstanding items
+			if (currentBatchId > 0) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(String.format(
+							"Flushing %d items",
+							currentBatchId));
+				}
+				ingestRunData.flush();
+				currentBatchId = 0;
+			}
 			if (kafkaOptions.isFlushAndReconnect()) {
 				LOGGER.info(
-						"Consumer timed out from Kafka topic [" + formatPluginName + "... ",
+						"Consumer timed out from Kafka topic [" + formatPluginName + "]... Reconnecting...",
 						te);
-				if (currentBatchId > 0) {
-					ingestRunData.flush();
-				}
 				consumeMessages(
 						formatPluginName,
 						avroFormatPlugin,
@@ -272,8 +290,8 @@ public class IngestFromKafkaDriver
 						stream);
 			}
 			else {
-				LOGGER.warn(
-						"Consumer timed out from Kafka topic [" + formatPluginName + "... ",
+				LOGGER.info(
+						"Consumer timed out from Kafka topic [" + formatPluginName + "]... ",
 						te);
 			}
 		}
@@ -320,7 +338,7 @@ public class IngestFromKafkaDriver
 
 		try (CloseableIterator<?> geowaveDataIt = ingestPlugin.toGeoWaveData(
 				dataRecord,
-				writerMap.keySet(),
+				indexMap.keySet(),
 				ingestOptions.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
@@ -351,5 +369,40 @@ public class IngestFromKafkaDriver
 
 			}
 		}
+	}
+
+	public List<Future<?>> getFutures() {
+		return futures;
+	}
+
+	/**
+	 * Only true if all futures are complete.
+	 * 
+	 * @return
+	 */
+	public boolean isComplete() {
+		for (Future<?> future : futures) {
+			if (!future.isDone()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Wait for all kafka topics to complete, then return the result objects.
+	 * 
+	 * @return
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public List<Object> waitFutures()
+			throws InterruptedException,
+			ExecutionException {
+		List<Object> results = new ArrayList<Object>();
+		for (Future<?> future : futures) {
+			results.add(future.get());
+		}
+		return results;
 	}
 }

@@ -87,12 +87,10 @@ public class KafkaTestUtils
 		kafkaToGeowave.setPluginFormats(ingestFormatOptions);
 		kafkaToGeowave.setInputIndexOptions(Arrays.asList(indexOption));
 		kafkaToGeowave.setInputStoreOptions(options);
-		kafkaToGeowave.getKafkaOptions().setBatchSize(
-				1);
 		kafkaToGeowave.getKafkaOptions().setConsumerTimeoutMs(
 				"5000");
 		kafkaToGeowave.getKafkaOptions().setReconnectOnTimeout(
-				true);
+				false);
 		kafkaToGeowave.getKafkaOptions().setGroupId(
 				"testGroup");
 		kafkaToGeowave.getKafkaOptions().setAutoOffsetReset(
@@ -106,6 +104,19 @@ public class KafkaTestUtils
 				null);
 
 		kafkaToGeowave.execute(new ManualOperationParams());
+
+		// Wait for ingest to complete. This works because we have set
+		// Kafka Consumer to Timeout and set the timeout at 5000 ms, and
+		// then not to re-connect. Since this is a unit test that should
+		// be fine. Basically read all data that's in the stream and
+		// finish.
+		try {
+			kafkaToGeowave.getDriver().waitFutures();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(
+					e);
+		}
 	}
 
 	public static KafkaConfig getKafkaBrokerConfig() {

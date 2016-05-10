@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataAccessFactory.Param;
 import org.geotools.data.Parameter;
@@ -38,7 +36,6 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 
 /**
@@ -71,12 +68,11 @@ public class GeoWavePluginConfig
 			"Number of buffered feature insertions before flushing to the datastore.",
 			false);
 
-	/*
-	 * private static final Param FEATURE_NAMESPACE = new Param(
-	 * FEATURE_NAMESPACE_KEY, String.class,
-	 * "The overriding namespace for all feature types maintained within this data store"
-	 * , false);
-	 */
+	private static final Param FEATURE_NAMESPACE = new Param(
+			FEATURE_NAMESPACE_KEY,
+			String.class,
+			"The overriding namespace for all feature types maintained within this data store",
+			false);
 
 	private static final Param LOCK_MGT = new Param(
 			LOCK_MGT_KEY,
@@ -139,6 +135,7 @@ public class GeoWavePluginConfig
 					Lists.transform(
 							Lists.newArrayList(configOptions),
 							new GeoWaveConfigOptionToGeoToolsConfigOption()));
+			params.add(FEATURE_NAMESPACE);
 			params.add(GEOWAVE_NAMESPACE);
 			params.add(LOCK_MGT);
 			params.add(AUTH_MGT);
@@ -401,41 +398,6 @@ public class GeoWavePluginConfig
 	private static Iterator<IndexQueryStrategySPI> getInxexQueryStrategyList() {
 		final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader.load(IndexQueryStrategySPI.class);
 		return ldr.iterator();
-	}
-
-	public static void applyOptions(
-			final Options allOptions ) {
-		final Option zookeeperUrl = new Option(
-				"z",
-				"zookeepers",
-				true,
-				"A comma-separated list of zookeeper servers that an Accumulo instance is using");
-		allOptions.addOption(zookeeperUrl);
-		final Option instanceId = new Option(
-				"i",
-				"instance-id",
-				true,
-				"The Accumulo instance ID");
-		allOptions.addOption(instanceId);
-		final Option user = new Option(
-				"u",
-				"user",
-				true,
-				"A valid Accumulo user ID");
-		allOptions.addOption(user);
-		final Option password = new Option(
-				"p",
-				"password",
-				true,
-				"The password for the user");
-		allOptions.addOption(password);
-
-		final Option namespace = new Option(
-				"n",
-				"namespace",
-				true,
-				"The table namespace (optional; default is no namespace)");
-		allOptions.addOption(namespace);
 	}
 
 	private static class GeoWaveConfigOptionToGeoToolsConfigOption implements
