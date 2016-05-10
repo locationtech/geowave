@@ -99,7 +99,10 @@
 </dl>
 <hr>
 <br>
-<pre>public class <span class="strong">InfoServiceImpl</span>
+<pre>@Produces(value="application/json")
+@Consumes(value="application/json")
+@Path(value="/info")
+public class <span class="strong">InfoServiceImpl</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../mil/nga/giat/geowave/service/InfoService.html" title="interface in mil.nga.giat.geowave.service">InfoService</a></pre>
 </li>
@@ -191,7 +194,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/service/InfoService.h
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
+<pre>@GET
+@Produces(value="application/json")
+@Path(value="/indices/{storeName}")
+public&nbsp;javax.ws.rs.core.Response&nbsp;getIndices(@PathParam(value="storeName")
+                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/InfoService.html#getIndices(java.lang.String)">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/InfoService.html" title="interface in mil.nga.giat.geowave.service">InfoService</a></code></dd>
@@ -204,7 +211,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/service/InfoService.h
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getAdapters</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
+<pre>@GET
+@Produces(value="application/json")
+@Path(value="/adapters/{storeName}")
+public&nbsp;javax.ws.rs.core.Response&nbsp;getAdapters(@PathParam(value="storeName")
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/service/InfoService.html#getAdapters(java.lang.String)">getAdapters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/service/InfoService.html" title="interface in mil.nga.giat.geowave.service">InfoService</a></code></dd>
