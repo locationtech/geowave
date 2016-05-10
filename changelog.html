@@ -14,6 +14,9 @@
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
 <li>Clean up SPI by removing unused SPIs <a href="https://github.com/ngageoint/geowave/issues/727">#727</a></li>
+<li>vector import/export integration test <a href="https://github.com/ngageoint/geowave/issues/687">#687</a></li>
+<li>Ingest format plugin for Avro files that match our export schema <a href="https://github.com/ngageoint/geowave/issues/686">#686</a></li>
+<li>Vector export commandline tools <a href="https://github.com/ngageoint/geowave/issues/684">#684</a></li>
 <li>implement integration test for spatial sub-sampling <a href="https://github.com/ngageoint/geowave/issues/666">#666</a></li>
 <li>Store required data statistics for discovering what adapters are in each index <a href="https://github.com/ngageoint/geowave/issues/660">#660</a></li>
 <li>Eliminate VisibilityWriter from DataStore.createIndexWriter <a href="https://github.com/ngageoint/geowave/issues/659">#659</a></li>
@@ -44,6 +47,8 @@
 <p><strong>Fixed bugs:</strong></p>
 <ul>
 <li>Tests are failing in Eclipse due to initialization error <a href="https://github.com/ngageoint/geowave/issues/751">#751</a></li>
+<li>Disable commandline completion <a href="https://github.com/ngageoint/geowave/issues/697">#697</a></li>
+<li>IndexWriter needs to be closed, flush isn't sufficient unless close is eventually called <a href="https://github.com/ngageoint/geowave/issues/696">#696</a></li>
 <li>raster resize commandline operation SPI missing <a href="https://github.com/ngageoint/geowave/issues/679">#679</a></li>
 <li>get geowavedemoapp running in windows <a href="https://github.com/ngageoint/geowave/issues/669">#669</a></li>
 <li>No assumptions should be made as to what Statistics a Statistical DataAdapter provides <a href="https://github.com/ngageoint/geowave/issues/655">#655</a></li>
@@ -58,6 +63,7 @@
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>Properly handle line endings at repo level via .gitattributes <a href="https://github.com/ngageoint/geowave/issues/755">#755</a></li>
 <li>Remove dead code and reconnect stats option switch for Accumulo <a href="https://github.com/ngageoint/geowave/issues/740">#740</a></li>
 <li>Merge geowave-osm project into Geowave main <a href="https://github.com/ngageoint/geowave/issues/729">#729</a></li>
 <li>Docs: Add accumulo.api flag <a href="https://github.com/ngageoint/geowave/issues/713">#713</a></li>
@@ -89,8 +95,12 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Jace updates for 0.9.1 <a href="https://github.com/ngageoint/geowave/pull/764">#764</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
+<li>GEOWAVE-546 &amp; GEOWAVE-696 Fixes / Updates <a href="https://github.com/ngageoint/geowave/pull/759">#759</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
 <li>GEOWAVE-727 - Fix issue introduced with this PR <a href="https://github.com/ngageoint/geowave/pull/757">#757</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
+<li>Properly handle line endings <a href="https://github.com/ngageoint/geowave/pull/756">#756</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>GEOWAVE-546 - Throw exception if index doesn't exist <a href="https://github.com/ngageoint/geowave/pull/754">#754</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
+<li>Subset fields after filtering, rather than prior (performance improvement) <a href="https://github.com/ngageoint/geowave/pull/753">#753</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Use JUnit 4.11 rather than various conflicting versoins <a href="https://github.com/ngageoint/geowave/pull/752">#752</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>multiple code improvements: squid:S1197, squid:S1118, squid:S2293, squid:CommentedOutCodeLine, squid:S1481, squid:UselessParenthesesCheck <a href="https://github.com/ngageoint/geowave/pull/750">#750</a> (<a href="https://github.com/georgekankava">georgekankava</a>)</li>
 <li>Fix bug from Issue #546. GeoWaveOutputFormat disconnected from analytics <a href="https://github.com/ngageoint/geowave/pull/748">#748</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
