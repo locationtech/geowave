@@ -91,10 +91,7 @@
 </dl>
 <hr>
 <br>
-<pre>@Produces(value="application/json")
-@Consumes(value="application/json")
-@Path(value="/info")
-public interface <span class="strong">InfoService</span></pre>
+<pre>public interface <span class="strong">InfoService</span></pre>
 </li>
 </ul>
 </div>
@@ -142,11 +139,7 @@ public interface <span class="strong">InfoService</span></pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>@GET
-@Produces(value="application/json")
-@Path(value="/indices/{storeName}")
-javax.ws.rs.core.Response&nbsp;getIndices(@PathParam(value="storeName")
-                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
+<pre>javax.ws.rs.core.Response&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
 </li>
 </ul>
 <a name="getAdapters(java.lang.String)">
@@ -155,11 +148,7 @@ javax.ws.rs.core.Response&nbsp;getIndices(@PathParam(value="storeName")
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getAdapters</h4>
-<pre>@GET
-@Produces(value="application/json")
-@Path(value="/adapters/{storeName}")
-javax.ws.rs.core.Response&nbsp;getAdapters(@PathParam(value="storeName")
-                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
+<pre>javax.ws.rs.core.Response&nbsp;getAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
 </li>
 </ul>
 </li>
