@@ -13,7 +13,7 @@
 *.df            text
 *.htm           text
 *.html          text
-*.java          text
+#*.java          text
 *.js            text
 *.json          text
 *.jsp           text
