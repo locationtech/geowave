@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.memory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class MemoryIndexStore implements
 		IndexStore
 {
-	private final Map<ByteArrayId, Index<?, ?>> indexMap = new HashMap<ByteArrayId, Index<?, ?>>();
+	private final Map<ByteArrayId, Index<?, ?>> indexMap = Collections.synchronizedMap(new HashMap<ByteArrayId, Index<?, ?>>());
 
 	public MemoryIndexStore() {}
 
