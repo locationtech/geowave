@@ -2359,25 +2359,43 @@ $ cd ingest
 $ unzip ne_50m_admin_0_countries.zip
 $ rm ne_50m_admin_0_countries.zip
 $ cd ..
-$ geowave -localingest \
-      -b ./ingest \
-      -gwNamespace geowave.50m_admin_0_countries \ <i class="conum" data-value="1"></i><b>(1)</b>
-      -f geotools-vector \ <i class="conum" data-value="2"></i><b>(2)</b>
-	  -datastore accumulo \
-      -user USERNAME \
-      -password PASSWORD \
-	  -instance ACCUMULO_INSTANCE_NAME \
-      -zookeeper ZOOKEEPER_HOST_NAME:2181</code></pre>
+$ geowave config addstore -t accumulo mystore \ <i class="conum" data-value="1"></i><b>(1)</b>
+      --gwNamespace geowave.50m_admin_0_countries \ <i class="conum" data-value="2"></i><b>(2)</b>
+      --zookeeper ZOOKEEPER_HOSTNAME:2181 \
+      --instance ACCUMULO_INSTANCE_NAME \
+      --user USERNAME \
+      --password PASSWORD
+$ geowave config addindex -t spatial myindex \ <i class="conum" data-value="3"></i><b>(3)</b>
+      --partitionStrategy round_robin \
+	  --numPartitions NUM_PARTITIONS \ <i class="conum" data-value="4"></i><b>(4)</b>
+$ geowave ingest localtogw ./ingest mystore myindex \ <i class="conum" data-value="5"></i><b>(5)</b>
+	  -f geotools-vector \ <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We preface the table name with the Accumulo namespace we configured earlier in the Accumulo configuration section followed by a dot (NAMESPACE.TABLE_NAME)</td>
+<td>This will create a re-usable named configuration <code>mystore</code> that can be referenced as a store by other commandline operations such as ingest</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We preface the table name with the Accumulo namespace we configured earlier in the Accumulo configuration section followed by a dot (NAMESPACE.TABLE_NAME)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This will create a re-usable named configuration <code>myindex</code> that can be referenced as an index by other commandline operations such as ingest</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The index is spatial and pre-split based on the number of partitions you may desire - this is an optional parameter but an example of customization you may choose on index configuration, in this case data is randomized into different splits which can help avoid hotspotting to a single node/core</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Notice the ingest command uses the named configurations <code>mystore</code> and <code>myindex</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
 <td>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</td>
 </tr>
 </table>
@@ -2390,24 +2408,53 @@ $ geowave -localingest \
 <div class="sect2">
 <h3 id="ingest-plugins"><a class="anchor" href="#ingest-plugins"></a>Ingest Plugins</h3>
 <div class="paragraph">
-<p>The geowave command line utility comes with several plugins out of the box</p>
+<p>The geowave command line utility comes with several plugins out of the box.  You can list the available plugins that are registered with your commandline tool and you can add more by simply copying a desired plugin into the /usr/local/geowave/tools/plugins directory.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave -localingest --list
-Available ingest types currently registered as plugins:
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave ingest listplugins
 
-tdrive:
-     files from Microsoft Research T-Drive trajectory data set
+Available index types currently registered as plugins:
 
-geotools:
-     all file-based datastores supported within geotools
+  spatial_temporal:
+    This dimensionality type matches all indices that only require Geometry and Time.
 
-geolife:
-     files from Microsoft Research GeoLife trajectory data set
+  spatial:
+    This dimensionality type matches all indices that only require Geometry.
 
-gpx:
-     xml files adhering to the schema of gps exchange format</code></pre>
+Available ingest formats currently registered as plugins:
+
+  geotools-vector:
+    all file-based vector datastores supported within geotools
+
+  geolife:
+    files from Microsoft Research GeoLife trajectory data set
+
+  gdelt:
+    files from Google Ideas GDELT data set
+
+  stanag4676:
+    xml files representing track data that adheres to the schema defined by STANAG-4676
+
+  geotools-raster:
+    all file-based raster formats supported within geotools
+
+  gpx:
+    xml files adhering to the schema of gps exchange format
+
+  tdrive:
+    files from Microsoft Research T-Drive trajectory data set
+
+  avro:
+    This can read an Avro file encoded with the SimpleFeatureCollection schema.  This schema is also used by the export tool, so this format handles re-ingesting exported datasets.
+
+Available datastores currently registered:
+
+  accumulo:
+    A GeoWave store backed by tables in Apache Accumulo
+
+  hbase:
+    A GeoWave store backed by tables in Apache HBase</code></pre>
 </div>
 </div>
 </div>
@@ -2422,7 +2469,8 @@ the configuration.</p>
 <h4 id="example"><a class="anchor" href="#example"></a>Example</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>geowave -DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json -localingest</code></pre>
+<pre class="highlightjs highlight"><code>$ GEOWAVE_TOOL_JAVA_OPT="-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json"
+$ geowave ingest localtogw ./ingest mystore myindex</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5289,7 +5337,7 @@ mvn -P docs install</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.1-SNAPSHOT from commit b03e1ebc1acff9bfeb0d049d87ac7fd7dbef5069.</p>
+<p>This documentation was generated for GeoWave version 0.9.1-SNAPSHOT from commit 37ecb18bfa7fe4de959a3cff4df8c5fde9ff542d.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -5341,7 +5389,7 @@ mvn -P docs install</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-11 12:49:22 UTC
+Last updated 2016-05-11 18:03:03 UTC
 </div>
 </div>
 </body>
