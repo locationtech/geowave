@@ -107,7 +107,8 @@ public class GeoWaveBasicIT
 	private static final String TEST_BASE_EXPORT_FILE_NAME = "basicIT-export.avro";
 
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
 
