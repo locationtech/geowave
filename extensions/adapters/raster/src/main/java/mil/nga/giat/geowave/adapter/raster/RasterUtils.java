@@ -18,8 +18,6 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +26,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.media.jai.BorderExtender;
 import javax.media.jai.Histogram;
 import javax.media.jai.Interpolation;
@@ -38,13 +35,6 @@ import javax.media.jai.RasterFactory;
 import javax.media.jai.RenderedImageAdapter;
 import javax.media.jai.RenderedOp;
 import javax.media.jai.TiledImage;
-import javax.media.jai.operator.ScaleDescriptor;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 import org.apache.log4j.Logger;
 import org.geotools.coverage.Category;
@@ -53,15 +43,16 @@ import org.geotools.coverage.GridSampleDimension;
 import org.geotools.coverage.TypeMap;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
+import org.geotools.coverage.processing.Operations;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.image.ImageWorker;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.builder.GridToEnvelopeMapper;
 import org.geotools.referencing.operation.matrix.MatrixFactory;
-import org.geotools.referencing.operation.transform.LinearTransform1D;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.resources.i18n.ErrorKeys;
 import org.geotools.resources.i18n.Errors;
@@ -77,14 +68,36 @@ import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.Matrix;
 import org.opengis.referencing.operation.TransformException;
 
+import com.google.common.collect.ImmutableMap;
 import com.sun.media.imageioimpl.common.BogusColorSpace;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+
 public class RasterUtils
 {
+	private static final RenderingHints DEFAULT_RENDERING_HINTS = new RenderingHints(
+			new ImmutableMap.Builder().put(
+					RenderingHints.KEY_RENDERING,
+					RenderingHints.VALUE_RENDER_QUALITY).put(
+					RenderingHints.KEY_ALPHA_INTERPOLATION,
+					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY).put(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON).put(
+					RenderingHints.KEY_COLOR_RENDERING,
+					RenderingHints.VALUE_COLOR_RENDER_QUALITY).put(
+					RenderingHints.KEY_DITHERING,
+					RenderingHints.VALUE_DITHER_ENABLE).put(
+					JAI.KEY_BORDER_EXTENDER,
+					BorderExtender.createInstance(BorderExtender.BORDER_COPY)).build());
+	private static Operations resampleOperations;
 	private final static Logger LOGGER = Logger.getLogger(RasterUtils.class);
 	private static final int MIN_SEGMENTS = 5;
 	private static final int MAX_SEGMENTS = 500;
@@ -580,7 +593,7 @@ public class RasterUtils
 	}
 
 	private static BufferedImage rescaleImageViaPlanarImage(
-			Interpolation interpolation,
+			final Interpolation interpolation,
 			final double rescaleX,
 			final double rescaleY,
 			final BufferedImage image ) {
@@ -588,46 +601,48 @@ public class RasterUtils
 				image,
 				image.getWidth(),
 				image.getHeight());
-
-		final RenderingHints scalingHints = new RenderingHints(
-				RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
-		scalingHints.put(
-				RenderingHints.KEY_ALPHA_INTERPOLATION,
-				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-		scalingHints.put(
-				RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		scalingHints.put(
-				RenderingHints.KEY_COLOR_RENDERING,
-				RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-		scalingHints.put(
-				RenderingHints.KEY_DITHERING,
-				RenderingHints.VALUE_DITHER_ENABLE);
-		scalingHints.put(
-				JAI.KEY_BORDER_EXTENDER,
-				BorderExtender.createInstance(BorderExtender.BORDER_COPY));
-		final RenderedOp result = ScaleDescriptor.create(
-				planarImage,
-				new Float(
-						rescaleX),
-				new Float(
-						rescaleY),
+		final ImageWorker w = new ImageWorker(
+				planarImage);
+		w.scale(
+				(float) rescaleX,
+				(float) rescaleY,
 				0.0f,
 				0.0f,
-				interpolation,
-				scalingHints);
+				interpolation);
+		final RenderedOp result = w.getRenderedOperation();
 
 		final WritableRaster scaledImageRaster = (WritableRaster) result.getData();
 
 		final ColorModel colorModel = image.getColorModel();
+		try {
+			final BufferedImage scaledImage = new BufferedImage(
+					colorModel,
+					scaledImageRaster,
+					image.isAlphaPremultiplied(),
+					null);
 
-		final BufferedImage scaledImage = new BufferedImage(
-				colorModel,
-				scaledImageRaster,
-				image.isAlphaPremultiplied(),
-				null);
-		return scaledImage;
+			return scaledImage;
+		}
+		catch (final IllegalArgumentException e) {
+			LOGGER.warn(
+					"Unable to rescale image",
+					e);
+			return image;
+		}
+	}
+
+	public static void forceRenderingHints(
+			final RenderingHints renderingHints ) {
+		resampleOperations = new Operations(
+				renderingHints);
+	}
+
+	public static synchronized Operations getResampleOperations() {
+		if (resampleOperations == null) {
+			resampleOperations = new Operations(
+					DEFAULT_RENDERING_HINTS);
+		}
+		return resampleOperations;
 	}
 
 	public static BufferedImage getEmptyImage(

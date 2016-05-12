@@ -8,7 +8,8 @@ the configuration.
 ==== Example
 [source]
 ----
-geowave -DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json -localingest
+$ GEOWAVE_TOOL_JAVA_OPT="-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json"
+$ geowave ingest localtogw ./ingest mystore myindex
 ----
 
 Configuration consists of several parts:

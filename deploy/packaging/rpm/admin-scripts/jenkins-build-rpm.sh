@@ -68,9 +68,7 @@ fi
 rm -rf geowave
 
 # Copy the Jace artifacts
-#cp ${WORKSPACE}/${ARGS[buildroot]}/SOURCES/jace-linux-amd64-debug.tar.gz ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/geowave-$version-${githash:0:7}-jace-linux-amd64-debug.tar.gz
-#cp ${WORKSPACE}/${ARGS[buildroot]}/SOURCES/jace-linux-amd64-release.tar.gz ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/geowave-$version-${githash:0:7}-jace-linux-amd64-release.tar.gz
-#cp ${WORKSPACE}/${ARGS[buildroot]}/SOURCES/jace-source.tar.gz ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/geowave-$version-${githash:0:7}-jace-source.tar.gz
+cp ${WORKSPACE}/${ARGS[buildroot]}/SOURCES/geowave-jace.tar.gz ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/geowave-$version-${githash:0:7}-jace.tar.gz
 
 echo '###### Copy rpm to repo and reindex'
 

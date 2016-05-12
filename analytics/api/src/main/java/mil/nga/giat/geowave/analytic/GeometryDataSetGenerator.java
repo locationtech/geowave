@@ -80,7 +80,7 @@ public class GeometryDataSetGenerator
 	}
 
 	public Geometry getBoundingRegion() {
-		final int adder[] = {
+		final int[] adder = {
 			1,
 			2,
 			-1,
@@ -121,7 +121,7 @@ public class GeometryDataSetGenerator
 			final double factor,
 			final double[] minAxis,
 			final double[] maxAxis ) {
-		final double range[] = new double[minAxis.length];
+		final double[] range = new double[minAxis.length];
 		for (int i = 0; i < minAxis.length; i++) {
 			range[i] = (maxAxis[i] - minAxis[i]) * factor;
 		}
@@ -140,12 +140,12 @@ public class GeometryDataSetGenerator
 			final double minCenterDistanceFactor,
 			final double[] minAxis,
 			final double[] maxAxis ) {
-		final double range[] = createRange(
+		final double[] range = createRange(
 				1.0,
 				minAxis,
 				maxAxis);
-		final double min[] = new double[range.length];
-		final double max[] = new double[range.length];
+		final double[] min = new double[range.length];
+		final double[] max = new double[range.length];
 		for (int i = 0; i < range.length; i++) {
 			min[i] = Math.max(
 					minAxis[i] + (minCenterDistanceFactor * (rand.nextInt(Integer.MAX_VALUE) % (range[i] / minCenterDistanceFactor))),
@@ -172,7 +172,6 @@ public class GeometryDataSetGenerator
 						0).getFeatureType());
 
 		LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getType().getTypeName());
-		Integer idCounter = 0;
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
 				index)) {
@@ -180,7 +179,6 @@ public class GeometryDataSetGenerator
 				writer.write(feature);
 				featureBuilder.reset();
 
-				idCounter++;
 			}
 		}
 	}
@@ -203,7 +201,7 @@ public class GeometryDataSetGenerator
 			final LineString line,
 			final double distanceFactor,
 			final int points ) {
-		final List<SimpleFeature> pointSet = new ArrayList<SimpleFeature>();
+		final List<SimpleFeature> pointSet = new ArrayList<>();
 		for (final Point point : CurvedDensityDataGeneratorTool.generatePoints(
 				line,
 				distanceFactor,
@@ -218,13 +216,13 @@ public class GeometryDataSetGenerator
 			final double outlierFactor,
 			final int numberOfCenters,
 			final int minSetSize,
-			final double minAxis[],
-			final double maxAxis[] ) {
+			final double[] minAxis,
+			final double[] maxAxis ) {
 
-		final List<SimpleFeature> pointSet = new ArrayList<SimpleFeature>();
-		final List<double[]> minForCenter = new ArrayList<double[]>();
-		final List<double[]> maxForCenter = new ArrayList<double[]>();
-		final double range[] = createRange(
+		final List<SimpleFeature> pointSet = new ArrayList<>();
+		final List<double[]> minForCenter = new ArrayList<>();
+		final List<double[]> maxForCenter = new ArrayList<>();
+		final double[] range = createRange(
 				minCenterDistanceFactor,
 				minAxis,
 				maxAxis);
@@ -305,8 +303,8 @@ public class GeometryDataSetGenerator
 	public List<SimpleFeature> addRandomNoisePoints(
 			final List<SimpleFeature> pointSet,
 			final int minSetSize,
-			final double minAxis[],
-			final double maxAxis[] ) {
+			final double[] minAxis,
+			final double[] maxAxis ) {
 		while (pointSet.size() < minSetSize) {
 			pointSet.add(createNewFeature(
 					minAxis,
@@ -361,10 +359,9 @@ public class GeometryDataSetGenerator
 	 */
 	private double computeMinDistance(
 			final double minCenterDistanceFactor,
-			final double minAxis[],
-			final double maxAxis[] ) {
-		// assert (minCenterDistanceFactor > 0.001);
-		assert (minCenterDistanceFactor < 0.75);
+			final double[] minAxis,
+			final double[] maxAxis ) {
+		assert minCenterDistanceFactor < 0.75;
 
 		final int dims = coordSystem.getDimension();
 
@@ -391,8 +388,8 @@ public class GeometryDataSetGenerator
 	}
 
 	private SimpleFeature createNewFeature(
-			final double minAxis[],
-			final double maxAxis[] ) {
+			final double[] minAxis,
+			final double[] maxAxis ) {
 
 		final int dims = coordSystem.getDimension();
 
@@ -461,7 +458,7 @@ public class GeometryDataSetGenerator
 
 	private SimpleFeature createFeatureWithGeometry(
 			final Geometry geometry ) {
-		final Object values[] = new Object[builder.getFeatureType().getAttributeCount()];
+		final Object[] values = new Object[builder.getFeatureType().getAttributeCount()];
 		for (int i = 0; i < values.length; i++) {
 			final AttributeDescriptor desc = builder.getFeatureType().getDescriptor(
 					i);
@@ -482,7 +479,7 @@ public class GeometryDataSetGenerator
 	}
 
 	// public static void main(
-	// final String args[] )
+	// final String[] args )
 	// throws Exception {
 	// final Options allOptions = new Options();
 	// DataStoreCommandLineOptions.applyOptions(allOptions);
@@ -600,11 +597,13 @@ public class GeometryDataSetGenerator
 
 		private static final CoordinateCircleDistanceFn DISTANCE_FN = new CoordinateCircleDistanceFn();
 
+		private CurvedDensityDataGeneratorTool() {}
+
 		public static final List<Point> generatePoints(
 				final LineString line,
 				final double distanceFactor,
 				final int points ) {
-			final List<Point> results = new ArrayList<Point>();
+			final List<Point> results = new ArrayList<>();
 			Coordinate lastCoor = null;
 			double distanceTotal = 0.0;
 			final double[] distancesBetweenCoords = new double[line.getCoordinates().length - 1];
@@ -641,7 +640,7 @@ public class GeometryDataSetGenerator
 				final Vector2D coordinateTwo,
 				final double distanceFactor,
 				final int points ) {
-			final List<Point> results = new ArrayList<Point>();
+			final List<Point> results = new ArrayList<>();
 			final Random rand = new Random();
 			final Vector2D originVec = coordinateTwo.subtract(coordinateOne);
 			for (int i = 0; i < points; i++) {

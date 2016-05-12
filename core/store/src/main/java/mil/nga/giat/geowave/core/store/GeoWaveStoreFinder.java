@@ -11,9 +11,6 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -21,6 +18,9 @@ import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GeoWaveStoreFinder
 {
@@ -124,8 +124,9 @@ public class GeoWaveStoreFinder
 			final Map<String, String> configOptions ) {
 		Map<String, StoreFactoryFamilySpi> factories = getRegisteredStoreFactoryFamilies();
 		final Object storeHint = configOptions.get(STORE_HINT_KEY);
+		Map<String, StoreFactoryFamilySpi> internalStoreFamilies = getRegisteredStoreFactoryFamilies();
 		if (storeHint != null) {
-			final StoreFactoryFamilySpi factory = factories.get(storeHint.toString());
+			final StoreFactoryFamilySpi factory = internalStoreFamilies.get(storeHint.toString());
 			if (factory != null) {
 				final List<String> missingOptions = getMissingRequiredOptions(
 						factory,
@@ -151,7 +152,7 @@ public class GeoWaveStoreFinder
 		// the arguments; if there are multiple factories that match and have
 		// the same number of options, arbitrarily the last one will be chosen
 		// and a warning message will be logged
-		for (final Entry<String, StoreFactoryFamilySpi> entry : factories.entrySet()) {
+		for (final Entry<String, StoreFactoryFamilySpi> entry : internalStoreFamilies.entrySet()) {
 			final StoreFactoryFamilySpi factory = entry.getValue();
 			final List<String> missingOptions = getMissingRequiredOptions(
 					factory,

@@ -287,9 +287,9 @@ public class AggregationIterator extends
 		// after that
 		while (rangeIt.hasNext()) {
 			final Range internalRange = rangeIt.next();
-			if (internalRange.getEndKey().compareTo(
+			if (internalRange.getEndKey() == null || internalRange.getEndKey().compareTo(
 					seekRange.getEndKey()) > 0) {
-				if (internalRange.getStartKey().compareTo(
+				if (internalRange.getStartKey() != null && internalRange.getStartKey().compareTo(
 						seekRange.getEndKey()) > 0) {
 					return;
 				}
@@ -314,9 +314,9 @@ public class AggregationIterator extends
 		// and clip its start to this range start key, and start on that
 		while (rangeIt.hasNext()) {
 			final Range internalRange = rangeIt.next();
-			if (internalRange.getEndKey().compareTo(
+			if (internalRange.getEndKey() == null || internalRange.getEndKey().compareTo(
 					seekRange.getStartKey()) > 0) {
-				if (internalRange.getStartKey().compareTo(
+				if (internalRange.getStartKey() != null && internalRange.getStartKey().compareTo(
 						seekRange.getStartKey()) > 0) {
 					internalRanges.add(internalRange);
 					return;
