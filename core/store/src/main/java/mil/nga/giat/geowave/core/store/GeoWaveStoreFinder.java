@@ -122,7 +122,6 @@ public class GeoWaveStoreFinder
 
 	public static StoreFactoryFamilySpi findStoreFamily(
 			final Map<String, String> configOptions ) {
-		Map<String, StoreFactoryFamilySpi> factories = getRegisteredStoreFactoryFamilies();
 		final Object storeHint = configOptions.get(STORE_HINT_KEY);
 		Map<String, StoreFactoryFamilySpi> internalStoreFamilies = getRegisteredStoreFactoryFamilies();
 		if (storeHint != null) {
