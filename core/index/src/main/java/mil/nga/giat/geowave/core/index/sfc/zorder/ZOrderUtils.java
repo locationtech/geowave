@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.core.index.sfc.zorder;
 
+import java.util.Arrays;
 import java.util.BitSet;
 
 import mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -116,9 +117,14 @@ public class ZOrderUtils
 					1,
 					bitsPerDimension);
 		}
+		int usedBits = bitsPerDimension * numDimensions;
+		int usedBytes = (int)Math.ceil(usedBits / 8.0);
+		int bitsetLength = (usedBytes * 8);
+		int bitOffset = bitsetLength - usedBits;
+		//round up to a bitset divisible by 8
 		final BitSet combinedBitSet = new BitSet(
-				bitsPerDimension * numDimensions);
-		int j = 0;
+				bitsetLength);
+		int j = bitOffset;
 		for (int i = 0; i < bitsPerDimension; i++) {
 			for (int d = 0; d < numDimensions; d++) {
 				combinedBitSet.set(
@@ -127,7 +133,11 @@ public class ZOrderUtils
 			}
 		}
 		final byte[] littleEndianBytes = combinedBitSet.toByteArray();
-		return swapEndianFormat(littleEndianBytes);
+		byte[] retVal = swapEndianFormat(littleEndianBytes);
+		if (retVal.length < usedBytes){
+			return Arrays.copyOf(retVal, usedBytes);
+		}
+		return retVal;
 	}
 
 	public static byte[] swapEndianFormat(
