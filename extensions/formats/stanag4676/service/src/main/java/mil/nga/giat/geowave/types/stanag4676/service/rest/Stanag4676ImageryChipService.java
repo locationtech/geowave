@@ -4,8 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,13 +30,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.io.Files;
-import com.xuggle.mediatool.IMediaWriter;
-import com.xuggle.mediatool.ToolFactory;
-import com.xuggle.xuggler.ICodec;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -48,6 +43,13 @@ import mil.nga.giat.geowave.format.stanag4676.image.ImageChip;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipUtils;
 import mil.nga.giat.geowave.service.ServiceUtils;
+
+import org.apache.log4j.Logger;
+
+import com.google.common.io.Files;
+import com.xuggle.mediatool.IMediaWriter;
+import com.xuggle.mediatool.ToolFactory;
+import com.xuggle.xuggler.ICodec;
 
 @Path("stanag4676")
 public class Stanag4676ImageryChipService
@@ -216,7 +218,7 @@ public class Stanag4676ImageryChipService
 					"Unable to read data to compose video file",
 					e1);
 			return Response.serverError().entity(
-					"Video generation failed for " + videoNameStr + "'" + "\nException: " + e1.getLocalizedMessage() + "\n stack trace: " + e1.getStackTrace()).build();
+					"Video generation failed for " + videoNameStr + "'" + "\nException: " + e1.getLocalizedMessage() + "\n stack trace: " + Arrays.toString(e1.getStackTrace())).build();
 		}
 
 		// ----------------------------------------------------
@@ -238,21 +240,29 @@ public class Stanag4676ImageryChipService
 						height,
 						speed);
 				LOGGER.info("Got a response body (path): " + responseBody.getAbsolutePath());
-				FileInputStream fis = new FileInputStream(
-						responseBody);
+				try (FileInputStream fis = new FileInputStream(
+						responseBody)) {
 
-				// try to delete the file immediately after it is returned
+					// try to delete the file immediately after it is returned
 
-				if (!responseBody.delete()) {
-					LOGGER.warn("Cannot delete response body");
+					if (!responseBody.delete()) {
+						LOGGER.warn("Cannot delete response body");
+					}
+
+					if (!responseBody.getParentFile().delete()) {
+						LOGGER.warn("Cannot delete response body's parent file");
+					}
+					return Response.ok().entity(
+							fis).type(
+							"video/webm").build();
 				}
-
-				if (!responseBody.getParentFile().delete()) {
-					LOGGER.warn("Cannot delete response body's parent file");
+				catch (final FileNotFoundException fnfe) {
+					LOGGER.error(
+							"Unable to find video file",
+							fnfe);
+					return Response.serverError().entity(
+							"Video generation failed for " + videoNameStr).build();
 				}
-				return Response.ok().entity(
-						fis).type(
-						"video/webm").build();
 			}
 			catch (final IOException e) {
 				LOGGER.error(
