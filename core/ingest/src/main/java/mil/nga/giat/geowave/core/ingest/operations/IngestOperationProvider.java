@@ -9,7 +9,7 @@ public class IngestOperationProvider implements
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
 		IngestSection.class,
 		KafkaToGeowaveCommand.class,
-		ListFormatCommand.class,
+		ListPluginsCommand.class,
 		LocalToGeowaveCommand.class,
 		LocalToHdfsCommand.class,
 		LocalToKafkaCommand.class,
