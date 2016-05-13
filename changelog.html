@@ -46,6 +46,8 @@
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
+<li>Issue in AccumuloMRUtils creates ranges where start key is greater than end key. <a href="https://github.com/ngageoint/geowave/issues/773">#773</a></li>
+<li>Fix bug when infinite ranges are applied to aggregations <a href="https://github.com/ngageoint/geowave/issues/765">#765</a></li>
 <li>Tests are failing in Eclipse due to initialization error <a href="https://github.com/ngageoint/geowave/issues/751">#751</a></li>
 <li>Disable commandline completion <a href="https://github.com/ngageoint/geowave/issues/697">#697</a></li>
 <li>IndexWriter needs to be closed, flush isn't sufficient unless close is eventually called <a href="https://github.com/ngageoint/geowave/issues/696">#696</a></li>
@@ -63,6 +65,8 @@
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>Issues rescaling images using geotools 14+ <a href="https://github.com/ngageoint/geowave/issues/760">#760</a></li>
+<li>Fix Stanag 4676 service issues <a href="https://github.com/ngageoint/geowave/issues/758">#758</a></li>
 <li>Properly handle line endings at repo level via .gitattributes <a href="https://github.com/ngageoint/geowave/issues/755">#755</a></li>
 <li>Remove dead code and reconnect stats option switch for Accumulo <a href="https://github.com/ngageoint/geowave/issues/740">#740</a></li>
 <li>Rework AttributeSubsettingIterator <a href="https://github.com/ngageoint/geowave/issues/733">#733</a></li>
@@ -100,6 +104,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>0.9.1 diff <a href="https://github.com/ngageoint/geowave/pull/775">#775</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Fix start&gt;end range issue in AccumuloMRUtils: <a href="https://github.com/ngageoint/geowave/pull/774">#774</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>made zorder behave more like hilbert for bit precisions not divisible… <a href="https://github.com/ngageoint/geowave/pull/772">#772</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fixed KDE command to match 0.9.1 CLI format <a href="https://github.com/ngageoint/geowave/pull/771">#771</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
