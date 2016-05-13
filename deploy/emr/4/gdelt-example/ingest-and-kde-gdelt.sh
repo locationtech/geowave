@@ -24,5 +24,7 @@ geowave config addstore -t accumulo gdelt-accumulo --gwNamespace geowave.gdelt -
 geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin --numPartitions $NUM_PARTITIONS
 geowave ingest localtogw $STAGING_DIR/gdelt gdelt-accumulo gdelt-spatial -f gdelt --gdelt.cql "BBOX(geometry,${WEST},${SOUTH},${EAST},${NORTH})"
 
+geowave config addstore -t accumulo gdelt-accumulo-out --gwNamespace geowave.kde_gdelt --zookeeper $HOSTNAME:2181 --instance $INSTANCE --user geowave --password geowave
+
 # run a kde to produce a heatmap
-hadoop jar ${GEOWAVE_TOOLS_HOME}/geowave-tools.jar -kde -featureType gdeltevent -minLevel 5 -maxLevel 26 -minSplits $NUM_PARTITIONS -maxSplits $NUM_PARTITIONS -coverageName gdeltevent_kde -hdfsHostPort ${HOSTNAME}:${HDFS_PORT} -jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} -tileSize 1 -output_datastore accumulo -output_gwNamespace geowave.kde_gdelt -output_connectionParams "zookeeper=${HOSTNAME}:2181;instance=${INSTANCE};user=geowave;password=geowave" -input_datastore accumulo -input_gwNamespace geowave.gdelt -input_connectionParams "zookeeper=${HOSTNAME}:2181;instance=${INSTANCE};user=geowave;password=geowave"
+hadoop jar ${GEOWAVE_TOOLS_HOME}/geowave-tools.jar analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde --hdfsHostPort ${HOSTNAME}:${HDFS_PORT} --jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} --tileSize 1 gdelt-accumulo gdelt-accumulo-out

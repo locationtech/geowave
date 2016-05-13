@@ -72,8 +72,12 @@ public class ServicesTestEnvironment implements
 		synchronized (GeoWaveITRunner.MUTEX) {
 			if (jettyServer == null) {
 				try {
+					// Prevent "Unauthorized class found" error
+					System.setProperty("GEOSERVER_XSTREAM_WHITELIST", "org.geoserver.wfs.**;org.geoserver.wms.**");
+					
 					// delete old workspace configuration if it's still there
 					jettyServer = new Server();
+					
 					final SocketConnector conn = new SocketConnector();
 					conn.setPort(JETTY_PORT);
 					conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
@@ -85,7 +89,7 @@ public class ServicesTestEnvironment implements
 
 					final WebAppContext gsWebapp = new WebAppContext();
 					gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
-					gsWebapp.setWar(GEOSERVER_WAR_DIR);
+					gsWebapp.setWar(GEOSERVER_WAR_DIR);					
 
 					final WebAppClassLoader classLoader = AccessController.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
 						@Override
@@ -144,7 +148,7 @@ public class ServicesTestEnvironment implements
 								new FileInputStream(
 										jettyConfigFile))).configure(jettyServer);
 					}
-
+					
 					jettyServer.start();
 					while (!jettyServer.isRunning() && !jettyServer.isStarted()) {
 						Thread.sleep(1000);
