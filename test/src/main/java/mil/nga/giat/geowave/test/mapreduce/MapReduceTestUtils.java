@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
@@ -43,6 +42,8 @@ public class MapReduceTestUtils
 		// ingest framework's main method and pre-defined commandline arguments
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 
+		final Thread progressLogger = startProgressLogger();
+
 		// Indexes
 		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
 				",");
@@ -63,7 +64,7 @@ public class MapReduceTestUtils
 		mrGw.setInputStoreOptions(dataStore);
 
 		mrGw.setPluginFormats(ingestFormatOptions);
-		MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
+		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 		mrGw.setParameters(
 				ingestFilePath,
 				env.getHdfs(),
@@ -74,6 +75,35 @@ public class MapReduceTestUtils
 				env.getJobtracker());
 
 		mrGw.execute(new ManualOperationParams());
+
+		progressLogger.interrupt();
+	}
+
+	private static Thread startProgressLogger() {
+		final Runnable r = new Runnable() {
+			@Override
+			public void run() {
+				final long start = System.currentTimeMillis();
+				try {
+					while (true) {
+						final long now = System.currentTimeMillis();
+						LOGGER.warn("Ingest running, progress: " + ((now - start) / 1000) + "s.");
+						Thread.sleep(60000);
+					}
+				}
+				catch (final InterruptedException e) {
+					// Do nothing; thread is designed to be interrupted when
+					// ingest completes
+				}
+			}
+		};
+
+		final Thread t = new Thread(
+				r);
+
+		t.start();
+
+		return t;
 	}
 
 	public static void filterConfiguration(
@@ -104,7 +134,7 @@ public class MapReduceTestUtils
 
 	public static Configuration getConfiguration() {
 		final Configuration conf = new Configuration();
-		MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
+		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 		conf.set(
 				"fs.defaultFS",
 				env.getHdfs());
