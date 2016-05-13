@@ -910,7 +910,7 @@
 		<profile>
 			<id>hortonworks</id>
 			<properties>
-			<!--TODO: upgrade to a version of hdp that supports hbase 1.x -->
+				<!--TODO: upgrade to a version of hdp that supports hbase 1.x -->
 				<hbase.version>1.1.1.2.3.0.0-2557</hbase.version>
 				<hadoop.version>2.6.0.2.2.0.0-2041</hadoop.version>
 			</properties>
