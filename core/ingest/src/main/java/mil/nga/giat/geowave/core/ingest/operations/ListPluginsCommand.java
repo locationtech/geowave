@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.beust.jcommander.Parameters;
-
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
@@ -18,6 +16,8 @@ import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
+
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "listplugins", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "List supported data store types, index types, and ingest formats")

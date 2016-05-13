@@ -1,0 +1,16 @@
+How we use 4676 in Geowave
+1. CQL FILTER on time. 
+	For example,
+	   CQL_FILTER=(StartTime>=yyyy-MM-ddTHH:mm:ss.SSSZ AND StartTime<=yyyy-MM-ddTHH:mm:ss.SSSZ)
+2. GetFeatureInfo with feature attributes to include the image and video chips.
+	See example content.ftl files included with this file. Content.ftl files should be installed in 
+		$GEOSERVER_HOME/data_dir/workspaces/<workspace_name>/<store_name>/<layer_name>
+	When preview layers in geoserver via the OpenLayers option, if you click on an item, you should see 
+	the clicked feature's details listed and not in a table. With the track_points and motion_points, an
+	image should be displayed. With the tracks, a looping video of the tracked item should be shown.
+3. Styles in Geoserver that use decimation.
+	See example style files included with this file.
+	Motion Points should be displayed (and decimated based on zoom level) using the icons that are in the icons subfolder.
+	Tracks should be colored based on speed.
+	Track points should be colored based on speed (and decimated based on zoom level).
+4. KDE generation - density maps.

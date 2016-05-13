@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.core.store.memory;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +29,12 @@ public class MemoryAdapterStore implements
 	private Map<ByteArrayId, DataAdapter<?>> adapterMap;
 
 	public MemoryAdapterStore() {
-		adapterMap = new HashMap<ByteArrayId, DataAdapter<?>>();
+		adapterMap = Collections.synchronizedMap(new HashMap<ByteArrayId, DataAdapter<?>>());
 	}
 
 	public MemoryAdapterStore(
 			final DataAdapter<?>[] adapters ) {
-		adapterMap = new HashMap<ByteArrayId, DataAdapter<?>>();
+		adapterMap = Collections.synchronizedMap(new HashMap<ByteArrayId, DataAdapter<?>>());
 		for (final DataAdapter<?> adapter : adapters) {
 			adapterMap.put(
 					adapter.getAdapterId(),
@@ -85,7 +86,7 @@ public class MemoryAdapterStore implements
 			throws IOException,
 			ClassNotFoundException {
 		final int count = in.readInt();
-		adapterMap = new HashMap<ByteArrayId, DataAdapter<?>>();
+		adapterMap = Collections.synchronizedMap(new HashMap<ByteArrayId, DataAdapter<?>>());
 		for (int i = 0; i < count; i++) {
 			final ByteArrayId id = (ByteArrayId) in.readObject();
 			final byte[] data = (byte[]) in.readObject();

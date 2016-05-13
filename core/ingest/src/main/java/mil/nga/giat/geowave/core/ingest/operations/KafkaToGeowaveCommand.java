@@ -52,6 +52,8 @@ public class KafkaToGeowaveCommand implements
 
 	private List<IndexPluginOptions> inputIndexOptions = null;
 
+	protected IngestFromKafkaDriver driver = null;
+
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
@@ -111,7 +113,7 @@ public class KafkaToGeowaveCommand implements
 		Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
 
 		// Driver
-		IngestFromKafkaDriver driver = new IngestFromKafkaDriver(
+		driver = new IngestFromKafkaDriver(
 				inputStoreOptions,
 				inputIndexOptions,
 				ingestPlugins,
@@ -123,6 +125,10 @@ public class KafkaToGeowaveCommand implements
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}
+	}
+
+	public IngestFromKafkaDriver getDriver() {
+		return driver;
 	}
 
 	public List<String> getParameters() {

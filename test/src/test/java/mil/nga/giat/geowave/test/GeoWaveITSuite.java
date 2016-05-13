@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
+import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
 import mil.nga.giat.geowave.test.mapreduce.BulkIngestInputGenerationIT;
 import mil.nga.giat.geowave.test.mapreduce.DBScanIT;
@@ -24,6 +25,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
 	GeoWaveBasicIT.class,
+	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
 	GeoWaveRasterIT.class,
 	BulkIngestInputGenerationIT.class,
