@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<StyledLayerDescriptor version="1.0.0" 
+ xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" 
+ xmlns="http://www.opengis.net/sld" 
+ xmlns:ogc="http://www.opengis.net/ogc" 
+ xmlns:xlink="http://www.w3.org/1999/xlink" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- a Named Layer is the basic building block of an SLD document -->
+  <NamedLayer>
+    <Name>DecimatePointsMotionIcons</Name>
+    <UserStyle>
+      <Name>DecimatePointsMotionIcons</Name>
+	  <Title>Motion Icons</Title>
+	  <IsDefault>1</IsDefault>
+      <FeatureTypeStyle>
+	    <Name>Motion Icons Style</Name>
+		<Transformation>
+		  <ogc:Function name="nga:Decimation">
+		    <ogc:Function name="parameter">
+			  <ogc:Literal>data</ogc:Literal>
+			</ogc:Function>
+			<ogc:Function name="parameter">
+			  <ogc:Literal>outputBBOX</ogc:Literal>
+			  <ogc:Function name="env">
+			    <ogc:Literal>wms_bbox</ogc:Literal>
+			  </ogc:Function>
+			</ogc:Function>
+			<ogc:Function name="parameter">
+			  <ogc:Literal>outputWidth</ogc:Literal>
+			  <ogc:Function name="env">
+			    <ogc:Literal>wms_width</ogc:Literal>
+			  </ogc:Function>
+			</ogc:Function>
+			<ogc:Function name="parameter">
+			  <ogc:Literal>outputHeight</ogc:Literal>
+			  <ogc:Function name="env">
+			    <ogc:Literal>wms_height</ogc:Literal>
+			  </ogc:Function>
+			</ogc:Function>
+			<ogc:Function name="parameter">
+			  <ogc:Literal>pixelSize</ogc:Literal>
+		      <ogc:Literal>4</ogc:Literal>
+			</ogc:Function>
+		  </ogc:Function>
+		</Transformation>
+        <Rule>
+          <Title>Start</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>START</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/GreenFlag.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>
+		<Rule>
+          <Title>Stop</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>STOP</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/Stop.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+		<Rule>
+          <Title>Left Turn</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>LEFT TURN</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/Left.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+		<Rule>
+          <Title>Left U-Turn</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>LEFT U TURN</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/RotCCLeft.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+		<Rule>
+          <Title>Right U-Turn</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>RIGHT U TURN</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/RotCCRight.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+		<Rule>
+          <Title>Right Turn</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>RIGHT TURN</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/Right.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+		<Rule>
+          <Title>Acceleration</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>ACCELERATION</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/Up.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+		<Rule>
+          <Title>Deceleration</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>DECELERATION</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/Down.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+		<Rule>
+          <Title>Transiting</Title>
+		  <ogc:Filter>
+		    <ogc:PropertyIsEqualTo>
+			  <ogc:PropertyName>MotionEvent</ogc:PropertyName>
+			  <ogc:Literal>TRANSITING</ogc:Literal>
+			</ogc:PropertyIsEqualTo>
+		  </ogc:Filter>
+            <PointSymbolizer>
+              <Graphic>
+			    <ExternalGraphic>
+				  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://c1-app-01:8080/icons/YellowCircle.png"/>
+				  <Format>image/png</Format>
+				</ExternalGraphic>
+				<Size>15</Size>
+            </Graphic>
+          </PointSymbolizer>
+        </Rule>	
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+

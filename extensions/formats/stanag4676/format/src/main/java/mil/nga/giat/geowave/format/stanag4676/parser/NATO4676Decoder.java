@@ -52,6 +52,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
+import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,6 +110,10 @@ public class NATO4676Decoder implements
 							xmlns);
 				}
 			}
+		}
+		catch (final JDOMParseException jdomPe) {
+			LOGGER.info("jdomParseException: " + jdomPe.getLocalizedMessage());
+			return null;
 		}
 		catch (final IOException ioe) {
 			return null;

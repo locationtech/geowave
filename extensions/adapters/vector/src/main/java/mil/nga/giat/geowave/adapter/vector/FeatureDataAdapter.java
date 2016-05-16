@@ -707,7 +707,7 @@ public class FeatureDataAdapter extends
 			final AttributeDescriptor ad = reprojectedType.getDescriptor(i);
 			final ByteArrayId currFieldId = new ByteArrayId(
 					ad.getLocalName());
-			fieldToPositionMap.put(
+			fieldToPositionMap.forcePut(
 					currFieldId,
 					i);
 		}

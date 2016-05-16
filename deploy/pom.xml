@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.1-SNAPSHOT</version>
+		<version>0.9.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-deploy</artifactId>
 	<name>GeoWave Deployment Configurations</name>
@@ -391,43 +391,40 @@
 			</build>
 		</profile>
 		<profile>
-			<id>windows-amd64-vc11-debug</id>
-			<properties>
-				<cmake.generator>Visual Studio 11 Win64</cmake.generator>
-				<cmake.config>Debug|x64</cmake.config>
-				<CMAKE_BUILD_TYPE>Debug</CMAKE_BUILD_TYPE>
-				<build.architecture>amd64</build.architecture>
-			</properties>
-		</profile>
-		<profile>
-			<id>windows-amd64-vc11-release</id>
-			<properties>
-				<cmake.generator>Visual Studio 11 Win64</cmake.generator>
-				<cmake.config>Release|x64</cmake.config>
-				<CMAKE_BUILD_TYPE>Release</CMAKE_BUILD_TYPE>
-				<build.architecture>amd64</build.architecture>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux-amd64-gcc-debug</id>
-			<properties>
-				<cmake.generator>Unix Makefiles</cmake.generator>
-				<CMAKE_BUILD_TYPE>Debug</CMAKE_BUILD_TYPE>
-				<build.architecture>amd64</build.architecture>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux-amd64-gcc-release</id>
-			<properties>
-				<cmake.generator>Unix Makefiles</cmake.generator>
-				<CMAKE_BUILD_TYPE>Release</CMAKE_BUILD_TYPE>
-				<build.architecture>amd64</build.architecture>
-			</properties>
-		</profile>
-		<profile>
-			<id>generate-jace-proxies</id>
+			<id>generate-geowave-jace</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>2.2</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<filters>
+										<filter>
+											<artifact>*:*</artifact>
+											<excludes>
+												<exclude>META-INF/*.SF</exclude>
+												<exclude>META-INF/*.DSA</exclude>
+												<exclude>META-INF/*.RSA</exclude>
+											</excludes>
+										</filter>
+									</filters>
+									<transformers>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+									</transformers>
+									<createDependencyReducedPom>false</createDependencyReducedPom>
+									<minimizeJar>false</minimizeJar>
+									<finalName>${project.build.finalName}-jace</finalName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<artifactId>maven-dependency-plugin</artifactId>
 						<version>2.4</version>
@@ -470,37 +467,6 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>2.2</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<filters>
-										<filter>
-											<artifact>*:*</artifact>
-											<excludes>
-												<exclude>META-INF/*.SF</exclude>
-												<exclude>META-INF/*.DSA</exclude>
-												<exclude>META-INF/*.RSA</exclude>
-											</excludes>
-										</filter>
-									</filters>
-									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-									</transformers>
-									<createDependencyReducedPom>false</createDependencyReducedPom>
-									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-jace</finalName>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
 						<groupId>com.googlecode.jace</groupId>
 						<artifactId>jace-maven-plugin</artifactId>
 						<version>1.3.0</version>
@@ -529,45 +495,6 @@
 									<exportSymbols>true</exportSymbols>
 
 									<minimizeDependencies>true</minimizeDependencies>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.googlecode.cmake-maven-project</groupId>
-						<artifactId>cmake-maven-plugin</artifactId>
-						<version>2.8.11-b4</version>
-						<executions>
-							<execution>
-								<id>cmake-generate</id>
-								<phase>package</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-								<configuration>
-									<sourcePath>${project.build.directory}/dependency/jace</sourcePath>
-									<targetPath>${project.build.directory}/dependency/jace</targetPath>
-									<generator>${cmake.generator}</generator>
-									<environmentVariables>
-										<JACE_HOME>${project.build.directory}/dependency/jace</JACE_HOME>
-										<BUILD_ARCHITECTURE>${build.architecture}</BUILD_ARCHITECTURE>
-									</environmentVariables>
-									<options>
-										<option>-DCMAKE_BUILD_TYPE:string=${CMAKE_BUILD_TYPE}</option>
-										<option>-DBUILD_SHARED_LIBS:bool=${BUILD_SHARED_LIBS}</option>
-										<option>-DBoost_NO_BOOST_CMAKE:bool=${Boost_NO_BOOST_CMAKE}</option>
-									</options>
-								</configuration>
-							</execution>
-							<execution>
-								<id>cmake-compile</id>
-								<phase>package</phase>
-								<goals>
-									<goal>compile</goal>
-								</goals>
-								<configuration>
-									<projectDirectory>${project.build.directory}/dependency/jace</projectDirectory>
-									<config>${cmake.config}</config>
 								</configuration>
 							</execution>
 						</executions>
@@ -637,30 +564,6 @@
 												<goals>
 													<goal>
 														generate-cpp-proxies
-													</goal>
-												</goals>
-											</pluginExecutionFilter>
-											<action>
-												<ignore />
-											</action>
-										</pluginExecution>
-										<pluginExecution>
-											<pluginExecutionFilter>
-												<groupId>
-													com.googlecode.cmake-maven-project
-												</groupId>
-												<artifactId>
-													cmake-maven-plugin
-												</artifactId>
-												<versionRange>
-													[2.8.11-b4,)
-												</versionRange>
-												<goals>
-													<goal>
-														generate
-													</goal>
-													<goal>
-														compile
 													</goal>
 												</goals>
 											</pluginExecutionFilter>
