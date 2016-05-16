@@ -79,7 +79,7 @@ public class GeoWaveGTRasterFormat extends
 				"https://github.com/ngageoint/geowave");
 		info.put(
 				"version",
-				"0.9.1");
+				"0.9.2");
 		mInfo = info;
 
 		// reading parameters
