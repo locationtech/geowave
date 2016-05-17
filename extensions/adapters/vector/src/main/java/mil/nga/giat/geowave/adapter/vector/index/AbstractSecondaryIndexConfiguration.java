@@ -55,11 +55,13 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 							Boolean.TRUE);
 				}
 				else {
-					LOGGER.error("Expected type " + clazz.getName() + " for attribute '" + attribute + "' but found " + attributeType.getName());
+					LOGGER.error("Expected type " + clazz.getName() + " for attribute '" + attribute + "' but found "
+							+ attributeType.getName());
 				}
 			}
 			else {
-				LOGGER.error("SimpleFeatureType does not contain an AttributeDescriptor that matches '" + attribute + "'");
+				LOGGER.error("SimpleFeatureType does not contain an AttributeDescriptor that matches '" + attribute
+						+ "'");
 			}
 		}
 	}

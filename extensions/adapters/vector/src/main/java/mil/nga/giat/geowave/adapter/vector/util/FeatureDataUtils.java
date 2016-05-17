@@ -54,15 +54,16 @@ public class FeatureDataUtils
 					fileUrls[i] = new URL(
 							fileObjs[i].toString());
 				}
-				final ClassLoader urlCL = java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
-					@Override
-					public URLClassLoader run() {
-						final URLClassLoader ucl = new URLClassLoader(
-								fileUrls,
-								cl);
-						return ucl;
-					}
-				});
+				final ClassLoader urlCL = java.security.AccessController
+						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
+							@Override
+							public URLClassLoader run() {
+								final URLClassLoader ucl = new URLClassLoader(
+										fileUrls,
+										cl);
+								return ucl;
+							}
+						});
 				GeoTools.addClassLoader(urlCL);
 				SPIServiceRegistry.registerClassLoader(urlCL);
 
@@ -85,8 +86,9 @@ public class FeatureDataUtils
 
 		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(crs)) {
 			MathTransform featureTransform = null;
-			if ((persistedType.getCoordinateReferenceSystem() != null) && persistedType.getCoordinateReferenceSystem().equals(
-					crs) && (transform != null)) {
+			if ((persistedType.getCoordinateReferenceSystem() != null)
+					&& persistedType.getCoordinateReferenceSystem().equals(
+							crs) && (transform != null)) {
 				// we can use the transform we have already calculated for this
 				// feature
 				featureTransform = transform;
@@ -101,9 +103,10 @@ public class FeatureDataUtils
 							true);
 				}
 				catch (final FactoryException e) {
-					LOGGER.warn(
-							"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
-							e);
+					LOGGER
+							.warn(
+									"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
+									e);
 				}
 			}
 			if (featureTransform != null) {
@@ -120,9 +123,10 @@ public class FeatureDataUtils
 							featureTransform));
 				}
 				catch (MismatchedDimensionException | TransformException e) {
-					LOGGER.warn(
-							"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
-							e);
+					LOGGER
+							.warn(
+									"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
+									e);
 				}
 			}
 		}

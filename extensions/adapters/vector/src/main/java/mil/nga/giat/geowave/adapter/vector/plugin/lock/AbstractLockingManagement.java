@@ -41,7 +41,8 @@ public abstract class AbstractLockingManagement implements
 			}
 			else {
 				try {
-					Class<? extends AbstractLockingManagement> lockManagerClass = (Class<? extends AbstractLockingManagement>) Class.forName(val);
+					Class<? extends AbstractLockingManagement> lockManagerClass = (Class<? extends AbstractLockingManagement>) Class
+							.forName(val);
 					if (!AbstractLockingManagement.class.isAssignableFrom(lockManagerClass)) {
 						throw new IllegalArgumentException(
 								"Invalid LockManagement class " + val);
@@ -80,7 +81,8 @@ public abstract class AbstractLockingManagement implements
 			String featureID,
 			Set<String> authorizations,
 			long expiryInMinutes ) {
-		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
+		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction
+				.getState(this);
 		if (lock == null) {
 			lock = new AuthorizedLock(
 					this,
@@ -100,7 +102,8 @@ public abstract class AbstractLockingManagement implements
 			String featureID,
 			Set<String> authorizations,
 			long expiryInMinutes ) {
-		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
+		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction
+				.getState(this);
 		if (lock == null) {
 			lock = new AuthorizedLock(
 					this,
@@ -151,7 +154,8 @@ public abstract class AbstractLockingManagement implements
 			String authID,
 			Transaction transaction )
 			throws IOException {
-		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
+		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction
+				.getState(this);
 		if (lock == null) lock = new AuthorizedLock(
 				this,
 				authID,
@@ -165,7 +169,8 @@ public abstract class AbstractLockingManagement implements
 			String authID,
 			Transaction transaction )
 			throws IOException {
-		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
+		AuthorizedLock lock = transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction
+				.getState(this);
 		if (lock == null) lock = new AuthorizedLock(
 				this,
 				authID,

@@ -28,7 +28,8 @@ public class IntermediateKeyValueMapper extends
 			final org.apache.hadoop.mapreduce.Mapper.Context context )
 			throws IOException,
 			InterruptedException {
-		try (CloseableIterator<KeyValueData<WritableComparable<?>, Writable>> data = ingestWithReducer.toIntermediateMapReduceData(key.datum())) {
+		try (CloseableIterator<KeyValueData<WritableComparable<?>, Writable>> data = ingestWithReducer
+				.toIntermediateMapReduceData(key.datum())) {
 			while (data.hasNext()) {
 				final KeyValueData<WritableComparable<?>, Writable> d = data.next();
 				context.write(

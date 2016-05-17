@@ -68,7 +68,8 @@ public class TextRangeFilter implements
 	public byte[] toBinary() {
 		final byte[] startBytes = StringUtils.stringToBinary(start);
 		final byte[] endBytes = StringUtils.stringToBinary(end);
-		final ByteBuffer bb = ByteBuffer.allocate(4 + 4 + 4 + fieldId.getBytes().length + 4 + startBytes.length + endBytes.length);
+		final ByteBuffer bb = ByteBuffer.allocate(4 + 4 + 4 + fieldId.getBytes().length + 4 + startBytes.length
+				+ endBytes.length);
 		bb.putInt(fieldId.getBytes().length);
 		bb.putInt(startBytes.length);
 		bb.putInt(endBytes.length);

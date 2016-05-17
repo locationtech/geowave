@@ -23,7 +23,8 @@ public class PropertyFilterVisitorTest
 	@Test
 	public void testNumbersTypes()
 			throws CQLException {
-		Filter filter = CQL.toFilter("a < 9 and c == 12 and e >= 11 and f <= 12 and g > 13 and h between 4 and 6 and k > 4 and k < 6 and l >= 4 and l <= 6");
+		Filter filter = CQL
+				.toFilter("a < 9 and c == 12 and e >= 11 and f <= 12 and g > 13 and h between 4 and 6 and k > 4 and k < 6 and l >= 4 and l <= 6");
 		Query query = new Query(
 				"type",
 				filter);
@@ -33,8 +34,9 @@ public class PropertyFilterVisitorTest
 		PropertyConstraintSet constraints = (PropertyConstraintSet) query.getFilter().accept(
 				visitor,
 				null);
-		NumberRangeFilter nf = (NumberRangeFilter) ((NumericLessThanConstraint) constraints.getConstraintsById(new ByteArrayId(
-				"a"))).getFilter();
+		NumberRangeFilter nf = (NumberRangeFilter) ((NumericLessThanConstraint) constraints
+				.getConstraintsById(new ByteArrayId(
+						"a"))).getFilter();
 		assertTrue(nf.getLowerValue().doubleValue() == Double.MIN_VALUE);
 		assertEquals(
 				9,

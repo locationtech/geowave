@@ -29,7 +29,8 @@ public class HadoopOptions
 	public HadoopOptions(
 			final PropertyManagement runTimeProperties )
 			throws IOException {
-		final boolean setRemoteInvocation = runTimeProperties.hasProperty(MRConfig.HDFS_HOST_PORT) || runTimeProperties.hasProperty(MRConfig.JOBTRACKER_HOST_PORT);
+		final boolean setRemoteInvocation = runTimeProperties.hasProperty(MRConfig.HDFS_HOST_PORT)
+				|| runTimeProperties.hasProperty(MRConfig.JOBTRACKER_HOST_PORT);
 		final String hostport = runTimeProperties.getPropertyAsString(
 				MRConfig.HDFS_HOST_PORT,
 				"localhost:53000");

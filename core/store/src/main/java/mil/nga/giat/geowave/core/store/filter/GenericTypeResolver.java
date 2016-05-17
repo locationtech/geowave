@@ -48,7 +48,8 @@ public abstract class GenericTypeResolver
 	private static final Logger LOGGER = Logger.getLogger(GenericTypeResolver.class);
 
 	/** Cache from Class to TypeVariable Map */
-	private static final Map<Class<?>, Reference<Map<TypeVariable<?>, Type>>> typeVariableCache = Collections.synchronizedMap(new WeakHashMap<Class<?>, Reference<Map<TypeVariable<?>, Type>>>());
+	private static final Map<Class<?>, Reference<Map<TypeVariable<?>, Type>>> typeVariableCache = Collections
+			.synchronizedMap(new WeakHashMap<Class<?>, Reference<Map<TypeVariable<?>, Type>>>());
 
 	/**
 	 * Resolve the single type argument of the given generic interface against
@@ -74,7 +75,8 @@ public abstract class GenericTypeResolver
 		}
 		if (typeArgs.length != 1) {
 			throw new IllegalArgumentException(
-					"Expected 1 type argument on generic interface [" + genericIfc.getName() + "] but found " + typeArgs.length);
+					"Expected 1 type argument on generic interface [" + genericIfc.getName() + "] but found "
+							+ typeArgs.length);
 		}
 		return typeArgs[0];
 	}

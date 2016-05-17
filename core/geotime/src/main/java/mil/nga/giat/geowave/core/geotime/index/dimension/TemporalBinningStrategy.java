@@ -205,9 +205,12 @@ public class TemporalBinningStrategy implements
 			default:
 				return StringUtils.stringToBinary(Integer.toString(value.get(Calendar.YEAR)));
 			case MONTH:
-				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH))));
+				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + TWO_DIGIT_NUMBER
+						.format(value.get(Calendar.MONTH))));
 			case DAY:
-				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH)) + "_" + TWO_DIGIT_NUMBER.format(value.get(Calendar.DAY_OF_MONTH))));
+				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_"
+						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH)) + "_" + TWO_DIGIT_NUMBER.format(value
+						.get(Calendar.DAY_OF_MONTH))));
 		}
 	}
 

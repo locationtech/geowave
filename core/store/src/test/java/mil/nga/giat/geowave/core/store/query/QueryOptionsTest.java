@@ -242,7 +242,9 @@ public class QueryOptionsTest
 								Collections.emptyListIterator());
 					}
 
-				}).next().getAdapterId() != null);
+				})
+				.next()
+				.getAdapterId() != null);
 	}
 
 	@Test

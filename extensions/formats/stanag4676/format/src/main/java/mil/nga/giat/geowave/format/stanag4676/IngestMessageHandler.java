@@ -116,8 +116,9 @@ public class IngestMessageHandler implements
 							if (imageChip != null && imageChip.length() > 0) {
 								final byte[] binary = BaseEncoding.base64().decode(
 										imageChip);
-								final ImageInputStream stream = ImageIO.createImageInputStream(new ByteArrayInputStream(
-										binary));
+								final ImageInputStream stream = ImageIO
+										.createImageInputStream(new ByteArrayInputStream(
+												binary));
 								img = ImageIO.read(stream);
 								if ((width < 0) || (img.getWidth() > width)) {
 									width = img.getWidth();
@@ -170,9 +171,10 @@ public class IngestMessageHandler implements
 					}
 
 					for (final TrackPoint pt : evt.getPoints().values()) {
-						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								pt.getLocation().longitude,
-								pt.getLocation().latitude)));
+						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY
+								.createPoint(new Coordinate(
+										pt.getLocation().longitude,
+										pt.getLocation().latitude)));
 
 						final String trackItemUUID = pt.getUuid();
 						final long timeStamp = pt.getEventTime();
@@ -229,9 +231,10 @@ public class IngestMessageHandler implements
 					}
 
 					for (final MotionEventPoint pt : evt.getMotionPoints().values()) {
-						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								pt.getLocation().longitude,
-								pt.getLocation().latitude)));
+						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY
+								.createPoint(new Coordinate(
+										pt.getLocation().longitude,
+										pt.getLocation().latitude)));
 						final String trackItemUUID = pt.getUuid();
 						final long timeStamp = pt.getEventTime();
 						final long endTimeStamp = pt.getEndTime();

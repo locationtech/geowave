@@ -102,6 +102,7 @@ public class NeighborData<T> implements
 
 	@Override
 	public String toString() {
-		return (id == null ? "" : Hex.encodeHexString(id.getBytes()) + ":") + element.toString() + "(" + this.distance + ")";
+		return (id == null ? "" : Hex.encodeHexString(id.getBytes()) + ":") + element.toString() + "(" + this.distance
+				+ ")";
 	}
 }

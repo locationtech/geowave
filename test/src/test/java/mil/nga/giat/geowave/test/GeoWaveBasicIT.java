@@ -89,15 +89,23 @@ public class GeoWaveBasicIT
 	private static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
 	private static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
 	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";
-	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-polygon-filter.shp";
-	private static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-temporal-filter.shp";
-	private static final String HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-polygon-temporal-filter.shp";
-	private static final String TORNADO_TRACKS_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "tornado_tracks_test_case/";
+	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
+			+ "hail-polygon-filter.shp";
+	private static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
+			+ "hail-box-temporal-filter.shp";
+	private static final String HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
+			+ "hail-polygon-temporal-filter.shp";
+	private static final String TORNADO_TRACKS_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE
+			+ "tornado_tracks_test_case/";
 	private static final String TORNADO_TRACKS_SHAPEFILE_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-box-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-polygon-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-box-temporal-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE + "tornado_tracks-polygon-temporal-filter.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-box-filter.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-polygon-filter.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-box-temporal-filter.shp";
+	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-polygon-temporal-filter.shp";
 
 	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
 	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
@@ -164,7 +172,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 		try {
 			testQuery(
@@ -182,7 +191,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage()
+					+ "'");
 		}
 
 		if ((nthreads > 0)) {
@@ -200,7 +210,8 @@ public class GeoWaveBasicIT
 			catch (final Exception e) {
 				e.printStackTrace();
 				TestUtils.deleteAll(dataStore);
-				Assert.fail("Error occurred while testing a bounding box stats on spatial index: '" + e.getLocalizedMessage() + "'");
+				Assert.fail("Error occurred while testing a bounding box stats on spatial index: '"
+						+ e.getLocalizedMessage() + "'");
 			}
 		}
 		try {
@@ -212,7 +223,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		TestUtils.deleteAll(dataStore);
@@ -318,7 +330,8 @@ public class GeoWaveBasicIT
 			catch (final IOException e) {
 				e.printStackTrace();
 				TestUtils.deleteAll(dataStore);
-				Assert.fail("Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '" + e.getLocalizedMessage() + "'");
+				Assert.fail("Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '"
+						+ e.getLocalizedMessage() + "'");
 			}
 		}
 		final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
@@ -329,7 +342,8 @@ public class GeoWaveBasicIT
 				final StatisticsCache cachedValue = statsCache.get(adapter.getAdapterId());
 				Assert.assertNotNull(cachedValue);
 				final Collection<DataStatistics<SimpleFeature>> expectedStats = cachedValue.statsCache.values();
-				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(adapter.getAdapterId())) {
+				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(adapter
+						.getAdapterId())) {
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
 						final DataStatistics<?> nextStats = statsIterator.next();
@@ -339,7 +353,8 @@ public class GeoWaveBasicIT
 						statsCount++;
 					}
 					Assert.assertEquals(
-							"The number of stats for data adapter '" + adapter.getAdapterId().getString() + "' do not match count expected",
+							"The number of stats for data adapter '" + adapter.getAdapterId().getString()
+									+ "' do not match count expected",
 							expectedStats.size(),
 							statsCount);
 				}
@@ -354,8 +369,10 @@ public class GeoWaveBasicIT
 					// statistics will match!
 					if (multithreaded) {
 						if (!(expectedStat.getStatisticsId().getString().startsWith(
-								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat.getStatisticsId().equals(
-								CountDataStatistics.STATS_ID))) {
+								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat
+								.getStatisticsId()
+								.equals(
+										CountDataStatistics.STATS_ID))) {
 							continue;
 						}
 					}
@@ -370,9 +387,13 @@ public class GeoWaveBasicIT
 				}
 				// finally check the one stat that is more manually calculated -
 				// the bounding box
-				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
-						adapter.getAdapterId(),
-						FeatureBoundingBoxStatistics.composeId(adapter.getType().getGeometryDescriptor().getLocalName()));
+				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore
+						.getDataStatistics(
+								adapter.getAdapterId(),
+								FeatureBoundingBoxStatistics.composeId(adapter
+										.getType()
+										.getGeometryDescriptor()
+										.getLocalName()));
 
 				Assert.assertNotNull(bboxStat);
 				Assert.assertEquals(
@@ -401,7 +422,8 @@ public class GeoWaveBasicIT
 			e.printStackTrace();
 
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while retrieving adapters or statistics from metadata table: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while retrieving adapters or statistics from metadata table: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 	}
 
@@ -516,7 +538,9 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert
+					.fail("Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '"
+							+ e.getLocalizedMessage() + "'");
 		}
 	}
 
@@ -554,7 +578,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a bounding box and time range query of spatial temporal index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -572,7 +597,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a polygon and time range query of spatial temporal index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -589,7 +615,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing a bounding box stats on spatial temporal index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -599,7 +626,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		try {
@@ -611,7 +639,8 @@ public class GeoWaveBasicIT
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '" + e.getLocalizedMessage() + "'");
+			Assert.fail("Error occurred while testing deletion of an entry using spatial temporal index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		TestUtils.deleteAll(dataStore);
@@ -680,7 +709,8 @@ public class GeoWaveBasicIT
 				Calendar.getInstance());
 		args.put(
 				String.class,
-				"This is my string. There are many like it, but this one is mine.\n" + "My string is my best friend. It is my life. I must master it as I must master my life.");
+				"This is my string. There are many like it, but this one is mine.\n"
+						+ "My string is my best friend. It is my life. I must master it as I must master my life.");
 		args.put(
 				long[].class,
 				new long[] {

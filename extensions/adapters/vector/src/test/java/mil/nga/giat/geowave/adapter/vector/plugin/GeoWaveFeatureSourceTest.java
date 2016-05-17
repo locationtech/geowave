@@ -121,9 +121,11 @@ public class GeoWaveFeatureSourceTest extends
 				Filter.INCLUDE);
 		assertTrue(source.getCount(query) > 2);
 
-		try (final CloseableIterator<DataStatistics<?>> stats = ((GeoWaveGTDataStore) dataStore).getDataStatisticsStore().getDataStatistics(
-				new ByteArrayId(
-						(typeName).getBytes(StringUtils.GEOWAVE_CHAR_SET)))) {
+		try (final CloseableIterator<DataStatistics<?>> stats = ((GeoWaveGTDataStore) dataStore)
+				.getDataStatisticsStore()
+				.getDataStatistics(
+						new ByteArrayId(
+								(typeName).getBytes(StringUtils.GEOWAVE_CHAR_SET)))) {
 			assertTrue(stats.hasNext());
 			int count = 0;
 			BoundingBoxDataStatistics<SimpleFeature> bboxStats = null;

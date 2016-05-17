@@ -44,7 +44,8 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 			if (!IngestUtils.isCompatible(
 					adapterProvider,
 					option)) {
-				LOGGER.warn("Local file ingest plugin for ingest type '" + providerName + "' does not support dimensionality '" + option.getType() + "'");
+				LOGGER.warn("Local file ingest plugin for ingest type '" + providerName
+						+ "' does not support dimensionality '" + option.getType() + "'");
 				valid = false;
 			}
 		}

@@ -743,7 +743,8 @@ public class GPXConsumer implements
 				if (childSequence.size() > 1) {
 					builder.set(
 							"geometry",
-							GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence.toArray(new Coordinate[childSequence.size()])));
+							GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence
+									.toArray(new Coordinate[childSequence.size()])));
 				}
 				else {
 					builder.set(

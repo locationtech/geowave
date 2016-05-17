@@ -14,7 +14,10 @@ public class KafkaConsumerCommandLineOptions extends
 	private String zookeeperConnect;
 
 	@PropertyReference("auto.offset.reset")
-	@Parameter(names = "--autoOffsetReset", description = "What to do when there is no initial offset in ZooKeeper or if an offset is out of range:\n" + "\t* smallest : automatically reset the offset to the smallest offset\n" + "\t* largest : automatically reset the offset to the largest offset\n" + "\t* anything else: throw exception to the consumer\n")
+	@Parameter(names = "--autoOffsetReset", description = "What to do when there is no initial offset in ZooKeeper or if an offset is out of range:\n"
+			+ "\t* smallest : automatically reset the offset to the smallest offset\n"
+			+ "\t* largest : automatically reset the offset to the largest offset\n"
+			+ "\t* anything else: throw exception to the consumer\n")
 	private String autoOffsetReset;
 
 	@PropertyReference("fetch.message.max.bytes")

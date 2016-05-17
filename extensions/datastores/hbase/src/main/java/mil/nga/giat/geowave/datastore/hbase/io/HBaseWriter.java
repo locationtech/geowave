@@ -114,7 +114,8 @@ public class HBaseWriter
 				}
 			}
 			else {
-				LOGGER.warn("Table " + name.getNameAsString() + " doesn't exist, so no question of adding column family " + columnFamilyName + " to it!");
+				LOGGER.warn("Table " + name.getNameAsString()
+						+ " doesn't exist, so no question of adding column family " + columnFamilyName + " to it!");
 			}
 		}
 	}

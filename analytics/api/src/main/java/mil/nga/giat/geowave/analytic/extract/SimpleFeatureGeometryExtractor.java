@@ -33,7 +33,10 @@ public class SimpleFeatureGeometryExtractor extends
 
 	protected static int getSRID(
 			final SimpleFeature geometryFeature ) {
-		final CoordinateReferenceSystem crs = geometryFeature.getDefaultGeometryProperty().getDescriptor().getCoordinateReferenceSystem();
+		final CoordinateReferenceSystem crs = geometryFeature
+				.getDefaultGeometryProperty()
+				.getDescriptor()
+				.getCoordinateReferenceSystem();
 		if (crs == null) {
 			return 4326;
 		}

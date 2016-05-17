@@ -68,7 +68,8 @@ public class JsonDefinitionColumnVisibilityManagement<T> implements
 					if (fieldName.matches(attName)) {
 						final JsonNode attNode = attributeMap.get(attName);
 						if (attNode == null) {
-							LOGGER.error("Cannot parse visibility expression, JsonNode for attribute " + attName + " was null");
+							LOGGER.error("Cannot parse visibility expression, JsonNode for attribute " + attName
+									+ " was null");
 							return null;
 						}
 						return validate(attNode.getTextValue());

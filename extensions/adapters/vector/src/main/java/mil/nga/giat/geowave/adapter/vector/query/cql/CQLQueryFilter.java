@@ -62,7 +62,8 @@ public class CQLQueryFilter implements
 					((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
 							adapter,
 							indexModel);
-					final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
+					final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
+							.getAdapterExtendedData();
 					if (existingExtValues != null) {
 						for (final PersistentValue<Object> val : existingExtValues.getValues()) {
 							adapterExtendedValues.addValue(val);

@@ -133,7 +133,8 @@ public class AdapterWithObjectWritable implements
 
 	@Override
 	public String toString() {
-		return "AdapterWithObjectWritable [ adapterId=" + adapterId + ", dataId=" + dataId + ", isPrimary=" + isPrimary + "]";
+		return "AdapterWithObjectWritable [ adapterId=" + adapterId + ", dataId=" + dataId + ", isPrimary=" + isPrimary
+				+ "]";
 	}
 
 }

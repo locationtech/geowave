@@ -108,7 +108,9 @@ public class AdapterBasedPartitioner extends
 				entry.data,
 				getIndex().getIndexModel());
 		final double[] thetas = getDistancePerDimension();
-		final MultiDimensionalNumericData primaryData = encoding.getNumericData(getIndex().getIndexModel().getDimensions());
+		final MultiDimensionalNumericData primaryData = encoding.getNumericData(getIndex()
+				.getIndexModel()
+				.getDimensions());
 		numericDataHolder.primary = primaryData;
 		numericDataHolder.expansion = querySet(
 				primaryData,

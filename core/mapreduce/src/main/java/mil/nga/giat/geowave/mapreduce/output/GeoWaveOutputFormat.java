@@ -241,11 +241,13 @@ public class GeoWaveOutputFormat extends
 					indexWriter.write(data);
 				}
 				else {
-					LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
+					LOGGER.warn("Cannot write to index '"
+							+ StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
 				}
 			}
 			else {
-				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "' does not exist");
+				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes())
+						+ "' does not exist");
 			}
 		}
 

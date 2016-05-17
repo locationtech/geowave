@@ -124,7 +124,8 @@ public class DateFieldRetypingSource extends
 			final StringBuilder logBuilder = new StringBuilder();
 			logBuilder.append("Type: " + typeLabel);
 			for (AttributeDescriptor propDef : type.getAttributeDescriptors()) {
-				logBuilder.append("\nField: " + propDef.getLocalName() + ", Type: " + propDef.getType().getBinding().getSimpleName());
+				logBuilder.append("\nField: " + propDef.getLocalName() + ", Type: "
+						+ propDef.getType().getBinding().getSimpleName());
 			}
 			LOGGER.log(
 					Level.DEBUG,

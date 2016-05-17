@@ -62,7 +62,7 @@ public class AttributeSubsettingIterator extends
 			for (final Entry<Key, Value> row : rowMapping.entrySet()) {
 				final Key currKey = row.getKey();
 				final Value currVal = row.getValue();
-				if(adapterId == null) {
+				if (adapterId == null) {
 					adapterId = currKey.getColumnFamily();
 				}
 				final byte[] originalBitmask = currKey.getColumnQualifierData().getBackingArray();
@@ -90,7 +90,9 @@ public class AttributeSubsettingIterator extends
 				}
 			}
 			if (!keyList.isEmpty() && !valList.isEmpty()) {
-				final Key outputKey = new Key(wholeRowKey.getRow(), adapterId);
+				final Key outputKey = new Key(
+						wholeRowKey.getRow(),
+						adapterId);
 				final Value outputVal = WholeRowIterator.encodeRow(
 						keyList,
 						valList);

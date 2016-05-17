@@ -99,7 +99,8 @@ public class SecondaryIndex<T> implements
 			persistables.add(dataStatistics);
 		}
 		final byte[] persistablesBinary = PersistenceUtils.toBinary(persistables);
-		final ByteBuffer buf = ByteBuffer.allocate(indexStrategyBinary.length + fieldIdBinary.length + 8 + persistablesBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(indexStrategyBinary.length + fieldIdBinary.length + 8
+				+ persistablesBinary.length);
 		buf.putInt(indexStrategyBinary.length);
 		buf.putInt(fieldIdBinary.length);
 		buf.put(indexStrategyBinary);

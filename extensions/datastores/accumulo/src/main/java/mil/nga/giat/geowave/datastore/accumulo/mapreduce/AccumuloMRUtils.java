@@ -86,18 +86,19 @@ public class AccumuloMRUtils
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final Integer minSplits,
 			final Integer maxSplits )
-					throws IOException,
-					InterruptedException {
+			throws IOException,
+			InterruptedException {
 
 		final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache = new HashMap<PrimaryIndex, RowRangeHistogramStatistics<?>>();
 
 		final List<InputSplit> retVal = new ArrayList<InputSplit>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
 
-		for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getAdaptersWithMinimalSetOfIndices(
-				adapterStore,
-				adapterIndexMappingStore,
-				indexStore)) {
+		for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+				.getAdaptersWithMinimalSetOfIndices(
+						adapterStore,
+						adapterIndexMappingStore,
+						indexStore)) {
 
 			populateIntermediateSplits(
 					splits,
@@ -148,10 +149,8 @@ public class AccumuloMRUtils
 				// number of locations/indices
 				final IntermediateSplitInfo lowestSplit = splits.pollFirst();
 				final IntermediateSplitInfo nextLowestSplit = splits.pollFirst();
-				lowestSplit.merge(
-						nextLowestSplit);
-				splits.add(
-						lowestSplit);
+				lowestSplit.merge(nextLowestSplit);
+				splits.add(lowestSplit);
 			}
 			while (splits.size() > maxSplits);
 		}
@@ -164,16 +163,16 @@ public class AccumuloMRUtils
 
 	private static final BigInteger ONE = new BigInteger(
 			"1");
-	
+
 	private static RowRangeHistogramStatistics<?> getRangeStats(
 			final PrimaryIndex index,
 			final List<DataAdapter<Object>> adapters,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore store,
 			final String[] authorizations )
-					throws AccumuloException,
-					AccumuloSecurityException,
-					IOException {
+			throws AccumuloException,
+			AccumuloSecurityException,
+			IOException {
 		RowRangeHistogramStatistics<?> singleStats = null;
 		for (final DataAdapter<?> adapter : adapters) {
 			final RowRangeHistogramStatistics<?> rowStat = (RowRangeHistogramStatistics<?>) store.getDataStatistics(
@@ -196,21 +195,22 @@ public class AccumuloMRUtils
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final String[] authorizations )
-					throws AccumuloException,
-					AccumuloSecurityException {
+			throws AccumuloException,
+			AccumuloSecurityException {
 
 		final RowRangeDataStatistics<?> stats = (RowRangeDataStatistics<?>) statsStore.getDataStatistics(
 				index.getId(),
 				RowRangeDataStatistics.getId(index.getId()),
 				authorizations);
 		if (stats == null) {
-			LOGGER.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
+			LOGGER
+					.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
 			return new Range();
 		}
 
-		final byte[] min  = stats.getMin();
-		final byte[] max  = stats.getMax();
-		
+		final byte[] min = stats.getMin();
+		final byte[] max = stats.getMax();
+
 		return new Range(
 				new Key(
 						new Text(
@@ -239,7 +239,7 @@ public class AccumuloMRUtils
 			final Integer maxSplits,
 			final DistributableQuery query,
 			final String[] authorizations )
-					throws IOException {
+			throws IOException {
 
 		if ((query != null) && !query.isSupported(index)) {
 			return splits;
@@ -393,7 +393,8 @@ public class AccumuloMRUtils
 									statsCache,
 									authorizations),
 							clippedRange);
-					if (!(fullrange.beforeStartKey(clippedRange.getEndKey()) || fullrange.afterEndKey(clippedRange.getStartKey()))) {
+					if (!(fullrange.beforeStartKey(clippedRange.getEndKey()) || fullrange.afterEndKey(clippedRange
+							.getStartKey()))) {
 						rangeList.add(new RangeLocationPair(
 								clippedRange,
 								location,
@@ -411,7 +412,8 @@ public class AccumuloMRUtils
 					splitInfo.put(
 							index,
 							rangeList);
-					splits.add(new IntermediateSplitInfo(splitInfo));
+					splits.add(new IntermediateSplitInfo(
+							splitInfo));
 				}
 			}
 		}
@@ -434,7 +436,7 @@ public class AccumuloMRUtils
 			final DataStatisticsStore statsStore,
 			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
 			final String[] authorizations )
-					throws IOException {
+			throws IOException {
 		RowRangeHistogramStatistics<?> rangeStats = statsCache.get(index);
 
 		if (rangeStats == null) {
@@ -592,7 +594,8 @@ public class AccumuloMRUtils
 						public int compare(
 								final IndexRangeLocation o1,
 								final IndexRangeLocation o2 ) {
-							return (o1.rangeLocationPair.getCardinality() - o2.rangeLocationPair.getCardinality()) < 0 ? -1 : 1;
+							return (o1.rangeLocationPair.getCardinality() - o2.rangeLocationPair.getCardinality()) < 0 ? -1
+									: 1;
 						}
 					});
 			for (final Entry<PrimaryIndex, List<RangeLocationPair>> ranges : splitInfo.entrySet()) {
@@ -613,8 +616,7 @@ public class AccumuloMRUtils
 				final double nextCardinality = currentCardinality + next.rangeLocationPair.getCardinality();
 				if (nextCardinality > targetCardinality) {
 					final IndexRangeLocation newSplit = next.split(
-							statsCache.get(
-									next.index),
+							statsCache.get(next.index),
 							currentCardinality,
 							targetCardinality);
 					// Stats can have inaccuracies over narrow ranges
@@ -664,7 +666,9 @@ public class AccumuloMRUtils
 			if (splitInfo.size() == 0) {
 				// First try to move a index set of ranges back.
 				if (otherSplitInfo.size() > 1) {
-					final Iterator<Entry<PrimaryIndex, List<RangeLocationPair>>> it = otherSplitInfo.entrySet().iterator();
+					final Iterator<Entry<PrimaryIndex, List<RangeLocationPair>>> it = otherSplitInfo
+							.entrySet()
+							.iterator();
 					final Entry<PrimaryIndex, List<RangeLocationPair>> entry = it.next();
 					it.remove();
 					splitInfo.put(
@@ -858,7 +862,7 @@ public class AccumuloMRUtils
 	protected static TabletLocator getTabletLocator(
 			final Object clientContextOrInstance,
 			final String tableId )
-					throws TableNotFoundException {
+			throws TableNotFoundException {
 		TabletLocator tabletLocator = null;
 		// @formatter:off
 		/*if[accumulo.api=1.6]
@@ -883,10 +887,10 @@ public class AccumuloMRUtils
 			final Object clientContextOrCredentials,
 			final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges,
 			final TabletLocator tabletLocator )
-					throws AccumuloException,
-					AccumuloSecurityException,
-					TableNotFoundException,
-					IOException {
+			throws AccumuloException,
+			AccumuloSecurityException,
+			TableNotFoundException,
+			IOException {
 		// @formatter:off
 		/*if[accumulo.api=1.6]
 		return tabletLocator.binRanges(

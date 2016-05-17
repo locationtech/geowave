@@ -329,7 +329,8 @@ public class GaussianFilter
 			final int floorOfLocation = (int) (locationPerDimension[currentDimension]);
 			final int[] floorLocation = finalIndexPerDimension;
 			floorLocation[currentDimension] = floorOfLocation + offset[currentDimension];
-			if ((floorLocation[currentDimension] >= 0) && (floorLocation[currentDimension] < binsPerDimension[currentDimension])) {
+			if ((floorLocation[currentDimension] >= 0)
+					&& (floorLocation[currentDimension] < binsPerDimension[currentDimension])) {
 				positions.addAll(getPositionsAndContributionPt(
 						numDimensions,
 						currentDimension + 1,
@@ -364,7 +365,8 @@ public class GaussianFilter
 			final int floorOfLocation = (int) (minLocationPerDimension[currentDimension]);
 			final int[] floorLocation = finalIndexPerDimension.clone();
 			floorLocation[currentDimension] = floorOfLocation + offset[currentDimension];
-			if ((floorLocation[currentDimension] >= 0) && (floorLocation[currentDimension] < binsPerDimension[currentDimension])) {
+			if ((floorLocation[currentDimension] >= 0)
+					&& (floorLocation[currentDimension] < binsPerDimension[currentDimension])) {
 				positions.addAll(getPositionsAndContribution(
 						numDimensions,
 						currentDimension + 1,

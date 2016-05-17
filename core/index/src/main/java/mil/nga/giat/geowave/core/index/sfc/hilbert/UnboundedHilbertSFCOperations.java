@@ -78,7 +78,8 @@ public class UnboundedHilbertSFCOperations implements
 		// Compare the number of dimensions to the number of values sent in
 		if (dimensionDefinitions.length != values.length) {
 			throw new ArrayIndexOutOfBoundsException(
-					"Number of dimensions supplied (" + values.length + ") is different than initialized (" + dimensionDefinitions.length + ").");
+					"Number of dimensions supplied (" + values.length + ") is different than initialized ("
+							+ dimensionDefinitions.length + ").");
 		}
 
 		// Loop through each value, then normalize the value based on the
@@ -117,7 +118,9 @@ public class UnboundedHilbertSFCOperations implements
 			final SFCDimensionDefinition[] dimensionDefinitions ) {
 		final BitVector[] bitVectors = new BitVector[values.size()];
 
-		final BitVector hilbertBitVector = BitVectorFactories.OPTIMAL.apply(compactHilbertCurve.getSpec().sumBitsPerDimension());
+		final BitVector hilbertBitVector = BitVectorFactories.OPTIMAL.apply(compactHilbertCurve
+				.getSpec()
+				.sumBitsPerDimension());
 
 		for (int i = 0; i < values.size(); i++) {
 			bitVectors[i] = BitVectorFactories.OPTIMAL.apply(dimensionDefinitions[i].getBitsOfPrecision());
@@ -164,7 +167,8 @@ public class UnboundedHilbertSFCOperations implements
 		final double normalizedValue = boundedDimensionDefinition.normalize(value);
 		if ((normalizedValue < 0) || (normalizedValue > 1)) {
 			throw new IllegalArgumentException(
-					"Value (" + value + ") is not within dimension bounds. The normalized value (" + normalizedValue + ") must be within (0,1)");
+					"Value (" + value + ") is not within dimension bounds. The normalized value (" + normalizedValue
+							+ ") must be within (0,1)");
 		}
 		final BigDecimal val = BigDecimal.valueOf(normalizedValue);
 		// scale it to a value within the bits of precision
@@ -261,11 +265,13 @@ public class UnboundedHilbertSFCOperations implements
 
 		if ((min < 0) || (min > 1)) {
 			throw new IllegalArgumentException(
-					"Value (" + value + ") is not within bounds. The normalized value (" + min + ") must be within (0,1)");
+					"Value (" + value + ") is not within bounds. The normalized value (" + min
+							+ ") must be within (0,1)");
 		}
 		if ((max < 0) || (max > 1)) {
 			throw new IllegalArgumentException(
-					"Value (" + value + ") is not within bounds. The normalized value (" + max + ") must be within (0,1)");
+					"Value (" + value + ") is not within bounds. The normalized value (" + max
+							+ ") must be within (0,1)");
 		}
 		// scale it to a value within the dimension definition range
 		return new NumericRange(
@@ -353,7 +359,9 @@ public class UnboundedHilbertSFCOperations implements
 		// com.google.uzaygezen.core.Query<LongRange, LongRange> hilbertQuery =
 		// queryBuilder.get();
 
-		final List<FilteredIndexRange<BigIntegerRange, BigIntegerRange>> hilbertRanges = queryBuilder.get().getFilteredIndexRanges();
+		final List<FilteredIndexRange<BigIntegerRange, BigIntegerRange>> hilbertRanges = queryBuilder
+				.get()
+				.getFilteredIndexRanges();
 
 		final ByteArrayRange[] sfcRanges = new ByteArrayRange[hilbertRanges.size()];
 		final int expectedByteCount = (int) Math.ceil(totalPrecision / 8.0);

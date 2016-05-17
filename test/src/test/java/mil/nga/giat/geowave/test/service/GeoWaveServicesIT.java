@@ -52,7 +52,8 @@ public class GeoWaveServicesIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
-	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE
+			+ "mapreduce-testdata.zip";
 	protected static final String TEST_CASE_GENERAL_GPX_BASE = TestUtils.TEST_CASE_BASE + "general_gpx_test_case/";
 	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
@@ -250,7 +251,8 @@ public class GeoWaveServicesIT
 		success = false;
 		// verify that we can recall the stored style
 		LOGGER.info("Verify that we can recall the stored style.");
-		final String style = IOUtils.toString(geoserverServiceClient.getStyle(ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE));
+		final String style = IOUtils.toString(geoserverServiceClient
+				.getStyle(ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE));
 		assertTrue(
 				"Unable to get style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
 				(style != null) && !style.isEmpty());
@@ -293,7 +295,8 @@ public class GeoWaveServicesIT
 
 		if (dsInfo != null) {
 			final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
-			List<ConfigOption> configOptions = Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(dataStoreOptions));
+			List<ConfigOption> configOptions = Arrays.asList(ConfigUtils
+					.createConfigOptionsFromJCommander(dataStoreOptions));
 			Collection<String> nonPasswordRequiredFields = Collections2.transform(
 					Collections2.filter(
 							configOptions,

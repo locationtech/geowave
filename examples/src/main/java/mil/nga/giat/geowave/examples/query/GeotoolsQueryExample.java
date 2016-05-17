@@ -203,7 +203,8 @@ public class GeotoolsQueryExample
 	private static void executePolygonQuery()
 			throws IOException {
 
-		System.out.println("Constructing polygon for the area contained by [Baltimore, MD; Richmond, VA; Harrisonburg, VA].");
+		System.out
+				.println("Constructing polygon for the area contained by [Baltimore, MD; Richmond, VA; Harrisonburg, VA].");
 
 		final Polygon polygon = GeometryUtils.GEOMETRY_FACTORY.createPolygon(new Coordinate[] {
 			baltimore,

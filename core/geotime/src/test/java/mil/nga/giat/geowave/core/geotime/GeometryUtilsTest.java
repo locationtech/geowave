@@ -138,7 +138,8 @@ public class GeometryUtilsTest
 			})
 		});
 		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(multiPolygon);
-		final List<MultiDimensionalNumericData> results = constraints.getIndexConstraints(new ExampleNumericIndexStrategy());
+		final List<MultiDimensionalNumericData> results = constraints
+				.getIndexConstraints(new ExampleNumericIndexStrategy());
 		assertEquals(
 				2,
 				results.size());
