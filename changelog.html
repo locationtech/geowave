@@ -11,14 +11,9 @@
 <h1 id="change-log">Change Log</h1>
 <h2 id="unreleased"><a href="https://github.com/ngageoint/geowave/tree/HEAD">Unreleased</a></h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.9.1...HEAD">Full Changelog</a></p>
-<p><strong>Implemented enhancements:</strong></p>
+<p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Provide full featured examples automated through EMR bootstrap scripts <a href="https://github.com/ngageoint/geowave/issues/682">#682</a></li>
-<li>Aggregation enhancements <a href="https://github.com/ngageoint/geowave/issues/681">#681</a></li>
-</ul>
-<p><strong>Fixed bugs:</strong></p>
-<ul>
-<li>Ensure JAI works properly for ingest and query of rasters in geowave <a href="https://github.com/ngageoint/geowave/issues/657">#657</a></li>
+<li>GEOWAVE-546 - Fix issue with Analytics <a href="https://github.com/ngageoint/geowave/pull/790">#790</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
 </ul>
 <h2 id="v0.9.1-2016-05-16"><a href="https://github.com/ngageoint/geowave/tree/v0.9.1">v0.9.1</a> (2016-05-16)</h2>
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.9.0.1...v0.9.1">Full Changelog</a></p>
@@ -28,6 +23,8 @@
 <li>vector import/export integration test <a href="https://github.com/ngageoint/geowave/issues/687">#687</a></li>
 <li>Ingest format plugin for Avro files that match our export schema <a href="https://github.com/ngageoint/geowave/issues/686">#686</a></li>
 <li>Vector export commandline tools <a href="https://github.com/ngageoint/geowave/issues/684">#684</a></li>
+<li>Provide full featured examples automated through EMR bootstrap scripts <a href="https://github.com/ngageoint/geowave/issues/682">#682</a></li>
+<li>Aggregation enhancements <a href="https://github.com/ngageoint/geowave/issues/681">#681</a></li>
 <li>implement integration test for spatial sub-sampling <a href="https://github.com/ngageoint/geowave/issues/666">#666</a></li>
 <li>Store required data statistics for discovering what adapters are in each index <a href="https://github.com/ngageoint/geowave/issues/660">#660</a></li>
 <li>Eliminate VisibilityWriter from DataStore.createIndexWriter <a href="https://github.com/ngageoint/geowave/issues/659">#659</a></li>
@@ -64,6 +61,7 @@
 <li>IndexWriter needs to be closed, flush isn't sufficient unless close is eventually called <a href="https://github.com/ngageoint/geowave/issues/696">#696</a></li>
 <li>raster resize commandline operation SPI missing <a href="https://github.com/ngageoint/geowave/issues/679">#679</a></li>
 <li>get geowavedemoapp running in windows <a href="https://github.com/ngageoint/geowave/issues/669">#669</a></li>
+<li>Ensure JAI works properly for ingest and query of rasters in geowave <a href="https://github.com/ngageoint/geowave/issues/657">#657</a></li>
 <li>No assumptions should be made as to what Statistics a Statistical DataAdapter provides <a href="https://github.com/ngageoint/geowave/issues/655">#655</a></li>
 <li>Evaluate if the DWITHIN adjustment should be interjected to handle CQL via GeoServer PLugin <a href="https://github.com/ngageoint/geowave/issues/653">#653</a></li>
 <li>Random SpatialTemporalQueryIT.testTimeRangeAcrossBinsYear() failure in 0.9.1 branch <a href="https://github.com/ngageoint/geowave/issues/625">#625</a></li>
@@ -76,6 +74,7 @@
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>Document Spark Integration with GeoWave <a href="https://github.com/ngageoint/geowave/issues/783">#783</a></li>
 <li>Issues rescaling images using geotools 14+ <a href="https://github.com/ngageoint/geowave/issues/760">#760</a></li>
 <li>Fix Stanag 4676 service issues <a href="https://github.com/ngageoint/geowave/issues/758">#758</a></li>
 <li>Properly handle line endings at repo level via .gitattributes <a href="https://github.com/ngageoint/geowave/issues/755">#755</a></li>
