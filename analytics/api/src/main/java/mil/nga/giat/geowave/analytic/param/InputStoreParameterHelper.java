@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.analytic.param;
 
 import java.util.Map;
 
+import org.apache.directory.api.util.exception.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
@@ -72,6 +73,13 @@ public class InputStoreParameterHelper implements
 	}
 
 	@Override
+	public PersistableStore getValue(
+			String stringValue ) {
+		throw new NotImplementedException(
+				"This method not implemented");
+	}
+
+	@Override
 	public void setValue(
 			final PropertyManagement propertyManagement,
 			final PersistableStore value ) {
@@ -79,4 +87,5 @@ public class InputStoreParameterHelper implements
 				StoreParameters.StoreParam.INPUT_STORE,
 				value);
 	}
+
 }

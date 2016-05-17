@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.directory.api.util.exception.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.JobContext;
@@ -190,6 +191,13 @@ public class PropertyManagementTest
 				public NonSerializableExample getValue(
 						final PropertyManagement propertyManagement ) {
 					return null;
+				}
+
+				@Override
+				public NonSerializableExample getValue(
+						String stringValue ) {
+					throw new NotImplementedException(
+							"This method not implemented");
 				}
 
 				@Override
