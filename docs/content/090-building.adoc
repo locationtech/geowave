@@ -42,7 +42,7 @@ mvn install $BUILD_ARGS <3>
 ----
 <1> Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section
 <2> If you don't need the complete history and want to speed up the clone you can limit the depth of your checkout with --depth NUM_COMMITS
-<3> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true
+<3> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
 
 [NOTE]
 ====
