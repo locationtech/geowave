@@ -148,6 +148,39 @@ public class BasicParameterHelper implements
 
 	@Override
 	public Object getValue(
+			String stringValue ) {
+		if (stringValue == null) {
+			return null;
+		}
+		if (baseClass.isAssignableFrom(Boolean.class)) {
+			return Boolean.parseBoolean(stringValue);
+		}
+		if (baseClass.isAssignableFrom(Integer.class)) {
+			return Integer.parseInt(stringValue);
+		}
+		else if (baseClass.isAssignableFrom(String.class)) {
+			return stringValue;
+		}
+		else if (baseClass.isAssignableFrom(Double.class)) {
+			return Double.parseDouble(stringValue);
+		}
+		else if (baseClass.isAssignableFrom(byte[].class)) {
+			return ByteArrayUtils.byteArrayFromString(stringValue);
+		}
+		else if (baseClass.isAssignableFrom(Class.class)) {
+			try {
+				return Class.forName(stringValue);
+			}
+			catch (ClassNotFoundException e) {
+				throw new RuntimeException(
+						"Couldn't load class: " + stringValue);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Object getValue(
 			final PropertyManagement propertyManagement ) {
 		try {
 			return propertyManagement.getProperty(parent);

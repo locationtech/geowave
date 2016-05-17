@@ -28,4 +28,7 @@ public interface ParameterHelper<T> extends
 			JobContext context,
 			Class<?> scope,
 			T defaultValue );
+
+	public T getValue(
+			String stringValue );
 }
