@@ -28,6 +28,16 @@
 			<groupId>com.github.sakserv</groupId>
 		    <artifactId>hadoop-mini-clusters-hbase</artifactId>
 		    <version>0.1.3</version>
+		    <exclusions>
+				<exclusion>
+					<groupId>hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.sakserv</groupId>

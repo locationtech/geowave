@@ -233,6 +233,11 @@
 				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>2.3.0</version>
+			</dependency>
+			<dependency>
 				<groupId>org.geoserver</groupId>
 				<artifactId>gs-wms</artifactId>
 				<version>${geoserver.version}</version>
@@ -875,13 +880,9 @@
 		<profile>
 			<id>cloudera</id>
 			<properties>
-				<!-- 
-				<hbase.version>1.0.0-cdh5.5.0</hbase.version>
-				<hadoop.version>2.6.0-cdh5.5.0</hadoop.version>
-				 -->				
-				<accumulo.version>1.6.0-cdh5.1.4</accumulo.version>				
+				<accumulo.version>1.6.0-cdh5.1.4</accumulo.version>
 				<hbase.version>1.2.0-cdh5.7.1</hbase.version>
-				<hadoop.version>2.6.0-cdh5.7.1</hadoop.version>
+				<hadoop.version>2.6.0-cdh5.4.0</hadoop.version>
 			</properties>
 			<repositories>
 				<repository>
@@ -915,14 +916,10 @@
 		<profile>
 			<id>hortonworks</id>
 			<properties>
-			<!--TODO: upgrade to a version of hdp that supports hbase 1.x -->
-				<!-- 
-				<hbase.version>1.1.1.2.3.0.0-2557</hbase.version>
-				<hadoop.version>2.6.0.2.2.0.0-2041</hadoop.version>
-				 -->
-				<accumulo.version>1.6.1.2.2.4.0-2633</accumulo.version>
+				<!-- <hbase.version>1.1.1.2.3.0.0-2557</hbase.version> <hadoop.version>2.6.0.2.2.0.0-2041</hadoop.version> -->
+				<accumulo.version>1.7.0.2.4.2.0-258</accumulo.version>
 				<hbase.version>1.1.2.2.4.2.0-258</hbase.version>
-				<hadoop.version>2.6.0.2.2.9.7-4</hadoop.version>
+				<hadoop.version>2.7.1.2.4.2.0-258</hadoop.version>
 			</properties>
 			<repositories>
 				<repository>
