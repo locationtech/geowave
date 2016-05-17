@@ -73,6 +73,7 @@ import com.sun.media.imageioimpl.common.BogusColorSpace;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -101,6 +102,8 @@ public class RasterUtils
 	private final static Logger LOGGER = Logger.getLogger(RasterUtils.class);
 	private static final int MIN_SEGMENTS = 5;
 	private static final int MAX_SEGMENTS = 500;
+
+	private static final int MAX_VERTICES_BEFORE_SIMPLIFICATION = 20;
 	private static final double SIMPLIFICATION_MAX_DEGREES = 0.0001;
 
 	public static Geometry getFootprint(
@@ -124,9 +127,19 @@ public class RasterUtils
 							gridCoverage.getCoordinateReferenceSystem(),
 							GeoWaveGTRasterFormat.DEFAULT_CRS,
 							true));
-			return DouglasPeuckerSimplifier.simplify(
-					new GeometryFactory().createPolygon(polyCoords),
-					SIMPLIFICATION_MAX_DEGREES);
+			final Polygon poly = new GeometryFactory().createPolygon(polyCoords);
+			if (polyCoords.length > MAX_VERTICES_BEFORE_SIMPLIFICATION) {
+				final Geometry retVal = DouglasPeuckerSimplifier.simplify(
+						poly,
+						SIMPLIFICATION_MAX_DEGREES);
+				if (retVal.isEmpty()) {
+					return poly;
+				}
+				return retVal;
+			}
+			else {
+				return poly;
+			}
 		}
 		catch (MismatchedDimensionException | TransformException | FactoryException e1) {
 			LOGGER.warn(
