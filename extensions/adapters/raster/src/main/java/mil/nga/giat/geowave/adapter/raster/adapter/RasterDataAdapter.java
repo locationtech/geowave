@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.adapter.raster.adapter;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.image.BufferedImage;
@@ -32,12 +31,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.measure.unit.Unit;
-import javax.media.jai.BorderExtender;
 import javax.media.jai.Interpolation;
 import javax.media.jai.InterpolationBicubic2;
 import javax.media.jai.InterpolationBilinear;
 import javax.media.jai.InterpolationNearest;
-import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
@@ -142,7 +139,7 @@ public class RasterDataAdapter implements
 			"image");
 	public final static int DEFAULT_TILE_SIZE = 256;
 	public final static boolean DEFAULT_BUILD_PYRAMID = false;
-	private static Operations resampleOperations;
+	private final static boolean DEFAULT_BUILD_HISTOGRAM = true;
 
 	/**
 	 * A transparent color for missing data.
@@ -182,6 +179,8 @@ public class RasterDataAdapter implements
 				originalGridCoverage,
 				DEFAULT_TILE_SIZE,
 				DEFAULT_BUILD_PYRAMID,
+				DEFAULT_BUILD_HISTOGRAM,
+				new double[originalGridCoverage.getNumSampleDimensions()][],
 				new NoDataMergeStrategy());
 	}
 
@@ -197,6 +196,8 @@ public class RasterDataAdapter implements
 				originalGridCoverage,
 				tileSize,
 				buildPyramid,
+				DEFAULT_BUILD_HISTOGRAM,
+				new double[originalGridCoverage.getNumSampleDimensions()][],
 				new NoDataMergeStrategy());
 	}
 
@@ -206,6 +207,8 @@ public class RasterDataAdapter implements
 			final GridCoverage2D originalGridCoverage,
 			final int tileSize,
 			final boolean buildPyramid,
+			final boolean buildHistogram,
+			final double[][] noDataValuesPerBand,
 			final RasterTileMergeStrategy<?> mergeStrategy ) {
 		final RenderedImage img = originalGridCoverage.getRenderedImage();
 		sampleModel = img.getSampleModel();
@@ -213,9 +216,14 @@ public class RasterDataAdapter implements
 		this.metadata = metadata;
 		this.coverageName = coverageName;
 		this.tileSize = tileSize;
-		histogramConfig = new HistogramConfig(
-				sampleModel);
-		noDataValuesPerBand = new double[originalGridCoverage.getNumSampleDimensions()][];
+		if (buildHistogram) {
+			histogramConfig = new HistogramConfig(
+					sampleModel);
+		}
+		else {
+			histogramConfig = null;
+		}
+		this.noDataValuesPerBand = noDataValuesPerBand;
 		for (int d = 0; d < noDataValuesPerBand.length; d++) {
 			noDataValuesPerBand[d] = originalGridCoverage.getSampleDimension(
 					d).getNoDataValues();
@@ -224,7 +232,9 @@ public class RasterDataAdapter implements
 		this.buildPyramid = buildPyramid;
 		this.mergeStrategy = new RootMergeStrategy(
 				getAdapterId(),
-				sampleModel,
+				sampleModel.createCompatibleSampleModel(
+						tileSize,
+						tileSize),
 				mergeStrategy);
 		init();
 	}
@@ -363,7 +373,9 @@ public class RasterDataAdapter implements
 		interpolation = Interpolation.getInstance(interpolationType);
 		this.mergeStrategy = new RootMergeStrategy(
 				getAdapterId(),
-				sampleModel,
+				sampleModel.createCompatibleSampleModel(
+						tileSize,
+						tileSize),
 				mergeStrategy);
 		init();
 	}
