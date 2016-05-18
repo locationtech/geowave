@@ -49,7 +49,8 @@ public class MemoryDataStore implements
 		DataStore
 {
 	private final static Logger LOGGER = Logger.getLogger(MemoryDataStore.class);
-	private final Map<ByteArrayId, TreeSet<EntryRow>> storeData = Collections.synchronizedMap(new HashMap<ByteArrayId, TreeSet<EntryRow>>());
+	private final Map<ByteArrayId, TreeSet<EntryRow>> storeData = Collections
+			.synchronizedMap(new HashMap<ByteArrayId, TreeSet<EntryRow>>());
 	private final AdapterStore adapterStore;
 	private final IndexStore indexStore;
 	private final DataStatisticsStore statsStore;
@@ -328,7 +329,8 @@ public class MemoryDataStore implements
 			final boolean isDelete,
 			final DataStoreCallbackManager callbackCache ) {
 		final TreeSet<EntryRow> set = getRowsForIndex(index.getId());
-		final Iterator<EntryRow> rowIt = ((query == null) || query.isSupported(index)) ? ((TreeSet<EntryRow>) set.clone()).iterator() : Collections.<EntryRow> emptyIterator();
+		final Iterator<EntryRow> rowIt = ((query == null) || query.isSupported(index)) ? ((TreeSet<EntryRow>) set
+				.clone()).iterator() : Collections.<EntryRow> emptyIterator();
 		final List<QueryFilter> filters = (query == null) ? new ArrayList<QueryFilter>() : new ArrayList<QueryFilter>(
 				query.createFilters(index.getIndexModel()));
 		filters.add(new QueryFilter() {

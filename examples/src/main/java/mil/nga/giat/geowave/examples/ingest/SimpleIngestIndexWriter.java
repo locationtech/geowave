@@ -32,7 +32,8 @@ public class SimpleIngestIndexWriter extends
 		String instance = null;
 
 		if (args.length != 5) {
-			log.error("Invalid arguments, expected: zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
+			log
+					.error("Invalid arguments, expected: zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
 			System.exit(1);
 		}
 		namespace = args[5];
@@ -54,7 +55,8 @@ public class SimpleIngestIndexWriter extends
 		}
 
 		si.generateGrid(geowaveDataStore);
-		System.out.println("Finished ingesting data to namespace: " + namespace + " at datastore instance: " + instance);
+		System.out
+				.println("Finished ingesting data to namespace: " + namespace + " at datastore instance: " + instance);
 
 	}
 

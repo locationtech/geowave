@@ -93,7 +93,8 @@ public class ComparisonGaussianCellMapper extends
 						0,
 						0,
 						0);
-				final double normalizedTime = (deltaTime * 3) / (maxDate.getTimeInMillis() - baseDate.getTimeInMillis());
+				final double normalizedTime = (deltaTime * 3)
+						/ (maxDate.getTimeInMillis() - baseDate.getTimeInMillis());
 				contribution = Math.pow(
 						Math.E,
 						-(normalizedTime * normalizedTime));
@@ -120,7 +121,8 @@ public class ComparisonGaussianCellMapper extends
 						0,
 						0,
 						0);
-				final double normalizedTime = (deltaTime * 3) / (baseDate.getTimeInMillis() - minDate.getTimeInMillis());
+				final double normalizedTime = (deltaTime * 3)
+						/ (baseDate.getTimeInMillis() - minDate.getTimeInMillis());
 				contribution = Math.pow(
 						Math.E,
 						-(normalizedTime * normalizedTime));

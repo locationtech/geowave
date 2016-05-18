@@ -155,7 +155,9 @@ public class GeoWaveITRunner extends
 				final List<FrameworkField> annotatedFields = getStoreAnnotatedFields();
 				if (annotatedFields.size() != fieldNameStoreTypePair.size()) {
 					throw new GeoWaveITException(
-							"Wrong number of stores and @GeoWaveTestStore fields." + " @GeoWaveTestStore fields counted: " + annotatedFields.size() + ", available parameters: " + fieldNameStoreTypePair.size() + ".");
+							"Wrong number of stores and @GeoWaveTestStore fields."
+									+ " @GeoWaveTestStore fields counted: " + annotatedFields.size()
+									+ ", available parameters: " + fieldNameStoreTypePair.size() + ".");
 				}
 				for (final FrameworkField field : annotatedFields) {
 					fieldsAndNamespacePairs.add(new ImmutablePair<Field, String>(
@@ -210,7 +212,8 @@ public class GeoWaveITRunner extends
 					if (!field.getType().isAssignableFrom(
 							DataStorePluginOptions.class)) {
 						errors.add(new GeoWaveITException(
-								"'" + field.getName() + "' must be of type '" + DataStorePluginOptions.class.getName() + "'"));
+								"'" + field.getName() + "' must be of type '" + DataStorePluginOptions.class.getName()
+										+ "'"));
 					}
 				}
 			}

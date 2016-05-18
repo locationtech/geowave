@@ -32,7 +32,8 @@ public class ImageChipUtils
 			final int height,
 			final int type ) {
 		if (img instanceof BufferedImage) {
-			if ((((BufferedImage) img).getType() == type) && (img.getWidth(null) == width) && (img.getHeight(null) == height)) {
+			if ((((BufferedImage) img).getType() == type) && (img.getWidth(null) == width)
+					&& (img.getHeight(null) == height)) {
 				return (BufferedImage) img;
 			}
 		}

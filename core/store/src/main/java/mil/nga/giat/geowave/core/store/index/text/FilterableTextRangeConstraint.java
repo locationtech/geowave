@@ -63,7 +63,8 @@ public class FilterableTextRangeConstraint extends
 			final byte padCharacter ) {
 		byte[] expressionBytes;
 		expressionBytes = StringUtils.stringToBinary(expression);
-		final byte[] result = new byte[expressionBytes.length + TextIndexStrategy.START_END_MARKER_BYTE.length + (pad < 0 ? 0 : pad)];
+		final byte[] result = new byte[expressionBytes.length + TextIndexStrategy.START_END_MARKER_BYTE.length
+				+ (pad < 0 ? 0 : pad)];
 		System.arraycopy(
 				TextIndexStrategy.START_END_MARKER_BYTE,
 				0,

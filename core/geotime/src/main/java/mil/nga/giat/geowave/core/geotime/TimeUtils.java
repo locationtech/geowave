@@ -57,7 +57,8 @@ public class TimeUtils
 				return ((Number) timeObj).longValue();
 			}
 			else {
-				LOGGER.warn("Time value '" + timeObj + "' of type '" + timeObj.getClass() + "' is not of expected temporal type");
+				LOGGER.warn("Time value '" + timeObj + "' of type '" + timeObj.getClass()
+						+ "' is not of expected temporal type");
 			}
 		}
 		return -1;

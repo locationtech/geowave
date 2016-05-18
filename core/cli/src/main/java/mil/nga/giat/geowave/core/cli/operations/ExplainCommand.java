@@ -16,7 +16,8 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 
 @GeowaveOperation(name = "explain", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "See what arguments are missing and " + "what values will be used for GeoWave commands")
+@Parameters(commandDescription = "See what arguments are missing and "
+		+ "what values will be used for GeoWave commands")
 public class ExplainCommand implements
 		Command
 {

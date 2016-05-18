@@ -154,7 +154,8 @@ public class RangeLocationPair
 
 			if (start.compareTo(end) > 0) {
 				throw new InvalidObjectException(
-						"Start key must be less than end key in range (" + start.getString() + ", " + end.getString() + ")");
+						"Start key must be less than end key in range (" + start.getString() + ", " + end.getString()
+								+ ")");
 			}
 		}
 

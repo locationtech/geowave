@@ -56,7 +56,8 @@ public class BasicKafkaIT
 				257);
 	}
 
-	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE
+			+ "mapreduce-testdata.zip";
 	protected static final String OSM_GPX_INPUT_DIR = TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/";
 
 	@GeoWaveTestStore({
@@ -93,12 +94,17 @@ public class BasicKafkaIT
 
 				// query by the full bounding box, make sure there is more than
 				// 0 count and make sure the count matches the number of results
-				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
-						adapter.getAdapterId(),
-						FeatureBoundingBoxStatistics.composeId(adapter.getType().getGeometryDescriptor().getLocalName()));
-				final CountDataStatistics<?> countStat = (CountDataStatistics<SimpleFeature>) statsStore.getDataStatistics(
-						adapter.getAdapterId(),
-						CountDataStatistics.STATS_ID);
+				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore
+						.getDataStatistics(
+								adapter.getAdapterId(),
+								FeatureBoundingBoxStatistics.composeId(adapter
+										.getType()
+										.getGeometryDescriptor()
+										.getLocalName()));
+				final CountDataStatistics<?> countStat = (CountDataStatistics<SimpleFeature>) statsStore
+						.getDataStatistics(
+								adapter.getAdapterId(),
+								CountDataStatistics.STATS_ID);
 				// then query it
 				final GeometryFactory factory = new GeometryFactory();
 				final Envelope env = new Envelope(
@@ -113,14 +119,18 @@ public class BasicKafkaIT
 						adapter,
 						query);
 				assertTrue(
-						"'" + adapter.getAdapterId().getString() + "' adapter must have at least one element in its statistic",
+						"'" + adapter.getAdapterId().getString()
+								+ "' adapter must have at least one element in its statistic",
 						countStat.getCount() > 0);
 				assertEquals(
-						"'" + adapter.getAdapterId().getString() + "' adapter should have the same results from a spatial query of '" + env + "' as its total count statistic",
+						"'" + adapter.getAdapterId().getString()
+								+ "' adapter should have the same results from a spatial query of '" + env
+								+ "' as its total count statistic",
 						countStat.getCount(),
 						resultCount);
 				assertEquals(
-						"'" + adapter.getAdapterId().getString() + "' adapter entries ingested does not match expected count",
+						"'" + adapter.getAdapterId().getString()
+								+ "' adapter entries ingested does not match expected count",
 						EXPECTED_COUNT_PER_ADAPTER_ID.get(adapter.getAdapterId()),
 						new Integer(
 								resultCount));

@@ -79,7 +79,9 @@ public class GeoWaveFeatureCollection extends
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getTransaction().getDataStatistics();
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
+					.getTransaction()
+					.getDataStatistics();
 			if (statsMap.containsKey(CountDataStatistics.STATS_ID)) {
 				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_ID);
 				if ((stats != null) && stats.isSet()) {
@@ -116,10 +118,16 @@ public class GeoWaveFeatureCollection extends
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
 		try {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader.getTransaction().getDataStatistics();
-			final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(reader.getFeatureType().getGeometryDescriptor().getLocalName());
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
+					.getTransaction()
+					.getDataStatistics();
+			final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(reader
+					.getFeatureType()
+					.getGeometryDescriptor()
+					.getLocalName());
 			if (statsMap.containsKey(statId)) {
-				final BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
+				final BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap
+						.get(statId);
 				return new ReferencedEnvelope(
 						stats.getMinX(),
 						stats.getMaxX(),
@@ -252,7 +260,8 @@ public class GeoWaveFeatureCollection extends
 
 			// limit becomes a 'soft' constraint since GeoServer will inforce
 			// the limit
-			final Long max = (limit != null) ? limit.longValue() + (startIndex == null ? 0 : startIndex.longValue()) : null;
+			final Long max = (limit != null) ? limit.longValue() + (startIndex == null ? 0 : startIndex.longValue())
+					: null;
 			// limit only used if less than an integer max value.
 			limit = (max != null && max.longValue() < Integer.MAX_VALUE) ? max.intValue() : null;
 

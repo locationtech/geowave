@@ -55,7 +55,8 @@ public class WFSSpatialTest extends
 		dataStore.createSchema(type);
 		query = new Query(
 				"geostuff",
-				CQL.toFilter("BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z"),
+				CQL
+						.toFilter("BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z"),
 				new String[] {
 					"geometry",
 					"pid"

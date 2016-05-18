@@ -205,10 +205,12 @@ public class CentroidManagerGeoWave<T> implements
 				scope,
 				logger);
 		try {
-			centroidFactory = (AnalyticItemWrapperFactory<T>) CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS.getHelper().getValue(
-					context,
-					scope,
-					CentroidItemWrapperFactory.class);
+			centroidFactory = (AnalyticItemWrapperFactory<T>) CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS
+					.getHelper()
+					.getValue(
+							context,
+							scope,
+							CentroidItemWrapperFactory.class);
 			centroidFactory.initialize(
 					context,
 					scope,

@@ -375,25 +375,6 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
-											com.googlecode.maven-java-formatter-plugin
-										</groupId>
-										<artifactId>
-											maven-java-formatter-plugin
-										</artifactId>
-										<versionRange>
-											[0.4,)
-										</versionRange>
-										<goals>
-											<goal>format</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
 											org.sonatype.plugins
 										</groupId>
 										<artifactId>
@@ -423,6 +404,25 @@
 										<execute />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											net.revelc.code
+										</groupId>
+										<artifactId>
+											formatter-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.5.2,)
+										</versionRange>
+										<goals>
+											<goal>format</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -449,6 +449,11 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+		          <groupId>net.revelc.code</groupId>
+		          <artifactId>formatter-maven-plugin</artifactId>
+		          <version>0.5.2</version>
+		        </plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -656,9 +661,8 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
-				<artifactId>maven-java-formatter-plugin</artifactId>
-				<version>0.4</version>
+				<groupId>net.revelc.code</groupId>
+        		<artifactId>formatter-maven-plugin</artifactId>
 				<configuration>
 					<configFile>eclipse/eclipse-formatter.xml</configFile>
 					<lineEnding>KEEP</lineEnding>

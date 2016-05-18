@@ -109,7 +109,8 @@ public class AggregationIterator extends
 					((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
 							adapter,
 							model);
-					final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
+					final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
+							.getAdapterExtendedData();
 					if (existingExtValues != null) {
 						for (final PersistentValue<Object> val : existingExtValues.getValues()) {
 							adapterExtendedValues.addValue(val);

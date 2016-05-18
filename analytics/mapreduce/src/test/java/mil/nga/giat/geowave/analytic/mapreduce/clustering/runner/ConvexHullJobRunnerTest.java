@@ -93,20 +93,26 @@ public class ConvexHullJobRunnerTest
 						"file://foo/bin",
 						job.getConfiguration().get(
 								"mapred.input.dir"));
-				final PersistableStore persistableStore = (PersistableStore) StoreParam.INPUT_STORE.getHelper().getValue(
-						job,
-						ConvexHullMapReduce.class,
-						null);
+				final PersistableStore persistableStore = (PersistableStore) StoreParam.INPUT_STORE
+						.getHelper()
+						.getValue(
+								job,
+								ConvexHullMapReduce.class,
+								null);
 				final IndexStore indexStore = persistableStore.getDataStoreOptions().createIndexStore();
 				try {
 					Assert.assertTrue(indexStore.indexExists(new ByteArrayId(
 							"spatial")));
 
-					final PersistableStore persistableAdapterStore = (PersistableStore) StoreParam.INPUT_STORE.getHelper().getValue(
-							job,
-							ConvexHullMapReduce.class,
-							null);
-					final AdapterStore adapterStore = persistableAdapterStore.getDataStoreOptions().createAdapterStore();
+					final PersistableStore persistableAdapterStore = (PersistableStore) StoreParam.INPUT_STORE
+							.getHelper()
+							.getValue(
+									job,
+									ConvexHullMapReduce.class,
+									null);
+					final AdapterStore adapterStore = persistableAdapterStore
+							.getDataStoreOptions()
+							.createAdapterStore();
 
 					Assert.assertTrue(adapterStore.adapterExists(new ByteArrayId(
 							"centroidtest")));

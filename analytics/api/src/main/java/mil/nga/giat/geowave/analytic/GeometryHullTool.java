@@ -407,8 +407,9 @@ public class GeometryHullTool
 	public Geometry concaveHull(
 			final Geometry geometry,
 			final Collection<Coordinate> providedInnerPoints ) {
-		final Set<Coordinate> innerPoints = (providedInnerPoints instanceof Set) ? (Set<Coordinate>) providedInnerPoints : new HashSet<Coordinate>(
-				providedInnerPoints);
+		final Set<Coordinate> innerPoints = (providedInnerPoints instanceof Set) ? (Set<Coordinate>) providedInnerPoints
+				: new HashSet<Coordinate>(
+						providedInnerPoints);
 		final TreeSet<Edge> edges = new TreeSet<Edge>();
 		final Coordinate[] geoCoordinateList = geometry.getCoordinates();
 		final int s = geoCoordinateList.length - 1;
@@ -888,7 +889,8 @@ public class GeometryHullTool
 		final Vector<Euclidean2D> projection = E1.scalarMultiply(
 				projectionLength).add(
 				vOne);
-		final double o = ((projectionLength < 0.0) ? vOne.distance(vVertex) : ((projectionLength > 1.0) ? vTwo.distance(vVertex) : vVertex.distance(projection)));
+		final double o = ((projectionLength < 0.0) ? vOne.distance(vVertex) : ((projectionLength > 1.0) ? vTwo
+				.distance(vVertex) : vVertex.distance(projection)));
 
 		return new double[] {
 			projectionLength,

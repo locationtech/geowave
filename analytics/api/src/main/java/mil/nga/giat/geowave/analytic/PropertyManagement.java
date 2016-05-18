@@ -253,10 +253,12 @@ public class PropertyManagement implements
 		final Object o = getPropertyValue(property);
 
 		try {
-			final Class<?> clazz = o == null ? defaultClass : (o instanceof Class) ? (Class<?>) o : Class.forName(o.toString());
+			final Class<?> clazz = o == null ? defaultClass : (o instanceof Class) ? (Class<?>) o : Class.forName(o
+					.toString());
 			if (!property.getHelper().getBaseClass().isAssignableFrom(
 					clazz)) {
-				LOGGER.error("Class for property " + property.self().toString() + " does not implement " + property.getHelper().getBaseClass().toString());
+				LOGGER.error("Class for property " + property.self().toString() + " does not implement "
+						+ property.getHelper().getBaseClass().toString());
 			}
 			return (T) clazz.newInstance();
 		}
@@ -954,7 +956,8 @@ public class PropertyManagement implements
 
 	private boolean containsPropertyValue(
 			final ParameterEnum<?> property ) {
-		return ((nestProperties != null) && nestProperties.containsPropertyValue(property)) || localProperties.containsKey(property);
+		return ((nestProperties != null) && nestProperties.containsPropertyValue(property))
+				|| localProperties.containsKey(property);
 	}
 
 	private Serializable getPropertyValue(

@@ -144,7 +144,8 @@ public interface Time extends
 				final NumericDimensionField[] field,
 				final NumericData[] rangeData ) {
 			assert (field[0] instanceof TimeField);
-			return (long) Math.floor(rangeData[0].getMin()) <= this.time && (long) Math.ceil(rangeData[0].getMax()) >= this.time;
+			return (long) Math.floor(rangeData[0].getMin()) <= this.time
+					&& (long) Math.ceil(rangeData[0].getMax()) >= this.time;
 		}
 	}
 

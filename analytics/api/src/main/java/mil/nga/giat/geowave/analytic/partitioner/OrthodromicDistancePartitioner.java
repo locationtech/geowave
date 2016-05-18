@@ -127,8 +127,12 @@ public class OrthodromicDistancePartitioner<T> extends
 		int otherIndex = 0;
 
 		for (int i = 0; i < dimensionFields.length; i++) {
-			final double minValue = (i == this.longDimensionPosition) ? geometry.getEnvelopeInternal().getMinX() : (i == this.latDimensionPosition ? geometry.getEnvelopeInternal().getMinY() : otherDimensionData[otherIndex] - distancePerDimension[i]);
-			final double maxValue = (i == this.longDimensionPosition) ? geometry.getEnvelopeInternal().getMaxX() : (i == this.latDimensionPosition ? geometry.getEnvelopeInternal().getMaxY() : otherDimensionData[otherIndex] + distancePerDimension[i]);
+			final double minValue = (i == this.longDimensionPosition) ? geometry.getEnvelopeInternal().getMinX()
+					: (i == this.latDimensionPosition ? geometry.getEnvelopeInternal().getMinY()
+							: otherDimensionData[otherIndex] - distancePerDimension[i]);
+			final double maxValue = (i == this.longDimensionPosition) ? geometry.getEnvelopeInternal().getMaxX()
+					: (i == this.latDimensionPosition ? geometry.getEnvelopeInternal().getMaxY()
+							: otherDimensionData[otherIndex] + distancePerDimension[i]);
 			if ((i != this.longDimensionPosition) && (i != latDimensionPosition)) {
 				otherIndex++;
 			}
@@ -222,7 +226,8 @@ public class OrthodromicDistancePartitioner<T> extends
 		// set up the distances based on geometry (orthodromic distance)
 		final double[] distancePerDimensionForIndex = new double[distancePerDimension.length];
 		for (int i = 0; i < distancePerDimension.length; i++) {
-			distancePerDimensionForIndex[i] = (i == longDimensionPosition) ? envelope.getWidth() / 2.0 : (i == latDimensionPosition ? envelope.getHeight() / 2.0 : distancePerDimension[i]);
+			distancePerDimensionForIndex[i] = (i == longDimensionPosition) ? envelope.getWidth() / 2.0
+					: (i == latDimensionPosition ? envelope.getHeight() / 2.0 : distancePerDimension[i]);
 			LOGGER.info(
 					"Dimension size {} is {} ",
 					i,

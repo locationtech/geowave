@@ -75,7 +75,8 @@ public class OsmProvider
 			FeatureDefinition fd ) {
 
 		// multipolygon type
-		if (osmunion.relationSets != null && osmunion.relationSets.size() > 0 && osmunion.tags != null && "multipolygon".equals(osmunion.tags.get("type"))) {
+		if (osmunion.relationSets != null && osmunion.relationSets.size() > 0 && osmunion.tags != null
+				&& "multipolygon".equals(osmunion.tags.get("type"))) {
 
 			Map<String, List<LinearRing>> rings = waysFromAccumulo(
 					osmunion.relationSets,
@@ -153,9 +154,10 @@ public class OsmProvider
 		// if we are missing portions geometry is invalid; log it and return
 		// null
 		if (missingNodes.size() != 0) {
-			LOGGER.error("Some of the nodes for Way: " + osmunion.Id + " were not present.  Nodes missing were: (" + Joiner.on(
-					",").join(
-					missingNodes) + ")");
+			LOGGER.error("Some of the nodes for Way: " + osmunion.Id + " were not present.  Nodes missing were: ("
+					+ Joiner.on(
+							",").join(
+							missingNodes) + ")");
 			return null;
 		}
 
@@ -196,7 +198,9 @@ public class OsmProvider
 				}
 				case Polygon: {
 					if (orderedCoords.length < 3) {
-						LOGGER.warn("Geometry type Polygon requested for unclosed way, but not enough points (4) would be present after closing.  Relation id: " + osmunion.Id);
+						LOGGER
+								.warn("Geometry type Polygon requested for unclosed way, but not enough points (4) would be present after closing.  Relation id: "
+										+ osmunion.Id);
 						return null;
 					}
 					// close the geometry since it's unclosed, but coereced to a
@@ -218,7 +222,8 @@ public class OsmProvider
 		}
 
 		// default case, shouldn't be hit;
-		LOGGER.error("Way: " + osmunion.Id + " did not parse correctly; geometry generation was not caught and fell through");
+		LOGGER.error("Way: " + osmunion.Id
+				+ " did not parse correctly; geometry generation was not caught and fell through");
 		return null;
 	}
 
@@ -358,9 +363,10 @@ public class OsmProvider
 				i++;
 			}
 			if (missingIds.size() != 0) {
-				LOGGER.error("Error building ring relation for relation: " + osmunion.Id + " missing values were: (" + Joiner.on(
-						",").join(
-						missingIds) + ")");
+				LOGGER.error("Error building ring relation for relation: " + osmunion.Id + " missing values were: ("
+						+ Joiner.on(
+								",").join(
+								missingIds) + ")");
 				return null;
 			}
 

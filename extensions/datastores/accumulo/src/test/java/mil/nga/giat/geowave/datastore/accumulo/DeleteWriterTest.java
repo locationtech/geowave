@@ -54,7 +54,9 @@ public class DeleteWriterTest
 	private DataStatisticsStore statsStore;
 	protected AccumuloOptions options = new AccumuloOptions();
 
-	private static final CommonIndexModel model = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
+	private static final CommonIndexModel model = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex()
+			.getIndexModel();
 
 	private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),

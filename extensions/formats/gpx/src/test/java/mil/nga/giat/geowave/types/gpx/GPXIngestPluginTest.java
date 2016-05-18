@@ -49,7 +49,8 @@ public class GPXIngestPluginTest
 								"NumberPoints").toString().equals(
 								"7") && feature.getAttribute(
 								"Duration").toString().equals(
-								"251000") && (feature.getAttribute("EndTimeStamp") != null) && (feature.getAttribute("StartTimeStamp") != null);
+								"251000") && (feature.getAttribute("EndTimeStamp") != null)
+								&& (feature.getAttribute("StartTimeStamp") != null);
 					}
 				});
 	}

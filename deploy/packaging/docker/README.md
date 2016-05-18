@@ -51,7 +51,7 @@ built for each of the desired build configurations (ex: cdh5, hortonworks or apa
 
 ```
 export WORKSPACE="$(pwd)/geowave"
-export SKIP_TESTS="-Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true" # (Optional)
+export SKIP_TESTS="-Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true" # (Optional)
 sudo chown -R $(whoami) geowave/deploy/packaging
 geowave/deploy/packaging/docker/docker-build-rpms.sh
 ```

@@ -108,7 +108,10 @@ public class FeatureWritable implements
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		output.writeUTF(featureType.getName().getNamespaceURI() == null ? "-" : featureType.getName().getNamespaceURI());
+		output
+				.writeUTF(featureType.getName().getNamespaceURI() == null ? "-" : featureType
+						.getName()
+						.getNamespaceURI());
 		output.writeUTF(featureType.getTypeName());
 		output.writeUTF(DataUtilities.encodeType(featureType));
 		output.writeUTF(FeatureDataUtils.getAxis(featureType.getCoordinateReferenceSystem()));
@@ -169,7 +172,8 @@ public class FeatureWritable implements
 			else if (binding == String.class) {
 				output.writeUTF((String) value);
 			}
-			else if ((binding == java.sql.Date.class) || (binding == java.sql.Time.class) || (binding == java.sql.Timestamp.class) || (binding == java.util.Date.class)) {
+			else if ((binding == java.sql.Date.class) || (binding == java.sql.Time.class)
+					|| (binding == java.sql.Timestamp.class) || (binding == java.util.Date.class)) {
 				output.writeLong(((Date) value).getTime());
 			}
 			else if (Geometry.class.isAssignableFrom(binding)) {

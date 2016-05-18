@@ -211,7 +211,8 @@ public class GDELTIngestPlugin extends
 				try {
 					final String[] vals = line.split("\t");
 					if ((vals.length < GDELTUtils.GDELT_MIN_COLUMNS) || (vals.length > GDELTUtils.GDELT_MAX_COLUMNS)) {
-						LOGGER.warn("Invalid GDELT line length: " + vals.length + " tokens found on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+						LOGGER.warn("Invalid GDELT line length: " + vals.length + " tokens found on line " + lineNumber
+								+ " of " + hfile.getOriginalFilePath());
 						continue;
 					}
 
@@ -234,7 +235,8 @@ public class GDELTIngestPlugin extends
 					}
 					catch (final Exception e) {
 						LOGGER.warn(
-								"Error reading GDELT lat/lon on line " + lineNumber + " of " + hfile.getOriginalFilePath(),
+								"Error reading GDELT lat/lon on line " + lineNumber + " of "
+										+ hfile.getOriginalFilePath(),
 								e);
 						continue;
 					}

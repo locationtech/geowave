@@ -21,7 +21,8 @@ public class GeoWaveDemoAppShell
 		Logger.getRootLogger().setLevel(
 				Level.WARN);
 
-		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName") : "geowave";
+		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
+				: "geowave";
 		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "password";
 
 		final String[] shellArgs = new String[] {

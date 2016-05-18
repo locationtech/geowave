@@ -464,7 +464,8 @@ public class MemoryDataStoreTest
 			return ((CountDataStatistics) stat).getCount() == count;
 		}
 		else if (stat instanceof IntegerRangeDataStatistics) {
-			return (((IntegerRangeDataStatistics) stat).getMin() == range.getMin()) && (((IntegerRangeDataStatistics) stat).getMax() == range.getMax());
+			return (((IntegerRangeDataStatistics) stat).getMin() == range.getMin())
+					&& (((IntegerRangeDataStatistics) stat).getMax() == range.getMax());
 		}
 		else if (stat instanceof RowRangeDataStatistics) {
 			return true;

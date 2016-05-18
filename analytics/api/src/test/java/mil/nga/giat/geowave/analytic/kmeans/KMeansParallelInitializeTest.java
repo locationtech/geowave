@@ -85,19 +85,26 @@ public class KMeansParallelInitializeTest
 					public int compare(
 							final SimpleFeature arg0,
 							final SimpleFeature arg1 ) {
-						final double arg0ToCorner = initializer.getCentroidAssociationFn().getDistanceFunction().measure(
-								arg0,
-								dataGenerator.getCorner());
-						final double arg1ToCorner = initializer.getCentroidAssociationFn().getDistanceFunction().measure(
-								arg1,
-								dataGenerator.getCorner());
+						final double arg0ToCorner = initializer
+								.getCentroidAssociationFn()
+								.getDistanceFunction()
+								.measure(
+										arg0,
+										dataGenerator.getCorner());
+						final double arg1ToCorner = initializer
+								.getCentroidAssociationFn()
+								.getDistanceFunction()
+								.measure(
+										arg1,
+										dataGenerator.getCorner());
 						return (arg0ToCorner - arg1ToCorner) < 0 ? -1 : 1;
 					}
 				});
 		final List<AnalyticItemWrapper<SimpleFeature>> itemSet = new ArrayList<AnalyticItemWrapper<SimpleFeature>>();
 		for (SimpleFeature feature : pointSet)
 			itemSet.add(itemFactory.create(feature));
-		final Pair<List<CentroidPairing<SimpleFeature>>, List<AnalyticItemWrapper<SimpleFeature>>> result = initializer.runLocal(itemSet);
+		final Pair<List<CentroidPairing<SimpleFeature>>, List<AnalyticItemWrapper<SimpleFeature>>> result = initializer
+				.runLocal(itemSet);
 		assertTrue(result.getRight().size() >= 5);
 		assertTrue(isMonotonic((StatsMap) initializer.getStats()));
 		for (AnalyticItemWrapper<SimpleFeature> centroid : result.getRight()) {

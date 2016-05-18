@@ -521,13 +521,14 @@ public class FilterToECQLExtension implements
 
 			}
 			else if ((filter.getExpression2() instanceof PropertyName) && (filter.getExpression1() instanceof Literal)) {
-				final Pair<Geometry, Double> geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
-						GeoWaveGTDataStore.DEFAULT_CRS,
-						filter.getExpression1().evaluate(
-								extraData,
-								Geometry.class),
-						filter.getDistanceUnits(),
-						filter.getDistance());
+				final Pair<Geometry, Double> geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils
+						.buffer(
+								GeoWaveGTDataStore.DEFAULT_CRS,
+								filter.getExpression1().evaluate(
+										extraData,
+										Geometry.class),
+								filter.getDistanceUnits(),
+								filter.getDistance());
 				newWithImpl = new IntersectsImpl(
 						new LiteralExpressionImpl(
 								geometryAndDegrees.getLeft()),

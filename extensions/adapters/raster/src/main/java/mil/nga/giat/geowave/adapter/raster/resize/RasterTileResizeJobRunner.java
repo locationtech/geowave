@@ -82,7 +82,8 @@ public class RasterTileResizeJobRunner extends
 
 		job.setJarByClass(this.getClass());
 
-		job.setJobName("Converting " + rasterResizeOptions.getInputCoverageName() + " to tile size=" + rasterResizeOptions.getOutputTileSize());
+		job.setJobName("Converting " + rasterResizeOptions.getInputCoverageName() + " to tile size="
+				+ rasterResizeOptions.getOutputTileSize());
 
 		job.setMapperClass(RasterTileResizeMapper.class);
 		job.setCombinerClass(RasterTileResizeCombiner.class);
@@ -114,7 +115,8 @@ public class RasterTileResizeJobRunner extends
 						rasterResizeOptions.getInputCoverageName()));
 		if (adapter == null) {
 			throw new IllegalArgumentException(
-					"Adapter for coverage '" + rasterResizeOptions.getInputCoverageName() + "' does not exist in namesace '" + inputStoreOptions.getGeowaveNamespace() + "'");
+					"Adapter for coverage '" + rasterResizeOptions.getInputCoverageName()
+							+ "' does not exist in namesace '" + inputStoreOptions.getGeowaveNamespace() + "'");
 		}
 
 		final RasterDataAdapter newAdapter = new RasterDataAdapter(

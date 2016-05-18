@@ -111,7 +111,8 @@ public interface Partitioner<T> extends
 
 		@Override
 		public String toString() {
-			return "PartitionData [id=" + Hex.encodeHexString(id.getBytes()) + ", groupId=" + (groupId == null ? "null" : groupId.getString()) + ", isPrimary=" + isPrimary + "]";
+			return "PartitionData [id=" + Hex.encodeHexString(id.getBytes()) + ", groupId="
+					+ (groupId == null ? "null" : groupId.getString()) + ", isPrimary=" + isPrimary + "]";
 		}
 
 		@Override

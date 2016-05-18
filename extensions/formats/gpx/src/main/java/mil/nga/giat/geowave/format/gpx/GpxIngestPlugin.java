@@ -85,7 +85,8 @@ public class GpxIngestPlugin extends
 				final String timespan = String.format(
 						"%d min, %d sec",
 						TimeUnit.MILLISECONDS.toMinutes(time),
-						TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
+						TimeUnit.MILLISECONDS.toSeconds(time)
+								- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
 				LOGGER.info("Metadata parsed in in " + timespan + " for " + metadata.size() + " tracks");
 			}
 			catch (final XMLStreamException | FileNotFoundException e) {

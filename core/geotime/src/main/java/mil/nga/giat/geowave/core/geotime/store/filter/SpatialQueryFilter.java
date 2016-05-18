@@ -229,7 +229,8 @@ public class SpatialQueryFilter extends
 			geometryFieldIdBuffer.put(id.getBytes());
 		}
 		final byte[] theRest = super.toBinary();
-		final ByteBuffer buf = ByteBuffer.allocate(12 + geometryBinary.length + geometryFieldIdByteSize + theRest.length);
+		final ByteBuffer buf = ByteBuffer.allocate(12 + geometryBinary.length + geometryFieldIdByteSize
+				+ theRest.length);
 		buf.putInt(compareOperation.ordinal());
 		buf.putInt(geometryBinary.length);
 		buf.putInt(geometryFieldIdByteSize);

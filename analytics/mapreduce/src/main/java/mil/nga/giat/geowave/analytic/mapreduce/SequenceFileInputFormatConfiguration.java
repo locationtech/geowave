@@ -32,7 +32,8 @@ public class SequenceFileInputFormatConfiguration implements
 			final PropertyManagement runTimeProperties,
 			final Configuration configuration )
 			throws Exception {
-		final Path localInputPath = inputPath == null ? runTimeProperties.getPropertyAsPath(InputParameters.Input.HDFS_INPUT_PATH) : inputPath;
+		final Path localInputPath = inputPath == null ? runTimeProperties
+				.getPropertyAsPath(InputParameters.Input.HDFS_INPUT_PATH) : inputPath;
 		if (localInputPath != null) {
 			configuration.set(
 					"mapred.input.dir",

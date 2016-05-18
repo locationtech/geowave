@@ -297,7 +297,8 @@ public class WholeFeatureDataAdapter extends
 					e);
 		}
 
-		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + adapterId.getBytes().length + attrBytes.length + 24);
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length
+				+ adapterId.getBytes().length + attrBytes.length + 24);
 
 		buf.putInt(0); // a signal for the new version
 		buf.putInt(typeNameBytes.length);

@@ -144,7 +144,8 @@ public class KMeansJumpJobRunner extends
 					GlobalParameters.Global.PARENT_BATCH_ID,
 					currentBatchId);
 
-			final DataStorePluginOptions dataStoreOptions = ((PersistableStore) propertyManagement.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
+			final DataStorePluginOptions dataStoreOptions = ((PersistableStore) propertyManagement
+					.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
 
 			final DistortionGroupManagement distortionGroupManagement = new DistortionGroupManagement(
 					dataStoreOptions.createDataStore(),

@@ -80,11 +80,13 @@ public class TestUtils
 	public static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
 	public static final String TEST_CASE_BASE = "data/";
 
-	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex();
 	public static final PrimaryIndex DEFAULT_ALLTIER_SPATIAL_INDEX = new SpatialIndexBuilder().setAllTiers(
 			true).createIndex();
 
-	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
+	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
+			.createPrimaryIndex();
 
 	public static boolean isYarn() {
 		return VersionUtil.compareVersions(

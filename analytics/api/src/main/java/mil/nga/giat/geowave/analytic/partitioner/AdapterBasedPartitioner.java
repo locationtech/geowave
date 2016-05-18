@@ -43,7 +43,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
  * This class depends on an AdapterStore. Since an AdapterStore is not
  * Serializable, the dependency is transient requiring initialization after
  * serialization
- * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
+ * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
  * 
  * 
  */
@@ -108,7 +108,9 @@ public class AdapterBasedPartitioner extends
 				entry.data,
 				getIndex().getIndexModel());
 		final double[] thetas = getDistancePerDimension();
-		final MultiDimensionalNumericData primaryData = encoding.getNumericData(getIndex().getIndexModel().getDimensions());
+		final MultiDimensionalNumericData primaryData = encoding.getNumericData(getIndex()
+				.getIndexModel()
+				.getDimensions());
 		numericDataHolder.primary = primaryData;
 		numericDataHolder.expansion = querySet(
 				primaryData,

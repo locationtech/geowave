@@ -52,7 +52,8 @@ public class HadoopWritableSerializationTool
 		HadoopWritableSerializer<Object, Writable> serializer = serializers.get(adapterID);
 		if (serializer == null) {
 			DataAdapter<?> adapter;
-			if ((adapterStore != null) && ((adapter = adapterStore.getAdapter(adapterID)) != null) && (adapter instanceof HadoopDataAdapter)) {
+			if ((adapterStore != null) && ((adapter = adapterStore.getAdapter(adapterID)) != null)
+					&& (adapter instanceof HadoopDataAdapter)) {
 				serializer = ((HadoopDataAdapter<Object, Writable>) adapter).createWritableSerializer();
 				serializers.put(
 						adapterID,

@@ -130,7 +130,8 @@ public class PersistenceUtils
 
 			if (factoryClassInst != null) {
 				if (!expectedType.isAssignableFrom(factoryClassInst.getClass())) {
-					LOGGER.warn("error creating class: " + className + " does not implement " + expectedType.getCanonicalName());
+					LOGGER.warn("error creating class: " + className + " does not implement "
+							+ expectedType.getCanonicalName());
 				}
 				else {
 					return ((T) factoryClassInst);

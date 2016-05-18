@@ -106,14 +106,16 @@ public abstract class DBScanClusterList implements
 
 	protected List<ByteArrayId> getIds(
 			boolean allowUpdates ) {
-		if (ids == null || ids == Collections.<ByteArrayId> emptyList()) ids = allowUpdates ? new ArrayList<ByteArrayId>(
-				4) : Collections.<ByteArrayId> emptyList();
+		if (ids == null || ids == Collections.<ByteArrayId> emptyList())
+			ids = allowUpdates ? new ArrayList<ByteArrayId>(
+					4) : Collections.<ByteArrayId> emptyList();
 		return ids;
 	}
 
 	protected Set<ByteArrayId> getLinkedClusters(
 			boolean allowUpdates ) {
-		if (linkedClusters == null || linkedClusters == Collections.<ByteArrayId> emptySet()) linkedClusters = allowUpdates ? new HashSet<ByteArrayId>() : Collections.<ByteArrayId> emptySet();
+		if (linkedClusters == null || linkedClusters == Collections.<ByteArrayId> emptySet())
+			linkedClusters = allowUpdates ? new HashSet<ByteArrayId>() : Collections.<ByteArrayId> emptySet();
 		return linkedClusters;
 	}
 
@@ -380,7 +382,8 @@ public abstract class DBScanClusterList implements
 
 	@Override
 	public String toString() {
-		return "DBScanClusterList [clusterGeo=" + (clusterGeo == null ? "null" : clusterGeo.toString()) + ", id=" + id + "]";
+		return "DBScanClusterList [clusterGeo=" + (clusterGeo == null ? "null" : clusterGeo.toString()) + ", id=" + id
+				+ "]";
 	}
 
 }

@@ -179,7 +179,9 @@ public class SpatialTemporalQueryTest
 								34)
 					})
 		};
-		final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
+		final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider()
+				.createPrimaryIndex()
+				.getIndexModel();
 		int pos = 0;
 		for (final CommonIndexedPersistenceEncoding dataItem : data) {
 			for (final QueryFilter filter : queryCopy.createFilters(model)) {

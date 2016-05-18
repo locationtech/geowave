@@ -39,7 +39,8 @@ public class GeoWaveInputFormatConfiguration implements
 			final PropertyManagement runTimeProperties,
 			final Configuration configuration )
 			throws Exception {
-		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
+		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties
+				.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
 		GeoWaveInputFormat.setDataStoreName(
 				configuration,
 				dataStoreOptions.getType());
@@ -55,7 +56,8 @@ public class GeoWaveInputFormatConfiguration implements
 					query);
 		}
 
-		final QueryOptions queryoptions = runTimeProperties.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS);
+		final QueryOptions queryoptions = runTimeProperties
+				.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS);
 
 		if (queryoptions != null) {
 			GeoWaveInputFormat.setQueryOptions(

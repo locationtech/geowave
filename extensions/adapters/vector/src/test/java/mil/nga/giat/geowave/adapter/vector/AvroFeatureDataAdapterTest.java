@@ -312,11 +312,15 @@ public class AvroFeatureDataAdapterTest
 						"whennot").getUserData().get(
 						"time"));
 
-		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy.getDefaultTypeMatchingHandlers(schema);
+		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy
+				.getDefaultTypeMatchingHandlers(schema);
 		boolean found = false;
 		for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
-			found |= ((handler instanceof FeatureTimestampHandler) && ((((FeatureTimestampHandler) handler).toIndexValue(
-					newFeature).toNumericData().getMin() - time2.getTime()) < 0.001));
+			found |= ((handler instanceof FeatureTimestampHandler) && ((((FeatureTimestampHandler) handler)
+					.toIndexValue(
+							newFeature)
+					.toNumericData()
+					.getMin() - time2.getTime()) < 0.001));
 		}
 
 		assertTrue(found);
@@ -374,7 +378,8 @@ public class AvroFeatureDataAdapterTest
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
 
-		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapter.getDefaultTypeMatchingHandlers(schema);
+		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapter
+				.getDefaultTypeMatchingHandlers(schema);
 		boolean found = false;
 		for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
 			found |= (handler instanceof FeatureTimestampHandler);
@@ -412,11 +417,15 @@ public class AvroFeatureDataAdapterTest
 						"when").getUserData().get(
 						"time"));
 
-		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy.getDefaultTypeMatchingHandlers(schema);
+		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy
+				.getDefaultTypeMatchingHandlers(schema);
 		boolean found = false;
 		for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
-			found |= ((handler instanceof FeatureTimestampHandler) && ((((FeatureTimestampHandler) handler).toIndexValue(
-					newFeature).toNumericData().getMin() - time1.getTime()) < 0.001));
+			found |= ((handler instanceof FeatureTimestampHandler) && ((((FeatureTimestampHandler) handler)
+					.toIndexValue(
+							newFeature)
+					.toNumericData()
+					.getMin() - time1.getTime()) < 0.001));
 		}
 
 		assertTrue(found);
@@ -465,12 +474,17 @@ public class AvroFeatureDataAdapterTest
 						"when").getUserData().get(
 						"start"));
 
-		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy.getDefaultTypeMatchingHandlers(schema);
+		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy
+				.getDefaultTypeMatchingHandlers(schema);
 		boolean found = false;
 		for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
-			found |= ((handler instanceof FeatureTimeRangeHandler) && ((((FeatureTimeRangeHandler) handler).toIndexValue(
-					newFeature).toNumericData().getMin() - time1.getTime()) < 0.001) && ((((FeatureTimeRangeHandler) handler).toIndexValue(
-					newFeature).toNumericData().getMax() - time2.getTime()) < 0.001));
+			found |= ((handler instanceof FeatureTimeRangeHandler)
+					&& ((((FeatureTimeRangeHandler) handler).toIndexValue(
+							newFeature).toNumericData().getMin() - time1.getTime()) < 0.001) && ((((FeatureTimeRangeHandler) handler)
+					.toIndexValue(
+							newFeature)
+					.toNumericData()
+					.getMax() - time2.getTime()) < 0.001));
 		}
 
 		assertTrue(found);
@@ -540,12 +554,17 @@ public class AvroFeatureDataAdapterTest
 						"start").getUserData().get(
 						"start"));
 
-		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy.getDefaultTypeMatchingHandlers(schema);
+		final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers = dataAdapterCopy
+				.getDefaultTypeMatchingHandlers(schema);
 		boolean found = false;
 		for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
-			found |= ((handler instanceof FeatureTimeRangeHandler) && ((((FeatureTimeRangeHandler) handler).toIndexValue(
-					newFeature).toNumericData().getMin() - time1.getTime()) < 0.001) && ((((FeatureTimeRangeHandler) handler).toIndexValue(
-					newFeature).toNumericData().getMax() - time2.getTime()) < 0.001));
+			found |= ((handler instanceof FeatureTimeRangeHandler)
+					&& ((((FeatureTimeRangeHandler) handler).toIndexValue(
+							newFeature).toNumericData().getMin() - time1.getTime()) < 0.001) && ((((FeatureTimeRangeHandler) handler)
+					.toIndexValue(
+							newFeature)
+					.toNumericData()
+					.getMax() - time2.getTime()) < 0.001));
 		}
 
 		assertTrue(found);

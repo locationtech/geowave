@@ -158,7 +158,8 @@ public class ExtractTimeFilterVisitorTest
 
 		final Date stime1 = DateUtilities.parseISO("2005-05-17T20:32:56Z");
 		final Date etime1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
-		filter = ECQL.toFilter("(start > 2005-05-17T20:32:56Z and end < 2005-05-18T20:32:56Z) or (start > 2005-05-19T20:32:56Z and end < 2005-05-20T20:32:56Z)");
+		filter = ECQL
+				.toFilter("(start > 2005-05-17T20:32:56Z and end < 2005-05-18T20:32:56Z) or (start > 2005-05-19T20:32:56Z and end < 2005-05-20T20:32:56Z)");
 		filter = factory.and(
 				Filter.INCLUDE,
 				filter);

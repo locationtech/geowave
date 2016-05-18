@@ -57,14 +57,15 @@ public class SPIServiceRegistryTest
 		}
 		SPIServiceRegistry registry = new SPIServiceRegistry(
 				FieldSerializationProviderSpi.class);
-		registry.registerLocalClassLoader(java.security.AccessController.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
-			public URLClassLoader run() {
-				final URLClassLoader ucl = new URLClassLoader(
-						fileUrls,
-						cl);
-				return ucl;
-			}
-		}));
+		registry.registerLocalClassLoader(java.security.AccessController
+				.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
+					public URLClassLoader run() {
+						final URLClassLoader ucl = new URLClassLoader(
+								fileUrls,
+								cl);
+						return ucl;
+					}
+				}));
 
 		// Proves that the VFS Classloader SPI loading bug exists
 		Iterator<FieldSerializationProviderSpi> it1 = ServiceLoader.load(
