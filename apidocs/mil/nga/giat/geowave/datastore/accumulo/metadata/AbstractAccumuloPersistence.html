@@ -173,120 +173,128 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObject(T)">addObject</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20T)">addObject</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+         <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
+         <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObjectToCache(T)">addObjectToCache</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObject(T)">addObject</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObjectToCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20T)">addObjectToCache</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
+                <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#clearCache()">clearCache</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteObject</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObjectFromCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">deleteObjectFromCache</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObjects(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteObjects</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#entryToValue(java.util.Map.Entry)">entryToValue</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloColumnFamily()">getAccumuloColumnFamily</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloColumnQualifier(mil.nga.giat.geowave.core.index.ByteArrayId)">getAccumuloColumnQualifier</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloColumnQualifier(T)">getAccumuloColumnQualifier</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;persistedObject)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloTablename()">getAccumuloTablename</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloVisibility(T)">getAccumuloVisibility</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAllObjectsWithSecondaryId(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getAllObjectsWithSecondaryId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getCombinedId(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getCombinedId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getIteratorConfig()">getIteratorConfig</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getObject</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObjectFromCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getObjectFromCache</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
                   <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObjects(java.lang.String...)">getObjects</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPeristenceTypeName(org.apache.accumulo.core.data.Key)">getPeristenceTypeName</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPersistenceTypeName()">getPersistenceTypeName</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPrimaryId(org.apache.accumulo.core.data.Key)">getPrimaryId</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPrimaryId(T)">getPrimaryId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;persistedObject)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected org.apache.accumulo.core.client.BatchScanner</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getScanner(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getScanner</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
           <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected org.apache.accumulo.core.client.IteratorSetting[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getScanSettings()">getScanSettings</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getSecondaryId(org.apache.accumulo.core.data.Key)">getSecondaryId</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getSecondaryId(T)">getSecondaryId</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;persistedObject)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#objectExists(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">objectExists</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId)</code>&nbsp;</td>
@@ -503,15 +511,30 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>protected&nbsp;void&nbsp;addObject(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</pre>
 </li>
 </ul>
-<a name="addObjectToCache(mil.nga.giat.geowave.core.index.Persistable)">
+<a name="addObject(mil.nga.giat.geowave.core.index.ByteArrayId,mil.nga.giat.geowave.core.index.ByteArrayId,mil.nga.giat.geowave.core.index.Persistable)">
 <!--   -->
-</a><a name="addObjectToCache(T)">
+</a><a name="addObject(mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.core.index.ByteArrayId, T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addObject</h4>
+<pre>protected&nbsp;void&nbsp;addObject(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
+             <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</pre>
+</li>
+</ul>
+<a name="addObjectToCache(mil.nga.giat.geowave.core.index.ByteArrayId,mil.nga.giat.geowave.core.index.ByteArrayId,mil.nga.giat.geowave.core.index.Persistable)">
+<!--   -->
+</a><a name="addObjectToCache(mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.core.index.ByteArrayId, T)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addObjectToCache</h4>
-<pre>protected&nbsp;void&nbsp;addObjectToCache(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</pre>
+<pre>protected&nbsp;void&nbsp;addObjectToCache(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
+                    <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</pre>
 </li>
 </ul>
 <a name="getObjectFromCache(mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.core.index.ByteArrayId)">

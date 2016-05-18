@@ -107,10 +107,14 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query.aggregate">mil.nga.giat.geowave.core.store.query.aggregate</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query.aggregate">mil.nga.giat.geowave.core.store.query.aggregate</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -382,6 +386,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/index/package-summary.html">mil.nga.giat.geowave.core.index</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/index/package-summary.html">mil.nga.giat.geowave.core.index</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a></strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/index/package-summary.html">mil.nga.giat.geowave.core.index</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -499,6 +516,37 @@
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="strong">NumericRangeDataStatistics.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.index">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/package-summary.html">mil.nga.giat.geowave.core.store.index</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/package-summary.html">mil.nga.giat.geowave.core.store.index</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexMetaDataSet.html" title="class in mil.nga.giat.geowave.core.store.index">IndexMetaDataSet</a>&lt;T&gt;</strong></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/package-summary.html">mil.nga.giat.geowave.core.store.index</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="strong">IndexMetaDataSet.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexMetaDataSet.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;merge)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -157,15 +157,27 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/NumericInd
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#createMetaData()">createMetaData</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#decomposeByteArrayId(mil.nga.giat.geowave.core.index.ByteArrayId)">decomposeByteArrayId</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id)</code>
 <div class="block">Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
  compound index strategy</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#extractByteArrayId(mil.nga.giat.geowave.core.index.ByteArrayId,%20int)">extractByteArrayId</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                  int&nbsp;index)</code>
+<div class="block">Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
+ compound index strategy</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -235,14 +247,16 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/NumericInd
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">getQueryRanges</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange)</code>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20mil.nga.giat.geowave.core.index.IndexMetaData...)">getQueryRanges</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
+              <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>
 <div class="block">Returns a list of query ranges for an specified numeric range.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">getQueryRanges</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
-              int&nbsp;maxEstimatedRangeDecomposition)</code>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html#getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int,%20mil.nga.giat.geowave.core.index.IndexMetaData...)">getQueryRanges</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
+              int&nbsp;maxEstimatedRangeDecomposition,
+              <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>
 <div class="block">Returns a list of query ranges for an specified numeric range.</div>
 </td>
 </tr>
@@ -396,35 +410,37 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/NumericInd
 <dt><span class="strong">Returns:</span></dt><dd>the ByteArrayId for each sub-strategy</dd></dl>
 </li>
 </ul>
-<a name="getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getQueryRanges</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;getQueryRanges(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType)">IndexStrategy</a></code></strong></div>
-<div class="block">Returns a list of query ranges for an specified numeric range.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType)">getQueryRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>indexedRange</code> - defines the numeric range for the query</dd>
-<dt><span class="strong">Returns:</span></dt><dd>a List of query ranges</dd></dl>
-</li>
-</ul>
-<a name="getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, int)">
+<a name="getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, mil.nga.giat.geowave.core.index.IndexMetaData...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getQueryRanges</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;getQueryRanges(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
-                                  int&nbsp;maxEstimatedRangeDecomposition)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType,%20int)">IndexStrategy</a></code></strong></div>
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType,%20mil.nga.giat.geowave.core.index.IndexMetaData...)">IndexStrategy</a></code></strong></div>
 <div class="block">Returns a list of query ranges for an specified numeric range.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType,%20int)">getQueryRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType,%20mil.nga.giat.geowave.core.index.IndexMetaData...)">getQueryRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>indexedRange</code> - defines the numeric range for the query</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a List of query ranges</dd></dl>
+</li>
+</ul>
+<a name="getQueryRanges(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, int, mil.nga.giat.geowave.core.index.IndexMetaData...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getQueryRanges</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;getQueryRanges(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
+                                  int&nbsp;maxEstimatedRangeDecomposition,
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType,%20int,%20mil.nga.giat.geowave.core.index.IndexMetaData...)">IndexStrategy</a></code></strong></div>
+<div class="block">Returns a list of query ranges for an specified numeric range.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getQueryRanges(QueryRangeType,%20int,%20mil.nga.giat.geowave.core.index.IndexMetaData...)">getQueryRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>indexedRange</code> - defines the numeric range for the query</dd>
 <dt><span class="strong">Returns:</span></dt><dd>a List of query ranges</dd></dl>
 </li>
@@ -590,7 +606,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/NumericInd
 <a name="getByteOffsetFromDimensionalIndex()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getByteOffsetFromDimensionalIndex</h4>
 <pre>public&nbsp;int&nbsp;getByteOffsetFromDimensionalIndex()</pre>
@@ -601,6 +617,33 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/NumericInd
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getByteOffsetFromDimensionalIndex()">getByteOffsetFromDimensionalIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>the byte offset prior to the dimensional index</dd></dl>
+</li>
+</ul>
+<a name="createMetaData()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createMetaData</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>&gt;&nbsp;createMetaData()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#createMetaData()">createMetaData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="extractByteArrayId(mil.nga.giat.geowave.core.index.ByteArrayId, int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>extractByteArrayId</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;extractByteArrayId(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                             int&nbsp;index)</pre>
+<div class="block">Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
+ compound index strategy</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>id</code> - the compound ByteArrayId</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the ByteArrayId for each sub-strategy</dd></dl>
 </li>
 </ul>
 </li>
