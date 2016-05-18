@@ -43,7 +43,7 @@ public class GeoWaveGTRasterFormat extends
 
 	static {
 		try {
-			DEFAULT_CRS = CRS.decode("EPSG:4326");
+			DEFAULT_CRS = CRS.decode("EPSG:4326", true);
 		}
 		catch (final FactoryException e) {
 			LOGGER.error(
