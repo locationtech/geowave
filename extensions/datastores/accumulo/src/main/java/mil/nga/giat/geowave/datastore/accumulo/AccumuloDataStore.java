@@ -61,6 +61,7 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -463,6 +464,10 @@ public class AccumuloDataStore implements
 							sanitizedQueryOptions.getScanCallback(),
 							sanitizedQueryOptions.getAggregation(),
 							sanitizedQueryOptions.getFieldIdsAdapterPair(),
+							composeMetaData(
+									indexAdapterPair.getLeft(),
+									adapterIdsToQuery,
+									sanitizedQueryOptions.getAuthorizations()),
 							sanitizedQueryOptions.getAuthorizations());
 
 					results.add(accumuloQuery.query(
@@ -852,14 +857,19 @@ public class AccumuloDataStore implements
 
 					}
 					else {
+						List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
 						dataIt = new AccumuloConstraintsQuery(
-								Collections.singletonList(adapter.getAdapterId()),
+								adapterIds,
 								index,
 								query,
 								null,
 								callback,
 								null,
 								queryOptions.getFieldIdsAdapterPair(),
+								composeMetaData(
+										indexAdapterPair.getLeft(),
+										adapterIds,
+										queryOptions.getAuthorizations()),
 								queryOptions.getAuthorizations()).query(
 								accumuloOperations,
 								adapterStore,
@@ -1040,4 +1050,20 @@ public class AccumuloDataStore implements
 		return secondaryIndexDataStore;
 	}
 
+	private IndexMetaDataSet composeMetaData(
+			final PrimaryIndex index,
+			final List<ByteArrayId> adapterIdsToQuery,
+			final String... authorizations ) {
+		IndexMetaDataSet metaData = new IndexMetaDataSet(
+				index.getId(),
+				index.getId(),
+				index.getIndexStrategy().createMetaData());
+		for (ByteArrayId adapterId : adapterIdsToQuery) {
+			metaData.merge((IndexMetaDataSet) statisticsStore.getDataStatistics(
+					adapterId,
+					IndexMetaDataSet.composeId(index.getId()),
+					authorizations));
+		}
+		return metaData;
+	}
 }

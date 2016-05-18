@@ -13,11 +13,11 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.ByteArrayRange.MergeOperation;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.ByteArrayRange.MergeOperation;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.IngestCallback;
@@ -26,9 +26,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -40,6 +38,7 @@ import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHa
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /*
@@ -74,7 +73,8 @@ public class DataStoreUtils
 	public static List<ByteArrayRange> constraintsToByteArrayRanges(
 			final List<MultiDimensionalNumericData> constraints,
 			final NumericIndexStrategy indexStrategy,
-			final int maxRanges ) {
+			final int maxRanges,
+			final IndexMetaData... hints ) {
 		if ((constraints == null) || constraints.isEmpty()) {
 			return new ArrayList<ByteArrayRange>(); // implies in negative and
 			// positive infinity
@@ -84,7 +84,8 @@ public class DataStoreUtils
 			for (final MultiDimensionalNumericData nd : constraints) {
 				ranges.addAll(indexStrategy.getQueryRanges(
 						nd,
-						maxRanges));
+						maxRanges,
+						hints));
 			}
 			if (constraints.size() > 1) {
 				return ByteArrayRange.mergeIntersections(

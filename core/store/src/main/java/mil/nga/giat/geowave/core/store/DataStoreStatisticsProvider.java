@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.EmptyStatisticVisibili
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class DataStoreStatisticsProvider<T> implements
@@ -34,9 +35,10 @@ public class DataStoreStatisticsProvider<T> implements
 				.getSupportedStatisticsIds() : new ByteArrayId[0];
 		final ByteArrayId[] newSet = Arrays.copyOf(
 				idsFromAdapter,
-				idsFromAdapter.length + 2);
+				idsFromAdapter.length + 3);
 		newSet[idsFromAdapter.length] = RowRangeDataStatistics.STATS_ID;
 		newSet[idsFromAdapter.length + 1] = RowRangeHistogramStatistics.STATS_ID;
+		newSet[idsFromAdapter.length + 2] = IndexMetaDataSet.STATS_ID;
 		return newSet;
 	}
 
@@ -52,6 +54,12 @@ public class DataStoreStatisticsProvider<T> implements
 					adapter.getAdapterId(),
 					index.getId(),
 					1024);
+		}
+		if (statisticsId.equals(IndexMetaDataSet.STATS_ID)) {
+			return new IndexMetaDataSet(
+					adapter.getAdapterId(),
+					index.getId(),
+					index.getIndexStrategy().createMetaData());
 		}
 		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
 				.createDataStatistics(statisticsId) : null;

@@ -18,7 +18,7 @@ public class PersistenceUtils
 	private final static Logger LOGGER = Logger.getLogger(PersistenceUtils.class);
 
 	public static byte[] toBinary(
-			final Collection<Persistable> persistables ) {
+			final Collection<? extends Persistable> persistables ) {
 		if (persistables.isEmpty()) {
 			return new byte[] {};
 		}

@@ -72,6 +72,7 @@ public class InputFormatAccumuloRangeQuery extends
 				queryOptions.getScanCallback(),
 				null,
 				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.accumuloRange = accumuloRange;

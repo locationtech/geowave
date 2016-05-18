@@ -10,6 +10,7 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.index.FieldIndexStrategy;
@@ -57,7 +58,8 @@ public class TextIndexStrategy implements
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
-			final TextQueryConstraint indexedRange ) {
+			final TextQueryConstraint indexedRange,
+			final IndexMetaData... hints ) {
 		return indexedRange.getRange(
 				start,
 				end);
@@ -66,7 +68,8 @@ public class TextIndexStrategy implements
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final TextQueryConstraint indexedRange,
-			final int maxEstimatedRangeDecomposition ) {
+			final int maxEstimatedRangeDecomposition,
+			final IndexMetaData... hints ) {
 		return indexedRange.getRange(
 				start,
 				end);
@@ -150,4 +153,8 @@ public class TextIndexStrategy implements
 		return null;
 	}
 
+	@Override
+	public List<IndexMetaData> createMetaData() {
+		return Collections.emptyList();
+	}
 }

@@ -63,6 +63,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStati
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
@@ -347,7 +348,7 @@ public class GeoWaveBasicIT
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
 						final DataStatistics<?> nextStats = statsIterator.next();
-						if (nextStats instanceof RowRangeHistogramStatistics) {
+						if (nextStats instanceof RowRangeHistogramStatistics || nextStats instanceof IndexMetaDataSet) {
 							continue;
 						}
 						statsCount++;

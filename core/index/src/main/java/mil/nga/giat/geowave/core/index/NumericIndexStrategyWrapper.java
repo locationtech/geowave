@@ -55,17 +55,20 @@ public class NumericIndexStrategyWrapper implements
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
-			final MultiDimensionalNumericData indexedRange ) {
+			final MultiDimensionalNumericData indexedRange,
+			final IndexMetaData... hints ) {
 		return indexStrategy.getQueryRanges(indexedRange);
 	}
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
-			final int maxRangeDecomposition ) {
+			final int maxRangeDecomposition,
+			final IndexMetaData... hints ) {
 		return indexStrategy.getQueryRanges(
 				indexedRange,
-				maxRangeDecomposition);
+				maxRangeDecomposition,
+				hints);
 	}
 
 	@Override
@@ -113,5 +116,10 @@ public class NumericIndexStrategyWrapper implements
 	@Override
 	public int getByteOffsetFromDimensionalIndex() {
 		return indexStrategy.getByteOffsetFromDimensionalIndex();
+	}
+
+	@Override
+	public List<IndexMetaData> createMetaData() {
+		return this.indexStrategy.createMetaData();
 	}
 }

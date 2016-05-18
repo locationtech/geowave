@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.index;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,8 @@ public class NullNumericIndexStrategy implements
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
-			final MultiDimensionalNumericData indexedRange ) {
+			final MultiDimensionalNumericData indexedRange,
+			final IndexMetaData... hints ) {
 		return getQueryRanges(
 				indexedRange,
 				-1);
@@ -50,7 +52,8 @@ public class NullNumericIndexStrategy implements
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
-			final int maxRangeDecomposition ) {
+			final int maxRangeDecomposition,
+			final IndexMetaData... hints ) {
 		// a null return here should be interpreted as negative to positive
 		// infinite
 		return null;
@@ -115,6 +118,11 @@ public class NullNumericIndexStrategy implements
 	@Override
 	public int getByteOffsetFromDimensionalIndex() {
 		return 0;
+	}
+
+	@Override
+	public List<IndexMetaData> createMetaData() {
+		return Collections.emptyList();
 	}
 
 }

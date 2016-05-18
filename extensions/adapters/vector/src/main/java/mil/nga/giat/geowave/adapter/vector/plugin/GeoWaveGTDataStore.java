@@ -209,8 +209,7 @@ public class GeoWaveGTDataStore extends
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
-				names.add(new NameImpl(
-						((GeotoolsFeatureDataAdapter) adapter).getType().getTypeName()));
+				names.add(((GeotoolsFeatureDataAdapter) adapter).getType().getName());
 			}
 		}
 		adapters.close();
