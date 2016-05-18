@@ -94,17 +94,6 @@ public class IndexMetaDataSet<T> extends
 		buffer.get(metaBytes);
 		
 		metaData = (List) PersistenceUtils.fromBinary(metaBytes);
-		// Stupid transform to get out of type conversion!
-	//	metaData = Lists.transform(
-	//			PersistenceUtils.fromBinary(metaBytes),
-	//			new Function<Persistable, IndexMetaData>() {
-	//				@Override
-	///				public IndexMetaData apply(
-	//						Persistable input ) {
-	//					return (IndexMetaData) input;
-	//				}
-	//			});
-
 	}
 
 	public IndexMetaData[] toArray() {
@@ -114,7 +103,7 @@ public class IndexMetaDataSet<T> extends
 	@Override
 	public void merge(
 			Mergeable merge ) {
-		if (merge instanceof IndexMetaDataSet) {
+		if (merge != null && merge instanceof IndexMetaDataSet) {
 			for (int i = 0; i < metaData.size(); i++) {
 				metaData.get(
 						i).merge(
