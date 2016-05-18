@@ -322,7 +322,8 @@ public class RootMergeStrategy<T extends Persistable> implements
 							bais);
 					final Object o = ois.readObject();
 					final int sampleModelKey = buf.getInt();
-					if ((o instanceof SerializableState) && (((SerializableState) o).getObject() instanceof SampleModel)) {
+					if ((o instanceof SerializableState)
+							&& (((SerializableState) o).getObject() instanceof SampleModel)) {
 						final SampleModel sampleModel = (SampleModel) ((SerializableState) o).getObject();
 						sampleModels.put(
 								sampleModelKey,

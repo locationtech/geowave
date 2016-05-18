@@ -446,10 +446,11 @@ public class HBaseDataStore implements
 			tempAdapterStore = new MemoryAdapterStore(
 					sanitizedQueryOptions.getAdaptersArray(adapterStore));
 
-			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions.getAdaptersWithMinimalSetOfIndices(
-					tempAdapterStore,
-					indexMappingStore,
-					indexStore)) {
+			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions
+					.getAdaptersWithMinimalSetOfIndices(
+							tempAdapterStore,
+							indexMappingStore,
+							indexStore)) {
 				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<ByteArrayId>();
 
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
@@ -588,10 +589,11 @@ public class HBaseDataStore implements
 		final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
 
 		try {
-			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getIndicesForAdapters(
-					adapterStore,
-					indexMappingStore,
-					indexStore)) {
+			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+					.getIndicesForAdapters(
+							adapterStore,
+							indexMappingStore,
+							indexStore)) {
 				final PrimaryIndex index = indexAdapterPair.getLeft();
 				final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 				final String altIdxTableName = tableName + HBaseUtils.ALT_INDEX_TABLE;
@@ -890,7 +892,8 @@ public class HBaseDataStore implements
 				// index table does not exist yet
 				if (operations.tableExists(altIdxTableName)) {
 					operations.deleteTable(altIdxTableName);
-					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName + "] as main table does not yet exist.");
+					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName
+							+ "] as main table does not yet exist.");
 				}
 			}
 

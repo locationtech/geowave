@@ -21,7 +21,9 @@ public class IngestUtils
 		if ((supportedTypes == null) || (supportedTypes.length == 0)) {
 			return false;
 		}
-		final Class<? extends CommonIndexValue>[] requiredTypes = dimensionalityProvider.getIndexPlugin().getRequiredIndexTypes();
+		final Class<? extends CommonIndexValue>[] requiredTypes = dimensionalityProvider
+				.getIndexPlugin()
+				.getRequiredIndexTypes();
 		for (final Class<? extends CommonIndexValue> requiredType : requiredTypes) {
 			boolean fieldFound = false;
 			for (final Class<? extends CommonIndexValue> supportedType : supportedTypes) {

@@ -164,7 +164,9 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements
 						public void notify(
 								final CentroidPairing<T> pairing ) {
 							try {
-								centroids.addAll(nestedGroupCentroidAssigner.getCentroidsForGroup(pairing.getCentroid().getGroupID()));
+								centroids.addAll(nestedGroupCentroidAssigner.getCentroidsForGroup(pairing
+										.getCentroid()
+										.getGroupID()));
 							}
 							catch (final IOException e) {
 								throw new RuntimeException(

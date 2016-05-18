@@ -102,7 +102,8 @@ public class NATO4676Decoder implements
 					msg = readTrackMessage(
 							rootEl,
 							xmlns);
-					LOGGER.info("TrackMessage read " + trackStatsNumTracks + " Tracks and " + trackStatsNumDots + " TrackPoints.");
+					LOGGER.info("TrackMessage read " + trackStatsNumTracks + " Tracks and " + trackStatsNumDots
+							+ " TrackPoints.");
 				}
 				else if ("MissionSummary".equals(name)) {
 					msg = readMissionSummaryMessage(

@@ -135,8 +135,10 @@ public class SpatialTemporalQueryIT
 				DAY_INDEX);
 
 		try {
-			for (int day = cal.getActualMinimum(Calendar.DAY_OF_MONTH); day <= cal.getActualMaximum(Calendar.DAY_OF_MONTH); day++) {
-				final double ptVal = ((((day + 1.0) - cal.getActualMinimum(Calendar.DAY_OF_MONTH)) / ((cal.getActualMaximum(Calendar.DAY_OF_MONTH) - cal.getActualMinimum(Calendar.DAY_OF_MONTH)) + 2.0)) * 2) - 1;
+			for (int day = cal.getActualMinimum(Calendar.DAY_OF_MONTH); day <= cal
+					.getActualMaximum(Calendar.DAY_OF_MONTH); day++) {
+				final double ptVal = ((((day + 1.0) - cal.getActualMinimum(Calendar.DAY_OF_MONTH)) / ((cal
+						.getActualMaximum(Calendar.DAY_OF_MONTH) - cal.getActualMinimum(Calendar.DAY_OF_MONTH)) + 2.0)) * 2) - 1;
 				cal.set(
 						Calendar.DAY_OF_MONTH,
 						day);
@@ -163,7 +165,8 @@ public class SpatialTemporalQueryIT
 						Calendar.MONTH,
 						month);
 
-				final double ptVal = ((((month + 1.0) - cal.getActualMinimum(Calendar.MONTH)) / ((cal.getActualMaximum(Calendar.MONTH) - cal.getActualMinimum(Calendar.MONTH)) + 2.0)) * 2) - 1;
+				final double ptVal = ((((month + 1.0) - cal.getActualMinimum(Calendar.MONTH)) / ((cal
+						.getActualMaximum(Calendar.MONTH) - cal.getActualMinimum(Calendar.MONTH)) + 2.0)) * 2) - 1;
 				final Point pt = geomFactory.createPoint(new Coordinate(
 						ptVal,
 						ptVal));
@@ -273,7 +276,8 @@ public class SpatialTemporalQueryIT
 									final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 									final BasicQuery query,
 									final PrimaryIndex[] indices ) {
-								final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader.load(IndexQueryStrategySPI.class);
+								final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader
+										.load(IndexQueryStrategySPI.class);
 								final Iterator<IndexQueryStrategySPI> it = ldr.iterator();
 								final List<Index<?, ?>> indexList = new ArrayList<Index<?, ?>>();
 
@@ -287,7 +291,8 @@ public class SpatialTemporalQueryIT
 											query,
 											indices);
 									Assert.assertTrue(
-											"Index Strategy '" + strategy.toString() + "' must at least choose one index.",
+											"Index Strategy '" + strategy.toString()
+													+ "' must at least choose one index.",
 											indexStrategyIt.hasNext());
 								}
 								return new CloseableIteratorWrapper<Index<?, ?>>(
@@ -506,7 +511,9 @@ public class SpatialTemporalQueryIT
 			final String endTimeAttribute )
 			throws CQLException,
 			IOException {
-		final String cqlPredicate = "BBOX(\"geo\",-1,-1,1,1) AND \"" + startTimeAttribute + "\" <= '" + CQL_DATE_FORMAT.format(endOfQuery) + "' AND \"" + endTimeAttribute + "\" >= '" + CQL_DATE_FORMAT.format(startOfQuery) + "'";
+		final String cqlPredicate = "BBOX(\"geo\",-1,-1,1,1) AND \"" + startTimeAttribute + "\" <= '"
+				+ CQL_DATE_FORMAT.format(endOfQuery) + "' AND \"" + endTimeAttribute + "\" >= '"
+				+ CQL_DATE_FORMAT.format(startOfQuery) + "'";
 		final Set<String> fidResults = new HashSet<String>();
 		try (CloseableIterator<SimpleFeature> it = dataStore.query(
 				options,

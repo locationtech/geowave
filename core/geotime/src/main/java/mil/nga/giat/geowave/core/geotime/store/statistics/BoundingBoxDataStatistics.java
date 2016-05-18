@@ -49,7 +49,8 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	}
 
 	public boolean isSet() {
-		if ((minX == Double.MAX_VALUE) || (minY == Double.MAX_VALUE) || (maxX == -Double.MAX_VALUE) || (maxY == -Double.MAX_VALUE)) {
+		if ((minX == Double.MAX_VALUE) || (minY == Double.MAX_VALUE) || (maxX == -Double.MAX_VALUE)
+				|| (maxY == -Double.MAX_VALUE)) {
 			return false;
 		}
 		return true;

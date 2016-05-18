@@ -158,7 +158,8 @@ public class GeoWaveNNIT
 							OrthodromicDistancePartitioner.class,
 							new PersistableStore(
 									dataStorePluginOptions),
-							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1/pairs",
+							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
+									+ "/t1/pairs",
 							TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + "/t1",
 							3,
 							SequenceFileOutputFormatConfiguration.class,

@@ -81,8 +81,10 @@ public class NumericQueryConstraint implements
 					Math.min(
 							this.upperValue.doubleValue(),
 							otherNumeric.upperValue.doubleValue()),
-					lowEquals ? otherNumeric.inclusiveLow & inclusiveLow : (replaceMin ? otherNumeric.inclusiveLow : inclusiveLow),
-					upperEquals ? otherNumeric.inclusiveHigh & inclusiveHigh : (replaceMax ? otherNumeric.inclusiveHigh : inclusiveHigh));
+					lowEquals ? otherNumeric.inclusiveLow & inclusiveLow : (replaceMin ? otherNumeric.inclusiveLow
+							: inclusiveLow),
+					upperEquals ? otherNumeric.inclusiveHigh & inclusiveHigh : (replaceMax ? otherNumeric.inclusiveHigh
+							: inclusiveHigh));
 		}
 		return this;
 	}
@@ -104,8 +106,10 @@ public class NumericQueryConstraint implements
 					Math.max(
 							this.upperValue.doubleValue(),
 							otherNumeric.upperValue.doubleValue()),
-					lowEquals ? otherNumeric.inclusiveLow | inclusiveLow : (replaceMin ? otherNumeric.inclusiveLow : inclusiveLow),
-					upperEquals ? otherNumeric.inclusiveHigh | inclusiveHigh : (replaceMax ? otherNumeric.inclusiveHigh : inclusiveHigh));
+					lowEquals ? otherNumeric.inclusiveLow | inclusiveLow : (replaceMin ? otherNumeric.inclusiveLow
+							: inclusiveLow),
+					upperEquals ? otherNumeric.inclusiveHigh | inclusiveHigh : (replaceMax ? otherNumeric.inclusiveHigh
+							: inclusiveHigh));
 		}
 		return this;
 	}

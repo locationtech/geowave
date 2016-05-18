@@ -318,7 +318,10 @@ public class ConvexHullMapReduce
 			indexIds.add(new ByteArrayId(
 					StringUtils.stringToBinary(config.getString(
 							HullParameters.Hull.INDEX_ID,
-							new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getId().getString()))));
+							new SpatialDimensionalityTypeProvider.SpatialIndexBuilder()
+									.createIndex()
+									.getId()
+									.getString()))));
 
 		}
 	}

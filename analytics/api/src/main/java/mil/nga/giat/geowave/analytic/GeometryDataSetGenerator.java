@@ -147,9 +147,11 @@ public class GeometryDataSetGenerator
 		final double[] min = new double[range.length];
 		final double[] max = new double[range.length];
 		for (int i = 0; i < range.length; i++) {
-			min[i] = Math.max(
-					minAxis[i] + (minCenterDistanceFactor * (rand.nextInt(Integer.MAX_VALUE) % (range[i] / minCenterDistanceFactor))),
-					minAxis[i]);
+			min[i] = Math
+					.max(
+							minAxis[i]
+									+ (minCenterDistanceFactor * (rand.nextInt(Integer.MAX_VALUE) % (range[i] / minCenterDistanceFactor))),
+							minAxis[i]);
 			max[i] = Math.min(
 					min[i] + (minCenterDistanceFactor * range[i]),
 					maxAxis[i]);

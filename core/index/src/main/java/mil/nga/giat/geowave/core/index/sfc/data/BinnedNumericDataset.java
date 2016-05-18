@@ -106,7 +106,8 @@ public class BinnedNumericDataset implements
 		final BinRange[][] binRangesPerDimension = new BinRange[dimensionDefinitions.length][];
 		int numBinnedQueries = 1;
 		for (int d = 0; d < dimensionDefinitions.length; d++) {
-			binRangesPerDimension[d] = dimensionDefinitions[d].getNormalizedRanges(numericData.getDataPerDimension()[d]);
+			binRangesPerDimension[d] = dimensionDefinitions[d]
+					.getNormalizedRanges(numericData.getDataPerDimension()[d]);
 			numBinnedQueries *= binRangesPerDimension[d].length;
 		}
 		// now we need to combine all permutations of bin ranges into

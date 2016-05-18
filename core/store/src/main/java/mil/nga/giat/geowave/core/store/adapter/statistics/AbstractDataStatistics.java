@@ -110,6 +110,7 @@ abstract public class AbstractDataStatistics<T> implements
 
 	@Override
 	public String toString() {
-		return "AbstractDataStatistics [dataAdapterId=" + dataAdapterId.getString() + ", statisticsId=" + statisticsId.getString() + "]";
+		return "AbstractDataStatistics [dataAdapterId=" + dataAdapterId.getString() + ", statisticsId="
+				+ statisticsId.getString() + "]";
 	}
 }

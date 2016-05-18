@@ -130,7 +130,8 @@ public class IngestFromKafkaDriver
 					avroFormatPlugin = pluginProvider.getValue();
 
 					final IngestPluginBase<?, ?> ingestWithAvroPlugin = avroFormatPlugin.getIngestWithAvroPlugin();
-					final WritableDataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions.getVisibility());
+					final WritableDataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions
+							.getVisibility());
 					adapters.addAll(Arrays.asList(dataAdapters));
 					final KafkaIngestRunData runData = new KafkaIngestRunData(
 							adapters,
@@ -207,13 +208,15 @@ public class IngestFromKafkaDriver
 					"Kafka consumer connector is null, unable to create message streams");
 		}
 		try {
-			LOGGER.debug("Kafka consumer setup for format [" + formatPluginName + "] against topic [" + formatPluginName + "]");
+			LOGGER.debug("Kafka consumer setup for format [" + formatPluginName + "] against topic ["
+					+ formatPluginName + "]");
 			final Map<String, Integer> topicCount = new HashMap<>();
 			topicCount.put(
 					formatPluginName,
 					1);
 
-			final Map<String, List<KafkaStream<byte[], byte[]>>> consumerStreams = consumer.createMessageStreams(topicCount);
+			final Map<String, List<KafkaStream<byte[], byte[]>>> consumerStreams = consumer
+					.createMessageStreams(topicCount);
 			final List<KafkaStream<byte[], byte[]>> streams = consumerStreams.get(formatPluginName);
 
 			queue.remove(formatPluginName);

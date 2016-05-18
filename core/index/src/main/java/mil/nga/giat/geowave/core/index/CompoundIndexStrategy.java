@@ -540,11 +540,11 @@ public class CompoundIndexStrategy implements
 
 	/**
 	 * 
-	 *  Delegate Metadata item for an underlying index.
-	 *  For CompoundIndexStrategy, this delegate wraps the meta data
-	 *  for one of the two indices.  The primary function of this class
-	 *  is to extract out the parts of the ByteArrayId that are specific
-	 *  to each index during an 'update' operation.
+	 * Delegate Metadata item for an underlying index. For
+	 * CompoundIndexStrategy, this delegate wraps the meta data for one of the
+	 * two indices. The primary function of this class is to extract out the
+	 * parts of the ByteArrayId that are specific to each index during an
+	 * 'update' operation.
 	 *
 	 */
 	private static class CompoundIndexMetaDataWrapper implements

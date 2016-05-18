@@ -548,14 +548,16 @@ public class QueryOptions implements
 		}
 
 		byte[] fieldIdsBytes = new byte[0];
-		if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getLeft() != null) && (fieldIdsAdapterPair.getLeft().size() > 0)) {
+		if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getLeft() != null)
+				&& (fieldIdsAdapterPair.getLeft().size() > 0)) {
 			final String fieldIdsString = org.apache.commons.lang3.StringUtils.join(
 					fieldIdsAdapterPair.getLeft(),
 					',');
 			fieldIdsBytes = StringUtils.stringToBinary(fieldIdsString.toString());
 		}
 
-		final ByteBuffer buf = ByteBuffer.allocate(24 + authBytes.length + aSize + iSize + adapterBytes.length + fieldIdsBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(24 + authBytes.length + aSize + iSize + adapterBytes.length
+				+ fieldIdsBytes.length);
 		buf.putInt(adapterBytes.length);
 		if (adapterBytes.length > 0) {
 			buf.put(adapterBytes);
@@ -659,7 +661,8 @@ public class QueryOptions implements
 
 	@Override
 	public String toString() {
-		return "QueryOptions [adapterId=" + adapterIds + ", limit=" + limit + ", authorizations=" + Arrays.toString(authorizations) + "]";
+		return "QueryOptions [adapterId=" + adapterIds + ", limit=" + limit + ", authorizations="
+				+ Arrays.toString(authorizations) + "]";
 	}
 
 	@Override

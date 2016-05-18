@@ -452,7 +452,9 @@ public class MemoryDataStoreTest
 			DataStatistics<Integer> stat = (DataStatistics<Integer>) statIt.next();
 			if (stat instanceof CountDataStatistics && ((CountDataStatistics) stat).getCount() != count)
 				return false;
-			else if (stat instanceof IntegerRangeDataStatistics && (((IntegerRangeDataStatistics) stat).getMin() != range.getMin() || ((IntegerRangeDataStatistics) stat).getMax() != range.getMax())) return false;
+			else if (stat instanceof IntegerRangeDataStatistics
+					&& (((IntegerRangeDataStatistics) stat).getMin() != range.getMin() || ((IntegerRangeDataStatistics) stat)
+							.getMax() != range.getMax())) return false;
 		}
 		return true;
 	}

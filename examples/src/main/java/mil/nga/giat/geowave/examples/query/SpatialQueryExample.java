@@ -327,7 +327,8 @@ public class SpatialQueryExample
 
 		// Define the geometry to query. We'll find all points that fall inside
 		// that geometry
-		String queryPolygonDefinition = "POLYGON (( " + "-180 -90, " + "-180 90, " + "180 90, " + "180 -90, " + "-180 -90" + "))";
+		String queryPolygonDefinition = "POLYGON (( " + "-180 -90, " + "-180 90, " + "180 90, " + "180 -90, "
+				+ "-180 -90" + "))";
 		Geometry queryPolygon = new WKTReader(
 				JTSFactoryFinder.getGeometryFactory()).read(queryPolygonDefinition);
 
@@ -381,7 +382,9 @@ public class SpatialQueryExample
 
 		// Define the geometry to query. We'll find all points that fall inside
 		// that geometry.
-		String queryPolygonDefinition = "POLYGON (( " + "-118.50059509277344 33.75688594085081, " + "-118.50059509277344 34.1521587488017, " + "-117.80502319335938 34.1521587488017, " + "-117.80502319335938 33.75688594085081, " + "-118.50059509277344 33.75688594085081" + "))";
+		String queryPolygonDefinition = "POLYGON (( " + "-118.50059509277344 33.75688594085081, "
+				+ "-118.50059509277344 34.1521587488017, " + "-117.80502319335938 34.1521587488017, "
+				+ "-117.80502319335938 33.75688594085081, " + "-118.50059509277344 33.75688594085081" + "))";
 
 		Geometry queryPolygon = new WKTReader(
 				JTSFactoryFinder.getGeometryFactory()).read(queryPolygonDefinition);
@@ -581,7 +584,9 @@ public class SpatialQueryExample
 				sfType);
 
 		// For ease of use, we'll create the polygon geometry with WKT format.
-		String polygonDefinition = "POLYGON (( " + "-80.3045654296875 25.852426562716428, " + "-80.123291015625 25.808545671771615, " + "-80.19195556640625 25.7244467526159, " + "-80.34233093261719 25.772068899816585, " + "-80.3045654296875 25.852426562716428" + "))";
+		String polygonDefinition = "POLYGON (( " + "-80.3045654296875 25.852426562716428, "
+				+ "-80.123291015625 25.808545671771615, " + "-80.19195556640625 25.7244467526159, "
+				+ "-80.34233093261719 25.772068899816585, " + "-80.3045654296875 25.852426562716428" + "))";
 		Geometry geom = new WKTReader(
 				JTSFactoryFinder.getGeometryFactory()).read(polygonDefinition);
 		sfBuilder.set(
@@ -624,7 +629,9 @@ public class SpatialQueryExample
 
 		// Define the geometry to query. We'll find all polygons that intersect
 		// with this geometry.
-		String queryPolygonDefinition = "POLYGON (( " + "-80.4037857055664 25.81596330265488, " + "-80.27915954589844 25.788144792391982, " + "-80.34370422363281 25.8814655232439, " + "-80.44567108154297 25.896291175546626, " + "-80.4037857055664  25.81596330265488" + "))";
+		String queryPolygonDefinition = "POLYGON (( " + "-80.4037857055664 25.81596330265488, "
+				+ "-80.27915954589844 25.788144792391982, " + "-80.34370422363281 25.8814655232439, "
+				+ "-80.44567108154297 25.896291175546626, " + "-80.4037857055664  25.81596330265488" + "))";
 
 		Geometry queryPolygon = new WKTReader(
 				JTSFactoryFinder.getGeometryFactory()).read(queryPolygonDefinition);

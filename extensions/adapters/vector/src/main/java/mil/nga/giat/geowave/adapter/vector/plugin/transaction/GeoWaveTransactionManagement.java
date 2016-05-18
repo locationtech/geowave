@@ -117,7 +117,8 @@ public class GeoWaveTransactionManagement extends
 	@Override
 	public boolean isEmpty() {
 		synchronized (mutex) {
-			return modifiedFeatures.isEmpty() && addedFidList.isEmpty() && removedFeatures.isEmpty() && addedFeatures.isEmpty();
+			return modifiedFeatures.isEmpty() && addedFidList.isEmpty() && removedFeatures.isEmpty()
+					&& addedFeatures.isEmpty();
 		}
 	}
 

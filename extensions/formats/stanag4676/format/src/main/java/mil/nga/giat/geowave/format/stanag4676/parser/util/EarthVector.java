@@ -1163,7 +1163,8 @@ public class EarthVector
 	 */
 	public double getDistance(
 			final EarthVector loc ) {
-		double dist = getEarthRadiusKM() * (Math.acos(ecfVector.dot(loc.getVector()) / (ecfVector.length() * loc.getVector().length())));
+		double dist = getEarthRadiusKM()
+				* (Math.acos(ecfVector.dot(loc.getVector()) / (ecfVector.length() * loc.getVector().length())));
 
 		if (Double.isNaN(dist) || Double.isInfinite(dist)) {
 			dist = 0;
@@ -1181,7 +1182,9 @@ public class EarthVector
 	 */
 	public double getDistanceReverseDirection(
 			final EarthVector loc ) {
-		double dist = getEarthRadiusKM() * ((2 * Math.PI) - Math.acos(ecfVector.dot(loc.getVector()) / (ecfVector.length() * loc.getVector().length())));
+		double dist = getEarthRadiusKM()
+				* ((2 * Math.PI) - Math.acos(ecfVector.dot(loc.getVector())
+						/ (ecfVector.length() * loc.getVector().length())));
 
 		if (Double.isNaN(dist) || Double.isInfinite(dist)) {
 			dist = 0;
@@ -1199,7 +1202,8 @@ public class EarthVector
 	 */
 	public double getSphereDistance(
 			final EarthVector loc ) {
-		return (getEarthRadiusKM() * (Math.acos((Math.sin(latitude) * Math.sin(loc.getLatitude())) + (Math.cos(latitude) * Math.cos(loc.getLatitude()) * Math.cos(loc.getLongitude() - longitude)))));
+		return (getEarthRadiusKM() * (Math.acos((Math.sin(latitude) * Math.sin(loc.getLatitude()))
+				+ (Math.cos(latitude) * Math.cos(loc.getLatitude()) * Math.cos(loc.getLongitude() - longitude)))));
 	}
 
 	/**
@@ -1248,7 +1252,8 @@ public class EarthVector
 			azimuth = RAD_180 - azimuth;
 		}
 		final double deltaLon = Math.abs(loc.getLongitude() - longitude);
-		if (((loc.getLongitude() < longitude) && (deltaLon < RAD_180)) || ((loc.getLongitude() > longitude) && (deltaLon > RAD_180))) {
+		if (((loc.getLongitude() < longitude) && (deltaLon < RAD_180))
+				|| ((loc.getLongitude() > longitude) && (deltaLon > RAD_180))) {
 			// normalize azimuth to 0-360 degrees
 			azimuth = RAD_360 - azimuth;
 		}
@@ -1296,7 +1301,8 @@ public class EarthVector
 		final double radiusAtEquatorKM = REKM;
 
 		if (flat) {
-			return ((radiusAtEquatorKM * (1.0 - EARTH_FLATTENING)) / Math.sqrt(1.0 - (Math.cos(lat) * Math.cos(lat) * EARTH_FLATTENING * (2.0 - EARTH_FLATTENING))));
+			return ((radiusAtEquatorKM * (1.0 - EARTH_FLATTENING)) / Math.sqrt(1.0 - (Math.cos(lat) * Math.cos(lat)
+					* EARTH_FLATTENING * (2.0 - EARTH_FLATTENING))));
 		}
 		else {
 			return radiusAtEquatorKM;

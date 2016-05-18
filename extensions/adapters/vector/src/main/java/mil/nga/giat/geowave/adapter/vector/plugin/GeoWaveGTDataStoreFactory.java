@@ -57,7 +57,9 @@ public class GeoWaveGTDataStoreFactory implements
 	 * entry listed in META-INF/services/org.geotools.data.DataStoreFactorySPI
 	 */
 	public GeoWaveGTDataStoreFactory() {
-		final Collection<StoreFactoryFamilySpi> dataStoreFactories = GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().values();
+		final Collection<StoreFactoryFamilySpi> dataStoreFactories = GeoWaveStoreFinder
+				.getRegisteredStoreFactoryFamilies()
+				.values();
 		if (dataStoreFactories.isEmpty()) {
 			LOGGER.error("No GeoWave DataStore found!  Geotools datastore for GeoWave is unavailable");
 			geowaveStoreFactoryFamily = null;
@@ -165,7 +167,8 @@ public class GeoWaveGTDataStoreFactory implements
 
 	@Override
 	public String getDescription() {
-		return "A datastore that uses the GeoWave API for spatial data persistence in " + geowaveStoreFactoryFamily.getName() + ". " + geowaveStoreFactoryFamily.getDescription();
+		return "A datastore that uses the GeoWave API for spatial data persistence in "
+				+ geowaveStoreFactoryFamily.getName() + ". " + geowaveStoreFactoryFamily.getDescription();
 	}
 
 	@Override
@@ -236,7 +239,10 @@ public class GeoWaveGTDataStoreFactory implements
 			private int i = 1;
 
 			private GeoWaveGTDataStoreFactoryIterator() {
-				final Iterator<StoreFactoryFamilySpi> geowaveDataStoreIt = GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().values().iterator();
+				final Iterator<StoreFactoryFamilySpi> geowaveDataStoreIt = GeoWaveStoreFinder
+						.getRegisteredStoreFactoryFamilies()
+						.values()
+						.iterator();
 				geowaveDataStoreIt.next();
 				it = Iterators.transform(
 						geowaveDataStoreIt,

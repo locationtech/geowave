@@ -168,16 +168,17 @@ public class CommonOptions
 	 */
 	public QueryOptions buildQueryOptions() {
 		final QueryOptions options = new QueryOptions();
-		if (queryOptions.getAdapterIds() != null && queryOptions.getAdapterIds().size() > 0) options.setAdapter(Lists.transform(
-				queryOptions.getAdapterIds(),
-				new Function<String, ByteArrayId>() {
-					@Override
-					public ByteArrayId apply(
-							String input ) {
-						return new ByteArrayId(
-								input);
-					}
-				}));
+		if (queryOptions.getAdapterIds() != null && queryOptions.getAdapterIds().size() > 0)
+			options.setAdapter(Lists.transform(
+					queryOptions.getAdapterIds(),
+					new Function<String, ByteArrayId>() {
+						@Override
+						public ByteArrayId apply(
+								String input ) {
+							return new ByteArrayId(
+									input);
+						}
+					}));
 		if (queryOptions.getAuthorizations() != null) {
 			options.setAuthorizations(this.queryOptions.getAuthorizations().toArray(
 					new String[this.queryOptions.getAuthorizations().size()]));

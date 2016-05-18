@@ -44,12 +44,14 @@ public class AccumuloStoreTestEnvironment implements
 
 	@Override
 	public void setup() {
-		if (!TestUtils.isSet(zookeeper) || !TestUtils.isSet(accumuloInstance) || !TestUtils.isSet(accumuloUser) || !TestUtils.isSet(accumuloPassword)) {
+		if (!TestUtils.isSet(zookeeper) || !TestUtils.isSet(accumuloInstance) || !TestUtils.isSet(accumuloUser)
+				|| !TestUtils.isSet(accumuloPassword)) {
 			zookeeper = System.getProperty("zookeeperUrl");
 			accumuloInstance = System.getProperty("instance");
 			accumuloUser = System.getProperty("username");
 			accumuloPassword = System.getProperty("password");
-			if (!TestUtils.isSet(zookeeper) || !TestUtils.isSet(accumuloInstance) || !TestUtils.isSet(accumuloUser) || !TestUtils.isSet(accumuloPassword)) {
+			if (!TestUtils.isSet(zookeeper) || !TestUtils.isSet(accumuloInstance) || !TestUtils.isSet(accumuloUser)
+					|| !TestUtils.isSet(accumuloPassword)) {
 				try {
 
 					// TEMP_DIR = Files.createTempDir();
@@ -81,7 +83,8 @@ public class AccumuloStoreTestEnvironment implements
 							e);
 					LOGGER.info("Check '" + TEMP_DIR.getAbsolutePath() + File.separator + "logs' for more info");
 					if (SystemUtils.IS_OS_WINDOWS) {
-						LOGGER.warn("For windows, make sure that Cygwin is installed and set a CYGPATH environment variable to %CYGWIN_HOME%/bin/cygpath to successfully run a mini accumulo cluster");
+						LOGGER
+								.warn("For windows, make sure that Cygwin is installed and set a CYGPATH environment variable to %CYGWIN_HOME%/bin/cygpath to successfully run a mini accumulo cluster");
 					}
 					Assert.fail("Unable to start mini accumulo instance: '" + e.getLocalizedMessage() + "'");
 				}

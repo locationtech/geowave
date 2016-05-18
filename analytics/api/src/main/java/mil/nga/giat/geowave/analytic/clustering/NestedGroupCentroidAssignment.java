@@ -213,7 +213,8 @@ public class NestedGroupCentroidAssignment<T>
 
 			// only use the parent batch ID for upper levels, otherwise use the
 			// current batch ID.
-			final List<AnalyticItemWrapper<T>> centroids = (currentLevel == endZoomLevel) ? centroidManager.getCentroidsForGroup(group.getGroupID()) : centroidManager.getCentroidsForGroup(
+			final List<AnalyticItemWrapper<T>> centroids = (currentLevel == endZoomLevel) ? centroidManager
+					.getCentroidsForGroup(group.getGroupID()) : centroidManager.getCentroidsForGroup(
 					parentBatchID,
 					group.getGroupID());
 			if (centroids.size() == 0) {

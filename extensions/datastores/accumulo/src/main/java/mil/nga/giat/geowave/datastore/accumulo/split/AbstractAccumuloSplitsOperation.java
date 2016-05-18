@@ -90,7 +90,8 @@ abstract public class AbstractAccumuloSplitsOperation
 					LOGGER.error("index '" + splitOptions.getIndexId() + "' does not exist; unable to create splits");
 				}
 				if (!(index instanceof PrimaryIndex)) {
-					LOGGER.error("index '" + splitOptions.getIndexId() + "' is not a primary index; unable to create splits");
+					LOGGER.error("index '" + splitOptions.getIndexId()
+							+ "' is not a primary index; unable to create splits");
 				}
 				return setSplits(
 						connector,

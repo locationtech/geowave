@@ -178,12 +178,16 @@ public class KDEJobRunner extends
 		final FileSystem fs = FileSystem.get(conf);
 		fs.delete(
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName()),
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+								+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_"
+								+ kdeCommandLineOptions.getCoverageName()),
 				true);
 		FileOutputFormat.setOutputPath(
 				job,
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+								+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_"
+								+ kdeCommandLineOptions.getCoverageName() + "/basic"));
 
 		final boolean job1Success = job.waitForCompletion(true);
 		boolean job2Success = false;
@@ -205,7 +209,9 @@ public class KDEJobRunner extends
 			statsReducer.setMapperClass(IdentityMapper.class);
 			statsReducer.setPartitionerClass(getJob2Partitioner());
 			statsReducer.setReducerClass(getJob2Reducer());
-			statsReducer.setNumReduceTasks(getJob2NumReducers((kdeCommandLineOptions.getMaxLevel() - kdeCommandLineOptions.getMinLevel()) + 1));
+			statsReducer
+					.setNumReduceTasks(getJob2NumReducers((kdeCommandLineOptions.getMaxLevel() - kdeCommandLineOptions
+							.getMinLevel()) + 1));
 			statsReducer.setMapOutputKeyClass(DoubleWritable.class);
 			statsReducer.setMapOutputValueClass(LongWritable.class);
 			statsReducer.setOutputKeyClass(getJob2OutputKeyClass());
@@ -215,7 +221,9 @@ public class KDEJobRunner extends
 			FileInputFormat.setInputPaths(
 					statsReducer,
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
+							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
+									+ "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
 			setupJob2Output(
 					conf,
 					statsReducer,
@@ -233,7 +241,9 @@ public class KDEJobRunner extends
 
 		fs.delete(
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_" + kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_" + kdeCommandLineOptions.getCoverageName()),
+						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+								+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_"
+								+ kdeCommandLineOptions.getCoverageName()),
 				true);
 		return (job1Success && job2Success && postJob2Success) ? 0 : 1;
 	}
@@ -297,11 +307,15 @@ public class KDEJobRunner extends
 	}
 
 	protected String getJob2Name() {
-		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Ingest";
+		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
+				+ " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel()
+				+ " Ingest";
 	}
 
 	protected String getJob1Name() {
-		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel() + " Calculation";
+		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
+				+ " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel()
+				+ " Calculation";
 	}
 
 	protected void setupJob2Output(

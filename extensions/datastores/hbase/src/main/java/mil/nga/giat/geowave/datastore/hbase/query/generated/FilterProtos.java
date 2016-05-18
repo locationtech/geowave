@@ -83,7 +83,8 @@ public final class FilterProtos
 				throws com.google.protobuf.InvalidProtocolBufferException {
 			initFields();
 			int mutable_bitField0_ = 0;
-			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder();
+			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
+					.newBuilder();
 			try {
 				boolean done = false;
 				while (!done) {
@@ -133,9 +134,10 @@ public final class FilterProtos
 		}
 
 		protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
-			return mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.internal_static_SingleEntryFilter_fieldAccessorTable.ensureFieldAccessorsInitialized(
-					mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.class,
-					mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.Builder.class);
+			return mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.internal_static_SingleEntryFilter_fieldAccessorTable
+					.ensureFieldAccessorsInitialized(
+							mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.class,
+							mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.Builder.class);
 		}
 
 		public static com.google.protobuf.Parser<SingleEntryFilter> PARSER = new com.google.protobuf.AbstractParser<SingleEntryFilter>() {
@@ -424,9 +426,10 @@ public final class FilterProtos
 			}
 
 			protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
-				return mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.internal_static_SingleEntryFilter_fieldAccessorTable.ensureFieldAccessorsInitialized(
-						mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.class,
-						mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.Builder.class);
+				return mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.internal_static_SingleEntryFilter_fieldAccessorTable
+						.ensureFieldAccessorsInitialized(
+								mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.class,
+								mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.Builder.class);
 			}
 
 			// Construct using
@@ -471,7 +474,8 @@ public final class FilterProtos
 			}
 
 			public mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter getDefaultInstanceForType() {
-				return mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.getDefaultInstance();
+				return mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter
+						.getDefaultInstance();
 			}
 
 			public mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter build() {
@@ -513,7 +517,8 @@ public final class FilterProtos
 
 			public Builder mergeFrom(
 					mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter other ) {
-				if (other == mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter.getDefaultInstance()) return this;
+				if (other == mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter
+						.getDefaultInstance()) return this;
 				if (other.hasAdapterId()) {
 					setAdapterId(other.getAdapterId());
 				}
@@ -547,7 +552,8 @@ public final class FilterProtos
 							extensionRegistry);
 				}
 				catch (com.google.protobuf.InvalidProtocolBufferException e) {
-					parsedMessage = (mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter) e.getUnfinishedMessage();
+					parsedMessage = (mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter) e
+							.getUnfinishedMessage();
 					throw e;
 				}
 				finally {
@@ -664,7 +670,10 @@ public final class FilterProtos
 	private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
 	static {
 		java.lang.String[] descriptorData = {
-			"\n!protobuf/SingleEntryFilters.proto\"6\n\021S" + "ingleEntryFilter\022\021\n\tadapterId\030\001 \002(\014\022\016\n\006d" + "ataId\030\002 \002(\014BL\n4mil.nga.giat.geowave.data" + "store.hbase.query.generatedB\014FilterProto" + "sH\001\210\001\001\240\001\001"
+			"\n!protobuf/SingleEntryFilters.proto\"6\n\021S"
+					+ "ingleEntryFilter\022\021\n\tadapterId\030\001 \002(\014\022\016\n\006d"
+					+ "ataId\030\002 \002(\014BL\n4mil.nga.giat.geowave.data"
+					+ "store.hbase.query.generatedB\014FilterProto" + "sH\001\210\001\001\240\001\001"
 		};
 		com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
 			public com.google.protobuf.ExtensionRegistry assignDescriptors(

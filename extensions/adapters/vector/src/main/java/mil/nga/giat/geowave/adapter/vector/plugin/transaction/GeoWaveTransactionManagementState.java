@@ -130,7 +130,8 @@ public class GeoWaveTransactionManagementState implements
 			throws IOException {
 
 		try {
-			for (final Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
+			for (final Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i
+					.hasNext();) {
 				final Map.Entry<String, GeoWaveTransactionManagement> entry = i.next();
 
 				final String typeName = entry.getKey();
@@ -226,7 +227,8 @@ public class GeoWaveTransactionManagementState implements
 		Entry<String, GeoWaveTransactionManagement> entry;
 
 		try {
-			for (final Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i.hasNext();) {
+			for (final Iterator<Entry<String, GeoWaveTransactionManagement>> i = typeNameDiff.entrySet().iterator(); i
+					.hasNext();) {
 				entry = i.next();
 
 				final String typeName = entry.getKey();
@@ -246,7 +248,8 @@ public class GeoWaveTransactionManagementState implements
 
 	@Override
 	public String toString() {
-		return "GeoWaveTransactionManagementState [components=" + components + ", lockingManager=" + lockingManager + ", transaction=" + transaction + ", txID=" + txID + ", typeNameDiff=" + typeNameDiff + "]";
+		return "GeoWaveTransactionManagementState [components=" + components + ", lockingManager=" + lockingManager
+				+ ", transaction=" + transaction + ", txID=" + txID + ", typeNameDiff=" + typeNameDiff + "]";
 	}
 
 }

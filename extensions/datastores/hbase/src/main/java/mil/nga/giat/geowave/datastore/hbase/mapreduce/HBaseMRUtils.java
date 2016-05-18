@@ -68,10 +68,11 @@ public class HBaseMRUtils
 		final List<InputSplit> retVal = new ArrayList<InputSplit>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
 
-		for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getAdaptersWithMinimalSetOfIndices(
-				adapterStore,
-				adapterIndexMappingStore,
-				indexStore)) {
+		for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+				.getAdaptersWithMinimalSetOfIndices(
+						adapterStore,
+						adapterIndexMappingStore,
+						indexStore)) {
 
 			populateIntermediateSplits(
 					splits,
@@ -171,7 +172,8 @@ public class HBaseMRUtils
 				RowRangeDataStatistics.getId(index.getId()),
 				authorizations);
 		if (stats == null) {
-			LOGGER.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
+			LOGGER
+					.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
 			return new HBaseMRRowRange();
 		}
 
@@ -254,7 +256,8 @@ public class HBaseMRUtils
 					regionLocator);
 		}
 
-		for (final Entry<HRegionLocation, Map<HRegionInfo, List<HBaseMRRowRange>>> locationEntry : binnedRanges.entrySet()) {
+		for (final Entry<HRegionLocation, Map<HRegionInfo, List<HBaseMRRowRange>>> locationEntry : binnedRanges
+				.entrySet()) {
 			final String hostname = locationEntry.getKey().getHostname();
 
 			for (final Entry<HRegionInfo, List<HBaseMRRowRange>> regionEntry : locationEntry.getValue().entrySet()) {
@@ -514,7 +517,8 @@ public class HBaseMRUtils
 						public int compare(
 								final IndexRangeLocation o1,
 								final IndexRangeLocation o2 ) {
-							return (o1.rangeLocationPair.getCardinality() - o2.rangeLocationPair.getCardinality()) < 0 ? -1 : 1;
+							return (o1.rangeLocationPair.getCardinality() - o2.rangeLocationPair.getCardinality()) < 0 ? -1
+									: 1;
 						}
 					});
 			for (final Entry<PrimaryIndex, List<RangeLocationPair>> ranges : splitInfo.entrySet()) {
@@ -585,7 +589,9 @@ public class HBaseMRUtils
 			if (splitInfo.size() == 0) {
 				// First try to move a index set of ranges back.
 				if (otherSplitInfo.size() > 1) {
-					final Iterator<Entry<PrimaryIndex, List<RangeLocationPair>>> it = otherSplitInfo.entrySet().iterator();
+					final Iterator<Entry<PrimaryIndex, List<RangeLocationPair>>> it = otherSplitInfo
+							.entrySet()
+							.iterator();
 					final Entry<PrimaryIndex, List<RangeLocationPair>> entry = it.next();
 					it.remove();
 					splitInfo.put(

@@ -207,7 +207,8 @@ public abstract class AbstractPartitioner<T> implements
 			if (model.getDimensions().length > distancePerDimension.length) {
 				final double[] newDistancePerDimension = new double[model.getDimensions().length];
 				for (int j = 0; j < newDistancePerDimension.length; j++) {
-					newDistancePerDimension[j] = distancePerDimension[j < distancePerDimension.length ? j : (distancePerDimension.length - 1)];
+					newDistancePerDimension[j] = distancePerDimension[j < distancePerDimension.length ? j
+							: (distancePerDimension.length - 1)];
 				}
 				distancePerDimension = newDistancePerDimension;
 			}
@@ -252,7 +253,8 @@ public abstract class AbstractPartitioner<T> implements
 			final double distance = distancePerDimensionForIndex[i] * 2.0; // total
 			// width...(radius)
 			// adjust by precision factory (0 to 1.0)
-			dimensionPrecision[i] = (int) (precisionFactor * Math.abs((int) (Math.log(dimensions[i].getRange() / distance) / Math.log(2))));
+			dimensionPrecision[i] = (int) (precisionFactor * Math.abs((int) (Math.log(dimensions[i].getRange()
+					/ distance) / Math.log(2))));
 
 			totalRequestedPrecision += dimensionPrecision[i];
 		}

@@ -44,7 +44,8 @@ public class DateFieldOptionProvider
 
 						final int firstSemiCol = entry.indexOf(':');
 						if (firstSemiCol < 0) {
-							LOGGER.error("Field entry: \"" + entry + "\" requires semi-colon to separate field Name from field Format");
+							LOGGER.error("Field entry: \"" + entry
+									+ "\" requires semi-colon to separate field Name from field Format");
 						}
 						else {
 							final String fieldName = entry.substring(

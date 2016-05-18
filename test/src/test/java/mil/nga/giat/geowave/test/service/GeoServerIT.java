@@ -169,7 +169,8 @@ public class GeoServerIT
 			IOException {
 		final HttpClient httpclient = createClient();
 		final HttpPut command = new HttpPut(
-				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/services/wfs/workspaces/" + ServicesTestEnvironment.TEST_WORKSPACE + "/settings");
+				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/services/wfs/workspaces/"
+						+ ServicesTestEnvironment.TEST_WORKSPACE + "/settings");
 		command.setHeader(
 				"Content-type",
 				"text/xml");
@@ -186,7 +187,8 @@ public class GeoServerIT
 			IOException {
 		final HttpClient httpclient = createClient();
 		final HttpPut command = new HttpPut(
-				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/services/wms/workspaces/" + ServicesTestEnvironment.TEST_WORKSPACE + "/settings");
+				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/services/wms/workspaces/"
+						+ ServicesTestEnvironment.TEST_WORKSPACE + "/settings");
 		command.setHeader(
 				"Content-type",
 				"text/xml");
@@ -203,7 +205,8 @@ public class GeoServerIT
 			IOException {
 		final HttpClient httpclient = createClient();
 		final HttpPost command = new HttpPost(
-				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/workspaces/" + ServicesTestEnvironment.TEST_WORKSPACE + "/datastores/" + TestUtils.TEST_NAMESPACE + "/featuretypes");
+				ServicesTestEnvironment.GEOSERVER_REST_PATH + "/workspaces/" + ServicesTestEnvironment.TEST_WORKSPACE
+						+ "/datastores/" + TestUtils.TEST_NAMESPACE + "/featuretypes");
 		command.setHeader(
 				"Content-type",
 				"text/xml");
@@ -377,7 +380,8 @@ public class GeoServerIT
 			final String patternX = "34.6815818";
 			final String patternY = "35.1828408";
 			// name space check as well
-			return content.contains(patternX) && content.contains(patternY) && content.contains(ServicesTestEnvironment.TEST_WORKSPACE + ":geometry");
+			return content.contains(patternX) && content.contains(patternY)
+					&& content.contains(ServicesTestEnvironment.TEST_WORKSPACE + ":geometry");
 		}
 		return false;
 	}
@@ -424,9 +428,10 @@ public class GeoServerIT
 				"1.1.0",
 				new BasicNameValuePair(
 						"cql_filter",
-						URLEncoder.encode(
-								"BBOX(geometry,34.68,35.18,34.7,35.19) and when during 2005-05-19T00:00:00Z/2005-05-19T21:32:56Z",
-								"UTF8")),
+						URLEncoder
+								.encode(
+										"BBOX(geometry,34.68,35.18,34.7,35.19) and when during 2005-05-19T00:00:00Z/2005-05-19T21:32:56Z",
+										"UTF8")),
 				new BasicNameValuePair(
 						"srsName",
 						"EPSG:4326"));
@@ -444,9 +449,10 @@ public class GeoServerIT
 				"1.1.0",
 				new BasicNameValuePair(
 						"cql_filter",
-						URLEncoder.encode(
-								"BBOX(geometry,34.68,35.18,34.7,35.19) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
-								"UTF8")),
+						URLEncoder
+								.encode(
+										"BBOX(geometry,34.68,35.18,34.7,35.19) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
+										"UTF8")),
 				new BasicNameValuePair(
 						"srsName",
 						"EPSG:4326"));

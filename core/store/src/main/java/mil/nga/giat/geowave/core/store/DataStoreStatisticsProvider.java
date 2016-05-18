@@ -31,7 +31,8 @@ public class DataStoreStatisticsProvider<T> implements
 
 	@Override
 	public ByteArrayId[] getSupportedStatisticsIds() {
-		final ByteArrayId[] idsFromAdapter = (adapter instanceof StatisticsProvider && includeAdapterStats) ? ((StatisticsProvider) adapter).getSupportedStatisticsIds() : new ByteArrayId[0];
+		final ByteArrayId[] idsFromAdapter = (adapter instanceof StatisticsProvider && includeAdapterStats) ? ((StatisticsProvider) adapter)
+				.getSupportedStatisticsIds() : new ByteArrayId[0];
 		final ByteArrayId[] newSet = Arrays.copyOf(
 				idsFromAdapter,
 				idsFromAdapter.length + 3);
@@ -60,12 +61,14 @@ public class DataStoreStatisticsProvider<T> implements
 					index.getId(),
 					index.getIndexStrategy().createMetaData());
 		}
-		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter).createDataStatistics(statisticsId) : null;
+		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
+				.createDataStatistics(statisticsId) : null;
 	}
 
 	@Override
 	public EntryVisibilityHandler<T> getVisibilityHandler(
 			final ByteArrayId statisticsId ) {
-		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter).getVisibilityHandler(statisticsId) : new EmptyStatisticVisibility<T>();
+		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
+				.getVisibilityHandler(statisticsId) : new EmptyStatisticVisibility<T>();
 	}
 }

@@ -107,7 +107,8 @@ public class VectorLocalExportCommand extends
 					}
 					else if (!(adapter instanceof GeotoolsFeatureDataAdapter)) {
 						JCommander.getConsole().println(
-								"Type '" + adapterId + "' does not support vector export. Instance of " + adapter.getClass());
+								"Type '" + adapterId + "' does not support vector export. Instance of "
+										+ adapter.getClass());
 						continue;
 					}
 					featureAdapters.add((GeotoolsFeatureDataAdapter) adapter);
@@ -185,7 +186,8 @@ public class VectorLocalExportCommand extends
 						}
 					}
 					JCommander.getConsole().println(
-							"Exported " + (avList.size() + (iteration * options.getBatchSize())) + " features from '" + sft.getTypeName() + "'");
+							"Exported " + (avList.size() + (iteration * options.getBatchSize())) + " features from '"
+									+ sft.getTypeName() + "'");
 					iteration++;
 					simpleFeatureCollection.setSimpleFeatureCollection(avList);
 					dfw.append(simpleFeatureCollection);

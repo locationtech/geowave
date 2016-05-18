@@ -91,7 +91,8 @@ public class TieredSFCIndexStrategy implements
 		if ((maxRangeDecomposition > 1) && (orderedSfcs.length > 1)) {
 			maxRangeDecompositionPerSfc = (int) Math.ceil((double) maxRangeDecomposition / (double) orderedSfcs.length);
 		}
-		final TierIndexMetaData metaData = (hints.length > 0 && hints[0] != null && hints[0] instanceof TierIndexMetaData) ? (TierIndexMetaData) hints[0] : null;
+		final TierIndexMetaData metaData = (hints.length > 0 && hints[0] != null && hints[0] instanceof TierIndexMetaData) ? (TierIndexMetaData) hints[0]
+				: null;
 
 		for (int sfcIndex = orderedSfcs.length - 1; sfcIndex >= 0; sfcIndex--) {
 			if (metaData != null && metaData.tierCounts[sfcIndex] == 0) continue;
@@ -282,7 +283,8 @@ public class TieredSFCIndexStrategy implements
 		int result = 1;
 		result = (prime * result) + Arrays.hashCode(baseDefinitions);
 		result = (prime * result) + (int) (maxEstimatedDuplicateIds ^ (maxEstimatedDuplicateIds >>> 32));
-		result = (prime * result) + ((maxEstimatedDuplicateIdsBigInteger == null) ? 0 : maxEstimatedDuplicateIdsBigInteger.hashCode());
+		result = (prime * result)
+				+ ((maxEstimatedDuplicateIdsBigInteger == null) ? 0 : maxEstimatedDuplicateIdsBigInteger.hashCode());
 		result = (prime * result) + ((orderedSfcIndexToTierId == null) ? 0 : orderedSfcIndexToTierId.hashCode());
 		result = (prime * result) + Arrays.hashCode(orderedSfcs);
 		return result;
@@ -392,7 +394,8 @@ public class TieredSFCIndexStrategy implements
 							sfc.getId(maxValues))));
 			return retVal;
 		}
-		else if ((maxEstimatedDuplicateIds == null) || (rowCount.compareTo(maxEstimatedDuplicateIds) <= 0) || (sfcIndex == 0)) {
+		else if ((maxEstimatedDuplicateIds == null) || (rowCount.compareTo(maxEstimatedDuplicateIds) <= 0)
+				|| (sfcIndex == 0)) {
 			return decomposeRangesForEntry(
 					index,
 					tierId,
@@ -440,7 +443,8 @@ public class TieredSFCIndexStrategy implements
 					// the increment caused an overflow which shouldn't
 					// ever happen assuming the start row ID is less
 					// than the end row ID
-					LOGGER.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");
+					LOGGER
+							.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");
 					overflow = true;
 					break;
 				}

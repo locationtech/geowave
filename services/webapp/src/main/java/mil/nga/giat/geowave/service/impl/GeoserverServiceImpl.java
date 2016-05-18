@@ -341,9 +341,7 @@ public class GeoserverServiceImpl implements
 	@Path("/datastores")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDatastores(
-			@DefaultValue("")
-			@QueryParam("workspace")
-			String customWorkspace ) {
+			@DefaultValue("") @QueryParam("workspace") String customWorkspace ) {
 
 		customWorkspace = (customWorkspace.equals("")) ? defaultWorkspace : customWorkspace;
 
@@ -403,7 +401,8 @@ public class GeoserverServiceImpl implements
 					}
 
 					if (entryArray == null) {
-						log.error("entry Array was null; didn't find a valid connectionParameters datastore object of type JSONObject or JSONArray");
+						log
+								.error("entry Array was null; didn't find a valid connectionParameters datastore object of type JSONObject or JSONArray");
 					}
 					else {
 						// report connection params for each data store
@@ -440,9 +439,7 @@ public class GeoserverServiceImpl implements
 	public Response getDatastore(
 			@PathParam("datastoreName")
 			final String datastoreName,
-			@DefaultValue("")
-			@QueryParam("workspace")
-			String customWorkspace ) {
+			@DefaultValue("") @QueryParam("workspace") String customWorkspace ) {
 
 		customWorkspace = (customWorkspace.equals("")) ? defaultWorkspace : customWorkspace;
 
@@ -452,8 +449,11 @@ public class GeoserverServiceImpl implements
 						geoserverPass));
 		final WebTarget target = client.target(geoserverUrl);
 
-		final Response resp = target.path(
-				"geoserver/rest/workspaces/" + customWorkspace + "/datastores/" + datastoreName + ".json").request().get();
+		final Response resp = target
+				.path(
+						"geoserver/rest/workspaces/" + customWorkspace + "/datastores/" + datastoreName + ".json")
+				.request()
+				.get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			JSONObject datastore = null;
@@ -575,9 +575,7 @@ public class GeoserverServiceImpl implements
 	public Response deleteDatastore(
 			@PathParam("datastoreName")
 			final String datastoreName,
-			@DefaultValue("")
-			@QueryParam("workspace")
-			String customWorkspace ) {
+			@DefaultValue("") @QueryParam("workspace") String customWorkspace ) {
 
 		customWorkspace = (customWorkspace.equals("")) ? defaultWorkspace : customWorkspace;
 
@@ -721,7 +719,8 @@ public class GeoserverServiceImpl implements
 						}
 
 						if (entryArray == null) {
-							log.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
+							log
+									.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
 						}
 						else {
 							// group layers by namespace
@@ -866,11 +865,14 @@ public class GeoserverServiceImpl implements
 						geoserverPass));
 		final WebTarget target = client.target(geoserverUrl);
 
-		Response resp = target.path(
-				"geoserver/rest/workspaces/" + customWorkspace + "/datastores/" + datastore + "/featuretypes").request().post(
-				Entity.entity(
-						jsonString,
-						MediaType.APPLICATION_JSON));
+		Response resp = target
+				.path(
+						"geoserver/rest/workspaces/" + customWorkspace + "/datastores/" + datastore + "/featuretypes")
+				.request()
+				.post(
+						Entity.entity(
+								jsonString,
+								MediaType.APPLICATION_JSON));
 
 		if (resp.getStatus() != Status.CREATED.getStatusCode()) {
 			return resp;

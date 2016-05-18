@@ -94,7 +94,8 @@ public class SimpleFeatureItemWrapperFactory implements
 
 		@Override
 		public String toString() {
-			return "SimpleFeatureCentroid [item=" + item.getID() + ", + group=" + getGroupID() + ", + count=" + getAssociationCount() + ", cost=" + getCost() + "]";
+			return "SimpleFeatureCentroid [item=" + item.getID() + ", + group=" + getGroupID() + ", + count="
+					+ getAssociationCount() + ", cost=" + getCost() + "]";
 		}
 
 		@Override
@@ -178,7 +179,8 @@ public class SimpleFeatureItemWrapperFactory implements
 			final String name,
 			final int defaultValue ) {
 		final Object att = feature.getAttribute(name);
-		return att == null ? defaultValue : (att instanceof Number ? ((Number) att).intValue() : Integer.parseInt(att.toString()));
+		return att == null ? defaultValue : (att instanceof Number ? ((Number) att).intValue() : Integer.parseInt(att
+				.toString()));
 	}
 
 	/*

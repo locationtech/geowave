@@ -165,7 +165,8 @@ public class QueryOptionsIT
 		try {
 			type = DataUtilities.createType(
 					typeName,
-					CITY_ATTRIBUTE + ":String," + STATE_ATTRIBUTE + ":String," + POPULATION_ATTRIBUTE + ":Double," + LAND_AREA_ATTRIBUTE + ":Double," + GEOMETRY_ATTRIBUTE + ":Geometry");
+					CITY_ATTRIBUTE + ":String," + STATE_ATTRIBUTE + ":String," + POPULATION_ATTRIBUTE + ":Double,"
+							+ LAND_AREA_ATTRIBUTE + ":Double," + GEOMETRY_ATTRIBUTE + ":Geometry");
 		}
 		catch (final SchemaException e) {
 			System.out.println("Unable to create SimpleFeatureType");

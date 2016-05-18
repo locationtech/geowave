@@ -63,7 +63,9 @@ public class GeoWaveFeatureSource extends
 				Filter.INCLUDE)) {
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
 					components).getDataStatistics();
-			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(getFeatureType().getGeometryDescriptor().getLocalName()));
+			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(getFeatureType()
+					.getGeometryDescriptor()
+					.getLocalName()));
 		}
 		if (bboxStats != null) {
 			minx = ((BoundingBoxDataStatistics) bboxStats).getMinX();

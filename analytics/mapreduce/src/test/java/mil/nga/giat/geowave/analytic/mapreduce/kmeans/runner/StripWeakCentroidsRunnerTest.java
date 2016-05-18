@@ -316,10 +316,11 @@ public class StripWeakCentroidsRunnerTest
 			StripWeakCentroidsRunner<Long>
 	{
 
-		private final List<AnalyticItemWrapper<Long>> testSet = Arrays.asList((AnalyticItemWrapper<Long>) new LongCentroid(
-				1L,
-				"",
-				22));
+		private final List<AnalyticItemWrapper<Long>> testSet = Arrays
+				.asList((AnalyticItemWrapper<Long>) new LongCentroid(
+						1L,
+						"",
+						22));
 
 		StripWeakCentroidsRunnerForTestOne() {
 			super();

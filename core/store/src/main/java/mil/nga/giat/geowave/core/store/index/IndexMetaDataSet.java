@@ -92,7 +92,7 @@ public class IndexMetaDataSet<T> extends
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		final byte[] metaBytes = new byte[buffer.remaining()];
 		buffer.get(metaBytes);
-		
+
 		metaData = (List) PersistenceUtils.fromBinary(metaBytes);
 	}
 

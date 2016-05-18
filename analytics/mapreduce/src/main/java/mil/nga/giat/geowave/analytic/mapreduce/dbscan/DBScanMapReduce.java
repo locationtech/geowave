@@ -276,7 +276,8 @@ public class DBScanMapReduce
 				final Reducer<PartitionDataWritable, AdapterWithObjectWritable, GeoWaveInputKey, ObjectWritable>.Context context )
 				throws IOException,
 				InterruptedException {
-			final HadoopWritableSerializer<SimpleFeature, FeatureWritable> serializer = outputAdapter.createWritableSerializer();
+			final HadoopWritableSerializer<SimpleFeature, FeatureWritable> serializer = outputAdapter
+					.createWritableSerializer();
 			final Set<Cluster> processed = new HashSet<Cluster>();
 			final Iterator<Map.Entry<ByteArrayId, Cluster>> clusterIt = summary.entrySet().iterator();
 			while (clusterIt.hasNext()) {
@@ -289,7 +290,9 @@ public class DBScanMapReduce
 							batchID,
 							UUID.randomUUID().toString(),
 							cluster.getId().getString(), // name
-							partitionData.getGroupId() != null ? partitionData.getGroupId().toString() : cluster.getId().getString(), // group
+							partitionData.getGroupId() != null ? partitionData.getGroupId().toString() : cluster
+									.getId()
+									.getString(), // group
 							0.0,
 							cluster.getGeometry(),
 							new String[0],

@@ -412,7 +412,8 @@ public class FeatureDataAdapter extends
 		final byte[] secondaryIndexBytes = PersistenceUtils.toBinary(secondaryIndexManager);
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
-		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length + namespaceBytes.length + attrBytes.length + axisBytes.length + secondaryIndexBytes.length + 21);
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length
+				+ namespaceBytes.length + attrBytes.length + axisBytes.length + secondaryIndexBytes.length + 21);
 		buf.put(VERSION);
 		buf.putInt(typeNameBytes.length);
 		buf.putInt(namespaceBytes.length);
@@ -468,7 +469,8 @@ public class FeatureDataAdapter extends
 
 		// 24 bytes is the 6 four byte length fields and one byte for the
 		// version
-		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 29];
+		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
+				- namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 29];
 		buf.get(secondaryIndexBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);

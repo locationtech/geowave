@@ -45,7 +45,8 @@ public abstract class GeoWaveReducer extends
 			final Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable>.Context context )
 			throws IOException,
 			InterruptedException {
-		final HadoopWritableSerializer<?, Writable> serializer = serializationTool.getHadoopWritableSerializerForAdapter(key.getAdapterId());
+		final HadoopWritableSerializer<?, Writable> serializer = serializationTool
+				.getHadoopWritableSerializerForAdapter(key.getAdapterId());
 		final Iterable<Object> transformedValues = Iterables.transform(
 				values,
 				new Function<ObjectWritable, Object>() {

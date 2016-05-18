@@ -120,12 +120,14 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 				};
 			}
 			else {
-				LOGGER.warn("Null grid coverage from file '" + input.getAbsolutePath() + "' for discovered geotools format '" + format.getName() + "'");
+				LOGGER.warn("Null grid coverage from file '" + input.getAbsolutePath()
+						+ "' for discovered geotools format '" + format.getName() + "'");
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to read grid coverage of file '" + input.getAbsolutePath() + "' for discovered geotools format '" + format.getName() + "'",
+					"Unable to read grid coverage of file '" + input.getAbsolutePath()
+							+ "' for discovered geotools format '" + format.getName() + "'",
 					e);
 		}
 		return new Wrapper(

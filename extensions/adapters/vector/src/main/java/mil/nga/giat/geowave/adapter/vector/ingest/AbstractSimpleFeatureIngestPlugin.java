@@ -121,7 +121,8 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 	@Override
 	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
 			final String globalVisibility ) {
-		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility.isEmpty()) ? new GlobalVisibilityHandler<SimpleFeature, Object>(
+		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility
+				.isEmpty()) ? new GlobalVisibilityHandler<SimpleFeature, Object>(
 				globalVisibility) : null;
 		final SimpleFeatureType[] types = getTypes();
 		final WritableDataAdapter<SimpleFeature>[] retVal = new WritableDataAdapter[types.length];
@@ -155,14 +156,16 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> wrapIteratorWithFilters(
 			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData ) {
 		final CQLFilterOptionProvider internalFilterProvider;
-		if ((filterOptionProvider != null) && (filterOptionProvider.getCqlFilterString() != null) && !filterOptionProvider.getCqlFilterString().trim().isEmpty()) {
+		if ((filterOptionProvider != null) && (filterOptionProvider.getCqlFilterString() != null)
+				&& !filterOptionProvider.getCqlFilterString().trim().isEmpty()) {
 			internalFilterProvider = filterOptionProvider;
 		}
 		else {
 			internalFilterProvider = null;
 		}
 		final TypeNameOptionProvider internalTypeNameProvider;
-		if ((typeNameProvider != null) && (typeNameProvider.getTypeName() != null) && !typeNameProvider.getTypeName().trim().isEmpty()) {
+		if ((typeNameProvider != null) && (typeNameProvider.getTypeName() != null)
+				&& !typeNameProvider.getTypeName().trim().isEmpty()) {
 			internalTypeNameProvider = typeNameProvider;
 		}
 		else {
@@ -175,7 +178,8 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 						@Override
 						public boolean apply(
 								final GeoWaveData<SimpleFeature> input ) {
-							if ((internalTypeNameProvider != null) && internalTypeNameProvider.typeNameMatches(input.getAdapterId().getString())) {
+							if ((internalTypeNameProvider != null)
+									&& internalTypeNameProvider.typeNameMatches(input.getAdapterId().getString())) {
 								return false;
 							}
 							if ((internalFilterProvider != null) && !internalFilterProvider.evaluate(input.getValue())) {

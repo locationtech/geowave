@@ -120,7 +120,8 @@ public class IndexPluginOptions extends
 			// default to round robin partitioning (none is not valid if there
 			// are more than 1 partition)
 			if (partitionStrategy.equals(PartitionStrategy.NONE)) {
-				LOGGER.warn("Partition strategy is necessary when using more than 1 partition, defaulting to 'round_robin' partitioning.");
+				LOGGER
+						.warn("Partition strategy is necessary when using more than 1 partition, defaulting to 'round_robin' partitioning.");
 			}
 			retVal = new CustomIdIndex(
 					new CompoundIndexStrategy(
@@ -129,7 +130,8 @@ public class IndexPluginOptions extends
 							index.getIndexStrategy()),
 					index.getIndexModel(),
 					new ByteArrayId(
-							index.getId().getString() + "_" + PartitionStrategy.ROUND_ROBIN.name() + "_" + numPartitions));
+							index.getId().getString() + "_" + PartitionStrategy.ROUND_ROBIN.name() + "_"
+									+ numPartitions));
 		}
 		if ((getType() != null) && (getType().length() > 0)) {
 			retVal = new CustomIdIndex(

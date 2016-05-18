@@ -90,7 +90,8 @@ public class KMeansIterationsJobRunnerTest
 				new Configuration(),
 				propertyMgt);
 
-		for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.groups.entrySet()) {
+		for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.groups
+				.entrySet()) {
 			assertEquals(
 					3,
 					e.getValue().size());
@@ -101,7 +102,8 @@ public class KMeansIterationsJobRunnerTest
 						newCentroid.getIterationID());
 				// check to make sure there is no overlap of old and new IDs
 				boolean b = false;
-				for (final AnalyticItemWrapper<SimpleFeature> oldCentroid : KMeansIterationsJobRunnerForTest.deletedSet.get(e.getKey())) {
+				for (final AnalyticItemWrapper<SimpleFeature> oldCentroid : KMeansIterationsJobRunnerForTest.deletedSet
+						.get(e.getKey())) {
 					b |= oldCentroid.getID().equals(
 							newCentroid.getID());
 
@@ -111,7 +113,8 @@ public class KMeansIterationsJobRunnerTest
 
 		}
 
-		for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.deletedSet.entrySet()) {
+		for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.deletedSet
+				.entrySet()) {
 			assertEquals(
 					3,
 					e.getValue().size());
