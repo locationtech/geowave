@@ -5,14 +5,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.SchemaException;
@@ -26,8 +23,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -161,18 +156,17 @@ public class GeoWaveServicesIT
 		final JSONArray indices = infoServiceClient.getIndices(
 				dataStoreOptions.getType()).getJSONArray(
 				"indices");
-		final String expectedIndex = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
 		for (int i = 0; i < indices.size(); i++) {
 			if (indices.getJSONObject(
 					i).getString(
 					"name").equals(
-					expectedIndex)) {
+						TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString())) {
 				success = true;
 				break;
 			}
 		}
 		assertTrue(
-				"Unable to find index '" + expectedIndex + "'",
+				"Unable to find index '" + TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString() + "'",
 				success);
 		success = false;
 
