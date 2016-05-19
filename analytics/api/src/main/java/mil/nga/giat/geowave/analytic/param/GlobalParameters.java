@@ -32,6 +32,7 @@ public class GlobalParameters
 					baseClass,
 					name,
 					description,
+					false,
 					hasArg);
 		}
 

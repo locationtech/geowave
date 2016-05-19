@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.CommonParameters.Common;
 	ElementType.METHOD
 })
 public @interface CommonParameter {
-	Common value();
+	Common[] value();
 }

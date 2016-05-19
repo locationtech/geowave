@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.HullParameters.Hull;
 	ElementType.METHOD
 })
 public @interface HullParameter {
-	Hull value();
+	Hull[] value();
 }

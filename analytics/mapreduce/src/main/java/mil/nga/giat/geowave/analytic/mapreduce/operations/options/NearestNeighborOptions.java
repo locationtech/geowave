@@ -2,10 +2,8 @@ package mil.nga.giat.geowave.analytic.mapreduce.operations.options;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
-import mil.nga.giat.geowave.analytic.param.annotations.MapReduceParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.OutputParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.PartitionParameter;
 
@@ -16,22 +14,8 @@ public class NearestNeighborOptions
 	@Parameter(names = {
 		"-oop",
 		"--outputHdfsOutputPath"
-	}, description = "Output HDFS File Path")
+	}, required = true, description = "Output HDFS File Path")
 	private String outputHdfsOutputPath;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.CONFIG_FILE)
-	@Parameter(names = {
-		"-conf",
-		"--mapReduceConfigFile"
-	}, description = "MapReduce Configuration")
-	private String mapReduceConfigFile;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_BASE_DIR)
-	@Parameter(names = {
-		"-hdfsbase",
-		"--mapReduceHdfsBaseDir"
-	}, description = "Fully qualified path to the base directory in hdfs")
-	private String mapReduceHdfsBaseDir;
 
 	@PartitionParameter(PartitionParameters.Partition.MAX_MEMBER_SELECTION)
 	@Parameter(names = {
@@ -51,8 +35,8 @@ public class NearestNeighborOptions
 	@Parameter(names = {
 		"-pmd",
 		"--partitionMaxDistance"
-	}, description = "Maximum Partition Distance")
-	private String partitionPartitionDistance;
+	}, required = true, description = "Maximum Partition Distance")
+	private String partitionMaxDistance;
 
 	@PartitionParameter(PartitionParameters.Partition.PARTITION_PRECISION)
 	@Parameter(names = {
@@ -109,13 +93,13 @@ public class NearestNeighborOptions
 		this.partitionPartitionerClass = partitionPartitionerClass;
 	}
 
-	public String getPartitionPartitionDistance() {
-		return partitionPartitionDistance;
+	public String getPartitionMaxDistance() {
+		return partitionMaxDistance;
 	}
 
-	public void setPartitionPartitionDistance(
-			String partitionPartitionDistance ) {
-		this.partitionPartitionDistance = partitionPartitionDistance;
+	public void setPartitionMaxDistance(
+			String partitionMaxDistance ) {
+		this.partitionMaxDistance = partitionMaxDistance;
 	}
 
 	public String getPartitionSecondaryPartitionerClass() {
@@ -153,23 +137,4 @@ public class NearestNeighborOptions
 			String partitioningGeometricDistanceUnit ) {
 		this.partitioningGeometricDistanceUnit = partitioningGeometricDistanceUnit;
 	}
-
-	public String getMapReduceConfigFile() {
-		return mapReduceConfigFile;
-	}
-
-	public void setMapReduceConfigFile(
-			String mapReduceConfigFile ) {
-		this.mapReduceConfigFile = mapReduceConfigFile;
-	}
-
-	public String getMapReduceHdfsBaseDir() {
-		return mapReduceHdfsBaseDir;
-	}
-
-	public void setMapReduceHdfsBaseDir(
-			String mapReduceHdfsBaseDir ) {
-		this.mapReduceHdfsBaseDir = mapReduceHdfsBaseDir;
-	}
-
 }

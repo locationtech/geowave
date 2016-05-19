@@ -17,6 +17,30 @@ DESCRIPTION
 
 The geowave analytic dbscan operator will run a density based scanner analytic on GeoWave data
 
+EXAMPLE
+//:-----------
+
+[source, bash]
+----
+yarn jar geowave-tools.jar analytic dbscan -cmi 5 -cms 10 -emn 2 -emx 6 -pmd 1000 -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.adapters gpxpoint my_store
+----
+
+Run through 5 max iterations (cmi), with max distance between points as 10 meters (cms), min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd), 
+reducer count is 4 (orc), the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the temporary files needed by this job are stored in hdfs:/host:port//user/rwgdrummer (hdfsbase), and the data executed against DBSCAN is 'gpxpoint' (query.adapters).  
+The accumulo connection parameters are loaded from my_store.
+
+EXECUTION
+//:-----------
+
+DBSCAN uses GeoWaveInputFormat to load data from GeoWave into HDFS.  You can use the extract query parameter to limit
+the records used in the analytic.
+
+It iteratively calls Nearest Neighbor to execute a sequence of concave hulls.  The hulls are saved into sequence files 
+written to a temporary HDFS directory, and then read in again for the next DBSCAN iteration. 
+
+After completion, the data is written back from HDFS to Accumulo using a job called the "input load runner".
+
 OPTIONS
 //:-------
 
@@ -172,3 +196,5 @@ OPTIONS
    The comma-separated set of field names to extract; by default all are extracted
 
 --query.index::
+
+   The input index to pull the data from (if different than expected)

@@ -160,7 +160,7 @@ public class GeoWaveServicesIT
 			if (indices.getJSONObject(
 					i).getString(
 					"name").equals(
-						TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString())) {
+					TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString())) {
 				success = true;
 				break;
 			}

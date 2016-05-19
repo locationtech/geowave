@@ -11,11 +11,13 @@ public class InputParameters
 				FormatConfiguration.class,
 				"ifc",
 				"Input Format Class",
+				true,
 				true),
 		HDFS_INPUT_PATH(
 				Path.class,
 				"iip",
 				"Input HDFS File Path",
+				false,
 				true);
 
 		private final ParameterHelper<Object> helper;
@@ -24,12 +26,14 @@ public class InputParameters
 				final Class baseClass,
 				final String name,
 				final String description,
+				final boolean isClass,
 				final boolean hasArg ) {
 			helper = new BasicParameterHelper(
 					this,
 					baseClass,
 					name,
 					description,
+					isClass,
 					hasArg);
 		}
 

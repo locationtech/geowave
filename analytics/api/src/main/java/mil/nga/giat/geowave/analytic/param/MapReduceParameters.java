@@ -47,6 +47,7 @@ public class MapReduceParameters
 					baseClass,
 					name,
 					description,
+					false,
 					hasArg);
 		}
 

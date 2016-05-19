@@ -13,46 +13,55 @@ public class ExtractParameters
 				String.class,
 				"eot",
 				"Output Data Type ID",
+				false,
 				true),
 		DATA_NAMESPACE_URI(
 				String.class,
 				"ens",
 				"Output Data Namespace URI",
+				false,
 				true),
 		REDUCER_COUNT(
 				Integer.class,
 				"erc",
 				"Number of Reducers For initial data extraction and de-duplication",
+				false,
 				true),
 		DIMENSION_EXTRACT_CLASS(
 				DimensionExtractor.class,
 				"ede",
 				"Class to extract dimensions into a simple feature output",
+				true,
 				true),
 		QUERY(
 				DistributableQuery.class,
 				"eq",
 				"Query",
+				false,
 				true),
 		QUERY_OPTIONS(
 				QueryOptions.class,
 				"eqf",
 				"Restricted extracted field list (comma-separated list of field ids)",
+				false,
 				true),
 		MAX_INPUT_SPLIT(
 				Integer.class,
 				"emx",
 				"Maximum input split size",
+				false,
 				true),
 		MIN_INPUT_SPLIT(
 				Integer.class,
 				"emn",
 				"Minimum input split size",
+				false,
 				true),
 		GROUP_ID(
 				String.class,
 				"eg",
 				"Group ID assigned to extracted data",
+				false,
 				true);
 
 		private transient final ParameterHelper<?> helper;
@@ -61,12 +70,14 @@ public class ExtractParameters
 				final Class baseClass,
 				final String name,
 				final String description,
+				final boolean isClass,
 				final boolean hasArg ) {
 			helper = new BasicParameterHelper(
 					this,
 					baseClass,
 					name,
 					description,
+					isClass,
 					hasArg);
 		}
 

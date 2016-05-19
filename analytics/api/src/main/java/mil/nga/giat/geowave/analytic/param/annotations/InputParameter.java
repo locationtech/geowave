@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.InputParameters.Input;
 	ElementType.METHOD
 })
 public @interface InputParameter {
-	Input value();
+	Input[] value();
 }

@@ -2,16 +2,15 @@ package mil.nga.giat.geowave.analytic.param;
 
 import java.util.Map;
 
-import org.apache.directory.api.util.exception.NotImplementedException;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InputStoreParameterHelper implements
 		ParameterHelper<PersistableStore>
@@ -70,13 +69,6 @@ public class InputStoreParameterHelper implements
 					e);
 			return null;
 		}
-	}
-
-	@Override
-	public PersistableStore getValue(
-			String stringValue ) {
-		throw new NotImplementedException(
-				"This method not implemented");
 	}
 
 	@Override

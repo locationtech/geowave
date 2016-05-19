@@ -256,7 +256,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 			params.addAll(inputFormat.getParameters());
 		}
 		if (outputFormat != null) {
-			params.addAll(inputFormat.getParameters());
+			params.addAll(outputFormat.getParameters());
 		}
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
 			StoreParam.INPUT_STORE,
