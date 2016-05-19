@@ -155,10 +155,14 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/api
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#INDEX_PROPERTY_NAMESPACE">INDEX_PROPERTY_NAMESPACE</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#nameOverride">nameOverride</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#numPartitions">numPartitions</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in mil.nga.giat.geowave.core.store.operations.remote.options">IndexPluginOptions.PartitionStrategy</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#partitionStrategy">partitionStrategy</a></strong></code>&nbsp;</td>
 </tr>
@@ -209,20 +213,24 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/api
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#getIndexPlugin()">getIndexPlugin</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#getNameOverride()">getNameOverride</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#getNumPartitions()">getNumPartitions</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in mil.nga.giat.geowave.core.store.operations.remote.options">IndexPluginOptions.PartitionStrategy</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#getPartitionStrategy()">getPartitionStrategy</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#getType()">getType</a></strong>()</code>
 <div class="block">This is implemented by the PluginOptions interface by child classes</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/IndexPluginOptions.html#selectPlugin(java.lang.String)">selectPlugin</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;qualifier)</code>
 <div class="block">This is implemented by the PluginOptions interface by child classes</div>
@@ -282,6 +290,15 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/api
 <h4>DEFAULT_PROPERTY_NAMESPACE</h4>
 <pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> DEFAULT_PROPERTY_NAMESPACE</pre>
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../../../constant-values.html#mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="nameOverride">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nameOverride</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> nameOverride</pre>
 </li>
 </ul>
 <a name="numPartitions">
@@ -369,6 +386,15 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/api
 <li class="blockList">
 <h4>getNumPartitions</h4>
 <pre>public&nbsp;int&nbsp;getNumPartitions()</pre>
+</li>
+</ul>
+<a name="getNameOverride()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNameOverride</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getNameOverride()</pre>
 </li>
 </ul>
 <a name="getPartitionStrategy()">
