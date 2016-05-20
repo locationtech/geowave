@@ -43,6 +43,22 @@ public class TemporalBinningStrategyTest
 				0L);
 	}
 
+	@Test
+	public void testLargeNumberOfHourBins() {
+		internalTestBinsMatchExpectedCount(
+				250000,
+				Unit.HOUR,
+				0L);
+	}
+
+	@Test
+	public void testLargeNumberOfMinuteBins() {
+		internalTestBinsMatchExpectedCount(
+				250000,
+				Unit.MINUTE,
+				0L);
+	}
+
 	private void internalTestBinsMatchExpectedCount(
 			final int binCount,
 			final Unit unit,
