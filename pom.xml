@@ -53,6 +53,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
+		<tools.finalName>${project.artifactId}-${project.version}-tools</tools.finalName>
 		<container.extension />
 		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
 			you have previously generated) -->
@@ -861,7 +862,7 @@
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-tools</finalName>
+									<finalName>${tools.finalName}</finalName>
 								</configuration>
 							</execution>
 						</executions>
