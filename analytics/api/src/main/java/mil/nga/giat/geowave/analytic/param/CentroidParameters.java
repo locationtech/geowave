@@ -12,36 +12,43 @@ public class CentroidParameters
 				String.class,
 				"cid",
 				"Index Identifier for Centroids",
+				false,
 				true),
 		DATA_TYPE_ID(
 				String.class,
 				"cdt",
 				"Data Type ID for a centroid item",
+				false,
 				true),
 		DATA_NAMESPACE_URI(
 				String.class,
 				"cns",
 				"Data Type Namespace for centroid item",
+				false,
 				true),
 		CONXVERGANCE_TOLERANCE(
 				Double.class,
 				"cct",
 				"The alpha parameter measure the minimum covergence to reach before ",
+				false,
 				true),
 		EXTRACTOR_CLASS(
 				CentroidExtractor.class,
 				"cce",
 				"Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor",
+				true,
 				true),
 		WRAPPER_FACTORY_CLASS(
 				AnalyticItemWrapperFactory.class,
 				"cfc",
 				"A factory class that implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory",
+				true,
 				true),
 		ZOOM_LEVEL(
 				Integer.class,
 				"czl",
 				"Zoom Level Number",
+				true,
 				true);
 		private final ParameterHelper helper;
 
@@ -49,12 +56,14 @@ public class CentroidParameters
 				final Class baseClass,
 				final String name,
 				final String description,
+				final boolean isClass,
 				final boolean hasArg ) {
 			helper = new BasicParameterHelper(
 					this,
 					baseClass,
 					name,
 					description,
+					isClass,
 					hasArg);
 		}
 

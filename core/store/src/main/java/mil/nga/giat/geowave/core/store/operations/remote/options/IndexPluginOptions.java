@@ -39,7 +39,7 @@ public class IndexPluginOptions extends
 		"--indexName"
 	}, description = "A custom name can be given to this index. Default name will be the based on configuration parameters.")
 	protected String nameOverride = null;
-	
+
 	@Parameter(names = {
 		"-np",
 		"--numPartitions"
@@ -93,7 +93,7 @@ public class IndexPluginOptions extends
 	public int getNumPartitions() {
 		return numPartitions;
 	}
-	
+
 	public String getNameOverride() {
 		return nameOverride;
 	}

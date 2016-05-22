@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.OutputParameters.Output;
 	ElementType.METHOD
 })
 public @interface OutputParameter {
-	Output value();
+	Output[] value();
 }

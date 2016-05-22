@@ -9,9 +9,11 @@ import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.InputParameters;
+import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.CommonParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ExtractParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.InputParameter;
+import mil.nga.giat.geowave.analytic.param.annotations.MapReduceParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.OutputParameter;
 import mil.nga.giat.geowave.core.cli.annotations.PrefixParameter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -19,6 +21,40 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 public class CommonOptions
 {
+	@MapReduceParameter(MapReduceParameters.MRConfig.CONFIG_FILE)
+	@Parameter(names = {
+		"-conf",
+		"--mapReduceConfigFile"
+	}, description = "MapReduce Configuration")
+	private String mapReduceConfigFile;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_BASE_DIR)
+	@Parameter(names = {
+		"-hdfsbase",
+		"--mapReduceHdfsBaseDir"
+	}, required = true, description = "Fully qualified path to the base directory in hdfs")
+	private String mapReduceHdfsBaseDir;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
+	@Parameter(names = {
+		"-hdfs",
+		"--mapReduceHdfsHostPort"
+	}, required = true, description = "HDFS hostname and port in the format hostname:port")
+	private String mapReduceHdfsHostPort;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)
+	@Parameter(names = {
+		"-jobtracker",
+		"--mapReduceJobtrackerHostPort"
+	}, description = "[REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port")
+	private String mapReduceJobtrackerHostPort;
+
+	@MapReduceParameter(MapReduceParameters.MRConfig.YARN_RESOURCE_MANAGER)
+	@Parameter(names = {
+		"-resourceman",
+		"--mapReduceYarnResourceManager"
+	}, description = "[REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port")
+	private String mapReduceYarnResourceManager;
 
 	@CommonParameter(CommonParameters.Common.DISTANCE_FUNCTION_CLASS)
 	@Parameter(names = {
@@ -35,14 +71,14 @@ public class CommonOptions
 	@Parameter(names = {
 		"-emx",
 		"--extractMaxInputSplit"
-	}, description = "Maximum input split size")
+	}, required = true, description = "Maximum hdfs input split size")
 	private String extractMaxInputSplit;
 
 	@ExtractParameter(ExtractParameters.Extract.MIN_INPUT_SPLIT)
 	@Parameter(names = {
 		"-emn",
 		"--extractMinInputSplit"
-	}, description = "Minimum input split size")
+	}, required = true, description = "Minimum hdfs input split size")
 	private String extractMinInputSplit;
 
 	@ExtractParameter(ExtractParameters.Extract.QUERY)
@@ -70,7 +106,7 @@ public class CommonOptions
 	@Parameter(names = {
 		"-iip",
 		"--inputHdfsPath"
-	}, description = "Input Path")
+	}, hidden = true, description = "Input Path")
 	private String inputHdfsPath;
 
 	@OutputParameter(OutputParameters.Output.REDUCER_COUNT)
@@ -190,4 +226,48 @@ public class CommonOptions
 		return options;
 	}
 
+	public String getMapReduceConfigFile() {
+		return mapReduceConfigFile;
+	}
+
+	public void setMapReduceConfigFile(
+			String mapReduceConfigFile ) {
+		this.mapReduceConfigFile = mapReduceConfigFile;
+	}
+
+	public String getMapReduceHdfsBaseDir() {
+		return mapReduceHdfsBaseDir;
+	}
+
+	public void setMapReduceHdfsBaseDir(
+			String mapReduceHdfsBaseDir ) {
+		this.mapReduceHdfsBaseDir = mapReduceHdfsBaseDir;
+	}
+
+	public String getMapReduceHdfsHostPort() {
+		return mapReduceHdfsHostPort;
+	}
+
+	public void setMapReduceHdfsHostPort(
+			String mapReduceHdfsHostPort ) {
+		this.mapReduceHdfsHostPort = mapReduceHdfsHostPort;
+	}
+
+	public String getMapReduceJobtrackerHostPort() {
+		return mapReduceJobtrackerHostPort;
+	}
+
+	public void setMapReduceJobtrackerHostPort(
+			String mapReduceJobtrackerHostPort ) {
+		this.mapReduceJobtrackerHostPort = mapReduceJobtrackerHostPort;
+	}
+
+	public String getMapReduceYarnResourceManager() {
+		return mapReduceYarnResourceManager;
+	}
+
+	public void setMapReduceYarnResourceManager(
+			String mapReduceYarnResourceManager ) {
+		this.mapReduceYarnResourceManager = mapReduceYarnResourceManager;
+	}
 }

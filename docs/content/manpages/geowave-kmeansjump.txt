@@ -17,6 +17,37 @@ DESCRIPTION
 
 The geowave analytic kmeansjump operator will execute a KMeans Clustering analytic using a Jump Method
 
+EXAMPLE
+//:-----------
+
+[source, bash]
+----
+yarn jar geowave-tools.jar analytic kmeansjump -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans 
+-hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -jkp 3 -jrc 4,8 my_store
+----
+
+The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
+the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the data executed against is 'hail' (query.adapters), the min k for kmeans parallel sampling is 3 (jkp),
+the comma separated range of centroids is 4,8 (jrc).
+The accumulo connection parameters are loaded from my_store.
+
+EXECUTION
+//:-----------
+
+KMeansJump uses most of the same parameters from KMeansParallel.  It tries every k value given (-jrc) to find
+the value with least entropy.  The other value, jkp, will specify which k values should use kmeans parallel for
+sampling versus a single sampler (which uses a random sample).  For instance, if you specify 4,8 for jrc and 
+6 for jkp, then k=4,5 will use the kmeansparallel sampler, while 6,7,8 will use the single sampler.
+
+KMeansJump executes by executing several iterations, running the sampler (described above, which also
+calls the normal k-means algorithm to determine centroids) and then executing 
+a KMeans distortion job, which calculates the entropy of the calculated centroids.
+
+Look at the "EXECUTION" documentation for kmeansparallel operation for discussion of output, tolerance and 
+performance variables.
+
 OPTIONS
 //:-------
 

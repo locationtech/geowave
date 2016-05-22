@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 	ElementType.METHOD
 })
 public @interface PartitionParameter {
-	Partition value();
+	Partition[] value();
 }

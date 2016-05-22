@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.SampleParameters.Sample;
 	ElementType.METHOD
 })
 public @interface SampleParameter {
-	Sample value();
+	Sample[] value();
 }

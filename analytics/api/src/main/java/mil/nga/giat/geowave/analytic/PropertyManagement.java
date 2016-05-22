@@ -81,6 +81,8 @@ public class PropertyManagement implements
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 		converters.add(new DoubleConverter());
+		converters.add(new IntegerConverter());
+		converters.add(new ByteConverter());
 	}
 
 	public PropertyManagement(
@@ -92,6 +94,8 @@ public class PropertyManagement implements
 		this.converters.add(new PathConverter());
 		this.converters.add(new PersistableConverter());
 		this.converters.add(new DoubleConverter());
+		this.converters.add(new IntegerConverter());
+		this.converters.add(new ByteConverter());
 		for (final PropertyConverter<?> converter : converters) {
 			addConverter(converter);
 		}
@@ -108,6 +112,8 @@ public class PropertyManagement implements
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 		converters.add(new DoubleConverter());
+		converters.add(new IntegerConverter());
+		converters.add(new ByteConverter());
 		storeAll(
 				names,
 				values);
@@ -879,6 +885,54 @@ public class PropertyManagement implements
 		@Override
 		public Class<Path> baseClass() {
 			return Path.class;
+		}
+	}
+
+	public static class ByteConverter implements
+			PropertyConverter<byte[]>
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Serializable convert(
+				final byte[] ob ) {
+			return ByteArrayUtils.byteArrayToString(ob);
+		}
+
+		@Override
+		public byte[] convert(
+				final Serializable ob )
+				throws Exception {
+			return ByteArrayUtils.byteArrayFromString(ob.toString());
+		}
+
+		@Override
+		public Class<byte[]> baseClass() {
+			return byte[].class;
+		}
+	}
+
+	public static class IntegerConverter implements
+			PropertyConverter<Integer>
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Serializable convert(
+				final Integer ob ) {
+			return ob;
+		}
+
+		@Override
+		public Integer convert(
+				final Serializable ob )
+				throws Exception {
+			return Integer.parseInt(ob.toString());
+		}
+
+		@Override
+		public Class<Integer> baseClass() {
+			return Integer.class;
 		}
 	}
 
