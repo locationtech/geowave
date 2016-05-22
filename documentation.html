@@ -3002,35 +3002,19 @@ Density of region is measured by a minimum cardinality of enclosed features with
 <div class="sect2">
 <h3 id="building-2"><a class="anchor" href="#building-2"></a>Building</h3>
 <div class="paragraph">
-<p>First build the main project, specifying the dependency versions.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -Daccumulo.api=1.6 -P cloudera"
-git clone https://github.com/ngageoint/geowave.git
-cd geowave
-mvn install -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true $BUILD_ARGS</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Next, build the analytics tool framework.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd analytics/mapreduce
-mvn package -P analytics-singlejar -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true $BUILD_ARGS</code></pre>
-</div>
+<p>Build the geowave tools project, as explained in the "Tools &#8594; Building" section.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="running"><a class="anchor" href="#running"></a>Running</h3>
-<div class="paragraph">
-<p>The 'singlejar' jar file is located in the analytics/mapreduce/target/munged.   The jar is executed by Yarn.</p>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-analytic-mapreduce-0.8.8-SNAPSHOT-analytics-singlejar.jar  -dbscan  -n rwgdrummer.gpx -u rwgdrummer -p rwgdrummer -z zookeeper-master:2181 -i accumulo -emn 2 -emx 6 -pd 1000 -pc mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner -cms 10 -orc 4 -hdfsbase /user/rwgdrummer -b bdb4 -eit gpxpoint</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic &lt;algorithm&gt; &lt;options&gt; &lt;store&gt;</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The above command will execute &lt;algorithm&gt; (such as dbscan), sourcing the data
+from the &lt;store&gt; datastore (see config addstore)</p>
 </div>
 </div>
 <div class="sect2">
@@ -3060,6 +3044,34 @@ mvn package -P analytics-singlejar -Dfindbugs.skip=true -Dformatter.skip=true -D
 </div>
 <div class="paragraph">
 <p>The geowave analytic dbscan operator will run a density based scanner analytic on GeoWave data</p>
+</div>
+<div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic dbscan -cmi 5 -cms 10 -emn 2 -emx 6 -pmd 1000 -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.adapters gpxpoint my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run through 5 max iterations (cmi), with max distance between points as 10 meters (cms), min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd),
+reducer count is 4 (orc), the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the temporary files needed by this job are stored in hdfs:/host:port//user/rwgdrummer (hdfsbase), and the data executed against DBSCAN is 'gpxpoint' (query.adapters).
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>DBSCAN uses GeoWaveInputFormat to load data from GeoWave into HDFS.  You can use the extract query parameter to limit
+the records used in the analytic.</p>
+</div>
+<div class="paragraph">
+<p>It iteratively calls Nearest Neighbor to execute a sequence of concave hulls.  The hulls are saved into sequence files
+written to a temporary HDFS directory, and then read in again for the next DBSCAN iteration.</p>
+</div>
+<div class="paragraph">
+<p>After completion, the data is written back from HDFS to Accumulo using a job called the "input load runner".</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -3219,10 +3231,13 @@ mil.nga.giat.geowave.analytics.tools.Projection</p>
 </dd>
 <dt class="hdlist1">--query.index</dt>
 <dd>
-<p>==== geowave analytic kde</p>
+<p>The input index to pull the data from (if different than expected)</p>
 </dd>
 </dl>
 </div>
+</div>
+<div class="sect3">
+<h4 id="geowave-analytic-kde"><a class="anchor" href="#geowave-analytic-kde"></a>geowave analytic kde</h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -3312,6 +3327,41 @@ mil.nga.giat.geowave.analytics.tools.Projection</p>
 </div>
 <div class="paragraph">
 <p>The geowave analytic kmeansjump operator will execute a KMeans Clustering analytic using a Jump Method</p>
+</div>
+<div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic kmeansjump -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans
+-hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -jkp 3 -jrc 4,8 my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
+the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the data executed against is 'hail' (query.adapters), the min k for kmeans parallel sampling is 3 (jkp),
+the comma separated range of centroids is 4,8 (jrc).
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>KMeansJump uses most of the same parameters from KMeansParallel.  It tries every k value given (-jrc) to find
+the value with least entropy.  The other value, jkp, will specify which k values should use kmeans parallel for
+sampling versus a single sampler (which uses a random sample).  For instance, if you specify 4,8 for jrc and
+6 for jkp, then k=4,5 will use the kmeansparallel sampler, while 6,7,8 will use the single sampler.</p>
+</div>
+<div class="paragraph">
+<p>KMeansJump executes by executing several iterations, running the sampler (described above, which also
+calls the normal k-means algorithm to determine centroids) and then executing
+a KMeans distortion job, which calculates the entropy of the calculated centroids.</p>
+</div>
+<div class="paragraph">
+<p>Look at the "EXECUTION" documentation for kmeansparallel operation for discussion of output, tolerance and
+performance variables.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -3525,6 +3575,54 @@ mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
 <p>The geowave analytic kmeansparallel operator will execute a KMeans Parallel Clustering analytic</p>
 </div>
 <div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic kmeansparallel -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans
+-hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -sms 4 -sxs 8 -ssi 10 my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
+the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the data executed against is 'hail' (query.adapters), the min sample size is 4 (sms, which is kmin),
+the max sample size is 8 (which is kmax), the minimum number of sampling iterations is 10.
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>KMeansParallel tries to identify the optimal k (sms, smx) for a set of zoom levels (1 &#8594; zl).  When zoom level is 1,
+it will perform a normal kmeans and find k clusters.  If zoomlevel is 2 or higher, it will take each cluster found,
+and then try to create sub-clusters (bounded by that cluster), identifying a new optimal k for that sub-cluster.  As
+such, without powerful infrastucture, this approach could take a significant amount of time to complete with zoom levels
+higher than 1.</p>
+</div>
+<div class="paragraph">
+<p>KMeansParallel executes by first executing an extraction and de-duplication on data received via
+GeoWaveInputFormat.  The data is copied to HDFS for faster processing.  The K-Sampler job is used to pick sample
+centroid points.  These centroids are then assigned a cost, and then weak centroids are stripped before the
+K-Sampler is executed again.  This process iterates several times, before the best centroid locations are found,
+which are fed into the real K-Means algorithm as initial guesses.  K-Means iterates until the tolerance is
+reached (-cct, which defaults to 0.0001) or the max iterations is met (-cmi).</p>
+</div>
+<div class="paragraph">
+<p>After execution, KMeansParallel writes the centroids to an output data type (-eot, defaults to centroid), and then
+creates an informational set of convex hulls which you can plot in GeoServer to visually identify cluster groups
+(-hdt, defaults to convex_hull).</p>
+</div>
+<div class="paragraph">
+<p>For tuning performance, you can set the number of reducers used in each step.  Extraction/Dedupe reducer count is
+-crc, Clustering reducer count is -erc, Convex Hull reducer count is -hrc, and Output reducer count is -orc).</p>
+</div>
+<div class="paragraph">
+<p>If you would like to run the algorithm multiple times, it may be useful to set the batch id (-b), which can
+be used to distinguish between multiple batches (runs).</p>
+</div>
+<div class="paragraph">
 <p>OPTIONS</p>
 </div>
 <div class="dlist">
@@ -3708,6 +3806,35 @@ mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
 Analytic 'nn' is similar to DBScan, with less arguments.
 'nn' just dumps all near neighbors for every feature id in a list of pairs.
 Most developers will want to extend the framework to add their own extensions.</p>
+</div>
+<div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic nn -emn 2 -emx 6 -pmd 1000 -oop /user/rwgdrummer_out -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.adapters gpxpoint my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd),
+the sequence file output directory is hdfs://host:port/user/rwgdrummer_out, reducer count is 4 (orc),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the temporary files needed by this job are stored in hdfs:/host:port//user/rwgdrummer (hdfsbase), and the data executed against is 'gpxpoint' (query.adapters).
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>To execute nearest neighbor search in GeoWave, we use the concept of a "partitioner" to
+partition all data on the hilbert curve into square segments for the
+purposes of parallelizing the search.</p>
+</div>
+<div class="paragraph">
+<p>The default partitioner will multiply this value by 2 and use that for the actual partition sizes.
+Because of this, the terminology is a bit confusing, but the "pmd" option is actually the most
+important variable here, describing the max distance for a point to be considered a neighbor to
+another point.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -5337,7 +5464,7 @@ mvn -P docs install</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.2-SNAPSHOT from commit 9f8f289efae8a3267c3da30d1f3d097bc78ae25e.</p>
+<p>This documentation was generated for GeoWave version 0.9.2-SNAPSHOT from commit 9a69f8464217942bfe137dd678f97f8955f6d54f.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -5389,7 +5516,7 @@ mvn -P docs install</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-19 23:28:19 UTC
+Last updated 2016-05-22 23:17:26 UTC
 </div>
 </div>
 </body>
