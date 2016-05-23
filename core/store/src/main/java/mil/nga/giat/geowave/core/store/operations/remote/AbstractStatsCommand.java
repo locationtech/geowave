@@ -96,7 +96,8 @@ public abstract class AbstractStatsCommand extends
 								inputStoreOptions,
 								adapter,
 								authorizations)) {
-							LOGGER.info("Unable to calculate statistics for adapter: " + adapter.getAdapterId().getString());
+							LOGGER.info("Unable to calculate statistics for adapter: "
+									+ adapter.getAdapterId().getString());
 						}
 					}
 				}

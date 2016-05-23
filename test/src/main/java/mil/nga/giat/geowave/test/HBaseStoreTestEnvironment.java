@@ -74,10 +74,14 @@ public class HBaseStoreTestEnvironment implements
 				}
 
 				try {
-					zookeeperLocalCluster = new ZookeeperLocalCluster.Builder().setPort(
-							Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY))).setTempDir(
-							propertyParser.getProperty(ConfigVars.ZOOKEEPER_TEMP_DIR_KEY)).setZookeeperConnectionString(
-							propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY)).build();
+					zookeeperLocalCluster = new ZookeeperLocalCluster.Builder()
+							.setPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY)))
+							.setTempDir(
+									propertyParser.getProperty(ConfigVars.ZOOKEEPER_TEMP_DIR_KEY))
+							.setZookeeperConnectionString(
+									propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
+							.build();
 					zookeeperLocalCluster.start();
 				}
 				catch (final Exception e) {
@@ -89,16 +93,28 @@ public class HBaseStoreTestEnvironment implements
 				zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
 
 				try {
-					hbaseLocalCluster = new HbaseLocalCluster.Builder().setHbaseMasterPort(
-							Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY))).setHbaseMasterInfoPort(
-							Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_INFO_PORT_KEY))).setNumRegionServers(
-							Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY))).setHbaseRootDir(
-							propertyParser.getProperty(ConfigVars.HBASE_ROOT_DIR_KEY)).setZookeeperPort(
-							Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY))).setZookeeperConnectionString(
-							propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY)).setZookeeperZnodeParent(
-							propertyParser.getProperty(ConfigVars.HBASE_ZNODE_PARENT_KEY)).setHbaseWalReplicationEnabled(
-							Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY))).setHbaseConfiguration(
-							new Configuration()).build();
+					hbaseLocalCluster = new HbaseLocalCluster.Builder()
+							.setHbaseMasterPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY)))
+							.setHbaseMasterInfoPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_INFO_PORT_KEY)))
+							.setNumRegionServers(
+									Integer.parseInt(propertyParser
+											.getProperty(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY)))
+							.setHbaseRootDir(
+									propertyParser.getProperty(ConfigVars.HBASE_ROOT_DIR_KEY))
+							.setZookeeperPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY)))
+							.setZookeeperConnectionString(
+									propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
+							.setZookeeperZnodeParent(
+									propertyParser.getProperty(ConfigVars.HBASE_ZNODE_PARENT_KEY))
+							.setHbaseWalReplicationEnabled(
+									Boolean.parseBoolean(propertyParser
+											.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY)))
+							.setHbaseConfiguration(
+									new Configuration())
+							.build();
 					hbaseLocalCluster.start();
 				}
 				catch (final Exception e) {

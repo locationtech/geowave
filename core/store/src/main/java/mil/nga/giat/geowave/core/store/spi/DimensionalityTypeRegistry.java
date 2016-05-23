@@ -29,7 +29,9 @@ public class DimensionalityTypeRegistry
 		while (dimensionalityTypesProviders.hasNext()) {
 			final DimensionalityTypeProviderSpi dimensionalityTypeProvider = dimensionalityTypesProviders.next();
 			if (registeredDimensionalityTypes.containsKey(dimensionalityTypeProvider.getDimensionalityTypeName())) {
-				LOGGER.warn("Dimensionality type '" + dimensionalityTypeProvider.getDimensionalityTypeName() + "' already registered.  Unable to register type provided by " + dimensionalityTypeProvider.getClass().getName());
+				LOGGER.warn("Dimensionality type '" + dimensionalityTypeProvider.getDimensionalityTypeName()
+						+ "' already registered.  Unable to register type provided by "
+						+ dimensionalityTypeProvider.getClass().getName());
 			}
 			else {
 				registeredDimensionalityTypes.put(
