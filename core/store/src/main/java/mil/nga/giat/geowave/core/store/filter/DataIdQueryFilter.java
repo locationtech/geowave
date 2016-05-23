@@ -28,7 +28,8 @@ public class DataIdQueryFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding persistenceEncoding ) {
-		return adapterId.equals(persistenceEncoding.getAdapterId()) && dataIds.contains(persistenceEncoding.getDataId());
+		return adapterId.equals(persistenceEncoding.getAdapterId())
+				&& dataIds.contains(persistenceEncoding.getDataId());
 	}
 
 	@Override

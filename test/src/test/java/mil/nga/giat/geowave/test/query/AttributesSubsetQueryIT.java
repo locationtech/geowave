@@ -221,7 +221,8 @@ public class AttributesSubsetQueryIT
 		try {
 			type = DataUtilities.createType(
 					"testCityData",
-					CITY_ATTRIBUTE + ":String," + STATE_ATTRIBUTE + ":String," + POPULATION_ATTRIBUTE + ":Double," + LAND_AREA_ATTRIBUTE + ":Double," + GEOMETRY_ATTRIBUTE + ":Geometry");
+					CITY_ATTRIBUTE + ":String," + STATE_ATTRIBUTE + ":String," + POPULATION_ATTRIBUTE + ":Double,"
+							+ LAND_AREA_ATTRIBUTE + ":Double," + GEOMETRY_ATTRIBUTE + ":Geometry");
 		}
 		catch (final SchemaException e) {
 			LOGGER.error(

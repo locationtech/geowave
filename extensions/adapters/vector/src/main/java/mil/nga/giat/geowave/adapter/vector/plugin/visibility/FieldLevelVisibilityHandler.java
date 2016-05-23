@@ -77,10 +77,11 @@ public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implement
 		final byte[] result = visibilityAttributeValue != null ? translateVisibility(
 				visibilityAttributeValue,
 				fieldName) : null;
-		return result != null ? result : (defaultFieldVisiblityHandler == null ? new byte[0] : defaultFieldVisiblityHandler.getVisibility(
-				rowValue,
-				fieldId,
-				fieldValue));
+		return result != null ? result : (defaultFieldVisiblityHandler == null ? new byte[0]
+				: defaultFieldVisiblityHandler.getVisibility(
+						rowValue,
+						fieldId,
+						fieldValue));
 	}
 
 }

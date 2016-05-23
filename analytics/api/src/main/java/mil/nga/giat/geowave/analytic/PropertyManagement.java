@@ -81,6 +81,8 @@ public class PropertyManagement implements
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 		converters.add(new DoubleConverter());
+		converters.add(new IntegerConverter());
+		converters.add(new ByteConverter());
 	}
 
 	public PropertyManagement(
@@ -92,6 +94,8 @@ public class PropertyManagement implements
 		this.converters.add(new PathConverter());
 		this.converters.add(new PersistableConverter());
 		this.converters.add(new DoubleConverter());
+		this.converters.add(new IntegerConverter());
+		this.converters.add(new ByteConverter());
 		for (final PropertyConverter<?> converter : converters) {
 			addConverter(converter);
 		}
@@ -108,6 +112,8 @@ public class PropertyManagement implements
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 		converters.add(new DoubleConverter());
+		converters.add(new IntegerConverter());
+		converters.add(new ByteConverter());
 		storeAll(
 				names,
 				values);
@@ -253,10 +259,12 @@ public class PropertyManagement implements
 		final Object o = getPropertyValue(property);
 
 		try {
-			final Class<?> clazz = o == null ? defaultClass : (o instanceof Class) ? (Class<?>) o : Class.forName(o.toString());
+			final Class<?> clazz = o == null ? defaultClass : (o instanceof Class) ? (Class<?>) o : Class.forName(o
+					.toString());
 			if (!property.getHelper().getBaseClass().isAssignableFrom(
 					clazz)) {
-				LOGGER.error("Class for property " + property.self().toString() + " does not implement " + property.getHelper().getBaseClass().toString());
+				LOGGER.error("Class for property " + property.self().toString() + " does not implement "
+						+ property.getHelper().getBaseClass().toString());
 			}
 			return (T) clazz.newInstance();
 		}
@@ -880,6 +888,54 @@ public class PropertyManagement implements
 		}
 	}
 
+	public static class ByteConverter implements
+			PropertyConverter<byte[]>
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Serializable convert(
+				final byte[] ob ) {
+			return ByteArrayUtils.byteArrayToString(ob);
+		}
+
+		@Override
+		public byte[] convert(
+				final Serializable ob )
+				throws Exception {
+			return ByteArrayUtils.byteArrayFromString(ob.toString());
+		}
+
+		@Override
+		public Class<byte[]> baseClass() {
+			return byte[].class;
+		}
+	}
+
+	public static class IntegerConverter implements
+			PropertyConverter<Integer>
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Serializable convert(
+				final Integer ob ) {
+			return ob;
+		}
+
+		@Override
+		public Integer convert(
+				final Serializable ob )
+				throws Exception {
+			return Integer.parseInt(ob.toString());
+		}
+
+		@Override
+		public Class<Integer> baseClass() {
+			return Integer.class;
+		}
+	}
+
 	public static class DoubleConverter implements
 			PropertyConverter<Double>
 	{
@@ -954,7 +1010,8 @@ public class PropertyManagement implements
 
 	private boolean containsPropertyValue(
 			final ParameterEnum<?> property ) {
-		return ((nestProperties != null) && nestProperties.containsPropertyValue(property)) || localProperties.containsKey(property);
+		return ((nestProperties != null) && nestProperties.containsPropertyValue(property))
+				|| localProperties.containsKey(property);
 	}
 
 	private Serializable getPropertyValue(

@@ -79,7 +79,8 @@ public class GeoWaveConfiguratorBase
 	public static String enumToConfKey(
 			final Class<?> implementingClass,
 			final Enum<?> e ) {
-		final String s = implementingClass.getSimpleName() + "." + e.getDeclaringClass().getSimpleName() + "." + org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase());
+		final String s = implementingClass.getSimpleName() + "." + e.getDeclaringClass().getSimpleName() + "."
+				+ org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase());
 		return s;
 	}
 

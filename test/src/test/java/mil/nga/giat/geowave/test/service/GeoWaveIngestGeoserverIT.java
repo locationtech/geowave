@@ -158,7 +158,8 @@ public class GeoWaveIngestGeoserverIT
 
 		BufferedImage ref = null;
 
-		final String geoserverVersion = (System.getProperty("geoserver.version") != null) ? System.getProperty("geoserver.version") : "";
+		final String geoserverVersion = (System.getProperty("geoserver.version") != null) ? System
+				.getProperty("geoserver.version") : "";
 
 		Assert.assertNotNull(geoserverVersion);
 
@@ -300,10 +301,12 @@ public class GeoWaveIngestGeoserverIT
 			}
 		}
 		if (errorPixels < minErrorPixels) {
-			Assert.fail(String.format(
-					"Subsampling did not work as expected; error pixels (%d) did not exceed the minimum threshold (%d)",
-					errorPixels,
-					minErrorPixels));
+			Assert
+					.fail(String
+							.format(
+									"Subsampling did not work as expected; error pixels (%d) did not exceed the minimum threshold (%d)",
+									errorPixels,
+									minErrorPixels));
 		}
 	}
 

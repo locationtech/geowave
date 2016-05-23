@@ -371,8 +371,12 @@ public class GeoWaveRasterReader extends
 					OverviewStatistics.STATS_ID);
 			if (statistics instanceof OverviewStatistics) {
 				final OverviewStatistics overviewStats = (OverviewStatistics) statistics;
-				width = (int) Math.ceil(((bboxStats.getMaxX() - bboxStats.getMinX()) / overviewStats.getResolutions()[0].getResolution(0)));
-				height = (int) Math.ceil(((bboxStats.getMaxY() - bboxStats.getMinY()) / overviewStats.getResolutions()[0].getResolution(1)));
+				width = (int) Math
+						.ceil(((bboxStats.getMaxX() - bboxStats.getMinX()) / overviewStats.getResolutions()[0]
+								.getResolution(0)));
+				height = (int) Math
+						.ceil(((bboxStats.getMaxY() - bboxStats.getMinY()) / overviewStats.getResolutions()[0]
+								.getResolution(1)));
 			}
 		}
 
@@ -712,7 +716,9 @@ public class GeoWaveRasterReader extends
 			final TreeMap<Double, SubStrategy> sortedStrategies = new TreeMap<Double, SubStrategy>();
 			SubStrategy targetIndexStrategy = null;
 			for (final SubStrategy subStrategy : ((HierarchicalNumericIndexStrategy) strategy).getSubStrategies()) {
-				final double[] idRangePerDimension = subStrategy.getIndexStrategy().getHighestPrecisionIdRangePerDimension();
+				final double[] idRangePerDimension = subStrategy
+						.getIndexStrategy()
+						.getHighestPrecisionIdRangePerDimension();
 				double rangeSum = 0;
 				for (final double range : idRangePerDimension) {
 					rangeSum += range;
@@ -723,7 +729,9 @@ public class GeoWaveRasterReader extends
 						subStrategy);
 			}
 			for (final SubStrategy subStrategy : sortedStrategies.descendingMap().values()) {
-				final double[] highestPrecisionIdRangePerDimension = subStrategy.getIndexStrategy().getHighestPrecisionIdRangePerDimension();
+				final double[] highestPrecisionIdRangePerDimension = subStrategy
+						.getIndexStrategy()
+						.getHighestPrecisionIdRangePerDimension();
 				// if the id range is less than or equal to the target
 				// resolution in each dimension, use this substrategy
 				boolean withinTargetResolution = true;

@@ -187,7 +187,8 @@ public class Stanag4676IngestPlugin extends
 		@Override
 		public WritableDataAdapter<Object>[] getDataAdapters(
 				final String globalVisibility ) {
-			final FieldVisibilityHandler fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility.isEmpty()) ? new GlobalVisibilityHandler(
+			final FieldVisibilityHandler fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility
+					.isEmpty()) ? new GlobalVisibilityHandler(
 					globalVisibility) : null;
 			return new WritableDataAdapter[] {
 				new FeatureDataAdapter(

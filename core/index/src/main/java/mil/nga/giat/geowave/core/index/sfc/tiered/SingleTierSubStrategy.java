@@ -3,11 +3,13 @@ package mil.nga.giat.geowave.core.index.sfc.tiered;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -42,7 +44,8 @@ public class SingleTierSubStrategy implements
 
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
-			final MultiDimensionalNumericData indexedRange ) {
+			final MultiDimensionalNumericData indexedRange,
+			final IndexMetaData... hints ) {
 		return getQueryRanges(
 				indexedRange,
 				TieredSFCIndexStrategy.DEFAULT_MAX_RANGES);
@@ -51,7 +54,8 @@ public class SingleTierSubStrategy implements
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
-			final int maxRangeDecomposition ) {
+			final int maxRangeDecomposition,
+			final IndexMetaData... hints ) {
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
@@ -233,5 +237,10 @@ public class SingleTierSubStrategy implements
 			}
 		}
 		return rowIdOffset;
+	}
+
+	@Override
+	public List<IndexMetaData> createMetaData() {
+		return Collections.<IndexMetaData> emptyList();
 	}
 }

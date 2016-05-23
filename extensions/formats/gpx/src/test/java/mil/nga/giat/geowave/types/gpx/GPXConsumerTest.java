@@ -41,7 +41,9 @@ public class GPXConsumerTest
 							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Elevation").toString().equals(
-								"4.46") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
+								"4.46") && (feature.getAttribute("Timestamp") != null)
+								&& (feature.getAttribute("Latitude") != null)
+								&& (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -52,7 +54,9 @@ public class GPXConsumerTest
 							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Elevation").toString().equals(
-								"4.634") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
+								"4.634") && (feature.getAttribute("Timestamp") != null)
+								&& (feature.getAttribute("Latitude") != null)
+								&& (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -63,7 +67,9 @@ public class GPXConsumerTest
 							final SimpleFeature feature ) {
 						return feature.getAttribute(
 								"Elevation").toString().equals(
-								"10.46") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
+								"10.46") && (feature.getAttribute("Timestamp") != null)
+								&& (feature.getAttribute("Latitude") != null)
+								&& (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -84,7 +90,9 @@ public class GPXConsumerTest
 								"VDOP").toString().equals(
 								"2.1") && feature.getAttribute(
 								"PDOP").toString().equals(
-								"2.2") && (feature.getAttribute("Timestamp") != null) && (feature.getAttribute("Latitude") != null) && (feature.getAttribute("Longitude") != null);
+								"2.2") && (feature.getAttribute("Timestamp") != null)
+								&& (feature.getAttribute("Latitude") != null)
+								&& (feature.getAttribute("Longitude") != null);
 					}
 				});
 		expectedResults.put(
@@ -163,7 +171,8 @@ public class GPXConsumerTest
 					@Override
 					public boolean validate(
 							final SimpleFeature feature ) {
-						return (feature.getAttribute("Longitude") != null) && (feature.getAttribute("Latitude") != null);
+						return (feature.getAttribute("Longitude") != null)
+								&& (feature.getAttribute("Latitude") != null);
 					}
 				});
 

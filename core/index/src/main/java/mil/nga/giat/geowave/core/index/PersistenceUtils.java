@@ -18,7 +18,7 @@ public class PersistenceUtils
 	private final static Logger LOGGER = Logger.getLogger(PersistenceUtils.class);
 
 	public static byte[] toBinary(
-			final Collection<Persistable> persistables ) {
+			final Collection<? extends Persistable> persistables ) {
 		if (persistables.isEmpty()) {
 			return new byte[] {};
 		}
@@ -130,7 +130,8 @@ public class PersistenceUtils
 
 			if (factoryClassInst != null) {
 				if (!expectedType.isAssignableFrom(factoryClassInst.getClass())) {
-					LOGGER.warn("error creating class: " + className + " does not implement " + expectedType.getCanonicalName());
+					LOGGER.warn("error creating class: " + className + " does not implement "
+							+ expectedType.getCanonicalName());
 				}
 				else {
 					return ((T) factoryClassInst);

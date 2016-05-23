@@ -66,9 +66,7 @@ public interface GeoserverService
 	@Path("/datastores")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDatastores(
-			@DefaultValue("")
-			@QueryParam("workspace")
-			String customWorkspace );
+			@DefaultValue("") @QueryParam("workspace") String customWorkspace );
 
 	@GET
 	@Path("/datastores/{datastoreName}")
@@ -76,9 +74,7 @@ public interface GeoserverService
 	public Response getDatastore(
 			@PathParam("datastoreName")
 			final String datastoreName,
-			@DefaultValue("")
-			@QueryParam("workspace")
-			String customWorkspace );
+			@DefaultValue("") @QueryParam("workspace") String customWorkspace );
 
 	@POST
 	@Path("/datastores")
@@ -92,9 +88,7 @@ public interface GeoserverService
 	public Response deleteDatastore(
 			@PathParam("datastoreName")
 			final String datastoreName,
-			@DefaultValue("")
-			@QueryParam("workspace")
-			String customWorkspace );
+			@DefaultValue("") @QueryParam("workspace") String customWorkspace );
 
 	@GET
 	@Path("/layers")

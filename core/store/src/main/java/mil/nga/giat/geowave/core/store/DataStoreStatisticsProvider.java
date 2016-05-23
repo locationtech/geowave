@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.EmptyStatisticVisibili
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class DataStoreStatisticsProvider<T> implements
@@ -30,12 +31,14 @@ public class DataStoreStatisticsProvider<T> implements
 
 	@Override
 	public ByteArrayId[] getSupportedStatisticsIds() {
-		final ByteArrayId[] idsFromAdapter = (adapter instanceof StatisticsProvider && includeAdapterStats) ? ((StatisticsProvider) adapter).getSupportedStatisticsIds() : new ByteArrayId[0];
+		final ByteArrayId[] idsFromAdapter = (adapter instanceof StatisticsProvider && includeAdapterStats) ? ((StatisticsProvider) adapter)
+				.getSupportedStatisticsIds() : new ByteArrayId[0];
 		final ByteArrayId[] newSet = Arrays.copyOf(
 				idsFromAdapter,
-				idsFromAdapter.length + 2);
+				idsFromAdapter.length + 3);
 		newSet[idsFromAdapter.length] = RowRangeDataStatistics.STATS_ID;
 		newSet[idsFromAdapter.length + 1] = RowRangeHistogramStatistics.STATS_ID;
+		newSet[idsFromAdapter.length + 2] = IndexMetaDataSet.STATS_ID;
 		return newSet;
 	}
 
@@ -52,12 +55,20 @@ public class DataStoreStatisticsProvider<T> implements
 					index.getId(),
 					1024);
 		}
-		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter).createDataStatistics(statisticsId) : null;
+		if (statisticsId.equals(IndexMetaDataSet.STATS_ID)) {
+			return new IndexMetaDataSet(
+					adapter.getAdapterId(),
+					index.getId(),
+					index.getIndexStrategy().createMetaData());
+		}
+		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
+				.createDataStatistics(statisticsId) : null;
 	}
 
 	@Override
 	public EntryVisibilityHandler<T> getVisibilityHandler(
 			final ByteArrayId statisticsId ) {
-		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter).getVisibilityHandler(statisticsId) : new EmptyStatisticVisibility<T>();
+		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
+				.getVisibilityHandler(statisticsId) : new EmptyStatisticVisibility<T>();
 	}
 }

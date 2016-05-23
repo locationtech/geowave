@@ -5,18 +5,22 @@ import com.beust.jcommander.Parameter;
 import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.ClusteringParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.GlobalParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.HullParameter;
-import mil.nga.giat.geowave.analytic.param.annotations.MapReduceParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.OutputParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.PartitionParameter;
 
 public class DBScanOptions
 {
+	@OutputParameter(OutputParameters.Output.HDFS_OUTPUT_PATH)
+	@Parameter(names = {
+		"-oop",
+		"--outputHdfsOutputPath"
+	}, description = "Output HDFS File Path")
+	private String outputHdfsOutputPath;
 
 	@PartitionParameter(PartitionParameters.Partition.DISTANCE_THRESHOLDS)
 	@Parameter(names = {
@@ -36,14 +40,14 @@ public class DBScanOptions
 	@Parameter(names = {
 		"-cmi",
 		"--clusteringMaxIterations"
-	}, description = "Maximum number of iterations when finding optimal clusters")
+	}, required = true, description = "Maximum number of iterations when finding optimal clusters")
 	private String clusteringMaxIterations;
 
 	@ClusteringParameter(ClusteringParameters.Clustering.MINIMUM_SIZE)
 	@Parameter(names = {
 		"-cms",
 		"--clusteringMinimumSize"
-	}, description = "Minimum Cluster Size")
+	}, required = true, description = "Minimum Cluster Size")
 	private String clusteringMinimumSize;
 
 	@GlobalParameter(GlobalParameters.Global.BATCH_ID)
@@ -60,61 +64,12 @@ public class DBScanOptions
 	}, description = "Data Type ID for a centroid item")
 	private String hullDataTypeId;
 
-	@HullParameter(HullParameters.Hull.HULL_BUILDER)
-	@Parameter(names = {
-		"-hhb",
-		"--hullHullBuilder"
-	}, description = "Hull Builder")
-	private String hullHullBuilder;
-
 	@HullParameter(HullParameters.Hull.PROJECTION_CLASS)
 	@Parameter(names = {
 		"-hpe",
 		"--hullProjectionClass"
 	}, description = "Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection")
 	private String hullProjectionClass;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.CONFIG_FILE)
-	@Parameter(names = {
-		"-conf",
-		"--mapReduceConfigFile"
-	}, description = "MapReduce Configuration")
-	private String mapReduceConfigFile;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_BASE_DIR)
-	@Parameter(names = {
-		"-hdfsbase",
-		"--mapReduceHdfsBaseDir"
-	}, description = "Fully qualified path to the base directory in hdfs")
-	private String mapReduceHdfsBaseDir;
-
-	@OutputParameter(OutputParameters.Output.HDFS_OUTPUT_PATH)
-	@Parameter(names = {
-		"-oop",
-		"--outputHdfsOutputPath"
-	}, description = "Output HDFS File Path when used with a sequence file")
-	private String outputHdfsOutputPath;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
-	@Parameter(names = {
-		"-hdfs",
-		"--mapReduceHdfsHostPort"
-	}, description = "HDFS hostname and port in the format hostname:port")
-	private String mapReduceHdfsHostPort;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)
-	@Parameter(names = {
-		"-jobtracker",
-		"--mapReduceJobtrackerHostPort"
-	}, description = "Hadoop job tracker hostname and port in the format hostname:port")
-	private String mapReduceJobtrackerHostPort;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.YARN_RESOURCE_MANAGER)
-	@Parameter(names = {
-		"-resourceman",
-		"--mapReduceYarnResourceManager"
-	}, description = "Yarn resource manager hostname and port in the format hostname:port")
-	private String mapReduceYarnResourceManager;
 
 	@OutputParameter(OutputParameters.Output.DATA_NAMESPACE_URI)
 	@Parameter(names = {
@@ -162,8 +117,8 @@ public class DBScanOptions
 	@Parameter(names = {
 		"-pmd",
 		"--partitionMaxDistance"
-	}, description = "Maximum Partition Distance")
-	private String partitionPartitionDistance;
+	}, required = true, description = "Maximum Partition Distance")
+	private String partitionMaxDistance;
 
 	@PartitionParameter(PartitionParameters.Partition.PARTITION_PRECISION)
 	@Parameter(names = {
@@ -233,15 +188,6 @@ public class DBScanOptions
 		this.hullDataTypeId = hullDataTypeId;
 	}
 
-	public String getHullHullBuilder() {
-		return hullHullBuilder;
-	}
-
-	public void setHullHullBuilder(
-			String hullHullBuilder ) {
-		this.hullHullBuilder = hullHullBuilder;
-	}
-
 	public String getHullProjectionClass() {
 		return hullProjectionClass;
 	}
@@ -249,51 +195,6 @@ public class DBScanOptions
 	public void setHullProjectionClass(
 			String hullProjectionClass ) {
 		this.hullProjectionClass = hullProjectionClass;
-	}
-
-	public String getMapReduceConfigFile() {
-		return mapReduceConfigFile;
-	}
-
-	public void setMapReduceConfigFile(
-			String mapReduceConfigFile ) {
-		this.mapReduceConfigFile = mapReduceConfigFile;
-	}
-
-	public String getMapReduceHdfsBaseDir() {
-		return mapReduceHdfsBaseDir;
-	}
-
-	public void setMapReduceHdfsBaseDir(
-			String mapReduceHdfsBaseDir ) {
-		this.mapReduceHdfsBaseDir = mapReduceHdfsBaseDir;
-	}
-
-	public String getMapReduceHdfsHostPort() {
-		return mapReduceHdfsHostPort;
-	}
-
-	public void setMapReduceHdfsHostPort(
-			String mapReduceHdfsHostPort ) {
-		this.mapReduceHdfsHostPort = mapReduceHdfsHostPort;
-	}
-
-	public String getMapReduceJobtrackerHostPort() {
-		return mapReduceJobtrackerHostPort;
-	}
-
-	public void setMapReduceJobtrackerHostPort(
-			String mapReduceJobtrackerHostPort ) {
-		this.mapReduceJobtrackerHostPort = mapReduceJobtrackerHostPort;
-	}
-
-	public String getMapReduceYarnResourceManager() {
-		return mapReduceYarnResourceManager;
-	}
-
-	public void setMapReduceYarnResourceManager(
-			String mapReduceYarnResourceManager ) {
-		this.mapReduceYarnResourceManager = mapReduceYarnResourceManager;
 	}
 
 	public String getOutputDataNamespaceUri() {
@@ -350,13 +251,13 @@ public class DBScanOptions
 		this.partitionPartitionDecreaseRate = partitionPartitionDecreaseRate;
 	}
 
-	public String getPartitionPartitionDistance() {
-		return partitionPartitionDistance;
+	public String getPartitionMaxDistance() {
+		return partitionMaxDistance;
 	}
 
-	public void setPartitionPartitionDistance(
-			String partitionPartitionDistance ) {
-		this.partitionPartitionDistance = partitionPartitionDistance;
+	public void setPartitionMaxDistance(
+			String partitionMaxDistance ) {
+		this.partitionMaxDistance = partitionMaxDistance;
 	}
 
 	public String getPartitionPartitionPrecision() {

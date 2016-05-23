@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -43,7 +44,7 @@ public class AccumuloConstraintsQuery extends
 	protected final List<MultiDimensionalNumericData> constraints;
 	protected final List<DistributableQueryFilter> distributableFilters;
 	protected boolean queryFiltersEnabled;
-
+	protected final IndexMetaDataSet indexMetaData;
 	protected final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 
 	public AccumuloConstraintsQuery(
@@ -54,6 +55,7 @@ public class AccumuloConstraintsQuery extends
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final IndexMetaDataSet indexMetaData,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -64,6 +66,7 @@ public class AccumuloConstraintsQuery extends
 				scanCallback,
 				aggregation,
 				fieldIdsAdapterPair,
+				indexMetaData,
 				authorizations);
 	}
 
@@ -76,6 +79,7 @@ public class AccumuloConstraintsQuery extends
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final IndexMetaDataSet indexMetaData,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
@@ -85,6 +89,7 @@ public class AccumuloConstraintsQuery extends
 				authorizations);
 		this.constraints = constraints;
 		this.aggregation = aggregation;
+		this.indexMetaData = indexMetaData;
 		final SplitFilterLists lists = splitList(queryFilters);
 		final List<QueryFilter> clientFilters = lists.clientFilters;
 		// add dedupe filters to the front of both lists so that the
@@ -174,7 +179,8 @@ public class AccumuloConstraintsQuery extends
 			final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
 					constraints,
 					index.getIndexStrategy(),
-					MAX_RANGE_DECOMPOSITION);
+					MAX_RANGE_DECOMPOSITION,
+					indexMetaData.toArray());
 			if ((ranges == null) || (ranges.size() < 2)) {
 				return ranges;
 			}
@@ -201,7 +207,8 @@ public class AccumuloConstraintsQuery extends
 			return DataStoreUtils.constraintsToByteArrayRanges(
 					constraints,
 					index.getIndexStrategy(),
-					MAX_RANGE_DECOMPOSITION);
+					MAX_RANGE_DECOMPOSITION,
+					indexMetaData.toArray());
 		}
 	}
 

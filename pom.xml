@@ -53,6 +53,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
+		<tools.finalName>${project.artifactId}-${project.version}-tools</tools.finalName>
 		<container.extension />
 		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
 			you have previously generated) -->
@@ -380,25 +381,6 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
-											com.googlecode.maven-java-formatter-plugin
-										</groupId>
-										<artifactId>
-											maven-java-formatter-plugin
-										</artifactId>
-										<versionRange>
-											[0.4,)
-										</versionRange>
-										<goals>
-											<goal>format</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
 											org.sonatype.plugins
 										</groupId>
 										<artifactId>
@@ -428,6 +410,25 @@
 										<execute />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											net.revelc.code
+										</groupId>
+										<artifactId>
+											formatter-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.5.2,)
+										</versionRange>
+										<goals>
+											<goal>format</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -454,6 +455,11 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+		          <groupId>net.revelc.code</groupId>
+		          <artifactId>formatter-maven-plugin</artifactId>
+		          <version>0.5.2</version>
+		        </plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -661,9 +667,8 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
-				<artifactId>maven-java-formatter-plugin</artifactId>
-				<version>0.4</version>
+				<groupId>net.revelc.code</groupId>
+        		<artifactId>formatter-maven-plugin</artifactId>
 				<configuration>
 					<configFile>eclipse/eclipse-formatter.xml</configFile>
 					<lineEnding>KEEP</lineEnding>
@@ -862,7 +867,7 @@
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-tools</finalName>
+									<finalName>${tools.finalName}</finalName>
 								</configuration>
 							</execution>
 						</executions>

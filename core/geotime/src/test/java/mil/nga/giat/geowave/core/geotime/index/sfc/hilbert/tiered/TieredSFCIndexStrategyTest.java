@@ -81,7 +81,9 @@ public class TieredSFCIndexStrategyTest
 
 		MultiDimensionalNumericData indexedData = new BasicNumericDataset(
 				dataPerDimension1);
-		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex().getIndexStrategy();
+		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider()
+				.createPrimaryIndex()
+				.getIndexStrategy();
 
 		final List<ByteArrayId> ids1 = strategy.getInsertionIds(indexedData);
 		assertEquals(
@@ -124,7 +126,9 @@ public class TieredSFCIndexStrategyTest
 	@Test
 	public void testPredefinedSpatialEntries()
 			throws Exception {
-		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexStrategy();
+		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex()
+				.getIndexStrategy();
 		for (int sfcIndex = 0; sfcIndex < SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION.length; sfcIndex++) {
 			final NumericData[] dataPerDimension = new NumericData[2];
 			final double precision = 360 / Math.pow(
@@ -171,7 +175,8 @@ public class TieredSFCIndexStrategyTest
 								"multiple ranges were found unexpectedly for tier " + tier);
 					}
 					assertEquals(
-							"this range is an exact fit, so it should have exactly one value for tier " + SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
+							"this range is an exact fit, so it should have exactly one value for tier "
+									+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
 							range.getStart(),
 							range.getEnd());
 					rangeAtTierFound = true;
@@ -179,26 +184,31 @@ public class TieredSFCIndexStrategyTest
 			}
 			if (!rangeAtTierFound) {
 				throw new Exception(
-						"no ranges were found at the expected exact fit tier " + SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex]);
+						"no ranges were found at the expected exact fit tier "
+								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex]);
 			}
 
 			// ensure the first byte is equal to the appropriate number of bits
 			// of precision
 			if ((ids.get(
-					0).getBytes()[0] == 0) || ((sfcIndex == (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION.length - 1)) || (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex] + 1)))) {
+					0).getBytes()[0] == 0)
+					|| ((sfcIndex == (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION.length - 1)) || (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex] + 1)))) {
 				assertEquals(
-						"Insertion ID expected to be exact match at tier " + SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
+						"Insertion ID expected to be exact match at tier "
+								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
 						SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
 						ids.get(
 								0).getBytes()[0]);
 				assertEquals(
-						"Insertion ID size expected to be 1 at tier " + SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
+						"Insertion ID size expected to be 1 at tier "
+								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
 						1,
 						ids.size());
 			}
 			else {
 				assertEquals(
-						"Insertion ID expected to be duplicated at tier " + SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						"Insertion ID expected to be duplicated at tier "
+								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						ids.get(
 								0).getBytes()[0]);
@@ -208,7 +218,8 @@ public class TieredSFCIndexStrategyTest
 				// otherwise we will get a square decomposition of 4 ids
 				final int expectedIds = (precision > 90) && (precision <= 180) ? 2 : 4;
 				assertEquals(
-						"Insertion ID size expected to be " + expectedIds + " at tier " + SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						"Insertion ID size expected to be " + expectedIds + " at tier "
+								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						expectedIds,
 						ids.size());
 			}
@@ -218,7 +229,9 @@ public class TieredSFCIndexStrategyTest
 	@Test
 	public void testOneEstimatedDuplicateInsertion()
 			throws Exception {
-		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexStrategy();
+		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex()
+				.getIndexStrategy();
 		for (final int element : SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION) {
 			final NumericData[] dataPerDimension = new NumericData[2];
 			final double precision = 360 / Math.pow(

@@ -86,7 +86,8 @@ public class GeoWaveGTDataStore extends
 	protected AdapterIndexMappingStore adapterIndexMappingStore;
 	private final Map<String, PrimaryIndex[]> preferredIndexes = new ConcurrentHashMap<String, PrimaryIndex[]>();
 
-	private final VisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper.loadVisibilityManagement();
+	private final VisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper
+			.loadVisibilityManagement();
 	private final AuthorizationSPI authorizationSPI;
 	private final IndexQueryStrategySPI indexQueryStrategy;
 	private final URI featureNameSpaceURI;
@@ -152,7 +153,8 @@ public class GeoWaveGTDataStore extends
 		if (currentSelections != null) {
 			return currentSelections;
 		}
-		final AdapterToIndexMapping adapterIndexMapping = adapterIndexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
+		final AdapterToIndexMapping adapterIndexMapping = adapterIndexMappingStore.getIndicesForAdapter(adapter
+				.getAdapterId());
 		if (adapterIndexMapping != null && adapterIndexMapping.isNotEmpty()) {
 			currentSelections = adapterIndexMapping.getIndices(this.indexStore);
 		}
@@ -207,8 +209,7 @@ public class GeoWaveGTDataStore extends
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
-				names.add(new NameImpl(
-						((GeotoolsFeatureDataAdapter) adapter).getType().getTypeName()));
+				names.add(((GeotoolsFeatureDataAdapter) adapter).getType().getName());
 			}
 		}
 		adapters.close();
@@ -377,7 +378,8 @@ public class GeoWaveGTDataStore extends
 					ex);
 		}
 
-		if (currentSelectionsList.isEmpty()) currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+		if (currentSelectionsList.isEmpty())
+			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
 
 		return currentSelectionsList.toArray(new PrimaryIndex[currentSelectionsList.size()]);
 	}

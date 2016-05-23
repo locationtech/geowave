@@ -214,7 +214,8 @@ public class GeoWaveFeatureReader implements
 
 	protected static boolean hasAtLeastSpatial(
 			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null) || (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+		if ((index == null) || (index.getIndexStrategy() == null)
+				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
 			return false;
 		}
 		boolean hasLatitude = false;
@@ -232,7 +233,8 @@ public class GeoWaveFeatureReader implements
 
 	protected static boolean hasTime(
 			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null) || (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+		if ((index == null) || (index.getIndexStrategy() == null)
+				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
 			return false;
 		}
 		for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
@@ -524,7 +526,8 @@ public class GeoWaveFeatureReader implements
 			}
 
 			final PrimaryIndex[] writeIndices = components.getAdapterIndices();
-			final PrimaryIndex queryIndex = ((writeIndices != null) && (writeIndices.length > 0)) ? writeIndices[0] : null;
+			final PrimaryIndex queryIndex = ((writeIndices != null) && (writeIndices.length > 0)) ? writeIndices[0]
+					: null;
 
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
@@ -588,8 +591,9 @@ public class GeoWaveFeatureReader implements
 		final List<DataStatistics<SimpleFeature>> stats = new LinkedList<DataStatistics<SimpleFeature>>();
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
 		for (final Map.Entry<ByteArrayId, DataStatistics<SimpleFeature>> stat : statsMap.entrySet()) {
-			if ((stat.getValue() instanceof FeatureStatistic) && ((FeatureStatistic) stat.getValue()).getFieldName().endsWith(
-					name)) {
+			if ((stat.getValue() instanceof FeatureStatistic)
+					&& ((FeatureStatistic) stat.getValue()).getFieldName().endsWith(
+							name)) {
 				stats.add(stat.getValue());
 			}
 		}

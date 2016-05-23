@@ -151,13 +151,7 @@ public class MemoryDataStoreTest
 
 		final Iterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics();
 		assertTrue(checkStats(
-				(DataStatistics<Integer>) statsIt.next(),
-				2,
-				new NumericRange(
-						25,
-						35)));
-		assertTrue(checkStats(
-				(DataStatistics<Integer>) statsIt.next(),
+				statsIt,
 				2,
 				new NumericRange(
 						25,
@@ -333,13 +327,7 @@ public class MemoryDataStoreTest
 
 		final Iterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics();
 		assertTrue(checkStats(
-				(DataStatistics<Integer>) statsIt.next(),
-				2,
-				new NumericRange(
-						25,
-						35)));
-		assertTrue(checkStats(
-				(DataStatistics<Integer>) statsIt.next(),
+				statsIt,
 				2,
 				new NumericRange(
 						25,
@@ -457,22 +445,18 @@ public class MemoryDataStoreTest
 	}
 
 	private boolean checkStats(
-			final DataStatistics<Integer> stat,
+			final Iterator<DataStatistics<?>> statIt,
 			final int count,
 			final NumericRange range ) {
-		if (stat instanceof CountDataStatistics) {
-			return ((CountDataStatistics) stat).getCount() == count;
+		while (statIt.hasNext()) {
+			DataStatistics<Integer> stat = (DataStatistics<Integer>) statIt.next();
+			if (stat instanceof CountDataStatistics && ((CountDataStatistics) stat).getCount() != count)
+				return false;
+			else if (stat instanceof IntegerRangeDataStatistics
+					&& (((IntegerRangeDataStatistics) stat).getMin() != range.getMin() || ((IntegerRangeDataStatistics) stat)
+							.getMax() != range.getMax())) return false;
 		}
-		else if (stat instanceof IntegerRangeDataStatistics) {
-			return (((IntegerRangeDataStatistics) stat).getMin() == range.getMin()) && (((IntegerRangeDataStatistics) stat).getMax() == range.getMax());
-		}
-		else if (stat instanceof RowRangeDataStatistics) {
-			return true;
-		}
-		else if (stat instanceof RowRangeHistogramStatistics) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	private class TestQueryFilter implements

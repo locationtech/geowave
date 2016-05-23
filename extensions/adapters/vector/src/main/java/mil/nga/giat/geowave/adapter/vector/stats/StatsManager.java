@@ -104,8 +104,10 @@ public class StatsManager
 
 			if (descriptor.getUserData().containsKey(
 					"stats")) {
-				final StatsConfigurationCollection statsConfigurations = (StatsConfigurationCollection) descriptor.getUserData().get(
-						"stats");
+				final StatsConfigurationCollection statsConfigurations = (StatsConfigurationCollection) descriptor
+						.getUserData()
+						.get(
+								"stats");
 				for (StatsConfig<SimpleFeature> statConfig : statsConfigurations.getConfigurationsForAttribute()) {
 					addStats(
 							statConfig.create(

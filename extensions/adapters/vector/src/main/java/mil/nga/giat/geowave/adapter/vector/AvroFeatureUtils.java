@@ -119,7 +119,8 @@ public class AvroFeatureUtils
 
 		if (classification == null) {
 			throw new IOException(
-					"No default classification was provided, and no classification for: '" + localName + "' was provided");
+					"No default classification was provided, and no classification for: '" + localName
+							+ "' was provided");
 		}
 
 		return classification;

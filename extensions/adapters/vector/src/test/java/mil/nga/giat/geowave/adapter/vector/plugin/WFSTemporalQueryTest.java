@@ -47,7 +47,8 @@ public class WFSTemporalQueryTest extends
 			IOException,
 			GeoWavePluginException {
 		dataStore = createDataStore();
-		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex());
+		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialTemporalDimensionalityTypeProvider()
+				.createPrimaryIndex());
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,start:Date,end:Date");
@@ -140,7 +141,8 @@ public class WFSTemporalQueryTest extends
 		final Transaction transaction2 = new DefaultTransaction();
 		final Query query = new Query(
 				"geostuff",
-				CQL.toFilter("BBOX(geometry,44,27,42,30) and start during 2005-05-16T20:32:56Z/2005-05-20T21:32:56Z and end during 2005-05-18T20:32:56Z/2005-05-22T21:32:56Z"),
+				CQL
+						.toFilter("BBOX(geometry,44,27,42,30) and start during 2005-05-16T20:32:56Z/2005-05-20T21:32:56Z and end during 2005-05-18T20:32:56Z/2005-05-22T21:32:56Z"),
 				new String[] {
 					"geometry",
 					"pid"

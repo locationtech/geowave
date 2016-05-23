@@ -57,9 +57,12 @@ public class ServicesTestEnvironment implements
 	protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "DecimatePoints-10px";
 	protected static final String TEST_STYLE_NAME_MAJOR_SUBSAMPLE = "DecimatePoints-100px";
 	protected static final String TEST_STYLE_PATH = "src/test/resources/sld/";
-	protected static final String TEST_SLD_NO_DIFFERENCE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_NO_DIFFERENCE + ".sld";
-	protected static final String TEST_SLD_MINOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MINOR_SUBSAMPLE + ".sld";
-	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + ".sld";
+	protected static final String TEST_SLD_NO_DIFFERENCE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_NO_DIFFERENCE
+			+ ".sld";
+	protected static final String TEST_SLD_MINOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MINOR_SUBSAMPLE
+			+ ".sld";
+	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE
+			+ ".sld";
 
 	private Server jettyServer;
 
@@ -93,21 +96,22 @@ public class ServicesTestEnvironment implements
 					gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
 					gsWebapp.setWar(GEOSERVER_WAR_DIR);
 
-					final WebAppClassLoader classLoader = AccessController.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
-						@Override
-						public WebAppClassLoader run() {
-							try {
-								return new WebAppClassLoader(
-										gsWebapp);
-							}
-							catch (final IOException e) {
-								LOGGER.error(
-										"Unable to create new classloader",
-										e);
-								return null;
-							}
-						}
-					});
+					final WebAppClassLoader classLoader = AccessController
+							.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
+								@Override
+								public WebAppClassLoader run() {
+									try {
+										return new WebAppClassLoader(
+												gsWebapp);
+									}
+									catch (final IOException e) {
+										LOGGER.error(
+												"Unable to create new classloader",
+												e);
+										return null;
+									}
+								}
+							});
 					if (classLoader == null) {
 						throw new IOException(
 								"Unable to create classloader");

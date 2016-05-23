@@ -86,7 +86,8 @@ public class SecondaryIndexingQueryIT
 		// create SimpleFeatureType
 		schema = DataUtilities.createType(
 				TYPE_NAME,
-				"location:Geometry," + "city:String," + "state:String," + "since:Date," + "landArea:Double," + "munincipalPop:Integer," + "notes:String");
+				"location:Geometry," + "city:String," + "state:String," + "since:Date," + "landArea:Double,"
+						+ "munincipalPop:Integer," + "notes:String");
 
 		// mark attributes for secondary indexing:
 		final List<SimpleFeatureUserDataConfiguration> secondaryIndexingConfigs = new ArrayList<>();
@@ -179,7 +180,8 @@ public class SecondaryIndexingQueryIT
 					secondaryIndex,
 					index,
 					new String[0]);
-			System.out.println("Iterating matches for " + StringUtils.stringFromBinary(secondaryIndex.getId().getBytes()));
+			System.out.println("Iterating matches for "
+					+ StringUtils.stringFromBinary(secondaryIndex.getId().getBytes()));
 			int numMatches = 0;
 			while (matches.hasNext()) {
 				numMatches++;

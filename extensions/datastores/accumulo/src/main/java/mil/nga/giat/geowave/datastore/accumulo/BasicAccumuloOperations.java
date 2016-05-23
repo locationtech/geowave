@@ -202,7 +202,8 @@ public class BasicAccumuloOperations implements
 
 	private String[] getAuthorizations(
 			final String... additionalAuthorizations ) {
-		final String[] safeAdditionalAuthorizations = additionalAuthorizations == null ? new String[] {} : additionalAuthorizations;
+		final String[] safeAdditionalAuthorizations = additionalAuthorizations == null ? new String[] {}
+				: additionalAuthorizations;
 
 		return authorization == null ? safeAdditionalAuthorizations : (String[]) ArrayUtils.add(
 				safeAdditionalAuthorizations,
@@ -693,7 +694,8 @@ public class BasicAccumuloOperations implements
 									// this iterator exists with the wrong
 									// scope, we will assume we want to remove
 									// it and add the new configuration
-									LOGGER.warn("found iterator '" + iteratorConfig.getIteratorName() + "' missing scope '" + s.name() + "', removing it and re-attaching");
+									LOGGER.warn("found iterator '" + iteratorConfig.getIteratorName()
+											+ "' missing scope '" + s.name() + "', removing it and re-attaching");
 
 									mustDelete = true;
 									break;

@@ -10,7 +10,7 @@ public class QueryOptionsCommand
 	@Parameter(names = "--auth", description = "The comma-separated list of authorizations used during extract; by default all authorizations are used.")
 	private List<String> authorizations;
 
-	@Parameter(names = "--adapters", description = "The comma-separated list of data adapters to query; by default all adapters are used.")
+	@Parameter(names = "--adapters", required = true, description = "The comma-separated list of data adapters to query; by default all adapters are used.")
 	private List<String> adapterIds = null;
 
 	@Parameter(names = "--index", description = "The specific index to query; by default one is chosen for each adapter.")

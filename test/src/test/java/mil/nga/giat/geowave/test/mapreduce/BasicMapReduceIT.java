@@ -72,7 +72,8 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 })
 public class BasicMapReduceIT
 {
-	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
+	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE
+			+ "mapreduce-testdata.zip";
 	protected static final String TEST_CASE_GENERAL_GPX_BASE = TestUtils.TEST_CASE_BASE + "general_gpx_test_case/";
 	protected static final String GENERAL_GPX_FILTER_PACKAGE = TEST_CASE_GENERAL_GPX_BASE + "filter/";
 	protected static final String GENERAL_GPX_FILTER_FILE = GENERAL_GPX_FILTER_PACKAGE + "filter.shp";
@@ -161,7 +162,8 @@ public class BasicMapReduceIT
 			Assert.assertNotNull(url);
 			expectedResultsResources.add(url);
 		}
-		final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources.toArray(new URL[expectedResultsResources.size()]));
+		final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources
+				.toArray(new URL[expectedResultsResources.size()]));
 		runTestJob(
 				expectedResults,
 				TestUtils.resourceToQuery(new File(
@@ -302,7 +304,8 @@ public class BasicMapReduceIT
 				dataStorePluginOptions,
 				DimensionalityType.ALL,
 				"avro",
-				TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + File.separator + TEST_EXPORT_DIRECTORY);
+				TestUtils.TEMP_DIR + File.separator + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY + File.separator
+						+ TEST_EXPORT_DIRECTORY);
 	}
 
 	@SuppressFBWarnings(value = "DM_GC", justification = "Memory usage kept low for travis-ci")
@@ -435,7 +438,8 @@ public class BasicMapReduceIT
 				final SimpleFeature result = (SimpleFeature) value;
 				final Geometry geometry = (Geometry) result.getDefaultGeometry();
 				if (!geometry.isEmpty()) {
-					resultType = expectedHashedCentroids.contains(TestUtils.hashCentroid(geometry)) ? ResultCounterType.EXPECTED : ResultCounterType.UNEXPECTED;
+					resultType = expectedHashedCentroids.contains(TestUtils.hashCentroid(geometry)) ? ResultCounterType.EXPECTED
+							: ResultCounterType.UNEXPECTED;
 				}
 			}
 			context.getCounter(

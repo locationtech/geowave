@@ -93,7 +93,8 @@ public class MiniAccumuloClusterFactory
 				}
 			}
 			if (!success) {
-				LOGGER.error("'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
+				LOGGER
+						.error("'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
 
 				// return mini accumulo cluster anyways
 				return retVal;

@@ -136,7 +136,8 @@ public class NATO4676Encoder implements
 				TrackMessage trackMsg = (TrackMessage) msg;
 				if (firstTrackMessage) {
 					pw.write(GetXMLOpen());
-					pw.write("<TrackMessage xmlns=\"urn:int:nato:stanag4676:0.14\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" schemaVersion=\"0.14\">\n");
+					pw
+							.write("<TrackMessage xmlns=\"urn:int:nato:stanag4676:0.14\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" schemaVersion=\"0.14\">\n");
 					indentLevel++;
 					EncodeMsgMetadata(msg);
 					indentLevel--;
@@ -151,7 +152,8 @@ public class NATO4676Encoder implements
 				MissionSummary ms = msMsg.getMissionSummary();
 				if (ms != null) {
 					pw.write(GetXMLOpen());
-					pw.write("<MissionSummary xmlns=\"http://siginnovations.com/MissionSummarySIG\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
+					pw
+							.write("<MissionSummary xmlns=\"http://siginnovations.com/MissionSummarySIG\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
 					indentLevel++;
 					EncodeMsgMetadata(msg);
 					pw.write(indent() + "<Name>" + ms.getName() + "</Name>\n");
@@ -502,7 +504,8 @@ public class NATO4676Encoder implements
 			indentLevel--;
 			pw.write(indent() + "</pointDetailVelocity>\n");
 		}
-		if ((detail.getAccelerationX() != null) || (detail.getAccelerationY() != null) || (detail.getAccelerationZ() != null)) {
+		if ((detail.getAccelerationX() != null) || (detail.getAccelerationY() != null)
+				|| (detail.getAccelerationZ() != null)) {
 			pw.write(indent() + "<pointDetailAcceleration xsi:type=\"LocalCartesianAcceleration\">\n");
 			indentLevel++;
 			if (detail.getAccelerationX() != null) {

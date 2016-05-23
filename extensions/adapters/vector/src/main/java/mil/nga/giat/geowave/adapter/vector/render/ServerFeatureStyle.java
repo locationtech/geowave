@@ -113,7 +113,8 @@ public class ServerFeatureStyle implements
 			elseRulesBinary = new byte[0];
 		}
 
-		final ByteBuffer buf = ByteBuffer.allocate(13 + ruleListBinary.length + elseRulesBinary.length + styleIdBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(13 + ruleListBinary.length + elseRulesBinary.length
+				+ styleIdBinary.length);
 		buf.putInt(ruleListBinary.length);
 		buf.put(ruleListBinary);
 		buf.putInt(elseRulesBinary.length);

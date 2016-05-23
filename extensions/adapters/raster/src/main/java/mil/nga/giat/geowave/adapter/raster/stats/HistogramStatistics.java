@@ -224,7 +224,8 @@ public class HistogramStatistics extends
 				params,
 				null);
 
-		final javax.media.jai.Histogram histogram = (javax.media.jai.Histogram) coverage.getProperty(Histogram.GT_SYNTHETIC_PROPERTY_HISTOGRAM);
+		final javax.media.jai.Histogram histogram = (javax.media.jai.Histogram) coverage
+				.getProperty(Histogram.GT_SYNTHETIC_PROPERTY_HISTOGRAM);
 
 		javax.media.jai.Histogram mergedHistogram;
 		final javax.media.jai.Histogram resolutionHistogram = histograms.get(resolution);

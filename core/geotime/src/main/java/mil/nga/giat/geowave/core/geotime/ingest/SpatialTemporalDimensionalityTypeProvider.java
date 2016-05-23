@@ -201,9 +201,10 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 			if (convertedValue == null) {
 				throw new ParameterException(
-						"Value " + value + "can not be converted to an index bias. " + "Available values are: " + StringUtils.join(
-								Bias.values(),
-								", ").toLowerCase());
+						"Value " + value + "can not be converted to an index bias. " + "Available values are: "
+								+ StringUtils.join(
+										Bias.values(),
+										", ").toLowerCase());
 			}
 			return convertedValue;
 		}
@@ -221,9 +222,10 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 			if (convertedValue == null) {
 				throw new ParameterException(
-						"Value " + value + "can not be converted to Unit. " + "Available values are: " + StringUtils.join(
-								Unit.values(),
-								", ").toLowerCase());
+						"Value " + value + "can not be converted to Unit. " + "Available values are: "
+								+ StringUtils.join(
+										Unit.values(),
+										", ").toLowerCase());
 			}
 			return convertedValue;
 		}

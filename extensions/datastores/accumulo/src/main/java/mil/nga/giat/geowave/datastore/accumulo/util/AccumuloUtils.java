@@ -138,7 +138,8 @@ public class AccumuloUtils
 	public static String getQualifiedTableName(
 			final String tableNamespace,
 			final String unqualifiedTableName ) {
-		return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName : tableNamespace + "_" + unqualifiedTableName;
+		return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName : tableNamespace + "_"
+				+ unqualifiedTableName;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1073,6 +1074,7 @@ public class AccumuloUtils
 					null,
 					null,
 					null,
+					null,
 					new String[0]);
 			final CloseableIterator<?> iterator = accumuloQuery.query(
 					operations,
@@ -1116,6 +1118,7 @@ public class AccumuloUtils
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
 					null,
 					index,
+					null,
 					null,
 					null,
 					null,

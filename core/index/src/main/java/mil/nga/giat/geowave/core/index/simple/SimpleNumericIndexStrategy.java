@@ -8,6 +8,7 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
@@ -65,10 +66,12 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	 */
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
-			final MultiDimensionalNumericData indexedRange ) {
+			final MultiDimensionalNumericData indexedRange,
+			final IndexMetaData... hints ) {
 		return getQueryRanges(
 				indexedRange,
-				-1);
+				-1,
+				hints);
 	}
 
 	/**
@@ -80,7 +83,8 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
-			final int maxEstimatedRangeDecomposition ) {
+			final int maxEstimatedRangeDecomposition,
+			final IndexMetaData... hints ) {
 		final T min = cast(indexedRange.getMinValuesPerDimension()[0]);
 		final ByteArrayId start = new ByteArrayId(
 				lexicoder.toByteArray(min));
@@ -212,4 +216,8 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 		return null;
 	}
 
+	@Override
+	public List<IndexMetaData> createMetaData() {
+		return Collections.emptyList();
+	}
 }

@@ -15,6 +15,7 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
@@ -362,14 +363,16 @@ public class BasicQueryTest
 
 		@Override
 		public List<ByteArrayRange> getQueryRanges(
-				final MultiDimensionalNumericData indexedRange ) {
+				final MultiDimensionalNumericData indexedRange,
+				final IndexMetaData... hints ) {
 			return null;
 		}
 
 		@Override
 		public List<ByteArrayRange> getQueryRanges(
 				final MultiDimensionalNumericData indexedRange,
-				final int maxEstimatedRangeDecomposition ) {
+				final int maxEstimatedRangeDecomposition,
+				final IndexMetaData... hints ) {
 			return null;
 		}
 
@@ -425,6 +428,11 @@ public class BasicQueryTest
 		public int getByteOffsetFromDimensionalIndex() {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		@Override
+		public List<IndexMetaData> createMetaData() {
+			return Collections.emptyList();
 		}
 
 	}

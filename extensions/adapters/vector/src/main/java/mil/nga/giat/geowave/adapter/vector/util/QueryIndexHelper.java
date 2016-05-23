@@ -30,7 +30,8 @@ public class QueryIndexHelper
 			final AttributeDescriptor attr ) {
 		final TemporalRange timeRange = new TemporalRange();
 		if (attr != null) {
-			final FeatureTimeRangeStatistics stat = ((FeatureTimeRangeStatistics) statsMap.get(FeatureTimeRangeStatistics.composeId(attr.getLocalName())));
+			final FeatureTimeRangeStatistics stat = ((FeatureTimeRangeStatistics) statsMap
+					.get(FeatureTimeRangeStatistics.composeId(attr.getLocalName())));
 			if (stat != null) {
 				timeRange.setStartTime(stat.getMinTime());
 				timeRange.setEndTime(stat.getMaxTime());
@@ -82,9 +83,11 @@ public class QueryIndexHelper
 				return constraintsSet;
 			}
 		}
-		else if ((timeDescriptors.getTime() != null) && constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
+		else if ((timeDescriptors.getTime() != null)
+				&& constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
 			final String name = timeDescriptors.getTime().getLocalName();
-			final FeatureTimeRangeStatistics stats = ((FeatureTimeRangeStatistics) statsMap.get(FeatureTimeRangeStatistics.composeId(name)));
+			final FeatureTimeRangeStatistics stats = ((FeatureTimeRangeStatistics) statsMap
+					.get(FeatureTimeRangeStatistics.composeId(name)));
 
 			final TemporalConstraints constraints = constraintsSet.getConstraintsFor(name);
 			if (stats != null) {
@@ -124,7 +127,8 @@ public class QueryIndexHelper
 			}
 
 		}
-		else if ((timeDescriptors.getTime() != null) && constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
+		else if ((timeDescriptors.getTime() != null)
+				&& constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
 			return constraintsSet.getConstraintsFor(timeDescriptors.getTime().getLocalName());
 		}
 		return new TemporalConstraints();
@@ -148,7 +152,10 @@ public class QueryIndexHelper
 		final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(geoAttrName);
 		final FeatureBoundingBoxStatistics bboxStats = (FeatureBoundingBoxStatistics) statsMap.get(statId);
 		if (bboxStats != null && bbox != null) {
-			final Geometry geo = bboxStats.composeGeometry(featureType.getGeometryDescriptor().getType().getCoordinateReferenceSystem());
+			final Geometry geo = bboxStats.composeGeometry(featureType
+					.getGeometryDescriptor()
+					.getType()
+					.getCoordinateReferenceSystem());
 			return geo.intersection(bbox);
 		}
 		return bbox;
@@ -159,8 +166,10 @@ public class QueryIndexHelper
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats ) {
 
 		if ((timeDescriptors.getEndRange() != null) || (timeDescriptors.getStartRange() != null)) {
-			final FeatureTimeRangeStatistics endRange = (timeDescriptors.getEndRange() != null) ? ((FeatureTimeRangeStatistics) stats.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getEndRange().getLocalName()))) : null;
-			final FeatureTimeRangeStatistics startRange = (timeDescriptors.getStartRange() != null) ? ((FeatureTimeRangeStatistics) stats.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getStartRange().getLocalName()))) : null;
+			final FeatureTimeRangeStatistics endRange = (timeDescriptors.getEndRange() != null) ? ((FeatureTimeRangeStatistics) stats
+					.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getEndRange().getLocalName()))) : null;
+			final FeatureTimeRangeStatistics startRange = (timeDescriptors.getStartRange() != null) ? ((FeatureTimeRangeStatistics) stats
+					.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getStartRange().getLocalName()))) : null;
 
 			if ((endRange != null) && (startRange != null)) {
 				return SpatialTemporalQuery.createConstraints(
@@ -180,7 +189,8 @@ public class QueryIndexHelper
 			}
 		}
 		else if (timeDescriptors.getTime() != null) {
-			final FeatureTimeRangeStatistics timeStat = ((FeatureTimeRangeStatistics) stats.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getTime().getLocalName())));
+			final FeatureTimeRangeStatistics timeStat = ((FeatureTimeRangeStatistics) stats
+					.get(FeatureTimeRangeStatistics.composeId(timeDescriptors.getTime().getLocalName())));
 			if (timeStat != null) {
 				return SpatialTemporalQuery.createConstraints(
 						timeStat.asTemporalRange(),
@@ -195,7 +205,8 @@ public class QueryIndexHelper
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap ) {
 		final String geoAttrName = featureType.getGeometryDescriptor().getLocalName();
 		final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(geoAttrName);
-		final BoundingBoxDataStatistics<SimpleFeature> bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
+		final BoundingBoxDataStatistics<SimpleFeature> bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap
+				.get(statId);
 		return (bboxStats != null) ? bboxStats.getConstraints() : new ConstraintSet();
 	}
 
@@ -211,7 +222,8 @@ public class QueryIndexHelper
 					timeDescriptors,
 					timeBoundsSet);
 		}
-		else if ((timeDescriptors.getTime() != null) && timeBoundsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
+		else if ((timeDescriptors.getTime() != null)
+				&& timeBoundsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
 			return timeBoundsSet.getConstraintsFor(timeDescriptors.getTime().getLocalName());
 		}
 

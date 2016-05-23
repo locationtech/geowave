@@ -94,7 +94,8 @@ abstract public class AbstractDataAdapter<T> implements
 		// matching index handlers
 		for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : indexFieldHandlers) {
 			if (indexHandler instanceof DimensionMatchingIndexFieldHandler) {
-				final ByteArrayId[] matchedDimensionFieldIds = ((DimensionMatchingIndexFieldHandler<T, ? extends CommonIndexValue, Object>) indexHandler).getSupportedIndexFieldIds();
+				final ByteArrayId[] matchedDimensionFieldIds = ((DimensionMatchingIndexFieldHandler<T, ? extends CommonIndexValue, Object>) indexHandler)
+						.getSupportedIndexFieldIds();
 				for (final ByteArrayId matchedDimensionId : matchedDimensionFieldIds) {
 					dimensionMatchingFieldHandlers.put(
 							matchedDimensionId,
@@ -123,9 +124,10 @@ abstract public class AbstractDataAdapter<T> implements
 					IndexFieldHandler.class)[1];
 			// if the type matching handlers can already handle this class,
 			// don't overload it, otherwise, use this as a default handler
-			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> existingTypeHandler = FieldUtils.getAssignableValueFromClassMap(
-					defaultFieldHandlerClass,
-					typeMatchingFieldHandlers);
+			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> existingTypeHandler = FieldUtils
+					.getAssignableValueFromClassMap(
+							defaultFieldHandlerClass,
+							typeMatchingFieldHandlers);
 			if (existingTypeHandler == null) {
 				typeMatchingFieldHandlers.put(
 						defaultFieldHandlerClass,
@@ -148,7 +150,9 @@ abstract public class AbstractDataAdapter<T> implements
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = getFieldHandler(dimension);
 			if (fieldHandler == null) {
-				LOGGER.warn("Unable to find field handler for data adapter '" + StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '" + StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+				LOGGER.warn("Unable to find field handler for data adapter '"
+						+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
+						+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
 				continue;
 			}
 			final CommonIndexValue value = fieldHandler.toIndexValue(entry);
@@ -187,7 +191,9 @@ abstract public class AbstractDataAdapter<T> implements
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler = (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
 			if (fieldHandler == null) {
-				LOGGER.warn("Unable to find field handler for data adapter '" + StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '" + StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+				LOGGER.warn("Unable to find field handler for data adapter '"
+						+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
+						+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
 				continue;
 			}
 			final CommonIndexValue value = data.getCommonData().getValue(
@@ -213,7 +219,8 @@ abstract public class AbstractDataAdapter<T> implements
 	protected IndexFieldHandler<T, ? extends CommonIndexValue, Object> getFieldHandler(
 			final NumericDimensionField<? extends CommonIndexValue> dimension ) {
 		// first try explicit dimension matching
-		IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = dimensionMatchingFieldHandlers.get(dimension.getFieldId());
+		IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = dimensionMatchingFieldHandlers
+				.get(dimension.getFieldId());
 		if (fieldHandler == null) {
 			// if that fails, go for type matching
 			fieldHandler = FieldUtils.getAssignableValueFromClassMap(
@@ -241,12 +248,14 @@ abstract public class AbstractDataAdapter<T> implements
 				persistables.add((Persistable) nativeHandler);
 			}
 		}
-		for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : typeMatchingFieldHandlers.values()) {
+		for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : typeMatchingFieldHandlers
+				.values()) {
 			if (indexHandler instanceof Persistable) {
 				persistables.add((Persistable) indexHandler);
 			}
 		}
-		for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : dimensionMatchingFieldHandlers.values()) {
+		for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : dimensionMatchingFieldHandlers
+				.values()) {
 			if (indexHandler instanceof Persistable) {
 				persistables.add((Persistable) indexHandler);
 			}

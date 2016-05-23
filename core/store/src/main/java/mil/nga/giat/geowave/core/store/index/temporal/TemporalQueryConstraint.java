@@ -91,8 +91,10 @@ public class TemporalQueryConstraint implements
 						fieldId,
 						start.compareTo(filterConstraints.start) < 0 ? filterConstraints.start : start,
 						end.compareTo(filterConstraints.end) > 0 ? filterConstraints.end : end,
-						lowEquals ? filterConstraints.inclusiveLow & inclusiveLow : (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow),
-						upperEquals ? filterConstraints.inclusiveHigh & inclusiveHigh : (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh));
+						lowEquals ? filterConstraints.inclusiveLow & inclusiveLow
+								: (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow),
+						upperEquals ? filterConstraints.inclusiveHigh & inclusiveHigh
+								: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh));
 			}
 		}
 		return this;
@@ -112,8 +114,10 @@ public class TemporalQueryConstraint implements
 						fieldId,
 						start.compareTo(filterConstraints.start) > 0 ? filterConstraints.start : start,
 						end.compareTo(filterConstraints.end) < 0 ? filterConstraints.end : end,
-						lowEquals ? filterConstraints.inclusiveLow | inclusiveLow : (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow),
-						upperEquals ? filterConstraints.inclusiveHigh | inclusiveHigh : (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh));
+						lowEquals ? filterConstraints.inclusiveLow | inclusiveLow
+								: (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow),
+						upperEquals ? filterConstraints.inclusiveHigh | inclusiveHigh
+								: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh));
 			}
 		}
 		return this;

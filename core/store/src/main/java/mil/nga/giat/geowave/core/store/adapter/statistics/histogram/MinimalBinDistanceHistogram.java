@@ -272,7 +272,8 @@ public class MinimalBinDistanceHistogram implements
 			final Bin smallestdiffbin = bins.get(smallestdiffloc);
 			final double d = smallestdiffbin.count + bins.get(smallestdiffloc + 1).count;
 			smallestdiffbin.lowerBound *= smallestdiffbin.count / d;
-			smallestdiffbin.lowerBound += (bins.get(smallestdiffloc + 1).lowerBound / d) * bins.get(smallestdiffloc + 1).count;
+			smallestdiffbin.lowerBound += (bins.get(smallestdiffloc + 1).lowerBound / d)
+					* bins.get(smallestdiffloc + 1).count;
 			smallestdiffbin.count = d;
 			// Shift the remaining bins left one position
 			bins.remove(smallestdiffloc + 1);
@@ -316,7 +317,9 @@ public class MinimalBinDistanceHistogram implements
 				}
 
 				csum -= bins.get(b).count;
-				final double r = bins.get(b - 1).lowerBound + ((((q * totalCount) - csum) * (bins.get(b).lowerBound - bins.get(b - 1).lowerBound)) / (bins.get(b).count));
+				final double r = bins.get(b - 1).lowerBound
+						+ ((((q * totalCount) - csum) * (bins.get(b).lowerBound - bins.get(b - 1).lowerBound)) / (bins
+								.get(b).count));
 				return r;
 			}
 		}
@@ -370,7 +373,8 @@ public class MinimalBinDistanceHistogram implements
 		// (lowerBoundary,0) (lowerBoundary,lowerCount)
 		// (upperBoundary,upperCount) (upperBoundary,0)
 		// divided by (upperBoundary - lowerBoundary).
-		final double mb = lowerCount + (((upperCount - lowerCount) / (upperBoundary - lowerBoundary)) * (val - lowerBoundary));
+		final double mb = lowerCount
+				+ (((upperCount - lowerCount) / (upperBoundary - lowerBoundary)) * (val - lowerBoundary));
 		final double s = (((lowerCount + mb) / 2.0) * (val - lowerBoundary)) / (upperBoundary - lowerBoundary);
 		final double r = foundCount + s + (lowerCount / 2.0);
 		return r > 1.0 ? r : (inclusive ? 1.0 : r);

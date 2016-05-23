@@ -71,7 +71,8 @@ public class OsmXmlLoader implements
 			if (n == null) {
 				throw new Exception(
 						String.format(
-								"Error while parsing OSM XML: Node %s in Way %s " + "(length: %s) is not declared in the document!",
+								"Error while parsing OSM XML: Node %s in Way %s "
+										+ "(length: %s) is not declared in the document!",
 								wn.getNodeId(),
 								way.getId(),
 								way.getWayNodes().size()));

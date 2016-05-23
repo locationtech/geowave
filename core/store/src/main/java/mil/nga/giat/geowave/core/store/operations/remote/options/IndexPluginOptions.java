@@ -36,6 +36,11 @@ public class IndexPluginOptions extends
 	private String indexType;
 
 	@Parameter(names = {
+		"--indexName"
+	}, description = "A custom name can be given to this index. Default name will be the based on configuration parameters.")
+	protected String nameOverride = null;
+
+	@Parameter(names = {
 		"-np",
 		"--numPartitions"
 	}, description = "The number of partitions.  Default partitions will be 1.")
@@ -89,6 +94,10 @@ public class IndexPluginOptions extends
 		return numPartitions;
 	}
 
+	public String getNameOverride() {
+		return nameOverride;
+	}
+
 	public PartitionStrategy getPartitionStrategy() {
 		return partitionStrategy;
 	}
@@ -131,12 +140,12 @@ public class IndexPluginOptions extends
 					new ByteArrayId(
 							index.getId().getString() + "_" + PartitionStrategy.ROUND_ROBIN.name() + "_" + numPartitions));
 		}
-		if ((getType() != null) && (getType().length() > 0)) {
+		if ((getNameOverride() != null) && (getNameOverride().length() > 0)) {
 			retVal = new CustomIdIndex(
 					retVal.getIndexStrategy(),
 					retVal.getIndexModel(),
 					new ByteArrayId(
-							getType()));
+							getNameOverride()));
 		}
 		return retVal;
 	}

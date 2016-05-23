@@ -94,10 +94,12 @@ public class FeatureNumericHistogramStatistics extends
 		if (val < 0 || (1.0 - percentageNegative) < 0.000000001) {
 			// subtract one from percentage since negative is negated so
 			// percentage is inverted
-			return (percentageNegative > 0) ? percentageNegative * (1.0 - (negativeHistogram.getPercentileAtOrBelowValue(-val) / 100.0)) : 0.0;
+			return (percentageNegative > 0) ? percentageNegative
+					* (1.0 - (negativeHistogram.getPercentileAtOrBelowValue(-val) / 100.0)) : 0.0;
 		}
 		else {
-			return percentageNegative + (1.0 - percentageNegative) * (positiveHistogram.getPercentileAtOrBelowValue(val) / 100.0);
+			return percentageNegative + (1.0 - percentageNegative)
+					* (positiveHistogram.getPercentileAtOrBelowValue(val) / 100.0);
 		}
 
 	}
@@ -129,7 +131,8 @@ public class FeatureNumericHistogramStatistics extends
 			final int bins ) {
 		final long[] result = new long[bins];
 		final double max = positiveHistogram.getMaxValue();
-		final double min = negativeHistogram == null ? positiveHistogram.getMinValue() : -negativeHistogram.getMaxValue();
+		final double min = negativeHistogram == null ? positiveHistogram.getMinValue() : -negativeHistogram
+				.getMaxValue();
 		final double binSize = (max - min) / (bins);
 		long last = 0;
 		final long tc = totalSampleSize();
@@ -161,7 +164,8 @@ public class FeatureNumericHistogramStatistics extends
 	@Override
 	public byte[] toBinary() {
 		final int positiveBytes = positiveHistogram.getEstimatedFootprintInBytes();
-		final int bytesNeeded = positiveBytes + (negativeHistogram == null ? 0 : negativeHistogram.getEstimatedFootprintInBytes());
+		final int bytesNeeded = positiveBytes
+				+ (negativeHistogram == null ? 0 : negativeHistogram.getEstimatedFootprintInBytes());
 		final ByteBuffer buffer = super.binaryBuffer(bytesNeeded + 5);
 		final int startPosition = buffer.position();
 		buffer.putInt(startPosition); // buffer out an int

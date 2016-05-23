@@ -161,7 +161,8 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 		// the secondaryId is optional so check for null
 		if (secondaryId != null) {
 			return new ByteArrayId(
-					this.accumuloOperations.getTableNameSpace() + "_" + primaryId.getString() + "_" + secondaryId.getString());
+					this.accumuloOperations.getTableNameSpace() + "_" + primaryId.getString() + "_"
+							+ secondaryId.getString());
 		}
 		return primaryId;
 	}
@@ -172,8 +173,21 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 
 	protected void addObject(
 			final T object ) {
-		final ByteArrayId id = getPrimaryId(object);
-		addObjectToCache(object);
+		addObject(
+				getPrimaryId(object),
+				getSecondaryId(object),
+				object);
+	}
+
+	protected void addObject(
+			final ByteArrayId id,
+			final ByteArrayId secondaryId,
+			final T object ) {
+		addObjectToCache(
+				id,
+				secondaryId,
+				object);
+
 		try {
 
 			final Writer writer = accumuloOperations.createWriter(
@@ -225,10 +239,12 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 	}
 
 	protected void addObjectToCache(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId,
 			final T object ) {
 		final ByteArrayId combinedId = getCombinedId(
-				getPrimaryId(object),
-				getSecondaryId(object));
+				primaryId,
+				secondaryId);
 		cache.put(
 				combinedId,
 				object);
@@ -350,7 +366,10 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 				entry.getValue().get(),
 				Persistable.class);
 		if (result != null) {
-			addObjectToCache(result);
+			addObjectToCache(
+					getPrimaryId(result),
+					getSecondaryId(result),
+					result);
 		}
 		return result;
 	}

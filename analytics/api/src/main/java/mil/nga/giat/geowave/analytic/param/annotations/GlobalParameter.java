@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters.Global;
 	ElementType.METHOD
 })
 public @interface GlobalParameter {
-	Global value();
+	Global[] value();
 }

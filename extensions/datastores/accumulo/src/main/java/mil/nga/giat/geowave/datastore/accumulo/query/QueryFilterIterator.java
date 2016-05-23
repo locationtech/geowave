@@ -69,9 +69,10 @@ public class QueryFilterIterator extends
 				f = URL.class.getDeclaredField("factory");
 			}
 			catch (final NoSuchFieldException e) {
-				LOGGER.error(
-						"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
-						e);
+				LOGGER
+						.error(
+								"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
+								e);
 				throw (factoryError);
 			}
 			f.setAccessible(true);
@@ -80,19 +81,23 @@ public class QueryFilterIterator extends
 				o = f.get(null);
 			}
 			catch (final IllegalAccessException e) {
-				LOGGER.error(
-						"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
-						e);
+				LOGGER
+						.error(
+								"URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to;  additionally unable to discover type of Factory",
+								e);
 				throw (factoryError);
 			}
 			if (o instanceof FsUrlStreamHandlerFactory) {
-				LOGGER.info("setURLStreamHandlerFactory already set on this JVM to FsUrlStreamHandlerFactory.  Nothing to do");
+				LOGGER
+						.info("setURLStreamHandlerFactory already set on this JVM to FsUrlStreamHandlerFactory.  Nothing to do");
 				return;
 			}
 			else {
 				type = o.getClass().getCanonicalName();
 			}
-			LOGGER.error("URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to: " + type);
+			LOGGER
+					.error("URL.setURLStreamHandlerFactory() can only be called once per JVM instance, and currently something has set it to: "
+							+ type);
 			throw (factoryError);
 		}
 	}
@@ -130,7 +135,8 @@ public class QueryFilterIterator extends
 									fieldValue));
 						}
 						else {
-							LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());
+							LOGGER.error("Could not find reader for common index field: "
+									+ commonIndexFieldId.getString());
 						}
 					}
 					else {

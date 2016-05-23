@@ -48,8 +48,12 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class QueryIndexHelperTest
 {
-	private static final NumericIndexStrategy SPATIAL_INDEX_STRATEGY = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexStrategy();
-	private static final NumericIndexStrategy SPATIAL_TEMPORAL_INDEX_STRATEGY = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex().getIndexStrategy();
+	private static final NumericIndexStrategy SPATIAL_INDEX_STRATEGY = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex()
+			.getIndexStrategy();
+	private static final NumericIndexStrategy SPATIAL_TEMPORAL_INDEX_STRATEGY = new SpatialTemporalDimensionalityTypeProvider()
+			.createPrimaryIndex()
+			.getIndexStrategy();
 	final ByteArrayId dataAdapterId = new ByteArrayId(
 			"123");
 

@@ -43,7 +43,8 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 				while (!done && i < indices.length) {
 					nextIdx = indices[i++];
 					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
-					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx.getIndexStrategy());
+					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx
+							.getIndexStrategy());
 					if (ChooseBestMatchIndexQueryStrategy.isFullTableScan(queryRanges)) {
 						// keep this is as a default in case all indices
 						// result in a full table scan
@@ -56,7 +57,8 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 						for (final MultiDimensionalNumericData qr : queryRanges) {
 							final double[] dataRangePerDimension = new double[qr.getDimensionCount()];
 							for (int d = 0; d < dataRangePerDimension.length; d++) {
-								dataRangePerDimension[d] = qr.getMaxValuesPerDimension()[d] - qr.getMinValuesPerDimension()[d];
+								dataRangePerDimension[d] = qr.getMaxValuesPerDimension()[d]
+										- qr.getMinValuesPerDimension()[d];
 							}
 							totalMax += IndexUtils.getDimensionalBitsUsed(
 									nextIdx.getIndexStrategy(),

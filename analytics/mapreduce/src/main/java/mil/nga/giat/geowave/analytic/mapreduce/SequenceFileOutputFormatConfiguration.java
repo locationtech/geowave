@@ -33,7 +33,8 @@ public class SequenceFileOutputFormatConfiguration implements
 			final Configuration configuration )
 			throws Exception {
 
-		final Path localOutputPath = outputPath == null ? runTimeProperties.getPropertyAsPath(OutputParameters.Output.HDFS_OUTPUT_PATH) : outputPath;
+		final Path localOutputPath = outputPath == null ? runTimeProperties
+				.getPropertyAsPath(OutputParameters.Output.HDFS_OUTPUT_PATH) : outputPath;
 		if (localOutputPath != null) {
 			configuration.set(
 					"mapred.output.dir",

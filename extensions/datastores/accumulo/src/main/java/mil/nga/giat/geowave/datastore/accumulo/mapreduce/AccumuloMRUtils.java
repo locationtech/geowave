@@ -94,10 +94,11 @@ public class AccumuloMRUtils
 		final List<InputSplit> retVal = new ArrayList<InputSplit>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
 
-		for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getAdaptersWithMinimalSetOfIndices(
-				adapterStore,
-				adapterIndexMappingStore,
-				indexStore)) {
+		for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+				.getAdaptersWithMinimalSetOfIndices(
+						adapterStore,
+						adapterIndexMappingStore,
+						indexStore)) {
 
 			populateIntermediateSplits(
 					splits,
@@ -202,7 +203,8 @@ public class AccumuloMRUtils
 				RowRangeDataStatistics.getId(index.getId()),
 				authorizations);
 		if (stats == null) {
-			LOGGER.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
+			LOGGER
+					.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
 			return new Range();
 		}
 
@@ -391,7 +393,8 @@ public class AccumuloMRUtils
 									statsCache,
 									authorizations),
 							clippedRange);
-					if (!(fullrange.beforeStartKey(clippedRange.getEndKey()) || fullrange.afterEndKey(clippedRange.getStartKey()))) {
+					if (!(fullrange.beforeStartKey(clippedRange.getEndKey()) || fullrange.afterEndKey(clippedRange
+							.getStartKey()))) {
 						rangeList.add(new RangeLocationPair(
 								clippedRange,
 								location,
@@ -591,7 +594,8 @@ public class AccumuloMRUtils
 						public int compare(
 								final IndexRangeLocation o1,
 								final IndexRangeLocation o2 ) {
-							return (o1.rangeLocationPair.getCardinality() - o2.rangeLocationPair.getCardinality()) < 0 ? -1 : 1;
+							return (o1.rangeLocationPair.getCardinality() - o2.rangeLocationPair.getCardinality()) < 0 ? -1
+									: 1;
 						}
 					});
 			for (final Entry<PrimaryIndex, List<RangeLocationPair>> ranges : splitInfo.entrySet()) {
@@ -662,7 +666,9 @@ public class AccumuloMRUtils
 			if (splitInfo.size() == 0) {
 				// First try to move a index set of ranges back.
 				if (otherSplitInfo.size() > 1) {
-					final Iterator<Entry<PrimaryIndex, List<RangeLocationPair>>> it = otherSplitInfo.entrySet().iterator();
+					final Iterator<Entry<PrimaryIndex, List<RangeLocationPair>>> it = otherSplitInfo
+							.entrySet()
+							.iterator();
 					final Entry<PrimaryIndex, List<RangeLocationPair>> entry = it.next();
 					it.remove();
 					splitInfo.put(

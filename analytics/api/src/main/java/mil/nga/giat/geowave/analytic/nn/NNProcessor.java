@@ -238,8 +238,10 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 			throws IOException,
 			InterruptedException {
 
-		LOGGER.info("Processing " + parentPartition.toString() + " with primary = " + primaries.size() + " and other = " + others.size());
-		LOGGER.info("Processing " + parentPartition.toString() + " with sub-partitions = " + uniqueSetOfPartitions.size());
+		LOGGER.info("Processing " + parentPartition.toString() + " with primary = " + primaries.size()
+				+ " and other = " + others.size());
+		LOGGER.info("Processing " + parentPartition.toString() + " with sub-partitions = "
+				+ uniqueSetOfPartitions.size());
 
 		index = new NeighborIndex<STORE_VALUE>(
 				listFactory);

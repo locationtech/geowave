@@ -215,7 +215,8 @@ public class OrthodromicDistancePartitionerTest
 							bs.toByteArray()))) {
 
 				@SuppressWarnings("unchecked")
-				final OrthodromicDistancePartitioner<SimpleFeature> partitioner2 = (OrthodromicDistancePartitioner<SimpleFeature>) is.readObject();
+				final OrthodromicDistancePartitioner<SimpleFeature> partitioner2 = (OrthodromicDistancePartitioner<SimpleFeature>) is
+						.readObject();
 				assertEquals(
 						partitioner2,
 						partitioner);

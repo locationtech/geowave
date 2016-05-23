@@ -176,8 +176,12 @@ public class GpxUtils
 									}
 									case "tags": {
 										final List<CharSequence> tags = new ArrayList<CharSequence>();
-										while (!(event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(
-												"tags"))) {
+										while (!(event.isEndElement() && event
+												.asEndElement()
+												.getName()
+												.getLocalPart()
+												.equals(
+														"tags"))) {
 											if (event.isStartElement()) {
 												node = event.asStartElement();
 												if (node.getName().getLocalPart().equals(

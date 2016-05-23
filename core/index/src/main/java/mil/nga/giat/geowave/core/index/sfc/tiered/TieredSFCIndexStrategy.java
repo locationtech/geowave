@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -75,7 +78,8 @@ public class TieredSFCIndexStrategy implements
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
-			final int maxRangeDecomposition ) {
+			final int maxRangeDecomposition,
+			final IndexMetaData... hints ) {
 		// TODO don't just pass max ranges along to the SFC, take tiering and
 		// binning into account to limit the number of ranges correctly
 
@@ -87,7 +91,11 @@ public class TieredSFCIndexStrategy implements
 		if ((maxRangeDecomposition > 1) && (orderedSfcs.length > 1)) {
 			maxRangeDecompositionPerSfc = (int) Math.ceil((double) maxRangeDecomposition / (double) orderedSfcs.length);
 		}
+		final TierIndexMetaData metaData = (hints.length > 0 && hints[0] != null && hints[0] instanceof TierIndexMetaData) ? (TierIndexMetaData) hints[0]
+				: null;
+
 		for (int sfcIndex = orderedSfcs.length - 1; sfcIndex >= 0; sfcIndex--) {
+			if (metaData != null && metaData.tierCounts[sfcIndex] == 0) continue;
 			final SpaceFillingCurve sfc = orderedSfcs[sfcIndex];
 			final Byte tier = orderedSfcIndexToTierId.get(sfcIndex);
 			queryRanges.addAll(getQueryRanges(
@@ -146,10 +154,12 @@ public class TieredSFCIndexStrategy implements
 	 */
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
-			final MultiDimensionalNumericData indexedRange ) {
+			final MultiDimensionalNumericData indexedRange,
+			final IndexMetaData... hints ) {
 		return getQueryRanges(
 				indexedRange,
-				DEFAULT_MAX_RANGES);
+				DEFAULT_MAX_RANGES,
+				hints);
 	}
 
 	/**
@@ -273,7 +283,8 @@ public class TieredSFCIndexStrategy implements
 		int result = 1;
 		result = (prime * result) + Arrays.hashCode(baseDefinitions);
 		result = (prime * result) + (int) (maxEstimatedDuplicateIds ^ (maxEstimatedDuplicateIds >>> 32));
-		result = (prime * result) + ((maxEstimatedDuplicateIdsBigInteger == null) ? 0 : maxEstimatedDuplicateIdsBigInteger.hashCode());
+		result = (prime * result)
+				+ ((maxEstimatedDuplicateIdsBigInteger == null) ? 0 : maxEstimatedDuplicateIdsBigInteger.hashCode());
 		result = (prime * result) + ((orderedSfcIndexToTierId == null) ? 0 : orderedSfcIndexToTierId.hashCode());
 		result = (prime * result) + Arrays.hashCode(orderedSfcs);
 		return result;
@@ -383,7 +394,8 @@ public class TieredSFCIndexStrategy implements
 							sfc.getId(maxValues))));
 			return retVal;
 		}
-		else if ((maxEstimatedDuplicateIds == null) || (rowCount.compareTo(maxEstimatedDuplicateIds) <= 0) || (sfcIndex == 0)) {
+		else if ((maxEstimatedDuplicateIds == null) || (rowCount.compareTo(maxEstimatedDuplicateIds) <= 0)
+				|| (sfcIndex == 0)) {
 			return decomposeRangesForEntry(
 					index,
 					tierId,
@@ -431,7 +443,8 @@ public class TieredSFCIndexStrategy implements
 					// the increment caused an overflow which shouldn't
 					// ever happen assuming the start row ID is less
 					// than the end row ID
-					LOGGER.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");
+					LOGGER
+							.warn("Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");
 					overflow = true;
 					break;
 				}
@@ -611,5 +624,86 @@ public class TieredSFCIndexStrategy implements
 			}
 		}
 		return rowIdOffset;
+	}
+
+	@Override
+	public List<IndexMetaData> createMetaData() {
+		return Collections.singletonList((IndexMetaData) new TierIndexMetaData(
+				orderedSfcIndexToTierId.inverse()));
+	}
+
+	private static class TierIndexMetaData implements
+			IndexMetaData
+	{
+
+		private int[] tierCounts = null;
+		private ImmutableBiMap<Byte, Integer> orderedTierIdToSfcIndex = null;
+
+		public TierIndexMetaData() {}
+
+		public TierIndexMetaData(
+				final ImmutableBiMap<Byte, Integer> orderedTierIdToSfcIndex ) {
+			super();
+			this.tierCounts = new int[orderedTierIdToSfcIndex.size()];
+			this.orderedTierIdToSfcIndex = orderedTierIdToSfcIndex;
+		}
+
+		@Override
+		public byte[] toBinary() {
+			final ByteBuffer buffer = ByteBuffer.allocate(4 + tierCounts.length * 4);
+			buffer.putInt(tierCounts.length);
+			for (int count : tierCounts)
+				buffer.putInt(count);
+			// do not use orderedTierIdToSfcIndex on query
+			// for (final Entry<Byte,Integer > entry :
+			// orderedTierIdToSfcIndex.entrySet()) {
+			// buffer.put(entry.getKey().byteValue());
+			// buffer.put(entry.getValue().byteValue());
+			// }
+			return buffer.array();
+		}
+
+		@Override
+		public void fromBinary(
+				byte[] bytes ) {
+			final ByteBuffer buffer = ByteBuffer.wrap(bytes);
+			tierCounts = new int[buffer.getInt()];
+			for (int i = 0; i < tierCounts.length; i++) {
+				tierCounts[i] = buffer.getInt();
+			}
+			// do not use orderedTierIdToSfcIndex on query
+			// final Builder<Byte,Integer> bimapBuilder =
+			// ImmutableBiMap.builder();
+			// for (int i = 0; i < tierCounts.length; i++) {
+			// bimapBuilder.put(
+			// buffer.get(),
+			// Byte.valueOf(buffer.get()).intValue()
+			// );
+			// }
+			// orderedTierIdToSfcIndex = bimapBuilder.build();
+		}
+
+		@Override
+		public void merge(
+				Mergeable merge ) {
+			if (merge instanceof TierIndexMetaData) {
+				TierIndexMetaData other = (TierIndexMetaData) merge;
+				int pos = 0;
+				for (int count : other.tierCounts)
+					this.tierCounts[pos++] += count;
+			}
+
+		}
+
+		@Override
+		public void update(
+				List<ByteArrayId> ids ) {
+
+			for (ByteArrayId id : ids) {
+				tierCounts[orderedTierIdToSfcIndex.get(
+						id.getBytes()[0]).intValue()]++;
+			}
+		}
+
 	}
 }

@@ -110,7 +110,9 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		final BasicQuery query = new BasicQuery(
 				constraints);
 
-		final NumericIndexStrategy temporalIndexStrategy = new SpatialTemporalIndexBuilder().createIndex().getIndexStrategy();
+		final NumericIndexStrategy temporalIndexStrategy = new SpatialTemporalIndexBuilder()
+				.createIndex()
+				.getIndexStrategy();
 		final List<MultiDimensionalNumericData> tempConstraints = query.getIndexConstraints(temporalIndexStrategy);
 
 		final List<ByteArrayRange> temporalRanges = DataStoreUtils.constraintsToByteArrayRanges(

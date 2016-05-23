@@ -11,7 +11,8 @@ public class HdfsFile extends
 		org.apache.avro.specific.SpecificRecordBase implements
 		org.apache.avro.specific.SpecificRecord
 {
-	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"HdfsFile\",\"namespace\":\"mil.nga.giat.geowave.core.ingest.hdfs\",\"fields\":[{\"name\":\"originalFile\",\"type\":\"bytes\",\"doc\":\"Original file data\"},{\"name\":\"originalFilePath\",\"type\":[\"string\",\"null\"],\"doc\":\"Original file path\"}],\"doc:\":\"Stores the original files from a local file system in HDFS\"}");
+	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser()
+			.parse("{\"type\":\"record\",\"name\":\"HdfsFile\",\"namespace\":\"mil.nga.giat.geowave.core.ingest.hdfs\",\"fields\":[{\"name\":\"originalFile\",\"type\":\"bytes\",\"doc\":\"Original file data\"},{\"name\":\"originalFilePath\",\"type\":[\"string\",\"null\"],\"doc\":\"Original file path\"}],\"doc:\":\"Stores the original files from a local file system in HDFS\"}");
 
 	public static org.apache.avro.Schema getClassSchema() {
 		return SCHEMA$;
@@ -254,8 +255,10 @@ public class HdfsFile extends
 		public HdfsFile build() {
 			try {
 				HdfsFile record = new HdfsFile();
-				record.originalFile = fieldSetFlags()[0] ? this.originalFile : (java.nio.ByteBuffer) defaultValue(fields()[0]);
-				record.originalFilePath = fieldSetFlags()[1] ? this.originalFilePath : (java.lang.CharSequence) defaultValue(fields()[1]);
+				record.originalFile = fieldSetFlags()[0] ? this.originalFile
+						: (java.nio.ByteBuffer) defaultValue(fields()[0]);
+				record.originalFilePath = fieldSetFlags()[1] ? this.originalFilePath
+						: (java.lang.CharSequence) defaultValue(fields()[1]);
 				return record;
 			}
 			catch (Exception e) {

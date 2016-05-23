@@ -55,7 +55,8 @@ public class SingleItemClusterList extends
 
 	protected Set<Coordinate> getClusterPoints(
 			boolean allowUpdates ) {
-		if (clusterPoints == null || clusterPoints == Collections.<Coordinate> emptySet()) clusterPoints = allowUpdates ? new HashSet<Coordinate>() : Collections.<Coordinate> emptySet();
+		if (clusterPoints == null || clusterPoints == Collections.<Coordinate> emptySet())
+			clusterPoints = allowUpdates ? new HashSet<Coordinate>() : Collections.<Coordinate> emptySet();
 		return clusterPoints;
 
 	}
@@ -75,7 +76,8 @@ public class SingleItemClusterList extends
 
 		boolean checkForCompress = false;
 
-		final Coordinate centerCoordinate = context.getItem1() == newInstance ? context.getPoint2() : context.getPoint1();
+		final Coordinate centerCoordinate = context.getItem1() == newInstance ? context.getPoint2() : context
+				.getPoint1();
 
 		Geometry thisGeo = getGeometry();
 		// only need to cluster this new point if it is likely top be an
@@ -89,7 +91,8 @@ public class SingleItemClusterList extends
 		// Closest distance points are only added if they are on a segment of a
 		// complex geometry.
 		if (!(newInstance.getGeometry() instanceof Point)) {
-			final Coordinate newInstanceCoordinate = context.getItem2() == newInstance ? context.getPoint2() : context.getPoint1();
+			final Coordinate newInstanceCoordinate = context.getItem2() == newInstance ? context.getPoint2() : context
+					.getPoint1();
 			checkForCompress = getClusterPoints(
 					true).add(
 					newInstanceCoordinate);

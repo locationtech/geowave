@@ -86,7 +86,8 @@ public class ExtractTimeFilterVisitor extends
 
 	public ExtractTimeFilterVisitor(
 			final TimeDescriptors timeDescriptors ) {
-		if (timeDescriptors.hasTime() && timeDescriptors.getStartRange() != null && timeDescriptors.getEndRange() != null) {
+		if (timeDescriptors.hasTime() && timeDescriptors.getStartRange() != null
+				&& timeDescriptors.getEndRange() != null) {
 			addRangeVariables(
 					timeDescriptors.getStartRange().getLocalName(),
 					timeDescriptors.getEndRange().getLocalName());
@@ -107,13 +108,15 @@ public class ExtractTimeFilterVisitor extends
 		final TemporalConstraintsSet constrainsSet = getRawConstraints(filter);
 		for (final String[] range : validParamRanges) {
 			if (constrainsSet.hasConstraintsFor(range[0]) || constrainsSet.hasConstraintsFor(range[1])) {
-				final TemporalConstraints start = (constrainsSet.hasConstraintsFor(range[0])) ? constrainsSet.getConstraintsFor(range[0]) : constrainsSet.getConstraintsFor(range[1]);
+				final TemporalConstraints start = (constrainsSet.hasConstraintsFor(range[0])) ? constrainsSet
+						.getConstraintsFor(range[0]) : constrainsSet.getConstraintsFor(range[1]);
 				// Note: getConstraints has a side effect that is returns a
 				// constraint--full range, if necessary
 				// so if start and end are both not specific, the prior line
 				// would create the end
 				// thus sconstraints and econstraints will be identical
-				final TemporalConstraints end = (constrainsSet.hasConstraintsFor(range[1])) ? constrainsSet.getConstraintsFor(range[1]) : start;
+				final TemporalConstraints end = (constrainsSet.hasConstraintsFor(range[1])) ? constrainsSet
+						.getConstraintsFor(range[1]) : start;
 
 				constrainsSet.removeConstraints(
 						range[0],

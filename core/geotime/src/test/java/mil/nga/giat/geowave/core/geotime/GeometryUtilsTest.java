@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -138,7 +140,8 @@ public class GeometryUtilsTest
 			})
 		});
 		final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(multiPolygon);
-		final List<MultiDimensionalNumericData> results = constraints.getIndexConstraints(new ExampleNumericIndexStrategy());
+		final List<MultiDimensionalNumericData> results = constraints
+				.getIndexConstraints(new ExampleNumericIndexStrategy());
 		assertEquals(
 				2,
 				results.size());
@@ -188,14 +191,16 @@ public class GeometryUtilsTest
 
 		@Override
 		public List<ByteArrayRange> getQueryRanges(
-				final MultiDimensionalNumericData indexedRange ) {
+				final MultiDimensionalNumericData indexedRange,
+				IndexMetaData... hints ) {
 			return null;
 		}
 
 		@Override
 		public List<ByteArrayRange> getQueryRanges(
 				final MultiDimensionalNumericData indexedRange,
-				final int maxEstimatedRangeDecomposition ) {
+				final int maxEstimatedRangeDecomposition,
+				IndexMetaData... hints ) {
 			return null;
 		}
 
@@ -251,6 +256,11 @@ public class GeometryUtilsTest
 		public int getByteOffsetFromDimensionalIndex() {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		@Override
+		public List<IndexMetaData> createMetaData() {
+			return Collections.emptyList();
 		}
 
 	}

@@ -61,6 +61,7 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -314,7 +315,8 @@ public class AccumuloDataStore implements
 				// index table does not exist yet
 				if (accumuloOperations.tableExists(altIdxTableName)) {
 					accumuloOperations.deleteTable(altIdxTableName);
-					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName + "] as main table does not yet exist.");
+					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName
+							+ "] as main table does not yet exist.");
 				}
 			}
 
@@ -394,10 +396,11 @@ public class AccumuloDataStore implements
 			tempAdapterStore = new MemoryAdapterStore(
 					sanitizedQueryOptions.getAdaptersArray(adapterStore));
 
-			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions.getAdaptersWithMinimalSetOfIndices(
-					tempAdapterStore,
-					indexMappingStore,
-					indexStore)) {
+			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions
+					.getAdaptersWithMinimalSetOfIndices(
+							tempAdapterStore,
+							indexMappingStore,
+							indexStore)) {
 				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<>();
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 					if (sanitizedQuery instanceof RowIdQuery) {
@@ -461,6 +464,10 @@ public class AccumuloDataStore implements
 							sanitizedQueryOptions.getScanCallback(),
 							sanitizedQueryOptions.getAggregation(),
 							sanitizedQueryOptions.getFieldIdsAdapterPair(),
+							composeMetaData(
+									indexAdapterPair.getLeft(),
+									adapterIdsToQuery,
+									sanitizedQueryOptions.getAuthorizations()),
 							sanitizedQueryOptions.getAuthorizations());
 
 					results.add(accumuloQuery.query(
@@ -495,7 +502,8 @@ public class AccumuloDataStore implements
 
 	protected static byte[] getRowIdBytes(
 			final AccumuloRowId rowElements ) {
-		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.getDataId().length + rowElements.getAdapterId().length + rowElements.getInsertionId().length);
+		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.getDataId().length
+				+ rowElements.getAdapterId().length + rowElements.getInsertionId().length);
 		buf.put(rowElements.getInsertionId());
 		buf.put(rowElements.getAdapterId());
 		buf.put(rowElements.getDataId());
@@ -734,10 +742,11 @@ public class AccumuloDataStore implements
 		final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
 
 		try {
-			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getIndicesForAdapters(
-					adapterStore,
-					indexMappingStore,
-					indexStore)) {
+			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+					.getIndicesForAdapters(
+							adapterStore,
+							indexMappingStore,
+							indexStore)) {
 				final PrimaryIndex index = indexAdapterPair.getLeft();
 				if (index == null) {
 					continue;
@@ -749,7 +758,8 @@ public class AccumuloDataStore implements
 						indexTableName,
 						queryOptions.getAuthorizations());
 
-				final BatchDeleter altIdxDelete = accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(altIdxTableName) ? accumuloOperations.createBatchDeleter(
+				final BatchDeleter altIdxDelete = accumuloOptions.isUseAltIndex()
+						&& accumuloOperations.tableExists(altIdxTableName) ? accumuloOperations.createBatchDeleter(
 						altIdxTableName,
 						queryOptions.getAuthorizations()) : null;
 
@@ -847,14 +857,19 @@ public class AccumuloDataStore implements
 
 					}
 					else {
+						List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
 						dataIt = new AccumuloConstraintsQuery(
-								Collections.singletonList(adapter.getAdapterId()),
+								adapterIds,
 								index,
 								query,
 								null,
 								callback,
 								null,
 								queryOptions.getFieldIdsAdapterPair(),
+								composeMetaData(
+										indexAdapterPair.getLeft(),
+										adapterIds,
+										queryOptions.getAuthorizations()),
 								queryOptions.getAuthorizations()).query(
 								accumuloOperations,
 								adapterStore,
@@ -1035,4 +1050,20 @@ public class AccumuloDataStore implements
 		return secondaryIndexDataStore;
 	}
 
+	private IndexMetaDataSet composeMetaData(
+			final PrimaryIndex index,
+			final List<ByteArrayId> adapterIdsToQuery,
+			final String... authorizations ) {
+		IndexMetaDataSet metaData = new IndexMetaDataSet(
+				index.getId(),
+				index.getId(),
+				index.getIndexStrategy().createMetaData());
+		for (ByteArrayId adapterId : adapterIdsToQuery) {
+			metaData.merge((IndexMetaDataSet) statisticsStore.getDataStatistics(
+					adapterId,
+					IndexMetaDataSet.composeId(index.getId()),
+					authorizations));
+		}
+		return metaData;
+	}
 }

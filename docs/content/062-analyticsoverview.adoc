@@ -37,29 +37,14 @@ A infrastructure component that produces all the neighbors of a feature within a
 
 === Building
 
-First build the main project, specifying the dependency versions.
-
-[source, bash]
-----
-export BUILD_ARGS="-Daccumulo.version=1.6.0-cdh5.1.4 -Dhadoop.version=2.6.0-cdh5.4.0 -Dgeotools.version=13.0 -Dgeoserver.version=2.7.0 -Dvendor.version=cdh5 -Daccumulo.api=1.6 -P cloudera"
-git clone https://github.com/ngageoint/geowave.git
-cd geowave
-mvn install -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true $BUILD_ARGS
-----
-
-Next, build the analytics tool framework.
-
-[source, bash]
-----
-cd analytics/mapreduce
-mvn package -P analytics-singlejar -Dfindbugs.skip=true -DskipFormat=true -DskipITs=true -DskipTests=true $BUILD_ARGS
-----
+Build the geowave tools project, as explained in the "Tools -> Building" section.
 
 === Running
 
-The 'singlejar' jar file is located in the analytics/mapreduce/target/munged.   The jar is executed by Yarn.
-
 [source, bash]
 ----
-yarn jar geowave-analytic-mapreduce-0.8.8-SNAPSHOT-analytics-singlejar.jar  -dbscan  -n rwgdrummer.gpx -u rwgdrummer -p rwgdrummer -z zookeeper-master:2181 -i accumulo -emn 2 -emx 6 -pd 1000 -pc mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner -cms 10 -orc 4 -hdfsbase /user/rwgdrummer -b bdb4 -eit gpxpoint
+yarn jar geowave-tools.jar analytic <algorithm> <options> <store>
 ----
+
+The above command will execute <algorithm> (such as dbscan), sourcing the data
+from the <store> datastore (see config addstore)

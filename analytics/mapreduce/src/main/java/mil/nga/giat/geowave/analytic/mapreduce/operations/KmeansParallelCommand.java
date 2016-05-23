@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.mapreduce.clustering.runner.MultiLevelKMeansClusteringJobRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.CommonOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.KMeansCommonOptions;
+import mil.nga.giat.geowave.analytic.mapreduce.operations.options.KMeansParallelOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.PropertyManagementConverter;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters.Extract;
@@ -41,7 +42,10 @@ public class KmeansParallelCommand extends
 	@ParametersDelegate
 	private KMeansCommonOptions kmeansCommonOptions = new KMeansCommonOptions();
 
-	private DataStorePluginOptions inputStoreOptions = null;
+	@ParametersDelegate
+	private KMeansParallelOptions kmeansParallelOptions = new KMeansParallelOptions();
+
+	DataStorePluginOptions inputStoreOptions = null;
 
 	@Override
 	public void execute(
@@ -84,6 +88,7 @@ public class KmeansParallelCommand extends
 				properties);
 		converter.readProperties(commonOptions);
 		converter.readProperties(kmeansCommonOptions);
+		converter.readProperties(kmeansParallelOptions);
 		properties.store(
 				Extract.QUERY_OPTIONS,
 				commonOptions.buildQueryOptions());
@@ -131,5 +136,14 @@ public class KmeansParallelCommand extends
 	public void setInputStoreOptions(
 			DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	public KMeansParallelOptions getKmeansParallelOptions() {
+		return kmeansParallelOptions;
+	}
+
+	public void setKmeansParallelOptions(
+			KMeansParallelOptions kmeansParallelOptions ) {
+		this.kmeansParallelOptions = kmeansParallelOptions;
 	}
 }

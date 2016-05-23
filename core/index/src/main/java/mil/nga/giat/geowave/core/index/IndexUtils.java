@@ -115,7 +115,9 @@ public class IndexUtils
 						binnedQueries[i][d] = 0;
 					}
 					else {
-						binnedQueries[i][d] = log2(Math.ceil((binsPerDimension[d][b].getNormalizedMax() - binsPerDimension[d][b].getNormalizedMin()) / cellRangePerDimension[d]));
+						binnedQueries[i][d] = log2(Math
+								.ceil((binsPerDimension[d][b].getNormalizedMax() - binsPerDimension[d][b]
+										.getNormalizedMin()) / cellRangePerDimension[d]));
 					}
 
 				}

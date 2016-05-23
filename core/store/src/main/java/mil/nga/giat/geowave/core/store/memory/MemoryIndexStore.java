@@ -19,7 +19,8 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class MemoryIndexStore implements
 		IndexStore
 {
-	private final Map<ByteArrayId, Index<?, ?>> indexMap = Collections.synchronizedMap(new HashMap<ByteArrayId, Index<?, ?>>());
+	private final Map<ByteArrayId, Index<?, ?>> indexMap = Collections
+			.synchronizedMap(new HashMap<ByteArrayId, Index<?, ?>>());
 
 	public MemoryIndexStore() {}
 

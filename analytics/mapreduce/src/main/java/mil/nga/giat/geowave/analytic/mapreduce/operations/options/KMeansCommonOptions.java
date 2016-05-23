@@ -8,7 +8,6 @@ import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.CentroidParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ClusteringParameter;
@@ -16,7 +15,6 @@ import mil.nga.giat.geowave.analytic.param.annotations.CommonParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ExtractParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.GlobalParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.HullParameter;
-import mil.nga.giat.geowave.analytic.param.annotations.MapReduceParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.SampleParameter;
 
 public class KMeansCommonOptions
@@ -60,7 +58,7 @@ public class KMeansCommonOptions
 	@Parameter(names = {
 		"-cmi",
 		"--clusteringMaxIterations"
-	}, description = "Maximum number of iterations when finding optimal clusters")
+	}, required = true, description = "Maximum number of iterations when finding optimal clusters")
 	private String clusteringMaxIterations;
 
 	@ClusteringParameter(ClusteringParameters.Clustering.MAX_REDUCER_COUNT)
@@ -74,7 +72,7 @@ public class KMeansCommonOptions
 	@Parameter(names = {
 		"-zl",
 		"--clusteringZoomLevels"
-	}, description = "Number of Zoom Levels to Process")
+	}, required = true, description = "Number of Zoom Levels to Process")
 	private String clusteringZoomLevels;
 
 	@CommonParameter(CommonParameters.Common.DIMENSION_EXTRACT_CLASS)
@@ -167,62 +165,6 @@ public class KMeansCommonOptions
 		"--hullWrapperFactoryClass"
 	}, description = "Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory")
 	private String hullWrapperFactoryClass;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.CONFIG_FILE)
-	@Parameter(names = {
-		"-conf",
-		"--mapReduceConfigFile"
-	}, description = "MapReduce Configuration")
-	private String mapReduceConfigFile;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_BASE_DIR)
-	@Parameter(names = {
-		"-hdfsbase",
-		"--mapReduceHdfsBaseDir"
-	}, description = "Fully qualified path to the base directory in hdfs")
-	private String mapReduceHdfsBaseDir;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
-	@Parameter(names = {
-		"-hdfs",
-		"--mapReduceHdfsHostPort"
-	}, description = "HDFS hostname and port in the format hostname:port")
-	private String mapReduceHdfsHostPort;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)
-	@Parameter(names = {
-		"-jobtracker",
-		"--mapReduceJobtrackerHostPort"
-	}, description = "Hadoop job tracker hostname and port in the format hostname:port")
-	private String mapReduceJobtrackerHostPort;
-
-	@MapReduceParameter(MapReduceParameters.MRConfig.YARN_RESOURCE_MANAGER)
-	@Parameter(names = {
-		"-resourceman",
-		"--mapReduceYarnResourceManager"
-	}, description = "Yarn resource manager hostname and port in the format hostname:port")
-	private String mapReduceYarnResourceManager;
-
-	@SampleParameter(SampleParameters.Sample.MAX_SAMPLE_SIZE)
-	@Parameter(names = {
-		"-sxs",
-		"--sampleMaxSampleSize"
-	}, description = "Max Sample Size")
-	private String sampleMaxSampleSize;
-
-	@SampleParameter(SampleParameters.Sample.MIN_SAMPLE_SIZE)
-	@Parameter(names = {
-		"-sms",
-		"--sampleMinSampleSize"
-	}, description = "Minimum Sample Size")
-	private String sampleMinSampleSize;
-
-	@SampleParameter(SampleParameters.Sample.SAMPLE_ITERATIONS)
-	@Parameter(names = {
-		"-ssi",
-		"--sampleSampleIterations"
-	}, description = "Minimum number of sample iterations")
-	private String sampleSampleIterations;
 
 	public String getCentroidExtractorClass() {
 		return centroidExtractorClass;
@@ -413,75 +355,4 @@ public class KMeansCommonOptions
 		this.hullWrapperFactoryClass = hullWrapperFactoryClass;
 	}
 
-	public String getMapReduceConfigFile() {
-		return mapReduceConfigFile;
-	}
-
-	public void setMapReduceConfigFile(
-			String mapReduceConfigFile ) {
-		this.mapReduceConfigFile = mapReduceConfigFile;
-	}
-
-	public String getMapReduceHdfsBaseDir() {
-		return mapReduceHdfsBaseDir;
-	}
-
-	public void setMapReduceHdfsBaseDir(
-			String mapReduceHdfsBaseDir ) {
-		this.mapReduceHdfsBaseDir = mapReduceHdfsBaseDir;
-	}
-
-	public String getMapReduceHdfsHostPort() {
-		return mapReduceHdfsHostPort;
-	}
-
-	public void setMapReduceHdfsHostPort(
-			String mapReduceHdfsHostPort ) {
-		this.mapReduceHdfsHostPort = mapReduceHdfsHostPort;
-	}
-
-	public String getMapReduceJobtrackerHostPort() {
-		return mapReduceJobtrackerHostPort;
-	}
-
-	public void setMapReduceJobtrackerHostPort(
-			String mapReduceJobtrackerHostPort ) {
-		this.mapReduceJobtrackerHostPort = mapReduceJobtrackerHostPort;
-	}
-
-	public String getMapReduceYarnResourceManager() {
-		return mapReduceYarnResourceManager;
-	}
-
-	public void setMapReduceYarnResourceManager(
-			String mapReduceYarnResourceManager ) {
-		this.mapReduceYarnResourceManager = mapReduceYarnResourceManager;
-	}
-
-	public String getSampleMaxSampleSize() {
-		return sampleMaxSampleSize;
-	}
-
-	public void setSampleMaxSampleSize(
-			String sampleMaxSampleSize ) {
-		this.sampleMaxSampleSize = sampleMaxSampleSize;
-	}
-
-	public String getSampleMinSampleSize() {
-		return sampleMinSampleSize;
-	}
-
-	public void setSampleMinSampleSize(
-			String sampleMinSampleSize ) {
-		this.sampleMinSampleSize = sampleMinSampleSize;
-	}
-
-	public String getSampleSampleIterations() {
-		return sampleSampleIterations;
-	}
-
-	public void setSampleSampleIterations(
-			String sampleSampleIterations ) {
-		this.sampleSampleIterations = sampleSampleIterations;
-	}
 }

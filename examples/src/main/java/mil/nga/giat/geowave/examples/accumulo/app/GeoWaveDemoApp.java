@@ -33,12 +33,14 @@ public class GeoWaveDemoApp
 		Logger.getRootLogger().setLevel(
 				Level.WARN);
 
-		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System.getProperty("interactive")) : true;
+		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System
+				.getProperty("interactive")) : true;
 
 		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "password";
 
 		final File tempDir = Files.createTempDir();
-		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName") : "geowave";
+		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
+				: "geowave";
 		final MiniAccumuloConfigImpl miniAccumuloConfig = new MiniAccumuloConfigImpl(
 				tempDir,
 				password).setNumTservers(
@@ -60,7 +62,8 @@ public class GeoWaveDemoApp
 		System.out.println("starting up ...");
 		Thread.sleep(3000);
 
-		System.out.println("cluster running with instance name " + accumulo.getInstanceName() + " and zookeepers " + accumulo.getZooKeepers());
+		System.out.println("cluster running with instance name " + accumulo.getInstanceName() + " and zookeepers "
+				+ accumulo.getZooKeepers());
 
 		if (interactive) {
 			System.out.println("hit Enter to shutdown ..");

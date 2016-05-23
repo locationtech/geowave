@@ -16,15 +16,18 @@ public class BasicParameterHelper implements
 	final static Logger LOGGER = LoggerFactory.getLogger(BasicParameterHelper.class);
 	private final ParameterEnum<?> parent;
 	private final Class<Object> baseClass;
+	private final boolean isClass;
 
 	public BasicParameterHelper(
 			final ParameterEnum<?> parent,
 			final Class<Object> baseClass,
 			final String name,
 			final String description,
+			final boolean isClass,
 			final boolean hasArg ) {
 		this.baseClass = baseClass;
 		this.parent = parent;
+		this.isClass = isClass;
 	}
 
 	@Override
@@ -46,42 +49,42 @@ public class BasicParameterHelper implements
 
 	private static final void setParameter(
 			final Configuration config,
-			final Class<?> clazz,
+			final Class<?> scope,
 			final Object val,
 			final ParameterEnum configItem ) {
 		if (val != null) {
 			if (val instanceof Long) {
 				config.setLong(
 						GeoWaveConfiguratorBase.enumToConfKey(
-								clazz,
+								scope,
 								configItem.self()),
 						((Long) val));
 			}
 			else if (val instanceof Double) {
 				config.setDouble(
 						GeoWaveConfiguratorBase.enumToConfKey(
-								clazz,
+								scope,
 								configItem.self()),
 						((Double) val));
 			}
 			else if (val instanceof Boolean) {
 				config.setBoolean(
 						GeoWaveConfiguratorBase.enumToConfKey(
-								clazz,
+								scope,
 								configItem.self()),
 						((Boolean) val));
 			}
 			else if (val instanceof Integer) {
 				config.setInt(
 						GeoWaveConfiguratorBase.enumToConfKey(
-								clazz,
+								scope,
 								configItem.self()),
 						((Integer) val));
 			}
 			else if (val instanceof Class) {
 				config.setClass(
 						GeoWaveConfiguratorBase.enumToConfKey(
-								clazz,
+								scope,
 								configItem.self()),
 						((Class) val),
 						((Class) val));
@@ -89,14 +92,14 @@ public class BasicParameterHelper implements
 			else if (val instanceof byte[]) {
 				config.set(
 						GeoWaveConfiguratorBase.enumToConfKey(
-								clazz,
+								scope,
 								configItem.self()),
 						ByteArrayUtils.byteArrayToString((byte[]) val));
 			}
 			else {
 				config.set(
 						GeoWaveConfiguratorBase.enumToConfKey(
-								clazz,
+								scope,
 								configItem.self()),
 						val.toString());
 			}
@@ -148,39 +151,6 @@ public class BasicParameterHelper implements
 
 	@Override
 	public Object getValue(
-			String stringValue ) {
-		if (stringValue == null) {
-			return null;
-		}
-		if (baseClass.isAssignableFrom(Boolean.class)) {
-			return Boolean.parseBoolean(stringValue);
-		}
-		if (baseClass.isAssignableFrom(Integer.class)) {
-			return Integer.parseInt(stringValue);
-		}
-		else if (baseClass.isAssignableFrom(String.class)) {
-			return stringValue;
-		}
-		else if (baseClass.isAssignableFrom(Double.class)) {
-			return Double.parseDouble(stringValue);
-		}
-		else if (baseClass.isAssignableFrom(byte[].class)) {
-			return ByteArrayUtils.byteArrayFromString(stringValue);
-		}
-		else if (baseClass.isAssignableFrom(Class.class)) {
-			try {
-				return Class.forName(stringValue);
-			}
-			catch (ClassNotFoundException e) {
-				throw new RuntimeException(
-						"Couldn't load class: " + stringValue);
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public Object getValue(
 			final PropertyManagement propertyManagement ) {
 		try {
 			return propertyManagement.getProperty(parent);
@@ -197,8 +167,17 @@ public class BasicParameterHelper implements
 	public void setValue(
 			final PropertyManagement propertyManagement,
 			final Object value ) {
+		Object storeValue = value;
+		if (this.isClass && value instanceof String) {
+			try {
+				storeValue = Class.forName(value.toString());
+			}
+			catch (ClassNotFoundException e) {
+				LOGGER.error("Class " + value.toString() + " for property " + parent + " is not found");
+			}
+		}
 		propertyManagement.store(
 				parent,
-				value);
+				storeValue);
 	}
 }
