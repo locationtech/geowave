@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
@@ -255,18 +256,34 @@ public class BasicMapReduceIT
 			throws Exception {
 		final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
 		final VectorMRExportOptions options = exportCommand.getMrOptions();
-		final File exportDir = new File(
-				TestUtils.TEMP_DIR,
-				TEST_EXPORT_DIRECTORY);
-		exportDir.delete();
-		exportDir.mkdir();
 
 		exportCommand.setStoreOptions(dataStorePluginOptions);
 
 		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
+		final String exportPath = env.getHdfsBaseDirectory() + "/" + TEST_EXPORT_DIRECTORY;
+
+		final File exportDir = new File(
+				exportPath.replace(
+						"file:",
+						""));
+		if (exportDir.exists()) {
+			boolean deleted = false;
+			int attempts = 5;
+			while (!deleted && attempts-- > 0) {
+				try {
+					FileUtils.deleteDirectory(exportDir);
+					deleted = true;
+				}
+				catch (Exception e) {
+					LOGGER.error("Export directory not deleted, trying again in 10s: " + e);
+					Thread.sleep(10000);
+				}
+			}
+		}
+
 		exportCommand.setParameters(
 				env.getHdfs(),
-				env.getHdfsBaseDirectory() + "/" + TEST_EXPORT_DIRECTORY,
+				exportPath,
 				null);
 		options.setBatchSize(10000);
 		options.setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);

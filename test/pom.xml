@@ -37,7 +37,7 @@
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
@@ -65,6 +65,10 @@
 				<exclusion>
 					<artifactId>jdk.tools</artifactId>
 					<groupId>jdk.tools</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
