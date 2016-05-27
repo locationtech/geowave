@@ -103,14 +103,13 @@
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in mil.nga.giat.geowave.core.index.dimension.bin">BinningStrategy</a></pre>
 <div class="block">This class is useful for establishing a consistent binning strategy using a
- unit of time (currently day, month, or year). Each bin will then be defined
- by the boundaries of that unit within the timezone given in the constructor.
- So if the unit is year and the data spreads across 2011-2013, the bins will
- be 2011, 2012, and 2013. The unit chosen should represent a much more
- significant range than the average query range (at least 20x larger) for
- efficiency purposes. So if the average query is for a 24 hour period, the
- unit should not be a day, but could be perhaps a month or a year (depending
- on the temporal extent of the dataset).</div>
+ unit of time. Each bin will then be defined by the boundaries of that unit
+ within the timezone given in the constructor. So if the unit is year and the
+ data spreads across 2011-2013, the bins will be 2011, 2012, and 2013. The
+ unit chosen should represent a much more significant range than the average
+ query range (at least 20x larger) for efficiency purposes. So if the average
+ query is for a 24 hour period, the unit should not be a day, but could be
+ perhaps a month or a year (depending on the temporal extent of the dataset).</div>
 </li>
 </ul>
 </div>
