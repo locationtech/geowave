@@ -17,25 +17,34 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This class is useful for establishing a consistent binning strategy using a
- * unit of time (currently day, month, or year). Each bin will then be defined
- * by the boundaries of that unit within the timezone given in the constructor.
- * So if the unit is year and the data spreads across 2011-2013, the bins will
- * be 2011, 2012, and 2013. The unit chosen should represent a much more
- * significant range than the average query range (at least 20x larger) for
- * efficiency purposes. So if the average query is for a 24 hour period, the
- * unit should not be a day, but could be perhaps a month or a year (depending
- * on the temporal extent of the dataset).
+ * unit of time. Each bin will then be defined by the boundaries of that unit
+ * within the timezone given in the constructor. So if the unit is year and the
+ * data spreads across 2011-2013, the bins will be 2011, 2012, and 2013. The
+ * unit chosen should represent a much more significant range than the average
+ * query range (at least 20x larger) for efficiency purposes. So if the average
+ * query is for a 24 hour period, the unit should not be a day, but could be
+ * perhaps a month or a year (depending on the temporal extent of the dataset).
  */
 public class TemporalBinningStrategy implements
 		BinningStrategy
 {
 	public static enum Unit {
+		MINUTE(
+				Calendar.MINUTE),
+		HOUR(
+				Calendar.HOUR_OF_DAY),
 		DAY(
 				Calendar.DAY_OF_MONTH),
+		WEEK(
+				Calendar.WEEK_OF_YEAR),
 		MONTH(
 				Calendar.MONTH),
 		YEAR(
-				Calendar.YEAR);
+				Calendar.YEAR),
+		DECADE(
+				-1);
+		// java.util.Calendar does not define a field number for decade
+		// use -1 since that value is unused
 
 		private final int calendarEnum;
 
@@ -135,6 +144,9 @@ public class TemporalBinningStrategy implements
 		long binSizeMillis = MILLIS_PER_DAY;
 		// use the max possible value for that unit as the bin size
 		switch (unit) {
+			case DECADE:
+				binSizeMillis *= 3653;
+				break;
 			case YEAR:
 			default:
 				binSizeMillis *= 366;
@@ -142,18 +154,36 @@ public class TemporalBinningStrategy implements
 			case MONTH:
 				binSizeMillis *= 31;
 				break;
+			case WEEK:
+				binSizeMillis *= 7;
+				break;
 			case DAY:
+				break;
+			case HOUR:
+				binSizeMillis /= 24;
+				break;
+			case MINUTE:
+				binSizeMillis /= 1440;
 				break;
 		}
 		return binSizeMillis;
 
 	}
 
-	@SuppressFBWarnings(value = "SF_SWITCH_FALLTHROUGH", justification = "Fallthrough intentional for time parsing")
+	@SuppressFBWarnings(value = {
+		"SF_SWITCH_FALLTHROUGH",
+		"SF_SWITCH_NO_DEFAULT"
+	}, justification = "Fallthrough intentional for time parsing; default case is provided")
 	protected void setToEpoch(
 			final Calendar value ) {
 		// reset appropriate values to 0 based on the unit
 		switch (unit) {
+			case DECADE:
+				value.set(
+						Calendar.YEAR,
+						((value.get(Calendar.YEAR) / 10) * 10));
+				// don't break so that the other fields are also set to the
+				// minimum
 			case YEAR:
 			default:
 				value.set(
@@ -168,6 +198,29 @@ public class TemporalBinningStrategy implements
 				// don't break so that the other fields are also set to the
 				// minimum
 			case DAY:
+				value.set(
+						Calendar.HOUR_OF_DAY,
+						value.getActualMinimum(Calendar.HOUR_OF_DAY));
+				// don't break so that the other fields are also set to the
+				// minimum
+			case HOUR:
+				value.set(
+						Calendar.MINUTE,
+						value.getActualMinimum(Calendar.MINUTE));
+				// don't break so that the other fields are also set to the
+				// minimum
+			case MINUTE:
+				value.set(
+						Calendar.SECOND,
+						value.getActualMinimum(Calendar.SECOND));
+				value.set(
+						Calendar.MILLISECOND,
+						value.getActualMinimum(Calendar.MILLISECOND));
+				break; // special handling for week
+			case WEEK:
+				value.set(
+						Calendar.DAY_OF_WEEK,
+						value.getActualMinimum(Calendar.DAY_OF_WEEK));
 				value.set(
 						Calendar.HOUR_OF_DAY,
 						value.getActualMinimum(Calendar.HOUR_OF_DAY));
@@ -191,8 +244,14 @@ public class TemporalBinningStrategy implements
 				return 4;
 			case MONTH:
 				return 7;
+			case WEEK:
+				return 7;
 			case DAY:
 				return 10;
+			case HOUR:
+				return 13;
+			case MINUTE:
+				return 16;
 		}
 	}
 
@@ -207,10 +266,24 @@ public class TemporalBinningStrategy implements
 			case MONTH:
 				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_" + TWO_DIGIT_NUMBER
 						.format(value.get(Calendar.MONTH))));
+			case WEEK:
+				return StringUtils.stringToBinary(Integer.toString(value.get(Calendar.YEAR)) + "_"
+						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.WEEK_OF_YEAR)));
 			case DAY:
 				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_"
 						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH)) + "_" + TWO_DIGIT_NUMBER.format(value
 						.get(Calendar.DAY_OF_MONTH))));
+			case HOUR:
+				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_"
+						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH)) + "_"
+						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.DAY_OF_MONTH)) + "_" + TWO_DIGIT_NUMBER
+						.format(value.get(Calendar.HOUR_OF_DAY))));
+			case MINUTE:
+				return StringUtils.stringToBinary((Integer.toString(value.get(Calendar.YEAR)) + "_"
+						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH)) + "_"
+						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.DAY_OF_MONTH)) + "_"
+						+ TWO_DIGIT_NUMBER.format(value.get(Calendar.HOUR_OF_DAY)) + "_" + TWO_DIGIT_NUMBER
+						.format(value.get(Calendar.MINUTE))));
 		}
 	}
 
@@ -223,6 +296,20 @@ public class TemporalBinningStrategy implements
 		final String str = StringUtils.stringFromBinary(binId);
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 		switch (unit) {
+			case MINUTE:
+				final int minute = Integer.parseInt(str.substring(
+						14,
+						16));
+				cal.set(
+						Calendar.MINUTE,
+						minute);
+			case HOUR:
+				final int hour = Integer.parseInt(str.substring(
+						11,
+						13));
+				cal.set(
+						Calendar.HOUR_OF_DAY,
+						hour);
 			case DAY:
 				final int day = Integer.parseInt(str.substring(
 						8,
@@ -245,6 +332,30 @@ public class TemporalBinningStrategy implements
 				cal.set(
 						Calendar.YEAR,
 						year);
+				break; // do not automatically fall-through to decade parsing
+			case DECADE:
+				int decade = Integer.parseInt(str.substring(
+						0,
+						4));
+				decade = (decade / 10) * 10; // int division will truncate ones
+				cal.set(
+						Calendar.YEAR,
+						decade);
+				break; // special handling for week
+			case WEEK:
+				final int yr = Integer.parseInt(str.substring(
+						0,
+						4));
+				cal.set(
+						Calendar.YEAR,
+						yr);
+				final int weekOfYear = Integer.parseInt(str.substring(
+						5,
+						7));
+				cal.set(
+						Calendar.WEEK_OF_YEAR,
+						weekOfYear);
+				break;
 		}
 		setToEpoch(cal);
 		return cal;
