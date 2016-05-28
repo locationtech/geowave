@@ -19,7 +19,7 @@ cache:
 install: "mvn -q clean install javadoc:aggregate -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
 script: "mvn -q -T 2C verify -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}"
 before_install:
-  - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
+  - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
   - chmod +x .utility/push-javadoc-to-gh-pages.sh
   - chmod +x .utility/build-docs-site.sh
   - chmod +x .utility/maven-coveralls-hack.sh
