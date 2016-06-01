@@ -16,7 +16,7 @@ env:
 cache:
   directories:
   - $HOME/.m2
-install: "mvn -q clean install javadoc:aggregate -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
+install: "mvn -q clean install javadoc:aggregate -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -Dformatter.skip=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
 script: "mvn -q -T 2C verify -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}"
 before_install:
   - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
@@ -40,5 +40,5 @@ addons:
       description: Build submitted via Travis CI
     notification_email: GeoWave@nga.mil
     build_command_prepend: mvn clean
-    build_command: mvn clean compile -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -P ${PLATFORM_VERSION}
+    build_command: mvn clean compile -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -Dformatter.skip=true -P ${PLATFORM_VERSION}
     branch_pattern: coverity_scan
