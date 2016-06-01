@@ -6,10 +6,12 @@
 Analytics embody algorithms tailored to geospatial data.  Most analytics leverage Hadoop MapReduce for bulk computation.
 Results of analytic jobs consist of vector or raster data stored in GeoWave.  The analytics infrastructure provides tools to
 build algorithms in Spark.  For example, a Kryo serializer/deserializer enables exchange of SimpleFeatures and the GeoWaveInputFormat
-supplies data to the Hadoop RDD <1>.
+supplies data to the Hadoop RDD
 
 [NOTE]
-<1> GeoWaveInputFormat does not remove duplicate features that reference polygons spanning multiple index regions.
+====
+GeoWaveInputFormat does not remove duplicate features that reference polygons spanning multiple index regions.
+====
 
 The following algorithms are provided.
 

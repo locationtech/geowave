@@ -20,6 +20,7 @@ You will be prompted with "Are you sure?"
 
 OPTIONS
 //:-------
+
 --auth::
 
    The authorizations used for the statistics calculation as a subset of the
