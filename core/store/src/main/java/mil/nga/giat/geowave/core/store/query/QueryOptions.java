@@ -417,11 +417,14 @@ public class QueryOptions implements
 		final List<Pair<PrimaryIndex, DataAdapter<Object>>> result = new ArrayList<Pair<PrimaryIndex, DataAdapter<Object>>>();
 		for (final DataAdapter<Object> adapter : adapters) {
 			final AdapterToIndexMapping indices = adapterIndexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
-			if ((indexId != null) && indices.contains(indexId)) {
+			if (index != null) {
+				result.add(Pair.of(
+						index,
+						adapter));
+			}
+			else if ((indexId != null) && indices.contains(indexId)) {
 				if (index == null) {
 					index = (PrimaryIndex) indexStore.getIndex(indexId);
-				}
-				if (index != null) {
 					result.add(Pair.of(
 							index,
 							adapter));

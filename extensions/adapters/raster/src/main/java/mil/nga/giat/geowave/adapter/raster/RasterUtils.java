@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
+import java.awt.image.IndexColorModel;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
@@ -58,6 +59,7 @@ import org.geotools.resources.i18n.ErrorKeys;
 import org.geotools.resources.i18n.Errors;
 import org.geotools.resources.image.ImageUtilities;
 import org.geotools.util.NumberRange;
+import org.opengis.coverage.SampleDimension;
 import org.opengis.coverage.SampleDimensionType;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.geometry.Envelope;
@@ -300,7 +302,7 @@ public class RasterUtils
 
 	/**
 	 * Creates a math transform using the information provided.
-	 * 
+	 *
 	 * @return The math transform.
 	 * @throws IllegalStateException
 	 *             if the grid range or the envelope were not set.
@@ -372,7 +374,7 @@ public class RasterUtils
 
 	/**
 	 * Returns the math transform as a two-dimensional affine transform.
-	 * 
+	 *
 	 * @return The math transform as a two-dimensional affine transform.
 	 * @throws IllegalStateException
 	 *             if the math transform is not of the appropriate type.
@@ -429,6 +431,7 @@ public class RasterUtils
 			final String coverageName,
 			final Interpolation interpolation,
 			final Histogram histogram,
+			final boolean scaleTo8Bit,
 			final ColorModel defaultColorModel ) {
 
 		if (pixelDimension == null) {
@@ -449,9 +452,27 @@ public class RasterUtils
 				Math.round(height),
 				1);
 		BufferedImage image = null;
-
+		int numDimensions;
+		SampleDimension[] sampleDimensions = null;
+		double[][] extrema = null;
+		boolean extremaValid = false;
 		while (gridCoverages.hasNext()) {
 			final GridCoverage currentCoverage = gridCoverages.next();
+			if (sampleDimensions == null) {
+				numDimensions = currentCoverage.getNumSampleDimensions();
+				sampleDimensions = new SampleDimension[numDimensions];
+				extrema = new double[2][numDimensions];
+				extremaValid = true;
+				for (int d = 0; d < numDimensions; d++) {
+					sampleDimensions[d] = currentCoverage.getSampleDimension(d);
+					extrema[0][d] = sampleDimensions[d].getMinimumValue();
+					extrema[1][d] = sampleDimensions[d].getMaximumValue();
+					if ((extrema[1][d] - extrema[0][d]) <= 0) {
+						extremaValid = false;
+					}
+				}
+			}
+
 			final Envelope coverageEnv = currentCoverage.getEnvelope();
 			final RenderedImage coverageImage = currentCoverage.getRenderedImage();
 			if (image == null) {
@@ -494,26 +515,65 @@ public class RasterUtils
 		else {
 			resultEnvelope = requestEnvelope;
 		}
+		final double scaleX = rescaleX * (width / imageWidth);
+		final double scaleY = rescaleY * (height / imageHeight);
+		if ((scaleX != 1) || (scaleY != 1)) {
+			image = rescaleImageViaPlanarImage(
+					interpolation,
+					rescaleX * (width / imageWidth),
+					rescaleY * (height / imageHeight),
+					image);
 
-		image = rescaleImageViaPlanarImage(
-				interpolation,
-				rescaleX * (width / imageWidth),
-				rescaleY * (height / imageHeight),
-				image);
-		RenderedImage result;
-		if (outputTransparentColor == null) {
-			result = image;
 		}
-		else {
+		RenderedImage result = image;
+		// hypothetically masking the output transparent color should happen
+		// before histogram stretching, but the masking seems to only work now
+		// when the image is bytes in each band which requires some amount of
+		// modification to the original data, we'll use extrema
+		if (extremaValid && scaleTo8Bit) {
+			final int dataType = result.getData().getDataBuffer().getDataType();
+			switch (dataType) {
+			// in case the original image has a USHORT pixel type without
+			// being associated
+			// with an index color model I would still go to 8 bits
+				case DataBuffer.TYPE_USHORT:
+					if (result.getColorModel() instanceof IndexColorModel) {
+						break;
+					}
+				case DataBuffer.TYPE_DOUBLE:
+				case DataBuffer.TYPE_FLOAT:
+				case DataBuffer.TYPE_INT:
+				case DataBuffer.TYPE_SHORT:
+					// rescale to byte
+					final ImageWorkerPredefineStats w = new ImageWorkerPredefineStats(
+							result);
+					// it was found that geoserver will perform this, and worse
+					// perform it on local extrema calculated from a single
+					// tile, this is our one opportunity to at least ensure this
+					// transformation is done without too much harm by using
+					// global extrema
+					result = w.setExtrema(
+							extrema).rescaleToBytes().getRenderedImage();
+					break;
+				default:
+					// findbugs seems to want to have a default case, default is
+					// to do nothing
+					break;
+			}
+		}
+		if (outputTransparentColor != null) {
 			result = ImageUtilities.maskColor(
 					outputTransparentColor,
-					image);
+					result);
 		}
 		if (histogram != null) {
 			// we should perform histogram equalization
 			final int numBands = histogram.getNumBands();
 			final float[][] cdFeq = new float[numBands][];
+			final double[][] computedExtrema = new double[2][numBands];
 			for (int b = 0; b < numBands; b++) {
+				computedExtrema[0][b] = histogram.getLowValue(b);
+				computedExtrema[1][b] = histogram.getHighValue(b);
 				final int numBins = histogram.getNumBins()[b];
 				cdFeq[b] = new float[numBins];
 				for (int i = 0; i < numBins; i++) {
@@ -525,6 +585,9 @@ public class RasterUtils
 			adaptedResult.setProperty(
 					"histogram",
 					histogram);
+			adaptedResult.setProperty(
+					"extrema",
+					computedExtrema);
 			result = JAI.create(
 					"matchcdf",
 					adaptedResult,
@@ -650,7 +713,7 @@ public class RasterUtils
 				renderingHints);
 	}
 
-	public static synchronized Operations getResampleOperations() {
+	public static synchronized Operations getCoverageOperations() {
 		if (resampleOperations == null) {
 			resampleOperations = new Operations(
 					DEFAULT_RENDERING_HINTS);
@@ -860,7 +923,7 @@ public class RasterUtils
 	 * dimensions for the data backing the given iterator. Particularly, it was
 	 * desirable to be able to provide the name per band which was not provided
 	 * in the original.
-	 * 
+	 *
 	 * @param name
 	 *            The name for each band of the data (e.g. "Elevation").
 	 * @param model

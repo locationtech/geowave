@@ -255,6 +255,7 @@ public class KDERasterResizeIT
 					pixelDimensions,
 					queryEnvelope,
 					null,
+					null,
 					null);
 			final RenderedImage image = gridCoverage.getRenderedImage();
 			final Raster raster = image.getData();
