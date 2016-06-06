@@ -135,11 +135,11 @@ public class GeoWaveAccumuloRecordReader<T> extends
 								r.getRange(),
 								queryFilters,
 								isOutputWritable,
-								queryOptions).query(
+								rangeQueryOptions).query(
 								accumuloOperations,
 								adapterStore,
-								queryOptions.getMaxResolutionSubsamplingPerDimension(),
-								queryOptions.getLimit()));
+								rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+								rangeQueryOptions.getLimit()));
 				incrementalRangeSums.put(
 						r,
 						sum);
