@@ -326,6 +326,7 @@ public class DataStoreUtils
 			}
 			return new DataStoreEntryInfo(
 					dataId,
+					insertionIds,
 					rowIds,
 					fieldInfoList);
 		}
@@ -333,6 +334,7 @@ public class DataStoreUtils
 				entry).getString() + "] not saved.");
 		return new DataStoreEntryInfo(
 				dataId,
+				Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST);
 

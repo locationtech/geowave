@@ -1,10 +1,10 @@
 package mil.nga.giat.geowave.test;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -126,7 +126,7 @@ public class TestUtils
 	}
 
 	public static void deleteAll(
-			DataStorePluginOptions dataStore ) {
+			final DataStorePluginOptions dataStore ) {
 		dataStore.createDataStore().delete(
 				new QueryOptions(),
 				null);
@@ -357,15 +357,37 @@ public class TestUtils
 	/**
 	 * Unzips the contents of a zip file to a target output directory, deleting
 	 * anything that existed beforehand
-	 * 
+	 *
 	 * @param zipInput
 	 *            input zip file
 	 * @param outputFolder
 	 *            zip file output folder
+	 *
 	 */
 	public static void unZipFile(
 			final File zipInput,
 			final String outputFolder ) {
+		unZipFile(
+				zipInput,
+				outputFolder,
+				true);
+	}
+
+	/**
+	 * Unzips the contents of a zip file to a target output directory
+	 *
+	 * @param zipInput
+	 *            input zip file
+	 * @param outputFolder
+	 *            zip file output folder
+	 *
+	 * @param deleteTargetDir
+	 *            delete the destination directory before extracting
+	 */
+	public static void unZipFile(
+			final File zipInput,
+			final String outputFolder,
+			final boolean deleteTargetDir ) {
 
 		try {
 			final File of = new File(
@@ -376,7 +398,7 @@ public class TestUtils
 							"Could not create temporary directory: " + of.toString());
 				}
 			}
-			else {
+			else if (deleteTargetDir) {
 				FileUtil.fullyDelete(of);
 			}
 			final ZipFile z = new ZipFile(
@@ -412,6 +434,69 @@ public class TestUtils
 			FileUtils.write(
 					file,
 					str);
+		}
+	}
+
+	/**
+	 *
+	 * @param bi
+	 *            sample
+	 * @param ref
+	 *            reference
+	 * @param minPctError
+	 *            used for testing subsampling - to ensure we are properly
+	 *            subsampling we want there to be some error if subsampling is
+	 *            aggressive (10 pixels)
+	 * @param maxPctError
+	 *            used for testing subsampling - we want to ensure at most we
+	 *            are off by this percentile
+	 */
+	public static void testTileAgainstReference(
+			final BufferedImage actual,
+			final BufferedImage expected,
+			final double minPctError,
+			final double maxPctError ) {
+		Assert.assertEquals(
+				expected.getWidth(),
+				actual.getWidth());
+		Assert.assertEquals(
+				expected.getHeight(),
+				actual.getHeight());
+		final int totalPixels = expected.getWidth() * expected.getHeight();
+		final int minErrorPixels = (int) Math.round(minPctError * totalPixels);
+		final int maxErrorPixels = (int) Math.round(maxPctError * totalPixels);
+		int errorPixels = 0;
+		// test under default style
+		for (int x = 0; x < expected.getWidth(); x++) {
+			for (int y = 0; y < expected.getHeight(); y++) {
+				if (actual.getRGB(
+						x,
+						y) != expected.getRGB(
+						x,
+						y)) {
+					errorPixels++;
+					if (errorPixels > maxErrorPixels) {
+						Assert.fail(String.format(
+								"[%d,%d] failed to match ref=%d gen=%d",
+								x,
+								y,
+								expected.getRGB(
+										x,
+										y),
+								actual.getRGB(
+										x,
+										y)));
+					}
+				}
+			}
+		}
+		if (errorPixels < minErrorPixels) {
+			Assert
+					.fail(String
+							.format(
+									"Subsampling did not work as expected; error pixels (%d) did not exceed the minimum threshold (%d)",
+									errorPixels,
+									minErrorPixels));
 		}
 	}
 }

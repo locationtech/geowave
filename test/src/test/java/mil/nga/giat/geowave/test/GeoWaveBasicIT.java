@@ -143,9 +143,6 @@ public class GeoWaveBasicIT
 
 	public void testIngestAndQuerySpatialPointsAndLines(
 			final int nthreads ) {
-		System.getProperties().put(
-				"AccumuloIndexWriter.skipFlush",
-				"true");
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,
@@ -548,10 +545,6 @@ public class GeoWaveBasicIT
 
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
-		System.getProperties().put(
-				"AccumuloIndexWriter.skipFlush",
-				"true");
-
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,

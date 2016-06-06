@@ -269,4 +269,29 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			return internalCreatePrimaryIndex(options);
 		}
 	}
+
+	public static boolean isSpatialTemporal(
+			final PrimaryIndex index ) {
+		if ((index == null) || (index.getIndexStrategy() == null)
+				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
+		if (dimensions.length < 3) {
+			return false;
+		}
+		boolean hasLat = false, hasLon = false, hasTime = false;
+		for (final NumericDimensionDefinition definition : dimensions) {
+			if (definition instanceof TimeDefinition) {
+				hasTime = true;
+			}
+			else if (definition instanceof LatitudeDefinition) {
+				hasLat = true;
+			}
+			else if (definition instanceof LongitudeDefinition) {
+				hasLon = true;
+			}
+		}
+		return hasTime && hasLat && hasLon;
+	}
 }

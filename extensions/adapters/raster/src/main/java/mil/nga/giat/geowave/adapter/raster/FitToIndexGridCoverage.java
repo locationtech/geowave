@@ -4,9 +4,8 @@ import java.awt.image.RenderedImage;
 import java.awt.image.renderable.RenderableImage;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 
 import org.opengis.coverage.CannotEvaluateException;
 import org.opengis.coverage.PointOutsideCoverageException;
@@ -21,6 +20,8 @@ import org.opengis.util.RecordType;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+
 public class FitToIndexGridCoverage implements
 		GridCoverage
 {
@@ -30,6 +31,7 @@ public class FitToIndexGridCoverage implements
 	private final Envelope originalEnvelope;
 	private final Geometry footprintWorldGeometry;
 	private final Geometry footprintScreenGeometry;
+	private final Map properties;
 
 	public FitToIndexGridCoverage(
 			final GridCoverage gridCoverage,
@@ -37,13 +39,19 @@ public class FitToIndexGridCoverage implements
 			final Resolution resolution,
 			final Envelope originalEnvelope,
 			final Geometry footprintWorldGeometry,
-			final Geometry footprintScreenGeometry ) {
+			final Geometry footprintScreenGeometry,
+			final Map properties ) {
 		this.gridCoverage = gridCoverage;
 		this.insertionId = insertionId;
 		this.resolution = resolution;
 		this.originalEnvelope = originalEnvelope;
 		this.footprintWorldGeometry = footprintWorldGeometry;
 		this.footprintScreenGeometry = footprintScreenGeometry;
+		this.properties = properties;
+	}
+
+	public Map getProperties() {
+		return properties;
 	}
 
 	public Geometry getFootprintWorldGeometry() {

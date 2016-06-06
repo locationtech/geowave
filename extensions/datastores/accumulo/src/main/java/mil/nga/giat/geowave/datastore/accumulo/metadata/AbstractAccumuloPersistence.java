@@ -35,11 +35,11 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
  * This abstract class does most of the work for storing persistable objects in
  * Accumulo and can be easily extended for any object that needs to be
  * persisted.
- * 
+ *
  * There is an LRU cache associated with it so staying in sync with external
  * updates is not practical - it assumes the objects are not updated often or at
  * all. The objects are stored in their own table.
- * 
+ *
  * @param <T>
  *            The type of persistable object that this stores
  */
@@ -59,8 +59,8 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 			.75F,
 			true) {
 		/**
-				 *
-				 */
+						 *
+						 */
 		private static final long serialVersionUID = 1L;
 
 		// This method is called just after a new entry has been added
@@ -201,6 +201,9 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable>
 						accumuloOperations.attachIterators(
 								getAccumuloTablename(),
 								true,
+								true,
+								true,
+								null,
 								configs);
 					}
 				}

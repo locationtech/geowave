@@ -9,6 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.geotools.coverage.grid.GridCoverage2D;
+import org.geotools.coverage.grid.io.AbstractGridFormat;
+import org.geotools.coverage.grid.io.GridCoverage2DReader;
+import org.geotools.coverage.grid.io.GridFormatFinder;
+import org.opengis.coverage.grid.GridCoverage;
+
+import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -19,13 +27,6 @@ import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-
-import org.apache.log4j.Logger;
-import org.geotools.coverage.grid.GridCoverage2D;
-import org.geotools.coverage.grid.io.AbstractGridFormat;
-import org.geotools.coverage.grid.io.GridCoverage2DReader;
-import org.geotools.coverage.grid.io.GridFormatFinder;
-import org.opengis.coverage.grid.GridCoverage;
 
 /**
  * This plugin is used for ingesting any GeoTools supported file data store from
@@ -98,17 +99,48 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 										mdName));
 					}
 				}
-				final RasterDataAdapter adapter = new RasterDataAdapter(
-						input.getName(),
-						metadata,
-						coverage,
-						optionProvider.getTileSize(),
-						optionProvider.isBuildPyramid());
 				final List<GeoWaveData<GridCoverage>> coverages = new ArrayList<GeoWaveData<GridCoverage>>();
-				coverages.add(new GeoWaveData<GridCoverage>(
-						adapter,
-						primaryIndexIds,
-						coverage));
+
+				if (optionProvider.isSeparateBands() && (coverage.getNumSampleDimensions() > 1)) {
+					final String baseName = optionProvider.getCoverageName() != null ? optionProvider.getCoverageName()
+							: input.getName();
+					final double[][] nodata = optionProvider.getNodata(coverage.getNumSampleDimensions());
+					for (int b = 0; b < coverage.getNumSampleDimensions(); b++) {
+						final RasterDataAdapter adapter = new RasterDataAdapter(
+								baseName + "_B" + b,
+								metadata,
+								(GridCoverage2D) RasterUtils.getCoverageOperations().selectSampleDimension(
+										coverage,
+										new int[] {
+											b
+										}),
+								optionProvider.getTileSize(),
+								optionProvider.isBuildPyramid(),
+								optionProvider.isBuildHistogream(),
+								new double[][] {
+									nodata[b]
+								});
+						coverages.add(new GeoWaveData<GridCoverage>(
+								adapter,
+								primaryIndexIds,
+								coverage));
+					}
+				}
+				else {
+					final RasterDataAdapter adapter = new RasterDataAdapter(
+							optionProvider.getCoverageName() != null ? optionProvider.getCoverageName()
+									: input.getName(),
+							metadata,
+							coverage,
+							optionProvider.getTileSize(),
+							optionProvider.isBuildPyramid(),
+							optionProvider.isBuildHistogream(),
+							optionProvider.getNodata(coverage.getNumSampleDimensions()));
+					coverages.add(new GeoWaveData<GridCoverage>(
+							adapter,
+							primaryIndexIds,
+							coverage));
+				}
 				return new Wrapper(
 						coverages.iterator()) {
 
