@@ -36,7 +36,8 @@ public class OSMRunner extends
 		Configured implements
 		Tool
 {
-	private static final Logger log = LoggerFactory.getLogger(OSMRunner.class);
+	private static final Logger log = LoggerFactory.getLogger(
+			OSMRunner.class);
 	private org.apache.avro.Schema avroSchema = null;
 	private String inputAvroFile = null;
 
@@ -48,13 +49,17 @@ public class OSMRunner extends
 			throws Exception {
 		OSMIngestCommandArgs argv = new OSMIngestCommandArgs();
 		DataStorePluginOptions opts = new DataStorePluginOptions();
-		opts.selectPlugin(new AccumuloDataStoreFactory().getName());
+		opts.selectPlugin(
+				new AccumuloDataStoreFactory().getName());
 
 		OperationParser parser = new OperationParser();
-		parser.addAdditionalObject(argv);
-		parser.addAdditionalObject(opts);
+		parser.addAdditionalObject(
+				argv);
+		parser.addAdditionalObject(
+				opts);
 
-		CommandLineOperationParams params = parser.parse(args);
+		CommandLineOperationParams params = parser.parse(
+				args);
 		if (params.getSuccessCode() == 0) {
 			OSMRunner runner = new OSMRunner(
 					argv,
@@ -63,11 +68,14 @@ public class OSMRunner extends
 					new Configuration(),
 					runner,
 					args);
-			System.exit(res);
+			System.exit(
+					res);
 		}
 
-		System.out.println(params.getSuccessMessage());
-		System.exit(params.getSuccessCode());
+		System.out.println(
+				params.getSuccessMessage());
+		System.exit(
+				params.getSuccessCode());
 	}
 
 	public OSMRunner(
@@ -99,7 +107,11 @@ public class OSMRunner extends
 				accumuloOptions.getUser(),
 				accumuloOptions.getPassword(),
 				accumuloOptions.getGeowaveNamespace());
-		bao.createTable(argv.getOsmTableName());
+		bao.createTable(
+				argv.getOsmTableName(),
+				true,
+				true,
+				null);
 
 		bao.addLocalityGroup(
 				argv.getOsmTableName(),
@@ -129,25 +141,32 @@ public class OSMRunner extends
 		Job job = Job.getInstance(
 				conf,
 				ingestOptions.getJobName());
-		job.setJarByClass(OSMRunner.class);
+		job.setJarByClass(
+				OSMRunner.class);
 
 		switch (ingestOptions.getMapperType()) {
 			case "NODE": {
-				configureSchema(Node.getClassSchema());
+				configureSchema(
+						Node.getClassSchema());
 				inputAvroFile = ingestOptions.getNameNode() + "/" + ingestOptions.getNodesBasePath();
-				job.setMapperClass(OSMNodeMapper.class);
+				job.setMapperClass(
+						OSMNodeMapper.class);
 				break;
 			}
 			case "WAY": {
-				configureSchema(Way.getClassSchema());
+				configureSchema(
+						Way.getClassSchema());
 				inputAvroFile = ingestOptions.getNameNode() + "/" + ingestOptions.getWaysBasePath();
-				job.setMapperClass(OSMWayMapper.class);
+				job.setMapperClass(
+						OSMWayMapper.class);
 				break;
 			}
 			case "RELATION": {
-				configureSchema(Relation.getClassSchema());
+				configureSchema(
+						Relation.getClassSchema());
 				inputAvroFile = ingestOptions.getNameNode() + "/" + ingestOptions.getRelationsBasePath();
-				job.setMapperClass(OSMRelationMapper.class);
+				job.setMapperClass(
+						OSMRelationMapper.class);
 				break;
 			}
 			default:
@@ -158,10 +177,12 @@ public class OSMRunner extends
 					"argument for mapper type must be one of: NODE, WAY, or RELATION");
 		}
 
-		enableLocalityGroups(ingestOptions);
+		enableLocalityGroups(
+				ingestOptions);
 
 		// input format
-		job.setInputFormatClass(AvroKeyInputFormat.class);
+		job.setInputFormatClass(
+				AvroKeyInputFormat.class);
 		FileInputFormat.setInputPaths(
 				job,
 				inputAvroFile);
@@ -171,9 +192,12 @@ public class OSMRunner extends
 
 		// mappper
 
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Mutation.class);
-		job.setOutputFormatClass(AccumuloOutputFormat.class);
+		job.setOutputKeyClass(
+				Text.class);
+		job.setOutputValueClass(
+				Mutation.class);
+		job.setOutputFormatClass(
+				AccumuloOutputFormat.class);
 		AccumuloOutputFormat.setConnectorInfo(
 				job,
 				accumuloOptions.getUser(),
@@ -189,12 +213,14 @@ public class OSMRunner extends
 				job,
 				new ClientConfiguration().withInstance(
 						accumuloOptions.getInstance()).withZkHosts(
-						accumuloOptions.getZookeeper()));
+								accumuloOptions.getZookeeper()));
 
 		// reducer
-		job.setNumReduceTasks(0);
+		job.setNumReduceTasks(
+				0);
 
-		return job.waitForCompletion(true) ? 0 : -1;
+		return job.waitForCompletion(
+				true) ? 0 : -1;
 	}
 
 }
