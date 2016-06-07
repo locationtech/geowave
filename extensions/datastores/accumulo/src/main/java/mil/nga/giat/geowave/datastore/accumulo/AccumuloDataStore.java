@@ -244,8 +244,9 @@ public class AccumuloDataStore implements
 						AccumuloUtils.attachRowMergingIterators(
 								((RowMergingDataAdapter<?, ?>) adapter),
 								accumuloOperations,
-								indexName,
-								accumuloOptions.isCreateTable());
+								accumuloOptions,
+								index.getIndexStrategy().getNaturalSplits(),
+								indexName);
 					}
 				}
 				if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(
@@ -857,7 +858,7 @@ public class AccumuloDataStore implements
 
 					}
 					else {
-						List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
+						final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
 						dataIt = new AccumuloConstraintsQuery(
 								adapterIds,
 								index,
@@ -1054,12 +1055,12 @@ public class AccumuloDataStore implements
 			final PrimaryIndex index,
 			final List<ByteArrayId> adapterIdsToQuery,
 			final String... authorizations ) {
-		IndexMetaDataSet metaData = new IndexMetaDataSet(
+		final IndexMetaDataSet metaData = new IndexMetaDataSet(
 				index.getId(),
 				index.getId(),
 				index.getIndexStrategy().createMetaData());
-		for (ByteArrayId adapterId : adapterIdsToQuery) {
-			metaData.merge((IndexMetaDataSet) statisticsStore.getDataStatistics(
+		for (final ByteArrayId adapterId : adapterIdsToQuery) {
+			metaData.merge(statisticsStore.getDataStatistics(
 					adapterId,
 					IndexMetaDataSet.composeId(index.getId()),
 					authorizations));

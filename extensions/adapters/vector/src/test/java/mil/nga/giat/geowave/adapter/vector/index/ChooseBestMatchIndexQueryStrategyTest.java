@@ -127,6 +127,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 								1
 							},
 							Arrays.asList(range.getStart()),
+							Arrays.asList(range.getStart()),
 							Collections.<FieldInfo<?>> emptyList()),
 					null);
 			rangeTempStats.entryIngested(
@@ -134,6 +135,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 							new byte[] {
 								1
 							},
+							Arrays.asList(range.getEnd()),
 							Arrays.asList(range.getEnd()),
 							Collections.<FieldInfo<?>> emptyList()),
 					null);
@@ -153,6 +155,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 							new byte[] {
 								1
 							},
+							Arrays.asList(range.getStart()),
 							Arrays.asList(range.getStart()),
 							Collections.<FieldInfo<?>> emptyList()),
 					null);

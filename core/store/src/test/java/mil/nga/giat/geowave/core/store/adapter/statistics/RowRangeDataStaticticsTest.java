@@ -5,19 +5,20 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
+import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
-
-import org.junit.Test;
 
 public class RowRangeDataStaticticsTest
 {
 
 	@Test
 	public void testEmpty() {
-		RowRangeDataStatistics<Integer> stats = new RowRangeDataStatistics<Integer>(
+		final RowRangeDataStatistics<Integer> stats = new RowRangeDataStatistics<Integer>(
 				new ByteArrayId(
 						"20030"));
 
@@ -28,26 +29,28 @@ public class RowRangeDataStaticticsTest
 
 	@Test
 	public void testIngest() {
-		RowRangeDataStatistics<Integer> stats = new RowRangeDataStatistics<Integer>(
+		final RowRangeDataStatistics<Integer> stats = new RowRangeDataStatistics<Integer>(
 				new ByteArrayId(
 						"20030"));
 
+		List<ByteArrayId> ids = Arrays.asList(
+				new ByteArrayId(
+						"20030"),
+				new ByteArrayId(
+						"014"),
+				new ByteArrayId(
+						"0124"),
+				new ByteArrayId(
+						"0123"),
+				new ByteArrayId(
+						"5064"),
+				new ByteArrayId(
+						"50632"));
 		stats.entryIngested(
 				new DataStoreEntryInfo(
 						"23".getBytes(),
-						Arrays.asList(
-								new ByteArrayId(
-										"20030"),
-								new ByteArrayId(
-										"014"),
-								new ByteArrayId(
-										"0124"),
-								new ByteArrayId(
-										"0123"),
-								new ByteArrayId(
-										"5064"),
-								new ByteArrayId(
-										"50632")),
+						ids,
+						ids,
 						Collections.<FieldInfo<?>> emptyList()),
 				1);
 
@@ -65,20 +68,21 @@ public class RowRangeDataStaticticsTest
 
 		// merge
 
-		RowRangeDataStatistics<Integer> stats2 = new RowRangeDataStatistics<Integer>(
+		final RowRangeDataStatistics<Integer> stats2 = new RowRangeDataStatistics<Integer>(
 				new ByteArrayId(
 						"20030"));
-
+		ids = Arrays.asList(
+				new ByteArrayId(
+						"20030"),
+				new ByteArrayId(
+						"014"),
+				new ByteArrayId(
+						"8062"));
 		stats2.entryIngested(
 				new DataStoreEntryInfo(
 						"32".getBytes(),
-						Arrays.asList(
-								new ByteArrayId(
-										"20030"),
-								new ByteArrayId(
-										"014"),
-								new ByteArrayId(
-										"8062")),
+						ids,
+						ids,
 						Collections.<FieldInfo<?>> emptyList()),
 				1);
 

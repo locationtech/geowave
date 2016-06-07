@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -78,13 +79,14 @@ import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 
 /**
  * A set of convenience methods for common operations on Accumulo within
  * GeoWave, such as conversions between GeoWave objects and corresponding
  * Accumulo objects.
- * 
+ *
  */
 public class AccumuloUtils
 {
@@ -341,6 +343,8 @@ public class AccumuloUtils
 						new DataStoreEntryInfo(
 								rowId.getDataId(),
 								Arrays.asList(new ByteArrayId(
+										rowId.getInsertionId())),
+								Arrays.asList(new ByteArrayId(
 										k.getRowData().getBackingArray())),
 								fieldInfoList));
 				if (scanCallback != null) {
@@ -355,11 +359,11 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * Takes a byte array representing a serialized composite group of
 	 * FieldInfos sharing a common visibility and returns a List of the
 	 * individual FieldInfos
-	 * 
+	 *
 	 * @param compositeFieldId
 	 *            the composite bitmask representing the fields contained within
 	 *            the flattenedValue
@@ -528,7 +532,7 @@ public class AccumuloUtils
 	/**
 	 * This method combines all FieldInfos that share a common visibility into a
 	 * single FieldInfo
-	 * 
+	 *
 	 * @param originalList
 	 * @return a new list of composite FieldInfos
 	 */
@@ -619,7 +623,7 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dataWriter
 	 * @param index
 	 * @param entry
@@ -650,7 +654,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get Namespaces
-	 * 
+	 *
 	 * @param connector
 	 */
 	public static List<String> getNamespaces(
@@ -670,7 +674,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get list of data adapters associated with the given namespace
-	 * 
+	 *
 	 * @param connector
 	 * @param namespace
 	 */
@@ -701,7 +705,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get list of indices associated with the given namespace
-	 * 
+	 *
 	 * @param connector
 	 * @param namespace
 	 */
@@ -732,7 +736,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set splits on a table based on a partition ID
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param randomParitions
@@ -754,27 +758,20 @@ public class AccumuloUtils
 		final AccumuloOperations operations = new BasicAccumuloOperations(
 				connector,
 				namespace);
-		operations.createTable(index.getId().getString());
 		final RoundRobinKeyIndexStrategy partitions = new RoundRobinKeyIndexStrategy(
 				randomPartitions);
-		final SortedSet<Text> splits = new TreeSet<Text>();
-		for (final ByteArrayId split : partitions.getNaturalSplits()) {
-			splits.add(new Text(
-					split.getBytes()));
-		}
 
-		final String tableName = AccumuloUtils.getQualifiedTableName(
-				namespace,
-				index.getId().getString());
-		connector.tableOperations().addSplits(
-				tableName,
-				splits);
+		operations.createTable(
+				index.getId().getString(),
+				true,
+				true,
+				partitions.getNaturalSplits());
 	}
 
 	/**
 	 * Set splits on a table based on quantile distribution and fixed number of
 	 * splits
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param quantile
@@ -838,7 +835,7 @@ public class AccumuloUtils
 	/**
 	 * Set splits on table based on equal interval distribution and fixed number
 	 * of splits.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param numberSplits
@@ -920,7 +917,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set splits on table based on fixed number of rows per split.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param numberRows
@@ -977,7 +974,7 @@ public class AccumuloUtils
 
 	/**
 	 * Check if locality group is set.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1008,7 +1005,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set locality group.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1038,7 +1035,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get number of entries for a data adapter in an index.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1093,7 +1090,7 @@ public class AccumuloUtils
 
 	/**
 	 * * Get number of entries per index.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @return
@@ -1143,31 +1140,37 @@ public class AccumuloUtils
 	public static void attachRowMergingIterators(
 			final RowMergingDataAdapter<?, ?> adapter,
 			final AccumuloOperations operations,
-			final String tableName,
-			final boolean createTable )
+			final AccumuloOptions options,
+			final Set<ByteArrayId> splits,
+			final String tableName )
 			throws TableNotFoundException {
-		final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
-		final OptionProvider optionProvider = new RowMergingAdapterOptionProvider(
-				adapter);
 		final RowTransform rowTransform = adapter.getTransform();
-		final IteratorConfig rowMergingCombinerConfig = new IteratorConfig(
-				EnumSet.complementOf(visibilityCombinerScope),
-				rowTransform.getBaseTransformPriority(),
-				rowTransform.getTransformName() + ROW_MERGING_SUFFIX,
-				RowMergingCombiner.class.getName(),
-				optionProvider);
-		final IteratorConfig rowMergingVisibilityCombinerConfig = new IteratorConfig(
-				visibilityCombinerScope,
-				rowTransform.getBaseTransformPriority() + 1,
-				rowTransform.getTransformName() + ROW_MERGING_VISIBILITY_SUFFIX,
-				RowMergingVisibilityCombiner.class.getName(),
-				optionProvider);
+		if (rowTransform != null) {
+			final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
+			final OptionProvider optionProvider = new RowMergingAdapterOptionProvider(
+					adapter);
+			final IteratorConfig rowMergingCombinerConfig = new IteratorConfig(
+					EnumSet.complementOf(visibilityCombinerScope),
+					rowTransform.getBaseTransformPriority(),
+					rowTransform.getTransformName() + ROW_MERGING_SUFFIX,
+					RowMergingCombiner.class.getName(),
+					optionProvider);
+			final IteratorConfig rowMergingVisibilityCombinerConfig = new IteratorConfig(
+					visibilityCombinerScope,
+					rowTransform.getBaseTransformPriority() + 1,
+					rowTransform.getTransformName() + ROW_MERGING_VISIBILITY_SUFFIX,
+					RowMergingVisibilityCombiner.class.getName(),
+					optionProvider);
 
-		operations.attachIterators(
-				tableName,
-				createTable,
-				rowMergingCombinerConfig,
-				rowMergingVisibilityCombinerConfig);
+			operations.attachIterators(
+					tableName,
+					options.isCreateTable(),
+					true,
+					options.isEnableBlockCache(),
+					splits,
+					rowMergingCombinerConfig,
+					rowMergingVisibilityCombinerConfig);
+		}
 	}
 
 	private static CloseableIterator<Entry<Key, Value>> getIterator(

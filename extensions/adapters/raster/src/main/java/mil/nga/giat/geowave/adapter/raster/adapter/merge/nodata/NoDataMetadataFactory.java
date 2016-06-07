@@ -86,7 +86,7 @@ public class NoDataMetadataFactory
 			final NoDataByFilter noDataByFilter2 = ((NoDataByFilter) noDataMetadata2);
 
 			final double[][] noDataPerBand1 = noDataByFilter1.getNoDataPerBand();
-			final double[][] noDataPerBand2 = noDataByFilter1.getNoDataPerBand();
+			final double[][] noDataPerBand2 = noDataByFilter2.getNoDataPerBand();
 			// union the no data values from each filter
 			final int numBands = Math.min(
 					noDataPerBand1.length,

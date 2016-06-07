@@ -698,7 +698,6 @@ public class TieredSFCIndexStrategy implements
 		@Override
 		public void update(
 				List<ByteArrayId> ids ) {
-
 			for (ByteArrayId id : ids) {
 				tierCounts[orderedTierIdToSfcIndex.get(
 						id.getBytes()[0]).intValue()]++;
