@@ -2,7 +2,10 @@ package mil.nga.giat.geowave.core.store.operations.remote.options;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.beust.jcommander.ParameterException;
@@ -19,7 +22,7 @@ public class IndexLoader
 
 	private final String indexName;
 
-	private List<IndexPluginOptions> loadedIndexes;
+	private Map<String, IndexPluginOptions> loadedIndices;
 
 	/**
 	 * Constructor
@@ -32,54 +35,59 @@ public class IndexLoader
 	/**
 	 * Attempt to find an index group or index name in the config file with the
 	 * given name.
-	 * 
+	 *
 	 * @param configFile
 	 * @return
 	 */
 	public boolean loadFromConfig(
-			File configFile ) {
+			final File configFile ) {
 
-		loadedIndexes = new ArrayList<IndexPluginOptions>();
+		loadedIndices = new HashMap<String, IndexPluginOptions>();
 
 		// Properties (load them all)
-		Properties props = ConfigOptions.loadProperties(
+		final Properties props = ConfigOptions.loadProperties(
 				configFile,
 				null);
 
 		// Is there a comma?
-		String[] indexes = indexName.split(",");
-		for (String index : indexes) {
+		final String[] indices = indexName.split(
+				",");
+		for (final String index : indices) {
 
 			// Attempt to load as an index group first.
-			IndexGroupPluginOptions indexGroupOptions = loadIndexGroupPluginOptions(
+			final IndexGroupPluginOptions indexGroupOptions = loadIndexGroupPluginOptions(
 					props,
 					index);
 
 			// Attempt to load as an index next.
-			IndexPluginOptions indexOptions = loadIndexPluginOptions(
+			final IndexPluginOptions indexOptions = loadIndexPluginOptions(
 					props,
 					index);
 
-			if (indexGroupOptions != null && indexOptions != null) {
+			if ((indexGroupOptions != null) && (indexOptions != null)) {
 				throw new ParameterException(
 						"Aborting because there is both an index group " + "and index with the name: " + indexName);
 			}
 			else if (indexOptions != null) {
-				loadedIndexes.add(indexOptions);
+				loadedIndices.put(
+						index,
+						indexOptions);
 			}
 			else if (indexGroupOptions != null) {
-				loadedIndexes.addAll(indexGroupOptions.getDimensionalityPlugins().values());
+				loadedIndices.putAll(
+						indexGroupOptions.getDimensionalityPlugins());
 			}
 		}
 
-		return loadedIndexes.size() != 0;
+		return loadedIndices.size() != 0;
 	}
 
-	private IndexGroupPluginOptions loadIndexGroupPluginOptions(
-			Properties props,
-			String name ) {
-		IndexGroupPluginOptions indexGroupPlugin = new IndexGroupPluginOptions();
-		String indexGroupNamespace = IndexGroupPluginOptions.getIndexGroupNamespace(indexName);
+	private static IndexGroupPluginOptions loadIndexGroupPluginOptions(
+			final Properties props,
+			final String name ) {
+		final IndexGroupPluginOptions indexGroupPlugin = new IndexGroupPluginOptions();
+		final String indexGroupNamespace = IndexGroupPluginOptions.getIndexGroupNamespace(
+				name);
 		if (!indexGroupPlugin.load(
 				props,
 				indexGroupNamespace)) {
@@ -88,11 +96,12 @@ public class IndexLoader
 		return indexGroupPlugin;
 	}
 
-	private IndexPluginOptions loadIndexPluginOptions(
-			Properties props,
-			String name ) {
-		IndexPluginOptions indexPlugin = new IndexPluginOptions();
-		String indexNamespace = IndexPluginOptions.getIndexNamespace(indexName);
+	private static IndexPluginOptions loadIndexPluginOptions(
+			final Properties props,
+			final String name ) {
+		final IndexPluginOptions indexPlugin = new IndexPluginOptions();
+		final String indexNamespace = IndexPluginOptions.getIndexNamespace(
+				name);
 		if (!indexPlugin.load(
 				props,
 				indexNamespace)) {
@@ -102,20 +111,25 @@ public class IndexLoader
 	}
 
 	public List<IndexPluginOptions> getLoadedIndexes() {
-		return loadedIndexes;
+		return Collections.unmodifiableList(
+				new ArrayList<IndexPluginOptions>(
+						loadedIndices.values()));
 	}
 
 	public void addIndex(
-			IndexPluginOptions option ) {
-		if (this.loadedIndexes == null) {
-			this.loadedIndexes = new ArrayList<IndexPluginOptions>();
+			final String indexName,
+			final IndexPluginOptions option ) {
+		if (loadedIndices == null) {
+			loadedIndices = new HashMap<String, IndexPluginOptions>();
 		}
-		this.loadedIndexes.add(option);
+		loadedIndices.put(
+				indexName,
+				option);
 	}
 
-	public void setLoadedIndexes(
-			List<IndexPluginOptions> loadedIndexes ) {
-		this.loadedIndexes = loadedIndexes;
+	public void setLoadedIndices(
+			final Map<String, IndexPluginOptions> loadedIndexes ) {
+		loadedIndices = loadedIndexes;
 	}
 
 	public String getIndexName() {
