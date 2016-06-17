@@ -52,7 +52,8 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 public class BasicAccumuloOperations implements
 		AccumuloOperations
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			BasicAccumuloOperations.class);
 	private static final int DEFAULT_NUM_THREADS = 16;
 	private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
 	private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB
@@ -67,6 +68,7 @@ public class BasicAccumuloOperations implements
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
 	private String password;
+	private final Map<String, Set<String>> insuredAuthorizationCache;
 
 	/**
 	 * This is will create an Accumulo connector based on passed in connection
@@ -180,7 +182,9 @@ public class BasicAccumuloOperations implements
 		this.tableNamespace = tableNamespace;
 		this.connector = connector;
 		locGrpCache = new HashMap<String, Long>();
-		cacheTimeoutMillis = TimeUnit.DAYS.toMillis(1);
+		insuredAuthorizationCache = new HashMap<String, Set<String>>();
+		cacheTimeoutMillis = TimeUnit.DAYS.toMillis(
+				1);
 	}
 
 	public int getNumThreads() {
@@ -240,7 +244,8 @@ public class BasicAccumuloOperations implements
 			final boolean enableBlockCache,
 			final Set<ByteArrayId> splits )
 			throws TableNotFoundException {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
 			try {
@@ -256,8 +261,9 @@ public class BasicAccumuloOperations implements
 				if ((splits != null) && !splits.isEmpty()) {
 					final SortedSet<Text> partitionKeys = new TreeSet<Text>();
 					for (final ByteArrayId split : splits) {
-						partitionKeys.add(new Text(
-								split.getBytes()));
+						partitionKeys.add(
+								new Text(
+										split.getBytes()));
 					}
 					connector.tableOperations().addSplits(
 							qName,
@@ -271,11 +277,13 @@ public class BasicAccumuloOperations implements
 			}
 		}
 		final BatchWriterConfig config = new BatchWriterConfig();
-		config.setMaxMemory(byteBufferSize);
+		config.setMaxMemory(
+				byteBufferSize);
 		config.setMaxLatency(
 				timeoutMillis,
 				TimeUnit.MILLISECONDS);
-		config.setMaxWriteThreads(numThreads);
+		config.setMaxWriteThreads(
+				numThreads);
 		return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
 				connector.createBatchWriter(
 						qName,
@@ -285,7 +293,8 @@ public class BasicAccumuloOperations implements
 	@Override
 	public void createTable(
 			final String tableName ) {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		if (!connector.tableOperations().exists(
 				qName)) {
 			try {
@@ -309,19 +318,22 @@ public class BasicAccumuloOperations implements
 		try {
 			rowIterator = new RowIterator(
 					connector.createScanner(
-							getQualifiedTableName(tableName),
+							getQualifiedTableName(
+									tableName),
 							(authorization == null) ? new Authorizations(
-									additionalAuthorizations) : new Authorizations(
-									(String[]) ArrayUtils.add(
-											additionalAuthorizations,
-											authorization))));
+									additionalAuthorizations)
+									: new Authorizations(
+											(String[]) ArrayUtils.add(
+													additionalAuthorizations,
+													authorization))));
 			while (rowIterator.hasNext()) {
 				rowIterator.next();
 			}
 			return rowIterator.getKVCount();
 		}
 		catch (final TableNotFoundException e) {
-			LOGGER.warn("Table '" + tableName + "' not found during count operation");
+			LOGGER.warn(
+					"Table '" + tableName + "' not found during count operation");
 			return 0;
 		}
 	}
@@ -329,7 +341,8 @@ public class BasicAccumuloOperations implements
 	@Override
 	public boolean deleteTable(
 			final String tableName ) {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		try {
 			connector.tableOperations().delete(
 					qName);
@@ -390,7 +403,8 @@ public class BasicAccumuloOperations implements
 			final String columnQualifier ) {
 		return this.delete(
 				tableName,
-				Arrays.asList(rowId),
+				Arrays.asList(
+						rowId),
 				columnFamily,
 				columnQualifier);
 	}
@@ -405,9 +419,12 @@ public class BasicAccumuloOperations implements
 			deleter = createBatchDeleter(
 					tableName,
 					additionalAuthorizations);
-			deleter.setRanges(Arrays.asList(new Range()));
-			deleter.fetchColumnFamily(new Text(
-					columnFamily));
+			deleter.setRanges(
+					Arrays.asList(
+							new Range()));
+			deleter.fetchColumnFamily(
+					new Text(
+							columnFamily));
 			deleter.delete();
 			return true;
 		}
@@ -448,25 +465,31 @@ public class BasicAccumuloOperations implements
 									columnQualifier));
 				}
 				else {
-					deleter.fetchColumnFamily(new Text(
-							columnFamily));
+					deleter.fetchColumnFamily(
+							new Text(
+									columnFamily));
 				}
 			}
 			final Set<ByteArrayId> removeSet = new HashSet<ByteArrayId>();
 			final List<Range> rowRanges = new ArrayList<Range>();
 			for (final ByteArrayId rowId : rowIds) {
-				rowRanges.add(Range.exact(new Text(
-						rowId.getBytes())));
-				removeSet.add(new ByteArrayId(
-						rowId.getBytes()));
+				rowRanges.add(
+						Range.exact(
+								new Text(
+										rowId.getBytes())));
+				removeSet.add(
+						new ByteArrayId(
+								rowId.getBytes()));
 			}
-			deleter.setRanges(rowRanges);
+			deleter.setRanges(
+					rowRanges);
 
 			final Iterator<Map.Entry<Key, Value>> iterator = deleter.iterator();
 			while (iterator.hasNext()) {
 				final Entry<Key, Value> entry = iterator.next();
-				removeSet.remove(new ByteArrayId(
-						entry.getKey().getRowData().getBackingArray()));
+				removeSet.remove(
+						new ByteArrayId(
+								entry.getKey().getRowData().getBackingArray()));
 			}
 
 			if (removeSet.isEmpty()) {
@@ -491,7 +514,8 @@ public class BasicAccumuloOperations implements
 	@Override
 	public boolean tableExists(
 			final String tableName ) {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		return connector.tableOperations().exists(
 				qName);
 	}
@@ -502,24 +526,31 @@ public class BasicAccumuloOperations implements
 			final byte[] localityGroup )
 			throws AccumuloException,
 			TableNotFoundException {
-		final String qName = getQualifiedTableName(tableName);
-		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
+		final String qName = getQualifiedTableName(
+				tableName);
+		final String localityGroupStr = qName + StringUtils.stringFromBinary(
+				localityGroup);
 
 		// check the cache for our locality group
-		if (locGrpCache.containsKey(localityGroupStr)) {
-			if ((locGrpCache.get(localityGroupStr) - new Date().getTime()) < cacheTimeoutMillis) {
+		if (locGrpCache.containsKey(
+				localityGroupStr)) {
+			if ((locGrpCache.get(
+					localityGroupStr) - new Date().getTime()) < cacheTimeoutMillis) {
 				return true;
 			}
 			else {
-				locGrpCache.remove(localityGroupStr);
+				locGrpCache.remove(
+						localityGroupStr);
 			}
 		}
 
 		// check accumulo to see if locality group exists
 		final boolean groupExists = connector.tableOperations().exists(
-				qName) && connector.tableOperations().getLocalityGroups(
-				qName).keySet().contains(
-				StringUtils.stringFromBinary(localityGroup));
+				qName)
+				&& connector.tableOperations().getLocalityGroups(
+						qName).keySet().contains(
+								StringUtils.stringFromBinary(
+										localityGroup));
 
 		// update the cache
 		if (groupExists) {
@@ -538,16 +569,21 @@ public class BasicAccumuloOperations implements
 			throws AccumuloException,
 			TableNotFoundException,
 			AccumuloSecurityException {
-		final String qName = getQualifiedTableName(tableName);
-		final String localityGroupStr = qName + StringUtils.stringFromBinary(localityGroup);
+		final String qName = getQualifiedTableName(
+				tableName);
+		final String localityGroupStr = qName + StringUtils.stringFromBinary(
+				localityGroup);
 
 		// check the cache for our locality group
-		if (locGrpCache.containsKey(localityGroupStr)) {
-			if ((locGrpCache.get(localityGroupStr) - new Date().getTime()) < cacheTimeoutMillis) {
+		if (locGrpCache.containsKey(
+				localityGroupStr)) {
+			if ((locGrpCache.get(
+					localityGroupStr) - new Date().getTime()) < cacheTimeoutMillis) {
 				return;
 			}
 			else {
-				locGrpCache.remove(localityGroupStr);
+				locGrpCache.remove(
+						localityGroupStr);
 			}
 		}
 
@@ -559,11 +595,13 @@ public class BasicAccumuloOperations implements
 
 			final Set<Text> groupSet = new HashSet<Text>();
 
-			groupSet.add(new Text(
-					localityGroup));
+			groupSet.add(
+					new Text(
+							localityGroup));
 
 			localityGroups.put(
-					StringUtils.stringFromBinary(localityGroup),
+					StringUtils.stringFromBinary(
+							localityGroup),
 					groupSet);
 
 			connector.tableOperations().setLocalityGroups(
@@ -582,9 +620,11 @@ public class BasicAccumuloOperations implements
 			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return connector.createScanner(
-				getQualifiedTableName(tableName),
+				getQualifiedTableName(
+						tableName),
 				new Authorizations(
-						getAuthorizations(additionalAuthorizations)));
+						getAuthorizations(
+								additionalAuthorizations)));
 	}
 
 	@Override
@@ -593,9 +633,11 @@ public class BasicAccumuloOperations implements
 			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return connector.createBatchScanner(
-				getQualifiedTableName(tableName),
+				getQualifiedTableName(
+						tableName),
 				new Authorizations(
-						getAuthorizations(additionalAuthorizations)),
+						getAuthorizations(
+								additionalAuthorizations)),
 				numThreads);
 	}
 
@@ -605,23 +647,60 @@ public class BasicAccumuloOperations implements
 			final String... authorizations )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		Authorizations auths = connector.securityOperations().getUserAuthorizations(
-				clientUser);
-		final List<byte[]> newSet = new ArrayList<byte[]>();
-		for (final String auth : authorizations) {
-			if (!auths.contains(auth)) {
-				newSet.add(auth.getBytes(StringUtils.GEOWAVE_CHAR_SET));
+		String user;
+		if (clientUser == null) {
+			user = connector.whoami();
+		}
+		else {
+			user = clientUser;
+		}
+		Set<String> uninsuredAuths = new HashSet<String>();
+		Set<String> insuredAuths = insuredAuthorizationCache.get(
+				user);
+		if (insuredAuths == null) {
+			uninsuredAuths.addAll(
+					Arrays.asList(
+							authorizations));
+			insuredAuths = new HashSet<String>();
+			insuredAuthorizationCache.put(user, insuredAuths);
+		}
+		else {
+			for (final String auth : authorizations) {
+				if (!insuredAuths.contains(
+						auth)) {
+					uninsuredAuths.add(
+							auth);
+				}
 			}
 		}
-		if (newSet.size() > 0) {
-			newSet.addAll(auths.getAuthorizations());
-			connector.securityOperations().changeUserAuthorizations(
-					clientUser,
-					new Authorizations(
-							newSet));
-			auths = connector.securityOperations().getUserAuthorizations(
-					clientUser);
-			LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
+		if (!uninsuredAuths.isEmpty()) {
+			Authorizations auths = connector.securityOperations().getUserAuthorizations(
+					user);
+			final List<byte[]> newSet = new ArrayList<byte[]>();
+			for (final String auth : uninsuredAuths) {
+				if (!auths.contains(
+						auth)) {
+					newSet.add(
+							auth.getBytes(
+									StringUtils.GEOWAVE_CHAR_SET));
+				}
+			}
+			if (newSet.size() > 0) {
+				newSet.addAll(
+						auths.getAuthorizations());
+				connector.securityOperations().changeUserAuthorizations(
+						user,
+						new Authorizations(
+								newSet));
+				auths = connector.securityOperations().getUserAuthorizations(
+						user);
+				LOGGER.trace(
+						clientUser + " has authorizations " + ArrayUtils.toString(
+								auths.getAuthorizations()));
+			}
+			for (final String auth : uninsuredAuths) {
+				insuredAuths.add(auth);
+			}
 		}
 	}
 
@@ -631,15 +710,20 @@ public class BasicAccumuloOperations implements
 			final String... additionalAuthorizations )
 			throws TableNotFoundException {
 		return connector.createBatchDeleter(
-				getQualifiedTableName(tableName),
+				getQualifiedTableName(
+						tableName),
 				new Authorizations(
-						getAuthorizations(additionalAuthorizations)),
+						getAuthorizations(
+								additionalAuthorizations)),
 				numThreads,
-				new BatchWriterConfig().setMaxWriteThreads(
-						numThreads).setMaxMemory(
-						byteBufferSize).setTimeout(
-						timeoutMillis,
-						TimeUnit.MILLISECONDS));
+				new BatchWriterConfig()
+						.setMaxWriteThreads(
+								numThreads)
+						.setMaxMemory(
+								byteBufferSize)
+						.setTimeout(
+								timeoutMillis,
+								TimeUnit.MILLISECONDS));
 	}
 
 	public long getCacheTimeoutMillis() {
@@ -657,7 +741,8 @@ public class BasicAccumuloOperations implements
 			final boolean createTable,
 			final IteratorConfig[] iterators )
 			throws TableNotFoundException {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
 			try {
@@ -677,10 +762,12 @@ public class BasicAccumuloOperations implements
 				for (final IteratorConfig iteratorConfig : iterators) {
 					boolean mustDelete = false;
 					boolean exists = false;
-					final EnumSet<IteratorScope> existingScopes = iteratorScopes.get(iteratorConfig.getIteratorName());
+					final EnumSet<IteratorScope> existingScopes = iteratorScopes.get(
+							iteratorConfig.getIteratorName());
 					EnumSet<IteratorScope> configuredScopes;
 					if (iteratorConfig.getScopes() == null) {
-						configuredScopes = EnumSet.allOf(IteratorScope.class);
+						configuredScopes = EnumSet.allOf(
+								IteratorScope.class);
 					}
 					else {
 						configuredScopes = iteratorConfig.getScopes();
@@ -690,12 +777,14 @@ public class BasicAccumuloOperations implements
 						if (existingScopes.size() == configuredScopes.size()) {
 							exists = true;
 							for (final IteratorScope s : existingScopes) {
-								if (!configuredScopes.contains(s)) {
+								if (!configuredScopes.contains(
+										s)) {
 									// this iterator exists with the wrong
 									// scope, we will assume we want to remove
 									// it and add the new configuration
-									LOGGER.warn("found iterator '" + iteratorConfig.getIteratorName()
-											+ "' missing scope '" + s.name() + "', removing it and re-attaching");
+									LOGGER.warn(
+											"found iterator '" + iteratorConfig.getIteratorName() + "' missing scope '"
+													+ s.name() + "', removing it and re-attaching");
 
 									mustDelete = true;
 									break;
@@ -715,7 +804,8 @@ public class BasicAccumuloOperations implements
 										scope);
 								if (setting != null) {
 									final Map<String, String> existingOptions = setting.getOptions();
-									configuredOptions = iteratorConfig.getOptions(existingOptions);
+									configuredOptions = iteratorConfig.getOptions(
+											existingOptions);
 									// we found the setting existing in one
 									// scope, assume the options are the same
 									// for each scope
@@ -734,7 +824,8 @@ public class BasicAccumuloOperations implements
 					}
 					if (!exists) {
 						if (configuredOptions == null) {
-							configuredOptions = iteratorConfig.getOptions(new HashMap<String, String>());
+							configuredOptions = iteratorConfig.getOptions(
+									new HashMap<String, String>());
 						}
 						connector.tableOperations().attachIterator(
 								qName,
@@ -772,7 +863,8 @@ public class BasicAccumuloOperations implements
 			final AccumuloRequiredOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		return createOperations(options).connector;
+		return createOperations(
+				options).connector;
 	}
 
 	public static String getUsername(
@@ -817,7 +909,8 @@ public class BasicAccumuloOperations implements
 			throws TableNotFoundException,
 			AccumuloException,
 			AccumuloSecurityException {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
 			try {
@@ -833,8 +926,9 @@ public class BasicAccumuloOperations implements
 		}
 		final SortedSet<Text> partitionKeys = new TreeSet<Text>();
 		for (final ByteArrayId split : splits) {
-			partitionKeys.add(new Text(
-					split.getBytes()));
+			partitionKeys.add(
+					new Text(
+							split.getBytes()));
 		}
 		connector.tableOperations().addSplits(
 				qName,

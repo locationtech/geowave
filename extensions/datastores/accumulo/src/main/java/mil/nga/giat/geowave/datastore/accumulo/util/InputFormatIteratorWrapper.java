@@ -24,7 +24,7 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
  * reference to the next value. It maintains the adapter ID, data ID, and
  * original accumulo key in the GeoWaveInputKey for use by the
  * GeoWaveInputFormat.
- * 
+ *
  * @param <T>
  *            The type for the entry
  */
@@ -37,13 +37,16 @@ public class InputFormatIteratorWrapper<T> implements
 	private final HadoopWritableSerializationTool serializationTool;
 	private final boolean isOutputWritable;
 	private Entry<GeoWaveInputKey, T> nextValue;
+	private final boolean wholeRowEncoding;
 
 	public InputFormatIteratorWrapper(
+			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<Entry<Key, Value>> scannerIt,
 			final boolean isOutputWritable,
 			final QueryFilter clientFilter ) {
+		this.wholeRowEncoding = wholeRowEncoding;
 		this.serializationTool = new HadoopWritableSerializationTool(
 				adapterStore);
 		this.index = index;
@@ -56,6 +59,7 @@ public class InputFormatIteratorWrapper<T> implements
 		while ((nextValue == null) && scannerIt.hasNext()) {
 			final Entry<Key, Value> row = scannerIt.next();
 			final Entry<GeoWaveInputKey, T> decodedValue = decodeRow(
+					wholeRowEncoding,
 					row,
 					clientFilter,
 					index);
@@ -68,6 +72,7 @@ public class InputFormatIteratorWrapper<T> implements
 
 	@SuppressWarnings("unchecked")
 	private Entry<GeoWaveInputKey, T> decodeRow(
+			final boolean wholeRowEncoding,
 			final Entry<Key, Value> row,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
@@ -76,6 +81,7 @@ public class InputFormatIteratorWrapper<T> implements
 		final Object value = AccumuloUtils.decodeRow(
 				row.getKey(),
 				row.getValue(),
+				wholeRowEncoding,
 				rowId,
 				serializationTool.getAdapterStore(),
 				clientFilter,
@@ -87,7 +93,8 @@ public class InputFormatIteratorWrapper<T> implements
 				rowId.getAdapterId());
 		final T result = (T) (isOutputWritable ? serializationTool.getHadoopWritableSerializerForAdapter(
 				adapterId).toWritable(
-				value) : value);
+						value)
+				: value);
 		final GeoWaveInputKey key = new GeoWaveInputKey(
 				adapterId,
 				new ByteArrayId(
@@ -100,8 +107,9 @@ public class InputFormatIteratorWrapper<T> implements
 										index.getId().getBytes(),
 										rowId.getInsertionId()),
 								rowId.getDataId())));
-		key.setInsertionId(new ByteArrayId(
-				rowId.getInsertionId()));
+		key.setInsertionId(
+				new ByteArrayId(
+						rowId.getInsertionId()));
 		return new GeoWaveInputFormatEntry(
 				key,
 				result);
