@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -44,7 +45,20 @@ import mil.nga.giat.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipUtils;
 import mil.nga.giat.geowave.service.ServiceUtils;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.jcodec.codecs.vpx.NopRateControl;
+import org.jcodec.codecs.vpx.RateControl;
+import org.jcodec.codecs.vpx.VP8Encoder;
+import org.jcodec.common.FileChannelWrapper;
+import org.jcodec.common.NIOUtils;
+import org.jcodec.common.model.ColorSpace;
+import org.jcodec.common.model.Picture;
+import org.jcodec.common.model.Size;
+import org.jcodec.containers.mkv.muxer.MKVMuxer;
+import org.jcodec.containers.mkv.muxer.MKVMuxerTrack;
+import org.jcodec.scale.AWTUtil;
+import org.jcodec.scale.RgbToYuv420p;
 
 import com.google.common.io.Files;
 import com.xuggle.mediatool.IMediaWriter;
@@ -157,7 +171,7 @@ public class Stanag4676ImageryChipService
 				}
 			}
 		}
-		return Response.noContent().entity(
+		return Response.serverError().entity(
 				"Cannot find image chip with mission = '" + mission + "', track = '" + track + "', time = '" + cal.getTime() + "'").build();
 	}
 
@@ -177,8 +191,11 @@ public class Stanag4676ImageryChipService
 			final int targetPixelSize,
 			@QueryParam("speed")
 			@DefaultValue("1")
-			final double speed ) {
-		String videoNameStr = "mission = '" + mission + "', track = '" + track + "'";
+			final double speed,
+			@QueryParam("source")
+			@DefaultValue("0")
+			final double source ) {
+		String videoNameStr = "mission = '" + mission + "', track = '" + track + "'" + "', source = '" + source + "'";
 
 		final DataStore dataStore = getSingletonInstance();
 		final TreeMap<Long, BufferedImage> imageChips = new TreeMap<Long, BufferedImage>();
@@ -231,27 +248,48 @@ public class Stanag4676ImageryChipService
 			LOGGER.info("Sending Video for " + videoNameStr);
 
 			try {
-				LOGGER.info("Attempting to build the video ...");
-				final File responseBody = buildVideo(
-						mission,
-						track,
-						imageChips,
-						width,
-						height,
-						speed);
+				final File responseBody;
+				if (source == 0) {
+					LOGGER.info("Attempting to build the video ...");
+					responseBody = buildVideo(
+							mission,
+							track,
+							imageChips,
+							width,
+							height,
+							speed);
+				}
+				else {
+					LOGGER.info("Attempting to build the video the new way ...");
+					responseBody = buildVideo2(
+							mission,
+							track,
+							imageChips,
+							width,
+							height,
+							speed);
+				}
 				LOGGER.info("Got a response body (path): " + responseBody.getAbsolutePath());
 				try (FileInputStream fis = new FileInputStream(
-						responseBody)) {
+						responseBody) {
 
-					// try to delete the file immediately after it is returned
+					@Override
+					public void close()
+							throws IOException {
+						// super.close();
+						// try to delete the file immediately after it is
+						// returned
 
-					if (!responseBody.delete()) {
-						LOGGER.warn("Cannot delete response body");
+						if (!responseBody.delete()) {
+							LOGGER.warn("Cannot delete response body");
+						}
+
+						if (!responseBody.getParentFile().delete()) {
+							LOGGER.warn("Cannot delete response body's parent file");
+						}
 					}
-
-					if (!responseBody.getParentFile().delete()) {
-						LOGGER.warn("Cannot delete response body's parent file");
-					}
+				}) {
+					LOGGER.info("Returning video object: " + fis);
 					return Response.ok().entity(
 							fis).type(
 							"video/webm").build();
@@ -263,6 +301,14 @@ public class Stanag4676ImageryChipService
 					return Response.serverError().entity(
 							"Video generation failed for " + videoNameStr).build();
 				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to write video file",
+							e);
+					return Response.serverError().entity(
+							"Video generation failed for " + videoNameStr).build();
+				}
+
 			}
 			catch (final IOException e) {
 				LOGGER.error(
@@ -303,6 +349,8 @@ public class Stanag4676ImageryChipService
 
 		final double timeNormalizationFactor = 1.0 / timeScaleFactor;
 
+		int i = 0;
+		int y = 0;
 		for (final Entry<Long, BufferedImage> e : data.entrySet()) {
 			if ((e.getValue().getWidth() == width) && (e.getValue().getHeight() == height)) {
 				writer.encodeVideo(
@@ -310,11 +358,156 @@ public class Stanag4676ImageryChipService
 						e.getValue(),
 						(long) ((e.getKey() - startTime) * timeNormalizationFactor),
 						TimeUnit.MILLISECONDS);
+				++y;
 			}
+			++i;
 		}
 		writer.close();
+		LOGGER.error("Found " + y + " of " + i + " old fashioned frames");
+
 		return videoFile;
 	}
+
+	// ------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
+
+	private static final int MAX_FRAMES = 2000;
+
+	private static File buildVideo2(
+			final String mission,
+			final String track,
+			final TreeMap<Long, BufferedImage> data,
+			final int width,
+			final int height,
+			final double timeScaleFactor )
+			throws IOException {
+
+		final File videoFileDir = Files.createTempDir();
+		final File videoFile = new File(
+				videoFileDir,
+				mission + "_" + track + ".webm");
+
+		FileChannelWrapper sink = null;
+
+		try {
+			sink = NIOUtils.writableFileChannel(videoFile.getAbsolutePath());
+
+			/*
+			 * Version 0.1.9
+			 */
+			RateControl rc = new NopRateControl(
+					10);
+			// (int) timeScaleFactor);
+
+			VP8Encoder encoder = new VP8Encoder(
+					rc); // qp
+			RgbToYuv420p transform = new RgbToYuv420p(
+					0,
+					0);
+
+			MKVMuxer muxer = new MKVMuxer();
+			MKVMuxerTrack videoTrack = null;
+
+			int i = 0;
+			int y = 0;
+			for (final Entry<Long, BufferedImage> e : data.entrySet()) {
+				BufferedImage rgb = e.getValue();
+
+				if (videoTrack == null) {
+					videoTrack = muxer.createVideoTrack(
+							new Size(
+									rgb.getWidth(),
+									rgb.getHeight()),
+							"V_VP8");
+				}
+				Picture yuv = Picture.create(
+						rgb.getWidth(),
+						rgb.getHeight(),
+						ColorSpace.YUV420);
+				transform.transform(
+						AWTUtil.fromBufferedImage(rgb),
+						yuv);
+				ByteBuffer buf = ByteBuffer.allocate(rgb.getWidth() * rgb.getHeight() * 3);
+
+				ByteBuffer ff = encoder.encodeFrame(
+						yuv,
+						buf);
+
+				// Frame number must be from 1 to ...
+				videoTrack.addSampleEntry(
+						ff,
+						(int) (i * timeScaleFactor) + 1);
+
+				++y;
+				if ((++i) > MAX_FRAMES) {
+					break;
+				}
+			}
+			if (i == 1) {
+				LOGGER.error("Image sequence not found");
+				return null;
+			}
+			LOGGER.error("Found " + y + " of " + i + " new frames." + "  videoTrack timescale is " + videoTrack.getTimescale());
+			muxer.mux(sink);
+
+			// ------------------------------------------------------------------
+			// Version 0.2.0
+			// ------------------------------------------------------------------
+
+			// VP8Encoder encoder = VP8Encoder.createVP8Encoder((int)
+			// timeScaleFactor); // qp
+			// RgbToYuv420p8Bit transform = new RgbToYuv420p8Bit();
+			// final Long startTime = data.firstKey();
+			// final double timeNormalizationFactor = 1.0 / timeScaleFactor;
+			//
+			// MKVMuxer muxer = new MKVMuxer();
+			// MKVMuxerTrack videoTrack = null;
+			//
+			// /*
+			// * writer.encodeVideo( 0, frame_data, (long) ((e.getKey() -
+			// * startTime) * timeNormalizationFactor), TimeUnit.MILLISECONDS);
+			// */
+			//
+			// int i = 0;
+			// for (final Entry<Long, BufferedImage> e : data.entrySet()) {
+			// BufferedImage rgb = e.getValue();
+			// if (videoTrack == null) {
+			// videoTrack =
+			// muxer.createVideoTrack(
+			// new Size(rgb.getWidth(), rgb.getHeight()), "V_VP8"); }
+			// Picture8Bit yuv =
+			// Picture8Bit.create(rgb.getWidth(), rgb.getHeight(),
+			// ColorSpace.YUV420);
+			//
+			// transform.transform(AWTUtil.fromBufferedImageRGB8Bit(rgb), yuv);
+			// ByteBuffer buf = ByteBuffer.allocate(rgb.getWidth() *
+			// rgb.getHeight() * 3);
+			// ByteBuffer ff = encoder.encodeFrame8Bit(yuv, buf);
+			//
+			// videoTrack.addSampleEntry(ff, i - 1);
+			// if ((++i) > MAX_FRAMES) {
+			// break;
+			// }
+			// }
+			// if (i == 1) {
+			// System.out.println("Image sequence not found"); return null;
+			// }
+			// muxer.mux(sink);
+
+			// ------------------------------------------------------------------
+
+		}
+		finally {
+			if (sink != null) {
+				sink.close();
+				IOUtils.closeQuietly(sink);
+			}
+		}
+		return videoFile;
+	}
+
+	// ------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
 
 	private synchronized DataStore getSingletonInstance() {
 		if (dataStore != null) {

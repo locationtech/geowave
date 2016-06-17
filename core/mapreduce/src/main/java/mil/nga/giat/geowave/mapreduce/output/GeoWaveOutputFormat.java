@@ -1,12 +1,14 @@
 package mil.nga.giat.geowave.mapreduce.output;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.OutputCommitter;
@@ -56,8 +58,32 @@ public class GeoWaveOutputFormat extends
 					persistentAdapterStore.addAdapter(a);
 				}
 			}
+
 			final IndexStore persistentIndexStore = GeoWaveStoreFinder.createIndexStore(configOptions);
 			final Index[] indices = JobContextIndexStore.getIndices(context);
+			StringBuilder sbDebug = new StringBuilder();
+
+			sbDebug.append("Config Options: ");
+			for (Map.Entry<String, String> entry : configOptions.entrySet()) {
+				sbDebug.append(entry.getKey() + "/" + entry.getValue() + ", ");
+			}
+			sbDebug.append("\n\tIndices Size: " + indices.length);
+			sbDebug.append("\n\tpersistentIndexStore: " + persistentIndexStore);
+			final String filename = "/META-INF/services/mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi";
+
+			InputStream is = context.getClass().getResourceAsStream(
+					filename);
+			if (is == null) {
+				sbDebug.append("\n\tStoreFactoryFamilySpi: Unable to open file '" + filename + "'");
+			}
+			else {
+				sbDebug.append("\n\tStoreFactoryFamilySpi: " + IOUtils.toString(
+						is,
+						"UTF-8"));
+			}
+
+			LOGGER.debug(sbDebug.toString());
+
 			for (final Index i : indices) {
 				if (!persistentIndexStore.indexExists(i.getId())) {
 					persistentIndexStore.addIndex(i);
@@ -241,13 +267,11 @@ public class GeoWaveOutputFormat extends
 					indexWriter.write(data);
 				}
 				else {
-					LOGGER.warn("Cannot write to index '"
-							+ StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
+					LOGGER.warn("Cannot write to index '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
 				}
 			}
 			else {
-				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes())
-						+ "' does not exist");
+				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "' does not exist");
 			}
 		}
 
