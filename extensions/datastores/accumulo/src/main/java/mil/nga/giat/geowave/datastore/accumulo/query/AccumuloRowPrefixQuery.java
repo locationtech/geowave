@@ -5,13 +5,13 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * Represents a query operation using an Accumulo row prefix.
- * 
+ *
  */
 public class AccumuloRowPrefixQuery<T> extends
 		AbstractAccumuloRowQuery<T>
@@ -25,11 +25,13 @@ public class AccumuloRowPrefixQuery<T> extends
 			final ByteArrayId rowPrefix,
 			final ScanCallback<T> scanCallback,
 			final Integer limit,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
 				index,
 				authorizations,
-				scanCallback);
+				scanCallback,
+				visibilityCounts);
 		this.limit = limit;
 		this.rowPrefix = rowPrefix;
 	}
@@ -42,10 +44,11 @@ public class AccumuloRowPrefixQuery<T> extends
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
-		ranges.add(new ByteArrayRange(
-				rowPrefix,
-				rowPrefix,
-				false));
+		ranges.add(
+				new ByteArrayRange(
+						rowPrefix,
+						rowPrefix,
+						false));
 		return ranges;
 	}
 
