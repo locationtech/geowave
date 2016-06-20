@@ -28,8 +28,7 @@ public abstract class AccumuloFilteredIndexQuery extends
 		AccumuloQuery
 {
 	protected List<QueryFilter> clientFilters;
-	private final static Logger LOGGER = Logger.getLogger(
-			AccumuloFilteredIndexQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(AccumuloFilteredIndexQuery.class);
 	protected final ScanCallback<?> scanCallback;
 
 	public AccumuloFilteredIndexQuery(
@@ -66,12 +65,8 @@ public abstract class AccumuloFilteredIndexQuery extends
 			final AdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
-		if (!accumuloOperations.tableExists(
-				StringUtils.stringFromBinary(
-						index.getId().getBytes()))) {
-			LOGGER.warn(
-					"Table does not exist " + StringUtils.stringFromBinary(
-							index.getId().getBytes()));
+		if (!accumuloOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()))) {
+			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
 			return new CloseableIterator.Empty();
 		}
 		final ScannerBase scanner = getScanner(
@@ -80,12 +75,10 @@ public abstract class AccumuloFilteredIndexQuery extends
 				limit);
 
 		if (scanner == null) {
-			LOGGER.error(
-					"Could not get scanner instance, getScanner returned null");
+			LOGGER.error("Could not get scanner instance, getScanner returned null");
 			return new CloseableIterator.Empty();
 		}
-		addScanIteratorSettings(
-				scanner);
+		addScanIteratorSettings(scanner);
 		Iterator it = initIterator(
 				adapterStore,
 				scanner);
@@ -99,7 +92,7 @@ public abstract class AccumuloFilteredIndexQuery extends
 						scanner),
 				it);
 	}
-	
+
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final ScannerBase scanner ) {

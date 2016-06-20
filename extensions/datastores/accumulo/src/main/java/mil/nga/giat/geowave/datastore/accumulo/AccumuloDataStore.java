@@ -108,8 +108,7 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 public class AccumuloDataStore implements
 		MapReduceDataStore
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			AccumuloDataStore.class);
+	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
 
 	protected final IndexStore indexStore;
 	protected final AdapterStore adapterStore;
@@ -193,13 +192,11 @@ public class AccumuloDataStore implements
 			final DataAdapter<T> adapter,
 			final PrimaryIndex... indices )
 			throws MismatchedIndexToAdapterMapping {
-		store(
-				adapter);
+		store(adapter);
 
-		indexMappingStore.addAdapterIndexMapping(
-				new AdapterToIndexMapping(
-						adapter.getAdapterId(),
-						indices));
+		indexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(
+				adapter.getAdapterId(),
+				indices));
 
 		final byte[] adapterId = adapter.getAdapterId().getBytes();
 		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
@@ -211,24 +208,21 @@ public class AccumuloDataStore implements
 					secondaryIndexDataStore,
 					i == 0);
 
-			callbackManager.setPersistStats(
-					accumuloOptions.isPersistDataStatistics());
+			callbackManager.setPersistStats(accumuloOptions.isPersistDataStatistics());
 
 			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
 
-			store(
-					index);
+			store(index);
 
 			final String indexName = index.getId().getString();
 
 			if (adapter instanceof WritableDataAdapter) {
 				if (accumuloOptions.isUseAltIndex()) {
 					try {
-						callbacks.add(
-								new AltIndexCallback<T>(
-										indexName,
-										(WritableDataAdapter<T>) adapter,
-										accumuloOptions));
+						callbacks.add(new AltIndexCallback<T>(
+								indexName,
+								(WritableDataAdapter<T>) adapter,
+								accumuloOptions));
 
 					}
 					catch (final TableNotFoundException e) {
@@ -238,17 +232,16 @@ public class AccumuloDataStore implements
 					}
 				}
 			}
-			callbacks.add(
-					callbackManager.getIngestCallback(
-							(WritableDataAdapter<T>) adapter,
-							index));
+			callbacks.add(callbackManager.getIngestCallback(
+					(WritableDataAdapter<T>) adapter,
+					index));
 
 			try {
 				if (adapter instanceof RowMergingDataAdapter) {
 					if (!DataAdapterAndIndexCache.getInstance(
 							RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID).add(
-									adapter.getAdapterId(),
-									indexName)) {
+							adapter.getAdapterId(),
+							indexName)) {
 						AccumuloUtils.attachRowMergingIterators(
 								((RowMergingDataAdapter<?, ?>) adapter),
 								accumuloOperations,
@@ -310,10 +303,8 @@ public class AccumuloDataStore implements
 				throws TableNotFoundException {
 			this.adapter = adapter;
 			altIdxTableName = indexName + AccumuloUtils.ALT_INDEX_TABLE;
-			if (accumuloOperations.tableExists(
-					indexName)) {
-				if (!accumuloOperations.tableExists(
-						altIdxTableName)) {
+			if (accumuloOperations.tableExists(indexName)) {
+				if (!accumuloOperations.tableExists(altIdxTableName)) {
 					throw new TableNotFoundException(
 							altIdxTableName,
 							altIdxTableName,
@@ -322,13 +313,10 @@ public class AccumuloDataStore implements
 			}
 			else {
 				// index table does not exist yet
-				if (accumuloOperations.tableExists(
-						altIdxTableName)) {
-					accumuloOperations.deleteTable(
-							altIdxTableName);
-					LOGGER.warn(
-							"Deleting current alternate index table [" + altIdxTableName
-									+ "] as main table does not yet exist.");
+				if (accumuloOperations.tableExists(altIdxTableName)) {
+					accumuloOperations.deleteTable(altIdxTableName);
+					LOGGER.warn("Deleting current alternate index table [" + altIdxTableName
+							+ "] as main table does not yet exist.");
 				}
 			}
 
@@ -368,28 +356,24 @@ public class AccumuloDataStore implements
 
 	protected synchronized void store(
 			final DataAdapter<?> adapter ) {
-		if (accumuloOptions.isPersistAdapter() && !adapterStore.adapterExists(
-				adapter.getAdapterId())) {
-			adapterStore.addAdapter(
-					adapter);
+		if (accumuloOptions.isPersistAdapter() && !adapterStore.adapterExists(adapter.getAdapterId())) {
+			adapterStore.addAdapter(adapter);
 		}
 	}
 
 	protected synchronized void store(
 			final PrimaryIndex index ) {
-		if (accumuloOptions.isPersistIndex() && !indexStore.indexExists(
-				index.getId())) {
-			indexStore.addIndex(
-					index);
+		if (accumuloOptions.isPersistIndex() && !indexStore.indexExists(index.getId())) {
+			indexStore.addIndex(index);
 		}
 	}
 
 	/*
 	 * Since this general-purpose method crosses multiple adapters, the type of
 	 * result cannot be assumed.
-	 *
+	 * 
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * mil.nga.giat.geowave.core.store.DataStore#query(mil.nga.giat.geowave.
 	 * core.store.query.QueryOptions,
@@ -410,8 +394,7 @@ public class AccumuloDataStore implements
 		MemoryAdapterStore tempAdapterStore;
 		try {
 			tempAdapterStore = new MemoryAdapterStore(
-					sanitizedQueryOptions.getAdaptersArray(
-							adapterStore));
+					sanitizedQueryOptions.getAdaptersArray(adapterStore));
 
 			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions
 					.getAdaptersWithMinimalSetOfIndices(
@@ -429,29 +412,26 @@ public class AccumuloDataStore implements
 								filter,
 								sanitizedQueryOptions.getAuthorizations());
 
-						results.add(
-								q.query(
-										accumuloOperations,
-										tempAdapterStore,
-										sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-										-1));
+						results.add(q.query(
+								accumuloOperations,
+								tempAdapterStore,
+								sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+								-1));
 						continue;
 					}
 					else if (sanitizedQuery instanceof DataIdQuery) {
 						final DataIdQuery idQuery = (DataIdQuery) sanitizedQuery;
 						if (idQuery.getAdapterId().equals(
 								adapter.getAdapterId())) {
-							results.add(
-									getEntries(
-											indexAdapterPair.getLeft(),
-											idQuery.getDataIds(),
-											(DataAdapter<Object>) adapterStore.getAdapter(
-													idQuery.getAdapterId()),
-											filter,
-											(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
-											sanitizedQueryOptions.getAuthorizations(),
-											sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-											true));
+							results.add(getEntries(
+									indexAdapterPair.getLeft(),
+									idQuery.getDataIds(),
+									(DataAdapter<Object>) adapterStore.getAdapter(idQuery.getAdapterId()),
+									filter,
+									(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+									sanitizedQueryOptions.getAuthorizations(),
+									sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+									true));
 						}
 						continue;
 					}
@@ -468,15 +448,13 @@ public class AccumuloDataStore implements
 										statisticsStore,
 										sanitizedQueryOptions.getAuthorizations()),
 								sanitizedQueryOptions.getAuthorizations());
-						results.add(
-								prefixQuery.query(
-										accumuloOperations,
-										sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-										tempAdapterStore));
+						results.add(prefixQuery.query(
+								accumuloOperations,
+								sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+								tempAdapterStore));
 						continue;
 					}
-					adapterIdsToQuery.add(
-							adapter.getAdapterId());
+					adapterIdsToQuery.add(adapter.getAdapterId());
 				}
 				// supports querying multiple adapters in a single index
 				// in one query instance (one scanner) for efficiency
@@ -508,12 +486,11 @@ public class AccumuloDataStore implements
 									sanitizedQueryOptions.getAuthorizations()),
 							sanitizedQueryOptions.getAuthorizations());
 
-					results.add(
-							accumuloQuery.query(
-									accumuloOperations,
-									tempAdapterStore,
-									sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-									sanitizedQueryOptions.getLimit()));
+					results.add(accumuloQuery.query(
+							accumuloOperations,
+							tempAdapterStore,
+							sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+							sanitizedQueryOptions.getLimit()));
 				}
 			}
 
@@ -535,28 +512,20 @@ public class AccumuloDataStore implements
 						}
 					}
 				},
-				Iterators.concat(
-						new CastIterator<T>(
-								results.iterator())));
+				Iterators.concat(new CastIterator<T>(
+						results.iterator())));
 	}
 
 	protected static byte[] getRowIdBytes(
 			final AccumuloRowId rowElements ) {
-		final ByteBuffer buf = ByteBuffer.allocate(
-				12 + rowElements.getDataId().length + rowElements.getAdapterId().length
-						+ rowElements.getInsertionId().length);
-		buf.put(
-				rowElements.getInsertionId());
-		buf.put(
-				rowElements.getAdapterId());
-		buf.put(
-				rowElements.getDataId());
-		buf.putInt(
-				rowElements.getAdapterId().length);
-		buf.putInt(
-				rowElements.getDataId().length);
-		buf.putInt(
-				rowElements.getNumberOfDuplicates());
+		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.getDataId().length
+				+ rowElements.getAdapterId().length + rowElements.getInsertionId().length);
+		buf.put(rowElements.getInsertionId());
+		buf.put(rowElements.getAdapterId());
+		buf.put(rowElements.getDataId());
+		buf.putInt(rowElements.getAdapterId().length);
+		buf.putInt(rowElements.getDataId().length);
+		buf.putInt(rowElements.getNumberOfDuplicates());
 		return buf.array();
 	}
 
@@ -566,8 +535,7 @@ public class AccumuloDataStore implements
 				row,
 				row.length - 12,
 				row.length);
-		final ByteBuffer metadataBuf = ByteBuffer.wrap(
-				metadata);
+		final ByteBuffer metadataBuf = ByteBuffer.wrap(metadata);
 		final int adapterIdLength = metadataBuf.getInt();
 		final int dataIdLength = metadataBuf.getInt();
 		final int numberOfDuplicates = metadataBuf.getInt();
@@ -579,12 +547,9 @@ public class AccumuloDataStore implements
 		final byte[] indexId = new byte[row.length - 12 - adapterIdLength - dataIdLength];
 		final byte[] adapterId = new byte[adapterIdLength];
 		final byte[] dataId = new byte[dataIdLength];
-		buf.get(
-				indexId);
-		buf.get(
-				adapterId);
-		buf.get(
-				dataId);
+		buf.get(indexId);
+		buf.get(adapterId);
+		buf.get(dataId);
 		return new AccumuloRowId(
 				indexId,
 				dataId,
@@ -612,8 +577,7 @@ public class AccumuloDataStore implements
 					adapter
 				});
 
-		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(
-				altIdxTableName)) {
+		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(altIdxTableName)) {
 			final List<ByteArrayId> rowIds = getAltIndexRowIds(
 					altIdxTableName,
 					dataIds,
@@ -669,20 +633,17 @@ public class AccumuloDataStore implements
 			final DifferingFieldVisibilityEntryCount visibilityCount = DifferingFieldVisibilityEntryCount
 					.getVisibilityCounts(
 							index,
-							Collections.singletonList(
-									adapter.getAdapterId()),
+							Collections.singletonList(adapter.getAdapterId()),
 							statisticsStore,
 							authorizations);
-			scanner.fetchColumnFamily(
-					new Text(
-							adapter.getAdapterId().getBytes()));
+			scanner.fetchColumnFamily(new Text(
+					adapter.getAdapterId().getBytes()));
 			if (visibilityCount.isAnyEntryDifferingFieldVisiblity()) {
 				final IteratorSetting rowIteratorSettings = new IteratorSetting(
 						SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
 						SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
 						WholeRowIterator.class);
-				scanner.addScanIterator(
-						rowIteratorSettings);
+				scanner.addScanIterator(rowIteratorSettings);
 
 			}
 			final IteratorSetting filterIteratorSettings = new IteratorSetting(
@@ -692,23 +653,18 @@ public class AccumuloDataStore implements
 
 			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.ADAPTER_ID,
-					ByteArrayUtils.byteArrayToString(
-							adapter.getAdapterId().getBytes()));
+					ByteArrayUtils.byteArrayToString(adapter.getAdapterId().getBytes()));
 
 			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.WHOLE_ROW_ENCODED_KEY,
-					Boolean.toString(
-							visibilityCount.isAnyEntryDifferingFieldVisiblity()));
+					Boolean.toString(visibilityCount.isAnyEntryDifferingFieldVisiblity()));
 			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.DATA_IDS,
-					SingleEntryFilterIterator.encodeIDs(
-							dataIds));
-			scanner.addScanIterator(
-					filterIteratorSettings);
+					SingleEntryFilterIterator.encodeIDs(dataIds));
+			scanner.addScanIterator(filterIteratorSettings);
 
 			if (limit > 0) {
-				((Scanner) scanner).setBatchSize(
-						limit);
+				((Scanner) scanner).setBatchSize(limit);
 			}
 
 			return new CloseableIteratorWrapper<Object>(
@@ -739,29 +695,23 @@ public class AccumuloDataStore implements
 			final int limit ) {
 
 		final List<ByteArrayId> result = new ArrayList<ByteArrayId>();
-		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(
-				tableName)) {
+		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(tableName)) {
 			ScannerBase scanner = null;
 			for (final ByteArrayId dataId : dataIds) {
 				try {
-					scanner = accumuloOperations.createScanner(
-							tableName);
+					scanner = accumuloOperations.createScanner(tableName);
 
-					((Scanner) scanner).setRange(
-							Range.exact(
-									new Text(
-											dataId.getBytes())));
+					((Scanner) scanner).setRange(Range.exact(new Text(
+							dataId.getBytes())));
 
-					scanner.fetchColumnFamily(
-							new Text(
-									adapterId.getBytes()));
+					scanner.fetchColumnFamily(new Text(
+							adapterId.getBytes()));
 
 					final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
 					int i = 0;
 					while (iterator.hasNext() && ((limit < 0) || (i < limit))) {
-						result.add(
-								new ByteArrayId(
-										iterator.next().getKey().getColumnQualifierData().getBackingArray()));
+						result.add(new ByteArrayId(
+								iterator.next().getKey().getColumnQualifierData().getBackingArray()));
 						i++;
 					}
 				}
@@ -834,23 +784,19 @@ public class AccumuloDataStore implements
 						indexTableName,
 						queryOptions.getAuthorizations());
 
-				final BatchDeleter altIdxDelete = accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(
-						altIdxTableName)
-								? accumuloOperations.createBatchDeleter(
-										altIdxTableName,
-										queryOptions.getAuthorizations())
-								: null;
+				final BatchDeleter altIdxDelete = accumuloOptions.isUseAltIndex()
+						&& accumuloOperations.tableExists(altIdxTableName) ? accumuloOperations.createBatchDeleter(
+						altIdxTableName,
+						queryOptions.getAuthorizations()) : null;
 
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 
 					final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
 							statisticsStore,
 							secondaryIndexDataStore,
-							queriedAdapters.add(
-									adapter.getAdapterId()));
+							queriedAdapters.add(adapter.getAdapterId()));
 
-					callbackCache.setPersistStats(
-							accumuloOptions.isPersistDataStatistics());
+					callbackCache.setPersistStats(accumuloOptions.isPersistDataStatistics());
 
 					if (query instanceof EverythingQuery) {
 						deleteEntries(
@@ -868,8 +814,8 @@ public class AccumuloDataStore implements
 							callbackCache.getDeleteCallback(
 									(WritableDataAdapter<Object>) adapter,
 									index).entryDeleted(
-											entryInfo,
-											entry);
+									entryInfo,
+									entry);
 							try {
 								addToBatch(
 										idxDeleter,
@@ -877,24 +823,20 @@ public class AccumuloDataStore implements
 								if (altIdxDelete != null) {
 									addToBatch(
 											altIdxDelete,
-											Collections.singletonList(
-													adapter.getDataId(
-															entry)));
+											Collections.singletonList(adapter.getDataId(entry)));
 								}
 							}
 							catch (final MutationsRejectedException e) {
 								LOGGER.error(
 										"Failed deletion",
 										e);
-								aOk.set(
-										false);
+								aOk.set(false);
 							}
 							catch (final TableNotFoundException e) {
 								LOGGER.error(
 										"Failed deletion",
 										e);
-								aOk.set(
-										false);
+								aOk.set(false);
 							}
 
 						}
@@ -936,19 +878,17 @@ public class AccumuloDataStore implements
 								null,
 								DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 										indexAdapterPair.getLeft(),
-										Collections.singletonList(
-												adapter.getAdapterId()),
+										Collections.singletonList(adapter.getAdapterId()),
 										statisticsStore,
 										queryOptions.getAuthorizations()),
 								queryOptions.getAuthorizations()).query(
-										accumuloOperations,
-										null,
-										adapterStore);
+								accumuloOperations,
+								null,
+								adapterStore);
 
 					}
 					else {
-						final List<ByteArrayId> adapterIds = Collections.singletonList(
-								adapter.getAdapterId());
+						final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
 						dataIt = new AccumuloConstraintsQuery(
 								adapterIds,
 								index,
@@ -973,10 +913,10 @@ public class AccumuloDataStore implements
 										statisticsStore,
 										queryOptions.getAuthorizations()),
 								queryOptions.getAuthorizations()).query(
-										accumuloOperations,
-										adapterStore,
-										null,
-										null);
+								accumuloOperations,
+								adapterStore,
+								null,
+								null);
 					}
 
 					while (dataIt.hasNext()) {
@@ -1022,11 +962,9 @@ public class AccumuloDataStore implements
 			throws IOException {
 		final String tableName = index.getId().getString();
 		final String altIdxTableName = tableName + AccumuloUtils.ALT_INDEX_TABLE;
-		final String adapterId = StringUtils.stringFromBinary(
-				adapter.getAdapterId().getBytes());
+		final String adapterId = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
 
-		try (final CloseableIterator<DataStatistics<?>> it = statisticsStore.getDataStatistics(
-				adapter.getAdapterId())) {
+		try (final CloseableIterator<DataStatistics<?>> it = statisticsStore.getDataStatistics(adapter.getAdapterId())) {
 
 			while (it.hasNext()) {
 				final DataStatistics stats = it.next();
@@ -1044,8 +982,7 @@ public class AccumuloDataStore implements
 				tableName,
 				adapterId,
 				additionalAuthorizations);
-		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(
-				altIdxTableName)) {
+		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(altIdxTableName)) {
 			deleteAll(
 					altIdxTableName,
 					adapterId,
@@ -1063,12 +1000,9 @@ public class AccumuloDataStore implements
 					tableName,
 					additionalAuthorizations);
 
-			deleter.setRanges(
-					Arrays.asList(
-							new Range()));
-			deleter.fetchColumnFamily(
-					new Text(
-							columnFamily));
+			deleter.setRanges(Arrays.asList(new Range()));
+			deleter.fetchColumnFamily(new Text(
+					columnFamily));
 			deleter.delete();
 			return true;
 		}
@@ -1093,13 +1027,10 @@ public class AccumuloDataStore implements
 			TableNotFoundException {
 		final List<Range> rowRanges = new ArrayList<Range>();
 		for (final ByteArrayId id : ids) {
-			rowRanges.add(
-					Range.exact(
-							new Text(
-									id.getBytes())));
+			rowRanges.add(Range.exact(new Text(
+					id.getBytes())));
 		}
-		deleter.setRanges(
-				rowRanges);
+		deleter.setRanges(rowRanges);
 		deleter.delete();
 	}
 

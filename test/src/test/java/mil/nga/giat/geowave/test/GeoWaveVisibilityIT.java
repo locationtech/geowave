@@ -1,4 +1,3 @@
-
 //                            BasicAccumuloOperations ops = new BasicAccumuloOperations(zookeeper, accumuloInstance, accumuloUser, accumuloPassword, "");
 //                            ops.insureAuthorization(accumuloUser, "a","b","c");
 
@@ -63,26 +62,20 @@ public class GeoWaveVisibilityIT
 			for (int i = 0; i < TOTAL_FEATURES; i++) {
 				bldr.set(
 						"a",
-						Integer.toString(
-								i));
+						Integer.toString(i));
 				bldr.set(
 						"b",
-						Integer.toString(
-								i));
+						Integer.toString(i));
 				bldr.set(
 						"c",
-						Integer.toString(
-								i));
+						Integer.toString(i));
 				bldr.set(
 						"geometry",
-						new GeometryFactory().createPoint(
-								new Coordinate(
-										0,
-										0)));
+						new GeometryFactory().createPoint(new Coordinate(
+								0,
+								0)));
 				writer.write(
-						bldr.buildFeature(
-								Integer.toString(
-										i)),
+						bldr.buildFeature(Integer.toString(i)),
 						new VisibilityWriter<SimpleFeature>() {
 
 							@Override
@@ -96,16 +89,14 @@ public class GeoWaveVisibilityIT
 											final ByteArrayId fieldId,
 											final Object fieldValue ) {
 
-										final boolean isGeom = fieldId.equals(
-												GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID);
+										final boolean isGeom = fieldId
+												.equals(GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID);
 										final int fieldValueInt;
 										if (isGeom) {
-											fieldValueInt = Integer.parseInt(
-													rowValue.getID());
+											fieldValueInt = Integer.parseInt(rowValue.getID());
 										}
 										else {
-											fieldValueInt = Integer.parseInt(
-													fieldValue.toString());
+											fieldValueInt = Integer.parseInt(fieldValue.toString());
 										}
 										// just make half of them varied and
 										// half of them the same
@@ -149,8 +140,7 @@ public class GeoWaveVisibilityIT
 				.createDataStatisticsStore()
 				.getDataStatistics(
 						adapter.getAdapterId(),
-						DifferingFieldVisibilityEntryCount.composeId(
-								TestUtils.DEFAULT_SPATIAL_INDEX.getId()));
+						DifferingFieldVisibilityEntryCount.composeId(TestUtils.DEFAULT_SPATIAL_INDEX.getId()));
 		Assert.assertEquals(
 				"Exactly half the entries should have differing visibility",
 				TOTAL_FEATURES / 2,
@@ -189,7 +179,7 @@ public class GeoWaveVisibilityIT
 					},
 					spatial,
 					(6 * TOTAL_FEATURES) / 8,
-					((2 * TOTAL_FEATURES / 8) * 4) + (2*TOTAL_FEATURES / 2));
+					((2 * TOTAL_FEATURES / 8) * 4) + (2 * TOTAL_FEATURES / 2));
 		}
 		// order shouldn't matter, but let's make sure here
 		for (String[] auths : new String[][] {
@@ -223,7 +213,7 @@ public class GeoWaveVisibilityIT
 					auths,
 					spatial,
 					(7 * TOTAL_FEATURES) / 8,
-					((3 * TOTAL_FEATURES / 8) * 4) + (3*TOTAL_FEATURES / 2));
+					((3 * TOTAL_FEATURES / 8) * 4) + (3 * TOTAL_FEATURES / 2));
 		}
 
 		testQuery(
@@ -246,25 +236,21 @@ public class GeoWaveVisibilityIT
 			final int expectedNonNullFieldCount )
 			throws IOException {
 		final QueryOptions queryOpts = new QueryOptions();
-		queryOpts.setAuthorizations(
-				auths);
+		queryOpts.setAuthorizations(auths);
 		try (CloseableIterator<SimpleFeature> it = (CloseableIterator) store.query(
 				queryOpts,
 				spatial ? new SpatialQuery(
-						new GeometryFactory().toGeometry(
-								new Envelope(
-										-1,
-										1,
-										-1,
-										1)))
-						: null)) {
+						new GeometryFactory().toGeometry(new Envelope(
+								-1,
+								1,
+								-1,
+								1))) : null)) {
 			int resultCount = 0;
 			int nonNullFieldsCount = 0;
 			while (it.hasNext()) {
 				final SimpleFeature feature = it.next();
 				for (int a = 0; a < feature.getAttributeCount(); a++) {
-					if (feature.getAttribute(
-							a) != null) {
+					if (feature.getAttribute(a) != null) {
 						nonNullFieldsCount++;
 					}
 				}
@@ -272,15 +258,13 @@ public class GeoWaveVisibilityIT
 			}
 			Assert.assertEquals(
 					"Unexpected result count for " + (spatial ? "spatial query" : "full table scan") + " with auths "
-							+ Arrays.toString(
-									auths),
+							+ Arrays.toString(auths),
 					expectedResultCount,
 					resultCount);
 
 			Assert.assertEquals(
 					"Unexpected non-null field count for " + (spatial ? "spatial query" : "full table scan")
-							+ " with auths " + Arrays.toString(
-									auths),
+							+ " with auths " + Arrays.toString(auths),
 					expectedNonNullFieldCount,
 					nonNullFieldsCount);
 		}
@@ -288,29 +272,21 @@ public class GeoWaveVisibilityIT
 
 	private static SimpleFeatureType getType() {
 		final SimpleFeatureTypeBuilder bldr = new SimpleFeatureTypeBuilder();
-		bldr.setName(
-				"testvis");
+		bldr.setName("testvis");
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
-		bldr.add(
-				attributeTypeBuilder.binding(
-						String.class).buildDescriptor(
-								"a"));
-		bldr.add(
-				attributeTypeBuilder.binding(
-						String.class).buildDescriptor(
-								"b"));
-		bldr.add(
-				attributeTypeBuilder.binding(
-						String.class).buildDescriptor(
-								"c"));
-		bldr.add(
-				attributeTypeBuilder
-						.binding(
-								Point.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								"geometry"));
+		bldr.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"a"));
+		bldr.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"b"));
+		bldr.add(attributeTypeBuilder.binding(
+				String.class).buildDescriptor(
+				"c"));
+		bldr.add(attributeTypeBuilder.binding(
+				Point.class).nillable(
+				false).buildDescriptor(
+				"geometry"));
 		return bldr.buildFeatureType();
 	}
 }

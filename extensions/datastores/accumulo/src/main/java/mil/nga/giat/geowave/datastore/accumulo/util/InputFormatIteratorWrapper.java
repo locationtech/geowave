@@ -93,8 +93,7 @@ public class InputFormatIteratorWrapper<T> implements
 				rowId.getAdapterId());
 		final T result = (T) (isOutputWritable ? serializationTool.getHadoopWritableSerializerForAdapter(
 				adapterId).toWritable(
-						value)
-				: value);
+				value) : value);
 		final GeoWaveInputKey key = new GeoWaveInputKey(
 				adapterId,
 				new ByteArrayId(
@@ -107,9 +106,8 @@ public class InputFormatIteratorWrapper<T> implements
 										index.getId().getBytes(),
 										rowId.getInsertionId()),
 								rowId.getDataId())));
-		key.setInsertionId(
-				new ByteArrayId(
-						rowId.getInsertionId()));
+		key.setInsertionId(new ByteArrayId(
+				rowId.getInsertionId()));
 		return new GeoWaveInputFormatEntry(
 				key,
 				result);

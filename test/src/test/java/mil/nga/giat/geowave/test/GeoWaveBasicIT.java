@@ -350,7 +350,9 @@ public class GeoWaveBasicIT
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
 						final DataStatistics<?> nextStats = statsIterator.next();
-						if (nextStats instanceof RowRangeHistogramStatistics || nextStats instanceof IndexMetaDataSet || nextStats instanceof DifferingFieldVisibilityEntryCount || nextStats instanceof DuplicateEntryCount) {
+						if (nextStats instanceof RowRangeHistogramStatistics || nextStats instanceof IndexMetaDataSet
+								|| nextStats instanceof DifferingFieldVisibilityEntryCount
+								|| nextStats instanceof DuplicateEntryCount) {
 							continue;
 						}
 						statsCount++;

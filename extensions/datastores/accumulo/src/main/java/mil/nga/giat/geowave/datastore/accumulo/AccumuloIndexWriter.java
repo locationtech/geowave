@@ -41,7 +41,6 @@ public class AccumuloIndexWriter<T> implements
 	protected final DataAdapter<T> adapter;
 	protected final byte[] adapterId;
 	final Closeable closable;
-	
 
 	public AccumuloIndexWriter(
 			final DataAdapter<T> adapter,
@@ -126,7 +125,7 @@ public class AccumuloIndexWriter<T> implements
 					writer,
 					accumuloOperations,
 					visibilityWriter);
-			if (entryInfo == null){
+			if (entryInfo == null) {
 				return Collections.EMPTY_LIST;
 			}
 			callback.entryIngested(

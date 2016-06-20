@@ -23,8 +23,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
 {
-	private static final Logger LOGGER = Logger.getLogger(
-			AbstractAccumuloRowQuery.class);
+	private static final Logger LOGGER = Logger.getLogger(AbstractAccumuloRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractAccumuloRowQuery(
@@ -48,12 +47,10 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 				maxResolutionSubsamplingPerDimension,
 				getScannerLimit());
 		if (scanner == null) {
-			LOGGER.error(
-					"Unable to get a new scanner instance, getScanner returned null");
+			LOGGER.error("Unable to get a new scanner instance, getScanner returned null");
 			return null;
 		}
-		addScanIteratorSettings(
-				scanner);
+		addScanIteratorSettings(scanner);
 		return new CloseableIteratorWrapper<T>(
 				new ScannerClosableWrapper(
 						scanner),
@@ -68,16 +65,14 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
-		addFieldSubsettingToIterator(
-				scanner);
+		addFieldSubsettingToIterator(scanner);
 		if (useWholeRowIterator()) {
 			// we have to at least use a whole row iterator
 			final IteratorSetting iteratorSettings = new IteratorSetting(
 					QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
 					QueryFilterIterator.QUERY_ITERATOR_NAME,
 					WholeRowIterator.class);
-			scanner.addScanIterator(
-					iteratorSettings);
+			scanner.addScanIterator(iteratorSettings);
 		}
 	}
 

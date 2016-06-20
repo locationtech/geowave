@@ -34,8 +34,7 @@ import org.apache.log4j.Logger;
 public class InputFormatAccumuloRangeQuery extends
 		AccumuloConstraintsQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			InputFormatAccumuloRangeQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(InputFormatAccumuloRangeQuery.class);
 	private final Range accumuloRange;
 	private final boolean isOutputWritable;
 
@@ -44,8 +43,7 @@ public class InputFormatAccumuloRangeQuery extends
 			final AdapterStore adapterStore,
 			final QueryOptions queryOptions ) {
 		try {
-			return queryOptions.getAdapterIds(
-					adapterStore);
+			return queryOptions.getAdapterIds(adapterStore);
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -94,13 +92,11 @@ public class InputFormatAccumuloRangeQuery extends
 			scanner = accumuloOperations.createScanner(
 					tableName,
 					getAdditionalAuthorizations());
-			scanner.setRange(
-					accumuloRange);
+			scanner.setRange(accumuloRange);
 			if ((adapterIds != null) && !adapterIds.isEmpty()) {
 				for (final ByteArrayId adapterId : adapterIds) {
-					scanner.fetchColumnFamily(
-							new Text(
-									adapterId.getBytes()));
+					scanner.fetchColumnFamily(new Text(
+							adapterId.getBytes()));
 				}
 			}
 			return scanner;

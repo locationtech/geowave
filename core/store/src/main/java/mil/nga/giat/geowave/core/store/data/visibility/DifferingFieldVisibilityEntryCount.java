@@ -56,8 +56,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 			final ByteArrayId indexId ) {
 		super(
 				dataAdapterId,
-				composeId(
-						indexId));
+				composeId(indexId));
 	}
 
 	public static ByteArrayId composeId(
@@ -78,18 +77,15 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = super.binaryBuffer(
-				8);
-		buf.putLong(
-				entriesWithDifferingFieldVisibilities);
+		final ByteBuffer buf = super.binaryBuffer(8);
+		buf.putLong(entriesWithDifferingFieldVisibilities);
 		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = super.binaryBuffer(
-				bytes);
+		final ByteBuffer buf = super.binaryBuffer(bytes);
 		entriesWithDifferingFieldVisibilities = buf.getLong();
 	}
 
@@ -97,8 +93,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	public void entryIngested(
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
-		if (entryHasDifferentVisibilities(
-				entryInfo)) {
+		if (entryHasDifferentVisibilities(entryInfo)) {
 			entriesWithDifferingFieldVisibilities++;
 		}
 	}
@@ -107,8 +102,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	public void entryDeleted(
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
-		if (entryHasDifferentVisibilities(
-				entryInfo)) {
+		if (entryHasDifferentVisibilities(entryInfo)) {
 			entriesWithDifferingFieldVisibilities--;
 		}
 	}
@@ -152,15 +146,13 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 			final DifferingFieldVisibilityEntryCount adapterVisibilityCount = (DifferingFieldVisibilityEntryCount) statisticsStore
 					.getDataStatistics(
 							adapterId,
-							DifferingFieldVisibilityEntryCount.composeId(
-									index.getId()),
+							DifferingFieldVisibilityEntryCount.composeId(index.getId()),
 							authorizations);
 			if (combinedVisibilityCount == null) {
 				combinedVisibilityCount = adapterVisibilityCount;
 			}
 			else {
-				combinedVisibilityCount.merge(
-						adapterVisibilityCount);
+				combinedVisibilityCount.merge(adapterVisibilityCount);
 			}
 		}
 		return combinedVisibilityCount;

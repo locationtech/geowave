@@ -81,44 +81,40 @@ public class AttributeSubsettingIterator extends
 				final byte[] newBitmask = BitmaskUtils.generateANDBitmask(
 						originalBitmask,
 						fieldSubsetBitmask);
-				if (BitmaskUtils.isAnyBitSet(
-						newBitmask)) {
+				if (BitmaskUtils.isAnyBitSet(newBitmask)) {
 					if (!Arrays.equals(
 							newBitmask,
 							originalBitmask)) {
-						keyList.add(
-								replaceColumnQualifier(
-										currKey,
-										new Text(
-												newBitmask)));
-						valList.add(
-								constructNewValue(
-										currVal,
-										originalBitmask,
-										newBitmask));
+						keyList.add(replaceColumnQualifier(
+								currKey,
+								new Text(
+										newBitmask)));
+						valList.add(constructNewValue(
+								currVal,
+								originalBitmask,
+								newBitmask));
 					}
 					else {
 						// pass along unmodified
-						keyList.add(
-								currKey);
-						valList.add(
-								currVal);
+						keyList.add(currKey);
+						valList.add(currVal);
 					}
 				}
 			}
 			if (!keyList.isEmpty() && !valList.isEmpty()) {
-				final Key outputKey = new Key(
-						wholeRowKey.getRow(),
-						adapterId);
 				final Value outputVal;
+				final Key outputKey;
 				if (wholeRowEncoded) {
+					outputKey = new Key(
+							wholeRowKey.getRow(),
+							adapterId);
 					outputVal = WholeRowIterator.encodeRow(
 							keyList,
 							valList);
 				}
 				else {
-					outputVal = valList.get(
-							0);
+					outputKey = keyList.get(0);
+					outputVal = valList.get(0);
 				}
 				output.append(
 						outputKey,
@@ -132,26 +128,20 @@ public class AttributeSubsettingIterator extends
 			final Value original,
 			final byte[] originalBitmask,
 			final byte[] newBitmask ) {
-		final ByteBuffer originalBytes = ByteBuffer.wrap(
-				original.get());
+		final ByteBuffer originalBytes = ByteBuffer.wrap(original.get());
 		final List<byte[]> valsToKeep = new ArrayList<>();
 		int totalSize = 0;
-		final List<Integer> originalPositions = BitmaskUtils.getFieldPositions(
-				originalBitmask);
+		final List<Integer> originalPositions = BitmaskUtils.getFieldPositions(originalBitmask);
 		// convert list to set for quick contains()
 		final Set<Integer> newPositions = new HashSet<Integer>(
-				BitmaskUtils.getFieldPositions(
-						newBitmask));
+				BitmaskUtils.getFieldPositions(newBitmask));
 		if (originalPositions.size() > 1) {
 			for (final Integer originalPosition : originalPositions) {
 				final int len = originalBytes.getInt();
 				final byte[] val = new byte[len];
-				originalBytes.get(
-						val);
-				if (newPositions.contains(
-						originalPosition)) {
-					valsToKeep.add(
-							val);
+				originalBytes.get(val);
+				if (newPositions.contains(originalPosition)) {
+					valsToKeep.add(val);
 					totalSize += len;
 				}
 			}
@@ -167,21 +157,15 @@ public class AttributeSubsettingIterator extends
 			return null;
 		}
 		if (valsToKeep.size() == 1) {
-			final ByteBuffer retVal = ByteBuffer.allocate(
-					totalSize);
-			retVal.put(
-					valsToKeep.get(
-							0));
+			final ByteBuffer retVal = ByteBuffer.allocate(totalSize);
+			retVal.put(valsToKeep.get(0));
 			return new Value(
 					retVal.array());
 		}
-		final ByteBuffer retVal = ByteBuffer.allocate(
-				(valsToKeep.size() * 4) + totalSize);
+		final ByteBuffer retVal = ByteBuffer.allocate((valsToKeep.size() * 4) + totalSize);
 		for (final byte[] val : valsToKeep) {
-			retVal.putInt(
-					val.length);
-			retVal.put(
-					val);
+			retVal.putInt(val.length);
+			retVal.put(val);
 		}
 		return new Value(
 				retVal.array());
@@ -198,26 +182,20 @@ public class AttributeSubsettingIterator extends
 				options,
 				env);
 		// get fieldIds and associated adapter
-		final String bitmaskStr = options.get(
-				FIELD_SUBSET_BITMASK);
-		fieldSubsetBitmask = ByteArrayUtils.byteArrayFromString(
-				bitmaskStr);
-		final String wholeRowEncodedStr = options.get(
-				WHOLE_ROW_ENCODED_KEY);
-		//default to whole row encoded if not specified
-		wholeRowEncoded = (wholeRowEncodedStr == null || !wholeRowEncodedStr.equals(
-				Boolean.toString(false)));
+		final String bitmaskStr = options.get(FIELD_SUBSET_BITMASK);
+		fieldSubsetBitmask = ByteArrayUtils.byteArrayFromString(bitmaskStr);
+		final String wholeRowEncodedStr = options.get(WHOLE_ROW_ENCODED_KEY);
+		// default to whole row encoded if not specified
+		wholeRowEncoded = (wholeRowEncodedStr == null || !wholeRowEncodedStr.equals(Boolean.toString(false)));
 	}
 
 	@Override
 	public boolean validateOptions(
 			final Map<String, String> options ) {
-		if ((!super.validateOptions(
-				options)) || (options == null)) {
+		if ((!super.validateOptions(options)) || (options == null)) {
 			return false;
 		}
-		final boolean hasFieldsBitmask = options.containsKey(
-				FIELD_SUBSET_BITMASK);
+		final boolean hasFieldsBitmask = options.containsKey(FIELD_SUBSET_BITMASK);
 		if (!hasFieldsBitmask) {
 			// all are required
 			return false;
@@ -257,25 +235,21 @@ public class AttributeSubsettingIterator extends
 
 		// dimension fields must also be included
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
-			fieldPositions.add(
-					adapterAssociatedWithFieldIds.getPositionOfOrderedField(
-							indexModel,
-							dimension.getFieldId()));
+			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
+					indexModel,
+					dimension.getFieldId()));
 		}
 
 		for (final String fieldId : fieldIds) {
-			fieldPositions.add(
-					adapterAssociatedWithFieldIds.getPositionOfOrderedField(
-							indexModel,
-							new ByteArrayId(
-									fieldId)));
+			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
+					indexModel,
+					new ByteArrayId(
+							fieldId)));
 		}
-		final byte[] fieldSubsetBitmask = BitmaskUtils.generateCompositeBitmask(
-				fieldPositions);
+		final byte[] fieldSubsetBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
 
 		setting.addOption(
 				FIELD_SUBSET_BITMASK,
-				ByteArrayUtils.byteArrayToString(
-						fieldSubsetBitmask));
+				ByteArrayUtils.byteArrayToString(fieldSubsetBitmask));
 	}
 }

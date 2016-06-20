@@ -43,8 +43,7 @@ public class MaxDuplicatesStatistics<T> extends
 			final ByteArrayId indexId ) {
 		super(
 				dataAdapterId,
-				composeId(
-						indexId));
+				composeId(indexId));
 	}
 
 	public static ByteArrayId composeId(
@@ -65,18 +64,15 @@ public class MaxDuplicatesStatistics<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = super.binaryBuffer(
-				8);
-		buf.putInt(
-				maxDuplicates);
+		final ByteBuffer buf = super.binaryBuffer(8);
+		buf.putInt(maxDuplicates);
 		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = super.binaryBuffer(
-				bytes);
+		final ByteBuffer buf = super.binaryBuffer(bytes);
 		maxDuplicates = buf.getInt();
 	}
 

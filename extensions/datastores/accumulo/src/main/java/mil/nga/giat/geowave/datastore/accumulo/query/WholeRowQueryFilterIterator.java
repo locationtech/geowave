@@ -26,21 +26,33 @@ import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
  * "model". If either one of these serialized options are not successfully
  * found, this iterator will accept everything.
  */
-public class WholeRowQueryFilterIterator extends WholeRowIterator {
+public class WholeRowQueryFilterIterator extends
+		WholeRowIterator
+{
 	private final static Logger LOGGER = Logger.getLogger(WholeRowQueryFilterIterator.class);
 	protected QueryFilterIterator queryFilterIterator;
 
 	@Override
-	protected boolean filter(final Text currentRow, final List<Key> keys, final List<Value> values) {
+	protected boolean filter(
+			final Text currentRow,
+			final List<Key> keys,
+			final List<Value> values ) {
 		if ((queryFilterIterator != null) && queryFilterIterator.isSet()) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 			final List<AccumuloFieldInfo> unknownData = new ArrayList<AccumuloFieldInfo>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
 				final Value value = values.get(i);
-				queryFilterIterator.aggregateFieldData(key, value, commonData, unknownData);
+				queryFilterIterator.aggregateFieldData(
+						key,
+						value,
+						commonData,
+						unknownData);
 			}
-			return queryFilterIterator.applyRowFilter(currentRow, commonData, unknownData);
+			return queryFilterIterator.applyRowFilter(
+					currentRow,
+					commonData,
+					unknownData);
 		}
 		// if the query filter or index model did not get sent to this iterator,
 		// it'll just have to accept everything
@@ -48,11 +60,17 @@ public class WholeRowQueryFilterIterator extends WholeRowIterator {
 	}
 
 	@Override
-	public void init(final SortedKeyValueIterator<Key, Value> source, final Map<String, String> options,
-			final IteratorEnvironment env) throws IOException {
+	public void init(
+			final SortedKeyValueIterator<Key, Value> source,
+			final Map<String, String> options,
+			final IteratorEnvironment env )
+			throws IOException {
 		queryFilterIterator = new QueryFilterIterator();
 		queryFilterIterator.setOptions(options);
-		super.init(source, options, env);
+		super.init(
+				source,
+				options,
+				env);
 	}
 
 }

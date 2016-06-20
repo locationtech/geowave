@@ -17,10 +17,17 @@ import mil.nga.giat.geowave.core.store.DeleteCallback;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
-public class FieldVisibilityCount<T> extends AbstractDataStatistics<T> implements DeleteCallback<T> {
-	public static final ByteArrayId STATS_ID = new ByteArrayId("FIELD_VISIBILITY_COUNT");
-	private static final ByteArrayId SEPARATOR = new ByteArrayId("_");
-	private static final byte[] STATS_ID_AND_SEPARATOR = ArrayUtils.addAll(STATS_ID.getBytes(), SEPARATOR.getBytes());
+public class FieldVisibilityCount<T> extends
+		AbstractDataStatistics<T> implements
+		DeleteCallback<T>
+{
+	public static final ByteArrayId STATS_ID = new ByteArrayId(
+			"FIELD_VISIBILITY_COUNT");
+	private static final ByteArrayId SEPARATOR = new ByteArrayId(
+			"_");
+	private static final byte[] STATS_ID_AND_SEPARATOR = ArrayUtils.addAll(
+			STATS_ID.getBytes(),
+			SEPARATOR.getBytes());
 	private final Map<ByteArrayId, Long> countsPerVisibility;
 
 	protected FieldVisibilityCount() {
@@ -28,24 +35,36 @@ public class FieldVisibilityCount<T> extends AbstractDataStatistics<T> implement
 		countsPerVisibility = new HashMap<ByteArrayId, Long>();
 	}
 
-	private FieldVisibilityCount(final ByteArrayId dataAdapterId, final ByteArrayId statsId,
-			final Map<ByteArrayId, Long> countsPerVisibility) {
-		super(dataAdapterId, statsId);
+	private FieldVisibilityCount(
+			final ByteArrayId dataAdapterId,
+			final ByteArrayId statsId,
+			final Map<ByteArrayId, Long> countsPerVisibility ) {
+		super(
+				dataAdapterId,
+				statsId);
 		this.countsPerVisibility = countsPerVisibility;
 	}
 
-	public FieldVisibilityCount(final ByteArrayId dataAdapterId, final ByteArrayId indexId) {
-		super(dataAdapterId, composeId(indexId));
+	public FieldVisibilityCount(
+			final ByteArrayId dataAdapterId,
+			final ByteArrayId indexId ) {
+		super(
+				dataAdapterId,
+				composeId(indexId));
 		countsPerVisibility = new HashMap<ByteArrayId, Long>();
 	}
 
-	public static ByteArrayId composeId(final ByteArrayId indexId) {
-		return new ByteArrayId(ArrayUtils.addAll(STATS_ID_AND_SEPARATOR, indexId.getBytes()));
+	public static ByteArrayId composeId(
+			final ByteArrayId indexId ) {
+		return new ByteArrayId(
+				ArrayUtils.addAll(
+						STATS_ID_AND_SEPARATOR,
+						indexId.getBytes()));
 	}
 
 	@Override
 	public byte[] toBinary() {
-		 int bufferSize = 4;
+		int bufferSize = 4;
 		final List<byte[]> serializedCounts = new ArrayList<byte[]>();
 		for (final Entry<ByteArrayId, Long> entry : countsPerVisibility.entrySet()) {
 			final byte[] key = entry.getKey().getBytes();
@@ -59,7 +78,7 @@ public class FieldVisibilityCount<T> extends AbstractDataStatistics<T> implement
 		}
 		ByteBuffer buf = super.binaryBuffer(bufferSize);
 		buf.putInt(serializedCounts.size());
-		for (byte[] count : serializedCounts){
+		for (byte[] count : serializedCounts) {
 			buf.put(count);
 		}
 		return buf.array();
@@ -67,11 +86,15 @@ public class FieldVisibilityCount<T> extends AbstractDataStatistics<T> implement
 
 	@Override
 	public DataStatistics<T> duplicate() {
-		return new FieldVisibilityCount<T>(dataAdapterId, statisticsId, this.countsPerVisibility);
+		return new FieldVisibilityCount<T>(
+				dataAdapterId,
+				statisticsId,
+				this.countsPerVisibility);
 	}
 
 	@Override
-	public void fromBinary(final byte[] bytes) {
+	public void fromBinary(
+			final byte[] bytes ) {
 		final ByteBuffer buf = super.binaryBuffer(bytes);
 		final int size = buf.getInt();
 		countsPerVisibility.clear();
@@ -80,39 +103,57 @@ public class FieldVisibilityCount<T> extends AbstractDataStatistics<T> implement
 			final byte[] id = new byte[idCount];
 			buf.get(id);
 			final long count = buf.getLong();
-			countsPerVisibility.put(new ByteArrayId(id), count);
+			countsPerVisibility.put(
+					new ByteArrayId(
+							id),
+					count);
 		}
 	}
 
 	@Override
-	public void entryIngested(final DataStoreEntryInfo entryInfo, final T entry) {
-		updateEntry(entryInfo, 1);
+	public void entryIngested(
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
+		updateEntry(
+				entryInfo,
+				1);
 	}
 
-	private void updateEntry(final DataStoreEntryInfo entryInfo, final int incrementValue) {
+	private void updateEntry(
+			final DataStoreEntryInfo entryInfo,
+			final int incrementValue ) {
 		if ((entryInfo != null) && (entryInfo.getFieldInfo() != null)) {
 			final List<FieldInfo<?>> fields = entryInfo.getFieldInfo();
 			for (final FieldInfo<?> field : fields) {
-				ByteArrayId visibility = new ByteArrayId(new byte[] {});
+				ByteArrayId visibility = new ByteArrayId(
+						new byte[] {});
 				if (field.getVisibility() != null) {
-					visibility = new ByteArrayId(field.getVisibility());
+					visibility = new ByteArrayId(
+							field.getVisibility());
 				}
 				Long count = countsPerVisibility.get(visibility);
 				if (count == null) {
 					count = 0L;
 				}
-				countsPerVisibility.put(visibility, count + incrementValue);
+				countsPerVisibility.put(
+						visibility,
+						count + incrementValue);
 			}
 		}
 	}
 
 	@Override
-	public void entryDeleted(final DataStoreEntryInfo entryInfo, final T entry) {
-		updateEntry(entryInfo, -1);
+	public void entryDeleted(
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
+		updateEntry(
+				entryInfo,
+				-1);
 	}
 
 	@Override
-	public void merge(final Mergeable merge) {
+	public void merge(
+			final Mergeable merge ) {
 		if ((merge != null) && (merge instanceof FieldVisibilityCount)) {
 			final Map<ByteArrayId, Long> otherCounts = ((FieldVisibilityCount) merge).countsPerVisibility;
 			for (final Entry<ByteArrayId, Long> entry : otherCounts.entrySet()) {
@@ -120,7 +161,9 @@ public class FieldVisibilityCount<T> extends AbstractDataStatistics<T> implement
 				if (count == null) {
 					count = 0L;
 				}
-				countsPerVisibility.put(entry.getKey(), count + entry.getValue());
+				countsPerVisibility.put(
+						entry.getKey(),
+						count + entry.getValue());
 			}
 		}
 	}

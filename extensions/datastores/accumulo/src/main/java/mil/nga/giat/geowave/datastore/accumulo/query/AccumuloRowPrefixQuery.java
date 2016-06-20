@@ -44,11 +44,10 @@ public class AccumuloRowPrefixQuery<T> extends
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
-		ranges.add(
-				new ByteArrayRange(
-						rowPrefix,
-						rowPrefix,
-						false));
+		ranges.add(new ByteArrayRange(
+				rowPrefix,
+				rowPrefix,
+				false));
 		return ranges;
 	}
 

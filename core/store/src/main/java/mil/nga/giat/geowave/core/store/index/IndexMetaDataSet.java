@@ -42,8 +42,7 @@ public class IndexMetaDataSet<T> extends
 			final IndexStrategy<?, ?> indexStrategy ) {
 		super(
 				adapterId,
-				composeId(
-						indexId));
+				composeId(indexId));
 		this.metaData = indexStrategy.createMetaData();
 	}
 
@@ -69,12 +68,9 @@ public class IndexMetaDataSet<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] metaBytes = PersistenceUtils.toBinary(
-				metaData);
-		final ByteBuffer buffer = super.binaryBuffer(
-				metaBytes.length);
-		buffer.put(
-				metaBytes);
+		final byte[] metaBytes = PersistenceUtils.toBinary(metaData);
+		final ByteBuffer buffer = super.binaryBuffer(metaBytes.length);
+		buffer.put(metaBytes);
 		return buffer.array();
 	}
 
@@ -82,19 +78,15 @@ public class IndexMetaDataSet<T> extends
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buffer = super.binaryBuffer(
-				bytes);
+		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		final byte[] metaBytes = new byte[buffer.remaining()];
-		buffer.get(
-				metaBytes);
+		buffer.get(metaBytes);
 
-		metaData = (List) PersistenceUtils.fromBinary(
-				metaBytes);
+		metaData = (List) PersistenceUtils.fromBinary(metaBytes);
 	}
 
 	public IndexMetaData[] toArray() {
-		return metaData.toArray(
-				new IndexMetaData[metaData.size()]);
+		return metaData.toArray(new IndexMetaData[metaData.size()]);
 	}
 
 	@Override
@@ -104,8 +96,7 @@ public class IndexMetaDataSet<T> extends
 			for (int i = 0; i < metaData.size(); i++) {
 				metaData.get(
 						i).merge(
-								((IndexMetaDataSet<T>) merge).metaData.get(
-										i));
+						((IndexMetaDataSet<T>) merge).metaData.get(i));
 			}
 		}
 	}
@@ -115,8 +106,7 @@ public class IndexMetaDataSet<T> extends
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsAdded(
-					entryInfo.getRowIds());
+			imd.insertionIdsAdded(entryInfo.getRowIds());
 		}
 	}
 
@@ -125,8 +115,7 @@ public class IndexMetaDataSet<T> extends
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsRemoved(
-					entryInfo.getRowIds());
+			imd.insertionIdsRemoved(entryInfo.getRowIds());
 		}
 	}
 
@@ -139,15 +128,13 @@ public class IndexMetaDataSet<T> extends
 		for (final ByteArrayId adapterId : adapterIdsToQuery) {
 			final IndexMetaDataSet adapterMetadata = (IndexMetaDataSet) statisticsStore.getDataStatistics(
 					adapterId,
-					IndexMetaDataSet.composeId(
-							index.getId()),
+					IndexMetaDataSet.composeId(index.getId()),
 					authorizations);
 			if (combinedMetaData == null) {
 				combinedMetaData = adapterMetadata;
 			}
 			else {
-				combinedMetaData.merge(
-						adapterMetadata);
+				combinedMetaData.merge(adapterMetadata);
 			}
 		}
 		return combinedMetaData != null ? combinedMetaData.toArray() : null;

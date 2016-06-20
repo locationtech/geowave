@@ -21,7 +21,9 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  * @param <T>
  *            The type for the entry
  */
-public class EntryIteratorWrapper<T> implements Iterator<T> {
+public class EntryIteratorWrapper<T> implements
+		Iterator<T>
+{
 	private final AdapterStore adapterStore;
 	private final PrimaryIndex index;
 	private final Iterator<Entry<Key, Value>> scannerIt;
@@ -31,8 +33,12 @@ public class EntryIteratorWrapper<T> implements Iterator<T> {
 
 	private T nextValue;
 
-	public EntryIteratorWrapper(final boolean wholeRowEncoding, final AdapterStore adapterStore, final PrimaryIndex index,
-			final Iterator<Entry<Key, Value>> scannerIt, final QueryFilter clientFilter) {
+	public EntryIteratorWrapper(
+			final boolean wholeRowEncoding,
+			final AdapterStore adapterStore,
+			final PrimaryIndex index,
+			final Iterator<Entry<Key, Value>> scannerIt,
+			final QueryFilter clientFilter ) {
 		this.adapterStore = adapterStore;
 		this.index = index;
 		this.scannerIt = scannerIt;
@@ -41,9 +47,13 @@ public class EntryIteratorWrapper<T> implements Iterator<T> {
 		this.wholeRowEncoding = wholeRowEncoding;
 	}
 
-	public EntryIteratorWrapper(final boolean wholeRowEncoding, final AdapterStore adapterStore, final PrimaryIndex index,
-			final Iterator<Entry<Key, Value>> scannerIt, final QueryFilter clientFilter,
-			final ScanCallback<T> scanCallback) {
+	public EntryIteratorWrapper(
+			final boolean wholeRowEncoding,
+			final AdapterStore adapterStore,
+			final PrimaryIndex index,
+			final Iterator<Entry<Key, Value>> scannerIt,
+			final QueryFilter clientFilter,
+			final ScanCallback<T> scanCallback ) {
 		this.adapterStore = adapterStore;
 		this.index = index;
 		this.scannerIt = scannerIt;
@@ -55,7 +65,10 @@ public class EntryIteratorWrapper<T> implements Iterator<T> {
 	private void findNext() {
 		while ((nextValue == null) && scannerIt.hasNext()) {
 			final Entry<Key, Value> row = scannerIt.next();
-			final T decodedValue = decodeRow(row, clientFilter, index);
+			final T decodedValue = decodeRow(
+					row,
+					clientFilter,
+					index);
 			if (decodedValue != null) {
 				nextValue = decodedValue;
 				return;
@@ -63,9 +76,18 @@ public class EntryIteratorWrapper<T> implements Iterator<T> {
 		}
 	}
 
-	private T decodeRow(final Entry<Key, Value> row, final QueryFilter clientFilter, final PrimaryIndex index) {
-		return AccumuloUtils.decodeRow(row.getKey(), row.getValue(), wholeRowEncoding,
-				adapterStore, clientFilter, index, scanCallback);
+	private T decodeRow(
+			final Entry<Key, Value> row,
+			final QueryFilter clientFilter,
+			final PrimaryIndex index ) {
+		return AccumuloUtils.decodeRow(
+				row.getKey(),
+				row.getValue(),
+				wholeRowEncoding,
+				adapterStore,
+				clientFilter,
+				index,
+				scanCallback);
 	}
 
 	@Override
@@ -75,7 +97,8 @@ public class EntryIteratorWrapper<T> implements Iterator<T> {
 	}
 
 	@Override
-	public T next() throws NoSuchElementException {
+	public T next()
+			throws NoSuchElementException {
 		if (nextValue == null) {
 			findNext();
 		}

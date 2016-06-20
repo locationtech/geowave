@@ -51,8 +51,7 @@ public class DuplicateEntryCount<T> extends
 			final ByteArrayId indexId ) {
 		super(
 				dataAdapterId,
-				composeId(
-						indexId));
+				composeId(indexId));
 	}
 
 	public static ByteArrayId composeId(
@@ -73,18 +72,15 @@ public class DuplicateEntryCount<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = super.binaryBuffer(
-				8);
-		buf.putLong(
-				entriesWithDuplicates);
+		final ByteBuffer buf = super.binaryBuffer(8);
+		buf.putLong(entriesWithDuplicates);
 		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = super.binaryBuffer(
-				bytes);
+		final ByteBuffer buf = super.binaryBuffer(bytes);
 		entriesWithDuplicates = buf.getLong();
 	}
 
@@ -92,8 +88,7 @@ public class DuplicateEntryCount<T> extends
 	public void entryIngested(
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
-		if (entryHasDuplicates(
-				entryInfo)) {
+		if (entryHasDuplicates(entryInfo)) {
 			entriesWithDuplicates++;
 		}
 	}
@@ -102,8 +97,7 @@ public class DuplicateEntryCount<T> extends
 	public void entryDeleted(
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
-		if (entryHasDuplicates(
-				entryInfo)) {
+		if (entryHasDuplicates(entryInfo)) {
 			entriesWithDuplicates--;
 		}
 	}
@@ -123,7 +117,7 @@ public class DuplicateEntryCount<T> extends
 		}
 		return false;
 	}
-	
+
 	public static DuplicateEntryCount getDuplicateCounts(
 			final PrimaryIndex index,
 			final List<ByteArrayId> adapterIdsToQuery,
@@ -131,18 +125,15 @@ public class DuplicateEntryCount<T> extends
 			final String... authorizations ) {
 		DuplicateEntryCount combinedDuplicateCount = null;
 		for (final ByteArrayId adapterId : adapterIdsToQuery) {
-			final DuplicateEntryCount adapterVisibilityCount = (DuplicateEntryCount) statisticsStore
-					.getDataStatistics(
-							adapterId,
-							DuplicateEntryCount.composeId(
-									index.getId()),
-							authorizations);
+			final DuplicateEntryCount adapterVisibilityCount = (DuplicateEntryCount) statisticsStore.getDataStatistics(
+					adapterId,
+					DuplicateEntryCount.composeId(index.getId()),
+					authorizations);
 			if (combinedDuplicateCount == null) {
 				combinedDuplicateCount = adapterVisibilityCount;
 			}
 			else {
-				combinedDuplicateCount.merge(
-						adapterVisibilityCount);
+				combinedDuplicateCount.merge(adapterVisibilityCount);
 			}
 		}
 		return combinedDuplicateCount;

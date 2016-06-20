@@ -19,7 +19,9 @@ import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 
-public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
+public class WholeRowAggregationIterator extends
+		WholeRowQueryFilterIterator
+{
 	private AggregationIterator aggregationIterator;
 
 	public WholeRowAggregationIterator() {
@@ -27,7 +29,10 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
 	}
 
 	@Override
-	protected boolean filter(final Text currentRow, final List<Key> keys, final List<Value> values) {
+	protected boolean filter(
+			final Text currentRow,
+			final List<Key> keys,
+			final List<Value> values ) {
 		if ((aggregationIterator != null) && (aggregationIterator.queryFilterIterator != null)
 				&& aggregationIterator.queryFilterIterator.isSet()) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
@@ -35,13 +40,22 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
 				final Value value = values.get(i);
-				queryFilterIterator.aggregateFieldData(key, value, commonData, unknownData);
+				queryFilterIterator.aggregateFieldData(
+						key,
+						value,
+						commonData,
+						unknownData);
 			}
-			final CommonIndexedPersistenceEncoding encoding = QueryFilterIterator.getEncoding(currentRow, commonData,
+			final CommonIndexedPersistenceEncoding encoding = QueryFilterIterator.getEncoding(
+					currentRow,
+					commonData,
 					unknownData);
 			final boolean queryFilterResult = queryFilterIterator.applyRowFilter(encoding);
 			if (queryFilterResult) {
-				aggregationIterator.aggregateRow(currentRow, queryFilterIterator.model, encoding);
+				aggregationIterator.aggregateRow(
+						currentRow,
+						queryFilterIterator.model,
+						encoding);
 			}
 		}
 		// we don't want to return anything but the aggregation result
@@ -49,18 +63,25 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
 	}
 
 	@Override
-	public void init(final SortedKeyValueIterator<Key, Value> source, final Map<String, String> options,
-			final IteratorEnvironment env) throws IOException {
+	public void init(
+			final SortedKeyValueIterator<Key, Value> source,
+			final Map<String, String> options,
+			final IteratorEnvironment env )
+			throws IOException {
 		aggregationIterator = new AggregationIterator();
 		aggregationIterator.setParent(new WholeRowAggregationParent());
 		aggregationIterator.setOptions(options);
 		aggregationIterator.queryFilterIterator = new QueryFilterIterator();
 		aggregationIterator.queryFilterIterator.setOptions(options);
-		super.init(source, options, env);
+		super.init(
+				source,
+				options,
+				env);
 	}
 
 	@Override
-	public SortedKeyValueIterator<Key, Value> deepCopy(final IteratorEnvironment env) {
+	public SortedKeyValueIterator<Key, Value> deepCopy(
+			final IteratorEnvironment env ) {
 		final SortedKeyValueIterator<Key, Value> iterator = super.deepCopy(env);
 		if (iterator instanceof WholeRowAggregationIterator) {
 			aggregationIterator = new AggregationIterator();
@@ -86,22 +107,37 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
 	}
 
 	@Override
-	public void next() throws IOException {
+	public void next()
+			throws IOException {
 		aggregationIterator.next();
 	}
 
 	@Override
-	public void seek(final Range range, final Collection<ByteSequence> columnFamilies, final boolean inclusive)
+	public void seek(
+			final Range range,
+			final Collection<ByteSequence> columnFamilies,
+			final boolean inclusive )
 			throws IOException {
-		aggregationIterator.seek(range, columnFamilies, inclusive);
+		aggregationIterator.seek(
+				range,
+				columnFamilies,
+				inclusive);
 	}
 
-	public class WholeRowAggregationParent implements SortedKeyValueIterator<Key, Value> {
+	public class WholeRowAggregationParent implements
+			SortedKeyValueIterator<Key, Value>
+	{
 
 		@Override
-		public void init(final SortedKeyValueIterator<Key, Value> source, final Map<String, String> options,
-				final IteratorEnvironment env) throws IOException {
-			WholeRowAggregationIterator.super.init(source, options, env);
+		public void init(
+				final SortedKeyValueIterator<Key, Value> source,
+				final Map<String, String> options,
+				final IteratorEnvironment env )
+				throws IOException {
+			WholeRowAggregationIterator.super.init(
+					source,
+					options,
+					env);
 		}
 
 		@Override
@@ -110,14 +146,21 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
 		}
 
 		@Override
-		public void next() throws IOException {
+		public void next()
+				throws IOException {
 			WholeRowAggregationIterator.super.next();
 		}
 
 		@Override
-		public void seek(final Range range, final Collection<ByteSequence> columnFamilies, final boolean inclusive)
+		public void seek(
+				final Range range,
+				final Collection<ByteSequence> columnFamilies,
+				final boolean inclusive )
 				throws IOException {
-			WholeRowAggregationIterator.super.seek(range, columnFamilies, inclusive);
+			WholeRowAggregationIterator.super.seek(
+					range,
+					columnFamilies,
+					inclusive);
 		}
 
 		@Override
@@ -131,7 +174,8 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
 		}
 
 		@Override
-		public SortedKeyValueIterator<Key, Value> deepCopy(final IteratorEnvironment env) {
+		public SortedKeyValueIterator<Key, Value> deepCopy(
+				final IteratorEnvironment env ) {
 			return WholeRowAggregationIterator.super.deepCopy(env);
 		}
 
