@@ -18,8 +18,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
@@ -36,7 +34,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.format.stanag4676.Stanag4676IngestPlugin;
@@ -61,9 +58,6 @@ import org.jcodec.scale.AWTUtil;
 import org.jcodec.scale.RgbToYuv420p;
 
 import com.google.common.io.Files;
-//import com.xuggle.mediatool.IMediaWriter;
-//import com.xuggle.mediatool.ToolFactory;
-//import com.xuggle.xuggler.ICodec;
 
 @Path("stanag4676")
 public class Stanag4676ImageryChipService
@@ -79,10 +73,8 @@ public class Stanag4676ImageryChipService
 	@Path("image/{mission}/{track}/{year}-{month}-{day}T{hour}:{minute}:{second}.{millis}.jpg")
 	@Produces("image/jpeg")
 	public Response getImage(
-			final @PathParam("mission")
-			String mission,
-			final @PathParam("track")
-			String track,
+			final @PathParam("mission") String mission,
+			final @PathParam("track") String track,
 			@PathParam("year")
 			final int year,
 			@PathParam("month")
@@ -119,16 +111,20 @@ public class Stanag4676ImageryChipService
 		String chipNameStr = "mission = '" + mission + "', track = '" + track + "'";
 
 		Object imageChip = null;
+		// ImageChipUtils.getDataId(mission,track,cal.getTimeInMillis()).getBytes()
 		try (CloseableIterator<Object> imageChipIt = dataStore.query(
 				new QueryOptions(
 						ImageChipDataAdapter.ADAPTER_ID,
 						Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getId()),
-				new DataIdQuery(
-						ImageChipDataAdapter.ADAPTER_ID,
-						ImageChipUtils.getDataId(
-								mission,
-								track,
-								cal.getTimeInMillis())))) {
+				new PrefixIdQuery(
+						new ByteArrayId(
+								ByteArrayUtils.combineArrays(
+										ImageChipDataAdapter.ADAPTER_ID.getBytes(),
+										ImageChipUtils.getDataId(
+												mission,
+												track,
+												cal.getTimeInMillis()).getBytes()))))) {
+
 			imageChip = (imageChipIt.hasNext()) ? imageChipIt.next() : null;
 		}
 		catch (IOException e1) {
@@ -166,13 +162,21 @@ public class Stanag4676ImageryChipService
 					LOGGER.error(
 							"Unable to write image chip content to JPEG",
 							e);
-					return Response.serverError().entity(
-							"Error generating JPEG from image chip for mission = '" + mission + "', track = '" + track + "'").build();
+					return Response
+							.serverError()
+							.entity(
+									"Error generating JPEG from image chip for mission = '" + mission + "', track = '"
+											+ track + "'")
+							.build();
 				}
 			}
 		}
-		return Response.serverError().entity(
-				"Cannot find image chip with mission = '" + mission + "', track = '" + track + "', time = '" + cal.getTime() + "'").build();
+		return Response
+				.serverError()
+				.entity(
+						"Cannot find image chip with mission = '" + mission + "', track = '" + track + "', time = '"
+								+ cal.getTime() + "'")
+				.build();
 	}
 
 	// ------------------------------------------------------------------------------
@@ -182,10 +186,8 @@ public class Stanag4676ImageryChipService
 	@Path("video/{mission}/{track}.webm")
 	@Produces("video/webm")
 	public Response getVideo(
-			final @PathParam("mission")
-			String mission,
-			final @PathParam("track")
-			String track,
+			final @PathParam("mission") String mission,
+			final @PathParam("track") String track,
 			@QueryParam("size")
 			@DefaultValue("-1")
 			final int targetPixelSize,
@@ -234,8 +236,13 @@ public class Stanag4676ImageryChipService
 			LOGGER.error(
 					"Unable to read data to compose video file",
 					e1);
-			return Response.serverError().entity(
-					"Video generation failed for " + videoNameStr + "'" + "\nException: " + e1.getLocalizedMessage() + "\n stack trace: " + Arrays.toString(e1.getStackTrace())).build();
+			return Response
+					.serverError()
+					.entity(
+							"Video generation failed for " + videoNameStr + "'" + "\nException: "
+									+ e1.getLocalizedMessage() + "\n stack trace: "
+									+ Arrays.toString(e1.getStackTrace()))
+					.build();
 		}
 
 		// ----------------------------------------------------
@@ -437,7 +444,8 @@ public class Stanag4676ImageryChipService
 				LOGGER.error("Image sequence not found");
 				return null;
 			}
-			LOGGER.debug("Found " + y + " of " + i + " new frames." + "  videoTrack timescale is " + videoTrack.getTimescale());
+			LOGGER.debug("Found " + y + " of " + i + " new frames." + "  videoTrack timescale is "
+					+ videoTrack.getTimescale());
 			muxer.mux(sink);
 
 			// ------------------------------------------------------------------
