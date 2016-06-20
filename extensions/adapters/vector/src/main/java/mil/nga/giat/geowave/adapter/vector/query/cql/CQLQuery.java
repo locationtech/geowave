@@ -2,14 +2,27 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.geotools.filter.text.cql2.CQL;
+import org.geotools.filter.text.cql2.CQLException;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.filter.Filter;
+
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.plugin.ExtractAttributesFilter;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractTimeFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -19,22 +32,17 @@ import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
-
-import org.apache.log4j.Logger;
-import org.geotools.filter.text.cql2.CQL;
-import org.geotools.filter.text.cql2.CQLException;
-import org.opengis.filter.Filter;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public class CQLQuery implements
 		DistributableQuery
@@ -46,44 +54,83 @@ public class CQLQuery implements
 
 	protected CQLQuery() {}
 
-	public CQLQuery(
+	public static DistributableQuery createOptimalQuery(
 			final String cql,
-			final GeotoolsFeatureDataAdapter adapter )
+			final GeotoolsFeatureDataAdapter adapter,
+			final PrimaryIndex index )
 			throws CQLException {
-		this(
+		return createOptimalQuery(
 				cql,
+				adapter,
 				CompareOperation.OVERLAPS,
-				adapter);
+				index);
 	}
 
-	public CQLQuery(
+	public static DistributableQuery createOptimalQuery(
 			final String cql,
+			final GeotoolsFeatureDataAdapter adapter,
 			final CompareOperation geoCompareOp,
-			final GeotoolsFeatureDataAdapter adapter )
+			final PrimaryIndex index )
 			throws CQLException {
-		cqlFilter = CQL.toFilter(cql);
-		filter = new CQLQueryFilter(
-				cqlFilter,
-				adapter);
+		final Filter cqlFilter = CQL.toFilter(cql);
+		final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
+
+		final Object obj = cqlFilter.accept(
+				attributesVisitor,
+				null);
+
+		final Collection<String> attrs;
+		if ((obj != null) && (obj instanceof Collection)) {
+			attrs = (Collection<String>) obj;
+		}
+		else {
+			attrs = new ArrayList<String>();
+		}
+		// assume the index can't handle spatial or temporal constraints if its
+		// null
+		final boolean isSpatial = index == null ? false : hasAtLeastSpatial(index);
+		final boolean isTemporal = index == null ? false : hasTime(index) && adapter.hasTemporalConstraints();
+		if (isSpatial) {
+			final String geomName = adapter.getType().getGeometryDescriptor().getLocalName();
+			attrs.remove(geomName);
+		}
+		if (isTemporal) {
+			final TimeDescriptors timeDescriptors = adapter.getTimeDescriptors();
+			if (timeDescriptors != null) {
+				final AttributeDescriptor timeDesc = timeDescriptors.getTime();
+				if (timeDesc != null) {
+					attrs.remove(timeDesc.getLocalName());
+				}
+				final AttributeDescriptor startDesc = timeDescriptors.getStartRange();
+				if (startDesc != null) {
+					attrs.remove(startDesc.getLocalName());
+				}
+				final AttributeDescriptor endDesc = timeDescriptors.getEndRange();
+				if (endDesc != null) {
+					attrs.remove(endDesc.getLocalName());
+				}
+			}
+		}
+		DistributableQuery baseQuery = null;
+		// there is only space and time
 		final Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
 				cqlFilter,
 				adapter.getType().getCoordinateReferenceSystem());
 		final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(
 				adapter.getTimeDescriptors()).getConstraints(cqlFilter);
-
-		// determine which time constraints are associated with an indexable
-		// field
-		final TemporalConstraints temporalConstraints = QueryIndexHelper.getTemporalConstraintsForDescriptors(
-				adapter.getTimeDescriptors(),
-				timeConstraintSet);
-		// convert to constraints
-		final Constraints timeConstraints = SpatialTemporalQuery.createConstraints(
-				temporalConstraints,
-				false);
 		if (geometry != null) {
 			Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(geometry);
-
 			if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
+				// determine which time constraints are associated with an
+				// indexable
+				// field
+				final TemporalConstraints temporalConstraints = QueryIndexHelper.getTemporalConstraintsForDescriptors(
+						adapter.getTimeDescriptors(),
+						timeConstraintSet);
+				// convert to constraints
+				final Constraints timeConstraints = SpatialTemporalQuery.createConstraints(
+						temporalConstraints,
+						false);
 				constraints = constraints.merge(timeConstraints);
 			}
 			baseQuery = new SpatialQuery(
@@ -92,10 +139,23 @@ public class CQLQuery implements
 					geoCompareOp);
 		}
 		else if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
+			// determine which time constraints are associated with an indexable
+			// field
+			final TemporalConstraints temporalConstraints = QueryIndexHelper.getTemporalConstraintsForDescriptors(
+					adapter.getTimeDescriptors(),
+					timeConstraintSet);
 			baseQuery = new TemporalQuery(
 					temporalConstraints);
 		}
-		// default case is to leave base query null.
+		if (attrs.isEmpty()) {
+			return baseQuery;
+		}
+		else {
+			return new CQLQuery(
+					baseQuery,
+					cqlFilter,
+					adapter);
+		}
 	}
 
 	public CQLQuery(
@@ -228,5 +288,38 @@ public class CQLQuery implements
 				visitor,
 				null);
 		return constraints.getFiltersFor(index);
+	}
+
+	protected static boolean hasAtLeastSpatial(
+			final PrimaryIndex index ) {
+		if ((index == null) || (index.getIndexStrategy() == null)
+				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		boolean hasLatitude = false;
+		boolean hasLongitude = false;
+		for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
+			if (dimension instanceof LatitudeDefinition) {
+				hasLatitude = true;
+			}
+			if (dimension instanceof LatitudeDefinition) {
+				hasLongitude = true;
+			}
+		}
+		return hasLatitude && hasLongitude;
+	}
+
+	protected static boolean hasTime(
+			final PrimaryIndex index ) {
+		if ((index == null) || (index.getIndexStrategy() == null)
+				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
+			if (dimension instanceof TimeDefinition) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
