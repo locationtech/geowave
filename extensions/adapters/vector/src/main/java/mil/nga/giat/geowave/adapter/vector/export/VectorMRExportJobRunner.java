@@ -135,9 +135,10 @@ public class VectorMRExportJobRunner extends
 			}
 			GeoWaveInputFormat.setQuery(
 					conf,
-					new CQLQuery(
+					CQLQuery.createOptimalQuery(
 							mrOptions.getCqlFilter(),
-							(GeotoolsFeatureDataAdapter) adapter));
+							(GeotoolsFeatureDataAdapter) adapter,
+							options.getIndex()));
 		}
 		GeoWaveInputFormat.setDataStoreName(
 				conf,

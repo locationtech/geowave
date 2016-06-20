@@ -126,9 +126,10 @@ public class CQLQueryExample
 				new QueryOptions(
 						ADAPTER,
 						index),
-				new CQLQuery(
+				CQLQuery.createOptimalQuery(
 						"BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and locationName like 'W%'",
-						ADAPTER))) {
+						ADAPTER,
+						index))) {
 
 			while (iterator.hasNext()) {
 				System.out.println("Query match: " + iterator.next().getID());
