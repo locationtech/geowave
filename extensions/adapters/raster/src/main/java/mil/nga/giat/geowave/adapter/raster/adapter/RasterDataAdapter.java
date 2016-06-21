@@ -1390,7 +1390,7 @@ public class RasterDataAdapter implements
 			final ByteBuffer entryBuf = ByteBuffer.wrap(entryBinary);
 			final int keyLength = entryBuf.getInt();
 			final byte[] keyBinary = new byte[keyLength];
-			final byte[] valueBinary = new byte[entryBinary.length - keyLength];
+			final byte[] valueBinary = new byte[entryBinary.length - keyLength - 4];
 			entryBuf.get(keyBinary);
 			entryBuf.get(valueBinary);
 			metadata.put(
