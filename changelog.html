@@ -13,12 +13,14 @@
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.9.1...HEAD">Full Changelog</a></p>
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
+<li>Publish docs once from travis-ci build, not for each job in the build matrix <a href="https://github.com/ngageoint/geowave/issues/814">#814</a></li>
 <li>Ability to set geowave-tools-singlejar name on the maven commandline <a href="https://github.com/ngageoint/geowave/issues/798">#798</a></li>
 <li>Permit selection of temporal binning strategy unit of measure <a href="https://github.com/ngageoint/geowave/issues/782">#782</a></li>
 <li>implement and expose new temporal binning strategies <a href="https://github.com/ngageoint/geowave/issues/555">#555</a></li>
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
+<li>Comma-delimited indices and index groups on commandline are not working <a href="https://github.com/ngageoint/geowave/issues/823">#823</a></li>
 <li>Custom index not properly used in query options for GeoWaveInputFormat <a href="https://github.com/ngageoint/geowave/issues/816">#816</a></li>
 <li>Raster reference CRS is using lat (x) and lon (y) <a href="https://github.com/ngageoint/geowave/issues/793">#793</a></li>
 </ul>
@@ -31,6 +33,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>changed maven repository references <a href="https://github.com/ngageoint/geowave/pull/835">#835</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-823: fixed index groups and multiple indices on commandline <a href="https://github.com/ngageoint/geowave/pull/824">#824</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fixes to quiet log spam. <a href="https://github.com/ngageoint/geowave/pull/821">#821</a> (<a href="https://github.com/andrewdmanning">andrewdmanning</a>)</li>
 <li>GEOWAVE-816: custom index on query options can be used with GeoWaveIn… <a href="https://github.com/ngageoint/geowave/pull/819">#819</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
