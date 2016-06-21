@@ -724,7 +724,12 @@
 			</snapshots>
 			<id>boundlessgeo</id>
 			<name>BoundlessGeo Maven Repository</name>
-			<url>https://boundless.artifactoryonline.com/boundless/main</url>
+			<url>http://repo.boundlessgeo.com/main</url>
+		</repository>
+		<repository>
+			<id>geosolutions</id>
+			<name>GeoSolutions Repository</name>
+			<url>http://maven.geo-solutions.it</url>
 		</repository>
 		<repository>
 			<id>osgeo</id>
