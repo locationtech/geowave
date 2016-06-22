@@ -69,6 +69,7 @@ public class InputFormatHBaseRangeQuery extends
 				(DedupeFilter) null,
 				queryOptions.getScanCallback(),
 				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.range = range;

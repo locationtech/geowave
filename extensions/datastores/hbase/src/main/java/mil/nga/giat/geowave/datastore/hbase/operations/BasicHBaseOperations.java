@@ -14,6 +14,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -192,8 +193,13 @@ public class BasicHBaseOperations implements
 
 	public ResultScanner getScannedResults(
 			final Scan scanner,
-			final String tableName )
+			final String tableName,
+			final String... authorizations )
 			throws IOException {
+		if (authorizations != null) {
+			scanner.setAuthorizations(new Authorizations(
+					authorizations));
+		}
 		return conn.getTable(
 				getTableName(getQualifiedTableName(tableName))).getScanner(
 				scanner);

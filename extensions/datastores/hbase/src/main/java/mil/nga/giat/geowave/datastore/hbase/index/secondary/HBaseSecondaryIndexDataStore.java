@@ -3,13 +3,12 @@ package mil.nga.giat.geowave.datastore.hbase.index.secondary;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
@@ -22,44 +21,63 @@ import org.apache.log4j.Logger;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.Closable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
-public class HBaseSecondaryIndexDataStore implements
-		SecondaryIndexDataStore,
-		Closable
+public class HBaseSecondaryIndexDataStore extends
+		BaseSecondaryIndexDataStore<RowMutations>
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseSecondaryIndexDataStore.class);
-	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	private final BasicHBaseOperations hbaseOperations;
-	private final Map<String, HBaseWriter> writerCache = new HashMap<>();
+	private final HBaseOptions hbaseOptions;
 
 	public HBaseSecondaryIndexDataStore(
 			final BasicHBaseOperations hbaseOperations ) {
-		super();
-		this.hbaseOperations = hbaseOperations;
+		this(
+				hbaseOperations,
+				new HBaseOptions());
 	}
 
-	private HBaseWriter getWriter(
-			final SecondaryIndex<?> secondaryIndex )
-			throws IOException {
+	public HBaseSecondaryIndexDataStore(
+			final BasicHBaseOperations hbaseOperations,
+			final HBaseOptions hbaseOptions ) {
+		super();
+		this.hbaseOperations = hbaseOperations;
+		this.hbaseOptions = hbaseOptions;
+	}
+
+	@Override
+	protected Writer<RowMutations> getWriter(
+			final SecondaryIndex<?> secondaryIndex ) {
 		final String secondaryIndexName = secondaryIndex.getIndexStrategy().getId();
 		if (writerCache.containsKey(secondaryIndexName)) {
 			return writerCache.get(secondaryIndexName);
 		}
 		HBaseWriter writer = null;
-		writer = hbaseOperations.createWriter(
-				TABLE_PREFIX + secondaryIndexName,
-				StringUtils.stringFromBinary(secondaryIndex.getId().getBytes()),
-				true);
+		try {
+			writer = hbaseOperations.createWriter(
+					TABLE_PREFIX + secondaryIndexName,
+					StringUtils.stringFromBinary(secondaryIndex.getId().getBytes()),
+					true);
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Unable to create HBase Writer.",
+					e);
+			return null;
+		}
 		writerCache.put(
 				secondaryIndexName,
 				writer);
@@ -68,72 +86,7 @@ public class HBaseSecondaryIndexDataStore implements
 	}
 
 	@Override
-	public void store(
-			final SecondaryIndex<?> secondaryIndex,
-			final ByteArrayId primaryIndexId,
-			final ByteArrayId primaryIndexRowId,
-			final List<FieldInfo<?>> indexedAttributes ) {
-		try {
-			final HBaseWriter writer = getWriter(secondaryIndex);
-			if (writer != null) {
-				for (final FieldInfo<?> indexedAttribute : indexedAttributes) {
-					@SuppressWarnings("unchecked")
-					final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex
-							.getIndexStrategy()
-							.getInsertionIds(
-									Arrays.asList(indexedAttribute));
-					for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-						writer.write(buildMutation(
-								insertionId.getBytes(),
-								secondaryIndex.getId().getBytes(),
-								indexedAttribute.getDataValue().getId().getBytes(),
-								indexedAttribute.getWrittenValue(),
-								indexedAttribute.getVisibility(),
-								primaryIndexId.getBytes(),
-								primaryIndexRowId.getBytes()));
-					}
-				}
-			}
-		}
-		catch (final IOException e) {
-			LOGGER.error("Failed to store to secondary index: " + e);
-		}
-	}
-
-	@Override
-	public void delete(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<FieldInfo<?>> indexedAttributes ) {
-		try {
-			final HBaseWriter writer = getWriter(secondaryIndex);
-			if (writer != null) {
-				for (final FieldInfo<?> indexedAttribute : indexedAttributes) {
-					@SuppressWarnings("unchecked")
-					final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex
-							.getIndexStrategy()
-							.getInsertionIds(
-									Arrays.asList(indexedAttribute));
-					for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-						writer.write(buildDeleteMutation(
-								insertionId.getBytes(),
-								secondaryIndex.getId().getBytes(),
-								indexedAttribute.getDataValue().getId().getBytes()));
-					}
-				}
-			}
-		}
-		catch (final IOException e) {
-			LOGGER.error("Failed to delete from secondary index: " + e);
-		}
-	}
-
-	@Override
-	public void removeAll() {
-		close();
-		writerCache.clear();
-	}
-
-	private RowMutations buildMutation(
+	protected RowMutations buildMutation(
 			final byte[] secondaryIndexRowId,
 			final byte[] secondaryIndexId,
 			final byte[] attributeName,
@@ -141,7 +94,7 @@ public class HBaseSecondaryIndexDataStore implements
 			final byte[] visibility,
 			final byte[] primaryIndexId,
 			final byte[] primaryIndexRowId )
-			throws IOException {
+			throws Exception {
 		final RowMutations m = new RowMutations(
 				secondaryIndexRowId);
 
@@ -154,16 +107,22 @@ public class HBaseSecondaryIndexDataStore implements
 				attributeName,
 				attributeValue);
 
+		p.addColumn(
+				secondaryIndexId,
+				primaryIndexId,
+				primaryIndexRowId);
+
 		m.add(p);
 
 		return m;
 	}
 
-	private RowMutations buildDeleteMutation(
+	@Override
+	protected RowMutations buildDeleteMutation(
 			final byte[] secondaryIndexRowId,
 			final byte[] secondaryIndexId,
 			final byte[] attributeName )
-			throws IOException {
+			throws Exception {
 		final RowMutations m = new RowMutations(
 				secondaryIndexRowId);
 
@@ -188,16 +147,6 @@ public class HBaseSecondaryIndexDataStore implements
 
 		final List<Scan> scans = new ArrayList<Scan>();
 
-		// final Scanner scanner = getScanner(
-		// secondaryIndex.getIndexStrategy().getId(),
-		// visibility);
-
-		// scanner.addScanIterator(getScanIteratorSettings(
-		// constraints,
-		// primaryIndexId));
-
-		// TODO visibility
-
 		for (final ByteArrayRange range : ranges) {
 			final Scan scanner = new Scan();
 			if (range.getStart() != null) {
@@ -221,7 +170,8 @@ public class HBaseSecondaryIndexDataStore implements
 			try {
 				final ResultScanner rs = hbaseOperations.getScannedResults(
 						scanner,
-						TABLE_PREFIX + secondaryIndex.getIndexStrategy().getId());
+						TABLE_PREFIX + secondaryIndex.getIndexStrategy().getId(),
+						visibility);
 
 				if (rs != null) {
 					results.add(rs);
@@ -232,24 +182,30 @@ public class HBaseSecondaryIndexDataStore implements
 			}
 		}
 
+		final DistributableFilterList filterList = new DistributableFilterList(
+				false,
+				constraints);
+
 		final Collection<ByteArrayId> primaryIndexRowIds = new ArrayList<>();
 		for (final ResultScanner resultsScan : results) {
 			final Iterator<Result> it = resultsScan.iterator();
 			while (it.hasNext()) {
 				final Result result = it.next();
-				// TODO Use breakpoints to find out what in the column/cells is
-				// actually being checked in accumulo version and what to
-				// correspondingly check here
 
-				// for(result.getColumnCells(family, primaryIndexId)){
-				//
-				// }
-				// if (entry.getKey().getColumnQualifier().toString().equals(
-				// primaryIndexId.getString())) {
-				// // found query match: keep track of primaryIndexRowId
-				// primaryIndexRowIds.add(new ByteArrayId(
-				// entry.getValue().get()));
-				// }
+				if (acceptRow(
+						result,
+						filterList,
+						primaryIndexId)) {
+					for (final Cell cell : result.rawCells()) {
+						if (new ByteArrayId(
+								CellUtil.cloneQualifier(cell)).equals(primaryIndexId)) {
+							// found query match: keep track of
+							// primaryIndexRowId
+							primaryIndexRowIds.add(new ByteArrayId(
+									CellUtil.cloneValue(cell)));
+						}
+					}
+				}
 			}
 		}
 
@@ -269,15 +225,38 @@ public class HBaseSecondaryIndexDataStore implements
 		return new CloseableIterator.Empty<ByteArrayId>();
 	}
 
-	@Override
-	public void close() {
-		for (final HBaseWriter writer : writerCache.values()) {
-			writer.close();
-		}
-	}
+	private boolean acceptRow(
+			final Result result,
+			final DistributableFilterList filters,
+			final ByteArrayId primaryIndexId ) {
+		if (filters != null) {
+			for (final Cell cell : result.rawCells()) {
+				if (!new ByteArrayId(
+						CellUtil.cloneQualifier(cell)).equals(primaryIndexId)) {
+					final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding = new IndexedPersistenceEncoding<ByteArrayId>(
+							null, // not needed
+							null, // not needed
+							null, // not needed
+							0, // not needed
+							new PersistentDataset<ByteArrayId>(
+									new PersistentValue<ByteArrayId>(
+											new ByteArrayId(
+													CellUtil.cloneQualifier(cell)),
+											new ByteArrayId(
+													CellUtil.cloneValue(cell)))),
+							null);
+					if (filters.accept(
+							null,
+							persistenceEncoding)) {
+						return true;
+					}
+				}
+			}
 
-	@Override
-	public void flush() {
-		close();
+			return false;
+		}
+		// should not happen but if the filter is not passed in, it will accept
+		// everything
+		return true;
 	}
 }

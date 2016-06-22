@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -518,6 +519,23 @@ public abstract class BaseDataStore
 		}
 	}
 
+	protected IndexMetaDataSet composeMetaData(
+			final PrimaryIndex index,
+			final List<ByteArrayId> adapterIdsToQuery,
+			final String... authorizations ) {
+		final IndexMetaDataSet metaData = new IndexMetaDataSet(
+				index.getId(),
+				index.getId(),
+				index.getIndexStrategy().createMetaData());
+		for (final ByteArrayId adapterId : adapterIdsToQuery) {
+			metaData.merge(statisticsStore.getDataStatistics(
+					adapterId,
+					IndexMetaDataSet.composeId(index.getId()),
+					authorizations));
+		}
+		return metaData;
+	}
+
 	protected abstract boolean deleteAll(
 			final String tableName,
 			final String columnFamily,
@@ -534,9 +552,10 @@ public abstract class BaseDataStore
 			throws Exception;
 
 	protected abstract List<ByteArrayId> getAltIndexRowIds(
-			String altIdxTableName,
-			List<ByteArrayId> dataIds,
-			ByteArrayId adapterId );
+			final String altIdxTableName,
+			final List<ByteArrayId> dataIds,
+			final ByteArrayId adapterId,
+			final String... authorizations );
 
 	protected abstract CloseableIterator<Object> getEntryRows(
 			final PrimaryIndex index,

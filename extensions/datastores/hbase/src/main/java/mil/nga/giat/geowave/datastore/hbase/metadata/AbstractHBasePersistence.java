@@ -58,7 +58,8 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 		try {
 			final Iterator<Result> it = operations.getScannedResults(
 					scanner,
-					getTablename()).iterator();
+					getTablename(),
+					authorizations).iterator();
 
 			final Iterator<T> iter = getNativeIteratorWrapper(it);
 
@@ -143,7 +144,8 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 			final Scan scanner = getFullScanner(authorizations);
 			final ResultScanner rS = operations.getScannedResults(
 					scanner,
-					getTablename());
+					getTablename(),
+					authorizations);
 			final Iterator<Result> it = rS.iterator();
 			return new CloseableIteratorWrapper<T>(
 					new ScannerClosableWrapper(
@@ -222,7 +224,8 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 					authorizations);
 			final ResultScanner rS = operations.getScannedResults(
 					scanner,
-					getTablename());
+					getTablename(),
+					authorizations);
 
 			final byte[] columnFamily = toBytes(getColumnFamily());
 			final byte[] columnQualifier = toBytes(getColumnQualifier(secondaryId));
@@ -328,7 +331,8 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 					authorizations);
 			final ResultScanner rS = operations.getScannedResults(
 					scanner,
-					getTablename());
+					getTablename(),
+					authorizations);
 			final Iterator<Result> it = rS.iterator();
 			return new CloseableIteratorWrapper<T>(
 					new ScannerClosableWrapper(

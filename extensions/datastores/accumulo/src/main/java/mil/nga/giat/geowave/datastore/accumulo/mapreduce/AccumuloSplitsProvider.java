@@ -17,22 +17,12 @@ import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.TableDeletedException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.TableOfflineException;
-//@formatter:off
-/*if[accumulo.api=1.6]
-import org.apache.accumulo.core.security.Credentials;
-import org.apache.accumulo.core.data.KeyExtent;
-else[accumulo.api=1.6]*/
-import org.apache.accumulo.core.client.impl.ClientContext;
-import org.apache.accumulo.core.client.impl.Credentials;
 import org.apache.accumulo.core.client.impl.Tables;
 import org.apache.accumulo.core.client.impl.TabletLocator;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.data.impl.KeyExtent;
-/*end[accumulo.api=1.6]*/
-//@formatter:on
 import org.apache.accumulo.core.master.state.tables.TableState;
 import org.apache.accumulo.core.util.UtilWaitThread;
 import org.apache.hadoop.io.Text;
@@ -55,6 +45,17 @@ import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.IntermediateSplitInfo;
 import mil.nga.giat.geowave.mapreduce.splits.RangeLocationPair;
 import mil.nga.giat.geowave.mapreduce.splits.SplitsProvider;
+
+//@formatter:off
+/*if[accumulo.api=1.6]
+import org.apache.accumulo.core.security.Credentials;
+import org.apache.accumulo.core.data.KeyExtent;
+else[accumulo.api=1.6]*/
+import org.apache.accumulo.core.client.impl.ClientContext;
+import org.apache.accumulo.core.client.impl.Credentials;
+import org.apache.accumulo.core.data.impl.KeyExtent;
+/*end[accumulo.api=1.6]*/
+//@formatter:on
 
 public class AccumuloSplitsProvider extends
 		SplitsProvider

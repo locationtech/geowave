@@ -30,13 +30,15 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.FilteredIndexQuery;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
 
 public abstract class HBaseFilteredIndexQuery extends
-		HBaseQuery
+		HBaseQuery implements
+		FilteredIndexQuery
 {
 
 	protected final ScanCallback<?> scanCallback;
@@ -56,7 +58,8 @@ public abstract class HBaseFilteredIndexQuery extends
 		this.scanCallback = scanCallback;
 	}
 
-	protected void setClientFilters(
+	@Override
+	public void setClientFilters(
 			final List<QueryFilter> clientFilters ) {
 		this.clientFilters = clientFilters;
 	}
@@ -131,7 +134,8 @@ public abstract class HBaseFilteredIndexQuery extends
 			try {
 				final ResultScanner rs = operations.getScannedResults(
 						scanner,
-						tableName);
+						tableName,
+						authorizations);
 
 				if (rs != null) {
 					results.add(rs);

@@ -28,10 +28,10 @@ import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
@@ -202,7 +202,7 @@ public class AggregationIterator extends
 			final byte[] constraintsBytes = ByteArrayUtils.byteArrayFromString(contraintsStr);
 			final List constraints = PersistenceUtils.fromBinary(constraintsBytes);
 			final String maxDecomp = options.get(MAX_DECOMPOSITION_OPTION_NAME);
-			Integer maxDecompInt = AccumuloConstraintsQuery.MAX_RANGE_DECOMPOSITION;
+			Integer maxDecompInt = ConstraintsQuery.MAX_RANGE_DECOMPOSITION;
 			if (maxDecomp != null) {
 				try {
 					maxDecompInt = Integer.parseInt(maxDecomp);
@@ -288,10 +288,10 @@ public class AggregationIterator extends
 		// after that
 		while (rangeIt.hasNext()) {
 			final Range internalRange = rangeIt.next();
-			if (internalRange.getEndKey() == null || internalRange.getEndKey().compareTo(
-					seekRange.getEndKey()) > 0) {
-				if (internalRange.getStartKey() != null && internalRange.getStartKey().compareTo(
-						seekRange.getEndKey()) > 0) {
+			if ((internalRange.getEndKey() == null) || (internalRange.getEndKey().compareTo(
+					seekRange.getEndKey()) > 0)) {
+				if ((internalRange.getStartKey() != null) && (internalRange.getStartKey().compareTo(
+						seekRange.getEndKey()) > 0)) {
 					return;
 				}
 				else {
@@ -315,10 +315,10 @@ public class AggregationIterator extends
 		// and clip its start to this range start key, and start on that
 		while (rangeIt.hasNext()) {
 			final Range internalRange = rangeIt.next();
-			if (internalRange.getEndKey() == null || internalRange.getEndKey().compareTo(
-					seekRange.getStartKey()) > 0) {
-				if (internalRange.getStartKey() != null && internalRange.getStartKey().compareTo(
-						seekRange.getStartKey()) > 0) {
+			if ((internalRange.getEndKey() == null) || (internalRange.getEndKey().compareTo(
+					seekRange.getStartKey()) > 0)) {
+				if ((internalRange.getStartKey() != null) && (internalRange.getStartKey().compareTo(
+						seekRange.getStartKey()) > 0)) {
 					internalRanges.add(internalRange);
 					return;
 				}

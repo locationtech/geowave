@@ -494,7 +494,8 @@ public class AccumuloDataStore extends
 	protected List<ByteArrayId> getAltIndexRowIds(
 			final String tableName,
 			final List<ByteArrayId> dataIds,
-			final ByteArrayId adapterId ) {
+			final ByteArrayId adapterId,
+			final String... authorizations ) {
 
 		final List<ByteArrayId> result = new ArrayList<ByteArrayId>();
 		try {
@@ -502,7 +503,9 @@ public class AccumuloDataStore extends
 				ScannerBase scanner = null;
 				for (final ByteArrayId dataId : dataIds) {
 					try {
-						scanner = accumuloOperations.createScanner(tableName);
+						scanner = accumuloOperations.createScanner(
+								tableName,
+								authorizations);
 
 						((Scanner) scanner).setRange(Range.exact(new Text(
 								dataId.getBytes())));
@@ -658,22 +661,5 @@ public class AccumuloDataStore extends
 				isOutputWritable,
 				adapterStore,
 				accumuloOperations);
-	}
-
-	private IndexMetaDataSet composeMetaData(
-			final PrimaryIndex index,
-			final List<ByteArrayId> adapterIdsToQuery,
-			final String... authorizations ) {
-		final IndexMetaDataSet metaData = new IndexMetaDataSet(
-				index.getId(),
-				index.getId(),
-				index.getIndexStrategy().createMetaData());
-		for (final ByteArrayId adapterId : adapterIdsToQuery) {
-			metaData.merge(statisticsStore.getDataStatistics(
-					adapterId,
-					IndexMetaDataSet.composeId(index.getId()),
-					authorizations));
-		}
-		return metaData;
 	}
 }

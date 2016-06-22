@@ -60,6 +60,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseConstraintsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowIdsQuery;
+import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowPrefixQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.SingleEntryFilter;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
@@ -154,10 +155,7 @@ public class HBaseDataStore extends
 	@Override
 	protected void initOnIndexWriterCreate(
 			final DataAdapter adapter,
-			final String indexName ) {
-		// TODO Auto-generated method stub
-
-	}
+			final String indexName ) {}
 
 	@Override
 	protected IndexWriter createIndexWriter(
@@ -222,7 +220,8 @@ public class HBaseDataStore extends
 						adapter.getAdapterId().getBytes()));
 				final ResultScanner results = operations.getScannedResults(
 						scanner,
-						tableName);
+						tableName,
+						authorizations);
 				resultScanners.add(results);
 				final Iterator<Result> resultIt = results.iterator();
 				if (resultIt.hasNext()) {
@@ -253,7 +252,8 @@ public class HBaseDataStore extends
 	protected List<ByteArrayId> getAltIndexRowIds(
 			final String tableName,
 			final List<ByteArrayId> dataIds,
-			final ByteArrayId adapterId ) {
+			final ByteArrayId adapterId,
+			final String... authorizations ) {
 
 		final List<ByteArrayId> result = new ArrayList<ByteArrayId>();
 		try {
@@ -266,7 +266,8 @@ public class HBaseDataStore extends
 
 					final ResultScanner results = operations.getScannedResults(
 							scanner,
-							tableName);
+							tableName,
+							authorizations);
 					final Iterator<Result> iterator = results.iterator();
 					while (iterator.hasNext()) {
 						result.add(new ByteArrayId(
@@ -303,6 +304,10 @@ public class HBaseDataStore extends
 				sanitizedQueryOptions.getAggregation(),
 				// TODO support field subsetting
 				// queryOptions.getFieldIds(),
+				composeMetaData(
+						index,
+						adapterIdsToQuery,
+						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
 		return hbaseQuery.query(
@@ -319,23 +324,17 @@ public class HBaseDataStore extends
 			final ByteArrayId rowPrefix,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore ) {
-		// TODO: support this
-		// final PrefixIdQuery prefixIdQuery = (PrefixIdQuery)
-		// sanitizedQuery;
-		// final HBaseRowPrefixQuery<Object> prefixQuery = new
-		// HBaseRowPrefixQuery<Object>(
-		// index,
-		// rowPrefix,
-		// (ScanCallback<Object>)
-		// sanitizedQueryOptions.getScanCallback(),
-		// sanitizedQueryOptions.getLimit(),
-		// sanitizedQueryOptions.getAuthorizations());
-
-		// return prefixQuery.query(
-		// operations,
-		// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-		// tempAdapterStore);
-		return null;
+		final HBaseRowPrefixQuery<Object> prefixQuery = new HBaseRowPrefixQuery<Object>(
+				index,
+				rowPrefix,
+				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getAuthorizations());
+		return prefixQuery.query(
+				operations,
+				// TODO support subsampling
+				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				tempAdapterStore);
 	}
 
 	@Override
@@ -401,7 +400,8 @@ public class HBaseDataStore extends
 			final Scan scanner = new Scan();
 			try (ResultScanner results = operations.getScannedResults(
 					scanner,
-					tableName)) {
+					tableName,
+					additionalAuthorizations)) {
 				for (final Result r : results) {
 					final Delete delete = new Delete(
 							r.getRow());

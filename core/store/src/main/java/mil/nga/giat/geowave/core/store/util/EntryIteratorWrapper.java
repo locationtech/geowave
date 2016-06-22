@@ -9,11 +9,11 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
- * This is used internally to translate Accumulo rows into native objects (using
- * the appropriate data adapter). It also performs any client-side filtering. It
- * will peek at the next entry in the accumulo iterator to always maintain a
- * reference to the next value.
- * 
+ * This is used internally to translate DataStore rows into native objects
+ * (using the appropriate data adapter). It also performs any client-side
+ * filtering. It will peek at the next entry in the wrapped iterator to always
+ * maintain a reference to the next value.
+ *
  * @param <T>
  *            The type for the entry
  */
@@ -60,19 +60,6 @@ public abstract class EntryIteratorWrapper<T> implements
 			final QueryFilter clientFilter,
 			final PrimaryIndex index );
 
-	// private T decodeRow(
-	// final Object row,
-	// final QueryFilter clientFilter,
-	// final PrimaryIndex index ) {
-	// return AccumuloUtils.decodeRow(
-	// row.getKey(),
-	// row.getValue(),
-	// adapterStore,
-	// clientFilter,
-	// index,
-	// scanCallback);
-	// }
-
 	@Override
 	public boolean hasNext() {
 		findNext();
@@ -82,7 +69,9 @@ public abstract class EntryIteratorWrapper<T> implements
 	@Override
 	public T next()
 			throws NoSuchElementException {
-		if (nextValue == null) findNext();
+		if (nextValue == null) {
+			findNext();
+		}
 		final T previousNext = nextValue;
 		if (nextValue == null) {
 			throw new NoSuchElementException();

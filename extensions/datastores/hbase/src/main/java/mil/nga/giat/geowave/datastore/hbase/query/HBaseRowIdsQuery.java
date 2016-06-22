@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.ScanCallback;
@@ -18,8 +16,6 @@ import mil.nga.giat.geowave.core.store.query.Query;
 public class HBaseRowIdsQuery<T> extends
 		HBaseConstraintsQuery
 {
-
-	private final static Logger LOGGER = Logger.getLogger(HBaseRowIdsQuery.class);
 
 	final Collection<ByteArrayId> rows;
 
@@ -37,23 +33,6 @@ public class HBaseRowIdsQuery<T> extends
 				dedupFilter,
 				scanCallback,
 				null,
-				authorizations);
-		this.rows = rows;
-	}
-
-	public HBaseRowIdsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final Collection<ByteArrayId> rows,
-			final ScanCallback<T> scanCallback,
-			final DedupeFilter dedupFilter,
-			final String[] authorizations ) {
-		super(
-				adapterIds,
-				index,
-				(Query) null,
-				dedupFilter,
-				scanCallback,
 				null,
 				authorizations);
 		this.rows = rows;
