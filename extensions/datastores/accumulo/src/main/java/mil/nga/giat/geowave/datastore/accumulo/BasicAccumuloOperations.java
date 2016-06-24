@@ -67,6 +67,7 @@ public class BasicAccumuloOperations implements
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
 	private String password;
+	private final Map<String, Set<String>> insuredAuthorizationCache;
 
 	/**
 	 * This is will create an Accumulo connector based on passed in connection
@@ -180,6 +181,7 @@ public class BasicAccumuloOperations implements
 		this.tableNamespace = tableNamespace;
 		this.connector = connector;
 		locGrpCache = new HashMap<String, Long>();
+		insuredAuthorizationCache = new HashMap<String, Set<String>>();
 		cacheTimeoutMillis = TimeUnit.DAYS.toMillis(1);
 	}
 
@@ -605,23 +607,51 @@ public class BasicAccumuloOperations implements
 			final String... authorizations )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		Authorizations auths = connector.securityOperations().getUserAuthorizations(
-				clientUser);
-		final List<byte[]> newSet = new ArrayList<byte[]>();
-		for (final String auth : authorizations) {
-			if (!auths.contains(auth)) {
-				newSet.add(auth.getBytes(StringUtils.GEOWAVE_CHAR_SET));
+		String user;
+		if (clientUser == null) {
+			user = connector.whoami();
+		}
+		else {
+			user = clientUser;
+		}
+		Set<String> uninsuredAuths = new HashSet<String>();
+		Set<String> insuredAuths = insuredAuthorizationCache.get(user);
+		if (insuredAuths == null) {
+			uninsuredAuths.addAll(Arrays.asList(authorizations));
+			insuredAuths = new HashSet<String>();
+			insuredAuthorizationCache.put(
+					user,
+					insuredAuths);
+		}
+		else {
+			for (final String auth : authorizations) {
+				if (!insuredAuths.contains(auth)) {
+					uninsuredAuths.add(auth);
+				}
 			}
 		}
-		if (newSet.size() > 0) {
-			newSet.addAll(auths.getAuthorizations());
-			connector.securityOperations().changeUserAuthorizations(
-					clientUser,
-					new Authorizations(
-							newSet));
-			auths = connector.securityOperations().getUserAuthorizations(
-					clientUser);
-			LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
+		if (!uninsuredAuths.isEmpty()) {
+			Authorizations auths = connector.securityOperations().getUserAuthorizations(
+					user);
+			final List<byte[]> newSet = new ArrayList<byte[]>();
+			for (final String auth : uninsuredAuths) {
+				if (!auths.contains(auth)) {
+					newSet.add(auth.getBytes(StringUtils.GEOWAVE_CHAR_SET));
+				}
+			}
+			if (newSet.size() > 0) {
+				newSet.addAll(auths.getAuthorizations());
+				connector.securityOperations().changeUserAuthorizations(
+						user,
+						new Authorizations(
+								newSet));
+				auths = connector.securityOperations().getUserAuthorizations(
+						user);
+				LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
+			}
+			for (final String auth : uninsuredAuths) {
+				insuredAuths.add(auth);
+			}
 		}
 	}
 

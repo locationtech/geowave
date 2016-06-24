@@ -60,12 +60,13 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -270,8 +271,7 @@ public class AccumuloDataStore implements
 					accumuloOperations,
 					accumuloOptions,
 					callbacksList,
-					callbacksList,
-					DataStoreUtils.UNCONSTRAINED_VISIBILITY);
+					callbacksList);
 
 			if (adapter instanceof IndexDependentDataAdapter) {
 				writers[i] = new IndependentAdapterIndexWriter<T>(
@@ -441,6 +441,11 @@ public class AccumuloDataStore implements
 								prefixIdQuery.getRowPrefix(),
 								(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 								sanitizedQueryOptions.getLimit(),
+								DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+										indexAdapterPair.getLeft(),
+										adapterIdsToQuery,
+										statisticsStore,
+										sanitizedQueryOptions.getAuthorizations()),
 								sanitizedQueryOptions.getAuthorizations());
 						results.add(prefixQuery.query(
 								accumuloOperations,
@@ -463,9 +468,20 @@ public class AccumuloDataStore implements
 							sanitizedQueryOptions.getScanCallback(),
 							sanitizedQueryOptions.getAggregation(),
 							sanitizedQueryOptions.getFieldIdsAdapterPair(),
-							composeMetaData(
+							IndexMetaDataSet.getIndexMetadata(
 									indexAdapterPair.getLeft(),
 									adapterIdsToQuery,
+									statisticsStore,
+									sanitizedQueryOptions.getAuthorizations()),
+							DuplicateEntryCount.getDuplicateCounts(
+									indexAdapterPair.getLeft(),
+									adapterIdsToQuery,
+									statisticsStore,
+									queryOptions.getAuthorizations()),
+							DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+									indexAdapterPair.getLeft(),
+									adapterIdsToQuery,
+									statisticsStore,
 									sanitizedQueryOptions.getAuthorizations()),
 							sanitizedQueryOptions.getAuthorizations());
 
@@ -609,16 +625,22 @@ public class AccumuloDataStore implements
 			final ScannerBase scanner = accumuloOperations.createScanner(
 					index.getId().getString(),
 					authorizations);
-
+			final DifferingFieldVisibilityEntryCount visibilityCount = DifferingFieldVisibilityEntryCount
+					.getVisibilityCounts(
+							index,
+							Collections.singletonList(adapter.getAdapterId()),
+							statisticsStore,
+							authorizations);
 			scanner.fetchColumnFamily(new Text(
 					adapter.getAdapterId().getBytes()));
+			if (visibilityCount.isAnyEntryDifferingFieldVisiblity()) {
+				final IteratorSetting rowIteratorSettings = new IteratorSetting(
+						SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
+						SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
+						WholeRowIterator.class);
+				scanner.addScanIterator(rowIteratorSettings);
 
-			final IteratorSetting rowIteratorSettings = new IteratorSetting(
-					SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
-					SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
-					WholeRowIterator.class);
-			scanner.addScanIterator(rowIteratorSettings);
-
+			}
 			final IteratorSetting filterIteratorSettings = new IteratorSetting(
 					SingleEntryFilterIterator.ENTRY_FILTER_ITERATOR_PRIORITY,
 					SingleEntryFilterIterator.ENTRY_FILTER_ITERATOR_NAME,
@@ -629,6 +651,9 @@ public class AccumuloDataStore implements
 					ByteArrayUtils.byteArrayToString(adapter.getAdapterId().getBytes()));
 
 			filterIteratorSettings.addOption(
+					SingleEntryFilterIterator.WHOLE_ROW_ENCODED_KEY,
+					Boolean.toString(visibilityCount.isAnyEntryDifferingFieldVisiblity()));
+			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.DATA_IDS,
 					SingleEntryFilterIterator.encodeIDs(dataIds));
 			scanner.addScanIterator(filterIteratorSettings);
@@ -637,6 +662,7 @@ public class AccumuloDataStore implements
 					new ScannerClosableWrapper(
 							scanner),
 					new EntryIteratorWrapper(
+							visibilityCount.isAnyEntryDifferingFieldVisiblity(),
 							adapterStore,
 							index,
 							scanner.iterator(),
@@ -837,6 +863,11 @@ public class AccumuloDataStore implements
 								((PrefixIdQuery) query).getRowPrefix(),
 								callback,
 								null,
+								DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+										indexAdapterPair.getLeft(),
+										Collections.singletonList(adapter.getAdapterId()),
+										statisticsStore,
+										queryOptions.getAuthorizations()),
 								queryOptions.getAuthorizations()).query(
 								accumuloOperations,
 								null,
@@ -853,9 +884,20 @@ public class AccumuloDataStore implements
 								callback,
 								null,
 								queryOptions.getFieldIdsAdapterPair(),
-								composeMetaData(
+								IndexMetaDataSet.getIndexMetadata(
 										indexAdapterPair.getLeft(),
 										adapterIds,
+										statisticsStore,
+										queryOptions.getAuthorizations()),
+								DuplicateEntryCount.getDuplicateCounts(
+										indexAdapterPair.getLeft(),
+										adapterIds,
+										statisticsStore,
+										queryOptions.getAuthorizations()),
+								DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+										indexAdapterPair.getLeft(),
+										adapterIds,
+										statisticsStore,
 										queryOptions.getAuthorizations()),
 								queryOptions.getAuthorizations()).query(
 								accumuloOperations,
@@ -1035,22 +1077,5 @@ public class AccumuloDataStore implements
 
 	public SecondaryIndexDataStore getSecondaryIndexDataStore() {
 		return secondaryIndexDataStore;
-	}
-
-	private IndexMetaDataSet composeMetaData(
-			final PrimaryIndex index,
-			final List<ByteArrayId> adapterIdsToQuery,
-			final String... authorizations ) {
-		final IndexMetaDataSet metaData = new IndexMetaDataSet(
-				index.getId(),
-				index.getId(),
-				index.getIndexStrategy().createMetaData());
-		for (final ByteArrayId adapterId : adapterIdsToQuery) {
-			metaData.merge(statisticsStore.getDataStatistics(
-					adapterId,
-					IndexMetaDataSet.composeId(index.getId()),
-					authorizations));
-		}
-		return metaData;
 	}
 }
