@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 	ElementType.METHOD
 })
 public @interface ClusteringParameter {
-	Clustering value();
+	Clustering[] value();
 }

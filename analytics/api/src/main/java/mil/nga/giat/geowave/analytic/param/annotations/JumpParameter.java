@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.JumpParameters.Jump;
 	ElementType.METHOD
 })
 public @interface JumpParameter {
-	Jump value();
+	Jump[] value();
 }

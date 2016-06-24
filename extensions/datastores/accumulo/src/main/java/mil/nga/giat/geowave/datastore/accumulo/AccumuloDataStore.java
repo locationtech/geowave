@@ -430,8 +430,7 @@ public class AccumuloDataStore implements
 									filter,
 									(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 									sanitizedQueryOptions.getAuthorizations(),
-									sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-									true));
+									sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension()));
 						}
 						continue;
 					}
@@ -565,8 +564,7 @@ public class AccumuloDataStore implements
 			final DedupeFilter dedupeFilter,
 			final ScanCallback<Object> callback,
 			final String[] authorizations,
-			final double[] maxResolutionSubsamplingPerDimension,
-			final boolean limit )
+			final double[] maxResolutionSubsamplingPerDimension )
 			throws IOException {
 		final String altIdxTableName = index.getId().getString() + AccumuloUtils.ALT_INDEX_TABLE;
 
@@ -581,8 +579,7 @@ public class AccumuloDataStore implements
 			final List<ByteArrayId> rowIds = getAltIndexRowIds(
 					altIdxTableName,
 					dataIds,
-					adapter.getAdapterId(),
-					limit ? 1 : -1);
+					adapter.getAdapterId());
 
 			if (rowIds.size() > 0) {
 				final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
@@ -597,7 +594,7 @@ public class AccumuloDataStore implements
 						accumuloOperations,
 						tempAdapterStore,
 						maxResolutionSubsamplingPerDimension,
-						(limit || (rowIds.size() < 2)) ? 1 : -1);
+						-1);
 			}
 		}
 		else {
@@ -608,8 +605,7 @@ public class AccumuloDataStore implements
 					adapter,
 					callback,
 					dedupeFilter,
-					authorizations,
-					limit ? 1 : -1);
+					authorizations);
 		}
 		return new CloseableIterator.Empty();
 	}
@@ -622,8 +618,7 @@ public class AccumuloDataStore implements
 			final DataAdapter<?> adapter,
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations,
-			final int limit ) {
+			final String[] authorizations ) {
 
 		try {
 
@@ -663,10 +658,6 @@ public class AccumuloDataStore implements
 					SingleEntryFilterIterator.encodeIDs(dataIds));
 			scanner.addScanIterator(filterIteratorSettings);
 
-			if (limit > 0) {
-				((Scanner) scanner).setBatchSize(limit);
-			}
-
 			return new CloseableIteratorWrapper<Object>(
 					new ScannerClosableWrapper(
 							scanner),
@@ -691,8 +682,7 @@ public class AccumuloDataStore implements
 	private List<ByteArrayId> getAltIndexRowIds(
 			final String tableName,
 			final List<ByteArrayId> dataIds,
-			final ByteArrayId adapterId,
-			final int limit ) {
+			final ByteArrayId adapterId ) {
 
 		final List<ByteArrayId> result = new ArrayList<ByteArrayId>();
 		if (accumuloOptions.isUseAltIndex() && accumuloOperations.tableExists(tableName)) {
@@ -708,11 +698,9 @@ public class AccumuloDataStore implements
 							adapterId.getBytes()));
 
 					final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
-					int i = 0;
-					while (iterator.hasNext() && ((limit < 0) || (i < limit))) {
+					while (iterator.hasNext()) {
 						result.add(new ByteArrayId(
 								iterator.next().getKey().getColumnQualifierData().getBackingArray()));
-						i++;
 					}
 				}
 				catch (final TableNotFoundException e) {
@@ -867,8 +855,7 @@ public class AccumuloDataStore implements
 								null,
 								callback,
 								queryOptions.getAuthorizations(),
-								null,
-								false);
+								null);
 					}
 					else if (query instanceof PrefixIdQuery) {
 						dataIt = new AccumuloRowPrefixQuery<Object>(

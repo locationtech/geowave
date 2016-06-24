@@ -35,6 +35,7 @@ public class JumpParameters
 					baseClass,
 					name,
 					description,
+					false,
 					hasArg);
 		}
 

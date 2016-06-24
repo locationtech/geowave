@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.directory.api.util.exception.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.JobContext;
@@ -51,6 +50,25 @@ public class PropertyManagementTest
 	}
 
 	@Test
+	public void testInt()
+			throws Exception {
+		final PropertyManagement pm = new PropertyManagement();
+
+		pm.storeAll(
+				new ParameterEnum[] {
+					ExtractParameters.Extract.MAX_INPUT_SPLIT
+				},
+				new Serializable[] {
+					"3"
+				});
+
+		assertEquals(
+				new Integer(
+						3),
+				pm.getProperty(ExtractParameters.Extract.MAX_INPUT_SPLIT));
+	}
+
+	@Test
 	public void testClass()
 			throws Exception {
 		final PropertyManagement pm = new PropertyManagement();
@@ -66,6 +84,14 @@ public class PropertyManagementTest
 		assertEquals(
 				EmptyDimensionExtractor.class,
 				pm.getPropertyAsClass(ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS));
+
+		((ParameterEnum<Object>) ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS).getHelper().setValue(
+				pm,
+				(Object) "mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor");
+
+		assertEquals(
+				EmptyDimensionExtractor.class,
+				pm.getProperty(ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -191,13 +217,6 @@ public class PropertyManagementTest
 				public NonSerializableExample getValue(
 						final PropertyManagement propertyManagement ) {
 					return null;
-				}
-
-				@Override
-				public NonSerializableExample getValue(
-						String stringValue ) {
-					throw new NotImplementedException(
-							"This method not implemented");
 				}
 
 				@Override
@@ -330,6 +349,7 @@ public class PropertyManagementTest
 					baseClass,
 					name,
 					description,
+					false,
 					hasArg);
 		}
 

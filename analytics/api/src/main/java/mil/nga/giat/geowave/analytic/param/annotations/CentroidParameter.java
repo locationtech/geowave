@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.CentroidParameters.Centroid;
 	ElementType.METHOD
 })
 public @interface CentroidParameter {
-	Centroid value();
+	Centroid[] value();
 }

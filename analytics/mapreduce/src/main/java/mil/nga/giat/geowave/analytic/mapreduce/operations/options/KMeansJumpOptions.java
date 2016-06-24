@@ -1,11 +1,14 @@
 package mil.nga.giat.geowave.analytic.mapreduce.operations.options;
 
+import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.analytic.param.JumpParameters;
 import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.JumpParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.SampleParameter;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 
 public class KMeansJumpOptions
 {
@@ -14,28 +17,28 @@ public class KMeansJumpOptions
 	@Parameter(names = {
 		"-jkp",
 		"--jumpKplusplusMin"
-	}, description = "The minimum k when K means ++ takes over sampling.")
+	}, required = true, description = "The minimum k when K means ++ takes over sampling.")
 	private String jumpKplusplusMin;
 
 	@JumpParameter(JumpParameters.Jump.RANGE_OF_CENTROIDS)
 	@Parameter(names = {
 		"-jrc",
 		"--jumpRangeOfCentroids"
-	}, description = "Comma-separated range of centroids (e.g. 2,100)")
-	private String jumpRangeOfCentroids;
+	}, required = true, description = "Comma-separated range of centroids (e.g. 2,100)", converter = NumericRangeConverter.class)
+	private NumericRange jumpRangeOfCentroids;
 
 	@SampleParameter(SampleParameters.Sample.SAMPLE_RANK_FUNCTION)
 	@Parameter(names = {
 		"-srf",
 		"--sampleSampleRankFunction"
-	}, description = "The rank function used when sampling the first N highest rank items.")
+	}, hidden = true, description = "The rank function used when sampling the first N highest rank items.")
 	private String sampleSampleRankFunction;
 
 	@SampleParameter(SampleParameters.Sample.SAMPLE_SIZE)
 	@Parameter(names = {
 		"-sss",
 		"--sampleSampleSize"
-	}, description = "Sample Size")
+	}, hidden = true, description = "Sample Size")
 	private String sampleSampleSize;
 
 	public String getJumpKplusplusMin() {
@@ -47,12 +50,12 @@ public class KMeansJumpOptions
 		this.jumpKplusplusMin = jumpKplusplusMin;
 	}
 
-	public String getJumpRangeOfCentroids() {
+	public NumericRange getJumpRangeOfCentroids() {
 		return jumpRangeOfCentroids;
 	}
 
 	public void setJumpRangeOfCentroids(
-			String jumpRangeOfCentroids ) {
+			NumericRange jumpRangeOfCentroids ) {
 		this.jumpRangeOfCentroids = jumpRangeOfCentroids;
 	}
 
@@ -72,5 +75,34 @@ public class KMeansJumpOptions
 	public void setSampleSampleSize(
 			String sampleSampleSize ) {
 		this.sampleSampleSize = sampleSampleSize;
+	}
+
+	public static class NumericRangeConverter implements
+			IStringConverter<NumericRange>
+	{
+
+		@Override
+		public NumericRange convert(
+				String value ) {
+			final String p = value.toString();
+			final String[] parts = p.split(",");
+			try {
+				if (parts.length == 2) {
+					return new NumericRange(
+							Double.parseDouble(parts[0].trim()),
+							Double.parseDouble(parts[1].trim()));
+				}
+				else {
+					return new NumericRange(
+							0,
+							Double.parseDouble(p));
+				}
+			}
+			catch (final Exception ex) {
+				throw new ParameterException(
+						"Invalid range parameter " + value);
+			}
+		}
+
 	}
 }

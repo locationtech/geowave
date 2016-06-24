@@ -38,6 +38,8 @@ public class AvroFeatureUtils
 	private static final SpecificDatumReader<AvroSimpleFeature> DATUM_READER = new SpecificDatumReader<AvroSimpleFeature>();
 	private static final WKBReader WKB_READER = new WKBReader();
 
+	private AvroFeatureUtils() {}
+
 	/**
 	 * Add the attributes, types and classifications for the SimpleFeatureType
 	 * to the provided FeatureDefinition
@@ -108,7 +110,7 @@ public class AvroFeatureUtils
 			final Map<String, String> defaultClassifications,
 			final String defaultClassification )
 			throws IOException {
-		String classification = null;
+		String classification;
 
 		if ((defaultClassifications != null) && defaultClassifications.containsKey(localName)) {
 			classification = defaultClassifications.get(localName);
@@ -145,7 +147,7 @@ public class AvroFeatureUtils
 
 		for (final AttributeDescriptor attr : sft.getAttributeDescriptors()) {
 			final Object o = sf.getAttribute(attr.getLocalName());
-			byte[] bytes = null;
+			byte[] bytes;
 			if (o instanceof Geometry) {
 				bytes = WKB_WRITER.write((Geometry) o);
 			}
@@ -214,7 +216,7 @@ public class AvroFeatureUtils
 			ClassNotFoundException,
 			ParseException {
 		// Convert
-		SimpleFeature simpleFeature = null;
+		SimpleFeature simpleFeature;
 
 		final SimpleFeatureBuilder sfb = new SimpleFeatureBuilder(
 				type);

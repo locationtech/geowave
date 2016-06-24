@@ -74,13 +74,6 @@ public class OutputStoreParameterHelper implements
 	}
 
 	@Override
-	public PersistableStore getValue(
-			String stringValue ) {
-		throw new NotImplementedException(
-				"This method not implemented");
-	}
-
-	@Override
 	public void setValue(
 			final PropertyManagement propertyManagement,
 			final PersistableStore value ) {

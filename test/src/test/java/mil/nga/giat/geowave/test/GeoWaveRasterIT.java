@@ -491,6 +491,7 @@ public class GeoWaveRasterIT
 				basicAdapter,
 				coverageName,
 				mergeStrategy);
+		basicAdapter.getMetadata().put("test-key","test-value");
 		try (IndexWriter writer = dataStore.createWriter(
 				mergeStrategyOverriddenAdapter,
 				TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX)) {

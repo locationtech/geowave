@@ -26,6 +26,10 @@ public class IndexOnlySpatialQuery extends
 				queryGeometry);
 	}
 
+	public IndexOnlySpatialQuery() {
+		super();
+	}
+
 	@Override
 	public DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,

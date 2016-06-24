@@ -36,12 +36,6 @@ public class BulkIngestInputGenerationIT
 	private static long mapInputRecords;
 	private static long mapOutputRecords;
 
-	@BeforeClass
-	public static void setUp() {
-		Logger.getRootLogger().setLevel(
-				Level.INFO);
-	}
-
 	@Test
 	public void testMapReduceJobSuccess()
 			throws Exception {

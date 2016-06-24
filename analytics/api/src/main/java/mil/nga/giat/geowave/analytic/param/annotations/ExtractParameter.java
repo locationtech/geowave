@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.ExtractParameters.Extract;
 	ElementType.METHOD
 })
 public @interface ExtractParameter {
-	Extract value();
+	Extract[] value();
 }

@@ -17,5 +17,5 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters.MRConfig;
 	ElementType.METHOD
 })
 public @interface MapReduceParameter {
-	MRConfig value();
+	MRConfig[] value();
 }
