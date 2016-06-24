@@ -129,7 +129,11 @@ public class AggregationIterator extends
 					currentRow,
 					commonData,
 					unknownData);
-			final boolean queryFilterResult = queryFilterIterator.applyRowFilter(encoding);
+
+			boolean queryFilterResult = true;
+			if (queryFilterIterator.isSet()) {
+				queryFilterResult = queryFilterIterator.applyRowFilter(encoding);
+			}
 			if (queryFilterResult) {
 				aggregateRow(
 						currentRow,
@@ -165,6 +169,7 @@ public class AggregationIterator extends
 					}
 				}
 			}
+
 			final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
 					persistenceEncoding.getAdapterId(),
 					persistenceEncoding.getDataId(),
@@ -173,56 +178,16 @@ public class AggregationIterator extends
 					persistenceEncoding.getCommonData(),
 					new PersistentDataset<byte[]>(),
 					adapterExtendedValues);
+			// the data adapter can't use the numeric index strategy and only
+			// the common index model to decode which is the case for feature
+			// data, we pass along a null strategy to eliminate the necessity to
+			// send a serialization of the strategy in the options of this
+			// iterator
 			final Object row = adapter.decode(
 					encoding,
 					new PrimaryIndex(
-							null, // the
-									// data
-									// adapter
-									// can't
-									// use
-									// the
-									// numeric
-									// index
-									// strategy
-									// and
-									// only
-									// the
-									// common
-									// index
-									// model
-									// to
-									// decode
-									// which
-									// is
-									// the
-									// case
-									// for
-									// feature
-									// data,
-									// we
-									// pass
-									// along
-									// a
-									// null
-									// strategy
-									// to
-									// eliminate
-									// the
-									// necessity
-									// to
-									// send
-									// a
-									// serialization
-									// of
-									// the
-									// strategy
-									// in
-									// the
-									// options
-									// of
-									// this
-									// iterator
+							null,
+
 							model));
 			if (row != null) {
 				// for now ignore field info
@@ -399,6 +364,8 @@ public class AggregationIterator extends
 		if (iterator instanceof AggregationIterator) {
 			((AggregationIterator) iterator).startRowOfAggregation = startRowOfAggregation;
 			((AggregationIterator) iterator).adapter = adapter;
+			((AggregationIterator) iterator).queryFilterIterator = queryFilterIterator;
+			((AggregationIterator) iterator).parent = parent;
 			((AggregationIterator) iterator).aggregationFunction = aggregationFunction;
 			((AggregationIterator) iterator).aggregationReturned = aggregationReturned;
 		}

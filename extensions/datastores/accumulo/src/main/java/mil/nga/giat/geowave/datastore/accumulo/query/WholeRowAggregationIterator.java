@@ -33,14 +33,13 @@ public class WholeRowAggregationIterator extends
 			final Text currentRow,
 			final List<Key> keys,
 			final List<Value> values ) {
-		if ((aggregationIterator != null) && (aggregationIterator.queryFilterIterator != null)
-				&& aggregationIterator.queryFilterIterator.isSet()) {
+		if ((aggregationIterator != null) && (aggregationIterator.queryFilterIterator != null)) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 			final List<AccumuloFieldInfo> unknownData = new ArrayList<AccumuloFieldInfo>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
 				final Value value = values.get(i);
-				queryFilterIterator.aggregateFieldData(
+				aggregationIterator.queryFilterIterator.aggregateFieldData(
 						key,
 						value,
 						commonData,
@@ -50,7 +49,10 @@ public class WholeRowAggregationIterator extends
 					currentRow,
 					commonData,
 					unknownData);
-			final boolean queryFilterResult = queryFilterIterator.applyRowFilter(encoding);
+			boolean queryFilterResult = true;
+			if (aggregationIterator.queryFilterIterator.isSet()) {
+				queryFilterResult = aggregationIterator.queryFilterIterator.applyRowFilter(encoding);
+			}
 			if (queryFilterResult) {
 				aggregationIterator.aggregateRow(
 						currentRow,
@@ -85,8 +87,8 @@ public class WholeRowAggregationIterator extends
 		final SortedKeyValueIterator<Key, Value> iterator = super.deepCopy(env);
 		if (iterator instanceof WholeRowAggregationIterator) {
 			aggregationIterator = new AggregationIterator();
-			aggregationIterator.setParent(new WholeRowAggregationParent());
 			aggregationIterator.deepCopyIterator(((WholeRowAggregationIterator) iterator).aggregationIterator);
+			aggregationIterator.setParent(new WholeRowAggregationParent());
 		}
 		return iterator;
 	}

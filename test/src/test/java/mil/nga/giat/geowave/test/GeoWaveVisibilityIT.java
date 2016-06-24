@@ -33,6 +33,8 @@ import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
@@ -267,6 +269,30 @@ public class GeoWaveVisibilityIT
 							+ " with auths " + Arrays.toString(auths),
 					expectedNonNullFieldCount,
 					nonNullFieldsCount);
+		}
+
+		queryOpts.setAggregation(
+				new CountAggregation<>(),
+				new FeatureDataAdapter(
+						getType()));
+		try (CloseableIterator<CountResult> it = (CloseableIterator) store.query(
+				queryOpts,
+				spatial ? new SpatialQuery(
+						new GeometryFactory().toGeometry(new Envelope(
+								-1,
+								1,
+								-1,
+								1))) : null)) {
+			CountResult result = it.next();
+			long count = 0;
+			if (result != null) {
+				count = result.getCount();
+			}
+			Assert.assertEquals(
+					"Unexpected aggregation result count for " + (spatial ? "spatial query" : "full table scan")
+							+ " with auths " + Arrays.toString(auths),
+					expectedResultCount,
+					count);
 		}
 	}
 

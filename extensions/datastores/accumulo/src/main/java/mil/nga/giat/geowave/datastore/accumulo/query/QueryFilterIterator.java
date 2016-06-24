@@ -209,21 +209,25 @@ public class QueryFilterIterator extends
 			final Map<String, String> options ) {
 		if (options == null) {
 			throw new IllegalArgumentException(
-					"Arguments must be set for " + WholeRowQueryFilterIterator.class.getName());
+					"Arguments must be set for " + QueryFilterIterator.class.getName());
 		}
 		try {
-			final String filterStr = options.get(FILTER);
-			final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
-			filter = PersistenceUtils.fromBinary(
-					filterBytes,
-					DistributableQueryFilter.class);
-			final String modelStr = options.get(MODEL);
-			final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
-			model = PersistenceUtils.fromBinary(
-					modelBytes,
-					CommonIndexModel.class);
-			for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
-				commonIndexFieldIds.add(numericDimension.getFieldId());
+			if (options.containsKey(FILTER)) {
+				final String filterStr = options.get(FILTER);
+				final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
+				filter = PersistenceUtils.fromBinary(
+						filterBytes,
+						DistributableQueryFilter.class);
+			}
+			if (options.containsKey(MODEL)) {
+				final String modelStr = options.get(MODEL);
+				final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
+				model = PersistenceUtils.fromBinary(
+						modelBytes,
+						CommonIndexModel.class);
+				for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
+					commonIndexFieldIds.add(numericDimension.getFieldId());
+				}
 			}
 		}
 		catch (final Exception e) {

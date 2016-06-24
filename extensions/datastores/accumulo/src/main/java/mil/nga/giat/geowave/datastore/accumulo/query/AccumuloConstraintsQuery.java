@@ -132,39 +132,43 @@ public class AccumuloConstraintsQuery extends
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 		addFieldSubsettingToIterator(scanner);
-
-		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
-			final IteratorSetting iteratorSettings;
-			if (isAggregation()) {
-				if (useWholeRowIterator()) {
-					iteratorSettings = new IteratorSetting(
-							QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-							QueryFilterIterator.QUERY_ITERATOR_NAME,
-							WholeRowAggregationIterator.class);
-				}
-				else {
-					iteratorSettings = new IteratorSetting(
-							QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-							QueryFilterIterator.QUERY_ITERATOR_NAME,
-							AggregationIterator.class);
-				}
-				iteratorSettings.addOption(
-						AggregationIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getLeft())));
-				final Aggregation aggr = aggregation.getRight();
-				iteratorSettings.addOption(
-						AggregationIterator.AGGREGATION_OPTION_NAME,
-						aggr.getClass().getName());
-				iteratorSettings.addOption(
-						AggregationIterator.CONSTRAINTS_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(constraints))));
-				iteratorSettings.addOption(
-						AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexStrategy())));
-				// don't bother setting max decomposition because it is just the
-				// default anyways
+		IteratorSetting iteratorSettings = null;
+		if (isAggregation()) {
+			if (useWholeRowIterator()) {
+				iteratorSettings = new IteratorSetting(
+						QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+						QueryFilterIterator.QUERY_ITERATOR_NAME,
+						WholeRowAggregationIterator.class);
 			}
 			else {
+				iteratorSettings = new IteratorSetting(
+						QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+						QueryFilterIterator.QUERY_ITERATOR_NAME,
+						AggregationIterator.class);
+			}
+			iteratorSettings.addOption(
+					AggregationIterator.ADAPTER_OPTION_NAME,
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getLeft())));
+			final Aggregation aggr = aggregation.getRight();
+			iteratorSettings.addOption(
+					AggregationIterator.AGGREGATION_OPTION_NAME,
+					aggr.getClass().getName());
+			iteratorSettings.addOption(
+					AggregationIterator.CONSTRAINTS_OPTION_NAME,
+					ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(constraints))));
+			iteratorSettings.addOption(
+					AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexStrategy())));
+			// the index model must be provided for the aggregation iterator to
+			// deserialize each entry
+			iteratorSettings.addOption(
+					QueryFilterIterator.MODEL,
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
+			// don't bother setting max decomposition because it is just the
+			// default anyways
+		}
+		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
+			if (iteratorSettings == null) {
 				if (useWholeRowIterator()) {
 					iteratorSettings = new IteratorSetting(
 							QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
@@ -183,20 +187,24 @@ public class AccumuloConstraintsQuery extends
 			iteratorSettings.addOption(
 					QueryFilterIterator.FILTER,
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(filterList)));
-			iteratorSettings.addOption(
-					QueryFilterIterator.MODEL,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
-			scanner.addScanIterator(iteratorSettings);
+			if (!iteratorSettings.getOptions().containsKey(
+					QueryFilterIterator.MODEL)) {
+				// it may already be added as an option if its an aggregation
+				iteratorSettings.addOption(
+						QueryFilterIterator.MODEL,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
+			}
 		}
-		else if (useWholeRowIterator()) {
+		else if ((iteratorSettings == null) && useWholeRowIterator()) {
 			// we have to at least use a whole row iterator
-			final IteratorSetting iteratorSettings = new IteratorSetting(
+			iteratorSettings = new IteratorSetting(
 					QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
 					QueryFilterIterator.QUERY_ITERATOR_NAME,
 					WholeRowIterator.class);
+		}
+		if (iteratorSettings != null) {
 			scanner.addScanIterator(iteratorSettings);
 		}
-
 	}
 
 	@Override
