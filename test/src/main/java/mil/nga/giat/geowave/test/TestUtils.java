@@ -498,5 +498,10 @@ public class TestUtils
 									errorPixels,
 									minErrorPixels));
 		}
+
+		if (errorPixels > 0) {
+			System.out.println(
+					(float) errorPixels / (float) totalPixels + "% pixels differed from expected");
+		}
 	}
 }

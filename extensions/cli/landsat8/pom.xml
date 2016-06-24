@@ -36,6 +36,10 @@
 					<groupId>com.vividsolutions</groupId>
 					<artifactId>jts</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>gt-epsg-hsql</artifactId>
+					<groupId>org.geotools</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
