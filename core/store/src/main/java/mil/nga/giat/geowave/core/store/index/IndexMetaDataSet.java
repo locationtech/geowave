@@ -5,13 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
@@ -40,7 +36,7 @@ public class IndexMetaDataSet<T> extends
 	}
 
 	public static ByteArrayId composeId(
-			ByteArrayId indexId ) {
+			final ByteArrayId indexId ) {
 		return new ByteArrayId(
 				ArrayUtils.addAll(
 						STATS_ID.getBytes(),
@@ -57,8 +53,8 @@ public class IndexMetaDataSet<T> extends
 
 	public static ByteArrayId decomposeFromId(
 			final ByteArrayId id ) {
-		int idLength = id.getBytes().length - STATS_ID.getBytes().length;
-		byte[] idBytes = new byte[idLength];
+		final int idLength = id.getBytes().length - STATS_ID.getBytes().length;
+		final byte[] idBytes = new byte[idLength];
 		System.arraycopy(
 				id.getBytes(),
 				STATS_ID.getBytes().length,
@@ -80,7 +76,7 @@ public class IndexMetaDataSet<T> extends
 	@Override
 	public byte[] toBinary() {
 		final byte[] metaBytes = PersistenceUtils.toBinary(metaData);
-		ByteBuffer buffer = super.binaryBuffer(metaBytes.length);
+		final ByteBuffer buffer = super.binaryBuffer(metaBytes.length);
 		buffer.put(metaBytes);
 		return buffer.array();
 	}
@@ -88,7 +84,7 @@ public class IndexMetaDataSet<T> extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		final byte[] metaBytes = new byte[buffer.remaining()];
 		buffer.get(metaBytes);
@@ -102,8 +98,8 @@ public class IndexMetaDataSet<T> extends
 
 	@Override
 	public void merge(
-			Mergeable merge ) {
-		if (merge != null && merge instanceof IndexMetaDataSet) {
+			final Mergeable merge ) {
+		if ((merge != null) && (merge instanceof IndexMetaDataSet)) {
 			for (int i = 0; i < metaData.size(); i++) {
 				metaData.get(
 						i).merge(
@@ -114,10 +110,10 @@ public class IndexMetaDataSet<T> extends
 
 	@Override
 	public void entryIngested(
-			DataStoreEntryInfo entryInfo,
-			T entry ) {
-		for (IndexMetaData imd : this.metaData) {
-			imd.update(entryInfo.getRowIds());
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
+		for (final IndexMetaData imd : this.metaData) {
+			imd.update(entryInfo.getInsertionIds());
 		}
 	}
 

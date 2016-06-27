@@ -7,6 +7,9 @@
 		<relativePath>../</relativePath>
 		<version>0.9.2-SNAPSHOT</version>
 	</parent>
+	<properties>
+		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
+	</properties>
 	<artifactId>geowave-test</artifactId>
 	<name>GeoWave Integration Tests</name>
 	<description>A module for integration and functional tests of GeoWave</description>
@@ -56,6 +59,16 @@
 			<groupId>net.lingala.zip4j</groupId>
 			<artifactId>zip4j</artifactId>
 			<version>1.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-archiver</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-cli-landsat8</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
@@ -179,7 +192,26 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>install-gdal</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>mil.nga.giat.geowave.test.InstallGdal</mainClass>
+					<arguments>
+						<argument>${gdal.dir}</argument>
+					</arguments>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -187,6 +219,10 @@
 				<executions>
 					<execution>
 						<configuration>
+							<environmentVariables>
+								<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
+								<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
+							</environmentVariables>
 							<systemPropertyVariables>
 								<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
 								<instance>${instance}</instance>
@@ -242,7 +278,9 @@
 												excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
-											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
+											<fileset dir="../"
+												includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
+												excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
@@ -276,6 +314,8 @@
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/stats/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/cli/landsat8/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/cli/osm/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/debug/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/formats/geotools-vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/formats/geotools-raster/src/main/java</sourceDirectory>

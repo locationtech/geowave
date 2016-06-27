@@ -99,7 +99,11 @@ public class OSMRunner extends
 				accumuloOptions.getUser(),
 				accumuloOptions.getPassword(),
 				accumuloOptions.getGeowaveNamespace());
-		bao.createTable(argv.getOsmTableName());
+		bao.createTable(
+				argv.getOsmTableName(),
+				true,
+				true,
+				null);
 
 		bao.addLocalityGroup(
 				argv.getOsmTableName(),

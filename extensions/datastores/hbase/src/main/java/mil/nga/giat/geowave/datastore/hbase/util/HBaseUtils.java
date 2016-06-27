@@ -410,6 +410,8 @@ public class HBaseUtils
 						new DataStoreEntryInfo(
 								rowId.getDataId(),
 								Arrays.asList(new ByteArrayId(
+										rowId.getInsertionId())),
+								Arrays.asList(new ByteArrayId(
 										row.getRow())),
 								fieldInfoList));
 				if (scanCallback != null) {

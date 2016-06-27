@@ -4,19 +4,20 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
+import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
-
-import org.junit.Test;
 
 public class RowHistogramFixedDataStaticticsTest
 {
 	static final long base = 7l;
 
 	private ByteArrayId genId(
-			long id ) {
+			final long id ) {
 		return new ByteArrayId(
 				String.format(
 						"\12%5h",
@@ -25,7 +26,7 @@ public class RowHistogramFixedDataStaticticsTest
 
 	@Test
 	public void testIngest() {
-		RowRangeHistogramStatistics<Integer> stats = new RowRangeHistogramStatistics<Integer>(
+		final RowRangeHistogramStatistics<Integer> stats = new RowRangeHistogramStatistics<Integer>(
 				new ByteArrayId(
 						"20030"),
 				new ByteArrayId(
@@ -33,11 +34,13 @@ public class RowHistogramFixedDataStaticticsTest
 				1024);
 
 		for (long i = 0; i < 10000; i++) {
+			final List<ByteArrayId> ids = Arrays.asList(genId(i));
 			stats.entryIngested(
 					new DataStoreEntryInfo(
 							Long.toString(
 									i).getBytes(),
-							Arrays.asList(genId(i)),
+							ids,
+							ids,
 							Collections.<FieldInfo<?>> emptyList()),
 					1);
 		}
@@ -62,7 +65,7 @@ public class RowHistogramFixedDataStaticticsTest
 						5000).getBytes()),
 				0.04);
 
-		RowRangeHistogramStatistics<Integer> stats2 = new RowRangeHistogramStatistics<Integer>(
+		final RowRangeHistogramStatistics<Integer> stats2 = new RowRangeHistogramStatistics<Integer>(
 				new ByteArrayId(
 						"20030"),
 				new ByteArrayId(
@@ -70,11 +73,14 @@ public class RowHistogramFixedDataStaticticsTest
 				1024);
 
 		for (long j = 10000; j < 20000; j++) {
+
+			ByteArrayId id = genId(j);
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
 							Long.toString(
 									j).getBytes(),
-							Arrays.asList(genId(j)),
+							Arrays.asList(id),
+							Arrays.asList(id),
 							Collections.<FieldInfo<?>> emptyList()),
 					1);
 		}

@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.adapter.raster.adapter;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.image.BufferedImage;
@@ -32,12 +31,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.measure.unit.Unit;
-import javax.media.jai.BorderExtender;
 import javax.media.jai.Interpolation;
 import javax.media.jai.InterpolationBicubic2;
 import javax.media.jai.InterpolationBilinear;
 import javax.media.jai.InterpolationNearest;
-import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
@@ -52,7 +49,6 @@ import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
-import org.geotools.coverage.processing.Operations;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.GeometryClipper;
 import org.geotools.geometry.jts.JTS;
@@ -98,12 +94,16 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IteratorWrapper;
 import mil.nga.giat.geowave.core.store.IteratorWrapper.Converter;
@@ -137,12 +137,14 @@ public class RasterDataAdapter implements
 		SourceThresholdFixMosaicDescriptor.register(false);
 	}
 
+	public final static String TILE_METADATA_PROPERTY_KEY = "TILE_METADATA";
+
 	private final static Logger LOGGER = Logger.getLogger(RasterDataAdapter.class);
 	private final static ByteArrayId DATA_FIELD_ID = new ByteArrayId(
 			"image");
 	public final static int DEFAULT_TILE_SIZE = 256;
 	public final static boolean DEFAULT_BUILD_PYRAMID = false;
-	private static Operations resampleOperations;
+	public final static boolean DEFAULT_BUILD_HISTOGRAM = true;
 
 	/**
 	 * A transparent color for missing data.
@@ -182,6 +184,8 @@ public class RasterDataAdapter implements
 				originalGridCoverage,
 				DEFAULT_TILE_SIZE,
 				DEFAULT_BUILD_PYRAMID,
+				DEFAULT_BUILD_HISTOGRAM,
+				new double[originalGridCoverage.getNumSampleDimensions()][],
 				new NoDataMergeStrategy());
 	}
 
@@ -197,6 +201,8 @@ public class RasterDataAdapter implements
 				originalGridCoverage,
 				tileSize,
 				buildPyramid,
+				DEFAULT_BUILD_HISTOGRAM,
+				new double[originalGridCoverage.getNumSampleDimensions()][],
 				new NoDataMergeStrategy());
 	}
 
@@ -206,6 +212,27 @@ public class RasterDataAdapter implements
 			final GridCoverage2D originalGridCoverage,
 			final int tileSize,
 			final boolean buildPyramid,
+			final boolean buildHistogram,
+			final double[][] noDataValuesPerBand ) {
+		this(
+				coverageName,
+				metadata,
+				originalGridCoverage,
+				tileSize,
+				buildPyramid,
+				buildHistogram,
+				noDataValuesPerBand,
+				new NoDataMergeStrategy());
+	}
+
+	public RasterDataAdapter(
+			final String coverageName,
+			final Map<String, String> metadata,
+			final GridCoverage2D originalGridCoverage,
+			final int tileSize,
+			final boolean buildPyramid,
+			final boolean buildHistogram,
+			final double[][] noDataValuesPerBand,
 			final RasterTileMergeStrategy<?> mergeStrategy ) {
 		final RenderedImage img = originalGridCoverage.getRenderedImage();
 		sampleModel = img.getSampleModel();
@@ -213,19 +240,46 @@ public class RasterDataAdapter implements
 		this.metadata = metadata;
 		this.coverageName = coverageName;
 		this.tileSize = tileSize;
-		histogramConfig = new HistogramConfig(
-				sampleModel);
-		noDataValuesPerBand = new double[originalGridCoverage.getNumSampleDimensions()][];
-		for (int d = 0; d < noDataValuesPerBand.length; d++) {
-			noDataValuesPerBand[d] = originalGridCoverage.getSampleDimension(
-					d).getNoDataValues();
+		if (buildHistogram) {
+			histogramConfig = new HistogramConfig(
+					sampleModel);
 		}
-		backgroundValuesPerBand = CoverageUtilities.getBackgroundValues(originalGridCoverage);
+		else {
+			histogramConfig = null;
+		}
+		if ((noDataValuesPerBand != null) && (noDataValuesPerBand.length != 0)) {
+			this.noDataValuesPerBand = noDataValuesPerBand;
+			backgroundValuesPerBand = new double[noDataValuesPerBand.length];
+			for (int d = 0; d < this.noDataValuesPerBand.length; d++) {
+				if ((noDataValuesPerBand[d] != null) && (noDataValuesPerBand[d].length > 0)) {
+					backgroundValuesPerBand[d] = noDataValuesPerBand[d][0];
+				}
+				else {
+					backgroundValuesPerBand[d] = 0.0;
+				}
+			}
+		}
+		else {
+			this.noDataValuesPerBand = new double[originalGridCoverage.getNumSampleDimensions()][];
+			for (int d = 0; d < this.noDataValuesPerBand.length; d++) {
+				this.noDataValuesPerBand[d] = originalGridCoverage.getSampleDimension(
+						d).getNoDataValues();
+			}
+			backgroundValuesPerBand = CoverageUtilities.getBackgroundValues(originalGridCoverage);
+		}
+
 		this.buildPyramid = buildPyramid;
-		this.mergeStrategy = new RootMergeStrategy(
-				getAdapterId(),
-				sampleModel,
-				mergeStrategy);
+		if (mergeStrategy != null) {
+			this.mergeStrategy = new RootMergeStrategy(
+					getAdapterId(),
+					sampleModel.createCompatibleSampleModel(
+							tileSize,
+							tileSize),
+					mergeStrategy);
+		}
+		else {
+			this.mergeStrategy = null;
+		}
 		init();
 	}
 
@@ -249,7 +303,7 @@ public class RasterDataAdapter implements
 				new HistogramConfig(
 						sampleModel),
 				true,
-				Interpolation.INTERP_BICUBIC,
+				Interpolation.INTERP_NEAREST,
 				buildPyramid,
 				new NoDataMergeStrategy());
 	}
@@ -361,10 +415,17 @@ public class RasterDataAdapter implements
 		this.buildPyramid = buildPyramid;
 		this.equalizeHistogram = equalizeHistogram;
 		interpolation = Interpolation.getInstance(interpolationType);
-		this.mergeStrategy = new RootMergeStrategy(
-				getAdapterId(),
-				sampleModel,
-				mergeStrategy);
+		if (mergeStrategy != null) {
+			this.mergeStrategy = new RootMergeStrategy(
+					getAdapterId(),
+					sampleModel.createCompatibleSampleModel(
+							tileSize,
+							tileSize),
+					mergeStrategy);
+		}
+		else {
+			this.mergeStrategy = null;
+		}
 		init();
 	}
 
@@ -391,7 +452,9 @@ public class RasterDataAdapter implements
 	public Iterator<GridCoverage> convertToIndex(
 			final PrimaryIndex index,
 			final GridCoverage gridCoverage ) {
-		if (index.getIndexStrategy() instanceof HierarchicalNumericIndexStrategy) {
+		final HierarchicalNumericIndexStrategy indexStrategy = CompoundHierarchicalIndexStrategyWrapper
+				.findHierarchicalStrategy(index.getIndexStrategy());
+		if (indexStrategy != null) {
 			final CoordinateReferenceSystem sourceCrs = gridCoverage.getCoordinateReferenceSystem();
 
 			final Envelope sampleEnvelope = gridCoverage.getEnvelope();
@@ -420,7 +483,7 @@ public class RasterDataAdapter implements
 
 			final MultiDimensionalNumericData bounds = GeometryUtils.basicConstraintSetFromEnvelope(
 					projectedReferenceEnvelope).getIndexConstraints(
-					index.getIndexStrategy());
+					indexStrategy);
 			final GridEnvelope gridEnvelope = gridCoverage.getGridGeometry().getGridRange();
 			// only one set of constraints..hence reference '0' element
 			final double[] tileRangePerDimension = new double[bounds.getDimensionCount()];
@@ -435,10 +498,8 @@ public class RasterDataAdapter implements
 						gridEnvelope.getSpan(d),
 						maxSpan);
 			}
-			final HierarchicalNumericIndexStrategy imagePyramid = (HierarchicalNumericIndexStrategy) index
-					.getIndexStrategy();
 			final TreeMap<Double, SubStrategy> substrategyMap = new TreeMap<Double, SubStrategy>();
-			for (final SubStrategy pyramidLevel : imagePyramid.getSubStrategies()) {
+			for (final SubStrategy pyramidLevel : indexStrategy.getSubStrategies()) {
 				final double[] idRangePerDimension = pyramidLevel
 						.getIndexStrategy()
 						.getHighestPrecisionIdRangePerDimension();
@@ -561,7 +622,7 @@ public class RasterDataAdapter implements
 
 				@Override
 				public GridCoverage next() {
-					final ByteArrayId insertionId = insertionIds.next();
+					ByteArrayId insertionId = insertionIds.next();
 					if (insertionId == null) {
 						return null;
 					}
@@ -643,7 +704,8 @@ public class RasterDataAdapter implements
 									wholeFootprintScreenGeom,
 									true);
 							if (footprintWithinTileScreenGeom == null) {
-								// for some reason the original image footprint
+								// for some reason the original image
+								// footprint
 								// falls outside this insertion ID
 								LOGGER.warn("Original footprint geometry (" + originalData.getGridGeometry()
 										+ ") falls outside the insertion bounds (" + insertionIdGeometry + ")");
@@ -654,7 +716,8 @@ public class RasterDataAdapter implements
 									gridToCRS);
 							if (footprintWithinTileScreenGeom
 									.covers(new GeometryFactory().toGeometry(fullTileEnvelope))) {
-								// if the screen geometry fully covers the tile,
+								// if the screen geometry fully covers the
+								// tile,
 								// don't bother carrying it forward
 								footprintWithinTileScreenGeom = null;
 							}
@@ -670,7 +733,8 @@ public class RasterDataAdapter implements
 
 						// TODO a JAI bug "workaround" in GeoTools does not
 						// work, this is a workaround for the GeoTools bug
-						// see https://jira.codehaus.org/browse/GEOT-3585, and
+						// see https://jira.codehaus.org/browse/GEOT-3585,
+						// and
 						// line 666-698 of
 						// org.geotools.coverage.processing.operation.Resampler2D
 						// (gt-coverage-12.1)
@@ -689,7 +753,7 @@ public class RasterDataAdapter implements
 							}
 						}
 						final GridCoverage resampledCoverage = (GridCoverage) RasterUtils
-								.getResampleOperations()
+								.getCoverageOperations()
 								.resample(
 										originalData,
 										GeoWaveGTRasterFormat.DEFAULT_CRS,
@@ -703,7 +767,8 @@ public class RasterDataAdapter implements
 						// adding a
 						// hacky fix
 
-						// sometimes the resample results in an image that is
+						// sometimes the resample results in an image that
+						// is
 						// not tileSize in width and height although the
 						// insertionIdGeometry is telling it to resample to
 						// tileSize
@@ -730,12 +795,17 @@ public class RasterDataAdapter implements
 						// -resampledCoverage.getRenderedImage().getMinX(),
 						// -resampledCoverage.getRenderedImage().getMinY());
 						// }
-						// if ((resampledCoverage.getRenderedImage().getWidth()
+						// if
+						// ((resampledCoverage.getRenderedImage().getWidth()
 						// != tileSize) ||
-						// (resampledCoverage.getRenderedImage().getHeight() !=
+						// (resampledCoverage.getRenderedImage().getHeight()
+						// !=
 						// tileSize) ||
-						// (resampledCoverage.getRenderedImage().getMinX() != 0)
-						// || (resampledCoverage.getRenderedImage().getMinY() !=
+						// (resampledCoverage.getRenderedImage().getMinX()
+						// != 0)
+						// ||
+						// (resampledCoverage.getRenderedImage().getMinY()
+						// !=
 						// 0)) {
 						// resampledCoverage = Operations.DEFAULT.scale(
 						// resampledCoverage,
@@ -744,6 +814,30 @@ public class RasterDataAdapter implements
 						// -resampledCoverage.getRenderedImage().getMinX(),
 						// -resampledCoverage.getRenderedImage().getMinY());
 						// }
+						if (pyramidLevel.getIndexStrategy() instanceof CompoundIndexStrategy) {
+							// this is exclusive on the end, and the tier is set
+							// so just get the id based on the lowest half of
+							// the multidimensional data
+							final double[] centroids = rangePerDimension.getCentroidPerDimension();
+							final double[] mins = rangePerDimension.getMinValuesPerDimension();
+							final NumericRange[] ranges = new NumericRange[centroids.length];
+							for (int d = 0; d < centroids.length; d++) {
+								ranges[d] = new NumericRange(
+										mins[d],
+										centroids[d]);
+							}
+
+							insertionId = pyramidLevel.getIndexStrategy().getInsertionIds(
+									new BasicNumericDataset(
+											ranges)).get(
+									0);
+							// this is intended to allow the partitioning
+							// algorithm to use a consistent multi-dimensional
+							// dataset (so if hashing is done on the
+							// multi-dimensional data, it will be a consistent
+							// hash for each tile and merge strategies will work
+							// correctly)
+						}
 						return new FitToIndexGridCoverage(
 								resampledCoverage,
 								insertionId,
@@ -751,7 +845,8 @@ public class RasterDataAdapter implements
 										pixelRes),
 								originalEnvelope,
 								footprintWithinTileWorldGeom,
-								footprintWithinTileScreenGeom);
+								footprintWithinTileScreenGeom,
+								getProperties(originalData));
 					}
 					catch (IllegalArgumentException | NoninvertibleTransformException e) {
 						LOGGER.warn(
@@ -848,7 +943,7 @@ public class RasterDataAdapter implements
 				GeoWaveGTRasterFormat.DEFAULT_CRS);
 		try {
 			return prepareCoverage(
-					rasterTile.getDataBuffer(),
+					rasterTile,
 					tileSize,
 					mapExtent);
 		}
@@ -863,16 +958,18 @@ public class RasterDataAdapter implements
 	/**
 	 * This method is responsible for creating a coverage from the supplied
 	 * {@link RenderedImage}.
-	 * 
+	 *
 	 * @param image
 	 * @return
 	 * @throws IOException
 	 */
 	private GridCoverage2D prepareCoverage(
-			final DataBuffer dataBuffer,
+			final RasterTile rasterTile,
 			final int tileSize,
 			final ReferencedEnvelope mapExtent )
 			throws IOException {
+		final DataBuffer dataBuffer = rasterTile.getDataBuffer();
+		final Persistable tileMetadata = rasterTile.getMetadata();
 		final SampleModel sm = sampleModel.createCompatibleSampleModel(
 				tileSize,
 				tileSize);
@@ -1024,6 +1121,15 @@ public class RasterDataAdapter implements
 					worldToScreenTransform.createInverse());
 
 			final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
+			final Map properties = new HashMap();
+			if (metadata != null) {
+				properties.putAll(metadata);
+			}
+			if (tileMetadata != null) {
+				properties.put(
+						TILE_METADATA_PROPERTY_KEY,
+						tileMetadata);
+			}
 			return gcf.create(
 					coverageName,
 					image,
@@ -1037,8 +1143,7 @@ public class RasterDataAdapter implements
 							null),
 					bands,
 					null,
-					null);
-
+					properties);
 		}
 		catch (IllegalArgumentException | NoninvertibleTransformException e) {
 			LOGGER.warn(
@@ -1048,13 +1153,26 @@ public class RasterDataAdapter implements
 		return null;
 	}
 
+	private static Map getProperties(
+			final GridCoverage entry ) {
+		Map originalCoverageProperties = new HashMap<>();
+		if (entry instanceof GridCoverage2D) {
+			originalCoverageProperties = ((GridCoverage2D) entry).getProperties();
+		}
+		else if (entry instanceof FitToIndexGridCoverage) {
+			originalCoverageProperties = ((FitToIndexGridCoverage) entry).getProperties();
+		}
+		return originalCoverageProperties;
+	}
+
 	public MergeableRasterTile<?> getRasterTileFromCoverage(
 			final GridCoverage entry ) {
 		return new MergeableRasterTile(
 				getRaster(
 						entry).getDataBuffer(),
-				mergeStrategy.getMetadata(
+				mergeStrategy == null ? null : mergeStrategy.getMetadata(
 						entry,
+						getProperties(entry),
 						this),
 				mergeStrategy,
 				getAdapterId());
@@ -1513,7 +1631,7 @@ public class RasterDataAdapter implements
 							coverageName));
 		}
 		else if (RasterFootprintStatistics.STATS_ID.equals(statisticsId)) {
-			return new RasterBoundingBoxStatistics(
+			return new RasterFootprintStatistics(
 					new ByteArrayId(
 							coverageName));
 		}
@@ -1591,18 +1709,30 @@ public class RasterDataAdapter implements
 				final Unit<?> unit ) {
 			super(
 					description,
-					!Double.isNaN(nodata) ? new Category[] {
+					// first attempt to retain the min and max with a "normal"
+					// category
+					!Double.isNaN(minimum) && !Double.isNaN(maximum) ? new Category[] {
 						new Category(
-								Vocabulary.formatInternational(VocabularyKeys.NODATA),
-								new Color(
-										0,
-										0,
-										0,
-										0),
+								Vocabulary.formatInternational(VocabularyKeys.NORMAL),
+								(Color) null,
 								NumberRange.create(
-										nodata,
-										nodata))
-					} : null,
+										minimum,
+										maximum)),
+					} :
+					// if that doesn't work, attempt to retain the nodata
+					// category
+							!Double.isNaN(nodata) ? new Category[] {
+								new Category(
+										Vocabulary.formatInternational(VocabularyKeys.NODATA),
+										new Color(
+												0,
+												0,
+												0,
+												0),
+										NumberRange.create(
+												nodata,
+												nodata))
+							} : null,
 					unit);
 			this.nodata = nodata;
 			this.minimum = minimum;
@@ -1708,11 +1838,13 @@ public class RasterDataAdapter implements
 
 	public Map<String, String> getConfiguredOptions() {
 		final Map<String, String> configuredOptions = new HashMap<String, String>();
-		final String mergeStrategyStr = ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(mergeStrategy));
+		if (mergeStrategy != null) {
+			final String mergeStrategyStr = ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(mergeStrategy));
 
-		configuredOptions.put(
-				RasterTileRowTransform.MERGE_STRATEGY_KEY,
-				mergeStrategyStr);
+			configuredOptions.put(
+					RasterTileRowTransform.MERGE_STRATEGY_KEY,
+					mergeStrategyStr);
+		}
 		return configuredOptions;
 	}
 
@@ -1730,8 +1862,17 @@ public class RasterDataAdapter implements
 										tileSize,
 										tileSize),
 								new Point())).getDataBuffer();
+				Persistable metadata = null;
+				if (entry instanceof GridCoverage2D) {
+					final Object metadataObj = ((GridCoverage2D) entry).getProperty(TILE_METADATA_PROPERTY_KEY);
+					if ((metadataObj != null) && (metadataObj instanceof Persistable)) {
+						metadata = (Persistable) metadataObj;
+					}
+				}
 				return new GridCoverageWritable(
-						dataBuffer,
+						new RasterTile(
+								dataBuffer,
+								metadata),
 						env.getMinimum(0),
 						env.getMaximum(0),
 						env.getMinimum(1),
@@ -1749,7 +1890,7 @@ public class RasterDataAdapter implements
 						GeoWaveGTRasterFormat.DEFAULT_CRS);
 				try {
 					return prepareCoverage(
-							writable.getDataBuffer(),
+							writable.getRasterTile(),
 							tileSize,
 							mapExtent);
 				}
@@ -1775,6 +1916,9 @@ public class RasterDataAdapter implements
 	public Map<String, String> getOptions(
 			final Map<String, String> existingOptions ) {
 		final Map<String, String> configuredOptions = getConfiguredOptions();
+		if (existingOptions == null) {
+			return configuredOptions;
+		}
 		final Map<String, String> mergedOptions = new HashMap<String, String>(
 				configuredOptions);
 		for (final Entry<String, String> e : existingOptions.entrySet()) {
@@ -1857,7 +2001,12 @@ public class RasterDataAdapter implements
 
 	@Override
 	public RowTransform<RasterTile<?>> getTransform() {
-		return new RasterTileRowTransform();
+		if (mergeStrategy != null) {
+			return new RasterTileRowTransform();
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override
