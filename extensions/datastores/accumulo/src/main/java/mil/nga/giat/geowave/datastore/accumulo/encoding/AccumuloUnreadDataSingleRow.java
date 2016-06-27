@@ -4,12 +4,13 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccumuloUnreadDataSingleRow implements AccumuloUnreadData
+public class AccumuloUnreadDataSingleRow implements
+		AccumuloUnreadData
 {
 	private final ByteBuffer partiallyConsumedBuffer;
 	private final int currentIndexInFieldPositions;
 	private final List<Integer> fieldPositions;
-	private final List<AccumuloFieldInfo> cachedRead = null;
+	private List<AccumuloFieldInfo> cachedRead = null;
 
 	public AccumuloUnreadDataSingleRow(
 			final ByteBuffer partiallyConsumedBuffer,
@@ -22,18 +23,15 @@ public class AccumuloUnreadDataSingleRow implements AccumuloUnreadData
 
 	public List<AccumuloFieldInfo> finishRead() {
 		if (cachedRead == null) {
-			final List<AccumuloFieldInfo> cachedRead = new ArrayList<>();
+			cachedRead = new ArrayList<>();
 			for (int i = currentIndexInFieldPositions; i < fieldPositions.size(); i++) {
 				final int fieldLength = partiallyConsumedBuffer.getInt();
 				final byte[] fieldValueBytes = new byte[fieldLength];
-				partiallyConsumedBuffer.get(
-						fieldValueBytes);
-				final Integer fieldPosition = fieldPositions.get(
-						i);
-				cachedRead.add(
-						new AccumuloFieldInfo(
-								fieldPosition,
-								fieldValueBytes));
+				partiallyConsumedBuffer.get(fieldValueBytes);
+				final Integer fieldPosition = fieldPositions.get(i);
+				cachedRead.add(new AccumuloFieldInfo(
+						fieldPosition,
+						fieldValueBytes));
 			}
 		}
 		return cachedRead;

@@ -52,14 +52,11 @@ public class AccumuloCommonIndexedPersistenceEncoding extends
 				final ByteArrayId fieldId = adapter.getFieldIdForPosition(
 						model,
 						field.getFieldPosition());
-				final FieldReader<Object> reader = adapter.getReader(
-						fieldId);
-				final Object value = reader.readField(
-						field.getValue());
-				adapterExtendedData.addValue(
-						new PersistentValue<Object>(
-								fieldId,
-								value));
+				final FieldReader<Object> reader = adapter.getReader(fieldId);
+				final Object value = reader.readField(field.getValue());
+				adapterExtendedData.addValue(new PersistentValue<Object>(
+						fieldId,
+						value));
 			}
 		}
 	}

@@ -38,17 +38,14 @@ public class WholeRowAggregationIterator extends
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 			final List<AccumuloUnreadData> unreadData = new ArrayList<>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
-				final Key key = keys.get(
-						i);
-				final Value value = values.get(
-						i);
+				final Key key = keys.get(i);
+				final Value value = values.get(i);
 				final AccumuloUnreadData singleRow = aggregationIterator.queryFilterIterator.aggregateFieldData(
 						key,
 						value,
 						commonData);
 				if (singleRow != null) {
-					unreadData.add(
-							singleRow);
+					unreadData.add(singleRow);
 				}
 			}
 			final CommonIndexedPersistenceEncoding encoding = QueryFilterIterator.getEncoding(
@@ -58,8 +55,7 @@ public class WholeRowAggregationIterator extends
 							unreadData));
 			boolean queryFilterResult = true;
 			if (aggregationIterator.queryFilterIterator.isSet()) {
-				queryFilterResult = aggregationIterator.queryFilterIterator.applyRowFilter(
-						encoding);
+				queryFilterResult = aggregationIterator.queryFilterIterator.applyRowFilter(encoding);
 			}
 			if (queryFilterResult) {
 				aggregationIterator.aggregateRow(
@@ -79,13 +75,10 @@ public class WholeRowAggregationIterator extends
 			final IteratorEnvironment env )
 			throws IOException {
 		aggregationIterator = new AggregationIterator();
-		aggregationIterator.setParent(
-				new WholeRowAggregationParent());
-		aggregationIterator.setOptions(
-				options);
+		aggregationIterator.setParent(new WholeRowAggregationParent());
+		aggregationIterator.setOptions(options);
 		aggregationIterator.queryFilterIterator = new QueryFilterIterator();
-		aggregationIterator.queryFilterIterator.setOptions(
-				options);
+		aggregationIterator.queryFilterIterator.setOptions(options);
 		super.init(
 				source,
 				options,
@@ -95,14 +88,11 @@ public class WholeRowAggregationIterator extends
 	@Override
 	public SortedKeyValueIterator<Key, Value> deepCopy(
 			final IteratorEnvironment env ) {
-		final SortedKeyValueIterator<Key, Value> iterator = super.deepCopy(
-				env);
+		final SortedKeyValueIterator<Key, Value> iterator = super.deepCopy(env);
 		if (iterator instanceof WholeRowAggregationIterator) {
 			aggregationIterator = new AggregationIterator();
-			aggregationIterator.deepCopyIterator(
-					((WholeRowAggregationIterator) iterator).aggregationIterator);
-			aggregationIterator.setParent(
-					new WholeRowAggregationParent());
+			aggregationIterator.deepCopyIterator(((WholeRowAggregationIterator) iterator).aggregationIterator);
+			aggregationIterator.setParent(new WholeRowAggregationParent());
 		}
 		return iterator;
 	}
@@ -192,8 +182,7 @@ public class WholeRowAggregationIterator extends
 		@Override
 		public SortedKeyValueIterator<Key, Value> deepCopy(
 				final IteratorEnvironment env ) {
-			return WholeRowAggregationIterator.super.deepCopy(
-					env);
+			return WholeRowAggregationIterator.super.deepCopy(env);
 		}
 
 	}

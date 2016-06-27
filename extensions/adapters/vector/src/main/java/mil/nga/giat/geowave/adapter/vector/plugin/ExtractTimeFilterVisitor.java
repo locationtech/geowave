@@ -6,11 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
-
 import org.geotools.data.Query;
 import org.geotools.filter.visitor.NullFilterVisitor;
 import org.geotools.util.Converters;
@@ -68,26 +63,33 @@ import org.opengis.temporal.Instant;
 import org.opengis.temporal.Period;
 import org.opengis.temporal.Position;
 
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
+
 /**
  * This class can be used to get Time range from an OpenGIS filter object.
  * GeoWave then uses this time range to perform a spatial intersection query.
- * 
+ *
  * Only those time elements associated with an index are extracted. At the
  * moment, the adapter only supports temporal indexing on a single attribute or
  * a pair of attributes representing a time range.
- * 
+ *
  */
 public class ExtractTimeFilterVisitor extends
 		NullFilterVisitor
 {
 	private final List<String[]> validParamRanges = new LinkedList<String[]>();
 
+	private boolean approximation = false;
+
 	public ExtractTimeFilterVisitor() {}
 
 	public ExtractTimeFilterVisitor(
 			final TimeDescriptors timeDescriptors ) {
-		if (timeDescriptors.hasTime() && timeDescriptors.getStartRange() != null
-				&& timeDescriptors.getEndRange() != null) {
+		if (timeDescriptors.hasTime() && (timeDescriptors.getStartRange() != null)
+				&& (timeDescriptors.getEndRange() != null)) {
 			addRangeVariables(
 					timeDescriptors.getStartRange().getLocalName(),
 					timeDescriptors.getEndRange().getLocalName());
@@ -106,6 +108,7 @@ public class ExtractTimeFilterVisitor extends
 	public TemporalConstraintsSet getConstraints(
 			final Filter filter ) {
 		final TemporalConstraintsSet constrainsSet = getRawConstraints(filter);
+		constrainsSet.setExact(!approximation);
 		for (final String[] range : validParamRanges) {
 			if (constrainsSet.hasConstraintsFor(range[0]) || constrainsSet.hasConstraintsFor(range[1])) {
 				final TemporalConstraints start = (constrainsSet.hasConstraintsFor(range[0])) ? constrainsSet
@@ -162,7 +165,7 @@ public class ExtractTimeFilterVisitor extends
 
 	/**
 	 * Produce an ReferencedEnvelope from the provided data parameter.
-	 * 
+	 *
 	 * @param data
 	 * @return ReferencedEnvelope
 	 */
@@ -197,22 +200,34 @@ public class ExtractTimeFilterVisitor extends
 			return (TemporalConstraints) data;
 		}
 		else if (data instanceof Period) {
+			// all periods are exclusive
 			final Position beginPosition = ((Period) data).getBeginning().getPosition();
 			final Position endPosition = ((Period) data).getEnding().getPosition();
 			Date s = TemporalRange.START_TIME, e = TemporalRange.START_TIME;
 
 			if (beginPosition.getDate() != null) {
-				s = beginPosition.getDate();
+				// make it exclusive on start
+				s = new Date(
+						beginPosition.getDate().getTime() + 1);
 			}
 			else if (beginPosition.getTime() != null) {
-				s = beginPosition.getTime();
+				// make it exclusive on start
+				s = new Date(
+						beginPosition.getTime().getTime() + 1);
 			}
 
 			if (endPosition.getDate() != null) {
-				e = endPosition.getDate();
+				// make it exclusive on end
+				e = new Date(
+						endPosition.getDate().getTime() - 1);
 			}
 			else if (endPosition.getTime() != null) {
-				e = endPosition.getTime();
+				// make it exclusive on end
+				e = new Date(
+						endPosition.getTime().getTime() - 1);
+			}
+			if (s.getTime() > e.getTime()) {
+				return new TemporalConstraints();
 			}
 			return toSet(new TemporalRange(
 					s,
@@ -264,12 +279,12 @@ public class ExtractTimeFilterVisitor extends
 
 	/**
 	 * Please note we are only visiting literals involved in spatial operations.
-	 * 
+	 *
 	 * @param literal
 	 *            , hopefully a Geometry or Envelope
 	 * @param data
 	 *            Incoming BoundingBox (or Envelope or CRS)
-	 * 
+	 *
 	 * @return ReferencedEnvelope updated to reflect literal
 	 */
 	@Override
@@ -307,31 +322,40 @@ public class ExtractTimeFilterVisitor extends
 		}
 		for (final String[] range : validParamRanges) {
 			if (constraints.hasConstraintsFor(range[0]) && constraints.hasConstraintsFor(range[1])) {
-				// TODO: this needs to be more robust at some point, its a
-				// workaround for now
-				TemporalConstraints start = constraints.getConstraintsFor(range[0]);
-				TemporalConstraints end = constraints.getConstraintsFor(range[1]);
-				if (constraints.hasConstraintsForRange(
+				final TemporalConstraints start = constraints.getConstraintsFor(range[0]);
+				final TemporalConstraints end = constraints.getConstraintsFor(range[1]);
+				constraints.removeConstraints(
 						range[0],
-						range[1])) {
-
-					TemporalConstraints combined = constraints.getConstraintsForRange(
+						range[1]);
+				// TODO: make this logic more robust
+				if (start.getEndRange().getEndTime().after(
+						end.getStartRange().getStartTime())) {
+					constraints.getConstraintsForRange(
 							range[0],
-							range[1]);
-					constraints.removeConstraints(
-							range[0],
-							range[1]);
-					combined.replaceWithIntersections(start);
-					combined.replaceWithIntersections(end);
+							range[1]).add(
+							new TemporalRange(
+									end.getStartRange().getStartTime(),
+									start.getEndRange().getEndTime()));
 				}
 				else {
-					end.replaceWithIntersections(start);
-					start.replaceWithIntersections(end);
-				}
+					// if there are multiple non-instersecting ranges, this is
+					// an approximation
+					approximation |= start.getRanges().size() > 1 || end.getRanges().size() > 1;
 
+					constraints.getConstraintsForRange(
+							range[0],
+							range[1]).add(
+							new TemporalRange(
+									start.getStartRange().getStartTime(),
+									end.getEndRange().getEndTime()));
+				}
 			}
 		}
 		return constraints;
+	}
+
+	public boolean isApproximation() {
+		return approximation;
 	}
 
 	@Override
@@ -434,7 +458,9 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							rightResult.getMaxOr(TemporalRange.START_TIME),
+							rightResult.getMaxOr(
+									TemporalRange.START_TIME,
+									1),
 							TemporalRange.END_TIME),
 					leftResult.getName());
 		}
@@ -442,7 +468,9 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							leftResult.getMinOr(TemporalRange.END_TIME)),
+							leftResult.getMinOr(
+									TemporalRange.END_TIME,
+									-1)),
 					rightResult.getName());
 		}
 		// property after property
@@ -481,13 +509,17 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							rightResult.getMinOr(TemporalRange.END_TIME)),
+							rightResult.getMinOr(
+									TemporalRange.END_TIME,
+									-1)),
 					leftResult.getName());
 		}
 		else if (rightResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							leftResult.getMaxOr(TemporalRange.START_TIME),
+							leftResult.getMaxOr(
+									TemporalRange.START_TIME,
+									1),
 							TemporalRange.END_TIME),
 					rightResult.getName());
 		}
@@ -522,7 +554,9 @@ public class ExtractTimeFilterVisitor extends
 		else if (rightResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							leftResult.getMinOr(TemporalRange.START_TIME),
+							leftResult.getMinOr(
+									TemporalRange.START_TIME,
+									0),
 							TemporalRange.END_TIME),
 					rightResult.getName());
 		}
@@ -552,7 +586,9 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							rightResult.getMinOr(TemporalRange.START_TIME),
+							rightResult.getMinOr(
+									TemporalRange.START_TIME,
+									0),
 							TemporalRange.END_TIME),
 					leftResult.getName());
 		}
@@ -620,7 +656,9 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							rightResult.getMaxOr(TemporalRange.END_TIME)),
+							rightResult.getMaxOr(
+									TemporalRange.END_TIME,
+									0)),
 					leftResult.getName());
 		}
 		else if (rightResult instanceof ParameterTimeConstraint) {
@@ -659,7 +697,9 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							leftResult.getMaxOr(TemporalRange.END_TIME)),
+							leftResult.getMaxOr(
+									TemporalRange.END_TIME,
+									0)),
 					rightResult.getName());
 		}
 		// property ended by property
@@ -688,7 +728,9 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							rightResult.getMinOr(TemporalRange.END_TIME)),
+							rightResult.getMinOr(
+									TemporalRange.END_TIME,
+									0)),
 					leftResult.getName());
 		}
 		else if (rightResult instanceof ParameterTimeConstraint) {
@@ -721,7 +763,9 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							rightResult.getMaxOr(TemporalRange.START_TIME),
+							rightResult.getMaxOr(
+									TemporalRange.START_TIME,
+									0),
 							TemporalRange.END_TIME),
 					leftResult.getName());
 		}
@@ -729,7 +773,9 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							leftResult.getMinOr(TemporalRange.END_TIME)),
+							leftResult.getMinOr(
+									TemporalRange.END_TIME,
+									0)),
 					rightResult.getName());
 		}
 		// property ends property
@@ -757,7 +803,9 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							rightResult.getMinOr(TemporalRange.START_TIME),
+							rightResult.getMinOr(
+									TemporalRange.START_TIME,
+									1),
 							TemporalRange.END_TIME),
 					leftResult.getName());
 		}
@@ -765,7 +813,9 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							leftResult.getMaxOr(TemporalRange.END_TIME)),
+							leftResult.getMaxOr(
+									TemporalRange.END_TIME,
+									-1)),
 					rightResult.getName());
 		}
 		// property overlappedBy property
@@ -795,7 +845,9 @@ public class ExtractTimeFilterVisitor extends
 			return new TemporalConstraints(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							rightResult.getMaxOr(TemporalRange.END_TIME)),
+							rightResult.getMaxOr(
+									TemporalRange.END_TIME,
+									-1)),
 					leftResult.getName());
 		}
 		else if (rightResult instanceof ParameterTimeConstraint) {
@@ -848,19 +900,25 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult.isEmpty() || rightResult.isEmpty()) {
 			return new TemporalConstraints();
 		}
+		// according to geotools documentation this is exclusive even though
+		// "overlaps" seems it should imply inclusive
 
 		// property overlappedBy value
 		if (leftResult instanceof ParameterTimeConstraint) {
 			return new TemporalConstraints(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							rightResult.getMaxOr(TemporalRange.END_TIME)),
+							rightResult.getMaxOr(
+									TemporalRange.END_TIME,
+									-1)),
 					leftResult.getName());
 		}
 		else if (rightResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							leftResult.getMaxOr(TemporalRange.START_TIME),
+							leftResult.getMaxOr(
+									TemporalRange.START_TIME,
+									-1),
 							TemporalRange.END_TIME),
 					rightResult.getName());
 		}
@@ -984,7 +1042,8 @@ public class ExtractTimeFilterVisitor extends
 		if (leftResult instanceof ParameterTimeConstraint) {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							rightResult.getStartRange().getStartTime(),
+							new Date(
+									rightResult.getStartRange().getStartTime().getTime() + 1),
 							TemporalRange.END_TIME),
 					leftResult.getName());
 		}
@@ -992,7 +1051,8 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							leftResult.getStartRange().getStartTime()),
+							new Date(
+									leftResult.getStartRange().getStartTime().getTime() - 1)),
 					rightResult.getName());
 		}
 	}
@@ -1045,13 +1105,15 @@ public class ExtractTimeFilterVisitor extends
 			return new ParameterTimeConstraint(
 					new TemporalRange(
 							TemporalRange.START_TIME,
-							rightResult.getStartRange().getStartTime()),
+							new Date(
+									rightResult.getStartRange().getStartTime().getTime() - 1)),
 					leftResult.getName());
 		}
 		else {
 			return new ParameterTimeConstraint(
 					new TemporalRange(
-							leftResult.getStartRange().getStartTime(),
+							new Date(
+									leftResult.getStartRange().getStartTime().getTime() + 1),
 							TemporalRange.END_TIME),
 					rightResult.getName());
 		}

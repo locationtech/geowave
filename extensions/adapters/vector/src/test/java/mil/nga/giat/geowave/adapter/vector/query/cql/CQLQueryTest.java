@@ -55,7 +55,7 @@ public class CQLQueryTest
 				new double[] {
 					27.2,
 					41.2,
-					1.116534776E12
+					1.116534776001E12
 				}));
 		assertTrue(Arrays.equals(
 				constraints.get(
@@ -63,7 +63,7 @@ public class CQLQueryTest
 				new double[] {
 					27.3,
 					41.3,
-					1.116538376E12
+					1.116538375999E12
 				}));
 	}
 
@@ -175,7 +175,7 @@ public class CQLQueryTest
 				new double[] {
 					27.2,
 					41.2,
-					1.116534776E12
+					1.116534776001E12
 				}));
 		assertTrue(Arrays.equals(
 				constraints.get(
@@ -183,7 +183,7 @@ public class CQLQueryTest
 				new double[] {
 					27.3,
 					41.3,
-					1.116538376E12
+					1.116538375999E12
 				}));
 		final CQLQuery query2 = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and end during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
@@ -198,7 +198,7 @@ public class CQLQueryTest
 				new double[] {
 					27.2,
 					41.2,
-					1.116534776E12
+					1.116534776001E12
 				}));
 		assertTrue(Arrays.equals(
 				constraints2.get(
@@ -206,12 +206,12 @@ public class CQLQueryTest
 				new double[] {
 					27.3,
 					41.3,
-					1.116538376E12
+					1.116538375999E12
 				}));
 
 		final CQLQuery query3 = (CQLQuery) CQLQuery
 				.createOptimalQuery(
-						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end before 2005-05-19T21:32:56Z)",
+						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start before 2005-05-19T21:32:56Z and end after 2005-05-19T20:32:56Z)",
 						adapter,
 						null,
 						null);
@@ -223,7 +223,7 @@ public class CQLQueryTest
 				new double[] {
 					27.2,
 					41.2,
-					1.116534776E12
+					1.116534776001E12
 				}));
 		assertTrue(Arrays.equals(
 				constraints3.get(
@@ -231,12 +231,12 @@ public class CQLQueryTest
 				new double[] {
 					27.3,
 					41.3,
-					1.116538376E12
+					1.116538375999E12
 				}));
 
 		final CQLQuery query4 = (CQLQuery) CQLQuery
 				.createOptimalQuery(
-						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end after 2006-05-19T21:32:56Z)",
+						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end after 2005-05-19T20:32:56Z)",
 						adapter,
 						null,
 						null);
@@ -248,7 +248,7 @@ public class CQLQueryTest
 				new double[] {
 					27.2,
 					41.2,
-					1.116534776E12
+					1.116534776001E12
 				}));
 		assertTrue(Arrays.equals(
 				constraints4.get(
@@ -256,7 +256,7 @@ public class CQLQueryTest
 				new double[] {
 					27.3,
 					41.3,
-					9.223372036854776E18
+					9.223372036854775999E18
 				}));
 
 	}

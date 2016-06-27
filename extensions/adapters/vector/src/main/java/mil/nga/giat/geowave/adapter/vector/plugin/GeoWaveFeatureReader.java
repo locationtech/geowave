@@ -47,6 +47,7 @@ import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
 import mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureStatistic;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -164,7 +165,7 @@ public class GeoWaveFeatureReader implements
 				statsMap,
 				timeBounds);
 
-		final Constraints geoConstraints = QueryIndexHelper.composeGeometricConstraints(
+		final GeoConstraintsWrapper geoConstraints = QueryIndexHelper.composeGeometricConstraints(
 				getFeatureType(),
 				transaction.getDataStatistics(),
 				jtsBounds);
@@ -175,9 +176,9 @@ public class GeoWaveFeatureReader implements
 		 */
 
 		final BasicQuery query = composeQuery(
-				jtsBounds,
 				geoConstraints,
 				timeConstraints);
+		query.setExact(timeBounds.isExact());
 
 		try (CloseableIterator<Index<?, ?>> indexIt = getComponents().getIndices(
 				statsMap,
@@ -264,7 +265,7 @@ public class GeoWaveFeatureReader implements
 		@Override
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
-				final mil.nga.giat.geowave.core.store.query.Query query ) {
+				final BasicQuery query ) {
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
 					index,
@@ -325,7 +326,7 @@ public class GeoWaveFeatureReader implements
 		@Override
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
-				final mil.nga.giat.geowave.core.store.query.Query query ) {
+				final BasicQuery query ) {
 
 			final QueryOptions options = new QueryOptions(
 					components.getAdapter(),
@@ -405,7 +406,7 @@ public class GeoWaveFeatureReader implements
 		@Override
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
-				final mil.nga.giat.geowave.core.store.query.Query query ) {
+				final BasicQuery query ) {
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
 					index,
@@ -446,7 +447,7 @@ public class GeoWaveFeatureReader implements
 		@Override
 		public CloseableIterator<SimpleFeature> query(
 				final PrimaryIndex index,
-				final mil.nga.giat.geowave.core.store.query.Query query ) {
+				final BasicQuery query ) {
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
 					index,
@@ -620,18 +621,19 @@ public class GeoWaveFeatureReader implements
 	}
 
 	private BasicQuery composeQuery(
-			final Geometry jtsBounds,
-			final Constraints geoConstraints,
+			final GeoConstraintsWrapper geoConstraints,
 			final Constraints temporalConstraints ) {
 
-		if (jtsBounds == null) {
+		if (geoConstraints.isConstraintsMatchGeometry()) {
 			return new BasicQuery(
-					geoConstraints.merge(temporalConstraints));
+					geoConstraints.getConstraints().merge(
+							temporalConstraints));
 		}
 		else {
 			return new SpatialQuery(
-					geoConstraints.merge(temporalConstraints),
-					jtsBounds);
+					geoConstraints.getConstraints().merge(
+							temporalConstraints),
+					geoConstraints.getGeometry());
 		}
 	}
 

@@ -19,8 +19,7 @@ public class AccumuloUnreadDataList implements
 		if (cachedRead == null) {
 			cachedRead = new ArrayList<>();
 			for (final AccumuloUnreadData d : unreadData) {
-				cachedRead.addAll(
-						d.finishRead());
+				cachedRead.addAll(d.finishRead());
 			}
 		}
 		return cachedRead;

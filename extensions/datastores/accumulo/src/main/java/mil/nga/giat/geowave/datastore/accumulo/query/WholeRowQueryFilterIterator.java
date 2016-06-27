@@ -52,7 +52,8 @@ public class WholeRowQueryFilterIterator extends
 			}
 			return queryFilterIterator.applyRowFilter(
 					currentRow,
-					commonData,unreadData.isEmpty() ? null : new AccumuloUnreadDataList(
+					commonData,
+					unreadData.isEmpty() ? null : new AccumuloUnreadDataList(
 							unreadData));
 		}
 		// if the query filter or index model did not get sent to this iterator,

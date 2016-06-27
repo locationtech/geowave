@@ -35,55 +35,83 @@ public class GeometryUtils
 	private final static Logger LOGGER = Logger.getLogger(GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
 
-	/**
-	 * This utility method will convert a JTS geometry to contraints that can be
-	 * used in a GeoWave query.
-	 * 
-	 * @return Constraints as a mapping of NumericData objects representing
-	 *         ranges for a latitude dimension and a longitude dimension
-	 */
 	public static Constraints basicConstraintsFromGeometry(
 			final Geometry geometry ) {
 
-		List<ConstraintSet> set = new LinkedList<ConstraintSet>();
+		final List<ConstraintSet> set = new LinkedList<ConstraintSet>();
 		constructListOfConstraintSetsFromGeometry(
 				geometry,
-				set);
+				set,
+				false);
 
 		return new Constraints(
 				set);
 	}
 
 	/**
+	 * This utility method will convert a JTS geometry to contraints that can be
+	 * used in a GeoWave query.
+	 *
+	 * @return Constraints as a mapping of NumericData objects representing
+	 *         ranges for a latitude dimension and a longitude dimension
+	 */
+	public static GeoConstraintsWrapper basicGeoConstraintsWrapperFromGeometry(
+			final Geometry geometry ) {
+
+		final List<ConstraintSet> set = new LinkedList<ConstraintSet>();
+		final boolean geometryConstraintsExactMatch = constructListOfConstraintSetsFromGeometry(
+				geometry,
+				set,
+				true);
+
+		return new GeoConstraintsWrapper(
+				new Constraints(
+						set),
+				geometryConstraintsExactMatch,
+				geometry);
+	}
+
+	/**
 	 * Recursively decompose geometry into a set of envelopes to create a single
 	 * set.
-	 * 
+	 *
 	 * @param geometry
 	 * @param destinationListOfSets
+	 * @param checkTopoEquality
 	 */
-	private static void constructListOfConstraintSetsFromGeometry(
+	private static boolean constructListOfConstraintSetsFromGeometry(
 			final Geometry geometry,
-			final List<ConstraintSet> destinationListOfSets ) {
+			final List<ConstraintSet> destinationListOfSets,
+			final boolean checkTopoEquality ) {
 
 		// Get the envelope of the geometry being held
-		int n = geometry.getNumGeometries();
+		final int n = geometry.getNumGeometries();
+		boolean retVal = true;
 		if (n > 1) {
+			retVal = false;
 			for (int gi = 0; gi < n; gi++) {
 				constructListOfConstraintSetsFromGeometry(
 						geometry.getGeometryN(gi),
-						destinationListOfSets);
+						destinationListOfSets,
+						checkTopoEquality);
 			}
 		}
 		else {
 			final Envelope env = geometry.getEnvelopeInternal();
 			destinationListOfSets.add(basicConstraintSetFromEnvelope(env));
+			if (checkTopoEquality) {
+				retVal = new GeometryFactory().toGeometry(
+						env).equalsTopo(
+						geometry);
+			}
 		}
+		return retVal;
 	}
 
 	/**
 	 * This utility method will convert a JTS envelope to contraints that can be
 	 * used in a GeoWave query.
-	 * 
+	 *
 	 * @return Constraints as a mapping of NumericData objects representing
 	 *         ranges for a latitude dimension and a longitude dimension
 	 */
@@ -119,7 +147,7 @@ public class GeometryUtils
 	/**
 	 * This utility method will convert a JTS envelope to contraints that can be
 	 * used in a GeoWave query.
-	 * 
+	 *
 	 * @return Constraints as a mapping of NumericData objects representing
 	 *         ranges for a latitude dimension and a longitude dimension
 	 */
@@ -133,7 +161,7 @@ public class GeometryUtils
 	/**
 	 * This utility method will convert a JTS envelope to that can be used in a
 	 * GeoWave query.
-	 * 
+	 *
 	 * @return Constraints as a mapping of NumericData objects representing
 	 *         ranges for a latitude dimension and a longitude dimension
 	 */
@@ -167,7 +195,7 @@ public class GeometryUtils
 
 	/**
 	 * Generate a longitude range from a JTS geometry
-	 * 
+	 *
 	 * @param geometry
 	 *            The JTS geometry
 	 * @return The longitude range in EPSG:4326
@@ -190,7 +218,7 @@ public class GeometryUtils
 
 	/**
 	 * Generate a latitude range from a JTS geometry
-	 * 
+	 *
 	 * @param geometry
 	 *            The JTS geometry
 	 * @return The latitude range in EPSG:4326
@@ -213,7 +241,7 @@ public class GeometryUtils
 
 	/**
 	 * Converts a JTS geometry to binary using JTS a Well Known Binary writer
-	 * 
+	 *
 	 * @param geometry
 	 *            The JTS geometry
 	 * @return The binary representation of the geometry
@@ -234,7 +262,7 @@ public class GeometryUtils
 
 	/**
 	 * Converts a byte array as well-known binary to a JTS geometry
-	 * 
+	 *
 	 * @param binary
 	 *            The well known binary
 	 * @return The JTS geometry
@@ -255,7 +283,7 @@ public class GeometryUtils
 	/**
 	 * This mehtod returns an envelope between negative infinite and positive
 	 * inifinity in both x and y
-	 * 
+	 *
 	 * @return the infinite bounding box
 	 */
 	public static Geometry infinity() {
@@ -266,5 +294,33 @@ public class GeometryUtils
 				Double.POSITIVE_INFINITY,
 				Double.NEGATIVE_INFINITY,
 				Double.POSITIVE_INFINITY));
+	}
+
+	public static class GeoConstraintsWrapper
+	{
+		private final Constraints constraints;
+		private final boolean constraintsMatchGeometry;
+		private final Geometry jtsBounds;
+
+		public GeoConstraintsWrapper(
+				final Constraints constraints,
+				final boolean constraintsMatchGeometry,
+				final Geometry jtsBounds ) {
+			this.constraints = constraints;
+			this.constraintsMatchGeometry = constraintsMatchGeometry;
+			this.jtsBounds = jtsBounds;
+		}
+
+		public Constraints getConstraints() {
+			return constraints;
+		}
+
+		public boolean isConstraintsMatchGeometry() {
+			return constraintsMatchGeometry;
+		}
+
+		public Geometry getGeometry() {
+			return jtsBounds;
+		}
 	}
 }

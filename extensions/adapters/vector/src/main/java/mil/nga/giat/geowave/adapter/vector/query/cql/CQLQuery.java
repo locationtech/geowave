@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.ExtractTimeFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
@@ -40,6 +41,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -70,7 +72,7 @@ public class CQLQuery implements
 			final String cql,
 			final GeotoolsFeatureDataAdapter adapter,
 			final PrimaryIndex index,
-			Query baseQuery )
+			final BasicQuery baseQuery )
 			throws CQLException {
 		return createOptimalQuery(
 				cql,
@@ -85,7 +87,7 @@ public class CQLQuery implements
 			final GeotoolsFeatureDataAdapter adapter,
 			final CompareOperation geoCompareOp,
 			final PrimaryIndex index,
-			Query baseQuery )
+			final BasicQuery baseQuery )
 			throws CQLException {
 		final Filter cqlFilter = CQL.toFilter(cql);
 		return createOptimalQuery(
@@ -99,7 +101,7 @@ public class CQLQuery implements
 			final Filter cqlFilter,
 			final GeotoolsFeatureDataAdapter adapter,
 			final PrimaryIndex index,
-			Query baseQuery ) {
+			final BasicQuery baseQuery ) {
 		return createOptimalQuery(
 				cqlFilter,
 				adapter,
@@ -113,7 +115,7 @@ public class CQLQuery implements
 			final GeotoolsFeatureDataAdapter adapter,
 			final CompareOperation geoCompareOp,
 			final PrimaryIndex index,
-			Query baseQuery ) {
+			BasicQuery baseQuery ) {
 		final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
 
 		final Object obj = cqlFilter.accept(
@@ -160,7 +162,10 @@ public class CQLQuery implements
 			final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(
 					adapter.getTimeDescriptors()).getConstraints(cqlFilter);
 			if (geometry != null) {
-				Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(geometry);
+				final GeoConstraintsWrapper geoConstraints = GeometryUtils
+						.basicGeoConstraintsWrapperFromGeometry(geometry);
+
+				Constraints constraints = geoConstraints.getConstraints();
 				if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
 					// determine which time constraints are associated with an
 					// indexable
@@ -173,12 +178,19 @@ public class CQLQuery implements
 					final Constraints timeConstraints = SpatialTemporalQuery.createConstraints(
 							temporalConstraints,
 							false);
-					constraints = constraints.merge(timeConstraints);
+					constraints = geoConstraints.getConstraints().merge(
+							timeConstraints);
 				}
-				baseQuery = new SpatialQuery(
-						constraints,
-						geometry,
-						geoCompareOp);
+				if (geoConstraints.isConstraintsMatchGeometry() && CompareOperation.OVERLAPS.equals(geoCompareOp)) {
+					baseQuery = new BasicQuery(
+							constraints);
+				}
+				else {
+					baseQuery = new SpatialQuery(
+							constraints,
+							geometry,
+							geoCompareOp);
+				}
 			}
 			else if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
 				// determine which time constraints are associated with an
@@ -191,7 +203,7 @@ public class CQLQuery implements
 						temporalConstraints);
 			}
 		}
-		if (attrs.isEmpty()) {
+		if (attrs.isEmpty() && ((baseQuery == null) || baseQuery.isExact())) {
 			return baseQuery;
 		}
 		else {

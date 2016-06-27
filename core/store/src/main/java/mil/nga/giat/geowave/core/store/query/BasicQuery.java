@@ -51,6 +51,7 @@ public class BasicQuery implements
 {
 	private final static double DOUBLE_TOLERANCE = 1E-12d;
 	private final static Logger LOGGER = Logger.getLogger(BasicQuery.class);
+	protected boolean exact = true;
 
 	/**
 	 * 
@@ -448,7 +449,12 @@ public class BasicQuery implements
 		public Constraints merge(
 				final List<ConstraintSet> otherConstraintSets ) {
 
-			if (otherConstraintSets.isEmpty()) return this;
+			if (otherConstraintSets.isEmpty())
+				return this;
+			else if (this.isEmpty()) {
+				return new Constraints(
+						otherConstraintSets);
+			}
 			final List<ConstraintSet> newSets = new LinkedList<ConstraintSet>();
 
 			for (final ConstraintSet newSet : otherConstraintSets) {
@@ -683,5 +689,14 @@ public class BasicQuery implements
 			}
 		}
 		return constraints;
+	}
+
+	public boolean isExact() {
+		return exact;
+	}
+
+	public void setExact(
+			boolean exact ) {
+		this.exact = exact;
 	}
 }
