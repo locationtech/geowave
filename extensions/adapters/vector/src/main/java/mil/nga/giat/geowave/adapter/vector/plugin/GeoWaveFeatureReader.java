@@ -68,7 +68,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
  * This class wraps a geotools data store as well as one for statistics (for
  * example to display Heatmaps) into a GeoTools FeatureReader for simple feature
  * data. It acts as a helper for GeoWave's GeoTools data store.
- * 
+ *
  */
 public class GeoWaveFeatureReader implements
 		FeatureReader<SimpleFeatureType, SimpleFeature>
@@ -278,10 +278,10 @@ public class GeoWaveFeatureReader implements
 			}
 			return components.getDataStore().query(
 					queryOptions,
-					new CQLQuery(
-							query,
+					CQLQuery.createOptimalQuery(
 							filter,
-							components.getAdapter()));
+							components.getAdapter(),
+							index));
 		}
 
 		@Override
@@ -365,10 +365,10 @@ public class GeoWaveFeatureReader implements
 					options.setMaxResolutionSubsamplingPerDimension(spans);
 					return components.getDataStore().query(
 							options,
-							new CQLQuery(
-									query,
+							CQLQuery.createOptimalQuery(
 									filter,
-									components.getAdapter()));
+									components.getAdapter(),
+									index));
 				}
 				catch (final TransformException e) {
 					throw new IllegalArgumentException(
@@ -415,10 +415,10 @@ public class GeoWaveFeatureReader implements
 			}
 			return components.getDataStore().query(
 					queryOptions,
-					new CQLQuery(
-							query,
+					CQLQuery.createOptimalQuery(
 							filter,
-							components.getAdapter()));
+							components.getAdapter(),
+							index));
 			// TODO: ? need to figure out how to add back CqlQueryRenderIterator
 			// renderer,
 		}
@@ -688,12 +688,16 @@ public class GeoWaveFeatureReader implements
 	}
 
 	private boolean subsetRequested() {
-		if (query == null) return false;
+		if (query == null) {
+			return false;
+		}
 		return !(query.getPropertyNames() == Query.ALL_NAMES);
 	}
 
 	private List<String> getSubset() {
-		if (query == null) return Collections.emptyList();
+		if (query == null) {
+			return Collections.emptyList();
+		}
 		return Arrays.asList(query.getPropertyNames());
 	}
 }
