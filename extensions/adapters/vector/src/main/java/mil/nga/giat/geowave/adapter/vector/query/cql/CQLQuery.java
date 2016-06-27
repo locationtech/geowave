@@ -73,6 +73,28 @@ public class CQLQuery implements
 			final PrimaryIndex index )
 			throws CQLException {
 		final Filter cqlFilter = CQL.toFilter(cql);
+		return createOptimalQuery(
+				cqlFilter,
+				adapter,
+				index);
+	}
+
+	public static DistributableQuery createOptimalQuery(
+			final Filter cqlFilter,
+			final GeotoolsFeatureDataAdapter adapter,
+			final PrimaryIndex index ) {
+		return createOptimalQuery(
+				cqlFilter,
+				adapter,
+				CompareOperation.OVERLAPS,
+				index);
+	}
+
+	public static DistributableQuery createOptimalQuery(
+			final Filter cqlFilter,
+			final GeotoolsFeatureDataAdapter adapter,
+			final CompareOperation geoCompareOp,
+			final PrimaryIndex index ) {
 		final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
 
 		final Object obj = cqlFilter.accept(
