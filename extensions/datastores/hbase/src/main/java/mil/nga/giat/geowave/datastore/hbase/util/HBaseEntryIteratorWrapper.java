@@ -22,6 +22,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final Iterator<Result> scannerIt,
 			final QueryFilter clientFilter ) {
 		super(
+				true,
 				adapterStore,
 				index,
 				scannerIt,
@@ -36,6 +37,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final QueryFilter clientFilter,
 			final ScanCallback<T> scanCallback ) {
 		super(
+				true,
 				adapterStore,
 				index,
 				scannerIt,
@@ -47,7 +49,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 	protected T decodeRow(
 			final Object row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
+			final PrimaryIndex index,
+			final boolean wholeRowEncoding ) {
 		Result result = null;
 		try {
 			result = (Result) row;

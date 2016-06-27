@@ -37,35 +37,16 @@ public class HBaseIndexWriter<T> extends
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final BasicHBaseOperations operations,
-			final IngestCallback<T> callback,
-			final Closeable closable,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		this(
-				adapter,
-				index,
-				operations,
-				new HBaseOptions(),
-				callback,
-				closable,
-				customFieldVisibilityWriter);
-	}
-
-	public HBaseIndexWriter(
-			final DataAdapter<T> adapter,
-			final PrimaryIndex index,
-			final BasicHBaseOperations operations,
 			final HBaseOptions options,
 			final IngestCallback<T> callback,
-			final Closeable closable,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
+			final Closeable closable ) {
 		super(
 				adapter,
 				index,
 				operations,
 				options,
 				callback,
-				closable,
-				customFieldVisibilityWriter);
+				closable);
 		this.operations = operations;
 		this.options = options;
 	}

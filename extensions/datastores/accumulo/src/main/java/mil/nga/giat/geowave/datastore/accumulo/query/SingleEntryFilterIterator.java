@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public class SingleEntryFilterIterator extends
 	public static final int WHOLE_ROW_ITERATOR_PRIORITY = ENTRY_FILTER_ITERATOR_PRIORITY - 1;
 	public static final String ADAPTER_ID = "adapterid";
 	public static final String DATA_IDS = "dataids";
+	public static final String WHOLE_ROW_ENCODED_KEY = "wholerow";
+	private boolean wholeRowEncoded;
 	private byte[] adapterId;
 	private List<byte[]> dataIds;
 
@@ -41,18 +44,25 @@ public class SingleEntryFilterIterator extends
 		boolean accept = true;
 
 		Map<Key, Value> entries = null;
-		try {
-			entries = WholeRowIterator.decodeRow(
+		if (wholeRowEncoded) {
+			try {
+				entries = WholeRowIterator.decodeRow(
+						k,
+						v);
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Unable to decode row.",
+						e);
+				return false;
+			}
+		}
+		else {
+			entries = new HashMap<Key, Value>();
+			entries.put(
 					k,
 					v);
 		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to decode row.",
-					e);
-			return false;
-		}
-
 		if ((entries != null) && entries.isEmpty()) {
 			accept = false;
 		}
@@ -161,7 +171,9 @@ public class SingleEntryFilterIterator extends
 		adapterId = BaseEncoding.base64Url().decode(
 				adapterIdStr);
 		dataIds = decodeIDs(dataIdsStr);
-
+		final String wholeRowEncodedStr = options.get(WHOLE_ROW_ENCODED_KEY);
+		// default to whole row encoded if not specified
+		wholeRowEncoded = (wholeRowEncodedStr == null || !wholeRowEncodedStr.equals(Boolean.toString(false)));
 		super.init(
 				source,
 				options,

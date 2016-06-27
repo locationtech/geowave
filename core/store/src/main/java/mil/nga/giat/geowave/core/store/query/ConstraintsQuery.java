@@ -7,12 +7,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
@@ -25,23 +26,27 @@ public class ConstraintsQuery
 	public final List<MultiDimensionalNumericData> constraints;
 	public final List<DistributableQueryFilter> distributableFilters;
 
-	private final IndexMetaDataSet indexMetaData;
+	private final IndexMetaData[] indexMetaData;
 	private final PrimaryIndex index;
 
 	public ConstraintsQuery(
 			final List<MultiDimensionalNumericData> constraints,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final IndexMetaDataSet indexMetaData,
+			final IndexMetaData[] indexMetaData,
 			final PrimaryIndex index,
 			final List<QueryFilter> queryFilters,
-			final DedupeFilter clientDedupeFilter,
+			DedupeFilter clientDedupeFilter,
+			final DuplicateEntryCount duplicateCounts,
 			final FilteredIndexQuery parentQuery ) {
 		this.constraints = constraints;
-		this.index = index;
 		this.aggregation = aggregation;
-		this.indexMetaData = indexMetaData;
+		this.indexMetaData = indexMetaData != null ? indexMetaData : new IndexMetaData[] {};
+		this.index = index;
 		final SplitFilterLists lists = splitList(queryFilters);
 		final List<QueryFilter> clientFilters = lists.clientFilters;
+		if ((duplicateCounts != null) && !duplicateCounts.isAnyEntryHaveDuplicates()) {
+			clientDedupeFilter = null;
+		}
 		// add dedupe filters to the front of both lists so that the
 		// de-duplication is performed before any more complex filtering
 		// operations, use the supplied client dedupe filter if possible
@@ -69,7 +74,7 @@ public class ConstraintsQuery
 					constraints,
 					index.getIndexStrategy(),
 					MAX_RANGE_DECOMPOSITION,
-					indexMetaData.toArray());
+					indexMetaData);
 			if ((ranges == null) || (ranges.size() < 2)) {
 				return ranges;
 			}
@@ -97,7 +102,7 @@ public class ConstraintsQuery
 					constraints,
 					index.getIndexStrategy(),
 					MAX_RANGE_DECOMPOSITION,
-					indexMetaData.toArray());
+					indexMetaData);
 		}
 	}
 

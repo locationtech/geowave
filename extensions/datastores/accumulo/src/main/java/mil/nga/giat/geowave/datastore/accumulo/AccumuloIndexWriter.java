@@ -39,16 +39,14 @@ public class AccumuloIndexWriter<T> extends
 			final AccumuloOperations accumuloOperations,
 			final AccumuloOptions accumuloOptions,
 			final IngestCallback<T> callback,
-			final Closeable closable,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
+			final Closeable closable ) {
 		super(
 				adapter,
 				index,
 				accumuloOperations,
 				accumuloOptions,
 				callback,
-				closable,
-				customFieldVisibilityWriter);
+				closable);
 		this.accumuloOperations = accumuloOperations;
 		this.accumuloOptions = accumuloOptions;
 	}
@@ -88,8 +86,11 @@ public class AccumuloIndexWriter<T> extends
 					index,
 					entry,
 					writer,
+					accumuloOperations,
 					visibilityWriter);
-
+			if (entryInfo == null) {
+				return Collections.EMPTY_LIST;
+			}
 			callback.entryIngested(
 					entryInfo,
 					entry);

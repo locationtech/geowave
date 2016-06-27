@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +49,14 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -179,16 +180,14 @@ public class AccumuloDataStore extends
 			final DataStoreOperations baseOperations,
 			final DataStoreOptions baseOptions,
 			final IngestCallback callback,
-			final Closeable closable,
-			final UniformVisibilityWriter unconstrainedVisibility ) {
+			final Closeable closable ) {
 		return new AccumuloIndexWriter(
 				adapter,
 				index,
 				accumuloOperations,
 				accumuloOptions,
 				callback,
-				closable,
-				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
+				closable);
 	}
 
 	@Override
@@ -335,9 +334,20 @@ public class AccumuloDataStore extends
 				sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getAggregation(),
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),
-				composeMetaData(
+				IndexMetaDataSet.getIndexMetadata(
 						index,
 						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
+				DuplicateEntryCount.getDuplicateCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
+				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -353,12 +363,18 @@ public class AccumuloDataStore extends
 			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
+			final AdapterStore tempAdapterStore,
+			final List<ByteArrayId> adapterIdsToQuery ) {
 		final AccumuloRowPrefixQuery<Object> prefixQuery = new AccumuloRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
 				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
+				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 		return prefixQuery.query(
 				accumuloOperations,
@@ -446,16 +462,22 @@ public class AccumuloDataStore extends
 			final ScannerBase scanner = accumuloOperations.createScanner(
 					index.getId().getString(),
 					authorizations);
-
+			final DifferingFieldVisibilityEntryCount visibilityCount = DifferingFieldVisibilityEntryCount
+					.getVisibilityCounts(
+							index,
+							Collections.singletonList(adapter.getAdapterId()),
+							statisticsStore,
+							authorizations);
 			scanner.fetchColumnFamily(new Text(
 					adapter.getAdapterId().getBytes()));
+			if (visibilityCount.isAnyEntryDifferingFieldVisiblity()) {
+				final IteratorSetting rowIteratorSettings = new IteratorSetting(
+						SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
+						SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
+						WholeRowIterator.class);
+				scanner.addScanIterator(rowIteratorSettings);
 
-			final IteratorSetting rowIteratorSettings = new IteratorSetting(
-					SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
-					SingleEntryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
-					WholeRowIterator.class);
-			scanner.addScanIterator(rowIteratorSettings);
-
+			}
 			final IteratorSetting filterIteratorSettings = new IteratorSetting(
 					SingleEntryFilterIterator.ENTRY_FILTER_ITERATOR_PRIORITY,
 					SingleEntryFilterIterator.ENTRY_FILTER_ITERATOR_NAME,
@@ -466,6 +488,9 @@ public class AccumuloDataStore extends
 					ByteArrayUtils.byteArrayToString(adapter.getAdapterId().getBytes()));
 
 			filterIteratorSettings.addOption(
+					SingleEntryFilterIterator.WHOLE_ROW_ENCODED_KEY,
+					Boolean.toString(visibilityCount.isAnyEntryDifferingFieldVisiblity()));
+			filterIteratorSettings.addOption(
 					SingleEntryFilterIterator.DATA_IDS,
 					SingleEntryFilterIterator.encodeIDs(dataIds));
 			scanner.addScanIterator(filterIteratorSettings);
@@ -474,6 +499,7 @@ public class AccumuloDataStore extends
 					new ScannerClosableWrapper(
 							scanner),
 					new AccumuloEntryIteratorWrapper(
+							visibilityCount.isAnyEntryDifferingFieldVisiblity(),
 							adapterStore,
 							index,
 							scanner.iterator(),

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -67,6 +68,7 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
@@ -76,7 +78,6 @@ import mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
@@ -85,15 +86,13 @@ import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
  * A set of convenience methods for common operations on Accumulo within
  * GeoWave, such as conversions between GeoWave objects and corresponding
  * Accumulo objects.
- * 
+ *
  */
 public class AccumuloUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloUtils.class);
 	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
 	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
-	private static final int ROW_MERGING_COMBINER_PRIORITY = 4;
-	private static final int ROW_MERGING_VISIBILITY_COMBINER_PRIORITY = 6;
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
@@ -146,6 +145,7 @@ public class AccumuloUtils
 	public static <T> T decodeRow(
 			final Key key,
 			final Value value,
+			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
@@ -155,6 +155,7 @@ public class AccumuloUtils
 		return (T) decodeRowObj(
 				key,
 				value,
+				wholeRowEncoding,
 				rowId,
 				null,
 				adapterStore,
@@ -166,6 +167,7 @@ public class AccumuloUtils
 	public static Object decodeRow(
 			final Key key,
 			final Value value,
+			final boolean wholeRowEncoding,
 			final GeowaveRowId rowId,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -173,6 +175,7 @@ public class AccumuloUtils
 		return decodeRowObj(
 				key,
 				value,
+				wholeRowEncoding,
 				rowId,
 				null,
 				adapterStore,
@@ -184,6 +187,7 @@ public class AccumuloUtils
 	private static <T> Object decodeRowObj(
 			final Key key,
 			final Value value,
+			final boolean wholeRowEncoding,
 			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
@@ -193,6 +197,7 @@ public class AccumuloUtils
 		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
 				key,
 				value,
+				wholeRowEncoding,
 				rowId,
 				dataAdapter,
 				adapterStore,
@@ -207,6 +212,7 @@ public class AccumuloUtils
 	public static <T> Pair<T, DataStoreEntryInfo> decodeRow(
 			final Key k,
 			final Value v,
+			final boolean wholeRowEncoding,
 			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
@@ -219,14 +225,22 @@ public class AccumuloUtils
 		}
 		DataAdapter<T> adapter = dataAdapter;
 		SortedMap<Key, Value> rowMapping;
-		try {
-			rowMapping = WholeRowIterator.decodeRow(
+		if (wholeRowEncoding) {
+			try {
+				rowMapping = WholeRowIterator.decodeRow(
+						k,
+						v);
+			}
+			catch (final IOException e) {
+				LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
+				return null;
+			}
+		}
+		else {
+			rowMapping = new TreeMap<Key, Value>();
+			rowMapping.put(
 					k,
 					v);
-		}
-		catch (final IOException e) {
-			LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
-			return null;
 		}
 		// build a persistence encoding object first, pass it through the
 		// client filters and if its accepted, use the data adapter to
@@ -355,11 +369,11 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * Takes a byte array representing a serialized composite group of
 	 * FieldInfos sharing a common visibility and returns a List of the
 	 * individual FieldInfos
-	 * 
+	 *
 	 * @param compositeFieldId
 	 *            the composite bitmask representing the fields contained within
 	 *            the flattenedValue
@@ -402,20 +416,41 @@ public class AccumuloUtils
 			final PrimaryIndex index,
 			final T entry,
 			final Writer writer,
+			final AccumuloOperations operations,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
-				writableAdapter,
-				index,
-				entry,
-				customFieldVisibilityWriter);
-		final List<Mutation> mutations = buildMutations(
-				writableAdapter.getAdapterId().getBytes(),
-				ingestInfo,
-				index,
-				writableAdapter);
+		// we need to make sure at least this user has authorization
+		// on the visibility that is being written
+		try {
+			final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
+					writableAdapter,
+					index,
+					entry,
+					customFieldVisibilityWriter);
+			if (customFieldVisibilityWriter != DataStoreUtils.UNCONSTRAINED_VISIBILITY) {
+				for (final FieldInfo field : ingestInfo.getFieldInfo()) {
+					if ((field.getVisibility() != null) && (field.getVisibility().length > 0)) {
+						operations.insureAuthorization(
+								null,
+								StringUtils.stringFromBinary(field.getVisibility()));
 
-		writer.write(mutations);
-		return ingestInfo;
+					}
+				}
+			}
+			final List<Mutation> mutations = buildMutations(
+					writableAdapter.getAdapterId().getBytes(),
+					ingestInfo,
+					index,
+					writableAdapter);
+
+			writer.write(mutations);
+			return ingestInfo;
+		}
+		catch (AccumuloException | AccumuloSecurityException e) {
+			LOGGER.warn(
+					"Unable to add user authorization",
+					e);
+		}
+		return null;
 	}
 
 	public static <T> void removeFromAltIndex(
@@ -528,7 +563,7 @@ public class AccumuloUtils
 	/**
 	 * This method combines all FieldInfos that share a common visibility into a
 	 * single FieldInfo
-	 * 
+	 *
 	 * @param originalList
 	 * @return a new list of composite FieldInfos
 	 */
@@ -619,7 +654,7 @@ public class AccumuloUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dataWriter
 	 * @param index
 	 * @param entry
@@ -650,7 +685,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get Namespaces
-	 * 
+	 *
 	 * @param connector
 	 */
 	public static List<String> getNamespaces(
@@ -658,7 +693,7 @@ public class AccumuloUtils
 		final List<String> namespaces = new ArrayList<String>();
 
 		for (final String table : connector.tableOperations().list()) {
-			final int idx = table.indexOf(AbstractAccumuloPersistence.METADATA_TABLE) - 1;
+			final int idx = table.indexOf(AbstractGeowavePersistence.METADATA_TABLE) - 1;
 			if (idx > 0) {
 				namespaces.add(table.substring(
 						0,
@@ -670,7 +705,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get list of data adapters associated with the given namespace
-	 * 
+	 *
 	 * @param connector
 	 * @param namespace
 	 */
@@ -701,7 +736,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get list of indices associated with the given namespace
-	 * 
+	 *
 	 * @param connector
 	 * @param namespace
 	 */
@@ -732,7 +767,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set splits on a table based on a partition ID
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param randomParitions
@@ -774,7 +809,7 @@ public class AccumuloUtils
 	/**
 	 * Set splits on a table based on quantile distribution and fixed number of
 	 * splits
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param quantile
@@ -838,7 +873,7 @@ public class AccumuloUtils
 	/**
 	 * Set splits on table based on equal interval distribution and fixed number
 	 * of splits.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param numberSplits
@@ -920,7 +955,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set splits on table based on fixed number of rows per split.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param numberRows
@@ -977,7 +1012,7 @@ public class AccumuloUtils
 
 	/**
 	 * Check if locality group is set.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1008,7 +1043,7 @@ public class AccumuloUtils
 
 	/**
 	 * Set locality group.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1038,7 +1073,7 @@ public class AccumuloUtils
 
 	/**
 	 * Get number of entries for a data adapter in an index.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @param adapter
@@ -1075,6 +1110,8 @@ public class AccumuloUtils
 					null,
 					null,
 					null,
+					null,
+					null,
 					new String[0]);
 			final CloseableIterator<?> iterator = accumuloQuery.query(
 					operations,
@@ -1093,7 +1130,7 @@ public class AccumuloUtils
 
 	/**
 	 * * Get number of entries per index.
-	 * 
+	 *
 	 * @param namespace
 	 * @param index
 	 * @return
@@ -1118,6 +1155,8 @@ public class AccumuloUtils
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
 					null,
 					index,
+					null,
+					null,
 					null,
 					null,
 					null,
@@ -1190,7 +1229,6 @@ public class AccumuloUtils
 		if (indexStore.indexExists(index.getId())) {
 			final ScannerBase scanner = operations.createBatchScanner(index.getId().getString());
 			((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(null));
-
 			final IteratorSetting iteratorSettings = new IteratorSetting(
 					10,
 					"GEOWAVE_WHOLE_ROW_ITERATOR",
@@ -1261,6 +1299,7 @@ public class AccumuloUtils
 			return AccumuloUtils.decodeRow(
 					row.getKey(),
 					row.getValue(),
+					true,
 					new AccumuloRowId(
 							row.getKey()), // need to pass this, otherwise null
 											// value for rowId gets dereferenced

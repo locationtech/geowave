@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 
 /**
  * This class can write many entries for a single index by retaining a single
@@ -36,22 +37,16 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 	protected final byte[] adapterId;
 	final Closeable closable;
 
-	// just need a reasonable threshold.
-
-	protected final VisibilityWriter<?> customFieldVisibilityWriter;
-
 	public DataStoreIndexWriter(
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
 			final IngestCallback<T> callback,
-			final Closeable closable,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
+			final Closeable closable ) {
 		this.index = index;
 		this.operations = operations;
 		this.options = options;
-		this.customFieldVisibilityWriter = customFieldVisibilityWriter;
 		this.callback = callback;
 		this.adapter = adapter;
 		this.adapterId = adapter.getAdapterId().getBytes();
@@ -77,7 +72,7 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 			final T entry ) {
 		return write(
 				entry,
-				(VisibilityWriter<T>) customFieldVisibilityWriter);
+				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
 	}
 
 	@Override

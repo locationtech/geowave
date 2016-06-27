@@ -28,11 +28,13 @@ public class AccumuloEntryIteratorWrapper<T> extends
 	private final static Logger LOGGER = Logger.getLogger(AccumuloEntryIteratorWrapper.class);
 
 	public AccumuloEntryIteratorWrapper(
+			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator scannerIt,
 			final QueryFilter clientFilter ) {
 		super(
+				wholeRowEncoding,
 				adapterStore,
 				index,
 				scannerIt,
@@ -41,12 +43,14 @@ public class AccumuloEntryIteratorWrapper<T> extends
 	}
 
 	public AccumuloEntryIteratorWrapper(
+			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T> scanCallback ) {
 		super(
+				wholeRowEncoding,
 				adapterStore,
 				index,
 				scannerIt,
@@ -58,18 +62,20 @@ public class AccumuloEntryIteratorWrapper<T> extends
 	protected T decodeRow(
 			final Object row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
+			final PrimaryIndex index,
+			final boolean wholeRowEncoding ) {
 		Entry<Key, Value> entry = null;
 		try {
 			entry = (Entry<Key, Value>) row;
 		}
-		catch (ClassCastException e) {
+		catch (final ClassCastException e) {
 			LOGGER.error("Row is not an accumulo row entry.");
 			return null;
 		}
 		return AccumuloUtils.decodeRow(
 				entry.getKey(),
 				entry.getValue(),
+				wholeRowEncoding,
 				adapterStore,
 				clientFilter,
 				index,

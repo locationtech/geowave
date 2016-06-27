@@ -73,6 +73,8 @@ public class InputFormatAccumuloRangeQuery extends
 				null,
 				null,
 				null,
+				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.accumuloRange = accumuloRange;
@@ -112,6 +114,7 @@ public class InputFormatAccumuloRangeQuery extends
 			final AdapterStore adapterStore,
 			final ScannerBase scanner ) {
 		return new InputFormatIteratorWrapper(
+				useWholeRowIterator(),
 				adapterStore,
 				index,
 				scanner.iterator(),

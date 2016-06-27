@@ -25,10 +25,12 @@ public abstract class EntryIteratorWrapper<T> implements
 	private final Iterator scannerIt;
 	private final QueryFilter clientFilter;
 	protected final ScanCallback<T> scanCallback;
+	private final boolean wholeRowEncoding;
 
 	private T nextValue;
 
 	public EntryIteratorWrapper(
+			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator scannerIt,
@@ -39,6 +41,7 @@ public abstract class EntryIteratorWrapper<T> implements
 		this.scannerIt = scannerIt;
 		this.clientFilter = clientFilter;
 		this.scanCallback = scanCallback;
+		this.wholeRowEncoding = wholeRowEncoding;
 	}
 
 	private void findNext() {
@@ -47,7 +50,8 @@ public abstract class EntryIteratorWrapper<T> implements
 			final T decodedValue = decodeRow(
 					row,
 					clientFilter,
-					index);
+					index,
+					wholeRowEncoding);
 			if (decodedValue != null) {
 				nextValue = decodedValue;
 				return;
@@ -58,7 +62,8 @@ public abstract class EntryIteratorWrapper<T> implements
 	protected abstract T decodeRow(
 			final Object row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index );
+			final PrimaryIndex index,
+			boolean wholeRowEncoding );
 
 	@Override
 	public boolean hasNext() {

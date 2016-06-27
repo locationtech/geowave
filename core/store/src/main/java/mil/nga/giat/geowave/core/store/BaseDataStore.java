@@ -136,8 +136,7 @@ public abstract class BaseDataStore
 					baseOperations,
 					baseOptions,
 					callbacksList,
-					callbacksList,
-					DataStoreUtils.UNCONSTRAINED_VISIBILITY);
+					callbacksList);
 
 			if (adapter instanceof IndexDependentDataAdapter) {
 				writers[i] = new IndependentAdapterIndexWriter<T>(
@@ -218,7 +217,8 @@ public abstract class BaseDataStore
 								indexAdapterPair.getLeft(),
 								prefixIdQuery.getRowPrefix(),
 								sanitizedQueryOptions,
-								tempAdapterStore));
+								tempAdapterStore,
+								adapterIdsToQuery));
 						continue;
 					}
 					adapterIdsToQuery.add(adapter.getAdapterId());
@@ -415,6 +415,7 @@ public abstract class BaseDataStore
 
 					CloseableIterator<?> dataIt = null;
 					queryOptions.setScanCallback(callback);
+					final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
 					if (query instanceof RowIdQuery) {
 						queryOptions.setLimit(-1);
 						dataIt = queryRowIds(
@@ -441,10 +442,10 @@ public abstract class BaseDataStore
 								index,
 								((PrefixIdQuery) query).getRowPrefix(),
 								queryOptions,
-								adapterStore);
+								adapterStore,
+								adapterIds);
 					}
 					else {
-						final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
 						dataIt = queryConstraints(
 								adapterIds,
 								index,
@@ -519,23 +520,6 @@ public abstract class BaseDataStore
 		}
 	}
 
-	protected IndexMetaDataSet composeMetaData(
-			final PrimaryIndex index,
-			final List<ByteArrayId> adapterIdsToQuery,
-			final String... authorizations ) {
-		final IndexMetaDataSet metaData = new IndexMetaDataSet(
-				index.getId(),
-				index.getId(),
-				index.getIndexStrategy().createMetaData());
-		for (final ByteArrayId adapterId : adapterIdsToQuery) {
-			metaData.merge(statisticsStore.getDataStatistics(
-					adapterId,
-					IndexMetaDataSet.composeId(index.getId()),
-					authorizations));
-		}
-		return metaData;
-	}
-
 	protected abstract boolean deleteAll(
 			final String tableName,
 			final String columnFamily,
@@ -578,7 +562,8 @@ public abstract class BaseDataStore
 			PrimaryIndex index,
 			ByteArrayId rowPrefix,
 			QueryOptions sanitizedQueryOptions,
-			AdapterStore tempAdapterStore );
+			AdapterStore tempAdapterStore,
+			List<ByteArrayId> adapterIdsToQuery );
 
 	protected abstract CloseableIterator<Object> queryRowIds(
 			DataAdapter<Object> adapter,
@@ -599,8 +584,7 @@ public abstract class BaseDataStore
 			DataStoreOperations baseOperations,
 			DataStoreOptions baseOptions,
 			final IngestCallback callback,
-			final Closeable closable,
-			UniformVisibilityWriter unconstrainedVisibility );
+			final Closeable closable );
 
 	protected abstract void initOnIndexWriterCreate(
 			final DataAdapter adapter,

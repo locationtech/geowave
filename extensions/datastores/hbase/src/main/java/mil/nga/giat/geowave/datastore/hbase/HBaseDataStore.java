@@ -39,12 +39,12 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -164,16 +164,14 @@ public class HBaseDataStore extends
 			final DataStoreOperations baseOperations,
 			final DataStoreOptions baseOptions,
 			final IngestCallback callback,
-			final Closeable closable,
-			final UniformVisibilityWriter unconstrainedVisibility ) {
+			final Closeable closable ) {
 		return new HBaseIndexWriter(
 				adapter,
 				index,
 				operations,
 				options,
 				callback,
-				closable,
-				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
+				closable);
 	}
 
 	@Override
@@ -302,11 +300,15 @@ public class HBaseDataStore extends
 				filter,
 				sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getAggregation(),
-				// TODO support field subsetting
-				// queryOptions.getFieldIds(),
-				composeMetaData(
+				IndexMetaDataSet.getIndexMetadata(
 						index,
 						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
+				DuplicateEntryCount.getDuplicateCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -323,7 +325,8 @@ public class HBaseDataStore extends
 			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
+			final AdapterStore tempAdapterStore,
+			final List<ByteArrayId> adapterIdsToQuery ) {
 		final HBaseRowPrefixQuery<Object> prefixQuery = new HBaseRowPrefixQuery<Object>(
 				index,
 				rowPrefix,

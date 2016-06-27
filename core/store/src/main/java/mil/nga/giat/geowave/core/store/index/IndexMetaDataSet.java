@@ -5,42 +5,49 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.IndexStrategy;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.DeleteCallback;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 
 public class IndexMetaDataSet<T> extends
 		AbstractDataStatistics<T> implements
-		Mergeable
+		DeleteCallback<T>
 {
 	private List<IndexMetaData> metaData;
-	private ByteArrayId indexId;
 	public static final ByteArrayId STATS_ID = new ByteArrayId(
 			"INDEX_METADATA_");
 
-	public IndexMetaDataSet() {}
+	protected IndexMetaDataSet() {}
+
+	private IndexMetaDataSet(
+			final ByteArrayId adapterId,
+			final ByteArrayId statsId,
+			final List<IndexMetaData> metaData ) {
+		super(
+				adapterId,
+				statsId);
+		this.metaData = metaData;
+	}
 
 	public IndexMetaDataSet(
 			final ByteArrayId adapterId,
 			final ByteArrayId indexId,
-			final List<IndexMetaData> metaData ) {
+			final IndexStrategy<?, ?> indexStrategy ) {
 		super(
 				adapterId,
 				composeId(indexId));
-		this.indexId = indexId;
-		this.metaData = metaData;
+		this.metaData = indexStrategy.createMetaData();
 	}
 
 	public static ByteArrayId composeId(
-			ByteArrayId indexId ) {
+			final ByteArrayId indexId ) {
 		return new ByteArrayId(
 				ArrayUtils.addAll(
 						STATS_ID.getBytes(),
@@ -51,26 +58,8 @@ public class IndexMetaDataSet<T> extends
 	public DataStatistics<T> duplicate() {
 		return new IndexMetaDataSet<T>(
 				dataAdapterId,
-				decomposeFromId(statisticsId),
+				statisticsId,
 				this.metaData);
-	}
-
-	public static ByteArrayId decomposeFromId(
-			final ByteArrayId id ) {
-		int idLength = id.getBytes().length - STATS_ID.getBytes().length;
-		byte[] idBytes = new byte[idLength];
-		System.arraycopy(
-				id.getBytes(),
-				STATS_ID.getBytes().length,
-				idBytes,
-				0,
-				idLength);
-		return new ByteArrayId(
-				idBytes);
-	}
-
-	public ByteArrayId getIndexId() {
-		return indexId;
 	}
 
 	public List<IndexMetaData> getMetaData() {
@@ -80,7 +69,7 @@ public class IndexMetaDataSet<T> extends
 	@Override
 	public byte[] toBinary() {
 		final byte[] metaBytes = PersistenceUtils.toBinary(metaData);
-		ByteBuffer buffer = super.binaryBuffer(metaBytes.length);
+		final ByteBuffer buffer = super.binaryBuffer(metaBytes.length);
 		buffer.put(metaBytes);
 		return buffer.array();
 	}
@@ -88,7 +77,7 @@ public class IndexMetaDataSet<T> extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		final byte[] metaBytes = new byte[buffer.remaining()];
 		buffer.get(metaBytes);
@@ -102,8 +91,8 @@ public class IndexMetaDataSet<T> extends
 
 	@Override
 	public void merge(
-			Mergeable merge ) {
-		if (merge != null && merge instanceof IndexMetaDataSet) {
+			final Mergeable merge ) {
+		if ((merge != null) && (merge instanceof IndexMetaDataSet)) {
 			for (int i = 0; i < metaData.size(); i++) {
 				metaData.get(
 						i).merge(
@@ -114,11 +103,40 @@ public class IndexMetaDataSet<T> extends
 
 	@Override
 	public void entryIngested(
-			DataStoreEntryInfo entryInfo,
-			T entry ) {
-		for (IndexMetaData imd : this.metaData) {
-			imd.update(entryInfo.getRowIds());
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
+		for (final IndexMetaData imd : this.metaData) {
+			imd.insertionIdsAdded(entryInfo.getRowIds());
 		}
 	}
 
+	@Override
+	public void entryDeleted(
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
+		for (final IndexMetaData imd : this.metaData) {
+			imd.insertionIdsRemoved(entryInfo.getRowIds());
+		}
+	}
+
+	public static IndexMetaData[] getIndexMetadata(
+			final PrimaryIndex index,
+			final List<ByteArrayId> adapterIdsToQuery,
+			final DataStatisticsStore statisticsStore,
+			final String... authorizations ) {
+		IndexMetaDataSet combinedMetaData = null;
+		for (final ByteArrayId adapterId : adapterIdsToQuery) {
+			final IndexMetaDataSet adapterMetadata = (IndexMetaDataSet) statisticsStore.getDataStatistics(
+					adapterId,
+					IndexMetaDataSet.composeId(index.getId()),
+					authorizations);
+			if (combinedMetaData == null) {
+				combinedMetaData = adapterMetadata;
+			}
+			else {
+				combinedMetaData.merge(adapterMetadata);
+			}
+		}
+		return combinedMetaData != null ? combinedMetaData.toArray() : null;
+	}
 }

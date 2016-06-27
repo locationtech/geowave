@@ -13,15 +13,16 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -42,7 +43,8 @@ public class HBaseConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final IndexMetaDataSet indexMetaData,
+			final IndexMetaData[] indexMetaData,
+			final DuplicateEntryCount duplicateCounts,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -53,6 +55,7 @@ public class HBaseConstraintsQuery extends
 				scanCallback,
 				aggregation,
 				indexMetaData,
+				duplicateCounts,
 				authorizations);
 	}
 
@@ -64,7 +67,8 @@ public class HBaseConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final IndexMetaDataSet indexMetaData,
+			final IndexMetaData[] indexMetaData,
+			final DuplicateEntryCount duplicateCounts,
 			final String[] authorizations ) {
 
 		super(
@@ -80,6 +84,7 @@ public class HBaseConstraintsQuery extends
 				index,
 				queryFilters,
 				clientDedupeFilter,
+				duplicateCounts,
 				this);
 
 		if (isAggregation()) {

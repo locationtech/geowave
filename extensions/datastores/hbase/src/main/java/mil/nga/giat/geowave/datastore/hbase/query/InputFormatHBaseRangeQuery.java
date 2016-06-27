@@ -70,6 +70,7 @@ public class InputFormatHBaseRangeQuery extends
 				queryOptions.getScanCallback(),
 				null,
 				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.range = range;

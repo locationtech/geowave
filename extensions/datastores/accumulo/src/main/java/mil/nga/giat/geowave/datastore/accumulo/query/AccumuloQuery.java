@@ -17,6 +17,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
@@ -32,16 +33,19 @@ abstract public class AccumuloQuery
 	protected final List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
+	protected final DifferingFieldVisibilityEntryCount visibilityCounts;
 
 	private final String[] authorizations;
 
 	public AccumuloQuery(
 			final PrimaryIndex index,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		this(
 				null,
 				index,
 				null,
+				visibilityCounts,
 				authorizations);
 	}
 
@@ -49,10 +53,12 @@ abstract public class AccumuloQuery
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;
 		this.fieldIdsAdapterPair = fieldIdsAdapterPair;
+		this.visibilityCounts = visibilityCounts;
 		this.authorizations = authorizations;
 	}
 
@@ -60,6 +66,10 @@ abstract public class AccumuloQuery
 
 	protected boolean isAggregation() {
 		return false;
+	}
+
+	protected boolean useWholeRowIterator() {
+		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
 	protected ScannerBase getScanner(
@@ -149,6 +159,10 @@ abstract public class AccumuloQuery
 						associatedAdapter,
 						fieldIds,
 						index.getIndexModel());
+
+				iteratorSetting.addOption(
+						AttributeSubsettingIterator.WHOLE_ROW_ENCODED_KEY,
+						Boolean.toString(useWholeRowIterator()));
 				scanner.addScanIterator(iteratorSetting);
 			}
 		}
