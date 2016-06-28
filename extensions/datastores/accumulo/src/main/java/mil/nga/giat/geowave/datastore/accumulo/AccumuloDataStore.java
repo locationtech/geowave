@@ -193,7 +193,9 @@ public class AccumuloDataStore extends
 	@Override
 	protected void initOnIndexWriterCreate(
 			final DataAdapter adapter,
-			final String indexName ) {
+			final PrimaryIndex index ) {
+
+		final String indexName = index.getId().getString();
 
 		try {
 			if (adapter instanceof RowMergingDataAdapter) {
@@ -204,8 +206,9 @@ public class AccumuloDataStore extends
 					AccumuloUtils.attachRowMergingIterators(
 							((RowMergingDataAdapter<?, ?>) adapter),
 							accumuloOperations,
-							indexName,
-							accumuloOptions.isCreateTable());
+							accumuloOptions,
+							index.getIndexStrategy().getNaturalSplits(),
+							indexName);
 				}
 			}
 

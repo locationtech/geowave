@@ -37,15 +37,22 @@ public class DataStoreEntryInfo
 
 	private final byte[] dataId;
 	private final List<ByteArrayId> rowIds;
+	private final List<ByteArrayId> insertionIds;
 	private final List<FieldInfo<?>> fieldInfo;
 
 	public DataStoreEntryInfo(
 			final byte[] dataId,
+			final List<ByteArrayId> insertionIds,
 			final List<ByteArrayId> rowIds,
 			final List<FieldInfo<?>> fieldInfo ) {
 		this.dataId = dataId;
+		this.insertionIds = insertionIds;
 		this.rowIds = rowIds;
 		this.fieldInfo = fieldInfo;
+	}
+
+	public List<ByteArrayId> getInsertionIds() {
+		return insertionIds;
 	}
 
 	public byte[] getDataId() {

@@ -186,4 +186,26 @@ public class SpatialDimensionalityTypeProvider implements
 		}
 	}
 
+	public static boolean isSpatial(
+			final PrimaryIndex index ) {
+		if ((index == null) || (index.getIndexStrategy() == null)
+				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
+		if (dimensions.length != 2) {
+			return false;
+		}
+		boolean hasLat = false, hasLon = false;
+		for (final NumericDimensionDefinition definition : dimensions) {
+			if (definition instanceof LatitudeDefinition) {
+				hasLat = true;
+			}
+			else if (definition instanceof LongitudeDefinition) {
+				hasLon = true;
+			}
+		}
+		return hasLat && hasLon;
+	}
+
 }

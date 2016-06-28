@@ -155,7 +155,7 @@ public class HBaseDataStore extends
 	@Override
 	protected void initOnIndexWriterCreate(
 			final DataAdapter adapter,
-			final String indexName ) {}
+			final PrimaryIndex index ) {}
 
 	@Override
 	protected IndexWriter createIndexWriter(

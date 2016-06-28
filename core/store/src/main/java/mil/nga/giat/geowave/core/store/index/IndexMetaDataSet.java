@@ -62,6 +62,20 @@ public class IndexMetaDataSet<T> extends
 				this.metaData);
 	}
 
+	public static ByteArrayId decomposeFromId(
+			final ByteArrayId id ) {
+		final int idLength = id.getBytes().length - STATS_ID.getBytes().length;
+		final byte[] idBytes = new byte[idLength];
+		System.arraycopy(
+				id.getBytes(),
+				STATS_ID.getBytes().length,
+				idBytes,
+				0,
+				idLength);
+		return new ByteArrayId(
+				idBytes);
+	}
+
 	public List<IndexMetaData> getMetaData() {
 		return metaData;
 	}

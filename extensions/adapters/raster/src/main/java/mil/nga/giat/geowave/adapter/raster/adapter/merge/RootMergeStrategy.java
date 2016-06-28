@@ -411,6 +411,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 
 	public T getMetadata(
 			final GridCoverage tileGridCoverage,
+			final Map originalCoverageProperties,
 			final RasterDataAdapter dataAdapter ) {
 		final RasterTileMergeStrategy<T> childMergeStrategy = getChildMergeStrategy(dataAdapter.getAdapterId());
 		if (childMergeStrategy != null) {

@@ -228,17 +228,17 @@ public class AccumuloSplitsProvider extends
 				for (final Range range : extentRanges.getValue()) {
 
 					final Range clippedRange = keyExtent.clip(range);
-					final double cardinality = getCardinality(
-							getHistStats(
-									index,
-									adapters,
-									adapterStore,
-									statsStore,
-									statsCache,
-									authorizations),
-							wrapRange(clippedRange));
 					if (!(fullrange.beforeStartKey(clippedRange.getEndKey()) || fullrange.afterEndKey(clippedRange
 							.getStartKey()))) {
+						final double cardinality = getCardinality(
+								getHistStats(
+										index,
+										adapters,
+										adapterStore,
+										statsStore,
+										statsCache,
+										authorizations),
+								wrapRange(clippedRange));
 						rangeList.add(new AccumuloRangeLocationPair(
 								wrapRange(clippedRange),
 								location,

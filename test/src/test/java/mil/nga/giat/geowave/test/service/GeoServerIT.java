@@ -377,6 +377,7 @@ public class GeoServerIT
 		final boolean result = r.getStatusLine().getStatusCode() == Status.OK.getStatusCode();
 		if (result) {
 			final String content = getContent(r);
+			System.out.println(content);
 			final String patternX = "34.6815818";
 			final String patternY = "35.1828408";
 			// name space check as well

@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -80,6 +81,7 @@ import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 
 /**
@@ -354,6 +356,8 @@ public class AccumuloUtils
 								index),
 						new DataStoreEntryInfo(
 								rowId.getDataId(),
+								Arrays.asList(new ByteArrayId(
+										rowId.getInsertionId())),
 								Arrays.asList(new ByteArrayId(
 										k.getRowData().getBackingArray())),
 								fieldInfoList));
@@ -789,21 +793,14 @@ public class AccumuloUtils
 		final AccumuloOperations operations = new BasicAccumuloOperations(
 				connector,
 				namespace);
-		operations.createTable(index.getId().getString());
 		final RoundRobinKeyIndexStrategy partitions = new RoundRobinKeyIndexStrategy(
 				randomPartitions);
-		final SortedSet<Text> splits = new TreeSet<Text>();
-		for (final ByteArrayId split : partitions.getNaturalSplits()) {
-			splits.add(new Text(
-					split.getBytes()));
-		}
 
-		final String tableName = AccumuloUtils.getQualifiedTableName(
-				namespace,
-				index.getId().getString());
-		connector.tableOperations().addSplits(
-				tableName,
-				splits);
+		operations.createTable(
+				index.getId().getString(),
+				true,
+				true,
+				partitions.getNaturalSplits());
 	}
 
 	/**
@@ -1182,31 +1179,37 @@ public class AccumuloUtils
 	public static void attachRowMergingIterators(
 			final RowMergingDataAdapter<?, ?> adapter,
 			final AccumuloOperations operations,
-			final String tableName,
-			final boolean createTable )
+			final AccumuloOptions options,
+			final Set<ByteArrayId> splits,
+			final String tableName )
 			throws TableNotFoundException {
-		final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
-		final OptionProvider optionProvider = new RowMergingAdapterOptionProvider(
-				adapter);
 		final RowTransform rowTransform = adapter.getTransform();
-		final IteratorConfig rowMergingCombinerConfig = new IteratorConfig(
-				EnumSet.complementOf(visibilityCombinerScope),
-				rowTransform.getBaseTransformPriority(),
-				rowTransform.getTransformName() + ROW_MERGING_SUFFIX,
-				RowMergingCombiner.class.getName(),
-				optionProvider);
-		final IteratorConfig rowMergingVisibilityCombinerConfig = new IteratorConfig(
-				visibilityCombinerScope,
-				rowTransform.getBaseTransformPriority() + 1,
-				rowTransform.getTransformName() + ROW_MERGING_VISIBILITY_SUFFIX,
-				RowMergingVisibilityCombiner.class.getName(),
-				optionProvider);
+		if (rowTransform != null) {
+			final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
+			final OptionProvider optionProvider = new RowMergingAdapterOptionProvider(
+					adapter);
+			final IteratorConfig rowMergingCombinerConfig = new IteratorConfig(
+					EnumSet.complementOf(visibilityCombinerScope),
+					rowTransform.getBaseTransformPriority(),
+					rowTransform.getTransformName() + ROW_MERGING_SUFFIX,
+					RowMergingCombiner.class.getName(),
+					optionProvider);
+			final IteratorConfig rowMergingVisibilityCombinerConfig = new IteratorConfig(
+					visibilityCombinerScope,
+					rowTransform.getBaseTransformPriority() + 1,
+					rowTransform.getTransformName() + ROW_MERGING_VISIBILITY_SUFFIX,
+					RowMergingVisibilityCombiner.class.getName(),
+					optionProvider);
 
-		operations.attachIterators(
-				tableName,
-				createTable,
-				rowMergingCombinerConfig,
-				rowMergingVisibilityCombinerConfig);
+			operations.attachIterators(
+					tableName,
+					options.isCreateTable(),
+					true,
+					options.isEnableBlockCache(),
+					splits,
+					rowMergingCombinerConfig,
+					rowMergingVisibilityCombinerConfig);
+		}
 	}
 
 	private static CloseableIterator<Entry<Key, Value>> getIterator(

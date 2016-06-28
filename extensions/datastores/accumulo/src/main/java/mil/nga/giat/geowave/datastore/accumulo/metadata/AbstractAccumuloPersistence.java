@@ -119,6 +119,9 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 						accumuloOperations.attachIterators(
 								getTablename(),
 								true,
+								true,
+								true,
+								null,
 								configs);
 					}
 				}

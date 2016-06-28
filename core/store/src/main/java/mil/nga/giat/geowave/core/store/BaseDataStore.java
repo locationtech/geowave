@@ -126,7 +126,7 @@ public abstract class BaseDataStore
 
 			initOnIndexWriterCreate(
 					adapter,
-					indexName);
+					index);
 
 			final IngestCallbackList<T> callbacksList = new IngestCallbackList<T>(
 					callbacks);
@@ -588,6 +588,6 @@ public abstract class BaseDataStore
 
 	protected abstract void initOnIndexWriterCreate(
 			final DataAdapter adapter,
-			final String indexName );
+			final PrimaryIndex index );
 
 }

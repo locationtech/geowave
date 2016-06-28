@@ -19,7 +19,7 @@ import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
  * This is the primary entry point for command line tools. When run it will
  * expect an operation is specified, and will use the appropriate command-line
  * driver for the chosen operation.
- * 
+ *
  */
 public class GeoWaveMain
 {
@@ -29,9 +29,9 @@ public class GeoWaveMain
 			final String[] args ) {
 
 		// Take an initial stab at running geowave with the given arguments.
-		OperationParser parser = new OperationParser(
+		final OperationParser parser = new OperationParser(
 				prepRegistry());
-		CommandLineOperationParams params = parser.parse(
+		final CommandLineOperationParams params = parser.parse(
 				GeowaveTopLevelSection.class,
 				args);
 
@@ -55,7 +55,7 @@ public class GeoWaveMain
 			JCommander.getConsole().println(
 					"\n" + params.getSuccessMessage());
 		}
-		else if (params.getSuccessCode() == 0 && !params.isCommandPresent()) {
+		else if ((params.getSuccessCode() == 0) && !params.isCommandPresent()) {
 			doHelp(params);
 		}
 
@@ -64,19 +64,19 @@ public class GeoWaveMain
 
 	/**
 	 * Run the operations contained in CommandLineOperationParams.
-	 * 
+	 *
 	 * @param params
 	 */
 	private static void run(
-			CommandLineOperationParams params ) {
+			final CommandLineOperationParams params ) {
 		// Execute the command
-		for (Operation operation : params.getOperationMap().values()) {
+		for (final Operation operation : params.getOperationMap().values()) {
 			if (operation instanceof Command) {
 
 				try {
 					((Command) operation).execute(params);
 				}
-				catch (Exception p) {
+				catch (final Exception p) {
 					params.setSuccessCode(-1);
 					params.setSuccessMessage(String.format(
 							"Unable to execute operation: %s",
@@ -93,21 +93,21 @@ public class GeoWaveMain
 	/**
 	 * This adds the help and explain commands to have all operations as
 	 * children, so the user can do 'help command' or 'explain command'
-	 * 
+	 *
 	 * @return
 	 */
 	private static OperationRegistry prepRegistry() {
-		OperationRegistry registry = OperationRegistry.getInstance();
+		final OperationRegistry registry = OperationRegistry.getInstance();
 
-		OperationEntry explainCommand = registry.getOperation(ExplainCommand.class);
-		OperationEntry helpCommand = registry.getOperation(HelpCommand.class);
-		OperationEntry topLevel = registry.getOperation(GeowaveTopLevelSection.class);
+		final OperationEntry explainCommand = registry.getOperation(ExplainCommand.class);
+		final OperationEntry helpCommand = registry.getOperation(HelpCommand.class);
+		final OperationEntry topLevel = registry.getOperation(GeowaveTopLevelSection.class);
 
 		// Special processing for "HelpSection". This special section will be
 		// added as a child to
 		// top level, and will have all the same children as top level.
-		for (OperationEntry entry : topLevel.getChildren()) {
-			if (entry != helpCommand && entry != explainCommand) {
+		for (final OperationEntry entry : topLevel.getChildren()) {
+			if ((entry != helpCommand) && (entry != explainCommand)) {
 				helpCommand.addChild(entry);
 				explainCommand.addChild(entry);
 			}
@@ -120,8 +120,8 @@ public class GeoWaveMain
 	 * This function will show options for the given operation/section.
 	 */
 	private static void doHelp(
-			CommandLineOperationParams params ) {
-		HelpCommand command = new HelpCommand();
+			final CommandLineOperationParams params ) {
+		final HelpCommand command = new HelpCommand();
 		command.execute(params);
 	}
 }

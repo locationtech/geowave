@@ -41,7 +41,7 @@ public class NoDataByFilter implements
 	public boolean isNoData(
 			final SampleIndex index,
 			final double value ) {
-		if ((shape != null) && !shape.contains(new GeometryFactory().createPoint(new Coordinate(
+		if ((shape != null) && !shape.intersects(new GeometryFactory().createPoint(new Coordinate(
 				index.getX(),
 				index.getY())))) {
 			return true;
