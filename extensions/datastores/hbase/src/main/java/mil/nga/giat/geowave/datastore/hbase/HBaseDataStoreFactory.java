@@ -37,8 +37,7 @@ public class HBaseDataStoreFactory extends
 				new HBaseAdapterIndexMappingStore(
 						hbaseOperations),
 				new HBaseSecondaryIndexDataStore(
-						hbaseOperations,
-						opts.getAdditionalOptions()),
+						hbaseOperations),
 				hbaseOperations,
 				opts.getAdditionalOptions());
 

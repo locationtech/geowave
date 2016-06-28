@@ -95,7 +95,11 @@ public class DeleteWriterTest
 			e.printStackTrace();
 		}
 
-		operations.createTable("test_table");
+		operations.createTable(
+				"test_table",
+				true,
+				true,
+				null);
 		mockDataStore = new AccumuloDataStore(
 				operations,
 				options);

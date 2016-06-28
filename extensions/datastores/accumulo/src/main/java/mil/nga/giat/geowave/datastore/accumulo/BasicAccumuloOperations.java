@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
@@ -67,12 +68,13 @@ public class BasicAccumuloOperations implements
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
 	private String password;
+	private final Map<String, Set<String>> insuredAuthorizationCache;
 
 	/**
 	 * This is will create an Accumulo connector based on passed in connection
 	 * information and credentials for convenience convenience. It will also use
 	 * reasonable defaults for unspecified parameters.
-	 * 
+	 *
 	 * @param zookeeperUrl
 	 *            The comma-delimited URLs for all zookeeper servers, this will
 	 *            be directly used to instantiate a ZookeeperInstance
@@ -114,7 +116,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and only requires an Accumulo
 	 * connector
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 */
@@ -128,7 +130,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and requires an Accumulo
 	 * connector and table namespace
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 * @param password
@@ -151,7 +153,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This is the full constructor for the operation factory and should be used
 	 * if any of the defaults are insufficient.
-	 * 
+	 *
 	 * @param numThreads
 	 *            The number of threads to use for a batch scanner and batch
 	 *            writer
@@ -180,6 +182,7 @@ public class BasicAccumuloOperations implements
 		this.tableNamespace = tableNamespace;
 		this.connector = connector;
 		locGrpCache = new HashMap<String, Long>();
+		insuredAuthorizationCache = new HashMap<String, Set<String>>();
 		cacheTimeoutMillis = TimeUnit.DAYS.toMillis(1);
 	}
 
@@ -241,7 +244,34 @@ public class BasicAccumuloOperations implements
 			final Set<ByteArrayId> splits )
 			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
-		if (createTable && !connector.tableOperations().exists(
+		if (createTable) {
+			createTable(
+					tableName,
+					enableVersioning,
+					enableBlockCache,
+					splits);
+		}
+		final BatchWriterConfig config = new BatchWriterConfig();
+		config.setMaxMemory(byteBufferSize);
+		config.setMaxLatency(
+				timeoutMillis,
+				TimeUnit.MILLISECONDS);
+		config.setMaxWriteThreads(numThreads);
+		return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
+				connector.createBatchWriter(
+						qName,
+						config));
+	}
+
+	@Override
+	public void createTable(
+			final String tableName,
+			final boolean enableVersioning,
+			final boolean enableBlockCache,
+			final Set<ByteArrayId> splits ) {
+		final String qName = getQualifiedTableName(tableName);
+
+		if (!connector.tableOperations().exists(
 				qName)) {
 			try {
 				connector.tableOperations().create(
@@ -264,36 +294,7 @@ public class BasicAccumuloOperations implements
 							partitionKeys);
 				}
 			}
-			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
-				LOGGER.warn(
-						"Unable to create table '" + qName + "'",
-						e);
-			}
-		}
-		final BatchWriterConfig config = new BatchWriterConfig();
-		config.setMaxMemory(byteBufferSize);
-		config.setMaxLatency(
-				timeoutMillis,
-				TimeUnit.MILLISECONDS);
-		config.setMaxWriteThreads(numThreads);
-		return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
-				connector.createBatchWriter(
-						qName,
-						config));
-	}
-
-	@Override
-	public void createTable(
-			final String tableName ) {
-		final String qName = getQualifiedTableName(tableName);
-		if (!connector.tableOperations().exists(
-				qName)) {
-			try {
-				connector.tableOperations().create(
-						qName,
-						true);
-			}
-			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
+			catch (AccumuloException | AccumuloSecurityException | TableExistsException | TableNotFoundException e) {
 				LOGGER.warn(
 						"Unable to create table '" + qName + "'",
 						e);
@@ -365,9 +366,7 @@ public class BasicAccumuloOperations implements
 	 */
 	@Override
 	public void deleteAll()
-			throws AccumuloSecurityException,
-			AccumuloException,
-			TableNotFoundException {
+			throws Exception {
 		SortedSet<String> tableNames = connector.tableOperations().list();
 
 		if ((tableNamespace != null) && !tableNamespace.isEmpty()) {
@@ -387,12 +386,14 @@ public class BasicAccumuloOperations implements
 			final String tableName,
 			final ByteArrayId rowId,
 			final String columnFamily,
-			final String columnQualifier ) {
+			final String columnQualifier,
+			final String... additionalAuthorizations ) {
 		return this.delete(
 				tableName,
 				Arrays.asList(rowId),
 				columnFamily,
-				columnQualifier);
+				columnQualifier,
+				additionalAuthorizations);
 	}
 
 	@Override
@@ -605,23 +606,51 @@ public class BasicAccumuloOperations implements
 			final String... authorizations )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		Authorizations auths = connector.securityOperations().getUserAuthorizations(
-				clientUser);
-		final List<byte[]> newSet = new ArrayList<byte[]>();
-		for (final String auth : authorizations) {
-			if (!auths.contains(auth)) {
-				newSet.add(auth.getBytes(StringUtils.GEOWAVE_CHAR_SET));
+		String user;
+		if (clientUser == null) {
+			user = connector.whoami();
+		}
+		else {
+			user = clientUser;
+		}
+		Set<String> uninsuredAuths = new HashSet<String>();
+		Set<String> insuredAuths = insuredAuthorizationCache.get(user);
+		if (insuredAuths == null) {
+			uninsuredAuths.addAll(Arrays.asList(authorizations));
+			insuredAuths = new HashSet<String>();
+			insuredAuthorizationCache.put(
+					user,
+					insuredAuths);
+		}
+		else {
+			for (final String auth : authorizations) {
+				if (!insuredAuths.contains(auth)) {
+					uninsuredAuths.add(auth);
+				}
 			}
 		}
-		if (newSet.size() > 0) {
-			newSet.addAll(auths.getAuthorizations());
-			connector.securityOperations().changeUserAuthorizations(
-					clientUser,
-					new Authorizations(
-							newSet));
-			auths = connector.securityOperations().getUserAuthorizations(
-					clientUser);
-			LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
+		if (!uninsuredAuths.isEmpty()) {
+			Authorizations auths = connector.securityOperations().getUserAuthorizations(
+					user);
+			final List<byte[]> newSet = new ArrayList<byte[]>();
+			for (final String auth : uninsuredAuths) {
+				if (!auths.contains(auth)) {
+					newSet.add(auth.getBytes(StringUtils.GEOWAVE_CHAR_SET));
+				}
+			}
+			if (newSet.size() > 0) {
+				newSet.addAll(auths.getAuthorizations());
+				connector.securityOperations().changeUserAuthorizations(
+						user,
+						new Authorizations(
+								newSet));
+				auths = connector.securityOperations().getUserAuthorizations(
+						user);
+				LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
+			}
+			for (final String auth : uninsuredAuths) {
+				insuredAuths.add(auth);
+			}
 		}
 	}
 
@@ -655,20 +684,19 @@ public class BasicAccumuloOperations implements
 	public boolean attachIterators(
 			final String tableName,
 			final boolean createTable,
-			final IteratorConfig[] iterators )
+			final boolean enableVersioning,
+			final boolean enableBlockCache,
+			final Set<ByteArrayId> splits,
+			final IteratorConfig... iterators )
 			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
-			try {
-				connector.tableOperations().create(
-						qName);
-			}
-			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
-				LOGGER.warn(
-						"Unable to create table '" + qName + "'",
-						e);
-			}
+			createTable(
+					tableName,
+					enableVersioning,
+					enableBlockCache,
+					splits);
 		}
 		try {
 			if ((iterators != null) && (iterators.length > 0)) {
@@ -757,7 +785,7 @@ public class BasicAccumuloOperations implements
 	}
 
 	public static BasicAccumuloOperations createOperations(
-			AccumuloRequiredOptions options )
+			final AccumuloRequiredOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
 		return new BasicAccumuloOperations(

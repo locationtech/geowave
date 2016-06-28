@@ -36,4 +36,6 @@ public interface AdapterIndexMappingStore
 	 */
 	public void remove(
 			ByteArrayId adapterId );
+
+	public void removeAll();
 }

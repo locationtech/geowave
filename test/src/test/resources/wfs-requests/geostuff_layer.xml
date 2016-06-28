@@ -17,15 +17,15 @@
 	<nativeBoundingBox>
 		<minx>-180.0</minx>
 		<maxx>-90.0</maxx>
-		<miny>90.0</miny>
-		<maxy>180.0</maxy>
+		<miny>-90.0</miny>
+		<maxy>90.0</maxy>
 		<crs>EPSG:4326</crs>
 	</nativeBoundingBox>
 	<latLonBoundingBox>
 		<minx>-180.0</minx>
 		<maxx>-90.0</maxx>
-		<miny>90.0</miny>
-		<maxy>180.0</maxy>
+		<miny>-90.0</miny>
+		<maxy>90.0</maxy>
 		<crs>GEOGCS["WGS84(DD)", DATUM["WGS84", SPHEROID["WGS84", 6378137.0,
 			298.257223563]], PRIMEM["Greenwich", 0.0], UNIT["degree",
 			0.017453292519943295], AXIS["Geodetic longitude", EAST],

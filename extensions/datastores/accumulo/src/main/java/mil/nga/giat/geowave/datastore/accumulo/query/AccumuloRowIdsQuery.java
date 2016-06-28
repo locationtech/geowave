@@ -38,6 +38,8 @@ public class AccumuloRowIdsQuery<T> extends
 				null,
 				null,
 				null,
+				null,
+				null,
 				authorizations);
 		this.rows = rows;
 	}

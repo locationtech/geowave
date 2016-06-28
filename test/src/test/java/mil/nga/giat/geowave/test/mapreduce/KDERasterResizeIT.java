@@ -188,11 +188,17 @@ public class KDERasterResizeIT
 			command.getOptions().setOutputCoverageName(
 					resizeTileSizeCoverageName);
 			command.getOptions().setIndexId(
-					TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX.getId().toString());
+					TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString());
+			// due to time considerations when running the test, downsample to
+			// at most 2 powers of 2 lower
+			int targetRes = (MAX_TILE_SIZE_POWER_OF_2 - i);
+			if ((i - targetRes) > 2) {
+				targetRes = i - 2;
+			}
 			command.getOptions().setOutputTileSize(
 					(int) Math.pow(
 							2,
-							MAX_TILE_SIZE_POWER_OF_2 - i));
+							targetRes));
 
 			ToolRunner.run(
 					command.createRunner(new ManualOperationParams()),
@@ -226,7 +232,7 @@ public class KDERasterResizeIT
 				StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION).append(
 				"=").append(
 				TEST_COVERAGE_NAMESPACE).append(
-				";equalizeHistogramOverride=false;interpolationOverride=").append(
+				";equalizeHistogramOverride=false;scaleTo8Bit=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
 
 		final Map<String, String> options = outputDataStorePluginOptions.getFactoryOptionsAsMap();
@@ -254,6 +260,7 @@ public class KDERasterResizeIT
 					tileSizeCoverageName,
 					pixelDimensions,
 					queryEnvelope,
+					null,
 					null,
 					null);
 			final RenderedImage image = gridCoverage.getRenderedImage();

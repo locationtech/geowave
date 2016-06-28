@@ -3,12 +3,9 @@ package mil.nga.giat.geowave.datastore.accumulo.index.secondary;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.accumulo.core.client.IteratorSetting;
@@ -26,28 +23,23 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.Closable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator;
 
-public class AccumuloSecondaryIndexDataStore implements
-		SecondaryIndexDataStore,
-		Closable
+public class AccumuloSecondaryIndexDataStore extends
+		BaseSecondaryIndexDataStore<Mutation>
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexDataStore.class);
-	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	private final AccumuloOperations accumuloOperations;
 	private final AccumuloOptions accumuloOptions;
-	private final Map<String, Writer> writerCache = new HashMap<>();
 
 	public AccumuloSecondaryIndexDataStore(
 			final AccumuloOperations accumuloOperations ) {
@@ -64,13 +56,14 @@ public class AccumuloSecondaryIndexDataStore implements
 		this.accumuloOptions = accumuloOptions;
 	}
 
-	private Writer getWriter(
+	@Override
+	protected Writer<Mutation> getWriter(
 			final SecondaryIndex<?> secondaryIndex ) {
 		final String secondaryIndexName = secondaryIndex.getIndexStrategy().getId();
 		if (writerCache.containsKey(secondaryIndexName)) {
 			return writerCache.get(secondaryIndexName);
 		}
-		Writer writer = null;
+		Writer<Mutation> writer = null;
 		try {
 			writer = accumuloOperations.createWriter(
 					TABLE_PREFIX + secondaryIndexName,
@@ -91,57 +84,7 @@ public class AccumuloSecondaryIndexDataStore implements
 	}
 
 	@Override
-	public void store(
-			final SecondaryIndex<?> secondaryIndex,
-			final ByteArrayId primaryIndexId,
-			final ByteArrayId primaryIndexRowId,
-			final List<FieldInfo<?>> indexedAttributes ) {
-		final Writer writer = getWriter(secondaryIndex);
-		if (writer != null) {
-			for (final FieldInfo<?> indexedAttribute : indexedAttributes) {
-				@SuppressWarnings("unchecked")
-				final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex.getIndexStrategy().getInsertionIds(
-						Arrays.asList(indexedAttribute));
-				for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-					writer.write(buildMutation(
-							insertionId.getBytes(),
-							secondaryIndex.getId().getBytes(),
-							indexedAttribute.getDataValue().getId().getBytes(),
-							indexedAttribute.getWrittenValue(),
-							indexedAttribute.getVisibility(),
-							primaryIndexId.getBytes(),
-							primaryIndexRowId.getBytes()));
-				}
-			}
-		}
-	}
-
-	@Override
-	public void delete(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<FieldInfo<?>> indexedAttributes ) {
-		final Writer writer = getWriter(secondaryIndex);
-		if (writer != null) {
-			for (final FieldInfo<?> indexedAttribute : indexedAttributes) {
-				@SuppressWarnings("unchecked")
-				final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex.getIndexStrategy().getInsertionIds(
-						Arrays.asList(indexedAttribute));
-				for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-					writer.write(buildDeleteMutation(
-							insertionId.getBytes(),
-							secondaryIndex.getId().getBytes(),
-							indexedAttribute.getDataValue().getId().getBytes()));
-				}
-			}
-		}
-	}
-
-	public void clearCache() {
-		close();
-		writerCache.clear();
-	}
-
-	private Mutation buildMutation(
+	protected Mutation buildMutation(
 			final byte[] secondaryIndexRowId,
 			final byte[] secondaryIndexId,
 			final byte[] attributeName,
@@ -166,7 +109,8 @@ public class AccumuloSecondaryIndexDataStore implements
 		return m;
 	}
 
-	private Mutation buildDeleteMutation(
+	@Override
+	protected Mutation buildDeleteMutation(
 			final byte[] secondaryIndexRowId,
 			final byte[] secondaryIndexId,
 			final byte[] attributeName ) {
@@ -237,7 +181,7 @@ public class AccumuloSecondaryIndexDataStore implements
 
 	private Collection<Range> getScanRanges(
 			final List<ByteArrayRange> ranges ) {
-		if (ranges == null || ranges.isEmpty()) {
+		if ((ranges == null) || ranges.isEmpty()) {
 			return Collections.singleton(new Range());
 		}
 		final Collection<Range> scanRanges = new ArrayList<>();
@@ -268,17 +212,5 @@ public class AccumuloSecondaryIndexDataStore implements
 				SecondaryIndexQueryFilterIterator.PRIMARY_INDEX_ID,
 				primaryIndexId.getString());
 		return iteratorSettings;
-	}
-
-	@Override
-	public void close() {
-		for (final Writer writer : writerCache.values()) {
-			writer.close();
-		}
-	}
-
-	@Override
-	public void flush() {
-		close();
 	}
 }

@@ -40,6 +40,10 @@ public class StatsManager
 		for (final DataStatistics<SimpleFeature> stat : statsList) {
 			if (stat.getStatisticsId().equals(
 					statisticsId)) {
+				// TODO most of the data statistics seem to do shallow clones
+				// that pass along a lot of references - this seems
+				// counter-intuitive to the spirit of a "create" method, but it
+				// seems to work right now?
 				return ((AbstractDataStatistics<SimpleFeature>) stat).duplicate();
 			}
 		}

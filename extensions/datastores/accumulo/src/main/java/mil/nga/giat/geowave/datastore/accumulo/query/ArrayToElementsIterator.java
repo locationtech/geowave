@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.data.field.ArrayReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.util.IteratorUtils;
@@ -59,7 +60,7 @@ public class ArrayToElementsIterator extends
 				final boolean addEncoding = (model.getReader(fieldId) == null);
 
 				final ByteSequence rowData = currentKey.getRowData();
-				AccumuloRowId rowId = new AccumuloRowId(
+				GeowaveRowId rowId = new GeowaveRowId(
 						rowData.getBackingArray());
 
 				// get each entry in the array as arrays of bytes
@@ -79,7 +80,7 @@ public class ArrayToElementsIterator extends
 							4);
 
 					// generate the new rowId
-					rowId = new AccumuloRowId(
+					rowId = new GeowaveRowId(
 							rowId.getInsertionId(),
 							dataId,
 							rowId.getAdapterId(),

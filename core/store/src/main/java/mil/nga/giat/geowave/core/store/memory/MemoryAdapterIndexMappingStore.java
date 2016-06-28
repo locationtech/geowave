@@ -86,4 +86,9 @@ public class MemoryAdapterIndexMappingStore implements
 		toIndexMapping.remove(adapterId);
 	}
 
+	@Override
+	public void removeAll() {
+		toIndexMapping.clear();
+	}
+
 }

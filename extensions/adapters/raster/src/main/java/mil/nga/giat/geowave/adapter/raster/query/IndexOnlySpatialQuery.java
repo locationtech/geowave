@@ -1,16 +1,18 @@
 package mil.nga.giat.geowave.adapter.raster.query;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public class IndexOnlySpatialQuery extends
 		SpatialQuery
 {
+	protected IndexOnlySpatialQuery() {
+		super();
+	}
 
 	protected IndexOnlySpatialQuery(
 			final Constraints constraints,
@@ -24,10 +26,6 @@ public class IndexOnlySpatialQuery extends
 			final Geometry queryGeometry ) {
 		super(
 				queryGeometry);
-	}
-
-	public IndexOnlySpatialQuery() {
-		super();
 	}
 
 	@Override

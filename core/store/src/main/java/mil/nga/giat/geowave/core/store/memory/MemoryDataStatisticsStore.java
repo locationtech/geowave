@@ -183,6 +183,11 @@ public class MemoryDataStatisticsStore implements
 
 	}
 
+	@Override
+	public void removeAll() {
+		statsMap.clear();
+	}
+
 	private static class Key
 	{
 		ByteArrayId adapterId;
