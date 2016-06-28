@@ -176,7 +176,7 @@ public class AggregationIterator extends
 					className,
 					Aggregation.class);
 			final String parameterStr = options.get(PARAMETER_OPTION_NAME);
-			if ((parameterStr != null) && parameterStr.isEmpty()) {
+			if ((parameterStr != null) && !parameterStr.isEmpty()) {
 				final byte[] parameterBytes = ByteArrayUtils.byteArrayFromString(parameterStr);
 				final Persistable aggregationParams = PersistenceUtils.fromBinary(
 						parameterBytes,
