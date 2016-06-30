@@ -307,17 +307,27 @@ public class ExtractTimeFilterVisitor extends
 		}
 		for (final String[] range : validParamRanges) {
 			if (constraints.hasConstraintsFor(range[0]) && constraints.hasConstraintsFor(range[1])) {
+				// TODO: this needs to be more robust at some point, its a
+				// workaround for now
 				TemporalConstraints start = constraints.getConstraintsFor(range[0]);
 				TemporalConstraints end = constraints.getConstraintsFor(range[1]);
-				constraints.removeConstraints(
+				if (constraints.hasConstraintsForRange(
 						range[0],
-						range[1]);
-				constraints.getConstraintsForRange(
-						range[0],
-						range[1]).add(
-						new TemporalRange(
-								start.getStartRange().getStartTime(),
-								end.getEndRange().getEndTime()));
+						range[1])) {
+
+					TemporalConstraints combined = constraints.getConstraintsForRange(
+							range[0],
+							range[1]);
+					constraints.removeConstraints(
+							range[0],
+							range[1]);
+					combined.replaceWithIntersections(start);
+					combined.replaceWithIntersections(end);
+				}
+				else {
+					end.replaceWithIntersections(start);
+					start.replaceWithIntersections(end);
+				}
 
 			}
 		}

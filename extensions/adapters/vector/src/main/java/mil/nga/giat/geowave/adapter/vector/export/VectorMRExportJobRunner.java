@@ -33,6 +33,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
@@ -135,10 +136,11 @@ public class VectorMRExportJobRunner extends
 			}
 			GeoWaveInputFormat.setQuery(
 					conf,
-					CQLQuery.createOptimalQuery(
+					(DistributableQuery) CQLQuery.createOptimalQuery(
 							mrOptions.getCqlFilter(),
 							(GeotoolsFeatureDataAdapter) adapter,
-							options.getIndex()));
+							options.getIndex(),
+							null));
 		}
 		GeoWaveInputFormat.setDataStoreName(
 				conf,
