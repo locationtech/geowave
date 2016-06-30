@@ -1,0 +1,7 @@
+<config>
+<user>root</user>
+<zookeeper>localhost:2181</zookeeper>
+<instance>geowave</instance>
+<password>password</password>
+<gwNamespace></gwNamespace>
+</config>
