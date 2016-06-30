@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -83,18 +84,61 @@ public class ConfigOptions
 
 	/**
 	 * The default property file is in the user's home directory, in the
-	 * .geowave folder.
+	 * .geowave folder. If the version can not be found the first available
+	 * property file in the folder is used
 	 * 
-	 * @return
+	 * @return Default Property File
 	 */
 	public static File getDefaultPropertyFile() {
 		final File defaultPath = getDefaultPropertyPath();
 		final String version = VersionUtils.getVersion();
+
+		if (version != null) {
+			return formatConfigFile(
+					version,
+					defaultPath);
+		}
+		else {
+			final String[] configFiles = defaultPath.list(new FilenameFilter() {
+
+				@Override
+				public boolean accept(
+						File dir,
+						String name ) {
+					return name.endsWith("-config.properties");
+				}
+			});
+			if (configFiles != null && configFiles.length > 0) {
+				final String backupVersion = configFiles[0].substring(
+						0,
+						configFiles[0].length() - 18);
+				return formatConfigFile(
+						backupVersion,
+						defaultPath);
+			}
+			else {
+				return formatConfigFile(
+						"unknownversion",
+						defaultPath);
+			}
+		}
+	}
+
+	/**
+	 * Configures a File based on a given path name and version
+	 * 
+	 * @param version
+	 * @param defaultPath
+	 * @return Configured File
+	 */
+	public static File formatConfigFile(
+			String version,
+			File defaultPath ) {
 		final String configFile = String.format(
 				"%s%s%s%s%s",
 				defaultPath.getAbsolutePath(),
 				File.separator,
-				(version != null ? version : "unknownversion"),
+				version,
 				"-",
 				GEOWAVE_CACHE_FILE);
 		return new File(
@@ -193,17 +237,11 @@ public class ConfigOptions
 
 			properties.load(is);
 		}
-		catch (final FileNotFoundException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Could not find property cache file: " + configFile,
 					e);
-			return null;
-		}
-		catch (final IOException e) {
-			// Stop executing.
-			LOGGER.error(
-					"Exception reading property cache file: " + configFile,
-					e);
+
 			return null;
 		}
 		finally {
