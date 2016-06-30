@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -193,17 +194,29 @@ public class ConfigOptions
 
 			properties.load(is);
 		}
-		catch (final FileNotFoundException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Could not find property cache file: " + configFile,
 					e);
-			return null;
-		}
-		catch (final IOException e) {
-			// Stop executing.
-			LOGGER.error(
-					"Exception reading property cache file: " + configFile,
-					e);
+			final String[] configFiles = configFile.getParentFile().list(new FilenameFilter() {
+				
+				@Override
+				public boolean accept(
+						File dir,
+						String name ) {
+					return name.endsWith("-config.properties");
+				}
+			});
+			if (configFiles != null && configFiles.length > 0){
+				
+				for (String fileString : configFiles){
+					File f = new File(fileString);
+					if (!configFile.getName().equals(f.getName())){
+						properties.putAll(loadProperties(f, pattern));
+					}
+				}
+				return properties;
+			}
 			return null;
 		}
 		finally {
