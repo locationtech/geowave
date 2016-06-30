@@ -45,6 +45,7 @@ public class CQLQueryTest
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
+				null,
 				null);
 		final List<MultiDimensionalNumericData> constraints = query
 				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
@@ -72,6 +73,7 @@ public class CQLQueryTest
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
+				null,
 				null);
 		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX_STRATEGY);
 		assertTrue(Arrays.equals(
@@ -96,6 +98,7 @@ public class CQLQueryTest
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20)",
 				adapter,
+				null,
 				null);
 		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX_STRATEGY);
 		assertTrue(Arrays.equals(
@@ -120,6 +123,7 @@ public class CQLQueryTest
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"pid = '10'",
 				adapter,
+				null,
 				null);
 		assertTrue(query.getIndexConstraints(
 				SPATIAL_INDEX_STRATEGY).isEmpty());
@@ -131,6 +135,7 @@ public class CQLQueryTest
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"pid = '10'",
 				adapter,
+				null,
 				null);
 		assertTrue(query.getIndexConstraints(
 				SPATIAL_TEMPORAL_INDEX_STRATEGY).isEmpty());
@@ -142,6 +147,7 @@ public class CQLQueryTest
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20)",
 				adapter,
+				null,
 				null);
 		assertTrue(query.getIndexConstraints(
 				SPATIAL_TEMPORAL_INDEX_STRATEGY).isEmpty());
@@ -159,6 +165,7 @@ public class CQLQueryTest
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and start during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
+				null,
 				null);
 		final List<MultiDimensionalNumericData> constraints = query
 				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
@@ -181,6 +188,7 @@ public class CQLQueryTest
 		final CQLQuery query2 = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and end during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
+				null,
 				null);
 		final List<MultiDimensionalNumericData> constraints2 = query2
 				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
@@ -205,6 +213,7 @@ public class CQLQueryTest
 				.createOptimalQuery(
 						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end before 2005-05-19T21:32:56Z)",
 						adapter,
+						null,
 						null);
 		final List<MultiDimensionalNumericData> constraints3 = query3
 				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
@@ -229,6 +238,7 @@ public class CQLQueryTest
 				.createOptimalQuery(
 						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end after 2006-05-19T21:32:56Z)",
 						adapter,
+						null,
 						null);
 		final List<MultiDimensionalNumericData> constraints4 = query4
 				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);

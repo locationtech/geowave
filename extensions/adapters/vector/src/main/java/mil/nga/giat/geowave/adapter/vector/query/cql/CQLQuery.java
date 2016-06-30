@@ -54,7 +54,7 @@ public class CQLQuery implements
 
 	protected CQLQuery() {}
 
-	public static DistributableQuery createOptimalQuery(
+	public static Query createOptimalQuery(
 			final String cql,
 			final GeotoolsFeatureDataAdapter adapter,
 			final PrimaryIndex index )
@@ -62,39 +62,58 @@ public class CQLQuery implements
 		return createOptimalQuery(
 				cql,
 				adapter,
-				CompareOperation.OVERLAPS,
-				index);
+				index,
+				null);
 	}
 
-	public static DistributableQuery createOptimalQuery(
+	public static Query createOptimalQuery(
+			final String cql,
+			final GeotoolsFeatureDataAdapter adapter,
+			final PrimaryIndex index,
+			Query baseQuery )
+			throws CQLException {
+		return createOptimalQuery(
+				cql,
+				adapter,
+				CompareOperation.OVERLAPS,
+				index,
+				baseQuery);
+	}
+
+	public static Query createOptimalQuery(
 			final String cql,
 			final GeotoolsFeatureDataAdapter adapter,
 			final CompareOperation geoCompareOp,
-			final PrimaryIndex index )
+			final PrimaryIndex index,
+			Query baseQuery )
 			throws CQLException {
 		final Filter cqlFilter = CQL.toFilter(cql);
 		return createOptimalQuery(
 				cqlFilter,
 				adapter,
-				index);
+				index,
+				baseQuery);
 	}
 
-	public static DistributableQuery createOptimalQuery(
+	public static Query createOptimalQuery(
 			final Filter cqlFilter,
 			final GeotoolsFeatureDataAdapter adapter,
-			final PrimaryIndex index ) {
+			final PrimaryIndex index,
+			Query baseQuery ) {
 		return createOptimalQuery(
 				cqlFilter,
 				adapter,
 				CompareOperation.OVERLAPS,
-				index);
+				index,
+				baseQuery);
 	}
 
-	public static DistributableQuery createOptimalQuery(
+	public static Query createOptimalQuery(
 			final Filter cqlFilter,
 			final GeotoolsFeatureDataAdapter adapter,
 			final CompareOperation geoCompareOp,
-			final PrimaryIndex index ) {
+			final PrimaryIndex index,
+			Query baseQuery ) {
 		final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
 
 		final Object obj = cqlFilter.accept(
@@ -133,41 +152,44 @@ public class CQLQuery implements
 				}
 			}
 		}
-		DistributableQuery baseQuery = null;
-		// there is only space and time
-		final Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
-				cqlFilter,
-				adapter.getType().getCoordinateReferenceSystem());
-		final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(
-				adapter.getTimeDescriptors()).getConstraints(cqlFilter);
-		if (geometry != null) {
-			Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(geometry);
-			if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
+		if (baseQuery == null) {
+			// there is only space and time
+			final Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
+					cqlFilter,
+					adapter.getType().getCoordinateReferenceSystem());
+			final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(
+					adapter.getTimeDescriptors()).getConstraints(cqlFilter);
+			if (geometry != null) {
+				Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(geometry);
+				if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
+					// determine which time constraints are associated with an
+					// indexable
+					// field
+					final TemporalConstraints temporalConstraints = QueryIndexHelper
+							.getTemporalConstraintsForDescriptors(
+									adapter.getTimeDescriptors(),
+									timeConstraintSet);
+					// convert to constraints
+					final Constraints timeConstraints = SpatialTemporalQuery.createConstraints(
+							temporalConstraints,
+							false);
+					constraints = constraints.merge(timeConstraints);
+				}
+				baseQuery = new SpatialQuery(
+						constraints,
+						geometry,
+						geoCompareOp);
+			}
+			else if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
 				// determine which time constraints are associated with an
 				// indexable
 				// field
 				final TemporalConstraints temporalConstraints = QueryIndexHelper.getTemporalConstraintsForDescriptors(
 						adapter.getTimeDescriptors(),
 						timeConstraintSet);
-				// convert to constraints
-				final Constraints timeConstraints = SpatialTemporalQuery.createConstraints(
-						temporalConstraints,
-						false);
-				constraints = constraints.merge(timeConstraints);
+				baseQuery = new TemporalQuery(
+						temporalConstraints);
 			}
-			baseQuery = new SpatialQuery(
-					constraints,
-					geometry,
-					geoCompareOp);
-		}
-		else if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
-			// determine which time constraints are associated with an indexable
-			// field
-			final TemporalConstraints temporalConstraints = QueryIndexHelper.getTemporalConstraintsForDescriptors(
-					adapter.getTimeDescriptors(),
-					timeConstraintSet);
-			baseQuery = new TemporalQuery(
-					temporalConstraints);
 		}
 		if (attrs.isEmpty()) {
 			return baseQuery;

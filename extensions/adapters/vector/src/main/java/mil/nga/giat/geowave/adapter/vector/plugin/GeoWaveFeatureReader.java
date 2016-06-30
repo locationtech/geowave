@@ -281,7 +281,8 @@ public class GeoWaveFeatureReader implements
 					CQLQuery.createOptimalQuery(
 							filter,
 							components.getAdapter(),
-							index));
+							index,
+							query));
 		}
 
 		@Override
@@ -368,7 +369,8 @@ public class GeoWaveFeatureReader implements
 							CQLQuery.createOptimalQuery(
 									filter,
 									components.getAdapter(),
-									index));
+									index,
+									query));
 				}
 				catch (final TransformException e) {
 					throw new IllegalArgumentException(
@@ -418,7 +420,8 @@ public class GeoWaveFeatureReader implements
 					CQLQuery.createOptimalQuery(
 							filter,
 							components.getAdapter(),
-							index));
+							index,
+							query));
 			// TODO: ? need to figure out how to add back CqlQueryRenderIterator
 			// renderer,
 		}
