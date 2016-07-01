@@ -43,13 +43,9 @@ public class StoreLoader
 			File configFile ) {
 
 		String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
-		/*Properties props = ConfigOptions.loadProperties(
-				configFile,
-				"^" + namespace);*/
-		
 		Properties props = ConfigOptions.loadProperties(
 				configFile,
-				null);
+				"^" + namespace);
 
 		dataStorePlugin = new DataStorePluginOptions();
 

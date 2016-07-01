@@ -36,7 +36,7 @@ public class VersionUtils
 
 	public static String getVersion() {
 		return getBuildProperties().getProperty(
-				VERSION_PROPERTY_KEY);
+		VERSION_PROPERTY_KEY);
 	}
 
 	public static void printVersionInfo() {

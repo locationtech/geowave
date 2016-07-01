@@ -198,21 +198,26 @@ public class ConfigOptions
 			LOGGER.error(
 					"Could not find property cache file: " + configFile,
 					e);
-			final String[] configFiles = configFile.getParentFile().list(new FilenameFilter() {
-				
-				@Override
-				public boolean accept(
-						File dir,
-						String name ) {
-					return name.endsWith("-config.properties");
-				}
-			});
-			if (configFiles != null && configFiles.length > 0){
-				
-				for (String fileString : configFiles){
-					File f = new File(fileString);
-					if (!configFile.getName().equals(f.getName())){
-						properties.putAll(loadProperties(f, pattern));
+			final String[] configFiles = configFile.getParentFile().list(
+					new FilenameFilter() {
+
+						@Override
+						public boolean accept(
+								File dir,
+								String name ) {
+							return name.endsWith("-config.properties");
+						}
+					});
+			if (configFiles != null && configFiles.length > 0) {
+
+				for (String fileString : configFiles) {
+					File f = new File(
+							fileString);
+					if (!configFile.getName().equals(
+							f.getName())) {
+						properties.putAll(loadProperties(
+								f,
+								pattern));
 					}
 				}
 				return properties;

@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.analytic.mapreduce.operations;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
@@ -62,6 +64,29 @@ public class KdeCommand extends
 		// Config file
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		
+		if (configFile == null && VersionUtils.getVersion() == null) {
+			final File defaultPath = ConfigOptions.getDefaultPropertyPath();
+			final String[] configFiles = defaultPath.list(
+					new FilenameFilter() {
+
+						@Override
+						public boolean accept(
+								File dir,
+								String name ) {
+							return name.endsWith("-config.properties");
+						}
+					});
+			if (configFiles != null && configFiles.length > 0) {
+				final String firstFile = String.format(
+						"%s%s%s",
+						defaultPath.getAbsolutePath(),
+						File.separator,
+						configFiles[0]);
+				configFile = new File(firstFile);
+			}
+			
+		}
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
