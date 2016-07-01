@@ -179,3 +179,5 @@ mil.nga.giat.geowave.test.annotation
 mil.nga.giat.geowave.test.kafka
 mil.nga.giat.geowave.test.mapreduce
 mil.nga.giat.geowave.test.service
+mil.nga.giat.geowave.types.stanag4676.service
+mil.nga.giat.geowave.types.stanag4676.service.rest
