@@ -48,7 +48,7 @@ import mil.nga.giat.geowave.core.store.index.numeric.NumericGreaterThanOrEqualTo
 import mil.nga.giat.geowave.core.store.index.numeric.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;

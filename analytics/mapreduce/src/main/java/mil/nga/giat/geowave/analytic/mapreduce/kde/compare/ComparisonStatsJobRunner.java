@@ -18,12 +18,11 @@ import org.opengis.feature.simple.SimpleFeature;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
-import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -42,41 +41,6 @@ public class ComparisonStatsJobRunner extends
 				inputDataStoreOptions,
 				outputDataStoreOptions);
 		timeAttribute = inputOptions.getTimeAttribute();
-	}
-
-	public static void main(
-			final String[] args )
-			throws Exception {
-		ConfigOptions opts = new ConfigOptions();
-		ComparisonCommandLineOptions comparisonOptions = new ComparisonCommandLineOptions();
-
-		OperationParser parser = new OperationParser();
-		parser.addAdditionalObject(opts);
-		parser.addAdditionalObject(comparisonOptions);
-
-		KdeCommand kdeCommand = new KdeCommand();
-		CommandLineOperationParams params = parser.parse(
-				kdeCommand,
-				args);
-
-		// Load the params for config file.
-		opts.prepare(params);
-
-		// Don't care about output, but this will set the datastore options.
-		kdeCommand.createRunner(params);
-
-		ComparisonStatsJobRunner runner = new ComparisonStatsJobRunner(
-				comparisonOptions,
-				kdeCommand.getKdeOptions(),
-				kdeCommand.getInputStoreOptions(),
-				kdeCommand.getOutputStoreOptions());
-
-		final int res = ToolRunner.run(
-				new Configuration(),
-				runner,
-				args);
-
-		System.exit(res);
 	}
 
 	@Override

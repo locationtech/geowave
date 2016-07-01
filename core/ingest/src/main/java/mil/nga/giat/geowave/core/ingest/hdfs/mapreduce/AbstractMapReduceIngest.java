@@ -19,9 +19,9 @@ import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.IndexPluginOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**

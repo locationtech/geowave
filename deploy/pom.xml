@@ -96,6 +96,11 @@
 					<artifactId>geowave-cli-geoserver</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-cli-operations</artifactId>
+					<version>${project.version}</version>
+				</dependency>				
 			</dependencies>
 			<build>
 				<plugins>

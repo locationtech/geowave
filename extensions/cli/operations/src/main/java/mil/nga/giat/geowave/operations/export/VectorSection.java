@@ -1,0 +1,15 @@
+package mil.nga.giat.geowave.operations.export;
+
+import com.beust.jcommander.Parameters;
+
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
+
+@GeowaveOperation(name = "vector", parentOperation = GeowaveTopLevelSection.class)
+@Parameters(commandDescription = "Export data from GeoWave to Avro files")
+public class VectorSection extends
+		DefaultOperation
+{
+
+}

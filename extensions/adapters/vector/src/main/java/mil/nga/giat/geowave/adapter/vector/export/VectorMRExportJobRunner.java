@@ -27,22 +27,20 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 
 public class VectorMRExportJobRunner extends
 		Configured implements
 		Tool
 {
-	private static final Logger LOGGER = Logger.getLogger(VectorMRExportCommand.class);
+	private static final Logger LOGGER = Logger.getLogger(VectorMRExportJobRunner.class);
 
 	public static final String BATCH_SIZE_KEY = "BATCH_SIZE";
 	private final DataStorePluginOptions storeOptions;
@@ -195,24 +193,6 @@ public class VectorMRExportJobRunner extends
 					ex);
 		}
 		return retVal ? 0 : 1;
-	}
-
-	public static void main(
-			final String[] args )
-			throws Exception {
-		ConfigOptions opts = new ConfigOptions();
-		OperationParser parser = new OperationParser();
-		parser.addAdditionalObject(opts);
-		VectorMRExportCommand command = new VectorMRExportCommand();
-		CommandLineOperationParams params = parser.parse(
-				command,
-				args);
-		opts.prepare(params);
-		final int res = ToolRunner.run(
-				new Configuration(),
-				command.createRunner(params),
-				args);
-		System.exit(res);
 	}
 
 	@Override

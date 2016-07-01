@@ -28,11 +28,11 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import com.google.common.io.Files;
 
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
-import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
-import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.IndexPluginOptions;
+import mil.nga.giat.geowave.operations.ingest.LocalToGeowaveCommand;
+import mil.nga.giat.geowave.operations.ingest.LocalToMapReduceToGeowaveCommand;
+import mil.nga.giat.geowave.operations.ingest.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.service.IngestService;
 import mil.nga.giat.geowave.service.ServiceUtils;
 

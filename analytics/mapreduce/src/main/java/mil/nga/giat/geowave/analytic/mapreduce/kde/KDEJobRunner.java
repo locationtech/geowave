@@ -31,7 +31,6 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
-import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
@@ -45,7 +44,7 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
@@ -362,24 +361,6 @@ public class KDEJobRunner extends
 				adapter,
 				index);
 		writer.close();
-	}
-
-	public static void main(
-			final String[] args )
-			throws Exception {
-		ConfigOptions opts = new ConfigOptions();
-		OperationParser parser = new OperationParser();
-		parser.addAdditionalObject(opts);
-		KdeCommand command = new KdeCommand();
-		CommandLineOperationParams params = parser.parse(
-				command,
-				args);
-		opts.prepare(params);
-		final int res = ToolRunner.run(
-				new Configuration(),
-				command.createRunner(params),
-				args);
-		System.exit(res);
 	}
 
 	@Override

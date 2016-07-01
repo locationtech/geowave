@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.cli.osm.operations.IngestOSMToGeoWaveCommand;
 import mil.nga.giat.geowave.cli.osm.operations.StageOSMToHDFSCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;

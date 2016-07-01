@@ -101,10 +101,6 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>javax.servlet</artifactId>
-					<groupId />
-				</exclusion>
-				<exclusion>
 					<artifactId>servlet-api</artifactId>
 					<groupId>org.mortbay.jetty</groupId>
 				</exclusion>

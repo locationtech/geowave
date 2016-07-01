@@ -1,0 +1,6 @@
+mil.nga.giat.geowave.operations.raster.RasterOperationCLIProvider
+mil.nga.giat.geowave.operations.export.VectorExportCLIProvider
+mil.nga.giat.geowave.operations.analytic.AnalyticOperationCLIProvider
+mil.nga.giat.geowave.operations.ingest.IngestOperationProvider
+mil.nga.giat.geowave.operations.remote.RemoteOperationsProvider
+mil.nga.giat.geowave.operations.config.ConfigOperationProvider

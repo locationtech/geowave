@@ -24,7 +24,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.plugins.StoreLoader;
 
 abstract public class AbstractGeoWaveQuery extends
 		DefaultOperation implements

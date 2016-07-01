@@ -30,8 +30,8 @@ import mil.nga.giat.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.StoreLoader;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
