@@ -477,7 +477,7 @@ public class AccumuloDataStore implements
 									indexAdapterPair.getLeft(),
 									adapterIdsToQuery,
 									statisticsStore,
-									queryOptions.getAuthorizations()),
+									sanitizedQueryOptions.getAuthorizations()),
 							DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 									indexAdapterPair.getLeft(),
 									adapterIdsToQuery,
