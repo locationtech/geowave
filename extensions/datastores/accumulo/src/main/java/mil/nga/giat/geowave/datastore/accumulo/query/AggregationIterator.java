@@ -35,6 +35,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
+import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadData;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class AggregationIterator extends
@@ -117,17 +118,15 @@ public class AggregationIterator extends
 			final Value value ) {
 		if ((queryFilterIterator != null) && queryFilterIterator.isSet()) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
-			final List<AccumuloFieldInfo> unknownData = new ArrayList<AccumuloFieldInfo>();
 			final Text currentRow = key.getRow();
-			queryFilterIterator.aggregateFieldData(
+			AccumuloUnreadData unreadData = queryFilterIterator.aggregateFieldData(
 					key,
 					value,
-					commonData,
-					unknownData);
+					commonData);
 			final CommonIndexedPersistenceEncoding encoding = QueryFilterIterator.getEncoding(
 					currentRow,
 					commonData,
-					unknownData);
+					unreadData);
 
 			boolean queryFilterResult = true;
 			if (queryFilterIterator.isSet()) {
