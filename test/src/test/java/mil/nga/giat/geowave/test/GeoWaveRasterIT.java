@@ -451,7 +451,7 @@ public class GeoWaveRasterIT
 
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
-				TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			writer.write(RasterUtils.createCoverageTypeDouble(
 					coverageName,
 					westLon,
@@ -496,7 +496,7 @@ public class GeoWaveRasterIT
 				"test-value");
 		try (IndexWriter writer = dataStore.createWriter(
 				mergeStrategyOverriddenAdapter,
-				TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			for (int r = 0; r < numRasters; r++) {
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						numBands,

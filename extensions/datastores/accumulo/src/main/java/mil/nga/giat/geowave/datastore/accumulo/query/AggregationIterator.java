@@ -367,6 +367,13 @@ public class AggregationIterator extends
 		}
 	}
 
+	@Override
+	protected void findTop() {
+		QueryFilterIterator.findTopEnhanced(
+				getSource(),
+				queryFilterIterator);
+	}
+
 	protected static void findEnd(
 			final Iterator<Range> rangeIt,
 			final Collection<Range> internalRanges,

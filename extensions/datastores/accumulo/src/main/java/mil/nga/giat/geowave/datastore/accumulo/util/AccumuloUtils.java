@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -226,7 +227,7 @@ public class AccumuloUtils
 			return null;
 		}
 		DataAdapter<T> adapter = dataAdapter;
-		SortedMap<Key, Value> rowMapping;
+		Map<Key, Value> rowMapping;
 		if (wholeRowEncoding) {
 			try {
 				rowMapping = WholeRowIterator.decodeRow(
@@ -239,7 +240,7 @@ public class AccumuloUtils
 			}
 		}
 		else {
-			rowMapping = new TreeMap<Key, Value>();
+			rowMapping = new HashMap<Key, Value>();
 			rowMapping.put(
 					k,
 					v);
@@ -1253,17 +1254,11 @@ public class AccumuloUtils
 					WholeRowIterator.class);
 			scanner.addScanIterator(iteratorSettings);
 
-			final List<QueryFilter> clientFilters = new ArrayList<QueryFilter>();
-			clientFilters.add(
-					0,
-					new DedupeFilter());
-
 			final Iterator<Entry<Key, Value>> it = new IteratorWrapper(
 					adapterStore,
 					index,
 					scanner.iterator(),
-					new FilterList<QueryFilter>(
-							clientFilters));
+					new DedupeFilter());
 
 			iterator = new CloseableIteratorWrapper<Entry<Key, Value>>(
 					new ScannerClosableWrapper(

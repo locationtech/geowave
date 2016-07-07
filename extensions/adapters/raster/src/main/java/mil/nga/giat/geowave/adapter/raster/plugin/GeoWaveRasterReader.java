@@ -184,8 +184,7 @@ public class GeoWaveRasterReader extends
 		geowaveAdapterStore = config.getAdapterStore();
 		geowaveStatisticsStore = config.getDataStatisticsStore();
 
-		rasterIndex = new SpatialIndexBuilder().setAllTiers(
-				true).createIndex();
+		rasterIndex = new SpatialIndexBuilder().createIndex();
 		crs = GeoWaveGTRasterFormat.DEFAULT_CRS;
 	}
 

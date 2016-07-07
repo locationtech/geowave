@@ -54,7 +54,9 @@ public class QueryIndexHelper
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
 			final TimeDescriptors timeDescriptors,
 			final TemporalConstraintsSet constraintsSet ) {
-
+		// TODO: if query range doesn't intersect with the stats, it seems the
+		// constraints are removed or empty - does this make sense? It seems
+		// this can result in open-ended time when it should find no results.
 		if ((timeDescriptors.getEndRange() != null) && (timeDescriptors.getStartRange() != null)) {
 			final String ename = timeDescriptors.getEndRange().getLocalName();
 			final String sname = timeDescriptors.getStartRange().getLocalName();

@@ -101,8 +101,9 @@ public abstract class AccumuloFilteredIndexQuery extends
 				adapterStore,
 				index,
 				scanner.iterator(),
-				new FilterList<QueryFilter>(
-						clientFilters),
+				clientFilters.isEmpty() ? null : clientFilters.size() == 1 ? clientFilters.get(0)
+						: new FilterList<QueryFilter>(
+								clientFilters),
 				scanCallback);
 	}
 

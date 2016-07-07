@@ -188,7 +188,7 @@ public class KDERasterResizeIT
 			command.getOptions().setOutputCoverageName(
 					resizeTileSizeCoverageName);
 			command.getOptions().setIndexId(
-					TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX.getId().toString());
+					TestUtils.DEFAULT_SPATIAL_INDEX.getId().toString());
 			command.getOptions().setOutputTileSize(
 					(int) Math.pow(
 							2,

@@ -182,11 +182,17 @@ public class AccumuloConstraintsQuery extends
 							QueryFilterIterator.class);
 				}
 			}
-			final DistributableQueryFilter filterList = new DistributableFilterList(
-					distributableFilters);
+			DistributableQueryFilter filter;
+			if (distributableFilters.size() > 1) {
+				filter = new DistributableFilterList(
+						distributableFilters);
+			}
+			else {
+				filter = distributableFilters.get(0);
+			}
 			iteratorSettings.addOption(
 					QueryFilterIterator.FILTER,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(filterList)));
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(filter)));
 			if (!iteratorSettings.getOptions().containsKey(
 					QueryFilterIterator.MODEL)) {
 				// it may already be added as an option if its an aggregation

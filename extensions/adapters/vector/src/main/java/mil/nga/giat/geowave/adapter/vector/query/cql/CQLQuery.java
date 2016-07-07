@@ -24,6 +24,9 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -35,6 +38,7 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
@@ -181,16 +185,25 @@ public class CQLQuery implements
 					constraints = geoConstraints.getConstraints().merge(
 							timeConstraints);
 				}
-				if (geoConstraints.isConstraintsMatchGeometry() && CompareOperation.OVERLAPS.equals(geoCompareOp)) {
-					baseQuery = new BasicQuery(
-							constraints);
-				}
-				else {
-					baseQuery = new SpatialQuery(
-							constraints,
-							geometry,
-							geoCompareOp);
-				}
+				// TODO: this actually doesn't boost performance much, if at
+				// all, and one key is missing - the query geometry has to be
+				// topologically equivalent to its envelope and the ingested
+				// geometry has to be topologically equivalent to its envelope
+				// this could be kept as a statistic on ingest, but considering
+				// it doesn't boost performance it may not be worthwhile
+				// pursuing
+
+				// if (geoConstraints.isConstraintsMatchGeometry() &&
+				// CompareOperation.OVERLAPS.equals(geoCompareOp)) {
+				// baseQuery = new BasicQuery(
+				// constraints);
+				// }
+				// else {
+				baseQuery = new SpatialQuery(
+						constraints,
+						geometry,
+						geoCompareOp);
+				// }
 			}
 			else if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
 				// determine which time constraints are associated with an
@@ -348,17 +361,16 @@ public class CQLQuery implements
 
 	protected static boolean hasAtLeastSpatial(
 			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null)
-				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+		if ((index == null) || (index.getIndexModel() == null) || (index.getIndexModel().getDimensions() == null)) {
 			return false;
 		}
 		boolean hasLatitude = false;
 		boolean hasLongitude = false;
-		for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
-			if (dimension instanceof LatitudeDefinition) {
+		for (final NumericDimensionField dimension : index.getIndexModel().getDimensions()) {
+			if (dimension instanceof LatitudeField) {
 				hasLatitude = true;
 			}
-			if (dimension instanceof LatitudeDefinition) {
+			if (dimension instanceof LongitudeField) {
 				hasLongitude = true;
 			}
 		}
@@ -367,12 +379,11 @@ public class CQLQuery implements
 
 	protected static boolean hasTime(
 			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null)
-				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+		if ((index == null) || (index.getIndexModel() == null) || (index.getIndexModel().getDimensions() == null)) {
 			return false;
 		}
-		for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
-			if (dimension instanceof TimeDefinition) {
+		for (final NumericDimensionField dimension : index.getIndexModel().getDimensions()) {
+			if (dimension instanceof TimeField) {
 				return true;
 			}
 		}

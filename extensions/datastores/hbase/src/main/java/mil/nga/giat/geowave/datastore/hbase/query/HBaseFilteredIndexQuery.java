@@ -278,8 +278,9 @@ public abstract class HBaseFilteredIndexQuery extends
 				adapterStore,
 				index,
 				resultsIterator,
-				new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
-						filters),
+				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
+						: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
+								filters),
 				scanCallback);
 	}
 

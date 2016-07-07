@@ -624,17 +624,25 @@ public class GeoWaveFeatureReader implements
 			final GeoConstraintsWrapper geoConstraints,
 			final Constraints temporalConstraints ) {
 
-		if (geoConstraints.isConstraintsMatchGeometry()) {
-			return new BasicQuery(
-					geoConstraints.getConstraints().merge(
-							temporalConstraints));
-		}
-		else {
-			return new SpatialQuery(
-					geoConstraints.getConstraints().merge(
-							temporalConstraints),
-					geoConstraints.getGeometry());
-		}
+		// TODO: this actually doesn't boost performance much, if at
+		// all, and one key is missing - the query geometry has to be
+		// topologically equivalent to its envelope and the ingested
+		// geometry has to be topologically equivalent to its envelope
+		// this could be kept as a statistic on ingest, but considering
+		// it doesn't boost performance it may not be worthwhile
+		// pursuing
+
+		// if (geoConstraints.isConstraintsMatchGeometry()) {
+		// return new BasicQuery(
+		// geoConstraints.getConstraints().merge(
+		// temporalConstraints));
+		// }
+		// else {
+		return new SpatialQuery(
+				geoConstraints.getConstraints().merge(
+						temporalConstraints),
+				geoConstraints.getGeometry());
+		// }
 	}
 
 	public Object convertToType(

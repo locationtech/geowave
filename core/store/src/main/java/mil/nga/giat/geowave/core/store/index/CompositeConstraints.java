@@ -50,8 +50,17 @@ public class CompositeConstraints implements
 		final List<DistributableQueryFilter> filters = new ArrayList<DistributableQueryFilter>();
 		for (final QueryConstraints constraint : constraints) {
 			if (constraint instanceof FilterableConstraints) {
-				filters.add(((FilterableConstraints) constraint).getFilter());
+				DistributableQueryFilter filter = ((FilterableConstraints) constraint).getFilter();
+				if (filter != null) {
+					filters.add(filter);
+				}
 			}
+		}
+		if (filters.isEmpty()) {
+			return null;
+		}
+		if (filters.size() == 1) {
+			return filters.get(0);
 		}
 		return new DistributableFilterList(
 				intersect,

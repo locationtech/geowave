@@ -141,16 +141,22 @@ public class StatsManager
 										descriptor.getLocalName())));
 
 			}
-			else if (String.class.isAssignableFrom(descriptor.getType().getBinding())) {
-				addStats(
-						new FeatureHyperLogLogStatistics(
-								dataAdapter.getAdapterId(),
-								descriptor.getLocalName(),
-								16),
-						new FieldIdStatisticVisibility(
-								new ByteArrayId(
-										descriptor.getLocalName())));
-			}
+			// else if (String.class.isAssignableFrom(
+			// descriptor.getType().getBinding())) {
+
+			// HyperLogLog is fairly expensive in
+			// serialization/deserialization of the HyperLogLogPlus object
+			// and is not used anywhere at the moment
+
+			// addStats(
+			// new FeatureHyperLogLogStatistics(
+			// dataAdapter.getAdapterId(),
+			// descriptor.getLocalName(),
+			// 16),
+			// new FieldIdStatisticVisibility(
+			// new ByteArrayId(
+			// descriptor.getLocalName())));
+			// }
 
 		}
 	}

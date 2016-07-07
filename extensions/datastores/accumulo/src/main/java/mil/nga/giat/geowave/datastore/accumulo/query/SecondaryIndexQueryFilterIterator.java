@@ -17,6 +17,7 @@ import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
+import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 
 public class SecondaryIndexQueryFilterIterator extends
 		RowFilter
@@ -25,7 +26,7 @@ public class SecondaryIndexQueryFilterIterator extends
 	public static final int ITERATOR_PRIORITY = 50;
 	public static final String FILTERS = "filters";
 	public static final String PRIMARY_INDEX_ID = "primaryIndexId";
-	private DistributableFilterList filters;
+	private DistributableQueryFilter filter;
 	private String primaryIndexId;
 
 	@Override
@@ -38,15 +39,17 @@ public class SecondaryIndexQueryFilterIterator extends
 				source,
 				options,
 				env);
-		if ((options == null) || (!options.containsKey(FILTERS)) || (!options.containsKey(PRIMARY_INDEX_ID))) {
+		if ((options == null) || (!options.containsKey(PRIMARY_INDEX_ID))) {
 			throw new IllegalArgumentException(
 					"Arguments must be set for " + SecondaryIndexQueryFilterIterator.class.getName());
 		}
-		final String filterStr = options.get(FILTERS);
-		final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
-		filters = PersistenceUtils.fromBinary(
-				filterBytes,
-				DistributableFilterList.class);
+		if (options.containsKey(FILTERS)) {
+			final String filterStr = options.get(FILTERS);
+			final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
+			filter = PersistenceUtils.fromBinary(
+					filterBytes,
+					DistributableQueryFilter.class);
+		}
 		primaryIndexId = options.get(PRIMARY_INDEX_ID);
 	}
 
@@ -54,7 +57,7 @@ public class SecondaryIndexQueryFilterIterator extends
 	public boolean acceptRow(
 			final SortedKeyValueIterator<Key, Value> rowIterator )
 			throws IOException {
-		if (filters != null) {
+		if (filter != null) {
 			while (rowIterator.hasTop()) {
 				final Key key = rowIterator.getTopKey();
 				final Value value = rowIterator.getTopValue();
@@ -72,7 +75,7 @@ public class SecondaryIndexQueryFilterIterator extends
 											new ByteArrayId(
 													value.get()))),
 							null);
-					if (filters.accept(
+					if (filter.accept(
 							null,
 							persistenceEncoding)) return true;
 				}

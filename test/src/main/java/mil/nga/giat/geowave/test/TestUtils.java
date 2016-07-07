@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,7 +32,6 @@ import com.vividsolutions.jts.geom.Point;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -82,9 +80,6 @@ public class TestUtils
 
 	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
 			.createPrimaryIndex();
-	public static final PrimaryIndex DEFAULT_ALLTIER_SPATIAL_INDEX = new SpatialIndexBuilder().setAllTiers(
-			true).createIndex();
-
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createPrimaryIndex();
 
@@ -126,7 +121,7 @@ public class TestUtils
 	}
 
 	public static void deleteAll(
-			DataStorePluginOptions dataStore ) {
+			final DataStorePluginOptions dataStore ) {
 		dataStore.createDataStore().delete(
 				new QueryOptions(),
 				null);
@@ -357,7 +352,7 @@ public class TestUtils
 	/**
 	 * Unzips the contents of a zip file to a target output directory, deleting
 	 * anything that existed beforehand
-	 * 
+	 *
 	 * @param zipInput
 	 *            input zip file
 	 * @param outputFolder

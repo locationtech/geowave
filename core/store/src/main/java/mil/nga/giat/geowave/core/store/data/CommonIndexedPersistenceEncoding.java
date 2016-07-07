@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
@@ -133,8 +134,11 @@ public class CommonIndexedPersistenceEncoding extends
 			final NumericDimensionField[] dimensions ) {
 		final NumericData[] dataPerDimension = new NumericData[dimensions.length];
 		for (int d = 0; d < dimensions.length; d++) {
-			dataPerDimension[d] = dimensions[d].getNumericData(getCommonData().getValue(
-					dimensions[d].getFieldId()));
+			CommonIndexValue val = getCommonData().getValue(
+					dimensions[d].getFieldId());
+			if (val != null) {
+				dataPerDimension[d] = dimensions[d].getNumericData(val);
+			}
 		}
 		return new BasicNumericDataset(
 				dataPerDimension);
@@ -175,7 +179,14 @@ public class CommonIndexedPersistenceEncoding extends
 			final NumericData[] insertTileRange,
 			final PrimaryIndex index ) {
 		@SuppressWarnings("rawtypes")
-		final NumericDimensionField[] dimensions = index.getIndexModel().getDimensions();
+		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
+		final NumericDimensionField[] fields = index.getIndexModel().getDimensions();
+		Map<Class, NumericDimensionField> dimensionTypeToFieldMap = new HashMap<>();
+		for (NumericDimensionField field : fields) {
+			dimensionTypeToFieldMap.put(
+					field.getBaseDefinition().getClass(),
+					field);
+		}
 
 		// Recall that each numeric data instance is extracted by a {@link
 		// DimensionField}. More than one DimensionField
@@ -191,35 +202,37 @@ public class CommonIndexedPersistenceEncoding extends
 				dimensions.length);
 
 		for (int d = 0; d < dimensions.length; d++) {
-			final ByteArrayId fieldId = dimensions[d].getFieldId();
-			final DimensionRangePair fieldData = fieldsRangeData.get(fieldId);
-			if (fieldData == null) {
-				fieldsRangeData.put(
-						fieldId,
-						new DimensionRangePair(
-								dimensions[d],
-								insertTileRange[d]));
-			}
-			else {
-				fieldData.add(
-						dimensions[d],
-						insertTileRange[d]);
+			NumericDimensionField field = dimensionTypeToFieldMap.get(dimensions[d].getClass());
+			if (field != null) {
+				final ByteArrayId fieldId = field.getFieldId();
+				final DimensionRangePair fieldData = fieldsRangeData.get(fieldId);
+				if (fieldData == null) {
+					fieldsRangeData.put(
+							fieldId,
+							new DimensionRangePair(
+									field,
+									insertTileRange[d]));
+				}
+				else {
+					fieldData.add(
+							field,
+							insertTileRange[d]);
+				}
 			}
 		}
 
-		boolean ok = true;
 		for (final Entry<ByteArrayId, DimensionRangePair> entry : fieldsRangeData.entrySet()) {
 			PersistentDataset<CommonIndexValue> commonData = getCommonData();
 			if (commonData != null) {
 				CommonIndexValue value = commonData.getValue(entry.getKey());
-				if (value != null) {
-					ok = ok && value.overlaps(
-							entry.getValue().dimensions,
-							entry.getValue().dataPerDimension);
+				if (value != null && !value.overlaps(
+						entry.getValue().dimensions,
+						entry.getValue().dataPerDimension)) {
+					return false;
 				}
 			}
 		}
-		return ok;
+		return true;
 	}
 
 }

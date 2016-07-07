@@ -95,6 +95,38 @@ public class QueryFilterIterator extends
 	}
 
 	@Override
+	protected void findTop() {
+		// it seems like the key can be cached and turns out to improve
+		// performance a bit
+		findTopEnhanced(
+				getSource(),
+				this);
+	}
+
+	protected static void findTopEnhanced(
+			final SortedKeyValueIterator<Key, Value> source,
+			final QueryFilterIterator filter ) {
+		Key key;
+		if (source.hasTop()) {
+			key = source.getTopKey();
+		}
+		else {
+			return;
+		}
+		while (!key.isDeleted() && !filter.accept(
+				key,
+				source.getTopValue())) {
+			try {
+				source.next();
+			}
+			catch (final IOException e) {
+				throw new RuntimeException(
+						e);
+			}
+		}
+	}
+
+	@Override
 	public boolean accept(
 			final Key key,
 			final Value value ) {
