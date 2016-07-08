@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -19,7 +18,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -48,7 +49,7 @@ public class GeoServerRestClient
 	private final static Logger logger = Logger.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
-	private class DataAdapterInfo
+	static private class DataAdapterInfo
 	{
 		String adapterId;
 		Boolean isRaster;
@@ -961,7 +962,10 @@ public class GeoServerRestClient
 
 			coverageXml = result.getWriter().toString();
 		}
-		catch (Exception e) {
+		catch (TransformerException e) {
+			e.printStackTrace();
+		}
+		catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 
@@ -1095,60 +1099,6 @@ public class GeoServerRestClient
 		logger.debug("No match!");
 		
 		return null;
-	}
-
-	private void writeConfigXml(
-			String storeConfigPath,
-			String user,
-			String pass,
-			String zookeeper,
-			String instance,
-			String cvgstoreName ) {
-		try {
-			// create the post XML
-			Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-
-			Element configEl = xmlDoc.createElement("config");
-			xmlDoc.appendChild(configEl);
-
-			Element userEl = xmlDoc.createElement("user");
-			userEl.appendChild(xmlDoc.createTextNode(user));
-			configEl.appendChild(userEl);
-
-			Element passEl = xmlDoc.createElement("password");
-			passEl.appendChild(xmlDoc.createTextNode(pass));
-			configEl.appendChild(passEl);
-
-			Element zkEl = xmlDoc.createElement("zookeeper");
-			zkEl.appendChild(xmlDoc.createTextNode(zookeeper));
-			configEl.appendChild(zkEl);
-
-			Element instEl = xmlDoc.createElement("instance");
-			instEl.appendChild(xmlDoc.createTextNode(instance));
-			configEl.appendChild(instEl);
-
-			Element gwnsEl = xmlDoc.createElement("gwNamespace");
-			gwnsEl.appendChild(xmlDoc.createTextNode(cvgstoreName));
-			configEl.appendChild(gwnsEl);
-
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			DOMSource source = new DOMSource(
-					xmlDoc);
-
-			String xmlFile = storeConfigPath + "/gwraster.xml";
-			FileWriter xmlWriter = new FileWriter(
-					xmlFile);
-
-			StreamResult result = new StreamResult(
-					xmlWriter);
-
-			xformer.transform(
-					source,
-					result);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	// Example use of geoserver rest client
