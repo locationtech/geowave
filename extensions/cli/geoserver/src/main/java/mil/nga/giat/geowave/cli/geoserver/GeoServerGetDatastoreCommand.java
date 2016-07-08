@@ -64,11 +64,11 @@ public class GeoServerGetDatastoreCommand implements
 		}
 
 		datastore = parameters.get(0);
-		
+
 		if (workspace == null || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}
-		
+
 		Response getStoreResponse = geoserverClient.getDatastore(
 				workspace,
 				datastore);
@@ -81,7 +81,8 @@ public class GeoServerGetDatastoreCommand implements
 			System.out.println(datastore.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer store info for '" + datastore + "'; code = " + getStoreResponse.getStatus());
+			System.err.println("Error getting GeoServer store info for '" + datastore + "'; code = "
+					+ getStoreResponse.getStatus());
 		}
 	}
 }

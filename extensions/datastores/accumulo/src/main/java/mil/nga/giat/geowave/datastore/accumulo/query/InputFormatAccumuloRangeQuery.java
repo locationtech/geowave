@@ -1,21 +1,9 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.filter.FilterList;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.util.InputFormatIteratorWrapper;
 
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ScannerBase;
@@ -23,6 +11,16 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.filter.FilterList;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.util.InputFormatIteratorWrapper;
 
 /**
  * * Represents a query operation for a range of Accumulo row IDs. This class is
@@ -73,6 +71,8 @@ public class InputFormatAccumuloRangeQuery extends
 				null,
 				null,
 				null,
+				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.accumuloRange = accumuloRange;
@@ -112,12 +112,14 @@ public class InputFormatAccumuloRangeQuery extends
 			final AdapterStore adapterStore,
 			final ScannerBase scanner ) {
 		return new InputFormatIteratorWrapper(
+				useWholeRowIterator(),
 				adapterStore,
 				index,
 				scanner.iterator(),
 				isOutputWritable,
-				new FilterList<QueryFilter>(
-						clientFilters));
+				clientFilters.isEmpty() ? null : clientFilters.size() == 1 ? clientFilters.get(0)
+						: new FilterList<QueryFilter>(
+								clientFilters));
 	}
 
 }

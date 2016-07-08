@@ -87,7 +87,8 @@ public class GeoServerGetCoverageCommand implements
 			System.out.println(jsonResponse.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer coverage info for " + cvgName + "; code = " + getCvgResponse.getStatus());
+			System.err.println("Error getting GeoServer coverage info for " + cvgName + "; code = "
+					+ getCvgResponse.getStatus());
 		}
 	}
 }

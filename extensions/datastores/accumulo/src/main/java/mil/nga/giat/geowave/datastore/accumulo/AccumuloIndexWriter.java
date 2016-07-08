@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
@@ -41,22 +42,16 @@ public class AccumuloIndexWriter<T> implements
 	protected final byte[] adapterId;
 	final Closeable closable;
 
-	// just need a reasonable threshold.
-
-	protected final VisibilityWriter<?> customFieldVisibilityWriter;
-
 	public AccumuloIndexWriter(
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final AccumuloOperations accumuloOperations,
 			final AccumuloOptions accumuloOptions,
 			final IngestCallback<T> callback,
-			final Closeable closable,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
+			final Closeable closable ) {
 		this.index = index;
 		this.accumuloOperations = accumuloOperations;
 		this.accumuloOptions = accumuloOptions;
-		this.customFieldVisibilityWriter = customFieldVisibilityWriter;
 		this.callback = callback;
 		this.adapter = adapter;
 		this.adapterId = adapter.getAdapterId().getBytes();
@@ -100,7 +95,7 @@ public class AccumuloIndexWriter<T> implements
 			final T entry ) {
 		return write(
 				entry,
-				(VisibilityWriter<T>) customFieldVisibilityWriter);
+				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
 	}
 
 	@Override
@@ -128,8 +123,11 @@ public class AccumuloIndexWriter<T> implements
 					index,
 					entry,
 					writer,
+					accumuloOperations,
 					visibilityWriter);
-
+			if (entryInfo == null) {
+				return Collections.EMPTY_LIST;
+			}
 			callback.entryIngested(
 					entryInfo,
 					entry);

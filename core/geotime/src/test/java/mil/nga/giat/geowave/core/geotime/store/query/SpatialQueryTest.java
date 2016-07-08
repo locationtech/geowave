@@ -53,7 +53,7 @@ public class SpatialQueryTest
 		final GeometryFactory factory = new GeometryFactory();
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
-		commonData.addOrUpdateValue(new PersistentValue<CommonIndexValue>(
+		commonData.addValue(new PersistentValue<CommonIndexValue>(
 				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID,
 				new GeometryWrapper(
 						factory.createLineString(coordinates))));

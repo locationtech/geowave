@@ -66,7 +66,8 @@ public class GeoServerListCoverageStoresCommand implements
 			System.out.println(cvgStores.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer coverage stores list for '" + workspace + "'; code = " + listCvgStoresResponse.getStatus());
+			System.err.println("Error getting GeoServer coverage stores list for '" + workspace + "'; code = "
+					+ listCvgStoresResponse.getStatus());
 		}
 	}
 }

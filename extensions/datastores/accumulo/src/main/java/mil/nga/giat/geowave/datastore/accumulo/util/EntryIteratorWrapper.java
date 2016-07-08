@@ -17,7 +17,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  * the appropriate data adapter). It also performs any client-side filtering. It
  * will peek at the next entry in the accumulo iterator to always maintain a
  * reference to the next value.
- * 
+ *
  * @param <T>
  *            The type for the entry
  */
@@ -29,10 +29,12 @@ public class EntryIteratorWrapper<T> implements
 	private final Iterator<Entry<Key, Value>> scannerIt;
 	private final QueryFilter clientFilter;
 	private final ScanCallback<T> scanCallback;
+	private boolean wholeRowEncoding;
 
 	private T nextValue;
 
 	public EntryIteratorWrapper(
+			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<Entry<Key, Value>> scannerIt,
@@ -42,9 +44,11 @@ public class EntryIteratorWrapper<T> implements
 		this.scannerIt = scannerIt;
 		this.clientFilter = clientFilter;
 		this.scanCallback = null;
+		this.wholeRowEncoding = wholeRowEncoding;
 	}
 
 	public EntryIteratorWrapper(
+			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<Entry<Key, Value>> scannerIt,
@@ -55,6 +59,7 @@ public class EntryIteratorWrapper<T> implements
 		this.scannerIt = scannerIt;
 		this.clientFilter = clientFilter;
 		this.scanCallback = scanCallback;
+		this.wholeRowEncoding = wholeRowEncoding;
 	}
 
 	private void findNext() {
@@ -78,6 +83,7 @@ public class EntryIteratorWrapper<T> implements
 		return AccumuloUtils.decodeRow(
 				row.getKey(),
 				row.getValue(),
+				wholeRowEncoding,
 				adapterStore,
 				clientFilter,
 				index,
@@ -93,7 +99,9 @@ public class EntryIteratorWrapper<T> implements
 	@Override
 	public T next()
 			throws NoSuchElementException {
-		if (nextValue == null) findNext();
+		if (nextValue == null) {
+			findNext();
+		}
 		final T previousNext = nextValue;
 		if (nextValue == null) {
 			throw new NoSuchElementException();

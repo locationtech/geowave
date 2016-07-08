@@ -120,13 +120,19 @@ public class TemporalConstraints
 	}
 
 	public Date getMinOr(
-			final Date min ) {
-		return (constraints.isEmpty()) ? min : constraints.getFirst().getStartTime();
+			final Date min,
+			int exclusivityIncrement ) {
+		return (constraints.isEmpty()) ? min : exclusivityIncrement == 0 ? constraints.getFirst().getStartTime()
+				: new Date(
+						constraints.getFirst().getStartTime().getTime() + exclusivityIncrement);
 	}
 
 	public Date getMaxOr(
-			final Date max ) {
-		return (constraints.isEmpty()) ? max : constraints.getLast().getEndTime();
+			final Date max,
+			int exclusivityIncrement ) {
+		return (constraints.isEmpty()) ? max : exclusivityIncrement == 0 ? constraints.getLast().getEndTime()
+				: new Date(
+						constraints.getLast().getEndTime().getTime() + exclusivityIncrement);
 	}
 
 	public boolean isEmpty() {

@@ -188,6 +188,7 @@ public class GeoWaveRasterReader extends
 		geowaveDataStore = config.getDataStore();
 		geowaveAdapterStore = config.getAdapterStore();
 		geowaveStatisticsStore = config.getDataStatisticsStore();
+		rasterIndex = new SpatialIndexBuilder().createIndex();
 		geowaveIndexStore = config.getIndexStore();
 		geowaveAdapterIndexMappingStore = config.getAdapterIndexMappingStore();
 		crs = GeoWaveGTRasterFormat.DEFAULT_CRS;

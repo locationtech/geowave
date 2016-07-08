@@ -459,9 +459,10 @@ public class SpatialQueryExample
 		int count = 0;
 		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
 				options,
-				new CQLQuery(
+				CQLQuery.createOptimalQuery(
 						CQLFilter,
-						bfAdapter))) {
+						bfAdapter,
+						options.getIndex()))) {
 
 			// Our query would have found 2 points based only on the Bounding
 			// Box, but using the
@@ -516,9 +517,10 @@ public class SpatialQueryExample
 		int count = 0;
 		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
 				options,
-				new CQLQuery(
+				CQLQuery.createOptimalQuery(
 						CQLFilter,
-						bfAdapter))) {
+						bfAdapter,
+						options.getIndex()))) {
 
 			// Our query would have found 2 points based only on the Bounding
 			// Box, but using the

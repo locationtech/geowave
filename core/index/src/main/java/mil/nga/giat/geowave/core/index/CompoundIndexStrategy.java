@@ -18,9 +18,9 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
  * Class that implements a compound index strategy. It's a wrapper around two
  * NumericIndexStrategy objects that can externally be treated as a
  * multi-dimensional NumericIndexStrategy.
- * 
+ *
  * Each of the 'wrapped' strategies cannot share the same dimension definition.
- * 
+ *
  */
 public class CompoundIndexStrategy implements
 		NumericIndexStrategy
@@ -89,7 +89,7 @@ public class CompoundIndexStrategy implements
 		subStrategy2 = PersistenceUtils.fromBinary(
 				delegateBinary2,
 				NumericIndexStrategy.class);
-		this.init();
+		init();
 		defaultNumberOfRanges = (int) Math.ceil(Math.pow(
 				2,
 				getNumberOfDimensions()));
@@ -97,7 +97,7 @@ public class CompoundIndexStrategy implements
 
 	/**
 	 * Get the number of dimensions of each sub-strategy
-	 * 
+	 *
 	 * @return an array with the number of dimensions for each sub-strategy
 	 */
 	public int[] getNumberOfDimensionsPerIndexStrategy() {
@@ -109,7 +109,7 @@ public class CompoundIndexStrategy implements
 
 	/**
 	 * Get the total number of dimensions from all sub-strategies
-	 * 
+	 *
 	 * @return the number of dimensions
 	 */
 	public int getNumberOfDimensions() {
@@ -118,7 +118,7 @@ public class CompoundIndexStrategy implements
 
 	/**
 	 * Create a compound ByteArrayId
-	 * 
+	 *
 	 * @param id1
 	 *            ByteArrayId for the first sub-strategy
 	 * @param id2
@@ -140,7 +140,7 @@ public class CompoundIndexStrategy implements
 	/**
 	 * Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
 	 * compound index strategy
-	 * 
+	 *
 	 * @param id
 	 *            the compound ByteArrayId
 	 * @return the ByteArrayId for each sub-strategy
@@ -209,7 +209,7 @@ public class CompoundIndexStrategy implements
 	@Override
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
-			IndexMetaData... hints ) {
+			final IndexMetaData... hints ) {
 		return getQueryRanges(
 				indexedRange,
 				-1,
@@ -220,7 +220,7 @@ public class CompoundIndexStrategy implements
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxEstimatedRangeDecomposition,
-			IndexMetaData... hints ) {
+			final IndexMetaData... hints ) {
 		final MultiDimensionalNumericData[] ranges = getRangesForIndexedRange(indexedRange);
 		final List<ByteArrayRange> rangeForStrategy1;
 		final List<ByteArrayRange> rangeForStrategy2;
@@ -368,7 +368,7 @@ public class CompoundIndexStrategy implements
 		strategy2Mappings = new int[precision.length];
 
 		int dimsPosition = 0;
-		for (NumericDimensionDefinition definition : strategy1Definitions) {
+		for (final NumericDimensionDefinition definition : strategy1Definitions) {
 			definitions.add(definition);
 			strategy1Mappings[dimsPosition] = dimsPosition;
 			strategy2Mappings[dimsPosition] = -1;
@@ -376,8 +376,8 @@ public class CompoundIndexStrategy implements
 			dimsPosition++;
 		}
 		int twosDefsPosition = 0;
-		for (NumericDimensionDefinition definition : strategy2Definitions) {
-			int pos = definitions.indexOf(definition);
+		for (final NumericDimensionDefinition definition : strategy2Definitions) {
+			final int pos = definitions.indexOf(definition);
 			if (pos >= 0) {
 				strategy2Mappings[pos] = twosDefsPosition;
 				precision[pos] = Math.max(
@@ -394,8 +394,8 @@ public class CompoundIndexStrategy implements
 			twosDefsPosition++;
 		}
 
-		this.baseDefinitions = definitions.toArray(new NumericDimensionDefinition[definitions.size()]);
-		this.highestPrecision = Arrays.copyOfRange(
+		baseDefinitions = definitions.toArray(new NumericDimensionDefinition[definitions.size()]);
+		highestPrecision = Arrays.copyOfRange(
 				precision,
 				0,
 				baseDefinitions.length);
@@ -484,15 +484,17 @@ public class CompoundIndexStrategy implements
 	@Override
 	public List<IndexMetaData> createMetaData() {
 		final List<IndexMetaData> result = new ArrayList<IndexMetaData>();
-		for (IndexMetaData metaData : subStrategy1.createMetaData())
+		for (final IndexMetaData metaData : subStrategy1.createMetaData()) {
 			result.add(new CompoundIndexMetaDataWrapper(
 					metaData,
 					0));
+		}
 		metaDataSplit = result.size();
-		for (IndexMetaData metaData : subStrategy2.createMetaData())
+		for (final IndexMetaData metaData : subStrategy2.createMetaData()) {
 			result.add(new CompoundIndexMetaDataWrapper(
 					metaData,
 					1));
+		}
 		return result;
 	}
 
@@ -504,12 +506,14 @@ public class CompoundIndexStrategy implements
 	}
 
 	private IndexMetaData[] extractHints(
-			IndexMetaData[] hints,
-			int indexNo ) {
-		if (hints == null || hints.length == 0) return hints;
+			final IndexMetaData[] hints,
+			final int indexNo ) {
+		if ((hints == null) || (hints.length == 0)) {
+			return hints;
+		}
 		final int splitPoint = getMetaDataSplit();
-		int start = (indexNo == 0) ? 0 : splitPoint;
-		int stop = (indexNo == 0) ? splitPoint : hints.length;
+		final int start = (indexNo == 0) ? 0 : splitPoint;
+		final int stop = (indexNo == 0) ? splitPoint : hints.length;
 		final IndexMetaData[] result = new IndexMetaData[stop - start];
 		int p = 0;
 		for (int i = start; i < stop; i++) {
@@ -521,7 +525,7 @@ public class CompoundIndexStrategy implements
 	/**
 	 * Get the ByteArrayId for each sub-strategy from the ByteArrayId for the
 	 * compound index strategy
-	 * 
+	 *
 	 * @param id
 	 *            the compound ByteArrayId
 	 * @return the ByteArrayId for each sub-strategy
@@ -551,7 +555,7 @@ public class CompoundIndexStrategy implements
 	}
 
 	/**
-	 * 
+	 *
 	 * Delegate Metadata item for an underlying index. For
 	 * CompoundIndexStrategy, this delegate wraps the meta data for one of the
 	 * two indices. The primary function of this class is to extract out the
@@ -570,8 +574,8 @@ public class CompoundIndexStrategy implements
 		public CompoundIndexMetaDataWrapper() {}
 
 		public CompoundIndexMetaDataWrapper(
-				IndexMetaData metaData,
-				int index ) {
+				final IndexMetaData metaData,
+				final int index ) {
 			super();
 			this.metaData = metaData;
 			this.index = index;
@@ -588,7 +592,7 @@ public class CompoundIndexStrategy implements
 
 		@Override
 		public void fromBinary(
-				byte[] bytes ) {
+				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			final byte[] metaBytes = new byte[bytes.length - 4];
 			buf.get(metaBytes);
@@ -600,7 +604,7 @@ public class CompoundIndexStrategy implements
 
 		@Override
 		public void merge(
-				Mergeable merge ) {
+				final Mergeable merge ) {
 			if (merge instanceof CompoundIndexMetaDataWrapper) {
 				final CompoundIndexMetaDataWrapper compound = (CompoundIndexMetaDataWrapper) merge;
 				metaData.merge(compound.metaData);
@@ -608,14 +612,14 @@ public class CompoundIndexStrategy implements
 		}
 
 		@Override
-		public void update(
-				List<ByteArrayId> ids ) {
-			metaData.update(Lists.transform(
+		public void insertionIdsAdded(
+				final List<ByteArrayId> ids ) {
+			metaData.insertionIdsAdded(Lists.transform(
 					ids,
 					new Function<ByteArrayId, ByteArrayId>() {
 						@Override
 						public ByteArrayId apply(
-								ByteArrayId input ) {
+								final ByteArrayId input ) {
 							return extractByteArrayId(
 									input,
 									index);
@@ -623,6 +627,21 @@ public class CompoundIndexStrategy implements
 					}));
 		}
 
+		@Override
+		public void insertionIdsRemoved(
+				final List<ByteArrayId> ids ) {
+			metaData.insertionIdsRemoved(Lists.transform(
+					ids,
+					new Function<ByteArrayId, ByteArrayId>() {
+						@Override
+						public ByteArrayId apply(
+								final ByteArrayId input ) {
+							return extractByteArrayId(
+									input,
+									index);
+						}
+					}));
+		}
 	}
 
 }

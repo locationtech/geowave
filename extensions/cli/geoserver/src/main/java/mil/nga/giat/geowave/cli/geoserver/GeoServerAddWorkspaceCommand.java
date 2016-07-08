@@ -63,7 +63,8 @@ public class GeoServerAddWorkspaceCommand implements
 			System.out.println("Add workspace '" + wsName + "' to GeoServer: OK");
 		}
 		else {
-			System.err.println("Error adding workspace '" + wsName + "' to GeoServer; code = " + addWorkspaceResponse.getStatus());
+			System.err.println("Error adding workspace '" + wsName + "' to GeoServer; code = "
+					+ addWorkspaceResponse.getStatus());
 		}
 	}
 }

@@ -79,11 +79,14 @@ public class GeoServerAddCoverageStoreCommand implements
 				coverageStore,
 				gwStore);
 
-		if (addStoreResponse.getStatus() == Status.OK.getStatusCode() || addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
-			System.out.println("Add coverage store for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer: OK");
+		if (addStoreResponse.getStatus() == Status.OK.getStatusCode()
+				|| addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
+			System.out.println("Add coverage store for '" + gwStore + "' to workspace '" + workspace
+					+ "' on GeoServer: OK");
 		}
 		else {
-			System.err.println("Error adding coverage store for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer; code = " + addStoreResponse.getStatus());
+			System.err.println("Error adding coverage store for '" + gwStore + "' to workspace '" + workspace
+					+ "' on GeoServer; code = " + addStoreResponse.getStatus());
 		}
 	}
 }

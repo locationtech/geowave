@@ -17,17 +17,19 @@ import com.google.common.collect.Iterators;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -35,7 +37,7 @@ import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
- * 
+ *
  */
 public class AccumuloConstraintsQuery extends
 		AccumuloFilteredIndexQuery
@@ -44,7 +46,7 @@ public class AccumuloConstraintsQuery extends
 	protected final List<MultiDimensionalNumericData> constraints;
 	protected final List<DistributableQueryFilter> distributableFilters;
 	protected boolean queryFiltersEnabled;
-	protected final IndexMetaDataSet indexMetaData;
+	protected final IndexMetaData[] indexMetaData;
 	protected final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 
 	public AccumuloConstraintsQuery(
@@ -55,7 +57,9 @@ public class AccumuloConstraintsQuery extends
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
-			final IndexMetaDataSet indexMetaData,
+			final IndexMetaData[] indexMetaData,
+			final DuplicateEntryCount duplicateCounts,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -67,6 +71,8 @@ public class AccumuloConstraintsQuery extends
 				aggregation,
 				fieldIdsAdapterPair,
 				indexMetaData,
+				duplicateCounts,
+				visibilityCounts,
 				authorizations);
 	}
 
@@ -75,23 +81,29 @@ public class AccumuloConstraintsQuery extends
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
-			final DedupeFilter clientDedupeFilter,
+			DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
-			final IndexMetaDataSet indexMetaData,
+			final IndexMetaData[] indexMetaData,
+			final DuplicateEntryCount duplicateCounts,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
 				scanCallback,
 				fieldIdsAdapterPair,
+				visibilityCounts,
 				authorizations);
 		this.constraints = constraints;
 		this.aggregation = aggregation;
-		this.indexMetaData = indexMetaData;
+		this.indexMetaData = indexMetaData != null ? indexMetaData : new IndexMetaData[] {};
 		final SplitFilterLists lists = splitList(queryFilters);
 		final List<QueryFilter> clientFilters = lists.clientFilters;
+		if ((duplicateCounts != null) && !duplicateCounts.isAnyEntryHaveDuplicates()) {
+			clientDedupeFilter = null;
+		}
 		// add dedupe filters to the front of both lists so that the
 		// de-duplication is performed before any more complex filtering
 		// operations, use the supplied client dedupe filter if possible
@@ -107,6 +119,7 @@ public class AccumuloConstraintsQuery extends
 					0,
 					clientDedupeFilter);
 		}
+
 		queryFiltersEnabled = true;
 	}
 
@@ -119,64 +132,90 @@ public class AccumuloConstraintsQuery extends
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 		addFieldSubsettingToIterator(scanner);
-
-		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
-
-			final IteratorSetting iteratorSettings;
-			if (isAggregation()) {
+		IteratorSetting iteratorSettings = null;
+		if (isAggregation()) {
+			if (useWholeRowIterator()) {
 				iteratorSettings = new IteratorSetting(
 						QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
 						QueryFilterIterator.QUERY_ITERATOR_NAME,
-						AggregationIterator.class);
-				iteratorSettings.addOption(
-						AggregationIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getLeft())));
-				final Aggregation aggr = aggregation.getRight();
-				iteratorSettings.addOption(
-						AggregationIterator.AGGREGATION_OPTION_NAME,
-						aggr.getClass().getName());
-				iteratorSettings.addOption(
-						AggregationIterator.CONSTRAINTS_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary((List) constraints))));
-				if (aggr.getParameters() != null) { // sets the parameters
-
-					iteratorSettings.addOption(
-							AggregationIterator.PARAMETER_OPTION_NAME,
-							ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(aggr.getParameters()))));
-				}
-				iteratorSettings.addOption(
-						AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexStrategy())));
-				// don't bother setting max decomposition because it is just the
-				// default anyways
+						WholeRowAggregationIterator.class);
 			}
 			else {
 				iteratorSettings = new IteratorSetting(
 						QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
 						QueryFilterIterator.QUERY_ITERATOR_NAME,
-						QueryFilterIterator.class);
+						AggregationIterator.class);
 			}
-			final DistributableQueryFilter filterList = new DistributableFilterList(
-					distributableFilters);
 			iteratorSettings.addOption(
-					QueryFilterIterator.FILTER,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(filterList)));
+					AggregationIterator.ADAPTER_OPTION_NAME,
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(aggregation.getLeft())));
+			final Aggregation aggr = aggregation.getRight();
+			iteratorSettings.addOption(
+					AggregationIterator.AGGREGATION_OPTION_NAME,
+					aggr.getClass().getName());
+			if (aggr.getParameters() != null) { // sets the parameters
+				iteratorSettings.addOption(
+						AggregationIterator.PARAMETER_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(aggr.getParameters()))));
+			}
+			iteratorSettings.addOption(
+					AggregationIterator.CONSTRAINTS_OPTION_NAME,
+					ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(constraints))));
+			iteratorSettings.addOption(
+					AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexStrategy())));
+			// the index model must be provided for the aggregation iterator to
+			// deserialize each entry
 			iteratorSettings.addOption(
 					QueryFilterIterator.MODEL,
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
-			scanner.addScanIterator(iteratorSettings);
+			// don't bother setting max decomposition because it is just the
+			// default anyways
 		}
-		else
-
-		{
+		if ((distributableFilters != null) && !distributableFilters.isEmpty() && queryFiltersEnabled) {
+			if (iteratorSettings == null) {
+				if (useWholeRowIterator()) {
+					iteratorSettings = new IteratorSetting(
+							QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+							QueryFilterIterator.QUERY_ITERATOR_NAME,
+							WholeRowQueryFilterIterator.class);
+				}
+				else {
+					iteratorSettings = new IteratorSetting(
+							QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+							QueryFilterIterator.QUERY_ITERATOR_NAME,
+							QueryFilterIterator.class);
+				}
+			}
+			DistributableQueryFilter filter;
+			if (distributableFilters.size() > 1) {
+				filter = new DistributableFilterList(
+						distributableFilters);
+			}
+			else {
+				filter = distributableFilters.get(0);
+			}
+			iteratorSettings.addOption(
+					QueryFilterIterator.FILTER,
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(filter)));
+			if (!iteratorSettings.getOptions().containsKey(
+					QueryFilterIterator.MODEL)) {
+				// it may already be added as an option if its an aggregation
+				iteratorSettings.addOption(
+						QueryFilterIterator.MODEL,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
+			}
+		}
+		else if ((iteratorSettings == null) && useWholeRowIterator()) {
 			// we have to at least use a whole row iterator
-			final IteratorSetting iteratorSettings = new IteratorSetting(
-					QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
-					QueryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
+			iteratorSettings = new IteratorSetting(
+					QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+					QueryFilterIterator.QUERY_ITERATOR_NAME,
 					WholeRowIterator.class);
+		}
+		if (iteratorSettings != null) {
 			scanner.addScanIterator(iteratorSettings);
 		}
-
 	}
 
 	@Override
@@ -186,7 +225,7 @@ public class AccumuloConstraintsQuery extends
 					constraints,
 					index.getIndexStrategy(),
 					MAX_RANGE_DECOMPOSITION,
-					indexMetaData.toArray());
+					indexMetaData);
 			if ((ranges == null) || (ranges.size() < 2)) {
 				return ranges;
 			}
@@ -214,7 +253,7 @@ public class AccumuloConstraintsQuery extends
 					constraints,
 					index.getIndexStrategy(),
 					MAX_RANGE_DECOMPOSITION,
-					indexMetaData.toArray());
+					indexMetaData);
 		}
 	}
 

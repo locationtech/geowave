@@ -188,7 +188,7 @@ public class KDERasterResizeIT
 			command.getOptions().setOutputCoverageName(
 					resizeTileSizeCoverageName);
 			command.getOptions().setIndexId(
-					TestUtils.DEFAULT_ALLTIER_SPATIAL_INDEX.getId().getString());
+					TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString());
 			// due to time considerations when running the test, downsample to
 			// at most 2 powers of 2 lower
 			int targetRes = (MAX_TILE_SIZE_POWER_OF_2 - i);
