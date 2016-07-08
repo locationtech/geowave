@@ -1,5 +1,7 @@
 #!/bin/bash
 source geowave-env.sh
+
+# Stop geowave. Add workspace data from geoserver-geowave-workspace.tar. Restart geowave.
 sudo service geowave stop
 sudo rm -r ${GEOSERVER_DATA_DIR}/workspaces/geowave
 sudo mkdir ${GEOSERVER_DATA_DIR}/workspaces/geowave
