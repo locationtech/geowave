@@ -50,17 +50,21 @@ public class TransformWriterTest
 			e.printStackTrace();
 		}
 
-		operations.createTable("test_table");
+		operations.createTable(
+				"test_table",
+				true,
+				true,
+				null);
 	}
 
 	private void write(
-			Writer writer,
-			String id,
-			String cf,
-			String cq,
-			String vis,
-			String value ) {
-		Mutation m = new Mutation(
+			final Writer writer,
+			final String id,
+			final String cf,
+			final String cq,
+			final String vis,
+			final String value ) {
+		final Mutation m = new Mutation(
 				new Text(
 						id.getBytes(StringUtils.GEOWAVE_CHAR_SET)));
 		m.put(
@@ -81,8 +85,8 @@ public class TransformWriterTest
 		int count;
 
 		public Expect(
-				byte[] id,
-				int count ) {
+				final byte[] id,
+				final int count ) {
 			super();
 			this.id = id;
 			this.count = count;
@@ -91,13 +95,13 @@ public class TransformWriterTest
 	}
 
 	private void check(
-			Iterator<Entry<Key, Value>> it,
-			Expect... expectations ) {
-		Map<ByteArrayId, Integer> result = new HashMap<ByteArrayId, Integer>();
+			final Iterator<Entry<Key, Value>> it,
+			final Expect... expectations ) {
+		final Map<ByteArrayId, Integer> result = new HashMap<ByteArrayId, Integer>();
 
 		while (it.hasNext()) {
-			Entry<Key, Value> entry = it.next();
-			ByteArrayId rowID = new ByteArrayId(
+			final Entry<Key, Value> entry = it.next();
+			final ByteArrayId rowID = new ByteArrayId(
 					entry.getKey().getRow().getBytes());
 			result.put(
 					rowID,
@@ -105,8 +109,8 @@ public class TransformWriterTest
 							rowID).intValue() : 0)));
 		}
 		int expectedCount = 0;
-		for (Expect e : expectations) {
-			ByteArrayId rowID = new ByteArrayId(
+		for (final Expect e : expectations) {
+			final ByteArrayId rowID = new ByteArrayId(
 					e.id);
 			expectedCount += (e.count > 0 ? 1 : 0);
 			assertEquals(
@@ -125,7 +129,7 @@ public class TransformWriterTest
 	public void test()
 			throws TableNotFoundException,
 			MutationsRejectedException {
-		Writer w = operations.createWriter("test_table");
+		final Writer w = operations.createWriter("test_table");
 		write(
 				w,
 				"1234",
@@ -184,7 +188,7 @@ public class TransformWriterTest
 						0));
 		scanner.close();
 
-		VisibilityTransformer transformer = new VisibilityTransformer(
+		final VisibilityTransformer transformer = new VisibilityTransformer(
 				"b",
 				"c");
 		scanner = operations.createScanner(
@@ -192,7 +196,7 @@ public class TransformWriterTest
 				"a",
 				"b",
 				"c");
-		TransformerWriter tw = new TransformerWriter(
+		final TransformerWriter tw = new TransformerWriter(
 				scanner,
 				"test_table",
 				operations,

@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
@@ -37,6 +38,8 @@ public class GeoWaveRasterConfig
 		// behavior of tile mosaicing that is already set within each adapter
 		INTERPOLATION(
 				"interpolationOverride"),
+		SCALE_TO_8BIT(
+				"scaleTo8Bit"),
 		EQUALIZE_HISTOGRAM(
 				"equalizeHistogramOverride");
 		private String configName;
@@ -57,8 +60,11 @@ public class GeoWaveRasterConfig
 	private IndexStore indexStore;
 	private AdapterStore adapterStore;
 	private DataStatisticsStore dataStatisticsStore;
+	private AdapterIndexMappingStore adapterIndexMappingStore;
 
 	private Boolean equalizeHistogramOverride = null;
+
+	private Boolean scaleTo8Bit = null;
 
 	private Integer interpolationOverride = null;
 
@@ -71,6 +77,7 @@ public class GeoWaveRasterConfig
 				dataStoreConfig,
 				geowaveNamespace,
 				null,
+				null,
 				null);
 	}
 
@@ -78,10 +85,12 @@ public class GeoWaveRasterConfig
 			final Map<String, String> dataStoreConfig,
 			final String geowaveNamespace,
 			final Boolean equalizeHistogramOverride,
+			final Boolean scaleTo8Bit,
 			final Integer interpolationOverride ) {
 		final GeoWaveRasterConfig result = new GeoWaveRasterConfig();
 		result.equalizeHistogramOverride = equalizeHistogramOverride;
 		result.interpolationOverride = interpolationOverride;
+		result.scaleTo8Bit = scaleTo8Bit;
 		synchronized (result) {
 			result.storeConfigObj = dataStoreConfig;
 			result.factoryFamily = GeoWaveStoreFinder.findStoreFamily(result.storeConfigObj);
@@ -188,6 +197,16 @@ public class GeoWaveRasterConfig
 				result.equalizeHistogramOverride = false;
 			}
 		}
+		final String scaleTo8Bit = params.get(ConfigParameter.SCALE_TO_8BIT.getConfigName());
+		if (scaleTo8Bit != null) {
+			if (scaleTo8Bit.trim().toLowerCase().equals(
+					"true")) {
+				result.scaleTo8Bit = true;
+			}
+			else {
+				result.scaleTo8Bit = false;
+			}
+		}
 		if (params.containsKey(ConfigParameter.INTERPOLATION.getConfigName())) {
 			result.interpolationOverride = Integer.parseInt(params.get(ConfigParameter.INTERPOLATION.getConfigName()));
 		}
@@ -233,6 +252,16 @@ public class GeoWaveRasterConfig
 		return dataStatisticsStore;
 	}
 
+	public synchronized AdapterIndexMappingStore getAdapterIndexMappingStore() {
+		if (adapterIndexMappingStore == null) {
+			adapterIndexMappingStore = factoryFamily.getAdapterIndexMappingStoreFactory().createStore(
+					ConfigUtils.populateOptionsFromList(
+							factoryFamily.getDataStatisticsStoreFactory().createOptionsInstance(),
+							storeConfigObj));
+		}
+		return adapterIndexMappingStore;
+	}
+
 	public boolean isInterpolationOverrideSet() {
 		return (interpolationOverride != null);
 	}
@@ -244,6 +273,18 @@ public class GeoWaveRasterConfig
 		}
 
 		return Interpolation.getInstance(interpolationOverride);
+	}
+
+	public boolean isScaleTo8BitSet() {
+		return (scaleTo8Bit != null);
+	}
+
+	public boolean isScaleTo8Bit() {
+		if (!isScaleTo8BitSet()) {
+			throw new IllegalStateException(
+					"Scale To 8-bit is not set for this config");
+		}
+		return scaleTo8Bit;
 	}
 
 	public boolean isEqualizeHistogramOverrideSet() {

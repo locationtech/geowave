@@ -3,7 +3,9 @@ package mil.nga.giat.geowave.core.store.spi;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-public class TestDimensionalityTypeProvider implements DimensionalityTypeProviderSpi {
+public class TestDimensionalityTypeProvider implements
+		DimensionalityTypeProviderSpi
+{
 
 	@Override
 	public Class<? extends CommonIndexValue>[] getRequiredIndexTypes() {
