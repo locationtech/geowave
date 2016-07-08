@@ -73,7 +73,7 @@ public class BasicAccumuloOperations implements
 	 * This is will create an Accumulo connector based on passed in connection
 	 * information and credentials for convenience convenience. It will also use
 	 * reasonable defaults for unspecified parameters.
-	 * 
+	 *
 	 * @param zookeeperUrl
 	 *            The comma-delimited URLs for all zookeeper servers, this will
 	 *            be directly used to instantiate a ZookeeperInstance
@@ -115,7 +115,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and only requires an Accumulo
 	 * connector
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 */
@@ -129,7 +129,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This constructor uses reasonable defaults and requires an Accumulo
 	 * connector and table namespace
-	 * 
+	 *
 	 * @param connector
 	 *            The connector to use for all operations
 	 * @param password
@@ -152,7 +152,7 @@ public class BasicAccumuloOperations implements
 	/**
 	 * This is the full constructor for the operation factory and should be used
 	 * if any of the defaults are insufficient.
-	 * 
+	 *
 	 * @param numThreads
 	 *            The number of threads to use for a batch scanner and batch
 	 *            writer
@@ -243,7 +243,34 @@ public class BasicAccumuloOperations implements
 			final Set<ByteArrayId> splits )
 			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
-		if (createTable && !connector.tableOperations().exists(
+		if (createTable) {
+			createTable(
+					tableName,
+					enableVersioning,
+					enableBlockCache,
+					splits);
+		}
+		final BatchWriterConfig config = new BatchWriterConfig();
+		config.setMaxMemory(byteBufferSize);
+		config.setMaxLatency(
+				timeoutMillis,
+				TimeUnit.MILLISECONDS);
+		config.setMaxWriteThreads(numThreads);
+		return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
+				connector.createBatchWriter(
+						qName,
+						config));
+	}
+
+	@Override
+	public void createTable(
+			final String tableName,
+			final boolean enableVersioning,
+			final boolean enableBlockCache,
+			final Set<ByteArrayId> splits ) {
+		final String qName = getQualifiedTableName(tableName);
+
+		if (!connector.tableOperations().exists(
 				qName)) {
 			try {
 				connector.tableOperations().create(
@@ -266,36 +293,7 @@ public class BasicAccumuloOperations implements
 							partitionKeys);
 				}
 			}
-			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
-				LOGGER.warn(
-						"Unable to create table '" + qName + "'",
-						e);
-			}
-		}
-		final BatchWriterConfig config = new BatchWriterConfig();
-		config.setMaxMemory(byteBufferSize);
-		config.setMaxLatency(
-				timeoutMillis,
-				TimeUnit.MILLISECONDS);
-		config.setMaxWriteThreads(numThreads);
-		return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
-				connector.createBatchWriter(
-						qName,
-						config));
-	}
-
-	@Override
-	public void createTable(
-			final String tableName ) {
-		final String qName = getQualifiedTableName(tableName);
-		if (!connector.tableOperations().exists(
-				qName)) {
-			try {
-				connector.tableOperations().create(
-						qName,
-						true);
-			}
-			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
+			catch (AccumuloException | AccumuloSecurityException | TableExistsException | TableNotFoundException e) {
 				LOGGER.warn(
 						"Unable to create table '" + qName + "'",
 						e);
@@ -685,20 +683,19 @@ public class BasicAccumuloOperations implements
 	public boolean attachIterators(
 			final String tableName,
 			final boolean createTable,
-			final IteratorConfig[] iterators )
+			final boolean enableVersioning,
+			final boolean enableBlockCache,
+			final Set<ByteArrayId> splits,
+			final IteratorConfig... iterators )
 			throws TableNotFoundException {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable && !connector.tableOperations().exists(
 				qName)) {
-			try {
-				connector.tableOperations().create(
-						qName);
-			}
-			catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
-				LOGGER.warn(
-						"Unable to create table '" + qName + "'",
-						e);
-			}
+			createTable(
+					tableName,
+					enableVersioning,
+					enableBlockCache,
+					splits);
 		}
 		try {
 			if ((iterators != null) && (iterators.length > 0)) {
@@ -787,7 +784,7 @@ public class BasicAccumuloOperations implements
 	}
 
 	public static BasicAccumuloOperations createOperations(
-			AccumuloRequiredOptions options )
+			final AccumuloRequiredOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
 		return new BasicAccumuloOperations(

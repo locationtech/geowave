@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.adapter.raster.adapter;
 
-import java.awt.image.DataBuffer;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import org.apache.hadoop.io.Writable;
 public class GridCoverageWritable implements
 		Writable
 {
-	private DataBuffer dataBuffer;
+	private RasterTile rasterTile;
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -24,12 +23,12 @@ public class GridCoverageWritable implements
 	protected GridCoverageWritable() {}
 
 	public GridCoverageWritable(
-			final DataBuffer dataBuffer,
+			final RasterTile rasterTile,
 			final double minX,
 			final double maxX,
 			final double minY,
 			final double maxY ) {
-		this.dataBuffer = dataBuffer;
+		this.rasterTile = rasterTile;
 		this.minX = minX;
 		this.maxX = maxX;
 		this.minY = minY;
@@ -37,20 +36,20 @@ public class GridCoverageWritable implements
 	}
 
 	public void set(
-			final DataBuffer dataBuffer,
+			final RasterTile rasterTile,
 			final double minX,
 			final double maxX,
 			final double minY,
 			final double maxY ) {
-		this.dataBuffer = dataBuffer;
+		this.rasterTile = rasterTile;
 		this.minX = minX;
 		this.maxX = maxX;
 		this.minY = minY;
 		this.maxY = maxY;
 	}
 
-	public DataBuffer getDataBuffer() {
-		return dataBuffer;
+	public RasterTile getRasterTile() {
+		return rasterTile;
 	}
 
 	public double getMinX() {
@@ -73,17 +72,11 @@ public class GridCoverageWritable implements
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		final int bufferSize = input.readInt();
-		final byte[] buffer = new byte[bufferSize];
-		input.readFully(buffer);
-		try {
-			dataBuffer = RasterTile.getDataBuffer(buffer);
-		}
-		catch (final ClassNotFoundException e) {
-			throw new IOException(
-					"Unable to read raster data buffer",
-					e);
-		}
+		final int rasterTileSize = input.readInt();
+		final byte[] rasterTileBinary = new byte[rasterTileSize];
+		input.readFully(rasterTileBinary);
+		rasterTile = new RasterTile();
+		rasterTile.fromBinary(rasterTileBinary);
 		minX = input.readDouble();
 		maxX = input.readDouble();
 		minY = input.readDouble();
@@ -94,9 +87,9 @@ public class GridCoverageWritable implements
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		final byte[] dataBufferBinary = RasterTile.getDataBufferBinary(dataBuffer);
-		output.writeInt(dataBufferBinary.length);
-		output.write(dataBufferBinary);
+		final byte[] rasterTileBinary = rasterTile.toBinary();
+		output.writeInt(rasterTileBinary.length);
+		output.write(rasterTileBinary);
 		output.writeDouble(minX);
 		output.writeDouble(maxX);
 		output.writeDouble(minY);

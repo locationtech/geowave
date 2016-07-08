@@ -155,6 +155,8 @@ public class GeoWaveStoreFinder
 		// the arguments; if there are multiple factories that match and have
 		// the same number of options, arbitrarily the last one will be chosen
 		// and a warning message will be logged
+		LOGGER.debug("Finding Factories (size): " + internalStoreFamilies.size());
+
 		for (final Entry<String, StoreFactoryFamilySpi> entry : internalStoreFamilies.entrySet()) {
 			final StoreFactoryFamilySpi factory = entry.getValue();
 			final List<String> missingOptions = getMissingRequiredOptions(
@@ -163,6 +165,7 @@ public class GeoWaveStoreFinder
 			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory
 					.getDataStoreFactory()
 					.createOptionsInstance());
+			LOGGER.debug("OPTIONS -- length: " + factoryOptions.length + ", " + factory.getName());
 			if (missingOptions.isEmpty()
 					&& ((matchingFactory == null) || (factoryOptions.length >= matchingFactoryOptionCount))) {
 				matchingFactory = factory;
@@ -170,6 +173,7 @@ public class GeoWaveStoreFinder
 				matchingFactoryOptionCount = factoryOptions.length;
 			}
 		}
+
 		if (matchingFactory == null) {
 			LOGGER.error("Unable to find any valid store");
 		}

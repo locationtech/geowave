@@ -1,6 +1,7 @@
 #!/bin/bash
-export STAGING_DIR=/tmp
+export STAGING_DIR=/mnt
 export INSTANCE=accumulo
+
 #PARIS 11/13/2015-11/14/2015
 #export TIME_REGEX=2015111[34]
 #export EAST=2.63791
@@ -22,6 +23,6 @@ export GEOSERVER_HOME=/usr/local/geowave/geoserver
 export GEOSERVER_DATA_DIR=$GEOSERVER_HOME/data_dir
 export GEOWAVE_TOOL_JAVA_OPT=-Xmx4g
 export GEOWAVE_TOOLS_HOME=/usr/local/geowave/tools
-export GEOWAVE_VERSION=0.9.1
+export GEOWAVE_VERSION=0.9.2
 export ACCUMULO_HOME=/opt/accumulo
 export PATH=$PATH:${ACCUMULO_HOME}/bin

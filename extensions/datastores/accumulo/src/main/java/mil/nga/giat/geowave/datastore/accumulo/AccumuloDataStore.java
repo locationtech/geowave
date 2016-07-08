@@ -245,8 +245,9 @@ public class AccumuloDataStore implements
 						AccumuloUtils.attachRowMergingIterators(
 								((RowMergingDataAdapter<?, ?>) adapter),
 								accumuloOperations,
-								indexName,
-								accumuloOptions.isCreateTable());
+								accumuloOptions,
+								index.getIndexStrategy().getNaturalSplits(),
+								indexName);
 					}
 				}
 				if (accumuloOptions.isUseLocalityGroups() && !accumuloOperations.localityGroupExists(

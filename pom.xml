@@ -29,7 +29,7 @@
 	</distributionManagement>
 	<scm>
 		<url>https://github.com/ngageoint/geowave.git</url>
-		<connection>scm:git:git@github.com:ngageoint/geowave.git</connection>
+		<connection>scm:git:https://github.com/ngageoint/geowave.git</connection>
 	</scm>
 	<properties>
 		<geotools.version>14.2</geotools.version>
@@ -456,10 +456,10 @@
 					</executions>
 				</plugin>
 				<plugin>
-		          <groupId>net.revelc.code</groupId>
-		          <artifactId>formatter-maven-plugin</artifactId>
-		          <version>0.5.2</version>
-		        </plugin>
+					<groupId>net.revelc.code</groupId>
+					<artifactId>formatter-maven-plugin</artifactId>
+					<version>0.5.2</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -668,7 +668,7 @@
 			</plugin>
 			<plugin>
 				<groupId>net.revelc.code</groupId>
-        		<artifactId>formatter-maven-plugin</artifactId>
+				<artifactId>formatter-maven-plugin</artifactId>
 				<configuration>
 					<configFile>eclipse/eclipse-formatter.xml</configFile>
 					<lineEnding>KEEP</lineEnding>
@@ -706,6 +706,28 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- for incrementing version numbers and tagging repositories 
+			To Use:
+			0. Ensure all files checked into master (clean environment).  Make sure
+			   you have access to both mvn and git on your command line, and you are
+			   in a terminal that has push access (credentials are setup and correct).
+			   Make sure you have the branch active in git you want to tag.
+			   If something goes wrong pushing, you will most likely have outstanding
+			   commits in your local repo you will have to revert/remove.
+			1. mvn release:prepare -DdryRun=true 
+			2. Inspect and ensure the correct pom.xml files will be modified
+			3. mvn release:prepare
+			4. mvn release:clean
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+			        <tagNameFormat>v@{project.version}</tagNameFormat>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>			
 		</plugins>
 	</build>
 	<modules>
@@ -727,14 +749,14 @@
 			<url>http://repo.boundlessgeo.com/main</url>
 		</repository>
 		<repository>
-			<id>geosolutions</id>
-			<name>GeoSolutions Repository</name>
-			<url>http://maven.geo-solutions.it</url>
-		</repository>
-		<repository>
 			<id>osgeo</id>
 			<name>Open Source Geospatial Foundation Repository</name>
 			<url>http://download.osgeo.org/webdav/geotools/</url>
+		</repository>
+		<repository>
+			<id>geosolutions</id>
+			<name>GeoSolutions Repository</name>
+			<url>http://maven.geo-solutions.it</url>
 		</repository>
 		<repository>
 			<id>geowave-maven-releases</id>
@@ -781,105 +803,6 @@
 		</plugins>
 	</reporting>
 	<profiles>
-		<profile>
-			<id>accumulo-container</id>
-			<properties>
-				<accumulo.scope>provided</accumulo.scope>
-				<container.extension>-accumulo-container</container.extension>
-			</properties>
-		</profile>
-		<profile>
-			<id>hbase-container</id>
-			<properties>
-				<hbase.scope>provided</hbase.scope>
-				<container.extension>-hbase-container</container.extension>
-			</properties>
-		</profile>
-		<profile>
-			<id>geotools-container</id>
-			<properties>
-				<geotools.scope>provided</geotools.scope>
-				<container.extension>-geotools-container</container.extension>
-			</properties>
-		</profile>
-		<profile>
-			<id>geowave-tools-singlejar</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>2.2</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<filters>
-										<filter>
-											<artifact>junit:junit</artifact>
-											<includes>
-												<include>junit/framework/**</include>
-												<include>org/junit/**</include>
-											</includes>
-											<excludes>
-												<exclude>org/junit/experimental/**</exclude>
-												<exclude>org/junit/runners/**</exclude>
-											</excludes>
-										</filter>
-										<filter>
-											<artifact>*:*</artifact>
-											<excludes>
-												<exclude>META-INF/*.SF</exclude>
-												<exclude>META-INF/*.DSA</exclude>
-												<exclude>META-INF/*.RSA</exclude>
-											</excludes>
-										</filter>
-									</filters>
-									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<manifestEntries>
-												<Main-Class>mil.nga.giat.geowave.core.cli.GeoWaveMain</Main-Class>
-												<Specification-Title>GeoWave</Specification-Title>
-												<Specification-Vendor>LocationTech</Specification-Vendor>
-												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
-												<Implementation-Vendor>LocationTech</Implementation-Vendor>
-												<Implementation-Version>${project.version}</Implementation-Version>
-											</manifestEntries>
-										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
-											of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jaiext</resource>
-										</transformer>
-									</transformers>
-									<createDependencyReducedPom>false</createDependencyReducedPom>
-									<minimizeJar>false</minimizeJar>
-									<finalName>${tools.finalName}</finalName>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 		<profile>
 			<!-- Generate docs with: mvn -P docs -pl docs install -->
 			<id>docs</id>

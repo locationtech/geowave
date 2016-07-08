@@ -114,24 +114,7 @@ public class IndexPluginOptions extends
 	private PrimaryIndex wrapIndexWithOptions(
 			final PrimaryIndex index ) {
 		PrimaryIndex retVal = index;
-		if ((numPartitions > 1) && partitionStrategy.equals(PartitionStrategy.HASH)) {
-			retVal = new CustomIdIndex(
-					new CompoundIndexStrategy(
-							new HashKeyIndexStrategy(
-									index.getIndexStrategy().getOrderedDimensionDefinitions(),
-									numPartitions),
-							index.getIndexStrategy()),
-					index.getIndexModel(),
-					new ByteArrayId(
-							index.getId().getString() + "_" + PartitionStrategy.HASH.name() + "_" + numPartitions));
-		}
-		else if (numPartitions > 1) {
-			// default to round robin partitioning (none is not valid if there
-			// are more than 1 partition)
-			if (partitionStrategy.equals(PartitionStrategy.NONE)) {
-				LOGGER
-						.warn("Partition strategy is necessary when using more than 1 partition, defaulting to 'round_robin' partitioning.");
-			}
+		if ((numPartitions > 1) && partitionStrategy.equals(PartitionStrategy.ROUND_ROBIN)) {
 			retVal = new CustomIdIndex(
 					new CompoundIndexStrategy(
 							new RoundRobinKeyIndexStrategy(
@@ -141,6 +124,23 @@ public class IndexPluginOptions extends
 					new ByteArrayId(
 							index.getId().getString() + "_" + PartitionStrategy.ROUND_ROBIN.name() + "_"
 									+ numPartitions));
+		}
+		else if (numPartitions > 1) {
+			// default to round robin partitioning (none is not valid if there
+			// are more than 1 partition)
+			if (partitionStrategy.equals(PartitionStrategy.NONE)) {
+				LOGGER
+						.warn("Partition strategy is necessary when using more than 1 partition, defaulting to 'hash' partitioning.");
+			}
+			retVal = new CustomIdIndex(
+					new CompoundIndexStrategy(
+							new HashKeyIndexStrategy(
+									index.getIndexStrategy().getOrderedDimensionDefinitions(),
+									numPartitions),
+							index.getIndexStrategy()),
+					index.getIndexModel(),
+					new ByteArrayId(
+							index.getId().getString() + "_" + PartitionStrategy.HASH.name() + "_" + numPartitions));
 		}
 		if ((getNameOverride() != null) && (getNameOverride().length() > 0)) {
 			retVal = new CustomIdIndex(

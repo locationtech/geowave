@@ -153,6 +153,11 @@ public class AccumuloConstraintsQuery extends
 			iteratorSettings.addOption(
 					AggregationIterator.AGGREGATION_OPTION_NAME,
 					aggr.getClass().getName());
+			if (aggr.getParameters() != null) { // sets the parameters
+				iteratorSettings.addOption(
+						AggregationIterator.PARAMETER_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(aggr.getParameters()))));
+			}
 			iteratorSettings.addOption(
 					AggregationIterator.CONSTRAINTS_OPTION_NAME,
 					ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(constraints))));
