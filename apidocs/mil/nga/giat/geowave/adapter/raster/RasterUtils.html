@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/ImageWorkerPredefineStats.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -202,6 +202,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#forceRenderingHints(java.awt.RenderingHints)">forceRenderingHints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/RenderingHints.html?is-external=true" title="class or interface in java.awt">RenderingHints</a>&nbsp;renderingHints)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static org.geotools.coverage.processing.Operations</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getCoverageOperations()">getCoverageOperations</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getEmptyImage(int,%20int,%20java.awt.Color,%20java.awt.Color,%20java.awt.image.ColorModel)">getEmptyImage</a></strong>(int&nbsp;width,
              int&nbsp;height,
@@ -209,18 +213,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
              <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a>&nbsp;defaultColorModel)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getFootprint(org.geotools.geometry.jts.ReferencedEnvelope,%20org.opengis.coverage.grid.GridCoverage)">getFootprint</a></strong>(org.geotools.geometry.jts.ReferencedEnvelope&nbsp;projectedReferenceEnvelope,
             org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static org.geotools.coverage.processing.Operations</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getResampleOperations()">getResampleOperations</a></strong>()</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static org.geotools.coverage.grid.GridCoverage2D</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#mosaicGridCoverages(java.util.Iterator,%20java.awt.Color,%20java.awt.Color,%20java.awt.Rectangle,%20org.geotools.geometry.GeneralEnvelope,%20double,%20double,%20double[][],%20boolean,%20org.geotools.coverage.grid.GridCoverageFactory,%20java.lang.String,%20javax.media.jai.Interpolation,%20javax.media.jai.Histogram,%20java.awt.image.ColorModel)">mosaicGridCoverages</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;gridCoverages,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#mosaicGridCoverages(java.util.Iterator,%20java.awt.Color,%20java.awt.Color,%20java.awt.Rectangle,%20org.geotools.geometry.GeneralEnvelope,%20double,%20double,%20double[][],%20boolean,%20org.geotools.coverage.grid.GridCoverageFactory,%20java.lang.String,%20javax.media.jai.Interpolation,%20javax.media.jai.Histogram,%20boolean,%20java.awt.image.ColorModel)">mosaicGridCoverages</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;gridCoverages,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;backgroundColor,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Rectangle.html?is-external=true" title="class or interface in java.awt">Rectangle</a>&nbsp;pixelDimension,
@@ -233,6 +233,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                    javax.media.jai.Interpolation&nbsp;interpolation,
                    javax.media.jai.Histogram&nbsp;histogram,
+                   boolean&nbsp;scaleTo8Bit,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a>&nbsp;defaultColorModel)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -339,7 +340,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                         double[][]&nbsp;noDataValues)</pre>
 </li>
 </ul>
-<a name="mosaicGridCoverages(java.util.Iterator, java.awt.Color, java.awt.Color, java.awt.Rectangle, org.geotools.geometry.GeneralEnvelope, double, double, double[][], boolean, org.geotools.coverage.grid.GridCoverageFactory, java.lang.String, javax.media.jai.Interpolation, javax.media.jai.Histogram, java.awt.image.ColorModel)">
+<a name="mosaicGridCoverages(java.util.Iterator, java.awt.Color, java.awt.Color, java.awt.Rectangle, org.geotools.geometry.GeneralEnvelope, double, double, double[][], boolean, org.geotools.coverage.grid.GridCoverageFactory, java.lang.String, javax.media.jai.Interpolation, javax.media.jai.Histogram, boolean, java.awt.image.ColorModel)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -358,6 +359,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                                                             javax.media.jai.Interpolation&nbsp;interpolation,
                                                             javax.media.jai.Histogram&nbsp;histogram,
+                                                            boolean&nbsp;scaleTo8Bit,
                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a>&nbsp;defaultColorModel)</pre>
 </li>
 </ul>
@@ -380,13 +382,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;void&nbsp;forceRenderingHints(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/RenderingHints.html?is-external=true" title="class or interface in java.awt">RenderingHints</a>&nbsp;renderingHints)</pre>
 </li>
 </ul>
-<a name="getResampleOperations()">
+<a name="getCoverageOperations()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getResampleOperations</h4>
-<pre>public static&nbsp;org.geotools.coverage.processing.Operations&nbsp;getResampleOperations()</pre>
+<h4>getCoverageOperations</h4>
+<pre>public static&nbsp;org.geotools.coverage.processing.Operations&nbsp;getCoverageOperations()</pre>
 </li>
 </ul>
 <a name="getEmptyImage(int, int, java.awt.Color, java.awt.Color, java.awt.image.ColorModel)">
@@ -494,7 +496,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/ImageWorkerPredefineStats.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

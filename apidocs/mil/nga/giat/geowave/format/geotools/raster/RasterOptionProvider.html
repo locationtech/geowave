@@ -138,20 +138,28 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spi/In
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#getCoverageName()">getCoverageName</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[][]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#getNodata(int)">getNodata</a></strong>(int&nbsp;numBands)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#getTileSize()">getTileSize</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#isBuildPyramid()">isBuildPyramid</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#isBuildHistogream()">isBuildHistogream</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#setBuildPyramid(boolean)">setBuildPyramid</a></strong>(boolean&nbsp;buildPyramid)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#isBuildPyramid()">isBuildPyramid</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#setTileSize(int)">setTileSize</a></strong>(int&nbsp;tileSize)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#isSeparateBands()">isSeparateBands</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -210,22 +218,40 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spi/In
 <pre>public&nbsp;int&nbsp;getTileSize()</pre>
 </li>
 </ul>
-<a name="setBuildPyramid(boolean)">
+<a name="isSeparateBands()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setBuildPyramid</h4>
-<pre>public&nbsp;void&nbsp;setBuildPyramid(boolean&nbsp;buildPyramid)</pre>
+<h4>isSeparateBands</h4>
+<pre>public&nbsp;boolean&nbsp;isSeparateBands()</pre>
 </li>
 </ul>
-<a name="setTileSize(int)">
+<a name="getCoverageName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCoverageName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getCoverageName()</pre>
+</li>
+</ul>
+<a name="isBuildHistogream()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isBuildHistogream</h4>
+<pre>public&nbsp;boolean&nbsp;isBuildHistogream()</pre>
+</li>
+</ul>
+<a name="getNodata(int)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setTileSize</h4>
-<pre>public&nbsp;void&nbsp;setTileSize(int&nbsp;tileSize)</pre>
+<h4>getNodata</h4>
+<pre>public&nbsp;double[][]&nbsp;getNodata(int&nbsp;numBands)</pre>
 </li>
 </ul>
 </li>

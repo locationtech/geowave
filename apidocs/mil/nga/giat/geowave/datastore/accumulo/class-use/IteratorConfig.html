@@ -100,17 +100,23 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">AccumuloOperations.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#attachIterators(java.lang.String,%20boolean,%20mil.nga.giat.geowave.datastore.accumulo.IteratorConfig...)">attachIterators</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+<td class="colLast"><span class="strong">BasicAccumuloOperations.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#attachIterators(java.lang.String,%20boolean,%20boolean,%20boolean,%20java.util.Set,%20mil.nga.giat.geowave.datastore.accumulo.IteratorConfig...)">attachIterators</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                boolean&nbsp;createTable,
-               <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>...&nbsp;iterators)</code>
-<div class="block">Attaches the iterators to the specified table.</div>
-</td>
+               boolean&nbsp;enableVersioning,
+               boolean&nbsp;enableBlockCache,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;splits,
+               <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>...&nbsp;iterators)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="strong">BasicAccumuloOperations.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html#attachIterators(java.lang.String,%20boolean,%20mil.nga.giat.geowave.datastore.accumulo.IteratorConfig[])">attachIterators</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+<td class="colLast"><span class="strong">AccumuloOperations.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#attachIterators(java.lang.String,%20boolean,%20boolean,%20boolean,%20java.util.Set,%20mil.nga.giat.geowave.datastore.accumulo.IteratorConfig...)">attachIterators</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                boolean&nbsp;createTable,
-               <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>[]&nbsp;iterators)</code>&nbsp;</td>
+               boolean&nbsp;enableVersioning,
+               boolean&nbsp;enableBlockCache,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;splits,
+               <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo">IteratorConfig</a>...&nbsp;iterators)</code>
+<div class="block">Attaches the iterators to the specified table.</div>
+</td>
 </tr>
 </tbody>
 </table>

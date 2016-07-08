@@ -306,11 +306,20 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.geotools.coverage.grid.GridCoverage2D</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#renderGridCoverage(java.lang.String,%20java.awt.Rectangle,%20org.geotools.geometry.GeneralEnvelope,%20java.awt.Color,%20java.awt.Color)">renderGridCoverage</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#renderGridCoverage(java.lang.String,%20java.awt.Rectangle,%20org.geotools.geometry.GeneralEnvelope,%20java.awt.Color,%20java.awt.Color,%20javax.media.jai.Interpolation)">renderGridCoverage</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Rectangle.html?is-external=true" title="class or interface in java.awt">Rectangle</a>&nbsp;dim,
                   org.geotools.geometry.GeneralEnvelope&nbsp;generalEnvelope,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;backgroundColor,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor)</code>&nbsp;</td>
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor,
+                  javax.media.jai.Interpolation&nbsp;interpolation)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#transformRequestEnvelope(mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReaderState,%20org.opengis.referencing.crs.CoordinateReferenceSystem)">transformRequestEnvelope</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterReaderState</a>&nbsp;state,
+                        org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
+<div class="block">transforms (if necessary) the requested envelope into the CRS used by
+ this reader.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -705,7 +714,7 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
-<a name="renderGridCoverage(java.lang.String, java.awt.Rectangle, org.geotools.geometry.GeneralEnvelope, java.awt.Color, java.awt.Color)">
+<a name="renderGridCoverage(java.lang.String, java.awt.Rectangle, org.geotools.geometry.GeneralEnvelope, java.awt.Color, java.awt.Color, javax.media.jai.Interpolation)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -715,10 +724,26 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Rectangle.html?is-external=true" title="class or interface in java.awt">Rectangle</a>&nbsp;dim,
                                                            org.geotools.geometry.GeneralEnvelope&nbsp;generalEnvelope,
                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;backgroundColor,
-                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor)
+                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor,
+                                                           javax.media.jai.Interpolation&nbsp;interpolation)
                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="transformRequestEnvelope(mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReaderState, org.opengis.referencing.crs.CoordinateReferenceSystem)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transformRequestEnvelope</h4>
+<pre>public static&nbsp;void&nbsp;transformRequestEnvelope(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterReaderState</a>&nbsp;state,
+                            org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)
+                                     throws org.geotools.data.DataSourceException</pre>
+<div class="block">transforms (if necessary) the requested envelope into the CRS used by
+ this reader.</div>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>org.geotools.data.DataSourceException</code></dd></dl>
 </li>
 </ul>
 <a name="getDynamicParameters()">

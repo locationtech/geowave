@@ -270,10 +270,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/test/TestUtils.html#testTileAgainstReference(java.awt.image.BufferedImage,%20java.awt.image.BufferedImage,%20double,%20double)">testTileAgainstReference</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a>&nbsp;actual,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a>&nbsp;expected,
+                        double&nbsp;minPctError,
+                        double&nbsp;maxPctError)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/test/TestUtils.html#unZipFile(java.io.File,%20java.lang.String)">unZipFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;zipInput,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputFolder)</code>
 <div class="block">Unzips the contents of a zip file to a target output directory, deleting
  anything that existed beforehand</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../mil/nga/giat/geowave/test/TestUtils.html#unZipFile(java.io.File,%20java.lang.String,%20boolean)">unZipFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;zipInput,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputFolder,
+         boolean&nbsp;deleteTargetDir)</code>
+<div class="block">Unzips the contents of a zip file to a target output directory</div>
 </td>
 </tr>
 </table>
@@ -551,10 +566,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>zipInput</code> - input zip file</dd><dd><code>outputFolder</code> - zip file output folder</dd></dl>
 </li>
 </ul>
+<a name="unZipFile(java.io.File, java.lang.String, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>unZipFile</h4>
+<pre>public static&nbsp;void&nbsp;unZipFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;zipInput,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputFolder,
+             boolean&nbsp;deleteTargetDir)</pre>
+<div class="block">Unzips the contents of a zip file to a target output directory</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>zipInput</code> - input zip file</dd><dd><code>outputFolder</code> - zip file output folder</dd><dd><code>deleteTargetDir</code> - delete the destination directory before extracting</dd></dl>
+</li>
+</ul>
 <a name="replaceParameters(java.util.Map, java.io.File)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>replaceParameters</h4>
 <pre>protected static&nbsp;void&nbsp;replaceParameters(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;values,
@@ -562,6 +590,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="testTileAgainstReference(java.awt.image.BufferedImage, java.awt.image.BufferedImage, double, double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>testTileAgainstReference</h4>
+<pre>public static&nbsp;void&nbsp;testTileAgainstReference(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a>&nbsp;actual,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a>&nbsp;expected,
+                            double&nbsp;minPctError,
+                            double&nbsp;maxPctError)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>bi</code> - sample</dd><dd><code>ref</code> - reference</dd><dd><code>minPctError</code> - used for testing subsampling - to ensure we are properly
+            subsampling we want there to be some error if subsampling is
+            aggressive (10 pixels)</dd><dd><code>maxPctError</code> - used for testing subsampling - we want to ensure at most we
+            are off by this percentile</dd></dl>
 </li>
 </ul>
 </li>

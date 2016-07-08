@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/MergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -129,7 +129,7 @@ implements org.apache.hadoop.io.Writable</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#GridCoverageWritable(java.awt.image.DataBuffer,%20double,%20double,%20double,%20double)">GridCoverageWritable</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;dataBuffer,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#GridCoverageWritable(mil.nga.giat.geowave.adapter.raster.adapter.RasterTile,%20double,%20double,%20double,%20double)">GridCoverageWritable</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
                     double&nbsp;minX,
                     double&nbsp;maxX,
                     double&nbsp;minY,
@@ -151,24 +151,24 @@ implements org.apache.hadoop.io.Writable</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getDataBuffer()">getDataBuffer</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMaxX()">getMaxX</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMaxY()">getMaxY</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMinX()">getMinX</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMinY()">getMinY</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getRasterTile()">getRasterTile</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -176,7 +176,7 @@ implements org.apache.hadoop.io.Writable</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#set(java.awt.image.DataBuffer,%20double,%20double,%20double,%20double)">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;dataBuffer,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#set(mil.nga.giat.geowave.adapter.raster.adapter.RasterTile,%20double,%20double,%20double,%20double)">set</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
    double&nbsp;minX,
    double&nbsp;maxX,
    double&nbsp;minY,
@@ -217,13 +217,13 @@ implements org.apache.hadoop.io.Writable</pre>
 <pre>protected&nbsp;GridCoverageWritable()</pre>
 </li>
 </ul>
-<a name="GridCoverageWritable(java.awt.image.DataBuffer, double, double, double, double)">
+<a name="GridCoverageWritable(mil.nga.giat.geowave.adapter.raster.adapter.RasterTile, double, double, double, double)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GridCoverageWritable</h4>
-<pre>public&nbsp;GridCoverageWritable(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;dataBuffer,
+<pre>public&nbsp;GridCoverageWritable(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
                     double&nbsp;minX,
                     double&nbsp;maxX,
                     double&nbsp;minY,
@@ -238,26 +238,26 @@ implements org.apache.hadoop.io.Writable</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="set(java.awt.image.DataBuffer, double, double, double, double)">
+<a name="set(mil.nga.giat.geowave.adapter.raster.adapter.RasterTile, double, double, double, double)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>set</h4>
-<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;dataBuffer,
+<pre>public&nbsp;void&nbsp;set(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
        double&nbsp;minX,
        double&nbsp;maxX,
        double&nbsp;minY,
        double&nbsp;maxY)</pre>
 </li>
 </ul>
-<a name="getDataBuffer()">
+<a name="getRasterTile()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getDataBuffer</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;getDataBuffer()</pre>
+<h4>getRasterTile</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;getRasterTile()</pre>
 </li>
 </ul>
 <a name="getMinX()">
@@ -352,7 +352,7 @@ implements org.apache.hadoop.io.Writable</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/MergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

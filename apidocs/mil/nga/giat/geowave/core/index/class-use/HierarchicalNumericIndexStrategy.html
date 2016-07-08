@@ -75,6 +75,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.raster.adapter">mil.nga.giat.geowave.adapter.raster.adapter</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.index.sfc.tiered">mil.nga.giat.geowave.core.index.sfc.tiered</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -83,6 +87,58 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.adapter.raster.adapter">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">HierarchicalNumericIndexStrategy</a> in <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/package-summary.html">mil.nga.giat.geowave.adapter.raster.adapter</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/package-summary.html">mil.nga.giat.geowave.adapter.raster.adapter</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">HierarchicalNumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">CompoundHierarchicalIndexStrategyWrapper</a></strong></code>
+<div class="block">This class wraps the first occurrence of a hierarchical index within a
+ compound index such that sub strategies within the hierarchy are replaced
+ maintaining the rest of the structure of the compound index</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/package-summary.html">mil.nga.giat.geowave.adapter.raster.adapter</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">HierarchicalNumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">HierarchicalNumericIndexStrategy</a></code></td>
+<td class="colLast"><span class="strong">CompoundHierarchicalIndexStrategyWrapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html#findHierarchicalStrategy(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">findHierarchicalStrategy</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">HierarchicalNumericIndexStrategy</a></code></td>
+<td class="colLast"><span class="strong">CompoundHierarchicalIndexStrategyWrapper.</span><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html#findHierarchicalStrategy(mil.nga.giat.geowave.core.index.NumericIndexStrategy,%20java.util.List)">findHierarchicalStrategy</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index">CompoundIndexStrategy</a>&gt;&nbsp;parentStrategies)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/package-summary.html">mil.nga.giat.geowave.adapter.raster.adapter</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">HierarchicalNumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html#CompoundHierarchicalIndexStrategyWrapper(java.util.List,%20mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy)">CompoundHierarchicalIndexStrategyWrapper</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/CompoundIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index">CompoundIndexStrategy</a>&gt;&nbsp;parentStrategies,
+                                        <a href="../../../../../../../mil/nga/giat/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">HierarchicalNumericIndexStrategy</a>&nbsp;firstHierarchicalStrategy)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.index.sfc.tiered">
 <!--   -->
 </a>

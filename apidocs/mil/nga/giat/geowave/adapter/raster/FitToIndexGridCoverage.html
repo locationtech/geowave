@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/ImageWorkerPredefineStats.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html" target="_top">Frames</a></li>
@@ -120,12 +120,13 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#FitToIndexGridCoverage(org.opengis.coverage.grid.GridCoverage,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.adapter.raster.Resolution,%20org.opengis.geometry.Envelope,%20com.vividsolutions.jts.geom.Geometry,%20com.vividsolutions.jts.geom.Geometry)">FitToIndexGridCoverage</a></strong>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#FitToIndexGridCoverage(org.opengis.coverage.grid.GridCoverage,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.adapter.raster.Resolution,%20org.opengis.geometry.Envelope,%20com.vividsolutions.jts.geom.Geometry,%20com.vividsolutions.jts.geom.Geometry,%20java.util.Map)">FitToIndexGridCoverage</a></strong>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
                       <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId,
                       <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster">Resolution</a>&nbsp;resolution,
                       org.opengis.geometry.Envelope&nbsp;originalEnvelope,
                       com.vividsolutions.jts.geom.Geometry&nbsp;footprintWorldGeometry,
-                      com.vividsolutions.jts.geom.Geometry&nbsp;footprintScreenGeometry)</code>&nbsp;</td>
+                      com.vividsolutions.jts.geom.Geometry&nbsp;footprintScreenGeometry,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&nbsp;properties)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -229,31 +230,35 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getOverviewGridGeometry(int)">getOverviewGridGeometry</a></strong>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getProperties()">getProperties</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>org.opengis.util.RecordType</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getRangeType()">getRangeType</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/renderable/RenderableImage.html?is-external=true" title="class or interface in java.awt.image.renderable">RenderableImage</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getRenderableImage(int,%20int)">getRenderableImage</a></strong>(int&nbsp;xAxis,
                   int&nbsp;yAxis)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/RenderedImage.html?is-external=true" title="class or interface in java.awt.image">RenderedImage</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getRenderedImage()">getRenderedImage</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster">Resolution</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getResolution()">getResolution</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>org.opengis.coverage.SampleDimension</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getSampleDimension(int)">getSampleDimension</a></strong>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getSources()">getSources</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#isDataEditable()">isDataEditable</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -279,7 +284,7 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="FitToIndexGridCoverage(org.opengis.coverage.grid.GridCoverage, mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.adapter.raster.Resolution, org.opengis.geometry.Envelope, com.vividsolutions.jts.geom.Geometry, com.vividsolutions.jts.geom.Geometry)">
+<a name="FitToIndexGridCoverage(org.opengis.coverage.grid.GridCoverage, mil.nga.giat.geowave.core.index.ByteArrayId, mil.nga.giat.geowave.adapter.raster.Resolution, org.opengis.geometry.Envelope, com.vividsolutions.jts.geom.Geometry, com.vividsolutions.jts.geom.Geometry, java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -290,7 +295,8 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
                       <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster">Resolution</a>&nbsp;resolution,
                       org.opengis.geometry.Envelope&nbsp;originalEnvelope,
                       com.vividsolutions.jts.geom.Geometry&nbsp;footprintWorldGeometry,
-                      com.vividsolutions.jts.geom.Geometry&nbsp;footprintScreenGeometry)</pre>
+                      com.vividsolutions.jts.geom.Geometry&nbsp;footprintScreenGeometry,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&nbsp;properties)</pre>
 </li>
 </ul>
 </li>
@@ -301,6 +307,15 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getProperties</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&nbsp;getProperties()</pre>
+</li>
+</ul>
 <a name="getFootprintWorldGeometry()">
 <!--   -->
 </a>
@@ -712,7 +727,7 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/ImageWorkerPredefineStats.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html" target="_top">Frames</a></li>

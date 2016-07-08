@@ -160,48 +160,61 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterConfig</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#createConfig(java.util.Map,%20java.lang.String,%20java.lang.Boolean,%20java.lang.Integer)">createConfig</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;dataStoreConfig,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#createConfig(java.util.Map,%20java.lang.String,%20java.lang.Boolean,%20java.lang.Boolean,%20java.lang.Integer)">createConfig</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;dataStoreConfig,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizeHistogramOverride,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;scaleTo8Bit,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;interpolationOverride)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#getAdapterIndexMappingStore()">getAdapterIndexMappingStore</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#getAdapterStore()">getAdapterStore</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#getDataStatisticsStore()">getDataStatisticsStore</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#getDataStore()">getDataStore</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#getIndexStore()">getIndexStore</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>javax.media.jai.Interpolation</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#getInterpolationOverride()">getInterpolationOverride</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#isEqualizeHistogramOverride()">isEqualizeHistogramOverride</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#isEqualizeHistogramOverrideSet()">isEqualizeHistogramOverrideSet</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#isInterpolationOverrideSet()">isInterpolationOverrideSet</a></strong>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#isScaleTo8Bit()">isScaleTo8Bit</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#isScaleTo8BitSet()">isScaleTo8BitSet</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterConfig</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#readFromConfigParams(java.lang.String)">readFromConfigParams</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configParams)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterConfig</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html#readFromURL(java.net.URL)">readFromURL</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;xmlURL)</code>&nbsp;</td>
 </tr>
@@ -254,7 +267,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</pre>
 </li>
 </ul>
-<a name="createConfig(java.util.Map, java.lang.String, java.lang.Boolean, java.lang.Integer)">
+<a name="createConfig(java.util.Map, java.lang.String, java.lang.Boolean, java.lang.Boolean, java.lang.Integer)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -263,6 +276,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterConfig</a>&nbsp;createConfig(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;dataStoreConfig,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizeHistogramOverride,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;scaleTo8Bit,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;interpolationOverride)</pre>
 </li>
 </ul>
@@ -326,6 +340,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;getDataStatisticsStore()</pre>
 </li>
 </ul>
+<a name="getAdapterIndexMappingStore()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAdapterIndexMappingStore</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;getAdapterIndexMappingStore()</pre>
+</li>
+</ul>
 <a name="isInterpolationOverrideSet()">
 <!--   -->
 </a>
@@ -342,6 +365,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getInterpolationOverride</h4>
 <pre>public&nbsp;javax.media.jai.Interpolation&nbsp;getInterpolationOverride()</pre>
+</li>
+</ul>
+<a name="isScaleTo8BitSet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isScaleTo8BitSet</h4>
+<pre>public&nbsp;boolean&nbsp;isScaleTo8BitSet()</pre>
+</li>
+</ul>
+<a name="isScaleTo8Bit()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isScaleTo8Bit</h4>
+<pre>public&nbsp;boolean&nbsp;isScaleTo8Bit()</pre>
 </li>
 </ul>
 <a name="isEqualizeHistogramOverrideSet()">

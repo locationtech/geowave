@@ -210,6 +210,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
  for compatibility checking with an adapter provider</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.html#isSpatialTemporal(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">isSpatialTemporal</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -335,7 +339,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
 <a name="getRequiredIndexTypes()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getRequiredIndexTypes</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;[]&nbsp;getRequiredIndexTypes()</pre>
@@ -346,6 +350,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getRequiredIndexTypes()">getRequiredIndexTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></code></dd>
 <dt><span class="strong">Returns:</span></dt><dd>the classes that are indexable by this index provider</dd></dl>
+</li>
+</ul>
+<a name="isSpatialTemporal(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isSpatialTemporal</h4>
+<pre>public static&nbsp;boolean&nbsp;isSpatialTemporal(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
 </li>
