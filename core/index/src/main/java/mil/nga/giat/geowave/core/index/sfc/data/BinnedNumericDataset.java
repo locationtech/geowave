@@ -10,18 +10,19 @@ import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 /**
  * The Binned Numeric Dataset class creates an object that associates a
  * multi-dimensional index range to a particular bin ID.
- * 
+ *
  */
 public class BinnedNumericDataset implements
 		MultiDimensionalNumericData
 {
 	private byte[] binId;
 	private MultiDimensionalNumericData indexRanges;
+	private boolean fullExtent;
 
 	protected BinnedNumericDataset() {}
 
 	/**
-	 * 
+	 *
 	 * @param binId
 	 *            a unique ID associated with the BinnedQuery object
 	 * @param indexRanges
@@ -29,9 +30,15 @@ public class BinnedNumericDataset implements
 	 */
 	public BinnedNumericDataset(
 			final byte[] binId,
-			final MultiDimensionalNumericData indexRanges ) {
+			final MultiDimensionalNumericData indexRanges,
+			final boolean fullExtent ) {
 		this.binId = binId;
 		this.indexRanges = indexRanges;
+		this.fullExtent = fullExtent;
+	}
+
+	public boolean isFullExtent() {
+		return fullExtent;
 	}
 
 	/**
@@ -89,7 +96,7 @@ public class BinnedNumericDataset implements
 	 * translated into 2 binned queries representing the 2012 portion of the
 	 * query and the 2013 portion, each normalized to millis from the beginning
 	 * of the year.
-	 * 
+	 *
 	 * @param numericData
 	 *            the incoming query into the index implementation, to be
 	 *            translated into normalized, binned queries
@@ -122,7 +129,8 @@ public class BinnedNumericDataset implements
 						binnedQueries[i] = new BinnedNumericDataset(
 								binRangesPerDimension[d][b].getBinId(),
 								new BasicNumericDataset(
-										rangePerDimension));
+										rangePerDimension),
+								binRangesPerDimension[d][b].isFullExtent());
 					}
 					else {
 						// because binned queries were intended to be immutable,
@@ -135,7 +143,8 @@ public class BinnedNumericDataset implements
 						binnedQueries[i] = new BinnedNumericDataset(
 								combinedBinId,
 								new BasicNumericDataset(
-										rangePerDimension));
+										rangePerDimension),
+								binnedQueries[i].fullExtent |= binRangesPerDimension[d][b].isFullExtent());
 					}
 
 					rangePerDimension[d] = new NumericRange(
@@ -155,7 +164,8 @@ public class BinnedNumericDataset implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] indexRangesBinary = PersistenceUtils.toBinary(indexRanges);
-		final ByteBuffer buf = ByteBuffer.allocate(4 + indexRangesBinary.length + binId.length);
+		final ByteBuffer buf = ByteBuffer.allocate(5 + indexRangesBinary.length + binId.length);
+		buf.put((byte) (fullExtent ? 1 : 0));
 		buf.putInt(binId.length);
 		buf.put(binId);
 		buf.put(indexRangesBinary);
@@ -166,10 +176,11 @@ public class BinnedNumericDataset implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		fullExtent = (buf.get() == 1);
 		binId = new byte[buf.getInt()];
 		buf.get(binId);
 
-		final byte[] indexRangesBinary = new byte[bytes.length - 4 - binId.length];
+		final byte[] indexRangesBinary = new byte[bytes.length - 5 - binId.length];
 		buf.get(indexRangesBinary);
 		indexRanges = PersistenceUtils.fromBinary(
 				indexRangesBinary,

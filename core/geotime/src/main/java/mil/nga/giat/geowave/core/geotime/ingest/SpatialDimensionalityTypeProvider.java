@@ -138,7 +138,7 @@ public class SpatialDimensionalityTypeProvider implements
 	{
 		@Parameter(names = {
 			"--pointOnly"
-		}, required = false, description = "The index will only be good at handling pointsand will not be optimized for handling lines/polys.  The default behavior is to handle any geometry.")
+		}, required = false, description = "The index will only be good at handling points and will not be optimized for handling lines/polys.  The default behavior is to handle any geometry.")
 		protected boolean pointOnly = false;
 		@Parameter(names = {
 			"--allTiers"
