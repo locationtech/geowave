@@ -138,7 +138,7 @@ public class HBaseDataStatisticsStore extends
 			final String transformingRegex,
 			final String replacement,
 			final String... authorizations ) {
-		// TODO #406 Need to fix
+		// TODO Unimplemented
 		LOGGER.error("This method transformVisibility is not yet coded. Need to fix it");
 
 	}
@@ -149,15 +149,15 @@ public class HBaseDataStatisticsStore extends
 	 */
 	@Override
 	protected Scan applyScannerSettings(
-			Scan scanner,
-			ByteArrayId primaryId,
-			ByteArrayId secondaryId ) {
-		Scan scan = super.applyScannerSettings(
+			final Scan scanner,
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId ) {
+		final Scan scan = super.applyScannerSettings(
 				scanner,
 				primaryId,
 				secondaryId);
 		if (primaryId != null) {
-			ByteBuffer buf = ByteBuffer.allocate(primaryId.getBytes().length + 1);
+			final ByteBuffer buf = ByteBuffer.allocate(primaryId.getBytes().length + 1);
 			buf.put(primaryId.getBytes());
 			buf.put(new byte[] {
 				0
@@ -175,7 +175,7 @@ public class HBaseDataStatisticsStore extends
 	 */
 	@Override
 	protected Iterator<DataStatistics<?>> getNativeIteratorWrapper(
-			Iterator<Result> resultIterator ) {
+			final Iterator<Result> resultIterator ) {
 		return new StatisticsNativeIteratorWrapper(
 				resultIterator);
 	}
@@ -191,13 +191,13 @@ public class HBaseDataStatisticsStore extends
 		private DataStatistics<?> nextVal = null;
 
 		public StatisticsNativeIteratorWrapper(
-				Iterator<Result> resultIterator ) {
-			this.it = resultIterator;
+				final Iterator<Result> resultIterator ) {
+			it = resultIterator;
 		}
 
 		@Override
 		public boolean hasNext() {
-			return nextVal != null || it.hasNext();
+			return (nextVal != null) || it.hasNext();
 		}
 
 		@Override
@@ -205,7 +205,7 @@ public class HBaseDataStatisticsStore extends
 			DataStatistics<?> currentStatistics = nextVal;
 			nextVal = null;
 			while (it.hasNext()) {
-				Cell cell = it.next().listCells().get(
+				final Cell cell = it.next().listCells().get(
 						0);
 
 				// This entryToValue function has the side effect of adding the
@@ -213,7 +213,7 @@ public class HBaseDataStatisticsStore extends
 				// We need to make sure to add the merged version of the stat at
 				// the end of this
 				// function, before it is returned.
-				DataStatistics<?> statEntry = entryToValue(cell);
+				final DataStatistics<?> statEntry = entryToValue(cell);
 
 				if (currentStatistics == null) {
 					currentStatistics = statEntry;
@@ -232,7 +232,10 @@ public class HBaseDataStatisticsStore extends
 			}
 
 			// Add this entry to cache (see comment above)
-			addObjectToCache(currentStatistics);
+			addObjectToCache(
+					getPrimaryId(currentStatistics),
+					getSecondaryId(currentStatistics),
+					currentStatistics);
 			return currentStatistics;
 		}
 
@@ -247,18 +250,18 @@ public class HBaseDataStatisticsStore extends
 	/**
 	 * This function will append a UUID to the record that's inserted into the
 	 * database.
-	 * 
+	 *
 	 * @param object
 	 * @return
 	 */
 	@Override
 	protected ByteArrayId getRowId(
-			DataStatistics<?> object ) {
-		byte[] parentRecord = super.getRowId(
+			final DataStatistics<?> object ) {
+		final byte[] parentRecord = super.getRowId(
 				object).getBytes();
-		ByteBuffer parentBuffer = ByteBuffer.allocate(parentRecord.length + 1 + 16);
+		final ByteBuffer parentBuffer = ByteBuffer.allocate(parentRecord.length + 1 + 16);
 		parentBuffer.put(parentRecord);
-		UUID uuid = UUID.randomUUID();
+		final UUID uuid = UUID.randomUUID();
 		parentBuffer.put(new byte[] {
 			0
 		});

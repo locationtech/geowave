@@ -33,6 +33,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadData;
@@ -229,7 +230,7 @@ public class AggregationIterator extends
 			final byte[] constraintsBytes = ByteArrayUtils.byteArrayFromString(contraintsStr);
 			final List constraints = PersistenceUtils.fromBinary(constraintsBytes);
 			final String maxDecomp = options.get(MAX_DECOMPOSITION_OPTION_NAME);
-			Integer maxDecompInt = AccumuloConstraintsQuery.MAX_RANGE_DECOMPOSITION;
+			Integer maxDecompInt = ConstraintsQuery.MAX_RANGE_DECOMPOSITION;
 			if (maxDecomp != null) {
 				try {
 					maxDecompInt = Integer.parseInt(maxDecomp);

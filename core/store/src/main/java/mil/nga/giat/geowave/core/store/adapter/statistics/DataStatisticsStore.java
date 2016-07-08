@@ -99,4 +99,6 @@ public interface DataStatisticsStore
 			final String transformingRegex,
 			final String replacement,
 			final String... authorizations );
+
+	public void removeAll();
 }

@@ -79,13 +79,4 @@ public class AccumuloAdapterIndexMappingStore extends
 		}
 
 	}
-
-	@Override
-	public void remove(
-			ByteArrayId adapterId ) {
-		super.deleteObject(
-				adapterId,
-				null);
-
-	}
 }

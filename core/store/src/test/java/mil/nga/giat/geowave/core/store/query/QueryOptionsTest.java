@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Assert;
+import org.junit.Test;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -24,10 +28,6 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class QueryOptionsTest
 {
@@ -94,13 +94,16 @@ public class QueryOptionsTest
 			public CloseableIterator<DataAdapter<?>> getAdapters() {
 				return new CloseableIterator.Wrapper(
 						Arrays.asList(
-								this.getAdapter(new ByteArrayId(
+								getAdapter(new ByteArrayId(
 										"QOT_1")),
-								this.getAdapter(new ByteArrayId(
+								getAdapter(new ByteArrayId(
 										"QOT_2")),
-								this.getAdapter(new ByteArrayId(
+								getAdapter(new ByteArrayId(
 										"QOT_3"))).iterator());
 			}
+
+			@Override
+			public void removeAll() {}
 
 		};
 
@@ -110,22 +113,25 @@ public class QueryOptionsTest
 
 					@Override
 					public AdapterToIndexMapping getIndicesForAdapter(
-							ByteArrayId adapterId ) {
+							final ByteArrayId adapterId ) {
 						if (adapterId.getString().equals(
-								"QOT_1"))
+								"QOT_1")) {
 							return new AdapterToIndexMapping(
 									adapterId,
 									new PrimaryIndex[] {
 										index1,
 										index2
 									});
+						}
 						else if (adapterId.getString().equals(
-								"QOT_2")) return new AdapterToIndexMapping(
-								adapterId,
-								new PrimaryIndex[] {
-									index1,
-									index3
-								});
+								"QOT_2")) {
+							return new AdapterToIndexMapping(
+									adapterId,
+									new PrimaryIndex[] {
+										index1,
+										index3
+									});
+						}
 						return new AdapterToIndexMapping(
 								adapterId,
 								new PrimaryIndex[] {
@@ -136,40 +142,49 @@ public class QueryOptionsTest
 
 					@Override
 					public void addAdapterIndexMapping(
-							AdapterToIndexMapping mapping )
+							final AdapterToIndexMapping mapping )
 							throws MismatchedIndexToAdapterMapping {}
 
 					@Override
 					public void remove(
-							ByteArrayId adapterId ) {
+							final ByteArrayId adapterId ) {}
 
-					}
+					@Override
+					public void removeAll() {}
 				},
 				new IndexStore() {
 
 					@Override
 					public void addIndex(
-							Index<?, ?> index ) {}
+							final Index<?, ?> index ) {}
 
 					@Override
 					public Index<?, ?> getIndex(
-							ByteArrayId indexId ) {
-						if (indexId.equals(index1.getId()))
+							final ByteArrayId indexId ) {
+						if (indexId.equals(index1.getId())) {
 							return index1;
-						else if (indexId.equals(index2.getId()))
+						}
+						else if (indexId.equals(index2.getId())) {
 							return index2;
-						else if (indexId.equals(index3.getId())) return index3;
+						}
+						else if (indexId.equals(index3.getId())) {
+							return index3;
+						}
 						return null;
 					}
 
 					@Override
 					public boolean indexExists(
-							ByteArrayId indexId ) {
-						if (indexId.equals(index1.getId()))
+							final ByteArrayId indexId ) {
+						if (indexId.equals(index1.getId())) {
 							return true;
-						else if (indexId.equals(index2.getId()))
+						}
+						else if (indexId.equals(index2.getId())) {
 							return true;
-						else if (indexId.equals(index3.getId())) return true;
+						}
+						else if (indexId.equals(index3.getId())) {
+							return true;
+						}
 						return false;
 					}
 
@@ -181,6 +196,9 @@ public class QueryOptionsTest
 										index2,
 										index3).iterator());
 					}
+
+					@Override
+					public void removeAll() {}
 
 				});
 
@@ -242,6 +260,9 @@ public class QueryOptionsTest
 								Collections.emptyListIterator());
 					}
 
+					@Override
+					public void removeAll() {}
+
 				})
 				.next()
 				.getAdapterId() != null);
@@ -254,9 +275,7 @@ public class QueryOptionsTest
 
 			@Override
 			public void addAdapter(
-					final DataAdapter<?> adapter ) {
-
-			}
+					final DataAdapter<?> adapter ) {}
 
 			@Override
 			public DataAdapter<?> getAdapter(
@@ -276,13 +295,16 @@ public class QueryOptionsTest
 				return new CloseableIterator.Wrapper(
 						Collections.emptyListIterator());
 			}
+
+			@Override
+			public void removeAll() {}
 		};
 
 		final QueryOptions ops = new QueryOptions(
 				Arrays.asList(
-						(DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+						adapterStore.getAdapter(new ByteArrayId(
 								"123")),
-						(DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+						adapterStore.getAdapter(new ByteArrayId(
 								"567"))));
 		assertEquals(
 				2,

@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
@@ -365,9 +366,7 @@ public class BasicAccumuloOperations implements
 	 */
 	@Override
 	public void deleteAll()
-			throws AccumuloSecurityException,
-			AccumuloException,
-			TableNotFoundException {
+			throws Exception {
 		SortedSet<String> tableNames = connector.tableOperations().list();
 
 		if ((tableNamespace != null) && !tableNamespace.isEmpty()) {
@@ -387,12 +386,14 @@ public class BasicAccumuloOperations implements
 			final String tableName,
 			final ByteArrayId rowId,
 			final String columnFamily,
-			final String columnQualifier ) {
+			final String columnQualifier,
+			final String... additionalAuthorizations ) {
 		return this.delete(
 				tableName,
 				Arrays.asList(rowId),
 				columnFamily,
-				columnQualifier);
+				columnQualifier,
+				additionalAuthorizations);
 	}
 
 	@Override

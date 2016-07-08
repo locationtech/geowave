@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.store.data.field.ArrayWriter.VariableSizeObject
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.util.IteratorUtils;
@@ -96,7 +97,7 @@ public class ElementsToArrayIterator extends
 				}
 
 				final ByteSequence rowData = getSource().getTopKey().getRowData();
-				final AccumuloRowId rowId = new AccumuloRowId(
+				final GeowaveRowId rowId = new GeowaveRowId(
 						rowData.getBackingArray());
 
 				// get the data id as a long
@@ -194,11 +195,11 @@ public class ElementsToArrayIterator extends
 			}
 			else {
 				final ByteSequence rowData = firstKey.getRowData();
-				final AccumuloRowId rowId = new AccumuloRowId(
+				final GeowaveRowId rowId = new GeowaveRowId(
 						rowData.getBackingArray());
 
 				// create a new rowid
-				final byte[] rowIdBytes = new AccumuloRowId(
+				final byte[] rowIdBytes = new GeowaveRowId(
 						rowId.getInsertionId(),
 						new byte[] {},
 						rowId.getAdapterId(),

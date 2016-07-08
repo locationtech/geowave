@@ -53,4 +53,6 @@ public interface SecondaryIndexDataStore
 			String... visibility );
 
 	public void flush();
+
+	public void removeAll();
 }

@@ -69,6 +69,8 @@ public class InputFormatHBaseRangeQuery extends
 				(DedupeFilter) null,
 				queryOptions.getScanCallback(),
 				null,
+				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.range = range;
@@ -99,7 +101,7 @@ public class InputFormatHBaseRangeQuery extends
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final Iterator<Result> resultsIterator ) {
-		// TODO Fix #406 Since currently we are not supporting server side
+		// TODO Since currently we are not supporting server side
 		// iterator/coprocessors, we also cannot run
 		// server side filters and hence they have to run on clients itself. So
 		// need to add server side filters also in list of client filters.

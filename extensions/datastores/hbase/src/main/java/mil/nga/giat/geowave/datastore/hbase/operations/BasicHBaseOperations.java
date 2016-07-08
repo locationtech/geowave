@@ -1,23 +1,31 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.RegionLocator;
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
-public class BasicHBaseOperations
+public class BasicHBaseOperations implements
+		DataStoreOperations
 {
 
 	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
@@ -130,6 +138,7 @@ public class BasicHBaseOperations
 				unqualifiedTableName);
 	}
 
+	@Override
 	public void deleteAll()
 			throws IOException {
 		final TableName[] tableNamesArr = conn.getAdmin().listTableNames();
@@ -149,6 +158,7 @@ public class BasicHBaseOperations
 		}
 	}
 
+	@Override
 	public boolean tableExists(
 			final String tableName )
 			throws IOException {
@@ -183,8 +193,13 @@ public class BasicHBaseOperations
 
 	public ResultScanner getScannedResults(
 			final Scan scanner,
-			final String tableName )
+			final String tableName,
+			final String... authorizations )
 			throws IOException {
+		if (authorizations != null) {
+			scanner.setAuthorizations(new Authorizations(
+					authorizations));
+		}
 		return conn.getTable(
 				getTableName(getQualifiedTableName(tableName))).getScanner(
 				scanner);
@@ -211,6 +226,11 @@ public class BasicHBaseOperations
 			final String tableName )
 			throws IOException {
 		return conn.getRegionLocator(getTableName(getQualifiedTableName(tableName)));
+	}
+
+	@Override
+	public String getTableNameSpace() {
+		return tableNamespace;
 	}
 
 	// public void addColumnFamily(

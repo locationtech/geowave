@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
@@ -42,6 +43,7 @@ public class SimpleHBaseIngestTest
 	private static HBaseAdapterStore adapterStore;
 	private static HBaseDataStatisticsStore statsStore;
 	private static HBaseAdapterIndexMappingStore mockIndexMappingStore;
+	private static HBaseSecondaryIndexDataStore secondaryIndexStore;
 	private static HBaseDataStore mockDataStore;
 
 	private static String zookeeper;
@@ -137,13 +139,19 @@ public class SimpleHBaseIngestTest
 
 		statsStore = new HBaseDataStatisticsStore(
 				hbaseOperations);
+
+		secondaryIndexStore = new HBaseSecondaryIndexDataStore(
+				hbaseOperations);
+
 		mockIndexMappingStore = new HBaseAdapterIndexMappingStore(
 				hbaseOperations);
+
 		mockDataStore = new HBaseDataStore(
 				indexStore,
 				adapterStore,
 				statsStore,
 				mockIndexMappingStore,
+				secondaryIndexStore,
 				hbaseOperations,
 				hbaseOptions);
 

@@ -13,17 +13,18 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
@@ -31,15 +32,9 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 public class HBaseConstraintsQuery extends
 		HBaseFilteredIndexQuery
 {
+	protected final ConstraintsQuery base;
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
-	private static final int MAX_RANGE_DECOMPOSITION = 5000;
-	private final List<MultiDimensionalNumericData> constraints;
-	protected final List<DistributableQueryFilter> distributableFilters;
-	protected boolean queryFiltersEnabled;
-
-	// TODO How to use?
-	protected final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 
 	public HBaseConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
@@ -48,6 +43,8 @@ public class HBaseConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+			final IndexMetaData[] indexMetaData,
+			final DuplicateEntryCount duplicateCounts,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -57,54 +54,9 @@ public class HBaseConstraintsQuery extends
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
+				indexMetaData,
+				duplicateCounts,
 				authorizations);
-	}
-
-	public HBaseConstraintsQuery(
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters ) {
-		this(
-				null,
-				index,
-				constraints,
-				queryFilters,
-				new String[0]);
-	}
-
-	public HBaseConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters ) {
-		this(
-				adapterIds,
-				index,
-				constraints,
-				queryFilters,
-				(DedupeFilter) null,
-				(ScanCallback<?>) null,
-				null,
-				new String[0]);
-
-	}
-
-	public HBaseConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final List<MultiDimensionalNumericData> constraints,
-			final List<QueryFilter> queryFilters,
-			final String[] authorizations ) {
-		this(
-				adapterIds,
-				index,
-				constraints,
-				queryFilters,
-				(DedupeFilter) null,
-				(ScanCallback<?>) null,
-				null,
-				authorizations);
-
 	}
 
 	public HBaseConstraintsQuery(
@@ -115,92 +67,46 @@ public class HBaseConstraintsQuery extends
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+			final IndexMetaData[] indexMetaData,
+			final DuplicateEntryCount duplicateCounts,
 			final String[] authorizations ) {
+
 		super(
 				adapterIds,
 				index,
 				scanCallback,
 				authorizations);
-		this.constraints = constraints;
-		this.aggregation = aggregation;
-		final SplitFilterLists lists = splitList(queryFilters);
-		final List<QueryFilter> clientFilters = lists.clientFilters;
-		// add dedupe filters to the front of both lists so that the
-		// de-duplication is performed before any more complex filtering
-		// operations, use the supplied client dedupe filter if possible
-		if (clientDedupeFilter != null) {
-			clientFilters.add(
-					0,
-					clientDedupeFilter);
-		}
-		super.setClientFilters(clientFilters);
-		distributableFilters = lists.distributableFilters;
-		if (!distributableFilters.isEmpty() && (clientDedupeFilter != null)) {
-			distributableFilters.add(
-					0,
-					clientDedupeFilter);
-		}
-		queryFiltersEnabled = true;
-		if (isAggregation()) {
-			// TODO because aggregations are done client-side make sure to set
-			// the adapter ID here
 
+		base = new ConstraintsQuery(
+				constraints,
+				aggregation,
+				indexMetaData,
+				index,
+				queryFilters,
+				clientDedupeFilter,
+				duplicateCounts,
+				this);
+
+		if (isAggregation()) {
+			// Because aggregations are done client-side make sure to set
+			// the adapter ID here
 			this.adapterIds = Collections.singletonList(aggregation.getLeft().getAdapterId());
 		}
 	}
 
 	protected boolean isAggregation() {
-		return ((aggregation != null) && (aggregation.getLeft() != null) && (aggregation.getRight() != null));
-
-	}
-
-	private static SplitFilterLists splitList(
-			final List<QueryFilter> allFilters ) {
-		final List<DistributableQueryFilter> distributableFilters = new ArrayList<DistributableQueryFilter>();
-		final List<QueryFilter> clientFilters = new ArrayList<QueryFilter>();
-		if ((allFilters == null) || allFilters.isEmpty()) {
-			return new SplitFilterLists(
-					distributableFilters,
-					clientFilters);
-		}
-		for (final QueryFilter filter : allFilters) {
-			if (filter instanceof DistributableQueryFilter) {
-				distributableFilters.add((DistributableQueryFilter) filter);
-			}
-			else {
-				clientFilters.add(filter);
-			}
-		}
-		return new SplitFilterLists(
-				distributableFilters,
-				clientFilters);
-	}
-
-	private static class SplitFilterLists
-	{
-		private final List<DistributableQueryFilter> distributableFilters;
-		private final List<QueryFilter> clientFilters;
-
-		public SplitFilterLists(
-				final List<DistributableQueryFilter> distributableFilters,
-				final List<QueryFilter> clientFilters ) {
-			this.distributableFilters = distributableFilters;
-			this.clientFilters = clientFilters;
-		}
+		return base.isAggregation();
 	}
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
-		return DataStoreUtils.constraintsToByteArrayRanges(
-				constraints,
-				index.getIndexStrategy(),
-				MAX_RANGE_DECOMPOSITION);
+		return base.getRanges();
 	}
 
 	@Override
 	protected List<QueryFilter> getAllFiltersList() {
 		final List<QueryFilter> filters = super.getAllFiltersList();
-		for (final QueryFilter distributable : distributableFilters) {
+		for (final QueryFilter distributable : base.distributableFilters) {
 			if (!filters.contains(distributable)) {
 				filters.add(distributable);
 			}
@@ -226,7 +132,7 @@ public class HBaseConstraintsQuery extends
 			// TODO implement aggregation as a co-processor on the server side,
 			// but for now simply aggregate client-side here
 
-			final Aggregation aggregationFunction = aggregation.getRight();
+			final Aggregation aggregationFunction = base.aggregation.getRight();
 			synchronized (aggregationFunction) {
 
 				aggregationFunction.clearResult();

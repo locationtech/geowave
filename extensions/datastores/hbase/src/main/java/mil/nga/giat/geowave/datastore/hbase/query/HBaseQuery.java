@@ -15,7 +15,7 @@ abstract public class HBaseQuery
 	protected List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 
-	private final String[] authorizations;
+	protected final String[] authorizations;
 
 	public HBaseQuery(
 			final PrimaryIndex index,

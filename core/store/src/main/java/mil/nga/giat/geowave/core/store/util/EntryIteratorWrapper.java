@@ -1,11 +1,7 @@
-package mil.nga.giat.geowave.datastore.accumulo.util;
+package mil.nga.giat.geowave.core.store.util;
 
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
-
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
 
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -13,23 +9,23 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
- * This is used internally to translate Accumulo rows into native objects (using
- * the appropriate data adapter). It also performs any client-side filtering. It
- * will peek at the next entry in the accumulo iterator to always maintain a
- * reference to the next value.
+ * This is used internally to translate DataStore rows into native objects
+ * (using the appropriate data adapter). It also performs any client-side
+ * filtering. It will peek at the next entry in the wrapped iterator to always
+ * maintain a reference to the next value.
  *
  * @param <T>
  *            The type for the entry
  */
-public class EntryIteratorWrapper<T> implements
+public abstract class EntryIteratorWrapper<T> implements
 		Iterator<T>
 {
-	private final AdapterStore adapterStore;
+	protected final AdapterStore adapterStore;
 	private final PrimaryIndex index;
-	private final Iterator<Entry<Key, Value>> scannerIt;
+	private final Iterator scannerIt;
 	private final QueryFilter clientFilter;
-	private final ScanCallback<T> scanCallback;
-	private boolean wholeRowEncoding;
+	protected final ScanCallback<T> scanCallback;
+	private final boolean wholeRowEncoding;
 
 	private T nextValue;
 
@@ -37,21 +33,7 @@ public class EntryIteratorWrapper<T> implements
 			final boolean wholeRowEncoding,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
-			final Iterator<Entry<Key, Value>> scannerIt,
-			final QueryFilter clientFilter ) {
-		this.adapterStore = adapterStore;
-		this.index = index;
-		this.scannerIt = scannerIt;
-		this.clientFilter = clientFilter;
-		this.scanCallback = null;
-		this.wholeRowEncoding = wholeRowEncoding;
-	}
-
-	public EntryIteratorWrapper(
-			final boolean wholeRowEncoding,
-			final AdapterStore adapterStore,
-			final PrimaryIndex index,
-			final Iterator<Entry<Key, Value>> scannerIt,
+			final Iterator scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T> scanCallback ) {
 		this.adapterStore = adapterStore;
@@ -64,11 +46,12 @@ public class EntryIteratorWrapper<T> implements
 
 	private void findNext() {
 		while ((nextValue == null) && scannerIt.hasNext()) {
-			final Entry<Key, Value> row = scannerIt.next();
+			final Object row = scannerIt.next();
 			final T decodedValue = decodeRow(
 					row,
 					clientFilter,
-					index);
+					index,
+					wholeRowEncoding);
 			if (decodedValue != null) {
 				nextValue = decodedValue;
 				return;
@@ -76,19 +59,11 @@ public class EntryIteratorWrapper<T> implements
 		}
 	}
 
-	private T decodeRow(
-			final Entry<Key, Value> row,
+	protected abstract T decodeRow(
+			final Object row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
-		return AccumuloUtils.decodeRow(
-				row.getKey(),
-				row.getValue(),
-				wholeRowEncoding,
-				adapterStore,
-				clientFilter,
-				index,
-				scanCallback);
-	}
+			final PrimaryIndex index,
+			boolean wholeRowEncoding );
 
 	@Override
 	public boolean hasNext() {

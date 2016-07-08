@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.mock.MockInstance;
@@ -25,6 +24,7 @@ import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.util.TransformerWriter;
 import mil.nga.giat.geowave.datastore.accumulo.util.VisibilityTransformer;
 
@@ -127,8 +127,7 @@ public class TransformWriterTest
 
 	@Test
 	public void test()
-			throws TableNotFoundException,
-			MutationsRejectedException {
+			throws TableNotFoundException {
 		final Writer w = operations.createWriter("test_table");
 		write(
 				w,

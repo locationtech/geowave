@@ -48,6 +48,7 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.ScanCallback;
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -59,6 +60,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -68,6 +70,7 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
@@ -76,7 +79,6 @@ import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
-import mil.nga.giat.geowave.datastore.accumulo.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloDataSet;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadDataSingleRow;
@@ -95,7 +97,6 @@ import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 public class AccumuloUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloUtils.class);
-	public final static String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
 	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
 	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
 
@@ -155,7 +156,7 @@ public class AccumuloUtils
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback ) {
-		final AccumuloRowId rowId = new AccumuloRowId(
+		final GeowaveRowId rowId = new GeowaveRowId(
 				key.getRow().copyBytes());
 		return (T) decodeRowObj(
 				key,
@@ -173,7 +174,7 @@ public class AccumuloUtils
 			final Key key,
 			final Value value,
 			final boolean wholeRowEncoding,
-			final AccumuloRowId rowId,
+			final GeowaveRowId rowId,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
@@ -193,7 +194,7 @@ public class AccumuloUtils
 			final Key key,
 			final Value value,
 			final boolean wholeRowEncoding,
-			final AccumuloRowId rowId,
+			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -218,7 +219,7 @@ public class AccumuloUtils
 			final Key k,
 			final Value v,
 			final boolean wholeRowEncoding,
-			final AccumuloRowId rowId,
+			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -716,7 +717,7 @@ public class AccumuloUtils
 		final List<String> namespaces = new ArrayList<String>();
 
 		for (final String table : connector.tableOperations().list()) {
-			final int idx = table.indexOf(AbstractAccumuloPersistence.METADATA_TABLE) - 1;
+			final int idx = table.indexOf(AbstractGeowavePersistence.METADATA_TABLE) - 1;
 			if (idx > 0) {
 				namespaces.add(table.substring(
 						0,

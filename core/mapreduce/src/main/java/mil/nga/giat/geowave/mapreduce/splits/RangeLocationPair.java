@@ -1,22 +1,24 @@
-package mil.nga.giat.geowave.datastore.accumulo.mapreduce.input;
+package mil.nga.giat.geowave.mapreduce.splits;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.apache.accumulo.core.data.Range;
-
-public class RangeLocationPair
+public abstract class RangeLocationPair
 {
+	// Type of 'range' is the only difference between this and the Accumulo
+	// version
 
-	private Range range;
+	// Should change to a generic type and reuse
+
+	private GeoWaveRowRange range;
 	private String location;
 	private double cardinality;
 
 	public RangeLocationPair() {}
 
 	public RangeLocationPair(
-			final Range range,
+			final GeoWaveRowRange range,
 			final String location,
 			final double cardinality ) {
 		this.location = location;
@@ -28,7 +30,7 @@ public class RangeLocationPair
 		return cardinality;
 	}
 
-	public Range getRange() {
+	public GeoWaveRowRange getRange() {
 		return range;
 	}
 
@@ -40,26 +42,40 @@ public class RangeLocationPair
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((range == null) ? 0 : range.hashCode());
+		result = (prime * result) + ((location == null) ? 0 : location.hashCode());
+		result = (prime * result) + ((range == null) ? 0 : range.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		RangeLocationPair other = (RangeLocationPair) obj;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final RangeLocationPair other = (RangeLocationPair) obj;
 		if (location == null) {
-			if (other.location != null) return false;
+			if (other.location != null) {
+				return false;
+			}
 		}
-		else if (!location.equals(other.location)) return false;
+		else if (!location.equals(other.location)) {
+			return false;
+		}
 		if (range == null) {
-			if (other.range != null) return false;
+			if (other.range != null) {
+				return false;
+			}
 		}
-		else if (!range.equals(other.range)) return false;
+		else if (!range.equals(other.range)) {
+			return false;
+		}
 		return true;
 	}
 
@@ -68,11 +84,13 @@ public class RangeLocationPair
 			throws IOException,
 			InstantiationException,
 			IllegalAccessException {
-		range = Range.class.newInstance();
+		range = buildRowRangeInstance();
 		range.readFields(in);
 		location = in.readUTF();
 		cardinality = in.readDouble();
 	}
+
+	protected abstract GeoWaveRowRange buildRowRangeInstance();
 
 	public void write(
 			final DataOutput out )
