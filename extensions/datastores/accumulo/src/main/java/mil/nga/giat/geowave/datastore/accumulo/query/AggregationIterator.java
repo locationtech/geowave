@@ -372,7 +372,7 @@ public class AggregationIterator extends
 	protected void findTop() {
 		QueryFilterIterator.findTopEnhanced(
 				getSource(),
-				queryFilterIterator);
+				this);
 	}
 
 	protected static void findEnd(

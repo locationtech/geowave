@@ -89,13 +89,15 @@ public class SpatialQueryFilter extends
 
 	public SpatialQueryFilter(
 			final MultiDimensionalNumericData query,
-			final NumericDimensionField<?>[] dimensionDefinitions,
+			final NumericDimensionField<?>[] orderedConstrainedDimensionDefinitions,
+			final NumericDimensionField<?>[] unconstrainedDimensionDefinitions,
 			final Geometry queryGeometry,
 			final CompareOperation compareOp ) {
 		this(
 				stripGeometry(
 						query,
-						dimensionDefinitions),
+						orderedConstrainedDimensionDefinitions,
+						unconstrainedDimensionDefinitions),
 				queryGeometry,
 				compareOp);
 	}
@@ -132,20 +134,31 @@ public class SpatialQueryFilter extends
 
 	private static StrippedGeometry stripGeometry(
 			final MultiDimensionalNumericData query,
-			final NumericDimensionField<?>[] dimensionDefinitions ) {
+			final NumericDimensionField<?>[] orderedConstrainedDimensionDefinitions,
+			final NumericDimensionField<?>[] unconstrainedDimensionDefinitions ) {
 		final Set<ByteArrayId> geometryFieldIds = new HashSet<ByteArrayId>();
 		final List<NumericData> numericDataPerDimension = new ArrayList<NumericData>();
 		final List<NumericDimensionField<?>> fields = new ArrayList<NumericDimensionField<?>>();
 		final NumericData[] data = query.getDataPerDimension();
-		for (int d = 0; d < dimensionDefinitions.length; d++) {
+		for (int d = 0; d < orderedConstrainedDimensionDefinitions.length; d++) {
 			// if the type on the generic is assignable to geometry then save
 			// the field ID for later filtering
-			if (isSpatial(dimensionDefinitions[d])) {
-				geometryFieldIds.add(dimensionDefinitions[d].getFieldId());
+			if (isSpatial(orderedConstrainedDimensionDefinitions[d])) {
+				geometryFieldIds.add(orderedConstrainedDimensionDefinitions[d].getFieldId());
 			}
 			else {
 				numericDataPerDimension.add(data[d]);
-				fields.add(dimensionDefinitions[d]);
+				fields.add(orderedConstrainedDimensionDefinitions[d]);
+			}
+		}
+		// we need to also add all geometry field IDs even if it is
+		// unconstrained to be able to apply a geometry intersection (understand
+		// that the bbox for a geometry can imply a full range based on its
+		// envelope but the polygon may still need to be intersected with
+		// results)
+		for (int d = 0; d < unconstrainedDimensionDefinitions.length; d++) {
+			if (isSpatial(unconstrainedDimensionDefinitions[d])) {
+				geometryFieldIds.add(unconstrainedDimensionDefinitions[d].getFieldId());
 			}
 		}
 		return new StrippedGeometry(

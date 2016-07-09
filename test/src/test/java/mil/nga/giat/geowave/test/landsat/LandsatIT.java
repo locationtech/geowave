@@ -76,8 +76,7 @@ public class LandsatIT
 				throws Exception {
 			store = dataStoreOptions.createDataStore();
 			indices = new PrimaryIndex[] {
-				new SpatialIndexBuilder().setAllTiers(
-						true).createIndex()
+				new SpatialIndexBuilder().createIndex()
 			};
 			coverageNameTemplate = new Template(
 					"name",

@@ -31,6 +31,8 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
+import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
+import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 
 public class TieredSFCIndexStrategyTest
 {
@@ -142,9 +144,17 @@ public class TieredSFCIndexStrategyTest
 	@Test
 	public void testPredefinedSpatialEntries()
 			throws Exception {
-		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex()
-				.getIndexStrategy();
+		final NumericIndexStrategy strategy = TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
+				new NumericDimensionDefinition[] {
+					new LongitudeDefinition(),
+					new LatitudeDefinition(
+							true)
+				},
+				new int[][] {
+					DEFINED_BITS_OF_PRECISION.clone(),
+					DEFINED_BITS_OF_PRECISION.clone()
+				},
+				SFCType.HILBERT);
 		for (int sfcIndex = 0; sfcIndex < DEFINED_BITS_OF_PRECISION.length; sfcIndex++) {
 			final NumericData[] dataPerDimension = new NumericData[2];
 			final double precision = 360 / Math.pow(

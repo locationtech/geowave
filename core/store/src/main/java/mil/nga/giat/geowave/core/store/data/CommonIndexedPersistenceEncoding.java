@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
@@ -202,7 +203,14 @@ public class CommonIndexedPersistenceEncoding extends
 				dimensions.length);
 
 		for (int d = 0; d < dimensions.length; d++) {
-			NumericDimensionField field = dimensionTypeToFieldMap.get(dimensions[d].getClass());
+			Class baseDefinitionCls;
+			if (dimensions[d] instanceof SFCDimensionDefinition) {
+				baseDefinitionCls = ((SFCDimensionDefinition) dimensions[d]).getDimensionDefinition().getClass();
+			}
+			else {
+				baseDefinitionCls = dimensions[d].getClass();
+			}
+			NumericDimensionField field = dimensionTypeToFieldMap.get(baseDefinitionCls);
 			if (field != null) {
 				final ByteArrayId fieldId = field.getFieldId();
 				final DimensionRangePair fieldData = fieldsRangeData.get(fieldId);

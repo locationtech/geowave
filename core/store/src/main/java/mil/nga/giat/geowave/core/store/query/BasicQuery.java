@@ -180,15 +180,15 @@ public class BasicQuery implements
 			final NumericDimensionDefinition[] dimensionDefinitions = indexStrategy.getOrderedDimensionDefinitions();
 			final NumericData[] dataPerDimension = new NumericData[dimensionDefinitions.length];
 			// all or nothing...for now
-			boolean hasFullRange = false;
 			for (int d = 0; d < dimensionDefinitions.length; d++) {
 				final ConstraintData dimConstraint = constraintsPerTypeOfDimensionDefinition
 						.get(dimensionDefinitions[d].getClass());
-				hasFullRange |= (dimConstraint == null);
-				dataPerDimension[d] = (dimConstraint == null ? dimensionDefinitions[d].getFullRange()
-						: dimConstraint.range);
+				if (dimConstraint == null) {
+					return new BasicNumericDataset();
+				}
+				dataPerDimension[d] = dimConstraint.range;
 			}
-			return hasFullRange ? new BasicNumericDataset() : new BasicNumericDataset(
+			return new BasicNumericDataset(
 					dataPerDimension);
 		}
 
@@ -217,7 +217,9 @@ public class BasicQuery implements
 		protected DistributableQueryFilter createFilter(
 				final CommonIndexModel indexModel,
 				final BasicQuery basicQuery ) {
-			NumericDimensionField<?>[] dimensionFields = indexModel.getDimensions();
+			final NumericDimensionField<?>[] dimensionFields = indexModel.getDimensions();
+			NumericDimensionField<?>[] orderedConstrainedDimensionFields = dimensionFields;
+			NumericDimensionField<?>[] unconstrainedDimensionFields;
 			NumericData[] orderedConstraintsPerDimension = new NumericData[dimensionFields.length];
 			// trim dimension fields to be only what is contained in the
 			// constraints
@@ -238,21 +240,31 @@ public class BasicQuery implements
 			if (!fieldsToTrim.isEmpty()) {
 				final NumericDimensionField<?>[] newDimensionFields = new NumericDimensionField[dimensionFields.length
 						- fieldsToTrim.size()];
+
+				unconstrainedDimensionFields = new NumericDimensionField[fieldsToTrim.size()];
 				final NumericData[] newOrderedConstraintsPerDimension = new NumericData[newDimensionFields.length];
 				int newDimensionCtr = 0;
+				int constrainedCtr = 0;
 				for (int i = 0; i < dimensionFields.length; i++) {
 					if (!fieldsToTrim.contains(i)) {
 						newDimensionFields[newDimensionCtr] = dimensionFields[i];
 						newOrderedConstraintsPerDimension[newDimensionCtr++] = orderedConstraintsPerDimension[i];
 					}
+					else {
+						unconstrainedDimensionFields[constrainedCtr++] = dimensionFields[i];
+					}
 				}
-				dimensionFields = newDimensionFields;
+				orderedConstrainedDimensionFields = newDimensionFields;
 				orderedConstraintsPerDimension = newOrderedConstraintsPerDimension;
+			}
+			else {
+				unconstrainedDimensionFields = new NumericDimensionField[] {};
 			}
 			return basicQuery.createQueryFilter(
 					new BasicNumericDataset(
 							orderedConstraintsPerDimension),
-					dimensionFields);
+					orderedConstrainedDimensionFields,
+					unconstrainedDimensionFields);
 		}
 
 		public byte[] toBinary() {
@@ -623,10 +635,11 @@ public class BasicQuery implements
 
 	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
-			final NumericDimensionField<?>[] dimensionFields ) {
+			final NumericDimensionField<?>[] orderedConstrainedDimensionFields,
+			final NumericDimensionField<?>[] unconstrainedDimensionFields ) {
 		return new BasicQueryFilter(
 				constraints,
-				dimensionFields);
+				orderedConstrainedDimensionFields);
 	}
 
 	@Override

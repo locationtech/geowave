@@ -29,9 +29,10 @@ public class IndexOnlySpatialQuery extends
 	}
 
 	@Override
-	public DistributableQueryFilter createQueryFilter(
-			final MultiDimensionalNumericData constraints,
-			final NumericDimensionField<?>[] dimensionFields ) {
+	protected DistributableQueryFilter createQueryFilter(
+			MultiDimensionalNumericData constraints,
+			NumericDimensionField<?>[] orderedConstrainedDimensionFields,
+			NumericDimensionField<?>[] unconstrainedDimensionDefinitions ) {
 		// this will ignore fine grained filters and just use the row ID in the
 		// index
 		return null;

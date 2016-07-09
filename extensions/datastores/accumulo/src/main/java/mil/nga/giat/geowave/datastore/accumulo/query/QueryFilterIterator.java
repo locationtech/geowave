@@ -105,7 +105,7 @@ public class QueryFilterIterator extends
 
 	protected static void findTopEnhanced(
 			final SortedKeyValueIterator<Key, Value> source,
-			final QueryFilterIterator filter ) {
+			final Filter filter ) {
 		Key key;
 		if (source.hasTop()) {
 			key = source.getTopKey();
@@ -118,6 +118,12 @@ public class QueryFilterIterator extends
 				source.getTopValue())) {
 			try {
 				source.next();
+				if (source.hasTop()) {
+					key = source.getTopKey();
+				}
+				else {
+					return;
+				}
 			}
 			catch (final IOException e) {
 				throw new RuntimeException(
