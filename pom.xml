@@ -35,9 +35,9 @@
 		<geotools.version>14.2</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.8.2</geoserver.version>
-		<accumulo.version>1.7.0</accumulo.version>
-		<hbase.version>1.2.0</hbase.version>
-		<hadoop.version>2.6.0</hadoop.version>
+		<accumulo.version>1.7.2</accumulo.version>
+		<hbase.version>1.2.1</hbase.version>
+		<hadoop.version>2.7.2</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
