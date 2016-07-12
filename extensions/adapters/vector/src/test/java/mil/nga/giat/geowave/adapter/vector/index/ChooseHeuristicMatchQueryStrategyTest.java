@@ -4,14 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeature;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
@@ -23,7 +24,6 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTyp
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
@@ -35,10 +35,7 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-
-public class ChooseHeuristicMatchIndexQueryStrategyTest
+public class ChooseHeuristicMatchQueryStrategyTest
 {
 	private static final double HOUR = 3600000;
 	private static final double DAY = HOUR * 24;
@@ -100,7 +97,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -121,7 +118,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -163,7 +160,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -184,7 +181,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -247,7 +244,7 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
+						1).getId(),
 				it.next().getId());
 		assertFalse(it.hasNext());
 
@@ -303,9 +300,9 @@ public class ChooseHeuristicMatchIndexQueryStrategyTest
 	}
 
 	private Constraints createConstraints(
-			double lat,
-			double lon,
-			double time ) {
+			final double lat,
+			final double lon,
+			final double time ) {
 		final ConstraintSet cs1 = new ConstraintSet();
 		cs1.addConstraint(
 				LatitudeDefinition.class,
