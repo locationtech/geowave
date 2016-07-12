@@ -86,7 +86,12 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index.DataStoreIndexWriter</a>&lt;T,org.apache.hadoop.hbase.client.RowMutations&gt;</li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.hbase.HBaseIndexWriter&lt;T&gt;</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -100,8 +105,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">HBaseIndexWriter&lt;T&gt;</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</pre>
+extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index">DataStoreIndexWriter</a>&lt;T,org.apache.hadoop.hbase.client.RowMutations&gt;</pre>
 </li>
 </ul>
 </div>
@@ -121,34 +125,17 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#adapter">adapter</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#adapterId">adapterId</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#callback">callback</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#customFieldVisibilityWriter">customFieldVisibilityWriter</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#options">options</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#persistStats">persistStats</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/io/HBaseWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase.io">HBaseWriter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#writer">writer</a></strong></code>&nbsp;</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.core.store.index.DataStoreIndexWriter">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.index.<a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index">DataStoreIndexWriter</a></h3>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#adapter">adapter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#adapterId">adapterId</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#callback">callback</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#index">index</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#writer">writer</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -163,21 +150,12 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#HBaseIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations,%20mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions,%20mil.nga.giat.geowave.core.store.IngestCallback,%20java.io.Closeable,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">HBaseIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;adapter,
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#HBaseIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations,%20mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions,%20mil.nga.giat.geowave.core.store.IngestCallback,%20java.io.Closeable)">HBaseIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;adapter,
                 <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                 <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
                 <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a>&nbsp;options,
                 <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;callback,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#HBaseIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations,%20mil.nga.giat.geowave.core.store.IngestCallback,%20java.io.Closeable,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">HBaseIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;adapter,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;callback,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -195,35 +173,18 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#close()">close</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#flush()">flush</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#getIndices()">getIndices</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#write(T)">write</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry)</code>
-<div class="block">Write the entry using the index writer's configure field visibility
- writer.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#write(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry,
-     <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#writeInternal(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">writeInternal</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry,
              <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.index.DataStoreIndexWriter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.index.<a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index">DataStoreIndexWriter</a></h3>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#close()">close</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#flush()">flush</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#getIndices()">getIndices</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write(T)">write</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -245,67 +206,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="persistStats">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>persistStats</h4>
-<pre>protected&nbsp;boolean persistStats</pre>
-</li>
-</ul>
-<a name="callback">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>callback</h4>
-<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt; callback</pre>
-</li>
-</ul>
-<a name="writer">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>writer</h4>
-<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/io/HBaseWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase.io">HBaseWriter</a> writer</pre>
-</li>
-</ul>
 <a name="options">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>options</h4>
-<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a> options</pre>
-</li>
-</ul>
-<a name="adapter">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>adapter</h4>
-<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt; adapter</pre>
-</li>
-</ul>
-<a name="adapterId">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>adapterId</h4>
-<pre>protected final&nbsp;byte[] adapterId</pre>
-</li>
-</ul>
-<a name="customFieldVisibilityWriter">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>customFieldVisibilityWriter</h4>
-<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt; customFieldVisibilityWriter</pre>
+<h4>options</h4>
+<pre>protected final&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a> options</pre>
 </li>
 </ul>
 </li>
@@ -316,21 +223,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="HBaseIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations, mil.nga.giat.geowave.core.store.IngestCallback, java.io.Closeable, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>HBaseIndexWriter</h4>
-<pre>public&nbsp;HBaseIndexWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;adapter,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;callback,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</pre>
-</li>
-</ul>
-<a name="HBaseIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations, mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions, mil.nga.giat.geowave.core.store.IngestCallback, java.io.Closeable, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
+<a name="HBaseIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations, mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions, mil.nga.giat.geowave.core.store.IngestCallback, java.io.Closeable)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -341,8 +234,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
                 <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
                 <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a>&nbsp;options,
                 <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;callback,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable,
-                <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;?&gt;&nbsp;customFieldVisibilityWriter)</pre>
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</pre>
 </li>
 </ul>
 </li>
@@ -353,92 +245,19 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWrite
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="close()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()
-           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close()" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close()" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
-</li>
-</ul>
 <a name="writeInternal(java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a><a name="writeInternal(T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>writeInternal</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;writeInternal(<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry,
                               <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</pre>
-</li>
-</ul>
-<a name="flush()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>flush</h4>
-<pre>public&nbsp;void&nbsp;flush()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#flush()">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="write(java.lang.Object)">
-<!--   -->
-</a><a name="write(T)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(T)">IndexWriter</a></code></strong></div>
-<div class="block">Write the entry using the index writer's configure field visibility
- writer.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(T)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;</code></dd>
-<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
-</li>
-</ul>
-<a name="write(java.lang.Object,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a><a name="write(T, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry,
-                      <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="getIndices()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getIndices</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;getIndices()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#getIndices()">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#writeInternal(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">writeInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index">DataStoreIndexWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>,org.apache.hadoop.hbase.client.RowMutations&gt;</code></dd>
 </dl>
 </li>
 </ul>

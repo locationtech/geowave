@@ -134,6 +134,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#index">index</a></strong></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#visibilityCounts">visibilityCounts</a></strong></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -149,13 +153,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#AccumuloQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20org.apache.commons.lang3.tuple.Pair,%20java.lang.String...)">AccumuloQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#AccumuloQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20org.apache.commons.lang3.tuple.Pair,%20mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount,%20java.lang.String...)">AccumuloQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
              org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#AccumuloQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.lang.String...)">AccumuloQuery</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#AccumuloQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount,%20java.lang.String...)">AccumuloQuery</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -194,6 +200,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#isAggregation()">isAggregation</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#useWholeRowIterator()">useWholeRowIterator</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -238,10 +248,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="fieldIdsAdapterPair">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fieldIdsAdapterPair</h4>
 <pre>protected final&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt; fieldIdsAdapterPair</pre>
+</li>
+</ul>
+<a name="visibilityCounts">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>visibilityCounts</h4>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a> visibilityCounts</pre>
 </li>
 </ul>
 </li>
@@ -252,17 +271,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.lang.String...)">
+<a name="AccumuloQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount, java.lang.String...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>AccumuloQuery</h4>
 <pre>public&nbsp;AccumuloQuery(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 </li>
 </ul>
-<a name="AccumuloQuery(java.util.List, mil.nga.giat.geowave.core.store.index.PrimaryIndex, org.apache.commons.lang3.tuple.Pair, java.lang.String...)">
+<a name="AccumuloQuery(java.util.List, mil.nga.giat.geowave.core.store.index.PrimaryIndex, org.apache.commons.lang3.tuple.Pair, mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount, java.lang.String...)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -271,6 +291,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;AccumuloQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
              org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 </li>
 </ul>
@@ -298,6 +319,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isAggregation</h4>
 <pre>protected&nbsp;boolean&nbsp;isAggregation()</pre>
+</li>
+</ul>
+<a name="useWholeRowIterator()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>useWholeRowIterator</h4>
+<pre>protected&nbsp;boolean&nbsp;useWholeRowIterator()</pre>
 </li>
 </ul>
 <a name="getScanner(mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, double[], java.lang.Integer)">

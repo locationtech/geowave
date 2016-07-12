@@ -130,17 +130,6 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
         org.opengis.filter.Filter&nbsp;filter,
         <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#CQLQuery(java.lang.String,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter)">CQLQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
-        <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#CQLQuery(java.lang.String,%20mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter)">CQLQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
-        <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;geoCompareOp,
-        <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -164,33 +153,77 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#createOptimalQuery(org.opengis.filter.Filter,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.query.BasicQuery)">createOptimalQuery</a></strong>(org.opengis.filter.Filter&nbsp;cqlFilter,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#createOptimalQuery(org.opengis.filter.Filter,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter,%20mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.query.BasicQuery)">createOptimalQuery</a></strong>(org.opengis.filter.Filter&nbsp;cqlFilter,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;geoCompareOp,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#createOptimalQuery(java.lang.String,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">createOptimalQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#createOptimalQuery(java.lang.String,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.query.BasicQuery)">createOptimalQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#createOptimalQuery(java.lang.String,%20mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter,%20mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.query.BasicQuery)">createOptimalQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;geoCompareOp,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#getIndexConstraints(mil.nga.giat.geowave.core.index.NumericIndexStrategy)">getIndexConstraints</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>
 <div class="block">Return a set of constraints to apply to the primary index based on the
  indexing strategy used.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#getSecondaryIndexConstraints(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryIndexConstraints</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>
 <div class="block">Return a set of constraints to apply to the given secondary index.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryQueryFilter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#hasAtLeastSpatial(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">hasAtLeastSpatial</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#hasTime(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">hasTime</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#isSupported(mil.nga.giat.geowave.core.store.index.Index)">isSupported</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</code>
 <div class="block">This is useful to determine what indices this query supports.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -225,33 +258,6 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 <pre>protected&nbsp;CQLQuery()</pre>
 </li>
 </ul>
-<a name="CQLQuery(java.lang.String, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>CQLQuery</h4>
-<pre>public&nbsp;CQLQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
-        <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)
-         throws org.geotools.filter.text.cql2.CQLException</pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code>org.geotools.filter.text.cql2.CQLException</code></dd></dl>
-</li>
-</ul>
-<a name="CQLQuery(java.lang.String, mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>CQLQuery</h4>
-<pre>public&nbsp;CQLQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
-        <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;geoCompareOp,
-        <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)
-         throws org.geotools.filter.text.cql2.CQLException</pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code>org.geotools.filter.text.cql2.CQLException</code></dd></dl>
-</li>
-</ul>
 <a name="CQLQuery(mil.nga.giat.geowave.core.store.query.Query, org.opengis.filter.Filter, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter)">
 <!--   -->
 </a>
@@ -271,6 +277,76 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="createOptimalQuery(java.lang.String, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createOptimalQuery</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;createOptimalQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)
+                                throws org.geotools.filter.text.cql2.CQLException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>org.geotools.filter.text.cql2.CQLException</code></dd></dl>
+</li>
+</ul>
+<a name="createOptimalQuery(java.lang.String, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.query.BasicQuery)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createOptimalQuery</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;createOptimalQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)
+                                throws org.geotools.filter.text.cql2.CQLException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>org.geotools.filter.text.cql2.CQLException</code></dd></dl>
+</li>
+</ul>
+<a name="createOptimalQuery(java.lang.String, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter, mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.query.BasicQuery)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createOptimalQuery</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;createOptimalQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cql,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;geoCompareOp,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)
+                                throws org.geotools.filter.text.cql2.CQLException</pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code>org.geotools.filter.text.cql2.CQLException</code></dd></dl>
+</li>
+</ul>
+<a name="createOptimalQuery(org.opengis.filter.Filter, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.query.BasicQuery)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createOptimalQuery</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;createOptimalQuery(org.opengis.filter.Filter&nbsp;cqlFilter,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)</pre>
+</li>
+</ul>
+<a name="createOptimalQuery(org.opengis.filter.Filter, mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter, mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.query.BasicQuery)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createOptimalQuery</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;createOptimalQuery(org.opengis.filter.Filter&nbsp;cqlFilter,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;geoCompareOp,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a>&nbsp;baseQuery)</pre>
+</li>
+</ul>
 <a name="createFilters(mil.nga.giat.geowave.core.store.index.CommonIndexModel)">
 <!--   -->
 </a>
@@ -377,7 +453,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 <a name="getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getSecondaryQueryFilter</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;&nbsp;getSecondaryQueryFilter(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</pre>
@@ -385,6 +461,24 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/quer
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html#getSecondaryQueryFilter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getSecondaryQueryFilter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="hasAtLeastSpatial(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasAtLeastSpatial</h4>
+<pre>protected static&nbsp;boolean&nbsp;hasAtLeastSpatial(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+</li>
+</ul>
+<a name="hasTime(mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>hasTime</h4>
+<pre>protected static&nbsp;boolean&nbsp;hasTime(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
 </li>

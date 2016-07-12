@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseCloseableIteratorWrapper.ScannerClosableWrapper.html" title="class in mil.nga.giat.geowave.datastore.hbase.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseCellGenerator.html" title="class in mil.nga.giat.geowave.datastore.hbase.util"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseInputFormatIteratorWrapper.html" title="class in mil.nga.giat.geowave.datastore.hbase.util"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -61,13 +61,13 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>
@@ -86,7 +86,12 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store.util">mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper</a>&lt;T&gt;</li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper&lt;T&gt;</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -97,15 +102,10 @@
 <dt>All Implemented Interfaces:</dt>
 <dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;</dd>
 </dl>
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseMultiScanIteratorWrapper.html" title="class in mil.nga.giat.geowave.datastore.hbase.util">HBaseMultiScanIteratorWrapper</a></dd>
-</dl>
 <hr>
 <br>
 <pre>public class <span class="strong">HBaseEntryIteratorWrapper&lt;T&gt;</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;</pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store.util">EntryIteratorWrapper</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -118,25 +118,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#clientFilter">clientFilter</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#index">index</a></strong></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#nextValue">nextValue</a></strong></code>&nbsp;</td>
-</tr>
-</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.util.<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store.util">EntryIteratorWrapper</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#adapterStore">adapterStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#scanCallback">scanCallback</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -180,27 +168,19 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#decodeRow(org.apache.hadoop.hbase.client.Result,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex)">decodeRow</a></strong>(org.apache.hadoop.hbase.client.Result&nbsp;row,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#decodeRow(java.lang.Object,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20boolean)">decodeRow</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;row,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#findNext()">findNext</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#hasNext()">hasNext</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#next()">next</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#remove()">remove</a></strong>()</code>&nbsp;</td>
+         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+         boolean&nbsp;wholeRowEncoding)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.util.<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store.util">EntryIteratorWrapper</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#hasNext()">hasNext</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#next()">next</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#remove()">remove</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -216,41 +196,6 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="index">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>index</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a> index</pre>
-</li>
-</ul>
-<a name="clientFilter">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>clientFilter</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a> clientFilter</pre>
-</li>
-</ul>
-<a name="nextValue">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>nextValue</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a> nextValue</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_detail">
@@ -290,64 +235,19 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="next()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>next</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&nbsp;next()
-       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util">NoSuchElementException</a></pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next()" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&gt;</code></dd>
-<dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util">NoSuchElementException</a></code></dd></dl>
-</li>
-</ul>
-<a name="hasNext()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hasNext</h4>
-<pre>public&nbsp;boolean&nbsp;hasNext()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext()" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="findNext()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>findNext</h4>
-<pre>protected&nbsp;void&nbsp;findNext()</pre>
-</li>
-</ul>
-<a name="decodeRow(org.apache.hadoop.hbase.client.Result, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.PrimaryIndex)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>decodeRow</h4>
-<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&nbsp;decodeRow(org.apache.hadoop.hbase.client.Result&nbsp;row,
-          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
-</li>
-</ul>
-<a name="remove()">
+<a name="decodeRow(java.lang.Object, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>remove</h4>
-<pre>public&nbsp;void&nbsp;remove()</pre>
+<h4>decodeRow</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&nbsp;decodeRow(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;row,
+          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
+          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+          boolean&nbsp;wholeRowEncoding)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove()" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#decodeRow(java.lang.Object,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20boolean)">decodeRow</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store.util">EntryIteratorWrapper</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -377,7 +277,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseCloseableIteratorWrapper.ScannerClosableWrapper.html" title="class in mil.nga.giat.geowave.datastore.hbase.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseCellGenerator.html" title="class in mil.nga.giat.geowave.datastore.hbase.util"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseInputFormatIteratorWrapper.html" title="class in mil.nga.giat.geowave.datastore.hbase.util"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -403,13 +303,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>

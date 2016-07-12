@@ -99,13 +99,18 @@
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/FilteredIndexQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">FilteredIndexQuery</a></dd>
+</dl>
+<dl>
 <dt>Direct Known Subclasses:</dt>
 <dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseConstraintsQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseConstraintsQuery</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public abstract class <span class="strong">HBaseFilteredIndexQuery</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseQuery</a></pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseQuery</a>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/FilteredIndexQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">FilteredIndexQuery</a></pre>
 </li>
 </ul>
 </div>
@@ -138,7 +143,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#adapterIds">adapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#index">index</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#adapterIds">adapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#authorizations">authorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#index">index</a></code></li>
 </ul>
 </li>
 </ul>
@@ -200,7 +205,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#setClientFilters(java.util.List)">setClientFilters</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;clientFilters)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -288,7 +293,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <ul class="blockList">
 <li class="blockList">
 <h4>setClientFilters</h4>
-<pre>protected&nbsp;void&nbsp;setClientFilters(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;clientFilters)</pre>
+<pre>public&nbsp;void&nbsp;setClientFilters(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;clientFilters)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/FilteredIndexQuery.html#setClientFilters(java.util.List)">setClientFilters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/FilteredIndexQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">FilteredIndexQuery</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="setFieldIds(java.util.Collection)">

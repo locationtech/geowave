@@ -86,10 +86,15 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence</a>&lt;T&gt;</li>
+<li>
+<ul class="inheritance">
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -134,7 +139,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.metadata.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#accumuloOperations">accumuloOperations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#cache">cache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#METADATA_TABLE">METADATA_TABLE</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#accumuloOperations">accumuloOperations</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.metadata.<a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#cache">cache</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#MAX_ENTRIES">MAX_ENTRIES</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#METADATA_TABLE">METADATA_TABLE</a></code></li>
 </ul>
 </li>
 </ul>
@@ -190,20 +202,20 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloAdapterIndexMappingStore.html#mappingExists(mil.nga.giat.geowave.core.store.AdapterToIndexMapping)">mappingExists</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;persistedObject)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AccumuloAdapterIndexMappingStore.html#remove(mil.nga.giat.geowave.core.index.ByteArrayId)">remove</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>
-<div class="block">Adapter to index mappings are maintain without regard to visibility
- constraints.</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.metadata.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20T)">addObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObject(T)">addObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObjectToCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20T)">addObjectToCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#clearCache()">clearCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObjectFromCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">deleteObjectFromCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObjects(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteObjects</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#entryToValue(java.util.Map.Entry)">entryToValue</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloColumnFamily()">getAccumuloColumnFamily</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloColumnQualifier(mil.nga.giat.geowave.core.index.ByteArrayId)">getAccumuloColumnQualifier</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloColumnQualifier(T)">getAccumuloColumnQualifier</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloTablename()">getAccumuloTablename</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAccumuloVisibility(T)">getAccumuloVisibility</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAllObjectsWithSecondaryId(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getAllObjectsWithSecondaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getCombinedId(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getCombinedId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getIteratorConfig()">getIteratorConfig</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObjectFromCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getObjectFromCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObjects(java.lang.String...)">getObjects</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPeristenceTypeName(org.apache.accumulo.core.data.Key)">getPeristenceTypeName</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPrimaryId(org.apache.accumulo.core.data.Key)">getPrimaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getScanner(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getScanSettings()">getScanSettings</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getSecondaryId(org.apache.accumulo.core.data.Key)">getSecondaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getSecondaryId(T)">getSecondaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#objectExists(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">objectExists</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#addObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20T)">addObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObjects(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteObjects</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#deleteObjects(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteObjects</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#entryToValue(java.util.Map.Entry)">entryToValue</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getAllObjectsWithSecondaryId(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getAllObjectsWithSecondaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getIteratorConfig()">getIteratorConfig</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getObjects(java.lang.String...)">getObjects</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPeristenceTypeName(org.apache.accumulo.core.data.Key)">getPeristenceTypeName</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPrimaryId(org.apache.accumulo.core.data.Key)">getPrimaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getScanner(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">getScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getScanSettings()">getScanSettings</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getSecondaryId(org.apache.accumulo.core.data.Key)">getSecondaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#objectExists(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">objectExists</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.metadata.<a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#addObject(T)">addObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#addObjectToCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20T)">addObjectToCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#deleteObject(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">deleteObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#deleteObjectFromCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">deleteObjectFromCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getColumnFamily()">getColumnFamily</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getColumnQualifier(mil.nga.giat.geowave.core.index.ByteArrayId)">getColumnQualifier</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getColumnQualifier(T)">getColumnQualifier</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getCombinedId(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getCombinedId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getObjectFromCache(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId)">getObjectFromCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getSecondaryId(T)">getSecondaryId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getTablename()">getTablename</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getVisibility(T)">getVisibility</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#remove(mil.nga.giat.geowave.core.index.ByteArrayId)">remove</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#removeAll()">removeAll</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#toBytes(java.lang.String)">toBytes</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -211,6 +223,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.adapter.<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove(mil.nga.giat.geowave.core.index.ByteArrayId)">remove</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#removeAll()">removeAll</a></code></li>
 </ul>
 </li>
 </ul>
@@ -261,7 +280,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getPrimaryId(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;persistedObject)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPrimaryId(T)">getPrimaryId</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getPrimaryId(T)">getPrimaryId</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -274,7 +293,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPersistenceTypeName()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html#getPersistenceTypeName()">getPersistenceTypeName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="class in mil.nga.giat.geowave.datastore.accumulo.metadata">AbstractAccumuloPersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#getPersistenceTypeName()">getPersistenceTypeName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -294,7 +313,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <a name="addAdapterIndexMapping(mil.nga.giat.geowave.core.store.AdapterToIndexMapping)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>addAdapterIndexMapping</h4>
 <pre>public&nbsp;void&nbsp;addAdapterIndexMapping(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)
@@ -309,22 +328,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in mil.nga.giat.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></code> - if the provided associations does match the stored
              associations, if they exist</dd></dl>
-</li>
-</ul>
-<a name="remove(mil.nga.giat.geowave.core.index.ByteArrayId)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>remove</h4>
-<pre>public&nbsp;void&nbsp;remove(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove(mil.nga.giat.geowave.core.index.ByteArrayId)">AdapterIndexMappingStore</a></code></strong></div>
-<div class="block">Adapter to index mappings are maintain without regard to visibility
- constraints.</div>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove(mil.nga.giat.geowave.core.index.ByteArrayId)">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
-</dl>
 </li>
 </ul>
 </li>

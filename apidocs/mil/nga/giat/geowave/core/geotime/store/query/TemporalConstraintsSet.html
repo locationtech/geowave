@@ -160,12 +160,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#isEmpty()">isEmpty</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#removeAllConstraintsExcept(java.lang.String...)">removeAllConstraintsExcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;names)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#isExact()">isExact</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#removeAllConstraintsExcept(java.lang.String...)">removeAllConstraintsExcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;names)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#removeConstraints(java.lang.String...)">removeConstraints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;names)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraintsSet.html#setExact(boolean)">setExact</a></strong>(boolean&nbsp;exact)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -214,6 +222,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>hasConstraintsForRange</h4>
 <pre>public&nbsp;boolean&nbsp;hasConstraintsForRange(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startName,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endName)</pre>
+</li>
+</ul>
+<a name="setExact(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setExact</h4>
+<pre>public&nbsp;void&nbsp;setExact(boolean&nbsp;exact)</pre>
+</li>
+</ul>
+<a name="isExact()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isExact</h4>
+<pre>public&nbsp;boolean&nbsp;isExact()</pre>
 </li>
 </ul>
 <a name="getConstraintsForRange(java.lang.String, java.lang.String)">

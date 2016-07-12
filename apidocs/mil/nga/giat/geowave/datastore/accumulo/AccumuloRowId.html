@@ -63,13 +63,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_summary">Method</a></li>
+<li><a href="#methods_inherited_from_class_mil.nga.giat.geowave.core.store.entities.GeowaveRowId">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip-navbar_top">
@@ -86,7 +86,12 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html" title="class in mil.nga.giat.geowave.core.store.entities">mil.nga.giat.geowave.core.store.entities.GeowaveRowId</a></li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -96,14 +101,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">AccumuloRowId</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This class encapsulates the elements that compose the row ID in Accumulo, and
- can serialize and deserialize the individual elements to/from the row ID. The
- row ID consists of the index ID, followed by an adapter ID, followed by a
- data ID, followed by data ID length and adapter ID length, and lastly the
- number of duplicate row IDs for this entry. The data ID must be unique for an
- adapter, so the combination of adapter ID and data ID is intended to
- guarantee uniqueness for this row ID.</div>
+extends <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html" title="class in mil.nga.giat.geowave.core.store.entities">GeowaveRowId</a></pre>
 </li>
 </ul>
 </div>
@@ -122,15 +120,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#AccumuloRowId(byte[])">AccumuloRowId</a></strong>(byte[]&nbsp;accumuloRowId)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#AccumuloRowId(byte[],%20byte[],%20byte[],%20int)">AccumuloRowId</a></strong>(byte[]&nbsp;indexId,
-             byte[]&nbsp;dataId,
-             byte[]&nbsp;adapterId,
-             int&nbsp;numberOfDuplicates)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#AccumuloRowId(org.apache.accumulo.core.data.Key)">AccumuloRowId</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key)</code>&nbsp;</td>
 </tr>
 </table>
@@ -142,37 +131,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#getAdapterId()">getAdapterId</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#getDataId()">getDataId</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#getInsertionId()">getInsertionId</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#getNumberOfDuplicates()">getNumberOfDuplicates</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#getRowId()">getRowId</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html#isDeduplicationEnabled()">isDeduplicationEnabled</a></strong>()</code>&nbsp;</td>
-</tr>
-</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.entities.GeowaveRowId">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.entities.<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html" title="class in mil.nga.giat.geowave.core.store.entities">GeowaveRowId</a></h3>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html#getAdapterId()">getAdapterId</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html#getDataId()">getDataId</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html#getInsertionId()">getInsertionId</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html#getNumberOfDuplicates()">getNumberOfDuplicates</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html#getRowId()">getRowId</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeowaveRowId.html#isDeduplicationEnabled()">isDeduplicationEnabled</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
 <!--   -->
@@ -197,93 +162,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="AccumuloRowId(org.apache.accumulo.core.data.Key)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloRowId</h4>
 <pre>public&nbsp;AccumuloRowId(org.apache.accumulo.core.data.Key&nbsp;key)</pre>
-</li>
-</ul>
-<a name="AccumuloRowId(byte[])">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>AccumuloRowId</h4>
-<pre>public&nbsp;AccumuloRowId(byte[]&nbsp;accumuloRowId)</pre>
-</li>
-</ul>
-<a name="AccumuloRowId(byte[], byte[], byte[], int)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>AccumuloRowId</h4>
-<pre>public&nbsp;AccumuloRowId(byte[]&nbsp;indexId,
-             byte[]&nbsp;dataId,
-             byte[]&nbsp;adapterId,
-             int&nbsp;numberOfDuplicates)</pre>
-</li>
-</ul>
-</li>
-</ul>
-<!-- ============ METHOD DETAIL ========== -->
-<ul class="blockList">
-<li class="blockList"><a name="method_detail">
-<!--   -->
-</a>
-<h3>Method Detail</h3>
-<a name="getRowId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRowId</h4>
-<pre>public&nbsp;byte[]&nbsp;getRowId()</pre>
-</li>
-</ul>
-<a name="getInsertionId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getInsertionId</h4>
-<pre>public&nbsp;byte[]&nbsp;getInsertionId()</pre>
-</li>
-</ul>
-<a name="getDataId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDataId</h4>
-<pre>public&nbsp;byte[]&nbsp;getDataId()</pre>
-</li>
-</ul>
-<a name="getAdapterId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getAdapterId</h4>
-<pre>public&nbsp;byte[]&nbsp;getAdapterId()</pre>
-</li>
-</ul>
-<a name="getNumberOfDuplicates()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNumberOfDuplicates</h4>
-<pre>public&nbsp;int&nbsp;getNumberOfDuplicates()</pre>
-</li>
-</ul>
-<a name="isDeduplicationEnabled()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>isDeduplicationEnabled</h4>
-<pre>public&nbsp;boolean&nbsp;isDeduplicationEnabled()</pre>
 </li>
 </ul>
 </li>
@@ -340,13 +222,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_summary">Method</a></li>
+<li><a href="#methods_inherited_from_class_mil.nga.giat.geowave.core.store.entities.GeowaveRowId">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a name="skip-navbar_bottom">

@@ -128,8 +128,9 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#BinnedNumericDataset(byte[],%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">BinnedNumericDataset</a></strong>(byte[]&nbsp;binId,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#BinnedNumericDataset(byte[],%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20boolean)">BinnedNumericDataset</a></strong>(byte[]&nbsp;binId,
+                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges,
+                    boolean&nbsp;fullExtent)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -190,6 +191,10 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#isFullExtent()">isFullExtent</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -224,14 +229,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <pre>protected&nbsp;BinnedNumericDataset()</pre>
 </li>
 </ul>
-<a name="BinnedNumericDataset(byte[], mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">
+<a name="BinnedNumericDataset(byte[], mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData, boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BinnedNumericDataset</h4>
 <pre>public&nbsp;BinnedNumericDataset(byte[]&nbsp;binId,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges)</pre>
+                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges,
+                    boolean&nbsp;fullExtent)</pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>binId</code> - a unique ID associated with the BinnedQuery object</dd><dd><code>indexRanges</code> - multi-dimensional range data</dd></dl>
 </li>
 </ul>
@@ -243,6 +249,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="isFullExtent()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isFullExtent</h4>
+<pre>public&nbsp;boolean&nbsp;isFullExtent()</pre>
+</li>
+</ul>
 <a name="getDataPerDimension()">
 <!--   -->
 </a>

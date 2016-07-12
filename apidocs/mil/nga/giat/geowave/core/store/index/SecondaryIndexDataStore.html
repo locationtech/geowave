@@ -87,7 +87,7 @@
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.index.secondary">AccumuloSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase.index.secondary">HBaseSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.memory">MemorySecondaryIndexDataStore</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.index.secondary">AccumuloSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase.index.secondary">HBaseSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.memory">MemorySecondaryIndexDataStore</a></dd>
 </dl>
 <hr>
 <br>
@@ -129,6 +129,10 @@
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;visibility)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#removeAll()">removeAll</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#store(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.util.List)">store</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
@@ -192,10 +196,19 @@
 <a name="flush()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>flush</h4>
 <pre>void&nbsp;flush()</pre>
+</li>
+</ul>
+<a name="removeAll()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>removeAll</h4>
+<pre>void&nbsp;removeAll()</pre>
 </li>
 </ul>
 </li>

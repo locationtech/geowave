@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsBuilder.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/EmptyStatisticVisibility.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DuplicateEntryCount.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" target="_top">Frames</a></li>
@@ -143,12 +143,16 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeAll()">removeAll</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeAllStatistics(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">removeAllStatistics</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Remove all statistics with a given adapter ID from the store</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeStatistics(mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String...)">removeStatistics</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                 <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
@@ -156,13 +160,13 @@
 <div class="block">Remove a statistic from the store</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html#setStatistics(mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics)">setStatistics</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</code>
 <div class="block">This will write the statistics to the underlying store.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html#transformVisibility(mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String,%20java.lang.String,%20java.lang.String...)">transformVisibility</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;transformingRegex,
@@ -282,7 +286,7 @@
 <a name="transformVisibility(mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String, java.lang.String, java.lang.String...)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>transformVisibility</h4>
 <pre>void&nbsp;transformVisibility(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
@@ -291,6 +295,15 @@
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block">Transform visibility for the data statistics - * + *</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>adapterId</code> - </dd></dl>
+</li>
+</ul>
+<a name="removeAll()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>removeAll</h4>
+<pre>void&nbsp;removeAll()</pre>
 </li>
 </ul>
 </li>
@@ -320,7 +333,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsBuilder.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/EmptyStatisticVisibility.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DuplicateEntryCount.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" target="_top">Frames</a></li>

@@ -86,12 +86,17 @@
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Superinterfaces:</dt>
+<dd><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a></dd>
+</dl>
+<dl>
 <dt>All Known Implementing Classes:</dt>
 <dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></dd>
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="strong">AccumuloOperations</span></pre>
+<pre>public interface <span class="strong">AccumuloOperations</span>
+extends <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a></pre>
 <div class="block">This interface is used as a basis for establishing connections for queries
  and ingest processes used by the index classes.
 
@@ -172,20 +177,20 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String,%20boolean)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
             boolean&nbsp;createTable)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String,%20boolean,%20boolean,%20boolean,%20java.util.Set)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
             boolean&nbsp;createTable,
             boolean&nbsp;enableVersioning,
@@ -196,10 +201,11 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#delete(java.lang.String,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String,%20java.lang.String)">delete</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#delete(java.lang.String,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.lang.String,%20java.lang.String,%20java.lang.String...)">delete</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
       <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowId,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnFamily,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnQualifier)</code>
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnQualifier,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>
 <div class="block">Drops the specified row from the specified table.</div>
 </td>
 </tr>
@@ -214,12 +220,6 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#deleteAll()">deleteAll</a></strong>()</code>
-<div class="block">Drops all tables in the instance namespace.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#deleteAll(java.lang.String,%20java.lang.String,%20java.lang.String...)">deleteAll</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnFamily,
@@ -227,37 +227,33 @@
 <div class="block">Delete all data associated with a given adapter and index.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#deleteTable(java.lang.String)">deleteTable</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Drops the table with the given name (the basic implementation will use a
  table namespace prefix if given).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>org.apache.accumulo.core.client.Connector</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getConnector()">getConnector</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getGeoWaveNamespace()">getGeoWaveNamespace</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>org.apache.accumulo.core.client.Instance</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getInstance()">getInstance</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getPassword()">getPassword</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getRowCount(java.lang.String,%20java.lang.String...)">getRowCount</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#getTableNameSpace()">getTableNameSpace</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -278,13 +274,14 @@
  within the table of the given name</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#tableExists(java.lang.String)">tableExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
-<div class="block">Checks for the existence of the table with the given name</div>
-</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.DataStoreOperations">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a></h3>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html#deleteAll()">deleteAll</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html#getTableNameSpace()">getTableNameSpace</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html#tableExists(java.lang.String)">tableExists</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -315,16 +312,6 @@
 <dt><span class="strong">Returns:</span></dt><dd>The appropriate batch deleter</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code> - The table does not exist in this Accumulo instance</dd></dl>
-</li>
-</ul>
-<a name="getTableNameSpace()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTableNameSpace</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTableNameSpace()</pre>
-<dl><dt><span class="strong">Returns:</span></dt><dd>Table Name Space, Empty string if not applicable.</dd></dl>
 </li>
 </ul>
 <a name="createBatchScanner(java.lang.String, java.lang.String...)">
@@ -390,7 +377,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)
                     throws org.apache.accumulo.core.client.TableNotFoundException</pre>
 <div class="block">Creates a new writer that can be used by an index. The basic
  implementation uses a BatchWriter but other implementations can be
@@ -411,7 +398,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                   boolean&nbsp;createTable)
                     throws org.apache.accumulo.core.client.TableNotFoundException</pre>
 <div class="block">Creates a new writer that can be used by an index. The basic
@@ -435,7 +422,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Writer.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                   boolean&nbsp;createTable,
                   boolean&nbsp;enableVersioning,
                   boolean&nbsp;enableBlockCache,
@@ -536,20 +523,6 @@
          not found or not dropped successfully</dd></dl>
 </li>
 </ul>
-<a name="tableExists(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>tableExists</h4>
-<pre>boolean&nbsp;tableExists(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</pre>
-<div class="block">Checks for the existence of the table with the given name</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>tableName</code> - The basic name of the table. Note that that basic
-            implementation of the factory will allow for a table namespace
-            to prefix this name</dd>
-<dt><span class="strong">Returns:</span></dt><dd>Returns true if the table was found, false if it was not found</dd></dl>
-</li>
-</ul>
 <a name="localityGroupExists(java.lang.String, byte[])">
 <!--   -->
 </a>
@@ -594,25 +567,7 @@
 <dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd></dl>
 </li>
 </ul>
-<a name="deleteAll()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>deleteAll</h4>
-<pre>void&nbsp;deleteAll()
-               throws org.apache.accumulo.core.client.TableNotFoundException,
-                      org.apache.accumulo.core.client.AccumuloException,
-                      org.apache.accumulo.core.client.AccumuloSecurityException</pre>
-<div class="block">Drops all tables in the instance namespace. If no tables are found in the
- namespace no operation occurs.</div>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.accumulo.core.client.TableNotFoundException</code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloException</code></dd>
-<dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code></dd></dl>
-</li>
-</ul>
-<a name="delete(java.lang.String, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String, java.lang.String)">
+<a name="delete(java.lang.String, mil.nga.giat.geowave.core.index.ByteArrayId, java.lang.String, java.lang.String, java.lang.String...)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -621,12 +576,13 @@
 <pre>boolean&nbsp;delete(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
              <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowId,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnFamily,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnQualifier)</pre>
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnQualifier,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</pre>
 <div class="block">Drops the specified row from the specified table. Returns whether the
  operation completed successfully.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>tableName</code> - the name of the table to delete from, this must be provided</dd><dd><code>rowId</code> - the row ID to delete, this must be provided</dd><dd><code>columnFamily</code> - the column family of the row to delete, this can be null to
             delete the whole row</dd><dd><code>columnQualifier</code> - the column qualifier for a given column family to delete, this
-            can be null to delete the whole column family</dd>
+            can be null to delete the whole column family</dd><dd><code>additionalAuthorizations</code> - checks authorizations</dd>
 <dt><span class="strong">Returns:</span></dt><dd>Returns true if the row deletion didn't encounter any errors,
          false if nothing was found or the row was not dropped
          successfully</dd></dl>

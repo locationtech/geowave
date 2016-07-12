@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/package-tree.html">Prev</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/package-tree.html">Next</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/package-tree.html">Next</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/mapreduce/package-tree.html" target="_top">Frames</a></li>
@@ -73,18 +73,33 @@
 <ul>
 <li type="circle">java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang"><span class="strong">Object</span></a>
 <ul>
-<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloMRUtils.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">AccumuloMRUtils</span></a></li>
-<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloMRUtils.IntermediateSplitInfo.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">AccumuloMRUtils.IntermediateSplitInfo</span></a> (implements java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;T&gt;)</li>
-<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloMRUtils.IntermediateSplitInfo.IndexRangeLocation.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">AccumuloMRUtils.IntermediateSplitInfo.IndexRangeLocation</span></a></li>
-<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloRecordReader.ProgressPerRange.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">GeoWaveAccumuloRecordReader.ProgressPerRange</span></a></li>
+<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloRowRange.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">AccumuloRowRange</span></a> (implements mil.nga.giat.geowave.mapreduce.splits.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>)</li>
 <li type="circle">org.apache.hadoop.mapreduce.InputSplit
 <ul>
-<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloInputSplit.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">GeoWaveAccumuloInputSplit</span></a> (implements org.apache.hadoop.io.Writable)</li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.splits.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveInputSplit.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="strong">GeoWaveInputSplit</span></a> (implements org.apache.hadoop.io.Writable)
+<ul>
+<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloInputSplit.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">GeoWaveAccumuloInputSplit</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.splits.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="strong">RangeLocationPair</span></a>
+<ul>
+<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloRangeLocationPair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">AccumuloRangeLocationPair</span></a></li>
 </ul>
 </li>
 <li type="circle">org.apache.hadoop.mapreduce.RecordReader&lt;KEYIN,VALUEIN&gt; (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>)
 <ul>
+<li type="circle">mil.nga.giat.geowave.mapreduce.splits.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="strong">GeoWaveRecordReader</span></a>&lt;T&gt;
+<ul>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloRecordReader.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">GeoWaveAccumuloRecordReader</span></a>&lt;T&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.splits.<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="strong">SplitsProvider</span></a>
+<ul>
+<li type="circle">mil.nga.giat.geowave.datastore.accumulo.mapreduce.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/AccumuloSplitsProvider.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce"><span class="strong">AccumuloSplitsProvider</span></a></li>
 </ul>
 </li>
 </ul>
@@ -111,7 +126,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/package-tree.html">Prev</a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/input/package-tree.html">Next</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/package-tree.html">Next</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/mapreduce/package-tree.html" target="_top">Frames</a></li>

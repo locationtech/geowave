@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/geotime/TimeUtils.html" title="class in mil.nga.giat.geowave.core.geotime"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.GeoConstraintsWrapper.html" title="class in mil.nga.giat.geowave.core.geotime"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/geotime/GeometryUtils.html" target="_top">Frames</a></li>
@@ -60,7 +60,7 @@
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
@@ -105,6 +105,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.GeoConstraintsWrapper.html" title="class in mil.nga.giat.geowave.core.geotime">GeometryUtils.GeoConstraintsWrapper</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field_summary">
@@ -169,10 +188,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#basicConstraintsFromGeometry(com.vividsolutions.jts.geom.Geometry)">basicConstraintsFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
-<div class="block">This utility method will convert a JTS geometry to contraints that can be
- used in a GeoWave query.</div>
-</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#basicConstraintsFromGeometry(com.vividsolutions.jts.geom.Geometry)">basicConstraintsFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.ConstraintSet</a></code></td>
@@ -183,31 +199,38 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.GeoConstraintsWrapper.html" title="class in mil.nga.giat.geowave.core.geotime">GeometryUtils.GeoConstraintsWrapper</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#basicGeoConstraintsWrapperFromGeometry(com.vividsolutions.jts.geom.Geometry)">basicGeoConstraintsWrapperFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<div class="block">This utility method will convert a JTS geometry to contraints that can be
+ used in a GeoWave query.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#geometryFromBinary(byte[])">geometryFromBinary</a></strong>(byte[]&nbsp;binary)</code>
 <div class="block">Converts a byte array as well-known binary to a JTS geometry</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#geometryToBinary(com.vividsolutions.jts.geom.Geometry)">geometryToBinary</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Converts a JTS geometry to binary using JTS a Well Known Binary writer</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#infinity()">infinity</a></strong>()</code>
 <div class="block">This mehtod returns an envelope between negative infinite and positive
  inifinity in both x and y</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#latitudeRangeFromGeometry(com.vividsolutions.jts.geom.Geometry)">latitudeRangeFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a latitude range from a JTS geometry</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#longitudeRangeFromGeometry(com.vividsolutions.jts.geom.Geometry)">longitudeRangeFromGeometry</a></strong>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a longitude range from a JTS geometry</div>
@@ -276,6 +299,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>basicConstraintsFromGeometry</h4>
 <pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;basicConstraintsFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+</li>
+</ul>
+<a name="basicGeoConstraintsWrapperFromGeometry(com.vividsolutions.jts.geom.Geometry)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>basicGeoConstraintsWrapperFromGeometry</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.GeoConstraintsWrapper.html" title="class in mil.nga.giat.geowave.core.geotime">GeometryUtils.GeoConstraintsWrapper</a>&nbsp;basicGeoConstraintsWrapperFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">This utility method will convert a JTS geometry to contraints that can be
  used in a GeoWave query.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>Constraints as a mapping of NumericData objects representing
@@ -409,7 +441,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/geotime/TimeUtils.html" title="class in mil.nga.giat.geowave.core.geotime"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.GeoConstraintsWrapper.html" title="class in mil.nga.giat.geowave.core.geotime"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/geotime/GeometryUtils.html" target="_top">Frames</a></li>
@@ -433,7 +465,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>

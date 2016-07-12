@@ -167,6 +167,10 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.splits">mil.nga.giat.geowave.mapreduce.splits</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.test">mil.nga.giat.geowave.test</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -186,7 +190,7 @@
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/BasicQuery.html#mil.nga.giat.geowave.adapter.raster.query">BasicQuery</a>
 <div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
  that match the Constraints passed into the constructor
- 
+
  NOTE: query to an index that requires a constraint and the constraint is
  missing within the query equates to an unconstrained index scan.</div>
 </td>
@@ -224,7 +228,7 @@
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/BasicQuery.html#mil.nga.giat.geowave.adapter.vector.index">BasicQuery</a>
 <div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
  that match the Constraints passed into the constructor
- 
+
  NOTE: query to an index that requires a constraint and the constraint is
  missing within the query equates to an unconstrained index scan.</div>
 </td>
@@ -245,14 +249,9 @@
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/BasicQuery.html#mil.nga.giat.geowave.adapter.vector.plugin">BasicQuery</a>
 <div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
  that match the Constraints passed into the constructor
- 
+
  NOTE: query to an index that requires a constraint and the constraint is
  missing within the query equates to an unconstrained index scan.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/Query.html#mil.nga.giat.geowave.adapter.vector.plugin">Query</a>
-<div class="block">This interface fully describes a query</div>
 </td>
 </tr>
 </tbody>
@@ -268,13 +267,22 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/BasicQuery.html#mil.nga.giat.geowave.adapter.vector.query.cql">BasicQuery</a>
+<div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
+ that match the Constraints passed into the constructor
+
+ NOTE: query to an index that requires a constraint and the constraint is
+ missing within the query equates to an unconstrained index scan.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/DistributableQuery.html#mil.nga.giat.geowave.adapter.vector.query.cql">DistributableQuery</a>
 <div class="block">This interface fully describes a query and is persistable so that it can be
  distributed if necessary (particularly useful for using a query as mapreduce
  input)</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/Query.html#mil.nga.giat.geowave.adapter.vector.query.cql">Query</a>
 <div class="block">This interface fully describes a query</div>
 </td>
@@ -397,7 +405,7 @@
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/BasicQuery.html#mil.nga.giat.geowave.core.geotime.store.query">BasicQuery</a>
 <div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
  that match the Constraints passed into the constructor
- 
+
  NOTE: query to an index that requires a constraint and the constraint is
  missing within the query equates to an unconstrained index scan.</div>
 </td>
@@ -479,7 +487,7 @@
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/BasicQuery.html#mil.nga.giat.geowave.core.store.index">BasicQuery</a>
 <div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
  that match the Constraints passed into the constructor
- 
+
  NOTE: query to an index that requires a constraint and the constraint is
  missing within the query equates to an unconstrained index scan.</div>
 </td>
@@ -522,7 +530,7 @@
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/BasicQuery.html#mil.nga.giat.geowave.core.store.query">BasicQuery</a>
 <div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
  that match the Constraints passed into the constructor
- 
+
  NOTE: query to an index that requires a constraint and the constraint is
  missing within the query equates to an unconstrained index scan.</div>
 </td>
@@ -548,11 +556,14 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/FilteredIndexQuery.html#mil.nga.giat.geowave.core.store.query">FilteredIndexQuery</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/Query.html#mil.nga.giat.geowave.core.store.query">Query</a>
 <div class="block">This interface fully describes a query</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/QueryOptions.html#mil.nga.giat.geowave.core.store.query">QueryOptions</a>
 <div class="block">Directs a query to restrict searches to specific adapters, indices, etc..</div>
 </td>
@@ -622,6 +633,12 @@
 <th class="colOne" scope="col">Class and Description</th>
 </tr>
 <tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/ConstraintsQuery.html#mil.nga.giat.geowave.datastore.accumulo.query">ConstraintsQuery</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/FilteredIndexQuery.html#mil.nga.giat.geowave.datastore.accumulo.query">FilteredIndexQuery</a>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/Query.html#mil.nga.giat.geowave.datastore.accumulo.query">Query</a>
 <div class="block">This interface fully describes a query</div>
@@ -698,6 +715,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/ConstraintsQuery.html#mil.nga.giat.geowave.datastore.hbase.query">ConstraintsQuery</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/FilteredIndexQuery.html#mil.nga.giat.geowave.datastore.hbase.query">FilteredIndexQuery</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/Query.html#mil.nga.giat.geowave.datastore.hbase.query">Query</a>
 <div class="block">This interface fully describes a query</div>
 </td>
@@ -752,6 +775,30 @@
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/QueryOptions.html#mil.nga.giat.geowave.mapreduce.input">QueryOptions</a>
+<div class="block">Directs a query to restrict searches to specific adapters, indices, etc..</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.mapreduce.splits">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/package-summary.html">mil.nga.giat.geowave.core.store.query</a> used by <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/package-summary.html">mil.nga.giat.geowave.mapreduce.splits</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/DistributableQuery.html#mil.nga.giat.geowave.mapreduce.splits">DistributableQuery</a>
+<div class="block">This interface fully describes a query and is persistable so that it can be
+ distributed if necessary (particularly useful for using a query as mapreduce
+ input)</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/class-use/QueryOptions.html#mil.nga.giat.geowave.mapreduce.splits">QueryOptions</a>
 <div class="block">Directs a query to restrict searches to specific adapters, indices, etc..</div>
 </td>
 </tr>

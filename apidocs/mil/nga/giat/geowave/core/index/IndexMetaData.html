@@ -113,8 +113,14 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.h
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#update(java.util.List)">update</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ids)</code>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsAdded(java.util.List)">insertionIdsAdded</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;insertionIds)</code>
 <div class="block">Update the aggregation result using the new entry provided</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsRemoved(java.util.List)">insertionIdsRemoved</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;insertionIds)</code>
+<div class="block">Update the aggregation result by removing the entries provided</div>
 </td>
 </tr>
 </table>
@@ -146,15 +152,26 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.h
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="update(java.util.List)">
+<a name="insertionIdsAdded(java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>insertionIdsAdded</h4>
+<pre>void&nbsp;insertionIdsAdded(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;insertionIds)</pre>
+<div class="block">Update the aggregation result using the new entry provided</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>insertionIds</code> - the new indices to compute an updated aggregation result on</dd></dl>
+</li>
+</ul>
+<a name="insertionIdsRemoved(java.util.List)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>update</h4>
-<pre>void&nbsp;update(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ids)</pre>
-<div class="block">Update the aggregation result using the new entry provided</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>entry</code> - the new entry to compute an updated aggregation result on</dd></dl>
+<h4>insertionIdsRemoved</h4>
+<pre>void&nbsp;insertionIdsRemoved(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;insertionIds)</pre>
+<div class="block">Update the aggregation result by removing the entries provided</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>insertionIds</code> - the new indices to compute an updated aggregation result on</dd></dl>
 </li>
 </ul>
 </li>

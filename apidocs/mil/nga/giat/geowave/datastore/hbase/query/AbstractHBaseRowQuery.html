@@ -98,6 +98,10 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseRowPrefixQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseRowPrefixQuery</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public abstract class <span class="strong">AbstractHBaseRowQuery&lt;T&gt;</span>
@@ -130,7 +134,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#adapterIds">adapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#index">index</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#adapterIds">adapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#authorizations">authorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#index">index</a></code></li>
 </ul>
 </li>
 </ul>
@@ -170,13 +174,9 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html#getScannerLimit()">getScannerLimit</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html#query(mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore)">query</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html#queryResultFromIterator(mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper)">queryResultFromIterator</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseCloseableIteratorWrapper.html" title="class in mil.nga.giat.geowave.datastore.hbase.util">HBaseCloseableIteratorWrapper</a>&lt;?&gt;&nbsp;it)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -249,26 +249,17 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <ul class="blockList">
 <li class="blockList">
 <h4>query</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a>&nbsp;query(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
-      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a>&gt;&nbsp;query(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</pre>
 </li>
 </ul>
 <a name="getScannerLimit()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getScannerLimit</h4>
 <pre>protected abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getScannerLimit()</pre>
-</li>
-</ul>
-<a name="queryResultFromIterator(mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>queryResultFromIterator</h4>
-<pre>protected abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a>&nbsp;queryResultFromIterator(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseCloseableIteratorWrapper.html" title="class in mil.nga.giat.geowave.datastore.hbase.util">HBaseCloseableIteratorWrapper</a>&lt;?&gt;&nbsp;it)</pre>
 </li>
 </ul>
 </li>

@@ -86,18 +86,13 @@
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.apache.accumulo.core.iterators.user.RowEncodingIterator</li>
+<li>org.apache.accumulo.core.iterators.WrappingIterator</li>
 <li>
 <ul class="inheritance">
-<li>org.apache.accumulo.core.iterators.user.WholeRowIterator</li>
-<li>
-<ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">mil.nga.giat.geowave.datastore.accumulo.query.QueryFilterIterator</a></li>
+<li>org.apache.accumulo.core.iterators.Filter</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -115,7 +110,7 @@
 <hr>
 <br>
 <pre>public class <span class="strong">AggregationIterator</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">QueryFilterIterator</a></pre>
+extends org.apache.accumulo.core.iterators.Filter</pre>
 </li>
 </ul>
 </div>
@@ -162,39 +157,36 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#AGGREGATION_QUERY_ITERATOR_NAME">AGGREGATION_QUERY_ITERATOR_NAME</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#AGGREGATION_QUERY_ITERATOR_PRIORITY">AGGREGATION_QUERY_ITERATOR_PRIORITY</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#CONSTRAINTS_OPTION_NAME">CONSTRAINTS_OPTION_NAME</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#INDEX_STRATEGY_OPTION_NAME">INDEX_STRATEGY_OPTION_NAME</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#MAX_DECOMPOSITION_OPTION_NAME">MAX_DECOMPOSITION_OPTION_NAME</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#PARAMETER_OPTION_NAME">PARAMETER_OPTION_NAME</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#STATISTICS_QUERY_ITERATOR_PRIORITY">STATISTICS_QUERY_ITERATOR_PRIORITY</a></strong></code>&nbsp;</td>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">QueryFilterIterator</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#queryFilterIterator">queryFilterIterator</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.query.QueryFilterIterator">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.accumulo.core.iterators.Filter">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">QueryFilterIterator</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#FILTER">FILTER</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#MODEL">MODEL</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#QUERY_ITERATOR_NAME">QUERY_ITERATOR_NAME</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#QUERY_ITERATOR_PRIORITY">QUERY_ITERATOR_PRIORITY</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#WHOLE_ROW_ITERATOR_NAME">WHOLE_ROW_ITERATOR_NAME</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#WHOLE_ROW_ITERATOR_PRIORITY">WHOLE_ROW_ITERATOR_PRIORITY</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="fields_inherited_from_class_org.apache.accumulo.core.iterators.user.RowEncodingIterator">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;org.apache.accumulo.core.iterators.user.RowEncodingIterator</h3>
-<code>MAX_BUFFER_SIZE_OPT, sourceIter</code></li>
+<h3>Fields inherited from class&nbsp;org.apache.accumulo.core.iterators.Filter</h3>
+<code>NEGATE</code></li>
 </ul>
 </li>
 </ul>
@@ -228,66 +220,114 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#accept(org.apache.hadoop.io.Text,%20java.util.List,%20java.util.List,%20mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding)">accept</a></strong>(org.apache.hadoop.io.Text&nbsp;currentRow,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Key&gt;&nbsp;keys,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Value&gt;&nbsp;values,
-      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-      <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#accept(org.apache.accumulo.core.data.Key,%20org.apache.accumulo.core.data.Value)">accept</a></strong>(org.apache.accumulo.core.data.Key&nbsp;key,
+      org.apache.accumulo.core.data.Value&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#aggregateRow(org.apache.hadoop.io.Text,%20mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding)">aggregateRow</a></strong>(org.apache.hadoop.io.Text&nbsp;currentRow,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#deepCopy(org.apache.accumulo.core.iterators.IteratorEnvironment)">deepCopy</a></strong>(org.apache.accumulo.core.iterators.IteratorEnvironment&nbsp;env)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#deepCopyIterator(org.apache.accumulo.core.iterators.SortedKeyValueIterator)">deepCopyIterator</a></strong>(org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;iterator)</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#findEnd(java.util.Iterator,%20java.util.Collection,%20org.apache.accumulo.core.data.Range)">findEnd</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;rangeIt,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;internalRanges,
+       org.apache.accumulo.core.data.Range&nbsp;seekRange)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#findStart(java.util.Iterator,%20java.util.Collection,%20org.apache.accumulo.core.data.Range)">findStart</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;rangeIt,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;internalRanges,
+         org.apache.accumulo.core.data.Range&nbsp;seekRange)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#findTop()">findTop</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>org.apache.accumulo.core.data.Key</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#getTopKey()">getTopKey</a></strong>()</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected org.apache.accumulo.core.data.Key</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#getTopOriginalKey()">getTopOriginalKey</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected org.apache.accumulo.core.data.Value</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#getTopOriginalValue()">getTopOriginalValue</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected org.apache.accumulo.core.data.Key</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#getTopStatKey()">getTopStatKey</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected org.apache.accumulo.core.data.Value</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#getTopStatValue()">getTopStatValue</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>org.apache.accumulo.core.data.Value</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#getTopValue()">getTopValue</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#hasTop()">hasTop</a></strong>()</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#hasTopOriginal()">hasTopOriginal</a></strong>()</code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#hasTopStat()">hasTopStat</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#init(org.apache.accumulo.core.iterators.SortedKeyValueIterator,%20java.util.Map,%20org.apache.accumulo.core.iterators.IteratorEnvironment)">init</a></strong>(org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;source,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;options,
     org.apache.accumulo.core.iterators.IteratorEnvironment&nbsp;env)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#next()">next</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#seek(org.apache.accumulo.core.data.Range,%20java.util.Collection,%20boolean)">seek</a></strong>(org.apache.accumulo.core.data.Range&nbsp;seekRange,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.apache.accumulo.core.data.ByteSequence&gt;&nbsp;columnFamilies,
     boolean&nbsp;inclusive)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#setOptions(java.util.Map)">setOptions</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;options)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#setParent(org.apache.accumulo.core.iterators.SortedKeyValueIterator)">setParent</a></strong>(org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;parent)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.datastore.accumulo.query.QueryFilterIterator">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.accumulo.core.iterators.Filter">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">QueryFilterIterator</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#filter(org.apache.hadoop.io.Text,%20java.util.List,%20java.util.List)">filter</a></code></li>
+<h3>Methods inherited from class&nbsp;org.apache.accumulo.core.iterators.Filter</h3>
+<code>describeOptions, setNegate, validateOptions</code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.apache.accumulo.core.iterators.user.WholeRowIterator">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.accumulo.core.iterators.WrappingIterator">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.apache.accumulo.core.iterators.user.WholeRowIterator</h3>
-<code>decodeRow, encodeRow, rowDecoder, rowEncoder</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_org.apache.accumulo.core.iterators.user.RowEncodingIterator">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;org.apache.accumulo.core.iterators.user.RowEncodingIterator</h3>
-<code>describeOptions, validateOptions</code></li>
+<h3>Methods inherited from class&nbsp;org.apache.accumulo.core.iterators.WrappingIterator</h3>
+<code>getSource, setSource</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -380,14 +420,23 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.MAX_DECOMPOSITION_OPTION_NAME">Constant Field Values</a></dd></dl>
 </li>
 </ul>
-<a name="STATISTICS_QUERY_ITERATOR_PRIORITY">
+<a name="AGGREGATION_QUERY_ITERATOR_PRIORITY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>AGGREGATION_QUERY_ITERATOR_PRIORITY</h4>
+<pre>public static final&nbsp;int AGGREGATION_QUERY_ITERATOR_PRIORITY</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.AGGREGATION_QUERY_ITERATOR_PRIORITY">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="queryFilterIterator">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>STATISTICS_QUERY_ITERATOR_PRIORITY</h4>
-<pre>public static final&nbsp;int STATISTICS_QUERY_ITERATOR_PRIORITY</pre>
-<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.STATISTICS_QUERY_ITERATOR_PRIORITY">Constant Field Values</a></dd></dl>
+<h4>queryFilterIterator</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">QueryFilterIterator</a> queryFilterIterator</pre>
 </li>
 </ul>
 </li>
@@ -415,6 +464,49 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="accept(org.apache.accumulo.core.data.Key, org.apache.accumulo.core.data.Value)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>accept</h4>
+<pre>public&nbsp;boolean&nbsp;accept(org.apache.accumulo.core.data.Key&nbsp;key,
+             org.apache.accumulo.core.data.Value&nbsp;value)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>accept</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.Filter</code></dd>
+</dl>
+</li>
+</ul>
+<a name="setParent(org.apache.accumulo.core.iterators.SortedKeyValueIterator)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setParent</h4>
+<pre>public&nbsp;void&nbsp;setParent(org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;parent)</pre>
+</li>
+</ul>
+<a name="aggregateRow(org.apache.hadoop.io.Text, mil.nga.giat.geowave.core.store.index.CommonIndexModel, mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>aggregateRow</h4>
+<pre>protected&nbsp;void&nbsp;aggregateRow(org.apache.hadoop.io.Text&nbsp;currentRow,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</pre>
+</li>
+</ul>
+<a name="setOptions(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOptions</h4>
+<pre>public&nbsp;void&nbsp;setOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;options)</pre>
+</li>
+</ul>
 <a name="getTopKey()">
 <!--   -->
 </a>
@@ -426,7 +518,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><strong>Specified by:</strong></dt>
 <dd><code>getTopKey</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>getTopKey</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
+<dd><code>getTopKey</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.WrappingIterator</code></dd>
 </dl>
 </li>
 </ul>
@@ -441,7 +533,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><strong>Specified by:</strong></dt>
 <dd><code>getTopValue</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>getTopValue</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
+<dd><code>getTopValue</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.WrappingIterator</code></dd>
 </dl>
 </li>
 </ul>
@@ -456,24 +548,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><strong>Specified by:</strong></dt>
 <dd><code>hasTop</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>hasTop</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
-</dl>
-</li>
-</ul>
-<a name="accept(org.apache.hadoop.io.Text, java.util.List, java.util.List, mil.nga.giat.geowave.core.store.index.CommonIndexModel, mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>accept</h4>
-<pre>protected&nbsp;boolean&nbsp;accept(org.apache.hadoop.io.Text&nbsp;currentRow,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Key&gt;&nbsp;keys,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.Value&gt;&nbsp;values,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</pre>
-<dl>
-<dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#accept(org.apache.hadoop.io.Text,%20java.util.List,%20java.util.List,%20mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding)">accept</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">QueryFilterIterator</a></code></dd>
+<dd><code>hasTop</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.WrappingIterator</code></dd>
 </dl>
 </li>
 </ul>
@@ -489,7 +564,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><strong>Specified by:</strong></dt>
 <dd><code>next</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>next</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
+<dd><code>next</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.Filter</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
@@ -508,9 +583,63 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><strong>Specified by:</strong></dt>
 <dd><code>init</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#init(org.apache.accumulo.core.iterators.SortedKeyValueIterator,%20java.util.Map,%20org.apache.accumulo.core.iterators.IteratorEnvironment)">init</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">QueryFilterIterator</a></code></dd>
+<dd><code>init</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.Filter</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getTopOriginalKey()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTopOriginalKey</h4>
+<pre>protected&nbsp;org.apache.accumulo.core.data.Key&nbsp;getTopOriginalKey()</pre>
+</li>
+</ul>
+<a name="getTopOriginalValue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTopOriginalValue</h4>
+<pre>protected&nbsp;org.apache.accumulo.core.data.Value&nbsp;getTopOriginalValue()</pre>
+</li>
+</ul>
+<a name="hasTopOriginal()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasTopOriginal</h4>
+<pre>protected&nbsp;boolean&nbsp;hasTopOriginal()</pre>
+</li>
+</ul>
+<a name="getTopStatKey()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTopStatKey</h4>
+<pre>protected&nbsp;org.apache.accumulo.core.data.Key&nbsp;getTopStatKey()</pre>
+</li>
+</ul>
+<a name="getTopStatValue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTopStatValue</h4>
+<pre>protected&nbsp;org.apache.accumulo.core.data.Value&nbsp;getTopStatValue()</pre>
+</li>
+</ul>
+<a name="hasTopStat()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasTopStat</h4>
+<pre>protected&nbsp;boolean&nbsp;hasTopStat()</pre>
 </li>
 </ul>
 <a name="deepCopy(org.apache.accumulo.core.iterators.IteratorEnvironment)">
@@ -524,8 +653,52 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><strong>Specified by:</strong></dt>
 <dd><code>deepCopy</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>deepCopy</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
+<dd><code>deepCopy</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.Filter</code></dd>
 </dl>
+</li>
+</ul>
+<a name="deepCopyIterator(org.apache.accumulo.core.iterators.SortedKeyValueIterator)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deepCopyIterator</h4>
+<pre>public&nbsp;void&nbsp;deepCopyIterator(org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;iterator)</pre>
+</li>
+</ul>
+<a name="findTop()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findTop</h4>
+<pre>protected&nbsp;void&nbsp;findTop()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>findTop</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.Filter</code></dd>
+</dl>
+</li>
+</ul>
+<a name="findEnd(java.util.Iterator, java.util.Collection, org.apache.accumulo.core.data.Range)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findEnd</h4>
+<pre>protected static&nbsp;void&nbsp;findEnd(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;rangeIt,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;internalRanges,
+           org.apache.accumulo.core.data.Range&nbsp;seekRange)</pre>
+</li>
+</ul>
+<a name="findStart(java.util.Iterator, java.util.Collection, org.apache.accumulo.core.data.Range)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findStart</h4>
+<pre>protected static&nbsp;void&nbsp;findStart(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;rangeIt,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.apache.accumulo.core.data.Range&gt;&nbsp;internalRanges,
+             org.apache.accumulo.core.data.Range&nbsp;seekRange)</pre>
 </li>
 </ul>
 <a name="seek(org.apache.accumulo.core.data.Range, java.util.Collection, boolean)">
@@ -542,7 +715,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><strong>Specified by:</strong></dt>
 <dd><code>seek</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><strong>Overrides:</strong></dt>
-<dd><code>seek</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.RowEncodingIterator</code></dd>
+<dd><code>seek</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.Filter</code></dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
