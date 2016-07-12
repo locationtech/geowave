@@ -61,7 +61,6 @@ public class GeoServerRestClient
 	public GeoServerRestClient(
 			GeoServerConfig config ) {
 		this.config = config;
-		logger.setLevel(Level.DEBUG);
 	}
 
 	public GeoServerConfig getConfig() {

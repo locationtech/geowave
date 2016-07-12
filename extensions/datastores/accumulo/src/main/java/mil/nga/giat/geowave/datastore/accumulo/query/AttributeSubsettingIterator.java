@@ -1,26 +1,13 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.data.Key;
@@ -31,6 +18,11 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
+
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 public class AttributeSubsettingIterator extends
 		TransformingIterator
@@ -129,47 +121,15 @@ public class AttributeSubsettingIterator extends
 			final Value original,
 			final byte[] originalBitmask,
 			final byte[] newBitmask ) {
-		final ByteBuffer originalBytes = ByteBuffer.wrap(original.get());
-		final List<byte[]> valsToKeep = new ArrayList<>();
-		int totalSize = 0;
-		final List<Integer> originalPositions = BitmaskUtils.getFieldPositions(originalBitmask);
-		// convert list to set for quick contains()
-		final Set<Integer> newPositions = new HashSet<Integer>(
-				BitmaskUtils.getFieldPositions(newBitmask));
-		if (originalPositions.size() > 1) {
-			for (final Integer originalPosition : originalPositions) {
-				final int len = originalBytes.getInt();
-				final byte[] val = new byte[len];
-				originalBytes.get(val);
-				if (newPositions.contains(originalPosition)) {
-					valsToKeep.add(val);
-					totalSize += len;
-				}
-			}
-		}
-		else if (!newPositions.isEmpty()) {
-			// this shouldn't happen because we should already catch the case
-			// where the bitmask is unchanged
-			return original;
-		}
-		else {
-			// and this shouldn't happen because we should already catch the
-			// case where the resultant bitmask is empty
+		final byte[] newBytes = BitmaskUtils.constructNewValue(
+				original.get(),
+				originalBitmask,
+				newBitmask);
+		if (newBytes == null) {
 			return null;
 		}
-		if (valsToKeep.size() == 1) {
-			final ByteBuffer retVal = ByteBuffer.allocate(totalSize);
-			retVal.put(valsToKeep.get(0));
-			return new Value(
-					retVal.array());
-		}
-		final ByteBuffer retVal = ByteBuffer.allocate((valsToKeep.size() * 4) + totalSize);
-		for (final byte[] val : valsToKeep) {
-			retVal.putInt(val.length);
-			retVal.put(val);
-		}
 		return new Value(
-				retVal.array());
+				newBytes);
 	}
 
 	@Override
@@ -187,7 +147,7 @@ public class AttributeSubsettingIterator extends
 		fieldSubsetBitmask = ByteArrayUtils.byteArrayFromString(bitmaskStr);
 		final String wholeRowEncodedStr = options.get(WHOLE_ROW_ENCODED_KEY);
 		// default to whole row encoded if not specified
-		wholeRowEncoded = (wholeRowEncodedStr == null || !wholeRowEncodedStr.equals(Boolean.toString(false)));
+		wholeRowEncoded = ((wholeRowEncodedStr == null) || !wholeRowEncodedStr.equals(Boolean.toString(false)));
 	}
 
 	@Override
@@ -205,7 +165,7 @@ public class AttributeSubsettingIterator extends
 	}
 
 	/**
-	 * 
+	 *
 	 * @return an {@link IteratorSetting} for this iterator
 	 */
 	public static IteratorSetting getIteratorSetting() {
@@ -217,7 +177,7 @@ public class AttributeSubsettingIterator extends
 
 	/**
 	 * Sets the desired subset of fields to keep
-	 * 
+	 *
 	 * @param setting
 	 *            the {@link IteratorSetting}
 	 * @param adapterAssociatedWithFieldIds
@@ -232,22 +192,11 @@ public class AttributeSubsettingIterator extends
 			final DataAdapter<?> adapterAssociatedWithFieldIds,
 			final List<String> fieldIds,
 			final CommonIndexModel indexModel ) {
-		final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
 
-		// dimension fields must also be included
-		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
-			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
-					indexModel,
-					dimension.getFieldId()));
-		}
-
-		for (final String fieldId : fieldIds) {
-			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
-					indexModel,
-					new ByteArrayId(
-							fieldId)));
-		}
-		final byte[] fieldSubsetBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
+		final byte[] fieldSubsetBitmask = BitmaskUtils.generateFieldSubsetBitmask(
+				indexModel,
+				fieldIds,
+				adapterAssociatedWithFieldIds);
 
 		setting.addOption(
 				FIELD_SUBSET_BITMASK,

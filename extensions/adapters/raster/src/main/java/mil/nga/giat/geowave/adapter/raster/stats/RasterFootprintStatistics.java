@@ -1,11 +1,6 @@
 package mil.nga.giat.geowave.adapter.raster.stats;
 
-import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
-import mil.nga.giat.geowave.adapter.raster.RasterUtils;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import java.nio.ByteBuffer;
 
 import org.apache.log4j.Logger;
 import org.opengis.coverage.grid.GridCoverage;
@@ -14,6 +9,13 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
+
+import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
+import mil.nga.giat.geowave.adapter.raster.RasterUtils;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
 public class RasterFootprintStatistics extends
 		AbstractDataStatistics<GridCoverage>
@@ -36,20 +38,26 @@ public class RasterFootprintStatistics extends
 
 	@Override
 	public byte[] toBinary() {
+		byte[] bytes = null;
 		if (footprint == null) {
-			return new byte[] {};
+			bytes = new byte[] {};
 		}
 		else {
-			return new WKBWriter().write(footprint);
+			bytes = new WKBWriter().write(footprint);
 		}
+		final ByteBuffer buf = super.binaryBuffer(bytes.length);
+		buf.put(bytes);
+		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		if (bytes.length > 0) {
+		final ByteBuffer buf = super.binaryBuffer(bytes);
+		final byte[] payload = buf.array();
+		if (payload.length > 0) {
 			try {
-				footprint = new WKBReader().read(bytes);
+				footprint = new WKBReader().read(payload);
 			}
 			catch (final ParseException e) {
 				LOGGER.warn(

@@ -50,8 +50,6 @@ public class HBaseStoreTestEnvironment implements
 
 	@Override
 	public void setup() {
-		LOGGER.setLevel(Level.DEBUG);
-		LOGGER.debug("HBASE TEST SETUP!");
 
 		if (!TestUtils.isSet(zookeeper)) {
 			zookeeper = System.getProperty("zookeeperUrl");

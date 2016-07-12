@@ -218,6 +218,17 @@ public class GeoWaveStoreFinder
 		return allOptions.toArray(new ConfigOption[] {});
 	}
 
+	public static synchronized ConfigOption[] getRequiredOptions(
+			final StoreFactoryFamilySpi storeFactoryFamily ) {
+		final List<ConfigOption> requiredOptions = new ArrayList<ConfigOption>();
+		for (final ConfigOption option : getAllOptions(storeFactoryFamily)) {
+			if (!option.isOptional()) {
+				requiredOptions.add(option);
+			}
+		}
+		return requiredOptions.toArray(new ConfigOption[] {});
+	}
+
 	private static <T extends GenericFactory> Map<String, T> getRegisteredFactories(
 			final Class<T> cls,
 			Map<String, T> registeredFactories ) {

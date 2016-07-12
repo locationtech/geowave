@@ -5,6 +5,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -13,9 +18,7 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseInputFormatIteratorWrapper;
-
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.log4j.Logger;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 /**
  * * Represents a query operation for a range of HBase row IDs. This class is
@@ -66,6 +69,7 @@ public class InputFormatHBaseRangeQuery extends
 				null,
 				null,
 				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.range = range;
@@ -75,7 +79,8 @@ public class InputFormatHBaseRangeQuery extends
 	@Override
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
-			final Iterator<Result> resultsIterator ) {
+			final Iterator<Result> resultsIterator,
+			final double[] maxResolutionSubsamplingPerDimension ) {
 		// TODO Since currently we are not supporting server side
 		// iterator/coprocessors, we also cannot run
 		// server side filters and hence they have to run on clients itself. So
@@ -89,6 +94,23 @@ public class InputFormatHBaseRangeQuery extends
 				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
 						: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
 								filters));
+	}
+
+	@Override
+	protected Scan getMultiScanner(
+			final Integer limit,
+			final List<Filter> distributableFilters ) {
+		final Scan scanner = new Scan();
+
+		scanner.setStartRow(range.getStart().getBytes());
+		scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
+
+		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+			for (final ByteArrayId adapterId : adapterIds) {
+				scanner.addFamily(adapterId.getBytes());
+			}
+		}
+		return scanner;
 	}
 
 }

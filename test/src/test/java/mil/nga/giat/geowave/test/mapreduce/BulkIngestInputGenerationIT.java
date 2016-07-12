@@ -2,9 +2,6 @@ package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.examples.ingest.bulk.GeonamesDataFileInputFormat;
-import mil.nga.giat.geowave.examples.ingest.bulk.SimpleFeatureToAccumuloKeyValueMapper;
-
 import org.apache.accumulo.core.client.mapreduce.AccumuloFileOutputFormat;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -21,8 +18,13 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import mil.nga.giat.geowave.examples.ingest.bulk.GeonamesDataFileInputFormat;
+import mil.nga.giat.geowave.examples.ingest.bulk.SimpleFeatureToAccumuloKeyValueMapper;
 
 public class BulkIngestInputGenerationIT
 {
@@ -34,13 +36,37 @@ public class BulkIngestInputGenerationIT
 	private static long mapInputRecords;
 	private static long mapOutputRecords;
 
+	private static long startMillis;
+
+	@BeforeClass
+	public static void startTimer() {
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*  RUNNING BulkIngestInputGenerationIT  *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED BulkIngestInputGenerationIT  *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
 	@Test
 	public void testMapReduceJobSuccess()
 			throws Exception {
 
 		LOGGER.info("Running Bulk Ingest Input Generation MapReduce job...");
 
-		int exitCode = ToolRunner.run(
+		final int exitCode = ToolRunner.run(
 				new BulkIngestInputGenerationJobRunner(),
 				null);
 
@@ -77,8 +103,8 @@ public class BulkIngestInputGenerationIT
 		final String REDUCER_OUTPUT = "part-r-";
 		boolean wasSuccessful = false;
 		boolean reducerOutputExists = false;
-		FileSystem fs = FileSystem.getLocal(new Configuration());
-		RemoteIterator<LocatedFileStatus> iterator = fs.listFiles(
+		final FileSystem fs = FileSystem.getLocal(new Configuration());
+		final RemoteIterator<LocatedFileStatus> iterator = fs.listFiles(
 				new Path(
 						OUTPUT_PATH),
 				false);
@@ -119,7 +145,7 @@ public class BulkIngestInputGenerationIT
 
 		@Override
 		public int run(
-				String[] args )
+				final String[] args )
 				throws Exception {
 
 			final Configuration conf = getConf();
@@ -156,7 +182,7 @@ public class BulkIngestInputGenerationIT
 			job.setNumReduceTasks(1);
 			job.setSpeculativeExecution(false);
 
-			boolean result = job.waitForCompletion(true);
+			final boolean result = job.waitForCompletion(true);
 
 			mapInputRecords = job.getCounters().findCounter(
 					TASK_COUNTER_GROUP_NAME,
@@ -170,8 +196,8 @@ public class BulkIngestInputGenerationIT
 		}
 
 		private Path cleanPathForReuse(
-				Configuration conf,
-				String pathString )
+				final Configuration conf,
+				final String pathString )
 				throws IOException {
 
 			final FileSystem fs = FileSystem.get(conf);
