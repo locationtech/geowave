@@ -217,7 +217,7 @@ public class AccumuloDataStatisticsStore extends
 	}
 
 	@Override
-	protected byte[] getAccumuloVisibility(
+	protected byte[] getVisibility(
 			final DataStatistics<?> entry ) {
 		return entry.getVisibility();
 	}
@@ -246,7 +246,7 @@ public class AccumuloDataStatisticsStore extends
 
 			final TransformerWriter writer = new TransformerWriter(
 					scanner,
-					getAccumuloTablename(),
+					getTablename(),
 					accumuloOperations,
 					new VisibilityTransformer(
 							transformingRegex,
@@ -256,7 +256,7 @@ public class AccumuloDataStatisticsStore extends
 		}
 		catch (final TableNotFoundException e) {
 			LOGGER.error(
-					"Table not found during transaction commit: " + getAccumuloTablename(),
+					"Table not found during transaction commit: " + getTablename(),
 					e);
 		}
 	}
@@ -268,7 +268,7 @@ public class AccumuloDataStatisticsStore extends
 		Scanner scanner = null;
 
 		scanner = accumuloOperations.createScanner(
-				getAccumuloTablename(),
+				getTablename(),
 				authorizations);
 
 		final IteratorSetting[] settings = getScanSettings();
@@ -277,8 +277,8 @@ public class AccumuloDataStatisticsStore extends
 				scanner.addScanIterator(setting);
 			}
 		}
-		final String columnFamily = getAccumuloColumnFamily();
-		final String columnQualifier = getAccumuloColumnQualifier(adapterId);
+		final String columnFamily = getColumnFamily();
+		final String columnQualifier = getColumnQualifier(adapterId);
 		scanner.fetchColumn(
 				new Text(
 						columnFamily),

@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -33,11 +34,13 @@ import org.apache.hadoop.io.Text;
 public class AttributeSubsettingIterator extends
 		TransformingIterator
 {
-	private static final int ITERATOR_PRIORITY = QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY + 1;
+	private static final int ITERATOR_PRIORITY = QueryFilterIterator.QUERY_ITERATOR_PRIORITY + 1;
 	private static final String ITERATOR_NAME = "ATTRIBUTE_SUBSETTING_ITERATOR";
 
 	private static final String FIELD_SUBSET_BITMASK = "fieldsBitmask";
+	public static final String WHOLE_ROW_ENCODED_KEY = "wholerow";
 	private byte[] fieldSubsetBitmask;
+	private boolean wholeRowEncoded;
 
 	@Override
 	protected PartialKey getKeyPrefix() {
@@ -52,9 +55,18 @@ public class AttributeSubsettingIterator extends
 		while (input.hasTop()) {
 			final Key wholeRowKey = input.getTopKey();
 			final Value wholeRowVal = input.getTopValue();
-			final SortedMap<Key, Value> rowMapping = WholeRowIterator.decodeRow(
-					wholeRowKey,
-					wholeRowVal);
+			final SortedMap<Key, Value> rowMapping;
+			if (wholeRowEncoded) {
+				rowMapping = WholeRowIterator.decodeRow(
+						wholeRowKey,
+						wholeRowVal);
+			}
+			else {
+				rowMapping = new TreeMap<Key, Value>();
+				rowMapping.put(
+						wholeRowKey,
+						wholeRowVal);
+			}
 			final List<Key> keyList = new ArrayList<>();
 			final List<Value> valList = new ArrayList<>();
 			Text adapterId = null;
@@ -90,12 +102,20 @@ public class AttributeSubsettingIterator extends
 				}
 			}
 			if (!keyList.isEmpty() && !valList.isEmpty()) {
-				final Key outputKey = new Key(
-						wholeRowKey.getRow(),
-						adapterId);
-				final Value outputVal = WholeRowIterator.encodeRow(
-						keyList,
-						valList);
+				final Value outputVal;
+				final Key outputKey;
+				if (wholeRowEncoded) {
+					outputKey = new Key(
+							wholeRowKey.getRow(),
+							adapterId);
+					outputVal = WholeRowIterator.encodeRow(
+							keyList,
+							valList);
+				}
+				else {
+					outputKey = keyList.get(0);
+					outputVal = valList.get(0);
+				}
 				output.append(
 						outputKey,
 						outputVal);
@@ -164,6 +184,9 @@ public class AttributeSubsettingIterator extends
 		// get fieldIds and associated adapter
 		final String bitmaskStr = options.get(FIELD_SUBSET_BITMASK);
 		fieldSubsetBitmask = ByteArrayUtils.byteArrayFromString(bitmaskStr);
+		final String wholeRowEncodedStr = options.get(WHOLE_ROW_ENCODED_KEY);
+		// default to whole row encoded if not specified
+		wholeRowEncoded = (wholeRowEncodedStr == null || !wholeRowEncodedStr.equals(Boolean.toString(false)));
 	}
 
 	@Override

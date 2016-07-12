@@ -12,16 +12,18 @@ import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
 /**
  * Functionality similar to <code> BatchWriterWrapper </code>
- * 
- * TODO #406 This class directly writes to the HBase table instead of using any
- * existing Writer API provided by HBase.
- * 
+ *
+ * This class directly writes to the HBase table instead of using any existing
+ * Writer API provided by HBase.
+ *
  */
-public class HBaseWriter
+public class HBaseWriter implements
+		Writer<RowMutations>
 {
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseWriter.class);
@@ -35,12 +37,28 @@ public class HBaseWriter
 		this.table = table;
 	}
 
-	private void write(
-			final RowMutations rowMutation )
-			throws IOException {
-		table.mutateRow(rowMutation);
+	@Override
+	public void write(
+			final RowMutations rowMutation ) {
+		try {
+			table.mutateRow(rowMutation);
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Unable to write mutation.",
+					e);
+		}
 	}
 
+	@Override
+	public void write(
+			final Iterable<RowMutations> mutations ) {
+		for (final RowMutations rowMutation : mutations) {
+			write(rowMutation);
+		}
+	}
+
+	@Override
 	public void close() {}
 
 	public void write(
@@ -54,14 +72,6 @@ public class HBaseWriter
 			write(rowMutation);
 		}
 	}
-
-	/*
-	 * private boolean columnFamilyExists( String columnFamily ) throws
-	 * IOException { for (HColumnDescriptor cDesc :
-	 * table.getTableDescriptor().getColumnFamilies()) { if
-	 * (cDesc.getNameAsString().matches( columnFamily)) return true; } return
-	 * false; }
-	 */
 
 	public void write(
 			final RowMutations mutation,
@@ -139,5 +149,8 @@ public class HBaseWriter
 			throws IOException {
 		table.delete(deletes);
 	}
+
+	@Override
+	public void flush() {}
 
 }

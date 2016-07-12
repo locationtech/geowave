@@ -13,73 +13,83 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 
 public class PropertyConstraintSet
 {
-	private Map<ByteArrayId, FilterableConstraints> constraints = new HashMap<ByteArrayId, FilterableConstraints>();
+	private final Map<ByteArrayId, FilterableConstraints> constraints = new HashMap<ByteArrayId, FilterableConstraints>();
 
 	public PropertyConstraintSet() {}
 
 	public PropertyConstraintSet(
-			FilterableConstraints constraint ) {
+			final FilterableConstraints constraint ) {
 		add(
 				constraint,
 				true);
 	}
 
 	public List<FilterableConstraints> getConstraintsFor(
-			ByteArrayId[] fieldIds ) {
-		List<FilterableConstraints> result = new LinkedList<FilterableConstraints>();
-		for (ByteArrayId fieldId : fieldIds) {
+			final ByteArrayId[] fieldIds ) {
+		final List<FilterableConstraints> result = new LinkedList<FilterableConstraints>();
+		for (final ByteArrayId fieldId : fieldIds) {
 			final FilterableConstraints c = constraints.get(fieldId);
-			if (c != null) result.add(c);
+			if (c != null) {
+				result.add(c);
+			}
 
 		}
 		return result;
 	}
 
 	public List<ByteArrayRange> getRangesFor(
-			SecondaryIndex<?> index ) {
-		List<ByteArrayRange> result = new LinkedList<ByteArrayRange>();
-		for (ByteArrayId fieldId : index.getFieldIDs()) {
+			final SecondaryIndex<?> index ) {
+		final List<ByteArrayRange> result = new LinkedList<ByteArrayRange>();
+		for (final ByteArrayId fieldId : index.getFieldIDs()) {
 			final FilterableConstraints c = constraints.get(fieldId);
-			if (c != null) result.addAll(index.getIndexStrategy().getQueryRanges(
-					c));
+			if (c != null) {
+				result.addAll(index.getIndexStrategy().getQueryRanges(
+						c));
+			}
 		}
 		return result;
 	}
 
 	public List<DistributableQueryFilter> getFiltersFor(
-			SecondaryIndex<?> index ) {
-		List<DistributableQueryFilter> result = new LinkedList<DistributableQueryFilter>();
-		for (ByteArrayId fieldId : index.getFieldIDs()) {
+			final SecondaryIndex<?> index ) {
+		final List<DistributableQueryFilter> result = new LinkedList<DistributableQueryFilter>();
+		for (final ByteArrayId fieldId : index.getFieldIDs()) {
 			final FilterableConstraints c = constraints.get(fieldId);
-			if (c != null) result.add(c.getFilter());
+			if (c != null) {
+				final DistributableQueryFilter filter = c.getFilter();
+				if (filter != null) {
+					result.add(filter);
+				}
+			}
 		}
 		return result;
 	}
 
 	public void add(
-			FilterableConstraints constraint,
-			boolean intersect ) {
+			final FilterableConstraints constraint,
+			final boolean intersect ) {
 		final ByteArrayId id = constraint.getFieldId();
-		FilterableConstraints constraintsForId = constraints.get(id);
+		final FilterableConstraints constraintsForId = constraints.get(id);
 		if (constraintsForId == null) {
 			constraints.put(
 					id,
 					constraint);
 		}
-		else if (intersect)
+		else if (intersect) {
 			constraints.put(
 					id,
 					constraintsForId.intersect(constraint));
-
-		else
+		}
+		else {
 			constraints.put(
 					id,
 					constraintsForId.union(constraint));
+		}
 	}
 
 	public void intersect(
-			PropertyConstraintSet set ) {
-		for (Map.Entry<ByteArrayId, FilterableConstraints> entry : set.constraints.entrySet()) {
+			final PropertyConstraintSet set ) {
+		for (final Map.Entry<ByteArrayId, FilterableConstraints> entry : set.constraints.entrySet()) {
 			add(
 					entry.getValue(),
 					true);
@@ -87,8 +97,8 @@ public class PropertyConstraintSet
 	}
 
 	public void union(
-			PropertyConstraintSet set ) {
-		for (Map.Entry<ByteArrayId, FilterableConstraints> entry : set.constraints.entrySet()) {
+			final PropertyConstraintSet set ) {
+		for (final Map.Entry<ByteArrayId, FilterableConstraints> entry : set.constraints.entrySet()) {
 			add(
 					entry.getValue(),
 					false);
@@ -96,7 +106,7 @@ public class PropertyConstraintSet
 	}
 
 	public FilterableConstraints getConstraintsById(
-			ByteArrayId id ) {
+			final ByteArrayId id ) {
 		return constraints.get(id);
 	}
 

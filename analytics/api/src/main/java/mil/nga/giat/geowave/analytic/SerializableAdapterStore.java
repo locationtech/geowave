@@ -78,6 +78,11 @@ public class SerializableAdapterStore implements
 		return getAdapterStore().getAdapters();
 	}
 
+	@Override
+	public void removeAll() {
+		getAdapterStore().removeAll();
+	}
+
 	private void writeObject(
 			final java.io.ObjectOutputStream out )
 			throws IOException {

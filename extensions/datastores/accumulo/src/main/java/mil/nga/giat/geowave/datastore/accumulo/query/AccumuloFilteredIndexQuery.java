@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,15 +17,18 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.FilteredIndexQuery;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 public abstract class AccumuloFilteredIndexQuery extends
-		AccumuloQuery
+		AccumuloQuery implements
+		FilteredIndexQuery
 {
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(AccumuloFilteredIndexQuery.class);
@@ -35,11 +39,13 @@ public abstract class AccumuloFilteredIndexQuery extends
 			final PrimaryIndex index,
 			final ScanCallback<?> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,
 				fieldIdsAdapterPair,
+				visibilityCounts,
 				authorizations);
 		this.scanCallback = scanCallback;
 	}
@@ -48,7 +54,8 @@ public abstract class AccumuloFilteredIndexQuery extends
 		return clientFilters;
 	}
 
-	protected void setClientFilters(
+	@Override
+	public void setClientFilters(
 			final List<QueryFilter> clientFilters ) {
 		this.clientFilters = clientFilters;
 	}
@@ -62,10 +69,18 @@ public abstract class AccumuloFilteredIndexQuery extends
 			final AdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
-		if (!accumuloOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()))) {
+		boolean exists = false;
+		try {
+			exists = accumuloOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()));
+		}
+		catch (final IOException e) {
+			LOGGER.error("e");
+		}
+		if (!exists) {
 			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
 			return new CloseableIterator.Empty();
 		}
+
 		final ScannerBase scanner = getScanner(
 				accumuloOperations,
 				maxResolutionSubsamplingPerDimension,
@@ -93,12 +108,14 @@ public abstract class AccumuloFilteredIndexQuery extends
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final ScannerBase scanner ) {
-		return new EntryIteratorWrapper(
+		return new AccumuloEntryIteratorWrapper(
+				useWholeRowIterator(),
 				adapterStore,
 				index,
 				scanner.iterator(),
-				new FilterList<QueryFilter>(
-						clientFilters),
+				clientFilters.isEmpty() ? null : clientFilters.size() == 1 ? clientFilters.get(0)
+						: new FilterList<QueryFilter>(
+								clientFilters),
 				scanCallback);
 	}
 

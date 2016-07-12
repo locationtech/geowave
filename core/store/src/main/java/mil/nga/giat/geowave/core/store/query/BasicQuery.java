@@ -3,13 +3,17 @@ package mil.nga.giat.geowave.core.store.query;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.apache.log4j.Logger;
+
+import com.google.common.math.DoubleMath;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -33,36 +37,33 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.math.DoubleMath;
-
 /**
  * The Basic Query class represent a hyper-cube(s) query across all dimensions
  * that match the Constraints passed into the constructor
- * 
+ *
  * NOTE: query to an index that requires a constraint and the constraint is
  * missing within the query equates to an unconstrained index scan. The query
  * filter is still applied.
- * 
+ *
  */
 public class BasicQuery implements
 		DistributableQuery
 {
 	private final static double DOUBLE_TOLERANCE = 1E-12d;
 	private final static Logger LOGGER = Logger.getLogger(BasicQuery.class);
+	protected boolean exact = true;
 
 	/**
-	 * 
+	 *
 	 * A set of constraints, one range per dimension
-	 * 
+	 *
 	 */
 	public static class ConstraintSet
 	{
 		protected Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition;
 
 		public ConstraintSet() {
-			constraintsPerTypeOfDimensionDefinition = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+			constraintsPerTypeOfDimensionDefinition = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
 		}
 
 		public ConstraintSet(
@@ -97,7 +98,7 @@ public class BasicQuery implements
 
 		public ConstraintSet merge(
 				final ConstraintSet constraintSet ) {
-			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> newSet = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> newSet = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
 
 			for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintSet.constraintsPerTypeOfDimensionDefinition
 					.entrySet()) {
@@ -149,7 +150,7 @@ public class BasicQuery implements
 		}
 
 		/**
-		 * 
+		 *
 		 * @param constraints
 		 * @return true if all dimensions intersect
 		 */
@@ -179,15 +180,15 @@ public class BasicQuery implements
 			final NumericDimensionDefinition[] dimensionDefinitions = indexStrategy.getOrderedDimensionDefinitions();
 			final NumericData[] dataPerDimension = new NumericData[dimensionDefinitions.length];
 			// all or nothing...for now
-			boolean hasFullRange = false;
 			for (int d = 0; d < dimensionDefinitions.length; d++) {
 				final ConstraintData dimConstraint = constraintsPerTypeOfDimensionDefinition
 						.get(dimensionDefinitions[d].getClass());
-				hasFullRange |= (dimConstraint == null);
-				dataPerDimension[d] = (dimConstraint == null ? dimensionDefinitions[d].getFullRange()
-						: dimConstraint.range);
+				if (dimConstraint == null) {
+					return new BasicNumericDataset();
+				}
+				dataPerDimension[d] = dimConstraint.range;
 			}
-			return hasFullRange ? new BasicNumericDataset() : new BasicNumericDataset(
+			return new BasicNumericDataset(
 					dataPerDimension);
 		}
 
@@ -217,13 +218,18 @@ public class BasicQuery implements
 				final CommonIndexModel indexModel,
 				final BasicQuery basicQuery ) {
 			final NumericDimensionField<?>[] dimensionFields = indexModel.getDimensions();
-			final NumericData[] orderedConstraintsPerDimension = new NumericData[dimensionFields.length];
+			NumericDimensionField<?>[] orderedConstrainedDimensionFields = dimensionFields;
+			NumericDimensionField<?>[] unconstrainedDimensionFields;
+			NumericData[] orderedConstraintsPerDimension = new NumericData[dimensionFields.length];
+			// trim dimension fields to be only what is contained in the
+			// constraints
+			final Set<Integer> fieldsToTrim = new HashSet<Integer>();
 			for (int d = 0; d < dimensionFields.length; d++) {
 				final ConstraintData nd = constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d]
 						.getBaseDefinition()
 						.getClass());
 				if (nd == null) {
-					orderedConstraintsPerDimension[d] = dimensionFields[d].getBaseDefinition().getFullRange();
+					fieldsToTrim.add(d);
 				}
 				else {
 					orderedConstraintsPerDimension[d] = constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d]
@@ -231,10 +237,34 @@ public class BasicQuery implements
 							.getClass()).range;
 				}
 			}
+			if (!fieldsToTrim.isEmpty()) {
+				final NumericDimensionField<?>[] newDimensionFields = new NumericDimensionField[dimensionFields.length
+						- fieldsToTrim.size()];
+
+				unconstrainedDimensionFields = new NumericDimensionField[fieldsToTrim.size()];
+				final NumericData[] newOrderedConstraintsPerDimension = new NumericData[newDimensionFields.length];
+				int newDimensionCtr = 0;
+				int constrainedCtr = 0;
+				for (int i = 0; i < dimensionFields.length; i++) {
+					if (!fieldsToTrim.contains(i)) {
+						newDimensionFields[newDimensionCtr] = dimensionFields[i];
+						newOrderedConstraintsPerDimension[newDimensionCtr++] = orderedConstraintsPerDimension[i];
+					}
+					else {
+						unconstrainedDimensionFields[constrainedCtr++] = dimensionFields[i];
+					}
+				}
+				orderedConstrainedDimensionFields = newDimensionFields;
+				orderedConstraintsPerDimension = newOrderedConstraintsPerDimension;
+			}
+			else {
+				unconstrainedDimensionFields = new NumericDimensionField[] {};
+			}
 			return basicQuery.createQueryFilter(
 					new BasicNumericDataset(
 							orderedConstraintsPerDimension),
-					dimensionFields);
+					orderedConstrainedDimensionFields,
+					unconstrainedDimensionFields);
 		}
 
 		public byte[] toBinary() {
@@ -270,7 +300,7 @@ public class BasicQuery implements
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			final int numEntries = buf.getInt();
-			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition = new LinkedHashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>(
+			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>(
 					numEntries);
 			for (int i = 0; i < numEntries; i++) {
 				final int classNameLength = buf.getInt();
@@ -387,7 +417,7 @@ public class BasicQuery implements
 
 		/**
 		 * Ignores 'default' indicator
-		 * 
+		 *
 		 * @param other
 		 * @return
 		 */
@@ -416,17 +446,17 @@ public class BasicQuery implements
 	}
 
 	/**
-	 * 
+	 *
 	 * A list of Constraint Sets. Each Constraint Set is an individual
 	 * hyper-cube query.
-	 * 
+	 *
 	 */
 	public static class Constraints
 	{
 		// these basic queries are tied to NumericDimensionDefinition types, not
 		// ideal, but third-parties can and will nned to implement their own
 		// queries if they implement their own dimension definitions
-		private List<ConstraintSet> constraintsSets = new LinkedList<ConstraintSet>();
+		private final List<ConstraintSet> constraintsSets = new LinkedList<ConstraintSet>();
 
 		public Constraints() {}
 
@@ -448,7 +478,13 @@ public class BasicQuery implements
 		public Constraints merge(
 				final List<ConstraintSet> otherConstraintSets ) {
 
-			if (otherConstraintSets.isEmpty()) return this;
+			if (otherConstraintSets.isEmpty()) {
+				return this;
+			}
+			else if (isEmpty()) {
+				return new Constraints(
+						otherConstraintSets);
+			}
 			final List<ConstraintSet> newSets = new LinkedList<ConstraintSet>();
 
 			for (final ConstraintSet newSet : otherConstraintSets) {
@@ -479,12 +515,14 @@ public class BasicQuery implements
 			if (constraints.isEmpty() != isEmpty()) {
 				return false;
 			}
-			for (ConstraintSet set : this.constraintsSets) {
+			for (final ConstraintSet set : constraintsSets) {
 				boolean foundMatch = false;
-				for (ConstraintSet otherSet : constraints.constraintsSets) {
+				for (final ConstraintSet otherSet : constraints.constraintsSets) {
 					foundMatch |= set.matches(otherSet);
 				}
-				if (!foundMatch) return false;
+				if (!foundMatch) {
+					return false;
+				}
 			}
 			return true;
 		}
@@ -493,21 +531,31 @@ public class BasicQuery implements
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((constraintsSets == null) ? 0 : constraintsSets.hashCode());
+			result = (prime * result) + ((constraintsSets == null) ? 0 : constraintsSets.hashCode());
 			return result;
 		}
 
 		@Override
 		public boolean equals(
-				Object obj ) {
-			if (this == obj) return true;
-			if (obj == null) return false;
-			if (getClass() != obj.getClass()) return false;
-			Constraints other = (Constraints) obj;
-			if (constraintsSets == null) {
-				if (other.constraintsSets != null) return false;
+				final Object obj ) {
+			if (this == obj) {
+				return true;
 			}
-			else if (!constraintsSets.equals(other.constraintsSets)) return false;
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final Constraints other = (Constraints) obj;
+			if (constraintsSets == null) {
+				if (other.constraintsSets != null) {
+					return false;
+				}
+			}
+			else if (!constraintsSets.equals(other.constraintsSets)) {
+				return false;
+			}
 			return true;
 		}
 
@@ -520,16 +568,18 @@ public class BasicQuery implements
 					constraintsSets.size());
 			for (final ConstraintSet set : constraintsSets) {
 				final MultiDimensionalNumericData mdSet = set.getIndexConstraints(indexStrategy);
-				if (!mdSet.isEmpty()) setRanges.add(mdSet);
+				if (!mdSet.isEmpty()) {
+					setRanges.add(mdSet);
+				}
 			}
 			return setRanges;
 		}
 
 		/**
-		 * 
+		 *
 		 * @param index
 		 * @return true if all constrain sets match the index
-		 * 
+		 *
 		 *         TODO: Should we allow each constraint target each index?
 		 */
 		public boolean isSupported(
@@ -570,22 +620,26 @@ public class BasicQuery implements
 			final DistributableQueryFilter filter = constraint.createFilter(
 					indexModel,
 					this);
-			if (filter != null) filters.add(filter);
+			if (filter != null) {
+				filters.add(filter);
+			}
 		}
 		if (!filters.isEmpty()) {
-			return Collections.<QueryFilter> singletonList(new DistributableFilterList(
-					false,
-					filters));
+			return Collections.<QueryFilter> singletonList(filters.size() == 1 ? filters.get(0)
+					: new DistributableFilterList(
+							false,
+							filters));
 		}
 		return Collections.emptyList();
 	}
 
 	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
-			final NumericDimensionField<?>[] dimensionFields ) {
+			final NumericDimensionField<?>[] orderedConstrainedDimensionFields,
+			final NumericDimensionField<?>[] unconstrainedDimensionFields ) {
 		return new BasicQueryFilter(
 				constraints,
-				dimensionFields);
+				orderedConstrainedDimensionFields);
 	}
 
 	@Override
@@ -596,7 +650,7 @@ public class BasicQuery implements
 	}
 
 	public boolean secondaryIndexSupports(
-			SecondaryIndex index ) {
+			final SecondaryIndex index ) {
 		for (final ByteArrayId id : index.getFieldIDs()) {
 			if (additionalConstraints.containsKey(id)) {
 				return true;
@@ -653,10 +707,10 @@ public class BasicQuery implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ByteArrayRange> getSecondaryIndexConstraints(
-			SecondaryIndex<?> index ) {
+			final SecondaryIndex<?> index ) {
 		final List<ByteArrayRange> allRanges = new ArrayList<>();
 		final List<FilterableConstraints> queryConstraints = getSecondaryIndexQueryConstraints(index);
-		for (QueryConstraints queryConstraint : queryConstraints) {
+		for (final QueryConstraints queryConstraint : queryConstraints) {
 			allRanges.addAll(index.getIndexStrategy().getQueryRanges(
 					queryConstraint));
 		}
@@ -665,23 +719,35 @@ public class BasicQuery implements
 
 	@Override
 	public List<DistributableQueryFilter> getSecondaryQueryFilter(
-			SecondaryIndex<?> index ) {
+			final SecondaryIndex<?> index ) {
 		final List<DistributableQueryFilter> allFilters = new ArrayList<>();
 		final List<FilterableConstraints> queryConstraints = getSecondaryIndexQueryConstraints(index);
-		for (FilterableConstraints queryConstraint : queryConstraints) {
-			allFilters.add(queryConstraint.getFilter());
+		for (final FilterableConstraints queryConstraint : queryConstraints) {
+			final DistributableQueryFilter filter = queryConstraint.getFilter();
+			if (filter != null) {
+				allFilters.add(filter);
+			}
 		}
 		return allFilters;
 	}
 
 	public List<FilterableConstraints> getSecondaryIndexQueryConstraints(
-			SecondaryIndex<?> index ) {
+			final SecondaryIndex<?> index ) {
 		final List<FilterableConstraints> constraints = new ArrayList<>();
-		for (ByteArrayId id : index.getFieldIDs()) {
+		for (final ByteArrayId id : index.getFieldIDs()) {
 			if (additionalConstraints.get(id) != null) {
 				constraints.add(additionalConstraints.get(id));
 			}
 		}
 		return constraints;
+	}
+
+	public boolean isExact() {
+		return exact;
+	}
+
+	public void setExact(
+			final boolean exact ) {
+		this.exact = exact;
 	}
 }

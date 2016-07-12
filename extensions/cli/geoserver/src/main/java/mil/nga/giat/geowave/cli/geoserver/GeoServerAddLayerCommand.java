@@ -90,7 +90,8 @@ public class GeoServerAddLayerCommand implements
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}
 
-		if (addOption != null) { // add all supercedes specific adapter selection
+		if (addOption != null) { // add all supercedes specific adapter
+									// selection
 			adapterId = addOption.name();
 		}
 
@@ -106,7 +107,8 @@ public class GeoServerAddLayerCommand implements
 			System.out.println(jsonResponse.toString(2));
 		}
 		else {
-			System.err.println("Error adding GeoServer layer for store '" + gwStore + "; code = " + addLayerResponse.getStatus());
+			System.err.println("Error adding GeoServer layer for store '" + gwStore + "; code = "
+					+ addLayerResponse.getStatus());
 		}
 	}
 
@@ -117,7 +119,7 @@ public class GeoServerAddLayerCommand implements
 		public AddOption convert(
 				final String value ) {
 			AddOption convertedValue = null;
-			
+
 			try {
 				convertedValue = AddOption.valueOf(value.toUpperCase());
 			}
@@ -127,9 +129,10 @@ public class GeoServerAddLayerCommand implements
 
 			if (convertedValue == null) {
 				throw new ParameterException(
-						"Value " + value + "can not be converted to an add option. " + "Available values are: " + StringUtils.join(
-								AddOption.values(),
-								", ").toLowerCase());
+						"Value " + value + "can not be converted to an add option. " + "Available values are: "
+								+ StringUtils.join(
+										AddOption.values(),
+										", ").toLowerCase());
 			}
 			return convertedValue;
 		}

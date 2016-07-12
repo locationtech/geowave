@@ -30,6 +30,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
@@ -142,7 +143,7 @@ public class WFSTransactionTest extends
 		Map<ByteArrayId, DataStatistics<SimpleFeature>> transStats = ((GeoWaveFeatureReader) reader)
 				.getTransaction()
 				.getDataStatistics();
-		assertNotNull(transStats.get(FeatureHyperLogLogStatistics.composeId("pid")));
+		assertNotNull(transStats.get(FeatureNumericRangeStatistics.composeId("pop")));
 		transaction3.close();
 
 	}

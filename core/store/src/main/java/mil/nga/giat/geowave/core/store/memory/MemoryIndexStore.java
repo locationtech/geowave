@@ -58,4 +58,9 @@ public class MemoryIndexStore implements
 						indexMap.values()).iterator());
 	}
 
+	@Override
+	public void removeAll() {
+		indexMap.clear();
+	}
+
 }

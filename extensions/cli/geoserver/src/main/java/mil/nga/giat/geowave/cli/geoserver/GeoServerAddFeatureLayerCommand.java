@@ -86,7 +86,8 @@ public class GeoServerAddFeatureLayerCommand implements
 			System.out.println(listObj.toString(2));
 		}
 		else {
-			System.err.println("Error adding GeoServer layer " + layerName + "; code = " + addLayerResponse.getStatus());
+			System.err
+					.println("Error adding GeoServer layer " + layerName + "; code = " + addLayerResponse.getStatus());
 		}
 	}
 }

@@ -3,17 +3,17 @@ package mil.nga.giat.geowave.mapreduce;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.collections.Transformer;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
 
 /**
  * This class implements an index store by first checking the job context for an
@@ -80,6 +80,11 @@ public class JobContextIndexStore implements
 					index);
 		}
 		return index;
+	}
+
+	@Override
+	public void removeAll() {
+		indexCache.clear();
 	}
 
 	@Override

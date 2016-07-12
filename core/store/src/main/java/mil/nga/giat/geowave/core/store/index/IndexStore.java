@@ -15,4 +15,6 @@ public interface IndexStore
 			ByteArrayId indexId );
 
 	public CloseableIterator<Index<?, ?>> getIndices();
+
+	public void removeAll();
 }

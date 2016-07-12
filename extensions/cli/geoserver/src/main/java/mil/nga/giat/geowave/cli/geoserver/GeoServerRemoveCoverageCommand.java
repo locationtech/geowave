@@ -84,7 +84,8 @@ public class GeoServerRemoveCoverageCommand implements
 			System.out.println("\nRemove GeoServer coverage '" + cvgName + "': OK");
 		}
 		else {
-			System.err.println("Error removing GeoServer coverage " + cvgName + "; code = " + getCvgResponse.getStatus());
+			System.err.println("Error removing GeoServer coverage " + cvgName + "; code = "
+					+ getCvgResponse.getStatus());
 		}
 	}
 }

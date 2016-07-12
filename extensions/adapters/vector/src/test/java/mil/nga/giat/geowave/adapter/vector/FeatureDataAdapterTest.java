@@ -486,7 +486,6 @@ public class FeatureDataAdapterTest
 		final SimpleFeatureUserDataConfigurationSet config = new SimpleFeatureUserDataConfigurationSet(
 				sfType,
 				secondaryIndexConfigs);
-		;
 		config.updateType(sfType);
 		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				sfType);

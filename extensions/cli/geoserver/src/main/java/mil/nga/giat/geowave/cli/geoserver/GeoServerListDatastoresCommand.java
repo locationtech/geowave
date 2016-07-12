@@ -66,7 +66,8 @@ public class GeoServerListDatastoresCommand implements
 			System.out.println(datastores.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer stores list for '" + workspace + "'; code = " + listStoresResponse.getStatus());
+			System.err.println("Error getting GeoServer stores list for '" + workspace + "'; code = "
+					+ listStoresResponse.getStatus());
 		}
 	}
 }

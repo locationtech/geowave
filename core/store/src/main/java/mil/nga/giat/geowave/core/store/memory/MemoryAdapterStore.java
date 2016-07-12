@@ -69,6 +69,11 @@ public class MemoryAdapterStore implements
 						adapterMap.values()).iterator());
 	}
 
+	@Override
+	public void removeAll() {
+		adapterMap.clear();
+	}
+
 	private void writeObject(
 			final java.io.ObjectOutputStream out )
 			throws IOException {

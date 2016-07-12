@@ -4,6 +4,8 @@ import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.store.Writer;
+
 /**
  * This is a basic wrapper around the Accumulo batch writer so that write
  * operations will use an interface that can be implemented differently for
@@ -11,7 +13,7 @@ import org.apache.log4j.Logger;
  * this implementation within a custom implementation of AccumuloOperations.
  */
 public class BatchWriterWrapper implements
-		Writer
+		Writer<Mutation>
 {
 	private final static Logger LOGGER = Logger.getLogger(BatchWriterWrapper.class);
 	private org.apache.accumulo.core.client.BatchWriter batchWriter;

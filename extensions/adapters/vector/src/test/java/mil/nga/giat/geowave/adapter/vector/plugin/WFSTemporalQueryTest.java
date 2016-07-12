@@ -7,10 +7,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
-import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
@@ -30,6 +26,10 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
+import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
+import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+
 public class WFSTemporalQueryTest extends
 		BaseDataStoreTest
 {
@@ -47,7 +47,7 @@ public class WFSTemporalQueryTest extends
 			IOException,
 			GeoWavePluginException {
 		dataStore = createDataStore();
-		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialTemporalDimensionalityTypeProvider()
+		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialDimensionalityTypeProvider()
 				.createPrimaryIndex());
 		type = DataUtilities.createType(
 				"geostuff",

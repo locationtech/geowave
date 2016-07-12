@@ -150,9 +150,13 @@ abstract public class AbstractDataAdapter<T> implements
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = getFieldHandler(dimension);
 			if (fieldHandler == null) {
-				LOGGER.warn("Unable to find field handler for data adapter '"
-						+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
-						+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+				if (LOGGER.isInfoEnabled()) {
+					// dont waste time converting IDs to String if info is not
+					// enabled
+					LOGGER.info("Unable to find field handler for data adapter '"
+							+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
+							+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+				}
 				continue;
 			}
 			final CommonIndexValue value = fieldHandler.toIndexValue(entry);
@@ -191,9 +195,13 @@ abstract public class AbstractDataAdapter<T> implements
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler = (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
 			if (fieldHandler == null) {
-				LOGGER.warn("Unable to find field handler for data adapter '"
-						+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
-						+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+				if (LOGGER.isInfoEnabled()) {
+					// dont waste time converting IDs to String if info is not
+					// enabled
+					LOGGER.info("Unable to find field handler for data adapter '"
+							+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
+							+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+				}
 				continue;
 			}
 			final CommonIndexValue value = data.getCommonData().getValue(

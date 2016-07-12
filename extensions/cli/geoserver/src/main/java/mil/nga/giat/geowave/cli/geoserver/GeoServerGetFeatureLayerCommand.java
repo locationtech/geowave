@@ -68,7 +68,8 @@ public class GeoServerGetFeatureLayerCommand implements
 			System.out.println(jsonResponse.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer layer info for '" + layerName + "'; code = " + getLayerResponse.getStatus());
+			System.err.println("Error getting GeoServer layer info for '" + layerName + "'; code = "
+					+ getLayerResponse.getStatus());
 		}
 	}
 }

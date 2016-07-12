@@ -69,9 +69,11 @@ public class CQLQuery extends
 					adapter);
 			try (final CloseableIterator<Object> it = dataStore.query(
 					options,
-					new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
+					mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
 							cqlStr,
-							adapter))) {
+							adapter,
+							null,
+							null))) {
 				final CountResult result = ((CountResult) (it.next()));
 				if (result != null) {
 					count += result.getCount();
@@ -91,9 +93,11 @@ public class CQLQuery extends
 					new QueryOptions(
 							adapterId,
 							indexId),
-					new mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery(
+					mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
 							cqlStr,
-							adapter))) {
+							adapter,
+							null,
+							null))) {
 				while (it.hasNext()) {
 					if (debug) {
 						System.out.println(it.next());

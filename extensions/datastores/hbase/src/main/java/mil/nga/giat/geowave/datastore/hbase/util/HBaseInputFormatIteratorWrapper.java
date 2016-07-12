@@ -9,11 +9,10 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.hbase.client.Result;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.hbase.entities.HBaseRowId;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
@@ -70,7 +69,7 @@ public class HBaseInputFormatIteratorWrapper<T> implements
 			final Result row,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
-		final HBaseRowId rowId = new HBaseRowId(
+		final GeowaveRowId rowId = new GeowaveRowId(
 				row.getRow());
 
 		final Object value = HBaseUtils.decodeRow(

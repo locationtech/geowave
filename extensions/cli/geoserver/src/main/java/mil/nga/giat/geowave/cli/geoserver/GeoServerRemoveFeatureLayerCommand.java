@@ -67,7 +67,8 @@ public class GeoServerRemoveFeatureLayerCommand implements
 			System.out.println(listObj.toString(2));
 		}
 		else {
-			System.err.println("Error deleting GeoServer layer " + layerName + "; code = " + deleteLayerResponse.getStatus());
+			System.err.println("Error deleting GeoServer layer " + layerName + "; code = "
+					+ deleteLayerResponse.getStatus());
 		}
 	}
 }

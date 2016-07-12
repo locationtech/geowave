@@ -12,6 +12,7 @@ import java.util.Set;
 public class TemporalConstraintsSet
 {
 	final Map<String, TemporalConstraints> constraintsSet = new HashMap<String, TemporalConstraints>();
+	private boolean exact = true;
 
 	public TemporalConstraintsSet() {}
 
@@ -19,6 +20,15 @@ public class TemporalConstraintsSet
 			final String startName,
 			final String endName ) {
 		return constraintsSet.containsKey(startName + "_" + endName);
+	}
+
+	public void setExact(
+			boolean exact ) {
+		this.exact = exact;
+	}
+
+	public boolean isExact() {
+		return exact;
 	}
 
 	public TemporalConstraints getConstraintsForRange(

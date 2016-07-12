@@ -114,10 +114,12 @@ public class SpatialQuery extends
 	@Override
 	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
-			final NumericDimensionField<?>[] dimensionFields ) {
+			final NumericDimensionField<?>[] orderedConstrainedDimensionFields,
+			final NumericDimensionField<?>[] unconstrainedDimensionDefinitions ) {
 		return new SpatialQueryFilter(
 				constraints,
-				dimensionFields,
+				orderedConstrainedDimensionFields,
+				unconstrainedDimensionDefinitions,
 				queryGeometry,
 				compareOp);
 	}

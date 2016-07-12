@@ -51,7 +51,8 @@ public class ExtractTimeFilterVisitorTest
 				null);
 		assertNotNull(range);
 		assertEquals(
-				time,
+				new Date(
+						time.getTime() + 1),
 				range.getStartRange().getStartTime());
 
 		range = (TemporalConstraints) query.getFilter().accept(
@@ -59,7 +60,8 @@ public class ExtractTimeFilterVisitorTest
 				null);
 		assertNotNull(range);
 		assertEquals(
-				time,
+				new Date(
+						time.getTime() + 1),
 				range.getStartRange().getStartTime());
 		assertEquals(
 				"when",
@@ -71,6 +73,9 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
+		final Date stimeNotEqual = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
 		final Date stime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 		Filter filter = ECQL.toFilter("when > 2005-05-19T20:32:56Z");
 		Query query = new Query(
@@ -81,7 +86,7 @@ public class ExtractTimeFilterVisitorTest
 				null);
 		assertNotNull(range);
 		assertEquals(
-				stime,
+				stimeNotEqual,
 				range.getStartRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
@@ -99,7 +104,7 @@ public class ExtractTimeFilterVisitorTest
 				null);
 		assertNotNull(range);
 		assertEquals(
-				stime,
+				stimeNotEqual,
 				range.getStartRange().getStartTime());
 		assertEquals(
 				TemporalRange.END_TIME,
@@ -131,8 +136,12 @@ public class ExtractTimeFilterVisitorTest
 	public void testMixedRanges()
 			throws CQLException,
 			ParseException {
-		final Date stime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date etime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
+		final Date stime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
+		final Date etime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-20T20:32:56Z").getTime() - 1);
 
 		Filter filter = ECQL.toFilter("start > 2005-05-19T20:32:56Z and end < 2005-05-20T20:32:56Z");
 		FilterFactory factory = new FilterFactoryImpl();
@@ -156,10 +165,14 @@ public class ExtractTimeFilterVisitorTest
 				rangeSet.getConstraintsFor(
 						"end").getEndRange().getEndTime());
 
-		final Date stime1 = DateUtilities.parseISO("2005-05-17T20:32:56Z");
-		final Date etime1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
+		final Date stime1 = new Date(
+				DateUtilities.parseISO(
+						"2005-05-17T20:32:56Z").getTime() + 1);
+		final Date etime1 = new Date(
+				DateUtilities.parseISO(
+						"2005-05-18T20:32:56Z").getTime() - 1);
 		filter = ECQL
-				.toFilter("(start > 2005-05-17T20:32:56Z and end < 2005-05-18T20:32:56Z) or (start > 2005-05-19T20:32:56Z and end < 2005-05-20T20:32:56Z)");
+				.toFilter("(start < 2005-05-18T20:32:56Z and end > 2005-05-17T20:32:56Z) or (start < 2005-05-20T20:32:56Z and end > 2005-05-19T20:32:56Z)");
 		filter = factory.and(
 				Filter.INCLUDE,
 				filter);
@@ -197,7 +210,7 @@ public class ExtractTimeFilterVisitorTest
 				"type",
 				filter);
 		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
-				visitorWithDescriptorForRange,
+				visitorWithDescriptor,
 				null);
 		assertNotNull(rangeSet);
 		assertTrue(!rangeSet.isEmpty());
@@ -217,6 +230,9 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
+		final Date etimeNotEqual = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T21:32:56Z").getTime() - 1);
 		final Date etime = DateUtilities.parseISO("2005-05-19T21:32:56Z");
 		Filter filter = ECQL.toFilter("when < 2005-05-19T21:32:56Z");
 		Query query = new Query(
@@ -230,7 +246,7 @@ public class ExtractTimeFilterVisitorTest
 				TemporalRange.START_TIME,
 				range.getStartRange().getStartTime());
 		assertEquals(
-				etime,
+				etimeNotEqual,
 				range.getEndRange().getEndTime());
 		assertEquals(
 				"when",
@@ -248,7 +264,7 @@ public class ExtractTimeFilterVisitorTest
 				TemporalRange.START_TIME,
 				range.getStartRange().getStartTime());
 		assertEquals(
-				etime,
+				etimeNotEqual,
 				range.getEndRange().getEndTime());
 		assertEquals(
 				"when",
@@ -279,8 +295,12 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date etime = DateUtilities.parseISO("2005-05-19T21:32:56Z");
-		final Date stime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
+		final Date etime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T21:32:56Z").getTime() - 1);
+		final Date stime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
 		Filter filter = ECQL.toFilter("when > 2005-05-19T21:32:56Z and when < 2005-05-19T20:32:56Z");
 		Query query = new Query(
 				"type",
@@ -315,7 +335,7 @@ public class ExtractTimeFilterVisitorTest
 				rangeSet.getConstraintsFor(
 						"when").getEndRange().getEndTime());
 
-		filter = ECQL.toFilter("sometime < 2005-05-19T20:32:56Z and when > 2005-05-19T20:32:56Z");
+		filter = ECQL.toFilter("sometime < 2005-05-19T21:32:56Z and when > 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
@@ -335,11 +355,11 @@ public class ExtractTimeFilterVisitorTest
 				rangeSet.getConstraintsFor(
 						"sometime").getStartRange().getStartTime());
 		assertEquals(
-				stime,
+				etime,
 				rangeSet.getConstraintsFor(
 						"sometime").getEndRange().getEndTime());
 
-		filter = ECQL.toFilter("when < 2005-05-19T20:32:56Z and sometime > 2005-05-19T20:32:56Z");
+		filter = ECQL.toFilter("when < 2005-05-19T21:32:56Z and sometime > 2005-05-19T20:32:56Z");
 		query = new Query(
 				"type",
 				filter);
@@ -351,7 +371,7 @@ public class ExtractTimeFilterVisitorTest
 				rangeSet.getConstraintsFor(
 						"when").getStartRange().getStartTime());
 		assertEquals(
-				stime,
+				etime,
 				rangeSet.getConstraintsFor(
 						"when").getEndRange().getEndTime());
 		assertEquals(
@@ -363,7 +383,7 @@ public class ExtractTimeFilterVisitorTest
 				rangeSet.getConstraintsFor(
 						"sometime").getEndRange().getEndTime());
 
-		filter = ECQL.toFilter("2005-05-19T20:32:56Z > when and  2005-05-19T20:32:56Z < sometime");
+		filter = ECQL.toFilter("2005-05-19T21:32:56Z > when and  2005-05-19T20:32:56Z < sometime");
 		query = new Query(
 				"type",
 				filter);
@@ -375,7 +395,7 @@ public class ExtractTimeFilterVisitorTest
 				rangeSet.getConstraintsFor(
 						"when").getStartRange().getStartTime());
 		assertEquals(
-				stime,
+				etime,
 				rangeSet.getConstraintsFor(
 						"when").getEndRange().getEndTime());
 		assertEquals(
@@ -417,8 +437,12 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date stime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date etime = DateUtilities.parseISO("2005-05-19T21:32:56Z");
+		final Date stime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
+		final Date etime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T21:32:56Z").getTime() - 1);
 		Filter filter = CQL.toFilter("when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z");
 		Query query = new Query(
 				"type",
@@ -451,7 +475,9 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
+		final Date etime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() - 1);
 		Filter filter = CQL.toFilter("when before 2005-05-19T20:32:56Z");
 		Query query = new Query(
 				"type",
@@ -484,7 +510,9 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date stime = DateUtilities.parseISO("2005-05-19T21:32:56Z");
+		final Date stime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T21:32:56Z").getTime() - 1);
 		Filter filter = CQL.toFilter("when BEFORE OR DURING 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z");
 		Query query = new Query(
 				"type",
@@ -500,7 +528,7 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				stime,
 				rangeSet.getConstraintsFor(
-						"when").getStartRange().getEndTime());
+						"when").getEndRange().getEndTime());
 
 		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
@@ -513,7 +541,7 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				stime,
 				rangeSet.getConstraintsFor(
-						"when").getStartRange().getEndTime());
+						"when").getEndRange().getEndTime());
 	}
 
 	@Test
@@ -521,8 +549,9 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date stime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date etime = DateUtilities.parseISO("2005-05-19T21:32:56Z");
+		final Date stime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
 		Filter filter = CQL.toFilter("when DURING OR AFTER 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z");
 		Query query = new Query(
 				"type",
@@ -538,7 +567,7 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				TemporalRange.END_TIME,
 				rangeSet.getConstraintsFor(
-						"when").getStartRange().getEndTime());
+						"when").getEndRange().getEndTime());
 
 		rangeSet = (TemporalConstraintsSet) query.getFilter().accept(
 				visitorWithDescriptor,
@@ -551,7 +580,7 @@ public class ExtractTimeFilterVisitorTest
 		assertEquals(
 				TemporalRange.END_TIME,
 				rangeSet.getConstraintsFor(
-						"when").getStartRange().getEndTime());
+						"when").getEndRange().getEndTime());
 
 	}
 
@@ -560,8 +589,12 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date sTime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date eTime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
+		final Date sTime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
+		final Date eTime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-20T20:32:56Z").getTime() - 1);
 		Filter filter = CQL.toFilter("when before 2005-05-20T20:32:56Z and when after 2005-05-19T20:32:56Z");
 		Query query = new Query(
 				"type",
@@ -637,8 +670,12 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date sTime2 = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date eTime1 = DateUtilities.parseISO("2005-05-17T20:32:56Z");
+		final Date sTime2 = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
+		final Date eTime1 = new Date(
+				DateUtilities.parseISO(
+						"2005-05-17T20:32:56Z").getTime() - 1);
 		Filter filter = CQL.toFilter("when before 2005-05-17T20:32:56Z or when after 2005-05-19T20:32:56Z");
 		Query query = new Query(
 				"type",
@@ -690,8 +727,12 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date sTime2 = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date eTime1 = DateUtilities.parseISO("2005-05-17T20:32:56Z");
+		final Date sTime2 = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
+		final Date eTime1 = new Date(
+				DateUtilities.parseISO(
+						"2005-05-17T20:32:56Z").getTime() - 1);
 		final Filter filter = CQL.toFilter("not (when before 2005-05-17T20:32:56Z or when after 2005-05-19T20:32:56Z)");
 		final Query query = new Query(
 				"type",
@@ -716,8 +757,12 @@ public class ExtractTimeFilterVisitorTest
 			throws CQLException,
 			ParseException {
 		final ExtractTimeFilterVisitor visitor = new ExtractTimeFilterVisitor();
-		final Date sTime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
-		final Date eTime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
+		final Date sTime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-19T20:32:56Z").getTime() + 1);
+		final Date eTime = new Date(
+				DateUtilities.parseISO(
+						"2005-05-20T20:32:56Z").getTime() - 1);
 		Filter filter = CQL.toFilter("not (when before 2005-05-20T20:32:56Z and when after 2005-05-19T20:32:56Z)");
 		Query query = new Query(
 				"type",

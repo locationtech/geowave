@@ -2,7 +2,10 @@ package mil.nga.giat.geowave.datastore.hbase.operations.config;
 
 import com.beust.jcommander.Parameter;
 
-public class HBaseOptions
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
+
+public class HBaseOptions implements
+		DataStoreOptions
 {
 	@Parameter(names = "--persistAdapter", hidden = true, arity = 1)
 	protected boolean persistAdapter = true;

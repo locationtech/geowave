@@ -22,7 +22,6 @@ public class HBaseSecondaryIndexDataStoreFactory extends
 			opts.setAdditionalOptions(new HBaseOptions());
 		}
 		return new HBaseSecondaryIndexDataStore(
-				createOperations(opts),
-				opts.getAdditionalOptions());
+				createOperations(opts));
 	}
 }
