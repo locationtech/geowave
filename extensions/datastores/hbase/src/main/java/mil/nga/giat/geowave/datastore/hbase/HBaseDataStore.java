@@ -72,7 +72,8 @@ public class HBaseDataStore extends
 		BaseDataStore implements
 		MapReduceDataStore
 {
-
+	public final static String TYPE = "hbase";
+	
 	private final static Logger LOGGER = Logger.getLogger(HBaseDataStore.class);
 
 	private final BasicHBaseOperations operations;
@@ -399,7 +400,8 @@ public class HBaseDataStore extends
 		try {
 			deleter = operations.createWriter(
 					tableName,
-					columnFamily);
+					columnFamily,
+					false);
 			final Scan scanner = new Scan();
 			try (ResultScanner results = operations.getScannedResults(
 					scanner,

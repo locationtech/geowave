@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math.util.MathUtils;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -118,7 +119,7 @@ public class GeoWaveBasicIT
 	private static final String TEST_BASE_EXPORT_FILE_NAME = "basicIT-export.avro";
 
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO,
+//		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
@@ -138,26 +139,42 @@ public class GeoWaveBasicIT
 		testIngestAndQuerySpatialPointsAndLines(4);
 	}
 
-	@Test
+//	@Test
 	public void testSingleThreadedIngestAndQuerySpatialPointsAndLines() {
 		testIngestAndQuerySpatialPointsAndLines(1);
 	}
 
 	public void testIngestAndQuerySpatialPointsAndLines(
 			final int nthreads ) {
+		LOGGER.setLevel(Level.DEBUG);
+		long mark = System.currentTimeMillis();
+		
+		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
+
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,
 				DimensionalityType.SPATIAL,
 				HAIL_SHAPEFILE_FILE,
 				nthreads);
+		
+		long dur = (System.currentTimeMillis() - mark);
+		LOGGER.debug("Ingest (points) duration = " + dur + " ms with " + nthreads + " thread(s).");
+		
+		mark = System.currentTimeMillis();
+		
 		TestUtils.testLocalIngest(
 				dataStore,
 				DimensionalityType.SPATIAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				nthreads);
+		
+		dur = (System.currentTimeMillis() - mark);
+		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
 
 		try {
+			mark = System.currentTimeMillis();
+
 			testQuery(
 					new File(
 							TEST_BOX_FILTER_FILE).toURI().toURL(),
@@ -169,6 +186,9 @@ public class GeoWaveBasicIT
 					},
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"bounding box constraint only");
+			
+			dur = (System.currentTimeMillis() - mark);
+			LOGGER.debug("BBOX query duration = " + dur + " ms.");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -177,6 +197,8 @@ public class GeoWaveBasicIT
 					+ e.getLocalizedMessage() + "'");
 		}
 		try {
+			mark = System.currentTimeMillis();
+
 			testQuery(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
@@ -188,6 +210,9 @@ public class GeoWaveBasicIT
 					},
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"polygon constraint only");
+			
+			dur = (System.currentTimeMillis() - mark);
+			LOGGER.debug("POLY query duration = " + dur + " ms.");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -547,7 +572,7 @@ public class GeoWaveBasicIT
 		}
 	}
 
-	@Test
+//	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
@@ -645,7 +670,7 @@ public class GeoWaveBasicIT
 		TestUtils.deleteAll(dataStore);
 	}
 
-	@Test
+//	@Test
 	public void testFeatureSerialization()
 			throws IOException {
 

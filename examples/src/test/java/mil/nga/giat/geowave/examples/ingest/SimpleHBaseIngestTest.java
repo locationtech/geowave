@@ -92,6 +92,10 @@ public class SimpleHBaseIngestTest
 		zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
 
 		try {
+			Configuration conf = new Configuration();
+			conf.set(
+					"hbase.online.schema.update.enable",
+					"true");
 			hbaseLocalCluster = new HbaseLocalCluster.Builder()
 					.setHbaseMasterPort(
 							Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY)))
@@ -111,7 +115,7 @@ public class SimpleHBaseIngestTest
 							Boolean.parseBoolean(propertyParser
 									.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY)))
 					.setHbaseConfiguration(
-							new Configuration())
+							conf)
 					.build();
 			hbaseLocalCluster.start();
 		}

@@ -53,7 +53,7 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 		this.closable = closable;
 	}
 
-	private synchronized void closeInternal() {
+	protected synchronized void closeInternal() {
 		if (writer != null) {
 			writer.close();
 			writer = null;

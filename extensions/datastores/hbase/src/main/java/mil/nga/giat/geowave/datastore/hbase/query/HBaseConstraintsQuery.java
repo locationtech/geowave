@@ -128,6 +128,7 @@ public class HBaseConstraintsQuery extends
 				operations,
 				adapterStore,
 				limit);
+
 		if (isAggregation() && (it != null) && it.hasNext()) {
 			// TODO implement aggregation as a co-processor on the server side,
 			// but for now simply aggregate client-side here
@@ -150,15 +151,20 @@ public class HBaseConstraintsQuery extends
 							"Unable to close hbase scanner",
 							e);
 				}
+				
+				LOGGER.error("KAM *** Aggregation took " + (System.currentTimeMillis()-hack) + " ms.");
+
 				return new Wrapper(
 						Iterators.singletonIterator(aggregationFunction.getResult()));
 			}
 		}
-		else {
-			return super.query(
-					operations,
-					adapterStore,
-					limit);
-		}
+//		else {
+//			return super.query(
+//					operations,
+//					adapterStore,
+//					limit);
+//		}
+		
+		return it;
 	}
 }

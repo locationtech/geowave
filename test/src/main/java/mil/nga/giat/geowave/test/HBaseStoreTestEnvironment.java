@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.test;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 
@@ -49,8 +50,12 @@ public class HBaseStoreTestEnvironment implements
 
 	@Override
 	public void setup() {
+		LOGGER.setLevel(Level.DEBUG);
+		LOGGER.debug("HBASE TEST SETUP!");
+		
 		if (!TestUtils.isSet(zookeeper)) {
 			zookeeper = System.getProperty("zookeeperUrl");
+			
 			if (!TestUtils.isSet(zookeeper)) {
 
 				PropertyParser propertyParser = null;
@@ -91,8 +96,14 @@ public class HBaseStoreTestEnvironment implements
 				}
 
 				zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
+				
+				LOGGER.debug("Using local zookeeper URL: " + zookeeper);
 
 				try {
+					Configuration conf = new Configuration();
+					conf.set(
+							"hbase.online.schema.update.enable",
+							"true");
 					hbaseLocalCluster = new HbaseLocalCluster.Builder()
 							.setHbaseMasterPort(
 									Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY)))
@@ -113,7 +124,7 @@ public class HBaseStoreTestEnvironment implements
 									Boolean.parseBoolean(propertyParser
 											.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY)))
 							.setHbaseConfiguration(
-									new Configuration())
+									conf)
 							.build();
 					hbaseLocalCluster.start();
 				}
@@ -123,6 +134,12 @@ public class HBaseStoreTestEnvironment implements
 					Assert.fail();
 				}
 			}
+			else {
+				LOGGER.debug("Using system zookeeper URL: " + zookeeper);
+			}
+		}
+		else {
+			LOGGER.debug("Using system zookeeper URL: " + zookeeper);
 		}
 	}
 

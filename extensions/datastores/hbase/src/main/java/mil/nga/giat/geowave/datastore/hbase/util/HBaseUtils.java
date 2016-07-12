@@ -1,25 +1,11 @@
 package mil.nga.giat.geowave.datastore.hbase.util;
 
 import java.io.Closeable;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NavigableMap;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.KeyValue;
-import org.apache.hadoop.hbase.client.Delete;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -36,7 +22,6 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
@@ -47,42 +32,34 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.RowMutations;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.log4j.Logger;
+
 public class HBaseUtils
 {
-
 	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
 
 	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.UTF8_CHAR_SET);
 	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.UTF8_CHAR_SET);
-
+	
 	private static final UniformVisibilityWriter DEFAULT_VISIBILITY = new UniformVisibilityWriter(
 			new UnconstrainedVisibilityHandler());
-
-	private static byte[] merge(
-			final byte vis1[],
-			final byte vis2[] ) {
-		if ((vis1 == null) || (vis1.length == 0)) {
-			return vis2;
-		}
-		else if ((vis2 == null) || (vis2.length == 0)) {
-			return vis1;
-		}
-
-		final ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
-		buffer.putChar('(');
-		buffer.put(vis1);
-		buffer.putChar(')');
-		buffer.put(BEG_AND_BYTE);
-		buffer.put(vis2);
-		buffer.put(END_AND_BYTE);
-		return buffer.array();
-	}
 
 	private static List<RowMutations> buildMutations(
 			final byte[] adapterId,
 			final DataStoreEntryInfo ingestInfo ) {
 		final List<RowMutations> mutations = new ArrayList<RowMutations>();
 		final List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
+		
 		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
 			final RowMutations mutation = new RowMutations(
 					rowId.getBytes());
@@ -102,6 +79,7 @@ public class HBaseUtils
 			}
 			mutations.add(mutation);
 		}
+
 		return mutations;
 	}
 
@@ -152,9 +130,11 @@ public class HBaseUtils
 				index,
 				entry,
 				customFieldVisibilityWriter);
+
 		final List<RowMutations> mutations = buildMutations(
 				writableAdapter.getAdapterId().getBytes(),
 				ingestInfo);
+
 
 		try {
 			writer.write(
@@ -164,6 +144,7 @@ public class HBaseUtils
 		catch (final IOException e) {
 			LOGGER.warn("Writing to table failed." + e);
 		}
+
 		return ingestInfo;
 	}
 
@@ -428,18 +409,8 @@ public class HBaseUtils
 			final Result row )
 			throws IOException {
 		final List<KeyValue> map = new ArrayList<KeyValue>();
-		/*
-		 * ByteArrayInputStream in = new
-		 * ByteArrayInputStream(v.getValueArray()); DataInputStream din = new
-		 * DataInputStream( in); int numKeys = din.readInt(); for (int i = 0; i
-		 * < numKeys; i++) { byte[] cf = readField(din); // read the col fam
-		 * byte[] cq = readField(din); // read the col qual byte[] cv =
-		 * readField(din); // read the col visibility long timestamp =
-		 * din.readLong(); // read the timestamp byte[] valBytes =
-		 * readField(din); // read the value map.add(new KeyValue(
-		 * CellUtil.cloneRow(v), cf, cq, timestamp, valBytes));
-		 */
 		final NavigableMap<byte[], NavigableMap<byte[], byte[]>> noVersionMap = row.getNoVersionMap();
+
 		for (final byte[] family : noVersionMap.keySet()) {
 			for (final byte[] qualifier : noVersionMap.get(
 					family).keySet()) {
@@ -457,22 +428,6 @@ public class HBaseUtils
 			}
 		}
 		return map;
-	}
-
-	private static byte[] readField(
-			final DataInputStream din )
-			throws IOException {
-		final int len = din.readInt();
-		final byte[] b = new byte[len];
-		final int readLen = din.read(b);
-		if ((len > 0) && (len != readLen)) {
-			throw new IOException(
-					String.format(
-							"Expected to read %d bytes but read %d",
-							len,
-							readLen));
-		}
-		return b;
 	}
 
 	public static <T> void writeAltIndex(
@@ -569,5 +524,4 @@ public class HBaseUtils
 		}
 
 	}
-
 }

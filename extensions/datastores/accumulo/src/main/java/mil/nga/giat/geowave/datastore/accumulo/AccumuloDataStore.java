@@ -93,6 +93,8 @@ public class AccumuloDataStore extends
 		BaseDataStore implements
 		MapReduceDataStore
 {
+	public final static String TYPE = "accumulo";
+	
 	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
 
 	private final AccumuloOperations accumuloOperations;

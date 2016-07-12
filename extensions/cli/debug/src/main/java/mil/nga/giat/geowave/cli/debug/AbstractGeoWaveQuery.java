@@ -5,15 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.google.common.base.Stopwatch;
-
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
@@ -26,6 +17,13 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
+import org.apache.commons.cli.ParseException;
+
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.google.common.base.Stopwatch;
+
 abstract public class AbstractGeoWaveQuery extends
 		DefaultOperation implements
 		Command
@@ -33,13 +31,13 @@ abstract public class AbstractGeoWaveQuery extends
 	@Parameter(description = "<storename>")
 	private List<String> parameters = new ArrayList<String>();
 
-	@Parameter(names = "--indexId", description = "The name of the index (optional)", converter = StringToByteArrayConverter.class)
+	@Parameter(names = "--indexId", required = false, description = "The name of the index (optional)", converter = StringToByteArrayConverter.class)
 	private ByteArrayId indexId;
 
-	@Parameter(names = "--adapterId", description = "Optional ability to provide an adapter ID", converter = StringToByteArrayConverter.class)
+	@Parameter(names = "--adapterId", required = false, description = "Optional ability to provide an adapter ID", converter = StringToByteArrayConverter.class)
 	private ByteArrayId adapterId;
 
-	@Parameter(names = "--debug", description = "Print out additional info for debug purposes")
+	@Parameter(names = "--debug", required = false, description = "Print out additional info for debug purposes")
 	private boolean debug = false;
 
 	@Override
@@ -100,12 +98,6 @@ abstract public class AbstractGeoWaveQuery extends
 			e.printStackTrace();
 		}
 	}
-
-	abstract protected void applyOptions(
-			Options options );
-
-	abstract protected void parseOptions(
-			CommandLine commandLine );
 
 	abstract protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
