@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.index;
 
+import java.util.List;
+
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -11,6 +13,23 @@ public class IndexUtils
 	public static MultiDimensionalNumericData getFullBounds(
 			final NumericIndexStrategy indexStrategy ) {
 		return getFullBounds(indexStrategy.getOrderedDimensionDefinitions());
+	}
+
+	/**
+	 * Constraints that are empty indicate full table scan. A full table scan
+	 * occurs if ANY one dimension is unbounded.
+	 *
+	 * @param constraints
+	 * @return true if any one dimension is unbounded
+	 */
+	public static final boolean isFullTableScan(
+			final List<MultiDimensionalNumericData> constraints ) {
+		for (final MultiDimensionalNumericData constraint : constraints) {
+			if (constraint.isEmpty()) {
+				return false;
+			}
+		}
+		return constraints.isEmpty();
 	}
 
 	public static MultiDimensionalNumericData getFullBounds(
@@ -66,10 +85,12 @@ public class IndexUtils
 		// cellRangePerDimension[ 2554.3212881088257]
 		// inflatedRangePerDimension[ 3601593.016233444]
 		// bitsFromTheRightPerDimension[ 10.461479447286157]]
-		for (double[] binnedBitsPerFromTheRightDimension : bitsFromTheRightPerDimension) {
+		for (final double[] binnedBitsPerFromTheRightDimension : bitsFromTheRightPerDimension) {
 			for (int d = 0; d < binnedBitsPerFromTheRightDimension.length; d++) {
 				final double totalBitsUsed = (bitsPerDimension[d] - binnedBitsPerFromTheRightDimension[d]);
-				if (totalBitsUsed < 0) return 0;
+				if (totalBitsUsed < 0) {
+					return 0;
+				}
 				result = Math.min(
 						totalBitsUsed,
 						result);
@@ -144,7 +165,7 @@ public class IndexUtils
 		final NumericDimensionDefinition dim[] = indexStrategy.getOrderedDimensionDefinitions();
 		final BinRange[][] result = new BinRange[rangePerDimension.length][];
 		for (int d = 0; d < rangePerDimension.length; d++) {
-			BinRange[] ranges = dim[d].getNormalizedRanges(new NumericRange(
+			final BinRange[] ranges = dim[d].getNormalizedRanges(new NumericRange(
 					0,
 					rangePerDimension[d]));
 			result[d] = ranges;
