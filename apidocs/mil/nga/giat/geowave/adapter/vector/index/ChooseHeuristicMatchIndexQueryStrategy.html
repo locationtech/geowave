@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html" title="class in mil.nga.giat.geowave.adapter.vector.index"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.index"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseLocalityPreservingQueryStrategy.html" title="class in mil.nga.giat.geowave.adapter.vector.index"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html" target="_top">Frames</a></li>
@@ -102,6 +102,11 @@
 <pre>public class <span class="strong">ChooseHeuristicMatchIndexQueryStrategy</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.index">IndexQueryStrategySPI</a></pre>
+<div class="block">This Query Strategy chooses the index that satisfies the most dimensions of
+ the underlying query first and then if multiple are found it will choose the
+ one that most closely preserves locality. It won't be optimized for a single
+ prefix query but it will choose the index with the most dimensions defined,
+ enabling more fine-grained contraints given a larger set of indexable ranges.</div>
 </li>
 </ul>
 </div>
@@ -278,7 +283,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ind
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html" title="class in mil.nga.giat.geowave.adapter.vector.index"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.index"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/ChooseLocalityPreservingQueryStrategy.html" title="class in mil.nga.giat.geowave.adapter.vector.index"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html" target="_top">Frames</a></li>

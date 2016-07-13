@@ -155,6 +155,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexUtils.html#inflateRange(double[],%20double[])">inflateRange</a></strong>(double[]&nbsp;cellRangePerDimension,
             double[]&nbsp;dataRangePerDimension)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexUtils.html#isFullTableScan(java.util.List)">isFullTableScan</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints)</code>
+<div class="block">Constraints that are empty indicate full table scan.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -201,6 +207,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getFullBounds</h4>
 <pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getFullBounds(<a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
+</li>
+</ul>
+<a name="isFullTableScan(java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isFullTableScan</h4>
+<pre>public static final&nbsp;boolean&nbsp;isFullTableScan(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints)</pre>
+<div class="block">Constraints that are empty indicate full table scan. A full table scan
+ occurs if ANY one dimension is unbounded.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>constraints</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if any one dimension is unbounded</dd></dl>
 </li>
 </ul>
 <a name="getFullBounds(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition[])">

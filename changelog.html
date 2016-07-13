@@ -13,6 +13,7 @@
 <p><a href="https://github.com/ngageoint/geowave/compare/v0.9.1...HEAD">Full Changelog</a></p>
 <p><strong>Implemented enhancements:</strong></p>
 <ul>
+<li>Increase the leniency in choosing config.properties <a href="https://github.com/ngageoint/geowave/issues/833">#833</a></li>
 <li>Publish docs once from travis-ci build, not for each job in the build matrix <a href="https://github.com/ngageoint/geowave/issues/814">#814</a></li>
 <li>Ability to set geowave-tools-singlejar name on the maven commandline <a href="https://github.com/ngageoint/geowave/issues/798">#798</a></li>
 <li>Permit selection of temporal binning strategy unit of measure <a href="https://github.com/ngageoint/geowave/issues/782">#782</a></li>
@@ -34,6 +35,9 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>update travis matrix for latest current/previous versions of hadoop, hbase, accumulo <a href="https://github.com/ngageoint/geowave/pull/864">#864</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
+<li>Geowave 833 <a href="https://github.com/ngageoint/geowave/pull/863">#863</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
+<li>GEOWAVE-854: removed option for --whole on ingest <a href="https://github.com/ngageoint/geowave/pull/856">#856</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-853: heuristic chooses highest dimensional index, pure locali… <a href="https://github.com/ngageoint/geowave/pull/855">#855</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>This is the uber pull request with GEOWAVE-667, GEOWAVE-831, HBase <a href="https://github.com/ngageoint/geowave/pull/850">#850</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>gs-cli-092: Corrected findbugs issues &amp; added geoserver cli to the extensions parent pom <a href="https://github.com/ngageoint/geowave/pull/847">#847</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
