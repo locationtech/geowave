@@ -167,24 +167,31 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#formatConfigFile(java.lang.String,%20java.io.File)">formatConfigFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;version,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;defaultPath)</code>
+<div class="block">Configures a File based on a given path name and version</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#getConfigFile()">getConfigFile</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#getDefaultPropertyFile()">getDefaultPropertyFile</a></strong>()</code>
 <div class="block">The default property file is in the user's home directory, in the
  .geowave folder.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#getDefaultPropertyPath()">getDefaultPropertyPath</a></strong>()</code>
 <div class="block">The default property file is in the user's home directory, in the
  .geowave folder.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#loadProperties(java.io.File,%20java.lang.String)">loadProperties</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern)</code>
@@ -192,17 +199,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  can't.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#prepare(mil.nga.giat.geowave.core.cli.api.OperationParams)">prepare</a></strong>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;inputParams)</code>
 <div class="block">Load the properties file into the input params.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#setConfigFile(java.lang.String)">setConfigFile</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configFile)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/options/ConfigOptions.html#writeProperties(java.io.File,%20java.util.Properties)">writeProperties</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>
@@ -335,8 +342,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getDefaultPropertyFile</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;getDefaultPropertyFile()</pre>
 <div class="block">The default property file is in the user's home directory, in the
- .geowave folder.</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+ .geowave folder. If the version can not be found the first available
+ property file in the folder is used</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>Default Property File</dd></dl>
+</li>
+</ul>
+<a name="formatConfigFile(java.lang.String, java.io.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>formatConfigFile</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;formatConfigFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;version,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;defaultPath)</pre>
+<div class="block">Configures a File based on a given path name and version</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>version</code> - </dd><dd><code>defaultPath</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>Configured File</dd></dl>
 </li>
 </ul>
 <a name="writeProperties(java.io.File, java.util.Properties)">
