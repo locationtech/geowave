@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.format.landsat8;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 
 import org.opengis.feature.simple.SimpleFeature;
@@ -12,18 +11,16 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.IndexLoader;
+import mil.nga.giat.geowave.core.store.plugins.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.StoreLoader;
 
 public class IngestRunner extends
 		RasterIngestRunner
