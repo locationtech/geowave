@@ -80,7 +80,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 										dataRangePerDimension);
 							}
 
-							if (currentBitsUsed > bestIndexBitsUsed) {
+							if (currentDimensionCount > bestIndexDimensionCount || currentBitsUsed > bestIndexBitsUsed) {
 								bestIndexBitsUsed = currentBitsUsed;
 								bestIndexDimensionCount = currentDimensionCount;
 								bestIdx = nextIdx;
