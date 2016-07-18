@@ -9,15 +9,16 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.util.EntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 /**
  * Represents a query operation by an Accumulo row. This abstraction is
  * re-usable for both exact row ID queries and row prefix queries.
- * 
+ *
  */
 abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
@@ -28,9 +29,11 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 	public AbstractAccumuloRowQuery(
 			final PrimaryIndex index,
 			final String[] authorizations,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T> scanCallback,
+			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
 				index,
+				visibilityCounts,
 				authorizations);
 		this.scanCallback = scanCallback;
 	}
@@ -51,7 +54,8 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 		return new CloseableIteratorWrapper<T>(
 				new ScannerClosableWrapper(
 						scanner),
-				new EntryIteratorWrapper(
+				new AccumuloEntryIteratorWrapper(
+						useWholeRowIterator(),
 						adapterStore,
 						index,
 						scanner.iterator(),
@@ -62,13 +66,14 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
 		addFieldSubsettingToIterator(scanner);
-
-		// we have to at least use a whole row iterator
-		final IteratorSetting iteratorSettings = new IteratorSetting(
-				QueryFilterIterator.WHOLE_ROW_ITERATOR_PRIORITY,
-				QueryFilterIterator.WHOLE_ROW_ITERATOR_NAME,
-				WholeRowIterator.class);
-		scanner.addScanIterator(iteratorSettings);
+		if (useWholeRowIterator()) {
+			// we have to at least use a whole row iterator
+			final IteratorSetting iteratorSettings = new IteratorSetting(
+					QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+					QueryFilterIterator.QUERY_ITERATOR_NAME,
+					WholeRowIterator.class);
+			scanner.addScanIterator(iteratorSettings);
+		}
 	}
 
 	abstract protected Integer getScannerLimit();

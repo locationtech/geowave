@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.core.store.data;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,8 +22,7 @@ public class PersistentDataset<T>
 	private final Map<ByteArrayId, T> fieldIdToValueMap;
 
 	public PersistentDataset() {
-		// to maintain order use a linked hashmap
-		fieldIdToValueMap = new LinkedHashMap<ByteArrayId, T>();
+		fieldIdToValueMap = new HashMap<ByteArrayId, T>();
 	}
 
 	public PersistentDataset(
@@ -44,20 +43,6 @@ public class PersistentDataset<T>
 	 *            the field ID/value pair to add
 	 */
 	public void addValue(
-			final PersistentValue<T> value ) {
-		if (fieldIdToValueMap.containsKey(value.getId())) return;
-		fieldIdToValueMap.put(
-				value.getId(),
-				value.getValue());
-	}
-
-	/**
-	 * Add or update the field ID/value pair to this data set
-	 * 
-	 * @param value
-	 *            the field ID/value pair to add
-	 */
-	public void addOrUpdateValue(
 			final PersistentValue<T> value ) {
 		fieldIdToValueMap.put(
 				value.getId(),

@@ -157,9 +157,11 @@ public class VectorLocalExportCommand extends
 				}
 				Query queryConstraints = null;
 				if (options.getCqlFilter() != null) {
-					queryConstraints = new CQLQuery(
+					queryConstraints = CQLQuery.createOptimalQuery(
 							options.getCqlFilter(),
-							adapter);
+							adapter,
+							queryIndex,
+							null);
 				}
 				queryOptions.setAdapter(adapter);
 

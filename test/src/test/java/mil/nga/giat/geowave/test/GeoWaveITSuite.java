@@ -8,6 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
 import mil.nga.giat.geowave.test.config.IndexLoaderTestIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
+import mil.nga.giat.geowave.test.landsat.LandsatIT;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
 import mil.nga.giat.geowave.test.mapreduce.BulkIngestInputGenerationIT;
 import mil.nga.giat.geowave.test.mapreduce.DBScanIT;
@@ -29,6 +30,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
 	GeoWaveRasterIT.class,
+	LandsatIT.class,
 	BulkIngestInputGenerationIT.class,
 	KDERasterResizeIT.class,
 	GeoWaveKMeansIT.class,

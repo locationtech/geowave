@@ -44,4 +44,6 @@ public interface AdapterStore
 	 * @return an iterator over all of the adapters in this store
 	 */
 	public CloseableIterator<DataAdapter<?>> getAdapters();
+
+	public void removeAll();
 }

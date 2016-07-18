@@ -102,12 +102,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 	protected WritableDataAdapter<SimpleFeature> newAdapter(
 			final SimpleFeatureType type,
 			final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler ) {
-		// TODO: assign other adapters based on serialization option
-		if (serializationFormatOptionProvider.isWhole()) {
-			return new WholeFeatureDataAdapter(
-					type);
-		}
-		else if (serializationFormatOptionProvider.isAvro()) {
+		if (serializationFormatOptionProvider.isAvro()) {
 			return new AvroFeatureDataAdapter(
 					type);
 		}

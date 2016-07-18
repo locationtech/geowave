@@ -13,19 +13,22 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
+import mil.nga.giat.geowave.core.store.Writer;
 
 /**
  * This interface is used as a basis for establishing connections for queries
  * and ingest processes used by the index classes.
- * 
+ *
  * Operations are configured to a specific 'table' name space.
  */
-public interface AccumuloOperations
+public interface AccumuloOperations extends
+		DataStoreOperations
 {
 
 	/**
 	 * Creates a new batch deleter that can be used by an index
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -42,13 +45,8 @@ public interface AccumuloOperations
 			throws TableNotFoundException;
 
 	/**
-	 * @return Table Name Space, Empty string if not applicable.
-	 */
-	public String getTableNameSpace();
-
-	/**
 	 * Creates a new batch scanner that can be used by an index
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -67,7 +65,7 @@ public interface AccumuloOperations
 
 	/**
 	 * Creates a new scanner that can be used by an index
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -86,14 +84,26 @@ public interface AccumuloOperations
 
 	/**
 	 * Creates a table for an index
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
 	 *            to prefix this name
+	 * @param enableVersioning
+	 *            If true the versioning iterator will be used.
+	 * @param enableBlockCache
+	 *            Will set the default property for accumulo block cache if the
+	 *            table is created
+	 * @param splits
+	 *            If the table is created, these splits will be added as
+	 *            partition keys. Null can be used to imply not to add any
+	 *            splits.
 	 */
 	public void createTable(
-			final String tableName );
+			final String tableName,
+			final boolean enableVersioning,
+			final boolean enableBlockCache,
+			final Set<ByteArrayId> splits );
 
 	/**
 	 * Creates a new writer that can be used by an index. The basic
@@ -101,7 +111,7 @@ public interface AccumuloOperations
 	 * replaced such as a context-based writer for bulk ingest within a
 	 * map-reduce job. A table is created by default if it does not exist with
 	 * no custom iterators.
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -120,7 +130,7 @@ public interface AccumuloOperations
 	 * replaced such as a context-based writer for bulk ingest within a
 	 * map-reduce job. This will use the createTable flag to determine if the
 	 * table should be created if it does not exist.
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -147,7 +157,7 @@ public interface AccumuloOperations
 	 * enableVersioning flag to determine if the versioning iterator should be
 	 * used. Additionally it will add the provided splits on creation of the
 	 * table only.
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -184,7 +194,7 @@ public interface AccumuloOperations
 	 * IteratorConfig.mergeOptions() to perform the merge. This will use the
 	 * createTable flag to determine if the table should be created if it does
 	 * not exist.
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -193,6 +203,17 @@ public interface AccumuloOperations
 	 *            If true and the table does not exist, it will be created. If
 	 *            false and the table does not exist, a TableNotFoundException
 	 *            will be thrown.
+	 * @param enableVersioning
+	 *            If true the versioning iterator will be used.
+	 * @param enableBlockCache
+	 *            Will set the default property for accumulo block cache if the
+	 *            table is created
+	 * @param splits
+	 *            If the table is created, these splits will be added as
+	 *            partition keys. Null can be used to imply not to add any
+	 *            splits.
+	 * @param iterators
+	 *            the iterators to attach
 	 * @return A flag indicating whether the iterator was successfully attached.
 	 * @throws TableNotFoundException
 	 *             The table does not exist in this Accumulo instance
@@ -200,13 +221,16 @@ public interface AccumuloOperations
 	public boolean attachIterators(
 			final String tableName,
 			final boolean createTable,
+			final boolean enableVersioning,
+			final boolean enableBlockCache,
+			final Set<ByteArrayId> splits,
 			final IteratorConfig... iterators )
 			throws TableNotFoundException;
 
 	/**
 	 * Add the splits to the specified table. This will use the createTable flag
 	 * to determine if the table should be created if it does not exist.
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -217,7 +241,7 @@ public interface AccumuloOperations
 	 *            will be thrown.
 	 * @param splits
 	 *            the splits to add to the given table
-	 * 
+	 *
 	 */
 	public void addSplits(
 			final String tableName,
@@ -231,7 +255,7 @@ public interface AccumuloOperations
 	 * Drops the table with the given name (the basic implementation will use a
 	 * table namespace prefix if given). Returns whether the table was found and
 	 * the operation completed successfully.
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -243,21 +267,9 @@ public interface AccumuloOperations
 			final String tableName );
 
 	/**
-	 * Checks for the existence of the table with the given name
-	 * 
-	 * @param tableName
-	 *            The basic name of the table. Note that that basic
-	 *            implementation of the factory will allow for a table namespace
-	 *            to prefix this name
-	 * @return Returns true if the table was found, false if it was not found
-	 */
-	public boolean tableExists(
-			final String tableName );
-
-	/**
 	 * Checks for the existence of the locality group with the given name,
 	 * within the table of the given name
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -276,7 +288,7 @@ public interface AccumuloOperations
 	/**
 	 * Adds the locality group with the given name to the table of the given
 	 * name
-	 * 
+	 *
 	 * @param tableName
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
@@ -293,18 +305,9 @@ public interface AccumuloOperations
 			AccumuloSecurityException;
 
 	/**
-	 * Drops all tables in the instance namespace. If no tables are found in the
-	 * namespace no operation occurs.
-	 */
-	public void deleteAll()
-			throws TableNotFoundException,
-			AccumuloException,
-			AccumuloSecurityException;
-
-	/**
 	 * Drops the specified row from the specified table. Returns whether the
 	 * operation completed successfully.
-	 * 
+	 *
 	 * @param tableName
 	 *            the name of the table to delete from, this must be provided
 	 * @param rowId
@@ -315,6 +318,8 @@ public interface AccumuloOperations
 	 * @param columnQualifier
 	 *            the column qualifier for a given column family to delete, this
 	 *            can be null to delete the whole column family
+	 * @param additionalAuthorizations
+	 *            checks authorizations
 	 * @return Returns true if the row deletion didn't encounter any errors,
 	 *         false if nothing was found or the row was not dropped
 	 *         successfully
@@ -322,13 +327,14 @@ public interface AccumuloOperations
 	public boolean delete(
 			final String tableName,
 			final ByteArrayId rowId,
-			String columnFamily,
-			String columnQualifier );
+			final String columnFamily,
+			final String columnQualifier,
+			final String... additionalAuthorizations );
 
 	/**
 	 * Drops the specified row from the specified table. Returns whether the
 	 * operation completed successfully.
-	 * 
+	 *
 	 * @param tableName
 	 *            the name of the table to delete from, this must be provided
 	 * @param rowIds
@@ -353,9 +359,9 @@ public interface AccumuloOperations
 			final String... additionalAuthorizations );
 
 	/**
-	 * 
+	 *
 	 * Delete all data associated with a given adapter and index.
-	 * 
+	 *
 	 * @param tableName
 	 *            the name of the table to delete from, this must be provided
 	 * @param columnFamily
@@ -371,7 +377,7 @@ public interface AccumuloOperations
 			final String... additionalAuthorizations );
 
 	/**
-	 * 
+	 *
 	 * @param tableName
 	 * @param additionalAuthorizations
 	 * @return the number of rows in the table given the constraints by the
@@ -382,7 +388,7 @@ public interface AccumuloOperations
 			String... additionalAuthorizations );
 
 	/**
-	 * 
+	 *
 	 * Insure user has the given operations.
 	 */
 	public void insureAuthorization(

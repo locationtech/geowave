@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;

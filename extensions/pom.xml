@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.2-SNAPSHOT</version>
+		<version>0.9.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-extension-parent</artifactId>
 	<name>GeoWave Extensions</name>
@@ -25,7 +25,9 @@
 		<module>formats/stanag4676/format</module>
 		<module>formats/stanag4676/service</module>
 		<module>cli/debug</module>
+		<module>cli/geoserver</module>
 		<module>cli/osm</module>
 		<module>cli/operations</module>
+		<module>cli/landsat8</module>
 	</modules>
 </project>

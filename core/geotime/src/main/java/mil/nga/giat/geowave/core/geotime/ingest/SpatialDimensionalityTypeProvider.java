@@ -4,9 +4,11 @@ import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
@@ -26,27 +28,7 @@ public class SpatialDimensionalityTypeProvider implements
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	private static final int LONGITUDE_BITS = 31;
 	private static final int LATITUDE_BITS = 31;
-	public static final int[] DEFINED_BITS_OF_PRECISION = new int[] {
-		0,
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
-		10,
-		11,
-		13,
-		18,
-		31
-	};
-	private static final int[] DEFINED_BITS_OF_PRECISION_POINT_ONLY = new int[] {
-		0,
-		31
-	};
+
 	protected static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
 		new LatitudeDefinition(
@@ -60,6 +42,13 @@ public class SpatialDimensionalityTypeProvider implements
 				true)
 	// just use the same range for latitude to make square sfc values in
 	// decimal degrees (EPSG:4326)
+	};
+	protected static final NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
+		new LongitudeField(),
+		new LatitudeField(
+				true),
+		new TimeField(
+				Unit.YEAR)
 	};
 
 	public SpatialDimensionalityTypeProvider() {}
@@ -93,57 +82,27 @@ public class SpatialDimensionalityTypeProvider implements
 
 	private static PrimaryIndex internalCreatePrimaryIndex(
 			final SpatialOptions options ) {
-		// TODO when we have stats to determine which tiers are filled, we can
-		// use the full incremental tiering
-		if (!options.pointOnly && options.allTiers) {
-			return new CustomIdIndex(
-					TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
-							SPATIAL_DIMENSIONS,
-							new int[] {
-								LONGITUDE_BITS,
-								LATITUDE_BITS
-							},
-							SFCType.HILBERT),
-					new BasicIndexModel(
-							new NumericDimensionField[] {
-								new LongitudeField(),
-								new LatitudeField(
-										true)
-							}),
-					new ByteArrayId(
-							DEFAULT_SPATIAL_ID + "_ALLTIERS"));
-		}
-
-		// but for now use predefined tiers to limit the query decomposition in
-		// cases where we are unlikely to use certain tiers
 		return new CustomIdIndex(
-				TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
+				TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
 						SPATIAL_DIMENSIONS,
-						options.pointOnly ? new int[][] {
-							DEFINED_BITS_OF_PRECISION_POINT_ONLY.clone(),
-							DEFINED_BITS_OF_PRECISION_POINT_ONLY.clone()
-						} : new int[][] {
-							DEFINED_BITS_OF_PRECISION.clone(),
-							DEFINED_BITS_OF_PRECISION.clone()
+						new int[] {
+							LONGITUDE_BITS,
+							LATITUDE_BITS
 						},
 						SFCType.HILBERT),
 				new BasicIndexModel(
-						SPATIAL_FIELDS),
+						options.storeTime ? SPATIAL_TEMPORAL_FIELDS : SPATIAL_FIELDS),
 				new ByteArrayId(
-						options.pointOnly ? DEFAULT_SPATIAL_ID + "_POINTONLY" : DEFAULT_SPATIAL_ID));
+						options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID));
 	}
 
 	private static class SpatialOptions implements
 			DimensionalityTypeOptions
 	{
 		@Parameter(names = {
-			"--pointOnly"
-		}, required = false, description = "The index will only be good at handling pointsand will not be optimized for handling lines/polys.  The default behavior is to handle any geometry.")
-		protected boolean pointOnly = false;
-		@Parameter(names = {
-			"--allTiers"
-		}, required = false, description = "The index will represent all tiers.  Typically for vector data we only need a subset of the tiers to minimize query decomposition, but for raster data typically all tiers is better.")
-		protected boolean allTiers = false;
+			"--storeTime"
+		}, required = false, description = "The index will store temporal values.  This allows it to slightly more efficiently run spatial-temporal queries although if spatial-temporal queries are a common use case, a separate spatial-temporal index is recommended.")
+		protected boolean storeTime = false;
 	}
 
 	@Override
@@ -166,17 +125,9 @@ public class SpatialDimensionalityTypeProvider implements
 			this.options = options;
 		}
 
-		public SpatialIndexBuilder setPointOnly(
-				final boolean pointOnly ) {
-			options.pointOnly = pointOnly;
-			return new SpatialIndexBuilder(
-					options);
-		}
-
-		public SpatialIndexBuilder setAllTiers(
-				final boolean allTiers ) {
-			options.allTiers = allTiers;
-
+		public SpatialIndexBuilder setIncludeTimeInCommonIndexModel(
+				final boolean storeTime ) {
+			options.storeTime = storeTime;
 			return new SpatialIndexBuilder(
 					options);
 		}
@@ -184,6 +135,28 @@ public class SpatialDimensionalityTypeProvider implements
 		public PrimaryIndex createIndex() {
 			return internalCreatePrimaryIndex(options);
 		}
+	}
+
+	public static boolean isSpatial(
+			final PrimaryIndex index ) {
+		if ((index == null) || (index.getIndexStrategy() == null)
+				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
+		if (dimensions.length != 2) {
+			return false;
+		}
+		boolean hasLat = false, hasLon = false;
+		for (final NumericDimensionDefinition definition : dimensions) {
+			if (definition instanceof LatitudeDefinition) {
+				hasLat = true;
+			}
+			else if (definition instanceof LongitudeDefinition) {
+				hasLon = true;
+			}
+		}
+		return hasLat && hasLon;
 	}
 
 }

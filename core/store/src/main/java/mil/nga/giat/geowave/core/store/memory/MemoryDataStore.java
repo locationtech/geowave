@@ -329,8 +329,7 @@ public class MemoryDataStore implements
 			final boolean isDelete,
 			final DataStoreCallbackManager callbackCache ) {
 		final TreeSet<EntryRow> set = getRowsForIndex(index.getId());
-		final Iterator<EntryRow> rowIt = ((query == null) || query.isSupported(index)) ? ((TreeSet<EntryRow>) set
-				.clone()).iterator() : Collections.<EntryRow> emptyIterator();
+		final Iterator<EntryRow> rowIt = ((TreeSet<EntryRow>) set.clone()).iterator();
 		final List<QueryFilter> filters = (query == null) ? new ArrayList<QueryFilter>() : new ArrayList<QueryFilter>(
 				query.createFilters(index.getIndexModel()));
 		filters.add(new QueryFilter() {

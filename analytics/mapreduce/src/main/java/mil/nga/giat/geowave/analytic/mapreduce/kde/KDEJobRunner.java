@@ -322,8 +322,7 @@ public class KDEJobRunner extends
 			final Job statsReducer,
 			final String statsNamespace )
 			throws Exception {
-		final PrimaryIndex index = new SpatialIndexBuilder().setAllTiers(
-				true).createIndex();
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				kdeCommandLineOptions.getCoverageName(),
 				AccumuloKDEReducer.NUM_BANDS,

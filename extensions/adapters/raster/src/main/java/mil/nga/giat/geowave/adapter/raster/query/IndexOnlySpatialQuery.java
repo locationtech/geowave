@@ -1,16 +1,18 @@
 package mil.nga.giat.geowave.adapter.raster.query;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public class IndexOnlySpatialQuery extends
 		SpatialQuery
 {
+	protected IndexOnlySpatialQuery() {
+		super();
+	}
 
 	protected IndexOnlySpatialQuery(
 			final Constraints constraints,
@@ -26,14 +28,11 @@ public class IndexOnlySpatialQuery extends
 				queryGeometry);
 	}
 
-	public IndexOnlySpatialQuery() {
-		super();
-	}
-
 	@Override
-	public DistributableQueryFilter createQueryFilter(
-			final MultiDimensionalNumericData constraints,
-			final NumericDimensionField<?>[] dimensionFields ) {
+	protected DistributableQueryFilter createQueryFilter(
+			MultiDimensionalNumericData constraints,
+			NumericDimensionField<?>[] orderedConstrainedDimensionFields,
+			NumericDimensionField<?>[] unconstrainedDimensionDefinitions ) {
 		// this will ignore fine grained filters and just use the row ID in the
 		// index
 		return null;

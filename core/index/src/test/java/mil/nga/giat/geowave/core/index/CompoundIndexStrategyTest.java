@@ -316,16 +316,13 @@ public class CompoundIndexStrategyTest
 
 	@Test
 	public void testHints() {
-		final List<IndexMetaData> dataSimple = simpleIndexStrategy.createMetaData();
-		final List<IndexMetaData> dataSFC = sfcIndexStrategy.createMetaData();
-
 		final List<ByteArrayId> ids = compoundIndexStrategy.getInsertionIds(
 				compoundIndexedRange,
 				8);
 
 		List<IndexMetaData> metaData = compoundIndexStrategy.createMetaData();
 		for (IndexMetaData imd : metaData) {
-			imd.update(ids);
+			imd.insertionIdsAdded(ids);
 		}
 
 		final List<ByteArrayRange> simpleIndexRanges = simpleIndexStrategy.getQueryRanges(simpleIndexedRange);

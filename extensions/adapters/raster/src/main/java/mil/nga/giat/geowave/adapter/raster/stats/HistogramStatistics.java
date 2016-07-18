@@ -14,14 +14,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
-import mil.nga.giat.geowave.adapter.raster.Resolution;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-
 import org.apache.log4j.Logger;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.processing.AbstractOperation;
@@ -34,6 +26,14 @@ import org.opengis.parameter.ParameterValueGroup;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.Polygon;
+
+import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
+import mil.nga.giat.geowave.adapter.raster.Resolution;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 
 public class HistogramStatistics extends
 		AbstractDataStatistics<GridCoverage>
@@ -220,28 +220,40 @@ public class HistogramStatistics extends
 		params.parameter(
 				"numBins").setValue(
 				histogramConfig.getNumBins());
-		final GridCoverage2D coverage = (GridCoverage2D) op.doOperation(
-				params,
-				null);
+		try {
 
-		final javax.media.jai.Histogram histogram = (javax.media.jai.Histogram) coverage
-				.getProperty(Histogram.GT_SYNTHETIC_PROPERTY_HISTOGRAM);
+			final GridCoverage2D coverage = (GridCoverage2D) op.doOperation(
+					params,
+					null);
+			final javax.media.jai.Histogram histogram = (javax.media.jai.Histogram) coverage
+					.getProperty(Histogram.GT_SYNTHETIC_PROPERTY_HISTOGRAM);
 
-		javax.media.jai.Histogram mergedHistogram;
-		final javax.media.jai.Histogram resolutionHistogram = histograms.get(resolution);
-		if (resolutionHistogram != null) {
-			mergedHistogram = mergeHistograms(
-					resolutionHistogram,
-					histogram);
+			javax.media.jai.Histogram mergedHistogram;
+			final javax.media.jai.Histogram resolutionHistogram = histograms.get(resolution);
+			if (resolutionHistogram != null) {
+				mergedHistogram = mergeHistograms(
+						resolutionHistogram,
+						histogram);
+			}
+			else {
+				mergedHistogram = histogram;
+			}
+			synchronized (this) {
+				histograms.put(
+						resolution,
+						mergedHistogram);
+			}
 		}
-		else {
-			mergedHistogram = histogram;
+		catch (final Exception e) {
+			// this is simply 'info' because there is a known issue in the
+			// histogram op when the ROI is so small that the resulting cropped
+			// pixel size is 0
+			LOGGER
+					.info(
+							"This is often a non-issue relating to applying an ROI calculation that results in 0 pixels (the error is in calculating stats).",
+							e);
 		}
-		synchronized (this) {
-			histograms.put(
-					resolution,
-					mergedHistogram);
-		}
+
 	}
 
 	private static javax.media.jai.Histogram mergeHistograms(

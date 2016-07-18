@@ -61,7 +61,7 @@ public class IndexGroupPluginOptions extends
 					entry.getKey(),
 					entry.getValue().getType()));
 		}
-		if (typeString.isEmpty()){
+		if (typeString.isEmpty()) {
 			return null;
 		}
 		return StringUtils.join(

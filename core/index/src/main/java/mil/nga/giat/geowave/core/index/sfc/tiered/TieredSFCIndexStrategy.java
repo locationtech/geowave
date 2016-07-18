@@ -12,6 +12,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableBiMap.Builder;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -30,15 +35,10 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableBiMap.Builder;
-
 /**
  * This class uses multiple SpaceFillingCurve objects, one per tier, to
  * represent a single cohesive index strategy with multiple precisions
- * 
+ *
  */
 public class TieredSFCIndexStrategy implements
 		HierarchicalNumericIndexStrategy
@@ -56,7 +56,7 @@ public class TieredSFCIndexStrategy implements
 
 	/**
 	 * Constructor used to create a Tiered Index Strategy.
-	 * 
+	 *
 	 * @param baseDefinitions
 	 *            the dimension definitions of the space filling curve
 	 * @param orderedSfcs
@@ -91,11 +91,13 @@ public class TieredSFCIndexStrategy implements
 		if ((maxRangeDecomposition > 1) && (orderedSfcs.length > 1)) {
 			maxRangeDecompositionPerSfc = (int) Math.ceil((double) maxRangeDecomposition / (double) orderedSfcs.length);
 		}
-		final TierIndexMetaData metaData = (hints.length > 0 && hints[0] != null && hints[0] instanceof TierIndexMetaData) ? (TierIndexMetaData) hints[0]
+		final TierIndexMetaData metaData = ((hints.length > 0) && (hints[0] != null) && (hints[0] instanceof TierIndexMetaData)) ? (TierIndexMetaData) hints[0]
 				: null;
 
 		for (int sfcIndex = orderedSfcs.length - 1; sfcIndex >= 0; sfcIndex--) {
-			if (metaData != null && metaData.tierCounts[sfcIndex] == 0) continue;
+			if ((metaData != null) && (metaData.tierCounts[sfcIndex] == 0)) {
+				continue;
+			}
 			final SpaceFillingCurve sfc = orderedSfcs[sfcIndex];
 			final Byte tier = orderedSfcIndexToTierId.get(sfcIndex);
 			queryRanges.addAll(getQueryRanges(
@@ -119,10 +121,23 @@ public class TieredSFCIndexStrategy implements
 			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.length);
 		}
 		for (final BinnedNumericDataset binnedQuery : binnedQueries) {
-			final RangeDecomposition rangeDecomp = sfc.decomposeRange(
-					binnedQuery,
-					true,
-					maxRangeDecompositionPerBin);
+			final RangeDecomposition rangeDecomp;
+			if (binnedQuery.isFullExtent()) {
+				rangeDecomp = new RangeDecomposition(
+						new ByteArrayRange[] {
+							new ByteArrayRange(
+									new ByteArrayId(
+											new byte[] {}),
+									new ByteArrayId(
+											new byte[] {}))
+						});
+			}
+			else {
+				rangeDecomp = sfc.decomposeRange(
+						binnedQuery,
+						true,
+						maxRangeDecompositionPerBin);
+			}
 			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
 					new byte[] {
 						tier
@@ -147,7 +162,7 @@ public class TieredSFCIndexStrategy implements
 
 	/**
 	 * Returns a list of query ranges for an specified numeric range.
-	 * 
+	 *
 	 * @param indexedRange
 	 *            defines the numeric range for the query
 	 * @return a List of query ranges
@@ -164,7 +179,7 @@ public class TieredSFCIndexStrategy implements
 
 	/**
 	 * Returns a list of id's for insertion.
-	 * 
+	 *
 	 * @param indexedData
 	 *            defines the numeric data to be indexed
 	 * @return a List of insertion ID's
@@ -644,16 +659,17 @@ public class TieredSFCIndexStrategy implements
 		public TierIndexMetaData(
 				final ImmutableBiMap<Byte, Integer> orderedTierIdToSfcIndex ) {
 			super();
-			this.tierCounts = new int[orderedTierIdToSfcIndex.size()];
+			tierCounts = new int[orderedTierIdToSfcIndex.size()];
 			this.orderedTierIdToSfcIndex = orderedTierIdToSfcIndex;
 		}
 
 		@Override
 		public byte[] toBinary() {
-			final ByteBuffer buffer = ByteBuffer.allocate(4 + tierCounts.length * 4);
+			final ByteBuffer buffer = ByteBuffer.allocate(4 + (tierCounts.length * 4));
 			buffer.putInt(tierCounts.length);
-			for (int count : tierCounts)
+			for (final int count : tierCounts) {
 				buffer.putInt(count);
+			}
 			// do not use orderedTierIdToSfcIndex on query
 			// for (final Entry<Byte,Integer > entry :
 			// orderedTierIdToSfcIndex.entrySet()) {
@@ -665,7 +681,7 @@ public class TieredSFCIndexStrategy implements
 
 		@Override
 		public void fromBinary(
-				byte[] bytes ) {
+				final byte[] bytes ) {
 			final ByteBuffer buffer = ByteBuffer.wrap(bytes);
 			tierCounts = new int[buffer.getInt()];
 			for (int i = 0; i < tierCounts.length; i++) {
@@ -685,25 +701,33 @@ public class TieredSFCIndexStrategy implements
 
 		@Override
 		public void merge(
-				Mergeable merge ) {
+				final Mergeable merge ) {
 			if (merge instanceof TierIndexMetaData) {
-				TierIndexMetaData other = (TierIndexMetaData) merge;
+				final TierIndexMetaData other = (TierIndexMetaData) merge;
 				int pos = 0;
-				for (int count : other.tierCounts)
-					this.tierCounts[pos++] += count;
+				for (final int count : other.tierCounts) {
+					tierCounts[pos++] += count;
+				}
 			}
 
 		}
 
 		@Override
-		public void update(
-				List<ByteArrayId> ids ) {
-
-			for (ByteArrayId id : ids) {
+		public void insertionIdsAdded(
+				final List<ByteArrayId> ids ) {
+			for (final ByteArrayId id : ids) {
 				tierCounts[orderedTierIdToSfcIndex.get(
 						id.getBytes()[0]).intValue()]++;
 			}
 		}
 
+		@Override
+		public void insertionIdsRemoved(
+				final List<ByteArrayId> ids ) {
+			for (final ByteArrayId id : ids) {
+				tierCounts[orderedTierIdToSfcIndex.get(
+						id.getBytes()[0]).intValue()]--;
+			}
+		}
 	}
 }

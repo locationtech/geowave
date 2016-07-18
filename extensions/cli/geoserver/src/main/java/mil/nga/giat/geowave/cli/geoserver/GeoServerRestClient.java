@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -19,7 +18,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -48,7 +49,7 @@ public class GeoServerRestClient
 	private final static Logger logger = Logger.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
-	private class DataAdapterInfo
+	static private class DataAdapterInfo
 	{
 		String adapterId;
 		Boolean isRaster;
@@ -178,19 +179,19 @@ public class GeoServerRestClient
 				else if (getDsResponse.getStatus() != Status.OK.getStatusCode()) {
 					return getDsResponse;
 				}
-				
+
 				logger.debug("Checking for existing feature layer: " + dataAdapterInfo.adapterId);
 
 				// See if the feature layer already exists
-				Response getFlResponse = getFeatureLayer(
-						dataAdapterInfo.adapterId);
+				Response getFlResponse = getFeatureLayer(dataAdapterInfo.adapterId);
 				if (getFlResponse.getStatus() == Status.OK.getStatusCode()) {
 					logger.debug(dataAdapterInfo.adapterId + " layer already exists");
 					continue;
 				}
 
-				logger.debug("Get feature layer: " + dataAdapterInfo.adapterId + " returned " + getFlResponse.getStatus());
-				
+				logger.debug("Get feature layer: " + dataAdapterInfo.adapterId + " returned "
+						+ getFlResponse.getStatus());
+
 				// We have a datastore. Add the layer per the adapter ID
 				Response addFlResponse = addFeatureLayer(
 						workspaceName,
@@ -202,7 +203,8 @@ public class GeoServerRestClient
 			}
 		}
 
-		// Report back to the caller the adapter IDs and the types that were used to create the layers
+		// Report back to the caller the adapter IDs and the types that were
+		// used to create the layers
 		JSONObject jsonObj = getJsonFromAdapters(
 				adapterInfoList,
 				"Successfully added:");
@@ -216,7 +218,8 @@ public class GeoServerRestClient
 			String description ) {
 		StringBuffer buf = new StringBuffer();
 
-		// If we made it this far, let's just iterate through the adapter IDs and build the JSON response data
+		// If we made it this far, let's just iterate through the adapter IDs
+		// and build the JSON response data
 		buf.append("{'description':'" + description + "', " + "'layers':[");
 
 		for (int i = 0; i < adapterInfoList.size(); i++) {
@@ -311,8 +314,11 @@ public class GeoServerRestClient
 	public Response getDatastore(
 			final String workspaceName,
 			String datastoreName ) {
-		final Response resp = getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json").request().get();
+		final Response resp = getWebTarget()
+				.path(
+						"geoserver/rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json")
+				.request()
+				.get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -450,7 +456,11 @@ public class GeoServerRestClient
 			final Map<String, List<String>> namespaceLayersMap = new HashMap<String, List<String>>();
 			final Pattern p = Pattern.compile("workspaces/(.*?)/datastores/(.*?)/");
 			for (int i = 0; i < layerArray.size(); i++) {
-				boolean include = !geowaveOnly && !wsFilter && !dsFilter; // no filtering of any kind
+				boolean include = !geowaveOnly && !wsFilter && !dsFilter; // no
+																			// filtering
+																			// of
+																			// any
+																			// kind
 
 				if (include) { // just grab it...
 					layerInfoArray.add(layerArray.getJSONObject(i));
@@ -508,7 +518,8 @@ public class GeoServerRestClient
 								}
 
 								if (entryArray == null) {
-									logger.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
+									logger
+											.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
 								}
 								else {
 									// group layers by namespace
@@ -596,11 +607,14 @@ public class GeoServerRestClient
 			final String workspaceName,
 			final String datastoreName,
 			final String layerName ) {
-		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + "/featuretypes").request().post(
-				Entity.entity(
-						"{'featureType':{'name':'" + layerName + "'}}",
-						MediaType.APPLICATION_JSON));
+		return getWebTarget()
+				.path(
+						"geoserver/rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + "/featuretypes")
+				.request()
+				.post(
+						Entity.entity(
+								"{'featureType':{'name':'" + layerName + "'}}",
+								MediaType.APPLICATION_JSON));
 	}
 
 	public Response deleteFeatureLayer(
@@ -613,8 +627,11 @@ public class GeoServerRestClient
 	public Response getCoverageStore(
 			final String workspaceName,
 			String coverageName ) {
-		final Response resp = getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json").request().get();
+		final Response resp = getWebTarget()
+				.path(
+						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json")
+				.request()
+				.get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -707,8 +724,12 @@ public class GeoServerRestClient
 	public Response getCoverages(
 			String workspaceName,
 			String cvsstoreName ) {
-		final Response resp = getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvsstoreName + "/coverages.json").request().get();
+		final Response resp = getWebTarget()
+				.path(
+						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvsstoreName
+								+ "/coverages.json")
+				.request()
+				.get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -735,8 +756,12 @@ public class GeoServerRestClient
 			final String workspaceName,
 			String cvgStoreName,
 			String coverageName ) {
-		final Response resp = getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages/" + coverageName + ".json").request().get();
+		final Response resp = getWebTarget()
+				.path(
+						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName
+								+ "/coverages/" + coverageName + ".json")
+				.request()
+				.get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -756,24 +781,33 @@ public class GeoServerRestClient
 			final String workspaceName,
 			final String cvgStoreName,
 			final String coverageName ) {
-		String jsonString = "{'coverage':" + "{'name':'" + coverageName + "'," + "'nativeCoverageName':'" + coverageName + "'}}";
+		String jsonString = "{'coverage':" + "{'name':'" + coverageName + "'," + "'nativeCoverageName':'"
+				+ coverageName + "'}}";
 		logger.debug("Posting JSON: " + jsonString + " to " + workspaceName + "/" + cvgStoreName);
 
-		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages").request().post(
-				Entity.entity(
-						jsonString,
-						MediaType.APPLICATION_JSON));
+		return getWebTarget()
+				.path(
+						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages")
+				.request()
+				.post(
+						Entity.entity(
+								jsonString,
+								MediaType.APPLICATION_JSON));
 	}
 
 	public Response deleteCoverage(
 			String workspaceName,
 			String cvgstoreName,
 			String coverageName ) {
-		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName + "/coverages/" + coverageName).queryParam(
-				"recurse",
-				"true").request().delete();
+		return getWebTarget()
+				.path(
+						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName
+								+ "/coverages/" + coverageName)
+				.queryParam(
+						"recurse",
+						"true")
+				.request()
+				.delete();
 	}
 
 	// Internal methods
@@ -940,12 +974,14 @@ public class GeoServerRestClient
 			rootEl.appendChild(urlEl);
 
 			/*
-			 * // Retrieve store config String user = geowaveStoreConfig.get("user"); String pass =
-			 * geowaveStoreConfig.get("password"); String zookeeper = geowaveStoreConfig.get("zookeeper"); String
-			 * instance = geowaveStoreConfig.get("instance");
+			 * // Retrieve store config String user =
+			 * geowaveStoreConfig.get("user"); String pass =
+			 * geowaveStoreConfig.get("password"); String zookeeper =
+			 * geowaveStoreConfig.get("zookeeper"); String instance =
+			 * geowaveStoreConfig.get("instance");
 			 * 
-			 * // Write the temp XML file for the store config writeConfigXml( storeConfigPath, user, pass, zookeeper,
-			 * instance, cvgstoreName);
+			 * // Write the temp XML file for the store config writeConfigXml(
+			 * storeConfigPath, user, pass, zookeeper, instance, cvgstoreName);
 			 */
 
 			// use a transformer to create the xml string for the rest call
@@ -961,7 +997,10 @@ public class GeoServerRestClient
 
 			coverageXml = result.getWriter().toString();
 		}
-		catch (Exception e) {
+		catch (TransformerException e) {
+			e.printStackTrace();
+		}
+		catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 
@@ -1060,7 +1099,7 @@ public class GeoServerRestClient
 			String adapterId,
 			DataAdapter adapter ) {
 		logger.debug("getAdapterInfo for id = " + adapterId);
-		
+
 		DataAdapterInfo info = new DataAdapterInfo();
 		info.adapterId = adapter.getAdapterId().getString();
 		info.isRaster = false;
@@ -1068,7 +1107,7 @@ public class GeoServerRestClient
 		if (adapter instanceof RasterDataAdapter) {
 			info.isRaster = true;
 		}
-		
+
 		logger.debug("> Adapter ID: " + info.adapterId);
 		logger.debug("> Adapter Type: " + adapter.getClass().getSimpleName());
 
@@ -1093,62 +1132,8 @@ public class GeoServerRestClient
 		}
 
 		logger.debug("No match!");
-		
+
 		return null;
-	}
-
-	private void writeConfigXml(
-			String storeConfigPath,
-			String user,
-			String pass,
-			String zookeeper,
-			String instance,
-			String cvgstoreName ) {
-		try {
-			// create the post XML
-			Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-
-			Element configEl = xmlDoc.createElement("config");
-			xmlDoc.appendChild(configEl);
-
-			Element userEl = xmlDoc.createElement("user");
-			userEl.appendChild(xmlDoc.createTextNode(user));
-			configEl.appendChild(userEl);
-
-			Element passEl = xmlDoc.createElement("password");
-			passEl.appendChild(xmlDoc.createTextNode(pass));
-			configEl.appendChild(passEl);
-
-			Element zkEl = xmlDoc.createElement("zookeeper");
-			zkEl.appendChild(xmlDoc.createTextNode(zookeeper));
-			configEl.appendChild(zkEl);
-
-			Element instEl = xmlDoc.createElement("instance");
-			instEl.appendChild(xmlDoc.createTextNode(instance));
-			configEl.appendChild(instEl);
-
-			Element gwnsEl = xmlDoc.createElement("gwNamespace");
-			gwnsEl.appendChild(xmlDoc.createTextNode(cvgstoreName));
-			configEl.appendChild(gwnsEl);
-
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			DOMSource source = new DOMSource(
-					xmlDoc);
-
-			String xmlFile = storeConfigPath + "/gwraster.xml";
-			FileWriter xmlWriter = new FileWriter(
-					xmlFile);
-
-			StreamResult result = new StreamResult(
-					xmlWriter);
-
-			xformer.transform(
-					source,
-					result);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	// Example use of geoserver rest client
@@ -1206,7 +1191,8 @@ public class GeoServerRestClient
 			System.out.println(datastores.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer coverage stores list for 'geowave'; code = " + listCoveragesResponse.getStatus());
+			System.err.println("Error getting GeoServer coverage stores list for 'geowave'; code = "
+					+ listCoveragesResponse.getStatus());
 		}
 
 		// test get coverage store
@@ -1222,7 +1208,8 @@ public class GeoServerRestClient
 			System.out.println(datastore.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer coverage store info for 'geowave/sfdem'; code = " + getCvgStoreResponse.getStatus());
+			System.err.println("Error getting GeoServer coverage store info for 'geowave/sfdem'; code = "
+					+ getCvgStoreResponse.getStatus());
 		}
 
 		// test add store
@@ -1300,11 +1287,13 @@ public class GeoServerRestClient
 		// if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
 		// System.out.println("\nGeoServer layer add response for 'ne_50m_admin_0_countries':");
 		//
-		// JSONObject jsonResponse = JSONObject.fromObject(addLayerResponse.getEntity());
+		// JSONObject jsonResponse =
+		// JSONObject.fromObject(addLayerResponse.getEntity());
 		// System.out.println(jsonResponse.toString(2));
 		// }
 		// else {
-		// System.err.println("Error adding GeoServer layer 'ne_50m_admin_0_countries'; code = " +
+		// System.err.println("Error adding GeoServer layer 'ne_50m_admin_0_countries'; code = "
+		// +
 		// addLayerResponse.getStatus());
 		// }
 

@@ -77,10 +77,10 @@ public class ByteArrayUtils
 			final byte[] id1,
 			final byte[] id2 ) {
 		byte[] combinedId;
-		if (id1 == null) {
+		if (id1 == null || id1.length == 0) {
 			combinedId = id2;
 		}
-		else if (id2 == null) {
+		else if (id2 == null || id2.length == 0) {
 			combinedId = id1;
 		}
 		else {

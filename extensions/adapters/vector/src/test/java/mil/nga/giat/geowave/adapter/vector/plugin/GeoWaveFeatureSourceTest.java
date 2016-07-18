@@ -149,10 +149,12 @@ public class GeoWaveFeatureSourceTest extends
 				}
 				count++;
 			}
-
-			assertEquals(
-					8,
-					count);
+			// rather than maintain an exact count on stats as we should be able
+			// to add them more dynamically, just make sure that there is some
+			// set of base stats found
+			assertTrue(
+					"Unexpectedly few stats found",
+					count > 5);
 
 			assertEquals(
 					66,

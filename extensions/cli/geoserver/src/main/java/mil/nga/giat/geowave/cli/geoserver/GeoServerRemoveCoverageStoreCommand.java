@@ -73,10 +73,12 @@ public class GeoServerRemoveCoverageStoreCommand implements
 				cvgstoreName);
 
 		if (deleteCvgStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("Delete store '" + cvgstoreName + "' from workspace '" + workspace + "' on GeoServer: OK");
+			System.out.println("Delete store '" + cvgstoreName + "' from workspace '" + workspace
+					+ "' on GeoServer: OK");
 		}
 		else {
-			System.err.println("Error deleting store '" + cvgstoreName + "' from workspace '" + workspace + "' on GeoServer; code = " + deleteCvgStoreResponse.getStatus());
+			System.err.println("Error deleting store '" + cvgstoreName + "' from workspace '" + workspace
+					+ "' on GeoServer; code = " + deleteCvgStoreResponse.getStatus());
 		}
 	}
 }

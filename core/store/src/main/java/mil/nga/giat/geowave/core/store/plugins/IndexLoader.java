@@ -50,8 +50,7 @@ public class IndexLoader
 				null);
 
 		// Is there a comma?
-		final String[] indices = indexName.split(
-				",");
+		final String[] indices = indexName.split(",");
 		for (final String index : indices) {
 
 			// Attempt to load as an index group first.
@@ -74,8 +73,7 @@ public class IndexLoader
 						indexOptions);
 			}
 			else if (indexGroupOptions != null) {
-				loadedIndices.putAll(
-						indexGroupOptions.getDimensionalityPlugins());
+				loadedIndices.putAll(indexGroupOptions.getDimensionalityPlugins());
 			}
 		}
 
@@ -86,8 +84,7 @@ public class IndexLoader
 			final Properties props,
 			final String name ) {
 		final IndexGroupPluginOptions indexGroupPlugin = new IndexGroupPluginOptions();
-		final String indexGroupNamespace = IndexGroupPluginOptions.getIndexGroupNamespace(
-				name);
+		final String indexGroupNamespace = IndexGroupPluginOptions.getIndexGroupNamespace(name);
 		if (!indexGroupPlugin.load(
 				props,
 				indexGroupNamespace)) {
@@ -100,8 +97,7 @@ public class IndexLoader
 			final Properties props,
 			final String name ) {
 		final IndexPluginOptions indexPlugin = new IndexPluginOptions();
-		final String indexNamespace = IndexPluginOptions.getIndexNamespace(
-				name);
+		final String indexNamespace = IndexPluginOptions.getIndexNamespace(name);
 		if (!indexPlugin.load(
 				props,
 				indexNamespace)) {
@@ -111,9 +107,8 @@ public class IndexLoader
 	}
 
 	public List<IndexPluginOptions> getLoadedIndexes() {
-		return Collections.unmodifiableList(
-				new ArrayList<IndexPluginOptions>(
-						loadedIndices.values()));
+		return Collections.unmodifiableList(new ArrayList<IndexPluginOptions>(
+				loadedIndices.values()));
 	}
 
 	public void addIndex(

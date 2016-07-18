@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.test;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
 import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
 import org.apache.commons.io.FileUtils;
@@ -12,8 +13,10 @@ import org.junit.Assert;
 
 import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 
 public class AccumuloStoreTestEnvironment implements
 		StoreTestEnvironment
@@ -89,7 +92,6 @@ public class AccumuloStoreTestEnvironment implements
 					Assert.fail("Unable to start mini accumulo instance: '" + e.getLocalizedMessage() + "'");
 				}
 			}
-
 		}
 	}
 

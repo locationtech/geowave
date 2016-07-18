@@ -8,6 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.CRS;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.MathTransform;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
@@ -43,25 +57,11 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
-import org.apache.log4j.Logger;
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.CRS;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.MathTransform;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
 /**
  * This data adapter will handle all reading/writing concerns for storing and
  * retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
  * store in Accumulo.
- * 
+ *
  * If the implementor needs to write rows with particular visibility, this can
  * be done by providing a FieldVisibilityHandler to a constructor or a
  * VisibilityManagement to a constructor. When using VisibilityManagement, the
@@ -71,25 +71,25 @@ import com.google.common.collect.HashBiMap;
  * attribute that contains the visibility meta-data.
  * persistedType.getDescriptor("someAttributeName").getUserData().put(
  * "visibility", Boolean.TRUE)
- * 
- * 
+ *
+ *
  * The adapter will use the SimpleFeature's default geometry for spatial
  * indexing.
- * 
+ *
  * The adaptor will use the first temporal attribute (a Calendar or Date object)
  * as the timestamp of a temporal index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for a specific time
  * attribute with Boolean.TRUE, then the attribute is used as the timestamp of a
  * temporal index.
- * 
+ *
  * If the feature type contains UserData properties 'start' and 'end' for two
  * different time attributes with value Boolean.TRUE, then the attributes are
  * used for a range index.
- * 
+ *
  * If the feature type contains a UserData property 'time' for *all* time
  * attributes with Boolean.FALSE, then a temporal index is not used.
- * 
+ *
  * Statistics configurations are maintained in UserData. Each attribute may have
  * a UserData property called 'stats'. The associated value is an instance of
  * {@link mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection}
@@ -98,7 +98,7 @@ import com.google.common.collect.HashBiMap;
  * type of statistic. The default statistics for geometry and temporal
  * constraints cannot be changed, as they are critical components to the
  * efficiency of query processing.
- * 
+ *
  */
 public class FeatureDataAdapter extends
 		AbstractDataAdapter<SimpleFeature> implements
@@ -705,15 +705,22 @@ public class FeatureDataAdapter extends
 	}
 
 	private void initializePositionMaps() {
-		for (int i = 0; i < reprojectedType.getAttributeCount(); i++) {
-			final AttributeDescriptor ad = reprojectedType.getDescriptor(i);
-			final ByteArrayId currFieldId = new ByteArrayId(
-					ad.getLocalName());
-			fieldToPositionMap.forcePut(
-					currFieldId,
-					i);
+		try {
+			for (int i = 0; i < reprojectedType.getAttributeCount(); i++) {
+				final AttributeDescriptor ad = reprojectedType.getDescriptor(i);
+				final ByteArrayId currFieldId = new ByteArrayId(
+						ad.getLocalName());
+				fieldToPositionMap.forcePut(
+						currFieldId,
+						i);
+			}
+			positionToFieldMap = fieldToPositionMap.inverse();
 		}
-		positionToFieldMap = fieldToPositionMap.inverse();
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to initialize position map, continuing anyways",
+					e);
+		}
 	}
 
 	private List<ByteArrayId> getDimensionFieldIds(

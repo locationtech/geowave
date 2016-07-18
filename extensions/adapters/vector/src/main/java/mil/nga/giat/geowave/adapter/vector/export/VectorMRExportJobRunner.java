@@ -13,7 +13,6 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 
 import com.beust.jcommander.JCommander;
@@ -23,15 +22,13 @@ import com.google.common.collect.Lists;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
-import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
@@ -133,9 +130,11 @@ public class VectorMRExportJobRunner extends
 			}
 			GeoWaveInputFormat.setQuery(
 					conf,
-					new CQLQuery(
+					(DistributableQuery) CQLQuery.createOptimalQuery(
 							mrOptions.getCqlFilter(),
-							(GeotoolsFeatureDataAdapter) adapter));
+							(GeotoolsFeatureDataAdapter) adapter,
+							options.getIndex(),
+							null));
 		}
 		GeoWaveInputFormat.setDataStoreName(
 				conf,

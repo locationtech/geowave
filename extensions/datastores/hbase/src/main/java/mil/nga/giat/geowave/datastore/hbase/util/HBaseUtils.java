@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.datastore.hbase.util;
 
+import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -11,11 +12,11 @@ import java.util.NavigableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
@@ -38,19 +39,18 @@ import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.hbase.entities.HBaseRowId;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
 public class HBaseUtils
 {
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
-	public static final String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
 
 	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.UTF8_CHAR_SET);
 	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.UTF8_CHAR_SET);
@@ -124,7 +124,7 @@ public class HBaseUtils
 			// metadata in our de-duplication
 			// step
 			rowIds.add(new ByteArrayId(
-					new HBaseRowId(
+					new GeowaveRowId(
 							indexId,
 							dataId,
 							adapterId,
@@ -224,7 +224,7 @@ public class HBaseUtils
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback ) {
 
-		final HBaseRowId rowId = new HBaseRowId(
+		final GeowaveRowId rowId = new GeowaveRowId(
 				row.getRow());
 		return (T) decodeRowObj(
 				row,
@@ -238,7 +238,7 @@ public class HBaseUtils
 
 	public static Object decodeRow(
 			final Result row,
-			final HBaseRowId rowId,
+			final GeowaveRowId rowId,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
@@ -254,7 +254,7 @@ public class HBaseUtils
 
 	private static <T> Object decodeRowObj(
 			final Result row,
-			final HBaseRowId rowId,
+			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -274,7 +274,7 @@ public class HBaseUtils
 	@SuppressWarnings("unchecked")
 	public static <T> Pair<T, DataStoreEntryInfo> decodeRow(
 			final Result row,
-			final HBaseRowId rowId,
+			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -299,8 +299,6 @@ public class HBaseUtils
 		final PersistentDataset<CommonIndexValue> indexData = new PersistentDataset<CommonIndexValue>();
 		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
 
-		// TODO #406 Need to fix this. Adding it currently to just fix
-		// compilation issue due to merge with #238
 		final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
 
 		// for now we are assuming all entries in a row are of the same type
@@ -366,9 +364,10 @@ public class HBaseUtils
 				// extended data model
 				final FieldReader<?> extFieldReader = adapter.getReader(fieldId);
 				if (extFieldReader == null) {
-					// if it still isn't resolved, log an error, and
-					// continue
-					LOGGER.error("field reader not found for data entry, the value will be ignored");
+					LOGGER.error("field reader not found for data entry, the value may be ignored");
+					unknownData.addValue(new PersistentValue<byte[]>(
+							fieldId,
+							byteValue));
 					continue;
 				}
 				final Object value = extFieldReader.readField(byteValue);
@@ -409,6 +408,8 @@ public class HBaseUtils
 								index),
 						new DataStoreEntryInfo(
 								rowId.getDataId(),
+								Arrays.asList(new ByteArrayId(
+										rowId.getInsertionId())),
 								Arrays.asList(new ByteArrayId(
 										row.getRow())),
 								fieldInfoList));
@@ -531,6 +532,42 @@ public class HBaseUtils
 				columnQualifier);
 		m.add(d);
 		return m;
+	}
+
+	public static class ScannerClosableWrapper implements
+			Closeable
+	{
+		private final ResultScanner results;
+
+		public ScannerClosableWrapper(
+				final ResultScanner results ) {
+			this.results = results;
+		}
+
+		@Override
+		public void close() {
+			results.close();
+		}
+
+	}
+
+	public static class MultiScannerClosableWrapper implements
+			Closeable
+	{
+		private final List<ResultScanner> results;
+
+		public MultiScannerClosableWrapper(
+				final List<ResultScanner> results ) {
+			this.results = results;
+		}
+
+		@Override
+		public void close() {
+			for (final ResultScanner scanner : results) {
+				scanner.close();
+			}
+		}
+
 	}
 
 }

@@ -93,6 +93,7 @@ public class GeoWaveNNIT
 		ingest(dataStorePluginOptions.createDataStore());
 		runNN(new SpatialQuery(
 				dataGenerator.getBoundingRegion()));
+		TestUtils.deleteAll(dataStorePluginOptions);
 	}
 
 	private void runNN(

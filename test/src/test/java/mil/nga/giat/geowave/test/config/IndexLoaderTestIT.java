@@ -32,22 +32,16 @@ public class IndexLoaderTestIT
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				props);
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
-		addIndex.setParameters(
-				"index2");
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
+		addIndex.prepare(params);
+		addIndex.execute(params);
+		addIndex.setParameters("index2");
+		addIndex.prepare(params);
+		addIndex.execute(params);
 		final IndexLoader loader = new IndexLoader(
 				"index1,index2");
 		Assert.assertTrue(
 				"Unable to load multiple indices from property file",
-				loader.loadFromConfig(
-						props));
+				loader.loadFromConfig(props));
 		final List<IndexPluginOptions> options = loader.getLoadedIndexes();
 		Assert.assertEquals(
 				"Given multiple indices an incorrect number of indices loaded",
@@ -71,30 +65,22 @@ public class IndexLoaderTestIT
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				props);
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
-		addIndex.setParameters(
-				"index2");
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
+		addIndex.prepare(params);
+		addIndex.execute(params);
+		addIndex.setParameters("index2");
+		addIndex.prepare(params);
+		addIndex.execute(params);
 		final AddIndexGroupCommand addIndexGroup = new AddIndexGroupCommand();
 		addIndexGroup.setParameters(
 				"indexGroup1",
 				"index1,index2");
-		addIndexGroup.prepare(
-				params);
-		addIndexGroup.execute(
-				params);
+		addIndexGroup.prepare(params);
+		addIndexGroup.execute(params);
 		final IndexLoader loader = new IndexLoader(
 				"indexGroup1");
 		Assert.assertTrue(
 				"Unable to load index groups from property file",
-				loader.loadFromConfig(
-						props));
+				loader.loadFromConfig(props));
 		final List<IndexPluginOptions> options = loader.getLoadedIndexes();
 		Assert.assertEquals(
 				"Given a single index group an incorrect number of indices loaded",
@@ -118,49 +104,33 @@ public class IndexLoaderTestIT
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				props);
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
-		addIndex.setParameters(
-				"index2");
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
-		addIndex.setParameters(
-				"index3");
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
-		addIndex.setParameters(
-				"index4");
-		addIndex.prepare(
-				params);
-		addIndex.execute(
-				params);
+		addIndex.prepare(params);
+		addIndex.execute(params);
+		addIndex.setParameters("index2");
+		addIndex.prepare(params);
+		addIndex.execute(params);
+		addIndex.setParameters("index3");
+		addIndex.prepare(params);
+		addIndex.execute(params);
+		addIndex.setParameters("index4");
+		addIndex.prepare(params);
+		addIndex.execute(params);
 		final AddIndexGroupCommand addIndexGroup = new AddIndexGroupCommand();
 		addIndexGroup.setParameters(
 				"indexGroup1",
 				"index1,index2");
-		addIndexGroup.prepare(
-				params);
-		addIndexGroup.execute(
-				params);
+		addIndexGroup.prepare(params);
+		addIndexGroup.execute(params);
 		addIndexGroup.setParameters(
 				"indexGroup2",
 				"index3,index2");
-		addIndexGroup.prepare(
-				params);
-		addIndexGroup.execute(
-				params);
+		addIndexGroup.prepare(params);
+		addIndexGroup.execute(params);
 		final IndexLoader loader = new IndexLoader(
 				"indexGroup1,indexGroup2,index4,index2");
 		Assert.assertTrue(
 				"Unable to load combination of index groups and indices from property file",
-				loader.loadFromConfig(
-						props));
+				loader.loadFromConfig(props));
 		final List<IndexPluginOptions> options = loader.getLoadedIndexes();
 		Assert.assertEquals(
 				"Given the combination of indices and index groups an incorrect number of indices loaded",

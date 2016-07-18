@@ -48,4 +48,10 @@ public class MemorySecondaryIndexDataStore implements
 
 	}
 
+	@Override
+	public void removeAll() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -79,11 +79,13 @@ public class GeoServerAddDatastoreCommand implements
 				datastore,
 				gwStore);
 
-		if (addStoreResponse.getStatus() == Status.OK.getStatusCode() || addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
+		if (addStoreResponse.getStatus() == Status.OK.getStatusCode()
+				|| addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
 			System.out.println("Add datastore for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer: OK");
 		}
 		else {
-			System.err.println("Error adding datastore for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer; code = " + addStoreResponse.getStatus());
+			System.err.println("Error adding datastore for '" + gwStore + "' to workspace '" + workspace
+					+ "' on GeoServer; code = " + addStoreResponse.getStatus());
 		}
 	}
 }

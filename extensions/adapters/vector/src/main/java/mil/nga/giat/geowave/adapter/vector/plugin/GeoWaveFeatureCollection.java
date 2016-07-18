@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -382,7 +383,7 @@ public class GeoWaveFeatureCollection extends
 			final ExtractAttributesFilter filter = new ExtractAttributesFilter();
 
 			final MinVisitor minVisitor = (MinVisitor) visitor;
-			final List<String> attrs = (List<String>) minVisitor.getExpression().accept(
+			final Collection<String> attrs = (Collection<String>) minVisitor.getExpression().accept(
 					filter,
 					null);
 			int acceptedCount = 0;
@@ -414,7 +415,7 @@ public class GeoWaveFeatureCollection extends
 			final ExtractAttributesFilter filter = new ExtractAttributesFilter();
 
 			final MaxVisitor maxVisitor = (MaxVisitor) visitor;
-			final List<String> attrs = (List<String>) maxVisitor.getExpression().accept(
+			final Collection<String> attrs = (Collection<String>) maxVisitor.getExpression().accept(
 					filter,
 					null);
 			int acceptedCount = 0;

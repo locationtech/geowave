@@ -65,6 +65,7 @@ public class RowHistogramDataStaticticsTest
 								1
 							},
 							ids,
+							ids,
 							Collections.<FieldInfo<?>> emptyList()),
 					1);
 			stats2.entryIngested(
@@ -72,6 +73,7 @@ public class RowHistogramDataStaticticsTest
 							new byte[] {
 								1
 							},
+							ids,
 							ids,
 							Collections.<FieldInfo<?>> emptyList()),
 					1);
@@ -99,6 +101,7 @@ public class RowHistogramDataStaticticsTest
 								1
 							},
 							ids,
+							ids,
 							Collections.<FieldInfo<?>> emptyList()),
 					1);
 			stats2.entryIngested(
@@ -106,6 +109,7 @@ public class RowHistogramDataStaticticsTest
 							new byte[] {
 								1
 							},
+							ids,
 							ids,
 							Collections.<FieldInfo<?>> emptyList()),
 					1);

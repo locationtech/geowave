@@ -10,6 +10,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -32,23 +33,6 @@ public class ChooseBestMatchIndexQueryStrategy implements
 	@Override
 	public String toString() {
 		return NAME;
-	}
-
-	/**
-	 * Constraints that are empty indicate full table scan. A full table scan
-	 * occurs if ANY one dimension is unbounded.
-	 * 
-	 * @param constraints
-	 * @return true if any one dimension is unbounded
-	 */
-	public static final boolean isFullTableScan(
-			final List<MultiDimensionalNumericData> constraints ) {
-		for (final MultiDimensionalNumericData constraint : constraints) {
-			if (constraint.isEmpty()) {
-				return false;
-			}
-		}
-		return constraints.isEmpty();
 	}
 
 	@Override
@@ -76,7 +60,7 @@ public class ChooseBestMatchIndexQueryStrategy implements
 								.warn("Best Match Heuristic requires statistic RowRangeHistogramStatistics for each index to properly choose an index.");
 					}
 
-					if (isFullTableScan(constraints)) {
+					if (IndexUtils.isFullTableScan(constraints)) {
 						// keep this is as a default in case all indices
 						// result in a full table scan
 						if (bestIdx == null) {
@@ -122,52 +106,5 @@ public class ChooseBestMatchIndexQueryStrategy implements
 			public void close()
 					throws IOException {}
 		};
-	}
-
-	private static boolean isSpatialTemporal(
-			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null)
-				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
-			return false;
-		}
-		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
-		if (dimensions.length < 3) {
-			return false;
-		}
-		boolean hasLat = false, hasLon = false, hasTime = false;
-		for (final NumericDimensionDefinition definition : dimensions) {
-			if (definition instanceof TimeDefinition) {
-				hasTime = true;
-			}
-			else if (definition instanceof LatitudeDefinition) {
-				hasLat = true;
-			}
-			else if (definition instanceof LongitudeDefinition) {
-				hasLon = true;
-			}
-		}
-		return hasTime && hasLat && hasLon;
-	}
-
-	private static boolean isSpatial(
-			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null)
-				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
-			return false;
-		}
-		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
-		if (dimensions.length != 2) {
-			return false;
-		}
-		boolean hasLat = false, hasLon = false;
-		for (final NumericDimensionDefinition definition : dimensions) {
-			if (definition instanceof LatitudeDefinition) {
-				hasLat = true;
-			}
-			else if (definition instanceof LongitudeDefinition) {
-				hasLon = true;
-			}
-		}
-		return hasLat && hasLon;
 	}
 }

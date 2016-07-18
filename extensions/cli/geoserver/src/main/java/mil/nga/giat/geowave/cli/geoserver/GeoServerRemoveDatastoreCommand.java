@@ -67,16 +67,18 @@ public class GeoServerRemoveDatastoreCommand implements
 		}
 
 		datastoreName = parameters.get(0);
-		
+
 		Response deleteStoreResponse = geoserverClient.deleteDatastore(
 				workspace,
 				datastoreName);
 
 		if (deleteStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("Delete store '" + datastoreName + "' from workspace '" + workspace + "' on GeoServer: OK");
+			System.out.println("Delete store '" + datastoreName + "' from workspace '" + workspace
+					+ "' on GeoServer: OK");
 		}
 		else {
-			System.err.println("Error deleting store '" + datastoreName + "' from workspace '" + workspace + "' on GeoServer; code = " + deleteStoreResponse.getStatus());
+			System.err.println("Error deleting store '" + datastoreName + "' from workspace '" + workspace
+					+ "' on GeoServer; code = " + deleteStoreResponse.getStatus());
 		}
 	}
 }

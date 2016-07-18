@@ -63,7 +63,8 @@ public class GeoServerRemoveWorkspaceCommand implements
 			System.out.println("Delete workspace '" + wsName + "' from GeoServer: OK");
 		}
 		else {
-			System.err.println("Error deleting workspace '" + wsName + "' from GeoServer; code = " + deleteWorkspaceResponse.getStatus());
+			System.err.println("Error deleting workspace '" + wsName + "' from GeoServer; code = "
+					+ deleteWorkspaceResponse.getStatus());
 		}
 	}
 }

@@ -6,15 +6,15 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseCloseableIteratorWrapper.ScannerClosableWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.ScannerClosableWrapper;
 
 abstract public class AbstractHBaseRowQuery<T> extends
 		HBaseQuery
@@ -28,11 +28,12 @@ abstract public class AbstractHBaseRowQuery<T> extends
 			final String[] authorizations,
 			final ScanCallback<T> scanCallback ) {
 		super(
-				index);
+				index,
+				authorizations);
 		this.scanCallback = scanCallback;
 	}
 
-	public T query(
+	public CloseableIterator<T> query(
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore ) {
 		final Scan scanner = new Scan();
@@ -41,7 +42,8 @@ abstract public class AbstractHBaseRowQuery<T> extends
 		try {
 			results = operations.getScannedResults(
 					scanner,
-					StringUtils.stringFromBinary(index.getId().getBytes()));
+					StringUtils.stringFromBinary(index.getId().getBytes()),
+					authorizations);
 		}
 		catch (final IOException e) {
 			LOGGER.error("Unable to get the scanned results " + e);
@@ -50,7 +52,7 @@ abstract public class AbstractHBaseRowQuery<T> extends
 		 * getScanner( accumuloOperations, getScannerLimit());
 		 * addScanIteratorSettings(scanner);
 		 */
-		final HBaseCloseableIteratorWrapper<Object> it = new HBaseCloseableIteratorWrapper<Object>(
+		return new CloseableIteratorWrapper<T>(
 				new ScannerClosableWrapper(
 						results),
 				new HBaseEntryIteratorWrapper(
@@ -58,11 +60,7 @@ abstract public class AbstractHBaseRowQuery<T> extends
 						index,
 						results.iterator(),
 						null));
-		return queryResultFromIterator(it);
 	}
 
 	abstract protected Integer getScannerLimit();
-
-	abstract protected T queryResultFromIterator(
-			final HBaseCloseableIteratorWrapper<?> it );
 }

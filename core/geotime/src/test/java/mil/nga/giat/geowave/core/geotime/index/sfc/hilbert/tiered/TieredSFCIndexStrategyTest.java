@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Test;
+
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
@@ -29,12 +31,28 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-
-import org.junit.Test;
+import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
+import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 
 public class TieredSFCIndexStrategyTest
 {
-
+	public static final int[] DEFINED_BITS_OF_PRECISION = new int[] {
+		0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9,
+		10,
+		11,
+		13,
+		18,
+		31
+	};
 	NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
 		new LatitudeDefinition(
@@ -126,14 +144,22 @@ public class TieredSFCIndexStrategyTest
 	@Test
 	public void testPredefinedSpatialEntries()
 			throws Exception {
-		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex()
-				.getIndexStrategy();
-		for (int sfcIndex = 0; sfcIndex < SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION.length; sfcIndex++) {
+		final NumericIndexStrategy strategy = TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
+				new NumericDimensionDefinition[] {
+					new LongitudeDefinition(),
+					new LatitudeDefinition(
+							true)
+				},
+				new int[][] {
+					DEFINED_BITS_OF_PRECISION.clone(),
+					DEFINED_BITS_OF_PRECISION.clone()
+				},
+				SFCType.HILBERT);
+		for (int sfcIndex = 0; sfcIndex < DEFINED_BITS_OF_PRECISION.length; sfcIndex++) {
 			final NumericData[] dataPerDimension = new NumericData[2];
 			final double precision = 360 / Math.pow(
 					2,
-					SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex]);
+					DEFINED_BITS_OF_PRECISION[sfcIndex]);
 			if (precision > 180) {
 				dataPerDimension[0] = new NumericRange(
 						-180,
@@ -169,14 +195,14 @@ public class TieredSFCIndexStrategyTest
 			for (final ByteArrayRange range : queryRanges) {
 				final byte tier = range.getStart().getBytes()[0];
 				queryRangeTiers.add(range.getStart().getBytes()[0]);
-				if (tier == SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex]) {
+				if (tier == DEFINED_BITS_OF_PRECISION[sfcIndex]) {
 					if (rangeAtTierFound) {
 						throw new Exception(
 								"multiple ranges were found unexpectedly for tier " + tier);
 					}
 					assertEquals(
 							"this range is an exact fit, so it should have exactly one value for tier "
-									+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
+									+ DEFINED_BITS_OF_PRECISION[sfcIndex],
 							range.getStart(),
 							range.getEnd());
 					rangeAtTierFound = true;
@@ -184,32 +210,28 @@ public class TieredSFCIndexStrategyTest
 			}
 			if (!rangeAtTierFound) {
 				throw new Exception(
-						"no ranges were found at the expected exact fit tier "
-								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex]);
+						"no ranges were found at the expected exact fit tier " + DEFINED_BITS_OF_PRECISION[sfcIndex]);
 			}
 
 			// ensure the first byte is equal to the appropriate number of bits
 			// of precision
 			if ((ids.get(
 					0).getBytes()[0] == 0)
-					|| ((sfcIndex == (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION.length - 1)) || (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex] + 1)))) {
+					|| ((sfcIndex == (DEFINED_BITS_OF_PRECISION.length - 1)) || (DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (DEFINED_BITS_OF_PRECISION[sfcIndex] + 1)))) {
 				assertEquals(
-						"Insertion ID expected to be exact match at tier "
-								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
-						SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
+						"Insertion ID expected to be exact match at tier " + DEFINED_BITS_OF_PRECISION[sfcIndex],
+						DEFINED_BITS_OF_PRECISION[sfcIndex],
 						ids.get(
 								0).getBytes()[0]);
 				assertEquals(
-						"Insertion ID size expected to be 1 at tier "
-								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex],
+						"Insertion ID size expected to be 1 at tier " + DEFINED_BITS_OF_PRECISION[sfcIndex],
 						1,
 						ids.size());
 			}
 			else {
 				assertEquals(
-						"Insertion ID expected to be duplicated at tier "
-								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
-						SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						"Insertion ID expected to be duplicated at tier " + DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+						DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						ids.get(
 								0).getBytes()[0]);
 				// if the precision is within the bounds of longitude but not
@@ -219,7 +241,7 @@ public class TieredSFCIndexStrategyTest
 				final int expectedIds = (precision > 90) && (precision <= 180) ? 2 : 4;
 				assertEquals(
 						"Insertion ID size expected to be " + expectedIds + " at tier "
-								+ SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
+								+ DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						expectedIds,
 						ids.size());
 			}
@@ -232,7 +254,7 @@ public class TieredSFCIndexStrategyTest
 		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider()
 				.createPrimaryIndex()
 				.getIndexStrategy();
-		for (final int element : SpatialDimensionalityTypeProvider.DEFINED_BITS_OF_PRECISION) {
+		for (final int element : DEFINED_BITS_OF_PRECISION) {
 			final NumericData[] dataPerDimension = new NumericData[2];
 			final double precision = 360 / Math.pow(
 					2,

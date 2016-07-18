@@ -58,8 +58,10 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
@@ -143,9 +145,6 @@ public class GeoWaveBasicIT
 
 	public void testIngestAndQuerySpatialPointsAndLines(
 			final int nthreads ) {
-		System.getProperties().put(
-				"AccumuloIndexWriter.skipFlush",
-				"true");
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,
@@ -349,7 +348,9 @@ public class GeoWaveBasicIT
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
 						final DataStatistics<?> nextStats = statsIterator.next();
-						if (nextStats instanceof RowRangeHistogramStatistics || nextStats instanceof IndexMetaDataSet) {
+						if (nextStats instanceof RowRangeHistogramStatistics || nextStats instanceof IndexMetaDataSet
+								|| nextStats instanceof DifferingFieldVisibilityEntryCount
+								|| nextStats instanceof DuplicateEntryCount) {
 							continue;
 						}
 						statsCount++;
@@ -548,10 +549,6 @@ public class GeoWaveBasicIT
 
 	@Test
 	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
-		System.getProperties().put(
-				"AccumuloIndexWriter.skipFlush",
-				"true");
-
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,

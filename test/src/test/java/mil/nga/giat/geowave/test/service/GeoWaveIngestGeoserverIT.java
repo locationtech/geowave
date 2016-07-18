@@ -172,7 +172,7 @@ public class GeoWaveIngestGeoserverIT
 					REFERENCE_26_WMS_IMAGE_PATH));
 		}
 
-		testTileAgainstReference(
+		TestUtils.testTileAgainstReference(
 				biDirectRender,
 				ref,
 				0,
@@ -189,7 +189,7 @@ public class GeoWaveIngestGeoserverIT
 				360,
 				null);
 		Assert.assertNotNull(ref);
-		testTileAgainstReference(
+		TestUtils.testTileAgainstReference(
 				biSubsamplingWithoutError,
 				ref,
 				0,
@@ -205,7 +205,7 @@ public class GeoWaveIngestGeoserverIT
 				920,
 				360,
 				null);
-		testTileAgainstReference(
+		TestUtils.testTileAgainstReference(
 				biSubsamplingWithExpectedError,
 				ref,
 				0.05,
@@ -221,7 +221,7 @@ public class GeoWaveIngestGeoserverIT
 				920,
 				360,
 				null);
-		testTileAgainstReference(
+		TestUtils.testTileAgainstReference(
 				biSubsamplingWithLotsOfError,
 				ref,
 				0.3,
@@ -245,69 +245,6 @@ public class GeoWaveIngestGeoserverIT
 		assertTrue(
 				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
 				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
-	}
-
-	/**
-	 * 
-	 * @param bi
-	 *            sample
-	 * @param ref
-	 *            reference
-	 * @param minPctError
-	 *            used for testing subsampling - to ensure we are properly
-	 *            subsampling we want there to be some error if subsampling is
-	 *            aggressive (10 pixels)
-	 * @param maxPctError
-	 *            used for testing subsampling - we want to ensure at most we
-	 *            are off by this percentile
-	 */
-	private static void testTileAgainstReference(
-			final BufferedImage bi,
-			final BufferedImage ref,
-			final double minPctError,
-			final double maxPctError ) {
-		Assert.assertEquals(
-				ref.getWidth(),
-				bi.getWidth());
-		Assert.assertEquals(
-				ref.getHeight(),
-				bi.getHeight());
-		final int totalPixels = ref.getWidth() * ref.getHeight();
-		final int minErrorPixels = (int) Math.round(minPctError * totalPixels);
-		final int maxErrorPixels = (int) Math.round(maxPctError * totalPixels);
-		int errorPixels = 0;
-		// test under default style
-		for (int x = 0; x < ref.getWidth(); x++) {
-			for (int y = 0; y < ref.getHeight(); y++) {
-				if (!(bi.getRGB(
-						x,
-						y) == ref.getRGB(
-						x,
-						y))) {
-					errorPixels++;
-					if (errorPixels > maxErrorPixels) {
-						Assert.fail(String.format(
-								"[%d,%d] failed to match ref=%d gen=%d",
-								x,
-								y,
-								ref.getRGB(
-										x,
-										y),
-								bi.getRGB(
-										x,
-										y)));
-					}
-				}
-			}
-		}
-		if (errorPixels < minErrorPixels) {
-			Assert
-					.fail(String
-							.format(
-									"Subsampling did not work as expected; error pixels (%d) did not exceed the minimum threshold (%d)",
-									errorPixels,
-									minErrorPixels));
-		}
 	}
 
 	private static BufferedImage getWMSSingleTile(

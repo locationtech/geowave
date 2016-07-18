@@ -250,8 +250,7 @@ public class AccumuloKDEReducer extends
 
 		}
 		else {
-			indexList.add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().setAllTiers(
-					true).createIndex().getId());
+			indexList.add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getId());
 		}
 	}
 }

@@ -10,7 +10,7 @@
 # Accumulo
 USER=accumulo
 # NOTE: This password, the Accumulo instance secret and the geoserver password are left at
-# The default settings. The default EMR Security group setting only allows ssh/22 open to
+# the default settings. The default EMR Security group setting only allows ssh/22 open to
 # external access so access to internal consoles and web UIs has to be done over SSH.
 # At some point in the future when this is revisited remember that nodes can be added to an
 # EMR at any point after creation so the password set during the initial spin-up would have
@@ -22,8 +22,8 @@ INSTALL_DIR=/opt
 ACCUMULO_DOWNLOAD_BASE_URL=https://archive.apache.org/dist/accumulo
 
 # GeoWave
-GEOWAVE_REPO_RPM=geowave-repo-dev-1.0-3.noarch.rpm # TODO: Should have a prod->latest rpm
-GEOWAVE_VERSION='0.9.1'
+GEOWAVE_REPO_RPM=geowave-repo-1.0-3.noarch.rpm # TODO: Should have a prod->latest rpm
+GEOWAVE_VERSION='0.9.2'
 GEOSERVER_PORT='8000'
 GEOSERVER_MEMORY="-Xmx512m -XX:MaxPermSize=128m"
 
@@ -33,26 +33,27 @@ IMAGEIO_URL=http://data.opengeo.org/suite/jai/jai_imageio-1_1-lib-linux-amd64-jd
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Step #1: I've externalized commands into library functions for clarity, download and source
-if [ ! -f /tmp/geowave-install-lib.sh ]; then
-	aws s3 cp s3://geowave/emr/4/gdelt-example/geowave-install-lib.sh /tmp/geowave-install-lib.sh
+if [ ! -f /mnt/geowave-install-lib.sh ]; then
+	aws s3 cp s3://geowave-guide-bucket/geowave-install-lib.sh /mnt/geowave-install-lib.sh
 fi
-source /tmp/geowave-install-lib.sh
-if [ ! -f /tmp/geowave-env.sh ]; then
-	aws s3 cp s3://geowave/emr/4/gdelt-example/geowave-env.sh /tmp/geowave-env.sh
+source /mnt/geowave-install-lib.sh
+if [ ! -f /mnt/geowave-env.sh ]; then
+	aws s3 cp s3://geowave-guide-bucket/geowave-env.sh /mnt/geowave-env.sh
 fi
-source /tmp/geowave-env.sh
-if [ ! -f /tmp/geoserver-geowave-workspace.tar ]; then
-	aws s3 cp s3://geowave/emr/4/gdelt-example/geoserver-geowave-workspace.tar  /tmp/geoserver-geowave-workspace.tar 
+source /mnt/geowave-env.sh
+if [ ! -f /mnt/geoserver-geowave-workspace.tar ]; then
+	aws s3 cp s3://geowave-guide-bucket/geoserver-geowave-workspace.tar  /mnt/geoserver-geowave-workspace.tar 
 fi
-if [ ! -f /tmp/setup-geoserver-geowave-workspace.sh ]; then
-	aws s3 cp s3://geowave/emr/4/gdelt-example/setup-geoserver-geowave-workspace.sh /tmp/setup-geoserver-geowave-workspace.sh
+if [ ! -f /mnt/setup-geoserver-geowave-workspace.sh ]; then
+	aws s3 cp s3://geowave-guide-bucket/setup-geoserver-geowave-workspace.sh /mnt/setup-geoserver-geowave-workspace.sh
 fi
-if [ ! -f /tmp/ingest-and-kde-gdelt.sh ]; then
-	aws s3 cp s3://geowave/emr/4/gdelt-example/ingest-and-kde-gdelt.sh /tmp/ingest-and-kde-gdelt.sh
+if [ ! -f /mnt/ingest-and-kde-gdelt.sh ]; then
+	aws s3 cp s3://geowave-guide-bucket/ingest-and-kde-gdelt.sh /mnt/ingest-and-kde-gdelt.sh
 fi
-if [ ! -f /tmp/setup-geowave.sh ]; then
-	aws s3 cp s3://geowave/emr/4/gdelt-example/setup-geowave.sh /tmp/setup-geowave.sh
+if [ ! -f /mnt/setup-geowave.sh ]; then
+	aws s3 cp s3://geowave-guide-bucket/setup-geowave.sh /mnt/setup-geowave.sh
 fi
+
 # Step #2: The EMR customize hooks run _before_ everything else, so Hadoop is not yet ready
 THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
 RUN_FLAG="${THIS_SCRIPT}.run"
@@ -73,8 +74,8 @@ create_accumulo_user && install_accumulo && configure_accumulo
 install_image_libs
 if is_master ; then
 	install_geowave	
-	chmod 755 /tmp/*.sh
-	cd /tmp;./setup-geowave.sh
+	chmod 755 /mnt/*.sh
+	cd /mnt;./setup-geowave.sh
 fi
 
 # Step #5: Optionally initialize all volumes

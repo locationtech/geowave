@@ -69,7 +69,7 @@ public class GeoServerListCoveragesCommand implements
 		}
 
 		csName = parameters.get(0);
-		
+
 		Response getCvgStoreResponse = geoserverClient.getCoverages(
 				workspace,
 				csName);
@@ -82,7 +82,8 @@ public class GeoServerListCoveragesCommand implements
 			System.out.println(cvgArray.toString(2));
 		}
 		else {
-			System.err.println("Error getting GeoServer coverage list for '" + csName + "'; code = " + getCvgStoreResponse.getStatus());
+			System.err.println("Error getting GeoServer coverage list for '" + csName + "'; code = "
+					+ getCvgStoreResponse.getStatus());
 		}
 	}
 }
