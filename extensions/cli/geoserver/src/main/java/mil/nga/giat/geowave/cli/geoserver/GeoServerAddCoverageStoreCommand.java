@@ -50,7 +50,7 @@ public class GeoServerAddCoverageStoreCommand implements
 	@Parameter(names = {
 		"-scale",
 		"--scaleTo8Bit"
-	}, required = false, description = "By default, values will automatically be scaled to 8-bit.  This can be disabled by setting this value to false", arity = 1)
+	}, required = false, description = "By default, integer values will automatically be scaled to 8-bit and floating point values will not.  This can be overridden setting this value to true or false.", arity = 1)
 	private Boolean scaleTo8Bit = null;
 
 	@Parameter(description = "<GeoWave store name>")
