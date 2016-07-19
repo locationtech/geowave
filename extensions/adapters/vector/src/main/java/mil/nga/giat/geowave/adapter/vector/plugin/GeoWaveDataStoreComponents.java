@@ -63,6 +63,10 @@ public class GeoWaveDataStoreComponents
 		return adapter;
 	}
 
+	public boolean isLooseQuery() {
+		return gtStore.isLooseQuery();
+	}
+
 	public DataStore getDataStore() {
 		return dataStore;
 	}

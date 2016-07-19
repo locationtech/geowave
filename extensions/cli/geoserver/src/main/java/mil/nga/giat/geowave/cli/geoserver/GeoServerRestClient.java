@@ -132,7 +132,10 @@ public class GeoServerRestClient
 					Response addCsResponse = addCoverageStore(
 							workspaceName,
 							cvgStoreName,
-							storeName);
+							storeName,
+							null,
+							null,
+							null);
 
 					if (addCsResponse.getStatus() != Status.CREATED.getStatusCode()) {
 						return addCsResponse;
@@ -676,7 +679,10 @@ public class GeoServerRestClient
 	public Response addCoverageStore(
 			String workspaceName,
 			String cvgStoreName,
-			String gwStoreName ) {
+			String gwStoreName,
+			Boolean equalizeHistogramOverride,
+			String interpolationOverride,
+			Boolean scaleTo8Bit ) {
 		DataStorePluginOptions inputStoreOptions = getStorePlugin(gwStoreName);
 
 		if (cvgStoreName == null || cvgStoreName.isEmpty()) {
@@ -693,13 +699,17 @@ public class GeoServerRestClient
 
 		storeConfigMap.put(
 				"gwNamespace",
-				gwStoreName);
+				inputStoreOptions.getGeowaveNamespace());
 
 		storeConfigMap.put(
 				GeoServerConfig.GEOSERVER_CS,
 				cvgStoreName);
 
-		final String cvgStoreXml = createCoverageXml(storeConfigMap);
+		final String cvgStoreXml = createCoverageXml(
+				storeConfigMap,
+				equalizeHistogramOverride,
+				interpolationOverride,
+				scaleTo8Bit);
 
 		System.out.println("Add coverage store - xml params:\n" + cvgStoreXml);
 
@@ -933,7 +943,10 @@ public class GeoServerRestClient
 	}
 
 	private String createCoverageXml(
-			Map<String, String> geowaveStoreConfig ) {
+			Map<String, String> geowaveStoreConfig,
+			Boolean equalizeHistogramOverride,
+			String interpolationOverride,
+			Boolean scaleTo8Bit ) {
 		String coverageXml = null;
 
 		String workspace = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_WORKSPACE);
@@ -967,7 +980,11 @@ public class GeoServerRestClient
 			rootEl.appendChild(configEl);
 
 			// Method using custom URL & handler:
-			String storeConfigUrl = createParamUrl(geowaveStoreConfig);
+			String storeConfigUrl = createParamUrl(
+					geowaveStoreConfig,
+					equalizeHistogramOverride,
+					interpolationOverride,
+					scaleTo8Bit);
 
 			Element urlEl = xmlDoc.createElement("url");
 			urlEl.appendChild(xmlDoc.createTextNode(storeConfigUrl));
@@ -1008,7 +1025,10 @@ public class GeoServerRestClient
 	}
 
 	private String createParamUrl(
-			Map<String, String> geowaveStoreConfig ) {
+			Map<String, String> geowaveStoreConfig,
+			Boolean equalizeHistogramOverride,
+			String interpolationOverride,
+			Boolean scaleTo8Bit ) {
 		// Retrieve store config
 		String user = geowaveStoreConfig.get("user");
 		String pass = geowaveStoreConfig.get("password");
@@ -1028,6 +1048,18 @@ public class GeoServerRestClient
 		buf.append(instance);
 		buf.append(";gwNamespace=");
 		buf.append(gwNamespace);
+		if (equalizeHistogramOverride != null) {
+			buf.append(";equalizeHistogramOverride=");
+			buf.append(equalizeHistogramOverride);
+		}
+		if (interpolationOverride != null) {
+			buf.append(";interpolationOverride=");
+			buf.append(interpolationOverride);
+		}
+		if (scaleTo8Bit != null) {
+			buf.append(";scaleTo8Bit=");
+			buf.append(scaleTo8Bit);
+		}
 
 		return buf.toString();
 	}
@@ -1158,7 +1190,7 @@ public class GeoServerRestClient
 		// String wsName = workspaces.getJSONObject(
 		// i).getString(
 		// "name");
-		// System.out.println("  > " + wsName);
+		// System.out.println(" > " + wsName);
 		// }
 		//
 		// System.out.println("---\n");
@@ -1176,7 +1208,8 @@ public class GeoServerRestClient
 		// System.out.println("Add workspace 'delete-me-ws' to GeoServer: OK");
 		// }
 		// else {
-		// System.err.println("Error adding workspace 'delete-me-ws' to GeoServer; code = "
+		// System.err.println("Error adding workspace 'delete-me-ws' to
+		// GeoServer; code = "
 		// + addWorkspaceResponse.getStatus());
 		// }
 
@@ -1239,10 +1272,12 @@ public class GeoServerRestClient
 		//
 		// if (addStoreResponse.getStatus() == Status.OK.getStatusCode() ||
 		// addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
-		// System.out.println("Add store 'delete-me-ds' to workspace 'delete-me-ws' on GeoServer: OK");
+		// System.out.println("Add store 'delete-me-ds' to workspace
+		// 'delete-me-ws' on GeoServer: OK");
 		// }
 		// else {
-		// System.err.println("Error adding store 'delete-me-ds' to workspace 'delete-me-ws' on GeoServer; code = "
+		// System.err.println("Error adding store 'delete-me-ds' to workspace
+		// 'delete-me-ws' on GeoServer; code = "
 		// + addStoreResponse.getStatus());
 		// }
 		//
@@ -1257,7 +1292,8 @@ public class GeoServerRestClient
 		// System.out.println(jsonResponse.toString(2));
 		// }
 		// else {
-		// System.err.println("Error getting GeoServer layer info for 'states'; code = "
+		// System.err.println("Error getting GeoServer layer info for 'states';
+		// code = "
 		// + getLayerResponse.getStatus());
 		// }
 
@@ -1285,14 +1321,16 @@ public class GeoServerRestClient
 		// "ne_50m_admin_0_countries");
 		//
 		// if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-		// System.out.println("\nGeoServer layer add response for 'ne_50m_admin_0_countries':");
+		// System.out.println("\nGeoServer layer add response for
+		// 'ne_50m_admin_0_countries':");
 		//
 		// JSONObject jsonResponse =
 		// JSONObject.fromObject(addLayerResponse.getEntity());
 		// System.out.println(jsonResponse.toString(2));
 		// }
 		// else {
-		// System.err.println("Error adding GeoServer layer 'ne_50m_admin_0_countries'; code = "
+		// System.err.println("Error adding GeoServer layer
+		// 'ne_50m_admin_0_countries'; code = "
 		// +
 		// addLayerResponse.getStatus());
 		// }
@@ -1301,14 +1339,16 @@ public class GeoServerRestClient
 		// Response deleteLayerResponse =
 		// geoserverClient.deleteLayer("ne_50m_admin_0_countries");
 		// if (deleteLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-		// System.out.println("\nGeoServer layer delete response for 'ne_50m_admin_0_countries':");
+		// System.out.println("\nGeoServer layer delete response for
+		// 'ne_50m_admin_0_countries':");
 		//
 		// JSONObject jsonResponse =
 		// JSONObject.fromObject(deleteLayerResponse.getEntity());
 		// System.out.println(jsonResponse.toString(2));
 		// }
 		// else {
-		// System.err.println("Error deleting GeoServer layer 'ne_50m_admin_0_countries'; code = "
+		// System.err.println("Error deleting GeoServer layer
+		// 'ne_50m_admin_0_countries'; code = "
 		// + deleteLayerResponse.getStatus());
 		// }
 
@@ -1319,10 +1359,12 @@ public class GeoServerRestClient
 		//
 		// if (deleteStoreResponse.getStatus() == Status.OK.getStatusCode() ||
 		// addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
-		// System.out.println("Delete store 'kamstoretest2' from workspace 'DeleteMe' on GeoServer: OK");
+		// System.out.println("Delete store 'kamstoretest2' from workspace
+		// 'DeleteMe' on GeoServer: OK");
 		// }
 		// else {
-		// System.err.println("Error deleting store 'kamstoretest2' from workspace 'DeleteMe' on GeoServer; code = "
+		// System.err.println("Error deleting store 'kamstoretest2' from
+		// workspace 'DeleteMe' on GeoServer; code = "
 		// + deleteStoreResponse.getStatus());
 		// }
 
@@ -1334,7 +1376,8 @@ public class GeoServerRestClient
 		// System.out.println("Delete workspace 'DeleteMe' from GeoServer: OK");
 		// }
 		// else {
-		// System.err.println("Error deleting workspace 'DeleteMe' from GeoServer; code = "
+		// System.err.println("Error deleting workspace 'DeleteMe' from
+		// GeoServer; code = "
 		// + deleteWorkspaceResponse.getStatus());
 		// }
 	}
