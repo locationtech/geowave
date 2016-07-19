@@ -638,7 +638,9 @@ public class GeoWaveRasterReader extends
 			histogram = null;
 		}
 		boolean scaleTo8Bit = true; // default to always scale to 8-bit
-		if (config.isScaleTo8BitSet()) {
+
+		boolean scaleTo8BitSet = config.isScaleTo8BitSet();
+		if (scaleTo8BitSet) {
 			scaleTo8Bit = config.isScaleTo8Bit();
 		}
 
@@ -671,6 +673,7 @@ public class GeoWaveRasterReader extends
 					state.getCoverageName(),
 					interpolation,
 					histogram,
+					scaleTo8BitSet,
 					scaleTo8Bit,
 					adapter.getColorModel());
 
