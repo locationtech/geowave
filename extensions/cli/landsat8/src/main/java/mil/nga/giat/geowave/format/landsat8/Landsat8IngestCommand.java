@@ -20,7 +20,7 @@ public class Landsat8IngestCommand extends
 		Command
 {
 
-	@Parameter(description = "<rasterstorename> <vectorstorename> <comma delimited index/group list>")
+	@Parameter(description = "<storename> <comma delimited index/group list>")
 	private final List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
