@@ -22,16 +22,6 @@ public class GeoServerConfig
 	public static final String DEFAULT_CS = "-raster";
 	public static final String DEFAULT_DS = "-vector";
 
-	public static final String GS_STORE_INSTANCE = "geoserver.store.instance";
-	public static final String GS_STORE_ZOOKEEPER = "geoserver.store.zookeeper";
-	public static final String GS_STORE_USER = "geoserver.store.user";
-	public static final String GS_STORE_PASS = "geoserver.store.pass";
-
-	public static final String DEFAULT_STORE_INSTANCE = "geowave";
-	public static final String DEFAULT_STORE_ZOOKEEPER = "localhost:2181";
-	public static final String DEFAULT_STORE_USER = "root";
-	public static final String DEFAULT_STORE_PASS = "password";
-
 	public final static String DISPLAY_NAME_PREFIX = "GeoWave Datastore - ";
 	public static final String QUERY_INDEX_STRATEGY_KEY = "Query Index Strategy";
 
@@ -111,53 +101,6 @@ public class GeoServerConfig
 		this.pass = DEFAULT_PASS;
 		this.url = DEFAULT_URL;
 		this.workspace = DEFAULT_WORKSPACE;
-	}
-
-	public HashMap<String, String> loadStoreConfig(
-			String storeName ) {
-		Properties gsConfig;
-
-		if (propFile != null) {
-			gsConfig = ConfigOptions.loadProperties(
-					propFile,
-					null);
-		}
-		else {
-			gsConfig = new Properties();
-		}
-
-		HashMap<String, String> geowaveStoreConfig = new HashMap<String, String>();
-
-		String sUser = gsConfig.getProperty(
-				GS_STORE_USER,
-				DEFAULT_STORE_PASS);
-		String sPassword = gsConfig.getProperty(
-				GS_STORE_PASS,
-				DEFAULT_STORE_USER);
-		String sZookeeper = gsConfig.getProperty(
-				GS_STORE_ZOOKEEPER,
-				DEFAULT_STORE_ZOOKEEPER);
-		String sInstance = gsConfig.getProperty(
-				GS_STORE_INSTANCE,
-				DEFAULT_STORE_INSTANCE);
-
-		geowaveStoreConfig.put(
-				"user",
-				sUser);
-		geowaveStoreConfig.put(
-				"password",
-				sPassword);
-		geowaveStoreConfig.put(
-				"gwNamespace",
-				storeName);
-		geowaveStoreConfig.put(
-				"zookeeper",
-				sZookeeper);
-		geowaveStoreConfig.put(
-				"instance",
-				sInstance);
-
-		return geowaveStoreConfig;
 	}
 
 	public String getUrl() {
