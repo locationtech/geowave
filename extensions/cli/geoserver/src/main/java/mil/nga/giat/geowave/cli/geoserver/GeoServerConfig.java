@@ -15,7 +15,7 @@ public class GeoServerConfig
 	public static final String GEOSERVER_CS = "geoserver.coverageStore";
 	public static final String GEOSERVER_DS = "geoserver.dataStore";
 
-	public static final String DEFAULT_URL = "http://localhost:8080";
+	public static final String DEFAULT_URL = "localhost:8080";
 	public static final String DEFAULT_USER = "admin";
 	public static final String DEFAULT_PASS = "geoserver";
 	public static final String DEFAULT_WORKSPACE = "geowave";
@@ -104,7 +104,13 @@ public class GeoServerConfig
 	}
 
 	public String getUrl() {
-		return url;
+
+		if (url.toLowerCase().startsWith(
+				"http://")) {
+			// assume exact URL
+			return url;
+		}
+		return "http://" + url + "/geoserver/";
 	}
 
 	public void setUrl(
