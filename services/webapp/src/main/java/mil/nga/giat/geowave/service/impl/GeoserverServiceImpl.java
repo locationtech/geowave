@@ -53,7 +53,7 @@ public class GeoserverServiceImpl implements
 	private final static Logger log = Logger.getLogger(GeoserverServiceImpl.class);
 	private final static int defaultIndentation = 2;
 
-	private final String geoserverUrl;
+	private String geoserverUrl;
 	private final String geoserverUser;
 	private final String geoserverPass;
 	private final String defaultWorkspace;
@@ -66,7 +66,10 @@ public class GeoserverServiceImpl implements
 
 		geoserverUrl = ServiceUtils.getProperty(
 				props,
-				"geoserver.url") + "/geoserver/";
+				"geoserver.url");
+		if (geoserverUrl != null && !geoserverUrl.contains("//")) {
+			geoserverUrl = "http://" + geoserverUrl + "/geoserver";
+		}
 
 		geoserverUser = ServiceUtils.getProperty(
 				props,
@@ -305,7 +308,7 @@ public class GeoserverServiceImpl implements
 
 				// upload the style to geoserver
 				final Response resp = target.path(
-						"geoserver/rest/styles/" + styleName).request().put(
+						"rest/styles/" + styleName).request().put(
 						Entity.entity(
 								inStream,
 								"application/vnd.ogc.sld+xml"));
@@ -873,7 +876,7 @@ public class GeoserverServiceImpl implements
 		}
 
 		resp = target.path(
-				"geoserver/rest/layers/" + layerName).request().put(
+				"rest/layers/" + layerName).request().put(
 				Entity.entity(
 						"{'layer':{'defaultStyle':{'name':'" + defaultStyle + "'}}}",
 						MediaType.APPLICATION_JSON));

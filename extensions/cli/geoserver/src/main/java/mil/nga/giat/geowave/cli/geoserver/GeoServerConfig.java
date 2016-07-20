@@ -104,13 +104,11 @@ public class GeoServerConfig
 	}
 
 	public String getUrl() {
-
-		if (url.toLowerCase().startsWith(
-				"http://")) {
+		if (!url.contains("//")) {
 			// assume exact URL
 			return url;
 		}
-		return "http://" + url + "/geoserver/";
+		return "http://" + url + "/geoserver";
 	}
 
 	public void setUrl(

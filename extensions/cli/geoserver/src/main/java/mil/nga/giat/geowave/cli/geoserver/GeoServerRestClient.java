@@ -439,7 +439,7 @@ public class GeoServerRestClient
 		boolean dsFilter = (datastoreName != null && !datastoreName.isEmpty());
 
 		final Response resp = getWebTarget().path(
-				"geoserver/rest/layers.json").request().get();
+				"rest/layers.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
