@@ -744,10 +744,28 @@ public class BasicAccumuloOperations implements
 								if (setting != null) {
 									final Map<String, String> existingOptions = setting.getOptions();
 									configuredOptions = iteratorConfig.getOptions(existingOptions);
+									if (existingOptions == null) {
+										mustDelete = (configuredOptions == null);
+									}
+									else if (configuredOptions == null) {
+										mustDelete = true;
+									}
+									else {
+										// neither are null, compare the size of
+										// the entry sets and check that they
+										// are equivalent
+										Set<Entry<String, String>> existingEntries = existingOptions.entrySet();
+										Set<Entry<String, String>> configuredEntries = configuredOptions.entrySet();
+										if (existingEntries.size() != configuredEntries.size()) {
+											mustDelete = true;
+										}
+										else {
+											mustDelete = (!existingEntries.containsAll(configuredEntries));
+										}
+									}
 									// we found the setting existing in one
 									// scope, assume the options are the same
 									// for each scope
-									mustDelete = true;
 									break;
 								}
 							}
