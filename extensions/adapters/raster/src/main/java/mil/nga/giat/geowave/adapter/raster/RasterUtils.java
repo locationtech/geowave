@@ -543,7 +543,7 @@ public class RasterUtils
 					}
 				case DataBuffer.TYPE_DOUBLE:
 				case DataBuffer.TYPE_FLOAT:
-					if (!scaleTo8BitSet) {
+					if (!scaleTo8BitSet && dataType != DataBuffer.TYPE_USHORT) {
 						break;
 					}
 				case DataBuffer.TYPE_INT:
