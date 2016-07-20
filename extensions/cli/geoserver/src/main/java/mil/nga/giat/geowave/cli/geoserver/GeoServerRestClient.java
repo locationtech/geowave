@@ -273,7 +273,7 @@ public class GeoServerRestClient
 
 	public Response getWorkspaces() {
 		final Response resp = getWebTarget().path(
-				"geoserver/rest/workspaces.json").request().get();
+				"rest/workspaces.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -299,7 +299,7 @@ public class GeoServerRestClient
 	public Response addWorkspace(
 			final String workspace ) {
 		return getWebTarget().path(
-				"geoserver/rest/workspaces").request().post(
+				"rest/workspaces").request().post(
 				Entity.entity(
 						"{'workspace':{'name':'" + workspace + "'}}",
 						MediaType.APPLICATION_JSON));
@@ -308,7 +308,7 @@ public class GeoServerRestClient
 	public Response deleteWorkspace(
 			final String workspace ) {
 		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspace).queryParam(
+				"rest/workspaces/" + workspace).queryParam(
 				"recurse",
 				"true").request().delete();
 	}
@@ -317,11 +317,8 @@ public class GeoServerRestClient
 	public Response getDatastore(
 			final String workspaceName,
 			String datastoreName ) {
-		final Response resp = getWebTarget()
-				.path(
-						"geoserver/rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json")
-				.request()
-				.get();
+		final Response resp = getWebTarget().path(
+				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -340,7 +337,7 @@ public class GeoServerRestClient
 	public Response getDatastores(
 			String workspaceName ) {
 		final Response resp = getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/datastores.json").request().get();
+				"rest/workspaces/" + workspaceName + "/datastores.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -390,7 +387,7 @@ public class GeoServerRestClient
 
 		// create a new geoserver style
 		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/datastores").request().post(
+				"rest/workspaces/" + workspaceName + "/datastores").request().post(
 				Entity.entity(
 						dataStoreJson,
 						MediaType.APPLICATION_JSON));
@@ -400,7 +397,7 @@ public class GeoServerRestClient
 			String workspaceName,
 			String datastoreName ) {
 		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/datastores/" + datastoreName).queryParam(
+				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName).queryParam(
 				"recurse",
 				"true").request().delete();
 	}
@@ -409,7 +406,7 @@ public class GeoServerRestClient
 	public Response getFeatureLayer(
 			final String layerName ) {
 		final Response resp = getWebTarget().path(
-				"geoserver/rest/layers/" + layerName + ".json").request().get();
+				"rest/layers/" + layerName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			JSONObject layer = JSONObject.fromObject(resp.readEntity(String.class));
@@ -610,31 +607,25 @@ public class GeoServerRestClient
 			final String workspaceName,
 			final String datastoreName,
 			final String layerName ) {
-		return getWebTarget()
-				.path(
-						"geoserver/rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + "/featuretypes")
-				.request()
-				.post(
-						Entity.entity(
-								"{'featureType':{'name':'" + layerName + "'}}",
-								MediaType.APPLICATION_JSON));
+		return getWebTarget().path(
+				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + "/featuretypes").request().post(
+				Entity.entity(
+						"{'featureType':{'name':'" + layerName + "'}}",
+						MediaType.APPLICATION_JSON));
 	}
 
 	public Response deleteFeatureLayer(
 			final String layerName ) {
 		return getWebTarget().path(
-				"geoserver/rest/layers/" + layerName).request().delete();
+				"rest/layers/" + layerName).request().delete();
 	}
 
 	// Coverage Stores
 	public Response getCoverageStore(
 			final String workspaceName,
 			String coverageName ) {
-		final Response resp = getWebTarget()
-				.path(
-						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json")
-				.request()
-				.get();
+		final Response resp = getWebTarget().path(
+				"rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -653,7 +644,7 @@ public class GeoServerRestClient
 	public Response getCoverageStores(
 			String workspaceName ) {
 		final Response resp = getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores.json").request().get();
+				"rest/workspaces/" + workspaceName + "/coveragestores.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -715,7 +706,7 @@ public class GeoServerRestClient
 
 		// create a new geoserver style
 		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores").request().post(
+				"rest/workspaces/" + workspaceName + "/coveragestores").request().post(
 				Entity.entity(
 						cvgStoreXml,
 						MediaType.APPLICATION_XML));
@@ -725,7 +716,7 @@ public class GeoServerRestClient
 			String workspaceName,
 			String cvgstoreName ) {
 		return getWebTarget().path(
-				"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName).queryParam(
+				"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName).queryParam(
 				"recurse",
 				"true").request().delete();
 	}
@@ -736,8 +727,7 @@ public class GeoServerRestClient
 			String cvsstoreName ) {
 		final Response resp = getWebTarget()
 				.path(
-						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvsstoreName
-								+ "/coverages.json")
+						"rest/workspaces/" + workspaceName + "/coveragestores/" + cvsstoreName + "/coverages.json")
 				.request()
 				.get();
 
@@ -768,8 +758,8 @@ public class GeoServerRestClient
 			String coverageName ) {
 		final Response resp = getWebTarget()
 				.path(
-						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName
-								+ "/coverages/" + coverageName + ".json")
+						"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages/"
+								+ coverageName + ".json")
 				.request()
 				.get();
 
@@ -795,14 +785,11 @@ public class GeoServerRestClient
 				+ coverageName + "'}}";
 		logger.debug("Posting JSON: " + jsonString + " to " + workspaceName + "/" + cvgStoreName);
 
-		return getWebTarget()
-				.path(
-						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages")
-				.request()
-				.post(
-						Entity.entity(
-								jsonString,
-								MediaType.APPLICATION_JSON));
+		return getWebTarget().path(
+				"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages").request().post(
+				Entity.entity(
+						jsonString,
+						MediaType.APPLICATION_JSON));
 	}
 
 	public Response deleteCoverage(
@@ -811,8 +798,8 @@ public class GeoServerRestClient
 			String coverageName ) {
 		return getWebTarget()
 				.path(
-						"geoserver/rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName
-								+ "/coverages/" + coverageName)
+						"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName + "/coverages/"
+								+ coverageName)
 				.queryParam(
 						"recurse",
 						"true")

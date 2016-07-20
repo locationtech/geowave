@@ -20,7 +20,7 @@ public class ConfigGeoServerCommand implements
 	@Parameter(names = {
 		"-u",
 		"--url"
-	}, required = false, description = "GeoServer URL")
+	}, required = false, description = "GeoServer URL (for example http://localhost:8080/geoserver), or simply host:port and appropriate assumptions are made")
 	private String url;
 
 	@Parameter(names = {
