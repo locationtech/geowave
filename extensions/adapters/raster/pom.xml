@@ -9,7 +9,32 @@
 	<artifactId>geowave-adapter-raster</artifactId>
 	<name>Geowave Raster Adapter</name>
 	<description>Geowave Data Adapter for Raster Data</description>
-	<dependencies>
+	<dependencies><dependency>
+			<groupId>it.geosolutions.imageio-ext</groupId>
+			<artifactId>imageio-ext-gdalgeotiff</artifactId>
+			<version>1.1.13</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.vividsolutions</groupId>
+					<artifactId>jts</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imageio-ext-gdal</artifactId>
+			<version>${geotools.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.vividsolutions</groupId>
+					<artifactId>jts</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>gt-epsg-hsql</artifactId>
+					<groupId>org.geotools</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

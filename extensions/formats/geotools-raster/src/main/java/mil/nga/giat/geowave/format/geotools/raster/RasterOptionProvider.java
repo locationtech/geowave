@@ -14,10 +14,13 @@ public class RasterOptionProvider implements
 {
 
 	@Parameter(names = "--pyramid", description = "Build an image pyramid on ingest for quick reduced resolution query")
-	private boolean buildPyramid = RasterDataAdapter.DEFAULT_BUILD_PYRAMID;
+	private boolean buildPyramid = false;
 
+	@Parameter(names = "--crs", description = "A CRS override for the provided raster file")
+	private String crs = null;
+	
 	@Parameter(names = "--histogram", description = "Build a histogram of samples per band on ingest for performing band equalization")
-	private boolean buildHistogream = RasterDataAdapter.DEFAULT_BUILD_HISTOGRAM;
+	private boolean buildHistogream = false;
 
 	@Parameter(names = "--tileSize", description = "Optional parameter to set the tile size stored (default is 256)")
 	private int tileSize = RasterDataAdapter.DEFAULT_TILE_SIZE;
@@ -43,6 +46,10 @@ public class RasterOptionProvider implements
 
 	public boolean isSeparateBands() {
 		return separateBands;
+	}
+
+	public String getCrs() {
+		return crs;
 	}
 
 	public String getCoverageName() {
