@@ -104,7 +104,7 @@ public class GeoServerConfig
 	}
 
 	public String getUrl() {
-		if (!url.contains("//")) {
+		if (url.contains("//")) {
 			// assume exact URL
 			return url;
 		}
