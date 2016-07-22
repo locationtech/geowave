@@ -350,6 +350,7 @@
 											<exclude>*:servlet-api:*</exclude>
 											<exclude>*:*:jsr305</exclude>
 											<exclude>org.springframework.security:*</exclude>
+											<exclude>org.springframework:*</exclude>
 											<exclude>org.geoserver:*</exclude>
 											<exclude>xpp3:xpp3_min</exclude>
 											<exclude>xpp3:xpp3</exclude>

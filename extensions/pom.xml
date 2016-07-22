@@ -11,6 +11,7 @@
 	<description>The set of extended capabilities supported for GeoWave</description>	
 	<packaging>pom</packaging>
 	<modules>
+		<module>adapters/auth</module>
 		<module>adapters/raster</module>
 		<module>adapters/vector</module>
 		<module>datastores/accumulo</module>

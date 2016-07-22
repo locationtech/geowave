@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.adapter.vector.auth;
+package mil.nga.giat.geowave.adapter.auth;
 
 /**
  * No authorization provided.
