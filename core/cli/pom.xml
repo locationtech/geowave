@@ -4,7 +4,7 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-core-parent</artifactId>
 		<relativePath>../</relativePath>
-		<version>0.9.2.1</version>
+		<version>0.9.2.2</version>
 	</parent>
 	<artifactId>geowave-core-cli</artifactId>
 	<name>GeoWave CLI</name>

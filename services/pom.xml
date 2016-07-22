@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.2.1</version>
+		<version>0.9.2.2</version>
 	</parent>
 	<artifactId>geowave-service-parent</artifactId>
 	<name>GeoWave Services Parent POM</name>
