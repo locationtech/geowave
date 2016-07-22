@@ -690,9 +690,21 @@ public class RasterUtils
 				0.0f,
 				interpolation);
 		final RenderedOp result = w.getRenderedOperation();
+		Raster raster = result.getData();
+		final WritableRaster scaledImageRaster;
+		if (raster instanceof WritableRaster) {
+			scaledImageRaster = (WritableRaster) raster;
+		}
+		else {
+			scaledImageRaster = raster.createCompatibleWritableRaster();
 
-		final WritableRaster scaledImageRaster = (WritableRaster) result.getData();
-
+			scaledImageRaster.setDataElements(
+					0,
+					0,
+					raster.getWidth(),
+					raster.getHeight(),
+					raster.getDataBuffer());
+		}
 		final ColorModel colorModel = image.getColorModel();
 		try {
 			final BufferedImage scaledImage = new BufferedImage(
