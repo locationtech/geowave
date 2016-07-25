@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html" title="class in mil.nga.giat.geowave.format.geotools.raster"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterMergeStrategyProviderSpi.html" title="interface in mil.nga.giat.geowave.format.geotools.raster"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">
@@ -142,6 +142,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spi/In
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#getCoverageName()">getCoverageName</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#getCrs()">getCrs</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#getMergeStrategy()">getMergeStrategy</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterOptionProvider.html#getNodata(int)">getNodata</a></strong>(int&nbsp;numBands)</code>&nbsp;</td>
 </tr>
@@ -227,6 +235,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spi/In
 <pre>public&nbsp;boolean&nbsp;isSeparateBands()</pre>
 </li>
 </ul>
+<a name="getCrs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCrs</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getCrs()</pre>
+</li>
+</ul>
 <a name="getCoverageName()">
 <!--   -->
 </a>
@@ -248,10 +265,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spi/In
 <a name="getNodata(int)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getNodata</h4>
 <pre>public&nbsp;double[][]&nbsp;getNodata(int&nbsp;numBands)</pre>
+</li>
+</ul>
+<a name="getMergeStrategy()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getMergeStrategy</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;getMergeStrategy()</pre>
 </li>
 </ul>
 </li>
@@ -280,7 +306,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spi/In
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html" title="class in mil.nga.giat.geowave.format.geotools.raster"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/raster/RasterMergeStrategyProviderSpi.html" title="interface in mil.nga.giat.geowave.format.geotools.raster"><span class="strong">Prev Class</span></a></li>
 <li>Next Class</li>
 </ul>
 <ul class="navList">

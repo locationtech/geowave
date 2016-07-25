@@ -140,9 +140,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addCoverageStore(java.lang.String,%20java.lang.String,%20java.lang.String)">addCoverageStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addCoverageStore(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.Boolean,%20java.lang.String,%20java.lang.Boolean)">addCoverageStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgStoreName,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName)</code>&nbsp;</td>
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizeHistogramOverride,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;interpolationOverride,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;scaleTo8Bit)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
@@ -474,7 +477,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverageStores(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</pre>
 </li>
 </ul>
-<a name="addCoverageStore(java.lang.String, java.lang.String, java.lang.String)">
+<a name="addCoverageStore(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.String, java.lang.Boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -482,7 +485,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>addCoverageStore</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgStoreName,
-                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName)</pre>
+                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName,
+                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizeHistogramOverride,
+                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;interpolationOverride,
+                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;scaleTo8Bit)</pre>
 </li>
 </ul>
 <a name="deleteCoverageStore(java.lang.String, java.lang.String)">
