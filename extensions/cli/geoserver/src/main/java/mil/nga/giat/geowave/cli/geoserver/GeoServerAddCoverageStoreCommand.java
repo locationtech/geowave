@@ -35,6 +35,24 @@ public class GeoServerAddCoverageStoreCommand implements
 	}, required = false, description = "<coverage store name>")
 	private String coverageStore = null;
 
+	@Parameter(names = {
+		"-histo",
+		"--equalizeHistogramOverride"
+	}, required = false, description = "This parameter will override the behavior to always perform histogram equalization if a histogram exists.  Valid values are true and false.", arity = 1)
+	private Boolean equalizeHistogramOverride = null;
+
+	@Parameter(names = {
+		"-interp",
+		"--interpolationOverride"
+	}, required = false, description = "This will override the default interpolation stored for each layer.  Valid values are 0, 1, 2, 3 for NearestNeighbor, Bilinear, Bicubic, and Bicubic (polynomial variant) resepctively. ")
+	private String interpolationOverride = null;
+
+	@Parameter(names = {
+		"-scale",
+		"--scaleTo8Bit"
+	}, required = false, description = "By default, integer values will automatically be scaled to 8-bit and floating point values will not.  This can be overridden setting this value to true or false.", arity = 1)
+	private Boolean scaleTo8Bit = null;
+
 	@Parameter(description = "<GeoWave store name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
@@ -77,7 +95,10 @@ public class GeoServerAddCoverageStoreCommand implements
 		Response addStoreResponse = geoserverClient.addCoverageStore(
 				workspace,
 				coverageStore,
-				gwStore);
+				gwStore,
+				equalizeHistogramOverride,
+				interpolationOverride,
+				scaleTo8Bit);
 
 		if (addStoreResponse.getStatus() == Status.OK.getStatusCode()
 				|| addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {

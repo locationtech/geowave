@@ -6,15 +6,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
 import org.geotools.coverage.grid.io.GridFormatFinder;
+import org.geotools.factory.Hints;
+import org.geotools.referencing.CRS;
 import org.opengis.coverage.grid.GridCoverage;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
@@ -63,12 +68,56 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 	@Override
 	public boolean supportsFile(
 			final File file ) {
-
-		final AbstractGridFormat format = GridFormatFinder.findFormat(file);
+		AbstractGridFormat format = null;
+		try {
+			format = GridFormatFinder.findFormat(file);
+		}
+		catch (final Exception e) {
+			LOGGER.info(
+					"Unable to support as raster file",
+					e);
+		}
 		// the null check is enough and we don't need to check the format
 		// accepts this file because the finder should have previously validated
 		// this
 		return (format != null);
+	}
+
+	private static AbstractGridFormat prioritizedFindFormat(
+			final File input ) {
+		final AbstractGridFormat format = null;
+		try {
+			final Set<AbstractGridFormat> formats = GridFormatFinder.findFormats(input);
+			if ((formats == null) || formats.isEmpty()) {
+				LOGGER.warn("Unable to support raster file " + input.getAbsolutePath());
+				return null;
+			}
+			// world image and geotiff can both open tif files, give
+			// priority to gdalgeotiff, followed by geotiff
+			for (final AbstractGridFormat f : formats) {
+				if ("GDALGeoTiff".equals(f.getName())) {
+					return f;
+				}
+			}
+			for (final AbstractGridFormat f : formats) {
+				if ("GeoTIFF".equals(f.getName())) {
+					return f;
+				}
+			}
+
+			// otherwise just pick the first
+			final Iterator<AbstractGridFormat> it = formats.iterator();
+			if (it.hasNext()) {
+				return it.next();
+			}
+		}
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Error while trying read raster file",
+					e);
+			return null;
+		}
+		return format;
 	}
 
 	@Override
@@ -76,9 +125,31 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 			final File input,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
-
-		final AbstractGridFormat format = GridFormatFinder.findFormat(input);
-		final GridCoverage2DReader reader = format.getReader(input);
+		final AbstractGridFormat format = prioritizedFindFormat(input);
+		if (format == null) {
+			return new Wrapper(
+					Collections.emptyIterator());
+		}
+		Hints hints = null;
+		if ((optionProvider.getCrs() != null) && !optionProvider.getCrs().trim().isEmpty()) {
+			try {
+				final CoordinateReferenceSystem crs = CRS.decode(optionProvider.getCrs());
+				if (crs != null) {
+					hints = new Hints();
+					hints.put(
+							Hints.DEFAULT_COORDINATE_REFERENCE_SYSTEM,
+							crs);
+				}
+			}
+			catch (final Exception e) {
+				LOGGER.warn(
+						"Unable to find coordinate reference system, continuing without hint",
+						e);
+			}
+		}
+		final GridCoverage2DReader reader = format.getReader(
+				input,
+				hints);
 		if (reader == null) {
 			LOGGER.error("Unable to get reader instance, getReader returned null");
 			return new Wrapper(
@@ -89,15 +160,25 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 			if (coverage != null) {
 				final Map<String, String> metadata = new HashMap<String, String>();
 				final String coverageName = coverage.getName().toString();
-				final String[] mdNames = reader.getMetadataNames(coverageName);
-				if ((mdNames != null) && (mdNames.length > 0)) {
-					for (final String mdName : mdNames) {
-						metadata.put(
-								mdName,
-								reader.getMetadataValue(
-										coverageName,
-										mdName));
+				try {
+					// wrapping with try-catch block because often the reader
+					// does not support operations on coverage name
+					// if not, we just don't have metadata, and continue
+					final String[] mdNames = reader.getMetadataNames(coverageName);
+					if ((mdNames != null) && (mdNames.length > 0)) {
+						for (final String mdName : mdNames) {
+							metadata.put(
+									mdName,
+									reader.getMetadataValue(
+											coverageName,
+											mdName));
+						}
 					}
+				}
+				catch (final Exception e) {
+					LOGGER.debug(
+							"Unable to find metadata from coverage reader",
+							e);
 				}
 				final List<GeoWaveData<GridCoverage>> coverages = new ArrayList<GeoWaveData<GridCoverage>>();
 

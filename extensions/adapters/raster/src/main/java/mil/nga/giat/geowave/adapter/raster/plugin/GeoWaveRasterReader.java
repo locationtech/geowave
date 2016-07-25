@@ -56,10 +56,10 @@ import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.Resolution;
 import mil.nga.giat.geowave.adapter.raster.adapter.CompoundHierarchicalIndexStrategyWrapper;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.adapter.raster.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
 import mil.nga.giat.geowave.adapter.raster.stats.OverviewStatistics;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
@@ -638,7 +638,9 @@ public class GeoWaveRasterReader extends
 			histogram = null;
 		}
 		boolean scaleTo8Bit = true; // default to always scale to 8-bit
-		if (config.isScaleTo8BitSet()) {
+
+		boolean scaleTo8BitSet = config.isScaleTo8BitSet();
+		if (scaleTo8BitSet) {
 			scaleTo8Bit = config.isScaleTo8Bit();
 		}
 
@@ -671,6 +673,7 @@ public class GeoWaveRasterReader extends
 					state.getCoverageName(),
 					interpolation,
 					histogram,
+					scaleTo8BitSet,
 					scaleTo8Bit,
 					adapter.getColorModel());
 

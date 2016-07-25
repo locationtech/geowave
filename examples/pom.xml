@@ -25,6 +25,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-adapter-raster</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.github.sakserv</groupId>
 		    <artifactId>hadoop-mini-clusters-hbase</artifactId>
 		    <version>0.1.3</version>

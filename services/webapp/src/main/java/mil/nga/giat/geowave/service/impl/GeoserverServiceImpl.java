@@ -53,7 +53,7 @@ public class GeoserverServiceImpl implements
 	private final static Logger log = Logger.getLogger(GeoserverServiceImpl.class);
 	private final static int defaultIndentation = 2;
 
-	private final String geoserverUrl;
+	private String geoserverUrl;
 	private final String geoserverUser;
 	private final String geoserverPass;
 	private final String defaultWorkspace;
@@ -67,6 +67,9 @@ public class GeoserverServiceImpl implements
 		geoserverUrl = ServiceUtils.getProperty(
 				props,
 				"geoserver.url");
+		if (geoserverUrl != null && !geoserverUrl.contains("//")) {
+			geoserverUrl = "http://" + geoserverUrl + "/geoserver";
+		}
 
 		geoserverUser = ServiceUtils.getProperty(
 				props,
@@ -94,7 +97,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		final Response resp = target.path(
-				"geoserver/rest/workspaces.json").request().get();
+				"rest/workspaces.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 
@@ -176,7 +179,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		return target.path(
-				"geoserver/rest/workspaces").request().post(
+				"rest/workspaces").request().post(
 				Entity.entity(
 						"{'workspace':{'name':'" + workspace + "'}}",
 						MediaType.APPLICATION_JSON));
@@ -196,7 +199,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		return target.path(
-				"geoserver/rest/workspaces/" + workspace).queryParam(
+				"rest/workspaces/" + workspace).queryParam(
 				"recurse",
 				"true").request().delete();
 	}
@@ -214,7 +217,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		final Response resp = target.path(
-				"geoserver/rest/styles.json").request().get();
+				"rest/styles.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 
@@ -253,7 +256,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		final Response resp = target.path(
-				"geoserver/rest/styles/" + styleName + ".sld").request().get();
+				"rest/styles/" + styleName + ".sld").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			final InputStream inStream = (InputStream) resp.getEntity();
@@ -298,14 +301,14 @@ public class GeoserverServiceImpl implements
 
 				// create a new geoserver style
 				target.path(
-						"geoserver/rest/styles").request().post(
+						"rest/styles").request().post(
 						Entity.entity(
 								"{'style':{'name':'" + styleName + "','filename':'" + styleName + ".sld'}}",
 								MediaType.APPLICATION_JSON));
 
 				// upload the style to geoserver
 				final Response resp = target.path(
-						"geoserver/rest/styles/" + styleName).request().put(
+						"rest/styles/" + styleName).request().put(
 						Entity.entity(
 								inStream,
 								"application/vnd.ogc.sld+xml"));
@@ -333,7 +336,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		return target.path(
-				"geoserver/rest/styles/" + styleName).request().delete();
+				"rest/styles/" + styleName).request().delete();
 	}
 
 	@Override
@@ -352,7 +355,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		final Response resp = target.path(
-				"geoserver/rest/workspaces/" + customWorkspace + "/datastores.json").request().get();
+				"rest/workspaces/" + customWorkspace + "/datastores.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 
@@ -449,11 +452,8 @@ public class GeoserverServiceImpl implements
 						geoserverPass));
 		final WebTarget target = client.target(geoserverUrl);
 
-		final Response resp = target
-				.path(
-						"geoserver/rest/workspaces/" + customWorkspace + "/datastores/" + datastoreName + ".json")
-				.request()
-				.get();
+		final Response resp = target.path(
+				"rest/workspaces/" + customWorkspace + "/datastores/" + datastoreName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			JSONObject datastore = null;
@@ -557,7 +557,7 @@ public class GeoserverServiceImpl implements
 
 		// create a new geoserver style
 		final Response resp = target.path(
-				"geoserver/rest/workspaces/" + customWorkspace + "/datastores").request().post(
+				"rest/workspaces/" + customWorkspace + "/datastores").request().post(
 				Entity.entity(
 						dataStoreJson,
 						MediaType.APPLICATION_JSON));
@@ -586,7 +586,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		return target.path(
-				"geoserver/rest/workspaces/" + customWorkspace + "/datastores/" + datastoreName).queryParam(
+				"rest/workspaces/" + customWorkspace + "/datastores/" + datastoreName).queryParam(
 				"recurse",
 				"true").request().delete();
 	}
@@ -659,7 +659,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		final Response resp = target.path(
-				"geoserver/rest/layers.json").request().get();
+				"rest/layers.json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 
@@ -802,7 +802,7 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		final Response resp = target.path(
-				"geoserver/rest/layers/" + layerName + ".json").request().get();
+				"rest/layers/" + layerName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			JSONObject layer = null;
@@ -865,21 +865,18 @@ public class GeoserverServiceImpl implements
 						geoserverPass));
 		final WebTarget target = client.target(geoserverUrl);
 
-		Response resp = target
-				.path(
-						"geoserver/rest/workspaces/" + customWorkspace + "/datastores/" + datastore + "/featuretypes")
-				.request()
-				.post(
-						Entity.entity(
-								jsonString,
-								MediaType.APPLICATION_JSON));
+		Response resp = target.path(
+				"rest/workspaces/" + customWorkspace + "/datastores/" + datastore + "/featuretypes").request().post(
+				Entity.entity(
+						jsonString,
+						MediaType.APPLICATION_JSON));
 
 		if (resp.getStatus() != Status.CREATED.getStatusCode()) {
 			return resp;
 		}
 
 		resp = target.path(
-				"geoserver/rest/layers/" + layerName).request().put(
+				"rest/layers/" + layerName).request().put(
 				Entity.entity(
 						"{'layer':{'defaultStyle':{'name':'" + defaultStyle + "'}}}",
 						MediaType.APPLICATION_JSON));
@@ -901,6 +898,6 @@ public class GeoserverServiceImpl implements
 		final WebTarget target = client.target(geoserverUrl);
 
 		return target.path(
-				"geoserver/rest/layers/" + layerName).request().delete();
+				"rest/layers/" + layerName).request().delete();
 	}
 }

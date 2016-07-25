@@ -49,6 +49,7 @@ import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
+import org.geotools.coverage.processing.Operations;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.GeometryClipper;
 import org.geotools.geometry.jts.JTS;
@@ -752,14 +753,12 @@ public class RasterDataAdapter implements
 								tileInterpolation = Interpolation.getInstance(Interpolation.INTERP_NEAREST);
 							}
 						}
-						final GridCoverage resampledCoverage = (GridCoverage) RasterUtils
-								.getCoverageOperations()
-								.resample(
-										originalData,
-										GeoWaveGTRasterFormat.DEFAULT_CRS,
-										insertionIdGeometry,
-										tileInterpolation,
-										backgroundValuesPerBand);
+						GridCoverage resampledCoverage = (GridCoverage) RasterUtils.getCoverageOperations().resample(
+								originalData,
+								GeoWaveGTRasterFormat.DEFAULT_CRS,
+								insertionIdGeometry,
+								tileInterpolation,
+								backgroundValuesPerBand);
 						// NOTE: for now this is commented out, but
 						// beware the
 						// resample operation under certain conditions,
@@ -777,43 +776,34 @@ public class RasterDataAdapter implements
 						// finalize the grid coverage to guarantee it is the
 						// correct tileSize
 
-						// final GridEnvelope e =
-						// resampledCoverage.getGridGeometry().getGridRange();
-						// boolean resize = false;
+						final GridEnvelope e = resampledCoverage.getGridGeometry().getGridRange();
+						boolean resize = false;
 
-						// for (int d = 0; d < e.getDimension(); d++) {
-						// if (e.getSpan(d) != tileSize) {
-						// resize = true;
-						// break;
-						// }
-						// }
-						// if (resize) {
-						// resampledCoverage = Operations.DEFAULT.scale(
-						// resampledCoverage,
-						// (double) tileSize / (double) e.getSpan(0),
-						// (double) tileSize / (double) e.getSpan(1),
-						// -resampledCoverage.getRenderedImage().getMinX(),
-						// -resampledCoverage.getRenderedImage().getMinY());
-						// }
-						// if
-						// ((resampledCoverage.getRenderedImage().getWidth()
-						// != tileSize) ||
-						// (resampledCoverage.getRenderedImage().getHeight()
-						// !=
-						// tileSize) ||
-						// (resampledCoverage.getRenderedImage().getMinX()
-						// != 0)
-						// ||
-						// (resampledCoverage.getRenderedImage().getMinY()
-						// !=
-						// 0)) {
-						// resampledCoverage = Operations.DEFAULT.scale(
-						// resampledCoverage,
-						// 1,
-						// 1,
-						// -resampledCoverage.getRenderedImage().getMinX(),
-						// -resampledCoverage.getRenderedImage().getMinY());
-						// }
+						for (int d = 0; d < e.getDimension(); d++) {
+							if (e.getSpan(d) != tileSize) {
+								resize = true;
+								break;
+							}
+						}
+						if (resize) {
+							resampledCoverage = Operations.DEFAULT.scale(
+									resampledCoverage,
+									(double) tileSize / (double) e.getSpan(0),
+									(double) tileSize / (double) e.getSpan(1),
+									-resampledCoverage.getRenderedImage().getMinX(),
+									-resampledCoverage.getRenderedImage().getMinY());
+						}
+						if ((resampledCoverage.getRenderedImage().getWidth() != tileSize)
+								|| (resampledCoverage.getRenderedImage().getHeight() != tileSize)
+								|| (resampledCoverage.getRenderedImage().getMinX() != 0)
+								|| (resampledCoverage.getRenderedImage().getMinY() != 0)) {
+							resampledCoverage = Operations.DEFAULT.scale(
+									resampledCoverage,
+									1,
+									1,
+									-resampledCoverage.getRenderedImage().getMinX(),
+									-resampledCoverage.getRenderedImage().getMinY());
+						}
 						if (pyramidLevel.getIndexStrategy() instanceof CompoundIndexStrategy) {
 							// this is exclusive on the end, and the tier is set
 							// so just get the id based on the lowest half of

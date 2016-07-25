@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.format.landsat8;
+package mil.nga.giat.geowave.adapter.raster.plugin;
 
 import org.geotools.coverageio.gdal.BaseGDALGridCoverage2DReader;
 import org.geotools.data.DataSourceException;

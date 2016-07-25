@@ -16,7 +16,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.SimpleAbstractMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.query.IndexOnlySpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;

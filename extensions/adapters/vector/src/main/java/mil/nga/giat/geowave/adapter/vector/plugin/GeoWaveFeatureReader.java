@@ -50,6 +50,7 @@ import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -638,6 +639,12 @@ public class GeoWaveFeatureReader implements
 		// temporalConstraints));
 		// }
 		// else {
+		if (components.isLooseQuery()) {
+			return new IndexOnlySpatialQuery(
+					geoConstraints.getConstraints().merge(
+							temporalConstraints),
+					geoConstraints.getGeometry());
+		}
 		return new SpatialQuery(
 				geoConstraints.getConstraints().merge(
 						temporalConstraints),

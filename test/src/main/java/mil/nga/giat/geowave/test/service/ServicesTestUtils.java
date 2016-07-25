@@ -48,7 +48,7 @@ public class ServicesTestUtils
 			}
 			final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 
-			writer.println("geoserver.url=" + ServicesTestEnvironment.JETTY_BASE_URL);
+			writer.println("geoserver.url=" + ServicesTestEnvironment.GEOSERVER_BASE_URL);
 			writer.println("geoserver.username=" + ServicesTestEnvironment.GEOSERVER_USER);
 			writer.println("geoserver.password=" + ServicesTestEnvironment.GEOSERVER_PASS);
 			writer.println("geoserver.workspace=" + ServicesTestEnvironment.TEST_WORKSPACE);

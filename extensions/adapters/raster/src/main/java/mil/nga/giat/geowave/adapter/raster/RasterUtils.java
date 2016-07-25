@@ -431,6 +431,7 @@ public class RasterUtils
 			final String coverageName,
 			final Interpolation interpolation,
 			final Histogram histogram,
+			final boolean scaleTo8BitSet,
 			final boolean scaleTo8Bit,
 			final ColorModel defaultColorModel ) {
 
@@ -542,6 +543,9 @@ public class RasterUtils
 					}
 				case DataBuffer.TYPE_DOUBLE:
 				case DataBuffer.TYPE_FLOAT:
+					if (!scaleTo8BitSet && dataType != DataBuffer.TYPE_USHORT) {
+						break;
+					}
 				case DataBuffer.TYPE_INT:
 				case DataBuffer.TYPE_SHORT:
 					// rescale to byte
@@ -686,9 +690,21 @@ public class RasterUtils
 				0.0f,
 				interpolation);
 		final RenderedOp result = w.getRenderedOperation();
+		Raster raster = result.getData();
+		final WritableRaster scaledImageRaster;
+		if (raster instanceof WritableRaster) {
+			scaledImageRaster = (WritableRaster) raster;
+		}
+		else {
+			scaledImageRaster = raster.createCompatibleWritableRaster();
 
-		final WritableRaster scaledImageRaster = (WritableRaster) result.getData();
-
+			scaledImageRaster.setDataElements(
+					0,
+					0,
+					raster.getWidth(),
+					raster.getHeight(),
+					raster.getDataBuffer());
+		}
 		final ColorModel colorModel = image.getColorModel();
 		try {
 			final BufferedImage scaledImage = new BufferedImage(

@@ -42,7 +42,7 @@ import mil.nga.giat.geowave.core.store.index.IndexStore;
  * This class encapsulates the parameterized configuration that can be provided
  * per GeoWave data store within GeoTools. For GeoServer this configuration can
  * be provided within the data store definition workflow.
- * 
+ *
  */
 public class GeoWavePluginConfig
 {
@@ -51,6 +51,7 @@ public class GeoWavePluginConfig
 	public static final String GEOWAVE_NAMESPACE_KEY = StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION;
 	// name matches the workspace parameter provided to the factory
 	protected static final String FEATURE_NAMESPACE_KEY = "namespace";
+	protected static final String LOOSE_QUERY_KEY = "namespace";
 	protected static final String LOCK_MGT_KEY = "Lock Management";
 	protected static final String AUTH_MGT_KEY = "Authorization Management Provider";
 	protected static final String AUTH_URL_KEY = "Authorization Data URL";
@@ -72,6 +73,13 @@ public class GeoWavePluginConfig
 			FEATURE_NAMESPACE_KEY,
 			String.class,
 			"The overriding namespace for all feature types maintained within this data store",
+			false);
+
+	private static final Param LOOSE_QUERY = new Param(
+			LOOSE_QUERY_KEY,
+			Boolean.class,
+			"When constraints are a subset of the indexed dimension types, the data store will be queried faster with a small false positive rate.  Defaults to off and is only recommended to enable if false positives are acceptable.",
+			false,
 			false);
 
 	private static final Param LOCK_MGT = new Param(
@@ -116,6 +124,7 @@ public class GeoWavePluginConfig
 	private final Integer transactionBufferSize;
 	private final IndexQueryStrategySPI indexQueryStrategy;
 	private final AdapterIndexMappingStore adapterIndexMappingStore;
+	private final Boolean looseQuery;
 
 	private static Map<String, List<Param>> paramMap = new HashMap<String, List<Param>>();
 
@@ -142,6 +151,7 @@ public class GeoWavePluginConfig
 			params.add(AUTH_URL);
 			params.add(TRANSACTION_BUFFER_SIZE_PARAM);
 			params.add(QUERY_INDEX_STRATEGY);
+			params.add(LOOSE_QUERY);
 			paramMap.put(
 					storeFactoryFamily.getName(),
 					params);
@@ -183,7 +193,13 @@ public class GeoWavePluginConfig
 			}
 		}
 		featureNameSpaceURI = namespaceURI;
-
+		param = params.get(LOOSE_QUERY_KEY);
+		if (param != null) {
+			looseQuery = param.equals(Boolean.valueOf(true));
+		}
+		else {
+			looseQuery = false;
+		}
 		param = params.get(TRANSACTION_BUFFER_SIZE);
 		Integer bufferSizeFromParam = 10000;
 		if (param != null) {
@@ -238,6 +254,10 @@ public class GeoWavePluginConfig
 		indexQueryStrategy = getIndexQueryStrategy(params);
 	}
 
+	public boolean isLooseQuery() {
+		return looseQuery == null ? false : looseQuery;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -290,9 +310,11 @@ public class GeoWavePluginConfig
 		if (param != null) {
 			final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
 			while (it.hasNext()) {
-				IndexQueryStrategySPI spi = it.next();
+				final IndexQueryStrategySPI spi = it.next();
 				if (spi.toString().equals(
-						param.toString())) return spi;
+						param.toString())) {
+					return spi;
+				}
 			}
 
 		}
@@ -418,7 +440,7 @@ public class GeoWavePluginConfig
 								Parameter.IS_PASSWORD,
 								Boolean.TRUE));
 			}
-			if (input.getType().isPrimitive() && input.getType() == boolean.class) {
+			if (input.getType().isPrimitive() && (input.getType() == boolean.class)) {
 				return new Param(
 						input.getName(),
 						input.getType(),

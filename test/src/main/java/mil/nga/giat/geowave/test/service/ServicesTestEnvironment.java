@@ -48,7 +48,8 @@ public class ServicesTestEnvironment implements
 	protected static final String TEST_WORKSPACE = "geowave_test";
 	protected static final String GEOSERVER_WAR_DIR = "target/geoserver";
 	protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
-	protected static final String GEOSERVER_REST_PATH = JETTY_BASE_URL + GEOSERVER_CONTEXT_PATH + "/rest";
+	protected static final String GEOSERVER_BASE_URL = JETTY_BASE_URL + GEOSERVER_CONTEXT_PATH;
+	protected static final String GEOSERVER_REST_PATH = GEOSERVER_BASE_URL + "/rest";
 	protected static final String GEOWAVE_WAR_DIR = "target/geowave-services";
 	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;

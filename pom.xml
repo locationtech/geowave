@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
@@ -36,6 +37,7 @@
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.8.2</geoserver.version>
 		<accumulo.version>1.7.2</accumulo.version>
+		<vfs2.version>2.1</vfs2.version>
 		<hbase.version>1.2.1</hbase.version>
 		<hadoop.version>2.7.2</hadoop.version>
 		<avro.version>1.7.6</avro.version>
@@ -110,6 +112,11 @@
 			<dependency>
 				<groupId>com.vividsolutions</groupId>
 				<artifactId>jts-core</artifactId>
+				<version>1.14.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vividsolutions</groupId>
+				<artifactId>jts-example</artifactId>
 				<version>1.14.0</version>
 			</dependency>
 			<dependency>
@@ -339,6 +346,12 @@
 				<groupId>org.glassfish.jersey.ext</groupId>
 				<artifactId>jersey-proxy-client</artifactId>
 				<version>${jersey.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-vfs2</artifactId>
+				<version>${vfs2.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -724,10 +737,10 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.3</version>
 				<configuration>
-			        <tagNameFormat>v@{project.version}</tagNameFormat>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 	<modules>
