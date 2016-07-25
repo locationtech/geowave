@@ -307,8 +307,8 @@
 						<sourceDirectory>../extensions/datastores/hbase/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
-						<sourceDirectory>../extensions/cli/stats/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/landsat8/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/cli/geoserver/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/osm/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/debug/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/formats/geotools-vector/src/main/java</sourceDirectory>
