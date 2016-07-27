@@ -234,12 +234,13 @@ public class AccumuloDataStore extends
 	protected <T> void addAltIndexCallback(
 			final List<IngestCallback<T>> callbacks,
 			final String indexName,
-			final DataAdapter<T> adapter ) {
+			final DataAdapter<T> adapter,
+			final ByteArrayId primaryIndexId ) {
 		try {
 			callbacks.add(new AltIndexCallback<T>(
 					indexName,
 					(WritableDataAdapter<T>) adapter,
-					accumuloOptions));
+					primaryIndexId));
 
 		}
 		catch (final Exception e) {
@@ -250,22 +251,27 @@ public class AccumuloDataStore extends
 	}
 
 	private class AltIndexCallback<T> implements
-			IngestCallback<T>,
-			Closeable,
-			Flushable
+			IngestCallback<T>
 	{
-
+		private final ByteArrayId EMPTY_VISIBILITY = new ByteArrayId(
+				new byte[0]);
+		private final ByteArrayId EMPTY_FIELD_ID = new ByteArrayId(
+				new byte[0]);
 		private final WritableDataAdapter<T> adapter;
-		private Writer altIdxWriter;
 		private final String altIdxTableName;
+		private final ByteArrayId primaryIndexId;
+		private final ByteArrayId altIndexId;
 
 		public AltIndexCallback(
 				final String indexName,
 				final WritableDataAdapter<T> adapter,
-				final AccumuloOptions accumuloOptions )
+				final ByteArrayId primaryIndexId )
 				throws TableNotFoundException {
 			this.adapter = adapter;
 			altIdxTableName = indexName + ALT_INDEX_TABLE;
+			altIndexId = new ByteArrayId(
+					altIdxTableName);
+			this.primaryIndexId = primaryIndexId;
 			try {
 				if (accumuloOperations.tableExists(indexName)) {
 					if (!accumuloOperations.tableExists(altIdxTableName)) {
@@ -287,39 +293,26 @@ public class AccumuloDataStore extends
 			catch (final IOException e) {
 				LOGGER.error("Exception checking for index " + indexName + ": " + e);
 			}
-
-			altIdxWriter = accumuloOperations.createWriter(
-					altIdxTableName,
-					accumuloOptions.isCreateTable(),
-					true,
-					accumuloOptions.isEnableBlockCache(),
-					null);
-		}
-
-		@Override
-		public void close()
-				throws IOException {
-			altIdxWriter.close();
-			altIdxWriter = null;
 		}
 
 		@Override
 		public void entryIngested(
 				final DataStoreEntryInfo entryInfo,
 				final T entry ) {
-			AccumuloUtils.writeAltIndex(
-					adapter,
-					entryInfo,
-					entry,
-					altIdxWriter);
-
+			for (final ByteArrayId primaryIndexRowId : entryInfo.getRowIds()) {
+				final ByteArrayId dataId = adapter.getDataId(entry);
+				if ((dataId != null) && (dataId.getBytes() != null) && (dataId.getBytes().length > 0)) {
+					secondaryIndexDataStore.storeJoinEntry(
+							altIndexId,
+							dataId,
+							adapter.getAdapterId(),
+							EMPTY_FIELD_ID,
+							primaryIndexId,
+							primaryIndexRowId,
+							EMPTY_VISIBILITY);
+				}
+			}
 		}
-
-		@Override
-		public void flush() {
-			altIdxWriter.flush();
-		}
-
 	}
 
 	@Override
@@ -545,8 +538,10 @@ public class AccumuloDataStore extends
 
 						final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
 						while (iterator.hasNext()) {
+							final byte[] cq = iterator.next().getKey().getColumnQualifierData().getBackingArray();
 							result.add(new ByteArrayId(
-									iterator.next().getKey().getColumnQualifierData().getBackingArray()));
+									ByteArrayUtils.splitVariableLengthArrays(
+											cq).getRight()));
 						}
 					}
 					catch (final TableNotFoundException e) {

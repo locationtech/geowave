@@ -8,6 +8,8 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 import com.google.common.collect.Sets;
 
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
+
 public abstract class AbstractSecondaryIndexConfiguration<T> implements
 		SimpleFeatureSecondaryIndexConfiguration
 {
@@ -15,31 +17,31 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 	private static final long serialVersionUID = -7425830022998223202L;
 	private final static Logger LOGGER = Logger.getLogger(AbstractSecondaryIndexConfiguration.class);
 	private final Class<T> clazz;
-	private Set<String> attributes;
+	private final Set<String> attributes;
+	private final SecondaryIndexType secondaryIndexType;
 
 	public AbstractSecondaryIndexConfiguration(
 			final Class<T> clazz,
-			final String attribute ) {
+			final String attribute,
+			final SecondaryIndexType secondaryIndexType ) {
 		this(
 				clazz,
-				Sets.newHashSet(attribute));
+				Sets.newHashSet(attribute),
+				secondaryIndexType);
 	}
 
 	public AbstractSecondaryIndexConfiguration(
 			final Class<T> clazz,
-			final Set<String> attributes ) {
+			final Set<String> attributes,
+			final SecondaryIndexType secondaryIndexType ) {
 		super();
 		this.clazz = clazz;
 		this.attributes = attributes;
+		this.secondaryIndexType = secondaryIndexType;
 	}
 
 	public Set<String> getAttributes() {
 		return attributes;
-	}
-
-	public void setAttributes(
-			Set<String> attributes ) {
-		this.attributes = attributes;
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 				if (clazz.isAssignableFrom(attributeType)) {
 					desc.getUserData().put(
 							getIndexKey(),
-							Boolean.TRUE);
+							secondaryIndexType.getValue());
 				}
 				else {
 					LOGGER.error("Expected type " + clazz.getName() + " for attribute '" + attribute + "' but found "
@@ -72,7 +74,7 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 		for (final AttributeDescriptor desc : type.getAttributeDescriptors()) {
 			if ((desc.getUserData().get(
 					getIndexKey()) != null) && (desc.getUserData().get(
-					getIndexKey()).equals(Boolean.TRUE))) {
+					getIndexKey()).equals(secondaryIndexType.getValue()))) {
 				attributes.add(desc.getLocalName());
 			}
 		}

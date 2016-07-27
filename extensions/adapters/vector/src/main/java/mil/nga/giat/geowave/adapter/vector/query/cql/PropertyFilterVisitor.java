@@ -7,8 +7,8 @@ import mil.nga.giat.geowave.core.store.index.numeric.NumericGreaterThanOrEqualTo
 import mil.nga.giat.geowave.core.store.index.numeric.NumericLessThanConstraint;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericLessThanOrEqualToConstraint;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericQueryConstraint;
-import mil.nga.giat.geowave.core.store.index.text.FilterableLikeConstraint;
-import mil.nga.giat.geowave.core.store.index.text.FilterableTextRangeConstraint;
+import mil.nga.giat.geowave.core.store.index.text.TextExactMatchFilter;
+import mil.nga.giat.geowave.core.store.index.text.TextQueryConstraint;
 
 import org.geotools.filter.visitor.NullFilterVisitor;
 import org.opengis.filter.And;
@@ -304,12 +304,7 @@ public class PropertyFilterVisitor extends
 							true,
 							true));
 		}
-		return new PropertyConstraintSet(
-				new FilterableTextRangeConstraint(
-						leftResult,
-						lower.toString(),
-						upper.toString(),
-						true));
+		return new PropertyConstraintSet();
 
 	}
 
@@ -325,19 +320,22 @@ public class PropertyFilterVisitor extends
 				this,
 				data);
 
-		if (value instanceof Number)
-
+		if (value instanceof Number) {
 			return new PropertyConstraintSet(
-
 					new NumericEqualsConstraint(
 							leftResult,
 							(Number) value));
-		else
+		}
+		else if (value instanceof String) {
 			return new PropertyConstraintSet(
-					new FilterableTextRangeConstraint(
+					new TextQueryConstraint(
 							leftResult,
-							value.toString(),
+							(String) value,
 							true));
+		}
+		else {
+			return new PropertyConstraintSet();
+		}
 
 	}
 
@@ -439,15 +437,7 @@ public class PropertyFilterVisitor extends
 	public Object visit(
 			final PropertyIsLike filter,
 			final Object data ) {
-		final ByteArrayId leftResult = (ByteArrayId) filter.getExpression().accept(
-				this,
-				data);
-		return new PropertyConstraintSet(
-				new FilterableLikeConstraint(
-						leftResult,
-						filter.getLiteral(),
-						filter.isMatchingCase()));
-
+		return new PropertyConstraintSet();
 	}
 
 	@Override

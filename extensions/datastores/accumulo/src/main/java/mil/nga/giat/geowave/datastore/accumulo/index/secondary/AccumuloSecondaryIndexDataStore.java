@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.base.Writer;
@@ -56,21 +57,22 @@ public class AccumuloSecondaryIndexDataStore extends
 		this.accumuloOptions = accumuloOptions;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Writer<Mutation> getWriter(
-			final SecondaryIndex<?> secondaryIndex ) {
-		final String secondaryIndexName = secondaryIndex.getIndexStrategy().getId();
+			final ByteArrayId secondaryIndexId ) {
+		final String secondaryIndexName = secondaryIndexId.getString();
 		if (writerCache.containsKey(secondaryIndexName)) {
 			return writerCache.get(secondaryIndexName);
 		}
 		Writer<Mutation> writer = null;
 		try {
 			writer = accumuloOperations.createWriter(
-					TABLE_PREFIX + secondaryIndexName,
+					secondaryIndexName,
 					true,
 					false,
 					accumuloOptions.isEnableBlockCache(),
-					secondaryIndex.getIndexStrategy().getNaturalSplits());
+					null);
 			writerCache.put(
 					secondaryIndexName,
 					writer);
@@ -84,28 +86,51 @@ public class AccumuloSecondaryIndexDataStore extends
 	}
 
 	@Override
-	protected Mutation buildMutation(
+	protected Mutation buildJoinMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName,
-			final byte[] attributeValue,
-			final byte[] visibility,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
 			final byte[] primaryIndexId,
-			final byte[] primaryIndexRowId ) {
+			final byte[] primaryIndexRowId,
+			final byte[] attributeVisibility ) {
 		final Mutation m = new Mutation(
 				secondaryIndexRowId);
 		final ColumnVisibility columnVisibility = new ColumnVisibility(
-				visibility);
+				attributeVisibility);
 		m.put(
-				secondaryIndexId,
-				attributeName,
+				ByteArrayUtils.combineArrays(
+						adapterId,
+						indexedAttributeFieldId),
+				ByteArrayUtils.combineVariableLengthArrays(
+						primaryIndexId,
+						primaryIndexRowId),
 				columnVisibility,
-				attributeValue);
+				EMPTY_VALUE);
+		return m;
+	}
+
+	@Override
+	protected Mutation buildMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId,
+			final byte[] fieldValue,
+			final byte[] fieldVisibility ) {
+		final Mutation m = new Mutation(
+				secondaryIndexRowId);
+		final ColumnVisibility columnVisibility = new ColumnVisibility(
+				fieldVisibility);
 		m.put(
-				secondaryIndexId,
-				primaryIndexId,
+				ByteArrayUtils.combineArrays(
+						adapterId,
+						indexedAttributeFieldId),
+				ByteArrayUtils.combineVariableLengthArrays(
+						fieldId,
+						dataId),
 				columnVisibility,
-				primaryIndexRowId);
+				fieldValue);
 		return m;
 	}
 
@@ -123,33 +148,31 @@ public class AccumuloSecondaryIndexDataStore extends
 	}
 
 	@Override
-	public CloseableIterator<ByteArrayId> query(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<ByteArrayRange> ranges,
-			final List<DistributableQueryFilter> constraints,
-			final ByteArrayId primaryIndexId,
+	public CloseableIterator<Object> scan(
+			ByteArrayId secondaryIndexId,
+			final List<ByteArrayRange> scanRanges,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
 			final String... visibility ) {
 		final Scanner scanner = getScanner(
-				secondaryIndex.getIndexStrategy().getId(),
+				StringUtils.stringFromBinary(secondaryIndexId.getBytes()),
 				visibility);
 		if (scanner != null) {
-			final Collection<ByteArrayId> primaryIndexRowIds = new ArrayList<>();
-			scanner.addScanIterator(getScanIteratorSettings(
-					constraints,
-					primaryIndexId));
-			final Collection<Range> scanRanges = getScanRanges(ranges);
-			for (final Range range : scanRanges) {
+			scanner.fetchColumnFamily(new Text(
+					ByteArrayUtils.combineArrays(
+							adapterId.getBytes(),
+							indexedAttributeFieldId.getBytes())));
+			final Collection<Range> ranges = getScanRanges(scanRanges);
+			for (final Range range : ranges) {
 				scanner.setRange(range);
-				for (final Entry<Key, Value> entry : scanner) {
-					if (entry.getKey().getColumnQualifier().toString().equals(
-							primaryIndexId.getString())) {
-						// found query match: keep track of primaryIndexRowId
-						primaryIndexRowIds.add(new ByteArrayId(
-								entry.getValue().get()));
-					}
-				}
 			}
-			return new CloseableIteratorWrapper<ByteArrayId>(
+			final Collection<Object> results = new ArrayList<>();
+			for (final Entry<Key, Value> entry : scanner) {
+				// TODO process entries to build results
+				// ... requires notion of join strategy
+				// ... which is not yet implemented
+			}
+			return new CloseableIteratorWrapper<Object>(
 					new Closeable() {
 						@Override
 						public void close()
@@ -157,9 +180,9 @@ public class AccumuloSecondaryIndexDataStore extends
 							scanner.close();
 						}
 					},
-					primaryIndexRowIds.iterator());
+					results.iterator());
 		}
-		return new CloseableIterator.Empty<ByteArrayId>();
+		return new CloseableIterator.Empty<Object>();
 	}
 
 	private Scanner getScanner(
@@ -168,7 +191,7 @@ public class AccumuloSecondaryIndexDataStore extends
 		Scanner scanner = null;
 		try {
 			scanner = accumuloOperations.createScanner(
-					TABLE_PREFIX + secondaryIndexId,
+					secondaryIndexId,
 					visibility);
 		}
 		catch (final TableNotFoundException e) {
@@ -214,4 +237,5 @@ public class AccumuloSecondaryIndexDataStore extends
 				primaryIndexId.getString());
 		return iteratorSettings;
 	}
+
 }

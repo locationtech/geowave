@@ -51,7 +51,7 @@ public class AccumuloIndexWriter<T> extends
 		this.accumuloOptions = accumuloOptions;
 	}
 
-	private synchronized void ensureOpen() {
+	protected synchronized void ensureOpen() {
 		if (writer == null) {
 			try {
 				writer = accumuloOperations.createWriter(
@@ -70,31 +70,15 @@ public class AccumuloIndexWriter<T> extends
 	}
 
 	@Override
-	public List<ByteArrayId> writeInternal(
+	protected DataStoreEntryInfo getEntryInfo(
 			final T entry,
 			final VisibilityWriter<T> visibilityWriter ) {
-
-		DataStoreEntryInfo entryInfo;
-		synchronized (this) {
-
-			ensureOpen();
-			if (writer == null) {
-				return Collections.emptyList();
-			}
-			entryInfo = AccumuloUtils.write(
-					(WritableDataAdapter<T>) adapter,
-					index,
-					entry,
-					writer,
-					accumuloOperations,
-					visibilityWriter);
-			if (entryInfo == null) {
-				return Collections.EMPTY_LIST;
-			}
-			callback.entryIngested(
-					entryInfo,
-					entry);
-		}
-		return entryInfo.getRowIds();
+		return AccumuloUtils.write(
+				(WritableDataAdapter<T>) adapter,
+				index,
+				entry,
+				writer,
+				accumuloOperations,
+				visibilityWriter);
 	}
 }

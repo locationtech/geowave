@@ -128,7 +128,8 @@ public abstract class BaseDataStore
 					addAltIndexCallback(
 							callbacks,
 							indexName,
-							adapter);
+							adapter,
+							index.getId());
 				}
 			}
 			callbacks.add(callbackManager.getIngestCallback(
@@ -587,7 +588,8 @@ public abstract class BaseDataStore
 	protected abstract <T> void addAltIndexCallback(
 			List<IngestCallback<T>> callbacks,
 			String indexName,
-			DataAdapter<T> adapter );
+			DataAdapter<T> adapter,
+			ByteArrayId primaryIndexId );
 
 	protected abstract IndexWriter createIndexWriter(
 			DataAdapter adapter,
