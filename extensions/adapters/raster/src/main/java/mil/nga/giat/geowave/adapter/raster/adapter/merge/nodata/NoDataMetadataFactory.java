@@ -345,7 +345,7 @@ public class NoDataMetadataFactory
 
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				if (shape.accept(
+				if (!shape.accept(
 						x,
 						y)) {
 					for (int b = 0; b < numBands; b++) {

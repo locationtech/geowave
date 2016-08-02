@@ -183,7 +183,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 							it));
 		}
 		catch (final TableNotFoundException e) {
-			LOGGER.error(
+			LOGGER.info(
 					"Unable to find objects, table '" + getTablename() + "' does not exist",
 					e);
 		}
@@ -243,7 +243,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 							it));
 		}
 		catch (final TableNotFoundException e) {
-			LOGGER.warn(
+			LOGGER.info(
 					"Unable to find objects, table '" + getTablename() + "' does not exist",
 					e);
 		}

@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransfor
 public class RasterTileRowTransform<T extends Persistable> implements
 		RowTransform<Mergeable>
 {
+	public static final String TRANSFORM_NAME = "RasterTile";
 	public static final String MERGE_STRATEGY_KEY = "MERGE_STRATEGY";
 	private RootMergeStrategy<T> mergeStrategy;
 	// this priority is fairly arbitrary at the moment
@@ -85,7 +86,7 @@ public class RasterTileRowTransform<T extends Persistable> implements
 
 	@Override
 	public String getTransformName() {
-		return "RasterTile";
+		return TRANSFORM_NAME;
 	}
 
 	@Override

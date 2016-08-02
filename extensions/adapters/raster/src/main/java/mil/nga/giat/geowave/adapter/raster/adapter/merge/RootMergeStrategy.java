@@ -220,6 +220,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 				final ObjectOutputStream oos = new ObjectOutputStream(
 						baos);
 				oos.writeObject(serializableSampleModel);
+				oos.close();
 				sampleModelBinary = baos.toByteArray();
 				byteCount += sampleModelBinary.length;
 				byteCount += 8;
@@ -321,6 +322,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 					final ObjectInputStream ois = new ObjectInputStream(
 							bais);
 					final Object o = ois.readObject();
+					ois.close();
 					final int sampleModelKey = buf.getInt();
 					if ((o instanceof SerializableState)
 							&& (((SerializableState) o).getObject() instanceof SampleModel)) {

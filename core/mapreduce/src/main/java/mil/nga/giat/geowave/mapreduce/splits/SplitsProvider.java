@@ -315,6 +315,9 @@ public abstract class SplitsProvider
 
 	protected static double getRangeLength(
 			final GeoWaveRowRange range ) {
+		if (range.getStartKey() == null || range.getEndKey() == null) {
+			return 1;
+		}
 		final byte[] start = range.getStartKey();
 		final byte[] end = range.getEndKey();
 

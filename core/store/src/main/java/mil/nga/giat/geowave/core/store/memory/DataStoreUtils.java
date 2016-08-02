@@ -122,26 +122,6 @@ public class DataStoreUtils
 				+ unqualifiedTableName;
 	}
 
-	public static <T> List<EntryRow> entryToRows(
-			final WritableDataAdapter<T> dataWriter,
-			final PrimaryIndex index,
-			final T entry,
-			final IngestCallback<T> ingestCallback,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final DataStoreEntryInfo ingestInfo = getIngestInfo(
-				dataWriter,
-				index,
-				entry,
-				customFieldVisibilityWriter);
-		ingestCallback.entryIngested(
-				ingestInfo,
-				entry);
-		return buildRows(
-				dataWriter.getAdapterId().getBytes(),
-				entry,
-				ingestInfo);
-	}
-
 	public static List<IndexedAdapterPersistenceEncoding> getEncodings(
 			final PrimaryIndex index,
 			final AdapterPersistenceEncoding encoding ) {
@@ -197,7 +177,7 @@ public class DataStoreUtils
 				extendedData);
 	}
 
-	private static <T> List<EntryRow> buildRows(
+	protected static <T> List<EntryRow> buildRows(
 			final byte[] adapterId,
 			final T entry,
 			final DataStoreEntryInfo ingestInfo ) {

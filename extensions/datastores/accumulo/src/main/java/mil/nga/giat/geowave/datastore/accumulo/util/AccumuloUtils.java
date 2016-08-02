@@ -428,7 +428,6 @@ public class AccumuloUtils
 			fieldInfoList.add(new AccumuloFieldInfo(
 					fieldPositions.get(0),
 					flattenedValue));
-
 		}
 		return new AccumuloDataSet(
 				fieldInfoList,
@@ -536,23 +535,6 @@ public class AccumuloUtils
 		}
 	}
 
-	public static <T> List<Mutation> entryToMutations(
-			final WritableDataAdapter<T> dataWriter,
-			final PrimaryIndex index,
-			final T entry,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
-				dataWriter,
-				index,
-				entry,
-				customFieldVisibilityWriter);
-		return buildMutations(
-				dataWriter.getAdapterId().getBytes(),
-				ingestInfo,
-				index,
-				dataWriter);
-	}
-
 	private static <T> List<Mutation> buildMutations(
 			final byte[] adapterId,
 			final DataStoreEntryInfo ingestInfo,
@@ -591,7 +573,7 @@ public class AccumuloUtils
 	 * @param originalList
 	 * @return a new list of composite FieldInfos
 	 */
-	private static <T> List<FieldInfo<?>> composeFlattenedFields(
+	protected static <T> List<FieldInfo<?>> composeFlattenedFields(
 			final List<FieldInfo<?>> originalList,
 			final CommonIndexModel model,
 			final WritableDataAdapter<?> writableAdapter ) {
