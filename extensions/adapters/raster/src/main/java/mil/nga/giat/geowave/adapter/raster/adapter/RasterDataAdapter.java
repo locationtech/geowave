@@ -75,6 +75,7 @@ import org.opengis.util.InternationalString;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.PrecisionModel;
 
 import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
@@ -690,10 +691,16 @@ public class RasterDataAdapter implements
 						Geometry footprintWithinTileWorldGeom = null;
 						Geometry footprintWithinTileScreenGeom = null;
 						try {
-							final Geometry wholeFootprintScreenGeom = JTS.transform(
+							// using fixed precision for geometry factory will
+							// round screen geometry values to the nearest
+							// pixel, which seems to be the most appropriate
+							// behavior
+							final Geometry wholeFootprintScreenGeom = new GeometryFactory(
+									new PrecisionModel(
+											PrecisionModel.FIXED)).createGeometry(JTS.transform(
 									footprint,
 									new AffineTransform2D(
-											worldToScreenTransform));
+											worldToScreenTransform)));
 							final com.vividsolutions.jts.geom.Envelope fullTileEnvelope = new com.vividsolutions.jts.geom.Envelope(
 									0,
 									tileSize,
@@ -713,8 +720,11 @@ public class RasterDataAdapter implements
 								return null;
 							}
 							footprintWithinTileWorldGeom = JTS.transform(
-									footprintWithinTileScreenGeom,
+									// change the precision model back to JTS
+									// default from fixed precision
+									new GeometryFactory().createGeometry(footprintWithinTileScreenGeom),
 									gridToCRS);
+
 							if (footprintWithinTileScreenGeom
 									.covers(new GeometryFactory().toGeometry(fullTileEnvelope))) {
 								// if the screen geometry fully covers the

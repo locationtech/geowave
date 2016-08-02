@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreCallbackManager;
+import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.IndexCompositeWriter;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -152,7 +153,7 @@ public class MemoryDataStore implements
 					(WritableDataAdapter) this.adapter,
 					index);
 
-			final List<EntryRow> rows = DataStoreUtils.entryToRows(
+			final List<EntryRow> rows = entryToRows(
 					(WritableDataAdapter) this.adapter,
 					index,
 					entry,
@@ -191,6 +192,26 @@ public class MemoryDataStore implements
 			}
 		}
 
+	}
+
+	public static <T> List<EntryRow> entryToRows(
+			final WritableDataAdapter<T> dataWriter,
+			final PrimaryIndex index,
+			final T entry,
+			final IngestCallback<T> ingestCallback,
+			final VisibilityWriter<T> customFieldVisibilityWriter ) {
+		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
+				dataWriter,
+				index,
+				entry,
+				customFieldVisibilityWriter);
+		ingestCallback.entryIngested(
+				ingestInfo,
+				entry);
+		return DataStoreUtils.buildRows(
+				dataWriter.getAdapterId().getBytes(),
+				entry,
+				ingestInfo);
 	}
 
 	private TreeSet<EntryRow> getRowsForIndex(

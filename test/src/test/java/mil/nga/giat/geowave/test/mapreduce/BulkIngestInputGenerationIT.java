@@ -20,10 +20,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BulkIngestInputGenerationIT
@@ -67,12 +65,9 @@ public class BulkIngestInputGenerationIT
 	}
 
 	private void verifyNumAccumuloKeyValuePairs() {
-		final int accumuloEntriesPerKey = 4; // FeatureDataAdapter creates 4
-												// Accumulo entries per
-												// SimpleFeature
 		Assert.assertEquals(
 				mapOutputRecords,
-				(NUM_GEONAMES_RECORDS * accumuloEntriesPerKey));
+				(NUM_GEONAMES_RECORDS));
 	}
 
 	private void verifyJobOutput()

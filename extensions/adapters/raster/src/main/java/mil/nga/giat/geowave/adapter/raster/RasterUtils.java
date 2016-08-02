@@ -65,6 +65,7 @@ import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.geometry.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.Matrix;
@@ -109,26 +110,66 @@ public class RasterUtils
 	private static final double SIMPLIFICATION_MAX_DEGREES = 0.0001;
 
 	public static Geometry getFootprint(
+			final GridCoverage gridCoverage,
+			final CoordinateReferenceSystem targetCrs ) {
+		return getFootprint(
+				getReferenceEnvelope(
+						gridCoverage,
+						targetCrs),
+				gridCoverage);
+	}
+
+	public static ReferencedEnvelope getReferenceEnvelope(
+			final GridCoverage gridCoverage,
+			final CoordinateReferenceSystem targetCrs ) {
+		final CoordinateReferenceSystem sourceCrs = gridCoverage.getCoordinateReferenceSystem();
+		final Envelope sampleEnvelope = gridCoverage.getEnvelope();
+
+		final ReferencedEnvelope sampleReferencedEnvelope = new ReferencedEnvelope(
+				new com.vividsolutions.jts.geom.Envelope(
+						sampleEnvelope.getMinimum(0),
+						sampleEnvelope.getMaximum(0),
+						sampleEnvelope.getMinimum(1),
+						sampleEnvelope.getMaximum(1)),
+				gridCoverage.getCoordinateReferenceSystem());
+
+		ReferencedEnvelope projectedReferenceEnvelope = sampleReferencedEnvelope;
+		if ((targetCrs != null) && !targetCrs.equals(sourceCrs)) {
+			try {
+				projectedReferenceEnvelope = sampleReferencedEnvelope.transform(
+						targetCrs,
+						true);
+			}
+			catch (TransformException | FactoryException e) {
+				LOGGER.warn(
+						"Unable to transform envelope of grid coverage to " + targetCrs.getName(),
+						e);
+			}
+		}
+		return projectedReferenceEnvelope;
+	}
+
+	public static Geometry getFootprint(
 			final ReferencedEnvelope projectedReferenceEnvelope,
 			final GridCoverage gridCoverage ) {
 		try {
 			final Envelope sampleEnvelope = gridCoverage.getEnvelope();
 			final double avgSpan = (projectedReferenceEnvelope.getSpan(0) + projectedReferenceEnvelope.getSpan(1)) / 2;
-
+			final MathTransform gridCrsToWorldCrs = CRS.findMathTransform(
+					gridCoverage.getCoordinateReferenceSystem(),
+					GeoWaveGTRasterFormat.DEFAULT_CRS,
+					true);
 			final Coordinate[] polyCoords = getWorldCoordinates(
 					sampleEnvelope.getMinimum(0),
 					sampleEnvelope.getMinimum(1),
 					sampleEnvelope.getMaximum(0),
 					sampleEnvelope.getMaximum(1),
-					(int) Math.min(
+					gridCrsToWorldCrs.isIdentity() ? 2 : (int) Math.min(
 							Math.max(
 									(avgSpan * MIN_SEGMENTS) / SIMPLIFICATION_MAX_DEGREES,
 									MIN_SEGMENTS),
 							MAX_SEGMENTS),
-					CRS.findMathTransform(
-							gridCoverage.getCoordinateReferenceSystem(),
-							GeoWaveGTRasterFormat.DEFAULT_CRS,
-							true));
+					gridCrsToWorldCrs);
 			final Polygon poly = new GeometryFactory().createPolygon(polyCoords);
 			if (polyCoords.length > MAX_VERTICES_BEFORE_SIMPLIFICATION) {
 				final Geometry retVal = DouglasPeuckerSimplifier.simplify(
@@ -175,8 +216,13 @@ public class RasterUtils
 		// note the following geometry collection may be invalid (say with
 		// overlapping polygons)
 		final Geometry geometryCollection = factory.buildGeometry(geometries);
-
+		// try {
 		return geometryCollection.union();
+		// }
+		// catch (Exception e) {
+		// LOGGER.warn("Error creating a union of this geometry collection", e);
+		// return geometryCollection;
+		// }
 	}
 
 	private static Coordinate[] getWorldCoordinates(
@@ -188,17 +234,17 @@ public class RasterUtils
 			final MathTransform gridToCRS )
 			throws MismatchedDimensionException,
 			TransformException {
-		final Point2D[] screenCoordinates = getScreenCoordinates(
+		final Point2D[] gridCoordinates = getGridCoordinates(
 				minX,
 				minY,
 				maxX,
 				maxY,
 				numPointsPerSegment);
-		final Coordinate[] worldCoordinates = new Coordinate[screenCoordinates.length];
-		for (int i = 0; i < screenCoordinates.length; i++) {
+		final Coordinate[] worldCoordinates = new Coordinate[gridCoordinates.length];
+		for (int i = 0; i < gridCoordinates.length; i++) {
 			final DirectPosition2D worldPt = new DirectPosition2D();
 			final DirectPosition2D dp = new DirectPosition2D(
-					screenCoordinates[i]);
+					gridCoordinates[i]);
 			gridToCRS.transform(
 					dp,
 					worldPt);
@@ -209,7 +255,7 @@ public class RasterUtils
 		return worldCoordinates;
 	}
 
-	private static Point2D[] getScreenCoordinates(
+	private static Point2D[] getGridCoordinates(
 			final double minX,
 			final double minY,
 			final double maxX,
@@ -543,7 +589,7 @@ public class RasterUtils
 					}
 				case DataBuffer.TYPE_DOUBLE:
 				case DataBuffer.TYPE_FLOAT:
-					if (!scaleTo8BitSet && dataType != DataBuffer.TYPE_USHORT) {
+					if (!scaleTo8BitSet && (dataType != DataBuffer.TYPE_USHORT)) {
 						break;
 					}
 				case DataBuffer.TYPE_INT:
@@ -690,20 +736,17 @@ public class RasterUtils
 				0.0f,
 				interpolation);
 		final RenderedOp result = w.getRenderedOperation();
-		Raster raster = result.getData();
+		final Raster raster = result.getData();
 		final WritableRaster scaledImageRaster;
 		if (raster instanceof WritableRaster) {
 			scaledImageRaster = (WritableRaster) raster;
 		}
 		else {
 			scaledImageRaster = raster.createCompatibleWritableRaster();
-
 			scaledImageRaster.setDataElements(
 					0,
 					0,
-					raster.getWidth(),
-					raster.getHeight(),
-					raster.getDataBuffer());
+					raster);
 		}
 		final ColorModel colorModel = image.getColorModel();
 		try {

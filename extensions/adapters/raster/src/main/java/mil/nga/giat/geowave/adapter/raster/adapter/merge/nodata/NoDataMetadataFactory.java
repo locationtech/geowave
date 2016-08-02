@@ -345,7 +345,7 @@ public class NoDataMetadataFactory
 
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				if (shape.accept(
+				if (shape.isNoData(
 						x,
 						y)) {
 					for (int b = 0; b < numBands; b++) {
@@ -419,7 +419,7 @@ public class NoDataMetadataFactory
 
 	private static interface NoDataByCoordinate
 	{
-		public boolean accept(
+		public boolean isNoData(
 				int x,
 				int y );
 	}
@@ -443,10 +443,10 @@ public class NoDataMetadataFactory
 		}
 
 		@Override
-		public boolean accept(
+		public boolean isNoData(
 				final int x,
 				final int y ) {
-			return ((shape != null) && !shape.contains(new GeometryFactory().createPoint(new Coordinate(
+			return ((shape != null) && !shape.intersects(new GeometryFactory().createPoint(new Coordinate(
 					x,
 					y))));
 		}
@@ -474,19 +474,20 @@ public class NoDataMetadataFactory
 		}
 
 		@Override
-		public boolean accept(
+		public boolean isNoData(
 				final int x,
 				final int y ) {
 			if (!acceptNone) {
 				for (final Geometry shape : shapes) {
-					// if any one contains the point than it is not "no data"
+					// if any one intersects the point than it is not "no data"
 					// based on shape
-					if (shape.contains(new GeometryFactory().createPoint(new Coordinate(
+					if (shape.intersects(new GeometryFactory().createPoint(new Coordinate(
 							x,
 							y)))) {
-						return true;
+						return false;
 					}
 				}
+				return true;
 			}
 			return false;
 		}

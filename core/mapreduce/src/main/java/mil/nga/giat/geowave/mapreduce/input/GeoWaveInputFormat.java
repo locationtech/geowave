@@ -68,6 +68,11 @@ public class GeoWaveInputFormat<T> extends
 
 	public static DataStatisticsStore getJobContextDataStatisticsStore(
 			final JobContext context ) {
+		// TODO, this doesn't create a data statistics store wrapping a
+		// jobcontext as the name implies, need to either wrap a job context or
+		// rename this (for adapter and index store, adapters and indices are
+		// stored in the job context rather than multiple processes needing to
+		// look it up, this doesn't seem to be happening for stats)
 		return GeoWaveConfiguratorBase.getDataStatisticsStore(
 				CLASS,
 				context);

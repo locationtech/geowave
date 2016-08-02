@@ -40,11 +40,17 @@ public class AccumuloRowRange implements
 
 	@Override
 	public byte[] getStartKey() {
+		if (range.getStartKey() == null) {
+			return null;
+		}
 		return range.getStartKey().getRowData().getBackingArray();
 	}
 
 	@Override
 	public byte[] getEndKey() {
+		if (range.getEndKey() == null) {
+			return null;
+		}
 		return range.getEndKey().getRowData().getBackingArray();
 	}
 

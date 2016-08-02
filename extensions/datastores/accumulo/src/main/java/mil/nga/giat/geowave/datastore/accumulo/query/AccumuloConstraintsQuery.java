@@ -201,7 +201,6 @@ public class AccumuloConstraintsQuery extends
 		if (iteratorSettings != null) {
 			scanner.addScanIterator(iteratorSettings);
 		}
-
 	}
 
 	@Override
