@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.accumulo.core.data.Key;
@@ -8,6 +9,7 @@ import org.apache.accumulo.core.data.Value;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -33,14 +35,28 @@ public class AccumuloKeyValuePairGenerator<T>
 	private WritableDataAdapter<T> adapter;
 	private PrimaryIndex index;
 	private VisibilityWriter<T> visibilityWriter;
+	private IngestCallback<T> callback;
 
 	public AccumuloKeyValuePairGenerator(
 			WritableDataAdapter<T> adapter,
 			PrimaryIndex index,
 			VisibilityWriter<T> visibilityWriter ) {
+		this(
+				adapter,
+				index,
+				null,
+				visibilityWriter);
+	}
+
+	public AccumuloKeyValuePairGenerator(
+			WritableDataAdapter<T> adapter,
+			PrimaryIndex index,
+			IngestCallback<T> callback,
+			VisibilityWriter<T> visibilityWriter ) {
 		super();
 		this.adapter = adapter;
 		this.index = index;
+		this.callback = callback;
 		this.visibilityWriter = visibilityWriter;
 	}
 
@@ -57,8 +73,19 @@ public class AccumuloKeyValuePairGenerator<T>
 				index,
 				entry,
 				visibilityWriter);
+		if (callback != null) {
+			if (ingestInfo == null) {
+				return Collections.EMPTY_LIST;
+			}
+			callback.entryIngested(
+					ingestInfo,
+					entry);
+		}
 		List<ByteArrayId> rowIds = ingestInfo.getRowIds();
-		List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
+		List<FieldInfo<?>> fieldInfoList = AccumuloUtils.composeFlattenedFields(
+				ingestInfo.getFieldInfo(),
+				index.getIndexModel(),
+				adapter);
 
 		for (ByteArrayId rowId : rowIds) {
 			for (@SuppressWarnings("rawtypes")

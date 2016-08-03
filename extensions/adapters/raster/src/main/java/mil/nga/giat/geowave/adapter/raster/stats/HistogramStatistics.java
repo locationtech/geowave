@@ -28,7 +28,9 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.Polygon;
 
 import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
+import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.Resolution;
+import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -164,9 +166,17 @@ public class HistogramStatistics extends
 		 * Create the operation for the Histogram with a ROI. No subsampling
 		 * should be applied.
 		 */
-		final Geometry footprint = ((FitToIndexGridCoverage) entry).getFootprintWorldGeometry();
-		if (footprint == null) {
-			return;
+		final Geometry footprint;
+		if (entry instanceof FitToIndexGridCoverage) {
+			footprint = ((FitToIndexGridCoverage) entry).getFootprintWorldGeometry();
+			if (footprint == null) {
+				return;
+			}
+		}
+		else {
+			footprint = RasterUtils.getFootprint(
+					entry,
+					GeoWaveGTRasterFormat.DEFAULT_CRS);
 		}
 
 		final GridCoverage originalCoverage;

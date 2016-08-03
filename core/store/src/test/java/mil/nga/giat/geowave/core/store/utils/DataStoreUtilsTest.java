@@ -24,6 +24,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.memory.EntryRow;
+import mil.nga.giat.geowave.core.store.memory.MemoryDataStore;
 
 import org.junit.Test;
 
@@ -33,7 +34,7 @@ public class DataStoreUtilsTest
 	public void testEntryToRows() {
 		final AtomicInteger count = new AtomicInteger(
 				0);
-		final List<EntryRow> entryRows = DataStoreUtils.entryToRows(
+		final List<EntryRow> entryRows = MemoryDataStore.entryToRows(
 				new MockComponents.MockAbstractDataAdapter(),
 				new PrimaryIndex(
 						new MockComponents.MockIndexStrategy(),
