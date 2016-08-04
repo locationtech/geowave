@@ -33,13 +33,13 @@
 	  <tag>HEAD</tag>
   </scm>
 	<properties>
-		<geotools.version>14.2</geotools.version>
+		<geotools.version>15.1</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
-		<geoserver.version>2.8.2</geoserver.version>
-		<accumulo.version>1.7.2</accumulo.version>
-		<vfs2.version>2.1</vfs2.version>
+		<geoserver.version>2.9.1</geoserver.version>
+		<accumulo.version>1.7.0</accumulo.version>
+		<vfs2.version>2.0</vfs2.version>
 		<hbase.version>1.2.1</hbase.version>
-		<hadoop.version>2.7.2</hadoop.version>
+		<hadoop.version>2.6.0</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -578,8 +578,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>

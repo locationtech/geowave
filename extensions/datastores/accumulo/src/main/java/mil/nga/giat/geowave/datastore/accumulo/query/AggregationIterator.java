@@ -115,7 +115,7 @@ public class AggregationIterator extends
 	public boolean accept(
 			final Key key,
 			final Value value ) {
-		if ((queryFilterIterator != null) && queryFilterIterator.isSet()) {
+		if (queryFilterIterator != null) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 			final Text currentRow = key.getRow();
 			AccumuloUnreadData unreadData = queryFilterIterator.aggregateFieldData(

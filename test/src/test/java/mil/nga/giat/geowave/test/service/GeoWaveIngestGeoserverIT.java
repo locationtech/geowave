@@ -137,6 +137,13 @@ public class GeoWaveIngestGeoserverIT
 					new File(
 							ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE)
 				}));
+
+		assertTrue(
+				"Unable to publish '" + ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE)
+				}));
 		Assert.assertTrue(
 				"Unable to publish '" + SimpleIngest.FEATURE_NAME + "' layer",
 				geoserverServiceClient.publishLayer(
@@ -227,6 +234,22 @@ public class GeoWaveIngestGeoserverIT
 				0.3,
 				0.35);
 
+		final BufferedImage biDistributedRendering = getWMSSingleTile(
+				-180,
+				180,
+				-90,
+				90,
+				SimpleIngest.FEATURE_NAME,
+				ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
+				920,
+				360,
+				null);
+		TestUtils.testTileAgainstReference(
+				biDistributedRendering,
+				ref,
+				0,
+				0);
+
 		assertTrue(
 				"Unable to delete layer '" + SimpleIngest.FEATURE_NAME + "'",
 				geoserverServiceClient.deleteLayer(SimpleIngest.FEATURE_NAME));
@@ -245,6 +268,9 @@ public class GeoWaveIngestGeoserverIT
 		assertTrue(
 				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
 				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
+		assertTrue(
+				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "'",
+				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 	}
 
 	private static BufferedImage getWMSSingleTile(

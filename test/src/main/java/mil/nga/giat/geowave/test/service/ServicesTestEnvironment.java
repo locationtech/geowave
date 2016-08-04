@@ -54,9 +54,10 @@ public class ServicesTestEnvironment implements
 	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
 	protected static final String GEOWAVE_WORKSPACE_PATH = GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
-	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "DecimatePoints-2px";
-	protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "DecimatePoints-10px";
-	protected static final String TEST_STYLE_NAME_MAJOR_SUBSAMPLE = "DecimatePoints-100px";
+	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "SubsamplePoints-2px";
+	protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "SubsamplePoints-10px";
+	protected static final String TEST_STYLE_NAME_MAJOR_SUBSAMPLE = "SubsamplePoints-100px";
+	protected static final String TEST_STYLE_NAME_DISTRIBUTED_RENDER = "DistributedRender";
 	protected static final String TEST_STYLE_PATH = "src/test/resources/sld/";
 	protected static final String TEST_SLD_NO_DIFFERENCE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_NO_DIFFERENCE
 			+ ".sld";
@@ -64,6 +65,8 @@ public class ServicesTestEnvironment implements
 			+ ".sld";
 	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE
 			+ ".sld";
+	protected static final String TEST_SLD_DISTRIBUTED_RENDER_FILE = TEST_STYLE_PATH
+			+ TEST_STYLE_NAME_DISTRIBUTED_RENDER + ".sld";
 
 	private Server jettyServer;
 

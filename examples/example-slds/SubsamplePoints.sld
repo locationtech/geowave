@@ -6,19 +6,19 @@
        xmlns:xlink="http://www.w3.org/1999/xlink"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
      <NamedLayer>
-       <Name>DecimatePoints-10px</Name>
+       <Name>Subsample At Requested Map Resolution</Name>
        <UserStyle>
-         <Title>DecimatePoints-10px</Title>
-         <Abstract>An example of how to handle large datasets in a WMS request by decimating to pixel resolution.</Abstract>
+         <Title>Decimate</Title>
+         <Abstract>An example of how to handle large datasets in a WMS request by subsampling the data within GeoWave based on the pixel resolution.</Abstract>
          <FeatureTypeStyle>
            <Transformation>
-             <ogc:Function name="nga:Decimation">
+             <ogc:Function name="geowave:Subsample">
                <ogc:Function name="parameter">
                  <ogc:Literal>data</ogc:Literal>
                </ogc:Function>
                <ogc:Function name="parameter">
                  <ogc:Literal>pixelSize</ogc:Literal>
-                 <ogc:Literal>10</ogc:Literal>
+                 <ogc:Literal>1.5</ogc:Literal>
                </ogc:Function>
                <ogc:Function name="parameter">
                  <ogc:Literal>outputBBOX</ogc:Literal>
@@ -41,6 +41,7 @@
              </ogc:Function>
            </Transformation>
            <Rule>
+           <!--Here you can put any style rules you want, unrelated to Subsampling, this point styling merely serves as an example-->
           <Name>Basic Red Square</Name>
             <Title>Red Square</Title>
             <Abstract>A 3 pixel square with a red fill and no stroke</Abstract>
@@ -52,7 +53,7 @@
                     <CssParameter name="fill">#FF0000</CssParameter>
                   </Fill>
                 </Mark>
-                <Size>6</Size>
+                <Size>3</Size>
               </Graphic>
             </PointSymbolizer>
           </Rule>
