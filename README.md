@@ -29,7 +29,7 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 * We have [Maven artifact repositories](http://ngageoint.github.io/geowave/documentation.html#maven-repositories-2) (indexes not enabled, but it works in a maven repo fragment)
   * Releases: http://geowave-maven.s3-website-us-east-1.amazonaws.com/release
   * Snapshots: http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot (nightly)
-* We have a [vagrant dev environment](https://github.com/ngageoint/geowave/tree/master/vagrant)
+* We have a [vagrant dev environment](https://github.com/ngageoint/geowave-vagrant)
 * We have a development all in one RPM package: "geowave-cdh5-single-host"
 * And you can always [build from source](http://ngageoint.github.io/geowave/documentation.html#installation-from-source)
   
