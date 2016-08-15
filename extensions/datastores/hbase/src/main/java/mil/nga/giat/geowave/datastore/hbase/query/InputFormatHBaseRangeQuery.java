@@ -18,9 +18,11 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.log4j.Logger;
 
 /**
- * * Represents a query operation for a range of HBase row IDs. This class is particularly used by the InputFormat as
- * the iterator that it returns will contain Entry<GeoWaveInputKey, Object> entries rather than just the object. This is
- * so the input format has a way of getting the adapter ID and data ID to define the key.
+ * * Represents a query operation for a range of HBase row IDs. This class is
+ * particularly used by the InputFormat as the iterator that it returns will
+ * contain Entry<GeoWaveInputKey, Object> entries rather than just the object.
+ * This is so the input format has a way of getting the adapter ID and data ID
+ * to define the key.
  */
 public class InputFormatHBaseRangeQuery extends
 		HBaseConstraintsQuery
@@ -84,8 +86,9 @@ public class InputFormatHBaseRangeQuery extends
 				index,
 				resultsIterator,
 				isOutputWritable,
-				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0) : new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
-						filters));
+				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
+						: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
+								filters));
 	}
 
 }

@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
-import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +94,7 @@ public class IngestTask implements
 	public void run() {
 		int count = 0;
 		long dbWriteMs = 0L;
-		
+
 		try {
 			LOGGER.debug(String.format(
 					"Worker executing for plugin [%s]",
@@ -167,7 +167,7 @@ public class IngestTask implements
 					this.getId(),
 					count,
 					(int) dbWriteMs / 1000));
-			
+
 			isFinished = true;
 		}
 	}

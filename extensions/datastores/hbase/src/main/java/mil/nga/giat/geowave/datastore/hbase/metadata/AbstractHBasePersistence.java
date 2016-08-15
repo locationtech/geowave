@@ -31,6 +31,12 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 {
 
 	private final static Logger LOGGER = Logger.getLogger(AbstractHBasePersistence.class);
+	protected static final String[] METADATA_CFS = new String[] {
+		HBaseAdapterIndexMappingStore.ADAPTER_INDEX_CF,
+		HBaseAdapterStore.ADAPTER_CF,
+		HBaseDataStatisticsStore.STATISTICS_CF,
+		HBaseIndexStore.INDEX_CF
+	};
 	protected final BasicHBaseOperations operations;
 
 	public AbstractHBasePersistence(
@@ -51,7 +57,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 		if (cacheResult != null) {
 			return (T) cacheResult;
 		}
-		
+
 		final Scan scanner = getScanner(
 				primaryId,
 				secondaryId,
@@ -190,7 +196,9 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 
 			final HBaseWriter writer = operations.createWriter(
 					getTablename(),
-					getColumnFamily().toString(),
+					// create table with all possible column families initially
+					// because it is known
+					METADATA_CFS,
 					true);
 			final RowMutations mutation = new RowMutations(
 					id.getBytes());
@@ -244,12 +252,13 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 				l.add(deleteMutations);
 
 			}
-			final HBaseWriter deleter = operations.createWriter(
+			try (final HBaseWriter deleter = operations.createWriter(
 					getTablename(),
-					getColumnFamily(),
-					false);
+					METADATA_CFS,
+					false)) {
 
-			deleter.delete(l);
+				deleter.delete(l);
+			}
 			return true;
 		}
 		catch (final IOException e) {

@@ -24,27 +24,26 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.BaseDataStore;
-import mil.nga.giat.geowave.core.store.Closable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.IngestCallback;
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -73,7 +72,7 @@ public class HBaseDataStore extends
 		MapReduceDataStore
 {
 	public final static String TYPE = "hbase";
-	
+
 	private final static Logger LOGGER = Logger.getLogger(HBaseDataStore.class);
 
 	private final BasicHBaseOperations operations;
@@ -367,7 +366,7 @@ public class HBaseDataStore extends
 
 	@Override
 	protected void addToBatch(
-			final Closable idxDeleter,
+			final Closeable idxDeleter,
 			final List<ByteArrayId> rowIds )
 			throws Exception {
 		final List<Delete> deletes = new ArrayList<Delete>();
@@ -381,13 +380,13 @@ public class HBaseDataStore extends
 	}
 
 	@Override
-	protected Closable createIndexDeleter(
+	protected Closeable createIndexDeleter(
 			final String indexTableName,
 			final String[] authorizations )
 			throws Exception {
 		return operations.createWriter(
 				indexTableName,
-				"",
+				new String[] {},
 				false);
 	}
 
@@ -400,7 +399,7 @@ public class HBaseDataStore extends
 		try {
 			deleter = operations.createWriter(
 					tableName,
-					columnFamily,
+					new String[] {},
 					false);
 			final Scan scanner = new Scan();
 			try (ResultScanner results = operations.getScannedResults(
@@ -507,7 +506,9 @@ public class HBaseDataStore extends
 
 			altIdxWriter = operations.createWriter(
 					altIdxTableName,
-					adapter.getAdapterId().getString(),
+					new String[] {
+						adapter.getAdapterId().getString()
+					},
 					hbaseOptions.isCreateTable());
 		}
 

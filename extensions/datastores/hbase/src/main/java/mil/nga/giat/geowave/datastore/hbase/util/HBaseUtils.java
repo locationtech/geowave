@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -12,13 +13,13 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -29,7 +30,7 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -50,16 +51,21 @@ public class HBaseUtils
 
 	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.UTF8_CHAR_SET);
 	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.UTF8_CHAR_SET);
-	
+
 	private static final UniformVisibilityWriter DEFAULT_VISIBILITY = new UniformVisibilityWriter(
 			new UnconstrainedVisibilityHandler());
 
-	private static List<RowMutations> buildMutations(
+	private static <T> List<RowMutations> buildMutations(
 			final byte[] adapterId,
-			final DataStoreEntryInfo ingestInfo ) {
+			final DataStoreEntryInfo ingestInfo,
+			final PrimaryIndex index,
+			final WritableDataAdapter<T> writableAdapter ) {
 		final List<RowMutations> mutations = new ArrayList<RowMutations>();
-		final List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
-		
+		final List<FieldInfo<?>> fieldInfoList = DataStoreUtils.composeFlattenedFields(
+				ingestInfo.getFieldInfo(),
+				index.getIndexModel(),
+				writableAdapter);
+
 		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
 			final RowMutations mutation = new RowMutations(
 					rowId.getBytes());
@@ -133,8 +139,9 @@ public class HBaseUtils
 
 		final List<RowMutations> mutations = buildMutations(
 				writableAdapter.getAdapterId().getBytes(),
-				ingestInfo);
-
+				ingestInfo,
+				index,
+				writableAdapter);
 
 		try {
 			writer.write(
@@ -266,14 +273,7 @@ public class HBaseUtils
 			return null;
 		}
 		DataAdapter<T> adapter = dataAdapter;
-		List<KeyValue> rowMapping;
-		try {
-			rowMapping = getSortedRowMapping(row);
-		}
-		catch (final IOException e) {
-			LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
-			return null;
-		}
+
 		// build a persistence encoding object first, pass it through the
 		// client filters and if its accepted, use the data adapter to
 		// decode the persistence model into the native data type
@@ -294,16 +294,14 @@ public class HBaseUtils
 			adapterMatchVerified = true;
 			adapterId = null;
 		}
+		NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> map = row.getMap();
+		final List<FieldInfo<?>> fieldInfoList = new ArrayList<FieldInfo<?>>();
 
-		final List<FieldInfo<?>> fieldInfoList = new ArrayList<FieldInfo<?>>(
-				rowMapping.size());
-
-		for (final KeyValue entry : rowMapping) {
+		for (final Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> cfEntry : map.entrySet()) {
 			// the column family is the data element's type ID
 			if (adapterId == null) {
 				adapterId = new ByteArrayId(
-						entry.getFamily());
-				// entry.getKey().getColumnFamilyData().getBackingArray());
+						cfEntry.getKey());
 			}
 
 			if (adapter == null) {
@@ -319,48 +317,20 @@ public class HBaseUtils
 				}
 				adapterMatchVerified = true;
 			}
-			final ByteArrayId fieldId = new ByteArrayId(
-					entry.getQualifier());
-			// entry.getKey().getColumnQualifierData().getBackingArray());
-			final CommonIndexModel indexModel;
-			indexModel = index.getIndexModel();
+			for (final Entry<byte[], NavigableMap<Long, byte[]>> cqEntry : cfEntry.getValue().entrySet()) {
+				final CommonIndexModel indexModel = index.getIndexModel();
+				final byte byteValue[] = cqEntry.getValue().lastEntry().getValue();
 
-			// first check if this field is part of the index model
-			final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldId);
-			final byte byteValue[] = entry.getValue();
-			if (indexFieldReader != null) {
-				final CommonIndexValue indexValue = indexFieldReader.readField(byteValue);
-				// indexValue.setVisibility(entry.getKey().getColumnVisibilityData().getBackingArray());
-				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
-						fieldId,
-						indexValue);
-				indexData.addValue(val);
-				fieldInfoList.add(getFieldInfo(
-						val,
+				DataStoreUtils.readFieldInfo(
+						fieldInfoList,
+						indexData,
+						extendedData,
+						unknownData,
+						cqEntry.getKey(),
+						new byte[] {},
 						byteValue,
-						indexValue.getVisibility()));
-			}
-			else {
-				// next check if this field is part of the adapter's
-				// extended data model
-				final FieldReader<?> extFieldReader = adapter.getReader(fieldId);
-				if (extFieldReader == null) {
-					LOGGER.error("field reader not found for data entry, the value may be ignored");
-					unknownData.addValue(new PersistentValue<byte[]>(
-							fieldId,
-							byteValue));
-					continue;
-				}
-				final Object value = extFieldReader.readField(byteValue);
-				final PersistentValue<Object> val = new PersistentValue<Object>(
-						fieldId,
-						value);
-				extendedData.addValue(val);
-				fieldInfoList.add(getFieldInfo(
-						val,
-						byteValue,
-						null));
-				// entry.getKey().getColumnVisibility().getBytes()));
+						adapter,
+						indexModel);
 			}
 		}
 

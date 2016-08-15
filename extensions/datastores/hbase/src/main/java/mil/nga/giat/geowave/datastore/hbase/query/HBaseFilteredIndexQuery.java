@@ -13,9 +13,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
@@ -136,8 +136,6 @@ public abstract class HBaseFilteredIndexQuery extends
 					multiScanner,
 					tableName,
 					authorizations);
-			
-			LOGGER.error("KAM *** HBase atomic DB query took " + (System.currentTimeMillis()-hack) + " ms.");
 
 			if (rs != null) {
 				results.add(rs);
@@ -174,7 +172,8 @@ public abstract class HBaseFilteredIndexQuery extends
 
 	protected abstract List<Filter> getDistributableFilter();
 
-	// experiment to test a single multi-scanner vs multiple single-range scanners
+	// experiment to test a single multi-scanner vs multiple single-range
+	// scanners
 	protected Scan getMultiScanner(
 			final Integer limit,
 			final List<Filter> distributableFilters,
@@ -184,7 +183,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		// Performance recommendations
 		scanner.setCaching(10000);
-		//scanner.setCacheBlocks(false);
+		scanner.setCacheBlocks(true);
 
 		FilterList filterList = new FilterList();
 
@@ -208,11 +207,6 @@ public abstract class HBaseFilteredIndexQuery extends
 					scanner,
 					adapters);
 		}
-
-		if ((limit != null) && (limit > 0) && (limit < scanner.getBatch())) {
-			scanner.setBatch(limit);
-		}
-
 		// create the multi-row filter
 		final List<RowRange> rowRanges = new ArrayList<RowRange>();
 
@@ -258,20 +252,14 @@ public abstract class HBaseFilteredIndexQuery extends
 			e.printStackTrace();
 		}
 
-		// Set the filter list for the scan and return the scan list (with the single multi-range scan)
+		// Set the filter list for the scan and return the scan list (with the
+		// single multi-range scan)
 		scanner.setFilter(filterList);
-
+		scanner.setMaxVersions(1);
 		// Only return the most recent version
 		scanner.setMaxVersions(1);
 
 		return scanner;
-	}
-
-	private byte[] getNextPrefix(
-			Scan scanner,
-			byte[] prefix ) {
-		return scanner.setRowPrefixFilter(
-				prefix).getStopRow();
 	}
 
 	private void handleSubsetOfFieldIds(
@@ -323,8 +311,9 @@ public abstract class HBaseFilteredIndexQuery extends
 				adapterStore,
 				index,
 				resultsIterator,
-				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0) : new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
-						filters),
+				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
+						: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
+								filters),
 				scanCallback);
 	}
 

@@ -52,10 +52,10 @@ public class HBaseStoreTestEnvironment implements
 	public void setup() {
 		LOGGER.setLevel(Level.DEBUG);
 		LOGGER.debug("HBASE TEST SETUP!");
-		
+
 		if (!TestUtils.isSet(zookeeper)) {
 			zookeeper = System.getProperty("zookeeperUrl");
-			
+
 			if (!TestUtils.isSet(zookeeper)) {
 
 				PropertyParser propertyParser = null;
@@ -96,7 +96,7 @@ public class HBaseStoreTestEnvironment implements
 				}
 
 				zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
-				
+
 				LOGGER.debug("Using local zookeeper URL: " + zookeeper);
 
 				try {

@@ -4,7 +4,7 @@ import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.base.Writer;
 
 /**
  * This is a basic wrapper around the Accumulo batch writer so that write

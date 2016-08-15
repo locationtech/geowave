@@ -13,10 +13,10 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.DataStoreIndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -80,8 +80,15 @@ public class HBaseIndexWriter<T> extends
 	@Override
 	protected synchronized void closeInternal() {
 		if (writer != null) {
-			writer.close();
-			writer = null;
+			try {
+				writer.close();
+				writer = null;
+			}
+			catch (IOException e) {
+				LOGGER.warn(
+						"Unable to close HBase writer",
+						e);
+			}
 		}
 	}
 
@@ -90,8 +97,11 @@ public class HBaseIndexWriter<T> extends
 			try {
 				writer = operations.createWriter(
 						StringUtils.stringFromBinary(index.getId().getBytes()),
-						adapter.getAdapterId().getString(),
-						options.isCreateTable());
+						new String[] {
+							adapter.getAdapterId().getString()
+						},
+						options.isCreateTable(),
+						index.getIndexStrategy().getNaturalSplits());
 			}
 			catch (final IOException e) {
 				LOGGER.error(

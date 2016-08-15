@@ -70,9 +70,9 @@ public class MinimalFullTable extends
 			throw new ParameterException(
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}
-		
+
 		String storeType = storeOptions.getDataStorePlugin().getType();
-		
+
 		if (storeType.equals(AccumuloDataStore.TYPE)) {
 			try {
 				AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
@@ -88,21 +88,21 @@ public class MinimalFullTable extends
 				final BatchScanner scanner = ops.createBatchScanner(indexId);
 				scanner.setRanges(Collections.singleton(new Range()));
 				Iterator<Entry<Key, Value>> it = scanner.iterator();
-				
+
 				stopWatch.start();
 				while (it.hasNext()) {
 					it.next();
 					results++;
 				}
 				stopWatch.stop();
-				
+
 				scanner.close();
 				System.out.println("Got " + results + " results in " + stopWatch.toString());
 			}
 			catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}	
+			}
 		}
 		else if (storeType.equals(HBaseDataStore.TYPE)) {
 			throw new UnsupportedOperationException(

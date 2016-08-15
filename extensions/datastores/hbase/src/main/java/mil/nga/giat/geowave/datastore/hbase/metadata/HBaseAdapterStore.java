@@ -13,7 +13,7 @@ public class HBaseAdapterStore extends
 		AdapterStore
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseAdapterStore.class);
-	private static final String ADAPTER_CF = "ADAPTER";
+	protected static final String ADAPTER_CF = "ADAPTER";
 
 	public HBaseAdapterStore(
 			BasicHBaseOperations operation ) {

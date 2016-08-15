@@ -3,9 +3,9 @@ package mil.nga.giat.geowave.adapter.vector.stats;
 import java.util.Date;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FixedBinNumericStatistics;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
 import org.opengis.feature.simple.SimpleFeature;
 

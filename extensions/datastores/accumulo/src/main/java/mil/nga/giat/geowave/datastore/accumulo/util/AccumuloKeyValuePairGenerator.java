@@ -8,13 +8,13 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.IngestCallback;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 /**
  * 
@@ -82,7 +82,7 @@ public class AccumuloKeyValuePairGenerator<T>
 					entry);
 		}
 		List<ByteArrayId> rowIds = ingestInfo.getRowIds();
-		List<FieldInfo<?>> fieldInfoList = AccumuloUtils.composeFlattenedFields(
+		List<FieldInfo<?>> fieldInfoList = DataStoreUtils.composeFlattenedFields(
 				ingestInfo.getFieldInfo(),
 				index.getIndexModel(),
 				adapter);

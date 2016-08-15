@@ -5,9 +5,9 @@ import java.util.HashSet;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.DeleteCallback;
-import mil.nga.giat.geowave.core.store.IngestCallback;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 
 public class CountDataStatistics<T> extends
 		AbstractDataStatistics<T> implements
