@@ -11,7 +11,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;

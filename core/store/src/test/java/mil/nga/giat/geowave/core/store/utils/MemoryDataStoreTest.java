@@ -21,7 +21,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.IntegerRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestIndexModel;
@@ -46,6 +45,7 @@ import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.spi.StoreFactoryFamilySpi;
 
 public class MemoryDataStoreTest
 {

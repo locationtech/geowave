@@ -44,7 +44,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;

@@ -2,18 +2,17 @@ package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.ingest.operations.IngestSection;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
 import com.beust.jcommander.Parameters;
+
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 @GeowaveOperation(name = "fullscan", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "fulltable scan")

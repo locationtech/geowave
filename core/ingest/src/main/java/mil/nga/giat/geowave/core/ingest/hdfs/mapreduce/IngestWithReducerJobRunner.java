@@ -6,9 +6,9 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 
 import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.IndexPluginOptions;
 
 /**
  * This class will run the ingestion process by using a mapper to aggregate key

@@ -7,10 +7,10 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
-import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.IndexPluginOptions;
+import mil.nga.giat.geowave.operations.ingest.LocalToMapReduceToGeowaveCommand;
+import mil.nga.giat.geowave.operations.ingest.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 
 public class MapReduceTestUtils

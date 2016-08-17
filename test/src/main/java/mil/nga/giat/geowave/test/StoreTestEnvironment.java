@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.test;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 
 public interface StoreTestEnvironment extends
 		TestEnvironment

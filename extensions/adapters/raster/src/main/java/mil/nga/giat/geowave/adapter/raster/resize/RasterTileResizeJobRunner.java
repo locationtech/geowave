@@ -13,8 +13,7 @@ import org.opengis.coverage.grid.GridCoverage;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
-import mil.nga.giat.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions;
+import mil.nga.giat.geowave.adapter.raster.resize.options.RasterTileResizeCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
@@ -27,7 +26,7 @@ import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
@@ -171,24 +170,6 @@ public class RasterTileResizeJobRunner extends
 			writer.close();
 		}
 		return retVal ? 0 : 1;
-	}
-
-	public static void main(
-			final String[] args )
-			throws Exception {
-		final ConfigOptions opts = new ConfigOptions();
-		final OperationParser parser = new OperationParser();
-		parser.addAdditionalObject(opts);
-		final ResizeCommand command = new ResizeCommand();
-		final CommandLineOperationParams params = parser.parse(
-				command,
-				args);
-		opts.prepare(params);
-		final int res = ToolRunner.run(
-				new Configuration(),
-				command.createRunner(params),
-				args);
-		System.exit(res);
 	}
 
 	@Override

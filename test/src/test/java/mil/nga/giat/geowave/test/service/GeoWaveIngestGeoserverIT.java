@@ -34,7 +34,7 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;

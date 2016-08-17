@@ -18,14 +18,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.coverage.grid.GridCoverage;
 
-import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
-import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.operations.analytic.KdeCommand;
+import mil.nga.giat.geowave.operations.raster.ResizeCommand;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;

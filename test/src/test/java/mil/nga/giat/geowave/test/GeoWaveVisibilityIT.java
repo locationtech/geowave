@@ -31,7 +31,7 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;

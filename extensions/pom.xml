@@ -27,6 +27,7 @@
 		<module>cli/debug</module>
 		<module>cli/geoserver</module>
 		<module>cli/osm</module>
+		<module>cli/operations</module>
 		<module>cli/landsat8</module>
 	</modules>
 </project>

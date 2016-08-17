@@ -11,7 +11,7 @@ import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
 import com.github.sakserv.propertyparser.PropertyParser;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 

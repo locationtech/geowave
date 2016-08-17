@@ -4,7 +4,7 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 
 import org.apache.hadoop.conf.Configuration;

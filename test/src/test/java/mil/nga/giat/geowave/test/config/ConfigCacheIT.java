@@ -13,18 +13,18 @@ import mil.nga.giat.geowave.core.cli.operations.config.SetCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
-import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.config.CopyIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.CopyStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexGroupCommand;
-import mil.nga.giat.geowave.core.store.operations.config.RemoveStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.IndexPluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.operations.config.AddIndexCommand;
+import mil.nga.giat.geowave.operations.config.AddIndexGroupCommand;
+import mil.nga.giat.geowave.operations.config.AddStoreCommand;
+import mil.nga.giat.geowave.operations.config.CopyIndexCommand;
+import mil.nga.giat.geowave.operations.config.CopyStoreCommand;
+import mil.nga.giat.geowave.operations.config.RemoveIndexCommand;
+import mil.nga.giat.geowave.operations.config.RemoveIndexGroupCommand;
+import mil.nga.giat.geowave.operations.config.RemoveStoreCommand;
 
 public class ConfigCacheIT
 {

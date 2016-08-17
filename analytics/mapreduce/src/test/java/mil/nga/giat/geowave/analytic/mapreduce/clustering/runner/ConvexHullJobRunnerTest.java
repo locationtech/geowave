@@ -39,7 +39,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.plugins.DataStorePluginOptions;
 
 public class ConvexHullJobRunnerTest
 {

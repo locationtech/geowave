@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.spi.StoreFactoryFamilySpi;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStore;

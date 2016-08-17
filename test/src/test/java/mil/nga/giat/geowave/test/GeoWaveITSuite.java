@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
+import mil.nga.giat.geowave.test.config.IndexLoaderTestIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.LandsatIT;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
@@ -43,6 +44,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	SpatialTemporalQueryIT.class,
 	PolygonDataIdQueryIT.class,
 	ConfigCacheIT.class,
+	IndexLoaderTestIT.class,
 	DataStatisticsStoreIT.class,
 })
 public class GeoWaveITSuite

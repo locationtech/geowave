@@ -8,10 +8,10 @@ import java.util.Map;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginException;
-import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.spi.StoreFactoryFamilySpi;
 
 import org.geotools.data.DataStore;
 

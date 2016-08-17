@@ -29,7 +29,6 @@ import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -37,6 +36,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.spi.StoreFactoryFamilySpi;
 
 /**
  * This class encapsulates the parameterized configuration that can be provided
