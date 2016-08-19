@@ -16,6 +16,8 @@ env:
 cache:
   directories:
   - $HOME/.m2
+  - test/landsat8
+  - test/target/temp/gdal
 install: "mvn -q clean install javadoc:aggregate -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -Dformatter.skip=true -P ${PLATFORM_VERSION}; .utility/build-docs-site.sh"
 script: "travis_wait 80 mvn -q -T 2C verify -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}"
 before_install:
