@@ -154,10 +154,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.lang.Integer,%20mil.nga.giat.geowave.core.store.ScanCallback,%20java.lang.String[])">QueryOptions</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.lang.Integer,%20mil.nga.giat.geowave.core.store.callback.ScanCallback,%20java.lang.String[])">QueryOptions</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -258,7 +258,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getMaxResolutionSubsamplingPerDimension()">getMaxResolutionSubsamplingPerDimension</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#getScanCallback()">getScanCallback</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -315,7 +315,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setScanCallback(mil.nga.giat.geowave.core.store.ScanCallback)">setScanCallback</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html#setScanCallback(mil.nga.giat.geowave.core.store.callback.ScanCallback)">setScanCallback</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
@@ -424,7 +424,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <pre>public&nbsp;QueryOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;options)</pre>
 </li>
 </ul>
-<a name="QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.lang.Integer, mil.nga.giat.geowave.core.store.ScanCallback, java.lang.String[])">
+<a name="QueryOptions(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.lang.Integer, mil.nga.giat.geowave.core.store.callback.ScanCallback, java.lang.String[])">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -433,7 +433,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <pre>public&nbsp;QueryOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>adapter</code> - </dd><dd><code>index</code> - </dd><dd><code>limit</code> - null or -1 implies no limit. Otherwise, constrain the number
             of results to the provided limit.</dd><dd><code>scanCallback</code> - </dd><dd><code>authorizations</code> - </dd></dl>
@@ -577,16 +577,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persist
 <ul class="blockList">
 <li class="blockList">
 <h4>getScanCallback</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;getScanCallback()</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;getScanCallback()</pre>
 </li>
 </ul>
-<a name="setScanCallback(mil.nga.giat.geowave.core.store.ScanCallback)">
+<a name="setScanCallback(mil.nga.giat.geowave.core.store.callback.ScanCallback)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setScanCallback</h4>
-<pre>public&nbsp;void&nbsp;setScanCallback(<a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback)</pre>
+<pre>public&nbsp;void&nbsp;setScanCallback(<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback)</pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>scanCallback</code> - a function called for each item discovered per the query
             constraints</dd></dl>
 </li>

@@ -145,7 +145,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">createWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</code>
 <div class="block">Returns an index writer to perform batched write operations</div>
@@ -161,16 +161,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/EntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">EntryRow</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#entryToRows(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20T,%20mil.nga.giat.geowave.core.store.IngestCallback,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">entryToRows</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-           T&nbsp;entry,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#getAdapterStore()">getAdapterStore</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html#getEncoding(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.memory.MemoryEntryRow)">getEncoding</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+           <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
+           <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryEntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryEntryRow</a>&nbsp;row)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
@@ -247,7 +245,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;createWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&nbsp;createWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)
                          throws <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in mil.nga.giat.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
 <div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex...)">DataStore</a></code></strong></div>
@@ -261,21 +259,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
          operations</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in mil.nga.giat.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></code></dd></dl>
-</li>
-</ul>
-<a name="entryToRows(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,mil.nga.giat.geowave.core.store.index.PrimaryIndex,java.lang.Object,mil.nga.giat.geowave.core.store.IngestCallback,mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a><a name="entryToRows(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, T, mil.nga.giat.geowave.core.store.IngestCallback, mil.nga.giat.geowave.core.store.data.VisibilityWriter)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>entryToRows</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/EntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">EntryRow</a>&gt;&nbsp;entryToRows(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                             T&nbsp;entry,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
 </li>
 </ul>
 <a name="delete(mil.nga.giat.geowave.core.store.query.QueryOptions, mil.nga.giat.geowave.core.store.query.Query)">
@@ -325,6 +308,17 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <dt><span class="strong">Returns:</span></dt><dd>An iterator on all results that match the query. The iterator
          implements Closeable and it is best practice to close the
          iterator after it is no longer needed.</dd></dl>
+</li>
+</ul>
+<a name="getEncoding(mil.nga.giat.geowave.core.store.index.CommonIndexModel, mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.memory.MemoryEntryRow)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEncoding</h4>
+<pre>protected static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;getEncoding(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
+                                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryEntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryEntryRow</a>&nbsp;row)</pre>
 </li>
 </ul>
 <a name="getAdapterStore()">

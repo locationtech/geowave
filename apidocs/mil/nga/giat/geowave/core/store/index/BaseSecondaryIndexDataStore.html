@@ -95,7 +95,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -105,7 +105,7 @@
 <br>
 <pre>public abstract class <span class="strong">BaseSecondaryIndexDataStore&lt;MutationType&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a></pre>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></pre>
 </li>
 </ul>
 </div>
@@ -129,7 +129,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#TABLE_PREFIX">TABLE_PREFIX</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#writerCache">writerCache</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -187,7 +187,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#delete(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20java.util.List)">delete</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</code>&nbsp;</td>
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -198,7 +198,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#getFilter(java.util.List)">getFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;&nbsp;constraints)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;</code></td>
+<td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#getWriter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -210,7 +210,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#store(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.util.List)">store</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexRowId,
-     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</code>&nbsp;</td>
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -257,7 +257,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <ul class="blockListLast">
 <li class="blockList">
 <h4>writerCache</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;&gt; writerCache</pre>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;&gt; writerCache</pre>
 </li>
 </ul>
 </li>
@@ -294,7 +294,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <pre>public&nbsp;void&nbsp;store(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexRowId,
-         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</pre>
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#store(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20mil.nga.giat.geowave.core.index.ByteArrayId,%20java.util.List)">store</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
@@ -317,7 +317,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <li class="blockList">
 <h4>delete</h4>
 <pre>public&nbsp;void&nbsp;delete(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</pre>
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;indexedAttributes)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#delete(mil.nga.giat.geowave.core.store.index.SecondaryIndex,%20java.util.List)">delete</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
@@ -346,7 +346,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/Closable.html#close()">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close()" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close()" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -401,7 +403,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/S
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getWriter</h4>
-<pre>protected abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;&nbsp;getWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex)</pre>
+<pre>protected abstract&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="type parameter in BaseSecondaryIndexDataStore">MutationType</a>&gt;&nbsp;getWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex)</pre>
 </li>
 </ul>
 </li>

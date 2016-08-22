@@ -177,20 +177,20 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOper
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String,%20boolean)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
             boolean&nbsp;createTable)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html#createWriter(java.lang.String,%20boolean,%20boolean,%20boolean,%20java.util.Set)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
             boolean&nbsp;createTable,
             boolean&nbsp;enableVersioning,
@@ -377,7 +377,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOper
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)
                     throws org.apache.accumulo.core.client.TableNotFoundException</pre>
 <div class="block">Creates a new writer that can be used by an index. The basic
  implementation uses a BatchWriter but other implementations can be
@@ -398,7 +398,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOper
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                   boolean&nbsp;createTable)
                     throws org.apache.accumulo.core.client.TableNotFoundException</pre>
 <div class="block">Creates a new writer that can be used by an index. The basic
@@ -422,7 +422,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOper
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                   boolean&nbsp;createTable,
                   boolean&nbsp;enableVersioning,
                   boolean&nbsp;enableBlockCache,

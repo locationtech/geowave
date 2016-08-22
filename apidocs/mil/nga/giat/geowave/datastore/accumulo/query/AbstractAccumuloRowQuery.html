@@ -127,7 +127,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html#scanCallback">scanCallback</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -152,9 +152,9 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html#AbstractAccumuloRowQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.lang.String[],%20mil.nga.giat.geowave.core.store.ScanCallback,%20mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount)">AbstractAccumuloRowQuery</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html#AbstractAccumuloRowQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.lang.String[],%20mil.nga.giat.geowave.core.store.callback.ScanCallback,%20mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount)">AbstractAccumuloRowQuery</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations,
-                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt;&nbsp;scanCallback,
+                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt;&nbsp;scanCallback,
                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts)</code>&nbsp;</td>
 </tr>
 </table>
@@ -221,7 +221,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <ul class="blockListLast">
 <li class="blockList">
 <h4>scanCallback</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt; scanCallback</pre>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt; scanCallback</pre>
 </li>
 </ul>
 </li>
@@ -232,7 +232,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AbstractAccumuloRowQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.lang.String[], mil.nga.giat.geowave.core.store.ScanCallback, mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount)">
+<a name="AbstractAccumuloRowQuery(mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.lang.String[], mil.nga.giat.geowave.core.store.callback.ScanCallback, mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -240,7 +240,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <h4>AbstractAccumuloRowQuery</h4>
 <pre>public&nbsp;AbstractAccumuloRowQuery(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations,
-                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt;&nbsp;scanCallback,
+                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="type parameter in AbstractAccumuloRowQuery">T</a>&gt;&nbsp;scanCallback,
                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts)</pre>
 </li>
 </ul>

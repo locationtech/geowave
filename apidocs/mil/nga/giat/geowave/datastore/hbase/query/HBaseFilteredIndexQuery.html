@@ -134,7 +134,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#clientFilters">clientFilters</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#scanCallback">scanCallback</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -159,9 +159,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#HBaseFilteredIndexQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.ScanCallback,%20java.lang.String...)">HBaseFilteredIndexQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#HBaseFilteredIndexQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.callback.ScanCallback,%20java.lang.String...)">HBaseFilteredIndexQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
+                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -188,10 +188,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getDistributableFilter()">getDistributableFilter</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.hbase.client.Scan&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getScanners(java.lang.Integer,%20java.util.List,%20mil.nga.giat.geowave.core.store.CloseableIterator)">getScanners</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.hbase.filter.Filter&gt;&nbsp;distributableFilters,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.apache.hadoop.hbase.client.Scan</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getMultiScanner(java.lang.Integer,%20java.util.List,%20mil.nga.giat.geowave.core.store.CloseableIterator)">getMultiScanner</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.hbase.filter.Filter&gt;&nbsp;distributableFilters,
+               <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a></code></td>
@@ -247,7 +247,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <ul class="blockList">
 <li class="blockList">
 <h4>scanCallback</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt; scanCallback</pre>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt; scanCallback</pre>
 </li>
 </ul>
 <a name="clientFilters">
@@ -267,7 +267,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="HBaseFilteredIndexQuery(java.util.List, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.ScanCallback, java.lang.String...)">
+<a name="HBaseFilteredIndexQuery(java.util.List, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.callback.ScanCallback, java.lang.String...)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -275,7 +275,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <h4>HBaseFilteredIndexQuery</h4>
 <pre>public&nbsp;HBaseFilteredIndexQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
+                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 </li>
 </ul>
@@ -329,15 +329,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <pre>protected abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.hbase.filter.Filter&gt;&nbsp;getDistributableFilter()</pre>
 </li>
 </ul>
-<a name="getScanners(java.lang.Integer, java.util.List, mil.nga.giat.geowave.core.store.CloseableIterator)">
+<a name="getMultiScanner(java.lang.Integer, java.util.List, mil.nga.giat.geowave.core.store.CloseableIterator)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getScanners</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.hbase.client.Scan&gt;&nbsp;getScanners(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
-                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.hbase.filter.Filter&gt;&nbsp;distributableFilters,
-                                                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</pre>
+<h4>getMultiScanner</h4>
+<pre>protected&nbsp;org.apache.hadoop.hbase.client.Scan&nbsp;getMultiScanner(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
+                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.hbase.filter.Filter&gt;&nbsp;distributableFilters,
+                                                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters)</pre>
 </li>
 </ul>
 <a name="initIterator(mil.nga.giat.geowave.core.store.adapter.AdapterStore, java.util.Iterator)">

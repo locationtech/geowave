@@ -95,13 +95,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">BatchWriterWrapper</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</pre>
+implements <a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</pre>
 <div class="block">This is a basic wrapper around the Accumulo batch writer so that write
  operations will use an interface that can be implemented differently for
  different purposes. For example, a bulk ingest can be performed by replacing
@@ -231,7 +231,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.htm
 <pre>public&nbsp;void&nbsp;write(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;org.apache.accumulo.core.data.Mutation&gt;&nbsp;mutations)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html#write(java.lang.Iterable)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html#write(java.lang.Iterable)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -244,7 +244,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.htm
 <pre>public&nbsp;void&nbsp;write(org.apache.accumulo.core.data.Mutation&nbsp;mutation)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html#write(MutationType)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html#write(MutationType)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -257,7 +257,9 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.htm
 <pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Closable.html#close()">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close()" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close()" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -270,7 +272,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.htm
 <pre>public&nbsp;void&nbsp;flush()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html#flush()">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html#flush()">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
 </dl>
 </li>
 </ul>

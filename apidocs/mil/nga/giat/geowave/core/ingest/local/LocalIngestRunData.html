@@ -184,15 +184,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html#getDataAdapter(mil.nga.giat.geowave.core.ingest.GeoWaveData)">getDataAdapter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html#getIndexWriter(mil.nga.giat.geowave.core.store.AdapterToIndexMapping)">getIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>
 <div class="block">Return an index writer from the pool.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html#releaseIndexWriter(mil.nga.giat.geowave.core.store.AdapterToIndexMapping,%20mil.nga.giat.geowave.core.store.IndexWriter)">releaseIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping,
-                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;writer)</code>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html#releaseIndexWriter(mil.nga.giat.geowave.core.store.AdapterToIndexMapping,%20mil.nga.giat.geowave.core.store.index.writer.IndexWriter)">releaseIndexWriter</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&nbsp;writer)</code>
 <div class="block">Return the index writer to the pool</div>
 </td>
 </tr>
@@ -269,7 +269,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexWriter</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;getIndexWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&nbsp;getIndexWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)
                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <div class="block">Return an index writer from the pool. The pool will create a new one The
  pool will not be cleaned up until the end. (No items will be cleaned up
@@ -280,14 +280,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
 </li>
 </ul>
-<a name="releaseIndexWriter(mil.nga.giat.geowave.core.store.AdapterToIndexMapping, mil.nga.giat.geowave.core.store.IndexWriter)">
+<a name="releaseIndexWriter(mil.nga.giat.geowave.core.store.AdapterToIndexMapping, mil.nga.giat.geowave.core.store.index.writer.IndexWriter)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>releaseIndexWriter</h4>
 <pre>public&nbsp;void&nbsp;releaseIndexWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping,
-                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;writer)
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&nbsp;writer)
                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <div class="block">Return the index writer to the pool</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>index</code> - - the primary index used to create the writer</dd><dd><code>writer</code> - </dd>

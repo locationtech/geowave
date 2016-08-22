@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/store/Closable.html" title="interface in mil.nga.giat.geowave.core.store">Closable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a></dd>
 </dl>
 <hr>
 <br>
@@ -177,7 +177,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
              byte[]&nbsp;primaryIndexRowId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;org.apache.hadoop.hbase.client.RowMutations&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.hadoop.hbase.client.RowMutations&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStore.html#getWriter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getWriter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -250,7 +250,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <ul class="blockList">
 <li class="blockList">
 <h4>getWriter</h4>
-<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/Writer.html" title="interface in mil.nga.giat.geowave.core.store">Writer</a>&lt;org.apache.hadoop.hbase.client.RowMutations&gt;&nbsp;getWriter(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.hadoop.hbase.client.RowMutations&gt;&nbsp;getWriter(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;secondaryIndex)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#getWriter(mil.nga.giat.geowave.core.store.index.SecondaryIndex)">getWriter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>&lt;org.apache.hadoop.hbase.client.RowMutations&gt;</code></dd>

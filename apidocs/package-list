@@ -106,6 +106,8 @@ mil.nga.giat.geowave.core.store.adapter
 mil.nga.giat.geowave.core.store.adapter.exceptions
 mil.nga.giat.geowave.core.store.adapter.statistics
 mil.nga.giat.geowave.core.store.adapter.statistics.histogram
+mil.nga.giat.geowave.core.store.base
+mil.nga.giat.geowave.core.store.callback
 mil.nga.giat.geowave.core.store.config
 mil.nga.giat.geowave.core.store.data
 mil.nga.giat.geowave.core.store.data.field
@@ -114,10 +116,12 @@ mil.nga.giat.geowave.core.store.data.visibility
 mil.nga.giat.geowave.core.store.dimension
 mil.nga.giat.geowave.core.store.entities
 mil.nga.giat.geowave.core.store.filter
+mil.nga.giat.geowave.core.store.flatten
 mil.nga.giat.geowave.core.store.index
 mil.nga.giat.geowave.core.store.index.numeric
 mil.nga.giat.geowave.core.store.index.temporal
 mil.nga.giat.geowave.core.store.index.text
+mil.nga.giat.geowave.core.store.index.writer
 mil.nga.giat.geowave.core.store.memory
 mil.nga.giat.geowave.core.store.metadata
 mil.nga.giat.geowave.core.store.operations.config

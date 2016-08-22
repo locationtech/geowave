@@ -105,7 +105,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureStatistic.html" title="interface in mil.nga.giat.geowave.adapter.vector.stats">FeatureStatistic</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureStatistic.html" title="interface in mil.nga.giat.geowave.adapter.vector.stats">FeatureStatistic</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</dd>
 </dl>
 <hr>
 <br>
@@ -232,7 +232,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20org.opengis.feature.simple.SimpleFeature)">entryIngested</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;entryInfo,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20org.opengis.feature.simple.SimpleFeature)">entryIngested</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
              org.opengis.feature.simple.SimpleFeature&nbsp;entry)</code>
 <div class="block">This will be called after an entry is successfully ingested with the row
  IDs that were used</div>
@@ -368,22 +368,22 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 </dl>
 </li>
 </ul>
-<a name="entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo, org.opengis.feature.simple.SimpleFeature)">
+<a name="entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo, org.opengis.feature.simple.SimpleFeature)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>entryIngested</h4>
-<pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;entryInfo,
+<pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
                  org.opengis.feature.simple.SimpleFeature&nbsp;entry)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html#entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20T)">IngestCallback</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T)">IngestCallback</a></code></strong></div>
 <div class="block">This will be called after an entry is successfully ingested with the row
  IDs that were used</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html#entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20T)">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T)">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20T)">entryIngested</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">FixedBinNumericStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T)">entryIngested</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">FixedBinNumericStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>entryInfo</code> - information regarding what was written to include the
             insertion row IDs, fields, and visibilities</dd><dd><code>entry</code> - the entry that was ingested</dd></dl>
 </li>

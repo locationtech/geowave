@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;T&gt;</dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;T&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -220,7 +220,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20T)">entryIngested</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;entryInfo,
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T)">entryIngested</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html" title="type parameter in FixedBinNumericStatistics">T</a>&nbsp;entry)</code>
 <div class="block">This will be called after an entry is successfully ingested with the row
  IDs that were used</div>
@@ -443,17 +443,17 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
 </li>
 </ul>
-<a name="entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo,java.lang.Object)">
+<a name="entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,java.lang.Object)">
 <!--   -->
-</a><a name="entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo, T)">
+</a><a name="entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo, T)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>entryIngested</h4>
-<pre>public abstract&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;entryInfo,
+<pre>public abstract&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html" title="type parameter in FixedBinNumericStatistics">T</a>&nbsp;entry)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html#entryIngested(mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20T)">IngestCallback</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T)">IngestCallback</a></code></strong></div>
 <div class="block">This will be called after an entry is successfully ingested with the row
  IDs that were used</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>entryInfo</code> - information regarding what was written to include the

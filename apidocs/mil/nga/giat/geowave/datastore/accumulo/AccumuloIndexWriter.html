@@ -100,7 +100,7 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
@@ -157,11 +157,11 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataSto
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions,%20mil.nga.giat.geowave.core.store.IngestCallback,%20java.io.Closeable)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;adapter,
+<td class="colOne"><code><strong><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations,%20mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions,%20mil.nga.giat.geowave.core.store.callback.IngestCallback,%20java.io.Closeable)">AccumuloIndexWriter</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;adapter,
                    <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions,
-                   <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;callback,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;callback,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
 </tr>
 </table>
@@ -190,7 +190,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataSto
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.index.<a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index">DataStoreIndexWriter</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#close()">close</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#flush()">flush</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#getIndices()">getIndices</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write(T)">write</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#close()">close</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#closeInternal()">closeInternal</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#flush()">flush</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#getIndices()">getIndices</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write(T)">write</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -239,7 +239,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataSto
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions, mil.nga.giat.geowave.core.store.IngestCallback, java.io.Closeable)">
+<a name="AccumuloIndexWriter(mil.nga.giat.geowave.core.store.adapter.DataAdapter, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations, mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions, mil.nga.giat.geowave.core.store.callback.IngestCallback, java.io.Closeable)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -249,7 +249,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataSto
                    <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
                    <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions,
-                   <a href="../../../../../../mil/nga/giat/geowave/core/store/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;callback,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;callback,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</pre>
 </li>
 </ul>

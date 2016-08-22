@@ -147,7 +147,15 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.base">mil.nga.giat.geowave.core.store.base</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index.writer">mil.nga.giat.geowave.core.store.index.writer</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -708,15 +716,6 @@
  stored in the Accumulo index.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/IndexDependentDataAdapter.html#mil.nga.giat.geowave.core.store">IndexDependentDataAdapter</a>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/WritableDataAdapter.html#mil.nga.giat.geowave.core.store">WritableDataAdapter</a>
-<div class="block">This extends the basic DataAdapter interface to be able to ingest data in
- addition to query for it.</div>
-</td>
-</tr>
 </tbody>
 </table>
 </li>
@@ -787,6 +786,42 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.base">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/package-summary.html">mil.nga.giat.geowave.core.store.adapter</a> used by <a href="../../../../../../../mil/nga/giat/geowave/core/store/base/package-summary.html">mil.nga.giat.geowave.core.store.base</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/AdapterIndexMappingStore.html#mil.nga.giat.geowave.core.store.base">AdapterIndexMappingStore</a>
+<div class="block">This is responsible for persisting adapter/index mappings (either in memory
+ or to disk depending on the implementation).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/AdapterStore.html#mil.nga.giat.geowave.core.store.base">AdapterStore</a>
+<div class="block">This is responsible for persisting data adapters (either in memory or to disk
+ depending on the implementation).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/DataAdapter.html#mil.nga.giat.geowave.core.store.base">DataAdapter</a>
+<div class="block">This interface should be implemented by any custom data type that must be
+ stored in the Accumulo index.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/WritableDataAdapter.html#mil.nga.giat.geowave.core.store.base">WritableDataAdapter</a>
+<div class="block">This extends the basic DataAdapter interface to be able to ingest data in
+ addition to query for it.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.store.index">
 <!--   -->
 </a>
@@ -801,6 +836,21 @@
 <div class="block">This interface should be implemented by any custom data type that must be
  stored in the Accumulo index.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.index.writer">
+<!--   -->
+</a>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/package-summary.html">mil.nga.giat.geowave.core.store.adapter</a> used by <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/writer/package-summary.html">mil.nga.giat.geowave.core.store.index.writer</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/IndexDependentDataAdapter.html#mil.nga.giat.geowave.core.store.index.writer">IndexDependentDataAdapter</a>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -821,31 +871,24 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/AdapterPersistenceEncoding.html#mil.nga.giat.geowave.core.store.memory">AdapterPersistenceEncoding</a>
-<div class="block">This is an implementation of persistence encoding that also contains all of
- the extended data values used to form the native type supported by this
- adapter.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/AdapterStore.html#mil.nga.giat.geowave.core.store.memory">AdapterStore</a>
 <div class="block">This is responsible for persisting data adapters (either in memory or to disk
  depending on the implementation).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/DataAdapter.html#mil.nga.giat.geowave.core.store.memory">DataAdapter</a>
 <div class="block">This interface should be implemented by any custom data type that must be
  stored in the Accumulo index.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/IndexedAdapterPersistenceEncoding.html#mil.nga.giat.geowave.core.store.memory">IndexedAdapterPersistenceEncoding</a>
 <div class="block">This is an implements of persistence encoding that also contains all of the
  extended data values used to form the native type supported by this adapter.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/WritableDataAdapter.html#mil.nga.giat.geowave.core.store.memory">WritableDataAdapter</a>
 <div class="block">This extends the basic DataAdapter interface to be able to ingest data in
  addition to query for it.</div>
@@ -936,9 +979,34 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/AdapterPersistenceEncoding.html#mil.nga.giat.geowave.core.store.util">AdapterPersistenceEncoding</a>
+<div class="block">This is an implementation of persistence encoding that also contains all of
+ the extended data values used to form the native type supported by this
+ adapter.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/AdapterStore.html#mil.nga.giat.geowave.core.store.util">AdapterStore</a>
 <div class="block">This is responsible for persisting data adapters (either in memory or to disk
  depending on the implementation).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/DataAdapter.html#mil.nga.giat.geowave.core.store.util">DataAdapter</a>
+<div class="block">This interface should be implemented by any custom data type that must be
+ stored in the Accumulo index.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/IndexedAdapterPersistenceEncoding.html#mil.nga.giat.geowave.core.store.util">IndexedAdapterPersistenceEncoding</a>
+<div class="block">This is an implements of persistence encoding that also contains all of the
+ extended data values used to form the native type supported by this adapter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/class-use/WritableDataAdapter.html#mil.nga.giat.geowave.core.store.util">WritableDataAdapter</a>
+<div class="block">This extends the basic DataAdapter interface to be able to ingest data in
+ addition to query for it.</div>
 </td>
 </tr>
 </tbody>

@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev Class</li>
-<li>Next Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/DataStoreUtils.html" title="class in mil.nga.giat.geowave.core.store.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/IteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store.util"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" target="_top">Frames</a></li>
@@ -134,7 +134,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#adapterStore">adapterStore</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#scanCallback">scanCallback</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -152,12 +152,12 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#EntryIteratorWrapper(boolean,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.ScanCallback)">EntryIteratorWrapper</a></strong>(boolean&nbsp;wholeRowEncoding,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html#EntryIteratorWrapper(boolean,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.util.Iterator,%20mil.nga.giat.geowave.core.store.filter.QueryFilter,%20mil.nga.giat.geowave.core.store.callback.ScanCallback)">EntryIteratorWrapper</a></strong>(boolean&nbsp;wholeRowEncoding,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&nbsp;scannerIt,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt;&nbsp;scanCallback)</code>&nbsp;</td>
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt;&nbsp;scanCallback)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -230,7 +230,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>scanCallback</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt; scanCallback</pre>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt; scanCallback</pre>
 </li>
 </ul>
 </li>
@@ -241,7 +241,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="EntryIteratorWrapper(boolean, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.util.Iterator, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.ScanCallback)">
+<a name="EntryIteratorWrapper(boolean, mil.nga.giat.geowave.core.store.adapter.AdapterStore, mil.nga.giat.geowave.core.store.index.PrimaryIndex, java.util.Iterator, mil.nga.giat.geowave.core.store.filter.QueryFilter, mil.nga.giat.geowave.core.store.callback.ScanCallback)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -252,7 +252,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&nbsp;scannerIt,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt;&nbsp;scanCallback)</pre>
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" title="type parameter in EntryIteratorWrapper">T</a>&gt;&nbsp;scanCallback)</pre>
 </li>
 </ul>
 </li>
@@ -342,8 +342,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev Class</li>
-<li>Next Class</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/DataStoreUtils.html" title="class in mil.nga.giat.geowave.core.store.util"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/util/IteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store.util"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/util/EntryIteratorWrapper.html" target="_top">Frames</a></li>

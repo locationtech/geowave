@@ -134,7 +134,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#clientFilters">clientFilters</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#scanCallback">scanCallback</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -159,9 +159,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#AccumuloFilteredIndexQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.ScanCallback,%20org.apache.commons.lang3.tuple.Pair,%20mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount,%20java.lang.String...)">AccumuloFilteredIndexQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
+<td class="colOne"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#AccumuloFilteredIndexQuery(java.util.List,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20mil.nga.giat.geowave.core.store.callback.ScanCallback,%20org.apache.commons.lang3.tuple.Pair,%20mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount,%20java.lang.String...)">AccumuloFilteredIndexQuery</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
                           org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
@@ -249,7 +249,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <ul class="blockListLast">
 <li class="blockList">
 <h4>scanCallback</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt; scanCallback</pre>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt; scanCallback</pre>
 </li>
 </ul>
 </li>
@@ -260,7 +260,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloFilteredIndexQuery(java.util.List, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.ScanCallback, org.apache.commons.lang3.tuple.Pair, mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount, java.lang.String...)">
+<a name="AccumuloFilteredIndexQuery(java.util.List, mil.nga.giat.geowave.core.store.index.PrimaryIndex, mil.nga.giat.geowave.core.store.callback.ScanCallback, org.apache.commons.lang3.tuple.Pair, mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount, java.lang.String...)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -268,7 +268,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <h4>AccumuloFilteredIndexQuery</h4>
 <pre>public&nbsp;AccumuloFilteredIndexQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?&gt;&nbsp;scanCallback,
                           org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>

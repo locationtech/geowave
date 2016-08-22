@@ -100,14 +100,16 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/io/HBaseWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase.io">HBaseWriter</a></code></td>
-<td class="colLast"><span class="strong">BasicHBaseOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createWriter(java.lang.String,%20java.lang.String)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnFamily)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">BasicHBaseOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createWriter(java.lang.String,%20java.lang.String[],%20boolean)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sTableName,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;columnFamilies,
+            boolean&nbsp;createTable)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/io/HBaseWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase.io">HBaseWriter</a></code></td>
-<td class="colLast"><span class="strong">BasicHBaseOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createWriter(java.lang.String,%20java.lang.String,%20boolean)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sTableName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;columnFamily,
-            boolean&nbsp;createTable)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">BasicHBaseOperations.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createWriter(java.lang.String,%20java.lang.String[],%20boolean,%20java.util.Set)">createWriter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sTableName,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;columnFamilies,
+            boolean&nbsp;createTable,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;splits)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -124,14 +126,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></code></td>
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a></code></td>
 <td class="colLast"><span class="strong">HBaseUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseUtils.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20T,%20mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter)">write</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
      T&nbsp;entry,
      <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/io/HBaseWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase.io">HBaseWriter</a>&nbsp;writer)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a></code></td>
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a></code></td>
 <td class="colLast"><span class="strong">HBaseUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseUtils.html#write(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20T,%20mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
      T&nbsp;entry,
@@ -140,8 +142,8 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="strong">HBaseUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseUtils.html#writeAltIndex(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.DataStoreEntryInfo,%20T,%20mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter)">writeAltIndex</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store">DataStoreEntryInfo</a>&nbsp;entryInfo,
+<td class="colLast"><span class="strong">HBaseUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseUtils.html#writeAltIndex(mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter,%20mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T,%20mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter)">writeAltIndex</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;writableAdapter,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
              T&nbsp;entry,
              <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/io/HBaseWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase.io">HBaseWriter</a>&nbsp;writer)</code>&nbsp;</td>
 </tr>
