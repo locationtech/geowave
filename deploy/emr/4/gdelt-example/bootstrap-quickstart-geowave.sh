@@ -23,7 +23,7 @@ ACCUMULO_DOWNLOAD_BASE_URL=https://archive.apache.org/dist/accumulo
 
 # GeoWave
 GEOWAVE_REPO_RPM=geowave-repo-1.0-3.noarch.rpm # TODO: Should have a prod->latest rpm
-GEOWAVE_VERSION='0.9.2'
+GEOWAVE_VERSION='0.9.3'
 GEOSERVER_PORT='8000'
 GEOSERVER_MEMORY="-Xmx512m -XX:MaxPermSize=128m"
 
@@ -37,21 +37,26 @@ if [ ! -f /mnt/geowave-install-lib.sh ]; then
 	aws s3 cp s3://geowave-guide-bucket/geowave-install-lib.sh /mnt/geowave-install-lib.sh
 fi
 source /mnt/geowave-install-lib.sh
+
 if [ ! -f /mnt/geowave-env.sh ]; then
 	aws s3 cp s3://geowave-guide-bucket/geowave-env.sh /mnt/geowave-env.sh
 fi
 source /mnt/geowave-env.sh
-if [ ! -f /mnt/geoserver-geowave-workspace.tar ]; then
-	aws s3 cp s3://geowave-guide-bucket/geoserver-geowave-workspace.tar  /mnt/geoserver-geowave-workspace.tar 
+
+if [ ! -f /mnt/colormap.sld ]; then
+	aws s3 cp s3://geowave-guide-bucket/colormap.sld  /mnt/colormap.sld 
 fi
+
+if [ ! -f /mnt/DecimatePoints.sld ]; then
+        aws s3 cp s3://geowave-guide-bucket/colormap.sld  /mnt/DecimatePoints.sld
+fi
+
 if [ ! -f /mnt/setup-geoserver-geowave-workspace.sh ]; then
 	aws s3 cp s3://geowave-guide-bucket/setup-geoserver-geowave-workspace.sh /mnt/setup-geoserver-geowave-workspace.sh
 fi
+
 if [ ! -f /mnt/ingest-and-kde-gdelt.sh ]; then
 	aws s3 cp s3://geowave-guide-bucket/ingest-and-kde-gdelt.sh /mnt/ingest-and-kde-gdelt.sh
-fi
-if [ ! -f /mnt/setup-geowave.sh ]; then
-	aws s3 cp s3://geowave-guide-bucket/setup-geowave.sh /mnt/setup-geowave.sh
 fi
 
 # Step #2: The EMR customize hooks run _before_ everything else, so Hadoop is not yet ready
@@ -75,7 +80,7 @@ install_image_libs
 if is_master ; then
 	install_geowave	
 	chmod 755 /mnt/*.sh
-	cd /mnt;./setup-geowave.sh
+	cd /mnt;./ingest-and-kde-gdelt.sh
 fi
 
 # Step #5: Optionally initialize all volumes
