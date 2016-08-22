@@ -1,0 +1,649 @@
+[[quickstart-guide]]
+<<<
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 938b5c1... adding the quickstart guide back in
+
+== Quickstart Guide
+
+=== What you will need
+* <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>
+* <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, VPC (Network Interface/Subnet Id)>>
+* <<110-appendices.adoc#create-ec2-security-group, EC2 Security Group>>
+* <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>>
+* <<110-appendices.adoc#aws-cli-setup, AWS CLI>> setup on your local machine (optional)
+** Not needed if you plan on using the EMR GUI to create the cluster
+
+=== Creating the Cluster
+
+Download the bootstrap-geowave.sh script https://s3.amazonaws.com/geowave-guide-bucket/bootstrap-geowave.sh[here] and upload it to your S3 bucket.
+
+*Note:* You can also clone the GeoWave project from https://github.com/ngageoint/geowave[GitHub] and find the script under deploy/emr/4/gdelt-example/
+
+If you have not created an S3 bucket please see the <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>> section.
+
+=== AWS CLI Method
+
+This is the basic makeup of the command you will call to create your geowave test cluster. All variables, designated as 
+${VARIABLES}, will need to be be replaced with your individual path, group, value, etc. An explanation of each of the 
+variables is given below the command.
+<<<<<<< HEAD
+=======
+== Quickstart Guide: Running Geowave on an AWS EMR Cluster
+=======
+
+== Quickstart Guide
+>>>>>>> b4609a4... added the rest of the quickstart guide
+
+=== What you will need
+* <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>
+* <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, VPC (Network Interface/Subnet Id)>>
+* <<110-appendices.adoc#create-ec2-security-group, EC2 Security Group>>
+* <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>>
+* <<110-appendices.adoc#aws-cli-setup, AWS CLI>> setup on your local machine (optional)
+** Not needed if you plan on using the EMR GUI to create the cluster
+
+=== Creating the Cluster
+
+Download the bootstrap-geowave.sh script https://s3.amazonaws.com/geowave-guide-bucket/bootstrap-geowave.sh[here] and upload it to your S3 bucket.
+
+*Note:* You can also clone the GeoWave project from https://github.com/ngageoint/geowave[GitHub] and find the script under deploy/emr/4/gdelt-example/
+
+If you have not created an S3 bucket please see the <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>> section.
+
+=== AWS CLI Method
+
+<<<<<<< HEAD
+Once the process of cluster initialization has started you will see the cluster appear in the EMR console immediately.
+The GeoWave portion of the process does not occur until the Hadoop and Spark portions of the initializations have completed
+which takes approximately 4-5 minutes. Once the GeoWave components have been installed there is an optional volume
+initialization step that will read every block of each volume to clear any initialization flags that may have been set.
+This option should be used when you want to benchmark an operation but can probably be skipped if you're primarily interested
+in quickly setting up a cluster to test some capability.
+>>>>>>> 93936bd... adding quickstart guide content
+=======
+This is the basic makeup of the command you will call to create your geowave test cluster. All variables, designated as 
+${VARIABLES}, will need to be be replaced with your individual path, group, value, etc. An explanation of each of the 
+variables is given below the command.
+>>>>>>> b4609a4... added the rest of the quickstart guide
+=======
+>>>>>>> 938b5c1... adding the quickstart guide back in
+
+[source, bash]
+----
+aws emr create-cluster \
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4609a4... added the rest of the quickstart guide
+=======
+>>>>>>> 938b5c1... adding the quickstart guide back in
+--name ${CLUSTER_NAME} \
+--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
+--ec2-attributes "KeyName=${YOUR_KEYNAME},SubnetId=${YOUR_SUBNET_ID},EmrManagedMasterSecurityGroup=${YOUR_SECURITY_GROUP},EmrManagedSlaveSecurityGroup=${YOUR_SECURITY_GROUP}" \
+--release-label ${EMR_VERSION} \
+--applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
+--use-default-roles \
+--no-auto-terminate \
+--bootstrap-actions Path=s3://${YOUR_BUCKET_NAME}/bootstrap-geowave.sh,Name=Bootstrap_GeoWave \
+--tags ${YOUR_TAGNAME} \
+--region ${YOUR_REGION} \
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 938b5c1... adding the quickstart guide back in
+----
+
+* ${CLUSTER_NAME} - The name you want to show up in the Cluster list in AWS
+** Example: “geowave-guide-cluster”
+* ${NUM_WORKERS} - The number core/worker nodes you want
+** You will be working with a relatively small amount of data in this walkthrough so we recommend using two
+* ${YOUR_KEYNAME} - The name of the key value pair you want to use for this cluster
+** Example: geowave-guide-keypair
+** If you have not created a keypair for this cluster please follow the steps <<110-appendices.adoc#create-ec2-key-pair, here>>.
+* ${YOUR_SUBNET_ID} - The subnet id linked with your security group(s)
+** Example: subnet-bc123123
+** If you are unsure of which subnet to use please see the VPC (network interface/subnet id) section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here>>.
+* ${YOUR_SECURITY_GROUP} - This is the security group(s) you want the cluster to be assigned to.
+** Example: sg-1a123456
+** If your AWS EMR account has default security groups setup you can leave the EmrManagedMasterSecurityGroup and EmrManagedSlaveSecurityGroup out of --ec2-attributes
+** If you are unsure of which groups to use here please see the EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
+* ${EMR_VERSION} - The version of EMR that you want to use for your cluster
+** Example: emr-4.7.0
+** GeoWave version 0.9.2.1 suports up to EMR version 4.7.2
+* ${YOUR_BUCKET_NAME} - The name of the bucket you uploaded the bootstrap-geowave.sh file to
+* ${YOUR_TAGNAME} - Tag name for the cluster you are creating
+** Example: “geowave-guide”
+** The --tags is completely optional, but may help you search for this cluster if there are many on the aws account you are using
+* ${YOUR_REGION} - Your aws region
+** Example: “us-east-1”
+
+If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a 
+message  detailing why the command failed.
+
+For more information on the create-cluster command please see the amazon documentation http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html[here].
+
+*Note:* The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired 
+cluster. There are many things that could still go wrong and cause the cluster to fail. You can open the AWS EMR GUI to 
+follow the progress of your cluster’s creation.
+
+The bootstrap-geowave.sh script will now setup the environment, then download and process one month of gdelt data. 
+
+Please view the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data 
+can be visualized, or the <<bootstrap-script-breakdown,Bootstrap Script Breakdown>> section to see more detail about what 
+is being done by the bootstrap script.
+
+*Note:* The entire process takes approximately 40 minutes on a three node cluster.
+
+=== AWS GUI Method
+
+Login to AWS and select EMR from the Services drop down menu.
+
+image::aws-gui-method-1.png[scaledwidth="100%",alt="select emr"]
+
+Select the “Create cluster” button in the top left side of the page. Once the Create Cluster application opens select the 
+“Go to advanced options” link at the top of the page.
+
+*Step 1:*
+
+image::aws-gui-method-2.png[scaledwidth="100%",alt="select emr"]
+
+Software Configuration
+
+* Vendor
+** Select Amazon.
+* Release
+** Select emr-4.7.0 from the dropdown list (older versions of GeoWave may not support all functions on newer versions of EMR) 
+** Ensure Hadoop, Ganglia, Hue and Spark are selected (it won’t hurt to have other software selected as well, but they aren’t needed)
+* Edit software settings
+** Don’t touch anything here
+
+Add Steps
+
+* We won’t be adding any steps for this quickstart guide
+
+*Step 2:*
+
+image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
+
+Hardware Configuration
+
+* Network
+** Select your VPC
+** If you haven’t setup a VPC please see the Create EC2 VPC section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here)>>.
+* EC2 Subnet
+** Select the subnet (or one of the subnets) associated with your VPC
+* Master
+** Select m3.xlarge from the EC2 instance type dropdown list
+* Core
+** Select m3.xlarge from the EC2 instance type dropdown list
+** Select 2 for the Instance count
+* Task
+** We won’t be using a task node in this walkthrough so leave the instance count at 0
+
+*Step 3:*
+
+image::aws-gui-method-4.png[scaledwidth="100%",alt="select emr"]
+
+General Options
+
+*Cluster name
+** Enter the desired name for your cluster
+** Cluster names do not have to be unique
+* Logging
+** Leave selected
+**Click on the folder icon and select your bucket
+* Debugging
+** Leave selected
+* Termination Protection
+** Leave selected
+* Tags
+** Enter a tag name for your cluster
+** This is completely optional, but may make it easier to search for your cluster later on
+
+Additional Options
+
+* EMRFS consistent view
+** Leave unselected
+* Bootstrap Actions: Expand the Bootstrap Actions section
+** Select Custom action from the Add bootstrap action drop down list
+** Click the “Configure and add” button
+
+image::aws-gui-method-5.png[scaledwidth="100%",alt="select emr"]
+
+* Name
+** Enter a name for the custom action
+** This can be left as the default value of “Custom action”
+* Script location
+** Click the folder icon to bring up a list of available S3 buckets
+** Select your folder and then select the bootstrap-geowave.sh file you uploaded at the beginning of this section
+* Click the “Select” button
+* Click the “Add” button
+* If you haven’t created an S3 bucket please see the Create AWS S3 Bucket section <<110-appendices.adoc#create-aws-s3-bucket, here>>.
+
+*Step 4:*
+
+image::aws-gui-method-6.png[scaledwidth="100%",alt="select emr"]
+
+Security Options
+
+* EC2 key pair
+** Select your key pair for this cluster
+** If you haven’t created a key pair please see the Create EC2 Key Pair section <<110-appendices.adoc#create-ec2-key-pair, here>>.
+* Cluster visible to all IAM users in account
+** Leave selected
+* Permissions
+** Leave “Default” selected
+* Expand the EC2 Security Groups section
+** Master: select your security group for the master node
+** Core & Task: select your security group for the core nodes
+** If you haven’t created a security group yet please see the Create EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
+
+Click the “Create Cluster” button to create and provision your cluster.
+
+The bootstrap-geowave.sh script will now setup the environment then download and process one month of gdelt data. Please 
+view the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data can be 
+visualized, or the <<bootstrap-script-breakdown,Bootstrap Script Breakdown>> section to see more detail about what is being 
+done by the bootstrap script.
+
+*Note:* The entire process takes about 40 minutes on a three node cluster.
+
+=== Interacting with the Cluster
+
+Enable Web Connections
+
+Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. Use the “Master public DNS” 
+value as your hostname and the security key you assigned to the cluster to enable the web connection.
+
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+If you are unfamiliar how to do this click on the “Enable Web Connection” link for detailed instructions on how to enable the 
+web connection for Linux or Windows.
+
+Accumulo Overview
+
+You can follow the progress of the data ingest and scan (kde) performed by the cluster on hte accumulo web server.
+
+Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :50095
+
+* Example: ec2-52-91-215-215.compute-1.amazonaws.com:50095
+
+You should see the following page:
+
+image::interacting-cluster-2.png[scaledwidth="100%",alt="select emr"]
+
+GeoServer
+
+Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :8000/geoserver/web/
+
+* Example: ec2-52-91-215-215.compute-1.amazonaws.com:8000/geoserver/web/
+
+image::interacting-cluster-3.png[scaledwidth="100%",alt="select emr"]
+
+Log into Geoserver
+
+* Username: admin
+* Password: geoserver
+
+image::interacting-cluster-4.png[scaledwidth="100%",alt="select emr"]
+
+Once the bootstrap-geowave.sh script is finished you will see two layers have been created. To view them click on the 
+“Layer Preview” link under the Data menu on the left side of the page.
+
+image::interacting-cluster-5.png[scaledwidth="100%",alt="select emr"]
+
+Click the OpenLayers link for either one to view it in another tab.
+
+* gdeltevent - shows all of the gdelt events in a bounding box around western europe as individual points.
+
+image::interacting-cluster-6.png[scaledwidth="100%",alt="select emr"]
+
+* gdeltevent_kde - a heat map produced using kernel density estimation in a bounding box around western europe.
+
+image::interacting-cluster-7.png[scaledwidth="100%",alt="select emr"]
+
+=== Bootstrap Script Breakdown
+
+The bootstrap script we are running in this tutorial has a few steps and runs a number of other scripts to setup the 
+environment, download the data, ingest the data, run the kde and set up the layers for geoserver. This section gives a 
+basic breakdown of each script. All scripts can be found in the geowave project under deploy/emr/4/gdelt-example/ 
+directory.
+
+* bootstrap-geowave.sh
+** This is the main script and has five major steps:
+*** Download and source the other scripts
+*** Delays the rest of the script until EMR is done setting up the desired environment
+*** Configures zookeeper and accumulo
+*** Runs the install_geowave and setup-geowave scripts
+*** Initializes all volumes
+
+* geowave-install-lib.sh
+** This script is mostly a list of methods that are called by the bootstrap-geowave script. It contains the majority of the 
+actual code that will be run.
+
+<<<<<<< HEAD
+* geowave-env.sh
+** Defines variables (port numbers, timeframe, bounding box, versions, etc.) for the other scripts.
+
+* setup-geowave.sh
+** Calls the ingest-and-kde-gdelt and setup-geoserver-geowave-workspace scripts.
+
+* ingest-and-kde-gdelt.sh
+** Creates an accumulo user and namespace, downloads the gdelt dataset defined in the geowave-env script, ingests that data, 
+and runs a kde on the data. A good script to look though if you want to learn the commands used to perform these actions.
+
+* setup-geoserver-geowave-workspace.sh
+** Uses the information in the geoserver-geowave-workspace.tar to setup your geoserver workspace stores and layers. This would 
+normally be done by the user through the geoserver interface.
+=======
+  --name "geowave-emr" \
+  --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
+  --ec2-attributes "KeyName=YOUR_KEYNAME,SubnetId=YOUR_SUBNET_ID" \
+  --region YOUR_REGION \
+  --release-label emr-4.3.0 \
+  --applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
+  --use-default-roles \
+  --no-auto-terminate \
+  --bootstrap-actions Path=s3://YOUR_S3_BUCKET/emr/4/bootstrap-geowave.sh,Name=Bootstrap_GeoWave_Node \
+  --tags "Name=geowave-emr-worker"
+=======
+>>>>>>> b4609a4... added the rest of the quickstart guide
+----
+
+* ${CLUSTER_NAME} - The name you want to show up in the Cluster list in AWS
+** Example: “geowave-guide-cluster”
+* ${NUM_WORKERS} - The number core/worker nodes you want
+** You will be working with a relatively small amount of data in this walkthrough so we recommend using two
+* ${YOUR_KEYNAME} - The name of the key value pair you want to use for this cluster
+** Example: geowave-guide-keypair
+** If you have not created a keypair for this cluster please follow the steps <<110-appendices.adoc#create-ec2-key-pair, here>>.
+* ${YOUR_SUBNET_ID} - The subnet id linked with your security group(s)
+** Example: subnet-bc123123
+** If you are unsure of which subnet to use please see the VPC (network interface/subnet id) section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here>>.
+* ${YOUR_SECURITY_GROUP} - This is the security group(s) you want the cluster to be assigned to.
+** Example: sg-1a123456
+** If your AWS EMR account has default security groups setup you can leave the EmrManagedMasterSecurityGroup and EmrManagedSlaveSecurityGroup out of --ec2-attributes
+** If you are unsure of which groups to use here please see the EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
+* ${EMR_VERSION} - The version of EMR that you want to use for your cluster
+** Example: emr-4.7.0
+** GeoWave version 0.9.2.1 suports up to EMR version 4.7.2
+* ${YOUR_BUCKET_NAME} - The name of the bucket you uploaded the bootstrap-geowave.sh file to
+* ${YOUR_TAGNAME} - Tag name for the cluster you are creating
+** Example: “geowave-guide”
+** The --tags is completely optional, but may help you search for this cluster if there are many on the aws account you are using
+* ${YOUR_REGION} - Your aws region
+** Example: “us-east-1”
+
+If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a 
+message  detailing why the command failed.
+
+For more information on the create-cluster command please see the amazon documentation http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html[here].
+
+*Note:* The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired 
+cluster. There are many things that could still go wrong and cause the cluster to fail. You can open the AWS EMR GUI to 
+follow the progress of your cluster’s creation.
+
+The bootstrap-geowave.sh script will now setup the environment, then download and process one month of gdelt data. 
+
+Please view the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data 
+can be visualized, or the <<bootstrap-script-breakdown,Bootstrap Script Breakdown>> section to see more detail about what 
+is being done by the bootstrap script.
+
+*Note:* The entire process takes approximately 40 minutes on a three node cluster.
+
+=== AWS GUI Method
+
+Login to AWS and select EMR from the Services drop down menu.
+
+image::aws-gui-method-1.png[scaledwidth="100%",alt="select emr"]
+
+Select the “Create cluster” button in the top left side of the page. Once the Create Cluster application opens select the 
+“Go to advanced options” link at the top of the page.
+
+*Step 1:*
+
+image::aws-gui-method-2.png[scaledwidth="100%",alt="select emr"]
+
+Software Configuration
+
+* Vendor
+** Select Amazon.
+* Release
+** Select emr-4.7.0 from the dropdown list (older versions of GeoWave may not support all functions on newer versions of EMR) 
+** Ensure Hadoop, Ganglia, Hue and Spark are selected (it won’t hurt to have other software selected as well, but they aren’t needed)
+* Edit software settings
+** Don’t touch anything here
+
+Add Steps
+
+* We won’t be adding any steps for this quickstart guide
+
+*Step 2:*
+
+image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
+
+Hardware Configuration
+
+* Network
+** Select your VPC
+** If you haven’t setup a VPC please see the Create EC2 VPC section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here)>>.
+* EC2 Subnet
+** Select the subnet (or one of the subnets) associated with your VPC
+* Master
+** Select m3.xlarge from the EC2 instance type dropdown list
+* Core
+** Select m3.xlarge from the EC2 instance type dropdown list
+** Select 2 for the Instance count
+* Task
+** We won’t be using a task node in this walkthrough so leave the instance count at 0
+
+*Step 3:*
+
+image::aws-gui-method-4.png[scaledwidth="100%",alt="select emr"]
+
+General Options
+
+*Cluster name
+** Enter the desired name for your cluster
+** Cluster names do not have to be unique
+* Logging
+** Leave selected
+**Click on the folder icon and select your bucket
+* Debugging
+** Leave selected
+* Termination Protection
+** Leave selected
+* Tags
+** Enter a tag name for your cluster
+** This is completely optional, but may make it easier to search for your cluster later on
+
+Additional Options
+
+* EMRFS consistent view
+** Leave unselected
+* Bootstrap Actions: Expand the Bootstrap Actions section
+** Select Custom action from the Add bootstrap action drop down list
+** Click the “Configure and add” button
+
+image::aws-gui-method-5.png[scaledwidth="100%",alt="select emr"]
+
+* Name
+** Enter a name for the custom action
+** This can be left as the default value of “Custom action”
+* Script location
+** Click the folder icon to bring up a list of available S3 buckets
+** Select your folder and then select the bootstrap-geowave.sh file you uploaded at the beginning of this section
+* Click the “Select” button
+* Click the “Add” button
+* If you haven’t created an S3 bucket please see the Create AWS S3 Bucket section <<110-appendices.adoc#create-aws-s3-bucket, here>>.
+
+*Step 4:*
+
+image::aws-gui-method-6.png[scaledwidth="100%",alt="select emr"]
+
+Security Options
+
+* EC2 key pair
+** Select your key pair for this cluster
+** If you haven’t created a key pair please see the Create EC2 Key Pair section <<110-appendices.adoc#create-ec2-key-pair, here>>.
+* Cluster visible to all IAM users in account
+** Leave selected
+* Permissions
+** Leave “Default” selected
+* Expand the EC2 Security Groups section
+** Master: select your security group for the master node
+** Core & Task: select your security group for the core nodes
+** If you haven’t created a security group yet please see the Create EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
+
+Click the “Create Cluster” button to create and provision your cluster.
+
+The bootstrap-geowave.sh script will now setup the environment then download and process one month of gdelt data. Please 
+view the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data can be 
+visualized, or the <<bootstrap-script-breakdown,Bootstrap Script Breakdown>> section to see more detail about what is being 
+done by the bootstrap script.
+
+*Note:* The entire process takes about 40 minutes on a three node cluster.
+
+=== Interacting with the Cluster
+
+Enable Web Connections
+
+Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. Use the “Master public DNS” 
+value as your hostname and the security key you assigned to the cluster to enable the web connection.
+
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+If you are unfamiliar how to do this click on the “Enable Web Connection” link for detailed instructions on how to enable the 
+web connection for Linux or Windows.
+
+Accumulo Overview
+
+You can follow the progress of the data ingest and scan (kde) performed by the cluster on hte accumulo web server.
+
+Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :50095
+
+* Example: ec2-52-91-215-215.compute-1.amazonaws.com:50095
+
+You should see the following page:
+
+image::interacting-cluster-2.png[scaledwidth="100%",alt="select emr"]
+
+GeoServer
+
+Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :8000/geoserver/web/
+
+* Example: ec2-52-91-215-215.compute-1.amazonaws.com:8000/geoserver/web/
+
+image::interacting-cluster-3.png[scaledwidth="100%",alt="select emr"]
+
+Log into Geoserver
+
+* Username: admin
+* Password: geoserver
+
+image::interacting-cluster-4.png[scaledwidth="100%",alt="select emr"]
+
+Once the bootstrap-geowave.sh script is finished you will see two layers have been created. To view them click on the 
+“Layer Preview” link under the Data menu on the left side of the page.
+
+image::interacting-cluster-5.png[scaledwidth="100%",alt="select emr"]
+
+Click the OpenLayers link for either one to view it in another tab.
+
+*gdeltevent* - shows all of the gdelt events in a bounding box around western europe as individual points.
+
+image::interacting-cluster-6.png[scaledwidth="100%",alt="select emr"]
+
+You may have notices that it took a fair amount of time to render the ~1.5 million points. To speed this process up we 
+can set the default style the Decimate Points style that was added in our script and can be found in the geowave 
+directory at geowave/examples/example-slds/DecimatePoints.sld. This can be done using the geowave cli commands or via 
+the geoserver GUI.
+
+Geowave CLI:
+
+[source, bash]
+----
+geowave gs setls gdeltevent --styleName DecimatePoints
+----
+
+Geoserver GUI:
+
+* Click on the Layers link in the menu at the left side of the page and select the gdeltevent layer
+* Select the Publishing tab, open the Default Style dropdown and select DecimatePoints
+
+image::interacting-cluster-8.png[scaledwidth="100%",alt="select emr"]
+
+* Click the Save button at the bottom of the page and reopen the image by going back to the Layer Preview and clicking 
+the OpenLayers link
+* You should see a noticeable difference in the time it takes to render the points
+
+image::interacting-cluster-9.png[scaledwidth="100%",alt="select emr"]
+
+*gdeltevent_kde* - a heat map produced using kernel density estimation in a bounding box around western europe.
+
+image::interacting-cluster-7.png[scaledwidth="100%",alt="select emr"]
+
+=== Bootstrap Script Breakdown
+
+The bootstrap script we are running in this tutorial has a few steps and runs a number of other scripts to setup the 
+environment, download the data, ingest the data, run the kde and set up the layers for geoserver. This section gives a 
+basic breakdown of each script. All scripts can be found in the geowave project under deploy/emr/4/gdelt-example/ 
+directory.
+
+* bootstrap-geowave.sh
+** This is the main script and has five major steps:
+*** Download and source the other scripts and styles
+*** Delays the rest of the script until EMR is done setting up the desired environment
+*** Configures zookeeper and accumulo
+*** Installs geowave and runs the ingest-and-kde-gdelt script
+*** Initializes all volumes
+
+* geowave-install-lib.sh
+** This script is a collection of methods that are called by the bootstrap-geowave script. It contains the majority of the 
+actual code that will be run.
+
+<<<<<<< HEAD
+* geowave-env
+=======
+<<<<<<< HEAD
+* geowave-env.sh
+=======
+* geowave-env
+>>>>>>> b4609a44c1d13a6a1a497c4329a13f55606f9610
+>>>>>>> 938b5c1... adding the quickstart guide back in
+=======
+* geowave-env.sh
+>>>>>>> 652ba73... updating geowave docs
+** Defines variables (port numbers, timeframe, bounding box, versions, etc.) for the other scripts.
+
+* ingest-and-kde-gdelt.sh
+** Creates an accumulo user and namespace, downloads the gdelt dataset defined in the geowave-env script, ingests that data, 
+and runs a kde on the data. It also calls the setup-geoserver-geowave-workspace script. A good script to look though if 
+you want to learn the commands used to perform these actions.
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+After the cluster has finished initializing you should be able to ssh into the master node and perform the final bits of
+project specific GeoWave configuration. The root password for Accumulo is set at the top of the bootstrap-geowave.sh script.
+You'd want to log into Accumulo and perform steps listed in the Accumulo Configuration section of the documentation. The
+latest iterator built for Apache Hadoop will have been uploaded into HDFS but no user accounts, namespaces or VFS contexts
+will have been configured. All of these are described with examples in both the GeoWave and Accumulo documentation.
+>>>>>>> 93936bd... adding quickstart guide content
+=======
+* setup-geoserver-geowave-workspace.sh
+** Uses the information in the geoserver-geowave-workspace.tar to setup your geoserver workspace stores and layers. This would 
+normally be done by the user through the geoserver interface.
+>>>>>>> b4609a4... added the rest of the quickstart guide
+=======
+* setup-geoserver-geowave-workspace.sh
+<<<<<<< HEAD
+** Uses the information in the geoserver-geowave-workspace.tar to setup your geoserver workspace stores and layers. This would 
+normally be done by the user through the geoserver interface.
+>>>>>>> 938b5c1... adding the quickstart guide back in
+=======
+** Uses the geowave cli utility to setup the geoserver datastores, layers and styles. This can also be done using the 
+geoserver GUI. 
+>>>>>>> 652ba73... updating geowave docs

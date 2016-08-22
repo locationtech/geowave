@@ -29,3 +29,7 @@ geowave config addstore -t accumulo gdelt-accumulo-out --gwNamespace geowave.kde
 
 # Run a kde to produce a heatmap
 hadoop jar ${GEOWAVE_TOOLS_HOME}/geowave-tools.jar --config-file /home/hadoop/.geowave/0.9.2-config.properties analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde --hdfsHostPort ${HOSTNAME}:${HDFS_PORT} --jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} --tileSize 1 gdelt-accumulo gdelt-accumulo-out
+
+# Run the geoserver workspace setup script
+cd $STAGING_DIR
+./setup-geoserver-geowave-workspace.sh

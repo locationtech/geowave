@@ -51,6 +51,12 @@ public class GeoServerAddLayerCommand implements
 	}, required = false, description = "select just <adapter id> from the store")
 	private String adapterId = null;
 
+	@Parameter(names = {
+		"-sld",
+		"--setStyle"
+	}, required = false, description = "<default style sld>")
+	private String style = null;
+
 	@Parameter(description = "<GeoWave store name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
@@ -98,7 +104,8 @@ public class GeoServerAddLayerCommand implements
 		Response addLayerResponse = geoserverClient.addLayer(
 				workspace,
 				gwStore,
-				adapterId);
+				adapterId,
+				style);
 
 		if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
 			System.out.println("Add GeoServer layer for '" + gwStore + ": OK");

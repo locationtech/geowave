@@ -11,34 +11,21 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import net.sf.json.JSONObject;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addfl", parentOperation = GeoServerSection.class)
-@Parameters(commandDescription = "Add a GeoServer feature layer")
-public class GeoServerAddFeatureLayerCommand implements
+@GeowaveOperation(name = "rmstyle", parentOperation = GeoServerSection.class)
+@Parameters(commandDescription = "Remove GeoServer Style")
+public class GeoServerRemoveStyleCommand implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
 
-	@Parameter(names = {
-		"-ws",
-		"--workspace"
-	}, required = false, description = "<workspace name>")
-	private String workspace = null;
-
-	@Parameter(names = {
-		"-ds",
-		"--datastore"
-	}, required = true, description = "<datastore name>")
-	private String datastore = null;
-
-	@Parameter(description = "<layer name>")
+	@Parameter(description = "<style name>")
 	private List<String> parameters = new ArrayList<String>();
-	private String layerName = null;
+	private String styleName = null;
 
 	@Override
 	public boolean prepare(
@@ -66,29 +53,19 @@ public class GeoServerAddFeatureLayerCommand implements
 			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
-					"Requires argument: <layer name>");
+					"Requires argument: <style name>");
 		}
 
-		if (workspace == null || workspace.isEmpty()) {
-			workspace = geoserverClient.getConfig().getWorkspace();
-		}
+		styleName = parameters.get(0);
 
-		layerName = parameters.get(0);
+		Response deleteStyleResponse = geoserverClient.deleteStyle(styleName);
 
-		Response addLayerResponse = geoserverClient.addFeatureLayer(
-				workspace,
-				datastore,
-				layerName,
-				null);
-
-		if (addLayerResponse.getStatus() == Status.CREATED.getStatusCode()) {
-			System.out.println("\nGeoServer add layer response " + layerName + ":");
-			JSONObject listObj = JSONObject.fromObject(addLayerResponse.getEntity());
-			System.out.println(listObj.toString(2));
+		if (deleteStyleResponse.getStatus() == Status.OK.getStatusCode()) {
+			System.out.println("Delete style '" + styleName + "' on GeoServer: OK");
 		}
 		else {
-			System.err
-					.println("Error adding GeoServer layer " + layerName + "; code = " + addLayerResponse.getStatus());
+			System.err.println("Error deleting style '" + styleName + "' on GeoServer; code = "
+					+ deleteStyleResponse.getStatus());
 		}
 	}
 }
