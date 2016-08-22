@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.memory.EntryRowID;
+import mil.nga.giat.geowave.core.store.base.EntryRowID;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;

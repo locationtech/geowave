@@ -211,8 +211,8 @@ public class GDELTIngestPlugin extends
 				try {
 					final String[] vals = line.split("\t");
 					if ((vals.length < GDELTUtils.GDELT_MIN_COLUMNS) || (vals.length > GDELTUtils.GDELT_MAX_COLUMNS)) {
-						LOGGER.warn("Invalid GDELT line length: " + vals.length + " tokens found on line " + lineNumber
-								+ " of " + hfile.getOriginalFilePath());
+						LOGGER.debug("Invalid GDELT line length: " + vals.length + " tokens found on line "
+								+ lineNumber + " of " + hfile.getOriginalFilePath());
 						continue;
 					}
 
@@ -227,14 +227,16 @@ public class GDELTIngestPlugin extends
 					try {
 						final Pair<Double, Double> latLon = GDELTUtils.parseLatLon(vals);
 						if (latLon == null) {
-							LOGGER.warn("No spatial data on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+							LOGGER
+									.debug("No spatial data on line " + lineNumber + " of "
+											+ hfile.getOriginalFilePath());
 							continue;
 						}
 						lat = latLon.getLeft();
 						lon = latLon.getRight();
 					}
 					catch (final Exception e) {
-						LOGGER.warn(
+						LOGGER.debug(
 								"Error reading GDELT lat/lon on line " + lineNumber + " of "
 										+ hfile.getOriginalFilePath(),
 								e);

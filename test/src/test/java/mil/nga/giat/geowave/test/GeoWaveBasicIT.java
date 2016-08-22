@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math.util.MathUtils;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -50,9 +51,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.IngestCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -62,12 +60,14 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
@@ -75,6 +75,7 @@ import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
@@ -145,19 +146,35 @@ public class GeoWaveBasicIT
 
 	public void testIngestAndQuerySpatialPointsAndLines(
 			final int nthreads ) {
+		LOGGER.setLevel(Level.DEBUG);
+		long mark = System.currentTimeMillis();
+
+		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
+
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,
 				DimensionalityType.SPATIAL,
 				HAIL_SHAPEFILE_FILE,
 				nthreads);
+
+		long dur = (System.currentTimeMillis() - mark);
+		LOGGER.debug("Ingest (points) duration = " + dur + " ms with " + nthreads + " thread(s).");
+
+		mark = System.currentTimeMillis();
+
 		TestUtils.testLocalIngest(
 				dataStore,
 				DimensionalityType.SPATIAL,
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				nthreads);
 
+		dur = (System.currentTimeMillis() - mark);
+		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
+
 		try {
+			mark = System.currentTimeMillis();
+
 			testQuery(
 					new File(
 							TEST_BOX_FILTER_FILE).toURI().toURL(),
@@ -169,6 +186,9 @@ public class GeoWaveBasicIT
 					},
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"bounding box constraint only");
+
+			dur = (System.currentTimeMillis() - mark);
+			LOGGER.debug("BBOX query duration = " + dur + " ms.");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -177,6 +197,8 @@ public class GeoWaveBasicIT
 					+ e.getLocalizedMessage() + "'");
 		}
 		try {
+			mark = System.currentTimeMillis();
+
 			testQuery(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
@@ -188,6 +210,9 @@ public class GeoWaveBasicIT
 					},
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"polygon constraint only");
+
+			dur = (System.currentTimeMillis() - mark);
+			LOGGER.debug("POLY query duration = " + dur + " ms.");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();

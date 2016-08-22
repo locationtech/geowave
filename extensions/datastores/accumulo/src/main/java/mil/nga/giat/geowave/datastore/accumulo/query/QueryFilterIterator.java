@@ -26,12 +26,13 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.flatten.FlattenedDataSet;
+import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
+import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPersistenceEncoding;
-import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloDataSet;
-import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloFieldInfo;
-import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadData;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class QueryFilterIterator extends
@@ -139,7 +140,7 @@ public class QueryFilterIterator extends
 		if (isSet()) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
-			final AccumuloUnreadData unreadData = aggregateFieldData(
+			final FlattenedUnreadData unreadData = aggregateFieldData(
 					key,
 					value,
 					commonData);
@@ -156,7 +157,7 @@ public class QueryFilterIterator extends
 	protected boolean applyRowFilter(
 			final Text currentRow,
 			final PersistentDataset<CommonIndexValue> commonData,
-			final AccumuloUnreadData unreadData ) {
+			final FlattenedUnreadData unreadData ) {
 		return applyRowFilter(getEncoding(
 				currentRow,
 				commonData,
@@ -166,7 +167,7 @@ public class QueryFilterIterator extends
 	protected static CommonIndexedPersistenceEncoding getEncoding(
 			final Text currentRow,
 			final PersistentDataset<CommonIndexValue> commonData,
-			final AccumuloUnreadData unreadData ) {
+			final FlattenedUnreadData unreadData ) {
 		final GeowaveRowId rowId = new GeowaveRowId(
 				currentRow.getBytes());
 		return new AccumuloCommonIndexedPersistenceEncoding(
@@ -188,20 +189,20 @@ public class QueryFilterIterator extends
 				encoding);
 	}
 
-	protected AccumuloUnreadData aggregateFieldData(
+	protected FlattenedUnreadData aggregateFieldData(
 			final Key key,
 			final Value value,
 			final PersistentDataset<CommonIndexValue> commonData ) {
 		final ByteArrayId colQual = new ByteArrayId(
 				key.getColumnQualifierData().getBackingArray());
 		final byte[] valueBytes = value.get();
-		final AccumuloDataSet dataSet = AccumuloUtils.decomposeFlattenedFields(
+		final FlattenedDataSet dataSet = DataStoreUtils.decomposeFlattenedFields(
 				colQual.getBytes(),
 				valueBytes,
 				key.getColumnVisibilityData().getBackingArray(),
 				model.getDimensions().length - 1);
-		final List<AccumuloFieldInfo> fieldInfos = dataSet.getFieldsRead();
-		for (final AccumuloFieldInfo fieldInfo : fieldInfos) {
+		final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
+		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
 			final int ordinal = fieldInfo.getFieldPosition();
 			if (ordinal < model.getDimensions().length) {
 				final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);

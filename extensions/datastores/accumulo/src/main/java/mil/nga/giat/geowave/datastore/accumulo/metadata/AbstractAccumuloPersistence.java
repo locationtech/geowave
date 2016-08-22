@@ -24,7 +24,7 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
@@ -150,7 +150,14 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 								PersistenceUtils.toBinary(object)));
 			}
 			writer.write(mutation);
-			writer.close();
+			try {
+				writer.close();
+			}
+			catch (final IOException e) {
+				LOGGER.warn(
+						"Unable to close metadata writer",
+						e);
+			}
 		}
 		catch (final TableNotFoundException e) {
 			LOGGER.error(

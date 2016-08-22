@@ -8,7 +8,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
 public class RowRangeDataStatistics<T> extends
 		AbstractDataStatistics<T>

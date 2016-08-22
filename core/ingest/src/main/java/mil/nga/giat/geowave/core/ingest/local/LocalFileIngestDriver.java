@@ -230,8 +230,8 @@ public class LocalFileIngestDriver extends
 					try {
 						while (!queue.offer(
 								geowaveData,
-								1,
-								TimeUnit.SECONDS)) {
+								100,
+								TimeUnit.MILLISECONDS)) {
 							// Determine if we have any workers left. The point
 							// of this code is so we
 							// aren't hanging after our workers exit (before the

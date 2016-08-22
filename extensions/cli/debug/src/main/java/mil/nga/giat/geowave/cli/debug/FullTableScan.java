@@ -5,13 +5,9 @@ import java.io.IOException;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.ingest.operations.IngestSection;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 
 import com.beust.jcommander.Parameters;
 
@@ -20,15 +16,6 @@ import com.beust.jcommander.Parameters;
 public class FullTableScan extends
 		AbstractGeoWaveQuery
 {
-
-	@Override
-	protected void applyOptions(
-			final Options options ) {}
-
-	@Override
-	protected void parseOptions(
-			final CommandLine commandLine ) {}
-
 	@Override
 	protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
