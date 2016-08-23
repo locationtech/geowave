@@ -11,7 +11,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 
 /**

@@ -3,8 +3,8 @@ package mil.nga.giat.geowave.core.store.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 

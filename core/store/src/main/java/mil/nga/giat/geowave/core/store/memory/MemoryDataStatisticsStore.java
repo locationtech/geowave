@@ -26,17 +26,17 @@ public class MemoryDataStatisticsStore implements
 		DataStatisticsStore
 {
 	private final static Logger LOGGER = Logger.getLogger(MemoryDataStatisticsStore.class);
-	private Map<Key, DataStatistics<?>> statsMap = new HashMap<Key, DataStatistics<?>>();
+	private final Map<Key, DataStatistics<?>> statsMap = new HashMap<Key, DataStatistics<?>>();
 
 	/**
 	 * This will write the statistics to the underlying store. Note that this
 	 * will overwrite whatever the current persisted statistics are with the
 	 * given statistics ID and data adapter ID. Use incorporateStatistics to
 	 * aggregate the statistics with any existing statistics.
-	 * 
+	 *
 	 * @param statistics
 	 *            The statistics to write
-	 * 
+	 *
 	 */
 	@Override
 	public void setStatistics(
@@ -52,7 +52,7 @@ public class MemoryDataStatisticsStore implements
 	/**
 	 * Add the statistics to the store, overwriting existing data statistics
 	 * with the aggregation of these statistics and the existing statistics
-	 * 
+	 *
 	 * @param statistics
 	 *            the data statistics
 	 */
@@ -82,7 +82,7 @@ public class MemoryDataStatisticsStore implements
 
 	/**
 	 * Get all data statistics from the store by a data adapter ID
-	 * 
+	 *
 	 * @param adapterId
 	 *            the data adapter ID
 	 * @return the list of statistics for the given adapter, empty if it doesn't
@@ -106,7 +106,7 @@ public class MemoryDataStatisticsStore implements
 
 	/**
 	 * Get all data statistics from the store
-	 * 
+	 *
 	 * @return the list of all statistics
 	 */
 	@Override
@@ -119,7 +119,7 @@ public class MemoryDataStatisticsStore implements
 	/**
 	 * Get statistics by adapter ID and the statistics ID (which will define a
 	 * unique statistic)
-	 * 
+	 *
 	 * @param adapterId
 	 *            The adapter ID for the requested statistics
 	 * @param statisticsId
@@ -136,7 +136,7 @@ public class MemoryDataStatisticsStore implements
 		for (final DataStatistics<?> stat : statsMap.values()) {
 			if (stat.getDataAdapterId().equals(
 					adapterId) && stat.getStatisticsId().equals(
-					statisticsId) && DataStoreUtils.isAuthorized(
+					statisticsId) && MemoryStoreUtils.isAuthorized(
 					stat.getVisibility(),
 					authorizations)) {
 				statSet.add(stat);
@@ -149,7 +149,7 @@ public class MemoryDataStatisticsStore implements
 
 	/**
 	 * Remove a statistic from the store
-	 * 
+	 *
 	 * @param adapterId
 	 * @param statisticsId
 	 * @return a flag indicating whether a statistic had existed with the given
@@ -164,7 +164,7 @@ public class MemoryDataStatisticsStore implements
 		for (final DataStatistics<?> stat : statsMap.values()) {
 			if (stat.getDataAdapterId().equals(
 					adapterId) && stat.getStatisticsId().equals(
-					statisticsId) && DataStoreUtils.isAuthorized(
+					statisticsId) && MemoryStoreUtils.isAuthorized(
 					stat.getVisibility(),
 					authorizations)) {
 				statSet.add(stat);
@@ -287,7 +287,7 @@ public class MemoryDataStatisticsStore implements
 		final Iterator<Entry<Key, DataStatistics<?>>> it = statsMap.entrySet().iterator();
 		while (it.hasNext()) {
 			final Entry<Key, DataStatistics<?>> entry = it.next();
-			if (entry.getKey().adapterId.equals(adapterId) && DataStoreUtils.isAuthorized(
+			if (entry.getKey().adapterId.equals(adapterId) && MemoryStoreUtils.isAuthorized(
 					entry.getKey().authorizations,
 					authorizations)) {
 				it.remove();
@@ -312,13 +312,13 @@ public class MemoryDataStatisticsStore implements
 						entry.getValue().getVisibility(),
 						"UTF-8");
 			}
-			catch (UnsupportedEncodingException e) {
+			catch (final UnsupportedEncodingException e) {
 				LOGGER.error(
 						"Invalid visibility " + Arrays.toString(entry.getValue().getVisibility()),
 						e);
 				continue;
 			}
-			if (entry.getKey().adapterId.equals(adapterId) && DataStoreUtils.isAuthorized(
+			if (entry.getKey().adapterId.equals(adapterId) && MemoryStoreUtils.isAuthorized(
 					entry.getKey().authorizations,
 					authorizations) && pattern.matcher(
 					visibility).find()) {
@@ -337,7 +337,7 @@ public class MemoryDataStatisticsStore implements
 					entry.getValue().setVisibility(
 							newVisibility.getBytes("UTF-8"));
 				}
-				catch (UnsupportedEncodingException e) {
+				catch (final UnsupportedEncodingException e) {
 					LOGGER.error(
 							"Invalid visibility " + newVisibility,
 							e);

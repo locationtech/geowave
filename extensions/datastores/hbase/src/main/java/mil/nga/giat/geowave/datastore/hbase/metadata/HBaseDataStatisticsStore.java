@@ -24,7 +24,7 @@ public class HBaseDataStatisticsStore extends
 		DataStatisticsStore
 {
 
-	private static final String STATISTICS_CF = "STATS";
+	protected static final String STATISTICS_CF = "STATS";
 	private final static Logger LOGGER = Logger.getLogger(HBaseDataStatisticsStore.class);
 
 	public HBaseDataStatisticsStore(

@@ -22,7 +22,7 @@ public class HBaseAdapterIndexMappingStore extends
 		AbstractHBasePersistence<AdapterToIndexMapping> implements
 		AdapterIndexMappingStore
 {
-	private static final String ADAPTER_INDEX_CF = "AIM";
+	protected static final String ADAPTER_INDEX_CF = "AIM";
 
 	public HBaseAdapterIndexMappingStore(
 			final BasicHBaseOperations hbaseOperations ) {

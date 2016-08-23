@@ -188,17 +188,17 @@ install_image_libs() {
 
 install_geowave() {
 	# Install the repo config file
-	sudo rpm -Uvh http://s3.amazonaws.com/geowave-rpms/dev/noarch/$GEOWAVE_REPO_RPM
+	sudo rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/$GEOWAVE_REPO_RPM
 
 	# EMR has a tar bundle installed puppet in /home/ec2-user 
 	# So as not to install incompatible puppet from the dependencies of geowave-puppet
 	# I'm doing this convoluted workaround to download and then install with no dep resolution
-	sudo yumdownloader --enablerepo geowave-dev --destdir /tmp geowave-puppet
+	sudo yumdownloader --enablerepo geowave --destdir /tmp geowave-puppet
 	sudo rpm -Uvh --force --nodeps /tmp/geowave-puppet.*.noarch.rpm 
 
 cat << EOF > /tmp/geowave.pp
 class { 'geowave::repo': 
-  repo_base_url => 'http://s3.amazonaws.com/geowave-rpms/dev/noarch/',
+  repo_base_url => 'http://s3.amazonaws.com/geowave-rpms/release/noarch/',
   repo_enabled  => 1,
 } ->
 class { 'geowave':

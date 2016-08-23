@@ -23,7 +23,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -69,8 +69,11 @@ public class HBaseSecondaryIndexDataStore extends
 		try {
 			writer = hbaseOperations.createWriter(
 					TABLE_PREFIX + secondaryIndexName,
-					StringUtils.stringFromBinary(secondaryIndex.getId().getBytes()),
-					true);
+					new String[] {
+						StringUtils.stringFromBinary(secondaryIndex.getId().getBytes())
+					},
+					true,
+					secondaryIndex.getIndexStrategy().getNaturalSplits());
 		}
 		catch (final IOException e) {
 			LOGGER.error(

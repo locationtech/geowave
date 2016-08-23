@@ -14,7 +14,7 @@ public class HBaseIndexStore extends
 {
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseIndexStore.class);
-	private static final String INDEX_CF = "INDEX";
+	protected static final String INDEX_CF = "INDEX";
 
 	public HBaseIndexStore(
 			final BasicHBaseOperations operations ) {

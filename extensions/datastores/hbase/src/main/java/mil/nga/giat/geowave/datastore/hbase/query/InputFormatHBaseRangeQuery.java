@@ -5,22 +5,17 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.Filter;
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseInputFormatIteratorWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
+
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.log4j.Logger;
 
 /**
  * * Represents a query operation for a range of HBase row IDs. This class is
@@ -75,26 +70,6 @@ public class InputFormatHBaseRangeQuery extends
 
 		this.range = range;
 		this.isOutputWritable = isOutputWritable;
-	}
-
-	@Override
-	protected List<Scan> getScanners(
-			final Integer limit,
-			final List<Filter> distributableFilters,
-			final CloseableIterator<DataAdapter<?>> adapters ) {
-
-		final Scan scanner = new Scan();
-
-		scanner.setStartRow(range.getStart().getBytes());
-		scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
-
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			for (final ByteArrayId adapterId : adapterIds) {
-				scanner.addFamily(adapterId.getBytes());
-			}
-		}
-
-		return Collections.singletonList(scanner);
 	}
 
 	@Override

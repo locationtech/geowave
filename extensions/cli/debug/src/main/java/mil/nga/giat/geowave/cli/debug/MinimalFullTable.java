@@ -27,9 +27,11 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
 
 @GeowaveOperation(name = "fullscanMinimal", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "full table scan without any iterators or deserialization")
@@ -69,32 +71,46 @@ public class MinimalFullTable extends
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}
 
-		try {
-			AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
+		String storeType = storeOptions.getDataStorePlugin().getType();
 
-			final AccumuloOperations ops = new BasicAccumuloOperations(
-					opts.getZookeeper(),
-					opts.getInstance(),
-					opts.getUser(),
-					opts.getPassword(),
-					opts.getGeowaveNamespace());
+		if (storeType.equals(AccumuloDataStore.TYPE)) {
+			try {
+				AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
 
-			long results = 0;
-			final BatchScanner scanner = ops.createBatchScanner(indexId);
-			scanner.setRanges(Collections.singleton(new Range()));
-			final Iterator<Entry<Key, Value>> it = scanner.iterator();
-			stopWatch.start();
-			while (it.hasNext()) {
-				it.next();
-				results++;
+				final AccumuloOperations ops = new BasicAccumuloOperations(
+						opts.getZookeeper(),
+						opts.getInstance(),
+						opts.getUser(),
+						opts.getPassword(),
+						opts.getGeowaveNamespace());
+
+				long results = 0;
+				final BatchScanner scanner = ops.createBatchScanner(indexId);
+				scanner.setRanges(Collections.singleton(new Range()));
+				Iterator<Entry<Key, Value>> it = scanner.iterator();
+
+				stopWatch.start();
+				while (it.hasNext()) {
+					it.next();
+					results++;
+				}
+				stopWatch.stop();
+
+				scanner.close();
+				System.out.println("Got " + results + " results in " + stopWatch.toString());
 			}
-			stopWatch.stop();
-			scanner.close();
-			System.out.println("Got " + results + " results in " + stopWatch.toString());
+			catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		else if (storeType.equals(HBaseDataStore.TYPE)) {
+			throw new UnsupportedOperationException(
+					"full scan for store type " + storeType + " not yet implemented.");
+		}
+		else {
+			throw new UnsupportedOperationException(
+					"full scan for store type " + storeType + " not implemented.");
 		}
 	}
 }
