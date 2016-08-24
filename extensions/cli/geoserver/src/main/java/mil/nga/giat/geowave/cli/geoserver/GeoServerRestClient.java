@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.ws.rs.PathParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -64,6 +66,10 @@ public class GeoServerRestClient
 		logger.setLevel(Level.DEBUG);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public GeoServerConfig getConfig() {
 		return config;
 	}
@@ -81,11 +87,20 @@ public class GeoServerRestClient
 		return webTarget;
 	}
 
-	// Convenience - add layer(s) for the given store by type
+	/**
+	 * Convenience - add layer(s) for the given store to geoserver
+	 * 
+	 * @param workspaceName
+	 * @param storeName
+	 * @param adapterId
+	 * @param defaultStyle
+	 * @return
+	 */
 	public Response addLayer(
 			String workspaceName,
 			final String storeName,
-			final String adapterId ) {
+			final String adapterId,
+			final String defaultStyle ) {
 		// retrieve the adapter info list for the store
 		ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(
 				storeName,
@@ -199,7 +214,8 @@ public class GeoServerRestClient
 				Response addFlResponse = addFeatureLayer(
 						workspaceName,
 						dataStoreName,
-						dataAdapterInfo.adapterId);
+						dataAdapterInfo.adapterId,
+						defaultStyle);
 				if (addFlResponse.getStatus() != Status.CREATED.getStatusCode()) {
 					return addFlResponse;
 				}
@@ -216,6 +232,13 @@ public class GeoServerRestClient
 				jsonObj.toString(defaultIndentation)).build();
 	}
 
+	/**
+	 * Get JSON object(s) from adapter list
+	 * 
+	 * @param adapterInfoList
+	 * @param description
+	 * @return JSONObject
+	 */
 	private JSONObject getJsonFromAdapters(
 			ArrayList<DataAdapterInfo> adapterInfoList,
 			String description ) {
@@ -241,7 +264,12 @@ public class GeoServerRestClient
 		return JSONObject.fromObject(buf.toString());
 	}
 
-	// Workspaces
+	/**
+	 * Check if workspace exists
+	 * 
+	 * @param workspace
+	 * @return true if workspace exists, false if not
+	 */
 	public boolean workspaceExists(
 			String workspace ) {
 		if (workspace == null) {
@@ -271,6 +299,11 @@ public class GeoServerRestClient
 		return false;
 	}
 
+	/**
+	 * Get list of workspaces from geoserver
+	 * 
+	 * @return
+	 */
 	public Response getWorkspaces() {
 		final Response resp = getWebTarget().path(
 				"rest/workspaces.json").request().get();
@@ -296,6 +329,12 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Add workspace to geoserver
+	 * 
+	 * @param workspace
+	 * @return
+	 */
 	public Response addWorkspace(
 			final String workspace ) {
 		return getWebTarget().path(
@@ -305,6 +344,12 @@ public class GeoServerRestClient
 						MediaType.APPLICATION_JSON));
 	}
 
+	/**
+	 * Delete workspace from geoserver
+	 * 
+	 * @param workspace
+	 * @return
+	 */
 	public Response deleteWorkspace(
 			final String workspace ) {
 		return getWebTarget().path(
@@ -313,7 +358,13 @@ public class GeoServerRestClient
 				"true").request().delete();
 	}
 
-	// Datastores
+	/**
+	 * Get the string version of a datastore JSONObject from geoserver
+	 * 
+	 * @param workspaceName
+	 * @param datastoreName
+	 * @return
+	 */
 	public Response getDatastore(
 			final String workspaceName,
 			String datastoreName ) {
@@ -334,6 +385,12 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Get list of Datastore names from geoserver
+	 * 
+	 * @param workspaceName
+	 * @return
+	 */
 	public Response getDatastores(
 			String workspaceName ) {
 		final Response resp = getWebTarget().path(
@@ -360,6 +417,14 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Add a geowave datastore to geoserver
+	 * 
+	 * @param workspaceName
+	 * @param datastoreName
+	 * @param gwStoreName
+	 * @return
+	 */
 	public Response addDatastore(
 			String workspaceName,
 			String datastoreName,
@@ -393,6 +458,13 @@ public class GeoServerRestClient
 						MediaType.APPLICATION_JSON));
 	}
 
+	/**
+	 * Delete a geowave datastore from geoserver
+	 * 
+	 * @param workspaceName
+	 * @param datastoreName
+	 * @return
+	 */
 	public Response deleteDatastore(
 			String workspaceName,
 			String datastoreName ) {
@@ -402,7 +474,12 @@ public class GeoServerRestClient
 				"true").request().delete();
 	}
 
-	// Feature (vector) Layers
+	/**
+	 * Get a layer from geoserver
+	 * 
+	 * @param layerName
+	 * @return
+	 */
 	public Response getFeatureLayer(
 			final String layerName ) {
 		final Response resp = getWebTarget().path(
@@ -603,10 +680,28 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Add feature layer to geoserver
+	 * 
+	 * @param workspaceName
+	 * @param datastoreName
+	 * @param layerName
+	 * @param defaultStyle
+	 * @return
+	 */
 	public Response addFeatureLayer(
 			final String workspaceName,
 			final String datastoreName,
-			final String layerName ) {
+			final String layerName,
+			final String defaultStyle ) {
+		if (defaultStyle != null) {
+			getWebTarget().path(
+					"rest/layers/" + layerName + ".json").request().put(
+					Entity.entity(
+							"{'layer':{'defaultStyle':{'name':'" + defaultStyle + "'}}}",
+							MediaType.APPLICATION_JSON));
+		}
+
 		return getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + "/featuretypes").request().post(
 				Entity.entity(
@@ -614,13 +709,137 @@ public class GeoServerRestClient
 						MediaType.APPLICATION_JSON));
 	}
 
+	/**
+	 * Delete a feature layer from geoserver
+	 * 
+	 * @param layerName
+	 * @return
+	 */
 	public Response deleteFeatureLayer(
 			final String layerName ) {
 		return getWebTarget().path(
 				"rest/layers/" + layerName).request().delete();
 	}
 
-	// Coverage Stores
+	/**
+	 * Change the default style of a layer
+	 * 
+	 * @param layerName
+	 * @param styleName
+	 * @return
+	 */
+	public Response setLayerStyle(
+			final String layerName,
+			final String styleName ) {
+
+		return getWebTarget().path(
+				"rest/layers/" + layerName + ".json").request().put(
+				Entity.entity(
+						"{'layer':{'defaultStyle':{'name':'" + styleName + "'}}}",
+						MediaType.APPLICATION_JSON));
+	}
+
+	/**
+	 * Get a geoserver style
+	 * 
+	 * @param styleName
+	 * @return
+	 */
+	public Response getStyle(
+			@PathParam("styleName")
+			final String styleName ) {
+
+		final Response resp = getWebTarget().path(
+				"rest/styles/" + styleName + ".sld").request().get();
+
+		if (resp.getStatus() == Status.OK.getStatusCode()) {
+			final InputStream inStream = (InputStream) resp.getEntity();
+
+			return Response.ok(
+					inStream,
+					MediaType.APPLICATION_XML).header(
+					"Content-Disposition",
+					"attachment; filename=\"" + styleName + ".sld\"").build();
+		}
+
+		return resp;
+	}
+
+	/**
+	 * Get a list of geoserver styles
+	 * 
+	 * @return
+	 */
+	public Response getStyles() {
+		final Response resp = getWebTarget().path(
+				"rest/styles.json").request().get();
+
+		if (resp.getStatus() == Status.OK.getStatusCode()) {
+
+			resp.bufferEntity();
+
+			// get the style names
+			final JSONArray styleArray = getArrayEntryNames(
+					JSONObject.fromObject(resp.readEntity(String.class)),
+					"styles",
+					"style");
+
+			final JSONObject stylesObj = new JSONObject();
+			stylesObj.put(
+					"styles",
+					styleArray);
+
+			return Response.ok(
+					stylesObj.toString(defaultIndentation)).build();
+		}
+
+		return resp;
+	}
+
+	/**
+	 * Add a style to geoserver
+	 * 
+	 * @param styleName
+	 * @param fileInStream
+	 * @return
+	 */
+	public Response addStyle(
+			final String styleName,
+			final InputStream fileInStream ) {
+
+		getWebTarget().path(
+				"rest/styles").request().post(
+				Entity.entity(
+						"{'style':{'name':'" + styleName + "','filename':'" + styleName + ".sld'}}",
+						MediaType.APPLICATION_JSON));
+
+		return getWebTarget().path(
+				"rest/styles/" + styleName).request().put(
+				Entity.entity(
+						fileInStream,
+						"application/vnd.ogc.sld+xml"));
+	}
+
+	/**
+	 * Delete a style from geoserver
+	 * 
+	 * @param styleName
+	 * @return
+	 */
+	public Response deleteStyle(
+			final String styleName ) {
+
+		return getWebTarget().path(
+				"rest/styles/" + styleName).request().delete();
+	}
+
+	/**
+	 * Get coverage store from geoserver
+	 * 
+	 * @param workspaceName
+	 * @param coverageName
+	 * @return
+	 */
 	public Response getCoverageStore(
 			final String workspaceName,
 			String coverageName ) {
@@ -641,6 +860,12 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Get a list of coverage stores from geoserver
+	 * 
+	 * @param workspaceName
+	 * @return
+	 */
 	public Response getCoverageStores(
 			String workspaceName ) {
 		final Response resp = getWebTarget().path(
@@ -667,6 +892,17 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Add coverage store to geoserver
+	 * 
+	 * @param workspaceName
+	 * @param cvgStoreName
+	 * @param gwStoreName
+	 * @param equalizeHistogramOverride
+	 * @param interpolationOverride
+	 * @param scaleTo8Bit
+	 * @return
+	 */
 	public Response addCoverageStore(
 			String workspaceName,
 			String cvgStoreName,
@@ -712,6 +948,13 @@ public class GeoServerRestClient
 						MediaType.APPLICATION_XML));
 	}
 
+	/**
+	 * Delete coverage store form geoserver
+	 * 
+	 * @param workspaceName
+	 * @param cvgstoreName
+	 * @return
+	 */
 	public Response deleteCoverageStore(
 			String workspaceName,
 			String cvgstoreName ) {
@@ -721,7 +964,13 @@ public class GeoServerRestClient
 				"true").request().delete();
 	}
 
-	// Coverages (raster layers)
+	/**
+	 * Get a list of coverages (raster layers) from geoserver
+	 * 
+	 * @param workspaceName
+	 * @param cvsstoreName
+	 * @return
+	 */
 	public Response getCoverages(
 			String workspaceName,
 			String cvsstoreName ) {
@@ -752,6 +1001,14 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Get coverage from geoserver
+	 * 
+	 * @param workspaceName
+	 * @param cvgStoreName
+	 * @param coverageName
+	 * @return
+	 */
 	public Response getCoverage(
 			final String workspaceName,
 			String cvgStoreName,
@@ -777,6 +1034,14 @@ public class GeoServerRestClient
 		return resp;
 	}
 
+	/**
+	 * Add coverage to geoserver
+	 * 
+	 * @param workspaceName
+	 * @param cvgStoreName
+	 * @param coverageName
+	 * @return
+	 */
 	public Response addCoverage(
 			final String workspaceName,
 			final String cvgStoreName,
@@ -792,6 +1057,14 @@ public class GeoServerRestClient
 						MediaType.APPLICATION_JSON));
 	}
 
+	/**
+	 * Delete coverage from geoserver
+	 * 
+	 * @param workspaceName
+	 * @param cvgstoreName
+	 * @param coverageName
+	 * @return
+	 */
 	public Response deleteCoverage(
 			String workspaceName,
 			String cvgstoreName,
@@ -977,17 +1250,6 @@ public class GeoServerRestClient
 			urlEl.appendChild(xmlDoc.createTextNode(storeConfigUrl));
 			rootEl.appendChild(urlEl);
 
-			/*
-			 * // Retrieve store config String user =
-			 * geowaveStoreConfig.get("user"); String pass =
-			 * geowaveStoreConfig.get("password"); String zookeeper =
-			 * geowaveStoreConfig.get("zookeeper"); String instance =
-			 * geowaveStoreConfig.get("instance");
-			 * 
-			 * // Write the temp XML file for the store config writeConfigXml(
-			 * storeConfigPath, user, pass, zookeeper, instance, cvgstoreName);
-			 */
-
 			// use a transformer to create the xml string for the rest call
 			Transformer xformer = TransformerFactory.newInstance().newTransformer();
 			DOMSource source = new DOMSource(
@@ -1153,219 +1415,5 @@ public class GeoServerRestClient
 		logger.debug("No match!");
 
 		return null;
-	}
-
-	// Example use of geoserver rest client
-	public static void main(
-			final String[] args ) {
-		// create the client
-		GeoServerConfig config = new GeoServerConfig();
-		GeoServerRestClient geoserverClient = new GeoServerRestClient(
-				config);
-
-		// test getWorkspaces
-		// Response getWorkspacesResponse = geoserverClient.getWorkspaces();
-		//
-		// if (getWorkspacesResponse.getStatus() == Status.OK.getStatusCode()) {
-		// System.out.println("\nList of GeoServer workspaces:");
-		//
-		// JSONObject jsonResponse =
-		// JSONObject.fromObject(getWorkspacesResponse.getEntity());
-		//
-		// final JSONArray workspaces = jsonResponse.getJSONArray("workspaces");
-		// for (int i = 0; i < workspaces.size(); i++) {
-		// String wsName = workspaces.getJSONObject(
-		// i).getString(
-		// "name");
-		// System.out.println(" > " + wsName);
-		// }
-		//
-		// System.out.println("---\n");
-		// }
-		// else {
-		// System.err.println("Error getting GeoServer workspace list; code = "
-		// + getWorkspacesResponse.getStatus());
-		// }
-		//
-		// // test addWorkspace
-		// Response addWorkspaceResponse =
-		// geoserverClient.addWorkspace("delete-me-ws");
-		// if (addWorkspaceResponse.getStatus() ==
-		// Status.CREATED.getStatusCode()) {
-		// System.out.println("Add workspace 'delete-me-ws' to GeoServer: OK");
-		// }
-		// else {
-		// System.err.println("Error adding workspace 'delete-me-ws' to
-		// GeoServer; code = "
-		// + addWorkspaceResponse.getStatus());
-		// }
-
-		// test coverage store list
-		Response listCoveragesResponse = geoserverClient.getCoverageStores("geowave");
-
-		if (listCoveragesResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer coverage stores list for 'geowave':");
-
-			JSONObject jsonResponse = JSONObject.fromObject(listCoveragesResponse.getEntity());
-			JSONArray datastores = jsonResponse.getJSONArray("coverageStores");
-			System.out.println(datastores.toString(2));
-		}
-		else {
-			System.err.println("Error getting GeoServer coverage stores list for 'geowave'; code = "
-					+ listCoveragesResponse.getStatus());
-		}
-
-		// test get coverage store
-		Response getCvgStoreResponse = geoserverClient.getCoverageStore(
-				"geowave",
-				"sfdem");
-
-		if (getCvgStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer coverage store info for 'geowave/sfdem':");
-
-			JSONObject jsonResponse = JSONObject.fromObject(getCvgStoreResponse.getEntity());
-			JSONObject datastore = jsonResponse.getJSONObject("coverageStore");
-			System.out.println(datastore.toString(2));
-		}
-		else {
-			System.err.println("Error getting GeoServer coverage store info for 'geowave/sfdem'; code = "
-					+ getCvgStoreResponse.getStatus());
-		}
-
-		// test add store
-		// HashMap<String, String> geowaveStoreConfig = new HashMap<String,
-		// String>();
-		// geowaveStoreConfig.put(
-		// "user",
-		// "root");
-		// geowaveStoreConfig.put(
-		// "password",
-		// "password");
-		// geowaveStoreConfig.put(
-		// "gwNamespace",
-		// "ne_50m_admin_0_countries");
-		// geowaveStoreConfig.put(
-		// "zookeeper",
-		// "localhost:2181");
-		// geowaveStoreConfig.put(
-		// "instance",
-		// "geowave");
-		//
-		// Response addStoreResponse = geoserverClient.addDatastore(
-		// "delete-me-ws",
-		// "delete-me-ds",
-		// "accumulo",
-		// geowaveStoreConfig);
-		//
-		// if (addStoreResponse.getStatus() == Status.OK.getStatusCode() ||
-		// addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
-		// System.out.println("Add store 'delete-me-ds' to workspace
-		// 'delete-me-ws' on GeoServer: OK");
-		// }
-		// else {
-		// System.err.println("Error adding store 'delete-me-ds' to workspace
-		// 'delete-me-ws' on GeoServer; code = "
-		// + addStoreResponse.getStatus());
-		// }
-		//
-		// // test getLayer
-		// Response getLayerResponse = geoserverClient.getLayer("states");
-		//
-		// if (getLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-		// System.out.println("\nGeoServer layer info for 'states':");
-		//
-		// JSONObject jsonResponse =
-		// JSONObject.fromObject(getLayerResponse.getEntity());
-		// System.out.println(jsonResponse.toString(2));
-		// }
-		// else {
-		// System.err.println("Error getting GeoServer layer info for 'states';
-		// code = "
-		// + getLayerResponse.getStatus());
-		// }
-
-		// test list layers
-		// Response listLayersResponse = geoserverClient.getLayers(
-		// "topp",
-		// null,
-		// false);
-		// if (listLayersResponse.getStatus() == Status.OK.getStatusCode()) {
-		// System.out.println("\nGeoServer layer list:");
-		// JSONObject listObj =
-		// JSONObject.fromObject(listLayersResponse.getEntity());
-		// System.out.println(listObj.toString(2));
-		// }
-		// else {
-		// System.err.println("Error getting GeoServer layer list; code = " +
-		// listLayersResponse.getStatus());
-		// }
-
-		// test add layer
-		// Response addLayerResponse = geoserverClient.addLayer(
-		// "delete-me-ws",
-		// "delete-me-ds",
-		// "polygon",
-		// "ne_50m_admin_0_countries");
-		//
-		// if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-		// System.out.println("\nGeoServer layer add response for
-		// 'ne_50m_admin_0_countries':");
-		//
-		// JSONObject jsonResponse =
-		// JSONObject.fromObject(addLayerResponse.getEntity());
-		// System.out.println(jsonResponse.toString(2));
-		// }
-		// else {
-		// System.err.println("Error adding GeoServer layer
-		// 'ne_50m_admin_0_countries'; code = "
-		// +
-		// addLayerResponse.getStatus());
-		// }
-
-		// test delete layer
-		// Response deleteLayerResponse =
-		// geoserverClient.deleteLayer("ne_50m_admin_0_countries");
-		// if (deleteLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-		// System.out.println("\nGeoServer layer delete response for
-		// 'ne_50m_admin_0_countries':");
-		//
-		// JSONObject jsonResponse =
-		// JSONObject.fromObject(deleteLayerResponse.getEntity());
-		// System.out.println(jsonResponse.toString(2));
-		// }
-		// else {
-		// System.err.println("Error deleting GeoServer layer
-		// 'ne_50m_admin_0_countries'; code = "
-		// + deleteLayerResponse.getStatus());
-		// }
-
-		// test delete store
-		// Response deleteStoreResponse = geoserverClient.deleteDatastore(
-		// "DeleteMe",
-		// "kamteststore2");
-		//
-		// if (deleteStoreResponse.getStatus() == Status.OK.getStatusCode() ||
-		// addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
-		// System.out.println("Delete store 'kamstoretest2' from workspace
-		// 'DeleteMe' on GeoServer: OK");
-		// }
-		// else {
-		// System.err.println("Error deleting store 'kamstoretest2' from
-		// workspace 'DeleteMe' on GeoServer; code = "
-		// + deleteStoreResponse.getStatus());
-		// }
-
-		// test deleteWorkspace
-		// Response deleteWorkspaceResponse =
-		// geoserverClient.deleteWorkspace("DeleteMe");
-		// if (deleteWorkspaceResponse.getStatus() == Status.OK.getStatusCode())
-		// {
-		// System.out.println("Delete workspace 'DeleteMe' from GeoServer: OK");
-		// }
-		// else {
-		// System.err.println("Error deleting workspace 'DeleteMe' from
-		// GeoServer; code = "
-		// + deleteWorkspaceResponse.getStatus());
-		// }
 	}
 }

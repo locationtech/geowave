@@ -1,44 +1,34 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.IOUtils;
+
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import net.sf.json.JSONObject;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addfl", parentOperation = GeoServerSection.class)
-@Parameters(commandDescription = "Add a GeoServer feature layer")
-public class GeoServerAddFeatureLayerCommand implements
+@GeowaveOperation(name = "getstyle", parentOperation = GeoServerSection.class)
+@Parameters(commandDescription = "Get GeoServer Style info")
+public class GeoServerGetStyleCommand implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
 
-	@Parameter(names = {
-		"-ws",
-		"--workspace"
-	}, required = false, description = "<workspace name>")
-	private String workspace = null;
-
-	@Parameter(names = {
-		"-ds",
-		"--datastore"
-	}, required = true, description = "<datastore name>")
-	private String datastore = null;
-
-	@Parameter(description = "<layer name>")
+	@Parameter(description = "<style name>")
 	private List<String> parameters = new ArrayList<String>();
-	private String layerName = null;
+	private String style = null;
 
 	@Override
 	public boolean prepare(
@@ -66,29 +56,23 @@ public class GeoServerAddFeatureLayerCommand implements
 			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
-					"Requires argument: <layer name>");
+					"Requires argument: <style name>");
 		}
 
-		if (workspace == null || workspace.isEmpty()) {
-			workspace = geoserverClient.getConfig().getWorkspace();
-		}
+		style = parameters.get(0);
 
-		layerName = parameters.get(0);
+		Response getStyleResponse = geoserverClient.getStyle(style);
 
-		Response addLayerResponse = geoserverClient.addFeatureLayer(
-				workspace,
-				datastore,
-				layerName,
-				null);
+		if (getStyleResponse.getStatus() == Status.OK.getStatusCode()) {
+			System.out.println("\nGeoServer style info for '" + style + "':");
 
-		if (addLayerResponse.getStatus() == Status.CREATED.getStatusCode()) {
-			System.out.println("\nGeoServer add layer response " + layerName + ":");
-			JSONObject listObj = JSONObject.fromObject(addLayerResponse.getEntity());
-			System.out.println(listObj.toString(2));
+			final String style = IOUtils.toString((InputStream) getStyleResponse.getEntity());
+			System.out.println(style);
+
 		}
 		else {
-			System.err
-					.println("Error adding GeoServer layer " + layerName + "; code = " + addLayerResponse.getStatus());
+			System.err.println("Error getting GeoServer style info for '" + style + "'; code = "
+					+ getStyleResponse.getStatus());
 		}
 	}
 }
