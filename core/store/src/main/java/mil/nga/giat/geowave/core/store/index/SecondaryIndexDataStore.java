@@ -14,17 +14,63 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 public interface SecondaryIndexDataStore
 {
 	/**
+	 * Stores a secondary index entry that will require a join against the
+	 * primary index upon lookup.
 	 * 
-	 * @param secondaryIndex
+	 * @param secondaryIndexId
+	 * @param indexedAttributeValue
+	 * @param adapterId
+	 * @param indexedAttributeFieldId
 	 * @param primaryIndexId
 	 * @param primaryIndexRowId
-	 * @param indexedAttributes
+	 * @param attributeVisibility
 	 */
-	public void store(
-			SecondaryIndex<?> secondaryIndex,
+	public void storeJoinEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
 			ByteArrayId primaryIndexId,
 			ByteArrayId primaryIndexRowId,
-			List<FieldInfo<?>> indexedAttributes );
+			ByteArrayId attributeVisibility );
+
+	/**
+	 * Stores a secondary index entry that will not require a join against the
+	 * primary index upon lookup.
+	 * 
+	 * @param secondaryIndexId
+	 * @param indexedAttributeValue
+	 * @param adapterId
+	 * @param indexedAttributeFieldId
+	 * @param dataId
+	 * @param attributeVisibility
+	 * @param attributes
+	 */
+	public void storeEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			ByteArrayId dataId,
+			ByteArrayId attributeVisibility,
+			List<FieldInfo<?>> attributes );
+
+	/**
+	 * Performs a scan of the appropriate secondary index table
+	 * 
+	 * @param secondaryIndexId
+	 * @param scanRanges
+	 * @param adapterId
+	 * @param indexedAttributeFieldId
+	 * @param visibility
+	 * @return an iterator over the results
+	 */
+	public CloseableIterator<Object> scan(
+			ByteArrayId secondaryIndexId,
+			List<ByteArrayRange> scanRanges,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			String... visibility );
 
 	/**
 	 * 
@@ -35,22 +81,6 @@ public interface SecondaryIndexDataStore
 	public void delete(
 			final SecondaryIndex<?> secondaryIndex,
 			final List<FieldInfo<?>> indexedAttributes );
-
-	/**
-	 * 
-	 * @param secondaryIndex
-	 * @param ranges
-	 * @param constraints
-	 * @param primaryIndexId
-	 * @param visibility
-	 * @return
-	 */
-	public CloseableIterator<ByteArrayId> query(
-			SecondaryIndex<?> secondaryIndex,
-			List<ByteArrayRange> ranges,
-			List<DistributableQueryFilter> constraints,
-			ByteArrayId primaryIndexId,
-			String... visibility );
 
 	public void flush();
 

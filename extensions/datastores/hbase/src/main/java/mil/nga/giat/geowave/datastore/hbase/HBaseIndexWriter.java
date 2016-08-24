@@ -52,29 +52,15 @@ public class HBaseIndexWriter<T> extends
 	}
 
 	@Override
-	public List<ByteArrayId> writeInternal(
-			final T entry,
-			final VisibilityWriter<T> visibilityWriter ) {
-
-		DataStoreEntryInfo entryInfo;
-		synchronized (this) {
-
-			ensureOpen();
-			if (writer == null) {
-				return Collections.emptyList();
-			}
-			entryInfo = HBaseUtils.write(
-					(WritableDataAdapter<T>) adapter,
-					index,
-					entry,
-					(HBaseWriter) writer,
-					visibilityWriter);
-
-			callback.entryIngested(
-					entryInfo,
-					entry);
-		}
-		return entryInfo.getRowIds();
+	protected DataStoreEntryInfo getEntryInfo(
+			T entry,
+			VisibilityWriter<T> visibilityWriter ) {
+		return HBaseUtils.write(
+				(WritableDataAdapter<T>) adapter,
+				index,
+				entry,
+				(HBaseWriter) writer,
+				visibilityWriter);
 	}
 
 	@Override
@@ -92,7 +78,7 @@ public class HBaseIndexWriter<T> extends
 		}
 	}
 
-	private synchronized void ensureOpen() {
+	protected synchronized void ensureOpen() {
 		if (writer == null) {
 			try {
 				writer = operations.createWriter(

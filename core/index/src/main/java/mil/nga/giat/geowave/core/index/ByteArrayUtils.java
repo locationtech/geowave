@@ -3,6 +3,9 @@ package mil.nga.giat.geowave.core.index;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.base.Preconditions;
 import com.google.common.io.BaseEncoding;
 
 /**
@@ -124,5 +127,69 @@ public class ByteArrayUtils
 		bb.putLong(uuid.getMostSignificantBits());
 		bb.putLong(uuid.getLeastSignificantBits());
 		return bb.array();
+	}
+
+	/**
+	 * Combines two variable length byte arrays into one large byte array and
+	 * appends the length of each individual byte array in sequential order at
+	 * the end of the combined byte array.
+	 * 
+	 * Given byte_array_1 of length 8 + byte_array_2 of length 16, the result
+	 * will be byte_array1 + byte_array_2 + 8 + 16.
+	 * 
+	 * Lengths are put after the individual arrays so they don't impact sorting
+	 * when used within the key of a sorted key-value data store.
+	 * 
+	 * @param array1
+	 *            the first byte array
+	 * @param array2
+	 *            the second byte array
+	 * @return the combined byte array including the individual byte array
+	 *         lengths
+	 */
+	public static byte[] combineVariableLengthArrays(
+			final byte[] array1,
+			final byte[] array2 ) {
+		Preconditions.checkNotNull(
+				array1,
+				"First byte array cannot be null");
+		Preconditions.checkNotNull(
+				array2,
+				"Second byte array cannot be null");
+		Preconditions.checkArgument(
+				array1.length > 1,
+				"First byte array cannot have length 0");
+		Preconditions.checkArgument(
+				array2.length > 1,
+				"Second byte array cannot have length 0");
+		final byte[] combinedWithoutLengths = ByteArrayUtils.internalCombineArrays(
+				array1,
+				array2);
+		final ByteBuffer combinedWithLengthsAppended = ByteBuffer.allocate(combinedWithoutLengths.length + 8); // 8
+																												// for
+																												// two
+																												// integer
+																												// lengths
+		combinedWithLengthsAppended.put(combinedWithoutLengths);
+		combinedWithLengthsAppended.putInt(array1.length);
+		combinedWithLengthsAppended.putInt(array2.length);
+		return combinedWithLengthsAppended.array();
+	}
+
+	public static Pair<byte[], byte[]> splitVariableLengthArrays(
+			final byte[] combinedArray ) {
+		final ByteBuffer combined = ByteBuffer.wrap(combinedArray);
+		final byte[] combinedArrays = new byte[combinedArray.length - 8];
+		combined.get(combinedArrays);
+		final ByteBuffer bb = ByteBuffer.wrap(combinedArrays);
+		final int len1 = combined.getInt();
+		final int len2 = combined.getInt();
+		final byte[] part1 = new byte[len1];
+		final byte[] part2 = new byte[len2];
+		bb.get(part1);
+		bb.get(part2);
+		return Pair.of(
+				part1,
+				part2);
 	}
 }

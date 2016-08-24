@@ -8,9 +8,8 @@ import mil.nga.giat.geowave.core.store.index.numeric.NumberRangeFilter;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericEqualsConstraint;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericLessThanConstraint;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericQueryConstraint;
-import mil.nga.giat.geowave.core.store.index.text.LikeFilter;
+import mil.nga.giat.geowave.core.store.index.text.TextExactMatchFilter;
 import mil.nga.giat.geowave.core.store.index.text.TextQueryConstraint;
-import mil.nga.giat.geowave.core.store.index.text.TextRangeFilter;
 
 import org.geotools.data.Query;
 import org.geotools.filter.text.cql2.CQL;
@@ -24,7 +23,7 @@ public class PropertyFilterVisitorTest
 	public void testNumbersTypes()
 			throws CQLException {
 		Filter filter = CQL
-				.toFilter("a < 9 and c == 12 and e >= 11 and f <= 12 and g > 13 and h between 4 and 6 and k > 4 and k < 6 and l >= 4 and l <= 6");
+				.toFilter("a < 9 and c = 12 and e >= 11 and f <= 12 and g > 13 and h between 4 and 6 and k > 4 and k < 6 and l >= 4 and l <= 6");
 		Query query = new Query(
 				"type",
 				filter);
@@ -121,7 +120,7 @@ public class PropertyFilterVisitorTest
 	@Test
 	public void testTextTypes()
 			throws CQLException {
-		Filter filter = CQL.toFilter("b == '10' and d like '%d' && f > '10'");
+		Filter filter = CQL.toFilter("b = '10'");
 		Query query = new Query(
 				"type",
 				filter);
@@ -131,22 +130,13 @@ public class PropertyFilterVisitorTest
 		PropertyConstraintSet constraints = (PropertyConstraintSet) query.getFilter().accept(
 				visitor,
 				null);
-		TextRangeFilter tf = (TextRangeFilter) ((TextQueryConstraint) constraints.getConstraintsById(new ByteArrayId(
-				"b"))).getFilter();
+		TextExactMatchFilter tf = (TextExactMatchFilter) ((TextQueryConstraint) constraints
+				.getConstraintsById(new ByteArrayId(
+						"b"))).getFilter();
 		assertEquals(
 				"10",
-				tf.getEnd());
-		assertEquals(
-				"10",
-				tf.getStart());
+				tf.getMatchValue());
 		assertTrue(tf.isCaseSensitive());
-
-		LikeFilter lf = (LikeFilter) ((TextQueryConstraint) constraints.getConstraintsById(new ByteArrayId(
-				"d"))).getFilter();
-		assertEquals(
-				"%d",
-				lf.getExpression());
-		assertTrue(lf.isCaseSensitive());
 
 	}
 }

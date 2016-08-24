@@ -178,7 +178,8 @@ public class HBaseDataStore extends
 	protected <T> void addAltIndexCallback(
 			final List<IngestCallback<T>> callbacks,
 			final String indexName,
-			final DataAdapter<T> adapter ) {
+			final DataAdapter<T> adapter,
+			final ByteArrayId primaryIndexId ) {
 		try {
 			callbacks.add(new AltIndexCallback<T>(
 					indexName,

@@ -6,7 +6,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 
@@ -15,11 +14,27 @@ public class MemorySecondaryIndexDataStore implements
 {
 
 	@Override
-	public void store(
-			SecondaryIndex<?> secondaryIndex,
+	public void storeJoinEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
 			ByteArrayId primaryIndexId,
 			ByteArrayId primaryIndexRowId,
-			List<FieldInfo<?>> indexedAttributes ) {
+			ByteArrayId attributeVisibility ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void storeEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			ByteArrayId dataId,
+			ByteArrayId attributeVisibility,
+			List<FieldInfo<?>> attributes ) {
 		// TODO Auto-generated method stub
 
 	}
@@ -33,16 +48,6 @@ public class MemorySecondaryIndexDataStore implements
 	}
 
 	@Override
-	public CloseableIterator<ByteArrayId> query(
-			SecondaryIndex<?> secondaryIndex,
-			List<ByteArrayRange> ranges,
-			List<DistributableQueryFilter> constraints,
-			ByteArrayId primaryIndexId,
-			String... visibility ) {
-		return new CloseableIterator.Empty<ByteArrayId>();
-	}
-
-	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
 
@@ -52,6 +57,17 @@ public class MemorySecondaryIndexDataStore implements
 	public void removeAll() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public CloseableIterator<Object> scan(
+			final ByteArrayId secondaryIndexId,
+			final List<ByteArrayRange> scanRanges,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final String... visibility ) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
