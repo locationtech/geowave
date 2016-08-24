@@ -136,7 +136,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addCoverage(java.lang.String,%20java.lang.String,%20java.lang.String)">addCoverage</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgStoreName,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>
+<div class="block">Add coverage to geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
@@ -145,31 +147,50 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizeHistogramOverride,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;interpolationOverride,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;scaleTo8Bit)</code>&nbsp;</td>
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;scaleTo8Bit)</code>
+<div class="block">Add coverage store to geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addDatastore(java.lang.String,%20java.lang.String,%20java.lang.String)">addDatastore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName)</code>&nbsp;</td>
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName)</code>
+<div class="block">Add a geowave datastore to geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addFeatureLayer(java.lang.String,%20java.lang.String,%20java.lang.String)">addFeatureLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addFeatureLayer(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String)">addFeatureLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>&nbsp;</td>
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultStyle)</code>
+<div class="block">Add feature layer to geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addLayer(java.lang.String,%20java.lang.String,%20java.lang.String)">addLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addLayer(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String)">addLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId)</code>&nbsp;</td>
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultStyle)</code>
+<div class="block">Convenience - add layer(s) for the given store to geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addWorkspace(java.lang.String)">addWorkspace</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addStyle(java.lang.String,%20java.io.InputStream)">addStyle</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;fileInStream)</code>
+<div class="block">Add a style to geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#addWorkspace(java.lang.String)">addWorkspace</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>
+<div class="block">Add workspace to geoserver</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#createDatastoreJson(java.lang.String,%20java.util.Map,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String,%20boolean)">createDatastoreJson</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveStoreType,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;geowaveStoreConfig,
@@ -180,33 +201,49 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryIndexStrategy,
                    boolean&nbsp;enabled)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#createFeatureTypeJson(java.lang.String)">createFeatureTypeJson</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureTypeName)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteCoverage(java.lang.String,%20java.lang.String,%20java.lang.String)">deleteCoverage</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstoreName,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>
+<div class="block">Delete coverage from geoserver</div>
+</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteCoverageStore(java.lang.String,%20java.lang.String)">deleteCoverageStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstoreName)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteDatastore(java.lang.String,%20java.lang.String)">deleteDatastore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</code>&nbsp;</td>
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstoreName)</code>
+<div class="block">Delete coverage store form geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteFeatureLayer(java.lang.String)">deleteFeatureLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteDatastore(java.lang.String,%20java.lang.String)">deleteDatastore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</code>
+<div class="block">Delete a geowave datastore from geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteWorkspace(java.lang.String)">deleteWorkspace</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteFeatureLayer(java.lang.String)">deleteFeatureLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>
+<div class="block">Delete a feature layer from geoserver</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteStyle(java.lang.String)">deleteStyle</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</code>
+<div class="block">Delete a style from geoserver</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#deleteWorkspace(java.lang.String)">deleteWorkspace</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>
+<div class="block">Delete workspace from geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected net.sf.json.JSONArray</code></td>
@@ -222,34 +259,48 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getCoverage(java.lang.String,%20java.lang.String,%20java.lang.String)">getCoverage</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgStoreName,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>
+<div class="block">Get coverage from geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getCoverages(java.lang.String,%20java.lang.String)">getCoverages</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvsstoreName)</code>&nbsp;</td>
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvsstoreName)</code>
+<div class="block">Get a list of coverages (raster layers) from geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getCoverageStore(java.lang.String,%20java.lang.String)">getCoverageStore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>
+<div class="block">Get coverage store from geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getCoverageStores(java.lang.String)">getCoverageStores</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getCoverageStores(java.lang.String)">getCoverageStores</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</code>
+<div class="block">Get a list of coverage stores from geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getDatastore(java.lang.String,%20java.lang.String)">getDatastore</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</code>&nbsp;</td>
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</code>
+<div class="block">Get the string version of a datastore JSONObject from geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getDatastores(java.lang.String)">getDatastores</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getDatastores(java.lang.String)">getDatastores</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</code>
+<div class="block">Get list of Datastore names from geoserver</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getFeatureLayer(java.lang.String)">getFeatureLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getFeatureLayer(java.lang.String)">getFeatureLayer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>
+<div class="block">Get a layer from geoserver</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
@@ -270,15 +321,34 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getWorkspaces()">getWorkspaces</a></strong>()</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getStyle(java.lang.String)">getStyle</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</code>
+<div class="block">Get a geoserver style</div>
+</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#main(java.lang.String[])">main</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getStyles()">getStyles</a></strong>()</code>
+<div class="block">Get a list of geoserver styles</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#getWorkspaces()">getWorkspaces</a></strong>()</code>
+<div class="block">Get list of workspaces from geoserver</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#setLayerStyle(java.lang.String,%20java.lang.String)">setLayerStyle</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</code>
+<div class="block">Change the default style of a layer</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#workspaceExists(java.lang.String)">workspaceExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerRestClient.html#workspaceExists(java.lang.String)">workspaceExists</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>
+<div class="block">Check if workspace exists</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -326,9 +396,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getConfig</h4>
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/GeoServerConfig.html" title="class in mil.nga.giat.geowave.cli.geoserver">GeoServerConfig</a>&nbsp;getConfig()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
-<a name="addLayer(java.lang.String, java.lang.String, java.lang.String)">
+<a name="addLayer(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -336,7 +407,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>addLayer</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName,
-                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId)</pre>
+                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
+                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultStyle)</pre>
+<div class="block">Convenience - add layer(s) for the given store to geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>storeName</code> - </dd><dd><code>adapterId</code> - </dd><dd><code>defaultStyle</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="workspaceExists(java.lang.String)">
@@ -346,6 +421,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>workspaceExists</h4>
 <pre>public&nbsp;boolean&nbsp;workspaceExists(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
+<div class="block">Check if workspace exists</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspace</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if workspace exists, false if not</dd></dl>
 </li>
 </ul>
 <a name="getWorkspaces()">
@@ -355,6 +433,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getWorkspaces</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getWorkspaces()</pre>
+<div class="block">Get list of workspaces from geoserver</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="addWorkspace(java.lang.String)">
@@ -364,6 +444,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>addWorkspace</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addWorkspace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
+<div class="block">Add workspace to geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspace</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="deleteWorkspace(java.lang.String)">
@@ -373,6 +456,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>deleteWorkspace</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteWorkspace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
+<div class="block">Delete workspace from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspace</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getDatastore(java.lang.String, java.lang.String)">
@@ -383,6 +469,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getDatastore</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</pre>
+<div class="block">Get the string version of a datastore JSONObject from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>datastoreName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getDatastores(java.lang.String)">
@@ -392,6 +481,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getDatastores</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDatastores(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</pre>
+<div class="block">Get list of Datastore names from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="addDatastore(java.lang.String, java.lang.String, java.lang.String)">
@@ -403,6 +495,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addDatastore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwStoreName)</pre>
+<div class="block">Add a geowave datastore to geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>datastoreName</code> - </dd><dd><code>gwStoreName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="deleteDatastore(java.lang.String, java.lang.String)">
@@ -413,6 +508,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>deleteDatastore</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteDatastore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</pre>
+<div class="block">Delete a geowave datastore from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>datastoreName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getFeatureLayer(java.lang.String)">
@@ -422,6 +520,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getFeatureLayer</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
+<div class="block">Get a layer from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>layerName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getFeatureLayers(java.lang.String, java.lang.String, boolean)">
@@ -438,7 +539,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
-<a name="addFeatureLayer(java.lang.String, java.lang.String, java.lang.String)">
+<a name="addFeatureLayer(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -446,7 +547,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>addFeatureLayer</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
-                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
+                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName,
+                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultStyle)</pre>
+<div class="block">Add feature layer to geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>datastoreName</code> - </dd><dd><code>layerName</code> - </dd><dd><code>defaultStyle</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="deleteFeatureLayer(java.lang.String)">
@@ -456,6 +561,71 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>deleteFeatureLayer</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
+<div class="block">Delete a feature layer from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>layerName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="setLayerStyle(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLayerStyle</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;setLayerStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
+<div class="block">Change the default style of a layer</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>layerName</code> - </dd><dd><code>styleName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="getStyle(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStyle</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStyle(@PathParam(value="styleName")
+                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
+<div class="block">Get a geoserver style</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>styleName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="getStyles()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStyles</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStyles()</pre>
+<div class="block">Get a list of geoserver styles</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="addStyle(java.lang.String, java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addStyle</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName,
+                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;fileInStream)</pre>
+<div class="block">Add a style to geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>styleName</code> - </dd><dd><code>fileInStream</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+<a name="deleteStyle(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deleteStyle</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
+<div class="block">Delete a style from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>styleName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getCoverageStore(java.lang.String, java.lang.String)">
@@ -466,6 +636,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getCoverageStore</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
+<div class="block">Get coverage store from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>coverageName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getCoverageStores(java.lang.String)">
@@ -475,6 +648,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getCoverageStores</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverageStores(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</pre>
+<div class="block">Get a list of coverage stores from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="addCoverageStore(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.String, java.lang.Boolean)">
@@ -489,6 +665,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizeHistogramOverride,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;interpolationOverride,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;scaleTo8Bit)</pre>
+<div class="block">Add coverage store to geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>cvgStoreName</code> - </dd><dd><code>gwStoreName</code> - </dd><dd><code>equalizeHistogramOverride</code> - </dd><dd><code>interpolationOverride</code> - </dd><dd><code>scaleTo8Bit</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="deleteCoverageStore(java.lang.String, java.lang.String)">
@@ -499,6 +678,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>deleteCoverageStore</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstoreName)</pre>
+<div class="block">Delete coverage store form geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>cvgstoreName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getCoverages(java.lang.String, java.lang.String)">
@@ -509,6 +691,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getCoverages</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverages(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvsstoreName)</pre>
+<div class="block">Get a list of coverages (raster layers) from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>cvsstoreName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="getCoverage(java.lang.String, java.lang.String, java.lang.String)">
@@ -520,6 +705,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgStoreName,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
+<div class="block">Get coverage from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>cvgStoreName</code> - </dd><dd><code>coverageName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="addCoverage(java.lang.String, java.lang.String, java.lang.String)">
@@ -531,6 +719,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgStoreName,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
+<div class="block">Add coverage to geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>cvgStoreName</code> - </dd><dd><code>coverageName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="deleteCoverage(java.lang.String, java.lang.String, java.lang.String)">
@@ -542,6 +733,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;deleteCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName,
                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstoreName,
                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
+<div class="block">Delete coverage from geoserver</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>workspaceName</code> - </dd><dd><code>cvgstoreName</code> - </dd><dd><code>coverageName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="createFeatureTypeJson(java.lang.String)">
@@ -592,20 +786,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="getStoreAdapters(java.lang.String, java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getStoreAdapters</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getStoreAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName,
                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId)</pre>
-</li>
-</ul>
-<a name="main(java.lang.String[])">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>main</h4>
-<pre>public static&nbsp;void&nbsp;main(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</pre>
 </li>
 </ul>
 </li>
