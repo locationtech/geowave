@@ -64,4 +64,4 @@ These can be literally anything. From the point of view of the data adapter they
 chunk of data. No distributed filtering can be performed on this data except for Accumulo's visibility filter - but the
 client side filtering extensibility point can still be used if necessary. The Data Adapter has to provide methods to
 serialize and deserialize these items in the form of Field Readers and Writers, but it is not necessary to have these
-methods on the classpath of any Accumulo nodes.
+methods on the classpath of any nodes.

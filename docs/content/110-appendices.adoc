@@ -59,8 +59,11 @@ For more detailed information on creating and using S3 buckets please see the Am
 From the “Services” dropdown, select EC2. Then select the “Key Pairs” link on the left side of the page and click the
 “Create Key Pair” button.
 
-*Note:* Ensure that your selected region (top right side of the page) is the same as the one you will be creating you
+[NOTE]
+==== 
+Ensure that your selected region (top right side of the page) is the same as the one you will be creating you
 cluster in. Key pairs cannot be used across regions.
+====
 
 Enter a name for the key pair in the popup and click the “Create” button.
 

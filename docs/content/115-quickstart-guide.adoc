@@ -15,7 +15,10 @@
 
 Download the bootstrap-geowave.sh script https://s3.amazonaws.com/geowave-guide-bucket/bootstrap-geowave.sh[here] and upload it to your S3 bucket.
 
-*Note:* You can also clone the GeoWave project from https://github.com/ngageoint/geowave[GitHub] and find the script under deploy/emr/4/gdelt-example/
+[NOTE]
+==== 
+You can also clone the GeoWave project from https://github.com/ngageoint/geowave[GitHub^] and find the script under deploy/emr/4/gdelt-example/
+====
 
 If you have not created an S3 bucket please see the <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>> section.
 
@@ -67,11 +70,15 @@ aws emr create-cluster \
 If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a 
 message  detailing why the command failed.
 
-For more information on the create-cluster command please see the amazon documentation http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html[here].
+For more information on the create-cluster command please see the amazon documentation http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html[here^].
 
-*Note:* The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired 
+[NOTE]
+==== 
+The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired 
 cluster. There are many things that could still go wrong and cause the cluster to fail. You can open the AWS EMR GUI to 
 follow the progress of your cluster’s creation.
+[NOTE]
+====
 
 The bootstrap-geowave.sh script will now setup the environment, then download and process one month of gdelt data. 
 
@@ -79,7 +86,10 @@ Please view the <<interacting-with-the-cluster,Interacting with the Cluster>> se
 can be visualized, or the <<bootstrap-script-breakdown,Bootstrap Script Breakdown>> section to see more detail about what 
 is being done by the bootstrap script.
 
-*Note:* The entire process takes approximately 40 minutes on a three node cluster.
+[NOTE]
+==== 
+The entire process takes approximately 25 minutes on a three node cluster.
+====
 
 === AWS GUI Method
 
@@ -192,7 +202,10 @@ view the <<interacting-with-the-cluster,Interacting with the Cluster>> section o
 visualized, or the <<bootstrap-script-breakdown,Bootstrap Script Breakdown>> section to see more detail about what is being 
 done by the bootstrap script.
 
-*Note:* The entire process takes about 25 minutes on a three node cluster.
+[NOTE]
+==== 
+The entire process takes about 25 minutes on a three node cluster.
+====
 
 === Interacting with the Cluster
 
