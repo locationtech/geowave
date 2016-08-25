@@ -7,23 +7,23 @@ GeoWave includes specific tailored implementations that have advanced support fo
 and both bounded and unbounded temporal values. Both single and ranged values are supported on all axes. GeoWave’s
 geospatial support is built on top of the GeoTools extensibility model. This means that it can integrate natively with
 any GeoTools compatible project (such as GeoServer and UDig), and can ingest GeoTools compatible data sources. GeoWave provides out-of-the-box
-support for the http://projects.apache.org/projects/accumulo.html[Apache Accumulo^] distributed key/value store.
+support for the https://accumulo.apache.org[Apache Accumulo^] and https://hbase.apache.org[Apache HBase^] distributed key/value stores.
 
 GeoWave Features:
 
-* Adds multi-dimensional indexing capability to http://projects.apache.org/projects/accumulo.html[Apache Accumulo^]
-* Adds support for geographic objects and geospatial operators to http://projects.apache.org/projects/accumulo.html[Apache Accumulo^]
+* Adds multi-dimensional indexing capability to Apache Accumulo and Apache HBase
+* Adds support for geographic objects and geospatial operators to Apache Accumulo and Apache HBase
 * Provides a http://geoserver.org/[GeoServer^] plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services
 * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 
-GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.
+GeoWave attempts to do for Accumulo and HBase as PostGIS does for PostgreSQL.
 
 <<<
 
 === Origin
 
 GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with
-http://www.radiantblue.com/[RadiantBlue Technologies] and http://www.boozallen.com/[Booz Allen Hamilton^]. The government
+http://www.radiantblue.com/[RadiantBlue Technologies^] and http://www.boozallen.com/[Booz Allen Hamilton^]. The government
 has https://github.com/ngageoint/geowave/blob/master/NOTICE[unlimited rights^] and is releasing this software to
 increase the impact of government investments by providing developers with the opportunity to take things in new directions.
 The software use, modification, and distribution rights are stipulated within the http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0^] license.
@@ -32,8 +32,8 @@ The software use, modification, and distribution rights are stipulated within th
 
 ==== Pluggable Backend
 GeoWave is intended to be a multidimensional indexing layer that can be added on top of any sorted key-value store.
-Accumulo was chosen as the initial target architecture. Support for https://hbase.apache.org/[Apache HBase^] is currently in work, and any
-datastore which allows prefix based range scans should be straightforward extensions.
+Accumulo was chosen as the initial target architecture and support for HBase has been added as well. Any datastore 
+which allows prefix based range scans should be straightforward extensions.
 
 ==== Modular Design
 

@@ -38,7 +38,7 @@ _Graphic background (C)MapBox and (C)OpenStreetMap_
 === OpenStreetMap GPX Tracks
 
 The OpenStreetMap Foundation has released a large set of user contributed GPS tracks.  These are about 8 years of
-historical tracks. The data set consists of just under 3 billion (not trillion as some websites claim) point, or
+historical tracks. The data set consists of just under 3 billion (not trillion as some websites claim) points, or
 just under one million trajectories.
 
 More information on this data set is available at http://wiki.openstreetmap.org/wiki/Planet.gpx[GPX Planet page^]
