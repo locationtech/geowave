@@ -17,3 +17,4 @@ geowave gs addstyle DecimatePoints -sld /mnt/DecimatePoints.sld
 
 # Set the kde layer default style to colormap
 geowave gs setls gdeltevent_kde --styleName colormap
+

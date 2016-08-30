@@ -1,17 +1,16 @@
 [[appendices]]
 <<<
+
 == Appendices
 
 [[version-appendix]]
 [appendix]
 <<<
+
 === Version
 
 This documentation was generated for GeoWave version ${project.version} from commit ${buildNumber}.
 
-<<<<<<< a3ed30f239238ef6d9335b0109779a982011db47
-<<<<<<< 46cf0ca866a84c176c4a5a612ba662e646c58f80
-=======
 [[vpc-appendix]]
 [appendix]
 <<<
@@ -113,25 +112,3 @@ For more detailed information on AWS EC2 Security Groups please see the Amazon d
 === AWS CLI Setup
 
 Please see the Amazon documentation http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html[here].
-
->>>>>>> documentation updates
-[[todo-appendix]]
-[appendix]
-<<<
-
-=======
->>>>>>> adding quickstart guide
-=== Topics in need of documentation
-
-* Ingest Examples
-* Query Iterators
-* Query CQL
-* MapReduce Input Format
-* Analytics - Kernel Density
-* Analytics - K-Means Clustering
-* Examples - Shapefile
-* Examples - OSM GPX Data
-* Examples - OSM Feature Data
-* Index Tuning
-* Supported Types
-* Editing from GitHub
