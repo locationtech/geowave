@@ -615,7 +615,7 @@ GeoWave includes specific tailored implementations that have advanced support fo
 and both bounded and unbounded temporal values. Both single and ranged values are supported on all axes. GeoWave’s
 geospatial support is built on top of the GeoTools extensibility model. This means that it can integrate natively with
 any GeoTools compatible project (such as GeoServer and UDig), and can ingest GeoTools compatible data sources. GeoWave provides out-of-the-box
-support for the <a href="http://projects.apache.org/projects/accumulo.html" target="_blank">Apache Accumulo</a> distributed key/value store.</p>
+support for the <a href="https://accumulo.apache.org" target="_blank">Apache Accumulo</a> and <a href="https://hbase.apache.org" target="_blank">Apache HBase</a> distributed key/value stores.</p>
 </div>
 <div class="paragraph">
 <p>GeoWave Features:</p>
@@ -623,10 +623,10 @@ support for the <a href="http://projects.apache.org/projects/accumulo.html" targ
 <div class="ulist">
 <ul>
 <li>
-<p>Adds multi-dimensional indexing capability to <a href="http://projects.apache.org/projects/accumulo.html" target="_blank">Apache Accumulo</a></p>
+<p>Adds multi-dimensional indexing capability to Apache Accumulo and Apache HBase</p>
 </li>
 <li>
-<p>Adds support for geographic objects and geospatial operators to <a href="http://projects.apache.org/projects/accumulo.html" target="_blank">Apache Accumulo</a></p>
+<p>Adds support for geographic objects and geospatial operators to Apache Accumulo and Apache HBase</p>
 </li>
 <li>
 <p>Provides a <a href="http://geoserver.org/" target="_blank">GeoServer</a> plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services</p>
@@ -637,14 +637,14 @@ support for the <a href="http://projects.apache.org/projects/accumulo.html" targ
 </ul>
 </div>
 <div class="paragraph">
-<p>GeoWave attempts to do for Accumulo as PostGIS does for PostgreSQL.</p>
+<p>GeoWave attempts to do for Accumulo and HBase as PostGIS does for PostgreSQL.</p>
 </div>
 <div style="page-break-after: always;"></div>
 <div class="sect2">
 <h3 id="origin"><a class="anchor" href="#origin"></a>Origin</h3>
 <div class="paragraph">
 <p>GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with
-<a href="http://www.radiantblue.com/">RadiantBlue Technologies</a> and <a href="http://www.boozallen.com/" target="_blank">Booz Allen Hamilton</a>. The government
+<a href="http://www.radiantblue.com/" target="_blank">RadiantBlue Technologies</a> and <a href="http://www.boozallen.com/" target="_blank">Booz Allen Hamilton</a>. The government
 has <a href="https://github.com/ngageoint/geowave/blob/master/NOTICE" target="_blank">unlimited rights</a> and is releasing this software to
 increase the impact of government investments by providing developers with the opportunity to take things in new directions.
 The software use, modification, and distribution rights are stipulated within the <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache 2.0</a> license.</p>
@@ -656,8 +656,8 @@ The software use, modification, and distribution rights are stipulated within th
 <h4 id="pluggable-backend"><a class="anchor" href="#pluggable-backend"></a>Pluggable Backend</h4>
 <div class="paragraph">
 <p>GeoWave is intended to be a multidimensional indexing layer that can be added on top of any sorted key-value store.
-Accumulo was chosen as the initial target architecture. Support for <a href="https://hbase.apache.org/" target="_blank">Apache HBase</a> is currently in work, and any
-datastore which allows prefix based range scans should be straightforward extensions.</p>
+Accumulo was chosen as the initial target architecture and support for HBase has been added as well. Any datastore
+which allows prefix based range scans should be straightforward extensions.</p>
 </div>
 </div>
 <div class="sect3">
@@ -707,7 +707,7 @@ Examples of these include:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>This is due to the way Accumulo (and any big table based database really) stores the data – as a sorted set of key/value pairs.</p>
+<p>This is due to the way big table based databases store the data – as a sorted set of key/value pairs.</p>
 </div>
 <div class="paragraph">
 <p>The goal is to provide a property that ensures values close in n-dimensional space are still close in 1-dimensional space.
@@ -740,30 +740,16 @@ an n-dimensional space and describe a set of steps to trace all points in a sing
 an excellent starting point to start learning about these curves.</p>
 </div>
 <div class="paragraph">
-<p>GeoWave has implemented two space filling curves: Z-Order and Hilbert.</p>
+<p>GeoWave supports two space filling curves: Z-Order and Hilbert, with the Hilbert type space filling curve being the
+primary implementation.</p>
 </div>
 <div class="sect3">
-<h4 id="z-order-sfc"><a class="anchor" href="#z-order-sfc"></a>Z-Order SFC</h4>
-<div class="paragraph">
-<p>This is also commonly called a GeoHash, or Morton order (and sometimes incorrectly called a Peano curve). This is the
-most popular SFC used for multi-dimensional &#8594; 1-dimensional mappings – primarily because it is both intuitive and very
-easy to implement in code. There are two common ways to implement this. Ideally a bit-interleaving approach is used (that is
-what gives rise to the diagram in figure 2). Imagine we had two numbers, A and B. Let the binary representation of
-those numbers be A1A2A3 and B1B2B3. The “bit interleaved” version would be A1B1A2B2A3B3. Since we are working with
-binary numbers this gives a “unit cell” of 2x2. If we added dimensions, just imagine the same interleaving, but another
-term - C1C2C3, etc. This is sometimes implemented in base 10 instead of base 2. This implementation reduces somewhat
-the locality (“packing property” – or the measure of how close numbers in n-dimensional space are to numbers in 1-dimensional
-space). As you might expect a two dimensional version of this gives a unit cell of 10x10 (for two dimensions) – hence the
-worse packing.</p>
-</div>
-<div class="sect4">
-<h5 id="hilbert-sfc"><a class="anchor" href="#hilbert-sfc"></a>Hilbert SFC</h5>
+<h4 id="hilbert-sfc"><a class="anchor" href="#hilbert-sfc"></a>Hilbert SFC</h4>
 <div class="paragraph">
 <p>The Hilbert curve is a bit more complex to work with than the Z-curve – both when calculating and when performing a
-decomposition – hence it is less commonly used. Nevertheless it is popular in other areas in computer science where
-multiple variables need to be set in a linear order – process scheduling for one. A simplistic view of a standard
-projections of the earth mapped to a Hilbert curve would look something like this – with 4 bits of cardinality per
-dimension (how many buckets we have).</p>
+decomposition. Nevertheless it is popular in certain areas in computer science where multiple variables need to be set
+in a linear order – process scheduling for one. A simplistic view of a standard projections of the earth mapped to
+a Hilbert curve would look something like this – with 4 bits of cardinality per dimension (how many buckets we have).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -780,6 +766,20 @@ for longitude (and incidentally 11.25 degrees for latitude). This doesn’t mean
 than this. It just means that our initial (coarse) index (based on SFC ranges) can’t provide resolution any better than
 this. Adding more bits per dimensions will increase the precision of the SFC based index.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="z-order-sfc"><a class="anchor" href="#z-order-sfc"></a>Z-Order SFC</h4>
+<div class="paragraph">
+<p>This is also commonly called a GeoHash, or Morton order (and sometimes incorrectly called a Peano curve). This is the
+most popular SFC used for multi-dimensional &#8594; 1-dimensional mappings – primarily because it is very easy to implement
+in code. There are two common ways to implement this. Ideally a bit-interleaving approach is used (that is what gives
+rise to the diagram in the figure <em>Z-Order curve based dimensional decomposition</em>). Imagine we had two numbers, A and
+B. Let the binary representation of those numbers be A1A2A3 and B1B2B3. The “bit interleaved” version would be
+A1B1A2B2A3B3. Since we are working with binary numbers this gives a “unit cell” of 2x2. If we added dimensions, just
+imagine the same interleaving, but another term - C1C2C3, etc. This is sometimes implemented in base 10 instead of base
+2. This implementation reduces somewhat the locality (“packing property” – or the measure of how close numbers in
+n-dimensional space are to numbers in 1-dimensional space). As you might expect a two dimensional version of this gives
+a unit cell of 10x10 (for two dimensions) – hence the worse packing.</p>
 </div>
 </div>
 </div>
@@ -952,7 +952,7 @@ density analytic. The data corresponds to Mapbox zoom level 13.</p>
 <h3 id="openstreetmap-gpx-tracks"><a class="anchor" href="#openstreetmap-gpx-tracks"></a>OpenStreetMap GPX Tracks</h3>
 <div class="paragraph">
 <p>The OpenStreetMap Foundation has released a large set of user contributed GPS tracks.  These are about 8 years of
-historical tracks. The data set consists of just under 3 billion (not trillion as some websites claim) point, or
+historical tracks. The data set consists of just under 3 billion (not trillion as some websites claim) points, or
 just under one million trajectories.</p>
 </div>
 <div class="paragraph">
@@ -1222,7 +1222,7 @@ The values that are associated with the primary index will be used for fine-grai
 chunk of data. No distributed filtering can be performed on this data except for Accumulo&#8217;s visibility filter - but the
 client side filtering extensibility point can still be used if necessary. The Data Adapter has to provide methods to
 serialize and deserialize these items in the form of Field Readers and Writers, but it is not necessary to have these
-methods on the classpath of any Accumulo nodes.</p>
+methods on the classpath of any nodes.</p>
 </div>
 </div>
 </div>
@@ -5530,9 +5530,8 @@ mvn -P docs install</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.3-SNAPSHOT from commit 46cf0ca866a84c176c4a5a612ba662e646c58f80.</p>
+<p>This documentation was generated for GeoWave version 0.9.3-SNAPSHOT from commit f919908651f34d0f9a04a5293b2279b4097a3be9.</p>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="topics-in-need-of-documentation"><a class="anchor" href="#topics-in-need-of-documentation"></a>Topics in need of documentation</h3>
@@ -5582,7 +5581,7 @@ mvn -P docs install</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-08-26 14:05:42 UTC
+Last updated 2016-08-31 13:15:39 UTC
 </div>
 </div>
 </body>
