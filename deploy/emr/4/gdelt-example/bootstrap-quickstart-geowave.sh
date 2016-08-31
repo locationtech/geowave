@@ -22,7 +22,7 @@ INSTALL_DIR=/opt
 ACCUMULO_DOWNLOAD_BASE_URL=https://archive.apache.org/dist/accumulo
 
 # GeoWave
-GEOWAVE_REPO_RPM=geowave-repo-1.0-3.noarch.rpm # TODO: Should have a prod->latest rpm
+GEOWAVE_REPO_RPM=geowave-repo-dev-1.0-3.noarch.rpm # TODO: Should have a prod->latest rpm
 GEOWAVE_VERSION='0.9.3-SNAPSHOT'
 GEOSERVER_PORT='8000'
 GEOSERVER_MEMORY="-Xmx512m -XX:MaxPermSize=128m"
