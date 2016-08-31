@@ -20,7 +20,6 @@ for file in `cat md5sums | cut -d' ' -f3 | grep "^${TIME_REGEX}"` ; do sudo wget
 md5sum -c md5sums 2>&1 | grep "^${TIME_REGEX}"
 cd $STAGING_DIR
 
-
 # Ingest the data. Indexed spatial only in this example. It can also be indexed using spatial-temporal
 geowave config addstore -t accumulo gdelt-accumulo --gwNamespace geowave.gdelt --zookeeper $HOSTNAME:2181 --instance $INSTANCE --user geowave --password geowave
 geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin --numPartitions $NUM_PARTITIONS
