@@ -17,7 +17,7 @@ aws emr create-cluster \
 --applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
 --use-default-roles \
 --no-auto-terminate \
---bootstrap-actions Path=s3://${YOUR_BUCKET_NAME}/bootstrap-geowave.sh,Name=Bootstrap_GeoWave \
+--bootstrap-actions Path=s3://${YOUR_BUCKET_NAME}/bootstrap-quickstart-geowave.sh,Name=Bootstrap_GeoWave \
 --tags ${YOUR_TAGNAME} \
 --region ${YOUR_REGION} \
 ----
