@@ -480,7 +480,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="creating-the-cluster"><a class="anchor" href="#creating-the-cluster"></a>Creating the Cluster</h3>
 <div class="paragraph">
-<p>Download the bootstrap-geowave.sh script <a href="https://s3.amazonaws.com/geowave-guide-bucket/bootstrap-geowave.sh">here</a> and upload it to your S3 bucket.</p>
+<p>Download the bootstrap-quickstart-geowave.sh script <a href="https://s3.amazonaws.com/geowave-guide-bucket/bootstrap-quickstart-geowave.sh">here</a> and upload it to your S3 bucket.</p>
 </div>
 <div class="paragraph">
 <p><strong>Note:</strong> You can also clone the GeoWave project from <a href="https://github.com/ngageoint/geowave">GitHub</a> and find the script under deploy/emr/4/gdelt-example/</p>
@@ -507,7 +507,7 @@ variables is given below the command.</p>
 --applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
 --use-default-roles \
 --no-auto-terminate \
---bootstrap-actions Path=s3://${YOUR_BUCKET_NAME}/bootstrap-geowave.sh,Name=Bootstrap_GeoWave \
+--bootstrap-actions Path=s3://${YOUR_BUCKET_NAME}/bootstrap-quickstart-geowave.sh,Name=Bootstrap_GeoWave \
 --tags ${YOUR_TAGNAME} \
 --region ${YOUR_REGION} \</code></pre>
 </div>
@@ -920,7 +920,7 @@ is being done by the bootstrap script.</p>
 <p>Click the folder icon to bring up a list of available S3 buckets</p>
 </li>
 <li>
-<p>Select your folder and then select the bootstrap-geowave.sh file you uploaded at the beginning of this section</p>
+<p>Select your folder and then select the bootstrap-quickstart-geowave.sh file you uploaded at the beginning of this section</p>
 </li>
 </ul>
 </div>
@@ -1272,7 +1272,7 @@ layers. This can also be done by the user through the geoserver GUI.</p>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.3-SNAPSHOT from commit a19c919dccd1da067e085fe3e255a0218baafd9e.</p>
+<p>This documentation was generated for GeoWave version 0.9.3-SNAPSHOT from commit 490b6c984ae4b181146b982917c2c6885b52a4a9.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1428,7 +1428,7 @@ button.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-01 16:05:59 UTC
+Last updated 2016-09-02 06:56:05 UTC
 </div>
 </div>
 </body>
