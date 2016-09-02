@@ -48,7 +48,7 @@ if [ ! -f /mnt/colormap.sld ]; then
 fi
 
 if [ ! -f /mnt/DecimatePoints.sld ]; then
-        aws s3 cp s3://geowave-guide-bucket/colormap.sld  /mnt/DecimatePoints.sld
+        aws s3 cp s3://geowave-guide-bucket/DecimatePoints.sld /mnt/DecimatePoints.sld
 fi
 
 if [ ! -f /mnt/setup-geoserver-geowave-workspace.sh ]; then
