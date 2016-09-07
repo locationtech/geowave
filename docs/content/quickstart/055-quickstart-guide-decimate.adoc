@@ -1,0 +1,35 @@
+[[quickstart-guide-decimate]]
+<<<
+
+*gdeltevent* - shows all of the gdelt events in a bounding box around western europe as individual points.
+
+image::interacting-cluster-6.png[scaledwidth="100%",alt="select emr"]
+
+You may have notices that it took a fair amount of time to render the ~1.5 million points. To speed this process up we 
+can set the default style the Decimate Points style that was added in our script and can be found in the geowave 
+directory at geowave/examples/example-slds/DecimatePoints.sld. This can be done using the geowave cli commands or via 
+the geoserver GUI.
+
+Geowave CLI:
+
+[source, bash]
+----
+geowave gs setls gdeltevent --styleName DecimatePoints
+----
+
+Geoserver GUI:
+
+* Click on the Layers link in the menu at the left side of the page and select the gdeltevent layer
+* Select the Publishing tab, open the Default Style dropdown and select DecimatePoints
+
+image::interacting-cluster-8.png[scaledwidth="100%",alt="select emr"]
+
+* Click the Save button at the bottom of the page and reopen the image by going back to the Layer Preview and clicking 
+the OpenLayers link
+* You should see a noticeable difference in the time it takes to render the points
+
+image::interacting-cluster-9.png[scaledwidth="100%",alt="select emr"]
+
+*gdeltevent_kde* - a heat map produced using kernel density estimation in a bounding box around western europe.
+
+image::interacting-cluster-7.png[scaledwidth="100%",alt="select emr"]

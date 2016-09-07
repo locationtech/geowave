@@ -1,0 +1,24 @@
+[[quickstart-guide-geoserver]]
+<<<
+
+GeoServer
+
+Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :8000/geoserver/web/
+
+* Example: ec2-52-91-215-215.compute-1.amazonaws.com:8000/geoserver/web/
+
+image::interacting-cluster-3.png[scaledwidth="100%",alt="select emr"]
+
+Log into Geoserver
+
+* Username: admin
+* Password: geoserver
+
+image::interacting-cluster-4.png[scaledwidth="100%",alt="select emr"]
+
+Once the bootstrap-geowave.sh script is finished you will see two layers have been created. To view them click on the 
+“Layer Preview” link under the Data menu on the left side of the page.
+
+image::interacting-cluster-5.png[scaledwidth="100%",alt="select emr"]
+
+Click the OpenLayers link for either one to view it in another tab.

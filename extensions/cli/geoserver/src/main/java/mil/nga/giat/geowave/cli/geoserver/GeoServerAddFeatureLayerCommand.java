@@ -78,7 +78,8 @@ public class GeoServerAddFeatureLayerCommand implements
 		Response addLayerResponse = geoserverClient.addFeatureLayer(
 				workspace,
 				datastore,
-				layerName);
+				layerName,
+				null);
 
 		if (addLayerResponse.getStatus() == Status.CREATED.getStatusCode()) {
 			System.out.println("\nGeoServer add layer response " + layerName + ":");
