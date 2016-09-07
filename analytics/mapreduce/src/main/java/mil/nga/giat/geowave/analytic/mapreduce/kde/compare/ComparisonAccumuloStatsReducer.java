@@ -41,6 +41,7 @@ public class ComparisonAccumuloStatsReducer extends
 		1,
 		1
 	};
+	private static final int TILE_SIZE = 1;
 	private long totalKeys = 0;
 	private long currentKey;
 
@@ -51,7 +52,6 @@ public class ComparisonAccumuloStatsReducer extends
 	private int numXPosts;
 	private int numYPosts;
 	private String coverageName;
-	private int tileSize;
 	protected List<ByteArrayId> indexList;
 
 	@Override
@@ -70,7 +70,7 @@ public class ComparisonAccumuloStatsReducer extends
 			final Point2d[] bbox = fromIndexToLL_UR(cellIndex);
 			final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 					NUM_BANDS,
-					tileSize);
+					TILE_SIZE);
 			raster.setSample(
 					0,
 					0,
@@ -142,9 +142,6 @@ public class ComparisonAccumuloStatsReducer extends
 		coverageName = context.getConfiguration().get(
 				KDEJobRunner.COVERAGE_NAME_KEY,
 				"");
-		tileSize = context.getConfiguration().getInt(
-				KDEJobRunner.TILE_SIZE_KEY,
-				25);
 		numLevels = (maxLevels - minLevels) + 1;
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",

@@ -18,10 +18,10 @@ public class KDECommandLineOptions
 	@Parameter(names = "--maxLevel", required = true, description = "The max level to run a KDE at")
 	private Integer maxLevel;
 
-	@Parameter(names = "--minSplits", required = true, description = "The min partitions for the input data")
+	@Parameter(names = "--minSplits", description = "The min partitions for the input data")
 	private Integer minSplits;
 
-	@Parameter(names = "--maxSplits", required = true, description = "The max partitions for the input data")
+	@Parameter(names = "--maxSplits", description = "The max partitions for the input data")
 	private Integer maxSplits;
 
 	@Parameter(names = "--coverageName", required = true, description = "The coverage name")
@@ -33,8 +33,8 @@ public class KDECommandLineOptions
 	@Parameter(names = "--jobSubmissionHostPort", required = true, description = "The job submission tracker")
 	private String jobTrackerOrResourceManHostPort;
 
-	@Parameter(names = "--tileSize", required = true, description = "The tile size")
-	private Integer tileSize;
+	@Parameter(names = "--tileSize", description = "The tile size")
+	private Integer tileSize = 1;
 
 	@Parameter(names = "--cqlFilter", description = "An optional CQL filter applied to the input data")
 	private String cqlFilter;

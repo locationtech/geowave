@@ -5,17 +5,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.opengis.coverage.grid.GridCoverage;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
-
-import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.opengis.coverage.grid.GridCoverage;
 
 public class AccumuloKDEReducer extends
 		Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
@@ -118,7 +119,6 @@ public class AccumuloKDEReducer extends
 	private int numXTiles;
 	private int numYTiles;
 	private String coverageName;
-	private int tileSize;
 	protected List<ByteArrayId> indexList;
 
 	@Override
@@ -146,7 +146,7 @@ public class AccumuloKDEReducer extends
 				final TileInfo tileInfo = fromCellIndexToTileInfo(cellIndex);
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						NUM_BANDS,
-						tileSize);
+						KDEJobRunner.TILE_SIZE);
 				raster.setSample(
 						tileInfo.x,
 						tileInfo.y,
@@ -183,14 +183,15 @@ public class AccumuloKDEReducer extends
 		}
 	}
 
+	@SuppressFBWarnings(value = "INT_BAD_REM_BY_1", justification = "The calculation is appropriate if we ever want to vary to tile size.")
 	private TileInfo fromCellIndexToTileInfo(
 			final long index ) {
 		final int xPost = (int) (index / numYPosts);
 		final int yPost = (int) (index % numYPosts);
-		final int xTile = xPost / tileSize;
-		final int yTile = yPost / tileSize;
-		final int x = (xPost % tileSize);
-		final int y = (yPost % tileSize);
+		final int xTile = xPost / KDEJobRunner.TILE_SIZE;
+		final int yTile = yPost / KDEJobRunner.TILE_SIZE;
+		final int x = (xPost % KDEJobRunner.TILE_SIZE);
+		final int y = (yPost % KDEJobRunner.TILE_SIZE);
 		final double tileWestLon = ((xTile * 360.0) / numXTiles) - 180.0;
 		final double tileSouthLat = ((yTile * 180.0) / numYTiles) - 90.0;
 		final double tileEastLon = tileWestLon + (360.0 / numXTiles);
@@ -201,7 +202,9 @@ public class AccumuloKDEReducer extends
 				tileSouthLat,
 				tileNorthLat,
 				x,
-				tileSize - y - 1); // remember java rasters go from 0 at the top
+				KDEJobRunner.TILE_SIZE - y - 1); // remember java rasters go
+													// from 0 at the
+		// top
 		// to (height-1) at the bottom, so we have
 		// to
 		// inverse the y here which goes from bottom
@@ -223,9 +226,6 @@ public class AccumuloKDEReducer extends
 		coverageName = context.getConfiguration().get(
 				KDEJobRunner.COVERAGE_NAME_KEY,
 				"");
-		tileSize = context.getConfiguration().getInt(
-				KDEJobRunner.TILE_SIZE_KEY,
-				1);
 		numLevels = (maxLevels - minLevels) + 1;
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",
@@ -236,7 +236,7 @@ public class AccumuloKDEReducer extends
 		numYTiles = (int) Math.pow(
 				2,
 				level);
-		numYPosts = numYTiles * tileSize;
+		numYPosts = numYTiles * KDEJobRunner.TILE_SIZE;
 
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,

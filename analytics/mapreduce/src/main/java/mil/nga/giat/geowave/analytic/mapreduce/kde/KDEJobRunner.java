@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.analytic.mapreduce.kde;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -30,21 +31,27 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
+import mil.nga.giat.geowave.core.store.operations.remote.ClearCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -58,10 +65,11 @@ public class KDEJobRunner extends
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KDEJobRunner.class);
 	public static final String GEOWAVE_CLASSPATH_JARS = "geowave.classpath.jars";
+	private static final String TMP_COVERAGE_SUFFIX = "_tMp_CoVeRaGe";
+	protected static int TILE_SIZE = 1;
 	public static final String MAX_LEVEL_KEY = "MAX_LEVEL";
 	public static final String MIN_LEVEL_KEY = "MIN_LEVEL";
 	public static final String COVERAGE_NAME_KEY = "COVERAGE_NAME";
-	public static final String TILE_SIZE_KEY = "TILE_SIZE";
 	protected KDECommandLineOptions kdeCommandLineOptions;
 	protected DataStorePluginOptions inputDataStoreOptions;
 	protected DataStorePluginOptions outputDataStoreOptions;
@@ -86,6 +94,34 @@ public class KDEJobRunner extends
 			conf = new Configuration();
 			setConf(conf);
 		}
+
+		DataStorePluginOptions rasterResizeOutputDataStoreOptions;
+		String kdeCoverageName;
+		// so we don't need a no data merge strategy, use 1 for the tile size of
+		// the KDE output and then run a resize operation
+		if ((kdeCommandLineOptions.getTileSize() > 1)) {
+			// this is the ending data store options after resize, the KDE will
+			// need to output to a temporary namespace, a resize operation
+			// will use the outputDataStoreOptions
+			rasterResizeOutputDataStoreOptions = outputDataStoreOptions;
+
+			// first clone the outputDataStoreOptions, then set it to a tmp
+			// namespace
+			final Map<String, String> configOptions = outputDataStoreOptions.getFactoryOptionsAsMap();
+			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
+					outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
+					configOptions);
+			options.setGeowaveNamespace(outputDataStoreOptions.getGeowaveNamespace() + "_tmp");
+			outputDataStoreOptions = new DataStorePluginOptions(
+					outputDataStoreOptions.getType(),
+					outputDataStoreOptions.getFactoryFamily(),
+					options);
+			kdeCoverageName = kdeCommandLineOptions.getCoverageName() + TMP_COVERAGE_SUFFIX;
+		}
+		else {
+			rasterResizeOutputDataStoreOptions = null;
+			kdeCoverageName = kdeCommandLineOptions.getCoverageName();
+		}
 		GeoWaveConfiguratorBase.setRemoteInvocationParams(
 				kdeCommandLineOptions.getHdfsHostPort(),
 				kdeCommandLineOptions.getJobTrackerOrResourceManHostPort(),
@@ -98,10 +134,7 @@ public class KDEJobRunner extends
 				kdeCommandLineOptions.getMinLevel());
 		conf.set(
 				COVERAGE_NAME_KEY,
-				kdeCommandLineOptions.getCoverageName());
-		conf.setInt(
-				TILE_SIZE_KEY,
-				kdeCommandLineOptions.getTileSize());
+				kdeCoverageName);
 		if (kdeCommandLineOptions.getCqlFilter() != null) {
 			conf.set(
 					GaussianCellMapper.CQL_FILTER_KEY,
@@ -192,6 +225,7 @@ public class KDEJobRunner extends
 		final boolean job1Success = job.waitForCompletion(true);
 		boolean job2Success = false;
 		boolean postJob2Success = false;
+
 		// Linear MapReduce job chaining
 		if (job1Success) {
 			setupEntriesPerLevel(
@@ -227,16 +261,63 @@ public class KDEJobRunner extends
 			setupJob2Output(
 					conf,
 					statsReducer,
-					outputDataStoreOptions.getGeowaveNamespace());
+					outputDataStoreOptions.getGeowaveNamespace(),
+					kdeCoverageName);
 			job2Success = statsReducer.waitForCompletion(true);
 			if (job2Success) {
 				postJob2Success = postJob2Actions(
 						conf,
-						outputDataStoreOptions.getGeowaveNamespace());
+						outputDataStoreOptions.getGeowaveNamespace(),
+						kdeCoverageName);
 			}
 		}
 		else {
 			job2Success = false;
+		}
+		if (rasterResizeOutputDataStoreOptions != null) {
+			// delegate to resize command to wrap it up with the correctly
+			// requested tile size
+			final ResizeCommand resizeCommand = new ResizeCommand();
+
+			// We're going to override these anyway.
+			resizeCommand.setParameters(
+					null,
+					null);
+
+			resizeCommand.setInputStoreOptions(outputDataStoreOptions);
+			resizeCommand.setOutputStoreOptions(rasterResizeOutputDataStoreOptions);
+
+			resizeCommand.getOptions().setInputCoverageName(
+					kdeCoverageName);
+			resizeCommand.getOptions().setMinSplits(
+					kdeCommandLineOptions.getMinSplits());
+			resizeCommand.getOptions().setMaxSplits(
+					kdeCommandLineOptions.getMaxSplits());
+			resizeCommand.getOptions().setHdfsHostPort(
+					kdeCommandLineOptions.getHdfsHostPort());
+			resizeCommand.getOptions().setJobTrackerOrResourceManHostPort(
+					kdeCommandLineOptions.getJobTrackerOrResourceManHostPort());
+			resizeCommand.getOptions().setOutputCoverageName(
+					kdeCommandLineOptions.getCoverageName());
+
+			resizeCommand.getOptions().setOutputTileSize(
+					kdeCommandLineOptions.getTileSize());
+
+			final int resizeStatus = ToolRunner.run(
+					resizeCommand.createRunner(new ManualOperationParams()),
+					new String[] {});
+			if (resizeStatus == 0) {
+				// delegate to clear command to clean up with tmp namespace
+				// after successful resize
+				final ClearCommand clearCommand = new ClearCommand();
+				clearCommand.setParameters(null);
+				clearCommand.setInputStoreOptions(outputDataStoreOptions);
+				clearCommand.execute(new ManualOperationParams());
+			}
+			else {
+				LOGGER.warn("Resize command error code '" + resizeStatus + "'.  Retaining temporary namespace '"
+						+ outputDataStoreOptions.getGeowaveNamespace() + "' with tile size of 1.");
+			}
 		}
 
 		fs.delete(
@@ -268,7 +349,8 @@ public class KDEJobRunner extends
 
 	protected boolean postJob2Actions(
 			final Configuration conf,
-			final String statsNamespace )
+			final String statsNamespace,
+			final String coverageName )
 			throws Exception {
 		return true;
 	}
@@ -321,16 +403,18 @@ public class KDEJobRunner extends
 	protected void setupJob2Output(
 			final Configuration conf,
 			final Job statsReducer,
-			final String statsNamespace )
+			final String statsNamespace,
+			final String coverageName )
 			throws Exception {
 		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
-				kdeCommandLineOptions.getCoverageName(),
+				coverageName,
 				AccumuloKDEReducer.NUM_BANDS,
-				kdeCommandLineOptions.getTileSize(),
+				TILE_SIZE,
 				AccumuloKDEReducer.MINS_PER_BAND,
 				AccumuloKDEReducer.MAXES_PER_BAND,
-				AccumuloKDEReducer.NAME_PER_BAND);
+				AccumuloKDEReducer.NAME_PER_BAND,
+				null);
 		setup(
 				statsReducer,
 				statsNamespace,
@@ -366,11 +450,11 @@ public class KDEJobRunner extends
 	public static void main(
 			final String[] args )
 			throws Exception {
-		ConfigOptions opts = new ConfigOptions();
-		OperationParser parser = new OperationParser();
+		final ConfigOptions opts = new ConfigOptions();
+		final OperationParser parser = new OperationParser();
 		parser.addAdditionalObject(opts);
-		KdeCommand command = new KdeCommand();
-		CommandLineOperationParams params = parser.parse(
+		final KdeCommand command = new KdeCommand();
+		final CommandLineOperationParams params = parser.parse(
 				command,
 				args);
 		opts.prepare(params);
