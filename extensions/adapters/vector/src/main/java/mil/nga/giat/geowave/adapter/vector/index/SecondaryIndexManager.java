@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.adapter.vector.index;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,140 +23,128 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
+import com.google.common.base.Splitter;
+
 public class SecondaryIndexManager implements
 		Persistable
 {
 	private final List<SecondaryIndex<SimpleFeature>> supportedSecondaryIndices = new ArrayList<>();
+	private transient DataAdapter<SimpleFeature> dataAdapter;
+	private transient SimpleFeatureType sft;
+	private transient StatsManager statsManager;
+
+	protected SecondaryIndexManager() {}
 
 	public SecondaryIndexManager(
 			final DataAdapter<SimpleFeature> dataAdapter,
 			final SimpleFeatureType sft,
 			final StatsManager statsManager ) {
-		initialize(
-				dataAdapter,
-				sft,
-				statsManager);
+		this.dataAdapter = dataAdapter;
+		this.statsManager = statsManager;
+		this.sft = sft;
+		initializeIndices();
 	}
 
-	private void addFieldToMap(
-			final Map<SecondaryIndexType, List<ByteArrayId>> fieldMap,
-			final SecondaryIndexType secondaryIndexType,
-			final ByteArrayId fieldId ) {
-		if (fieldMap.containsKey(secondaryIndexType)) {
-			final List<ByteArrayId> fields = fieldMap.get(secondaryIndexType);
-			fields.add(fieldId);
-		}
-		else {
-			final List<ByteArrayId> fields = new ArrayList<>();
-			fields.add(fieldId);
-			fieldMap.put(
-					secondaryIndexType,
-					fields);
-		}
-	}
-
-	private void initialize(
-			final DataAdapter<SimpleFeature> dataAdapter,
-			final SimpleFeatureType sft,
-			final StatsManager statsManager ) {
-
-		final Map<SecondaryIndexType, List<ByteArrayId>> numericFields = new HashMap<>();
-		final Map<SecondaryIndexType, List<ByteArrayId>> textFields = new HashMap<>();
-		final Map<SecondaryIndexType, List<ByteArrayId>> temporalFields = new HashMap<>();
-		final List<DataStatistics<SimpleFeature>> secondaryIndexStatistics = new ArrayList<>();
-
+	private void initializeIndices() {
 		for (final AttributeDescriptor desc : sft.getAttributeDescriptors()) {
 			final Map<Object, Object> userData = desc.getUserData();
 			final String attributeName = desc.getLocalName();
 			final ByteArrayId fieldId = new ByteArrayId(
 					attributeName);
+			String secondaryIndex = null;
 			SecondaryIndexType secondaryIndexType = null;
+			final List<ByteArrayId> fieldsForPartial = new ArrayList<>();
 			if (userData.containsKey(NumericSecondaryIndexConfiguration.INDEX_KEY)) {
-				secondaryIndexType = SecondaryIndexType.valueOf((String) userData
-						.get(NumericSecondaryIndexConfiguration.INDEX_KEY));
-				addFieldToMap(
-						numericFields,
-						secondaryIndexType,
-						fieldId);
+				secondaryIndex = NumericSecondaryIndexConfiguration.INDEX_KEY;
+				secondaryIndexType = SecondaryIndexType.valueOf((String) userData.get(NumericSecondaryIndexConfiguration.INDEX_KEY));
 			}
 			else if (userData.containsKey(TextSecondaryIndexConfiguration.INDEX_KEY)) {
-				secondaryIndexType = SecondaryIndexType.valueOf((String) userData
-						.get(TextSecondaryIndexConfiguration.INDEX_KEY));
-				addFieldToMap(
-						textFields,
-						secondaryIndexType,
-						fieldId);
+				secondaryIndex = TextSecondaryIndexConfiguration.INDEX_KEY;
+				secondaryIndexType = SecondaryIndexType.valueOf((String) userData.get(TextSecondaryIndexConfiguration.INDEX_KEY));
 			}
 			else if (userData.containsKey(TemporalSecondaryIndexConfiguration.INDEX_KEY)) {
-				secondaryIndexType = SecondaryIndexType.valueOf((String) userData
-						.get(TemporalSecondaryIndexConfiguration.INDEX_KEY));
-				addFieldToMap(
-						temporalFields,
+				secondaryIndex = TemporalSecondaryIndexConfiguration.INDEX_KEY;
+				secondaryIndexType = SecondaryIndexType.valueOf((String) userData.get(TemporalSecondaryIndexConfiguration.INDEX_KEY));
+			}
+			if (secondaryIndexType != null) {
+				if (secondaryIndexType.equals(SecondaryIndexType.PARTIAL)) {
+					final String joined = (String) userData.get(SecondaryIndexType.PARTIAL.getValue());
+					final Iterable<String> split = Splitter.on(
+							",").split(
+							joined);
+					for (String field : split) {
+						fieldsForPartial.add(new ByteArrayId(
+								field));
+					}
+				}
+				addIndex(
+						secondaryIndex,
+						fieldId,
 						secondaryIndexType,
-						fieldId);
+						fieldsForPartial);
 			}
-		}
-
-		for (final Map.Entry<SecondaryIndexType, List<ByteArrayId>> entry : numericFields.entrySet()) {
-			final SecondaryIndexType secondaryIndexType = entry.getKey();
-			final List<ByteArrayId> fieldIds = entry.getValue();
-			final List<DataStatistics<SimpleFeature>> numericStatistics = new ArrayList<>();
-			for (final ByteArrayId numericField : fieldIds) {
-				numericStatistics.add(new FeatureNumericHistogramStatistics(
-						dataAdapter.getAdapterId(),
-						numericField.getString()));
-			}
-			supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
-					new NumericIndexStrategy(),
-					fieldIds.toArray(new ByteArrayId[fieldIds.size()]),
-					numericStatistics,
-					secondaryIndexType));
-			secondaryIndexStatistics.addAll(numericStatistics);
-		}
-		for (final Map.Entry<SecondaryIndexType, List<ByteArrayId>> entry : textFields.entrySet()) {
-			final SecondaryIndexType secondaryIndexType = entry.getKey();
-			final List<ByteArrayId> fieldIds = entry.getValue();
-			final List<DataStatistics<SimpleFeature>> textStatistics = new ArrayList<>();
-			for (final ByteArrayId textField : fieldIds) {
-				textStatistics.add(new FeatureHyperLogLogStatistics(
-						dataAdapter.getAdapterId(),
-						textField.getString(),
-						16));
-			}
-			supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
-					new TextIndexStrategy(),
-					fieldIds.toArray(new ByteArrayId[fieldIds.size()]),
-					textStatistics,
-					secondaryIndexType));
-			secondaryIndexStatistics.addAll(textStatistics);
-		}
-		for (final Map.Entry<SecondaryIndexType, List<ByteArrayId>> entry : temporalFields.entrySet()) {
-			final SecondaryIndexType secondaryIndexType = entry.getKey();
-			final List<ByteArrayId> fieldIds = entry.getValue();
-			final List<DataStatistics<SimpleFeature>> temporalStatistics = new ArrayList<>();
-			for (final ByteArrayId temporalField : fieldIds) {
-				temporalStatistics.add(new FeatureNumericHistogramStatistics(
-						dataAdapter.getAdapterId(),
-						temporalField.getString()));
-			}
-			supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
-					new TemporalIndexStrategy(),
-					fieldIds.toArray(new ByteArrayId[fieldIds.size()]),
-					temporalStatistics,
-					secondaryIndexType));
-			secondaryIndexStatistics.addAll(temporalStatistics);
-		}
-
-		for (final DataStatistics<SimpleFeature> secondaryIndexStatistic : secondaryIndexStatistics) {
-			statsManager.addStats(
-					secondaryIndexStatistic,
-					new FieldIdStatisticVisibility<SimpleFeature>(
-							secondaryIndexStatistic.getStatisticsId()));
 		}
 	}
 
 	public List<SecondaryIndex<SimpleFeature>> getSupportedSecondaryIndices() {
 		return supportedSecondaryIndices;
+	}
+
+	private void addIndex(
+			final String secondaryIndex,
+			final ByteArrayId fieldId,
+			final SecondaryIndexType secondaryIndexType,
+			final List<ByteArrayId> fieldsForPartial ) {
+		final List<DataStatistics<SimpleFeature>> statistics = new ArrayList<>();
+		DataStatistics<SimpleFeature> stat = null;
+		switch (secondaryIndex) {
+			case NumericSecondaryIndexConfiguration.INDEX_KEY:
+				stat = new FeatureNumericHistogramStatistics(
+						dataAdapter.getAdapterId(),
+						fieldId.getString());
+				statistics.add(stat);
+				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
+						new NumericIndexStrategy(),
+						fieldId,
+						statistics,
+						secondaryIndexType,
+						fieldsForPartial));
+				break;
+			case TextSecondaryIndexConfiguration.INDEX_KEY:
+				stat = new FeatureHyperLogLogStatistics(
+						dataAdapter.getAdapterId(),
+						fieldId.getString(),
+						16);
+				statistics.add(stat);
+				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
+						new TextIndexStrategy(),
+						fieldId,
+						statistics,
+						secondaryIndexType,
+						fieldsForPartial));
+				break;
+			case TemporalSecondaryIndexConfiguration.INDEX_KEY:
+				stat = new FeatureNumericHistogramStatistics(
+						dataAdapter.getAdapterId(),
+						fieldId.getString());
+				statistics.add(stat);
+				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
+						new TemporalIndexStrategy(),
+						fieldId,
+						statistics,
+						secondaryIndexType,
+						fieldsForPartial));
+				break;
+			default:
+				break;
+
+		}
+		for (final DataStatistics<SimpleFeature> statistic : statistics) {
+			statsManager.addStats(
+					statistic,
+					new FieldIdStatisticVisibility<SimpleFeature>(
+							statistic.getStatisticsId()));
+		}
 	}
 
 	@Override

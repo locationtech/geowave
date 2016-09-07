@@ -49,71 +49,65 @@ public class SecondaryIndexDataManager<T> implements
 		for (final SecondaryIndex<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
 			final ByteArrayId secondaryIndexId = new ByteArrayId(
 					TABLE_PREFIX + secondaryIndex.getId().getString());
-			// get fieldIds marked for current secondary index
-			final ByteArrayId[] fieldIdsForIndex = secondaryIndex.getFieldIDs();
-			// loop fields for this secondary index
-			for (final ByteArrayId indexedAttributeFieldId : fieldIdsForIndex) {
-				// get fieldInfo for each fieldId to be indexed
-				final FieldInfo<?> indexedAttributeFieldInfo = getFieldInfo(
-						entryInfo,
-						indexedAttributeFieldId);
-				// get indexed value(s) for current field
-				@SuppressWarnings("unchecked")
-				final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex.getIndexStrategy().getInsertionIds(
-						Arrays.asList(indexedAttributeFieldInfo));
-				// loop insertionIds
-				for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-					final ByteArrayId primaryIndexRowId = entryInfo.getRowIds().get(
-							0);
-					final ByteArrayId attributeVisibility = new ByteArrayId(
-							indexedAttributeFieldInfo.getVisibility());
-					final ByteArrayId dataId = new ByteArrayId(
-							entryInfo.getDataId());
-					switch (secondaryIndex.getSecondaryIndexType()) {
-						case JOIN:
-							secondaryIndexStore.storeJoinEntry(
-									secondaryIndexId,
-									insertionId,
-									adapter.getAdapterId(),
-									indexedAttributeFieldId,
-									primaryIndexId,
-									primaryIndexRowId,
-									attributeVisibility);
-							break;
-						case PARTIAL:
-							final List<FieldInfo<?>> attributes = new ArrayList<>();
-							final List<ByteArrayId> attributesToStore = new ArrayList<>();
-							// FIXME ^^^ consult secondary index for fields to
-							// store ^^^
-							for (final ByteArrayId fieldId : attributesToStore) {
-								attributes.add(getFieldInfo(
-										entryInfo,
-										fieldId));
-							}
-							secondaryIndexStore.storeEntry(
-									secondaryIndexId,
-									insertionId,
-									adapter.getAdapterId(),
-									indexedAttributeFieldId,
-									dataId,
-									attributeVisibility,
-									attributes);
-							break;
-						case FULL:
-							secondaryIndexStore.storeEntry(
-									secondaryIndexId,
-									insertionId,
-									adapter.getAdapterId(),
-									indexedAttributeFieldId,
-									dataId,
-									attributeVisibility,
-									// full simply sends over all of the
-									// attributes
-									entryInfo.getFieldInfo());
-							break;
-						default:
-							break;
-					}
+			final ByteArrayId indexedAttributeFieldId = secondaryIndex.getFieldId();
+			// get fieldInfo for fieldId to be indexed
+			final FieldInfo<?> indexedAttributeFieldInfo = getFieldInfo(
+					entryInfo,
+					indexedAttributeFieldId);
+			// get indexed value(s) for current field
+			@SuppressWarnings("unchecked")
+			final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex.getIndexStrategy().getInsertionIds(
+					Arrays.asList(indexedAttributeFieldInfo));
+			// loop insertionIds
+			for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
+				final ByteArrayId primaryIndexRowId = entryInfo.getRowIds().get(
+						0);
+				final ByteArrayId attributeVisibility = new ByteArrayId(
+						indexedAttributeFieldInfo.getVisibility());
+				final ByteArrayId dataId = new ByteArrayId(
+						entryInfo.getDataId());
+				switch (secondaryIndex.getSecondaryIndexType()) {
+					case JOIN:
+						secondaryIndexStore.storeJoinEntry(
+								secondaryIndexId,
+								insertionId,
+								adapter.getAdapterId(),
+								indexedAttributeFieldId,
+								primaryIndexId,
+								primaryIndexRowId,
+								attributeVisibility);
+						break;
+					case PARTIAL:
+						final List<FieldInfo<?>> attributes = new ArrayList<>();
+						final List<ByteArrayId> attributesToStore = secondaryIndex.getPartialFieldIds();
+						for (final ByteArrayId fieldId : attributesToStore) {
+							attributes.add(getFieldInfo(
+									entryInfo,
+									fieldId));
+						}
+						secondaryIndexStore.storeEntry(
+								secondaryIndexId,
+								insertionId,
+								adapter.getAdapterId(),
+								indexedAttributeFieldId,
+								dataId,
+								attributeVisibility,
+								attributes);
+						break;
+					case FULL:
+						secondaryIndexStore.storeEntry(
+								secondaryIndexId,
+								insertionId,
+								adapter.getAdapterId(),
+								indexedAttributeFieldId,
+								dataId,
+								attributeVisibility,
+								// full simply sends over all of the
+								// attributes
+								entryInfo.getFieldInfo());
+						break;
+					default:
+						break;
 				}
 			}
 			// capture statistics
@@ -132,11 +126,9 @@ public class SecondaryIndexDataManager<T> implements
 
 		for (final SecondaryIndex<T> index : adapter.getSupportedSecondaryIndices()) {
 			final List<FieldInfo<?>> indexedAttributes = new LinkedList<FieldInfo<?>>();
-			for (final ByteArrayId fieldID : index.getFieldIDs()) {
-				indexedAttributes.add(getFieldInfo(
-						entryInfo,
-						fieldID));
-			}
+			indexedAttributes.add(getFieldInfo(
+					entryInfo,
+					index.getFieldId()));
 			secondaryIndexStore.delete(
 					index,
 					indexedAttributes);

@@ -1,14 +1,18 @@
 package mil.nga.giat.geowave.adapter.vector.index;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
-
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 
 public abstract class AbstractSecondaryIndexConfiguration<T> implements
 		SimpleFeatureSecondaryIndexConfiguration
@@ -19,6 +23,7 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 	private final Class<T> clazz;
 	private final Set<String> attributes;
 	private final SecondaryIndexType secondaryIndexType;
+	private final List<String> fieldIds;
 
 	public AbstractSecondaryIndexConfiguration(
 			final Class<T> clazz,
@@ -34,14 +39,35 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 			final Class<T> clazz,
 			final Set<String> attributes,
 			final SecondaryIndexType secondaryIndexType ) {
+		this(
+				clazz,
+				attributes,
+				secondaryIndexType,
+				Collections.<String> emptyList());
+	}
+
+	public AbstractSecondaryIndexConfiguration(
+			final Class<T> clazz,
+			final Set<String> attributes,
+			final SecondaryIndexType secondaryIndexType,
+			final List<String> fieldIds ) {
 		super();
 		this.clazz = clazz;
 		this.attributes = attributes;
 		this.secondaryIndexType = secondaryIndexType;
+		this.fieldIds = fieldIds;
+		if (secondaryIndexType.equals(SecondaryIndexType.PARTIAL) && (fieldIds == null || fieldIds.isEmpty())) {
+			throw new RuntimeException(
+					"A list of fieldIds must be provided when using a PARTIAL index type");
+		}
 	}
 
 	public Set<String> getAttributes() {
 		return attributes;
+	}
+
+	public List<String> getFieldIds() {
+		return fieldIds;
 	}
 
 	@Override
@@ -55,15 +81,20 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 					desc.getUserData().put(
 							getIndexKey(),
 							secondaryIndexType.getValue());
+					if (secondaryIndexType.equals(SecondaryIndexType.PARTIAL)) {
+						desc.getUserData().put(
+								secondaryIndexType.getValue(),
+								Joiner.on(
+										",").join(
+										fieldIds));
+					}
 				}
 				else {
-					LOGGER.error("Expected type " + clazz.getName() + " for attribute '" + attribute + "' but found "
-							+ attributeType.getName());
+					LOGGER.error("Expected type " + clazz.getName() + " for attribute '" + attribute + "' but found " + attributeType.getName());
 				}
 			}
 			else {
-				LOGGER.error("SimpleFeatureType does not contain an AttributeDescriptor that matches '" + attribute
-						+ "'");
+				LOGGER.error("SimpleFeatureType does not contain an AttributeDescriptor that matches '" + attribute + "'");
 			}
 		}
 	}
@@ -76,6 +107,17 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 					getIndexKey()) != null) && (desc.getUserData().get(
 					getIndexKey()).equals(secondaryIndexType.getValue()))) {
 				attributes.add(desc.getLocalName());
+			}
+			if (desc.getUserData().containsKey(
+					SecondaryIndexType.PARTIAL.getValue())) {
+				String joined = (String) desc.getUserData().get(
+						SecondaryIndexType.PARTIAL.getValue());
+				final Iterable<String> fields = Splitter.on(
+						",").split(
+						joined);
+				for (String field : fields) {
+					fieldIds.add(field);
+				}
 			}
 		}
 	}
