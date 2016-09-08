@@ -34,7 +34,7 @@ IMAGEIO_URL=http://data.opengeo.org/suite/jai/jai_imageio-1_1-lib-linux-amd64-jd
 
 # Step #1: I've externalized commands into library functions for clarity, download and source
 if [ ! -f /tmp/geowave-install-lib.sh ]; then
-	aws s3 cp s3://geowave/emr/4/release/geowave-install-lib.sh /tmp/geowave-install-lib.sh
+	aws s3 cp s3://geowave-downloads/release/$GEOWAVE_VERSION/geowave-install-lib.sh /tmp/geowave-install-lib.sh
 fi
 source /tmp/geowave-install-lib.sh
 
