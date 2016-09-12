@@ -42,37 +42,25 @@ public class TemporalSecondaryIndexConfiguration extends
 	}
 
 	public TemporalSecondaryIndexConfiguration(
-			final Class<Date> clazz,
-			final Set<String> attributes,
+			final String attribute,
 			final SecondaryIndexType secondaryIndexType,
 			final List<String> fieldIds ) {
 		super(
-				clazz,
-				attributes,
+				Date.class,
+				attribute,
 				secondaryIndexType,
 				fieldIds);
 	}
 
 	public TemporalSecondaryIndexConfiguration(
-			Class<Date> clazz,
-			Set<String> attributes,
-			SecondaryIndexType secondaryIndexType ) {
+			final Set<String> attributes,
+			final SecondaryIndexType secondaryIndexType,
+			final List<String> fieldIds ) {
 		super(
-				clazz,
+				Date.class,
 				attributes,
-				secondaryIndexType);
-		// TODO Auto-generated constructor stub
-	}
-
-	public TemporalSecondaryIndexConfiguration(
-			Class<Date> clazz,
-			String attribute,
-			SecondaryIndexType secondaryIndexType ) {
-		super(
-				clazz,
-				attribute,
-				secondaryIndexType);
-		// TODO Auto-generated constructor stub
+				secondaryIndexType,
+				fieldIds);
 	}
 
 	@JsonIgnore

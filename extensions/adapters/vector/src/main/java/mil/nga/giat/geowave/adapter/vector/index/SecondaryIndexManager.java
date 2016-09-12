@@ -56,15 +56,18 @@ public class SecondaryIndexManager implements
 			final List<ByteArrayId> fieldsForPartial = new ArrayList<>();
 			if (userData.containsKey(NumericSecondaryIndexConfiguration.INDEX_KEY)) {
 				secondaryIndex = NumericSecondaryIndexConfiguration.INDEX_KEY;
-				secondaryIndexType = SecondaryIndexType.valueOf((String) userData.get(NumericSecondaryIndexConfiguration.INDEX_KEY));
+				secondaryIndexType = SecondaryIndexType.valueOf((String) userData
+						.get(NumericSecondaryIndexConfiguration.INDEX_KEY));
 			}
 			else if (userData.containsKey(TextSecondaryIndexConfiguration.INDEX_KEY)) {
 				secondaryIndex = TextSecondaryIndexConfiguration.INDEX_KEY;
-				secondaryIndexType = SecondaryIndexType.valueOf((String) userData.get(TextSecondaryIndexConfiguration.INDEX_KEY));
+				secondaryIndexType = SecondaryIndexType.valueOf((String) userData
+						.get(TextSecondaryIndexConfiguration.INDEX_KEY));
 			}
 			else if (userData.containsKey(TemporalSecondaryIndexConfiguration.INDEX_KEY)) {
 				secondaryIndex = TemporalSecondaryIndexConfiguration.INDEX_KEY;
-				secondaryIndexType = SecondaryIndexType.valueOf((String) userData.get(TemporalSecondaryIndexConfiguration.INDEX_KEY));
+				secondaryIndexType = SecondaryIndexType.valueOf((String) userData
+						.get(TemporalSecondaryIndexConfiguration.INDEX_KEY));
 			}
 			if (secondaryIndexType != null) {
 				if (secondaryIndexType.equals(SecondaryIndexType.PARTIAL)) {
@@ -72,7 +75,7 @@ public class SecondaryIndexManager implements
 					final Iterable<String> split = Splitter.on(
 							",").split(
 							joined);
-					for (String field : split) {
+					for (final String field : split) {
 						fieldsForPartial.add(new ByteArrayId(
 								field));
 					}

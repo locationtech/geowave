@@ -41,37 +41,25 @@ public class NumericSecondaryIndexConfiguration extends
 	}
 
 	public NumericSecondaryIndexConfiguration(
-			final Class<Number> clazz,
-			final Set<String> attributes,
+			final String attribute,
 			final SecondaryIndexType secondaryIndexType,
 			final List<String> fieldIds ) {
 		super(
-				clazz,
-				attributes,
+				Number.class,
+				attribute,
 				secondaryIndexType,
 				fieldIds);
 	}
 
 	public NumericSecondaryIndexConfiguration(
-			Class<Number> clazz,
-			Set<String> attributes,
-			SecondaryIndexType secondaryIndexType ) {
+			final Set<String> attributes,
+			final SecondaryIndexType secondaryIndexType,
+			final List<String> fieldIds ) {
 		super(
-				clazz,
+				Number.class,
 				attributes,
-				secondaryIndexType);
-		// TODO Auto-generated constructor stub
-	}
-
-	public NumericSecondaryIndexConfiguration(
-			Class<Number> clazz,
-			String attribute,
-			SecondaryIndexType secondaryIndexType ) {
-		super(
-				clazz,
-				attribute,
-				secondaryIndexType);
-		// TODO Auto-generated constructor stub
+				secondaryIndexType,
+				fieldIds);
 	}
 
 	@JsonIgnore

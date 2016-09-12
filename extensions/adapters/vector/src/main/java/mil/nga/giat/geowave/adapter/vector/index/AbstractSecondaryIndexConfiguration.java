@@ -48,6 +48,18 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 
 	public AbstractSecondaryIndexConfiguration(
 			final Class<T> clazz,
+			final String attribute,
+			final SecondaryIndexType secondaryIndexType,
+			final List<String> fieldIds ) {
+		this(
+				clazz,
+				Sets.newHashSet(attribute),
+				secondaryIndexType,
+				fieldIds);
+	}
+
+	public AbstractSecondaryIndexConfiguration(
+			final Class<T> clazz,
 			final Set<String> attributes,
 			final SecondaryIndexType secondaryIndexType,
 			final List<String> fieldIds ) {
@@ -90,11 +102,13 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 					}
 				}
 				else {
-					LOGGER.error("Expected type " + clazz.getName() + " for attribute '" + attribute + "' but found " + attributeType.getName());
+					LOGGER.error("Expected type " + clazz.getName() + " for attribute '" + attribute + "' but found "
+							+ attributeType.getName());
 				}
 			}
 			else {
-				LOGGER.error("SimpleFeatureType does not contain an AttributeDescriptor that matches '" + attribute + "'");
+				LOGGER.error("SimpleFeatureType does not contain an AttributeDescriptor that matches '" + attribute
+						+ "'");
 			}
 		}
 	}

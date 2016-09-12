@@ -41,37 +41,25 @@ public class TextSecondaryIndexConfiguration extends
 	}
 
 	public TextSecondaryIndexConfiguration(
-			final Class<String> clazz,
-			final Set<String> attributes,
+			final String attribute,
 			final SecondaryIndexType secondaryIndexType,
 			final List<String> fieldIds ) {
 		super(
-				clazz,
-				attributes,
+				String.class,
+				attribute,
 				secondaryIndexType,
 				fieldIds);
 	}
 
 	public TextSecondaryIndexConfiguration(
-			Class<String> clazz,
-			Set<String> attributes,
-			SecondaryIndexType secondaryIndexType ) {
+			final Set<String> attributes,
+			final SecondaryIndexType secondaryIndexType,
+			final List<String> fieldIds ) {
 		super(
-				clazz,
+				String.class,
 				attributes,
-				secondaryIndexType);
-		// TODO Auto-generated constructor stub
-	}
-
-	public TextSecondaryIndexConfiguration(
-			Class<String> clazz,
-			String attribute,
-			SecondaryIndexType secondaryIndexType ) {
-		super(
-				clazz,
-				attribute,
-				secondaryIndexType);
-		// TODO Auto-generated constructor stub
+				secondaryIndexType,
+				fieldIds);
 	}
 
 	@JsonIgnore

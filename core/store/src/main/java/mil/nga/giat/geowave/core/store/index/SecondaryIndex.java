@@ -135,7 +135,9 @@ public class SecondaryIndex<T> implements
 			partialsLength = allPartials.array().length;
 			partialsBinary = allPartials.array();
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(indexStrategyBinary.length + fieldIdBinary.length + secondaryIndexTypeBinary.length + 20 + persistablesBinary.length + partialsLength + (partialsLength > 0 ? 4 : 0));
+		final ByteBuffer buf = ByteBuffer.allocate(indexStrategyBinary.length + fieldIdBinary.length
+				+ secondaryIndexTypeBinary.length + 20 + persistablesBinary.length + partialsLength
+				+ (partialsLength > 0 ? 4 : 0));
 		buf.putInt(indexStrategyBinary.length);
 		buf.putInt(fieldIdBinary.length);
 		buf.putInt(secondaryIndexTypeBinary.length);

@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,8 @@ import mil.nga.giat.geowave.adapter.vector.index.TextSecondaryIndexConfiguration
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryAdapter;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -60,6 +63,8 @@ public class SecondaryIndexIT
 
 		// mark attributes for secondary indexing
 		final List<SimpleFeatureUserDataConfiguration> configs = new ArrayList<>();
+
+		// JOIN
 		configs.add(new NumericSecondaryIndexConfiguration(
 				"doubleField",
 				SecondaryIndexType.JOIN));
@@ -69,8 +74,37 @@ public class SecondaryIndexIT
 		configs.add(new TextSecondaryIndexConfiguration(
 				"stringField",
 				SecondaryIndexType.JOIN));
-		// TODO SecondaryIndexType.FULL
-		// TODO SecondaryIndexType.PARTIAL
+
+		// FULL
+		// configs.add(new NumericSecondaryIndexConfiguration(
+		// "doubleField",
+		// SecondaryIndexType.FULL));
+		// configs.add(new TemporalSecondaryIndexConfiguration(
+		// "dateField",
+		// SecondaryIndexType.FULL));
+		// configs.add(new TextSecondaryIndexConfiguration(
+		// "stringField",
+		// SecondaryIndexType.FULL));
+
+		// PARTIAL
+		// configs.add(new NumericSecondaryIndexConfiguration(
+		// "doubleField",
+		// SecondaryIndexType.PARTIAL,
+		// Arrays.asList(
+		// StringUtils.stringFromBinary(
+		// GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes()))));
+		// configs.add(new TemporalSecondaryIndexConfiguration(
+		// "dateField",
+		// SecondaryIndexType.PARTIAL,
+		// Arrays.asList(
+		// StringUtils.stringFromBinary(
+		// GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes()))));
+		// configs.add(new TextSecondaryIndexConfiguration(
+		// "stringField",
+		// SecondaryIndexType.PARTIAL,
+		// Arrays.asList(
+		// StringUtils.stringFromBinary(
+		// GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes()))));
 
 		// update schema with configs
 		final SimpleFeatureType schema = DataUtilities.createType(
