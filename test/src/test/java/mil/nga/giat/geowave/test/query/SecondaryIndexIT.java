@@ -8,8 +8,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.NavigableMap;
+import java.util.Set;
 import java.util.UUID;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Range;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.security.Authorizations;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.io.Text;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -31,14 +50,20 @@ import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurat
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryAdapter;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
@@ -47,12 +72,96 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 @RunWith(GeoWaveITRunner.class)
 public class SecondaryIndexIT
 {
-
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
+	private FeatureDataAdapter dataAdapter;
+	private List<ByteArrayId> allPrimaryIndexIds = new ArrayList<>();
+	private List<String> allDataIds = new ArrayList<>();
+	private int numAttributes;
+
+	@Test
+	public void testSecondaryIndicesDirectly()
+			throws AccumuloException,
+			AccumuloSecurityException,
+			TableNotFoundException,
+			ParseException,
+			IOException {
+
+		Assert.assertTrue(allPrimaryIndexIds.size() == 3);
+
+		if (dataStoreOptions.getType().equals(
+				"accumulo")) {
+
+			final AccumuloRequiredOptions options = (AccumuloRequiredOptions) dataStoreOptions.getFactoryOptions();
+
+			final Connector connector = ConnectorPool.getInstance().getConnector(
+					options.getZookeeper(),
+					options.getInstance(),
+					options.getUser(),
+					options.getPassword());
+
+			numericJoinAccumulo(connector);
+			textJoinAccumulo(connector);
+			temporalJoinAccumulo(connector);
+			numericFullAccumulo(connector);
+			textFullAccumulo(connector);
+			temporalFullAccumulo(connector);
+			numericPartialAccumulo(connector);
+			textPartialAccumulo(connector);
+			temporalPartialAccumulo(connector);
+		}
+
+		else if (dataStoreOptions.getType().equals(
+				"hbase")) {
+
+			final HBaseRequiredOptions options = (HBaseRequiredOptions) dataStoreOptions.getFactoryOptions();
+
+			final Connection connection = ConnectionPool.getInstance().getConnection(
+					options.getZookeeper());
+
+			numericJoinHBase(connection);
+			textJoinHBase(connection);
+			temporalJoinHBase(connection);
+			numericFullHBase(connection);
+			textFullHBase(connection);
+			temporalFullHBase(connection);
+			numericPartialHBase(connection);
+			textPartialHBase(connection);
+			temporalPartialHBase(connection);
+		}
+
+	}
+
+	private static final String NUMERIC_JOIN_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_NUMERIC_JOIN";
+	private static final String TEXT_JOIN_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEXT_JOIN";
+	private static final String TEMPORAL_JOIN_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEMPORAL_JOIN";
+	private static final String NUMERIC_FULL_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_NUMERIC_FULL";
+	private static final String TEXT_FULL_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEXT_FULL";
+	private static final String TEMPORAL_FULL_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEMPORAL_FULL";
+	private static final String NUMERIC_PARTIAL_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_NUMERIC_PARTIAL";
+	private static final String TEXT_PARTIAL_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEXT_PARTIAL";
+	private static final String TEMPORAL_PARTIAL_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEMPORAL_PARTIAL";
+	private static final String GEOMETRY_FIELD = "geometryField";
+	private static final String NUMERIC_JOIN_FIELD = "doubleField";
+	private static final String TEMPORAL_JOIN_FIELD = "dateField";
+	private static final String TEXT_JOIN_FIELD = "stringField";
+	private static final String NUMERIC_FULL_FIELD = "doubleField2";
+	private static final String TEMPORAL_FULL_FIELD = "dateField2";
+	private static final String TEXT_FULL_FIELD = "stringField2";
+	private static final String NUMERIC_PARTIAL_FIELD = "doubleField3";
+	private static final String TEMPORAL_PARTIAL_FIELD = "dateField3";
+	private static final String TEXT_PARTIAL_FIELD = "stringField3";
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
+			"dd-MM-yyyy");
+	private static final ByteArrayId GEOMETRY_FIELD_ID = new ByteArrayId(
+			GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes());
+	private static final Authorizations DEFAULT_ACCUMULO_AUTHORIZATIONS = new Authorizations(
+			new String[] {});
+	private static final List<String> PARTIAL_LIST = Arrays.asList(StringUtils.stringFromBinary(GEOMETRY_FIELD_ID
+			.getBytes()));
 
 	@Before
 	public void initTest()
@@ -66,50 +175,48 @@ public class SecondaryIndexIT
 
 		// JOIN
 		configs.add(new NumericSecondaryIndexConfiguration(
-				"doubleField",
+				NUMERIC_JOIN_FIELD,
 				SecondaryIndexType.JOIN));
 		configs.add(new TemporalSecondaryIndexConfiguration(
-				"dateField",
+				TEMPORAL_JOIN_FIELD,
 				SecondaryIndexType.JOIN));
 		configs.add(new TextSecondaryIndexConfiguration(
-				"stringField",
+				TEXT_JOIN_FIELD,
 				SecondaryIndexType.JOIN));
 
 		// FULL
-		// configs.add(new NumericSecondaryIndexConfiguration(
-		// "doubleField",
-		// SecondaryIndexType.FULL));
-		// configs.add(new TemporalSecondaryIndexConfiguration(
-		// "dateField",
-		// SecondaryIndexType.FULL));
-		// configs.add(new TextSecondaryIndexConfiguration(
-		// "stringField",
-		// SecondaryIndexType.FULL));
+		configs.add(new NumericSecondaryIndexConfiguration(
+				NUMERIC_FULL_FIELD,
+				SecondaryIndexType.FULL));
+		configs.add(new TemporalSecondaryIndexConfiguration(
+				TEMPORAL_FULL_FIELD,
+				SecondaryIndexType.FULL));
+		configs.add(new TextSecondaryIndexConfiguration(
+				TEXT_FULL_FIELD,
+				SecondaryIndexType.FULL));
 
 		// PARTIAL
-		// configs.add(new NumericSecondaryIndexConfiguration(
-		// "doubleField",
-		// SecondaryIndexType.PARTIAL,
-		// Arrays.asList(
-		// StringUtils.stringFromBinary(
-		// GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes()))));
-		// configs.add(new TemporalSecondaryIndexConfiguration(
-		// "dateField",
-		// SecondaryIndexType.PARTIAL,
-		// Arrays.asList(
-		// StringUtils.stringFromBinary(
-		// GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes()))));
-		// configs.add(new TextSecondaryIndexConfiguration(
-		// "stringField",
-		// SecondaryIndexType.PARTIAL,
-		// Arrays.asList(
-		// StringUtils.stringFromBinary(
-		// GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes()))));
+		configs.add(new NumericSecondaryIndexConfiguration(
+				NUMERIC_PARTIAL_FIELD,
+				SecondaryIndexType.PARTIAL,
+				PARTIAL_LIST));
+		configs.add(new TemporalSecondaryIndexConfiguration(
+				TEMPORAL_PARTIAL_FIELD,
+				SecondaryIndexType.PARTIAL,
+				PARTIAL_LIST));
+		configs.add(new TextSecondaryIndexConfiguration(
+				TEXT_PARTIAL_FIELD,
+				SecondaryIndexType.PARTIAL,
+				PARTIAL_LIST));
 
 		// update schema with configs
 		final SimpleFeatureType schema = DataUtilities.createType(
 				"record",
-				"geometryField:Geometry,doubleField:Double,dateField:Date,stringField:String");
+				GEOMETRY_FIELD + ":Geometry," + NUMERIC_JOIN_FIELD + ":Double," + NUMERIC_FULL_FIELD + ":Double,"
+						+ NUMERIC_PARTIAL_FIELD + ":Double," + TEMPORAL_JOIN_FIELD + ":Date," + TEMPORAL_FULL_FIELD
+						+ ":Date," + TEMPORAL_PARTIAL_FIELD + ":Date," + TEXT_JOIN_FIELD + ":String," + TEXT_FULL_FIELD
+						+ ":String," + TEXT_PARTIAL_FIELD + ":String");
+		numAttributes = schema.getAttributeCount();
 		final SimpleFeatureUserDataConfigurationSet config = new SimpleFeatureUserDataConfigurationSet(
 				schema,
 				configs);
@@ -119,33 +226,31 @@ public class SecondaryIndexIT
 		final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
 				schema);
 		final List<SimpleFeature> features = new ArrayList<>();
-		final DateFormat dateFormat = new SimpleDateFormat(
-				"dd-MM-yyyy");
 		features.add(buildSimpleFeature(
 				builder,
 				-180d,
 				-90d,
-				dateFormat.parse("11-11-2012"),
+				DATE_FORMAT.parse("11-11-2012"),
 				1d,
 				"aaa"));
 		features.add(buildSimpleFeature(
 				builder,
 				0d,
 				0d,
-				dateFormat.parse("11-30-2013"),
+				DATE_FORMAT.parse("11-30-2013"),
 				10d,
 				"bbb"));
 		features.add(buildSimpleFeature(
 				builder,
 				180d,
 				90d,
-				dateFormat.parse("12-25-2015"),
+				DATE_FORMAT.parse("12-25-2015"),
 				100d,
 				"ccc"));
 
 		// ingest data
 		final DataStore dataStore = dataStoreOptions.createDataStore();
-		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
+		dataAdapter = new FeatureDataAdapter(
 				schema);
 		final PrimaryIndex index = TestUtils.DEFAULT_SPATIAL_INDEX;
 		try (@SuppressWarnings("unchecked")
@@ -153,22 +258,581 @@ public class SecondaryIndexIT
 				dataAdapter,
 				index)) {
 			for (final SimpleFeature aFeature : features) {
-				writer.write(aFeature);
+				allPrimaryIndexIds.addAll(writer.write(aFeature));
 			}
 		}
-	}
-
-	@Test
-	public void test() {
-		final SecondaryIndexDataStore secondaryIndexDataStore = dataStoreOptions.createSecondaryIndexStore();
-		// TODO ...
-		Assert.assertTrue(true);
 	}
 
 	@After
 	public void deleteTestData()
 			throws IOException {
 		TestUtils.deleteAll(dataStoreOptions);
+	}
+
+	private void numericJoinAccumulo(
+			final Connector connector )
+			throws TableNotFoundException {
+		final Scanner scanner = connector.createScanner(
+				NUMERIC_JOIN_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						Lexicoders.DOUBLE.toByteArray(0d)),
+				new Text(
+						Lexicoders.DOUBLE.toByteArray(20d))));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								NUMERIC_JOIN_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+					.getKey()
+					.getColumnQualifierData()
+					.getBackingArray());
+			if (numResults == 1) {
+				Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(0)));
+			}
+			else if (numResults == 2) {
+				Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+			}
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == 2);
+	}
+
+	private void numericJoinHBase(
+			final Connection connection )
+			throws IOException {
+		final Table table = connection.getTable(TableName.valueOf((NUMERIC_JOIN_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						NUMERIC_JOIN_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(Lexicoders.DOUBLE.toByteArray(0d));
+		scan.setStopRow(Lexicoders.DOUBLE.toByteArray(20d));
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == 1);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry.getKey());
+				if (numResults == 1) {
+					Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(0)));
+				}
+				else if (numResults == 2) {
+					Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+				}
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 2);
+	}
+
+	private void textJoinAccumulo(
+			final Connector connector )
+			throws TableNotFoundException {
+		final Scanner scanner = connector.createScanner(
+				TEXT_JOIN_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						new ByteArrayId(
+								"bbb").getBytes())));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								TEXT_JOIN_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+					.getKey()
+					.getColumnQualifierData()
+					.getBackingArray());
+			Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void textJoinHBase(
+			final Connection connection )
+			throws IOException {
+		final Table table = connection.getTable(TableName.valueOf((TEXT_JOIN_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						TEXT_JOIN_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(new ByteArrayId(
+				"bbb").getBytes());
+		scan.setStopRow(new ByteArrayId(
+				"bbb").getBytes());
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == 1);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry.getKey());
+				Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void temporalJoinAccumulo(
+			final Connector connector )
+			throws TableNotFoundException,
+			ParseException {
+		final Scanner scanner = connector.createScanner(
+				TEMPORAL_JOIN_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+								"11-30-2012").getTime())),
+				new Text(
+						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+								"11-30-2014").getTime()))));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								TEMPORAL_JOIN_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+					.getKey()
+					.getColumnQualifierData()
+					.getBackingArray());
+			Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void temporalJoinHBase(
+			final Connection connection )
+			throws IOException,
+			ParseException {
+		final Table table = connection.getTable(TableName.valueOf((TEMPORAL_JOIN_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						TEMPORAL_JOIN_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+				"11-30-2012").getTime()));
+		scan.setStopRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+				"11-30-2014").getTime()));
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == 1);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry.getKey());
+				Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void numericFullAccumulo(
+			final Connector connector )
+			throws TableNotFoundException {
+		final Scanner scanner = connector.createScanner(
+				NUMERIC_FULL_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						Lexicoders.DOUBLE.toByteArray(0d)),
+				new Text(
+						Lexicoders.DOUBLE.toByteArray(20d))));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								NUMERIC_FULL_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			final String dataId = SecondaryIndexUtils.getDataId(entry
+					.getKey()
+					.getColumnQualifierData()
+					.getBackingArray());
+			if ((numResults / numAttributes) == 0) {
+				Assert.assertTrue(dataId.equals(allDataIds.get(0)));
+			}
+			else if ((numResults / numAttributes) == 1) {
+				Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+			}
+			numResults += 1;
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == (2 * numAttributes));
+	}
+
+	private void numericFullHBase(
+			final Connection connection )
+			throws IOException {
+		final Table table = connection.getTable(TableName.valueOf((NUMERIC_FULL_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						NUMERIC_FULL_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(Lexicoders.DOUBLE.toByteArray(0d));
+		scan.setStopRow(Lexicoders.DOUBLE.toByteArray(20d));
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == numAttributes);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final String dataId = SecondaryIndexUtils.getDataId(entry.getKey());
+				Assert.assertTrue((dataId.equals(allDataIds.get(0))) || (dataId.equals(allDataIds.get(1))));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 2);
+	}
+
+	private void textFullAccumulo(
+			final Connector connector )
+			throws TableNotFoundException {
+		final Scanner scanner = connector.createScanner(
+				TEXT_FULL_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						new ByteArrayId(
+								"bbb").getBytes())));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								TEXT_FULL_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final String dataId = SecondaryIndexUtils.getDataId(entry
+					.getKey()
+					.getColumnQualifierData()
+					.getBackingArray());
+			Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == numAttributes);
+	}
+
+	private void textFullHBase(
+			final Connection connection )
+			throws IOException {
+		final Table table = connection.getTable(TableName.valueOf((TEXT_FULL_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						TEXT_FULL_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(new ByteArrayId(
+				"bbb").getBytes());
+		scan.setStopRow(new ByteArrayId(
+				"bbb").getBytes());
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == numAttributes);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final String dataId = SecondaryIndexUtils.getDataId(entry.getKey());
+				Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void temporalFullAccumulo(
+			final Connector connector )
+			throws TableNotFoundException,
+			ParseException {
+		final Scanner scanner = connector.createScanner(
+				TEMPORAL_FULL_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+								"11-30-2012").getTime())),
+				new Text(
+						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+								"11-30-2014").getTime()))));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								TEMPORAL_FULL_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final String dataId = SecondaryIndexUtils.getDataId(entry
+					.getKey()
+					.getColumnQualifierData()
+					.getBackingArray());
+			Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == numAttributes);
+	}
+
+	private void temporalFullHBase(
+			final Connection connection )
+			throws IOException,
+			ParseException {
+		final Table table = connection.getTable(TableName.valueOf((TEMPORAL_FULL_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						TEMPORAL_FULL_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+				"11-30-2012").getTime()));
+		scan.setStopRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+				"11-30-2014").getTime()));
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == numAttributes);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final String dataId = SecondaryIndexUtils.getDataId(entry.getKey());
+				Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void numericPartialAccumulo(
+			final Connector connector )
+			throws TableNotFoundException {
+		final Scanner scanner = connector.createScanner(
+				NUMERIC_PARTIAL_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						Lexicoders.DOUBLE.toByteArray(0d)),
+				new Text(
+						Lexicoders.DOUBLE.toByteArray(20d))));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								NUMERIC_PARTIAL_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
+			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+			Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
+			final String dataId = SecondaryIndexUtils.getDataId(entry
+					.getKey()
+					.getColumnQualifierData()
+					.getBackingArray());
+			if (numResults == 1) {
+				Assert.assertTrue(dataId.equals(allDataIds.get(0)));
+			}
+			else if (numResults == 2) {
+				Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+			}
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == 2);
+	}
+
+	private void numericPartialHBase(
+			final Connection connection )
+			throws IOException {
+		final Table table = connection.getTable(TableName.valueOf((NUMERIC_PARTIAL_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						NUMERIC_PARTIAL_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(Lexicoders.DOUBLE.toByteArray(0d));
+		scan.setStopRow(Lexicoders.DOUBLE.toByteArray(20d));
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == 1);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final byte[] cq = entry.getKey();
+				final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+				Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
+				final String dataId = SecondaryIndexUtils.getDataId(cq);
+				Assert.assertTrue((dataId.equals(allDataIds.get(0))) || (dataId.equals(allDataIds.get(1))));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 2);
+	}
+
+	private void textPartialAccumulo(
+			final Connector connector )
+			throws TableNotFoundException {
+		final Scanner scanner = connector.createScanner(
+				TEXT_PARTIAL_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						new ByteArrayId(
+								"bbb").getBytes())));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								TEXT_PARTIAL_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
+			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+			Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
+			final String dataId = SecondaryIndexUtils.getDataId(cq);
+			Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void textPartialHBase(
+			final Connection connection )
+			throws IOException {
+		final Table table = connection.getTable(TableName.valueOf((TEXT_PARTIAL_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						TEXT_PARTIAL_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(new ByteArrayId(
+				"bbb").getBytes());
+		scan.setStopRow(new ByteArrayId(
+				"bbb").getBytes());
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == 1);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final byte[] cq = entry.getKey();
+				final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+				Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
+				final String dataId = SecondaryIndexUtils.getDataId(cq);
+				Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void temporalPartialAccumulo(
+			final Connector connector )
+			throws TableNotFoundException,
+			ParseException {
+		final Scanner scanner = connector.createScanner(
+				TEMPORAL_PARTIAL_TABLE,
+				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		scanner.setRange(new Range(
+				new Text(
+						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+								"11-30-2012").getTime())),
+				new Text(
+						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+								"11-30-2014").getTime()))));
+		scanner.fetchColumnFamily(new Text(
+				SecondaryIndexUtils.constructColumnFamily(
+						dataAdapter.getAdapterId(),
+						new ByteArrayId(
+								TEMPORAL_PARTIAL_FIELD))));
+		int numResults = 0;
+		for (final Entry<Key, Value> entry : scanner) {
+			numResults += 1;
+			final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
+			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+			Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
+			final String dataId = SecondaryIndexUtils.getDataId(cq);
+			Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+		}
+		scanner.close();
+		Assert.assertTrue(numResults == 1);
+	}
+
+	private void temporalPartialHBase(
+			final Connection connection )
+			throws IOException,
+			ParseException {
+		final Table table = connection.getTable(TableName.valueOf((TEMPORAL_PARTIAL_TABLE)));
+		final Scan scan = new Scan();
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						TEMPORAL_PARTIAL_FIELD));
+		scan.addFamily(columnFamily);
+		scan.setStartRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+				"11-30-2012").getTime()));
+		scan.setStopRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+				"11-30-2014").getTime()));
+		final ResultScanner results = table.getScanner(scan);
+		int numResults = 0;
+		for (final Result result : results) {
+			numResults += 1;
+			final NavigableMap<byte[], byte[]> qualifierToValueMap = result.getFamilyMap(columnFamily);
+			final Set<Entry<byte[], byte[]>> entries = qualifierToValueMap.entrySet();
+			Assert.assertTrue(entries.size() == 1);
+			for (final Entry<byte[], byte[]> entry : entries) {
+				final byte[] cq = entry.getKey();
+				final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+				Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
+				final String dataId = SecondaryIndexUtils.getDataId(cq);
+				Assert.assertTrue(dataId.equals(allDataIds.get(1)));
+			}
+		}
+		table.close();
+		Assert.assertTrue(numResults == 1);
 	}
 
 	private SimpleFeature buildSimpleFeature(
@@ -179,20 +843,40 @@ public class SecondaryIndexIT
 			final double doubleField,
 			final String stringField ) {
 		builder.set(
-				"geometryField",
+				GEOMETRY_FIELD,
 				GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 						lng,
 						lat)));
 		builder.set(
-				"dateField",
+				TEMPORAL_JOIN_FIELD,
 				dateField);
 		builder.set(
-				"doubleField",
+				TEMPORAL_FULL_FIELD,
+				dateField);
+		builder.set(
+				TEMPORAL_PARTIAL_FIELD,
+				dateField);
+		builder.set(
+				NUMERIC_JOIN_FIELD,
 				doubleField);
 		builder.set(
-				"stringField",
+				NUMERIC_FULL_FIELD,
+				doubleField);
+		builder.set(
+				NUMERIC_PARTIAL_FIELD,
+				doubleField);
+		builder.set(
+				TEXT_JOIN_FIELD,
 				stringField);
-		return builder.buildFeature(UUID.randomUUID().toString());
+		builder.set(
+				TEXT_FULL_FIELD,
+				stringField);
+		builder.set(
+				TEXT_PARTIAL_FIELD,
+				stringField);
+		final String dataId = UUID.randomUUID().toString();
+		allDataIds.add(dataId);
+		return builder.buildFeature(dataId);
 	}
 
 }

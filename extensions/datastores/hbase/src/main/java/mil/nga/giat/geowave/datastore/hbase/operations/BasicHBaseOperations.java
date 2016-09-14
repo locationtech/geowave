@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -111,7 +113,7 @@ public class BasicHBaseOperations implements
 				qTableName);
 	}
 
-	private void createTable(
+	public void createTable(
 			final String[] columnFamilies,
 			final TableName name,
 			final Set<ByteArrayId> splits )
@@ -139,6 +141,38 @@ public class BasicHBaseOperations implements
 					conn.getAdmin().createTable(
 							desc);
 				}
+			}
+		}
+	}
+
+	public void addColumnFamiles(
+			final String[] columnFamilies,
+			final String tableName )
+			throws IOException {
+		final TableName table = getTableName(tableName);
+		final List<String> existingColumnFamilies = new ArrayList<>();
+		final List<String> newColumnFamilies = new ArrayList<>();
+		synchronized (ADMIN_MUTEX) {
+			if (conn.getAdmin().isTableAvailable(
+					table)) {
+				final HTableDescriptor existingTableDescriptor = conn.getAdmin().getTableDescriptor(
+						table);
+				final HColumnDescriptor[] existingColumnDescriptors = existingTableDescriptor.getColumnFamilies();
+				for (final HColumnDescriptor hColumnDescriptor : existingColumnDescriptors) {
+					existingColumnFamilies.add(hColumnDescriptor.getNameAsString());
+				}
+				for (final String columnFamily : columnFamilies) {
+					if (!existingColumnFamilies.contains(columnFamily)) {
+						newColumnFamilies.add(columnFamily);
+					}
+				}
+				for (final String newColumnFamily : newColumnFamilies) {
+					existingTableDescriptor.addFamily(new HColumnDescriptor(
+							newColumnFamily));
+				}
+				conn.getAdmin().modifyTable(
+						table,
+						existingTableDescriptor);
 			}
 		}
 	}

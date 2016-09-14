@@ -31,6 +31,7 @@ import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.SecondaryIndexQueryFilterIterator;
@@ -98,10 +99,10 @@ public class AccumuloSecondaryIndexDataStore extends
 		final ColumnVisibility columnVisibility = new ColumnVisibility(
 				attributeVisibility);
 		m.put(
-				ByteArrayUtils.combineArrays(
+				SecondaryIndexUtils.constructColumnFamily(
 						adapterId,
 						indexedAttributeFieldId),
-				ByteArrayUtils.combineVariableLengthArrays(
+				SecondaryIndexUtils.constructColumnQualifier(
 						primaryIndexId,
 						primaryIndexRowId),
 				columnVisibility,
@@ -123,10 +124,10 @@ public class AccumuloSecondaryIndexDataStore extends
 		final ColumnVisibility columnVisibility = new ColumnVisibility(
 				fieldVisibility);
 		m.put(
-				ByteArrayUtils.combineArrays(
+				SecondaryIndexUtils.constructColumnFamily(
 						adapterId,
 						indexedAttributeFieldId),
-				ByteArrayUtils.combineVariableLengthArrays(
+				SecondaryIndexUtils.constructColumnQualifier(
 						fieldId,
 						dataId),
 				columnVisibility,
@@ -159,9 +160,9 @@ public class AccumuloSecondaryIndexDataStore extends
 				visibility);
 		if (scanner != null) {
 			scanner.fetchColumnFamily(new Text(
-					ByteArrayUtils.combineArrays(
-							adapterId.getBytes(),
-							indexedAttributeFieldId.getBytes())));
+					SecondaryIndexUtils.constructColumnFamily(
+							adapterId,
+							indexedAttributeFieldId)));
 			final Collection<Range> ranges = getScanRanges(scanRanges);
 			for (final Range range : ranges) {
 				scanner.setRange(range);

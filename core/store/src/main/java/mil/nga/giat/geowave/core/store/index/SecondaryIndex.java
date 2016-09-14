@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 public class SecondaryIndex<T> implements
 		Index<FilterableConstraints, List<FieldInfo<?>>>
 {
+	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	private FieldIndexStrategy<?, ?> indexStrategy;
 	private ByteArrayId fieldId;
 	private List<DataStatistics<T>> associatedStatistics;
@@ -53,7 +54,7 @@ public class SecondaryIndex<T> implements
 		this.associatedStatistics = associatedStatistics;
 		this.secondaryIndexType = secondaryIndexType;
 		this.secondaryIndexId = new ByteArrayId(
-				StringUtils.stringToBinary(indexStrategy.getId() + "_" + secondaryIndexType.getValue()));
+				TABLE_PREFIX + indexStrategy.getId() + "_" + secondaryIndexType.getValue());
 		this.partialFieldIds = partialFieldIds;
 	}
 

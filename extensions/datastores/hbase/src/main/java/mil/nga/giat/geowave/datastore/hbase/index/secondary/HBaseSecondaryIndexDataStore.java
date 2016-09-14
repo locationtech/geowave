@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
@@ -53,10 +54,8 @@ public class HBaseSecondaryIndexDataStore extends
 		try {
 			writer = hbaseOperations.createWriter(
 					secondaryIndexName,
-					new String[] {
-						secondaryIndexName
-					},
-					true);
+					new String[] {},
+					false);
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -87,10 +86,10 @@ public class HBaseSecondaryIndexDataStore extends
 		p.setCellVisibility(new CellVisibility(
 				StringUtils.stringFromBinary(attributeVisibility)));
 		p.addColumn(
-				ByteArrayUtils.combineArrays(
+				SecondaryIndexUtils.constructColumnFamily(
 						adapterId,
 						indexedAttributeFieldId),
-				ByteArrayUtils.combineVariableLengthArrays(
+				SecondaryIndexUtils.constructColumnQualifier(
 						primaryIndexId,
 						primaryIndexRowId),
 				EMPTY_VALUE);
@@ -115,10 +114,10 @@ public class HBaseSecondaryIndexDataStore extends
 		p.setCellVisibility(new CellVisibility(
 				StringUtils.stringFromBinary(fieldVisibility)));
 		p.addColumn(
-				ByteArrayUtils.combineArrays(
+				SecondaryIndexUtils.constructColumnFamily(
 						adapterId,
 						indexedAttributeFieldId),
-				ByteArrayUtils.combineVariableLengthArrays(
+				SecondaryIndexUtils.constructColumnQualifier(
 						fieldId,
 						dataId),
 				fieldValue);

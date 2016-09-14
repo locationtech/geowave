@@ -29,7 +29,6 @@ public class SecondaryIndexDataManager<T> implements
 	private final SecondaryIndexDataAdapter<T> adapter;
 	final SecondaryIndexDataStore secondaryIndexStore;
 	final ByteArrayId primaryIndexId;
-	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 
 	public SecondaryIndexDataManager(
 			final SecondaryIndexDataStore secondaryIndexStore,
@@ -47,8 +46,6 @@ public class SecondaryIndexDataManager<T> implements
 			final T entry ) {
 		// loop secondary indices for adapter
 		for (final SecondaryIndex<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
-			final ByteArrayId secondaryIndexId = new ByteArrayId(
-					TABLE_PREFIX + secondaryIndex.getId().getString());
 			final ByteArrayId indexedAttributeFieldId = secondaryIndex.getFieldId();
 			// get fieldInfo for fieldId to be indexed
 			final FieldInfo<?> indexedAttributeFieldInfo = getFieldInfo(
@@ -69,7 +66,7 @@ public class SecondaryIndexDataManager<T> implements
 				switch (secondaryIndex.getSecondaryIndexType()) {
 					case JOIN:
 						secondaryIndexStore.storeJoinEntry(
-								secondaryIndexId,
+								secondaryIndex.getId(),
 								insertionId,
 								adapter.getAdapterId(),
 								indexedAttributeFieldId,
@@ -86,7 +83,7 @@ public class SecondaryIndexDataManager<T> implements
 									fieldId));
 						}
 						secondaryIndexStore.storeEntry(
-								secondaryIndexId,
+								secondaryIndex.getId(),
 								insertionId,
 								adapter.getAdapterId(),
 								indexedAttributeFieldId,
@@ -96,7 +93,7 @@ public class SecondaryIndexDataManager<T> implements
 						break;
 					case FULL:
 						secondaryIndexStore.storeEntry(
-								secondaryIndexId,
+								secondaryIndex.getId(),
 								insertionId,
 								adapter.getAdapterId(),
 								indexedAttributeFieldId,

@@ -54,6 +54,7 @@ import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -539,9 +540,7 @@ public class AccumuloDataStore extends
 						final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
 						while (iterator.hasNext()) {
 							final byte[] cq = iterator.next().getKey().getColumnQualifierData().getBackingArray();
-							result.add(new ByteArrayId(
-									ByteArrayUtils.splitVariableLengthArrays(
-											cq).getRight()));
+							result.add(SecondaryIndexUtils.getPrimaryRowId(cq));
 						}
 					}
 					catch (final TableNotFoundException e) {
