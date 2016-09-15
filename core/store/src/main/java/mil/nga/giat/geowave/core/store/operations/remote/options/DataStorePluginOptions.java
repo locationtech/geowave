@@ -45,29 +45,38 @@ public class DataStorePluginOptions extends
 	 * From the given options (like 'username', 'password') and the given
 	 * storeType (like 'accumulo'), setup this plugin options to be able to
 	 * create data stores.
-	 * 
+	 *
 	 * @param storeType
 	 * @param options
 	 */
 	public DataStorePluginOptions(
-			String storeType,
-			Map<String, String> options ) {
+			final String storeType,
+			final Map<String, String> options ) {
 		selectPlugin(storeType);
 		ConfigUtils.populateOptionsFromList(
 				getFactoryOptions(),
 				options);
 	}
 
+	public DataStorePluginOptions(
+			final String storeType,
+			final StoreFactoryFamilySpi factoryPlugin,
+			final StoreFactoryOptions factoryOptions ) {
+		this.storeType = storeType;
+		this.factoryPlugin = factoryPlugin;
+		this.factoryOptions = factoryOptions;
+	}
+
 	/**
 	 * This method will allow the user to specify the desired factory, such as
-	 * 'accumulo' or 'memory'.
+	 * 'accumulo' or 'hbase'.
 	 */
 	@Override
 	public void selectPlugin(
-			String qualifier ) {
+			final String qualifier ) {
 		storeType = qualifier;
 		if (qualifier != null) {
-			Map<String, StoreFactoryFamilySpi> factories = GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
+			final Map<String, StoreFactoryFamilySpi> factories = GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
 			factoryPlugin = factories.get(qualifier);
 			if (factoryPlugin == null) {
 				throw new ParameterException(
@@ -86,7 +95,7 @@ public class DataStorePluginOptions extends
 	}
 
 	public void setFactoryOptions(
-			StoreFactoryOptions factoryOptions ) {
+			final StoreFactoryOptions factoryOptions ) {
 		this.factoryOptions = factoryOptions;
 	}
 
@@ -128,12 +137,13 @@ public class DataStorePluginOptions extends
 				getFactoryOptions());
 	}
 
+	@Override
 	public String getType() {
 		return storeType;
 	}
 
 	public static String getStoreNamespace(
-			String name ) {
+			final String name ) {
 		return String.format(
 				"%s.%s",
 				DATASTORE_PROPERTY_NAMESPACE,
