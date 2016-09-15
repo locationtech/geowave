@@ -114,12 +114,20 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a></code></td>
-<td class="colLast"><span class="strong">RasterUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createDataAdapterTypeDouble(java.lang.String,%20int,%20int,%20double[],%20double[],%20java.lang.String[])">createDataAdapterTypeDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
+<td class="colLast"><span class="strong">RasterUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createDataAdapterTypeDouble(java.lang.String,%20int,%20int,%20double[],%20double[],%20java.lang.String[],%20mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">createDataAdapterTypeDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                            int&nbsp;numBands,
                            int&nbsp;tileSize,
                            double[]&nbsp;minsPerBand,
                            double[]&nbsp;maxesPerBand,
-                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;namesPerBand)</code>&nbsp;</td>
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;namesPerBand,
+                           <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a></code></td>
+<td class="colLast"><span class="strong">RasterUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createDataAdapterTypeDouble(java.lang.String,%20int,%20int,%20mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">createDataAdapterTypeDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
+                           int&nbsp;numBands,
+                           int&nbsp;tileSize,
+                           <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -135,12 +143,15 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#RasterDataAdapter(mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter,%20java.lang.String,%20int,%20mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">RasterDataAdapter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;adapter,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
-                 int&nbsp;tileSize,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#RasterDataAdapter(mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter,%20java.lang.String)">RasterDataAdapter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;adapter,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#RasterDataAdapter(mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter,%20java.lang.String,%20int)">RasterDataAdapter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;adapter,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
+                 int&nbsp;tileSize)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#RasterDataAdapter(mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter,%20java.lang.String,%20mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">RasterDataAdapter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;adapter,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                  <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</code>&nbsp;</td>

@@ -173,39 +173,47 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createDataAdapterTypeDouble(java.lang.String,%20int,%20int,%20double[],%20double[],%20java.lang.String[])">createDataAdapterTypeDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createDataAdapterTypeDouble(java.lang.String,%20int,%20int,%20double[],%20double[],%20java.lang.String[],%20mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">createDataAdapterTypeDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                            int&nbsp;numBands,
                            int&nbsp;tileSize,
                            double[]&nbsp;minsPerBand,
                            double[]&nbsp;maxesPerBand,
-                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;namesPerBand)</code>&nbsp;</td>
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;namesPerBand,
+                           <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createDataAdapterTypeDouble(java.lang.String,%20int,%20int,%20mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">createDataAdapterTypeDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
+                           int&nbsp;numBands,
+                           int&nbsp;tileSize,
+                           <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/WritableRaster.html?is-external=true" title="class or interface in java.awt.image">WritableRaster</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createRasterTypeDouble(int,%20int)">createRasterTypeDouble</a></strong>(int&nbsp;numBands,
                       int&nbsp;tileSize)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static org.opengis.referencing.operation.MathTransform</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#createTransform(double[],%20mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData)">createTransform</a></strong>(double[]&nbsp;idRangePerDimension,
                <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;fullBounds)</code>
 <div class="block">Creates a math transform using the information provided.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#fillWithNoDataValues(java.awt.image.WritableRaster,%20double[][])">fillWithNoDataValues</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/WritableRaster.html?is-external=true" title="class or interface in java.awt.image">WritableRaster</a>&nbsp;raster,
                     double[][]&nbsp;noDataValues)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#forceRenderingHints(java.awt.RenderingHints)">forceRenderingHints</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/RenderingHints.html?is-external=true" title="class or interface in java.awt">RenderingHints</a>&nbsp;renderingHints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static org.geotools.coverage.processing.Operations</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getCoverageOperations()">getCoverageOperations</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getEmptyImage(int,%20int,%20java.awt.Color,%20java.awt.Color,%20java.awt.image.ColorModel)">getEmptyImage</a></strong>(int&nbsp;width,
              int&nbsp;height,
@@ -213,22 +221,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
              <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a>&nbsp;defaultColorModel)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getFootprint(org.opengis.coverage.grid.GridCoverage,%20org.opengis.referencing.crs.CoordinateReferenceSystem)">getFootprint</a></strong>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
             org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;targetCrs)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getFootprint(org.geotools.geometry.jts.ReferencedEnvelope,%20org.opengis.coverage.grid.GridCoverage)">getFootprint</a></strong>(org.geotools.geometry.jts.ReferencedEnvelope&nbsp;projectedReferenceEnvelope,
             org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static org.geotools.geometry.jts.ReferencedEnvelope</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#getReferenceEnvelope(org.opengis.coverage.grid.GridCoverage,%20org.opengis.referencing.crs.CoordinateReferenceSystem)">getReferenceEnvelope</a></strong>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
                     org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;targetCrs)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static org.geotools.coverage.grid.GridCoverage2D</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#mosaicGridCoverages(java.util.Iterator,%20java.awt.Color,%20java.awt.Color,%20java.awt.Rectangle,%20org.geotools.geometry.GeneralEnvelope,%20double,%20double,%20double[][],%20boolean,%20org.geotools.coverage.grid.GridCoverageFactory,%20java.lang.String,%20javax.media.jai.Interpolation,%20javax.media.jai.Histogram,%20boolean,%20boolean,%20java.awt.image.ColorModel)">mosaicGridCoverages</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;gridCoverages,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;backgroundColor,
@@ -247,7 +255,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                    boolean&nbsp;scaleTo8Bit,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a>&nbsp;defaultColorModel)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/RasterUtils.html#toBufferedImage(java.awt.Image,%20int)">toBufferedImage</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Image.html?is-external=true" title="class or interface in java.awt">Image</a>&nbsp;image,
                int&nbsp;type)</code>&nbsp;</td>
@@ -457,7 +465,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                             int&nbsp;tileSize)</pre>
 </li>
 </ul>
-<a name="createDataAdapterTypeDouble(java.lang.String, int, int, double[], double[], java.lang.String[])">
+<a name="createDataAdapterTypeDouble(java.lang.String, int, int, mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createDataAdapterTypeDouble</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;createDataAdapterTypeDouble(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
+                                            int&nbsp;numBands,
+                                            int&nbsp;tileSize,
+                                            <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</pre>
+</li>
+</ul>
+<a name="createDataAdapterTypeDouble(java.lang.String, int, int, double[], double[], java.lang.String[], mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -468,7 +488,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                             int&nbsp;tileSize,
                                             double[]&nbsp;minsPerBand,
                                             double[]&nbsp;maxesPerBand,
-                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;namesPerBand)</pre>
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;namesPerBand,
+                                            <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;?&gt;&nbsp;mergeStrategy)</pre>
 </li>
 </ul>
 <a name="createCoverageTypeDouble(java.lang.String, double, double, double, double, java.awt.image.WritableRaster)">
