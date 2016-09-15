@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.opengis.coverage.grid.GridCoverage;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
 import mil.nga.giat.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -116,14 +115,13 @@ public class RasterTileResizeJobRunner extends
 		if (adapter == null) {
 			throw new IllegalArgumentException(
 					"Adapter for coverage '" + rasterResizeOptions.getInputCoverageName()
-							+ "' does not exist in namesace '" + inputStoreOptions.getGeowaveNamespace() + "'");
+							+ "' does not exist in namespace '" + inputStoreOptions.getGeowaveNamespace() + "'");
 		}
 
 		final RasterDataAdapter newAdapter = new RasterDataAdapter(
 				(RasterDataAdapter) adapter,
 				rasterResizeOptions.getOutputCoverageName(),
-				rasterResizeOptions.getOutputTileSize(),
-				new NoDataMergeStrategy());
+				rasterResizeOptions.getOutputTileSize());
 		JobContextAdapterStore.addDataAdapter(
 				job.getConfiguration(),
 				adapter);

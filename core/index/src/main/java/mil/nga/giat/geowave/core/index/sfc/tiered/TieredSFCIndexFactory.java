@@ -86,7 +86,7 @@ public class TieredSFCIndexFactory
 		};
 
 		return new TieredSFCIndexStrategy(
-				sfcDimensions,
+				baseDefinitions,
 				orderedSfcs,
 				ImmutableBiMap.of(
 						0,

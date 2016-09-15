@@ -544,9 +544,6 @@ public class CompoundIndexStrategy implements
 		}
 
 		final byte[] bytes2 = new byte[id.getBytes().length - id1Length - 4];
-		if (id1Length < 0) {
-			System.err.println("Crap");
-		}
 		buf.position(id1Length);
 		buf.get(bytes2);
 		return new ByteArrayId(

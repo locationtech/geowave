@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.SimpleAbstractMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -303,7 +304,8 @@ public class GeoWaveRasterIT
 		final RasterDataAdapter adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				numBands,
-				tileSize);
+				tileSize,
+				new NoDataMergeStrategy());
 		final WritableRaster raster1 = RasterUtils.createRasterTypeDouble(
 				numBands,
 				tileSize);
@@ -509,7 +511,8 @@ public class GeoWaveRasterIT
 		final RasterDataAdapter basicAdapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				numBands,
-				tileSize);
+				tileSize,
+				new NoDataMergeStrategy());
 		final RasterDataAdapter mergeStrategyOverriddenAdapter = new RasterDataAdapter(
 				basicAdapter,
 				coverageName,
