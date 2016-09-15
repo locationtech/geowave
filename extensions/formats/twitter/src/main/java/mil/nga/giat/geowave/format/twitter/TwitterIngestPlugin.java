@@ -21,12 +21,12 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
@@ -35,6 +35,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 /*
  */
@@ -49,32 +53,13 @@ public class TwitterIngestPlugin extends
 
 	private final ByteArrayId sftNameKey;
 
-	private boolean includeSupplementalFields;
-
-	private DataSchemaOptionProvider dataSchemaOptionProvider;
-
 	public TwitterIngestPlugin() {
-
-		// default to reduced data format
-		setIncludeSupplementalFields(false);
+		twitterSft = TwitterUtils.createTwitterEventDataType();
+		twitterSftBuilder = new SimpleFeatureBuilder(
+				twitterSft);
 
 		sftNameKey = new ByteArrayId(
 				StringUtils.stringToBinary(TwitterUtils.TWITTER_SFT_NAME));
-	}
-
-	private void setIncludeSupplementalFields(
-			final boolean includeSupplementalFields ) {
-		this.includeSupplementalFields = includeSupplementalFields;
-
-		twitterSft = TwitterUtils.createTwitterEventDataType(includeSupplementalFields);
-		twitterSftBuilder = new SimpleFeatureBuilder(
-				twitterSft);
-	}
-
-	public void setDataSchemaOptionProvider(
-			final DataSchemaOptionProvider dataSchemaOptionProvider ) {
-		this.dataSchemaOptionProvider = dataSchemaOptionProvider;
-		setIncludeSupplementalFields(dataSchemaOptionProvider.includeSupplementalFields());
 	}
 
 	@Override
@@ -209,7 +194,7 @@ public class TwitterIngestPlugin extends
 					try {
 						sr = new StringReader(
 								line);
-						JsonReader jsonReader = javax.json.Json.createReader(sr);
+						JsonReader jsonReader = Json.createReader(sr);
 						JsonObject tweet = jsonReader.readObject();
 
 						try {

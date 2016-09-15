@@ -1,15 +1,16 @@
 package mil.nga.giat.geowave.format.twitter;
 
-import com.vividsolutions.jts.geom.Point;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.opengis.feature.simple.SimpleFeatureType;
-
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.geotools.feature.AttributeTypeBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * This is a convenience class for performing common Twitter static utility
@@ -47,53 +48,86 @@ public class TwitterUtils
 	public static final String TWITTER_RETWEETCOUNT_ATTRIBUTE = "retweet_count";
 	public static final String TWITTER_LANG_ATTRIBUTE = "lang";
 
-	public static SimpleFeatureType createTwitterEventDataType(
-			final boolean includeSupplementalFields ) {
+	public static SimpleFeatureType createTwitterEventDataType() {
 
 		final SimpleFeatureTypeBuilder simpleFeatureTypeBuilder = new SimpleFeatureTypeBuilder();
-		simpleFeatureTypeBuilder.setName(TWITTER_SFT_NAME);
+		simpleFeatureTypeBuilder.setName(
+				TWITTER_SFT_NAME);
 
 		final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
 
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				String.class).nillable(
-				true).buildDescriptor(
-				TWITTER_USERID_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				String.class).nillable(
-				true).buildDescriptor(
-				TWITTER_USERNAME_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				String.class).nillable(
-				true).buildDescriptor(
-				TWITTER_TEXT_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				String.class).nillable(
-				true).buildDescriptor(
-				TWITTER_INREPLYTOUSER_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				String.class).nillable(
-				true).buildDescriptor(
-				TWITTER_INREPLYTOSTATUS_ATTRIBUTE));
-		if (includeSupplementalFields) {
-
-		}
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Integer.class).nillable(
-				true).buildDescriptor(
-				TWITTER_RETWEETCOUNT_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				String.class).nillable(
-				true).buildDescriptor(
-				TWITTER_LANG_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Date.class).nillable(
-				false).buildDescriptor(
-				TWITTER_DTG_ATTRIBUTE));
-		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
-				Point.class).nillable(
-				false).buildDescriptor(
-				TWITTER_GEOMETRY_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								TWITTER_USERID_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								TWITTER_USERNAME_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								TWITTER_TEXT_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								TWITTER_INREPLYTOUSER_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								TWITTER_INREPLYTOSTATUS_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								Integer.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								TWITTER_RETWEETCOUNT_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								String.class)
+						.nillable(
+								true)
+						.buildDescriptor(
+								TWITTER_LANG_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								Date.class)
+						.nillable(
+								false)
+						.buildDescriptor(
+								TWITTER_DTG_ATTRIBUTE));
+		simpleFeatureTypeBuilder.add(
+				attributeTypeBuilder
+						.binding(
+								Point.class)
+						.nillable(
+								false)
+						.buildDescriptor(
+								TWITTER_GEOMETRY_ATTRIBUTE));
 
 		return simpleFeatureTypeBuilder.buildFeatureType();
 
