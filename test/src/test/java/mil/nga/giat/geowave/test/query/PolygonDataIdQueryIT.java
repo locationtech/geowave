@@ -61,6 +61,7 @@ public class PolygonDataIdQueryIT
 								StringUtils.stringToBinary(DATA_ID))));
 		int numResults = 0;
 		while (matches.hasNext()) {
+			matches.next();
 			numResults++;
 		}
 		Assert.assertTrue(
