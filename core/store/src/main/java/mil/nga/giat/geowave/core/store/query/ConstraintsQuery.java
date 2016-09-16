@@ -65,7 +65,7 @@ public class ConstraintsQuery
 	}
 
 	public boolean isAggregation() {
-		return ((aggregation != null) && (aggregation.getLeft() != null) && (aggregation.getRight() != null));
+		return ((aggregation != null) && (aggregation.getRight() != null));
 	}
 
 	public List<ByteArrayRange> getRanges() {

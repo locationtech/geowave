@@ -1,9 +1,10 @@
 package mil.nga.giat.geowave.core.store.query.aggregate;
 
 import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
-public class CountAggregation<T> implements
-		Aggregation<Persistable, CountResult, T>
+public class CountAggregation implements
+		CommonIndexAggregation<Persistable, CountResult>
 {
 	private CountResult countResult = new CountResult();
 
@@ -16,7 +17,7 @@ public class CountAggregation<T> implements
 
 	@Override
 	public void aggregate(
-			final T entry ) {
+			final CommonIndexedPersistenceEncoding entry ) {
 		if (!countResult.isSet()) {
 			countResult.count = 0;
 		}

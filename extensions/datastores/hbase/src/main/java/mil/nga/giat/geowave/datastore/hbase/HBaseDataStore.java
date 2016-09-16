@@ -243,7 +243,8 @@ public class HBaseDataStore extends
 						index,
 						iterator,
 						null,
-						scanCallback));
+						scanCallback,
+						true));
 	}
 
 	@Override

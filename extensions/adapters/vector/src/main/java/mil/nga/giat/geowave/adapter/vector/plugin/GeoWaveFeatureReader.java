@@ -65,6 +65,8 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for
@@ -152,14 +154,29 @@ public class GeoWaveFeatureReader implements
 		return new CloseableIterator.Empty<SimpleFeature>();
 	}
 
-	public CloseableIterator<SimpleFeature> issueQuery(
+	public long getCount() {
+		return featureCollection.getCount();
+	}
+
+	protected long getCountInternal(
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBounds,
-			final QueryIssuer issuer ) {
+			final Filter filter,
+			final Integer limit ) {
+		final CountQueryIssuer countIssuer = new CountQueryIssuer(
+				filter,
+				limit);
+		issueQuery(
+				jtsBounds,
+				timeBounds,
+				countIssuer);
+		return countIssuer.count;
+	}
 
-		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
-
+	private BasicQuery getQuery(
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Geometry jtsBounds,
+			final TemporalConstraintsSet timeBounds ) {
 		final Constraints timeConstraints = QueryIndexHelper.composeTimeBoundedConstraints(
 				components.getAdapter().getType(),
 				components.getAdapter().getTimeDescriptors(),
@@ -168,7 +185,7 @@ public class GeoWaveFeatureReader implements
 
 		final GeoConstraintsWrapper geoConstraints = QueryIndexHelper.composeGeometricConstraints(
 				getFeatureType(),
-				transaction.getDataStatistics(),
+				statsMap,
 				jtsBounds);
 
 		/**
@@ -180,22 +197,43 @@ public class GeoWaveFeatureReader implements
 				geoConstraints,
 				timeConstraints);
 		query.setExact(timeBounds.isExact());
+		return query;
+	}
+
+	public CloseableIterator<SimpleFeature> issueQuery(
+			final Geometry jtsBounds,
+			final TemporalConstraintsSet timeBounds,
+			final QueryIssuer issuer ) {
+
+		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
+
+		final BasicQuery query = getQuery(
+				statsMap,
+				jtsBounds,
+				timeBounds);
 
 		try (CloseableIterator<Index<?, ?>> indexIt = getComponents().getIndices(
 				statsMap,
 				query)) {
 			while (indexIt.hasNext()) {
 				final PrimaryIndex index = (PrimaryIndex) indexIt.next();
-				results.add(issuer.query(
-						index,
-						query));
 
+				final CloseableIterator<SimpleFeature> it = issuer.query(
+						index,
+						query);
+				if (it != null) {
+					results.add(it);
+				}
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
 					"unable to close index iterator for query",
 					e);
+		}
+		if (results.isEmpty()) {
+			return getNoData();
 		}
 		return interweaveTransaction(
 				issuer.getLimit(),
@@ -295,6 +333,61 @@ public class GeoWaveFeatureReader implements
 		@Override
 		public Integer getLimit() {
 			return limit;
+		}
+	}
+
+	private class CountQueryIssuer extends
+			BaseIssuer implements
+			QueryIssuer
+	{
+		private long count = 0;
+
+		public CountQueryIssuer(
+				final Filter filter,
+				final Integer limit ) {
+			super(
+					filter,
+					limit);
+		}
+
+		@Override
+		public CloseableIterator<SimpleFeature> query(
+				final PrimaryIndex index,
+				final BasicQuery query ) {
+			final QueryOptions queryOptions = new QueryOptions(
+					components.getAdapter(),
+					index,
+					limit,
+					null,
+					transaction.composeAuthorizations());
+			queryOptions.setAggregation(
+					new CountAggregation(),
+					null);
+
+			try (final CloseableIterator<CountResult> result = components.getDataStore().query(
+					queryOptions,
+					CQLQuery.createOptimalQuery(
+							filter,
+							components.getAdapter(),
+							index,
+							query))) {
+				if (result.hasNext()) {
+					final CountResult cntResult = result.next();
+					if (cntResult != null) {
+						count = cntResult.getCount();
+					}
+				}
+			}
+			catch (final IOException e) {
+				LOGGER.warn(
+						"Unable to close count iterator",
+						e);
+			}
+			return null;
+		}
+
+		public long getCount() {
+			return count;
 		}
 	}
 

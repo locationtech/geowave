@@ -272,7 +272,7 @@ public class GeoWaveVisibilityIT
 		}
 
 		queryOpts.setAggregation(
-				new CountAggregation<>(),
+				new CountAggregation(),
 				new FeatureDataAdapter(
 						getType()));
 		try (CloseableIterator<CountResult> it = (CloseableIterator) store.query(

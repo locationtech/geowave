@@ -75,7 +75,8 @@ public class InputFormatHBaseRangeQuery extends
 	@Override
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
-			final Iterator<Result> resultsIterator ) {
+			final Iterator<Result> resultsIterator,
+			boolean decodePersistenceEncoding ) {
 		// TODO Since currently we are not supporting server side
 		// iterator/coprocessors, we also cannot run
 		// server side filters and hence they have to run on clients itself. So

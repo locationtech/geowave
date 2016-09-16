@@ -49,6 +49,7 @@ import mil.nga.giat.geowave.core.store.index.writer.IndexCompositeWriter;
 import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class MemoryDataStore implements
@@ -261,7 +262,7 @@ public class MemoryDataStore implements
 				false);
 	}
 
-	private <T> CloseableIterator<T> query(
+	private CloseableIterator query(
 			final QueryOptions queryOptions,
 			final Query query,
 			final boolean isDelete ) {
@@ -273,7 +274,7 @@ public class MemoryDataStore implements
 			// once
 			final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
 
-			final List<CloseableIterator<T>> results = new ArrayList<CloseableIterator<T>>();
+			final List<CloseableIterator<Object>> results = new ArrayList<CloseableIterator<Object>>();
 
 			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
 					.getIndicesForAdapters(
@@ -303,7 +304,7 @@ public class MemoryDataStore implements
 							callbackManager);
 				}
 			}
-			return new CloseableIteratorWrapper<T>(
+			return new CloseableIteratorWrapper(
 					new Closeable() {
 						@Override
 						public void close()
@@ -323,13 +324,13 @@ public class MemoryDataStore implements
 			LOGGER.error(
 					"Cannot process query [" + (query == null ? "all" : query.toString()) + "]",
 					e);
-			return new CloseableIterator.Empty<T>();
+			return new CloseableIterator.Empty();
 		}
 
 	}
 
-	private <T> void populateResults(
-			final List<CloseableIterator<T>> results,
+	private void populateResults(
+			final List<CloseableIterator<Object>> results,
 			final DataAdapter<Object> adapter,
 			final PrimaryIndex index,
 			final Query query,
@@ -356,10 +357,11 @@ public class MemoryDataStore implements
 		if (filter != null) {
 			filters.add(filter);
 		}
-		results.add(new CloseableIterator<T>() {
+
+		results.add(new CloseableIterator() {
 			MemoryEntryRow nextRow = null;
 			MemoryEntryRow currentRow = null;
-			IndexedPersistenceEncoding encoding = null;
+			IndexedAdapterPersistenceEncoding encoding = null;
 
 			private boolean getNext() {
 				while ((nextRow == null) && rowIt.hasNext()) {
@@ -396,23 +398,23 @@ public class MemoryDataStore implements
 			}
 
 			@Override
-			public T next() {
+			public Object next() {
 				currentRow = nextRow;
 				if (isDelete) {
-					final DataAdapter<T> adapter = (DataAdapter<T>) adapterStore.getAdapter(encoding.getAdapterId());
+					final DataAdapter adapter = adapterStore.getAdapter(encoding.getAdapterId());
 					if (adapter instanceof WritableDataAdapter) {
 						callbackCache.getDeleteCallback(
-								(WritableDataAdapter<T>) adapter,
+								(WritableDataAdapter) adapter,
 								index).entryDeleted(
 								currentRow.getInfo(),
-								(T) currentRow.entry);
+								currentRow.entry);
 					}
 				}
-				((ScanCallback<T>) queryOptions.getScanCallback()).entryScanned(
+				((ScanCallback) queryOptions.getScanCallback()).entryScanned(
 						currentRow.getInfo(),
-						(T) currentRow.entry);
+						currentRow.entry);
 				nextRow = null;
-				return (T) currentRow.entry;
+				return currentRow.entry;
 			}
 
 			@Override
@@ -431,7 +433,36 @@ public class MemoryDataStore implements
 				}
 			}
 		});
+		boolean isAggregation = (queryOptions.getAggregation() != null);
+		if (isAggregation) {
 
+			DataAdapter adapterAggregation = queryOptions.getAggregation().getKey();
+			Aggregation agg = queryOptions.getAggregation().getRight();
+			for (CloseableIterator r : results) {
+				while (r.hasNext()) {
+					Object entry = r.next();
+					if (adapterAggregation != null) {
+						agg.aggregate(entry);
+					}
+					else {
+						agg.aggregate(adapter.encode(
+								entry,
+								index.getIndexModel()));
+					}
+				}
+				try {
+					r.close();
+				}
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			results.clear();
+			results.add(new CloseableIterator.Wrapper<>(
+					Iterators.singletonIterator((Object) agg.getResult())));
+		}
 	}
 
 	protected static IndexedAdapterPersistenceEncoding getEncoding(

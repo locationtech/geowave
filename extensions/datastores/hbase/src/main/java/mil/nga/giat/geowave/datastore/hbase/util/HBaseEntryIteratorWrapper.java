@@ -15,6 +15,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 		EntryIteratorWrapper<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseEntryIteratorWrapper.class);
+	private boolean decodePersistenceEncoding = true;
 
 	public HBaseEntryIteratorWrapper(
 			final AdapterStore adapterStore,
@@ -35,7 +36,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final PrimaryIndex index,
 			final Iterator<Result> scannerIt,
 			final QueryFilter clientFilter,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T> scanCallback,
+			boolean decodePersistenceEncoding ) {
 		super(
 				true,
 				adapterStore,
@@ -43,6 +45,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 				scannerIt,
 				clientFilter,
 				scanCallback);
+		this.decodePersistenceEncoding = decodePersistenceEncoding;
 	}
 
 	@Override
@@ -64,7 +67,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 				adapterStore,
 				clientFilter,
 				index,
-				scanCallback);
+				scanCallback,
+				decodePersistenceEncoding);
 	}
 
 }

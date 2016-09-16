@@ -34,9 +34,6 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
@@ -45,12 +42,10 @@ import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
 
+@SuppressWarnings("rawtypes")
 public class HBaseUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
-
-	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.UTF8_CHAR_SET);
-	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.UTF8_CHAR_SET);
 
 	private static final UniformVisibilityWriter DEFAULT_VISIBILITY = new UniformVisibilityWriter(
 			new UnconstrainedVisibilityHandler());
@@ -87,33 +82,6 @@ public class HBaseUtils
 		}
 
 		return mutations;
-	}
-
-	private static <T> void addToRowIds(
-			final List<ByteArrayId> rowIds,
-			final List<ByteArrayId> insertionIds,
-			final byte[] dataId,
-			final byte[] adapterId,
-			final boolean enableDeduplication ) {
-
-		final int numberOfDuplicates = insertionIds.size() - 1;
-
-		for (final ByteArrayId insertionId : insertionIds) {
-			final byte[] indexId = insertionId.getBytes();
-			// because the combination of the adapter ID and data ID
-			// gaurantees uniqueness, we combine them in the row ID to
-			// disambiguate index values that are the same, also adding
-			// enough length values to be able to read the row ID again, we
-			// lastly add a number of duplicates which can be useful as
-			// metadata in our de-duplication
-			// step
-			rowIds.add(new ByteArrayId(
-					new GeowaveRowId(
-							indexId,
-							dataId,
-							adapterId,
-							enableDeduplication ? numberOfDuplicates : -1).getRowId()));
-		}
 	}
 
 	// Retrieves the next incremental HBase prefix following the passed-in
@@ -210,7 +178,8 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T> scanCallback,
+			boolean decodeRow ) {
 
 		final GeowaveRowId rowId = new GeowaveRowId(
 				row.getRow());
@@ -221,7 +190,8 @@ public class HBaseUtils
 				adapterStore,
 				clientFilter,
 				index,
-				scanCallback);
+				scanCallback,
+				decodeRow);
 	}
 
 	public static Object decodeRow(
@@ -229,7 +199,8 @@ public class HBaseUtils
 			final GeowaveRowId rowId,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
+			final PrimaryIndex index,
+			boolean decodeRow ) {
 		return decodeRowObj(
 				row,
 				rowId,
@@ -237,42 +208,46 @@ public class HBaseUtils
 				adapterStore,
 				clientFilter,
 				index,
-				null);
+				null,
+				decodeRow);
 	}
 
-	private static <T> Object decodeRowObj(
+	private static Object decodeRowObj(
 			final Result row,
 			final GeowaveRowId rowId,
-			final DataAdapter<T> dataAdapter,
+			final DataAdapter dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
-		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
+			final ScanCallback scanCallback,
+			boolean decodeRow ) {
+		final Pair<Object, DataStoreEntryInfo> pair = decodeRow(
 				row,
 				rowId,
 				dataAdapter,
 				adapterStore,
 				clientFilter,
 				index,
-				scanCallback);
+				scanCallback,
+				decodeRow);
 		return pair != null ? pair.getLeft() : null;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Pair<T, DataStoreEntryInfo> decodeRow(
+	public static Pair<Object, DataStoreEntryInfo> decodeRow(
 			final Result row,
 			final GeowaveRowId rowId,
-			final DataAdapter<T> dataAdapter,
+			final DataAdapter dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback scanCallback,
+			boolean decodeRow ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
 			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
 		}
-		DataAdapter<T> adapter = dataAdapter;
+		DataAdapter adapter = dataAdapter;
 
 		// build a persistence encoding object first, pass it through the
 		// client filters and if its accepted, use the data adapter to
@@ -305,7 +280,7 @@ public class HBaseUtils
 			}
 
 			if (adapter == null) {
-				adapter = (DataAdapter<T>) adapterStore.getAdapter(adapterId);
+				adapter = adapterStore.getAdapter(adapterId);
 				if (adapter == null) {
 					LOGGER.error("DataAdapter does not exist");
 					return null;
@@ -353,10 +328,10 @@ public class HBaseUtils
 				LOGGER.error("Error, adapter was null when it should not be");
 			}
 			else {
-				final Pair<T, DataStoreEntryInfo> pair = Pair.of(
-						adapter.decode(
+				final Pair<Object, DataStoreEntryInfo> pair = Pair.of(
+						decodeRow ? adapter.decode(
 								encodedRow,
-								index),
+								index) : encodedRow,
 						new DataStoreEntryInfo(
 								rowId.getDataId(),
 								Arrays.asList(new ByteArrayId(
@@ -364,7 +339,7 @@ public class HBaseUtils
 								Arrays.asList(new ByteArrayId(
 										row.getRow())),
 								fieldInfoList));
-				if (scanCallback != null) {
+				if (scanCallback != null && decodeRow) {
 					scanCallback.entryScanned(
 							pair.getRight(),
 							pair.getLeft());
@@ -373,31 +348,6 @@ public class HBaseUtils
 			}
 		}
 		return null;
-	}
-
-	private static List<KeyValue> getSortedRowMapping(
-			final Result row )
-			throws IOException {
-		final List<KeyValue> map = new ArrayList<KeyValue>();
-		final NavigableMap<byte[], NavigableMap<byte[], byte[]>> noVersionMap = row.getNoVersionMap();
-
-		for (final byte[] family : noVersionMap.keySet()) {
-			for (final byte[] qualifier : noVersionMap.get(
-					family).keySet()) {
-				final Cell cell = CellUtil.createCell(
-						row.getRow(),
-						family,
-						qualifier,
-						System.currentTimeMillis(),
-						KeyValue.Type.Put.getCode(),
-						noVersionMap.get(
-								family).get(
-								qualifier));
-				map.add(new KeyValue(
-						cell));
-			}
-		}
-		return map;
 	}
 
 	public static <T> void writeAltIndex(

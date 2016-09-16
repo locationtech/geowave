@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
 public class HBaseConstraintsQuery extends
@@ -98,6 +99,10 @@ public class HBaseConstraintsQuery extends
 		return base.isAggregation();
 	}
 
+	protected boolean isCommonIndexAggregation() {
+		return base.isAggregation() && (base.aggregation.getRight() instanceof CommonIndexAggregation);
+	}
+
 	@Override
 	protected List<ByteArrayRange> getRanges() {
 		return base.getRanges();
@@ -124,10 +129,11 @@ public class HBaseConstraintsQuery extends
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
-		final CloseableIterator<Object> it = super.query(
+		final CloseableIterator<Object> it = super.internalQuery(
 				operations,
 				adapterStore,
-				limit);
+				limit,
+				isCommonIndexAggregation());
 
 		if (isAggregation() && (it != null) && it.hasNext()) {
 			// TODO implement aggregation as a co-processor on the server side,
@@ -156,13 +162,6 @@ public class HBaseConstraintsQuery extends
 						Iterators.singletonIterator(aggregationFunction.getResult()));
 			}
 		}
-		// else {
-		// return super.query(
-		// operations,
-		// adapterStore,
-		// limit);
-		// }
-
 		return it;
 	}
 }

@@ -97,6 +97,18 @@ public abstract class HBaseFilteredIndexQuery extends
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
+		return internalQuery(
+				operations,
+				adapterStore,
+				limit,
+				true);
+	}
+
+	protected CloseableIterator<Object> internalQuery(
+			final BasicHBaseOperations operations,
+			final AdapterStore adapterStore,
+			final Integer limit,
+			boolean decodePersistenceEncoding ) {
 		try {
 			if (!validateAdapters(operations)) {
 				LOGGER.warn("Query contains no valid adapters.");
@@ -152,7 +164,8 @@ public abstract class HBaseFilteredIndexQuery extends
 		if (results.iterator().hasNext()) {
 			Iterator it = initIterator(
 					adapterStore,
-					Iterators.concat(resultsIterators.iterator()));
+					Iterators.concat(resultsIterators.iterator()),
+					decodePersistenceEncoding);
 
 			if ((limit != null) && (limit > 0)) {
 				it = Iterators.limit(
@@ -301,7 +314,8 @@ public abstract class HBaseFilteredIndexQuery extends
 
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
-			final Iterator<Result> resultsIterator ) {
+			final Iterator<Result> resultsIterator,
+			boolean decodePersistenceEncoding ) {
 		// TODO Since currently we are not supporting server side
 		// iterator/coprocessors, we also cannot run
 		// server side filters and hence they have to run on clients itself. So
@@ -314,7 +328,8 @@ public abstract class HBaseFilteredIndexQuery extends
 				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
 						: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
 								filters),
-				scanCallback);
+				scanCallback,
+				decodePersistenceEncoding);
 	}
 
 	protected List<QueryFilter> getAllFiltersList() {
