@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 
 public class RasterUtilsTest
 {
@@ -12,7 +13,8 @@ public class RasterUtilsTest
 		final RasterDataAdapter adapter = RasterUtils.createDataAdapterTypeDouble(
 				"test",
 				3,
-				256);
+				256,
+				new NoDataMergeStrategy());
 		Assert.assertNotNull(adapter);
 		Assert.assertEquals(
 				"test",

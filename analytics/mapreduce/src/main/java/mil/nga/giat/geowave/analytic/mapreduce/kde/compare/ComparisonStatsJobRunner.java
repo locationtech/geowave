@@ -33,10 +33,10 @@ public class ComparisonStatsJobRunner extends
 	private final String timeAttribute;
 
 	public ComparisonStatsJobRunner(
-			ComparisonCommandLineOptions inputOptions,
-			KDECommandLineOptions kdeCommandLineOptions,
-			DataStorePluginOptions inputDataStoreOptions,
-			DataStorePluginOptions outputDataStoreOptions ) {
+			final ComparisonCommandLineOptions inputOptions,
+			final KDECommandLineOptions kdeCommandLineOptions,
+			final DataStorePluginOptions inputDataStoreOptions,
+			final DataStorePluginOptions outputDataStoreOptions ) {
 		super(
 				kdeCommandLineOptions,
 				inputDataStoreOptions,
@@ -47,15 +47,15 @@ public class ComparisonStatsJobRunner extends
 	public static void main(
 			final String[] args )
 			throws Exception {
-		ConfigOptions opts = new ConfigOptions();
-		ComparisonCommandLineOptions comparisonOptions = new ComparisonCommandLineOptions();
+		final ConfigOptions opts = new ConfigOptions();
+		final ComparisonCommandLineOptions comparisonOptions = new ComparisonCommandLineOptions();
 
-		OperationParser parser = new OperationParser();
+		final OperationParser parser = new OperationParser();
 		parser.addAdditionalObject(opts);
 		parser.addAdditionalObject(comparisonOptions);
 
-		KdeCommand kdeCommand = new KdeCommand();
-		CommandLineOperationParams params = parser.parse(
+		final KdeCommand kdeCommand = new KdeCommand();
+		final CommandLineOperationParams params = parser.parse(
 				kdeCommand,
 				args);
 
@@ -65,7 +65,7 @@ public class ComparisonStatsJobRunner extends
 		// Don't care about output, but this will set the datastore options.
 		kdeCommand.createRunner(params);
 
-		ComparisonStatsJobRunner runner = new ComparisonStatsJobRunner(
+		final ComparisonStatsJobRunner runner = new ComparisonStatsJobRunner(
 				comparisonOptions,
 				kdeCommand.getKdeOptions(),
 				kdeCommand.getInputStoreOptions(),
@@ -91,7 +91,8 @@ public class ComparisonStatsJobRunner extends
 	@Override
 	protected boolean postJob2Actions(
 			final Configuration conf,
-			final String statsNamespace )
+			final String statsNamespace,
+			final String coverageName )
 			throws Exception {
 		final FileSystem fs = FileSystem.get(conf);
 		fs.delete(
@@ -177,9 +178,13 @@ public class ComparisonStatsJobRunner extends
 					ingester,
 					statsNamespace,
 					RasterUtils.createDataAdapterTypeDouble(
-							statsNamespace,
+							coverageName,
 							ComparisonAccumuloStatsReducer.NUM_BANDS,
-							kdeCommandLineOptions.getTileSize()),
+							1,
+							ComparisonAccumuloStatsReducer.MINS_PER_BAND,
+							ComparisonAccumuloStatsReducer.MAXES_PER_BAND,
+							ComparisonAccumuloStatsReducer.NAME_PER_BAND,
+							null),
 					new SpatialDimensionalityTypeProvider().createPrimaryIndex());
 			return ingester.waitForCompletion(true);
 
@@ -263,7 +268,8 @@ public class ComparisonStatsJobRunner extends
 	protected void setupJob2Output(
 			final Configuration conf,
 			final Job statsReducer,
-			final String statsNamespace )
+			final String statsNamespace,
+			final String coverageName )
 			throws Exception {
 		FileOutputFormat.setOutputPath(
 				statsReducer,

@@ -123,9 +123,9 @@ public class KDERasterResizeIT
 			command.getKdeOptions().setFeatureType(
 					KDE_FEATURE_TYPE_NAME);
 			command.getKdeOptions().setMinLevel(
-					BASE_MIN_LEVEL - i);
+					BASE_MIN_LEVEL);
 			command.getKdeOptions().setMaxLevel(
-					BASE_MAX_LEVEL - i);
+					BASE_MAX_LEVEL);
 			command.getKdeOptions().setMinSplits(
 					MapReduceTestUtils.MIN_INPUT_SPLITS);
 			command.getKdeOptions().setMaxSplits(

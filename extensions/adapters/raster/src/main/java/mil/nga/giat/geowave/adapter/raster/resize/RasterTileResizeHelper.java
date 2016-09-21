@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.opengis.coverage.grid.GridCoverage;
+
 import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -14,10 +19,6 @@ import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.opengis.coverage.grid.GridCoverage;
 
 public class RasterTileResizeHelper
 {
@@ -42,7 +43,17 @@ public class RasterTileResizeHelper
 			}
 			else if (adapter.getAdapterId().getString().equals(
 					newAdapterId)) {
-				newAdapter = (RasterDataAdapter) adapter;
+				if (((RasterDataAdapter) adapter).getTransform() == null) {
+					// the new adapter doesn't have a merge strategy - resizing
+					// will require merging, so default to NoDataMergeStrategy
+					newAdapter = new RasterDataAdapter(
+							(RasterDataAdapter) adapter,
+							newAdapterId,
+							new NoDataMergeStrategy());
+				}
+				else {
+					newAdapter = (RasterDataAdapter) adapter;
+				}
 			}
 		}
 	}

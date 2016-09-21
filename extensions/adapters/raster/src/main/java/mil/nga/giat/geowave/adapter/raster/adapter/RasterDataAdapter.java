@@ -312,9 +312,17 @@ public class RasterDataAdapter implements
 
 	public RasterDataAdapter(
 			final RasterDataAdapter adapter,
+			final String coverageName ) {
+		this(
+				adapter,
+				coverageName,
+				adapter.tileSize);
+	}
+
+	public RasterDataAdapter(
+			final RasterDataAdapter adapter,
 			final String coverageName,
-			final int tileSize,
-			final RasterTileMergeStrategy<?> mergeStrategy ) {
+			final int tileSize ) {
 		this(
 				coverageName,
 				adapter.getSampleModel().createCompatibleSampleModel(
@@ -329,7 +337,8 @@ public class RasterDataAdapter implements
 				adapter.equalizeHistogram,
 				interpolationToByte(adapter.interpolation),
 				adapter.buildPyramid,
-				mergeStrategy);
+				adapter.mergeStrategy == null ? null : adapter.mergeStrategy.getChildMergeStrategy(adapter
+						.getAdapterId()));
 	}
 
 	public RasterDataAdapter(

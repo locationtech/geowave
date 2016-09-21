@@ -5,9 +5,17 @@ import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.opengis.coverage.grid.GridCoverage;
+
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 import junit.framework.Assert;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
@@ -16,6 +24,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.SimpleAbstractMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -25,22 +34,8 @@ import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.opengis.coverage.grid.GridCoverage;
-
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveRasterIT
@@ -280,7 +275,8 @@ public class GeoWaveRasterIT
 		final RasterDataAdapter adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				numBands,
-				tileSize);
+				tileSize,
+				new NoDataMergeStrategy());
 		final WritableRaster raster1 = RasterUtils.createRasterTypeDouble(
 				numBands,
 				tileSize);
@@ -486,7 +482,8 @@ public class GeoWaveRasterIT
 		final RasterDataAdapter basicAdapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				numBands,
-				tileSize);
+				tileSize,
+				new NoDataMergeStrategy());
 		final RasterDataAdapter mergeStrategyOverriddenAdapter = new RasterDataAdapter(
 				basicAdapter,
 				coverageName,

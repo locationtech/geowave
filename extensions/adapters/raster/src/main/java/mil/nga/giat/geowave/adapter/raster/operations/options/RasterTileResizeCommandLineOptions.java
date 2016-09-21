@@ -4,10 +4,10 @@ import com.beust.jcommander.Parameter;
 
 public class RasterTileResizeCommandLineOptions
 {
-	@Parameter(names = "--inputCoverageName", description = "The name of the feature type to run a KDE on", required = true)
+	@Parameter(names = "--inputCoverageName", description = "The name of the input raster coverage", required = true)
 	private String inputCoverageName;
 
-	@Parameter(names = "--outputCoverageName", description = "The min level to run a KDE at", required = true)
+	@Parameter(names = "--outputCoverageName", description = "The out output raster coverage name", required = true)
 	private String outputCoverageName;
 
 	@Parameter(names = "--minSplits", description = "The min partitions for the input data")
@@ -16,16 +16,16 @@ public class RasterTileResizeCommandLineOptions
 	@Parameter(names = "--maxSplits", description = "The max partitions for the input data")
 	private Integer maxSplits;
 
-	@Parameter(names = "--hdfsHostPort", description = "The max partitions for the input data", converter = HdfsHostPortConverter.class)
+	@Parameter(names = "--hdfsHostPort", description = "he hdfs host port", converter = HdfsHostPortConverter.class, required = true)
 	private String hdfsHostPort;
 
-	@Parameter(names = "--jobSubmissionHostPort", description = "The max partitions for the input data")
+	@Parameter(names = "--jobSubmissionHostPort", description = "The job submission tracker", required = true)
 	private String jobTrackerOrResourceManHostPort;
 
-	@Parameter(names = "--outputTileSize", description = "The max partitions for the input data")
+	@Parameter(names = "--outputTileSize", description = "The tile size to output", required = true)
 	private Integer outputTileSize;
 
-	@Parameter(names = "--indexId", description = "The max level to run a KDE at")
+	@Parameter(names = "--indexId", description = "The index that the input raster is stored in")
 	private String indexId;
 
 	// Default constructor

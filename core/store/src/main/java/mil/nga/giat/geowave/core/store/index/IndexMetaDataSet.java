@@ -106,7 +106,7 @@ public class IndexMetaDataSet<T> extends
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsAdded(entryInfo.getRowIds());
+			imd.insertionIdsAdded(entryInfo.getInsertionIds());
 		}
 	}
 
@@ -115,7 +115,7 @@ public class IndexMetaDataSet<T> extends
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsRemoved(entryInfo.getRowIds());
+			imd.insertionIdsRemoved(entryInfo.getInsertionIds());
 		}
 	}
 
