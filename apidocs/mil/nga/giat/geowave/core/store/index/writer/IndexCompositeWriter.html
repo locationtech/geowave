@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index.writer"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer"><span class="strong">Next Class</span></a></li>
+<li>Next Class</li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" target="_top">Frames</a></li>
@@ -95,13 +95,13 @@
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;T&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="strong">IndexCompositeWriter&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;T&gt;</pre>
+implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -120,7 +120,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html#IndexCompositeWriter(mil.nga.giat.geowave.core.store.index.writer.IndexWriter[])">IndexCompositeWriter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;[]&nbsp;writers)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html#IndexCompositeWriter(mil.nga.giat.geowave.core.store.IndexWriter[])">IndexCompositeWriter</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;[]&nbsp;writers)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -183,13 +183,13 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="IndexCompositeWriter(mil.nga.giat.geowave.core.store.index.writer.IndexWriter[])">
+<a name="IndexCompositeWriter(mil.nga.giat.geowave.core.store.IndexWriter[])">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IndexCompositeWriter</h4>
-<pre>public&nbsp;IndexCompositeWriter(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;[]&nbsp;writers)</pre>
+<pre>public&nbsp;IndexCompositeWriter(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;[]&nbsp;writers)</pre>
 </li>
 </ul>
 </li>
@@ -226,12 +226,12 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <li class="blockList">
 <h4>write</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry)</pre>
-<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html#write(T)">IndexWriter</a></code></strong></div>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(T)">IndexWriter</a></code></strong></div>
 <div class="block">Write the entry using the index writer's configure field visibility
  writer.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html#write(T)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(T)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
@@ -247,7 +247,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html#write(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write(T,%20mil.nga.giat.geowave.core.store.data.VisibilityWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -260,7 +260,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;getIndices()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html#getIndices()">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#getIndices()">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -273,7 +273,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <pre>public&nbsp;void&nbsp;flush()</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html#flush()">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#flush()">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -304,7 +304,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/inde
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index.writer"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store.index.writer"><span class="strong">Next Class</span></a></li>
+<li>Next Class</li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" target="_top">Frames</a></li>
