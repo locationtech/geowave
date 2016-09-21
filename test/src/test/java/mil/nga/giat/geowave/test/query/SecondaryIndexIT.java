@@ -58,7 +58,7 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
-import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
