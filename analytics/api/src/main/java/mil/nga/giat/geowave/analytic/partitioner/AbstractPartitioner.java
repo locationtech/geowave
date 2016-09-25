@@ -272,9 +272,7 @@ public abstract class AbstractPartitioner<T> implements
 
 		// Not relevant since this is a single tier strategy.
 		// For now, just setting to a non-zero reasonable value
-		indexStrategy.setMaxEstimatedDuplicateIds((int) Math.pow(
-				dimensions.length,
-				2));
+		indexStrategy.setMaxEstimatedDuplicateIdsPerDimension(2);
 
 		index = new PrimaryIndex(
 				indexStrategy,
