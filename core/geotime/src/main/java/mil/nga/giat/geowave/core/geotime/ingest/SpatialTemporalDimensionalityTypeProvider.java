@@ -107,7 +107,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 		else {
 			return new CustomIdIndex(
-					TieredSFCIndexFactory.createEqualIntervalPrecisionTieredStrategy(
+					TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
 							dimensions,
 							new int[] {
 								options.bias.getSpatialPrecision(),
