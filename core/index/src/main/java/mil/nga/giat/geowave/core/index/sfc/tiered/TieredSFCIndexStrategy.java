@@ -121,23 +121,10 @@ public class TieredSFCIndexStrategy implements
 			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.length);
 		}
 		for (final BinnedNumericDataset binnedQuery : binnedQueries) {
-			final RangeDecomposition rangeDecomp;
-			if (binnedQuery.isFullExtent()) {
-				rangeDecomp = new RangeDecomposition(
-						new ByteArrayRange[] {
-							new ByteArrayRange(
-									new ByteArrayId(
-											new byte[] {}),
-									new ByteArrayId(
-											new byte[] {}))
-						});
-			}
-			else {
-				rangeDecomp = sfc.decomposeRange(
-						binnedQuery,
-						true,
-						maxRangeDecompositionPerBin);
-			}
+			final RangeDecomposition rangeDecomp = sfc.decomposeRange(
+					binnedQuery,
+					true,
+					maxRangeDecompositionPerBin);
 			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
 					new byte[] {
 						tier
