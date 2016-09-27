@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>mil.nga.giat</groupId>
+        <artifactId>geowave-extension-parent</artifactId>
+        <relativePath>../../</relativePath>
+        <version>0.9.3-SNAPSHOT</version>
+    </parent>
+    <artifactId>geowave-format-twitter</artifactId>
+    <name>GeoWave Twitter Format Support</name>
+    <description>GeoWave ingest support for twitter API</description>
+    <dependencies>
+        <dependency>
+            <groupId>mil.nga.giat</groupId>
+            <artifactId>geowave-adapter-vector</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mil.nga.giat</groupId>
+            <artifactId>geowave-core-ingest</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+    </dependencies>
+</project>
