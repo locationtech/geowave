@@ -5,9 +5,11 @@ import java.util.List;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 
 public class MemorySecondaryIndexDataStore implements
 		SecondaryIndexDataStore
@@ -60,12 +62,12 @@ public class MemorySecondaryIndexDataStore implements
 	}
 
 	@Override
-	public CloseableIterator<Object> scan(
-			final ByteArrayId secondaryIndexId,
-			final List<ByteArrayRange> scanRanges,
-			final ByteArrayId adapterId,
+	public <T> CloseableIterator<T> query(
+			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
-			final String... visibility ) {
+			final DataAdapter<T> adapter,
+			final DistributableQuery query,
+			final String... authorizations ) {
 		// TODO Auto-generated method stub
 		return null;
 	}

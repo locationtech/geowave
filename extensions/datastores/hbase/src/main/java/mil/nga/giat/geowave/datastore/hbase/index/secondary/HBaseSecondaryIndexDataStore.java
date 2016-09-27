@@ -14,9 +14,12 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
@@ -146,13 +149,13 @@ public class HBaseSecondaryIndexDataStore extends
 	}
 
 	@Override
-	public CloseableIterator<Object> scan(
-			final ByteArrayId secondaryIndexId,
-			final List<ByteArrayRange> scanRanges,
-			final ByteArrayId adapterId,
+	public <T> CloseableIterator<T> query(
+			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
-			final String... visibility ) {
-		// TODO implement ... mimick Accumulo approach
+			final DataAdapter<T> adapter,
+			final DistributableQuery query,
+			final String... authorizations ) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

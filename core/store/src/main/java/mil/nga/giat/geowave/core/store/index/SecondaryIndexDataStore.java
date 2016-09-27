@@ -5,8 +5,12 @@ import java.util.List;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 /**
  * This is responsible for persisting secondary index entries
@@ -56,21 +60,21 @@ public interface SecondaryIndexDataStore
 			List<FieldInfo<?>> attributes );
 
 	/**
-	 * Performs a scan of the appropriate secondary index table
+	 * TODO
 	 * 
-	 * @param secondaryIndexId
-	 * @param scanRanges
-	 * @param adapterId
+	 * @param secondaryIndex
 	 * @param indexedAttributeFieldId
-	 * @param visibility
-	 * @return an iterator over the results
+	 * @param adapter
+	 * @param query
+	 * @param authorizations
+	 * @return
 	 */
-	public CloseableIterator<Object> scan(
-			ByteArrayId secondaryIndexId,
-			List<ByteArrayRange> scanRanges,
-			ByteArrayId adapterId,
-			ByteArrayId indexedAttributeFieldId,
-			String... visibility );
+	public <T> CloseableIterator<T> query(
+			final SecondaryIndex<T> secondaryIndex,
+			final ByteArrayId indexedAttributeFieldId,
+			final DataAdapter<T> adapter,
+			final DistributableQuery query,
+			final String... authorizations );
 
 	/**
 	 * 

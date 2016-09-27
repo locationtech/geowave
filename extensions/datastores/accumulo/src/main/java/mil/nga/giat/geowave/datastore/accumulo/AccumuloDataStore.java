@@ -141,7 +141,7 @@ public class AccumuloDataStore extends
 			final IndexStore indexStore,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
 			final AdapterIndexMappingStore indexMappingStore,
 			final AccumuloOperations accumuloOperations ) {
 		this(
@@ -158,7 +158,7 @@ public class AccumuloDataStore extends
 			final IndexStore indexStore,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
 			final AdapterIndexMappingStore indexMappingStore,
 			final AccumuloOperations accumuloOperations,
 			final AccumuloOptions accumuloOptions ) {
@@ -173,6 +173,7 @@ public class AccumuloDataStore extends
 
 		this.accumuloOperations = accumuloOperations;
 		this.accumuloOptions = accumuloOptions;
+		secondaryIndexDataStore.setAccumuloDataStore(this);
 	}
 
 	@Override
