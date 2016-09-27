@@ -168,6 +168,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Hier
 <div class="block">Constructor used to create a Tiered Index Strategy.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#TieredSFCIndexStrategy(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition[],%20mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve[],%20com.google.common.collect.ImmutableBiMap,%20long)">TieredSFCIndexStrategy</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
+                      <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>[]&nbsp;orderedSfcs,
+                      com.google.common.collect.ImmutableBiMap&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&gt;&nbsp;orderedSfcIndexToTierId,
+                      long&nbsp;maxEstimatedDuplicateIdsPerDimension)</code>
+<div class="block">Constructor used to create a Tiered Index Strategy.</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -239,7 +248,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Hier
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#getInsertionIds(mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData,%20int)">getInsertionIds</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData,
-               int&nbsp;maxDuplicateInsertionIds)</code>
+               int&nbsp;maxDuplicateInsertionIdsPerDimension)</code>
 <div class="block">Returns a list of id's for insertion.</div>
 </td>
 </tr>
@@ -309,7 +318,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Hier
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#setMaxEstimatedDuplicateIds(int)">setMaxEstimatedDuplicateIds</a></strong>(int&nbsp;maxEstimatedDuplicateIds)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#setMaxEstimatedDuplicateIdsPerDimension(int)">setMaxEstimatedDuplicateIdsPerDimension</a></strong>(int&nbsp;maxEstimatedDuplicateIdsPerDimension)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
@@ -367,7 +376,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Hier
 <a name="TieredSFCIndexStrategy(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition[], mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve[], com.google.common.collect.ImmutableBiMap)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>TieredSFCIndexStrategy</h4>
 <pre>public&nbsp;TieredSFCIndexStrategy(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
@@ -375,6 +384,19 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Hier
                       com.google.common.collect.ImmutableBiMap&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&gt;&nbsp;orderedSfcIndexToTierId)</pre>
 <div class="block">Constructor used to create a Tiered Index Strategy.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>baseDefinitions</code> - the dimension definitions of the space filling curve</dd><dd><code>orderedSfcs</code> - the space filling curve used to create the strategy</dd></dl>
+</li>
+</ul>
+<a name="TieredSFCIndexStrategy(mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition[], mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve[], com.google.common.collect.ImmutableBiMap, long)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>TieredSFCIndexStrategy</h4>
+<pre>public&nbsp;TieredSFCIndexStrategy(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
+                      <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>[]&nbsp;orderedSfcs,
+                      com.google.common.collect.ImmutableBiMap&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&gt;&nbsp;orderedSfcIndexToTierId,
+                      long&nbsp;maxEstimatedDuplicateIdsPerDimension)</pre>
+<div class="block">Constructor used to create a Tiered Index Strategy.</div>
 </li>
 </ul>
 </li>
@@ -453,7 +475,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Hier
 <li class="blockList">
 <h4>getInsertionIds</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getInsertionIds(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData,
-                                int&nbsp;maxDuplicateInsertionIds)</pre>
+                                int&nbsp;maxDuplicateInsertionIdsPerDimension)</pre>
 <div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html#getInsertionIds(EntryRangeType,%20int)">IndexStrategy</a></code></strong></div>
 <div class="block">Returns a list of id's for insertion.</div>
 <dl>
@@ -654,13 +676,13 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Hier
 <dt><span class="strong">Returns:</span></dt><dd>the range of a single insertion ID for each dimension</dd></dl>
 </li>
 </ul>
-<a name="setMaxEstimatedDuplicateIds(int)">
+<a name="setMaxEstimatedDuplicateIdsPerDimension(int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setMaxEstimatedDuplicateIds</h4>
-<pre>public&nbsp;void&nbsp;setMaxEstimatedDuplicateIds(int&nbsp;maxEstimatedDuplicateIds)</pre>
+<h4>setMaxEstimatedDuplicateIdsPerDimension</h4>
+<pre>public&nbsp;void&nbsp;setMaxEstimatedDuplicateIdsPerDimension(int&nbsp;maxEstimatedDuplicateIdsPerDimension)</pre>
 </li>
 </ul>
 <a name="getNaturalSplits()">
