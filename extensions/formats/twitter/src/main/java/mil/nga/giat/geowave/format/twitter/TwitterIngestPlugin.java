@@ -210,7 +210,8 @@ public class TwitterIngestPlugin extends
 						}
 						catch (final Exception e) {
 							LOGGER.debug(
-									"Error reading twitter coordinate on line " + lineNumber + " of " + hfile.getOriginalFilePath() + "\n" + line,
+									"Error reading twitter coordinate on line " + lineNumber + " of "
+											+ hfile.getOriginalFilePath() + "\n" + line,
 									e);
 							continue;
 						}
@@ -225,7 +226,8 @@ public class TwitterIngestPlugin extends
 							dtg = TwitterUtils.parseDate(dtgString);
 						}
 						catch (final Exception e) {
-							LOGGER.warn("Error reading tweet date on line " + lineNumber + " of " + hfile.getOriginalFilePath());
+							LOGGER.warn("Error reading tweet date on line " + lineNumber + " of "
+									+ hfile.getOriginalFilePath());
 							continue;
 						}
 
@@ -238,9 +240,11 @@ public class TwitterIngestPlugin extends
 						tweetText = tweet.getString("text");
 
 						// nullable
-						if (!tweet.isNull("in_reply_to_user_id_str")) inReplyUser = tweet.getString("in_reply_to_user_id_str");
+						if (!tweet.isNull("in_reply_to_user_id_str"))
+							inReplyUser = tweet.getString("in_reply_to_user_id_str");
 
-						if (!tweet.isNull("in_reply_to_status_id_str")) inReplyStatus = tweet.getString("in_reply_to_status_id_str");
+						if (!tweet.isNull("in_reply_to_status_id_str"))
+							inReplyStatus = tweet.getString("in_reply_to_status_id_str");
 
 						retweetCount = tweet.getInt("retweet_count");
 
