@@ -112,10 +112,6 @@ public class TieredSFCIndexStrategy implements
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
-		int maxRangeDecompositionPerSfc = maxRangeDecomposition;
-		if ((maxRangeDecomposition > 1) && (orderedSfcs.length > 1)) {
-			maxRangeDecompositionPerSfc = (int) Math.ceil((double) maxRangeDecomposition / (double) orderedSfcs.length);
-		}
 		final TierIndexMetaData metaData = ((hints.length > 0) && (hints[0] != null) && (hints[0] instanceof TierIndexMetaData)) ? (TierIndexMetaData) hints[0]
 				: null;
 
@@ -128,7 +124,9 @@ public class TieredSFCIndexStrategy implements
 			queryRanges.addAll(getQueryRanges(
 					binnedQueries,
 					sfc,
-					maxRangeDecompositionPerSfc,
+					maxRangeDecomposition, // for now we're doing this
+											// per SFC/tier rather than
+											// dividing by the tiers
 					tier));
 		}
 		return queryRanges;
