@@ -1,12 +1,15 @@
 package mil.nga.giat.geowave.format.geotools.vector;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
@@ -38,26 +41,31 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		LocalFileIngestPlugin<SimpleFeature>
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoToolsVectorDataStoreIngestPlugin.class);
+	private final static String PROPERTIES_EXTENSION = ".properties";
 
 	private final RetypingVectorDataPlugin retypingPlugin;
 	private final Filter filter;
+	private final List<String> featureTypeNames;
 
 	public GeoToolsVectorDataStoreIngestPlugin(
 			final Filter filter ) {
 		// by default inherit the types of the original file
 		this(
 				null,
-				filter);
+				filter,
+				new ArrayList<String>());
 	}
 
 	public GeoToolsVectorDataStoreIngestPlugin(
 			final RetypingVectorDataPlugin retypingPlugin,
-			final Filter filter ) {
+			final Filter filter,
+			List<String> featureTypeNames ) {
 		// this constructor can be used directly as an extension point for
 		// retyping the original feature data, if the retyping plugin is null,
 		// the data will be ingested as the original type
 		this.retypingPlugin = retypingPlugin;
 		this.filter = filter;
+		this.featureTypeNames = featureTypeNames;
 	}
 
 	@Override
@@ -69,24 +77,47 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	public void init(
 			final File baseDirectory ) {}
 
+	private static boolean isPropertiesFile(
+			File file ) {
+		return file.getName().toLowerCase().endsWith(
+				PROPERTIES_EXTENSION);
+	}
+
+	private static DataStore getDataStore(
+			final File file )
+			throws Exception {
+		final Map<Object, Object> map = new HashMap<>();
+		if (isPropertiesFile(file)) {
+			try (FileInputStream fis = new FileInputStream(
+					file)) {
+				Properties prop = new Properties();
+				prop.load(fis);
+				map.putAll(prop);
+				final DataStore dataStore = DataStoreFinder.getDataStore(map);
+				return dataStore;
+			}
+		}
+		map.put(
+				"url",
+				file.toURI().toURL());
+		final DataStore dataStore = DataStoreFinder.getDataStore(map);
+		return dataStore;
+	}
+
 	@Override
 	public boolean supportsFile(
 			final File file ) {
-
-		final Map<String, Object> map = new HashMap<String, Object>();
+		DataStore dataStore = null;
 		try {
-			map.put(
-					"url",
-					file.toURI().toURL());
-			final DataStore dataStore = DataStoreFinder.getDataStore(map);
-			return dataStore != null;
+			dataStore = getDataStore(file);
+			dataStore.dispose();
 		}
-		catch (final IOException e) {
+		catch (final Exception e) {
 			LOGGER.info(
 					"GeoTools was unable to read data source for file '" + file.getAbsolutePath() + "'",
 					e);
 		}
-		return false;
+		return dataStore != null;
 	}
 
 	@Override
@@ -101,49 +132,69 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String visibility ) {
 		DataStore dataStore = null;
-		List<Name> names = null;
 		try {
-			final Map<String, Object> map = new HashMap<String, Object>();
-			map.put(
-					"url",
-					input.toURI().toURL());
-			dataStore = DataStoreFinder.getDataStore(map);
-			if (dataStore == null) {
-				LOGGER.error("Unable to get a datastore instance, getDataStore returned null");
-				return null;
-			}
-
-			names = dataStore.getNames();
+			dataStore = getDataStore(input);
 		}
-		catch (final IOException e) {
+		catch (Exception e) {
 			LOGGER.error(
-					"Unable to ingest data source for file '" + input.getAbsolutePath() + "'",
+					"Exception getting a datastore instance",
 					e);
 		}
-		if ((names == null) || (dataStore == null)) {
-			LOGGER.error("Unable to get datatore name");
-			return null;
-		}
-		final List<SimpleFeatureCollection> featureCollections = new ArrayList<SimpleFeatureCollection>();
-		for (final Name name : names) {
+		if (dataStore != null) {
+			List<Name> names = null;
 			try {
-				final SimpleFeatureSource source = dataStore.getFeatureSource(name);
-				final SimpleFeatureCollection featureCollection = source.getFeatures();
-				featureCollections.add(featureCollection);
+				names = dataStore.getNames();
 			}
-			catch (final Exception e) {
+			catch (IOException e) {
 				LOGGER.error(
-						"Unable to ingest data source for feature name '" + name + "'",
+						"Unable to get feature tpes from datastore '" + input.getAbsolutePath() + "'",
 						e);
 			}
+			if (names == null) {
+				LOGGER.error("Unable to get datatore name");
+				return null;
+			}
+			final List<SimpleFeatureCollection> featureCollections = new ArrayList<SimpleFeatureCollection>();
+			for (final Name name : names) {
+				try {
+					if (featureTypeNames != null && !featureTypeNames.isEmpty()
+							&& !featureTypeNames.contains(name.getLocalPart())) {
+						continue;
+					}
+					final SimpleFeatureSource source = dataStore.getFeatureSource(name);
+
+					final SimpleFeatureCollection featureCollection;
+					// we pass the filter in here so that the datastore may be
+					// able to take advantage of the filter
+					// but also send the filter along to be evaluated per
+					// feature in case the filter is not respected by the
+					// underlying store, we may want to consider relying on the
+					// filtering being done by the store here
+					if (filter != null) {
+						featureCollection = source.getFeatures(filter);
+					}
+					else {
+						featureCollection = source.getFeatures();
+					}
+					featureCollections.add(featureCollection);
+				}
+				catch (final Exception e) {
+					LOGGER.error(
+							"Unable to ingest data source for feature name '" + name + "'",
+							e);
+				}
+			}
+			return new SimpleFeatureGeoWaveWrapper(
+					featureCollections,
+					primaryIndexIds,
+					visibility,
+					dataStore,
+					retypingPlugin,
+					filter);
 		}
-		return new SimpleFeatureGeoWaveWrapper(
-				featureCollections,
-				primaryIndexIds,
-				visibility,
-				dataStore,
-				retypingPlugin,
-				filter);
+
+		LOGGER.error("Unable to get a datastore instance, getDataStore returned null");
+		return null;
 	}
 
 	@Override

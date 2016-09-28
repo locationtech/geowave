@@ -40,7 +40,8 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 		return new GeoToolsVectorDataStoreIngestPlugin(
 				new DateFieldRetypingPlugin(
 						vectorDataOptions.getDateFieldOptionProvider()),
-				vectorDataOptions.getCqlFilterOptionProvider());
+				vectorDataOptions.getCqlFilterOptionProvider(),
+				vectorDataOptions.getFeatureTypeNames());
 	}
 
 	@Override
