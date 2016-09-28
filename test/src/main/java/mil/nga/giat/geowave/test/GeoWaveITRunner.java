@@ -587,7 +587,7 @@ public class GeoWaveITRunner extends
 				traverseRequirements(
 						entry,
 						retVal,
-						i,
+						i++,
 						testsAddedToArray);
 			}
 			return retVal;
