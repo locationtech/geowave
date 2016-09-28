@@ -44,13 +44,13 @@ public class TieredSFCIndexStrategy implements
 		HierarchicalNumericIndexStrategy
 {
 	private final static Logger LOGGER = Logger.getLogger(TieredSFCIndexStrategy.class);
-	private final static int MAX_ESTIMATED_DUPLICATE_IDS_PER_DIMENSION = 2;
+	private final static int DEFAULT_MAX_ESTIMATED_DUPLICATE_IDS_PER_DIMENSION = 2;
 	protected static final int DEFAULT_MAX_RANGES = -1;
 	private SpaceFillingCurve[] orderedSfcs;
 	private ImmutableBiMap<Integer, Byte> orderedSfcIndexToTierId;
 	private NumericDimensionDefinition[] baseDefinitions;
-	private long maxEstimatedDuplicateIds;
-	private BigInteger maxEstimatedDuplicateIdsBigInteger;
+	private long maxEstimatedDuplicateIdsPerDimension;
+	private Map<Integer, BigInteger> maxEstimatedDuplicatesPerDimensionalExtent = new HashMap<>();
 
 	protected TieredSFCIndexStrategy() {}
 
@@ -66,13 +66,38 @@ public class TieredSFCIndexStrategy implements
 			final NumericDimensionDefinition[] baseDefinitions,
 			final SpaceFillingCurve[] orderedSfcs,
 			final ImmutableBiMap<Integer, Byte> orderedSfcIndexToTierId ) {
+		this(
+				baseDefinitions,
+				orderedSfcs,
+				orderedSfcIndexToTierId,
+				DEFAULT_MAX_ESTIMATED_DUPLICATE_IDS_PER_DIMENSION);
+	}
+
+	/**
+	 * Constructor used to create a Tiered Index Strategy.
+	 */
+	public TieredSFCIndexStrategy(
+			final NumericDimensionDefinition[] baseDefinitions,
+			final SpaceFillingCurve[] orderedSfcs,
+			final ImmutableBiMap<Integer, Byte> orderedSfcIndexToTierId,
+			long maxEstimatedDuplicateIdsPerDimension ) {
 		this.orderedSfcs = orderedSfcs;
 		this.baseDefinitions = baseDefinitions;
 		this.orderedSfcIndexToTierId = orderedSfcIndexToTierId;
-		maxEstimatedDuplicateIds = (long) Math.pow(
-				MAX_ESTIMATED_DUPLICATE_IDS_PER_DIMENSION,
-				baseDefinitions.length);
-		maxEstimatedDuplicateIdsBigInteger = BigInteger.valueOf(maxEstimatedDuplicateIds);
+		this.maxEstimatedDuplicateIdsPerDimension = maxEstimatedDuplicateIdsPerDimension;
+		initDuplicateIdLookup();
+
+	}
+
+	private void initDuplicateIdLookup() {
+		for (int i = 0; i <= baseDefinitions.length; i++) {
+			long maxEstimatedDuplicateIds = (long) Math.pow(
+					maxEstimatedDuplicateIdsPerDimension,
+					i);
+			maxEstimatedDuplicatesPerDimensionalExtent.put(
+					i,
+					BigInteger.valueOf(maxEstimatedDuplicateIds));
+		}
 	}
 
 	@Override
@@ -87,10 +112,6 @@ public class TieredSFCIndexStrategy implements
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
-		int maxRangeDecompositionPerSfc = maxRangeDecomposition;
-		if ((maxRangeDecomposition > 1) && (orderedSfcs.length > 1)) {
-			maxRangeDecompositionPerSfc = (int) Math.ceil((double) maxRangeDecomposition / (double) orderedSfcs.length);
-		}
 		final TierIndexMetaData metaData = ((hints.length > 0) && (hints[0] != null) && (hints[0] instanceof TierIndexMetaData)) ? (TierIndexMetaData) hints[0]
 				: null;
 
@@ -103,7 +124,9 @@ public class TieredSFCIndexStrategy implements
 			queryRanges.addAll(getQueryRanges(
 					binnedQueries,
 					sfc,
-					maxRangeDecompositionPerSfc,
+					maxRangeDecomposition, // for now we're doing this
+											// per SFC/tier rather than
+											// dividing by the tiers
 					tier));
 		}
 		return queryRanges;
@@ -121,23 +144,10 @@ public class TieredSFCIndexStrategy implements
 			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.length);
 		}
 		for (final BinnedNumericDataset binnedQuery : binnedQueries) {
-			final RangeDecomposition rangeDecomp;
-			if (binnedQuery.isFullExtent()) {
-				rangeDecomp = new RangeDecomposition(
-						new ByteArrayRange[] {
-							new ByteArrayRange(
-									new ByteArrayId(
-											new byte[] {}),
-									new ByteArrayId(
-											new byte[] {}))
-						});
-			}
-			else {
-				rangeDecomp = sfc.decomposeRange(
-						binnedQuery,
-						true,
-						maxRangeDecompositionPerBin);
-			}
+			final RangeDecomposition rangeDecomp = sfc.decomposeRange(
+					binnedQuery,
+					true,
+					maxRangeDecompositionPerBin);
 			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
 					new byte[] {
 						tier
@@ -189,16 +199,29 @@ public class TieredSFCIndexStrategy implements
 			final MultiDimensionalNumericData indexedData ) {
 		return internalGetInsertionIds(
 				indexedData,
-				maxEstimatedDuplicateIdsBigInteger);
+				maxEstimatedDuplicatesPerDimensionalExtent.get(getRanges(indexedData)));
+	}
+
+	private static int getRanges(
+			final MultiDimensionalNumericData indexedData ) {
+		double[] mins = indexedData.getMinValuesPerDimension();
+		double[] maxes = indexedData.getMaxValuesPerDimension();
+		int ranges = 0;
+		for (int d = 0; d < mins.length; d++) {
+			if (mins[d] != maxes[d]) {
+				ranges++;
+			}
+		}
+		return ranges;
 	}
 
 	@Override
 	public List<ByteArrayId> getInsertionIds(
 			final MultiDimensionalNumericData indexedData,
-			final int maxDuplicateInsertionIds ) {
+			final int maxDuplicateInsertionIdsPerDimension ) {
 		return internalGetInsertionIds(
 				indexedData,
-				BigInteger.valueOf(maxDuplicateInsertionIds));
+				BigInteger.valueOf(maxDuplicateInsertionIdsPerDimension));
 	}
 
 	private List<ByteArrayId> internalGetInsertionIds(
@@ -297,9 +320,8 @@ public class TieredSFCIndexStrategy implements
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + Arrays.hashCode(baseDefinitions);
-		result = (prime * result) + (int) (maxEstimatedDuplicateIds ^ (maxEstimatedDuplicateIds >>> 32));
 		result = (prime * result)
-				+ ((maxEstimatedDuplicateIdsBigInteger == null) ? 0 : maxEstimatedDuplicateIdsBigInteger.hashCode());
+				+ (int) (maxEstimatedDuplicateIdsPerDimension ^ (maxEstimatedDuplicateIdsPerDimension >>> 32));
 		result = (prime * result) + ((orderedSfcIndexToTierId == null) ? 0 : orderedSfcIndexToTierId.hashCode());
 		result = (prime * result) + Arrays.hashCode(orderedSfcs);
 		return result;
@@ -323,15 +345,7 @@ public class TieredSFCIndexStrategy implements
 				other.baseDefinitions)) {
 			return false;
 		}
-		if (maxEstimatedDuplicateIds != other.maxEstimatedDuplicateIds) {
-			return false;
-		}
-		if (maxEstimatedDuplicateIdsBigInteger == null) {
-			if (other.maxEstimatedDuplicateIdsBigInteger != null) {
-				return false;
-			}
-		}
-		else if (!maxEstimatedDuplicateIdsBigInteger.equals(other.maxEstimatedDuplicateIdsBigInteger)) {
+		if (maxEstimatedDuplicateIdsPerDimension != other.maxEstimatedDuplicateIdsPerDimension) {
 			return false;
 		}
 		if (orderedSfcIndexToTierId == null) {
@@ -489,7 +503,7 @@ public class TieredSFCIndexStrategy implements
 		buf.putInt(orderedSfcs.length);
 		buf.putInt(baseDefinitions.length);
 		buf.putInt(orderedSfcIndexToTierId.size());
-		buf.putLong(maxEstimatedDuplicateIds);
+		buf.putLong(maxEstimatedDuplicateIdsPerDimension);
 		for (final byte[] sfcBinary : orderedSfcBinaries) {
 			buf.putInt(sfcBinary.length);
 			buf.put(sfcBinary);
@@ -513,8 +527,7 @@ public class TieredSFCIndexStrategy implements
 		final int numSfcs = buf.getInt();
 		final int numDimensions = buf.getInt();
 		final int mappingSize = buf.getInt();
-		maxEstimatedDuplicateIds = buf.getLong();
-		maxEstimatedDuplicateIdsBigInteger = BigInteger.valueOf(maxEstimatedDuplicateIds);
+		maxEstimatedDuplicateIdsPerDimension = buf.getLong();
 		orderedSfcs = new SpaceFillingCurve[numSfcs];
 		baseDefinitions = new NumericDimensionDefinition[numDimensions];
 		for (int i = 0; i < numSfcs; i++) {
@@ -539,6 +552,8 @@ public class TieredSFCIndexStrategy implements
 					buf.get());
 		}
 		orderedSfcIndexToTierId = bimapBuilder.build();
+
+		initDuplicateIdLookup();
 	}
 
 	@Override
@@ -610,10 +625,11 @@ public class TieredSFCIndexStrategy implements
 		}
 	}
 
-	public void setMaxEstimatedDuplicateIds(
-			final int maxEstimatedDuplicateIds ) {
-		this.maxEstimatedDuplicateIds = maxEstimatedDuplicateIds;
-		maxEstimatedDuplicateIdsBigInteger = BigInteger.valueOf(maxEstimatedDuplicateIds);
+	public void setMaxEstimatedDuplicateIdsPerDimension(
+			final int maxEstimatedDuplicateIdsPerDimension ) {
+		this.maxEstimatedDuplicateIdsPerDimension = maxEstimatedDuplicateIdsPerDimension;
+
+		initDuplicateIdLookup();
 	}
 
 	@Override

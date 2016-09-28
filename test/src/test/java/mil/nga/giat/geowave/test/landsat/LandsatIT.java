@@ -191,14 +191,20 @@ public class LandsatIT
 		final RenderedImage result = gridCoverage.getRenderedImage();
 		String referenceImage = REFERENCE_LANDSAT_IMAGE_PATH;
 		// test the result with expected, allowing for no error
-		if (System.getProperty(
-				"os.name").equals(
-				"Linux")) {
-			// this is ugly but the expected result seems different on centos
-			// than ubuntu or windows (it looks more correct on windows and
-			// ubuntu)
-			// TODO: determine why this is the case
-			referenceImage = ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH;
+
+		// this is ugly but the expected result seems different on
+		// centos than ubuntu or windows (it looks more correct on windows and
+		// ubuntu). These properties can be set to toggle the reference image,
+		// by default the alternate is used on all linux OS.
+
+		// TODO: determine why this is the case
+		if (System.getProperty("use_default_landsat") == null) {
+			if (System.getProperty("use_alt_landsat") != null || System.getProperty(
+					"os.name").equals(
+					"Linux")) {
+
+				referenceImage = ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH;
+			}
 		}
 		final BufferedImage reference = ImageIO.read(new File(
 				referenceImage));

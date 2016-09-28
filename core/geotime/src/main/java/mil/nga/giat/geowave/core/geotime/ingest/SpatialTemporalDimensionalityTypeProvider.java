@@ -107,14 +107,15 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 		else {
 			return new CustomIdIndex(
-					TieredSFCIndexFactory.createEqualIntervalPrecisionTieredStrategy(
+					TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
 							dimensions,
 							new int[] {
 								options.bias.getSpatialPrecision(),
 								options.bias.getSpatialPrecision(),
 								options.bias.getTemporalPrecision()
 							},
-							SFCType.HILBERT),
+							SFCType.HILBERT,
+							options.maxDuplicates),
 					new BasicIndexModel(
 							fields),
 					new ByteArrayId(
@@ -146,6 +147,10 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			"--pointTimestampOnly"
 		}, required = false, description = "The index will only be good at handling points and timestamps and will not be optimized for handling lines/polys or time ranges.  The default behavior is to handle any geometry and time ranges well.")
 		protected boolean pointOnly = false;
+		@Parameter(names = {
+			"--maxDuplicates"
+		}, required = false, description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
+		protected long maxDuplicates = -1;
 	}
 
 	public static enum Bias {
@@ -261,6 +266,13 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		public SpatialTemporalIndexBuilder setPeriodicity(
 				final Unit periodicity ) {
 			options.periodicity = periodicity;
+			return new SpatialTemporalIndexBuilder(
+					options);
+		}
+
+		public SpatialTemporalIndexBuilder setMaxDupicates(
+				final long maxDuplicates ) {
+			options.maxDuplicates = maxDuplicates;
 			return new SpatialTemporalIndexBuilder(
 					options);
 		}
