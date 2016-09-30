@@ -1,15 +1,11 @@
-package mil.nga.giat.geowave.datastore.accumulo.util;
+package mil.nga.giat.geowave.datastore.hbase.util;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Map.Entry;
 
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.log4j.Logger;
-
+import org.apache.hadoop.hbase.client.Result;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -19,48 +15,37 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 
-public class AccumuloSecondaryIndexUtils
+public class HBaseSecondaryIndexUtils
 {
 
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexUtils.class);
-
 	/**
-	 * Decodes an Accumulo key-value pair from the result of a secondary index
-	 * scan back into the original type using the given data adapter
+	 * Decodes a result a HBase secondary index scan back into the original type
+	 * using the given data adapter
 	 * 
-	 * @param key
-	 * @param value
+	 * @param row
+	 * @param columnFamily
 	 * @param adapter
 	 * @return
 	 */
 	public static <T> T decodeRow(
-			final Key key,
-			final Value value,
+			final Result row,
+			final byte[] columnFamily,
 			final DataAdapter<T> adapter ) {
-		Map<Key, Value> rowMapping;
-		try {
-			rowMapping = WholeRowIterator.decodeRow(
-					key,
-					value);
-		}
-		catch (final IOException e) {
-			LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
-			return null;
-		}
+		final NavigableMap<byte[], byte[]> qualifierToValueMap = row.getFamilyMap(columnFamily);
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
 		final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
 		ByteArrayId dataId = null;
-		Map<ByteArrayId, byte[]> fieldIdToValueMap = new HashMap<>();
-		for (final Entry<Key, Value> entry : rowMapping.entrySet()) {
-			final byte[] cqBytes = entry.getKey().getColumnQualifierData().getBackingArray();
+		final Map<ByteArrayId, byte[]> fieldIdToValueMap = new HashMap<>();
+		for (final Entry<byte[], byte[]> entry : qualifierToValueMap.entrySet()) {
+			final byte[] cqBytes = entry.getKey();
 			final String dataIdString = SecondaryIndexUtils.getDataId(cqBytes);
 			if (dataId == null) {
 				dataId = new ByteArrayId(
 						dataIdString);
 			}
 			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cqBytes);
-			final byte[] fieldValue = entry.getValue().get();
+			final byte[] fieldValue = entry.getValue();
 			fieldIdToValueMap.put(
 					fieldId,
 					fieldValue);
@@ -94,4 +79,5 @@ public class AccumuloSecondaryIndexUtils
 				encodedData,
 				null);
 	}
+
 }

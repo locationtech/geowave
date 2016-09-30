@@ -119,7 +119,7 @@ public class HBaseDataStore extends
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AdapterIndexMappingStore indexMappingStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final HBaseSecondaryIndexDataStore secondaryIndexDataStore,
 			final BasicHBaseOperations operations ) {
 		this(
 				indexStore,
@@ -136,7 +136,7 @@ public class HBaseDataStore extends
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AdapterIndexMappingStore indexMappingStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final HBaseSecondaryIndexDataStore secondaryIndexDataStore,
 			final BasicHBaseOperations operations,
 			final HBaseOptions options ) {
 		super(
@@ -150,6 +150,7 @@ public class HBaseDataStore extends
 
 		this.operations = operations;
 		this.options = options;
+		secondaryIndexDataStore.setHbaseDataStore(this);
 	}
 
 	@Override
