@@ -1,9 +1,9 @@
 [[quickstart-guide-interact]]
 <<<
 
-=== Interacting with the Cluster
+== Interacting with the Cluster
 
-Enable Web Connections
+=== Enable Web Connections
 
 Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. Use the “Master public DNS” 
 value as your hostname and the security key you assigned to the cluster to enable the web connection.

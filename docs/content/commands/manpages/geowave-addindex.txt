@@ -1,0 +1,92 @@
+//:geowave-addindex(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config addindex - creates an index configuration for use in GeoWave
+
+SYNOPSIS
+//:--------
+
+geowave config addindex [options] <name>
+
+DESCRIPTION
+//:-----------
+
+The geowave config addindex operator will create a local index configuration
+that can be reused but is not associated with a store until data is ingested.
+
+OPTIONS
+//:-------
+
+- -d, --default
+ * Make this the default index  for creating stores
+
+- -np, --numPartitions <arg>
+ * The number of partitions
+ * Default: 1
+
+- -ps, --partitionStrategy <arg>
+ * The partition strategy to use
+ * Default: NONE
+ * Possible Values: NONE, HASH, ROUND_ROBIN
+
+- *-t, --type <arg>
+ * The type of index, such as spatial or spatial_temporal
+ * Required!
+ * When -t, --type is spatial, the following options are available
+ 
+  ** --allTiers
+   *** The index will represent all tiers.  Typically for vector data we only
+     need a subset of the tiers to minimize query decomposition, but for raster
+     data typically all tiers is better.
+   *** Default: false
+
+  ** -d, --default
+   ***  Make this the default index creating stores
+
+  ** -np, --numPartitions
+   *** The number of partitions.
+    **** Default: 1
+
+  ** -ps, --partitionStrategy
+   *** The partition strategy to use.
+    **** Default: NONE
+    **** Possible Values: [NONE, HASH, ROUND_ROBIN]
+
+  ** --pointOnly
+   *** The index will only be good at handling pointsand will not be optimized
+     for handling lines/polys.  The default behavior is to handle any geometry.
+     Default: false
+
+ * When -t, --type is spatial_temporal, the following options are available
+
+  ** --bias
+   *** The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.
+   *** Default: BALANCED
+   *** Possible Values: [TEMPORAL, BALANCED, SPATIAL]
+
+  ** -d, --default
+   *** Make this the default index creating stores
+
+  ** -np, --numPartitions
+   *** The number of partitions.
+   *** Default: 1
+
+  ** -ps, --partitionStrategy
+   *** The partition strategy to use.
+   *** Default: NONE
+   *** Possible Values: [NONE, HASH, ROUND_ROBIN]
+
+  ** --period
+   *** The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.
+   *** Default: YEAR
+   *** Possible Values: [DAY, MONTH, YEAR]
+
+  ** --pointTimestampOnly
+   *** The index will only be good at handling points and timestamps and will
+     not be optimized for handling lines/polys or time ranges.  The default
+     behavior is to handle any geometry and time ranges well.
+   *** Default: false

@@ -13,9 +13,16 @@ Hardware Configuration
 * EC2 Subnet
 ** Select the subnet (or one of the subnets) associated with your VPC
 * Master
-** Select m3.xlarge from the EC2 instance type dropdown list
+** Select m4.xlarge from the EC2 instance type dropdown list
 * Core
-** Select m3.xlarge from the EC2 instance type dropdown list
+** Select m4.xlarge from the EC2 instance type dropdown list
 ** Select 2 for the Instance count
 * Task
 ** We won’t be using a task node in this walkthrough so leave the instance count at 0
+
+--- +
+
+[NOTE]
+====
+You can request spot instances here to save money. 
+====
