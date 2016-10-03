@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.SecondaryIndexEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseSecondaryIndexUtils;
 
@@ -20,16 +21,19 @@ public class HBaseSecondaryIndexEntryIteratorWrapper<T> extends
 	private final static Logger LOGGER = Logger.getLogger(HBaseSecondaryIndexEntryIteratorWrapper.class);
 	private final ResultScanner scanner;
 	private final byte[] columnFamily;
+	private final PrimaryIndex index;
 
 	public HBaseSecondaryIndexEntryIteratorWrapper(
 			final ResultScanner scanner,
 			final byte[] columnFamily,
-			final DataAdapter<T> adapter ) {
+			final DataAdapter<T> adapter,
+			final PrimaryIndex index ) {
 		super(
 				scanner.iterator(),
 				adapter);
 		this.scanner = scanner;
 		this.columnFamily = columnFamily;
+		this.index = index;
 	}
 
 	@Override
@@ -46,7 +50,8 @@ public class HBaseSecondaryIndexEntryIteratorWrapper<T> extends
 		return HBaseSecondaryIndexUtils.decodeRow(
 				entry,
 				columnFamily,
-				adapter);
+				adapter,
+				index);
 	}
 
 	@Override

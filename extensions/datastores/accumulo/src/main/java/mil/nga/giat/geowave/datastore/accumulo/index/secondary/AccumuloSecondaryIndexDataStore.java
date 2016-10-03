@@ -24,17 +24,18 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.CastIterator;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.query.RowIdQuery;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 
@@ -44,7 +45,7 @@ public class AccumuloSecondaryIndexDataStore extends
 	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexDataStore.class);
 	private final AccumuloOperations accumuloOperations;
 	private final AccumuloOptions accumuloOptions;
-	private AccumuloDataStore accumuloDataStore = null;
+	private DataStore dataStore = null;
 
 	public AccumuloSecondaryIndexDataStore(
 			final AccumuloOperations accumuloOperations ) {
@@ -61,9 +62,10 @@ public class AccumuloSecondaryIndexDataStore extends
 		this.accumuloOptions = accumuloOptions;
 	}
 
-	public void setAccumuloDataStore(
-			final AccumuloDataStore accumuloDataStore ) {
-		this.accumuloDataStore = accumuloDataStore;
+	@Override
+	public void setDataStore(
+			final DataStore dataStore ) {
+		this.dataStore = dataStore;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -161,6 +163,7 @@ public class AccumuloSecondaryIndexDataStore extends
 			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
 			final DataAdapter<T> adapter,
+			final PrimaryIndex primaryIndex,
 			final DistributableQuery query,
 			final String... authorizations ) {
 		final Scanner scanner = getScanner(
@@ -184,7 +187,8 @@ public class AccumuloSecondaryIndexDataStore extends
 				scanner.addScanIterator(iteratorSettings);
 				return new AccumuloSecondaryIndexEntryIteratorWrapper<T>(
 						scanner,
-						adapter);
+						adapter,
+						primaryIndex);
 			}
 			else {
 				final List<CloseableIterator<Object>> allResults = new ArrayList<>();
@@ -195,11 +199,11 @@ public class AccumuloSecondaryIndexDataStore extends
 						final Pair<ByteArrayId, ByteArrayId> entry = joinEntryIterator.next();
 						final ByteArrayId primaryIndexId = entry.getLeft();
 						final ByteArrayId primaryIndexRowId = entry.getRight();
-						final CloseableIterator<Object> intermediateResults = accumuloDataStore.query(
+						final CloseableIterator<Object> intermediateResults = dataStore.query(
 								new QueryOptions(
 										adapter.getAdapterId(),
 										primaryIndexId),
-								new RowIdQuery(
+								new PrefixIdQuery(
 										primaryIndexRowId));
 						allResults.add(intermediateResults);
 						return new CloseableIteratorWrapper<T>(

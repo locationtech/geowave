@@ -9,6 +9,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.SecondaryIndexEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloSecondaryIndexUtils;
 
@@ -22,14 +23,17 @@ public class AccumuloSecondaryIndexEntryIteratorWrapper<T> extends
 
 	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexEntryIteratorWrapper.class);
 	private final Scanner scanner;
+	private final PrimaryIndex index;
 
 	public AccumuloSecondaryIndexEntryIteratorWrapper(
 			final Scanner scanner,
-			final DataAdapter<T> adapter ) {
+			final DataAdapter<T> adapter,
+			final PrimaryIndex index ) {
 		super(
 				scanner.iterator(),
 				adapter);
 		this.scanner = scanner;
+		this.index = index;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -47,7 +51,8 @@ public class AccumuloSecondaryIndexEntryIteratorWrapper<T> extends
 		return AccumuloSecondaryIndexUtils.decodeRow(
 				entry.getKey(),
 				entry.getValue(),
-				adapter);
+				adapter,
+				index);
 	}
 
 	@Override

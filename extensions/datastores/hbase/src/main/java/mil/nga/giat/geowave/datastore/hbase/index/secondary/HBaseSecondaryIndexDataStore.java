@@ -21,17 +21,18 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.CastIterator;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
@@ -42,7 +43,7 @@ public class HBaseSecondaryIndexDataStore extends
 	private final static Logger LOGGER = Logger.getLogger(HBaseSecondaryIndexDataStore.class);
 	private final BasicHBaseOperations hbaseOperations;
 	private final HBaseOptions hbaseOptions;
-	private HBaseDataStore hbaseDataStore = null;
+	private DataStore dataStore = null;
 
 	public HBaseSecondaryIndexDataStore(
 			final BasicHBaseOperations hbaseOperations ) {
@@ -59,9 +60,10 @@ public class HBaseSecondaryIndexDataStore extends
 		this.hbaseOptions = hbaseOptions;
 	}
 
-	public void setHbaseDataStore(
-			final HBaseDataStore hbaseDataStore ) {
-		this.hbaseDataStore = hbaseDataStore;
+	@Override
+	public void setDataStore(
+			final DataStore dataStore ) {
+		this.dataStore = dataStore;
 	}
 
 	@Override
@@ -171,6 +173,7 @@ public class HBaseSecondaryIndexDataStore extends
 			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
 			final DataAdapter<T> adapter,
+			final PrimaryIndex primaryIndex,
 			final DistributableQuery query,
 			final String... authorizations ) {
 		final List<Scan> scans = new ArrayList<Scan>();
@@ -218,7 +221,7 @@ public class HBaseSecondaryIndexDataStore extends
 							final Pair<ByteArrayId, ByteArrayId> entry = joinEntryIterator.next();
 							final ByteArrayId primaryIndexId = entry.getLeft();
 							final ByteArrayId primaryIndexRowId = entry.getRight();
-							final CloseableIterator<Object> intermediateResults = hbaseDataStore.query(
+							final CloseableIterator<Object> intermediateResults = dataStore.query(
 									new QueryOptions(
 											adapter.getAdapterId(),
 											primaryIndexId),
@@ -250,7 +253,8 @@ public class HBaseSecondaryIndexDataStore extends
 					allResultsList.add(new HBaseSecondaryIndexEntryIteratorWrapper<T>(
 							resultsScan,
 							columnFamily,
-							adapter));
+							adapter,
+							primaryIndex));
 				}
 			}
 			return new CloseableIteratorWrapper<T>(

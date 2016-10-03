@@ -17,6 +17,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 
 public class AccumuloSecondaryIndexUtils
@@ -31,12 +32,14 @@ public class AccumuloSecondaryIndexUtils
 	 * @param key
 	 * @param value
 	 * @param adapter
+	 * @param indexModel
 	 * @return
 	 */
 	public static <T> T decodeRow(
 			final Key key,
 			final Value value,
-			final DataAdapter<T> adapter ) {
+			final DataAdapter<T> adapter,
+			final PrimaryIndex index ) {
 		Map<Key, Value> rowMapping;
 		try {
 			rowMapping = WholeRowIterator.decodeRow(
@@ -68,18 +71,29 @@ public class AccumuloSecondaryIndexUtils
 		for (final Entry<ByteArrayId, byte[]> entry : fieldIdToValueMap.entrySet()) {
 			final ByteArrayId fieldId = entry.getKey();
 			final byte[] fieldValueBytes = entry.getValue();
-			final FieldReader<?> fieldReader = adapter.getReader(fieldId);
-			if (fieldReader != null) {
-				final Object fieldValue = fieldReader.readField(fieldValueBytes);
-				final PersistentValue<Object> val = new PersistentValue<Object>(
+			final FieldReader<? extends CommonIndexValue> indexFieldReader = index.getIndexModel().getReader(
+					fieldId);
+			if (indexFieldReader != null) {
+				final CommonIndexValue indexValue = indexFieldReader.readField(fieldValueBytes);
+				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
 						fieldId,
-						fieldValue);
-				extendedData.addValue(val);
+						indexValue);
+				commonData.addValue(val);
 			}
 			else {
-				unknownData.addValue(new PersistentValue<byte[]>(
-						fieldId,
-						fieldValueBytes));
+				final FieldReader<?> fieldReader = adapter.getReader(fieldId);
+				if (fieldReader != null) {
+					final Object fieldValue = fieldReader.readField(fieldValueBytes);
+					final PersistentValue<Object> val = new PersistentValue<Object>(
+							fieldId,
+							fieldValue);
+					extendedData.addValue(val);
+				}
+				else {
+					unknownData.addValue(new PersistentValue<byte[]>(
+							fieldId,
+							fieldValueBytes));
+				}
 			}
 		}
 		final IndexedAdapterPersistenceEncoding encodedData = new IndexedAdapterPersistenceEncoding(
@@ -92,6 +106,6 @@ public class AccumuloSecondaryIndexUtils
 				extendedData);
 		return adapter.decode(
 				encodedData,
-				null);
+				index);
 	}
 }

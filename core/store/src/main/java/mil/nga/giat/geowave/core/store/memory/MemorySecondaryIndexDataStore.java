@@ -3,10 +3,11 @@ package mil.nga.giat.geowave.core.store.memory;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -66,10 +67,18 @@ public class MemorySecondaryIndexDataStore implements
 			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
 			final DataAdapter<T> adapter,
+			final PrimaryIndex primaryIndex,
 			final DistributableQuery query,
 			final String... authorizations ) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setDataStore(
+			final DataStore dataStore ) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

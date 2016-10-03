@@ -3,20 +3,25 @@ package mil.nga.giat.geowave.core.store.index;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.core.store.query.Query;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 /**
  * This is responsible for persisting secondary index entries
  */
 public interface SecondaryIndexDataStore
 {
+	/**
+	 * Set the reference to the primary data store
+	 * 
+	 * @param dataStore
+	 */
+	public void setDataStore(
+			DataStore dataStore );
+
 	/**
 	 * Stores a secondary index entry that will require a join against the
 	 * primary index upon lookup.
@@ -60,11 +65,12 @@ public interface SecondaryIndexDataStore
 			List<FieldInfo<?>> attributes );
 
 	/**
-	 * TODO
+	 * Execute a query against the given secondary index
 	 * 
 	 * @param secondaryIndex
 	 * @param indexedAttributeFieldId
 	 * @param adapter
+	 * @param primaryIndex
 	 * @param query
 	 * @param authorizations
 	 * @return
@@ -73,6 +79,7 @@ public interface SecondaryIndexDataStore
 			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
 			final DataAdapter<T> adapter,
+			final PrimaryIndex primaryIndex,
 			final DistributableQuery query,
 			final String... authorizations );
 
