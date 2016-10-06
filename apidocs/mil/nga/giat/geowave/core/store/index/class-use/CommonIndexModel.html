@@ -111,42 +111,46 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.flatten">mil.nga.giat.geowave.core.store.flatten</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index.numeric">mil.nga.giat.geowave.core.store.index.numeric</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index.temporal">mil.nga.giat.geowave.core.store.index.temporal</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index.text">mil.nga.giat.geowave.core.store.index.text</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query">mil.nga.giat.geowave.core.store.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.util">mil.nga.giat.geowave.core.store.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.encoding">mil.nga.giat.geowave.datastore.accumulo.encoding</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.query">mil.nga.giat.geowave.datastore.accumulo.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.stanag4676.image">mil.nga.giat.geowave.format.stanag4676.image</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -493,6 +497,28 @@
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="strong">QueryFilter.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html#accept(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding)">accept</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.flatten">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/package-summary.html">mil.nga.giat.geowave.core.store.flatten</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/package-summary.html">mil.nga.giat.geowave.core.store.flatten</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><span class="strong">BitmaskUtils.</span><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#generateFieldSubsetBitmask(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20java.util.List,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">generateFieldSubsetBitmask</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</code>
+<div class="block">Generates a field subset bitmask for the given index, adapter, and fields</div>
+</td>
 </tr>
 </tbody>
 </table>

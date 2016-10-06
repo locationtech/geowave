@@ -175,16 +175,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/st
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/RasterBoundingBoxStatistics.html#fromBinary(byte[])">fromBinary</a></strong>(byte[]&nbsp;bytes)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected com.vividsolutions.jts.geom.Envelope</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/RasterBoundingBoxStatistics.html#getEnvelope(org.opengis.coverage.grid.GridCoverage)">getEnvelope</a></strong>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/RasterBoundingBoxStatistics.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -192,7 +184,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/st
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.geotime.store.statistics.<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T)">entryIngested</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getConstraints()">getConstraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getHeight()">getHeight</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMaxX()">getMaxX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMaxY()">getMaxY</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMinX()">getMinX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMinY()">getMinY</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getWidth()">getWidth</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#isSet()">isSet</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#toString()">toString</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#entryIngested(mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo,%20T)">entryIngested</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#fromBinary(byte[])">fromBinary</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getConstraints()">getConstraints</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getHeight()">getHeight</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMaxX()">getMaxX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMaxY()">getMaxY</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMinX()">getMinX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getMinY()">getMinY</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getWidth()">getWidth</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#isSet()">isSet</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#toBinary()">toBinary</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#toString()">toString</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics">
@@ -251,43 +243,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/st
 <a name="getEnvelope(org.opengis.coverage.grid.GridCoverage)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getEnvelope</h4>
 <pre>protected&nbsp;com.vividsolutions.jts.geom.Envelope&nbsp;getEnvelope(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getEnvelope(T)">getEnvelope</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="toBinary()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toBinary</h4>
-<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary()">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#toBinary()">toBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="fromBinary(byte[])">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>fromBinary</h4>
-<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary(byte[])">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
-<dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#fromBinary(byte[])">fromBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 </dl>
 </li>
 </ul>

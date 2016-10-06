@@ -137,19 +137,36 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#constructNewValue(byte[],%20byte[],%20byte[])">constructNewValue</a></strong>(byte[]&nbsp;value,
+                 byte[]&nbsp;originalBitmask,
+                 byte[]&nbsp;newBitmask)</code>
+<div class="block">Generates a new value byte array representing a subset of fields of the
+ given value</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#generateANDBitmask(byte[],%20byte[])">generateANDBitmask</a></strong>(byte[]&nbsp;bitmask1,
                   byte[]&nbsp;bitmask2)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#generateCompositeBitmask(java.lang.Integer)">generateCompositeBitmask</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;fieldPosition)</code>
 <div class="block">Generates a composite bitmask given a single field position.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#generateCompositeBitmask(java.util.SortedSet)">generateCompositeBitmask</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;fieldPositions)</code>
 <div class="block">Generates a composite bitmask given a list of field positions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#generateFieldSubsetBitmask(mil.nga.giat.geowave.core.store.index.CommonIndexModel,%20java.util.List,%20mil.nga.giat.geowave.core.store.adapter.DataAdapter)">generateFieldSubsetBitmask</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</code>
+<div class="block">Generates a field subset bitmask for the given index, adapter, and fields</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -230,7 +247,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;byte[]&nbsp;generateCompositeBitmask(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;fieldPositions)</pre>
 <div class="block">Generates a composite bitmask given a list of field positions. The
  composite bitmask represents a true bit for every positive field position
- 
+
  For example, given field 0, field 1, and field 2 this method will return
  00000111</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldPositions</code> - a list of field positions</dd>
@@ -246,7 +263,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;byte[]&nbsp;generateCompositeBitmask(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;fieldPosition)</pre>
 <div class="block">Generates a composite bitmask given a single field position. The
  composite bitmask represents a true bit for this field position
- 
+
  For example, given field 2 this method will return 00000100</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fieldPosition</code> - a field position</dd>
 <dt><span class="strong">Returns:</span></dt><dd>a composite bitmask</dd></dl>
@@ -255,7 +272,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="getFieldPositions(byte[])">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getFieldPositions</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;getFieldPositions(byte[]&nbsp;bitmask)</pre>
@@ -263,6 +280,35 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  generates a list of field positions.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>compositeBitmask</code> - the composite bitmask</dd>
 <dt><span class="strong">Returns:</span></dt><dd>a list of field positions</dd></dl>
+</li>
+</ul>
+<a name="generateFieldSubsetBitmask(mil.nga.giat.geowave.core.store.index.CommonIndexModel, java.util.List, mil.nga.giat.geowave.core.store.adapter.DataAdapter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateFieldSubsetBitmask</h4>
+<pre>public static&nbsp;byte[]&nbsp;generateFieldSubsetBitmask(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+                                <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</pre>
+<div class="block">Generates a field subset bitmask for the given index, adapter, and fields</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>indexModel</code> - the index's CommonIndexModel</dd><dd><code>fieldIds</code> - the fields to include in the subset, as Strings</dd><dd><code>adapterAssociatedWithFieldIds</code> - the adapter for the type whose fields are being subsetted</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the field subset bitmask</dd></dl>
+</li>
+</ul>
+<a name="constructNewValue(byte[], byte[], byte[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>constructNewValue</h4>
+<pre>public static&nbsp;byte[]&nbsp;constructNewValue(byte[]&nbsp;value,
+                       byte[]&nbsp;originalBitmask,
+                       byte[]&nbsp;newBitmask)</pre>
+<div class="block">Generates a new value byte array representing a subset of fields of the
+ given value</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - the original column value</dd><dd><code>originalBitmask</code> - the bitmask from the column qualifier</dd><dd><code>newBitmask</code> - the field subset bitmask</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the subsetted value as a byte[]</dd></dl>
 </li>
 </ul>
 </li>

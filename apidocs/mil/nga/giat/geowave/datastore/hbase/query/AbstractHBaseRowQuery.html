@@ -134,7 +134,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#adapterIds">adapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#authorizations">authorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#index">index</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#adapterIds">adapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#authorizations">authorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#fieldIds">fieldIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseQuery.html#index">index</a></code></li>
 </ul>
 </li>
 </ul>
@@ -175,7 +175,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html#query(mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore)">query</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html#query(mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations,%20double[],%20mil.nga.giat.geowave.core.store.adapter.AdapterStore)">query</a></strong>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
+     double[]&nbsp;maxResolutionSubsamplingPerDimension,
      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 </table>
@@ -243,13 +244,14 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="query(mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations, mil.nga.giat.geowave.core.store.adapter.AdapterStore)">
+<a name="query(mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations, double[], mil.nga.giat.geowave.core.store.adapter.AdapterStore)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>query</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/AbstractHBaseRowQuery.html" title="type parameter in AbstractHBaseRowQuery">T</a>&gt;&nbsp;query(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
+                         double[]&nbsp;maxResolutionSubsamplingPerDimension,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</pre>
 </li>
 </ul>
