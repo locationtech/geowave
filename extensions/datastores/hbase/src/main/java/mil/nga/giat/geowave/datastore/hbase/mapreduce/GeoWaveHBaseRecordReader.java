@@ -61,8 +61,7 @@ public class GeoWaveHBaseRecordReader<T> extends
 				rangeQueryOptions).query(
 				operations,
 				adapterStore,
-				// TODO Support subsampling
-				// rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				rangeQueryOptions.getLimit());
 	}
 

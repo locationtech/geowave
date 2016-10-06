@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 public class ServicesTestEnvironment implements
@@ -215,8 +216,7 @@ public class ServicesTestEnvironment implements
 	@Override
 	public TestEnvironment[] getDependentEnvironments() {
 		return new TestEnvironment[] {
-			MapReduceTestEnvironment.getInstance(),
-			AccumuloStoreTestEnvironment.getInstance()
+			MapReduceTestEnvironment.getInstance()
 		};
 	}
 }
