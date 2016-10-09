@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.mapreduce.splits;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,7 @@ public abstract class SplitsProvider
 {
 	private final static Logger LOGGER = Logger.getLogger(SplitsProvider.class);
 
-	private static final BigInteger ONE = new BigInteger(
-			"1");
+	private static final BigInteger TWO = BigInteger.valueOf(2);
 
 	public SplitsProvider() {}
 
@@ -155,12 +155,12 @@ public abstract class SplitsProvider
 		return constructRange(
 				getKeyFromBigInteger(
 						new BigInteger(
-								min).subtract(ONE),
+								min).subtract(BigInteger.ONE),
 						min.length),
 				true,
 				getKeyFromBigInteger(
 						new BigInteger(
-								max).add(ONE),
+								max).add(BigInteger.ONE),
 						max.length),
 				true);
 	}
@@ -222,7 +222,7 @@ public abstract class SplitsProvider
 		return rangeStats;
 	}
 
-	protected byte[] getKeyFromBigInteger(
+	protected static byte[] getKeyFromBigInteger(
 			final BigInteger value,
 			final int numBytes ) {
 		final byte[] valueBytes = value.toByteArray();
@@ -334,6 +334,38 @@ public abstract class SplitsProvider
 						maxDepth));
 		return endBI.subtract(
 				startBI).doubleValue();
+	}
+
+	protected static byte[] getMidpoint(
+			final GeoWaveRowRange range ) {
+		if (range.getStartKey() == null || range.getEndKey() == null) {
+			return null;
+		}
+
+		final byte[] start = range.getStartKey();
+		final byte[] end = range.getEndKey();
+		if (Arrays.equals(
+				start,
+				end)) {
+			return null;
+		}
+		final int maxDepth = Math.max(
+				end.length,
+				start.length);
+		final BigInteger startBI = new BigInteger(
+				extractBytes(
+						start,
+						maxDepth));
+		final BigInteger endBI = new BigInteger(
+				extractBytes(
+						end,
+						maxDepth));
+		return getKeyFromBigInteger(
+				endBI.subtract(
+						startBI).divide(
+						TWO).add(
+						startBI),
+				maxDepth);
 	}
 
 	public static byte[] extractBytes(
