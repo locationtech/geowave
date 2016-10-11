@@ -243,8 +243,10 @@ public class HBaseDataStore extends
 						tempAdapterStore,
 						index,
 						iterator,
+						dedupeFilter,
+						scanCallback,
 						null,
-						scanCallback));
+						null));
 	}
 
 	@Override
@@ -311,13 +313,13 @@ public class HBaseDataStore extends
 						adapterIdsToQuery,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
+				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				sanitizedQueryOptions.getAuthorizations());
 
 		return hbaseQuery.query(
 				operations,
 				tempAdapterStore,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				sanitizedQueryOptions.getLimit());
 	}
 
@@ -336,8 +338,7 @@ public class HBaseDataStore extends
 				sanitizedQueryOptions.getAuthorizations());
 		return prefixQuery.query(
 				operations,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				tempAdapterStore);
 	}
 
@@ -360,8 +361,7 @@ public class HBaseDataStore extends
 		return q.query(
 				operations,
 				tempAdapterStore,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				-1);
 	}
 

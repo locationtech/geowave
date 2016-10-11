@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServerStartable;
-import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.TestEnvironment;
+import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 
 public class KafkaTestEnvironment implements
 		TestEnvironment
@@ -56,9 +56,8 @@ public class KafkaTestEnvironment implements
 
 	@Override
 	public TestEnvironment[] getDependentEnvironments() {
-		// TODO: create zookeeper test environment as dependency instead
 		return new TestEnvironment[] {
-			AccumuloStoreTestEnvironment.getInstance()
+			ZookeeperTestEnvironment.getInstance()
 		};
 	}
 }

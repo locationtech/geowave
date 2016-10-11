@@ -9,8 +9,11 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.log4j.Logger;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,6 +30,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.GeoWaveRasterIT;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
@@ -45,6 +49,31 @@ public class DataStatisticsStoreIT
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
+
+	private final static Logger LOGGER = Logger.getLogger(DataStatisticsStoreIT.class);
+	private static long startMillis;
+
+	@BeforeClass
+	public static void startTimer() {
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*    RUNNING DataStatisticsStoreIT      *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*    FINISHED DataStatisticsStoreIT     *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
 
 	@Before
 	public void clean()
@@ -87,7 +116,7 @@ public class DataStatisticsStoreIT
 		Iterator<Result> res = rs.iterator();
 		byte[] row = res.next().getRow();
 		Assert.assertEquals(
-				stat.getStatisticsId().getBytes().length + 16 + 1,
+				stat.getStatisticsId().getBytes().length + HBaseUtils.UNIQUE_ADDED_BYTES,
 				row.length);
 
 		byte[] bytes = new byte[stat.getStatisticsId().getBytes().length];

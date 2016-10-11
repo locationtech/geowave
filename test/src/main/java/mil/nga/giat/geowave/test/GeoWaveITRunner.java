@@ -259,27 +259,42 @@ public class GeoWaveITRunner extends
 			Exception {
 		final GeoWaveStoreRunnerConfig emptyConfig = new GeoWaveStoreRunnerConfig();
 		List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
-		if (typeIsAnnotated()) {
-			if (fieldsAreAnnotated()) {
-				throw new GeoWaveITException(
-						"Only type or fields can be annotated with @GeoWaveTestStore, not both");
-			}
+
+		String storeTypeProp = System.getenv("IT_STORE_TYPE");
+		boolean typeOverridden = false;
+		if (TestUtils.isSet(storeTypeProp)) {
 			final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
-			final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
-					GeoWaveTestStore.class);
-			for (final GeoWaveStoreType storeType : store.value()) {
+			final GeoWaveStoreType storeType = GeoWaveStoreType.valueOf(storeTypeProp);
+			if (containsAnnotationForType(storeType)) {
+				typeOverridden = true;
 				configs.add(new GeoWaveStoreRunnerConfig(
 						storeType,
 						dataStoreOptionFields));
 			}
 		}
-		else {
-			configs.add(emptyConfig);
-			final List<FrameworkField> storeFields = getStoreAnnotatedFields();
-			for (final FrameworkField field : storeFields) {
-				configs = addRunnerConfigsForField(
-						field,
-						configs);
+		if (!typeOverridden) {
+			if (typeIsAnnotated()) {
+				if (fieldsAreAnnotated()) {
+					throw new GeoWaveITException(
+							"Only type or fields can be annotated with @GeoWaveTestStore, not both");
+				}
+				final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
+				final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
+						GeoWaveTestStore.class);
+				for (final GeoWaveStoreType storeType : store.value()) {
+					configs.add(new GeoWaveStoreRunnerConfig(
+							storeType,
+							dataStoreOptionFields));
+				}
+			}
+			else {
+				configs.add(emptyConfig);
+				final List<FrameworkField> storeFields = getStoreAnnotatedFields();
+				for (final FrameworkField field : storeFields) {
+					configs = addRunnerConfigsForField(
+							field,
+							configs);
+				}
 			}
 		}
 		for (final GeoWaveStoreRunnerConfig config : configs) {
@@ -288,6 +303,31 @@ public class GeoWaveITRunner extends
 					config.fieldNameStoreTypePair);
 			runners.add(runner);
 		}
+	}
+
+	private boolean containsAnnotationForType(
+			GeoWaveStoreType storeType ) {
+		if (typeIsAnnotated()) {
+			final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
+					GeoWaveTestStore.class);
+			for (GeoWaveStoreType annotationType : store.value()) {
+				if (annotationType == storeType) {
+					return true;
+				}
+			}
+		}
+		else {
+			for (FrameworkField field : getTestClass().getAnnotatedFields(
+					GeoWaveTestStore.class)) {
+				for (GeoWaveStoreType annotationType : field.getField().getAnnotation(
+						GeoWaveTestStore.class).value()) {
+					if (annotationType == storeType) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	private Set<String> getDataStoreOptionFieldsForTypeAnnotation()
@@ -547,7 +587,7 @@ public class GeoWaveITRunner extends
 				traverseRequirements(
 						entry,
 						retVal,
-						i,
+						i++,
 						testsAddedToArray);
 			}
 			return retVal;

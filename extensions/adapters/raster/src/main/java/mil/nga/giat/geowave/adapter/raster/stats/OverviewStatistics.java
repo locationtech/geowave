@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.opengis.coverage.grid.GridCoverage;
+
 import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.adapter.raster.Resolution;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -12,8 +14,6 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-
-import org.opengis.coverage.grid.GridCoverage;
 
 public class OverviewStatistics extends
 		AbstractDataStatistics<GridCoverage>
@@ -47,7 +47,7 @@ public class OverviewStatistics extends
 														// size
 			}
 
-			final ByteBuffer buf = ByteBuffer.allocate(byteCount);
+			final ByteBuffer buf = super.binaryBuffer(byteCount);
 			buf.putInt(resolutionBinaries.size());
 			for (final byte[] resBinary : resolutionBinaries) {
 				buf.putInt(resBinary.length);
@@ -60,7 +60,7 @@ public class OverviewStatistics extends
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		final ByteBuffer buf = super.binaryBuffer(bytes);
 		final int resLength = buf.getInt();
 		synchronized (this) {
 			resolutions = new Resolution[resLength];

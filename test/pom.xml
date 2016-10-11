@@ -102,6 +102,23 @@
 	</dependencies>
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>munge-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>munge</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>munge</goal>
+                        </goals>
+                        <configuration>
+                            <symbols>accumulo.api=${accumulo.api}</symbols>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -271,10 +288,10 @@
 
 									<structure name="GeoWave">
 										<classfiles>
-											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
+											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**,**/test/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
-											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
+											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**,**/test/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
@@ -328,7 +345,7 @@
 						<sourceDirectory>../services/webapp/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>
 						<sourceDirectory>../examples/src/main/java</sourceDirectory>
-						<sourceDirectory>../test/src/main/java</sourceDirectory>
+						<sourceDirectory>../test/target/munged/main/java</sourceDirectory>
 					</sourceDirectories>
 				</configuration>
 			</plugin>

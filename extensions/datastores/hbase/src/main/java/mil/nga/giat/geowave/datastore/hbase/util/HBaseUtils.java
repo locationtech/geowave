@@ -2,36 +2,13 @@ package mil.nga.giat.geowave.datastore.hbase.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
-import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.Cell;
@@ -45,9 +22,41 @@ import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
+import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
+import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+
 public class HBaseUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
+
+	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID when
+	// needed for uniqueness
+	public final static int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
+	public final static byte UNIQUE_ID_DELIMITER = 0;
 
 	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.UTF8_CHAR_SET);
 	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.UTF8_CHAR_SET);
@@ -59,14 +68,20 @@ public class HBaseUtils
 			final byte[] adapterId,
 			final DataStoreEntryInfo ingestInfo,
 			final PrimaryIndex index,
-			final WritableDataAdapter<T> writableAdapter ) {
+			final WritableDataAdapter<T> writableAdapter,
+			final boolean ensureUniqueId ) {
 		final List<RowMutations> mutations = new ArrayList<RowMutations>();
 		final List<FieldInfo<?>> fieldInfoList = DataStoreUtils.composeFlattenedFields(
 				ingestInfo.getFieldInfo(),
 				index.getIndexModel(),
 				writableAdapter);
 
-		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
+		for (ByteArrayId rowId : ingestInfo.getRowIds()) {
+			if (ensureUniqueId) {
+				rowId = ensureUniqueId(
+						rowId.getBytes(),
+						true);
+			}
 			final RowMutations mutation = new RowMutations(
 					rowId.getBytes());
 			try {
@@ -141,7 +156,9 @@ public class HBaseUtils
 				writableAdapter.getAdapterId().getBytes(),
 				ingestInfo,
 				index,
-				writableAdapter);
+				writableAdapter,
+				(writableAdapter instanceof RowMergingDataAdapter)
+						&& (((RowMergingDataAdapter) writableAdapter).getTransform() != null));
 
 		try {
 			writer.write(
@@ -210,7 +227,8 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T> scanCallback,
+			final byte[] fieldSubsetBitmask ) {
 
 		final GeowaveRowId rowId = new GeowaveRowId(
 				row.getRow());
@@ -221,7 +239,8 @@ public class HBaseUtils
 				adapterStore,
 				clientFilter,
 				index,
-				scanCallback);
+				scanCallback,
+				fieldSubsetBitmask);
 	}
 
 	public static Object decodeRow(
@@ -237,6 +256,7 @@ public class HBaseUtils
 				adapterStore,
 				clientFilter,
 				index,
+				null,
 				null);
 	}
 
@@ -247,7 +267,8 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T> scanCallback,
+			final byte[] fieldSubsetBitmask ) {
 		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
 				row,
 				rowId,
@@ -255,7 +276,8 @@ public class HBaseUtils
 				adapterStore,
 				clientFilter,
 				index,
-				scanCallback);
+				scanCallback,
+				fieldSubsetBitmask);
 		return pair != null ? pair.getLeft() : null;
 	}
 
@@ -267,7 +289,8 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T> scanCallback,
+			final byte[] fieldSubsetBitmask ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
 			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
@@ -294,7 +317,7 @@ public class HBaseUtils
 			adapterMatchVerified = true;
 			adapterId = null;
 		}
-		NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> map = row.getMap();
+		final NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> map = row.getMap();
 		final List<FieldInfo<?>> fieldInfoList = new ArrayList<FieldInfo<?>>();
 
 		for (final Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> cfEntry : map.entrySet()) {
@@ -319,14 +342,26 @@ public class HBaseUtils
 			}
 			for (final Entry<byte[], NavigableMap<Long, byte[]>> cqEntry : cfEntry.getValue().entrySet()) {
 				final CommonIndexModel indexModel = index.getIndexModel();
-				final byte byteValue[] = cqEntry.getValue().lastEntry().getValue();
+				byte[] byteValue = cqEntry.getValue().lastEntry().getValue();
+				byte[] qualifier = cqEntry.getKey();
+
+				if (fieldSubsetBitmask != null) {
+					final byte[] newBitmask = BitmaskUtils.generateANDBitmask(
+							qualifier,
+							fieldSubsetBitmask);
+					byteValue = BitmaskUtils.constructNewValue(
+							byteValue,
+							qualifier,
+							newBitmask);
+					qualifier = newBitmask;
+				}
 
 				DataStoreUtils.readFieldInfo(
 						fieldInfoList,
 						indexData,
 						extendedData,
 						unknownData,
-						cqEntry.getKey(),
+						qualifier,
 						new byte[] {},
 						byteValue,
 						adapter,
@@ -493,5 +528,104 @@ public class HBaseUtils
 			}
 		}
 
+	}
+
+	public static ByteArrayId ensureUniqueId(
+			final byte[] id,
+			final boolean hasMetadata ) {
+
+		final ByteBuffer buf = ByteBuffer.allocate(id.length + UNIQUE_ADDED_BYTES);
+
+		byte[] metadata = null;
+		byte[] data;
+		if (hasMetadata) {
+			metadata = Arrays.copyOfRange(
+					id,
+					id.length - 12,
+					id.length);
+
+			final ByteBuffer metadataBuf = ByteBuffer.wrap(metadata);
+			final int adapterIdLength = metadataBuf.getInt();
+			int dataIdLength = metadataBuf.getInt();
+			dataIdLength += UNIQUE_ADDED_BYTES;
+			final int duplicates = metadataBuf.getInt();
+
+			final ByteBuffer newMetaData = ByteBuffer.allocate(metadata.length);
+			newMetaData.putInt(adapterIdLength);
+			newMetaData.putInt(dataIdLength);
+			newMetaData.putInt(duplicates);
+
+			metadata = newMetaData.array();
+
+			data = Arrays.copyOfRange(
+					id,
+					0,
+					id.length - 12);
+		}
+		else {
+			data = id;
+		}
+
+		buf.put(data);
+
+		final long timestamp = System.nanoTime();
+		final UUID uuid = UUID.randomUUID();
+		buf.put(new byte[] {
+			UNIQUE_ID_DELIMITER
+		});
+		buf.putLong(timestamp);
+		buf.putLong(uuid.getMostSignificantBits());
+		buf.putLong(uuid.getLeastSignificantBits());
+
+		if (hasMetadata) {
+			buf.put(metadata);
+		}
+
+		return new ByteArrayId(
+				buf.array());
+	}
+
+	public static boolean rowIdsMatch(
+			final GeowaveRowId rowId1,
+			final GeowaveRowId rowId2 ) {
+
+		if (!Arrays.equals(
+				rowId1.getAdapterId(),
+				rowId2.getAdapterId())) {
+			return false;
+		}
+
+		if (Arrays.equals(
+				rowId1.getDataId(),
+				rowId2.getDataId())) {
+			return true;
+		}
+
+		return Arrays.equals(
+				removeUniqueId(rowId1.getRowId()),
+				removeUniqueId(rowId2.getRowId()));
+	}
+
+	public static byte[] removeUniqueId(
+			final byte[] row ) {
+
+		final GeowaveRowId rowId = new GeowaveRowId(
+				row);
+		byte[] dataId = rowId.getDataId();
+
+		if ((dataId.length < UNIQUE_ADDED_BYTES) || (dataId[dataId.length - UNIQUE_ADDED_BYTES] != UNIQUE_ID_DELIMITER)) {
+			return row;
+		}
+
+		dataId = Arrays.copyOfRange(
+				dataId,
+				0,
+				dataId.length - UNIQUE_ADDED_BYTES);
+
+		return new GeowaveRowId(
+				rowId.getInsertionId(),
+				dataId,
+				rowId.getAdapterId(),
+				rowId.getNumberOfDuplicates()).getRowId();
 	}
 }

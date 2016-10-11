@@ -11,7 +11,9 @@ import java.util.Map.Entry;
 import javax.media.jai.Interpolation;
 
 import org.apache.hadoop.util.ToolRunner;
+import org.apache.log4j.Logger;
 import org.geotools.geometry.GeneralEnvelope;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,7 +42,8 @@ import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
 	Environment.MAP_REDUCE
 })
 @GeoWaveTestStore({
-	GeoWaveStoreType.ACCUMULO
+	GeoWaveStoreType.ACCUMULO,
+	GeoWaveStoreType.HBASE
 })
 public class KDERasterResizeIT
 {
@@ -55,8 +58,8 @@ public class KDERasterResizeIT
 	private static final double TARGET_DECIMAL_DEGREES_SIZE = 0.132;
 	private static final String KDE_FEATURE_TYPE_NAME = "kde-test";
 	private static final int MIN_TILE_SIZE_POWER_OF_2 = 0;
-	private static final int MAX_TILE_SIZE_POWER_OF_2 = 6;
-	private static final int INCREMENT = 2;
+	private static final int MAX_TILE_SIZE_POWER_OF_2 = 4;
+	private static final int INCREMENT = 4;
 	private static final int BASE_MIN_LEVEL = 15;
 	private static final int BASE_MAX_LEVEL = 17;
 
@@ -64,6 +67,9 @@ public class KDERasterResizeIT
 	protected DataStorePluginOptions outputDataStorePluginOptions;
 
 	protected DataStorePluginOptions inputDataStorePluginOptions;
+
+	private final static Logger LOGGER = Logger.getLogger(KDERasterResizeIT.class);
+	private static long startMillis;
 
 	@BeforeClass
 	public static void extractTestFiles()
@@ -73,6 +79,24 @@ public class KDERasterResizeIT
 						KDERasterResizeIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TestUtils.TEST_CASE_BASE);
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*         RUNNING KDERasterResizeIT     *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*      FINISHED KDERasterResizeIT       *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test
@@ -145,6 +169,7 @@ public class KDERasterResizeIT
 					command.createRunner(new ManualOperationParams()),
 					new String[] {});
 		}
+
 		final int numLevels = (BASE_MAX_LEVEL - BASE_MIN_LEVEL) + 1;
 		final double[][][][] initialSampleValuesPerRequestSize = new double[numLevels][][][];
 		for (int l = 0; l < numLevels; l++) {
@@ -161,6 +186,7 @@ public class KDERasterResizeIT
 									l))),
 					null);
 		}
+
 		for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
 			final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
 			final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_PREFIX + i;
