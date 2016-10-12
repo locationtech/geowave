@@ -98,12 +98,16 @@ public class ConstraintsQuery
 			return retVal;
 		}
 		else {
+			return getAllRanges();
+		}
+	}
+
+	public List<ByteArrayRange> getAllRanges() {
 			return DataStoreUtils.constraintsToByteArrayRanges(
 					constraints,
 					index.getIndexStrategy(),
 					MAX_RANGE_DECOMPOSITION,
 					indexMetaData);
-		}
 	}
 
 	private SplitFilterLists splitList(

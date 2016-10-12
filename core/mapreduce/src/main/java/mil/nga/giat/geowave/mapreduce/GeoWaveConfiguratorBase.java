@@ -119,40 +119,17 @@ public class GeoWaveConfiguratorBase
 	public static DataStore getDataStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		final String dataStoreName = getDataStoreName(
-				implementingClass,
-				context);
-		if ((dataStoreName != null) && (!dataStoreName.isEmpty())) {
-			final Map<String, String> configOptions = getStoreConfigOptions(
+		return GeoWaveStoreFinder.createDataStore(getStoreConfigOptions(
 					implementingClass,
-					context);
-			configOptions.put(
-					GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
-					dataStoreName);
-			return GeoWaveStoreFinder.createDataStore(configOptions);
-		}
-		else {
-			return null;
-		}
+				context));
 	}
 
 	public static DataStatisticsStore getDataStatisticsStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		// use adapter store name and if thats not set, use the data store name
-		String dataStatisticsStoreName = getDataStoreName(
+		return GeoWaveStoreFinder.createDataStatisticsStore(getStoreConfigOptions(
 				implementingClass,
-				context);
-		if ((dataStatisticsStoreName == null) || (dataStatisticsStoreName.isEmpty())) {
-			return null;
-		}
-		final Map<String, String> configOptions = getStoreConfigOptions(
-				implementingClass,
-				context);
-		configOptions.put(
-				GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
-				dataStatisticsStoreName);
-		return GeoWaveStoreFinder.createDataStatisticsStore(configOptions);
+				context));
 	}
 
 	public static void setDataStoreName(
@@ -187,9 +164,18 @@ public class GeoWaveConfiguratorBase
 	public static Map<String, String> getStoreConfigOptions(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		return getConfigOptionsInternal(
+		final String dataStoreName = getDataStoreName(
+				implementingClass,
+				context);
+		final Map<String, String> configOptions = getConfigOptionsInternal(
 				implementingClass,
 				getConfiguration(context));
+		if ((dataStoreName != null) && (!dataStoreName.isEmpty())) {
+			configOptions.put(
+					GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
+					dataStoreName);
+		}
+		return configOptions;
 	}
 
 	public static String getDataStoreName(

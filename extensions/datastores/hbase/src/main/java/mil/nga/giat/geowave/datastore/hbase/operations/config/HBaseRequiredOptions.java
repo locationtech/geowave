@@ -14,7 +14,7 @@ public class HBaseRequiredOptions extends
 	@Parameter(names = {
 		"-z",
 		"--" + ZOOKEEPER_CONFIG_KEY
-	}, description = "A comma-separated list of zookeeper servers that an Accumulo instance is using", required = true)
+	}, description = "A comma-separated list of zookeeper servers that an HBase instance is using", required = true)
 	private String zookeeper;
 
 	@ParametersDelegate

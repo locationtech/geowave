@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class GeoWaveStoreFinder
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveStoreFinder.class);
-	private static String STORE_HINT_KEY = "store_name";
+	public static String STORE_HINT_KEY = "store_name";
 
 	public static final ConfigOption STORE_HINT_OPTION = new ConfigOption(
 			STORE_HINT_KEY,
