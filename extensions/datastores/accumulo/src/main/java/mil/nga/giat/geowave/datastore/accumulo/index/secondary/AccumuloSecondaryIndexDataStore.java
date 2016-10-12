@@ -146,15 +146,40 @@ public class AccumuloSecondaryIndexDataStore extends
 	}
 
 	@Override
-	protected Mutation buildDeleteMutation(
+	protected Mutation buildJoinDeleteMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName ) {
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] primaryIndexId,
+			final byte[] primaryIndexRowId ) {
 		final Mutation m = new Mutation(
 				secondaryIndexRowId);
 		m.putDelete(
-				secondaryIndexId,
-				attributeName);
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						primaryIndexId,
+						primaryIndexRowId));
+		return m;
+	}
+
+	@Override
+	protected Mutation buildFullDeleteMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId ) {
+		final Mutation m = new Mutation(
+				secondaryIndexRowId);
+		m.putDelete(
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						fieldId,
+						dataId));
 		return m;
 	}
 

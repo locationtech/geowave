@@ -120,15 +120,71 @@ public class SecondaryIndexDataManager<T> implements
 	public void entryDeleted(
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
-
-		for (final SecondaryIndex<T> index : adapter.getSupportedSecondaryIndices()) {
-			final List<FieldInfo<?>> indexedAttributes = new LinkedList<FieldInfo<?>>();
-			indexedAttributes.add(getFieldInfo(
+		// loop secondary indices for adapter
+		for (final SecondaryIndex<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
+			final ByteArrayId indexedAttributeFieldId = secondaryIndex.getFieldId();
+			// get fieldInfo for fieldId to be deleted
+			final FieldInfo<?> indexedAttributeFieldInfo = getFieldInfo(
 					entryInfo,
-					index.getFieldId()));
-			secondaryIndexStore.delete(
-					index,
-					indexedAttributes);
+					indexedAttributeFieldId);
+			// get indexed value(s) for current field
+			@SuppressWarnings("unchecked")
+			final List<ByteArrayId> secondaryIndexRowIds = secondaryIndex.getIndexStrategy().getInsertionIds(
+					Arrays.asList(indexedAttributeFieldInfo));
+			// loop insertionIds
+			for (final ByteArrayId secondaryIndexRowId : secondaryIndexRowIds) {
+				final ByteArrayId primaryIndexRowId = entryInfo.getRowIds().get(
+						0);
+				final ByteArrayId dataId = new ByteArrayId(
+						entryInfo.getDataId());
+				switch (secondaryIndex.getSecondaryIndexType()) {
+					case JOIN:
+						secondaryIndexStore.deleteJoinEntry(
+								secondaryIndex.getId(),
+								secondaryIndexRowId,
+								adapter.getAdapterId(),
+								indexedAttributeFieldId,
+								primaryIndexId,
+								primaryIndexRowId);
+						break;
+					case PARTIAL:
+						final List<FieldInfo<?>> attributes = new ArrayList<>();
+						final List<ByteArrayId> attributesToDelete = secondaryIndex.getPartialFieldIds();
+						for (final ByteArrayId fieldId : attributesToDelete) {
+							attributes.add(getFieldInfo(
+									entryInfo,
+									fieldId));
+						}
+						secondaryIndexStore.deleteEntry(
+								secondaryIndex.getId(),
+								secondaryIndexRowId,
+								adapter.getAdapterId(),
+								indexedAttributeFieldId,
+								dataId,
+								attributes);
+						break;
+					case FULL:
+						secondaryIndexStore.deleteEntry(
+								secondaryIndex.getId(),
+								secondaryIndexRowId,
+								adapter.getAdapterId(),
+								indexedAttributeFieldId,
+								dataId,
+								// full simply sends over all of the
+								// attributes
+								entryInfo.getFieldInfo());
+						break;
+					default:
+						break;
+				}
+			}
+			// TODO delete statistics
+			// for (final DataStatistics<T> associatedStatistic :
+			// secondaryIndex.getAssociatedStatistics()) {
+			// associatedStatistic.entryDeleted(
+			// entryInfo,
+			// entry);
+			// }
 		}
 
 	}

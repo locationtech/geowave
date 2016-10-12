@@ -103,24 +103,49 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 	}
 
 	@Override
-	public void delete(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<FieldInfo<?>> indexedAttributes ) {
+	public void deleteJoinEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId primaryIndexId,
+			final ByteArrayId primaryIndexRowId ) {
 		try {
-			final Writer<MutationType> writer = getWriter(secondaryIndex.getId());
+			final Writer<MutationType> writer = getWriter(secondaryIndexId);
 			if (writer != null) {
-				for (final FieldInfo<?> indexedAttribute : indexedAttributes) {
-					@SuppressWarnings("unchecked")
-					final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex
-							.getIndexStrategy()
-							.getInsertionIds(
-									Arrays.asList(indexedAttribute));
-					for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-						writer.write(buildDeleteMutation(
-								insertionId.getBytes(),
-								secondaryIndex.getId().getBytes(),
-								indexedAttribute.getDataValue().getId().getBytes()));
-					}
+				writer.write(buildJoinDeleteMutation(
+						indexedAttributeValue.getBytes(),
+						adapterId.getBytes(),
+						indexedAttributeFieldId.getBytes(),
+						primaryIndexId.getBytes(),
+						primaryIndexRowId.getBytes()));
+			}
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Failed to delete from secondary index.",
+					e);
+		}
+	}
+
+	@Override
+	public void deleteEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId dataId,
+			final List<FieldInfo<?>> attributes ) {
+		try {
+			final Writer<MutationType> writer = getWriter(secondaryIndexId);
+			if (writer != null) {
+				for (FieldInfo<?> attribute : attributes) {
+					writer.write(buildFullDeleteMutation(
+							indexedAttributeValue.getBytes(),
+							adapterId.getBytes(),
+							indexedAttributeFieldId.getBytes(),
+							dataId.getBytes(),
+							attribute.getDataValue().getId().getBytes()));
 				}
 			}
 		}
@@ -175,11 +200,21 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 			final byte[] fieldVisibility )
 			throws IOException;
 
-	protected abstract MutationType buildDeleteMutation(
+	protected abstract MutationType buildJoinDeleteMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName )
-			throws Exception;
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] primaryIndexId,
+			final byte[] primaryIndexRowId )
+			throws IOException;
+
+	protected abstract MutationType buildFullDeleteMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId )
+			throws IOException;
 
 	protected abstract Writer<MutationType> getWriter(
 			ByteArrayId secondaryIndexId );

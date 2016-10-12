@@ -43,9 +43,25 @@ public class MemorySecondaryIndexDataStore implements
 	}
 
 	@Override
-	public void delete(
-			SecondaryIndex<?> secondaryIndex,
-			List<FieldInfo<?>> indexedAttributes ) {
+	public void deleteJoinEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			ByteArrayId primaryIndexId,
+			ByteArrayId primaryIndexRowId ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			ByteArrayId dataId,
+			List<FieldInfo<?>> attributes ) {
 		// TODO Auto-generated method stub
 
 	}

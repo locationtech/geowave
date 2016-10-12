@@ -149,22 +149,48 @@ public class HBaseSecondaryIndexDataStore extends
 	}
 
 	@Override
-	protected RowMutations buildDeleteMutation(
+	protected RowMutations buildJoinDeleteMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName )
-			throws Exception {
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] primaryIndexId,
+			final byte[] primaryIndexRowId )
+			throws IOException {
 		final RowMutations m = new RowMutations(
 				secondaryIndexRowId);
-
 		final Delete d = new Delete(
 				secondaryIndexRowId);
 		d.addColumn(
-				secondaryIndexId,
-				attributeName);
-
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						primaryIndexId,
+						primaryIndexRowId));
 		m.add(d);
+		return m;
+	}
 
+	@Override
+	protected RowMutations buildFullDeleteMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId )
+			throws IOException {
+		final RowMutations m = new RowMutations(
+				secondaryIndexRowId);
+		final Delete d = new Delete(
+				secondaryIndexRowId);
+		d.addColumn(
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						fieldId,
+						dataId));
+		m.add(d);
 		return m;
 	}
 

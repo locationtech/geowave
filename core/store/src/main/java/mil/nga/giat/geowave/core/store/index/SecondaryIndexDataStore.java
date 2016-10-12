@@ -83,15 +83,21 @@ public interface SecondaryIndexDataStore
 			final DistributableQuery query,
 			final String... authorizations );
 
-	/**
-	 * 
-	 * @param secondaryIndex
-	 * @param primaryIndexId
-	 * @param indexedAttributes
-	 */
-	public void delete(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<FieldInfo<?>> indexedAttributes );
+	public void deleteJoinEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId primaryIndexId,
+			final ByteArrayId primaryIndexRowId );
+
+	public void deleteEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId dataId,
+			final List<FieldInfo<?>> attributes );
 
 	public void flush();
 
