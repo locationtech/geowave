@@ -189,27 +189,31 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected byte[]</code></td>
+<td class="colFirst"><code>protected static byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#getKeyFromBigInteger(java.math.BigInteger,%20int)">getKeyFromBigInteger</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;value,
                     int&nbsp;numBytes)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#getMidpoint(mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange)">getMidpoint</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#getRange(mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange,%20int)">getRange</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
         int&nbsp;cardinality)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#getRangeLength(mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange)">getRangeLength</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#getRangeMax(mil.nga.giat.geowave.core.store.index.Index,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20java.lang.String[])">getRangeMax</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index,
            <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
            <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.mapreduce.InputSplit&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#getSplits(mil.nga.giat.geowave.core.store.DataStoreOperations,%20mil.nga.giat.geowave.core.store.query.DistributableQuery,%20mil.nga.giat.geowave.core.store.query.QueryOptions,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20mil.nga.giat.geowave.core.store.index.IndexStore,%20mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore,%20java.lang.Integer,%20java.lang.Integer)">getSplits</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&nbsp;operations,
          <a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
@@ -223,12 +227,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Read the metadata table to get tablets and match up ranges to them.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#getStart(mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange,%20int)">getStart</a></strong>(<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
         int&nbsp;cardinality)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html?is-external=true" title="class or interface in java.util">TreeSet</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.html" title="class in mil.nga.giat.geowave.mapreduce.splits">IntermediateSplitInfo</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html#populateIntermediateSplits(java.util.TreeSet,%20mil.nga.giat.geowave.core.store.DataStoreOperations,%20mil.nga.giat.geowave.core.store.index.PrimaryIndex,%20java.util.List,%20java.util.Map,%20mil.nga.giat.geowave.core.store.adapter.AdapterStore,%20mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore,%20java.lang.Integer,%20mil.nga.giat.geowave.core.store.query.DistributableQuery,%20java.lang.String[])">populateIntermediateSplits</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html?is-external=true" title="class or interface in java.util">TreeSet</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.html" title="class in mil.nga.giat.geowave.mapreduce.splits">IntermediateSplitInfo</a>&gt;&nbsp;splits,
                           <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&nbsp;operations,
@@ -411,7 +415,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getKeyFromBigInteger</h4>
-<pre>protected&nbsp;byte[]&nbsp;getKeyFromBigInteger(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;value,
+<pre>protected static&nbsp;byte[]&nbsp;getKeyFromBigInteger(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;value,
                           int&nbsp;numBytes)</pre>
 </li>
 </ul>
@@ -452,6 +456,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getRangeLength</h4>
 <pre>protected static&nbsp;double&nbsp;getRangeLength(<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range)</pre>
+</li>
+</ul>
+<a name="getMidpoint(mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMidpoint</h4>
+<pre>protected static&nbsp;byte[]&nbsp;getMidpoint(<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range)</pre>
 </li>
 </ul>
 <a name="extractBytes(byte[], int)">
