@@ -46,7 +46,6 @@ public class IntermediateSplitInfo implements
 
 			final double thisCardinalty = rangeLocationPair.getCardinality();
 			final double fraction = (targetCardinality - currentCardinality) / thisCardinalty;
-			final int splitCardinality = (int) (thisCardinalty * fraction);
 
 			final byte[] start = rangeLocationPair.getRange().getStartKey();
 			final byte[] end = rangeLocationPair.getRange().getEndKey();
@@ -59,37 +58,51 @@ public class IntermediateSplitInfo implements
 					start.length,
 					end.length);
 
-			final byte[] splitKey = expandBytes(
+			byte[] splitKey = expandBytes(
 					expectedEnd,
 					maxCardinality);
 
+			final String location = rangeLocationPair.getLocation();
+			final boolean startKeyInclusive = true;
+			final boolean endKeyInclusive = false;
 			if (Arrays.equals(
 					start,
 					splitKey) || Arrays.equals(
 					end,
 					splitKey)) {
+				// for now let's just return null
+				// TODO determine a more rigorous approach than just giving up
+				// on the split
+				// splitKey =
+				// SplitsProvider.getMidpoint(rangeLocationPair.getRange());
+				// if (splitKey == null) {
 				return null;
+				// }
 			}
 
-			final String location = rangeLocationPair.getLocation();
 			try {
 				final RangeLocationPair newPair = splitsProvider.constructRangeLocationPair(
 						splitsProvider.constructRange(
 								rangeLocationPair.getRange().getStartKey(),
 								rangeLocationPair.getRange().isStartKeyInclusive(),
 								splitKey,
-								false),
+								endKeyInclusive),
 						location,
-						splitCardinality);
+						stats.cardinality(
+								rangeLocationPair.getRange().getStartKey(),
+								splitKey));
 
 				rangeLocationPair = splitsProvider.constructRangeLocationPair(
 						splitsProvider.constructRange(
 								splitKey,
-								true,
+								startKeyInclusive,
 								rangeLocationPair.getRange().getEndKey(),
 								rangeLocationPair.getRange().isEndKeyInclusive()),
 						location,
-						rangeLocationPair.getCardinality() - splitCardinality);
+
+						stats.cardinality(
+								splitKey,
+								rangeLocationPair.getRange().getEndKey()));
 
 				return new IndexRangeLocation(
 						newPair,
@@ -181,15 +194,17 @@ public class IntermediateSplitInfo implements
 
 		do {
 			final IndexRangeLocation next = orderedSplits.pollFirst();
-			final double nextCardinality = currentCardinality + next.rangeLocationPair.getCardinality();
+			double nextCardinality = currentCardinality + next.rangeLocationPair.getCardinality();
 			if (nextCardinality > targetCardinality) {
 				final IndexRangeLocation newSplit = next.split(
 						statsCache.get(next.index),
 						currentCardinality,
 						targetCardinality);
+				double splitCardinality = next.rangeLocationPair.getCardinality();
 				// Stats can have inaccuracies over narrow ranges
 				// thus, a split based on statistics may not be found
 				if (newSplit != null) {
+					splitCardinality += newSplit.rangeLocationPair.getCardinality();
 					addPairForIndex(
 							otherSplitInfo,
 							newSplit.rangeLocationPair,
@@ -208,8 +223,11 @@ public class IntermediateSplitInfo implements
 							next.rangeLocationPair,
 							next.index);
 				}
-
-				break;
+				nextCardinality = currentCardinality + splitCardinality;
+				if (nextCardinality > targetCardinality) {
+					break;
+				}
+				currentCardinality = nextCardinality;
 			}
 			else {
 				addPairForIndex(
@@ -246,7 +264,6 @@ public class IntermediateSplitInfo implements
 				otherSplitInfo.clear();
 			}
 		}
-
 		return otherSplitInfo.size() == 0 ? null : new IntermediateSplitInfo(
 				otherSplitInfo,
 				splitsProvider);
@@ -284,27 +301,89 @@ public class IntermediateSplitInfo implements
 			final IntermediateSplitInfo o ) {
 		final double thisTotal = getTotalRangeAtCardinality();
 		final double otherTotal = o.getTotalRangeAtCardinality();
-		return (thisTotal - otherTotal) < 0 ? -1 : 1;
+		int result = Double.compare(
+				thisTotal,
+				otherTotal);
+		if (result == 0) {
+			result = Integer.compare(
+					splitInfo.size(),
+					o.splitInfo.size());
+			if (result == 0) {
+				final List<RangeLocationPair> pairs = new ArrayList<>();
+
+				final List<RangeLocationPair> otherPairs = new ArrayList<>();
+				double rangeSum = 0;
+				double otherSum = 0;
+				for (final List<RangeLocationPair> p : splitInfo.values()) {
+					pairs.addAll(p);
+				}
+				for (final List<RangeLocationPair> p : o.splitInfo.values()) {
+					otherPairs.addAll(p);
+				}
+
+				result = Integer.compare(
+						pairs.size(),
+						otherPairs.size());
+				if (result == 0) {
+					for (final RangeLocationPair p : pairs) {
+						rangeSum += SplitsProvider.getRangeLength(p.getRange());
+					}
+					for (final RangeLocationPair p : otherPairs) {
+						otherSum += SplitsProvider.getRangeLength(p.getRange());
+					}
+					result = Double.compare(
+							rangeSum,
+							otherSum);
+					if (result == 0) {
+						result = Integer.compare(
+								hashCode(),
+								o.hashCode());
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((splitInfo == null) ? 0 : splitInfo.hashCode());
+		result = (prime * result) + ((splitsProvider == null) ? 0 : splitsProvider.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(
 			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof IntermediateSplitInfo)) {
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		return compareTo((IntermediateSplitInfo) obj) == 0;
-	}
-
-	@Override
-	public int hashCode() {
-		// think this matches the spirit of compareTo
-		return com.google.common.base.Objects.hashCode(
-				getTotalRangeAtCardinality(),
-				super.hashCode());
+		final IntermediateSplitInfo other = (IntermediateSplitInfo) obj;
+		if (splitInfo == null) {
+			if (other.splitInfo != null) {
+				return false;
+			}
+		}
+		else if (!splitInfo.equals(other.splitInfo)) {
+			return false;
+		}
+		if (splitsProvider == null) {
+			if (other.splitsProvider != null) {
+				return false;
+			}
+		}
+		else if (!splitsProvider.equals(other.splitsProvider)) {
+			return false;
+		}
+		return true;
 	}
 
 	private synchronized double getTotalRangeAtCardinality() {

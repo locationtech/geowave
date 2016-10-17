@@ -441,7 +441,7 @@ public class RasterDataAdapter implements
 	}
 
 	private void init() {
-		int supportedStatsLength = 3;
+		int supportedStatsLength = 2;
 
 		if (histogramConfig != null) {
 			supportedStatsLength++;
@@ -450,10 +450,9 @@ public class RasterDataAdapter implements
 		supportedStatsIds = new ByteArrayId[supportedStatsLength];
 		supportedStatsIds[0] = OverviewStatistics.STATS_ID;
 		supportedStatsIds[1] = BoundingBoxDataStatistics.STATS_ID;
-		supportedStatsIds[2] = RasterFootprintStatistics.STATS_ID;
 
 		if (histogramConfig != null) {
-			supportedStatsIds[3] = HistogramStatistics.STATS_ID;
+			supportedStatsIds[2] = HistogramStatistics.STATS_ID;
 		}
 		visibilityHandler = new FieldIdStatisticVisibility<GridCoverage>(
 				DATA_FIELD_ID);
