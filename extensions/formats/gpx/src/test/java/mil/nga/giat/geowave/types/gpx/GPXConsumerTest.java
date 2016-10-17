@@ -183,39 +183,40 @@ public class GPXConsumerTest
 			throws IOException {
 		final Set<String> expectedSet = HelperClass.buildSet(expectedResults);
 
-		final InputStream is = this.getClass().getClassLoader().getResourceAsStream(
-				"sample_gpx.xml");
+		try (final InputStream is = this.getClass().getClassLoader().getResourceAsStream(
+				"sample_gpx.xml");) {
 
-		final ByteArrayId indexId = new ByteArrayId(
-				"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
-		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-		indexIds.add(indexId);
-		final GPXConsumer consumer = new GPXConsumer(
-				is,
-				indexIds,
-				"123",
-				new HashMap<String, Map<String, String>>(),
-				true,
-				"");
-		int totalCount = 0;
+			final ByteArrayId indexId = new ByteArrayId(
+					"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
+			final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+			indexIds.add(indexId);
+			final GPXConsumer consumer = new GPXConsumer(
+					is,
+					indexIds,
+					"123",
+					new HashMap<String, Map<String, String>>(),
+					true,
+					"");
+			int totalCount = 0;
 
-		while (consumer.hasNext()) {
-			final GeoWaveData<SimpleFeature> data = consumer.next();
-			if (!expectedSet.remove(data.getValue().getID())) {
-				System.out.println("Missing match:" + data.getValue().getID());
+			while (consumer.hasNext()) {
+				final GeoWaveData<SimpleFeature> data = consumer.next();
+				if (!expectedSet.remove(data.getValue().getID())) {
+					System.out.println("Missing match:" + data.getValue().getID());
+				}
+				final ValidateObject<SimpleFeature> tester = expectedResults.get(data.getValue().getID());
+				if (tester != null) {
+					assertTrue(
+							data.getValue().toString(),
+							tester.validate(data.getValue()));
+				}
+				totalCount++;
 			}
-			final ValidateObject<SimpleFeature> tester = expectedResults.get(data.getValue().getID());
-			if (tester != null) {
-				assertTrue(
-						data.getValue().toString(),
-						tester.validate(data.getValue()));
-			}
-			totalCount++;
+			consumer.close();
+			assertEquals(
+					12,
+					totalCount);
 		}
-		consumer.close();
-		assertEquals(
-				12,
-				totalCount);
 		// did everything get validated?
 		if (expectedSet.size() > 0) {
 			System.out.println("Failed matches:");
@@ -262,9 +263,8 @@ public class GPXConsumerTest
 		}
 		else if (dir.getName().endsWith(
 				"gpx")) {
-			final InputStream is = new FileInputStream(
-					dir);
-			try {
+			try (final InputStream is = new FileInputStream(
+					dir);) {
 				final ByteArrayId indexId = new ByteArrayId(
 						"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
 				final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
@@ -297,10 +297,6 @@ public class GPXConsumerTest
 				System.out.println("Failed " + dir);
 				throw ex;
 			}
-			finally {
-				is.close();
-			}
-
 		}
 
 	}

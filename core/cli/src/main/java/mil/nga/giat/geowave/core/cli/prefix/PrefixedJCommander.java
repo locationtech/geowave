@@ -135,9 +135,11 @@ public class PrefixedJCommander extends
 			comm.addPrefixedObject(object);
 		}
 
-		childCommanders.put(
-				last.getKey(),
-				comm);
+		if (last != null) {
+			childCommanders.put(
+					last.getKey(),
+					comm);
+		}
 	}
 
 	@Override

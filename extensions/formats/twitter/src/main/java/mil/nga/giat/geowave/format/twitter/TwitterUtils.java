@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -98,7 +99,8 @@ public class TwitterUtils
 
 	public static boolean validate(
 			final File file ) {
-		return file.getName().toLowerCase().matches(
+		return file.getName().toLowerCase(
+				Locale.ENGLISH).matches(
 				"\\d{8}-\\d{6}\\.txt\\.gz");
 	}
 }

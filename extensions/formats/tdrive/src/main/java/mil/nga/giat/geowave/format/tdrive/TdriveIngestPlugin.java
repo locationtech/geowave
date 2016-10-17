@@ -97,13 +97,15 @@ public class TdriveIngestPlugin extends
 			final File input ) {
 		BufferedReader fr = null;
 		BufferedReader br = null;
+		FileInputStream fis = null;
 		long pointInstance = 0l;
 		final List<TdrivePoint> pts = new ArrayList<TdrivePoint>();
 		try {
+			fis = new FileInputStream(
+					input);
 			fr = new BufferedReader(
 					new InputStreamReader(
-							new FileInputStream(
-									input),
+							fis,
 							StringUtils.GEOWAVE_CHAR_SET));
 			br = new BufferedReader(
 					fr);
@@ -145,6 +147,7 @@ public class TdriveIngestPlugin extends
 		finally {
 			IOUtils.closeQuietly(br);
 			IOUtils.closeQuietly(fr);
+			IOUtils.closeQuietly(fis);
 		}
 		return pts.toArray(new TdrivePoint[pts.size()]);
 	}

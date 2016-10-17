@@ -209,9 +209,9 @@ public class ConfigOptions
 		InputStream is = null;
 		try {
 			if (p != null) {
-				try (Scanner s = new Scanner(
-						new FileInputStream(
-								configFile),
+				try (FileInputStream input = new FileInputStream(
+						configFile); Scanner s = new Scanner(
+						input,
 						CHARSET)) {
 					final ByteArrayOutputStream out = new ByteArrayOutputStream();
 					final PrintWriter writer = new PrintWriter(

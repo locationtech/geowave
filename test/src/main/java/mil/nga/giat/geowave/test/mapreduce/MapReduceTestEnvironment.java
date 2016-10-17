@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.fs.FileSystem;
@@ -53,7 +54,8 @@ public class MapReduceTestEnvironment implements
 				hdfsProtocol = true;
 			}
 			else {
-				hdfsProtocol = hdfs.toLowerCase().startsWith(
+				hdfsProtocol = hdfs.toLowerCase(
+						Locale.ENGLISH).startsWith(
 						"hdfs://");
 			}
 		}

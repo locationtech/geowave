@@ -614,22 +614,6 @@ public class PropertyManagement implements
 		}
 	}
 
-	public void toOutput(
-			final OutputStream os )
-			throws IOException {
-		try (ObjectOutputStream oos = new ObjectOutputStream(
-				os)) {
-			oos.writeObject(localProperties);
-		}
-		if (nestProperties != null) {
-			os.write(1);
-			nestProperties.toOutput(os);
-		}
-		else {
-			os.write(2);
-		}
-	}
-
 	public void dump() {
 		LOGGER.info("Properties : ");
 		for (final Map.Entry<ParameterEnum<?>, Serializable> prop : localProperties.entrySet()) {
@@ -639,21 +623,6 @@ public class PropertyManagement implements
 					prop.getValue());
 		}
 		nestProperties.dump();
-	}
-
-	public void fromInput(
-			final InputStream is )
-			throws IOException,
-			ClassNotFoundException {
-		try (ObjectInputStream ois = new ObjectInputStream(
-				is)) {
-			localProperties.clear();
-			localProperties.putAll((HashMap<ParameterEnum<?>, Serializable>) ois.readObject());
-		}
-		if (is.read() == 1) {
-			nestProperties = new PropertyManagement();
-			nestProperties.fromInput(is);
-		}
 	}
 
 	/**

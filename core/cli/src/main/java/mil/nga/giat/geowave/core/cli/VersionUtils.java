@@ -17,9 +17,8 @@ public class VersionUtils
 	public static Properties getBuildProperties() {
 
 		final Properties props = new Properties();
-		try {
-			InputStream stream = VersionUtils.class.getClassLoader().getResourceAsStream(
-					BUILD_PROPERTIES_FILE_NAME);
+		try (InputStream stream = VersionUtils.class.getClassLoader().getResourceAsStream(
+				BUILD_PROPERTIES_FILE_NAME);) {
 
 			if (stream != null) {
 				props.load(stream);

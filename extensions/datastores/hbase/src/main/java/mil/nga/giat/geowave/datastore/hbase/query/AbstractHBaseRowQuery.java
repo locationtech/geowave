@@ -50,16 +50,21 @@ abstract public class AbstractHBaseRowQuery<T> extends
 			LOGGER.error("Unable to get the scanned results " + e);
 		}
 
-		return new CloseableIteratorWrapper<T>(
-				new ScannerClosableWrapper(
-						results),
-				new HBaseEntryIteratorWrapper(
-						adapterStore,
-						index,
-						results.iterator(),
-						null,
-						fieldIds,
-						maxResolutionSubsamplingPerDimension));
+		if (results != null) {
+			return new CloseableIteratorWrapper<T>(
+					new ScannerClosableWrapper(
+							results),
+					new HBaseEntryIteratorWrapper(
+							adapterStore,
+							index,
+							results.iterator(),
+							null,
+							fieldIds,
+							maxResolutionSubsamplingPerDimension));
+		}
+		else {
+			return new CloseableIterator.Empty<T>();
+		}
 	}
 
 	abstract protected Integer getScannerLimit();

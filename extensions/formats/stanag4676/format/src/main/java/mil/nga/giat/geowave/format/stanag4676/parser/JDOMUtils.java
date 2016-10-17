@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.vecmath.Point2d;
@@ -1577,7 +1578,7 @@ public class JDOMUtils
 		if ((el == null) && tryLowerCase) {
 			el = getChildIgnoreNamespace(
 					parentEl,
-					childName.toLowerCase(),
+					childName.toLowerCase(Locale.ENGLISH),
 					namespaces,
 					false);
 		}
@@ -1607,7 +1608,7 @@ public class JDOMUtils
 		if ((el == null) && tryLowerCase) {
 			el = getChildrenIgnoreNamespace(
 					parentEl,
-					childName.toLowerCase(),
+					childName.toLowerCase(Locale.ENGLISH),
 					namespaces,
 					false);
 		}
