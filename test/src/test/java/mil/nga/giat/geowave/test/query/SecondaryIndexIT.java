@@ -72,7 +72,10 @@ import mil.nga.giat.geowave.core.store.index.temporal.TemporalQueryConstraint;
 import mil.nga.giat.geowave.core.store.index.text.TextQueryConstraint;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
@@ -205,6 +208,38 @@ public class SecondaryIndexIT
 			Assert.assertTrue(result.getAttribute(
 					GEOMETRY_FIELD).equals(
 					expectedPoint));
+		}
+
+		// test delete
+		final Query deleteQuery = new DataIdQuery(
+				dataAdapter.getAdapterId(),
+				new ByteArrayId(
+						expectedDataId));
+		final QueryOptions queryOptions = new QueryOptions(
+				dataAdapter,
+				index);
+		dataStore.delete(
+				queryOptions,
+				deleteQuery);
+
+		for (final SecondaryIndex<SimpleFeature> secondaryIndex : allSecondaryIndices) {
+
+			int numResults = 0;
+			try (final CloseableIterator<SimpleFeature> results = secondaryDataStore.query(
+					secondaryIndex,
+					secondaryIndex.getFieldId(),
+					dataAdapter,
+					index,
+					query,
+					DEFAULT_AUTHORIZATIONS)) {
+
+				while (results.hasNext()) {
+					numResults++;
+				}
+			}
+			Assert.assertTrue(
+					secondaryIndex.getId().getString() + " returned " + numResults + " results (should have been 0)",
+					numResults == 0);
 		}
 	}
 

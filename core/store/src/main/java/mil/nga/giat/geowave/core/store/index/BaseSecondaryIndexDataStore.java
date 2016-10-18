@@ -2,18 +2,17 @@ package mil.nga.giat.geowave.core.store.index;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+
+import org.apache.log4j.Logger;
 
 public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 		SecondaryIndexDataStore,
@@ -174,6 +173,7 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 						e);
 			}
 		}
+		writerCache.clear();
 	}
 
 	@Override
