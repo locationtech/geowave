@@ -32,7 +32,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	LandsatIT.class,
 	BulkIngestInputGenerationIT.class,
 	KDERasterResizeIT.class,
-	GeoWaveKMeansIT.class,
+//	GeoWaveKMeansIT.class,
 	GeoWaveNNIT.class,
 	GeoServerIT.class,
 	GeoWaveServicesIT.class,

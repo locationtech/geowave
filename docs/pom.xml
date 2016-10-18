@@ -278,6 +278,7 @@
                     		<sourceDocumentName>quickstart.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
+<!-- Remove Quick Start PDF from doc gen
                     <execution>
                         <id>generate-pdf-quickstart</id>
                         <phase>generate-resources</phase>
@@ -295,6 +296,7 @@
                     		<sourceDocumentName>quickstart.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
+-->
                     <execution>
                         <id>generate-html-quickstart</id>
                         <phase>generate-resources</phase>

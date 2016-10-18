@@ -1,16 +1,20 @@
-sudo: false
+sudo: required
+dist: trusty
 language: java
 jdk:
   - oraclejdk7
 env:
   matrix:
-    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.1'		HADOOP_VERSION='2.7.2'             GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='""' BUILD_DOCS=true
-    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.6.0-cdh5.1.4'     ACCUMULO_API='1.6' HBASE_VERSION='1.2.0-cdh5.7.1'    HADOOP_VERSION='2.6.0-cdh5.4.0'    GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='cloudera' BUILD_DOCS=false
-    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.0.2.4.2.0-258'  ACCUMULO_API='1.7' HBASE_VERSION='1.1.2.2.4.2.0-258' HADOOP_VERSION='2.7.1.2.4.2.0-258' GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='hortonworks' BUILD_DOCS=false
-    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.6.5'              ACCUMULO_API='1.6' HBASE_VERSION='1.1.5'             HADOOP_VERSION='2.6.4'             GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='""' BUILD_DOCS=false	
-    - STORE_TYPE='HBASE'  ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.1'             HADOOP_VERSION='2.7.2'             GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='""' BUILD_DOCS=false
-    - STORE_TYPE='HBASE'  ACCUMULO_VERSION='1.6.0-cdh5.1.4'     ACCUMULO_API='1.6' HBASE_VERSION='1.2.0-cdh5.7.1'    HADOOP_VERSION='2.6.0-cdh5.4.0'    GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='cloudera' BUILD_DOCS=false
-    - STORE_TYPE='HBASE'  ACCUMULO_VERSION='1.7.0.2.4.2.0-258'  ACCUMULO_API='1.7' HBASE_VERSION='1.1.2.2.4.2.0-258' HADOOP_VERSION='2.7.1.2.4.2.0-258' GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='hortonworks' BUILD_DOCS=false
+    # The first line of the matrix just builds docs (only on master) and runs unit tests
+    # The rest skip the unit tests and run ITs only
+    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.1'             HADOOP_VERSION='2.7.2'             GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='""'          BUILD_DOCS=true   IT_ONLY=false
+    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.1'             HADOOP_VERSION='2.7.2'             GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='""'          BUILD_DOCS=false  IT_ONLY=true
+    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.6.0-cdh5.1.4'     ACCUMULO_API='1.6' HBASE_VERSION='1.2.0-cdh5.7.1'    HADOOP_VERSION='2.6.0-cdh5.4.0'    GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='cloudera'    BUILD_DOCS=false  IT_ONLY=true
+    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.0.2.4.2.0-258'  ACCUMULO_API='1.7' HBASE_VERSION='1.1.2.2.4.2.0-258' HADOOP_VERSION='2.7.1.2.4.2.0-258' GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='hortonworks' BUILD_DOCS=false  IT_ONLY=true
+    - STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.6.5'              ACCUMULO_API='1.6' HBASE_VERSION='1.1.5'             HADOOP_VERSION='2.6.4'             GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='""'          BUILD_DOCS=false  IT_ONLY=true	
+    - STORE_TYPE='HBASE'     ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.1'             HADOOP_VERSION='2.7.2'             GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='""'          BUILD_DOCS=false  IT_ONLY=true
+    - STORE_TYPE='HBASE'     ACCUMULO_VERSION='1.6.0-cdh5.1.4'     ACCUMULO_API='1.6' HBASE_VERSION='1.2.0-cdh5.7.1'    HADOOP_VERSION='2.6.0-cdh5.4.0'    GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='cloudera'    BUILD_DOCS=false  IT_ONLY=true
+    - STORE_TYPE='HBASE'     ACCUMULO_VERSION='1.7.0.2.4.2.0-258'  ACCUMULO_API='1.7' HBASE_VERSION='1.1.2.2.4.2.0-258' HADOOP_VERSION='2.7.1.2.4.2.0-258' GEOTOOLS_VERSION='14.2'   GEOSERVER_VERSION='2.8.2' PLATFORM_VERSION='hortonworks' BUILD_DOCS=false  IT_ONLY=true
   global:
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
     - secure: "IcwzKevdTSsKK9YERJ/LV81pfDe7Fx7qBxYcy43b0/emsioZJsJV5XSYHfFRIqceMkzp8LFBU8qiZR3cPZPKQoCjaG1QcwDeKQpyczIkMwzWzydhLR5dAzVETbQC9i2hH4sWjVVHW5WU6UUc3gCz5rPyIXFUYVUYxFeMWxHCe8w="
@@ -21,16 +25,24 @@ cache:
   - $HOME/.m2
   - test/landsat8
   - test/target/temp/gdal
-install: "travis_wait 20 mvn -q clean install -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -Dformatter.skip=true -P ${PLATFORM_VERSION}; .utility/build-docs.sh"
-script: "travis_wait 120 mvn -q verify -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}"
+install: 
+  - .utility/pull-dev-resources.sh
+  # This will only run on master w/ BUILD_DOCS=true
+  - travis_wait 30 .utility/build-docs.sh
+script:
+  # This script uses the IT_ONLY flag to determine whether to run unit tests using verify, or ITs only using failsafe
+  - travis_wait 50 .utility/run-tests.sh
 before_install:
+  # This must match the dev-resources version from the parent pom:
+  - export DEV_RESOURCES_VERSION=1.1
   - export IT_STORE_TYPE=${STORE_TYPE}
-  - export MAVEN_OPTS="-Xmx1400m -XX:MaxPermSize=192m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
+  - export MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=192m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
+  - chmod +x .utility/pull-dev-resources.sh
+  - chmod +x .utility/run-tests.sh
   - chmod +x .utility/build-docs.sh
   - chmod +x .utility/publish-docs.sh
   - chmod +x .utility/maven-coveralls-hack.sh
   - .utility/maven-coveralls-hack.sh
-  - cd dev-resources;mvn clean install;cd ..
 after_success:
   - .utility/publish-docs.sh
   - cd test; mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
