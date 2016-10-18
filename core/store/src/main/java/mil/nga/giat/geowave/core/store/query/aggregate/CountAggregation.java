@@ -42,6 +42,6 @@ public class CountAggregation<T> implements
 
 	@Override
 	public void clearResult() {
-		countResult = new CountResult();
+		countResult.count = 0;
 	}
 }

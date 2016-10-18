@@ -14,8 +14,7 @@ public abstract class AnalyticJobRunner extends
 			throws Exception {
 		final Configuration conf = super.getConf();
 
-		final Job job = new Job(
-				conf);
+		final Job job = Job.getInstance(conf);
 
 		job.setJarByClass(this.getClass());
 

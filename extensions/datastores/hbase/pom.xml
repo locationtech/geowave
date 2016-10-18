@@ -9,6 +9,40 @@
     <artifactId>geowave-datastore-hbase</artifactId>
 	<name>GeoWave Hbase</name>
     <description>Geowave Data Store on Apache Hbase</description>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.hadoop</groupId>
+										<artifactId>hadoop-maven-plugins</artifactId>
+										<versionRange>[2.0.5-alpha,)</versionRange>
+										<goals>
+											<goal>protoc</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
     <dependencies>
         <dependency>
             <groupId>mil.nga.giat</groupId>
@@ -28,6 +62,20 @@
         <dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
+			<exclusions>
+                <exclusion>
+                    <artifactId>jdk.tools</artifactId>
+                    <groupId>jdk.tools</groupId>
+                </exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-core</artifactId>
+				</exclusion>
+            </exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-server</artifactId>
 			<exclusions>
                 <exclusion>
                     <artifactId>jdk.tools</artifactId>
@@ -72,4 +120,97 @@
             <artifactId>annotations</artifactId>
         </dependency>
     </dependencies>
+
+	<profiles>
+		<profile>
+			<id>hbase-singlejar</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>2.2</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<artifactSet>
+										<includes>
+											<include>mil.nga.giat:geowave-core-store</include>
+											<include>mil.nga.giat:geowave-core-geotime</include>
+											<include>mil.nga.giat:geowave-core-index</include>
+											<include>com.vividsolutions:jts-core</include>
+										</includes>
+									</artifactSet>
+									<filters>
+										<filter>
+											<artifact>*:*</artifact>
+											<excludes>
+												<exclude>META-INF/*.SF</exclude>
+												<exclude>META-INF/*.DSA</exclude>
+												<exclude>META-INF/*.RSA</exclude>
+											</excludes>
+										</filter>
+									</filters>
+									<transformers>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+									</transformers>
+									<createDependencyReducedPom>false</createDependencyReducedPom>
+									<minimizeJar>false</minimizeJar>
+									<finalName>geowave-hbase</finalName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>compile-protobuf</id>
+			<activation>
+				<property>
+					<name>compile-protobuf</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-maven-plugins</artifactId>
+						<executions>
+							<execution>
+								<id>compile-protoc</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>protoc</goal>
+								</goals>
+								<configuration>
+									<imports>
+										<param>${basedir}/src/main/protobuf</param>
+									</imports>
+									<source>
+										<directory>${basedir}/src/main/protobuf</directory>
+										<!-- Unfortunately, Hadoop plugin does not support *.proto. We 
+											have to individually list every proto file here -->
+										<includes>
+											<include>AggregationService.proto</include>
+											<include>RowCountService.proto</include>
+											<include>SingleEntryFilter.proto</include>
+										</includes>
+									</source>
+									<!--<output>${project.build.directory}/generated-sources/java</output> -->
+									<output>${basedir}/src/main/java/</output>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
