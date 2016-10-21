@@ -68,7 +68,7 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-Xms1g -Xmx1400m -XX:MaxPermSize=256m</test.args>
+		<test.args>-Xms1g -Xmx2g -XX:MaxPermSize=256m</test.args>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
