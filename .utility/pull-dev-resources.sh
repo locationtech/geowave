@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ev
+#set -ev
 version=${DEV_RESOURCES_VERSION:=1.0}
 echo -e "Pull or build dev-resources-${version}.jar..."
 
