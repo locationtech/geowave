@@ -8,7 +8,6 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos;
 
@@ -25,6 +24,7 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.protobuf.ResponseConverter;
 import org.apache.hadoop.hbase.regionserver.Region;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
+import org.apache.log4j.Logger;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
@@ -36,6 +36,7 @@ public class AggregationEndpoint extends
 		Coprocessor,
 		CoprocessorService
 {
+	private static final Logger LOGGER = Logger.getLogger(AggregationEndpoint.class);
 
 	private RegionCoprocessorEnvironment env;
 	private HBaseDistributableFilter hdFilter;
@@ -94,8 +95,7 @@ public class AggregationEndpoint extends
 			}
 		}
 		catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			LOGGER.error("Could not create instance of Aggregation Type (" + aggregationType + ")" + e);
 		}
 
 		if (aggregation != null) {
@@ -113,16 +113,15 @@ public class AggregationEndpoint extends
 								hdFilter);
 					}
 					else {
-						System.err.println("Error creating distributable filter. ");
+						LOGGER.error("Error creating distributable filter.");
 					}
 				}
 				else {
-					System.err.println("Input distributable filter is undefined. ");
+					LOGGER.error("Input distributable filter is undefined.");
 				}
 			}
 			catch (Exception e) {
-				System.err.println(e.getMessage());
-				e.printStackTrace();
+				LOGGER.error("Error creating distributable filter." + e);
 			}
 
 			if (request.hasRangefilter()) {
@@ -140,12 +139,11 @@ public class AggregationEndpoint extends
 					}
 				}
 				catch (Exception e) {
-					System.err.println(e.getMessage());
-					e.printStackTrace();
+					LOGGER.error("Error creating range filter." + e);
 				}
 			}
 			else {
-				System.err.println("Input range filter is undefined. ");
+				LOGGER.error("Input range filter is undefined.");
 			}
 
 			if (request.hasAdapter()) {
@@ -165,16 +163,14 @@ public class AggregationEndpoint extends
 				value = ByteString.copyFrom(bvalue);
 			}
 			catch (IOException ioe) {
-				ioe.printStackTrace();
-				System.err.println(ioe.getMessage());
+				LOGGER.error("Error during aggregation." + ioe);
 
 				ResponseConverter.setControllerException(
 						controller,
 						ioe);
 			}
 			catch (Exception e) {
-				System.err.println(e.getMessage());
-				e.printStackTrace();
+				LOGGER.error("Error during aggregation." + e);
 			}
 		}
 

@@ -334,7 +334,7 @@ public class BasicHBaseOperations implements
 			}
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Error verifying/adding coprocessor." + e);
 		}
 	}
 }

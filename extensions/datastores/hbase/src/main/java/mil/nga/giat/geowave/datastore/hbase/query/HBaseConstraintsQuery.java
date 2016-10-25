@@ -305,10 +305,10 @@ public class HBaseConstraintsQuery extends
 
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error during aggregation." + e);
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
+			LOGGER.error("Error during aggregation." + e);
 		}
 
 		return new Wrapper(
@@ -359,7 +359,7 @@ public class HBaseConstraintsQuery extends
 			return filter;
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Error creating range filter." + e);
 		}
 
 		return null;

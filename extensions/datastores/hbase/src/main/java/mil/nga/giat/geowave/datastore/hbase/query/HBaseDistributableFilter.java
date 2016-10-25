@@ -100,7 +100,7 @@ public class HBaseDistributableFilter extends
 		List<Persistable> decodedFilterList = PersistenceUtils.fromBinary(filterBytes);
 
 		if (decodedFilterList == null) {
-			System.out.println("Failed to decode filter list");
+			LOGGER.error("Failed to decode filter list");
 			return false;
 		}
 
@@ -111,7 +111,7 @@ public class HBaseDistributableFilter extends
 				filterList.add((DistributableQueryFilter) decodedFilter);
 			}
 			else {
-				System.out.println("Unrecognized type for decoded filter!" + decodedFilter.getClass().getName());
+				LOGGER.warn("Unrecognized type for decoded filter!" + decodedFilter.getClass().getName());
 			}
 		}
 
@@ -120,7 +120,7 @@ public class HBaseDistributableFilter extends
 				CommonIndexModel.class);
 
 		if (model == null) {
-			System.out.println("Failed to decode index model");
+			LOGGER.error("Failed to decode index model");
 			return false;
 		}
 
@@ -185,7 +185,7 @@ public class HBaseDistributableFilter extends
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error applying distributed filter." + e);
 		}
 
 		return returnCode;
@@ -251,17 +251,17 @@ public class HBaseDistributableFilter extends
 	protected boolean applyRowFilter(
 			final CommonIndexedPersistenceEncoding encoding ) {
 		if (filterList == null) {
-			System.err.println("FILTER IS NULL");
+			LOGGER.error("FILTER IS NULL");
 			return false;
 		}
 
 		if (model == null) {
-			System.err.println("MODEL IS NULL");
+			LOGGER.error("MODEL IS NULL");
 			return false;
 		}
 
 		if (encoding == null) {
-			System.err.println("ENCODING IS NULL");
+			LOGGER.error("ENCODING IS NULL");
 			return false;
 		}
 
