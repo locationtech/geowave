@@ -33,6 +33,8 @@ script:
   # This script uses the IT_ONLY flag to determine whether to run unit tests using verify, or ITs only using failsafe
   - travis_wait 50 .utility/run-tests.sh
 before_install:
+  # This must match the dev-resources version from the parent pom:
+  - export DEV_RESOURCES_VERSION=1.1
   - export IT_STORE_TYPE=${STORE_TYPE}
   - export MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=192m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
   - chmod +x .utility/pull-dev-resources.sh

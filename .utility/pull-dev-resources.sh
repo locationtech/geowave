@@ -1,5 +1,6 @@
 #!/bin/bash
-#set -ev
+# Don't set -e in case the S3 pull fails
+set -v
 version=${DEV_RESOURCES_VERSION:=1.0}
 echo -e "Pull or build dev-resources-${version}.jar..."
 
@@ -23,7 +24,7 @@ if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ]; then
 		# Install downloaded jar to local repo
 		mvn install:install-file -Dfile=target/geowave-dev-resources-${version}.jar -DgroupId=mil.nga.giat -DartifactId=geowave-dev-resources -Dversion=${version} -Dpackaging=jar
 	else
-	# Fallback to building the jar if the S3 pull failed
+		# Fallback to building the jar if the S3 pull failed
 		echo -e "Pull from S3 failed. Building..."
 		mvn clean install
 	fi
