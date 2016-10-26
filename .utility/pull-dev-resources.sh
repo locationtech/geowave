@@ -1,5 +1,6 @@
 #!/bin/bash
-set -ev
+# Don't set -e in case the S3 pull fails
+set -v
 version=${DEV_RESOURCES_VERSION:=1.0}
 echo -e "Pull or build dev-resources-${version}.jar..."
 

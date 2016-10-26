@@ -1,15 +1,15 @@
 package mil.nga.giat.geowave.datastore.hbase.query;
 
-import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 
 abstract public class HBaseQuery
 {
@@ -18,6 +18,7 @@ abstract public class HBaseQuery
 	protected List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 	protected Pair<List<String>, DataAdapter<?>> fieldIds;
+	protected HBaseOptions options = null;
 
 	protected final String[] authorizations;
 
@@ -48,4 +49,8 @@ abstract public class HBaseQuery
 
 	abstract protected List<ByteArrayRange> getRanges();
 
+	public void setOptions(
+			HBaseOptions options ) {
+		this.options = options;
+	}
 }

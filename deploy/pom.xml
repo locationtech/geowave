@@ -35,6 +35,11 @@
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-hbase</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -490,6 +495,62 @@
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
 									<finalName>${project.build.finalName}-accumulo-singlejar</finalName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>hbase-singlejar</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>2.2</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<artifactSet>
+										<excludes>
+											<exclude>org.slf4j:*</exclude>
+										</excludes>
+									</artifactSet>
+									<filters>
+										<filter>
+											<artifact>*:*</artifact>
+											<excludes>
+												<exclude>META-INF/*.SF</exclude>
+												<exclude>META-INF/*.DSA</exclude>
+												<exclude>META-INF/*.RSA</exclude>
+											</excludes>
+										</filter>
+									</filters>
+									<transformers>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+											<manifestEntries>
+												<Specification-Title>GeoWave</Specification-Title>
+												<Specification-Vendor>LocationTech</Specification-Vendor>
+												<Specification-Version>${project.version}</Specification-Version>
+												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Vendor>LocationTech</Implementation-Vendor>
+												<Implementation-Version>${project.version}</Implementation-Version>
+											</manifestEntries>
+										</transformer>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+
+									</transformers>
+									<createDependencyReducedPom>false</createDependencyReducedPom>
+									<minimizeJar>false</minimizeJar>
+									<finalName>${project.build.finalName}-hbase-singlejar</finalName>
 								</configuration>
 							</execution>
 						</executions>

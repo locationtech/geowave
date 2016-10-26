@@ -46,6 +46,11 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-hbase</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-example</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -245,6 +250,7 @@
 								<username>${username}</username>
 								<password>${password}</password>
 								<geoserver.version>${geoserver.version}</geoserver.version>
+								<testStoreType>${IT_STORE_TYPE}</testStoreType>
 							</systemPropertyVariables>
 							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->

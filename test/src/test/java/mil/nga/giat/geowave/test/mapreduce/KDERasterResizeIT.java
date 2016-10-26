@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -260,6 +261,12 @@ public class KDERasterResizeIT
 				TEST_COVERAGE_NAMESPACE).append(
 				";equalizeHistogramOverride=false;scaleTo8Bit=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
+		
+		str.append(
+				";").append(
+				GeoWaveStoreFinder.STORE_HINT_KEY).append(
+				"=").append(
+						outputDataStorePluginOptions.getType());
 
 		final Map<String, String> options = outputDataStorePluginOptions.getFactoryOptionsAsMap();
 

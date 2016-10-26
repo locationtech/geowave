@@ -14,9 +14,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.log4j.Logger;
 
 /**
- * This class can run a basic job to query GeoWave. It manages Accumulo user,
- * Accumulo password, Accumulo instance name, zookeeper URLs, Accumulo
- * namespace, adapters, indices, query, min splits and max splits.
+ * This class can run a basic job to query GeoWave. It manages datastore
+ * connection params, adapters, indices, query, min splits and max splits.
  */
 public abstract class AbstractGeoWaveJobRunner extends
 		Configured implements
@@ -42,8 +41,7 @@ public abstract class AbstractGeoWaveJobRunner extends
 	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
-		final Job job = new Job(
-				super.getConf());
+		final Job job = Job.getInstance(super.getConf());
 		// must use the assembled job configuration
 		final Configuration conf = job.getConfiguration();
 

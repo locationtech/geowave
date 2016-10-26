@@ -194,6 +194,11 @@
 				<version>${hbase.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-server</artifactId>
+				<version>${hbase.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-client</artifactId>
 				<version>${hadoop.version}</version>
@@ -472,6 +477,15 @@
 					<groupId>net.revelc.code</groupId>
 					<artifactId>formatter-maven-plugin</artifactId>
 					<version>0.5.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-maven-plugins</artifactId>
+					<version>${hadoop.version}</version>
+					<configuration>
+						<protocVersion>2.5.0</protocVersion>
+						<protocCommand>/Apps/Protoc/bin/protoc</protocCommand>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

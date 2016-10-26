@@ -7,6 +7,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.FilteredIndexQuery;
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
+import mil.nga.giat.geowave.datastore.hbase.util.MergingEntryIterator;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.Result;
@@ -19,24 +38,6 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Iterators;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
-import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.FilteredIndexQuery;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.MergingEntryIterator;
 
 public abstract class HBaseFilteredIndexQuery extends
 		HBaseQuery implements
@@ -105,19 +106,16 @@ public abstract class HBaseFilteredIndexQuery extends
 			}
 		}
 		catch (final IOException ex) {
-			LOGGER
-					.warn("Unabe to check if " + StringUtils.stringFromBinary(index.getId().getBytes())
+			LOGGER.warn("Unabe to check if " + StringUtils.stringFromBinary(index.getId().getBytes())
 							+ " table exists");
 			return new CloseableIterator.Empty();
 		}
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
-		final List<Filter> distributableFilters = getDistributableFilter();
-
 		final Scan multiScanner = getMultiScanner(
 				limit,
-				distributableFilters);
+				null);
 
 		final List<Iterator<Result>> resultsIterators = new ArrayList<Iterator<Result>>();
 		final List<ResultScanner> results = new ArrayList<ResultScanner>();
@@ -162,8 +160,6 @@ public abstract class HBaseFilteredIndexQuery extends
 		return new CloseableIterator.Empty();
 	}
 
-	protected abstract List<Filter> getDistributableFilter();
-
 	// experiment to test a single multi-scanner vs multiple single-range
 	// scanners
 	protected Scan getMultiScanner(
@@ -172,18 +168,13 @@ public abstract class HBaseFilteredIndexQuery extends
 		// Single scan w/ multiple ranges
 		final Scan scanner = new Scan();
 
-		// Performance recommendations
-		scanner.setCaching(10000);
-		scanner.setCacheBlocks(true);
-
-		final FilterList filterList = new FilterList();
-
-		// Add server-side filters (currently not implemented)
-		if ((distributableFilters != null) && (!distributableFilters.isEmpty())) {
-			for (final Filter filter : distributableFilters) {
-				filterList.addFilter(filter);
-			}
+		// Performance tuning per store options
+		if (options.getScanCacheSize() != HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING) {
+			scanner.setCaching(options.getScanCacheSize());
 		}
+		scanner.setCacheBlocks(options.isEnableBlockCache());
+
+		FilterList filterList = new FilterList();
 
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			for (final ByteArrayId adapterId : adapterIds) {
@@ -233,19 +224,37 @@ public abstract class HBaseFilteredIndexQuery extends
 			filterList.addFilter(filter);
 		}
 		catch (final IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Error creating range filter." + e);
+		}
+
+		// Add distributable filters if requested
+		if (options.isEnableCustomFilters()) {
+			List<DistributableQueryFilter> distFilters = getDistributableFilters();
+			if (distFilters != null) {
+				HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
+				hbdFilter.init(
+						distFilters,
+						index.getIndexModel());
+
+				filterList.addFilter(hbdFilter);
+			}
 		}
 
 		// Set the filter list for the scan and return the scan list (with the
 		// single multi-range scan)
 		scanner.setFilter(filterList);
-		scanner.setMaxVersions(1);
+		
 		// Only return the most recent version
 		scanner.setMaxVersions(1);
 
 		return scanner;
 	}
 
+	// Override this (see HBaseConstraintsQuery)
+	protected List<DistributableQueryFilter> getDistributableFilters() {
+		return null;
+	}
+	
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final Iterator<Result> resultsIterator,

@@ -47,6 +47,8 @@ public class GeoWaveITRunner extends
 			false);
 	public static final Object MUTEX = new Object();
 
+	public static final String STORE_TYPE_PROPERTY_NAME = "testStoreType";
+
 	@Override
 	protected Statement withBeforeClasses(
 			final Statement statement ) {
@@ -260,7 +262,8 @@ public class GeoWaveITRunner extends
 		final GeoWaveStoreRunnerConfig emptyConfig = new GeoWaveStoreRunnerConfig();
 		List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
 
-		String storeTypeProp = System.getenv("IT_STORE_TYPE");
+		String storeTypeProp = System.getProperty(STORE_TYPE_PROPERTY_NAME);
+		
 		boolean typeOverridden = false;
 		if (TestUtils.isSet(storeTypeProp)) {
 			final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
@@ -272,6 +275,7 @@ public class GeoWaveITRunner extends
 						dataStoreOptionFields));
 			}
 		}
+		
 		if (!typeOverridden) {
 			if (typeIsAnnotated()) {
 				if (fieldsAreAnnotated()) {
