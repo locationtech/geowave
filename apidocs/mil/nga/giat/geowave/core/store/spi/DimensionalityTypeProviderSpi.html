@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DimensionalityTypeProviderSpi (GeoWave Parent POM 0.9.3-SNAPSHOT API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="DimensionalityTypeProviderSpi (GeoWave Parent POM 0.9.3-SNAPSHOT API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/DimensionalityTypeProviderSpi.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeRegistry.html" title="class in mil.nga.giat.geowave.core.store.spi"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" target="_top">Frames</a></li>
+<li><a href="DimensionalityTypeProviderSpi.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">mil.nga.giat.geowave.core.store.spi</div>
+<h2 title="Interface DimensionalityTypeProviderSpi" class="title">Interface DimensionalityTypeProviderSpi</h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialDimensionalityTypeProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalDimensionalityTypeProvider</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public interface <span class="strong">DimensionalityTypeProviderSpi</span></pre>
+<div class="block">This interface can be injected using SPI to determine which supported index
+ for an ingest type will be used.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex()">createPrimaryIndex</a></strong>()</code>
+<div class="block">This will return the primary index that match the options</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeDescription()">getDimensionalityTypeDescription</a></strong>()</code>
+<div class="block">if the registered dimensionality types are listed by a user, this can
+ provide a user-friendly description for each</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeName()">getDimensionalityTypeName</a></strong>()</code>
+<div class="block">This will represent the name for the dimensionality type that is
+ registered with the ingest framework and presented as a dimensionality
+ type option via the commandline.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getOptions()">getOptions</a></strong>()</code>
+<div class="block">These are options specific to the type of index being exposed by this SPI
+ plugin.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getPriority()">getPriority</a></strong>()</code>
+<div class="block">If there are multiple acceptable dimensionality types, the one with the
+ highest priority will be used</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getRequiredIndexTypes()">getRequiredIndexTypes</a></strong>()</code>
+<div class="block">return a set of classes that can be indexed by this index provider, used
+ for compatibility checking with an adapter provider</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getRequiredIndexTypes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRequiredIndexTypes</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;[]&nbsp;getRequiredIndexTypes()</pre>
+<div class="block">return a set of classes that can be indexed by this index provider, used
+ for compatibility checking with an adapter provider</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the classes that are indexable by this index provider</dd></dl>
+</li>
+</ul>
+<a name="getDimensionalityTypeName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDimensionalityTypeName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDimensionalityTypeName()</pre>
+<div class="block">This will represent the name for the dimensionality type that is
+ registered with the ingest framework and presented as a dimensionality
+ type option via the commandline. For consistency, this name is preferably
+ lower-case and without spaces, and should uniquely identify the
+ dimensionality type as much as possible.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the name of this dimensionality type</dd></dl>
+</li>
+</ul>
+<a name="getDimensionalityTypeDescription()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDimensionalityTypeDescription</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDimensionalityTypeDescription()</pre>
+<div class="block">if the registered dimensionality types are listed by a user, this can
+ provide a user-friendly description for each</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the user-friendly description</dd></dl>
+</li>
+</ul>
+<a name="getPriority()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPriority</h4>
+<pre>int&nbsp;getPriority()</pre>
+<div class="block">If there are multiple acceptable dimensionality types, the one with the
+ highest priority will be used</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a priority value, any integer will work, it is merely important
+         to consider values relative to each other</dd></dl>
+</li>
+</ul>
+<a name="createPrimaryIndex()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createPrimaryIndex</h4>
+<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;createPrimaryIndex()</pre>
+<div class="block">This will return the primary index that match the options</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the primary index</dd></dl>
+</li>
+</ul>
+<a name="getOptions()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getOptions</h4>
+<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a>&nbsp;getOptions()</pre>
+<div class="block">These are options specific to the type of index being exposed by this SPI
+ plugin.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/DimensionalityTypeProviderSpi.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeRegistry.html" title="class in mil.nga.giat.geowave.core.store.spi"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" target="_top">Frames</a></li>
+<li><a href="DimensionalityTypeProviderSpi.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; 2016. All rights reserved.</small></p>
+</body>
+</html>
