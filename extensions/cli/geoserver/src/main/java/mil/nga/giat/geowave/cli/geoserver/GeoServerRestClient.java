@@ -440,7 +440,7 @@ public class GeoServerRestClient
 		String queryIndexStrategy = "Best Match";
 
 		final String dataStoreJson = createDatastoreJson(
-				"accumulo",
+				inputStoreOptions.getType(),
 				inputStoreOptions.getFactoryOptionsAsMap(),
 				datastoreName,
 				lockMgmt,
@@ -915,7 +915,7 @@ public class GeoServerRestClient
 			cvgStoreName = gwStoreName + GeoServerConfig.DEFAULT_CS;
 		}
 
-		// Get the store's accumulo config
+		// Get the store's db config
 		Map<String, String> storeConfigMap = inputStoreOptions.getFactoryOptionsAsMap();
 
 		// Add in geoserver coverage store info

@@ -272,6 +272,12 @@
 						<scope>${accumulo.scope}</scope>
 					</dependency>
 					<dependency>
+						<groupId>org.apache.hbase</groupId>
+						<artifactId>hbase-client</artifactId>
+						<version>${hbase.version}</version>
+						<scope>${hbase.scope}</scope>
+					</dependency>
+					<dependency>
 						<groupId>org.apache.hadoop</groupId>
 						<artifactId>hadoop-common</artifactId>
 						<version>${hadoop.version}</version>
@@ -307,6 +313,12 @@
 						<scope>${accumulo.scope}</scope>
 					</dependency>
 					<dependency>
+						<groupId>org.apache.hbase</groupId>
+						<artifactId>hbase-client</artifactId>
+						<version>${hbase.version}</version>
+						<scope>${hbase.scope}</scope>
+					</dependency>
+					<dependency>
 						<groupId>org.apache.hadoop</groupId>
 						<artifactId>hadoop-common</artifactId>
 						<version>${hadoop.version}</version>
@@ -335,10 +347,13 @@
 											<exclude>*:pom:*</exclude>
 											<exclude>log4j:log4j</exclude>
 											<exclude>commons-codec:commons-codec</exclude>
-											<exclude>com.google.guava:guava</exclude>
+											
+											<!-- even though guava should exist in geoserver's classpath, 
+												<exclude>com.google.guava:guava</exclude> -->
 
 											<!-- even though commons-lang should exist in geoserver's classpath 
-												it is version 2.1 which is missing necessary classes, <exclude>*:commons-lang:*</exclude> -->
+												it is version 2.1 which is missing necessary classes, 
+												<exclude>*:commons-lang:*</exclude> -->
 
 											<!-- and commons-lang3 is also necessary due to different classes 
 												<exclude>org.apache.commons:commons-lang3</exclude> -->
