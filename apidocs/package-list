@@ -145,6 +145,7 @@ mil.nga.giat.geowave.datastore.accumulo.split
 mil.nga.giat.geowave.datastore.accumulo.util
 mil.nga.giat.geowave.datastore.hbase
 mil.nga.giat.geowave.datastore.hbase.cli
+mil.nga.giat.geowave.datastore.hbase.encoding
 mil.nga.giat.geowave.datastore.hbase.index.secondary
 mil.nga.giat.geowave.datastore.hbase.io
 mil.nga.giat.geowave.datastore.hbase.mapreduce

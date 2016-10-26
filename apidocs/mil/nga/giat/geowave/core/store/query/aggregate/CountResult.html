@@ -141,6 +141,9 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Merg
 <tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html#CountResult()">CountResult</a></strong>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html#CountResult(long)">CountResult</a></strong>(long&nbsp;value)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -173,10 +176,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Merg
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html#merge(mil.nga.giat.geowave.core.index.Mergeable)">merge</a></strong>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;result)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html#setCount(long)">setCount</a></strong>(long&nbsp;count)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html#toBinary()">toBinary</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/aggregate/CountResult.html#toString()">toString</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -222,10 +229,19 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Merg
 <a name="CountResult()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>CountResult</h4>
 <pre>public&nbsp;CountResult()</pre>
+</li>
+</ul>
+<a name="CountResult(long)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>CountResult</h4>
+<pre>public&nbsp;CountResult(long&nbsp;value)</pre>
 </li>
 </ul>
 </li>
@@ -252,6 +268,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Merg
 <li class="blockList">
 <h4>getCount</h4>
 <pre>public&nbsp;long&nbsp;getCount()</pre>
+</li>
+</ul>
+<a name="setCount(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCount</h4>
+<pre>public&nbsp;void&nbsp;setCount(long&nbsp;count)</pre>
 </li>
 </ul>
 <a name="toBinary()">

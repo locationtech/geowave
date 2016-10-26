@@ -121,24 +121,40 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#COPROCESSOR_JAR_KEY">COPROCESSOR_JAR_KEY</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#createTable">createTable</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#enableBlockCache">enableBlockCache</a></strong></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#enableCoprocessors">enableCoprocessors</a></strong></code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#persistAdapter">persistAdapter</a></strong></code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#enableCustomFilters">enableCustomFilters</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#persistDataStatistics">persistDataStatistics</a></strong></code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#persistAdapter">persistAdapter</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#persistDataStatistics">persistDataStatistics</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#persistIndex">persistIndex</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#scanCacheSize">scanCacheSize</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
@@ -147,6 +163,10 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#useLocalityGroups">useLocalityGroups</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#verifyCoprocessors">verifyCoprocessors</a></strong></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -181,12 +201,28 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#getCoprocessorJar()">getCoprocessorJar</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#getScanCacheSize()">getScanCacheSize</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#isCreateTable()">isCreateTable</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#isEnableBlockCache()">isEnableBlockCache</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#isEnableCoprocessors()">isEnableCoprocessors</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#isEnableCustomFilters()">isEnableCustomFilters</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -209,12 +245,28 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#isUseLocalityGroups()">isUseLocalityGroups</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#isVerifyCoprocessors()">isVerifyCoprocessors</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setCoprocessorJar(java.lang.String)">setCoprocessorJar</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coprocessorJar)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setCreateTable(boolean)">setCreateTable</a></strong>(boolean&nbsp;createTable)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setEnableBlockCache(boolean)">setEnableBlockCache</a></strong>(boolean&nbsp;enableBlockCache)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setEnableCoprocessors(boolean)">setEnableCoprocessors</a></strong>(boolean&nbsp;enableCoprocessors)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setEnableCustomFilters(boolean)">setEnableCustomFilters</a></strong>(boolean&nbsp;enableCustomFilters)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -230,11 +282,19 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setUseAltIndex(boolean)">setUseAltIndex</a></strong>(boolean&nbsp;useAltIndex)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setScanCacheSize(int)">setScanCacheSize</a></strong>(int&nbsp;scanCacheSize)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setUseAltIndex(boolean)">setUseAltIndex</a></strong>(boolean&nbsp;useAltIndex)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setUseLocalityGroups(boolean)">setUseLocalityGroups</a></strong>(boolean&nbsp;useLocalityGroups)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html#setVerifyCoprocessors(boolean)">setVerifyCoprocessors</a></strong>(boolean&nbsp;verifyCoprocessors)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -258,6 +318,16 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="COPROCESSOR_JAR_KEY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COPROCESSOR_JAR_KEY</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> COPROCESSOR_JAR_KEY</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions.COPROCESSOR_JAR_KEY">Constant Field Values</a></dd></dl>
+</li>
+</ul>
 <a name="persistAdapter">
 <!--   -->
 </a>
@@ -315,10 +385,46 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 <a name="enableBlockCache">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>enableBlockCache</h4>
 <pre>protected&nbsp;boolean enableBlockCache</pre>
+</li>
+</ul>
+<a name="scanCacheSize">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>scanCacheSize</h4>
+<pre>protected&nbsp;int scanCacheSize</pre>
+</li>
+</ul>
+<a name="enableCustomFilters">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>enableCustomFilters</h4>
+<pre>protected&nbsp;boolean enableCustomFilters</pre>
+</li>
+</ul>
+<a name="enableCoprocessors">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>enableCoprocessors</h4>
+<pre>protected&nbsp;boolean enableCoprocessors</pre>
+</li>
+</ul>
+<a name="verifyCoprocessors">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>verifyCoprocessors</h4>
+<pre>protected&nbsp;boolean verifyCoprocessors</pre>
 </li>
 </ul>
 </li>
@@ -482,10 +588,100 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Data
 <a name="setEnableBlockCache(boolean)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setEnableBlockCache</h4>
 <pre>public&nbsp;void&nbsp;setEnableBlockCache(boolean&nbsp;enableBlockCache)</pre>
+</li>
+</ul>
+<a name="getScanCacheSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getScanCacheSize</h4>
+<pre>public&nbsp;int&nbsp;getScanCacheSize()</pre>
+</li>
+</ul>
+<a name="setScanCacheSize(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setScanCacheSize</h4>
+<pre>public&nbsp;void&nbsp;setScanCacheSize(int&nbsp;scanCacheSize)</pre>
+</li>
+</ul>
+<a name="isEnableCustomFilters()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isEnableCustomFilters</h4>
+<pre>public&nbsp;boolean&nbsp;isEnableCustomFilters()</pre>
+</li>
+</ul>
+<a name="setEnableCustomFilters(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEnableCustomFilters</h4>
+<pre>public&nbsp;void&nbsp;setEnableCustomFilters(boolean&nbsp;enableCustomFilters)</pre>
+</li>
+</ul>
+<a name="isEnableCoprocessors()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isEnableCoprocessors</h4>
+<pre>public&nbsp;boolean&nbsp;isEnableCoprocessors()</pre>
+</li>
+</ul>
+<a name="setEnableCoprocessors(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEnableCoprocessors</h4>
+<pre>public&nbsp;void&nbsp;setEnableCoprocessors(boolean&nbsp;enableCoprocessors)</pre>
+</li>
+</ul>
+<a name="isVerifyCoprocessors()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isVerifyCoprocessors</h4>
+<pre>public&nbsp;boolean&nbsp;isVerifyCoprocessors()</pre>
+</li>
+</ul>
+<a name="setVerifyCoprocessors(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVerifyCoprocessors</h4>
+<pre>public&nbsp;void&nbsp;setVerifyCoprocessors(boolean&nbsp;verifyCoprocessors)</pre>
+</li>
+</ul>
+<a name="getCoprocessorJar()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCoprocessorJar</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getCoprocessorJar()</pre>
+</li>
+</ul>
+<a name="setCoprocessorJar(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setCoprocessorJar</h4>
+<pre>public&nbsp;void&nbsp;setCoprocessorJar(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coprocessorJar)</pre>
 </li>
 </ul>
 </li>
