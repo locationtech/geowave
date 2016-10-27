@@ -156,6 +156,7 @@ mil.nga.giat.geowave.datastore.hbase.query
 mil.nga.giat.geowave.datastore.hbase.query.generated
 mil.nga.giat.geowave.datastore.hbase.util
 mil.nga.giat.geowave.examples.accumulo.app
+mil.nga.giat.geowave.examples.hbase
 mil.nga.giat.geowave.examples.ingest
 mil.nga.giat.geowave.examples.ingest.bulk
 mil.nga.giat.geowave.examples.query
