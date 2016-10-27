@@ -245,7 +245,7 @@ public class HBaseDataStore extends
 						dedupeFilter,
 						scanCallback,
 						null,
-						scanCallback,
+						null,
 						true));
 	}
 
@@ -338,7 +338,7 @@ public class HBaseDataStore extends
 				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getAuthorizations());
-		
+
 		prefixQuery.setOptions(options);
 
 		return prefixQuery.query(
@@ -362,7 +362,6 @@ public class HBaseDataStore extends
 				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
-
 
 		q.setOptions(options);
 

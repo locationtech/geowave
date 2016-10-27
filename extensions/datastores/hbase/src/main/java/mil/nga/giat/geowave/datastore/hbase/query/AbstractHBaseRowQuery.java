@@ -60,7 +60,8 @@ abstract public class AbstractHBaseRowQuery<T> extends
 							results.iterator(),
 							null,
 							fieldIds,
-							maxResolutionSubsamplingPerDimension));
+							maxResolutionSubsamplingPerDimension,
+							true));
 		}
 		else {
 			return new CloseableIterator.Empty<T>();

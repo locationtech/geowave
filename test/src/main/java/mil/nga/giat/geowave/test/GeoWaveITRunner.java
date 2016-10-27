@@ -263,7 +263,7 @@ public class GeoWaveITRunner extends
 		List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
 
 		String storeTypeProp = System.getProperty(STORE_TYPE_PROPERTY_NAME);
-		
+
 		boolean typeOverridden = false;
 		if (TestUtils.isSet(storeTypeProp)) {
 			final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
@@ -275,7 +275,7 @@ public class GeoWaveITRunner extends
 						dataStoreOptionFields));
 			}
 		}
-		
+
 		if (!typeOverridden) {
 			if (typeIsAnnotated()) {
 				if (fieldsAreAnnotated()) {

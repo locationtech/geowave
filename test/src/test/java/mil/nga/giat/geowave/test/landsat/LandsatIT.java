@@ -126,7 +126,9 @@ public class LandsatIT
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("*      FINISHED LandsatIT               *");
-		LOGGER.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000) + "s elapsed.                 *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -139,20 +141,22 @@ public class LandsatIT
 		// just use the QA band as QA is the smallest, get the best cloud cover,
 		// but ensure it is before now so no recent collection affects the test
 		final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
-		analyzeOptions.setCqlFilter(String.format(
-				"BBOX(%s,%f,%f,%f,%f) AND %s='B4' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
-				SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
-				WEST,
-				SOUTH,
-				EAST,
-				NORTH,
-				BandFeatureIterator.BAND_ATTRIBUTE_NAME,
-				SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
-				"2016-06-01T00:00:00Z",
-				MIN_PATH,
-				MAX_PATH,
-				MIN_ROW,
-				MAX_ROW));
+		analyzeOptions
+				.setCqlFilter(String
+						.format(
+								"BBOX(%s,%f,%f,%f,%f) AND %s='B4' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
+								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
+								WEST,
+								SOUTH,
+								EAST,
+								NORTH,
+								BandFeatureIterator.BAND_ATTRIBUTE_NAME,
+								SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
+								"2016-06-01T00:00:00Z",
+								MIN_PATH,
+								MAX_PATH,
+								MIN_ROW,
+								MAX_ROW));
 		analyzeOptions.setNBestPerSpatial(true);
 		analyzeOptions.setNBestScenes(1);
 		analyzeOptions.setUseCachedScenes(true);

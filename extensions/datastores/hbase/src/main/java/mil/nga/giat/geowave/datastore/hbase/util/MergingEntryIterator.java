@@ -54,7 +54,8 @@ public class MergingEntryIterator<T> extends
 				clientFilter,
 				scanCallback,
 				fieldIds,
-				maxResolutionSubsamplingPerDimension);
+				maxResolutionSubsamplingPerDimension,
+				true);
 		this.mergingAdapters = mergingAdapters;
 		transforms = new HashMap<ByteArrayId, RowTransform>();
 	}

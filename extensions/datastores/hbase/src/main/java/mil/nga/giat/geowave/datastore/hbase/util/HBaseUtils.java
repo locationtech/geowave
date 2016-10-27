@@ -250,10 +250,10 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
 			boolean decodeRow ) {
-		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
+		final Pair<Object, DataStoreEntryInfo> pair = decodeRow(
 				row,
 				rowId,
 				dataAdapter,
@@ -274,7 +274,7 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
 			boolean decodeRow ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {

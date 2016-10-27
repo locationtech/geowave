@@ -103,11 +103,11 @@ public class ConstraintsQuery
 	}
 
 	public List<ByteArrayRange> getAllRanges() {
-			return DataStoreUtils.constraintsToByteArrayRanges(
-					constraints,
-					index.getIndexStrategy(),
-					MAX_RANGE_DECOMPOSITION,
-					indexMetaData);
+		return DataStoreUtils.constraintsToByteArrayRanges(
+				constraints,
+				index.getIndexStrategy(),
+				MAX_RANGE_DECOMPOSITION,
+				indexMetaData);
 	}
 
 	private SplitFilterLists splitList(

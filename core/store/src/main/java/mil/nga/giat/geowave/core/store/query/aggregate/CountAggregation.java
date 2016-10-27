@@ -9,7 +9,7 @@ public class CountAggregation implements
 	private long count = Long.MIN_VALUE;
 
 	public CountAggregation() {}
-	
+
 	public boolean isSet() {
 		return count != Long.MIN_VALUE;
 	}
@@ -30,7 +30,7 @@ public class CountAggregation implements
 		if (!isSet()) {
 			count = 0;
 		}
-		
+
 		count += 1;
 	}
 
@@ -44,8 +44,9 @@ public class CountAggregation implements
 		if (!isSet()) {
 			return null;
 		}
-		
-		return new CountResult(count);
+
+		return new CountResult(
+				count);
 	}
 
 	@Override

@@ -165,36 +165,37 @@ public class HBaseConstraintsQuery extends
 
 		// Aggregate without coprocessor
 		if (options == null || !options.isEnableCoprocessors()) {
-		final CloseableIterator<Object> it = super.query(
-				operations,
-				adapterStore,
-				maxResolutionSubsamplingPerDimension,
-				limit,isCommonIndexAggregation());
+			final CloseableIterator<Object> it = super.internalQuery(
+					operations,
+					adapterStore,
+					maxResolutionSubsamplingPerDimension,
+					limit,
+					isCommonIndexAggregation());
 
 			if ((it != null) && it.hasNext()) {
-			final Aggregation aggregationFunction = base.aggregation.getRight();
-			synchronized (aggregationFunction) {
+				final Aggregation aggregationFunction = base.aggregation.getRight();
+				synchronized (aggregationFunction) {
 
-				aggregationFunction.clearResult();
-				while (it.hasNext()) {
-					final Object input = it.next();
-					if (input != null) {
-						aggregationFunction.aggregate(input);
+					aggregationFunction.clearResult();
+					while (it.hasNext()) {
+						final Object input = it.next();
+						if (input != null) {
+							aggregationFunction.aggregate(input);
+						}
 					}
-				}
-				try {
-					it.close();
-				}
-				catch (final IOException e) {
-					LOGGER.warn(
-							"Unable to close hbase scanner",
-							e);
-				}
+					try {
+						it.close();
+					}
+					catch (final IOException e) {
+						LOGGER.warn(
+								"Unable to close hbase scanner",
+								e);
+					}
 
-				return new Wrapper(
-						Iterators.singletonIterator(aggregationFunction.getResult()));
+					return new Wrapper(
+							Iterators.singletonIterator(aggregationFunction.getResult()));
+				}
 			}
-		}
 
 			return new CloseableIterator.Empty();
 		}
@@ -226,7 +227,8 @@ public class HBaseConstraintsQuery extends
 
 			final Aggregation aggregation = base.aggregation.getRight();
 
-			AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType.newBuilder();
+			AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType
+					.newBuilder();
 			aggregationBuilder.setName(aggregation.getClass().getName());
 
 			if (aggregation.getParameters() != null) {
@@ -234,7 +236,8 @@ public class HBaseConstraintsQuery extends
 				aggregationBuilder.setParams(ByteString.copyFrom(paramBytes));
 			}
 
-			final AggregationProtos.AggregationRequest.Builder requestBuilder = AggregationProtos.AggregationRequest.newBuilder();
+			final AggregationProtos.AggregationRequest.Builder requestBuilder = AggregationProtos.AggregationRequest
+					.newBuilder();
 			requestBuilder.setAggregation(aggregationBuilder.build());
 
 			byte[] filterBytes = PersistenceUtils.toBinary(base.distributableFilters);
