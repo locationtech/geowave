@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -49,7 +50,7 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 			if ((combinedExtensions != null) && (combinedExtensions.length > 0)) {
 				final String[] lowerCaseExtensions = new String[combinedExtensions.length];
 				for (int i = 0; i < combinedExtensions.length; i++) {
-					lowerCaseExtensions[i] = combinedExtensions[i].toLowerCase();
+					lowerCaseExtensions[i] = combinedExtensions[i].toLowerCase(Locale.ENGLISH);
 				}
 				final String extStr = String.format(
 						"([^\\s]+(\\.(?i)(%s))$)",
@@ -68,7 +69,8 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 		public boolean supportsFile(
 				final File file ) {
 			if ((pattern != null) && !pattern.matcher(
-					file.getName().toLowerCase()).matches()) {
+					file.getName().toLowerCase(
+							Locale.ENGLISH)).matches()) {
 				return false;
 			}
 			else if (!localPluginBase.supportsFile(file)) {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -114,7 +115,8 @@ public class FeatureDefinitionSet
 			String name ) {
 		if (name == null) return null;
 
-		return name.trim().toLowerCase().replace(
+		return name.trim().toLowerCase(
+				Locale.ENGLISH).replace(
 				":",
 				"_");
 	}

@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.feature.AttributeTypeBuilder;
@@ -181,8 +182,10 @@ public class GDELTUtils
 
 	public static boolean validate(
 			final File file ) {
-		return file.getName().toLowerCase().matches(
-				"\\d{8}\\.export\\.csv\\.zip") || file.getName().toLowerCase().matches(
+		return file.getName().toLowerCase(
+				Locale.ENGLISH).matches(
+				"\\d{8}\\.export\\.csv\\.zip") || file.getName().toLowerCase(
+				Locale.ENGLISH).matches(
 				"\\d{4,6}\\.zip");
 	}
 }

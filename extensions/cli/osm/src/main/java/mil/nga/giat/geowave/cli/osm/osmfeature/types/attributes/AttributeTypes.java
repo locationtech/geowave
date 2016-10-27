@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.cli.osm.osmfeature.types.attributes;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -223,7 +224,8 @@ public class AttributeTypes
 				return (Boolean) source;
 			}
 			String val = String.valueOf(
-					source).toLowerCase().trim();
+					source).toLowerCase(
+					Locale.ENGLISH).trim();
 
 			if (val.equals("1") || val.equals("true") || val.equals("t") || val.equals("y") || val.equals("yes")) {
 				return true;

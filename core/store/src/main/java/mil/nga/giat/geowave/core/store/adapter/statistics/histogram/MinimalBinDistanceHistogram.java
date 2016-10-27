@@ -53,13 +53,9 @@ public class MinimalBinDistanceHistogram implements
 	public MinimalBinDistanceHistogram() {
 		totalCount = 0;
 
-		// init the RNG for breaking ties in histogram merging. A fixed seed is
-		// specified here
-		// to aid testing, but can be eliminated to use a time-based seed (which
-		// would
-		// make the algorithm non-deterministic).
+		// init the RNG for breaking ties in histogram merging.
 		prng = new Random(
-				31183);
+				System.currentTimeMillis());
 
 		bins = new ArrayList<Bin>(
 				1024);
@@ -72,13 +68,9 @@ public class MinimalBinDistanceHistogram implements
 			final int size ) {
 		totalCount = 0;
 
-		// init the RNG for breaking ties in histogram merging. A fixed seed is
-		// specified here
-		// to aid testing, but can be eliminated to use a time-based seed (which
-		// would
-		// make the algorithm non-deterministic).
+		// init the RNG for breaking ties in histogram merging.
 		prng = new Random(
-				31183);
+				System.currentTimeMillis());
 
 		bins = new ArrayList<Bin>(
 				size);

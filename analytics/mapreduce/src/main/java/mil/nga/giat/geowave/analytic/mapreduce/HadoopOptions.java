@@ -53,7 +53,7 @@ public class HadoopOptions
 			}
 			catch (final IOException ex) {
 				LOGGER.error(
-						"Configuration file " + name + " not found",
+						"Configuration file not found",
 						ex);
 				throw ex;
 			}
@@ -70,7 +70,7 @@ public class HadoopOptions
 		}
 		final FileSystem fs = FileSystem.get(config);
 		if (!fs.exists(basePath)) {
-			LOGGER.error("HDFS base directory " + basePath + " does not exist");
+			LOGGER.error("HDFS base directory does not exist");
 			return;
 		}
 	}

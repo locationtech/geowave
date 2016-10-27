@@ -92,7 +92,9 @@ public class RasterTileResizeHelper
 						needsMerge = true;
 					}
 					final MergeableRasterTile thisTile = newAdapter.getRasterTileFromCoverage((GridCoverage) value);
-					mergedTile.merge(thisTile);
+					if (mergedTile != null) {
+						mergedTile.merge(thisTile);
+					}
 				}
 			}
 		}

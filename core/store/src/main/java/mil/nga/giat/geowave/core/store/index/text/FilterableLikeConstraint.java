@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.core.store.index.text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -67,7 +68,7 @@ public class FilterableLikeConstraint extends
 							minNGramSize,
 							maxSize));
 			final List<ByteArrayId> specificNGrams = TextIndexStrategy.grams(
-					expression.toLowerCase(),
+					expression.toLowerCase(Locale.ENGLISH),
 					minNGramSearchSize,
 					maxNGramSize);
 			final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();

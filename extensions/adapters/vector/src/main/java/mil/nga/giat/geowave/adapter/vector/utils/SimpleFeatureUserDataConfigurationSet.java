@@ -118,9 +118,9 @@ public class SimpleFeatureUserDataConfigurationSet
 			final File configFile = new File(
 					configFileName);
 			if (configFile.exists() && configFile.canRead()) {
-				try (Reader reader = new InputStreamReader(
-						new FileInputStream(
-								configFile),
+				try (FileInputStream input = new FileInputStream(
+						configFile); Reader reader = new InputStreamReader(
+						input,
 						"UTF-8")) {
 					final ObjectMapper mapper = new ObjectMapper();
 					final SerializationConfig serializationConfig = mapper.getSerializationConfig();

@@ -514,7 +514,7 @@ public class CentroidManagerGeoWave<T> implements
 			it.close();
 			// indexWriter.close();
 		}
-		LOGGER.info("Transfer " + count + " centroids for " + fromBatchId + " to " + batchId);
+		LOGGER.info("Transfer " + count + " centroids");
 	}
 
 	@Override

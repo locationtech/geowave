@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -41,11 +42,13 @@ public class FeatureHyperLogLogStaticticsTest
 			+ " Mr. Schneider also questions Mr. Demerrit's claim that scientists are motivated by politics to conceive of climate warming as a global problem rather than one created primarily by rich nations: Most scientists are woefully unaware of the social context of the implications of their work and are too naive to be politically conspiratorial He says: What needs to be done is to go beyond platitudes about values embedded in science and to show explicitly, via many detailed and representative empirical examples, precisely how those social factors affected the outcome, and how it might have been otherwise if the process were differently constructed. The exchange is available online to subscribers of the journal at http://www.blackwellpublishers.co.uk/journals/anna";
 
 	private final String sample2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
-	final String[] pidSetOne = sample1.toLowerCase().replaceAll(
+	final String[] pidSetOne = sample1.toLowerCase(
+			Locale.ENGLISH).replaceAll(
 			"[,.:\\[\\]']",
 			"").split(
 			" ");
-	final String[] pidSetTwo = sample2.toLowerCase().replaceAll(
+	final String[] pidSetTwo = sample2.toLowerCase(
+			Locale.ENGLISH).replaceAll(
 			"[,.:\\[\\]']",
 			"").split(
 			" ");

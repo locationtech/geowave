@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -102,7 +103,8 @@ public class GpxIngestPlugin extends
 	public boolean supportsFile(
 			final File file ) {
 		// if its a gpx extension assume it is supported
-		if (file.getName().toLowerCase().endsWith(
+		if (file.getName().toLowerCase(
+				Locale.ENGLISH).endsWith(
 				"gpx")) {
 			return true;
 		}

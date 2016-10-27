@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -80,7 +81,8 @@ public class GeoWaveConfiguratorBase
 			final Class<?> implementingClass,
 			final Enum<?> e ) {
 		final String s = implementingClass.getSimpleName() + "." + e.getDeclaringClass().getSimpleName() + "."
-				+ org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase());
+				+ org.apache.hadoop.util.StringUtils.camelize(e.name().toLowerCase(
+						Locale.ENGLISH));
 		return s;
 	}
 

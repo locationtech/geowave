@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.geotime.ingest;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.beust.jcommander.IStringConverter;
@@ -209,7 +211,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 						"Value " + value + "can not be converted to an index bias. " + "Available values are: "
 								+ StringUtils.join(
 										Bias.values(),
-										", ").toLowerCase());
+										", ").toLowerCase(
+										Locale.ENGLISH));
 			}
 			return convertedValue;
 		}
@@ -230,7 +233,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 						"Value " + value + "can not be converted to Unit. " + "Available values are: "
 								+ StringUtils.join(
 										Unit.values(),
-										", ").toLowerCase());
+										", ").toLowerCase(
+										Locale.ENGLISH));
 			}
 			return convertedValue;
 		}
