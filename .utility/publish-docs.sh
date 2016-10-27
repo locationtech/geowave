@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ] && $BUILD_DOCS && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then  
+if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ] && [ "$BUILD_DOCS" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then  
   echo -e "Generating changelog...\n"
   gem install github_changelog_generator
   github_changelog_generator

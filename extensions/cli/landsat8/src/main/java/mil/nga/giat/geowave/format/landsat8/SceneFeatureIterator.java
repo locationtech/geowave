@@ -94,6 +94,8 @@ public class SceneFeatureIterator implements
 	private final String CSV_FILE_NAME = "scene_list";
 	private final String TEMP_CSV_FILE_NAME = "scene_list.tmp";
 	private CSVParser parser;
+	private FileInputStream parserFis;
+	private InputStreamReader parserIsr;
 	private Iterator<SimpleFeature> iterator;
 	private SimpleFeatureType type;
 
@@ -178,10 +180,12 @@ public class SceneFeatureIterator implements
 			// next unzip to CSV
 			GzipCompressorInputStream gzIn = null;
 			FileOutputStream out = null;
+			FileInputStream fin = null;
+			BufferedInputStream bin = null;
 			try {
-				final FileInputStream fin = new FileInputStream(
+				fin = new FileInputStream(
 						compressedFile);
-				final BufferedInputStream bin = new BufferedInputStream(
+				bin = new BufferedInputStream(
 						fin);
 				out = new FileOutputStream(
 						tempCsvFile);
@@ -214,6 +218,12 @@ public class SceneFeatureIterator implements
 				}
 				if (gzIn != null) {
 					IOUtils.closeQuietly(gzIn);
+				}
+				if (fin != null) {
+					IOUtils.closeQuietly(fin);
+				}
+				if (bin != null) {
+					IOUtils.closeQuietly(bin);
 				}
 			}
 			if (onlyScenesSinceLastRun && csvFile.exists()) {
@@ -402,12 +412,13 @@ public class SceneFeatureIterator implements
 			final Filter cqlFilter )
 			throws FileNotFoundException,
 			IOException {
-		final FileInputStream is = new FileInputStream(
+		parserFis = new FileInputStream(
 				csvFile);
+		parserIsr = new InputStreamReader(
+				parserFis,
+				StringUtils.UTF8_CHAR_SET);
 		parser = new CSVParser(
-				new InputStreamReader(
-						is,
-						StringUtils.UTF8_CHAR_SET),
+				parserIsr,
 				CSVFormat.DEFAULT.withHeader().withSkipHeaderRecord());
 		final Iterator<CSVRecord> csvIterator = parser.iterator();
 		long startLineDecrementor = startLine;
@@ -455,6 +466,10 @@ public class SceneFeatureIterator implements
 			try {
 				parser.close();
 				parser = null;
+				parserFis.close();
+				parserFis = null;
+				parserIsr.close();
+				parserIsr = null;
 			}
 			catch (final IOException e) {
 				LOGGER.warn(

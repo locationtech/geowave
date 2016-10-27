@@ -13,19 +13,12 @@ import javax.imageio.ImageIO;
 import javax.media.jai.Interpolation;
 import javax.media.jai.PlanarImage;
 
-import org.geotools.coverage.grid.GridCoverage2D;
-import org.geotools.geometry.GeneralEnvelope;
-import org.geotools.referencing.operation.projection.MapProjection;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -39,6 +32,18 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+
+import org.apache.log4j.Logger;
+import org.geotools.coverage.grid.GridCoverage2D;
+import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.referencing.operation.projection.MapProjection;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 @RunWith(GeoWaveITRunner.class)
 public class LandsatIT
@@ -88,7 +93,8 @@ public class LandsatIT
 	}
 
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected.png";
@@ -102,6 +108,29 @@ public class LandsatIT
 	private static final double NORTH = 34.25;
 	private static final double SOUTH = 33.5;
 
+	private final static Logger LOGGER = Logger.getLogger(LandsatIT.class);
+	private static long startMillis;
+
+	@BeforeClass
+	public static void startTimer() {
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*         RUNNING LandsatIT             *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*      FINISHED LandsatIT               *");
+		LOGGER.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000) + "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
 	@Test
 	public void testMosaic()
 			throws Exception {
@@ -110,22 +139,20 @@ public class LandsatIT
 		// just use the QA band as QA is the smallest, get the best cloud cover,
 		// but ensure it is before now so no recent collection affects the test
 		final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
-		analyzeOptions
-				.setCqlFilter(String
-						.format(
-								"BBOX(%s,%f,%f,%f,%f) AND %s='B4' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
-								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
-								WEST,
-								SOUTH,
-								EAST,
-								NORTH,
-								BandFeatureIterator.BAND_ATTRIBUTE_NAME,
-								SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
-								"2016-06-01T00:00:00Z",
-								MIN_PATH,
-								MAX_PATH,
-								MIN_ROW,
-								MAX_ROW));
+		analyzeOptions.setCqlFilter(String.format(
+				"BBOX(%s,%f,%f,%f,%f) AND %s='B4' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
+				SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
+				WEST,
+				SOUTH,
+				EAST,
+				NORTH,
+				BandFeatureIterator.BAND_ATTRIBUTE_NAME,
+				SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
+				"2016-06-01T00:00:00Z",
+				MIN_PATH,
+				MAX_PATH,
+				MIN_ROW,
+				MAX_ROW));
 		analyzeOptions.setNBestPerSpatial(true);
 		analyzeOptions.setNBestScenes(1);
 		analyzeOptions.setUseCachedScenes(true);
@@ -151,6 +178,12 @@ public class LandsatIT
 				dataStoreOptions.getGeowaveNamespace()).append(
 				";equalizeHistogramOverride=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
+
+		str.append(
+				";").append(
+				GeoWaveStoreFinder.STORE_HINT_KEY).append(
+				"=").append(
+				dataStoreOptions.getType());
 
 		final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
 
@@ -191,14 +224,20 @@ public class LandsatIT
 		final RenderedImage result = gridCoverage.getRenderedImage();
 		String referenceImage = REFERENCE_LANDSAT_IMAGE_PATH;
 		// test the result with expected, allowing for no error
-		if (System.getProperty(
-				"os.name").equals(
-				"Linux")) {
-			// this is ugly but the expected result seems different on centos
-			// than ubuntu or windows (it looks more correct on windows and
-			// ubuntu)
-			// TODO: determine why this is the case
-			referenceImage = ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH;
+
+		// this is ugly but the expected result seems different on
+		// centos than ubuntu or windows (it looks more correct on windows and
+		// ubuntu). These properties can be set to toggle the reference image,
+		// by default the alternate is used on all linux OS.
+
+		// TODO: determine why this is the case
+		if (System.getProperty("use_default_landsat") == null) {
+			if (System.getProperty("use_alt_landsat") != null || System.getProperty(
+					"os.name").equals(
+					"Linux")) {
+
+				referenceImage = ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH;
+			}
 		}
 		final BufferedImage reference = ImageIO.read(new File(
 				referenceImage));

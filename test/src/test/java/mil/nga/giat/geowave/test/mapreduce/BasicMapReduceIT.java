@@ -30,6 +30,7 @@ import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStoreFinder;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -81,6 +82,8 @@ public class BasicMapReduceIT
 	protected static final String GENERAL_GPX_EXPECTED_RESULTS_DIR = TEST_CASE_GENERAL_GPX_BASE + "filter_results/";
 	protected static final String OSM_GPX_INPUT_DIR = TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/";
 
+	private static long startMillis;
+
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
@@ -89,6 +92,25 @@ public class BasicMapReduceIT
 						MapReduceTestEnvironment.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TestUtils.TEST_CASE_BASE);
+
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*         RUNNING BasicMapReduceIT      *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*      FINISHED BasicMapReduceIT        *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
@@ -101,7 +123,8 @@ public class BasicMapReduceIT
 	}
 
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -269,12 +292,12 @@ public class BasicMapReduceIT
 		if (exportDir.exists()) {
 			boolean deleted = false;
 			int attempts = 5;
-			while (!deleted && attempts-- > 0) {
+			while (!deleted && (attempts-- > 0)) {
 				try {
 					FileUtils.deleteDirectory(exportDir);
 					deleted = true;
 				}
-				catch (Exception e) {
+				catch (final Exception e) {
 					LOGGER.error("Export directory not deleted, trying again in 10s: " + e);
 					Thread.sleep(10000);
 				}
@@ -370,7 +393,10 @@ public class BasicMapReduceIT
 			// after the first job there should be a sequence file with the
 			// filtered results which should match the expected results
 			// resources
-			final Configuration conf = super.getConf();
+
+			final Job job = Job.getInstance(super.getConf());
+
+			final Configuration conf = job.getConfiguration();
 			MapReduceTestUtils.filterConfiguration(conf);
 			final ByteBuffer buf = ByteBuffer.allocate((8 * expectedResults.hashedCentroids.size()) + 4);
 			buf.putInt(expectedResults.hashedCentroids.size());
@@ -380,7 +406,13 @@ public class BasicMapReduceIT
 			conf.set(
 					MapReduceTestUtils.EXPECTED_RESULTS_KEY,
 					ByteArrayUtils.byteArrayToString(buf.array()));
-			final Job job = Job.getInstance(conf);
+
+			GeoWaveInputFormat.setDataStoreName(
+					conf,
+					dataStoreOptions.getType());
+			GeoWaveInputFormat.setStoreConfigOptions(
+					conf,
+					dataStoreOptions.getFactoryOptionsAsMap());
 			job.setJarByClass(this.getClass());
 
 			job.setJobName("GeoWave Test (" + dataStoreOptions.getGeowaveNamespace() + ")");
@@ -391,9 +423,6 @@ public class BasicMapReduceIT
 			job.setOutputFormatClass(NullOutputFormat.class);
 			job.setNumReduceTasks(0);
 			job.setSpeculativeExecution(false);
-			GeoWaveInputFormat.setStoreConfigOptions(
-					job.getConfiguration(),
-					dataStoreOptions.getFactoryOptionsAsMap());
 			FileInputFormat.setInputPaths(
 					job,
 					getHdfsOutputPath());

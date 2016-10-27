@@ -68,7 +68,7 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-Xms256m -Xmx1024m -XX:MaxPermSize=256m</test.args>
+		<test.args>-Xms1g -Xmx2g -XX:MaxPermSize=256m</test.args>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
@@ -191,6 +191,11 @@
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
+				<version>${hbase.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-server</artifactId>
 				<version>${hbase.version}</version>
 			</dependency>
 			<dependency>
@@ -473,6 +478,15 @@
 					<artifactId>formatter-maven-plugin</artifactId>
 					<version>0.5.2</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-maven-plugins</artifactId>
+					<version>${hadoop.version}</version>
+					<configuration>
+						<protocVersion>2.5.0</protocVersion>
+						<protocCommand>/Apps/Protoc/bin/protoc</protocCommand>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -697,7 +711,7 @@
 					<dependency>
 						<groupId>mil.nga.giat</groupId>
 						<artifactId>geowave-dev-resources</artifactId>
-						<version>1.0</version>
+						<version>1.1</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -770,6 +784,17 @@
 			<id>geosolutions</id>
 			<name>GeoSolutions Repository</name>
 			<url>http://maven.geo-solutions.it</url>
+		</repository>
+		<repository>
+			<id>geowave-maven-snapshots</id>
+			<name>GeoWave AWS Snapshots Repository</name>
+			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>geowave-maven-releases</id>

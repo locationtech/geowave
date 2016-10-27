@@ -131,26 +131,36 @@ public abstract class GeoWaveRecordReader<T> extends
 		progressPerRange = new LinkedHashMap<RangeLocationPair, ProgressPerRange>();
 		RangeLocationPair prevRangeIndex = null;
 		float prevProgress = 0f;
-		for (final Entry<RangeLocationPair, BigDecimal> entry : incrementalRangeSums.entrySet()) {
-			final BigDecimal value = entry.getValue();
-			final float progress = value.divide(
-					sum,
-					RoundingMode.HALF_UP).floatValue();
-			if (prevRangeIndex != null) {
+		if (!sum.equals(BigDecimal.ZERO)) {
+			try {
+				for (final Entry<RangeLocationPair, BigDecimal> entry : incrementalRangeSums.entrySet()) {
+					final BigDecimal value = entry.getValue();
+					final float progress = value.divide(
+							sum,
+							RoundingMode.HALF_UP).floatValue();
+					if (prevRangeIndex != null) {
+						progressPerRange.put(
+								prevRangeIndex,
+								new ProgressPerRange(
+										prevProgress,
+										progress));
+					}
+					prevRangeIndex = entry.getKey();
+					prevProgress = progress;
+				}
 				progressPerRange.put(
 						prevRangeIndex,
 						new ProgressPerRange(
 								prevProgress,
-								progress));
+								1f));
+
 			}
-			prevRangeIndex = entry.getKey();
-			prevProgress = progress;
+			catch (Exception e) {
+				LOGGER.warn(
+						"Unable to calculate progress",
+						e);
+			}
 		}
-		progressPerRange.put(
-				prevRangeIndex,
-				new ProgressPerRange(
-						prevProgress,
-						1f));
 		// concatenate iterators
 		iterator = new CloseableIteratorWrapper<Object>(
 				new Closeable() {

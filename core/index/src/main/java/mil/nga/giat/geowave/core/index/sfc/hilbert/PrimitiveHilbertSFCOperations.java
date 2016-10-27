@@ -46,7 +46,7 @@ public class PrimitiveHilbertSFCOperations implements
 {
 	protected final static long UNIT_CELL_SIZE = (long) Math.pow(
 			2,
-			20);
+			19);
 	protected long[] binsPerDimension;
 
 	protected long minHilbertValue;

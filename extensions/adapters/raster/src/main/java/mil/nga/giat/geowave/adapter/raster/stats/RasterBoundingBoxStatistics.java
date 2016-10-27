@@ -1,15 +1,13 @@
 package mil.nga.giat.geowave.adapter.raster.stats;
 
-import java.nio.ByteBuffer;
-
-import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
-import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-
 import org.geotools.geometry.GeneralEnvelope;
 import org.opengis.coverage.grid.GridCoverage;
 
 import com.vividsolutions.jts.geom.Envelope;
+
+import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
+import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 
 public class RasterBoundingBoxStatistics extends
 		BoundingBoxDataStatistics<GridCoverage>
@@ -49,26 +47,6 @@ public class RasterBoundingBoxStatistics extends
 					resultingEnvelope.getMaximum(1));
 		}
 		return null;
-	}
-
-	@Override
-	public byte[] toBinary() {
-		final ByteBuffer buffer = ByteBuffer.allocate(32);
-		buffer.putDouble(minX);
-		buffer.putDouble(minY);
-		buffer.putDouble(maxX);
-		buffer.putDouble(maxY);
-		return buffer.array();
-	}
-
-	@Override
-	public void fromBinary(
-			final byte[] bytes ) {
-		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		minX = buffer.getDouble();
-		minY = buffer.getDouble();
-		maxX = buffer.getDouble();
-		maxY = buffer.getDouble();
 	}
 
 	private static org.opengis.geometry.Envelope getIntersection(

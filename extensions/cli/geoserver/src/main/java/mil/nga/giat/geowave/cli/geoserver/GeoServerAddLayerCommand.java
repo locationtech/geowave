@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.cli.geoserver;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -139,7 +140,8 @@ public class GeoServerAddLayerCommand implements
 						"Value " + value + "can not be converted to an add option. " + "Available values are: "
 								+ StringUtils.join(
 										AddOption.values(),
-										", ").toLowerCase());
+										", ").toLowerCase(
+										Locale.ENGLISH));
 			}
 			return convertedValue;
 		}

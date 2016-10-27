@@ -365,44 +365,6 @@ public class PropertyManagementTest
 	}
 
 	@Test
-	public void testIO()
-			throws Exception {
-		final PropertyManagement pm = new PropertyManagement();
-		pm.store(
-				ExtractParameters.Extract.QUERY,
-				"POLYGON ((24 33, 28 33, 28 31, 24 31, 24 33))");
-		pm.store(
-				Input.HDFS_INPUT_PATH,
-				"file:///foo");
-		byte[] result = null;
-		try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-			pm.toOutput(bos);
-			bos.flush();
-			result = bos.toByteArray();
-		}
-
-		try (ByteArrayInputStream bis = new ByteArrayInputStream(
-				result)) {
-			pm.fromInput(bis);
-		}
-		final DistributableQuery q = pm.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
-		assertEquals(
-				"POLYGON ((24 33, 28 33, 28 31, 24 31, 24 33))",
-				((SpatialQuery) q).getQueryGeometry().toText());
-
-		final Path path1 = new Path(
-				"http://java.sun.com/j2se/1.3/foo");
-
-		pm.store(
-				Input.HDFS_INPUT_PATH,
-				path1);
-		final Path path2 = pm.getPropertyAsPath(Input.HDFS_INPUT_PATH);
-		assertEquals(
-				path1,
-				path2);
-	}
-
-	@Test
 	public void testStoreWithEmbedded()
 			throws Exception {
 		final PropertyManagement pm1 = new PropertyManagement();

@@ -134,6 +134,9 @@ public class GPXConsumer implements
 		routeBuilder = new SimpleFeatureBuilder(
 				routeType);
 		try {
+			inputFactory.setProperty(
+					"javax.xml.stream.isSupportingExternalEntities",
+					false);
 			eventReader = inputFactory.createXMLEventReader(fileStream);
 			init();
 			if (!currentElementStack.isEmpty()) {

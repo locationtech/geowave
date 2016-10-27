@@ -5,6 +5,7 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
@@ -207,7 +208,8 @@ public class GeoWaveGTRasterFormat extends
 			return false;
 		}
 
-		if (!sourceUrl.getPath().toLowerCase().endsWith(
+		if (!sourceUrl.getPath().toLowerCase(
+				Locale.ENGLISH).endsWith(
 				".xml")) {
 			return false;
 		}

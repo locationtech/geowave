@@ -23,6 +23,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,8 +34,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
@@ -61,9 +63,12 @@ public class GeoWaveIngestGeoserverIT
 
 	private static GeoserverServiceClient geoserverServiceClient = null;
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
+
+	private static long startMillis;
 
 	@BeforeClass
 	public static void setupIngestTest()
@@ -71,6 +76,24 @@ public class GeoWaveIngestGeoserverIT
 		geoserverServiceClient = new GeoserverServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*    RUNNING GeoWaveIngestGeoserverIT   *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*  FINISHED GeoWaveIngestGeoserverIT    *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test
@@ -171,12 +194,12 @@ public class GeoWaveIngestGeoserverIT
 			ref = ImageIO.read(new File(
 					REFERENCE_26_WMS_IMAGE_PATH));
 		}
-
+		// being a little lenient because of differences in O/S rendering
 		TestUtils.testTileAgainstReference(
 				biDirectRender,
 				ref,
 				0,
-				0);
+				0.07);
 
 		final BufferedImage biSubsamplingWithoutError = getWMSSingleTile(
 				-180,
@@ -189,11 +212,13 @@ public class GeoWaveIngestGeoserverIT
 				360,
 				null);
 		Assert.assertNotNull(ref);
+
+		// being a little lenient because of differences in O/S rendering
 		TestUtils.testTileAgainstReference(
 				biSubsamplingWithoutError,
 				ref,
 				0,
-				0);
+				0.07);
 
 		final BufferedImage biSubsamplingWithExpectedError = getWMSSingleTile(
 				-180,
@@ -209,7 +234,7 @@ public class GeoWaveIngestGeoserverIT
 				biSubsamplingWithExpectedError,
 				ref,
 				0.05,
-				0.1);
+				0.15);
 
 		final BufferedImage biSubsamplingWithLotsOfError = getWMSSingleTile(
 				-180,
@@ -226,25 +251,43 @@ public class GeoWaveIngestGeoserverIT
 				ref,
 				0.3,
 				0.35);
+	}
+
+	@After
+	public void cleanup() {
+
+		final boolean layer = geoserverServiceClient.deleteLayer(SimpleIngest.FEATURE_NAME);
+		final boolean datastore = geoserverServiceClient.deleteDatastore(
+				TestUtils.TEST_NAMESPACE,
+				WORKSPACE);
+		final boolean styleNoDifference = geoserverServiceClient
+				.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);
+		final boolean styleMinor = geoserverServiceClient
+				.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
+		final boolean styleMajor = geoserverServiceClient
+				.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
+		final boolean workspace = geoserverServiceClient.deleteWorkspace(WORKSPACE);
 
 		assertTrue(
 				"Unable to delete layer '" + SimpleIngest.FEATURE_NAME + "'",
-				geoserverServiceClient.deleteLayer(SimpleIngest.FEATURE_NAME));
+				layer);
 		assertTrue(
 				"Unable to delete datastore '" + TestUtils.TEST_NAMESPACE + "'",
-				geoserverServiceClient.deleteDatastore(
-						TestUtils.TEST_NAMESPACE,
-						WORKSPACE));
+				datastore);
 		assertTrue(
 				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
-				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
+				styleNoDifference);
 
 		assertTrue(
 				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
-				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE));
+				styleMinor);
 		assertTrue(
 				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
-				geoserverServiceClient.deleteStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
+				styleMajor);
+		assertTrue(
+				"Unable to delete workspace '" + WORKSPACE + "'",
+				workspace);
+
 	}
 
 	private static BufferedImage getWMSSingleTile(

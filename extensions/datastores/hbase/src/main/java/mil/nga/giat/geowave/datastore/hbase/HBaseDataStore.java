@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -43,7 +44,6 @@ import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
-import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -242,6 +242,8 @@ public class HBaseDataStore extends
 						tempAdapterStore,
 						index,
 						iterator,
+						dedupeFilter,
+						scanCallback,
 						null,
 						scanCallback,
 						true));
@@ -311,13 +313,15 @@ public class HBaseDataStore extends
 						adapterIdsToQuery,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
+				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				sanitizedQueryOptions.getAuthorizations());
+
+		hbaseQuery.setOptions(options);
 
 		return hbaseQuery.query(
 				operations,
 				tempAdapterStore,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				sanitizedQueryOptions.getLimit());
 	}
 
@@ -334,10 +338,12 @@ public class HBaseDataStore extends
 				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getAuthorizations());
+		
+		prefixQuery.setOptions(options);
+
 		return prefixQuery.query(
 				operations,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				tempAdapterStore);
 	}
 
@@ -357,11 +363,13 @@ public class HBaseDataStore extends
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
+
+		q.setOptions(options);
+
 		return q.query(
 				operations,
 				tempAdapterStore,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				-1);
 	}
 

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -173,7 +172,6 @@ public class AccumuloSplitsProvider extends
 			tl.invalidateCache();
 			final List<Range> rangeList = new ArrayList<Range>(
 					ranges);
-			final Random r = new Random();
 			while (!binRanges(
 					rangeList,
 					clientContextOrCredentials,
@@ -196,8 +194,7 @@ public class AccumuloSplitsProvider extends
 				}
 				tserverBinnedRanges.clear();
 				LOGGER.warn("Unable to locate bins for specified ranges. Retrying.");
-				UtilWaitThread.sleep(100 + r.nextInt(101));
-				// sleep randomly between 100 and 200 ms
+				UtilWaitThread.sleep(150);
 				tl.invalidateCache();
 			}
 		}

@@ -117,10 +117,12 @@ public class TrackFileReader implements
 		}
 		finally {
 			{
-				try {
-					fis.close();
+				if (fis != null) {
+					try {
+						fis.close();
+					}
+					catch (final Exception e2) {}
 				}
-				catch (final Exception e2) {}
 			}
 		}
 	}

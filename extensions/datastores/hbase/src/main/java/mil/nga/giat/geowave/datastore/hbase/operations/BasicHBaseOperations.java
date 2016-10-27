@@ -10,16 +10,16 @@ import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptio
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.BufferedMutator;
-import org.apache.hadoop.hbase.client.BufferedMutator.ExceptionListener;
-import org.apache.hadoop.hbase.client.BufferedMutatorParams;
+import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
@@ -31,9 +31,11 @@ public class BasicHBaseOperations implements
 	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
 	private static final String DEFAULT_TABLE_NAMESPACE = "";
 	public static final Object ADMIN_MUTEX = new Object();
+	private static final long SLEEP_INTERVAL = 10000L;
 
 	private final Connection conn;
 	private final String tableNamespace;
+	private final boolean schemaUpdateEnabled;
 
 	public BasicHBaseOperations(
 			final String zookeeperInstances,
@@ -42,6 +44,10 @@ public class BasicHBaseOperations implements
 		conn = ConnectionPool.getInstance().getConnection(
 				zookeeperInstances);
 		tableNamespace = geowaveNamespace;
+
+		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
+				"hbase.online.schema.update.enable",
+				false);
 	}
 
 	public BasicHBaseOperations(
@@ -64,6 +70,10 @@ public class BasicHBaseOperations implements
 			final Connection connector ) {
 		this.tableNamespace = tableNamespace;
 		conn = connector;
+
+		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
+				"hbase.online.schema.update.enable",
+				false);
 	}
 
 	public static BasicHBaseOperations createOperations(
@@ -74,7 +84,11 @@ public class BasicHBaseOperations implements
 				options.getGeowaveNamespace());
 	}
 
-	private TableName getTableName(
+	public Configuration getConfig() {
+		return conn.getConfiguration();
+	}
+
+	public static TableName getTableName(
 			final String tableName ) {
 		return TableName.valueOf(tableName);
 	}
@@ -248,5 +262,79 @@ public class BasicHBaseOperations implements
 	@Override
 	public String getTableNameSpace() {
 		return tableNamespace;
+	}
+
+	public Table getTable(
+			final String tableName )
+			throws IOException {
+		return conn.getTable(getTableName(getQualifiedTableName(tableName)));
+	}
+
+	public void verifyCoprocessor(
+			String tableNameStr,
+			String coprocessorName,
+			String coprocessorJar ) {
+		try {
+			Admin admin = conn.getAdmin();
+			TableName tableName = getTableName(getQualifiedTableName(tableNameStr));
+			HTableDescriptor td = admin.getTableDescriptor(tableName);
+
+			if (!td.hasCoprocessor(coprocessorName)) {
+				LOGGER.debug(tableNameStr + " does not have coprocessor. Adding " + coprocessorName);
+
+				// Retrieve coprocessor jar path from config
+				Path hdfsJarPath = new Path(
+						coprocessorJar);
+				LOGGER.debug("Coprocessor jar path: " + hdfsJarPath.toString());
+
+				// if (!schemaUpdateEnabled &&
+				// !admin.isTableDisabled(tableName)) {
+				LOGGER.debug("- disable table...");
+				admin.disableTable(tableName);
+				// }
+
+				LOGGER.debug("- add coprocessor...");
+				td.addCoprocessor(
+						coprocessorName,
+						hdfsJarPath,
+						Coprocessor.PRIORITY_USER,
+						null);
+
+				LOGGER.debug("- modify table...");
+				admin.modifyTable(
+						tableName,
+						td);
+
+				// if (!schemaUpdateEnabled) {
+				LOGGER.debug("- enable table...");
+				admin.enableTable(tableName);
+				// }
+
+				// if (schemaUpdateEnabled) {
+				int regionsLeft;
+
+				do {
+					regionsLeft = admin.getAlterStatus(
+							tableName).getFirst();
+					LOGGER.debug(regionsLeft + " regions remaining in table modify");
+
+					try {
+						Thread.sleep(SLEEP_INTERVAL);
+					}
+					catch (final InterruptedException e) {
+						LOGGER.warn(
+								"Sleeping while coprocessor add interrupted",
+								e);
+					}
+				}
+				while (regionsLeft > 0);
+				// }
+
+				LOGGER.debug("Successfully added coprocessor");
+			}
+		}
+		catch (IOException e) {
+			LOGGER.error("Error verifying/adding coprocessor." + e);
+		}
 	}
 }

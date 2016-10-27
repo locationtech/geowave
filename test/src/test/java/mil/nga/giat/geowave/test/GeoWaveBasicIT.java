@@ -23,6 +23,7 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQLException;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,6 +52,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -67,7 +69,6 @@ import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.index.writer.IndexWriter;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
@@ -87,7 +88,6 @@ public class GeoWaveBasicIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd'T'hh:mm:ss'Z'");
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicIT.class);
 	private static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
 	private static final String TEST_FILTER_PACKAGE = TestUtils.TEST_CASE_BASE + "filter/";
 	private static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
@@ -124,6 +124,9 @@ public class GeoWaveBasicIT
 	})
 	protected DataStorePluginOptions dataStore;
 
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicIT.class);
+	private static long startMillis;
+
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
@@ -132,6 +135,25 @@ public class GeoWaveBasicIT
 						GeoWaveBasicIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TestUtils.TEST_CASE_BASE);
+
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*         RUNNING GeoWaveBasicIT        *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*      FINISHED GeoWaveBasicIT          *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test
@@ -146,7 +168,6 @@ public class GeoWaveBasicIT
 
 	public void testIngestAndQuerySpatialPointsAndLines(
 			final int nthreads ) {
-		LOGGER.setLevel(Level.DEBUG);
 		long mark = System.currentTimeMillis();
 
 		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
@@ -373,9 +394,10 @@ public class GeoWaveBasicIT
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
 						final DataStatistics<?> nextStats = statsIterator.next();
-						if (nextStats instanceof RowRangeHistogramStatistics || nextStats instanceof IndexMetaDataSet
-								|| nextStats instanceof DifferingFieldVisibilityEntryCount
-								|| nextStats instanceof DuplicateEntryCount) {
+						if ((nextStats instanceof RowRangeHistogramStatistics)
+								|| (nextStats instanceof IndexMetaDataSet)
+								|| (nextStats instanceof DifferingFieldVisibilityEntryCount)
+								|| (nextStats instanceof DuplicateEntryCount)) {
 							continue;
 						}
 						statsCount++;

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -38,7 +39,8 @@ public class FeatureCountMinSketchStaticticsTest
 			+ "In response, Mr. Schneider agrees that the conclusion that science is at least partially socially constructed, even if still news to some scientists, is clearly established."
 			+ "He bluntly states, however, that if scholars in the social studies of science are to be heard by more scientists, they will have to be careful to back up all social theoretical assertions with large numbers of broadly representative empirical examples."
 			+ " Mr. Schneider also questions Mr. Demerrit's claim that scientists are motivated by politics to conceive of climate warming as a global problem rather than one created primarily by rich nations: Most scientists are woefully unaware of the social context of the implications of their work and are too naive to be politically conspiratorial He says: What needs to be done is to go beyond platitudes about values embedded in science and to show explicitly, via many detailed and representative empirical examples, precisely how those social factors affected the outcome, and how it might have been otherwise if the process were differently constructed. The exchange is available online to subscribers of the journal at http://www.blackwellpublishers.co.uk/journals/anna";
-	final String[] pidSet = sample.toLowerCase().replaceAll(
+	final String[] pidSet = sample.toLowerCase(
+			Locale.ENGLISH).replaceAll(
 			"[,.:\\[\\]']",
 			"").split(
 			" ");

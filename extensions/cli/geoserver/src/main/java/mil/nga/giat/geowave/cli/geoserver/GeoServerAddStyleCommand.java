@@ -24,7 +24,6 @@ public class GeoServerAddStyleCommand implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
-	private InputStream inStream = null;
 
 	@Parameter(names = {
 		"-sld",
@@ -71,24 +70,23 @@ public class GeoServerAddStyleCommand implements
 			throw new ParameterException(
 					"Requires argument: <style xml file>");
 		}
-		else {
-			File styleXmlFile = new File(
-					stylesld);
-			inStream = new FileInputStream(
-					styleXmlFile);
-		}
 
-		Response addStyleResponse = geoserverClient.addStyle(
-				gwStyle,
-				inStream);
+		File styleXmlFile = new File(
+				stylesld);
+		try (final FileInputStream inStream = new FileInputStream(
+				styleXmlFile)) {
+			Response addStyleResponse = geoserverClient.addStyle(
+					gwStyle,
+					inStream);
 
-		if (addStyleResponse.getStatus() == Status.OK.getStatusCode()
-				|| addStyleResponse.getStatus() == Status.CREATED.getStatusCode()) {
-			System.out.println("Add style for '" + gwStyle + "' on GeoServer: OK");
-		}
-		else {
-			System.err.println("Error adding style for '" + gwStyle + "' on GeoServer; code = "
-					+ addStyleResponse.getStatus());
+			if (addStyleResponse.getStatus() == Status.OK.getStatusCode()
+					|| addStyleResponse.getStatus() == Status.CREATED.getStatusCode()) {
+				System.out.println("Add style for '" + gwStyle + "' on GeoServer: OK");
+			}
+			else {
+				System.err.println("Error adding style for '" + gwStyle + "' on GeoServer; code = "
+						+ addStyleResponse.getStatus());
+			}
 		}
 	}
 }

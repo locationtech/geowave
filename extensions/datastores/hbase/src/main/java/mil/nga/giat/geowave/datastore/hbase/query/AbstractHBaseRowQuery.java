@@ -35,6 +35,7 @@ abstract public class AbstractHBaseRowQuery<T> extends
 
 	public CloseableIterator<T> query(
 			final BasicHBaseOperations operations,
+			final double[] maxResolutionSubsamplingPerDimension,
 			final AdapterStore adapterStore ) {
 		final Scan scanner = new Scan();
 		scanner.setMaxResultSize(getScannerLimit());
@@ -48,18 +49,22 @@ abstract public class AbstractHBaseRowQuery<T> extends
 		catch (final IOException e) {
 			LOGGER.error("Unable to get the scanned results " + e);
 		}
-		/*
-		 * getScanner( accumuloOperations, getScannerLimit());
-		 * addScanIteratorSettings(scanner);
-		 */
-		return new CloseableIteratorWrapper<T>(
-				new ScannerClosableWrapper(
-						results),
-				new HBaseEntryIteratorWrapper(
-						adapterStore,
-						index,
-						results.iterator(),
-						null));
+
+		if (results != null) {
+			return new CloseableIteratorWrapper<T>(
+					new ScannerClosableWrapper(
+							results),
+					new HBaseEntryIteratorWrapper(
+							adapterStore,
+							index,
+							results.iterator(),
+							null,
+							fieldIds,
+							maxResolutionSubsamplingPerDimension));
+		}
+		else {
+			return new CloseableIterator.Empty<T>();
+		}
 	}
 
 	abstract protected Integer getScannerLimit();

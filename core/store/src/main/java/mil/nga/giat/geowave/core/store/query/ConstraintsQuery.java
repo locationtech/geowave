@@ -20,7 +20,7 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class ConstraintsQuery
 {
-	public static final int MAX_RANGE_DECOMPOSITION = 5000;
+	public static final int MAX_RANGE_DECOMPOSITION = 2000;
 
 	public final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 	public final List<MultiDimensionalNumericData> constraints;
@@ -98,12 +98,16 @@ public class ConstraintsQuery
 			return retVal;
 		}
 		else {
+			return getAllRanges();
+		}
+	}
+
+	public List<ByteArrayRange> getAllRanges() {
 			return DataStoreUtils.constraintsToByteArrayRanges(
 					constraints,
 					index.getIndexStrategy(),
 					MAX_RANGE_DECOMPOSITION,
 					indexMetaData);
-		}
 	}
 
 	private SplitFilterLists splitList(

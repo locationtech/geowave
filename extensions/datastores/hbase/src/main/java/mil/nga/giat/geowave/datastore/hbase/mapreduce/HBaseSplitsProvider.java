@@ -27,7 +27,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveInputSplit;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.IntermediateSplitInfo;
@@ -262,11 +261,13 @@ public class HBaseSplitsProvider extends
 						new ByteArrayId(
 								regionInfo.getEndKey())));
 				rangeList.add(overlappingRange);
+				i.remove();
 
 				final ByteArrayRange uncoveredRange = new ByteArrayRange(
 						new ByteArrayId(
-								HBaseUtils.getNextPrefix(regionInfo.getEndKey())),
+								regionInfo.getEndKey()),
 						range.getEnd());
+
 				i.add(uncoveredRange);
 			}
 		}

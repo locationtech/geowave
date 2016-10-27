@@ -210,7 +210,6 @@ public class DistortionGroupManagement
 
 			for (final DistortionGroup grp : groupDistortions.values()) {
 				final int optimalK = grp.bestCount();
-				LOGGER.info("Batch: " + batchId + "; Group: " + grp.groupID + "; Optimal Cluster Size: " + optimalK);
 				final String kbatchId = batchId + "_" + optimalK;
 				centroidManager.transferBatch(
 						kbatchId,
@@ -222,7 +221,7 @@ public class DistortionGroupManagement
 		}
 		catch (final Exception ex) {
 			LOGGER.error(
-					"Cannot detremine groups for batch" + batchId,
+					"Cannot determine groups for batch",
 					ex);
 			return 1;
 		}

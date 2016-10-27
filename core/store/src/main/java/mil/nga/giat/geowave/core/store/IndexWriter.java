@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.store.index.writer;
+package mil.nga.giat.geowave.core.store;
 
 import java.io.Closeable;
 import java.util.List;

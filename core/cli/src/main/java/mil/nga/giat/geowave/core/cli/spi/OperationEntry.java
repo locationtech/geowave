@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
@@ -59,13 +60,15 @@ public final class OperationEntry
 
 	public void addChild(
 			OperationEntry child ) {
-		if (children.containsKey(child.getOperationName().toLowerCase())) {
+		if (children.containsKey(child.getOperationName().toLowerCase(
+				Locale.ENGLISH))) {
 			throw new RuntimeException(
 					"Duplicate operation name: " + child.getOperationName() + " for "
 							+ this.getOperationClass().getName());
 		}
 		children.put(
-				child.getOperationName().toLowerCase(),
+				child.getOperationName().toLowerCase(
+						Locale.ENGLISH),
 				child);
 	}
 

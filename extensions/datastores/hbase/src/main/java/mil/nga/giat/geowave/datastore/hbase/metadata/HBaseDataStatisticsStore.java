@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.datastore.hbase.metadata;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;
-import java.util.UUID;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.hadoop.hbase.Cell;
@@ -259,15 +258,8 @@ public class HBaseDataStatisticsStore extends
 			final DataStatistics<?> object ) {
 		final byte[] parentRecord = super.getRowId(
 				object).getBytes();
-		final ByteBuffer parentBuffer = ByteBuffer.allocate(parentRecord.length + 1 + 16);
-		parentBuffer.put(parentRecord);
-		final UUID uuid = UUID.randomUUID();
-		parentBuffer.put(new byte[] {
-			0
-		});
-		parentBuffer.putLong(uuid.getMostSignificantBits());
-		parentBuffer.putLong(uuid.getLeastSignificantBits());
-		return new ByteArrayId(
-				parentBuffer.array());
+		return HBaseUtils.ensureUniqueId(
+				parentRecord,
+				false);
 	}
 }

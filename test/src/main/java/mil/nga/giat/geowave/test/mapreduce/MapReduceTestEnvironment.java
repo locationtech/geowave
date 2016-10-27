@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.test.mapreduce;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Logger;
@@ -51,7 +54,8 @@ public class MapReduceTestEnvironment implements
 				hdfsProtocol = true;
 			}
 			else {
-				hdfsProtocol = hdfs.toLowerCase().startsWith(
+				hdfsProtocol = hdfs.toLowerCase(
+						Locale.ENGLISH).startsWith(
 						"hdfs://");
 			}
 		}
@@ -62,20 +66,28 @@ public class MapReduceTestEnvironment implements
 
 	@Override
 	public void tearDown() {
-		if (hdfsProtocol) {
-			final Path tmpDir = new Path(
-					hdfsBaseDirectory);
-			try {
+		try {
+			if (hdfsProtocol) {
+				final Path tmpDir = new Path(
+						hdfsBaseDirectory);
 				final FileSystem fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
 				fs.delete(
 						tmpDir,
 						true);
 			}
-			catch (final IOException e) {
-				LOGGER.error(
-						"Unable to delete HDFS temp directory",
-						e);
+			else {
+				FileUtils.deleteDirectory(new File(
+						hdfsBaseDirectory.replace(
+								"file:",
+								"").replace(
+								"/C:",
+								"")));
 			}
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Unable to delete HDFS temp directory",
+					e);
 		}
 	}
 

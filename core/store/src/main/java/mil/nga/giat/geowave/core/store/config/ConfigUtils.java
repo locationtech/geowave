@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
@@ -15,7 +16,8 @@ public class ConfigUtils
 {
 	public static String cleanOptionName(
 			String name ) {
-		name = name.trim().toLowerCase().replaceAll(
+		name = name.trim().toLowerCase(
+				Locale.ENGLISH).replaceAll(
 				" ",
 				"_");
 		name = name.replaceAll(

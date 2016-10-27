@@ -19,6 +19,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -63,7 +64,6 @@ public class GeoServerRestClient
 	public GeoServerRestClient(
 			GeoServerConfig config ) {
 		this.config = config;
-		logger.setLevel(Level.DEBUG);
 	}
 
 	/**
@@ -441,7 +441,7 @@ public class GeoServerRestClient
 		String queryIndexStrategy = "Best Match";
 
 		final String dataStoreJson = createDatastoreJson(
-				"accumulo",
+				inputStoreOptions.getType(),
 				inputStoreOptions.getFactoryOptionsAsMap(),
 				datastoreName,
 				lockMgmt,
@@ -916,7 +916,7 @@ public class GeoServerRestClient
 			cvgStoreName = gwStoreName + GeoServerConfig.DEFAULT_CS;
 		}
 
-		// Get the store's accumulo config
+		// Get the store's db config
 		Map<String, String> storeConfigMap = inputStoreOptions.getFactoryOptionsAsMap();
 
 		// Add in geoserver coverage store info
@@ -1214,7 +1214,16 @@ public class GeoServerRestClient
 
 		try {
 			// create the post XML
-			Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+			factory.setFeature(
+					"http://xml.org/sax/features/external-general-entities",
+					false);
+			factory.setFeature(
+					"http://xml.org/sax/features/external-parameter-entities",
+					false);
+
+			Document xmlDoc = factory.newDocumentBuilder().newDocument();
 
 			Element rootEl = xmlDoc.createElement("coverageStore");
 			xmlDoc.appendChild(rootEl);
@@ -1251,7 +1260,23 @@ public class GeoServerRestClient
 			rootEl.appendChild(urlEl);
 
 			// use a transformer to create the xml string for the rest call
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
+			TransformerFactory xformerFactory = TransformerFactory.newInstance();
+
+			xformerFactory.setFeature(
+					"http://xml.org/sax/features/external-general-entities",
+					false);
+			xformerFactory.setFeature(
+					"http://xml.org/sax/features/external-parameter-entities",
+					false);
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_DTD,
+					"");
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_STYLESHEET,
+					"");
+
+			Transformer xformer = xformerFactory.newTransformer();
+
 			DOMSource source = new DOMSource(
 					xmlDoc);
 			StreamResult result = new StreamResult(

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class GeoWaveStoreFinder
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveStoreFinder.class);
-	private static String STORE_HINT_KEY = "store_name";
+	public static String STORE_HINT_KEY = "store_name";
 
 	public static final ConfigOption STORE_HINT_OPTION = new ConfigOption(
 			STORE_HINT_KEY,
@@ -216,6 +216,17 @@ public class GeoWaveStoreFinder
 			allOptions.addAll(Arrays.asList(factoryOptions));
 		}
 		return allOptions.toArray(new ConfigOption[] {});
+	}
+
+	public static synchronized ConfigOption[] getRequiredOptions(
+			final StoreFactoryFamilySpi storeFactoryFamily ) {
+		final List<ConfigOption> requiredOptions = new ArrayList<ConfigOption>();
+		for (final ConfigOption option : getAllOptions(storeFactoryFamily)) {
+			if (!option.isOptional()) {
+				requiredOptions.add(option);
+			}
+		}
+		return requiredOptions.toArray(new ConfigOption[] {});
 	}
 
 	private static <T extends GenericFactory> Map<String, T> getRegisteredFactories(

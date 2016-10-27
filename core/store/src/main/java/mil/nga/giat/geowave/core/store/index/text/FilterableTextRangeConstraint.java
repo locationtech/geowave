@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.core.store.index.text;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -25,7 +26,7 @@ public class FilterableTextRangeConstraint extends
 			final ByteArrayId fieldId,
 			final String matchstring,
 			final boolean caseSensitive ) {
-		start = end = caseSensitive ? matchstring : matchstring.toLowerCase();
+		start = end = caseSensitive ? matchstring : matchstring.toLowerCase(Locale.ENGLISH);
 		this.fieldId = fieldId;
 		this.caseSensitive = caseSensitive;
 	}
@@ -36,8 +37,8 @@ public class FilterableTextRangeConstraint extends
 			final String end,
 			final boolean caseSensitive ) {
 		super();
-		this.start = caseSensitive ? start : start.toLowerCase();
-		this.end = caseSensitive ? end : end.toLowerCase();
+		this.start = caseSensitive ? start : start.toLowerCase(Locale.ENGLISH);
+		this.end = caseSensitive ? end : end.toLowerCase(Locale.ENGLISH);
 		this.fieldId = fieldId;
 		this.caseSensitive = caseSensitive;
 	}

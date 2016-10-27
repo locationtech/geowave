@@ -93,6 +93,17 @@ public class TieredSFCIndexFactory
 						(byte) maxBitsOfPrecision));
 	}
 
+	static public TieredSFCIndexStrategy createFullIncrementalTieredStrategy(
+			final NumericDimensionDefinition[] baseDefinitions,
+			final int[] maxBitsPerDimension,
+			final SFCType sfcType ) {
+		return createFullIncrementalTieredStrategy(
+				baseDefinitions,
+				maxBitsPerDimension,
+				sfcType,
+				null);
+	}
+
 	/**
 	 * 
 	 * @param baseDefinitions
@@ -101,13 +112,16 @@ public class TieredSFCIndexFactory
 	 *            the max cardinality for the Index Strategy
 	 * @param sfcType
 	 *            the type of space filling curve (e.g. Hilbert)
+	 * @param maxEstimatedDuplicatedIds
+	 *            the max number of duplicate SFC IDs
 	 * @return an Index Strategy object with a tier for every incremental
 	 *         cardinality between the lowest max bits of precision and 0
 	 */
 	static public TieredSFCIndexStrategy createFullIncrementalTieredStrategy(
 			final NumericDimensionDefinition[] baseDefinitions,
 			final int[] maxBitsPerDimension,
-			final SFCType sfcType ) {
+			final SFCType sfcType,
+			Long maxEstimatedDuplicatedIds ) {
 		if (maxBitsPerDimension.length == 0) {
 			final ImmutableBiMap<Integer, Byte> emptyMap = ImmutableBiMap.of();
 			return new TieredSFCIndexStrategy(
@@ -144,7 +158,13 @@ public class TieredSFCIndexFactory
 					sfcType);
 
 		}
-
+		if (maxEstimatedDuplicatedIds != null && maxEstimatedDuplicatedIds > 0) {
+			return new TieredSFCIndexStrategy(
+					baseDefinitions,
+					spaceFillingCurves,
+					sfcIndexToTier.build(),
+					maxEstimatedDuplicatedIds);
+		}
 		return new TieredSFCIndexStrategy(
 				baseDefinitions,
 				spaceFillingCurves,
