@@ -98,7 +98,6 @@ public class LandsatIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected.png";
-	private static final String ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected_alt.png";
 	private static final int MIN_PATH = 198;
 	private static final int MAX_PATH = 199;
 	private static final int MIN_ROW = 36;
@@ -126,7 +125,9 @@ public class LandsatIT
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("*      FINISHED LandsatIT               *");
-		LOGGER.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000) + "s elapsed.                 *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -139,20 +140,22 @@ public class LandsatIT
 		// just use the QA band as QA is the smallest, get the best cloud cover,
 		// but ensure it is before now so no recent collection affects the test
 		final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
-		analyzeOptions.setCqlFilter(String.format(
-				"BBOX(%s,%f,%f,%f,%f) AND %s='B4' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
-				SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
-				WEST,
-				SOUTH,
-				EAST,
-				NORTH,
-				BandFeatureIterator.BAND_ATTRIBUTE_NAME,
-				SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
-				"2016-06-01T00:00:00Z",
-				MIN_PATH,
-				MAX_PATH,
-				MIN_ROW,
-				MAX_ROW));
+		analyzeOptions
+				.setCqlFilter(String
+						.format(
+								"BBOX(%s,%f,%f,%f,%f) AND %s='B4' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
+								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
+								WEST,
+								SOUTH,
+								EAST,
+								NORTH,
+								BandFeatureIterator.BAND_ATTRIBUTE_NAME,
+								SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
+								"2016-06-01T00:00:00Z",
+								MIN_PATH,
+								MAX_PATH,
+								MIN_ROW,
+								MAX_ROW));
 		analyzeOptions.setNBestPerSpatial(true);
 		analyzeOptions.setNBestScenes(1);
 		analyzeOptions.setUseCachedScenes(true);
@@ -222,25 +225,10 @@ public class LandsatIT
 				null,
 				null);
 		final RenderedImage result = gridCoverage.getRenderedImage();
-		String referenceImage = REFERENCE_LANDSAT_IMAGE_PATH;
-		// test the result with expected, allowing for no error
 
-		// this is ugly but the expected result seems different on
-		// centos than ubuntu or windows (it looks more correct on windows and
-		// ubuntu). These properties can be set to toggle the reference image,
-		// by default the alternate is used on all linux OS.
-
-		// TODO: determine why this is the case
-		if (System.getProperty("use_default_landsat") == null) {
-			if (System.getProperty("use_alt_landsat") != null || System.getProperty(
-					"os.name").equals(
-					"Linux")) {
-
-				referenceImage = ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH;
-			}
-		}
+		// test the result with expected, allowing for minimal error
 		final BufferedImage reference = ImageIO.read(new File(
-				referenceImage));
+				REFERENCE_LANDSAT_IMAGE_PATH));
 		TestUtils.testTileAgainstReference(
 				PlanarImage.wrapRenderedImage(
 						result).getAsBufferedImage(),

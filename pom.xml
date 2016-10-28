@@ -68,7 +68,7 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-Xms1g -Xmx2g -XX:MaxPermSize=256m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=256m</test.args>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
@@ -592,8 +592,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -619,6 +619,7 @@
 				<version>2.9.1</version>
 				<configuration>
 					<notimestamp>true</notimestamp>
+					<additionalparam>${javadoc.opts}</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
@@ -631,7 +632,6 @@
 							<sourceFileIncludes>
 								<include>**.java</include>
 							</sourceFileIncludes>
-							<additionalparam>${javadoc.opts}</additionalparam>
 							<quiet>true</quiet>
 							<windowtitle>GeoWave ${project.version}</windowtitle>
 							<doctitle>GeoWave ${project.version}</doctitle>
@@ -829,6 +829,8 @@
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<version>${findbugs.version}</version>
 				<configuration>
+					<maxHeap>256</maxHeap>
+					<jvmArgs>${test.args}</jvmArgs>
 					<findbugsXmlOutput>true</findbugsXmlOutput>
 					<xmlOutput>true</xmlOutput>
 					<effort>${findbugs.effort}</effort>

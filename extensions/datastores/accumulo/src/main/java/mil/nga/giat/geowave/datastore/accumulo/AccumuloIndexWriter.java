@@ -78,7 +78,7 @@ public class AccumuloIndexWriter<T> extends
 		synchronized (this) {
 
 			ensureOpen();
-			if (writer == null) {
+			if (writer == null || entry == null) {
 				return Collections.emptyList();
 			}
 			entryInfo = AccumuloUtils.write(
