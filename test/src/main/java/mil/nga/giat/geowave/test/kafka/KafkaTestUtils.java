@@ -14,12 +14,13 @@ import mil.nga.giat.geowave.core.ingest.operations.LocalToKafkaCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 
 public class KafkaTestUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(KafkaTestEnvironment.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			KafkaTestEnvironment.class);
 	private final static String MAX_MESSAGE_BYTES = "5000000";
 
 	protected static final File DEFAULT_LOG_DIR = new File(
@@ -28,7 +29,8 @@ public class KafkaTestUtils
 
 	public static void testKafkaStage(
 			final String ingestFilePath ) {
-		LOGGER.warn("Staging '" + ingestFilePath + "' to a Kafka topic - this may take several minutes...");
+		LOGGER.warn(
+				"Staging '" + ingestFilePath + "' to a Kafka topic - this may take several minutes...");
 		final String[] args = null;
 		String localhost = "localhost";
 		try {
@@ -42,11 +44,14 @@ public class KafkaTestUtils
 
 		// Ingest Formats
 		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
-		ingestFormatOptions.selectPlugin("gpx");
+		ingestFormatOptions.selectPlugin(
+				"gpx");
 
 		final LocalToKafkaCommand localToKafka = new LocalToKafkaCommand();
-		localToKafka.setParameters(ingestFilePath);
-		localToKafka.setPluginFormats(ingestFormatOptions);
+		localToKafka.setParameters(
+				ingestFilePath);
+		localToKafka.setPluginFormats(
+				ingestFormatOptions);
 		localToKafka.getKafkaOptions().setMetadataBrokerList(
 				localhost + ":9092");
 		localToKafka.getKafkaOptions().setRequestRequiredAcks(
@@ -57,14 +62,16 @@ public class KafkaTestUtils
 				"1000");
 		localToKafka.getKafkaOptions().setSerializerClass(
 				"mil.nga.giat.geowave.core.ingest.kafka.AvroKafkaEncoder");
-		localToKafka.execute(new ManualOperationParams());
+		localToKafka.execute(
+				new ManualOperationParams());
 	}
 
 	public static void testKafkaIngest(
 			final DataStorePluginOptions options,
 			final boolean spatialTemporal,
 			final String ingestFilePath ) {
-		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
+		LOGGER.warn(
+				"Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 
 		// // FIXME
 		// final String[] args = StringUtils.split("-kafkaingest" +
@@ -76,17 +83,23 @@ public class KafkaTestUtils
 
 		// Ingest Formats
 		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
-		ingestFormatOptions.selectPlugin("gpx");
+		ingestFormatOptions.selectPlugin(
+				"gpx");
 
 		// Indexes
 		final IndexPluginOptions indexOption = new IndexPluginOptions();
-		indexOption.selectPlugin((spatialTemporal ? "spatial_temporal" : "spatial"));
+		indexOption.selectPlugin(
+				(spatialTemporal ? "spatial_temporal" : "spatial"));
 
 		// Execute Command
 		final KafkaToGeowaveCommand kafkaToGeowave = new KafkaToGeowaveCommand();
-		kafkaToGeowave.setPluginFormats(ingestFormatOptions);
-		kafkaToGeowave.setInputIndexOptions(Arrays.asList(indexOption));
-		kafkaToGeowave.setInputStoreOptions(options);
+		kafkaToGeowave.setPluginFormats(
+				ingestFormatOptions);
+		kafkaToGeowave.setInputIndexOptions(
+				Arrays.asList(
+						indexOption));
+		kafkaToGeowave.setInputStoreOptions(
+				options);
 		kafkaToGeowave.getKafkaOptions().setConsumerTimeoutMs(
 				"5000");
 		kafkaToGeowave.getKafkaOptions().setReconnectOnTimeout(
@@ -98,12 +111,13 @@ public class KafkaTestUtils
 		kafkaToGeowave.getKafkaOptions().setFetchMessageMaxBytes(
 				MAX_MESSAGE_BYTES);
 		kafkaToGeowave.getKafkaOptions().setZookeeperConnect(
-				AccumuloStoreTestEnvironment.getInstance().getZookeeper());
+				ZookeeperTestEnvironment.getInstance().getZookeeper());
 		kafkaToGeowave.setParameters(
 				null,
 				null);
 
-		kafkaToGeowave.execute(new ManualOperationParams());
+		kafkaToGeowave.execute(
+				new ManualOperationParams());
 
 		// Wait for ingest to complete. This works because we have set
 		// Kafka Consumer to Timeout and set the timeout at 5000 ms, and
@@ -113,7 +127,7 @@ public class KafkaTestUtils
 		try {
 			kafkaToGeowave.getDriver().waitFutures();
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			throw new RuntimeException(
 					e);
 		}
@@ -126,7 +140,7 @@ public class KafkaTestUtils
 				DEFAULT_LOG_DIR.getAbsolutePath());
 		props.put(
 				"zookeeper.connect",
-				AccumuloStoreTestEnvironment.getInstance().getZookeeper());
+				ZookeeperTestEnvironment.getInstance().getZookeeper());
 		props.put(
 				"broker.id",
 				"0");

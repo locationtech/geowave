@@ -261,12 +261,12 @@ public class KDERasterResizeIT
 				TEST_COVERAGE_NAMESPACE).append(
 				";equalizeHistogramOverride=false;scaleTo8Bit=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
-		
+
 		str.append(
 				";").append(
 				GeoWaveStoreFinder.STORE_HINT_KEY).append(
 				"=").append(
-						outputDataStorePluginOptions.getType());
+				outputDataStorePluginOptions.getType());
 
 		final Map<String, String> options = outputDataStorePluginOptions.getFactoryOptionsAsMap();
 
