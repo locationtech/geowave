@@ -98,7 +98,6 @@ public class LandsatIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected.png";
-	private static final String ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected_alt.png";
 	private static final int MIN_PATH = 198;
 	private static final int MAX_PATH = 199;
 	private static final int MIN_ROW = 36;
@@ -226,25 +225,10 @@ public class LandsatIT
 				null,
 				null);
 		final RenderedImage result = gridCoverage.getRenderedImage();
-		String referenceImage = REFERENCE_LANDSAT_IMAGE_PATH;
-		// test the result with expected, allowing for no error
 
-		// this is ugly but the expected result seems different on
-		// centos than ubuntu or windows (it looks more correct on windows and
-		// ubuntu). These properties can be set to toggle the reference image,
-		// by default the alternate is used on all linux OS.
-
-		// TODO: determine why this is the case
-		if (System.getProperty("use_default_landsat") == null) {
-			if (System.getProperty("use_alt_landsat") != null || System.getProperty(
-					"os.name").equals(
-					"Linux")) {
-
-				referenceImage = ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH;
-			}
-		}
+		// test the result with expected, allowing for minimal error
 		final BufferedImage reference = ImageIO.read(new File(
-				referenceImage));
+				REFERENCE_LANDSAT_IMAGE_PATH));
 		TestUtils.testTileAgainstReference(
 				PlanarImage.wrapRenderedImage(
 						result).getAsBufferedImage(),
