@@ -151,7 +151,10 @@ public class AggregationIterator extends
 			final CommonIndexModel model,
 			final CommonIndexedPersistenceEncoding persistenceEncoding ) {
 		if (adapter == null) {
-			aggregationFunction.aggregate(persistenceEncoding.getCommonData());
+			aggregationFunction.aggregate(persistenceEncoding);
+			if (startRowOfAggregation == null) {
+				startRowOfAggregation = currentRow;
+			}
 		}
 		else if (persistenceEncoding.getAdapterId().getString().equals(
 				adapter.getAdapterId().getString())) {

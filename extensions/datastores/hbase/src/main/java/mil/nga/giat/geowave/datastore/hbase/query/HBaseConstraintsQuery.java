@@ -170,7 +170,7 @@ public class HBaseConstraintsQuery extends
 					adapterStore,
 					maxResolutionSubsamplingPerDimension,
 					limit,
-					isCommonIndexAggregation());
+					!isCommonIndexAggregation());
 
 			if ((it != null) && it.hasNext()) {
 				final Aggregation aggregationFunction = base.aggregation.getRight();
