@@ -3,13 +3,6 @@ package mil.nga.giat.geowave.datastore.hbase.operations;
 import java.io.IOException;
 import java.util.Set;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.DataStoreOperations;
-import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
-import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.Coprocessor;
@@ -24,6 +17,13 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
+import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 public class BasicHBaseOperations implements
 		DataStoreOperations
@@ -271,21 +271,16 @@ public class BasicHBaseOperations implements
 	}
 
 	public void verifyCoprocessor(
-			String tableNameStr,
-			String coprocessorName,
-			String coprocessorJar ) {
+			final String tableNameStr,
+			final String coprocessorName,
+			final String coprocessorJar ) {
 		try {
-			Admin admin = conn.getAdmin();
-			TableName tableName = getTableName(getQualifiedTableName(tableNameStr));
-			HTableDescriptor td = admin.getTableDescriptor(tableName);
+			final Admin admin = conn.getAdmin();
+			final TableName tableName = getTableName(getQualifiedTableName(tableNameStr));
+			final HTableDescriptor td = admin.getTableDescriptor(tableName);
 
 			if (!td.hasCoprocessor(coprocessorName)) {
 				LOGGER.debug(tableNameStr + " does not have coprocessor. Adding " + coprocessorName);
-
-				// Retrieve coprocessor jar path from config
-				Path hdfsJarPath = new Path(
-						coprocessorJar);
-				LOGGER.debug("Coprocessor jar path: " + hdfsJarPath.toString());
 
 				// if (!schemaUpdateEnabled &&
 				// !admin.isTableDisabled(tableName)) {
@@ -294,11 +289,21 @@ public class BasicHBaseOperations implements
 				// }
 
 				LOGGER.debug("- add coprocessor...");
-				td.addCoprocessor(
-						coprocessorName,
-						hdfsJarPath,
-						Coprocessor.PRIORITY_USER,
-						null);
+
+				// Retrieve coprocessor jar path from config
+				if (coprocessorJar == null) {
+					td.addCoprocessor(coprocessorName);
+				}
+				else {
+					final Path hdfsJarPath = new Path(
+							coprocessorJar);
+					LOGGER.debug("Coprocessor jar path: " + hdfsJarPath.toString());
+					td.addCoprocessor(
+							coprocessorName,
+							hdfsJarPath,
+							Coprocessor.PRIORITY_USER,
+							null);
+				}
 
 				LOGGER.debug("- modify table...");
 				admin.modifyTable(
@@ -308,32 +313,34 @@ public class BasicHBaseOperations implements
 				// if (!schemaUpdateEnabled) {
 				LOGGER.debug("- enable table...");
 				admin.enableTable(tableName);
-				// }
-
-				// if (schemaUpdateEnabled) {
-				int regionsLeft;
-
-				do {
-					regionsLeft = admin.getAlterStatus(
-							tableName).getFirst();
-					LOGGER.debug(regionsLeft + " regions remaining in table modify");
-
-					try {
-						Thread.sleep(SLEEP_INTERVAL);
-					}
-					catch (final InterruptedException e) {
-						LOGGER.warn(
-								"Sleeping while coprocessor add interrupted",
-								e);
-					}
-				}
-				while (regionsLeft > 0);
-				// }
-
-				LOGGER.debug("Successfully added coprocessor");
 			}
+			// }
+
+			// if (schemaUpdateEnabled) {
+			int regionsLeft;
+
+			do {
+				regionsLeft = admin.getAlterStatus(
+						tableName).getFirst();
+				LOGGER.debug(regionsLeft + " regions remaining in table modify");
+
+				try {
+					Thread.sleep(SLEEP_INTERVAL);
+				}
+				catch (final InterruptedException e) {
+					LOGGER.warn(
+							"Sleeping while coprocessor add interrupted",
+							e);
+				}
+			}
+			while (regionsLeft > 0);
+			// }
+
+			LOGGER.debug("Successfully added coprocessor");
 		}
-		catch (IOException e) {
+		catch (
+
+		final IOException e) {
 			LOGGER.error("Error verifying/adding coprocessor." + e);
 		}
 	}

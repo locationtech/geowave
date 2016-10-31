@@ -73,8 +73,9 @@ public class TestUtils
 
 	public static final File TEMP_DIR = new File(
 			"./target/temp");
-	protected static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
-	protected static final String TEST_FILTER_END_TIME_ATTRIBUTE_NAME = "EndTime";
+
+	public static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
+	public static final String TEST_FILTER_END_TIME_ATTRIBUTE_NAME = "EndTime";
 	public static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
 	public static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
 	public static final String TEST_CASE_BASE = "data/";
@@ -281,7 +282,7 @@ public class TestUtils
 		return featureToQuery(resourceToFeature(filterResource));
 	}
 
-	protected static SimpleFeature resourceToFeature(
+	public static SimpleFeature resourceToFeature(
 			final URL filterResource )
 			throws IOException {
 		final Map<String, Object> map = new HashMap<String, Object>();
@@ -496,7 +497,7 @@ public class TestUtils
 		}
 
 		if (errorPixels > 0) {
-			System.out.println((float) errorPixels / (float) totalPixels + "% pixels differed from expected");
+			System.out.println(((float) errorPixels / (float) totalPixels) + "% pixels differed from expected");
 		}
 	}
 }

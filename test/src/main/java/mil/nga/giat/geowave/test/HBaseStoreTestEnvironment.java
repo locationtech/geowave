@@ -10,13 +10,16 @@ import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.propertyparser.PropertyParser;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GenericStoreFactory;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
-public class HBaseStoreTestEnvironment implements
+public class HBaseStoreTestEnvironment extends
 		StoreTestEnvironment
 {
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new HBaseDataStoreFactory();
 	private static HBaseStoreTestEnvironment singletonInstance = null;
 
 	public static synchronized HBaseStoreTestEnvironment getInstance() {
@@ -34,20 +37,18 @@ public class HBaseStoreTestEnvironment implements
 	private HBaseStoreTestEnvironment() {}
 
 	@Override
-	public DataStorePluginOptions getDataStoreOptions(
-			final String namespace ) {
-		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-		final HBaseRequiredOptions opts = new HBaseRequiredOptions();
-		opts.setGeowaveNamespace(namespace);
-		opts.setZookeeper(zookeeper);
-		pluginOptions.selectPlugin(new HBaseDataStoreFactory().getName());
-		pluginOptions.setFactoryOptions(opts);
-		return pluginOptions;
+	protected void initOptions(
+			final StoreFactoryOptions options ) {
+		((HBaseRequiredOptions) options).setZookeeper(zookeeper);
+	}
+
+	@Override
+	protected GenericStoreFactory<DataStore> getDataStoreFactory() {
+		return STORE_FACTORY;
 	}
 
 	@Override
 	public void setup() {
-
 		PropertyParser propertyParser = null;
 
 		try {
@@ -70,7 +71,7 @@ public class HBaseStoreTestEnvironment implements
 
 		if (hbaseLocalCluster == null) {
 			try {
-				Configuration conf = new Configuration();
+				final Configuration conf = new Configuration();
 				conf.set(
 						"hbase.online.schema.update.enable",
 						"true");

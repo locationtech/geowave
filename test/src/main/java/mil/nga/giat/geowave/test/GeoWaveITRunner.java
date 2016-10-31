@@ -37,7 +37,9 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStoreImpl;
 import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
+import mil.nga.giat.geowave.test.annotation.OptionsOverride;
 
 public class GeoWaveITRunner extends
 		Suite
@@ -129,24 +131,26 @@ public class GeoWaveITRunner extends
 
 		private Object createTestUsingFieldInjection()
 				throws Exception {
-			String typeNamespace = null;
-			final Set<Pair<Field, String>> fieldsAndNamespacePairs = new HashSet<Pair<Field, String>>();
+			final Set<Pair<Field, GeoWaveTestStore>> fieldsAndStorePairs = new HashSet<Pair<Field, GeoWaveTestStore>>();
 			if (typeIsAnnotated()) {
 				final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
 						GeoWaveTestStore.class);
-
-				typeNamespace = store.namespace();
 				for (final String fieldName : fieldNameStoreTypePair.keySet()) {
 					final Field field = getTestClass().getJavaClass().getDeclaredField(
 							fieldName);
-					String fieldNamespace = typeNamespace;
+					final GeoWaveTestStoreImpl storeWithOverrides = new GeoWaveTestStoreImpl(
+							store);
 					if (field.isAnnotationPresent(NamespaceOverride.class)) {
-						fieldNamespace = field.getAnnotation(
-								NamespaceOverride.class).value();
+						storeWithOverrides.setNamespace(field.getAnnotation(
+								NamespaceOverride.class).value());
 					}
-					fieldsAndNamespacePairs.add(new ImmutablePair<Field, String>(
+					else if (field.isAnnotationPresent(OptionsOverride.class)) {
+						storeWithOverrides.setOptions(field.getAnnotation(
+								OptionsOverride.class).value());
+					}
+					fieldsAndStorePairs.add(new ImmutablePair<Field, GeoWaveTestStore>(
 							field,
-							fieldNamespace));
+							storeWithOverrides));
 				}
 			}
 			else {
@@ -158,21 +162,22 @@ public class GeoWaveITRunner extends
 									+ ", available parameters: " + fieldNameStoreTypePair.size() + ".");
 				}
 				for (final FrameworkField field : annotatedFields) {
-					fieldsAndNamespacePairs.add(new ImmutablePair<Field, String>(
+					fieldsAndStorePairs.add(new ImmutablePair<Field, GeoWaveTestStore>(
 							field.getField(),
 							field.getField().getAnnotation(
-									GeoWaveTestStore.class).namespace()));
+									GeoWaveTestStore.class)));
 				}
 			}
 			final Object testClassInstance = getTestClass().getJavaClass().newInstance();
-			for (final Pair<Field, String> field : fieldsAndNamespacePairs) {
+			for (final Pair<Field, GeoWaveTestStore> field : fieldsAndStorePairs) {
 				final GeoWaveStoreType type = fieldNameStoreTypePair.get(field.getLeft().getName());
 				field.getLeft().setAccessible(
 						true);
+				final GeoWaveTestStore store = field.getRight();
 				field.getLeft().set(
 						testClassInstance,
 						type.getTestEnvironment().getDataStoreOptions(
-								field.getRight()));
+								store));
 			}
 			return testClassInstance;
 		}
