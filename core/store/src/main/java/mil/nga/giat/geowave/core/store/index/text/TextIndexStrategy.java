@@ -26,6 +26,7 @@ public class TextIndexStrategy implements
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TextIndexStrategy.class);
 	protected static final String START_END_MARKER = "\01";
+	protected static final byte[] START_END_MARKER_BYTE = StringUtils.stringToBinary(START_END_MARKER);
 
 	private int start = 2;
 	private int end = 4;

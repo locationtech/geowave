@@ -78,7 +78,7 @@ public class SceneFeatureIterator implements
 	public static final String SCENE_DOWNLOAD_ATTRIBUTE_NAME = "sceneDownloadUrl";
 	public static final String ENTITY_ID_ATTRIBUTE_NAME = "entityId";
 
-	private static final String[] SCENE_ATTRIBUTES = new String[] {
+	protected static final String[] SCENE_ATTRIBUTES = new String[] {
 		SHAPE_ATTRIBUTE_NAME,
 		ACQUISITION_DATE_ATTRIBUTE_NAME,
 		CLOUD_COVER_ATTRIBUTE_NAME,

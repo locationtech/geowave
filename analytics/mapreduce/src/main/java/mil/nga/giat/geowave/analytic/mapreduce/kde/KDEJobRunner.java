@@ -71,22 +71,6 @@ public class KDEJobRunner extends
 	public static final String MAX_LEVEL_KEY = "MAX_LEVEL";
 	public static final String MIN_LEVEL_KEY = "MIN_LEVEL";
 	public static final String COVERAGE_NAME_KEY = "COVERAGE_NAME";
-	private static final String[] NAME_PER_BAND = new String[] {
-		"Weight",
-		"Normalized",
-		"Percentile"
-	};
-
-	private static final double[] MINS_PER_BAND = new double[] {
-		0,
-		0,
-		0
-	};
-	private static final double[] MAXES_PER_BAND = new double[] {
-		Double.MAX_VALUE,
-		1,
-		1
-	};
 	protected KDECommandLineOptions kdeCommandLineOptions;
 	protected DataStorePluginOptions inputDataStoreOptions;
 	protected DataStorePluginOptions outputDataStoreOptions;
@@ -435,9 +419,9 @@ public class KDEJobRunner extends
 				coverageName,
 				AccumuloKDEReducer.NUM_BANDS,
 				TILE_SIZE,
-				MINS_PER_BAND,
-				MAXES_PER_BAND,
-				NAME_PER_BAND,
+				AccumuloKDEReducer.MINS_PER_BAND,
+				AccumuloKDEReducer.MAXES_PER_BAND,
+				AccumuloKDEReducer.NAME_PER_BAND,
 				null);
 		setup(
 				statsReducer,

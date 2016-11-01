@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableBiMap.Builder;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -208,37 +209,13 @@ public class TieredSFCIndexStrategy implements
 		double[] maxes = indexedData.getMaxValuesPerDimension();
 		int ranges = 0;
 		for (int d = 0; d < mins.length; d++) {
-			if (!checkIfDoublesEqual(
+			if (!FloatCompareUtils.checkDoublesEqual(
 					mins[d],
 					maxes[d])) {
 				ranges++;
 			}
 		}
 		return ranges;
-	}
-
-	/**
-	 * The == operator is not reliable for doubles, so we are using this method
-	 * to check if two doubles are equal
-	 * 
-	 * @param x
-	 * @param y
-	 * @return true if the double are equal, false if they are not
-	 */
-	private static boolean checkIfDoublesEqual(
-			double x,
-			double y ) {
-		boolean xNeg = false;
-		boolean yNeg = false;
-		double diff = (Math.abs(x) - Math.abs(y));
-
-		if (x < 0.0) {
-			xNeg = true;
-		}
-		if (y < 0.0) {
-			yNeg = true;
-		}
-		return (diff <= 0.0001 && diff >= -0.0001 && xNeg == yNeg);
 	}
 
 	@Override

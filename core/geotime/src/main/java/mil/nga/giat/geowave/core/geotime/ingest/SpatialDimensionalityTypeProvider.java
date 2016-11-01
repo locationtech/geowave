@@ -29,21 +29,21 @@ public class SpatialDimensionalityTypeProvider implements
 	private static final int LONGITUDE_BITS = 31;
 	private static final int LATITUDE_BITS = 31;
 
-	private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
+	protected static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
 		new LatitudeDefinition(
 				true)
 	// just use the same range for latitude to make square sfc values in
 	// decimal degrees (EPSG:4326)
 	};
-	private static final NumericDimensionField[] SPATIAL_FIELDS = new NumericDimensionField[] {
+	protected static final NumericDimensionField[] SPATIAL_FIELDS = new NumericDimensionField[] {
 		new LongitudeField(),
 		new LatitudeField(
 				true)
 	// just use the same range for latitude to make square sfc values in
 	// decimal degrees (EPSG:4326)
 	};
-	private static final NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
+	protected static final NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
 		new LongitudeField(),
 		new LatitudeField(
 				true),

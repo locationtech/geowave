@@ -83,6 +83,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 public class RasterUtils
@@ -564,7 +565,8 @@ public class RasterUtils
 		}
 		final double scaleX = rescaleX * (width / imageWidth);
 		final double scaleY = rescaleY * (height / imageHeight);
-		if ((Math.abs(scaleX - 1) > SIMPLIFICATION_MAX_DEGREES) || (Math.abs(scaleY - 1) > SIMPLIFICATION_MAX_DEGREES)) {
+		if ((Math.abs(scaleX - 1) > FloatCompareUtils.COMP_EPSILON)
+				|| (Math.abs(scaleY - 1) > FloatCompareUtils.COMP_EPSILON)) {
 			image = rescaleImageViaPlanarImage(
 					interpolation,
 					rescaleX * (width / imageWidth),

@@ -13,8 +13,6 @@ import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 public class FilterableTextRangeConstraint extends
 		TextQueryConstraint
 {
-	private static final byte[] START_END_MARKER_BYTE = StringUtils.stringToBinary(TextIndexStrategy.START_END_MARKER);
-
 	private final ByteArrayId fieldId;
 	private final boolean caseSensitive;
 	private final String start;
@@ -65,20 +63,21 @@ public class FilterableTextRangeConstraint extends
 			final byte padCharacter ) {
 		byte[] expressionBytes;
 		expressionBytes = StringUtils.stringToBinary(expression);
-		final byte[] result = new byte[expressionBytes.length + START_END_MARKER_BYTE.length + (pad < 0 ? 0 : pad)];
+		final byte[] result = new byte[expressionBytes.length + TextIndexStrategy.START_END_MARKER_BYTE.length
+				+ (pad < 0 ? 0 : pad)];
 		System.arraycopy(
-				START_END_MARKER_BYTE,
+				TextIndexStrategy.START_END_MARKER_BYTE,
 				0,
 				result,
 				0,
-				START_END_MARKER_BYTE.length);
+				TextIndexStrategy.START_END_MARKER_BYTE.length);
 		System.arraycopy(
 				expressionBytes,
 				0,
 				result,
-				START_END_MARKER_BYTE.length,
+				TextIndexStrategy.START_END_MARKER_BYTE.length,
 				expressionBytes.length);
-		int pos = expressionBytes.length + START_END_MARKER_BYTE.length;
+		int pos = expressionBytes.length + TextIndexStrategy.START_END_MARKER_BYTE.length;
 		for (int i = 0; i < pad; i++) {
 			result[pos] = padCharacter;
 			pos++;

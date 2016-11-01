@@ -32,25 +32,6 @@ public class ComparisonStatsJobRunner extends
 {
 	private final String timeAttribute;
 
-	private static final String[] NAME_PER_BAND = new String[] {
-		"Summer",
-		"Winter",
-		"Combined",
-		"Combined Percentile"
-	};
-	private static final double[] MINS_PER_BAND = new double[] {
-		0,
-		0,
-		-1,
-		0
-	};
-	private static final double[] MAXES_PER_BAND = new double[] {
-		1,
-		1,
-		1,
-		1
-	};
-
 	public ComparisonStatsJobRunner(
 			final ComparisonCommandLineOptions inputOptions,
 			final KDECommandLineOptions kdeCommandLineOptions,
@@ -203,9 +184,9 @@ public class ComparisonStatsJobRunner extends
 								coverageName,
 								ComparisonAccumuloStatsReducer.NUM_BANDS,
 								1,
-								MINS_PER_BAND,
-								MAXES_PER_BAND,
-								NAME_PER_BAND,
+								ComparisonAccumuloStatsReducer.MINS_PER_BAND,
+								ComparisonAccumuloStatsReducer.MAXES_PER_BAND,
+								ComparisonAccumuloStatsReducer.NAME_PER_BAND,
 								null),
 						new SpatialDimensionalityTypeProvider().createPrimaryIndex());
 				return ingester.waitForCompletion(true);

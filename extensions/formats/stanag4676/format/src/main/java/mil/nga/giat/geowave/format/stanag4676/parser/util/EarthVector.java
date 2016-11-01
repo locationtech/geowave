@@ -5,6 +5,8 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector3d;
 
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
+
 public class EarthVector
 {
 
@@ -359,30 +361,6 @@ public class EarthVector
 	}
 
 	/**
-	 * The == operator is not reliable for doubles, so we are using this method
-	 * to check if two doubles are equal
-	 * 
-	 * @param x
-	 * @param y
-	 * @return true if the double are equal, false if they are not
-	 */
-	private static boolean checkIfDoublesEqual(
-			double x,
-			double y ) {
-		boolean xNeg = false;
-		boolean yNeg = false;
-		double diff = (Math.abs(x) - Math.abs(y));
-
-		if (x < 0.0) {
-			xNeg = true;
-		}
-		if (y < 0.0) {
-			yNeg = true;
-		}
-		return (diff <= 0.0001 && diff >= -0.0001 && xNeg == yNeg);
-	}
-
-	/**
 	 * equals - compare ecf position (x,y,z) for equality
 	 */
 	@Override
@@ -396,11 +374,11 @@ public class EarthVector
 		}
 		final EarthVector coord = (EarthVector) obj;
 
-		return (checkIfDoublesEqual(
+		return (FloatCompareUtils.checkDoublesEqual(
 				coord.getX(),
-				ecfVector.x) && checkIfDoublesEqual(
+				ecfVector.x) && FloatCompareUtils.checkDoublesEqual(
 				coord.getY(),
-				ecfVector.y) && checkIfDoublesEqual(
+				ecfVector.y) && FloatCompareUtils.checkDoublesEqual(
 				coord.getZ(),
 				ecfVector.z));
 	}

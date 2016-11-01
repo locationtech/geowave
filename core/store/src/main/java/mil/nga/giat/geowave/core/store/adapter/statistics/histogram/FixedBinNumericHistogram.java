@@ -20,6 +20,8 @@ package mil.nga.giat.geowave.core.store.adapter.statistics.histogram;
 
 import java.nio.ByteBuffer;
 
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
+
 /**
  * * Fixed number of bins for a histogram. Unless configured, the range will
  * expand dynamically, redistributing the data as necessary into the wider bins.
@@ -40,7 +42,6 @@ public class FixedBinNumericHistogram implements
 	private long totalCount = 0;
 	private double minValue = Double.MAX_VALUE;
 	private double maxValue = Double.MIN_VALUE;
-	private static final double COMP_VALUE = 10E-23;
 	private boolean constrainedRange = false;
 
 	/**
@@ -121,7 +122,7 @@ public class FixedBinNumericHistogram implements
 
 	private double binSize() {
 		final double v = (maxValue - minValue) / count.length;
-		return (v <= COMP_VALUE) ? 1.0 : v;
+		return (v <= FloatCompareUtils.COMP_EPSILON) ? 1.0 : v;
 	}
 
 	public double quantile(
@@ -252,15 +253,17 @@ public class FixedBinNumericHistogram implements
 			return;
 		}
 		// entry of the the same value or first entry
-		if ((totalCount == 0L) || (Math.abs(minValue / num - 1) <= COMP_VALUE)) {
+		if ((totalCount == 0L) || (Math.abs(minValue / num - 1) <= FloatCompareUtils.COMP_EPSILON)) {
 			count[0] += amount;
 			minValue = num;
 			maxValue = Math.max(
 					num,
 					maxValue);
 		} // else if entry has a different value
-		else if (Math.abs(maxValue / minValue - 1) <= COMP_VALUE) { // && num is
-																	// neither
+		else if (Math.abs(maxValue / minValue - 1) <= FloatCompareUtils.COMP_EPSILON) { // &&
+																						// num
+																						// is
+			// neither
 			if (num < minValue) {
 				count[count.length - 1] = count[0];
 				count[0] = amount;
