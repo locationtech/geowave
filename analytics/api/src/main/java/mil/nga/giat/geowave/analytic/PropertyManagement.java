@@ -435,7 +435,9 @@ public class PropertyManagement implements
 				}
 			}
 			catch (final Exception ex) {
-				LOGGER.error("Invalid range parameter " + property.self().toString());
+				LOGGER.error(
+						"Invalid range parameter " + property.self().toString(),
+						ex);
 				return defaultValue;
 			}
 		}
@@ -458,7 +460,9 @@ public class PropertyManagement implements
 						property.getHelper().getBaseClass());
 			}
 			catch (final ClassNotFoundException e) {
-				LOGGER.error("Class not found for property " + property);
+				LOGGER.error(
+						"Class not found for property " + property,
+						e);
 			}
 			catch (final java.lang.IllegalArgumentException ex) {
 				LOGGER.error(
@@ -523,7 +527,9 @@ public class PropertyManagement implements
 						property.getHelper().getBaseClass());
 			}
 			catch (final ClassNotFoundException e) {
-				LOGGER.error("Class not found for property " + property);
+				LOGGER.error(
+						"Class not found for property " + property,
+						e);
 			}
 			catch (final java.lang.IllegalArgumentException ex) {
 				LOGGER.error(

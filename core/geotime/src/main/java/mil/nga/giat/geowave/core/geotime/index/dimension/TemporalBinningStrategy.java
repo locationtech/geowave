@@ -361,6 +361,30 @@ public class TemporalBinningStrategy implements
 		return cal;
 	}
 
+	/**
+	 * The == operator is not reliable for doubles, so we are using this method
+	 * to check if two doubles are equal
+	 * 
+	 * @param x
+	 * @param y
+	 * @return true if the double are equal, false if they are not
+	 */
+	private static boolean checkIfDoublesEqual(
+			double x,
+			double y ) {
+		boolean xNeg = false;
+		boolean yNeg = false;
+		double diff = (Math.abs(x) - Math.abs(y));
+
+		if (x < 0.0) {
+			xNeg = true;
+		}
+		if (y < 0.0) {
+			yNeg = true;
+		}
+		return (diff <= 0.0001 && diff >= -0.0001 && xNeg == yNeg);
+	}
+
 	@Override
 	public BinRange[] getNormalizedRanges(
 			final NumericData range ) {
@@ -402,7 +426,9 @@ public class TemporalBinningStrategy implements
 				lastBin = true;
 				endMillis = (long) range.getMax();
 				// its questionable whether we use
-				fullExtent = range.getMax() == maxOfBin;
+				fullExtent = checkIfDoublesEqual(
+						range.getMax(),
+						maxOfBin);
 			}
 			else {
 				endMillis = maxOfBin;

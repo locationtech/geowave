@@ -65,7 +65,7 @@ public class KMeansDistortionJobRunner extends
 		job.setOutputValueClass(DistortionEntry.class);
 		job.setOutputFormatClass(GeoWaveOutputFormat.class);
 		// extends wait time to 15 minutes (default: 600 seconds)
-		final long milliSeconds = 1000 * 60 * 15;
+		final long milliSeconds = 1000L * 60L * 15L;
 		final Configuration conf = job.getConfiguration();
 		conf.setLong(
 				"mapred.task.timeout",

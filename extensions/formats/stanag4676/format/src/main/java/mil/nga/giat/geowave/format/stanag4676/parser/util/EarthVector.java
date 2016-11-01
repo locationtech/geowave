@@ -359,6 +359,30 @@ public class EarthVector
 	}
 
 	/**
+	 * The == operator is not reliable for doubles, so we are using this method
+	 * to check if two doubles are equal
+	 * 
+	 * @param x
+	 * @param y
+	 * @return true if the double are equal, false if they are not
+	 */
+	private static boolean checkIfDoublesEqual(
+			double x,
+			double y ) {
+		boolean xNeg = false;
+		boolean yNeg = false;
+		double diff = (Math.abs(x) - Math.abs(y));
+
+		if (x < 0.0) {
+			xNeg = true;
+		}
+		if (y < 0.0) {
+			yNeg = true;
+		}
+		return (diff <= 0.0001 && diff >= -0.0001 && xNeg == yNeg);
+	}
+
+	/**
 	 * equals - compare ecf position (x,y,z) for equality
 	 */
 	@Override
@@ -372,7 +396,13 @@ public class EarthVector
 		}
 		final EarthVector coord = (EarthVector) obj;
 
-		return ((coord.getX() == ecfVector.x) && (coord.getY() == ecfVector.y) && (coord.getZ() == ecfVector.z));
+		return (checkIfDoublesEqual(
+				coord.getX(),
+				ecfVector.x) && checkIfDoublesEqual(
+				coord.getY(),
+				ecfVector.y) && checkIfDoublesEqual(
+				coord.getZ(),
+				ecfVector.z));
 	}
 
 	@Override
@@ -793,7 +823,7 @@ public class EarthVector
 		double deltaLon = (points[segments].getLongitude(EarthVector.DEGREES) - baseLon);
 		final double baseAlt = points[0].elevation;
 		final double altStep = (points[segments].elevation - baseAlt) * resolution;
-		if (deltaLon != 0) {
+		if (Math.abs(deltaLon) >= 0.0) {
 			if (reverseDirection) {
 				if (Math.abs(deltaLon) < 180) {
 					// reverse it

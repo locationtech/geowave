@@ -64,7 +64,7 @@ public class NATO4676Decoder implements
 	HashMap<String, Track> trackMap = new HashMap<String, Track>();
 	private int trackStatsNumTracks = 0;
 	private int trackStatsNumDots = 0;
-	private static Logger LOGGER = LoggerFactory.getLogger(NATO4676Decoder.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(NATO4676Decoder.class);
 
 	boolean printNotParse = false;
 
@@ -113,14 +113,21 @@ public class NATO4676Decoder implements
 			}
 		}
 		catch (final JDOMParseException jdomPe) {
-			LOGGER.info("jdomParseException: " + jdomPe.getLocalizedMessage());
+			LOGGER.info(
+					"jdomParseException: " + jdomPe.getLocalizedMessage(),
+					jdomPe);
 			return null;
 		}
 		catch (final IOException ioe) {
+			LOGGER.info(
+					"IO exception: " + ioe.getLocalizedMessage(),
+					ioe);
 			return null;
 		}
 		catch (final JDOMException jdome) {
-			jdome.printStackTrace();
+			LOGGER.info(
+					"jdomException: " + jdome.getLocalizedMessage(),
+					jdome);
 			return null;
 		}
 
@@ -280,6 +287,9 @@ public class NATO4676Decoder implements
 					security.setClassification(ClassificationLevel.valueOf(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set classification level",
+							iae);
 					security.setClassification(null);
 				}
 			}
@@ -340,6 +350,9 @@ public class NATO4676Decoder implements
 					trackEvent.setStatus(TrackStatus.valueOf(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set status",
+							iae);
 					trackEvent.setStatus(null);
 				}
 			}
@@ -359,6 +372,9 @@ public class NATO4676Decoder implements
 					trackEvent.setExerciseIndicator(ExerciseIndicator.valueOf(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set exercise indicator",
+							iae);
 					trackEvent.setExerciseIndicator(null);
 				}
 			}
@@ -367,6 +383,9 @@ public class NATO4676Decoder implements
 					trackEvent.setSimulationIndicator(SimulationIndicator.valueOf(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set simulation indicator",
+							iae);
 					trackEvent.setSimulationIndicator(null);
 				}
 			}
@@ -418,16 +437,11 @@ public class NATO4676Decoder implements
 					}
 				}
 				else {
-					try {
-						final TrackPoint point = readTrackPoint(
-								child,
-								xmlns);
-						if (point != null) {
-							trackEvent.addPoint(point);
-						}
-					}
-					catch (final Exception e) {
-						LOGGER.error("Could not identify track item");
+					final TrackPoint point = readTrackPoint(
+							child,
+							xmlns);
+					if (point != null) {
+						trackEvent.addPoint(point);
 					}
 				}
 			}
@@ -483,6 +497,9 @@ public class NATO4676Decoder implements
 					trackPoint.speed = Double.parseDouble(childValue);
 				}
 				catch (final NumberFormatException nfe) {
+					LOGGER.warn(
+							"Unable to set speed",
+							nfe);
 					trackPoint.speed = null;
 				}
 			}
@@ -499,6 +516,9 @@ public class NATO4676Decoder implements
 					trackPoint.course = Double.parseDouble(childValue);
 				}
 				catch (final NumberFormatException nfe) {
+					LOGGER.warn(
+							"Unable to set course",
+							nfe);
 					trackPoint.course = null;
 				}
 			}
@@ -507,6 +527,9 @@ public class NATO4676Decoder implements
 					trackPoint.trackPointType = TrackPointType.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set track point type",
+							iae);
 					trackPoint.trackPointType = null;
 				}
 			}
@@ -565,6 +588,9 @@ public class NATO4676Decoder implements
 					trackPoint.speed = Double.parseDouble(childValue);
 				}
 				catch (final NumberFormatException nfe) {
+					LOGGER.warn(
+							"Unable to set speed",
+							nfe);
 					trackPoint.speed = null;
 				}
 			}
@@ -584,6 +610,9 @@ public class NATO4676Decoder implements
 					trackPoint.course = Double.parseDouble(childValue);
 				}
 				catch (final NumberFormatException nfe) {
+					LOGGER.warn(
+							"Unable to set course",
+							nfe);
 					trackPoint.course = null;
 				}
 			}
@@ -592,6 +621,9 @@ public class NATO4676Decoder implements
 					trackPoint.trackPointType = TrackPointType.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set track point type",
+							iae);
 					trackPoint.trackPointType = null;
 				}
 			}
@@ -600,6 +632,9 @@ public class NATO4676Decoder implements
 					trackPoint.trackPointSource = ModalityType.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set track point source",
+							iae);
 					trackPoint.trackPointSource = null;
 				}
 			}
@@ -632,6 +667,9 @@ public class NATO4676Decoder implements
 					trackIdentity.identity = Identity.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set identity",
+							iae);
 					trackIdentity.identity = null;
 				}
 
@@ -656,6 +694,9 @@ public class NATO4676Decoder implements
 					trackClassification.setUuid(UUID.fromString(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set uuid",
+							iae);
 					trackClassification.setUuid(null);
 				}
 			}
@@ -700,6 +741,9 @@ public class NATO4676Decoder implements
 					trackManagement.setUuid(UUID.fromString(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set uuid",
+							iae);
 					trackManagement.setUuid(null);
 				}
 			}
@@ -727,6 +771,9 @@ public class NATO4676Decoder implements
 					trackManagement.sourceModality = ModalityType.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set source modality",
+							iae);
 					trackManagement.sourceModality = null;
 				}
 			}
@@ -735,6 +782,9 @@ public class NATO4676Decoder implements
 					trackManagement.environment = TrackEnvironment.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set environment",
+							iae);
 					trackManagement.environment = null;
 				}
 			}
@@ -758,6 +808,9 @@ public class NATO4676Decoder implements
 					trackManagement.trackerType = TrackerType.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set tracker type",
+							iae);
 					trackManagement.trackerType = null;
 				}
 			}
@@ -766,6 +819,9 @@ public class NATO4676Decoder implements
 					trackManagement.alertIndicator = Boolean.parseBoolean(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set alert indicator",
+							iae);
 					trackManagement.alertIndicator = false;
 				}
 			}
@@ -788,6 +844,9 @@ public class NATO4676Decoder implements
 					motionImagery.setUuid(UUID.fromString(childValue));
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set uuid",
+							iae);
 					motionImagery.setUuid(null);
 				}
 			}
@@ -810,6 +869,9 @@ public class NATO4676Decoder implements
 					motionImagery.band = SymbolicSpectralRange.valueOf(childValue);
 				}
 				catch (final IllegalArgumentException iae) {
+					LOGGER.warn(
+							"Unable to set band value",
+							iae);
 					motionImagery.band = null;
 				}
 			}

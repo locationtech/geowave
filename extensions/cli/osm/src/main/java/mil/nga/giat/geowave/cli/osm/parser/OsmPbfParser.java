@@ -39,7 +39,7 @@ import mil.nga.giat.geowave.cli.osm.types.generated.Way;
 public class OsmPbfParser
 {
 
-	private static Logger LOGGER = org.slf4j.LoggerFactory.getLogger(OsmPbfParser.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(OsmPbfParser.class);
 
 	public Configuration stageData(
 			OsmPbfParserOptions args )
@@ -127,7 +127,9 @@ public class OsmPbfParser
 					});
 		}
 		catch (IOException ex) {
-			//
+			LOGGER.error(
+					"Unable to crrate the FSDataOutputStream",
+					ex);
 		}
 		finally {
 			IOUtils.closeQuietly(nodeWriter);
@@ -136,6 +138,7 @@ public class OsmPbfParser
 			IOUtils.closeQuietly(nodeOut);
 			IOUtils.closeQuietly(wayOut);
 			IOUtils.closeQuietly(relationOut);
+			fs.close();
 
 		}
 
@@ -155,10 +158,14 @@ public class OsmPbfParser
 					parser).process();
 		}
 		catch (FileNotFoundException e) {
-			LOGGER.error("Unable to load file: " + file.toString());
+			LOGGER.error(
+					"Unable to load file: " + file.toString(),
+					e);
 		}
-		catch (IOException e) {
-			LOGGER.error("Unable to process file: " + file.toString());
+		catch (IOException e1) {
+			LOGGER.error(
+					"Unable to process file: " + file.toString(),
+					e1);
 		}
 		finally {
 			IOUtils.closeQuietly(is);
@@ -397,7 +404,9 @@ public class OsmPbfParser
 				p.setUserName(getStringById(info.getUid()));
 			}
 			catch (Exception ex) {
-				LOGGER.warn("Error, input file doesn't contain a valid string table for user id: " + info.getUid());
+				LOGGER.warn(
+						"Error, input file doesn't contain a valid string table for user id: " + info.getUid(),
+						ex);
 				p.setUserName(String.valueOf(info.getUid()));
 			}
 			p.setChangesetId(info.getChangeset());

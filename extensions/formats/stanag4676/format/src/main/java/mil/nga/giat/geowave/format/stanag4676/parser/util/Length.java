@@ -215,12 +215,38 @@ public class Length implements
 		return lengthKM * INperKM;
 	}
 
+	/**
+	 * The == operator is not reliable for doubles, so we are using this method
+	 * to check if two doubles are equal
+	 * 
+	 * @param x
+	 * @param y
+	 * @return true if the double are equal, false if they are not
+	 */
+	private static boolean checkIfDoublesEqual(
+			double x,
+			double y ) {
+		boolean xNeg = false;
+		boolean yNeg = false;
+		double diff = (Math.abs(x) - Math.abs(y));
+
+		if (x < 0.0) {
+			xNeg = true;
+		}
+		if (y < 0.0) {
+			yNeg = true;
+		}
+		return (diff <= 0.0001 && diff >= -0.0001 && xNeg == yNeg);
+	}
+
 	@Override
 	public boolean equals(
 			final Object obj ) {
 		if (obj instanceof Length) {
 			final Length objLength = (Length) obj;
-			return objLength.lengthKM == lengthKM;
+			return checkIfDoublesEqual(
+					objLength.lengthKM,
+					lengthKM);
 		}
 		return false;
 	}

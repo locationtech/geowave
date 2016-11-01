@@ -208,11 +208,37 @@ public class TieredSFCIndexStrategy implements
 		double[] maxes = indexedData.getMaxValuesPerDimension();
 		int ranges = 0;
 		for (int d = 0; d < mins.length; d++) {
-			if (mins[d] != maxes[d]) {
+			if (!checkIfDoublesEqual(
+					mins[d],
+					maxes[d])) {
 				ranges++;
 			}
 		}
 		return ranges;
+	}
+
+	/**
+	 * The == operator is not reliable for doubles, so we are using this method
+	 * to check if two doubles are equal
+	 * 
+	 * @param x
+	 * @param y
+	 * @return true if the double are equal, false if they are not
+	 */
+	private static boolean checkIfDoublesEqual(
+			double x,
+			double y ) {
+		boolean xNeg = false;
+		boolean yNeg = false;
+		double diff = (Math.abs(x) - Math.abs(y));
+
+		if (x < 0.0) {
+			xNeg = true;
+		}
+		if (y < 0.0) {
+			yNeg = true;
+		}
+		return (diff <= 0.0001 && diff >= -0.0001 && xNeg == yNeg);
 	}
 
 	@Override

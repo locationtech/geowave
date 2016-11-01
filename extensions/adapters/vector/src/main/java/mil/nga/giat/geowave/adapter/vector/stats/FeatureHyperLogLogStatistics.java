@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
 
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 
 /**
@@ -87,7 +88,7 @@ public class FeatureHyperLogLogStatistics extends
 			try {
 				loglog = (HyperLogLogPlus) ((FeatureHyperLogLogStatistics) mergeable).loglog.merge(loglog);
 			}
-			catch (Exception e) {
+			catch (CardinalityMergeException e) {
 				throw new RuntimeException(
 						"Unable to merge counters",
 						e);

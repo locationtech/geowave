@@ -15,8 +15,7 @@ public interface DistributableRenderer extends
 		Persistable
 {
 	public void render(
-			Object content )
-			throws Exception;
+			Object content );
 
 	public boolean isDecimationEnabled();
 

@@ -100,7 +100,8 @@ public class KMeansJumpOptions
 			}
 			catch (final Exception ex) {
 				throw new ParameterException(
-						"Invalid range parameter " + value);
+						"Invalid range parameter " + value,
+						ex);
 			}
 		}
 

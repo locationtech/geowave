@@ -179,11 +179,15 @@ public class ConfigOptions
 			}
 		}
 		catch (FileNotFoundException e) {
-			LOGGER.error("Could not find the property file.");
+			LOGGER.error(
+					"Could not find the property file.",
+					e);
 			return false;
 		}
 		catch (IOException e) {
-			LOGGER.error("Exception writing property file.");
+			LOGGER.error(
+					"Exception writing property file.",
+					e);
 			return false;
 		}
 		return true;

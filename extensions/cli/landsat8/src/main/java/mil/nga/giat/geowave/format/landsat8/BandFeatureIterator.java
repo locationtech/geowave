@@ -36,6 +36,16 @@ public class BandFeatureIterator implements
 		PATH_ROW_FORMATTER.setMaximumIntegerDigits(3);
 		PATH_ROW_FORMATTER.setMinimumIntegerDigits(3);
 	}
+	private static final String[] SCENE_ATTRIBUTES = new String[] {
+		SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
+		SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
+		SceneFeatureIterator.CLOUD_COVER_ATTRIBUTE_NAME,
+		SceneFeatureIterator.PROCESSING_LEVEL_ATTRIBUTE_NAME,
+		SceneFeatureIterator.PATH_ATTRIBUTE_NAME,
+		SceneFeatureIterator.ROW_ATTRIBUTE_NAME,
+		SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME,
+		SceneFeatureIterator.SCENE_DOWNLOAD_ATTRIBUTE_NAME
+	};
 	private static final String DOWNLOAD_PREFIX = "http://landsat-pds.s3.amazonaws.com/L8";
 	protected static final String BANDS_TYPE_NAME = "band";
 	public static final String BAND_ATTRIBUTE_NAME = "band";
@@ -225,7 +235,7 @@ public class BandFeatureIterator implements
 									"[^\\d.]",
 									"");
 							final double mb = Double.parseDouble(sizeStr) / divisor;
-							for (final String attributeName : SceneFeatureIterator.SCENE_ATTRIBUTES) {
+							for (final String attributeName : SCENE_ATTRIBUTES) {
 								featureBuilder.set(
 										attributeName,
 										scene.getAttribute(attributeName));

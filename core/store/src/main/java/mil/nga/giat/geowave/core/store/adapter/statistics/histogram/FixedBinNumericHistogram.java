@@ -40,6 +40,7 @@ public class FixedBinNumericHistogram implements
 	private long totalCount = 0;
 	private double minValue = Double.MAX_VALUE;
 	private double maxValue = Double.MIN_VALUE;
+	private static final double COMP_VALUE = 10E-23;
 	private boolean constrainedRange = false;
 
 	/**
@@ -120,7 +121,7 @@ public class FixedBinNumericHistogram implements
 
 	private double binSize() {
 		final double v = (maxValue - minValue) / count.length;
-		return (v == 0.0) ? 1.0 : v;
+		return (v <= COMP_VALUE) ? 1.0 : v;
 	}
 
 	public double quantile(
@@ -240,7 +241,7 @@ public class FixedBinNumericHistogram implements
 	public void add(
 			final double num ) {
 		add(
-				1,
+				1L,
 				num);
 	}
 
@@ -251,14 +252,15 @@ public class FixedBinNumericHistogram implements
 			return;
 		}
 		// entry of the the same value or first entry
-		if ((totalCount == 0) || (minValue == num)) {
+		if ((totalCount == 0L) || (Math.abs(minValue / num - 1) <= COMP_VALUE)) {
 			count[0] += amount;
 			minValue = num;
 			maxValue = Math.max(
 					num,
 					maxValue);
 		} // else if entry has a different value
-		else if (minValue == maxValue) { // && num is neither
+		else if (Math.abs(maxValue / minValue - 1) <= COMP_VALUE) { // && num is
+																	// neither
 			if (num < minValue) {
 				count[count.length - 1] = count[0];
 				count[0] = amount;

@@ -189,7 +189,9 @@ public class GeoWavePluginConfig
 						param.toString()) : (URI) param;
 			}
 			catch (final URISyntaxException e) {
-				LOGGER.error("Malformed Feature Namespace URI : " + param);
+				LOGGER.error(
+						"Malformed Feature Namespace URI : " + param,
+						e);
 			}
 		}
 		featureNameSpaceURI = namespaceURI;
@@ -207,7 +209,9 @@ public class GeoWavePluginConfig
 				bufferSizeFromParam = param instanceof Integer ? (Integer) param : Integer.parseInt(param.toString());
 			}
 			catch (final Exception e) {
-				LOGGER.error("Malformed buffer size : " + param);
+				LOGGER.error(
+						"Malformed buffer size : " + param,
+						e);
 			}
 		}
 		transactionBufferSize = bufferSizeFromParam;

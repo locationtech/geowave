@@ -74,7 +74,7 @@ public class SpatialQueryExample
 		example.runPolygonExamples();
 	}
 
-	private void setupDataStores()
+	private static void setupDataStores()
 			throws AccumuloSecurityException,
 			AccumuloException {
 		// Initialize VectorDataStore and AccumuloAdapterStore
@@ -130,8 +130,9 @@ public class SpatialQueryExample
 			}
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(
+					"Could not create writter",
+					e);
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -427,15 +428,20 @@ public class GPXConsumer implements
 									"time")).getTime();
 
 				}
-				catch (final Exception t) {
+				catch (final ParseException e) {
+					LOGGER.warn(
+							"Unable to parse date in seconds",
+							e);
 					try {
 						element.timestamp = GpxUtils.parseDateMillis(
 								getChildCharacters(
 										eventReader,
 										"time")).getTime();
 					}
-					catch (final Exception t2) {
-
+					catch (final ParseException e2) {
+						LOGGER.warn(
+								"Unable to parse date in millis",
+								e2);
 					}
 				}
 				break;

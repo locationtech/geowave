@@ -102,14 +102,9 @@ public class TranslationEntry
 	 * @return
 	 */
 	public boolean hasValue() {
-		try {
-			Object value = getParam().get(
-					getObject());
-			return value != null;
-		}
-		catch (Exception e) {
-			return false;
-		}
+		Object value = getParam().get(
+				getObject());
+		return value != null;
 	}
 
 	/**

@@ -78,7 +78,7 @@ public class SceneFeatureIterator implements
 	public static final String SCENE_DOWNLOAD_ATTRIBUTE_NAME = "sceneDownloadUrl";
 	public static final String ENTITY_ID_ATTRIBUTE_NAME = "entityId";
 
-	protected static final String[] SCENE_ATTRIBUTES = new String[] {
+	private static final String[] SCENE_ATTRIBUTES = new String[] {
 		SHAPE_ATTRIBUTE_NAME,
 		ACQUISITION_DATE_ATTRIBUTE_NAME,
 		CLOUD_COVER_ATTRIBUTE_NAME,
@@ -474,7 +474,8 @@ public class SceneFeatureIterator implements
 			catch (final IOException e) {
 				LOGGER.warn(
 						"Unable to close CSV parser",
-						parser);
+						parser,
+						e);
 			}
 		}
 	}

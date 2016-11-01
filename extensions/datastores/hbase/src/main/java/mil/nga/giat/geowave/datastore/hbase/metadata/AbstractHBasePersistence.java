@@ -31,7 +31,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 {
 
 	private final static Logger LOGGER = Logger.getLogger(AbstractHBasePersistence.class);
-	protected static final String[] METADATA_CFS = new String[] {
+	private static final String[] METADATA_CFS = new String[] {
 		HBaseAdapterIndexMappingStore.ADAPTER_INDEX_CF,
 		HBaseAdapterStore.ADAPTER_CF,
 		HBaseDataStatisticsStore.STATISTICS_CF,
