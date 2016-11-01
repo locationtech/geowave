@@ -168,7 +168,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 									partitionData,
 									id);
 							if (singleton != null) {
-								singleton.setPrimary(partitionData.isPrimary() | singleton.isPrimary());
+								singleton.setPrimary(partitionData.isPrimary() || singleton.isPrimary());
 								if (isPrimary)
 									primaries.put(
 											id,

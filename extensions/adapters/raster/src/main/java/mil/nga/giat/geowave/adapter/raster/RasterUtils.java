@@ -564,7 +564,7 @@ public class RasterUtils
 		}
 		final double scaleX = rescaleX * (width / imageWidth);
 		final double scaleY = rescaleY * (height / imageHeight);
-		if ((scaleX != 1) || (scaleY != 1)) {
+		if ((Math.abs(scaleX - 1) > SIMPLIFICATION_MAX_DEGREES) || (Math.abs(scaleY - 1) > SIMPLIFICATION_MAX_DEGREES)) {
 			image = rescaleImageViaPlanarImage(
 					interpolation,
 					rescaleX * (width / imageWidth),
@@ -1060,12 +1060,11 @@ public class RasterUtils
 				model,
 				0);
 		final boolean sourceIsFloat = TypeMap.isFloatingPoint(sourceType);
-		SampleDimensionType targetType = null;
-		if (targetType == null) {
-			// Default to TYPE_BYTE for floating point images only; otherwise
-			// keep unchanged.
-			targetType = sourceIsFloat ? SampleDimensionType.UNSIGNED_8BITS : sourceType;
-		}
+
+		// Default to TYPE_BYTE for floating point images only; otherwise
+		// keep unchanged.
+		SampleDimensionType targetType = sourceIsFloat ? SampleDimensionType.UNSIGNED_8BITS : sourceType;
+
 		// Default setting: no scaling
 		final boolean targetIsFloat = TypeMap.isFloatingPoint(targetType);
 		NumberRange targetRange = TypeMap.getRange(targetType);

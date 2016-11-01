@@ -109,7 +109,9 @@ public class IntermediateSplitInfo implements
 						index);
 			}
 			catch (final java.lang.IllegalArgumentException ex) {
-				LOGGER.info("Unable to split range: " + ex.getLocalizedMessage());
+				LOGGER.info(
+						"Unable to split range: " + ex.getLocalizedMessage(),
+						ex);
 				return null;
 			}
 		}

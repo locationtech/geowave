@@ -329,7 +329,9 @@ public class OsmProvider
 							null).getIds();
 				}
 				catch (IOException e) {
-					LOGGER.error("Error deserializing member array for way: ");
+					LOGGER.error(
+							"Error deserializing member array for way: ",
+							e);
 				}
 			}
 
@@ -440,10 +442,10 @@ public class OsmProvider
 
 		Map<Long, Coordinate> coords = new HashMap<>();
 
-		long id = -1;
+		long id = -1L;
 		Coordinate crd = new Coordinate(
-				-1,
-				-1);
+				-200,
+				-200);
 		ByteSequence lastkey = null;
 
 		for (Map.Entry<Key, Value> row : bs) {
@@ -467,21 +469,21 @@ public class OsmProvider
 				id = longReader.readField(row.getValue().get());
 			}
 
-			if (id != -1 && crd.x != -1 && crd.y != -1) {
+			if (id != -1L && crd.x >= -180 && crd.y >= -180) {
 				coords.put(
 						id,
 						crd);
-				id = -1;
+				id = -1L;
 				crd = new Coordinate(
-						-1,
-						-1);
+						-200,
+						-200);
 				lastkey = null;
 			}
 			else if (!lastkey.equals(row.getKey().getRowData())) {
-				id = -1;
+				id = -1L;
 				crd = new Coordinate(
-						-1,
-						-1);
+						-200,
+						-200);
 				lastkey = null;
 			}
 

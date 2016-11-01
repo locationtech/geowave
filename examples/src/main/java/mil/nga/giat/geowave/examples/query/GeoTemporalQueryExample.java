@@ -19,6 +19,8 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -52,6 +54,8 @@ import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFa
  */
 public class GeoTemporalQueryExample
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoTemporalQueryExample.class);
+
 	private static File tempAccumuloDir;
 	private static MiniAccumuloClusterImpl accumulo;
 	private static AccumuloDataStore dataStore;
@@ -189,7 +193,9 @@ public class GeoTemporalQueryExample
 
 		}
 		catch (final Exception ex) {
-			ex.printStackTrace();
+			LOGGER.warn(
+					"Could not add points",
+					ex);
 		}
 
 		System.out.println("Ingesting canned data...");

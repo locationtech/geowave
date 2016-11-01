@@ -101,8 +101,9 @@ public class SimpleIngestProducerConsumer extends
 							}
 						}
 						catch (final IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							log.error(
+									"Unable to create writer",
+									e);
 						}
 					}
 				},

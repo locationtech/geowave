@@ -91,18 +91,18 @@ public class AccumuloKDEReducer extends
 	}
 
 	public static final int NUM_BANDS = 3;
-	protected static final String[] NAME_PER_BAND = new String[] {
+	private static final String[] NAME_PER_BAND = new String[] {
 		"Weight",
 		"Normalized",
 		"Percentile"
 	};
 
-	protected static final double[] MINS_PER_BAND = new double[] {
+	private static final double[] MINS_PER_BAND = new double[] {
 		0,
 		0,
 		0
 	};
-	protected static final double[] MAXES_PER_BAND = new double[] {
+	private static final double[] MAXES_PER_BAND = new double[] {
 		Double.MAX_VALUE,
 		1,
 		1

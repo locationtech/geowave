@@ -122,7 +122,7 @@ public class GeoWaveConfiguratorBase
 			final Class<?> implementingClass,
 			final JobContext context ) {
 		return GeoWaveStoreFinder.createDataStore(getStoreConfigOptions(
-					implementingClass,
+				implementingClass,
 				context));
 	}
 

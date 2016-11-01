@@ -17,13 +17,15 @@ import mil.nga.giat.geowave.core.store.index.FieldIndexStrategy;
 
 import org.apache.lucene.analysis.ngram.NGramTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TextIndexStrategy implements
 		FieldIndexStrategy<TextQueryConstraint, String>
 {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextIndexStrategy.class);
 	protected static final String START_END_MARKER = "\01";
-	protected static final byte[] START_END_MARKER_BYTE = StringUtils.stringToBinary(START_END_MARKER);
 
 	private int start = 2;
 	private int end = 4;
@@ -129,7 +131,12 @@ public class TextIndexStrategy implements
 			nGramTokenizer.close();
 		}
 		catch (final IOException e) {
-			e.printStackTrace();
+			LOGGER.error(
+					"Unable to read tokens",
+					e);
+		}
+		finally {
+
 		}
 
 		return tokens;

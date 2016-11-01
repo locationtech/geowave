@@ -6,7 +6,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrat
 public class NoDataMergeStrategyProvider implements
 		RasterMergeStrategyProviderSpi
 {
-	public static String NAME = "no-data";
+	public static final String NAME = "no-data";
 
 	@Override
 	public String getName() {

@@ -15,6 +15,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
+import org.geotools.filter.text.cql2.CQLException;
 
 import com.beust.jcommander.JCommander;
 import com.google.common.base.Function;
@@ -66,7 +67,10 @@ public class VectorMRExportJobRunner extends
 	 * Main method to execute the MapReduce analytic.
 	 */
 	public int runJob()
-			throws Exception {
+			throws CQLException,
+			IOException,
+			InterruptedException,
+			ClassNotFoundException {
 		Configuration conf = super.getConf();
 		if (conf == null) {
 			conf = new Configuration();

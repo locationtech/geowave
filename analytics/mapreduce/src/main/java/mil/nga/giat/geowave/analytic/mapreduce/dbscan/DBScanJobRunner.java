@@ -103,6 +103,9 @@ public class DBScanJobRunner extends
 				}
 				catch (final Throwable ex) {
 					// occurs when codec is not installed.
+					LOGGER.warn(
+							"Not configuable in this context",
+							ex);
 				}
 			}
 		}

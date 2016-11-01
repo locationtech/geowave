@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.analytic;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.measure.converter.ConversionException;
 import javax.measure.quantity.Length;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
@@ -11,6 +12,9 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.GeodeticCalculator;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -19,6 +23,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class GeometryCalculations
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeometryCalculations.class);
 
 	final GeometryFactory factory;
 	final CoordinateReferenceSystem crs;
@@ -103,8 +108,10 @@ public class GeometryCalculations
 					y2);
 			return geos;
 		}
-		catch (Exception ex) {
-			ex.printStackTrace();
+		catch (IllegalArgumentException | IndexOutOfBoundsException | TransformException | ConversionException ex) {
+			LOGGER.error(
+					"Unable to build geometry",
+					ex);
 		}
 
 		return null;

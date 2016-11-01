@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.IDefaultProvider;
 import com.beust.jcommander.JCommander;
@@ -22,6 +24,8 @@ import com.beust.jcommander.JCommander;
 public class PrefixedJCommander extends
 		JCommander
 {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(PrefixedJCommander.class);
 
 	// Allows us to override the commanders list that's being stored
 	// in our parent class.
@@ -63,6 +67,9 @@ public class PrefixedJCommander extends
 			// This is a programmer error, and will only happen if another
 			// version
 			// of JCommander is being used.
+			LOGGER.error(
+					"Another version of JCommander is being used",
+					e);
 			throw new RuntimeException(
 					e);
 		}
