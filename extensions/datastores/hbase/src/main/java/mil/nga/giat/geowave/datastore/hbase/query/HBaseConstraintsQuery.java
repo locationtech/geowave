@@ -49,7 +49,8 @@ public class HBaseConstraintsQuery extends
 {
 	protected final ConstraintsQuery base;
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			HBaseConstraintsQuery.class);
 
 	public HBaseConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
@@ -65,8 +66,10 @@ public class HBaseConstraintsQuery extends
 		this(
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(
+						index.getIndexStrategy()) : null,
+				query != null ? query.createFilters(
+						index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
@@ -109,7 +112,8 @@ public class HBaseConstraintsQuery extends
 		if (isAggregation()) {
 			// Because aggregations are done client-side make sure to set
 			// the adapter ID here
-			this.adapterIds = Collections.singletonList(aggregation.getLeft().getAdapterId());
+			this.adapterIds = Collections.singletonList(
+					aggregation.getLeft().getAdapterId());
 		}
 	}
 
@@ -138,8 +142,10 @@ public class HBaseConstraintsQuery extends
 
 		// Without custom filters, we need all the filters on the client side
 		for (final QueryFilter distributable : base.distributableFilters) {
-			if (!filters.contains(distributable)) {
-				filters.add(distributable);
+			if (!filters.contains(
+					distributable)) {
+				filters.add(
+						distributable);
 			}
 		}
 		return filters;
@@ -181,7 +187,8 @@ public class HBaseConstraintsQuery extends
 					while (it.hasNext()) {
 						final Object input = it.next();
 						if (input != null) {
-							aggregationFunction.aggregate(input);
+							aggregationFunction.aggregate(
+									input);
 						}
 					}
 					try {
@@ -194,7 +201,8 @@ public class HBaseConstraintsQuery extends
 					}
 
 					return new Wrapper(
-							Iterators.singletonIterator(aggregationFunction.getResult()));
+							Iterators.singletonIterator(
+									aggregationFunction.getResult()));
 				}
 			}
 
@@ -212,7 +220,8 @@ public class HBaseConstraintsQuery extends
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+		final String tableName = StringUtils.stringFromBinary(
+				index.getId().getBytes());
 		Mergeable total = null;
 
 		try {
@@ -230,44 +239,72 @@ public class HBaseConstraintsQuery extends
 
 			final AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType
 					.newBuilder();
-			aggregationBuilder.setName(aggregation.getClass().getName());
+			aggregationBuilder.setName(
+					aggregation.getClass().getName());
 
 			if (aggregation.getParameters() != null) {
-				final byte[] paramBytes = PersistenceUtils.toBinary(aggregation.getParameters());
-				aggregationBuilder.setParams(ByteString.copyFrom(paramBytes));
+				final byte[] paramBytes = PersistenceUtils.toBinary(
+						aggregation.getParameters());
+				aggregationBuilder.setParams(
+						ByteString.copyFrom(
+								paramBytes));
 			}
 
 			final AggregationProtos.AggregationRequest.Builder requestBuilder = AggregationProtos.AggregationRequest
 					.newBuilder();
-			requestBuilder.setAggregation(aggregationBuilder.build());
+			requestBuilder.setAggregation(
+					aggregationBuilder.build());
 
-			final byte[] filterBytes = PersistenceUtils.toBinary(base.distributableFilters);
-			final ByteString filterByteString = ByteString.copyFrom(filterBytes);
+			final byte[] filterBytes = PersistenceUtils.toBinary(
+					base.distributableFilters);
+			final ByteString filterByteString = ByteString.copyFrom(
+					filterBytes);
 
-			requestBuilder.setFilter(filterByteString);
+			requestBuilder.setFilter(
+					filterByteString);
 
-			requestBuilder.setModel(ByteString.copyFrom(PersistenceUtils.toBinary(index.getIndexModel())));
+			requestBuilder.setModel(
+					ByteString.copyFrom(
+							PersistenceUtils.toBinary(
+									index.getIndexModel())));
 
-			requestBuilder.setRangefilter(ByteString.copyFrom(multiFilter.toByteArray()));
+			requestBuilder.setRangefilter(
+					ByteString.copyFrom(
+							multiFilter.toByteArray()));
 			if (base.aggregation.getLeft() != null) {
 				final ByteArrayId adapterId = base.aggregation.getLeft().getAdapterId();
 				if (isCommonIndexAggregation()) {
 					final int binaryLength = 5 + adapterId.getBytes().length;
 
-					final ByteBuffer buf = ByteBuffer.allocate(binaryLength);
-					buf.put((byte) 0);
-					buf.putInt(adapterId.getBytes().length);
-					buf.put(adapterId.getBytes());
-					requestBuilder.setAdapter(ByteString.copyFrom(buf.array()));
+					final ByteBuffer buf = ByteBuffer.allocate(
+							binaryLength);
+					buf.put(
+							(byte) 0);
+					buf.putInt(
+							adapterId.getBytes().length);
+					buf.put(
+							adapterId.getBytes());
+					requestBuilder.setAdapter(
+							ByteString.copyFrom(
+									buf.array()));
 				}
 				else {
-					final DataAdapter dataAdapter = adapterStore.getAdapter(adapterId);
-					requestBuilder.setAdapter(ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter)));
+					final DataAdapter dataAdapter = adapterStore.getAdapter(
+							adapterId);
+					requestBuilder.setAdapter(
+							ByteString.copyFrom(
+									new byte[] {
+										1
+									}).concat(
+											ByteString.copyFrom(
+													PersistenceUtils.toBinary(
+															dataAdapter))));
 				}
 			}
 			final AggregationProtos.AggregationRequest request = requestBuilder.build();
 
-			final Table table = operations.getTable(tableName);
+			final Table table = operations.getTable(
+					tableName);
 
 			byte[] startRow = null;
 			byte[] endRow = null;
@@ -309,17 +346,20 @@ public class HBaseConstraintsQuery extends
 							bvalue,
 							Mergeable.class);
 
-					LOGGER.debug("Value from region " + regionCount + " is " + mvalue);
+					LOGGER.debug(
+							"Value from region " + regionCount + " is " + mvalue);
 
 					if (total == null) {
 						total = mvalue;
 					}
 					else {
-						total.merge(mvalue);
+						total.merge(
+								mvalue);
 					}
 				}
 				else {
-					LOGGER.debug("Empty response for region " + regionCount);
+					LOGGER.debug(
+							"Empty response for region " + regionCount);
 				}
 			}
 
@@ -336,7 +376,8 @@ public class HBaseConstraintsQuery extends
 		}
 
 		return new Wrapper(
-				Iterators.singletonIterator(total));
+				Iterators.singletonIterator(
+						total));
 	}
 
 	protected MultiRowRangeFilter getMultiFilter() {
@@ -346,11 +387,12 @@ public class HBaseConstraintsQuery extends
 		final List<ByteArrayRange> ranges = base.getAllRanges();
 
 		if ((ranges == null) || ranges.isEmpty()) {
-			rowRanges.add(new RowRange(
-					HConstants.EMPTY_BYTE_ARRAY,
-					true,
-					HConstants.EMPTY_BYTE_ARRAY,
-					false));
+			rowRanges.add(
+					new RowRange(
+							HConstants.EMPTY_BYTE_ARRAY,
+							true,
+							HConstants.EMPTY_BYTE_ARRAY,
+							false));
 		}
 		else {
 			for (final ByteArrayRange range : ranges) {
@@ -358,10 +400,12 @@ public class HBaseConstraintsQuery extends
 					final byte[] startRow = range.getStart().getBytes();
 					byte[] stopRow;
 					if (!range.isSingleValue()) {
-						stopRow = HBaseUtils.getNextPrefix(range.getEnd().getBytes());
+						stopRow = HBaseUtils.getNextPrefix(
+								range.getEnd().getBytes());
 					}
 					else {
-						stopRow = HBaseUtils.getNextPrefix(range.getStart().getBytes());
+						stopRow = HBaseUtils.getNextPrefix(
+								range.getStart().getBytes());
 					}
 
 					final RowRange rowRange = new RowRange(
@@ -370,7 +414,8 @@ public class HBaseConstraintsQuery extends
 							stopRow,
 							true);
 
-					rowRanges.add(rowRange);
+					rowRanges.add(
+							rowRange);
 				}
 			}
 		}
@@ -383,7 +428,8 @@ public class HBaseConstraintsQuery extends
 			return filter;
 		}
 		catch (final IOException e) {
-			LOGGER.error("Error creating range filter." + e);
+			LOGGER.error(
+					"Error creating range filter." + e);
 		}
 
 		return null;
