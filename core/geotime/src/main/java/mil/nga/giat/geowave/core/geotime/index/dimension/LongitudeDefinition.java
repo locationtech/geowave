@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.core.geotime.index.dimension;
 
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
@@ -39,7 +40,7 @@ public class LongitudeDefinition extends
 	public BinRange[] getNormalizedRanges(
 			final NumericData range ) {
 		// if the range is a single value, clamp at -180, 180
-		if (checkIfDoublesEqual(
+		if (FloatCompareUtils.checkDoublesEqual(
 				range.getMin(),
 				range.getMax())) {
 
@@ -87,30 +88,6 @@ public class LongitudeDefinition extends
 		// case guarantee a mod on a positive dividend and subtract 180
 		final double offsetLon = lon + 180;
 		return (((Math.ceil(Math.abs(offsetLon) / 360) * 360) + offsetLon) % 360) - 180;
-	}
-
-	/**
-	 * The == operator is not reliable for doubles, so we are using this method
-	 * to check if two doubles are equal
-	 * 
-	 * @param x
-	 * @param y
-	 * @return true if the double are equal, false if they are not
-	 */
-	private static boolean checkIfDoublesEqual(
-			double x,
-			double y ) {
-		boolean xNeg = false;
-		boolean yNeg = false;
-		double diff = (Math.abs(x) - Math.abs(y));
-
-		if (x < 0.0) {
-			xNeg = true;
-		}
-		if (y < 0.0) {
-			yNeg = true;
-		}
-		return (diff <= 0.0001 && diff >= -0.0001 && xNeg == yNeg);
 	}
 
 	@Override

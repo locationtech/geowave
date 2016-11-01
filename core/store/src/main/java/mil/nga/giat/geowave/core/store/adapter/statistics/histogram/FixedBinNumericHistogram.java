@@ -122,7 +122,9 @@ public class FixedBinNumericHistogram implements
 
 	private double binSize() {
 		final double v = (maxValue - minValue) / count.length;
-		return (v <= FloatCompareUtils.COMP_EPSILON) ? 1.0 : v;
+		return (FloatCompareUtils.checkDoublesEqual(
+				v,
+				0.0)) ? 1.0 : v;
 	}
 
 	public double quantile(
@@ -253,16 +255,20 @@ public class FixedBinNumericHistogram implements
 			return;
 		}
 		// entry of the the same value or first entry
-		if ((totalCount == 0L) || (Math.abs(minValue / num - 1) <= FloatCompareUtils.COMP_EPSILON)) {
+		if ((totalCount == 0L) || FloatCompareUtils.checkDoublesEqual(
+				minValue,
+				num)) {
 			count[0] += amount;
 			minValue = num;
 			maxValue = Math.max(
 					num,
 					maxValue);
 		} // else if entry has a different value
-		else if (Math.abs(maxValue / minValue - 1) <= FloatCompareUtils.COMP_EPSILON) { // &&
-																						// num
-																						// is
+		else if (FloatCompareUtils.checkDoublesEqual(
+				maxValue,
+				minValue)) { // &&
+								// num
+								// is
 			// neither
 			if (num < minValue) {
 				count[count.length - 1] = count[0];
