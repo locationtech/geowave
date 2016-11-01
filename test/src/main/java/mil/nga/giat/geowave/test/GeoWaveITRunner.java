@@ -128,7 +128,11 @@ public class GeoWaveITRunner extends
 		}
 
 		private Object createTestUsingFieldInjection()
-				throws Exception {
+				throws IllegalAccessException,
+				SecurityException,
+				NoSuchFieldException,
+				GeoWaveITException,
+				InstantiationException {
 			String typeNamespace = null;
 			final Set<Pair<Field, String>> fieldsAndNamespacePairs = new HashSet<Pair<Field, String>>();
 			if (typeIsAnnotated()) {
@@ -240,7 +244,9 @@ public class GeoWaveITRunner extends
 	 */
 	public GeoWaveITRunner(
 			final Class<?> klass )
-			throws Throwable {
+			throws InitializationError,
+			SecurityException,
+			GeoWaveITException {
 		super(
 				klass,
 				NO_RUNNERS);
@@ -255,7 +261,8 @@ public class GeoWaveITRunner extends
 
 	private void createRunnersForDataStores()
 			throws InitializationError,
-			Exception {
+			SecurityException,
+			GeoWaveITException {
 		final GeoWaveStoreRunnerConfig emptyConfig = new GeoWaveStoreRunnerConfig();
 		List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
 
@@ -335,7 +342,8 @@ public class GeoWaveITRunner extends
 	}
 
 	private Set<String> getDataStoreOptionFieldsForTypeAnnotation()
-			throws Exception {
+			throws SecurityException,
+			GeoWaveITException {
 		final Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 		final Set<String> dataStoreOptionFields = new HashSet<String>();
 		for (final Field field : fields) {
@@ -390,7 +398,7 @@ public class GeoWaveITRunner extends
 	}
 
 	private TestEnvironment[] getTestEnvironments()
-			throws Exception {
+			throws NullPointerException {
 		final Set<Environment> environments = new HashSet<Environment>();
 		final Environments es = getTestClass().getJavaClass().getAnnotation(
 				Environments.class);

@@ -106,9 +106,9 @@ public abstract class HBaseFilteredIndexQuery extends
 			}
 		}
 		catch (final IOException ex) {
-			LOGGER
-					.warn("Unabe to check if " + StringUtils.stringFromBinary(index.getId().getBytes())
-							+ " table exists");
+			LOGGER.warn(
+					"Unabe to check if " + StringUtils.stringFromBinary(index.getId().getBytes()) + " table exists",
+					ex);
 			return new CloseableIterator.Empty();
 		}
 
@@ -225,7 +225,9 @@ public abstract class HBaseFilteredIndexQuery extends
 			filterList.addFilter(filter);
 		}
 		catch (final IOException e) {
-			LOGGER.error("Error creating range filter." + e);
+			LOGGER.error(
+					"Error creating range filter.",
+					e);
 		}
 
 		// Add distributable filters if requested
