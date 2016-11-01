@@ -75,7 +75,7 @@ public class AggregationEndpoint extends
 			final RpcCallback<AggregationProtos.AggregationResponse> done ) {
 		FilterList filterList = null;
 		DataAdapter dataAdapter = null;
-		List<ByteArrayId> adapterIds = null;
+		ByteArrayId adapterId = null;
 		AggregationProtos.AggregationResponse response = null;
 		ByteString value = ByteString.EMPTY;
 
@@ -154,21 +154,20 @@ public class AggregationEndpoint extends
 					// a null character in ascii
 					final ByteBuffer buf = ByteBuffer.wrap(adapterBytes);
 					buf.get();
-					final int cfs = buf.getInt();
-					if (cfs > 0) {
-						adapterIds = new ArrayList<>();
-						for (int c = 0; c < cfs; c++) {
-							final int length = buf.getInt();
-							final byte[] adapterId = new byte[length];
-							buf.get(adapterId);
-							adapterIds.add(new ByteArrayId(
-									adapterId));
-						}
+					final int length = buf.getInt();
+					final byte[] adapterIdBytes = new byte[length];
+					buf.get(adapterIdBytes);
+					adapterId = new ByteArrayId(
+							adapterIdBytes);
+				}
+				else {
+					dataAdapter = PersistenceUtils.fromBinary(
+							adapterBytes,
+							DataAdapter.class);
+					if (dataAdapter != null) {
+						adapterId = dataAdapter.getAdapterId();
 					}
 				}
-				dataAdapter = PersistenceUtils.fromBinary(
-						adapterBytes,
-						DataAdapter.class);
 			}
 
 			try {
@@ -176,7 +175,7 @@ public class AggregationEndpoint extends
 						aggregation,
 						filterList,
 						dataAdapter,
-						adapterIds);
+						adapterId);
 
 				final byte[] bvalue = PersistenceUtils.toBinary(mvalue);
 				value = ByteString.copyFrom(bvalue);
@@ -203,7 +202,7 @@ public class AggregationEndpoint extends
 			final Aggregation aggregation,
 			final Filter filter,
 			final DataAdapter dataAdapter,
-			final List<ByteArrayId> adapterIds )
+			final ByteArrayId adapterId )
 			throws IOException {
 		final Scan scan = new Scan();
 		scan.setMaxVersions(1);
@@ -211,10 +210,8 @@ public class AggregationEndpoint extends
 		if (filter != null) {
 			scan.setFilter(filter);
 		}
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			for (final ByteArrayId id : adapterIds) {
-				scan.addFamily(id.getBytes());
-			}
+		if (adapterId != null) {
+			scan.addFamily(adapterId.getBytes());
 		}
 
 		aggregation.clearResult();
