@@ -47,7 +47,9 @@ public class HBaseMiniCluster
 								hbase.tearDown();
 							}
 							catch (final Exception e) {
-								System.out.println("Error shutting down hbase.");
+								LOGGER.error(
+										"Error shutting down hbase.",
+										e);
 							}
 							System.out.println("Shutting down!");
 						}
@@ -73,7 +75,9 @@ public class HBaseMiniCluster
 			propertyParser.parsePropsFile();
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to load property file: {}" + HBASE_PROPS_FILE);
+			LOGGER.error(
+					"Unable to load property file: {}" + HBASE_PROPS_FILE,
+					e);
 		}
 
 		if (System.getProperty(
@@ -94,7 +98,6 @@ public class HBaseMiniCluster
 		}
 		catch (final Exception e) {
 			LOGGER.error("Exception starting zookeeperLocalCluster: " + e);
-			e.printStackTrace();
 		}
 
 		zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
@@ -137,7 +140,6 @@ public class HBaseMiniCluster
 		}
 		catch (final Exception e) {
 			LOGGER.error("Exception starting hbaseLocalCluster: " + e);
-			e.printStackTrace();
 		}
 	}
 
