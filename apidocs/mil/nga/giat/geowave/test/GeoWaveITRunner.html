@@ -318,11 +318,15 @@ extends org.junit.runners.Suite</pre>
 <li class="blockList">
 <h4>GeoWaveITRunner</h4>
 <pre>public&nbsp;GeoWaveITRunner(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;klass)
-                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html?is-external=true" title="class or interface in java.lang">Throwable</a></pre>
+                throws org.junit.runners.model.InitializationError,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/SecurityException.html?is-external=true" title="class or interface in java.lang">SecurityException</a>,
+                       mil.nga.giat.geowave.test.GeoWaveITRunner.GeoWaveITException</pre>
 <div class="block">Only called reflectively. Do not use programmatically.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html?is-external=true" title="class or interface in java.lang">Throwable</a></code></dd>
+<dd><code>org.junit.runners.model.InitializationError</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/SecurityException.html?is-external=true" title="class or interface in java.lang">SecurityException</a></code></dd>
+<dd><code>mil.nga.giat.geowave.test.GeoWaveITRunner.GeoWaveITException</code></dd>
 </dl>
 </li>
 </ul>
