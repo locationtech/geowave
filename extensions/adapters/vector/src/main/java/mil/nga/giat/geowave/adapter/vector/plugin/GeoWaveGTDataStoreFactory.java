@@ -236,9 +236,9 @@ public class GeoWaveGTDataStoreFactory implements
 								params);
 						return false;
 					}
-					catch (final GeoWavePluginException e) {
+					catch (final Exception e) {
 						LOGGER
-								.error(
+								.info(
 										"supplied map does not contain all necessary parameters to construct GeoWaveGTDataStore",
 										e);
 					}
@@ -247,8 +247,8 @@ public class GeoWaveGTDataStoreFactory implements
 
 			return true;
 		}
-		catch (final GeoWavePluginException e1) {
-			LOGGER.error(
+		catch (final Exception e1) {
+			LOGGER.info(
 					"supplied map does not contain all necessary parameters to construct GeoWaveGTDataStore",
 					e1);
 			return false;
