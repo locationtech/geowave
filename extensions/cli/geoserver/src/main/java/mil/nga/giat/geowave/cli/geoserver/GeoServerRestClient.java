@@ -49,7 +49,7 @@ import com.beust.jcommander.ParameterException;
 
 public class GeoServerRestClient
 {
-	private final static Logger logger = Logger.getLogger(GeoServerRestClient.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
 	static private class DataAdapterInfo
@@ -64,6 +64,7 @@ public class GeoServerRestClient
 	public GeoServerRestClient(
 			GeoServerConfig config ) {
 		this.config = config;
+		LOGGER.setLevel(Level.DEBUG);
 	}
 
 	/**
@@ -106,17 +107,17 @@ public class GeoServerRestClient
 				storeName,
 				adapterId);
 
-		logger.debug("Finished retrieving adapter list");
+		LOGGER.debug("Finished retrieving adapter list");
 
 		if (adapterInfoList.size() > 1 && adapterId == null) {
-			logger.debug("addlayer doesn't know how to deal with multiple adapters");
+			LOGGER.debug("addlayer doesn't know how to deal with multiple adapters");
 
 			String descr = "Please use -a, or choose one of these with -id:";
 			JSONObject jsonObj = getJsonFromAdapters(
 					adapterInfoList,
 					descr);
 
-			logger.debug(jsonObj);
+			LOGGER.debug(jsonObj);
 
 			return Response.ok(
 					jsonObj.toString(defaultIndentation)).build();
@@ -124,7 +125,7 @@ public class GeoServerRestClient
 
 		// verify the workspace exists
 		if (!workspaceExists(workspaceName)) {
-			logger.debug("addlayer needs to create the " + workspaceName + " workspace");
+			LOGGER.debug("addlayer needs to create the " + workspaceName + " workspace");
 
 			Response addWsResponse = addWorkspace(workspaceName);
 			if (addWsResponse.getStatus() != Status.CREATED.getStatusCode()) {
@@ -166,7 +167,7 @@ public class GeoServerRestClient
 						cvgStoreName,
 						dataAdapterInfo.adapterId);
 				if (getCvResponse.getStatus() == Status.OK.getStatusCode()) {
-					logger.debug(dataAdapterInfo.adapterId + " layer already exists");
+					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
 					continue;
 				}
 
@@ -198,16 +199,16 @@ public class GeoServerRestClient
 					return getDsResponse;
 				}
 
-				logger.debug("Checking for existing feature layer: " + dataAdapterInfo.adapterId);
+				LOGGER.debug("Checking for existing feature layer: " + dataAdapterInfo.adapterId);
 
 				// See if the feature layer already exists
 				Response getFlResponse = getFeatureLayer(dataAdapterInfo.adapterId);
 				if (getFlResponse.getStatus() == Status.OK.getStatusCode()) {
-					logger.debug(dataAdapterInfo.adapterId + " layer already exists");
+					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
 					continue;
 				}
 
-				logger.debug("Get feature layer: " + dataAdapterInfo.adapterId + " returned "
+				LOGGER.debug("Get feature layer: " + dataAdapterInfo.adapterId + " returned "
 						+ getFlResponse.getStatus());
 
 				// We have a datastore. Add the layer per the adapter ID
@@ -293,7 +294,7 @@ public class GeoServerRestClient
 			}
 		}
 		else {
-			logger.error("Error retieving GeoServer workspace list");
+			LOGGER.error("Error retieving GeoServer workspace list");
 		}
 
 		return false;
@@ -595,7 +596,7 @@ public class GeoServerRestClient
 								}
 
 								if (entryArray == null) {
-									logger
+									LOGGER
 											.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
 								}
 								else {
@@ -1048,7 +1049,7 @@ public class GeoServerRestClient
 			final String coverageName ) {
 		String jsonString = "{'coverage':" + "{'name':'" + coverageName + "'," + "'nativeCoverageName':'"
 				+ coverageName + "'}}";
-		logger.debug("Posting JSON: " + jsonString + " to " + workspaceName + "/" + cvgStoreName);
+		LOGGER.debug("Posting JSON: " + jsonString + " to " + workspaceName + "/" + cvgStoreName);
 
 		return getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages").request().post(
@@ -1289,10 +1290,14 @@ public class GeoServerRestClient
 			coverageXml = result.getWriter().toString();
 		}
 		catch (TransformerException e) {
-			e.printStackTrace();
+			LOGGER.error(
+					"Unable to create transformer",
+					e);
 		}
-		catch (ParserConfigurationException e) {
-			e.printStackTrace();
+		catch (ParserConfigurationException e1) {
+			LOGGER.error(
+					"Unable to create DocumentBuilderFactory",
+					e1);
 		}
 
 		return coverageXml;
@@ -1375,7 +1380,7 @@ public class GeoServerRestClient
 
 		ArrayList<DataAdapterInfo> adapterInfoList = new ArrayList<DataAdapterInfo>();
 
-		logger.debug("Adapter list for " + storeName + " with adapterId = " + adapterId + ": ");
+		LOGGER.debug("Adapter list for " + storeName + " with adapterId = " + adapterId + ": ");
 
 		try (final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
 			while (it.hasNext()) {
@@ -1387,16 +1392,18 @@ public class GeoServerRestClient
 
 				if (info != null) {
 					adapterInfoList.add(info);
-					logger.debug("> '" + info.adapterId + "' adapter passed filter");
+					LOGGER.debug("> '" + info.adapterId + "' adapter passed filter");
 				}
 			}
 
 		}
 		catch (final IOException e) {
-			System.err.println("unable to close adapter iterator while looking up coverage names");
+			LOGGER.error(
+					"Unable to close adapter iterator while looking up coverage names",
+					e);
 		}
 
-		logger.debug("getStoreAdapterInfo(" + storeName + ") got " + adapterInfoList.size() + " ids");
+		LOGGER.debug("getStoreAdapterInfo(" + storeName + ") got " + adapterInfoList.size() + " ids");
 
 		return adapterInfoList;
 	}
@@ -1404,7 +1411,7 @@ public class GeoServerRestClient
 	private DataAdapterInfo getAdapterInfo(
 			String adapterId,
 			DataAdapter adapter ) {
-		logger.debug("getAdapterInfo for id = " + adapterId);
+		LOGGER.debug("getAdapterInfo for id = " + adapterId);
 
 		DataAdapterInfo info = new DataAdapterInfo();
 		info.adapterId = adapter.getAdapterId().getString();
@@ -1414,30 +1421,30 @@ public class GeoServerRestClient
 			info.isRaster = true;
 		}
 
-		logger.debug("> Adapter ID: " + info.adapterId);
-		logger.debug("> Adapter Type: " + adapter.getClass().getSimpleName());
+		LOGGER.debug("> Adapter ID: " + info.adapterId);
+		LOGGER.debug("> Adapter Type: " + adapter.getClass().getSimpleName());
 
 		if (adapterId == null || adapterId.equals(AddOption.ALL.name())) {
-			logger.debug("id is null or all");
+			LOGGER.debug("id is null or all");
 			return info;
 		}
 
 		if (adapterId.equals(adapter.getAdapterId().getString())) {
-			logger.debug("id matches adapter id");
+			LOGGER.debug("id matches adapter id");
 			return info;
 		}
 
 		if (adapterId.equals(AddOption.RASTER.name()) && adapter instanceof RasterDataAdapter) {
-			logger.debug("id is all-raster and adapter is raster type");
+			LOGGER.debug("id is all-raster and adapter is raster type");
 			return info;
 		}
 
 		if (adapterId.equals(AddOption.VECTOR.name()) && adapter instanceof GeotoolsFeatureDataAdapter) {
-			logger.debug("id is all-vector and adapter is vector type");
+			LOGGER.debug("id is all-vector and adapter is vector type");
 			return info;
 		}
 
-		logger.debug("No match!");
+		LOGGER.debug("No match!");
 
 		return null;
 	}

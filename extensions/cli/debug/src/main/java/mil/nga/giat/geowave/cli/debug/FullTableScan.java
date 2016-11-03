@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -16,6 +18,8 @@ import com.beust.jcommander.Parameters;
 public class FullTableScan extends
 		AbstractGeoWaveQuery
 {
+	private static Logger LOGGER = Logger.getLogger(FullTableScan.class);
+
 	@Override
 	protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
@@ -41,7 +45,9 @@ public class FullTableScan extends
 
 		}
 		catch (final IOException e) {
-			e.printStackTrace();
+			LOGGER.warn(
+					"Unable to read result",
+					e);
 		}
 		return count;
 	}

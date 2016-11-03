@@ -5,6 +5,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterDescription;
@@ -21,6 +23,8 @@ import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 public class ExplainCommand implements
 		Command
 {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(ExplainCommand.class);
 
 	@Override
 	public boolean prepare(
@@ -116,7 +120,9 @@ public class ExplainCommand implements
 						pd.getObject());
 			}
 			catch (Exception e) {
-				// Ignore, don't care
+				LOGGER.warn(
+						"Unable to set value",
+						e);
 			}
 
 			boolean required = false;

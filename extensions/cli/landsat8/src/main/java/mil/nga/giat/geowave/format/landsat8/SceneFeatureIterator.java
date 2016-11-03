@@ -474,7 +474,8 @@ public class SceneFeatureIterator implements
 			catch (final IOException e) {
 				LOGGER.warn(
 						"Unable to close CSV parser",
-						parser);
+						parser,
+						e);
 			}
 		}
 	}

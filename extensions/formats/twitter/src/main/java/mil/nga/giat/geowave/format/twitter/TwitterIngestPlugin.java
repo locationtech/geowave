@@ -174,6 +174,7 @@ public class TwitterIngestPlugin extends
 
 			StringReader sr = new StringReader(
 					"");
+			JsonReader jsonReader = null;
 
 			try {
 				while ((line = br.readLine()) != null) {
@@ -194,7 +195,7 @@ public class TwitterIngestPlugin extends
 					try {
 						sr = new StringReader(
 								line);
-						JsonReader jsonReader = Json.createReader(sr);
+						jsonReader = Json.createReader(sr);
 						JsonObject tweet = jsonReader.readObject();
 
 						try {
@@ -226,8 +227,10 @@ public class TwitterIngestPlugin extends
 							dtg = TwitterUtils.parseDate(dtgString);
 						}
 						catch (final Exception e) {
-							LOGGER.warn("Error reading tweet date on line " + lineNumber + " of "
-									+ hfile.getOriginalFilePath());
+							LOGGER.warn(
+									"Error reading tweet date on line " + lineNumber + " of "
+											+ hfile.getOriginalFilePath(),
+									e);
 							continue;
 						}
 
@@ -295,6 +298,7 @@ public class TwitterIngestPlugin extends
 					}
 					finally {
 						if (sr != null) sr.close();
+						if (jsonReader != null) jsonReader.close();
 					}
 				}
 

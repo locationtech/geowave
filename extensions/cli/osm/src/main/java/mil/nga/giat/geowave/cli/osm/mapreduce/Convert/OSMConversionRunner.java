@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.cli.osm.mapreduce.Convert;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.accumulo.core.client.ClientConfiguration;

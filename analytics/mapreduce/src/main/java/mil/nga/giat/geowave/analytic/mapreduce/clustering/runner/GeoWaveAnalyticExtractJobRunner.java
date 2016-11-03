@@ -123,7 +123,8 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			final String namespaceURI,
 			@SuppressWarnings("rawtypes")
 			final Class<? extends DimensionExtractor> dimensionExtractorClass )
-			throws Exception {
+			throws InstantiationException,
+			IllegalAccessException {
 		final DimensionExtractor<?> extractor = dimensionExtractorClass.newInstance();
 		return AnalyticFeature.createGeometryFeatureAdapter(
 				outputDataTypeID,
@@ -235,18 +236,18 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				config,
 				dataStoreOptions.getFactoryOptionsAsMap());
 
-		final FileSystem fs = FileSystem.get(config);
+		try (final FileSystem fs = FileSystem.get(config)) {
+			if (fs.exists(this.getHdfsOutputPath())) {
+				fs.delete(
+						getHdfsOutputPath(),
+						true);
+			}
 
-		if (fs.exists(this.getHdfsOutputPath())) {
-			fs.delete(
-					getHdfsOutputPath(),
-					true);
+			return ToolRunner.run(
+					config,
+					this,
+					new String[] {});
 		}
-
-		return ToolRunner.run(
-				config,
-				this,
-				new String[] {});
 	}
 
 	@Override

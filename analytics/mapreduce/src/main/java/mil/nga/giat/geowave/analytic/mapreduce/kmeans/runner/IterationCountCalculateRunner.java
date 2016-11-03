@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -52,7 +53,7 @@ public class IterationCountCalculateRunner<T> implements
 
 	private int getIterations(
 			final PropertyManagement propertyManagement )
-			throws Exception {
+			throws IOException {
 
 		final CentroidManager<T> centroidManager = new CentroidManagerGeoWave<T>(
 				propertyManagement);

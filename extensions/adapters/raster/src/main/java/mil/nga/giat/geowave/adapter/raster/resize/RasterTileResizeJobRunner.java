@@ -60,7 +60,9 @@ public class RasterTileResizeJobRunner extends
 	 * Main method to execute the MapReduce analytic.
 	 */
 	public int runJob()
-			throws Exception {
+			throws IOException,
+			InterruptedException,
+			ClassNotFoundException {
 		Configuration conf = super.getConf();
 		if (conf == null) {
 			conf = new Configuration();

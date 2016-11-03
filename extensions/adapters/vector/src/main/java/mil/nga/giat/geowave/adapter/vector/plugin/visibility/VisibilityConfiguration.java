@@ -115,7 +115,9 @@ public class VisibilityConfiguration implements
 							vm.toString()).newInstance();
 				}
 				catch (Exception ex) {
-					VisibilityManagementHelper.LOGGER.warn("Cannot load visibility management class " + vm.toString());
+					VisibilityManagementHelper.LOGGER.warn(
+							"Cannot load visibility management class " + vm.toString(),
+							ex);
 					return false;
 				}
 			}
@@ -128,14 +130,15 @@ public class VisibilityConfiguration implements
 	@SuppressWarnings("unchecked")
 	public Object readResolve()
 			throws ObjectStreamException {
-		if (managerClassName != null && !manager.getClass().getName().equals(
-				managerClassName)) {
+		if (managerClassName != null && !(manager instanceof JsonDefinitionColumnVisibilityManagement)) {
 			try {
 				manager = (VisibilityManagement<SimpleFeature>) Class.forName(
 						managerClassName).newInstance();
 			}
 			catch (Exception ex) {
-				VisibilityManagementHelper.LOGGER.warn("Cannot load visibility management class " + managerClassName);
+				VisibilityManagementHelper.LOGGER.warn(
+						"Cannot load visibility management class " + managerClassName,
+						ex);
 			}
 		}
 		return this;

@@ -64,7 +64,8 @@ public class DistortionGroupManagement
 	final static Logger LOGGER = LoggerFactory.getLogger(DistortionGroupManagement.class);
 	public final static PrimaryIndex DISTORTIONS_INDEX = new NullIndex(
 			"DISTORTIONS");
-	public final static List<ByteArrayId> DISTORTIONS_INDEX_LIST = Arrays.asList(DISTORTIONS_INDEX.getId());
+	public final static List<ByteArrayId> DISTORTIONS_INDEX_LIST = Collections.unmodifiableList(Arrays
+			.asList(DISTORTIONS_INDEX.getId()));
 
 	final DataStore dataStore;
 	final IndexStore indexStore;

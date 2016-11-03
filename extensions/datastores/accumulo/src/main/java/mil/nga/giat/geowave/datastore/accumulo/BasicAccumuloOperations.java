@@ -322,7 +322,9 @@ public class BasicAccumuloOperations implements
 			return rowIterator.getKVCount();
 		}
 		catch (final TableNotFoundException e) {
-			LOGGER.warn("Table '" + tableName + "' not found during count operation");
+			LOGGER.warn(
+					"Table '" + tableName + "' not found during count operation",
+					e);
 			return 0;
 		}
 	}

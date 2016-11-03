@@ -196,7 +196,9 @@ public class UpdateCentroidCostMapReduce
 						groupID);
 			}
 			catch (final MatchingCentroidNotFoundException e) {
-				LOGGER.error("Unable to get centroid " + id + " for group " + groupID);
+				LOGGER.error(
+						"Unable to get centroid " + id + " for group " + groupID,
+						e);
 				return;
 			}
 

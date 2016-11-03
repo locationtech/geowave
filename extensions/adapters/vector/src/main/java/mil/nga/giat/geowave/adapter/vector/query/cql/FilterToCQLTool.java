@@ -64,7 +64,9 @@ public class FilterToCQLTool
 									matchAction);
 						}
 						catch (IllegalFilterException | TransformException e) {
-							LOGGER.warn("Cannot convert DWithin Expression to work with WSG84");
+							LOGGER.warn(
+									"Cannot convert DWithin Expression to work with WSG84",
+									e);
 						}
 						final DWithinImpl impl = matchAction == null ? new DWithinImpl(
 								geometry1,

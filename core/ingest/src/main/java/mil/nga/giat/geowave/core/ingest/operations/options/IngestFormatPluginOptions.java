@@ -100,8 +100,10 @@ public class IngestFormatPluginOptions extends
 				}
 			}
 			catch (final UnsupportedOperationException e) {
-				LOGGER.warn("Plugin provider for ingest type '" + formatPlugin.getIngestFormatName()
-						+ "' does not support local file ingest");
+				LOGGER.warn(
+						"Plugin provider for ingest type '" + formatPlugin.getIngestFormatName()
+								+ "' does not support local file ingest",
+						e);
 				continue;
 			}
 			ingestPlugins.put(
@@ -124,8 +126,10 @@ public class IngestFormatPluginOptions extends
 				}
 			}
 			catch (final UnsupportedOperationException e) {
-				LOGGER.warn("Plugin provider for ingest type '" + formatPlugin.getIngestFormatName()
-						+ "' does not support hdfs ingest");
+				LOGGER.warn(
+						"Plugin provider for ingest type '" + formatPlugin.getIngestFormatName()
+								+ "' does not support hdfs ingest",
+						e);
 				continue;
 			}
 			ingestPlugins.put(
@@ -148,8 +152,10 @@ public class IngestFormatPluginOptions extends
 				}
 			}
 			catch (final UnsupportedOperationException e) {
-				LOGGER.warn("Plugin provider for ingest type '" + formatPlugin.getIngestFormatName()
-						+ "' does not support avro ingest");
+				LOGGER.warn(
+						"Plugin provider for ingest type '" + formatPlugin.getIngestFormatName()
+								+ "' does not support avro ingest",
+						e);
 				continue;
 			}
 			ingestPlugins.put(

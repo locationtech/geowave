@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableBiMap.Builder;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -208,7 +209,9 @@ public class TieredSFCIndexStrategy implements
 		double[] maxes = indexedData.getMaxValuesPerDimension();
 		int ranges = 0;
 		for (int d = 0; d < mins.length; d++) {
-			if (mins[d] != maxes[d]) {
+			if (!FloatCompareUtils.checkDoublesEqual(
+					mins[d],
+					maxes[d])) {
 				ranges++;
 			}
 		}

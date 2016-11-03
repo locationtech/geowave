@@ -597,7 +597,8 @@ public class GeometryHullTool
 							hullCoordinate),
 					maxAngle);
 		}
-		return 360 == Math.abs(maxAngle);
+		// return 360 == Math.abs(maxAngle);
+		return (Math.abs(maxAngle) >= 359.999 && Math.abs(maxAngle) <= 360.0001);
 	}
 
 	/**
@@ -626,7 +627,9 @@ public class GeometryHullTool
 					shape2));
 		}
 		catch (Exception ex) {
-			// ex.printStackTrace();
+			LOGGER.warn(
+					"Exception caught in connect method",
+					ex);
 		}
 		return createHullFromGeometry(
 				shape1,
