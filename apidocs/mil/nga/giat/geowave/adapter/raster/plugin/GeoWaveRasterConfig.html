@@ -301,10 +301,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>readFromConfigParams</h4>
 <pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterConfig</a>&nbsp;readFromConfigParams(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configParams)
-                                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+                                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang">NullPointerException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang">NullPointerException</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -315,10 +315,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>readFromURL</h4>
 <pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterConfig.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterConfig</a>&nbsp;readFromURL(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;xmlURL)
-                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                                              <a href="http://docs.oracle.com/javase/7/docs/api/javax/xml/parsers/ParserConfigurationException.html?is-external=true" title="class or interface in javax.xml.parsers">ParserConfigurationException</a>,
+                                              <a href="http://docs.oracle.com/javase/7/docs/api/org/xml/sax/SAXException.html?is-external=true" title="class or interface in org.xml.sax">SAXException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/javax/xml/parsers/ParserConfigurationException.html?is-external=true" title="class or interface in javax.xml.parsers">ParserConfigurationException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/org/xml/sax/SAXException.html?is-external=true" title="class or interface in org.xml.sax">SAXException</a></code></dd>
 </dl>
 </li>
 </ul>
