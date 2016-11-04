@@ -69,7 +69,9 @@ public class AccumuloEntryIteratorWrapper<T> extends
 			entry = (Entry<Key, Value>) row;
 		}
 		catch (final ClassCastException e) {
-			LOGGER.error("Row is not an accumulo row entry.");
+			LOGGER.error(
+					"Row is not an accumulo row entry.",
+					e);
 			return null;
 		}
 		return AccumuloUtils.decodeRow(

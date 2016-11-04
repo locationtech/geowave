@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.format.stanag4676.parser.util;
 
 import java.io.Serializable;
 
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
+
 public class Length implements
 		Serializable
 {
@@ -220,7 +222,9 @@ public class Length implements
 			final Object obj ) {
 		if (obj instanceof Length) {
 			final Length objLength = (Length) obj;
-			return objLength.lengthKM == lengthKM;
+			return FloatCompareUtils.checkDoublesEqual(
+					objLength.lengthKM,
+					lengthKM);
 		}
 		return false;
 	}

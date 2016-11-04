@@ -229,7 +229,9 @@ public class KMeansMapReduce
 						groupID);
 			}
 			catch (final MatchingCentroidNotFoundException e) {
-				LOGGER.error("Unable to get centroid " + centroidID + " for group " + groupID);
+				LOGGER.error(
+						"Unable to get centroid " + centroidID + " for group " + groupID,
+						e);
 				return;
 			}
 

@@ -689,8 +689,8 @@ public final class DelayedBackbufferGraphic extends
 	}, justification = "Access defined in java.awt.Graphics; finalization only called by container resource finalize method)_")
 	@Override
 	public void finalize() {
-		super.finalize();
 		delegate.finalize();
+		super.finalize();
 	}
 
 	@Override

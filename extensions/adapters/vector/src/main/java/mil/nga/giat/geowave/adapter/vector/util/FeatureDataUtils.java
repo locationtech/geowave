@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
@@ -157,7 +158,7 @@ public class FeatureDataUtils
 				typeName,
 				typeDescriptor);
 
-		final String lCaseAxis = axis.toLowerCase();
+		final String lCaseAxis = axis.toLowerCase(Locale.ENGLISH);
 		final CoordinateReferenceSystem crs = featureType.getCoordinateReferenceSystem();
 		final String typeAxis = getAxis(crs);
 		// Default for EPSG:4326 is lat/long, If the provided type was

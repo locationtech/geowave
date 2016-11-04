@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.JCommander;
 
 /**
@@ -17,6 +20,8 @@ import com.beust.jcommander.JCommander;
  */
 public class JCommanderPropertiesTransformer
 {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(JCommanderPropertiesTransformer.class);
 
 	// The namespace is prepended to entries translated via
 	// this translator in the Properties object, or it is used
@@ -126,6 +131,9 @@ public class JCommanderPropertiesTransformer
 						entry.getObject());
 			}
 			catch (Exception e) {
+				LOGGER.warn(
+						"Unable to set value",
+						e);
 				continue;
 			}
 			if (value == null) {

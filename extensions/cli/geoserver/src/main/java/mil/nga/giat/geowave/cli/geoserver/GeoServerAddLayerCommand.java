@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.cli.geoserver;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -125,21 +126,16 @@ public class GeoServerAddLayerCommand implements
 		@Override
 		public AddOption convert(
 				final String value ) {
-			AddOption convertedValue = null;
+			AddOption convertedValue = AddOption.valueOf(value.toUpperCase());
 
-			try {
-				convertedValue = AddOption.valueOf(value.toUpperCase());
-			}
-			catch (Exception e) {
-				// Nothing to do. Exception thrown below.
-			}
-
-			if (convertedValue == null) {
+			if (convertedValue != AddOption.ALL && convertedValue != AddOption.RASTER
+					&& convertedValue != AddOption.VECTOR) {
 				throw new ParameterException(
 						"Value " + value + "can not be converted to an add option. " + "Available values are: "
 								+ StringUtils.join(
 										AddOption.values(),
-										", ").toLowerCase());
+										", ").toLowerCase(
+										Locale.ENGLISH));
 			}
 			return convertedValue;
 		}

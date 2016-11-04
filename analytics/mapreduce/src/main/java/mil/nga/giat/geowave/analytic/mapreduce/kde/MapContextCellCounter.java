@@ -5,10 +5,14 @@ import java.io.IOException;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MapContextCellCounter implements
 		CellCounter
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MapContextCellCounter.class);
+
 	private final Context context;
 	private final long minLevel;
 	private final long maxLevel;
@@ -40,7 +44,9 @@ public class MapContextCellCounter implements
 								weight));
 			}
 			catch (IOException | InterruptedException e) {
-				e.printStackTrace();
+				LOGGER.error(
+						"Unable to write",
+						e);
 			}
 		}
 	}

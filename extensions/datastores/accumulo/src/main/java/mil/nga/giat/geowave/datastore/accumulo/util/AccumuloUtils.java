@@ -239,7 +239,9 @@ public class AccumuloUtils
 						v);
 			}
 			catch (final IOException e) {
-				LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
+				LOGGER.error(
+						"Could not decode row from iterator. Ensure whole row iterators are being used.",
+						e);
 				return null;
 			}
 		}
@@ -688,21 +690,23 @@ public class AccumuloUtils
 				max = max.max(value);
 			}
 
-			final BigDecimal dMax = new BigDecimal(
-					max);
-			final BigDecimal dMin = new BigDecimal(
-					min);
-			BigDecimal delta = dMax.subtract(dMin);
-			delta = delta.divideToIntegralValue(new BigDecimal(
-					numSplits));
+			if ((min != null) && (max != null)) {
+				final BigDecimal dMax = new BigDecimal(
+						max);
+				final BigDecimal dMin = new BigDecimal(
+						min);
+				BigDecimal delta = dMax.subtract(dMin);
+				delta = delta.divideToIntegralValue(new BigDecimal(
+						numSplits));
 
-			for (int ii = 1; ii <= numberSplits; ii++) {
-				final BigDecimal temp = delta.multiply(BigDecimal.valueOf(ii));
-				final BigInteger value = min.add(temp.toBigInteger());
+				for (int ii = 1; ii <= numberSplits; ii++) {
+					final BigDecimal temp = delta.multiply(BigDecimal.valueOf(ii));
+					final BigInteger value = min.add(temp.toBigInteger());
 
-				final Text split = new Text(
-						value.toByteArray());
-				splits.add(split);
+					final Text split = new Text(
+							value.toByteArray());
+					splits.add(split);
+				}
 			}
 
 			final String tableName = AccumuloUtils.getQualifiedTableName(

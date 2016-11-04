@@ -17,10 +17,13 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.accumulo.core.util.format.Formatter;
 import org.apache.hadoop.io.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PersistentDataFormatter implements
 		Formatter
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(PersistentDataFormatter.class);
 
 	public PersistentDataFormatter() {
 		super();
@@ -242,6 +245,9 @@ public class PersistentDataFormatter implements
 			sb.append(persistable.toString());
 		}
 		catch (Exception ex) {
+			LOGGER.info(
+					"Exception caught",
+					ex);
 			appendBytes(
 					sb,
 					value.get(),

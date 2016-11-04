@@ -388,7 +388,9 @@ public class NoDataMetadataFactory
 											x,
 											y,
 											b));
-									noDataValuesPerBand[b].add(allNoDataValues[b][i]);
+									if (noDataValuesPerBand != null && noDataValuesPerBand[b] != null) {
+										noDataValuesPerBand[b].add(allNoDataValues[b][i]);
+									}
 								}
 							}
 						}
@@ -398,7 +400,7 @@ public class NoDataMetadataFactory
 		}
 
 		final double[][] usedNoDataValues;
-		if (!skipNoData) {
+		if (!skipNoData && noDataValuesPerBand != null) {
 			usedNoDataValues = new double[noDataValuesPerBand.length][];
 			for (int b = 0; b < noDataValuesPerBand.length; b++) {
 				usedNoDataValues[b] = new double[noDataValuesPerBand[b].size()];

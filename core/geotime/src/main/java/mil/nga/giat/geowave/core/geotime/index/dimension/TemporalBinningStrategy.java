@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinValue;
@@ -402,7 +403,9 @@ public class TemporalBinningStrategy implements
 				lastBin = true;
 				endMillis = (long) range.getMax();
 				// its questionable whether we use
-				fullExtent = range.getMax() == maxOfBin;
+				fullExtent = FloatCompareUtils.checkDoublesEqual(
+						range.getMax(),
+						maxOfBin);
 			}
 			else {
 				endMillis = maxOfBin;

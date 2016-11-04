@@ -682,9 +682,11 @@ public class FeatureDataAdapter extends
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
-		final Integer retVal = fieldToPositionMap.get(
-				fieldId).intValue() + model.getDimensions().length;
-		return (retVal != null) ? retVal.intValue() : -1;
+		Integer position = fieldToPositionMap.get(fieldId);
+		if (position == null) {
+			return -1;
+		}
+		return position.intValue() + model.getDimensions().length;
 	}
 
 	@Override

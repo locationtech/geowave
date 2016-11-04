@@ -129,18 +129,27 @@ public class SPIServiceRegistry extends
 			loaders.add(SPIServiceRegistry.class.getClassLoader());
 		}
 		catch (SecurityException ex) {
+			LOGGER.warn(
+					"Unable to get the class loader",
+					ex);
 			exceptions.add("SPIServiceRegistry's class loader : " + ex.getLocalizedMessage());
 		}
 		try {
 			loaders.add(ClassLoader.getSystemClassLoader());
 		}
 		catch (SecurityException ex) {
+			LOGGER.warn(
+					"Unable to get the system class loader",
+					ex);
 			exceptions.add("System class loader : " + ex.getLocalizedMessage());
 		}
 		try {
 			loaders.add(Thread.currentThread().getContextClassLoader());
 		}
 		catch (SecurityException ex) {
+			LOGGER.warn(
+					"Unable to get the context class loader",
+					ex);
 			exceptions.add("Thread's class loader : " + ex.getLocalizedMessage());
 		}
 
@@ -160,6 +169,9 @@ public class SPIServiceRegistry extends
 				}
 			}
 			catch (SecurityException ex) {
+				LOGGER.warn(
+						"Unable to get the class loader",
+						ex);
 				exceptions.add(loaderSet[i].toString() + "'s parent class loader : " + ex.getLocalizedMessage());
 			}
 		}

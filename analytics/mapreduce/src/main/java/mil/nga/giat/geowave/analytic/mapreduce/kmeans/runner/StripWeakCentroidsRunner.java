@@ -136,7 +136,7 @@ public class StripWeakCentroidsRunner<T> implements
 				try {
 					centroidManager.delete(toDelete);
 				}
-				catch (final Exception e) {
+				catch (final IOException e) {
 					return -1;
 				}
 

@@ -48,7 +48,7 @@
 		<hadoop.scope>compile</hadoop.scope>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.14</jersey.version>
-		<kafka.artifact>kafka_2.10</kafka.artifact>
+		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
@@ -63,12 +63,12 @@
 		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.reportPath>
 		<it.reportPath>${project.reporting.outputDirectory}/jacoco-it</it.reportPath>
 		<ut.reportPath>${project.reporting.outputDirectory}/jacoco-ut</ut.reportPath>
-		<sonar.jacoco.reportPath>${ut.reportPath}</sonar.jacoco.reportPath>
-		<sonar.jacoco.itReportPath>${it.reportPath}</sonar.jacoco.itReportPath>
+		<sonar.jacoco.reportPath>${jacoco.ut.reportPath}</sonar.jacoco.reportPath>
+		<sonar.jacoco.itReportPath>${jacoco.it.reportPath}</sonar.jacoco.itReportPath>
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-Xms1g -Xmx1400m -XX:MaxPermSize=256m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=256m</test.args>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
@@ -191,6 +191,11 @@
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
+				<version>${hbase.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-server</artifactId>
 				<version>${hbase.version}</version>
 			</dependency>
 			<dependency>
@@ -473,6 +478,15 @@
 					<artifactId>formatter-maven-plugin</artifactId>
 					<version>0.5.2</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-maven-plugins</artifactId>
+					<version>${hadoop.version}</version>
+					<configuration>
+						<protocVersion>2.5.0</protocVersion>
+						<protocCommand>/Apps/Protoc/bin/protoc</protocCommand>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -578,8 +592,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -605,6 +619,7 @@
 				<version>2.9.1</version>
 				<configuration>
 					<notimestamp>true</notimestamp>
+					<additionalparam>${javadoc.opts}</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
@@ -617,7 +632,6 @@
 							<sourceFileIncludes>
 								<include>**.java</include>
 							</sourceFileIncludes>
-							<additionalparam>${javadoc.opts}</additionalparam>
 							<quiet>true</quiet>
 							<windowtitle>GeoWave ${project.version}</windowtitle>
 							<doctitle>GeoWave ${project.version}</doctitle>
@@ -697,7 +711,7 @@
 					<dependency>
 						<groupId>mil.nga.giat</groupId>
 						<artifactId>geowave-dev-resources</artifactId>
-						<version>1.0</version>
+						<version>1.1</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -815,6 +829,8 @@
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<version>${findbugs.version}</version>
 				<configuration>
+					<maxHeap>256</maxHeap>
+					<jvmArgs>${test.args}</jvmArgs>
 					<findbugsXmlOutput>true</findbugsXmlOutput>
 					<xmlOutput>true</xmlOutput>
 					<effort>${findbugs.effort}</effort>

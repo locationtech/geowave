@@ -7,12 +7,15 @@ import org.geotools.referencing.datum.DefaultEllipsoid;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
 public class CoordinateCircleDistanceFn implements
 		DistanceFn<Coordinate>
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CoordinateCircleDistanceFn.class);
 
 	/**
 	 *
@@ -51,6 +54,9 @@ public class CoordinateCircleDistanceFn implements
 		catch (final java.lang.AssertionError ae) {
 			// weird error with orthodromic distance..when distance is too close
 			// (0.05 meter), it fails the tolerance test
+			LOGGER.info(
+					"when distance is too close(0.05 meter), it fails the tolerance test",
+					ae);
 
 			final GeodeticCalculator calc = new GeodeticCalculator(
 					getCRS());

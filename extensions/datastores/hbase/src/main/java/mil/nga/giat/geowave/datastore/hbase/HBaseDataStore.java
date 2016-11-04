@@ -316,6 +316,8 @@ public class HBaseDataStore extends
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				sanitizedQueryOptions.getAuthorizations());
 
+		hbaseQuery.setOptions(options);
+
 		return hbaseQuery.query(
 				operations,
 				tempAdapterStore,
@@ -336,6 +338,9 @@ public class HBaseDataStore extends
 				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getAuthorizations());
+
+		prefixQuery.setOptions(options);
+
 		return prefixQuery.query(
 				operations,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
@@ -357,6 +362,8 @@ public class HBaseDataStore extends
 				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
+
+		q.setOptions(options);
 
 		return q.query(
 				operations,

@@ -13,22 +13,12 @@ import javax.imageio.ImageIO;
 import javax.media.jai.Interpolation;
 import javax.media.jai.PlanarImage;
 
-import org.apache.log4j.Logger;
-import org.geotools.coverage.grid.GridCoverage2D;
-import org.geotools.geometry.GeneralEnvelope;
-import org.geotools.referencing.operation.projection.MapProjection;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -42,6 +32,18 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+
+import org.apache.log4j.Logger;
+import org.geotools.coverage.grid.GridCoverage2D;
+import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.referencing.operation.projection.MapProjection;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 @RunWith(GeoWaveITRunner.class)
 public class LandsatIT
@@ -96,7 +98,6 @@ public class LandsatIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected.png";
-	private static final String ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected_alt.png";
 	private static final int MIN_PATH = 198;
 	private static final int MAX_PATH = 199;
 	private static final int MIN_ROW = 36;
@@ -181,6 +182,12 @@ public class LandsatIT
 				";equalizeHistogramOverride=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
 
+		str.append(
+				";").append(
+				GeoWaveStoreFinder.STORE_HINT_KEY).append(
+				"=").append(
+				dataStoreOptions.getType());
+
 		final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
 
 		for (final Entry<String, String> entry : options.entrySet()) {
@@ -218,25 +225,10 @@ public class LandsatIT
 				null,
 				null);
 		final RenderedImage result = gridCoverage.getRenderedImage();
-		String referenceImage = REFERENCE_LANDSAT_IMAGE_PATH;
-		// test the result with expected, allowing for no error
 
-		// this is ugly but the expected result seems different on
-		// centos than ubuntu or windows (it looks more correct on windows and
-		// ubuntu). These properties can be set to toggle the reference image,
-		// by default the alternate is used on all linux OS.
-
-		// TODO: determine why this is the case
-		if (System.getProperty("use_default_landsat") == null) {
-			if (System.getProperty("use_alt_landsat") != null || System.getProperty(
-					"os.name").equals(
-					"Linux")) {
-
-				referenceImage = ALTERNATE_REFERENCE_LANDSAT_IMAGE_PATH;
-			}
-		}
+		// test the result with expected, allowing for minimal error
 		final BufferedImage reference = ImageIO.read(new File(
-				referenceImage));
+				REFERENCE_LANDSAT_IMAGE_PATH));
 		TestUtils.testTileAgainstReference(
 				PlanarImage.wrapRenderedImage(
 						result).getAsBufferedImage(),

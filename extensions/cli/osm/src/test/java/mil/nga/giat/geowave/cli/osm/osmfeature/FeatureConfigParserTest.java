@@ -21,15 +21,11 @@ public class FeatureConfigParserTest
 			throws IOException {
 		FeatureConfigParser fcp = new FeatureConfigParser();
 
-		FeatureDefinitionSet fds = null;
-
-		FileInputStream fis = new FileInputStream(
+		try (FileInputStream fis = new FileInputStream(
 				new File(
-						TEST_DATA_CONFIG));
-
-		// fds = fcp.parseConfig(fis);
-
-		fis.close();
+						TEST_DATA_CONFIG))) {
+			fcp.parseConfig(fis);
+		}
 
 	}
 

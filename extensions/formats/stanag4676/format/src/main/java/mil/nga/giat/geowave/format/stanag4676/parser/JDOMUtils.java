@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.vecmath.Point2d;
@@ -314,7 +315,6 @@ public class JDOMUtils
 			LOGGER.info(
 					"read error",
 					jdome);
-			jdome.printStackTrace();
 			return null;
 		}
 	}
@@ -450,6 +450,9 @@ public class JDOMUtils
 			e.addContent(val);
 		}
 		catch (final IllegalDataException ide) {
+			LOGGER.warn(
+					"Unable to add content",
+					ide);
 			// Unless a better idea can be found, we need to replace all
 			// unparseable characters with a space as a placeholder
 			final StringBuffer newVal = new StringBuffer();
@@ -559,6 +562,9 @@ public class JDOMUtils
 			return Double.valueOf(e.getText());
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -583,6 +589,9 @@ public class JDOMUtils
 			return Double.valueOf(e.getChildText(childText));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -597,6 +606,9 @@ public class JDOMUtils
 					ns));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -608,6 +620,9 @@ public class JDOMUtils
 			return Double.valueOf(e.getAttributeValue(attrName));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -633,7 +648,11 @@ public class JDOMUtils
 			try {
 				val = Float.parseFloat(str);
 			}
-			catch (final Exception ex) {}
+			catch (final Exception ex) {
+				LOGGER.warn(
+						"Unable to get parse",
+						ex);
+			}
 		}
 
 		return val;
@@ -681,6 +700,9 @@ public class JDOMUtils
 			return Short.valueOf(e.getText());
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -705,6 +727,9 @@ public class JDOMUtils
 			return Short.valueOf(e.getChildText(childText));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -719,6 +744,9 @@ public class JDOMUtils
 					ns));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -747,6 +775,9 @@ public class JDOMUtils
 			return Byte.valueOf(e.getText());
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -758,6 +789,9 @@ public class JDOMUtils
 			return Byte.valueOf(e.getChildText(childText));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -772,6 +806,9 @@ public class JDOMUtils
 					ns));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -782,6 +819,9 @@ public class JDOMUtils
 			return Integer.valueOf(e.getText());
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -806,6 +846,9 @@ public class JDOMUtils
 			return Integer.valueOf(e.getChildText(childText));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -820,6 +863,9 @@ public class JDOMUtils
 					ns));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -848,6 +894,9 @@ public class JDOMUtils
 			return Long.valueOf(e.getText());
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -872,6 +921,9 @@ public class JDOMUtils
 			return Long.valueOf(e.getChildText(childTag));
 		}
 		catch (final Exception ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -885,7 +937,10 @@ public class JDOMUtils
 					childText,
 					ns));
 		}
-		catch (final Exception ex) {
+		catch (final NumberFormatException ex) {
+			LOGGER.error(
+					"Unable to get value",
+					ex);
 			return null;
 		}
 	}
@@ -924,18 +979,13 @@ public class JDOMUtils
 	static private Boolean getBooleanVal(
 			final Element e,
 			final String childTag ) {
-		try {
-			final String text = e.getChildText(childTag);
+		final String text = e.getChildText(childTag);
 
-			if ((text == null) || (text.isEmpty())) {
-				return null;
-			}
-
-			return Boolean.valueOf(text.trim());
-		}
-		catch (final Exception ex) {
+		if ((text == null) || (text.isEmpty())) {
 			return null;
 		}
+
+		return Boolean.valueOf(text.trim());
 	}
 
 	static public boolean getBooleanVal(
@@ -955,18 +1005,13 @@ public class JDOMUtils
 	@SuppressFBWarnings(value = "NP_BOOLEAN_RETURN_NULL", justification = "its private and only used by methods that check for null")
 	static private Boolean getBooleanVal(
 			final Element e ) {
-		try {
-			final String text = e.getText();
+		final String text = e.getText();
 
-			if ((text == null) || (text.isEmpty())) {
-				return null;
-			}
-
-			return Boolean.valueOf(text);
-		}
-		catch (final Exception ex) {
+		if ((text == null) || (text.isEmpty())) {
 			return null;
 		}
+
+		return Boolean.valueOf(text);
 	}
 
 	static public Element getElementVal(
@@ -1577,7 +1622,7 @@ public class JDOMUtils
 		if ((el == null) && tryLowerCase) {
 			el = getChildIgnoreNamespace(
 					parentEl,
-					childName.toLowerCase(),
+					childName.toLowerCase(Locale.ENGLISH),
 					namespaces,
 					false);
 		}
@@ -1607,7 +1652,7 @@ public class JDOMUtils
 		if ((el == null) && tryLowerCase) {
 			el = getChildrenIgnoreNamespace(
 					parentEl,
-					childName.toLowerCase(),
+					childName.toLowerCase(Locale.ENGLISH),
 					namespaces,
 					false);
 		}
@@ -1659,7 +1704,11 @@ public class JDOMUtils
 			try {
 				val = Double.parseDouble(str);
 			}
-			catch (final Exception e) {}
+			catch (final NumberFormatException e) {
+				LOGGER.error(
+						"Unable to parse",
+						e);
+			}
 		}
 
 		return val;
@@ -1682,7 +1731,11 @@ public class JDOMUtils
 			try {
 				val = Float.parseFloat(str);
 			}
-			catch (final Exception e) {}
+			catch (final NumberFormatException e) {
+				LOGGER.error(
+						"Unable to parse",
+						e);
+			}
 		}
 
 		return val;
@@ -1706,7 +1759,11 @@ public class JDOMUtils
 			try {
 				val = Integer.parseInt(str);
 			}
-			catch (final Exception e) {}
+			catch (final NumberFormatException e) {
+				LOGGER.error(
+						"Unable to parse",
+						e);
+			}
 
 			if (val != null) {
 				if (val == 0) {
@@ -1747,9 +1804,15 @@ public class JDOMUtils
 							xml)));
 		}
 		catch (final JDOMException e) {
+			LOGGER.error(
+					"Unable to build the SAXBuilder",
+					e);
 			return null;
 		}
-		catch (final IOException e) {
+		catch (final IOException e1) {
+			LOGGER.error(
+					"Unable to build the SAXBuilder",
+					e1);
 			return null;
 		}
 	}
@@ -1771,6 +1834,9 @@ public class JDOMUtils
 				strOutput = sw.toString();
 			}
 			catch (final IOException e) {
+				LOGGER.error(
+						"Unable to retrieve the xml output",
+						e);
 				return null;
 			}
 		}
