@@ -5,7 +5,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy
 public class NoMergeStrategyProvider implements
 		RasterMergeStrategyProviderSpi
 {
-	public static String NAME = "none";
+	public static final String NAME = "none";
 
 	@Override
 	public String getName() {

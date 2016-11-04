@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import mil.nga.giat.geowave.analytic.clustering.NeighborData;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math.util.MathUtils;
@@ -318,7 +319,9 @@ public class GeometryHullTool
 				continue;
 			}
 			// if one a line segment of the hull, then remove candidate
-			if (score == 0.0) {
+			if (FloatCompareUtils.checkDoublesEqual(
+					score,
+					0.0)) {
 				innerPoints.remove(selectedCandidate);
 				edges.add(edge);
 				continue;
