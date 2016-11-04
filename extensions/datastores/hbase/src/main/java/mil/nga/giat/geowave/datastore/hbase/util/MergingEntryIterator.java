@@ -174,7 +174,9 @@ public class MergingEntryIterator<T> extends
 				transform.initOptions(mergingAdapter.getOptions(null));
 			}
 			catch (final IOException e) {
-				LOGGER.error("Unable to initialize merge strategy for adapter: " + mergingAdapter.getAdapterId());
+				LOGGER.error(
+						"Unable to initialize merge strategy for adapter: " + mergingAdapter.getAdapterId(),
+						e);
 			}
 			transforms.put(
 					mergingAdapter.getAdapterId(),

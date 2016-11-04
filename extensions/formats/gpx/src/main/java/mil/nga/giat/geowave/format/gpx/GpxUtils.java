@@ -214,7 +214,11 @@ public class GpxUtils
 				}
 			}
 		}
-		catch (IOException e) {}
+		catch (IOException e) {
+			LOGGER.error(
+					"Could not create the FileInputStream.",
+					e);
+		}
 
 		return metadata;
 	}

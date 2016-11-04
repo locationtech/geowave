@@ -203,10 +203,8 @@ public class AccumuloStoreTestEnvironment implements
 				// hold on the log files and there is no hook to get
 				// notified when it is completely stopped
 
-				Thread.sleep(
-						2000);
-				FileUtils.deleteDirectory(
-						TEMP_DIR);
+				Thread.sleep(2000);
+				FileUtils.deleteDirectory(TEMP_DIR);
 			}
 			catch (final IOException | InterruptedException e) {
 				LOGGER.warn(

@@ -199,8 +199,7 @@ public class IngestFromKafkaDriver
 			final String formatPluginName,
 			final AvroFormatPlugin<T, ?> avroFormatPlugin,
 			final KafkaIngestRunData ingestRunData,
-			final List<String> queue )
-			throws RuntimeException {
+			final List<String> queue ) {
 
 		final ConsumerConnector consumer = buildKafkaConsumer();
 		if (consumer == null) {
