@@ -236,15 +236,21 @@ public class GeoWaveGTDataStoreFactory implements
 								params);
 						return false;
 					}
-					catch (final Exception e) {}
+					catch (final Exception e) {
+						LOGGER
+								.info(
+										"supplied map does not contain all necessary parameters to construct GeoWaveGTDataStore",
+										e);
+					}
 				}
 			}
 
 			return true;
 		}
-		catch (final Exception e) {
-			// supplied map does not contain all necessary parameters to
-			// construct GeoWaveGTDataStore
+		catch (final Exception e1) {
+			LOGGER.info(
+					"supplied map does not contain all necessary parameters to construct GeoWaveGTDataStore",
+					e1);
 			return false;
 		}
 	}
