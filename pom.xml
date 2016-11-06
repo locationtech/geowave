@@ -65,6 +65,8 @@
 		<ut.reportPath>${project.reporting.outputDirectory}/jacoco-ut</ut.reportPath>
 		<sonar.jacoco.reportPath>${jacoco.ut.reportPath}</sonar.jacoco.reportPath>
 		<sonar.jacoco.itReportPath>${jacoco.it.reportPath}</sonar.jacoco.itReportPath>
+		<surefire.report.path>${basedir}/target/surefire-reports</surefire.report.path>
+		<sonar.junit.reportsPath>${surefire.report.path}</sonar.junit.reportsPath>
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -611,6 +613,7 @@
 						<exclude>**IT.java</exclude>
 						<exclude>**/*ITSuite.java</exclude>
 					</excludes>
+					<outputDirectory>${surefire.report.path}</outputDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
