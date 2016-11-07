@@ -77,6 +77,10 @@ public class GeoWaveMain
 					((Command) operation).execute(params);
 				}
 				catch (final Exception p) {
+					LOGGER.warn(
+							"Unable to execute operation",
+							p);
+
 					params.setSuccessCode(-1);
 					params.setSuccessMessage(String.format(
 							"Unable to execute operation: %s",

@@ -18,8 +18,9 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
@@ -71,7 +72,7 @@ public class ChooseBestMatchIndexQueryStrategy implements
 						final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
 								constraints,
 								nextIdx.getIndexStrategy(),
-								5000);
+								ConstraintsQuery.MAX_RANGE_DECOMPOSITION);
 						final long temp = DataStoreUtils.cardinality(
 								nextIdx,
 								stats,

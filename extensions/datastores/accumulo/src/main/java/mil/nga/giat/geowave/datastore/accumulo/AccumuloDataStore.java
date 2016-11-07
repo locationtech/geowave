@@ -31,18 +31,11 @@ import org.apache.log4j.Logger;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.store.BaseDataStore;
-import mil.nga.giat.geowave.core.store.Closable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.DataAdapterAndIndexCache;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.IngestCallback;
-import mil.nga.giat.geowave.core.store.ScanCallback;
-import mil.nga.giat.geowave.core.store.Writer;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -50,6 +43,11 @@ import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -60,6 +58,7 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.util.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.AccumuloSplitsProvider;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveAccumuloRecordReader;
@@ -93,6 +92,8 @@ public class AccumuloDataStore extends
 		BaseDataStore implements
 		MapReduceDataStore
 {
+	public final static String TYPE = "accumulo";
+
 	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
 
 	private final AccumuloOperations accumuloOperations;
@@ -600,7 +601,7 @@ public class AccumuloDataStore extends
 	}
 
 	private static class ClosableBatchDeleter implements
-			Closable
+			Closeable
 	{
 		private final BatchDeleter deleter;
 
@@ -620,7 +621,7 @@ public class AccumuloDataStore extends
 	}
 
 	@Override
-	protected Closable createIndexDeleter(
+	protected Closeable createIndexDeleter(
 			final String indexTableName,
 			final String[] authorizations )
 			throws Exception {
@@ -632,7 +633,7 @@ public class AccumuloDataStore extends
 
 	@Override
 	protected void addToBatch(
-			final Closable deleter,
+			final Closeable deleter,
 			final List<ByteArrayId> ids )
 			throws Exception {
 		final List<Range> rowRanges = new ArrayList<Range>();

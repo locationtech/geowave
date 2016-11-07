@@ -24,22 +24,21 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.BaseDataStore;
-import mil.nga.giat.geowave.core.store.Closable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.IngestCallback;
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -72,6 +71,7 @@ public class HBaseDataStore extends
 		BaseDataStore implements
 		MapReduceDataStore
 {
+	public final static String TYPE = "hbase";
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseDataStore.class);
 
@@ -242,8 +242,10 @@ public class HBaseDataStore extends
 						tempAdapterStore,
 						index,
 						iterator,
+						dedupeFilter,
+						scanCallback,
 						null,
-						scanCallback));
+						null));
 	}
 
 	@Override
@@ -310,13 +312,15 @@ public class HBaseDataStore extends
 						adapterIdsToQuery,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
+				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				sanitizedQueryOptions.getAuthorizations());
+
+		hbaseQuery.setOptions(options);
 
 		return hbaseQuery.query(
 				operations,
 				tempAdapterStore,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				sanitizedQueryOptions.getLimit());
 	}
 
@@ -333,10 +337,12 @@ public class HBaseDataStore extends
 				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getAuthorizations());
+
+		prefixQuery.setOptions(options);
+
 		return prefixQuery.query(
 				operations,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				tempAdapterStore);
 	}
 
@@ -356,17 +362,18 @@ public class HBaseDataStore extends
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
+		q.setOptions(options);
+
 		return q.query(
 				operations,
 				tempAdapterStore,
-				// TODO support subsampling
-				// sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				-1);
 	}
 
 	@Override
 	protected void addToBatch(
-			final Closable idxDeleter,
+			final Closeable idxDeleter,
 			final List<ByteArrayId> rowIds )
 			throws Exception {
 		final List<Delete> deletes = new ArrayList<Delete>();
@@ -380,13 +387,13 @@ public class HBaseDataStore extends
 	}
 
 	@Override
-	protected Closable createIndexDeleter(
+	protected Closeable createIndexDeleter(
 			final String indexTableName,
 			final String[] authorizations )
 			throws Exception {
 		return operations.createWriter(
 				indexTableName,
-				"",
+				new String[] {},
 				false);
 	}
 
@@ -399,7 +406,8 @@ public class HBaseDataStore extends
 		try {
 			deleter = operations.createWriter(
 					tableName,
-					columnFamily);
+					new String[] {},
+					false);
 			final Scan scanner = new Scan();
 			try (ResultScanner results = operations.getScannedResults(
 					scanner,
@@ -505,7 +513,9 @@ public class HBaseDataStore extends
 
 			altIdxWriter = operations.createWriter(
 					altIdxTableName,
-					adapter.getAdapterId().getString(),
+					new String[] {
+						adapter.getAdapterId().getString()
+					},
 					hbaseOptions.isCreateTable());
 		}
 

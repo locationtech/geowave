@@ -4,7 +4,12 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.google.uzaygezen.core.CompactHilbertCurve;
+import com.google.uzaygezen.core.MultiDimensionalSpec;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -13,16 +18,88 @@ import mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
-import com.google.uzaygezen.core.CompactHilbertCurve;
-import com.google.uzaygezen.core.MultiDimensionalSpec;
-
 /***
  * Implementation of a Compact Hilbert space filling curve
- * 
+ *
  */
 public class HilbertSFC implements
 		SpaceFillingCurve
 {
+	private static class QueryCacheKey
+	{
+		private final double[] minsPerDimension;
+		private final double[] maxesPerDimension;
+		private final boolean overInclusiveOnEdge;
+		private final int maxFilteredIndexedRanges;
+
+		public QueryCacheKey(
+				final double[] minsPerDimension,
+				final double[] maxesPerDimension,
+				final boolean overInclusiveOnEdge,
+				final int maxFilteredIndexedRanges ) {
+			this.minsPerDimension = minsPerDimension;
+			this.maxesPerDimension = maxesPerDimension;
+			this.overInclusiveOnEdge = overInclusiveOnEdge;
+			this.maxFilteredIndexedRanges = maxFilteredIndexedRanges;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = (prime * result) + maxFilteredIndexedRanges;
+			result = (prime * result) + Arrays.hashCode(maxesPerDimension);
+			result = (prime * result) + Arrays.hashCode(minsPerDimension);
+			result = (prime * result) + (overInclusiveOnEdge ? 1231 : 1237);
+			return result;
+		}
+
+		@Override
+		public boolean equals(
+				final Object obj ) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final QueryCacheKey other = (QueryCacheKey) obj;
+			if (maxFilteredIndexedRanges != other.maxFilteredIndexedRanges) {
+				return false;
+			}
+			if (!Arrays.equals(
+					maxesPerDimension,
+					other.maxesPerDimension)) {
+				return false;
+			}
+			if (!Arrays.equals(
+					minsPerDimension,
+					other.minsPerDimension)) {
+				return false;
+			}
+			if (overInclusiveOnEdge != other.overInclusiveOnEdge) {
+				return false;
+			}
+			return true;
+		}
+	}
+
+	private static final int MAX_CACHED_QUERIES = 500;
+	private final Map<QueryCacheKey, RangeDecomposition> queryDecompositionCache = new LinkedHashMap<QueryCacheKey, RangeDecomposition>(
+			MAX_CACHED_QUERIES + 1,
+			.75F,
+			true) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean removeEldestEntry(
+				final Map.Entry<QueryCacheKey, RangeDecomposition> eldest ) {
+			return size() > MAX_CACHED_QUERIES;
+		}
+	};
 	protected CompactHilbertCurve compactHilbertCurve;
 	protected SFCDimensionDefinition[] dimensionDefinitions;
 	protected int totalPrecision;
@@ -37,7 +114,7 @@ public class HilbertSFC implements
 	/***
 	 * Use the SFCFactory.createSpaceFillingCurve method - don't call this
 	 * constructor directly
-	 * 
+	 *
 	 */
 	public HilbertSFC(
 			final SFCDimensionDefinition[] dimensionDefs ) {
@@ -143,14 +220,26 @@ public class HilbertSFC implements
 		if (maxFilteredIndexedRanges == -1) {
 			maxFilteredIndexedRanges = Integer.MAX_VALUE;
 		}
-		return decomposeQueryOperations.decomposeRange(
-				query.getDataPerDimension(),
-				compactHilbertCurve,
-				dimensionDefinitions,
-				totalPrecision,
-				maxFilteredIndexedRanges,
-				REMOVE_VACUUM,
-				overInclusiveOnEdge);
+		final QueryCacheKey key = new QueryCacheKey(
+				query.getMinValuesPerDimension(),
+				query.getMaxValuesPerDimension(),
+				overInclusiveOnEdge,
+				maxFilteredIndexedRanges);
+		RangeDecomposition rangeDecomp = queryDecompositionCache.get(key);
+		if (rangeDecomp == null) {
+			rangeDecomp = decomposeQueryOperations.decomposeRange(
+					query.getDataPerDimension(),
+					compactHilbertCurve,
+					dimensionDefinitions,
+					totalPrecision,
+					maxFilteredIndexedRanges,
+					REMOVE_VACUUM,
+					overInclusiveOnEdge);
+			queryDecompositionCache.put(
+					key,
+					rangeDecomp);
+		}
+		return rangeDecomp;
 	}
 
 	protected static byte[] fitExpectedByteCount(

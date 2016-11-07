@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class ServiceUtils
 {
-	private final static Logger log = LoggerFactory.getLogger(ServiceUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ServiceUtils.class);
 
 	public static Properties loadProperties(
 			final InputStream is ) {
@@ -19,7 +19,9 @@ public class ServiceUtils
 				props.load(is);
 			}
 			catch (final IOException e) {
-				log.error("Could not load properties from InputStream");
+				LOGGER.error(
+						"Could not load properties from InputStream",
+						e);
 			}
 		}
 		return props;

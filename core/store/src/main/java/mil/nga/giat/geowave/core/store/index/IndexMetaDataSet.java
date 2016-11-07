@@ -10,11 +10,11 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.IndexStrategy;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.DeleteCallback;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
 
 public class IndexMetaDataSet<T> extends
 		AbstractDataStatistics<T> implements
@@ -106,7 +106,7 @@ public class IndexMetaDataSet<T> extends
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsAdded(entryInfo.getRowIds());
+			imd.insertionIdsAdded(entryInfo.getInsertionIds());
 		}
 	}
 
@@ -115,7 +115,7 @@ public class IndexMetaDataSet<T> extends
 			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsRemoved(entryInfo.getRowIds());
+			imd.insertionIdsRemoved(entryInfo.getInsertionIds());
 		}
 	}
 

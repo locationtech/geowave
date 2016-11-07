@@ -5,6 +5,8 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector3d;
 
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
+
 public class EarthVector
 {
 
@@ -372,7 +374,13 @@ public class EarthVector
 		}
 		final EarthVector coord = (EarthVector) obj;
 
-		return ((coord.getX() == ecfVector.x) && (coord.getY() == ecfVector.y) && (coord.getZ() == ecfVector.z));
+		return (FloatCompareUtils.checkDoublesEqual(
+				coord.getX(),
+				ecfVector.x) && FloatCompareUtils.checkDoublesEqual(
+				coord.getY(),
+				ecfVector.y) && FloatCompareUtils.checkDoublesEqual(
+				coord.getZ(),
+				ecfVector.z));
 	}
 
 	@Override
@@ -793,7 +801,7 @@ public class EarthVector
 		double deltaLon = (points[segments].getLongitude(EarthVector.DEGREES) - baseLon);
 		final double baseAlt = points[0].elevation;
 		final double altStep = (points[segments].elevation - baseAlt) * resolution;
-		if (deltaLon != 0) {
+		if (Math.abs(deltaLon) >= 0.0) {
 			if (reverseDirection) {
 				if (Math.abs(deltaLon) < 180) {
 					// reverse it

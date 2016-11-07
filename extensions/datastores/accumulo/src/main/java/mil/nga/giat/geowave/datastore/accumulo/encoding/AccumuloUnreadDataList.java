@@ -3,22 +3,25 @@ package mil.nga.giat.geowave.datastore.accumulo.encoding;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
+import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
+
 public class AccumuloUnreadDataList implements
-		AccumuloUnreadData
+		FlattenedUnreadData
 {
-	private final List<AccumuloUnreadData> unreadData;
-	private List<AccumuloFieldInfo> cachedRead;
+	private final List<FlattenedUnreadData> unreadData;
+	private List<FlattenedFieldInfo> cachedRead;
 
 	public AccumuloUnreadDataList(
-			final List<AccumuloUnreadData> unreadData ) {
+			final List<FlattenedUnreadData> unreadData ) {
 		this.unreadData = unreadData;
 	}
 
 	@Override
-	public List<AccumuloFieldInfo> finishRead() {
+	public List<FlattenedFieldInfo> finishRead() {
 		if (cachedRead == null) {
 			cachedRead = new ArrayList<>();
-			for (final AccumuloUnreadData d : unreadData) {
+			for (final FlattenedUnreadData d : unreadData) {
 				cachedRead.addAll(d.finishRead());
 			}
 		}

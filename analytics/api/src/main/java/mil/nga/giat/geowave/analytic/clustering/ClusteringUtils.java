@@ -27,7 +27,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class ClusteringUtils
 {
@@ -40,8 +40,7 @@ public class ClusteringUtils
 			final String sampleDataTypeId,
 			final String sampleDataNamespaceURI,
 			final AdapterStore adapterStore,
-			final String[] dimensionNames )
-			throws Exception {
+			final String[] dimensionNames ) {
 
 		final FeatureDataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
 				sampleDataTypeId,
@@ -123,8 +122,7 @@ public class ClusteringUtils
 	}
 
 	public static PrimaryIndex createIndex(
-			final PropertyManagement propertyManagement )
-			throws Exception {
+			final PropertyManagement propertyManagement ) {
 
 		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
@@ -136,7 +134,9 @@ public class ClusteringUtils
 
 	public static DataAdapter<?> createAdapter(
 			final PropertyManagement propertyManagement )
-			throws Exception {
+			throws ClassNotFoundException,
+			InstantiationException,
+			IllegalAccessException {
 
 		final Class<DimensionExtractor> dimensionExtractorClass = propertyManagement.getPropertyAsClass(
 				CommonParameters.Common.DIMENSION_EXTRACT_CLASS,

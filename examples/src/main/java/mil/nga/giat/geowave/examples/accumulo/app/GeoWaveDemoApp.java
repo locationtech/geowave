@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFa
 
 public class GeoWaveDemoApp
 {
-
+	private static final Logger LOGGER = Logger.getLogger(GeoWaveDemoApp.class);
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 
 	protected static boolean isYarn() {
@@ -80,6 +80,9 @@ public class GeoWaveDemoApp
 								accumulo.stop();
 							}
 							catch (final Exception e) {
+								LOGGER.warn(
+										"Unable to shutdown accumulo",
+										e);
 								System.out.println("Error shutting down accumulo.");
 							}
 							System.out.println("Shutting down!");

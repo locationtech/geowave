@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.index.text;
 
 import java.nio.ByteBuffer;
+import java.util.Locale;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -56,7 +57,7 @@ public class TextRangeFilter implements
 				fieldId);
 		if (stringBytes != null) {
 			String value = stringBytes.getString();
-			value = caseSensitive ? value : value.toLowerCase();
+			value = caseSensitive ? value : value.toLowerCase(Locale.ENGLISH);
 			final int toStart = value.compareTo(start);
 			final int toEnd = value.compareTo(end);
 			return ((toStart >= 0) && (toEnd <= 0));

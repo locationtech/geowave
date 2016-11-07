@@ -1,0 +1,20 @@
+[[quickstart-guide-intro]]
+<<<
+
+== Quickstart Guide
+
+=== What you will need
+* <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>
+* <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, VPC (Network Interface/Subnet Id)>>
+* <<110-appendices.adoc#create-ec2-security-group, EC2 Security Group>>
+* <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>>
+* <<110-appendices.adoc#aws-cli-setup, AWS CLI>> setup on your local machine (optional)
+** Not needed if you plan on using the EMR GUI to create the cluster
+
+=== Creating the Cluster
+
+Download the bootstrap-quickstart-geowave.sh script https://s3.amazonaws.com/geowave-guide-bucket/bootstrap-quickstart-geowave.sh[here] and upload it to your S3 bucket.
+
+*Note:* You can also clone the GeoWave project from https://github.com/ngageoint/geowave[GitHub] and find the script under deploy/emr/4/gdelt-example/
+
+If you have not created an S3 bucket please see the <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>> section.

@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
@@ -26,6 +29,8 @@ import javassist.bytecode.annotation.MemberValue;
  */
 public class JavassistUtils
 {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(JavassistUtils.class);
 
 	public static final String PREFIX_PACKAGE = "mil.nga.giat.geowave.core.cli.parsed";
 
@@ -87,6 +92,9 @@ public class JavassistUtils
 				catch (ClassNotFoundException e) {
 					// Cannot apply this annotation because its type cannot be
 					// found.
+					LOGGER.error(
+							"Cannot apply this annotation because it's type cannot be found",
+							e);
 					continue;
 				}
 

@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.adapter.vector.utils;
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
+import java.util.Locale;
+
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
@@ -243,17 +245,17 @@ public class TimeDescriptors
 					if ((isStart != null) && isStart.booleanValue()) {
 						setStartRangeName(attrDesc.getLocalName());
 					}
-					else if ((isStart == null) && (getStartRangeName() == null)
-							&& attrDesc.getLocalName().toLowerCase().startsWith(
-									"start")) {
+					else if ((isStart == null) && (getStartRangeName() == null) && attrDesc.getLocalName().toLowerCase(
+							Locale.ENGLISH).startsWith(
+							"start")) {
 						setStartRangeName(attrDesc.getLocalName());
 					}
 					else if ((isEnd != null) && isEnd.booleanValue()) {
 						setEndRangeName(attrDesc.getLocalName());
 					}
-					else if ((isEnd == null) && (getEndRangeName() == null)
-							&& attrDesc.getLocalName().toLowerCase().startsWith(
-									"end")) {
+					else if ((isEnd == null) && (getEndRangeName() == null) && attrDesc.getLocalName().toLowerCase(
+							Locale.ENGLISH).startsWith(
+							"end")) {
 						setEndRangeName(attrDesc.getLocalName());
 					}
 					else if ((isTime == null) && (getTimeName() == null)) {

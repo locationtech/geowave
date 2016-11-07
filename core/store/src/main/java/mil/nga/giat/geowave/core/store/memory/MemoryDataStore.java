@@ -22,36 +22,41 @@ import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.DataStoreCallbackManager;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.IndexCompositeWriter;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.IngestCallback;
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.base.DataStoreCallbackManager;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.callback.IngestCallback;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.writer.IndexCompositeWriter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class MemoryDataStore implements
 		DataStore
 {
 	private final static Logger LOGGER = Logger.getLogger(MemoryDataStore.class);
-	private final Map<ByteArrayId, TreeSet<EntryRow>> storeData = Collections
-			.synchronizedMap(new HashMap<ByteArrayId, TreeSet<EntryRow>>());
+	private final Map<ByteArrayId, TreeSet<MemoryEntryRow>> storeData = Collections
+			.synchronizedMap(new HashMap<ByteArrayId, TreeSet<MemoryEntryRow>>());
 	private final AdapterStore adapterStore;
 	private final IndexStore indexStore;
 	private final DataStatisticsStore statsStore;
@@ -93,7 +98,7 @@ public class MemoryDataStore implements
 				indices));
 		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
 		int i = 0;
-		for (PrimaryIndex index : indices) {
+		for (final PrimaryIndex index : indices) {
 			indexStore.addIndex(index);
 			writers[i] = new MyIndexWriter<T>(
 					DataStoreUtils.UNCONSTRAINED_VISIBILITY,
@@ -140,7 +145,7 @@ public class MemoryDataStore implements
 				final T entry ) {
 			return write(
 					entry,
-					(VisibilityWriter<T>) customFieldVisibilityWriter);
+					customFieldVisibilityWriter);
 		}
 
 		@Override
@@ -153,15 +158,15 @@ public class MemoryDataStore implements
 					(WritableDataAdapter) this.adapter,
 					index);
 
-			final List<EntryRow> rows = entryToRows(
+			final List<MemoryEntryRow> rows = MemoryStoreUtils.entryToRows(
 					(WritableDataAdapter) this.adapter,
 					index,
 					entry,
 					callback,
 					fieldVisibilityWriter);
-			for (final EntryRow row : rows) {
+			for (final MemoryEntryRow row : rows) {
 				ids.add(row.getRowId());
-				final TreeSet<EntryRow> rowTreeSet = getRowsForIndex(index.getId());
+				final TreeSet<MemoryEntryRow> rowTreeSet = getRowsForIndex(index.getId());
 				if (rowTreeSet.contains(row)) {
 					rowTreeSet.remove(row);
 				}
@@ -194,31 +199,11 @@ public class MemoryDataStore implements
 
 	}
 
-	public static <T> List<EntryRow> entryToRows(
-			final WritableDataAdapter<T> dataWriter,
-			final PrimaryIndex index,
-			final T entry,
-			final IngestCallback<T> ingestCallback,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
-				dataWriter,
-				index,
-				entry,
-				customFieldVisibilityWriter);
-		ingestCallback.entryIngested(
-				ingestInfo,
-				entry);
-		return DataStoreUtils.buildRows(
-				dataWriter.getAdapterId().getBytes(),
-				entry,
-				ingestInfo);
-	}
-
-	private TreeSet<EntryRow> getRowsForIndex(
+	private TreeSet<MemoryEntryRow> getRowsForIndex(
 			final ByteArrayId id ) {
-		TreeSet<EntryRow> set = storeData.get(id);
+		TreeSet<MemoryEntryRow> set = storeData.get(id);
 		if (set == null) {
-			set = new TreeSet<EntryRow>();
+			set = new TreeSet<MemoryEntryRow>();
 			storeData.put(
 					id,
 					set);
@@ -257,7 +242,7 @@ public class MemoryDataStore implements
 	 * query, adapter ID, and is in the index ID will be returned as an instance
 	 * of the native data type that this adapter supports. The iterator will
 	 * only return as many results as the limit passed in.
-	 * 
+	 *
 	 * @param queryOptions
 	 *            additional options for the processing the query
 	 * @param the
@@ -286,22 +271,25 @@ public class MemoryDataStore implements
 			// keep a list of adapters that have been queried, to only low an
 			// adapter to be queried
 			// once
-			Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
+			final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
 
 			final List<CloseableIterator<T>> results = new ArrayList<CloseableIterator<T>>();
 
-			for (Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions.getIndicesForAdapters(
-					adapterStore,
-					adapterIndexMappingStore,
-					indexStore)) {
-				for (DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
+			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+					.getIndicesForAdapters(
+							adapterStore,
+							adapterIndexMappingStore,
+							indexStore)) {
+				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 
 					final boolean firstTimeForAdapter = queriedAdapters.add(adapter.getAdapterId());
-					if (!(firstTimeForAdapter || isDelete)) continue;
+					if (!(firstTimeForAdapter || isDelete)) {
+						continue;
+					}
 
-					DataStoreCallbackManager callbackManager = new DataStoreCallbackManager(
-							this.statsStore,
-							this.secondaryIndexDataStore,
+					final DataStoreCallbackManager callbackManager = new DataStoreCallbackManager(
+							statsStore,
+							secondaryIndexDataStore,
 							firstTimeForAdapter);
 
 					populateResults(
@@ -349,8 +337,8 @@ public class MemoryDataStore implements
 			final QueryOptions queryOptions,
 			final boolean isDelete,
 			final DataStoreCallbackManager callbackCache ) {
-		final TreeSet<EntryRow> set = getRowsForIndex(index.getId());
-		final Iterator<EntryRow> rowIt = ((TreeSet<EntryRow>) set.clone()).iterator();
+		final TreeSet<MemoryEntryRow> set = getRowsForIndex(index.getId());
+		final Iterator<MemoryEntryRow> rowIt = ((TreeSet<MemoryEntryRow>) set.clone()).iterator();
 		final List<QueryFilter> filters = (query == null) ? new ArrayList<QueryFilter>() : new ArrayList<QueryFilter>(
 				query.createFilters(index.getIndexModel()));
 		filters.add(new QueryFilter() {
@@ -365,18 +353,20 @@ public class MemoryDataStore implements
 				return false;
 			}
 		});
-		if (filter != null) filters.add(filter);
+		if (filter != null) {
+			filters.add(filter);
+		}
 		results.add(new CloseableIterator<T>() {
-			EntryRow nextRow = null;
-			EntryRow currentRow = null;
+			MemoryEntryRow nextRow = null;
+			MemoryEntryRow currentRow = null;
 			IndexedPersistenceEncoding encoding = null;
 
 			private boolean getNext() {
 				while ((nextRow == null) && rowIt.hasNext()) {
-					final EntryRow row = rowIt.next();
+					final MemoryEntryRow row = rowIt.next();
 					final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
 							row.getTableRowId().getAdapterId()));
-					encoding = DataStoreUtils.getEncoding(
+					encoding = MemoryStoreUtils.getEncoding(
 							index.getIndexModel(),
 							adapter,
 							row);
@@ -444,11 +434,48 @@ public class MemoryDataStore implements
 
 	}
 
+	protected static IndexedAdapterPersistenceEncoding getEncoding(
+			final CommonIndexModel model,
+			final DataAdapter<?> adapter,
+			final MemoryEntryRow row ) {
+		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
+		final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
+		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
+		for (final FieldInfo column : row.info.getFieldInfo()) {
+			final FieldReader<? extends CommonIndexValue> reader = model.getReader(column.getDataValue().getId());
+			if (reader == null) {
+				final FieldReader extendedReader = adapter.getReader(column.getDataValue().getId());
+				if (extendedReader != null) {
+					extendedData.addValue(column.getDataValue());
+				}
+				else {
+					unknownData.addValue(new PersistentValue<byte[]>(
+							column.getDataValue().getId(),
+							column.getWrittenValue()));
+				}
+			}
+			else {
+				commonData.addValue(column.getDataValue());
+			}
+		}
+		return new IndexedAdapterPersistenceEncoding(
+				new ByteArrayId(
+						row.getTableRowId().getAdapterId()),
+				new ByteArrayId(
+						row.getTableRowId().getDataId()),
+				new ByteArrayId(
+						row.getTableRowId().getInsertionId()),
+				row.getTableRowId().getNumberOfDuplicates(),
+				commonData,
+				unknownData,
+				extendedData);
+	}
+
 	private boolean isAuthorized(
-			final EntryRow row,
+			final MemoryEntryRow row,
 			final String... authorizations ) {
 		for (final FieldInfo info : row.info.getFieldInfo()) {
-			if (!DataStoreUtils.isAuthorized(
+			if (!MemoryStoreUtils.isAuthorized(
 					info.getVisibility(),
 					authorizations)) {
 				return false;

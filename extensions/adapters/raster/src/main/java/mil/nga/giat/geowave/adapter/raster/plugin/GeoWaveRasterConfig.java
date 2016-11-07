@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.media.jai.Interpolation;
@@ -100,7 +101,7 @@ public class GeoWaveRasterConfig
 
 	public static GeoWaveRasterConfig readFromConfigParams(
 			final String configParams )
-			throws Exception {
+			throws NullPointerException {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(configParams);
 
 		if (result != null) {
@@ -121,7 +122,9 @@ public class GeoWaveRasterConfig
 
 	public static GeoWaveRasterConfig readFromURL(
 			final URL xmlURL )
-			throws Exception {
+			throws IOException,
+			ParserConfigurationException,
+			SAXException {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(xmlURL.toString());
 
 		if (result != null) {
@@ -154,6 +157,13 @@ public class GeoWaveRasterConfig
 		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setIgnoringElementContentWhitespace(true);
 		dbf.setIgnoringComments(true);
+
+		dbf.setFeature(
+				"http://xml.org/sax/features/external-general-entities",
+				false);
+		dbf.setFeature(
+				"http://xml.org/sax/features/external-parameter-entities",
+				false);
 
 		final DocumentBuilder db = dbf.newDocumentBuilder();
 
@@ -189,7 +199,8 @@ public class GeoWaveRasterConfig
 		}
 		final String equalizeHistogram = params.get(ConfigParameter.EQUALIZE_HISTOGRAM.getConfigName());
 		if (equalizeHistogram != null) {
-			if (equalizeHistogram.trim().toLowerCase().equals(
+			if (equalizeHistogram.trim().toLowerCase(
+					Locale.ENGLISH).equals(
 					"true")) {
 				result.equalizeHistogramOverride = true;
 			}
@@ -199,7 +210,8 @@ public class GeoWaveRasterConfig
 		}
 		final String scaleTo8Bit = params.get(ConfigParameter.SCALE_TO_8BIT.getConfigName());
 		if (scaleTo8Bit != null) {
-			if (scaleTo8Bit.trim().toLowerCase().equals(
+			if (scaleTo8Bit.trim().toLowerCase(
+					Locale.ENGLISH).equals(
 					"true")) {
 				result.scaleTo8Bit = true;
 			}

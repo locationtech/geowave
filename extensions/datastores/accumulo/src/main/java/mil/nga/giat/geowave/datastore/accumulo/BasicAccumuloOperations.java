@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
@@ -323,7 +323,9 @@ public class BasicAccumuloOperations implements
 			return rowIterator.getKVCount();
 		}
 		catch (final TableNotFoundException e) {
-			LOGGER.warn("Table '" + tableName + "' not found during count operation");
+			LOGGER.warn(
+					"Table '" + tableName + "' not found during count operation",
+					e);
 			return 0;
 		}
 	}

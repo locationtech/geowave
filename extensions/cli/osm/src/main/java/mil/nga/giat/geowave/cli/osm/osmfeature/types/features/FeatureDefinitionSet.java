@@ -3,8 +3,10 @@ package mil.nga.giat.geowave.cli.osm.osmfeature.types.features;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -28,10 +30,12 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 
 public class FeatureDefinitionSet
 {
-	public final static List<String> GeneralizedFeatures = new ArrayList<>();
-	public final static List<FeatureDefinition> Features = new ArrayList<>();
-	public final static Map<String, FeatureDataAdapter> featureAdapters = new HashMap<>();
-	public final static Map<String, SimpleFeatureType> featureTypes = new HashMap<>();
+	public final static List<String> GeneralizedFeatures = Collections.unmodifiableList(new ArrayList<String>());
+	public final static List<FeatureDefinition> Features = (new ArrayList<FeatureDefinition>());
+	public final static Map<String, FeatureDataAdapter> featureAdapters = Collections
+			.unmodifiableMap(new HashMap<String, FeatureDataAdapter>());
+	public final static Map<String, SimpleFeatureType> featureTypes = Collections
+			.unmodifiableMap(new HashMap<String, SimpleFeatureType>());
 	private final static Object MUTEX = new Object();
 	private static boolean initialized = false;
 	private static final Logger LOGGER = LoggerFactory.getLogger(FeatureDefinitionSet.class);
@@ -114,7 +118,8 @@ public class FeatureDefinitionSet
 			String name ) {
 		if (name == null) return null;
 
-		return name.trim().toLowerCase().replace(
+		return name.trim().toLowerCase(
+				Locale.ENGLISH).replace(
 				":",
 				"_");
 	}

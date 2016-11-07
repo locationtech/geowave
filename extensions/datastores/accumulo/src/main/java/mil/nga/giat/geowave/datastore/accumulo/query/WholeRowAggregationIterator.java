@@ -16,8 +16,8 @@ import org.apache.hadoop.io.Text;
 
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadData;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadDataList;
 
 public class WholeRowAggregationIterator extends
@@ -36,11 +36,11 @@ public class WholeRowAggregationIterator extends
 			final List<Value> values ) {
 		if ((aggregationIterator != null) && (aggregationIterator.queryFilterIterator != null)) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
-			final List<AccumuloUnreadData> unreadData = new ArrayList<>();
+			final List<FlattenedUnreadData> unreadData = new ArrayList<>();
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
 				final Value value = values.get(i);
-				final AccumuloUnreadData singleRow = aggregationIterator.queryFilterIterator.aggregateFieldData(
+				final FlattenedUnreadData singleRow = aggregationIterator.queryFilterIterator.aggregateFieldData(
 						key,
 						value,
 						commonData);

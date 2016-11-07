@@ -34,8 +34,8 @@ import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
 public class HistogramStatistics extends
 		AbstractDataStatistics<GridCoverage>
@@ -103,7 +103,7 @@ public class HistogramStatistics extends
 		}
 		final byte[] configBinary = PersistenceUtils.toBinary(histogramConfig);
 		totalBytes += (configBinary.length + 4);
-		final ByteBuffer buf = ByteBuffer.allocate(totalBytes);
+		final ByteBuffer buf = super.binaryBuffer(totalBytes);
 		buf.putInt(configBinary.length);
 		buf.put(configBinary);
 		buf.putInt(perEntryBinary.size());
@@ -116,7 +116,7 @@ public class HistogramStatistics extends
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		final ByteBuffer buf = super.binaryBuffer(bytes);
 		final byte[] configBinary = new byte[buf.getInt()];
 		buf.get(configBinary);
 		histogramConfig = PersistenceUtils.fromBinary(

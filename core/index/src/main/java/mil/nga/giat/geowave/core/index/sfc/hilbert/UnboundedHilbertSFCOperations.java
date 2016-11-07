@@ -46,7 +46,7 @@ public class UnboundedHilbertSFCOperations implements
 	protected final static BigInteger UNIT_CELL_SIZE = BigDecimal.valueOf(
 			Math.pow(
 					2,
-					20)).toBigInteger();
+					19)).toBigInteger();
 	protected BigDecimal[] binsPerDimension;
 	protected BigInteger minHilbertValue;
 	protected BigInteger maxHilbertValue;

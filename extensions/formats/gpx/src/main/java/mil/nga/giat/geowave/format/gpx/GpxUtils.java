@@ -102,115 +102,124 @@ public class GpxUtils
 		final Map<Long, GpxTrack> metadata = new HashMap<Long, GpxTrack>();
 		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLEventReader eventReader = null;
-		InputStream in = null;
-		in = new BufferedInputStream(
-				new FileInputStream(
-						metadataFile));
-		eventReader = inputFactory.createXMLEventReader(in);
-		while (eventReader.hasNext()) {
-			XMLEvent event = eventReader.nextEvent();
-			if (event.isStartElement()) {
-				StartElement node = event.asStartElement();
-				switch (node.getName().getLocalPart()) {
-					case "gpxFile": {
-						final GpxTrack gt = new GpxTrack();
-						node = event.asStartElement();
-						@SuppressWarnings("unchecked")
-						final Iterator<Attribute> attributes = node.getAttributes();
-						while (attributes.hasNext()) {
-							final Attribute a = attributes.next();
-							switch (a.getName().getLocalPart()) {
-								case "id": {
-									gt.setTrackid(Long.parseLong(a.getValue()));
-									break;
-								}
-								case "timestamp": {
-									try {
-										gt.setTimestamp(parseDateSeconds(
-												a.getValue()).getTime());
-
+		try (final FileInputStream fis = new FileInputStream(
+				metadataFile); final InputStream in = new BufferedInputStream(
+				fis);) {
+			inputFactory.setProperty(
+					"javax.xml.stream.isSupportingExternalEntities",
+					false);
+			eventReader = inputFactory.createXMLEventReader(in);
+			while (eventReader.hasNext()) {
+				XMLEvent event = eventReader.nextEvent();
+				if (event.isStartElement()) {
+					StartElement node = event.asStartElement();
+					switch (node.getName().getLocalPart()) {
+						case "gpxFile": {
+							final GpxTrack gt = new GpxTrack();
+							node = event.asStartElement();
+							@SuppressWarnings("unchecked")
+							final Iterator<Attribute> attributes = node.getAttributes();
+							while (attributes.hasNext()) {
+								final Attribute a = attributes.next();
+								switch (a.getName().getLocalPart()) {
+									case "id": {
+										gt.setTrackid(Long.parseLong(a.getValue()));
+										break;
 									}
-									catch (final Exception t) {
+									case "timestamp": {
 										try {
-											gt.setTimestamp(parseDateMillis(
+											gt.setTimestamp(parseDateSeconds(
 													a.getValue()).getTime());
-										}
-										catch (final Exception t2) {
-											LOGGER.warn(
-													"Unable to format time: " + a.getValue(),
-													t2);
-										}
-									}
-									break;
-								}
-								case "points": {
-									gt.setPoints(Long.parseLong(a.getValue()));
-									break;
-								}
-								case "visibility": {
-									gt.setVisibility(a.getValue());
-									break;
-								}
-								case "uid": {
-									gt.setUserid(Long.parseLong(a.getValue()));
-									break;
-								}
-								case "user": {
-									gt.setUser(a.getValue());
-									break;
-								}
 
-							}
-						}
-						while (!(event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(
-								"gpxFile"))) {
-							if (event.isStartElement()) {
-								node = event.asStartElement();
-								switch (node.getName().getLocalPart()) {
-									case "description": {
-										event = eventReader.nextEvent();
-										if (event.isCharacters()) {
-											gt.setDescription(event.asCharacters().getData());
+										}
+										catch (final Exception t) {
+											try {
+												gt.setTimestamp(parseDateMillis(
+														a.getValue()).getTime());
+											}
+											catch (final Exception t2) {
+												LOGGER.warn(
+														"Unable to format time: " + a.getValue(),
+														t2);
+											}
 										}
 										break;
 									}
-									case "tags": {
-										final List<CharSequence> tags = new ArrayList<CharSequence>();
-										while (!(event.isEndElement() && event
-												.asEndElement()
-												.getName()
-												.getLocalPart()
-												.equals(
-														"tags"))) {
-											if (event.isStartElement()) {
-												node = event.asStartElement();
-												if (node.getName().getLocalPart().equals(
-														"tag")) {
-													event = eventReader.nextEvent();
-													if (event.isCharacters()) {
-														tags.add(event.asCharacters().getData());
+									case "points": {
+										gt.setPoints(Long.parseLong(a.getValue()));
+										break;
+									}
+									case "visibility": {
+										gt.setVisibility(a.getValue());
+										break;
+									}
+									case "uid": {
+										gt.setUserid(Long.parseLong(a.getValue()));
+										break;
+									}
+									case "user": {
+										gt.setUser(a.getValue());
+										break;
+									}
+
+								}
+							}
+							while (!(event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(
+									"gpxFile"))) {
+								if (event.isStartElement()) {
+									node = event.asStartElement();
+									switch (node.getName().getLocalPart()) {
+										case "description": {
+											event = eventReader.nextEvent();
+											if (event.isCharacters()) {
+												gt.setDescription(event.asCharacters().getData());
+											}
+											break;
+										}
+										case "tags": {
+											final List<CharSequence> tags = new ArrayList<CharSequence>();
+											while (!(event.isEndElement() && event
+													.asEndElement()
+													.getName()
+													.getLocalPart()
+													.equals(
+															"tags"))) {
+												if (event.isStartElement()) {
+													node = event.asStartElement();
+													if (node.getName().getLocalPart().equals(
+															"tag")) {
+														event = eventReader.nextEvent();
+														if (event.isCharacters()) {
+															tags.add(event.asCharacters().getData());
+														}
 													}
 												}
+												event = eventReader.nextEvent();
 											}
-											event = eventReader.nextEvent();
+											gt.setTags(tags);
+											break;
 										}
-										gt.setTags(tags);
-										break;
+
 									}
-
 								}
+								event = eventReader.nextEvent();
 							}
-							event = eventReader.nextEvent();
+							metadata.put(
+									gt.getTrackid(),
+									gt);
+							break;
 						}
-						metadata.put(
-								gt.getTrackid(),
-								gt);
-						break;
-					}
 
+					}
 				}
 			}
 		}
+		catch (IOException e) {
+			LOGGER.error(
+					"Could not create the FileInputStream.",
+					e);
+		}
+
 		return metadata;
 	}
 

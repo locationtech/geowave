@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.store.index;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -8,15 +10,14 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.Closable;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.Writer;
+import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 
 public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 		SecondaryIndexDataStore,
-		Closable
+		Closeable
 {
 
 	private final static Logger LOGGER = Logger.getLogger(BaseSecondaryIndexDataStore.class);
@@ -115,7 +116,14 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 	@Override
 	public void close() {
 		for (final Writer<MutationType> writer : writerCache.values()) {
-			writer.close();
+			try {
+				writer.close();
+			}
+			catch (final IOException e) {
+				LOGGER.warn(
+						"Unable to close secondary index writer",
+						e);
+			}
 		}
 	}
 

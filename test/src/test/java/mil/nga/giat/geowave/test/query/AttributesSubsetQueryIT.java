@@ -12,6 +12,7 @@ import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -46,7 +47,8 @@ public class AttributesSubsetQueryIT
 	private static FeatureDataAdapter dataAdapter;
 
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
 
@@ -77,6 +79,8 @@ public class AttributesSubsetQueryIT
 					GUADALAJARA,
 					ATLANTA)));
 
+	private static long startMillis;
+
 	@BeforeClass
 	public static void setupData()
 			throws IOException {
@@ -84,6 +88,25 @@ public class AttributesSubsetQueryIT
 
 		dataAdapter = new FeatureDataAdapter(
 				simpleFeatureType);
+
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*    RUNNING AttributesSubsetQueryIT    *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*   FINISHED AttributesSubsetQueryIT    *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test

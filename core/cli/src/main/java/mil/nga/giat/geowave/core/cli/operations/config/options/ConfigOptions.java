@@ -179,11 +179,15 @@ public class ConfigOptions
 			}
 		}
 		catch (FileNotFoundException e) {
-			LOGGER.error("Could not find the property file.");
+			LOGGER.error(
+					"Could not find the property file.",
+					e);
 			return false;
 		}
 		catch (IOException e) {
-			LOGGER.error("Exception writing property file.");
+			LOGGER.error(
+					"Exception writing property file.",
+					e);
 			return false;
 		}
 		return true;
@@ -209,9 +213,9 @@ public class ConfigOptions
 		InputStream is = null;
 		try {
 			if (p != null) {
-				try (Scanner s = new Scanner(
-						new FileInputStream(
-								configFile),
+				try (FileInputStream input = new FileInputStream(
+						configFile); Scanner s = new Scanner(
+						input,
 						CHARSET)) {
 					final ByteArrayOutputStream out = new ByteArrayOutputStream();
 					final PrintWriter writer = new PrintWriter(

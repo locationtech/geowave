@@ -9,14 +9,13 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
+import org.apache.log4j.Logger;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "clientCql", parentOperation = DebugSection.class)
@@ -24,29 +23,21 @@ import com.beust.jcommander.Parameters;
 public class ClientSideCQLQuery extends
 		AbstractGeoWaveQuery
 {
+	private static Logger LOGGER = Logger.getLogger(ClientSideCQLQuery.class);
+
+	@Parameter(names = "--cql", required = true, description = "CQL Filter executed client side")
+	private String cql;
+
 	private Filter filter;
 
-	@Override
-	protected void applyOptions(
-			final Options options ) {
-		final Option cql = new Option(
-				"cql",
-				true,
-				"CQL Filter executed client side");
-		cql.setRequired(true);
-		options.addOption(cql);
-	}
-
-	@Override
-	protected void parseOptions(
-			final CommandLine commandLine ) {
+	private void getFilter() {
 		try {
-			filter = ECQL.toFilter(commandLine.getOptionValue(
-					"cql").toString());
+			filter = ECQL.toFilter(cql);
 		}
 		catch (final CQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.warn(
+					"Unable to retrive filter",
+					e);
 		}
 	}
 
@@ -57,6 +48,8 @@ public class ClientSideCQLQuery extends
 			final ByteArrayId indexId,
 			final DataStore dataStore,
 			final boolean debug ) {
+		getFilter();
+
 		long count = 0;
 		try (final CloseableIterator<Object> it = dataStore.query(
 				new QueryOptions(
@@ -76,7 +69,9 @@ public class ClientSideCQLQuery extends
 			}
 		}
 		catch (final IOException e) {
-			e.printStackTrace();
+			LOGGER.warn(
+					"Unable to read result",
+					e);
 		}
 		return count;
 	}

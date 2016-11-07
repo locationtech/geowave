@@ -14,9 +14,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -74,7 +74,9 @@ public abstract class AccumuloFilteredIndexQuery extends
 			exists = accumuloOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()));
 		}
 		catch (final IOException e) {
-			LOGGER.error("e");
+			LOGGER.error(
+					"Table does not exist",
+					e);
 		}
 		if (!exists) {
 			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));

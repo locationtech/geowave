@@ -5,5 +5,5 @@ import java.nio.charset.StandardCharsets;
 
 public class Constants
 {
-	public static Charset CHARSET = StandardCharsets.UTF_8;
+	public static final Charset CHARSET = StandardCharsets.UTF_8;
 }

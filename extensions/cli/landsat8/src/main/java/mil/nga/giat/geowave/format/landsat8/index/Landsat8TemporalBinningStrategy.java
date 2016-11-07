@@ -124,7 +124,7 @@ public class Landsat8TemporalBinningStrategy implements
 				lastBin = true;
 				endMillis = (long) range.getMax();
 				// its questionable whether we use
-				fullExtent = range.getMax() == maxOfBin;
+				fullExtent = ((long) range.getMax()) == maxOfBin;
 			}
 			else {
 				endMillis = maxOfBin;

@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.core.geotime.index.dimension;
 
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
@@ -39,7 +40,9 @@ public class LongitudeDefinition extends
 	public BinRange[] getNormalizedRanges(
 			final NumericData range ) {
 		// if the range is a single value, clamp at -180, 180
-		if (range.getMin() == range.getMax()) {
+		if (FloatCompareUtils.checkDoublesEqual(
+				range.getMin(),
+				range.getMax())) {
 
 			return super.getNormalizedRanges(range);
 		}

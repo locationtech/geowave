@@ -9,9 +9,6 @@
 
 This documentation was generated for GeoWave version ${project.version} from commit ${buildNumber}.
 
-[[todo-appendix]]
-[appendix]
-<<<
 === Topics in need of documentation
 
 * Ingest Examples

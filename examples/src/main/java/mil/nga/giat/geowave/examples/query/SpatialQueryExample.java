@@ -35,8 +35,8 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
@@ -74,7 +74,7 @@ public class SpatialQueryExample
 		example.runPolygonExamples();
 	}
 
-	private void setupDataStores()
+	private static void setupDataStores()
 			throws AccumuloSecurityException,
 			AccumuloException {
 		// Initialize VectorDataStore and AccumuloAdapterStore
@@ -130,8 +130,9 @@ public class SpatialQueryExample
 			}
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(
+					"Could not create writter",
+					e);
 		}
 	}
 

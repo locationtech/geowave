@@ -5,13 +5,14 @@ import java.nio.ByteBuffer;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
 
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 
 /**
@@ -87,7 +88,7 @@ public class FeatureHyperLogLogStatistics extends
 			try {
 				loglog = (HyperLogLogPlus) ((FeatureHyperLogLogStatistics) mergeable).loglog.merge(loglog);
 			}
-			catch (Exception e) {
+			catch (CardinalityMergeException e) {
 				throw new RuntimeException(
 						"Unable to merge counters",
 						e);

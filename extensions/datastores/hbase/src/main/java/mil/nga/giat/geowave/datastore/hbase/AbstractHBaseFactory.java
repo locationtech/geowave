@@ -7,7 +7,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptio
 abstract public class AbstractHBaseFactory implements
 		GenericFactory
 {
-	private static final String NAME = "hbase";
+	private static final String NAME = HBaseDataStore.TYPE;
 	private static final String DESCRIPTION = "A GeoWave store backed by tables in Apache HBase";
 
 	@Override

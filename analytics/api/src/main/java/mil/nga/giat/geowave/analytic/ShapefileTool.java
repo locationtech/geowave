@@ -19,6 +19,8 @@ import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -26,6 +28,7 @@ import com.vividsolutions.jts.geom.Polygon;
 
 public class ShapefileTool
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShapefileTool.class);
 
 	private static SimpleFeatureType createFeatureType(
 			final String typeName,
@@ -108,8 +111,10 @@ public class ShapefileTool
 				writer.write();
 			}
 		}
-		catch (final Exception problem) {
-			problem.printStackTrace();
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Problem with the FeatureWritter",
+					e);
 			transaction.rollback();
 		}
 		finally {
@@ -167,8 +172,10 @@ public class ShapefileTool
 				writer.write();
 			}
 		}
-		catch (final Exception problem) {
-			problem.printStackTrace();
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Problem with the FeatureWritter",
+					e);
 			transaction.rollback();
 		}
 		finally {

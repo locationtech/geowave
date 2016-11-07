@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.analytic.mapreduce.clustering.runner;
 
+import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
@@ -11,11 +13,12 @@ public abstract class AnalyticJobRunner extends
 {
 	@SuppressWarnings("deprecation")
 	public int runJob()
-			throws Exception {
+			throws IOException,
+			InterruptedException,
+			ClassNotFoundException {
 		final Configuration conf = super.getConf();
 
-		final Job job = new Job(
-				conf);
+		final Job job = Job.getInstance(conf);
 
 		job.setJarByClass(this.getClass());
 

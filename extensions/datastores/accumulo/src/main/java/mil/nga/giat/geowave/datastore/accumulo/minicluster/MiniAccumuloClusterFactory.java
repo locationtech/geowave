@@ -53,7 +53,7 @@ public class MiniAccumuloClusterFactory
 
 		config.setClasspathItems(jarPath);
 
-		MiniAccumuloClusterImpl retVal = new MiniAccumuloClusterImpl(
+		MiniAccumuloClusterImpl retVal = new GeoWaveMiniAccumuloClusterImpl(
 				config);
 		if (SystemUtils.IS_OS_WINDOWS && isYarn()) {
 			// this must happen after instantiating Mini

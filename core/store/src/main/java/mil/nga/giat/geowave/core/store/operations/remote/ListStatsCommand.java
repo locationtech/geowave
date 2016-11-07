@@ -36,7 +36,7 @@ public class ListStatsCommand extends
 	@Override
 	public void execute(
 			OperationParams params )
-			throws Exception {
+			throws ParameterException {
 
 		// Ensure we have all the required arguments
 		if (parameters.size() < 1) {

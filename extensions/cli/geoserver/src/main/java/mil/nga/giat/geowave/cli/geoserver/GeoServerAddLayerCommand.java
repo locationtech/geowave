@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.cli.geoserver;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -51,6 +52,12 @@ public class GeoServerAddLayerCommand implements
 	}, required = false, description = "select just <adapter id> from the store")
 	private String adapterId = null;
 
+	@Parameter(names = {
+		"-sld",
+		"--setStyle"
+	}, required = false, description = "<default style sld>")
+	private String style = null;
+
 	@Parameter(description = "<GeoWave store name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
@@ -98,7 +105,8 @@ public class GeoServerAddLayerCommand implements
 		Response addLayerResponse = geoserverClient.addLayer(
 				workspace,
 				gwStore,
-				adapterId);
+				adapterId,
+				style);
 
 		if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
 			System.out.println("Add GeoServer layer for '" + gwStore + ": OK");
@@ -118,21 +126,16 @@ public class GeoServerAddLayerCommand implements
 		@Override
 		public AddOption convert(
 				final String value ) {
-			AddOption convertedValue = null;
+			AddOption convertedValue = AddOption.valueOf(value.toUpperCase());
 
-			try {
-				convertedValue = AddOption.valueOf(value.toUpperCase());
-			}
-			catch (Exception e) {
-				// Nothing to do. Exception thrown below.
-			}
-
-			if (convertedValue == null) {
+			if (convertedValue != AddOption.ALL && convertedValue != AddOption.RASTER
+					&& convertedValue != AddOption.VECTOR) {
 				throw new ParameterException(
 						"Value " + value + "can not be converted to an add option. " + "Available values are: "
 								+ StringUtils.join(
 										AddOption.values(),
-										", ").toLowerCase());
+										", ").toLowerCase(
+										Locale.ENGLISH));
 			}
 			return convertedValue;
 		}

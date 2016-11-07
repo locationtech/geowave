@@ -22,6 +22,7 @@
 		<module>formats/tdrive</module>
 		<module>formats/gdelt</module>
 		<module>formats/avro</module>
+		<module>formats/twitter</module>
 		<module>formats/stanag4676/format</module>
 		<module>formats/stanag4676/service</module>
 		<module>cli/debug</module>

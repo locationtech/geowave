@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
 
@@ -14,8 +15,8 @@ import mil.nga.giat.geowave.core.ingest.operations.LocalToKafkaCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 
 public class KafkaTestUtils
 {
@@ -98,7 +99,7 @@ public class KafkaTestUtils
 		kafkaToGeowave.getKafkaOptions().setFetchMessageMaxBytes(
 				MAX_MESSAGE_BYTES);
 		kafkaToGeowave.getKafkaOptions().setZookeeperConnect(
-				AccumuloStoreTestEnvironment.getInstance().getZookeeper());
+				ZookeeperTestEnvironment.getInstance().getZookeeper());
 		kafkaToGeowave.setParameters(
 				null,
 				null);
@@ -113,7 +114,7 @@ public class KafkaTestUtils
 		try {
 			kafkaToGeowave.getDriver().waitFutures();
 		}
-		catch (Exception e) {
+		catch (InterruptedException | ExecutionException e) {
 			throw new RuntimeException(
 					e);
 		}
@@ -126,7 +127,7 @@ public class KafkaTestUtils
 				DEFAULT_LOG_DIR.getAbsolutePath());
 		props.put(
 				"zookeeper.connect",
-				AccumuloStoreTestEnvironment.getInstance().getZookeeper());
+				ZookeeperTestEnvironment.getInstance().getZookeeper());
 		props.put(
 				"broker.id",
 				"0");

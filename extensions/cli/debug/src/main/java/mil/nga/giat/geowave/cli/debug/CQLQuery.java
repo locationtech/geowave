@@ -2,11 +2,6 @@ package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.geotools.filter.text.cql2.CQLException;
-
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -16,6 +11,10 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 
+import org.apache.log4j.Logger;
+import org.geotools.filter.text.cql2.CQLException;
+
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "serverCql", parentOperation = DebugSection.class)
@@ -23,34 +22,13 @@ import com.beust.jcommander.Parameters;
 public class CQLQuery extends
 		AbstractGeoWaveQuery
 {
+	private static Logger LOGGER = Logger.getLogger(CQLQuery.class);
+
+	@Parameter(names = "--cql", required = true, description = "CQL Filter executed client side")
 	private String cqlStr;
-	private boolean useAggregation = false;
 
-	@Override
-	protected void applyOptions(
-			final Options options ) {
-		final Option cql = new Option(
-				"cql",
-				true,
-				"CQL Filter executed client side");
-		cql.setRequired(true);
-		options.addOption(cql);
-
-		final Option aggregation = new Option(
-				"useAggregation",
-				false,
-				"Compute count on the server side");
-		aggregation.setRequired(false);
-		options.addOption(aggregation);
-	}
-
-	@Override
-	protected void parseOptions(
-			final CommandLine commandLine ) {
-		cqlStr = commandLine.getOptionValue(
-				"cql").toString();
-		useAggregation = commandLine.hasOption("useAggregation");
-	}
+	@Parameter(names = "--useAggregation, -agg", required = false, description = "Compute count on the server side")
+	private Boolean useAggregation = Boolean.FALSE;
 
 	@Override
 	protected long runQuery(
@@ -80,11 +58,14 @@ public class CQLQuery extends
 				}
 			}
 			catch (final IOException e) {
-				e.printStackTrace();
+				LOGGER.warn(
+						"Unable to read result",
+						e);
 			}
 			catch (final CQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				LOGGER.error(
+						"Unable to create optimal query",
+						e1);
 			}
 			return count;
 		}
@@ -109,11 +90,14 @@ public class CQLQuery extends
 				}
 			}
 			catch (final IOException e) {
-				e.printStackTrace();
+				LOGGER.warn(
+						"Unable to read result",
+						e);
 			}
 			catch (final CQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				LOGGER.error(
+						"Unable to create optimal query",
+						e1);
 			}
 			return count;
 		}

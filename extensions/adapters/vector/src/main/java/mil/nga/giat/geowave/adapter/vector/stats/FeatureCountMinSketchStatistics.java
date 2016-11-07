@@ -4,13 +4,14 @@ import java.nio.ByteBuffer;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.clearspring.analytics.stream.frequency.CountMinSketch;
+import com.clearspring.analytics.stream.frequency.FrequencyMergeException;
 
 /**
  * 
@@ -105,7 +106,7 @@ public class FeatureCountMinSketchStatistics extends
 						sketch,
 						((FeatureCountMinSketchStatistics) mergeable).sketch);
 			}
-			catch (Exception e) {
+			catch (FrequencyMergeException e) {
 				throw new RuntimeException(
 						"Unable to merge sketches",
 						e);

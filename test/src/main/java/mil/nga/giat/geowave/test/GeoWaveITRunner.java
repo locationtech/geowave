@@ -47,6 +47,8 @@ public class GeoWaveITRunner extends
 			false);
 	public static final Object MUTEX = new Object();
 
+	public static final String STORE_TYPE_PROPERTY_NAME = "testStoreType";
+
 	@Override
 	protected Statement withBeforeClasses(
 			final Statement statement ) {
@@ -126,7 +128,11 @@ public class GeoWaveITRunner extends
 		}
 
 		private Object createTestUsingFieldInjection()
-				throws Exception {
+				throws IllegalAccessException,
+				SecurityException,
+				NoSuchFieldException,
+				GeoWaveITException,
+				InstantiationException {
 			String typeNamespace = null;
 			final Set<Pair<Field, String>> fieldsAndNamespacePairs = new HashSet<Pair<Field, String>>();
 			if (typeIsAnnotated()) {
@@ -134,13 +140,9 @@ public class GeoWaveITRunner extends
 						GeoWaveTestStore.class);
 
 				typeNamespace = store.namespace();
-
-				Annotation[] annotations = getTestClass().getJavaClass().getDeclaredAnnotations();
 				for (final String fieldName : fieldNameStoreTypePair.keySet()) {
-
 					final Field field = getTestClass().getJavaClass().getDeclaredField(
 							fieldName);
-					Annotation[] a = field.getDeclaredAnnotations();
 					String fieldNamespace = typeNamespace;
 					if (field.isAnnotationPresent(NamespaceOverride.class)) {
 						fieldNamespace = field.getAnnotation(
@@ -234,6 +236,7 @@ public class GeoWaveITRunner extends
 	private static final List<Runner> NO_RUNNERS = Collections.<Runner> emptyList();
 
 	private final List<Runner> runners = new ArrayList<Runner>();
+	private final Set<GeoWaveStoreType> storeTypes = new HashSet<GeoWaveStoreType>();
 	private final TestEnvironment[] testEnvs;
 
 	/**
@@ -241,7 +244,9 @@ public class GeoWaveITRunner extends
 	 */
 	public GeoWaveITRunner(
 			final Class<?> klass )
-			throws Throwable {
+			throws InitializationError,
+			SecurityException,
+			GeoWaveITException {
 		super(
 				klass,
 				NO_RUNNERS);
@@ -256,30 +261,51 @@ public class GeoWaveITRunner extends
 
 	private void createRunnersForDataStores()
 			throws InitializationError,
-			Exception {
+			SecurityException,
+			GeoWaveITException {
 		final GeoWaveStoreRunnerConfig emptyConfig = new GeoWaveStoreRunnerConfig();
 		List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
-		if (typeIsAnnotated()) {
-			if (fieldsAreAnnotated()) {
-				throw new GeoWaveITException(
-						"Only type or fields can be annotated with @GeoWaveTestStore, not both");
-			}
+
+		final String storeTypeProp = System.getProperty(STORE_TYPE_PROPERTY_NAME);
+
+		boolean typeOverridden = false;
+		if (TestUtils.isSet(storeTypeProp)) {
 			final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
-			final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
-					GeoWaveTestStore.class);
-			for (final GeoWaveStoreType storeType : store.value()) {
+			final GeoWaveStoreType storeType = GeoWaveStoreType.valueOf(storeTypeProp);
+			if (containsAnnotationForType(storeType)) {
+				typeOverridden = true;
 				configs.add(new GeoWaveStoreRunnerConfig(
 						storeType,
 						dataStoreOptionFields));
+				storeTypes.add(storeType);
 			}
 		}
-		else {
-			configs.add(emptyConfig);
-			final List<FrameworkField> storeFields = getStoreAnnotatedFields();
-			for (final FrameworkField field : storeFields) {
-				configs = addRunnerConfigsForField(
-						field,
-						configs);
+
+		if (!typeOverridden) {
+			if (typeIsAnnotated()) {
+				if (fieldsAreAnnotated()) {
+					throw new GeoWaveITException(
+							"Only type or fields can be annotated with @GeoWaveTestStore, not both");
+				}
+				final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
+				final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
+						GeoWaveTestStore.class);
+				for (final GeoWaveStoreType storeType : store.value()) {
+					configs.add(new GeoWaveStoreRunnerConfig(
+							storeType,
+							dataStoreOptionFields));
+					storeTypes.add(storeType);
+				}
+			}
+			else {
+				configs.add(emptyConfig);
+				final List<FrameworkField> storeFields = getStoreAnnotatedFields();
+				for (final FrameworkField field : storeFields) {
+					configs = addRunnerConfigsForField(
+							field,
+							configs,
+							storeTypes);
+				}
 			}
 		}
 		for (final GeoWaveStoreRunnerConfig config : configs) {
@@ -290,8 +316,34 @@ public class GeoWaveITRunner extends
 		}
 	}
 
+	private boolean containsAnnotationForType(
+			final GeoWaveStoreType storeType ) {
+		if (typeIsAnnotated()) {
+			final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
+					GeoWaveTestStore.class);
+			for (final GeoWaveStoreType annotationType : store.value()) {
+				if (annotationType == storeType) {
+					return true;
+				}
+			}
+		}
+		else {
+			for (final FrameworkField field : getTestClass().getAnnotatedFields(
+					GeoWaveTestStore.class)) {
+				for (final GeoWaveStoreType annotationType : field.getField().getAnnotation(
+						GeoWaveTestStore.class).value()) {
+					if (annotationType == storeType) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	private Set<String> getDataStoreOptionFieldsForTypeAnnotation()
-			throws Exception {
+			throws SecurityException,
+			GeoWaveITException {
 		final Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 		final Set<String> dataStoreOptionFields = new HashSet<String>();
 		for (final Field field : fields) {
@@ -309,7 +361,8 @@ public class GeoWaveITRunner extends
 
 	private static List<GeoWaveStoreRunnerConfig> addRunnerConfigsForField(
 			final FrameworkField field,
-			final List<GeoWaveStoreRunnerConfig> currentConfigs )
+			final List<GeoWaveStoreRunnerConfig> currentConfigs,
+			final Set<GeoWaveStoreType> storeTypes )
 			throws GeoWaveITException {
 		final GeoWaveTestStore store = field.getField().getAnnotation(
 				GeoWaveTestStore.class);
@@ -327,6 +380,8 @@ public class GeoWaveITRunner extends
 						config,
 						field.getName(),
 						type));
+
+				storeTypes.add(type);
 			}
 		}
 		return newConfigs;
@@ -343,29 +398,7 @@ public class GeoWaveITRunner extends
 	}
 
 	private TestEnvironment[] getTestEnvironments()
-			throws Exception {
-		final Set<GeoWaveStoreType> types = new HashSet<GeoWaveStoreType>();
-		if (typeIsAnnotated()) {
-			if (fieldsAreAnnotated()) {
-				throw new GeoWaveITException(
-						"Only type or fields can be annotated with @GeoWaveTestStore, not both");
-			}
-			final GeoWaveTestStore store = getTestClass().getJavaClass().getAnnotation(
-					GeoWaveTestStore.class);
-			for (final GeoWaveStoreType storeType : store.value()) {
-				types.add(storeType);
-			}
-		}
-		else {
-			final List<FrameworkField> storeFields = getStoreAnnotatedFields();
-			for (final FrameworkField f : storeFields) {
-				final GeoWaveStoreType[] fieldTypes = f.getField().getAnnotation(
-						GeoWaveTestStore.class).value();
-				for (final GeoWaveStoreType t : fieldTypes) {
-					types.add(t);
-				}
-			}
-		}
+			throws NullPointerException {
 		final Set<Environment> environments = new HashSet<Environment>();
 		final Environments es = getTestClass().getJavaClass().getAnnotation(
 				Environments.class);
@@ -384,9 +417,9 @@ public class GeoWaveITRunner extends
 				environments.add(env);
 			}
 		}
-		final TestEnvironment[] testEnvs = new TestEnvironment[environments.size() + types.size()];
+		final TestEnvironment[] testEnvs = new TestEnvironment[environments.size() + storeTypes.size()];
 		int i = 0;
-		for (final GeoWaveStoreType t : types) {
+		for (final GeoWaveStoreType t : storeTypes) {
 			testEnvs[i++] = t.getTestEnvironment();
 		}
 		for (final Environment e : environments) {
@@ -429,8 +462,8 @@ public class GeoWaveITRunner extends
 		synchronized (MUTEX) {
 			if (!DEFER_CLEANUP.get()) {
 				// Tearodwn in reverse
-				List<TestEnvironment> envs = Arrays.asList(testEnvs);
-				ListIterator<TestEnvironment> it = envs.listIterator(envs.size());
+				final List<TestEnvironment> envs = Arrays.asList(testEnvs);
+				final ListIterator<TestEnvironment> it = envs.listIterator(envs.size());
 				while (it.hasPrevious()) {
 					it.previous().tearDown();
 				}
@@ -547,7 +580,7 @@ public class GeoWaveITRunner extends
 				traverseRequirements(
 						entry,
 						retVal,
-						i,
+						i++,
 						testsAddedToArray);
 			}
 			return retVal;

@@ -107,8 +107,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
-import mil.nga.giat.geowave.core.store.IteratorWrapper;
-import mil.nga.giat.geowave.core.store.IteratorWrapper.Converter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
@@ -126,6 +124,8 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.util.IteratorWrapper;
+import mil.nga.giat.geowave.core.store.util.IteratorWrapper.Converter;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
@@ -312,9 +312,17 @@ public class RasterDataAdapter implements
 
 	public RasterDataAdapter(
 			final RasterDataAdapter adapter,
+			final String coverageName ) {
+		this(
+				adapter,
+				coverageName,
+				adapter.tileSize);
+	}
+
+	public RasterDataAdapter(
+			final RasterDataAdapter adapter,
 			final String coverageName,
-			final int tileSize,
-			final RasterTileMergeStrategy<?> mergeStrategy ) {
+			final int tileSize ) {
 		this(
 				coverageName,
 				adapter.getSampleModel().createCompatibleSampleModel(
@@ -329,7 +337,8 @@ public class RasterDataAdapter implements
 				adapter.equalizeHistogram,
 				interpolationToByte(adapter.interpolation),
 				adapter.buildPyramid,
-				mergeStrategy);
+				adapter.mergeStrategy == null ? null : adapter.mergeStrategy.getChildMergeStrategy(adapter
+						.getAdapterId()));
 	}
 
 	public RasterDataAdapter(
@@ -432,7 +441,7 @@ public class RasterDataAdapter implements
 	}
 
 	private void init() {
-		int supportedStatsLength = 3;
+		int supportedStatsLength = 2;
 
 		if (histogramConfig != null) {
 			supportedStatsLength++;
@@ -441,10 +450,9 @@ public class RasterDataAdapter implements
 		supportedStatsIds = new ByteArrayId[supportedStatsLength];
 		supportedStatsIds[0] = OverviewStatistics.STATS_ID;
 		supportedStatsIds[1] = BoundingBoxDataStatistics.STATS_ID;
-		supportedStatsIds[2] = RasterFootprintStatistics.STATS_ID;
 
 		if (histogramConfig != null) {
-			supportedStatsIds[3] = HistogramStatistics.STATS_ID;
+			supportedStatsIds[2] = HistogramStatistics.STATS_ID;
 		}
 		visibilityHandler = new FieldIdStatisticVisibility<GridCoverage>(
 				DATA_FIELD_ID);

@@ -7,8 +7,8 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.core.store.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper;
@@ -69,7 +69,9 @@ public class AccumuloEntryIteratorWrapper<T> extends
 			entry = (Entry<Key, Value>) row;
 		}
 		catch (final ClassCastException e) {
-			LOGGER.error("Row is not an accumulo row entry.");
+			LOGGER.error(
+					"Row is not an accumulo row entry.",
+					e);
 			return null;
 		}
 		return AccumuloUtils.decodeRow(
