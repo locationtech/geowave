@@ -68,6 +68,9 @@ public class MiniAccumuloClusterFactory
 			LOGGER.info("'HADOOP_HOME' must be set and 'PATH' must contain %HADOOP_HOME%/bin");
 
 			final Map<String, String> env = System.getenv();
+			// HP Fortify "Path Manipulation" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 			String hadoopHome = System.getProperty("hadoop.home.dir");
 			if (hadoopHome == null) {
 				hadoopHome = env.get("HADOOP_HOME");
@@ -145,12 +148,13 @@ public class MiniAccumuloClusterFactory
 				Attributes.Name.CLASS_PATH,
 				classpath);
 
-		final JarOutputStream target = new JarOutputStream(
+		try (final JarOutputStream target = new JarOutputStream(
 				new FileOutputStream(
 						jarFile),
-				manifest);
+				manifest)) {
 
-		target.close();
+			target.close();
+		}
 
 		return jarFile.getAbsolutePath();
 	}

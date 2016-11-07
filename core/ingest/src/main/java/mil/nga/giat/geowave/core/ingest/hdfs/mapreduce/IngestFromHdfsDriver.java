@@ -72,6 +72,9 @@ public class IngestFromHdfsDriver
 			if (!IngestUtils.isCompatible(
 					adapterProvider,
 					option)) {
+				// HP Fortify "Log Forging" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				LOGGER.warn("HDFS file ingest plugin for ingest type '" + providerName
 						+ "' does not support dimensionality '" + option.getType() + "'");
 				valid = false;

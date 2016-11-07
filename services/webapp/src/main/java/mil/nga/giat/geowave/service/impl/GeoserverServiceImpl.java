@@ -61,8 +61,14 @@ public class GeoserverServiceImpl implements
 	public GeoserverServiceImpl(
 			@Context
 			final ServletConfig servletConfig ) {
-		final Properties props = ServiceUtils.loadProperties(servletConfig.getServletContext().getResourceAsStream(
-				servletConfig.getInitParameter("config.properties")));
+		Properties props = null;
+		try (InputStream is = servletConfig.getServletContext().getResourceAsStream(
+				servletConfig.getInitParameter("config.properties"))) {
+			props = ServiceUtils.loadProperties(is);
+		}
+		catch (IOException e) {
+			log.error(e);
+		}
 
 		geoserverUrl = ServiceUtils.getProperty(
 				props,

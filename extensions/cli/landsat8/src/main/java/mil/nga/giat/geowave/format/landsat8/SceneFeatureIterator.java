@@ -213,6 +213,9 @@ public class SceneFeatureIterator implements
 				throw e;
 			}
 			finally {
+				// HP Fortify "Unreleased Resource" false positive
+				// These streams are closed if not null, in this
+				// "finally" block
 				if (out != null) {
 					IOUtils.closeQuietly(out);
 				}
@@ -412,6 +415,7 @@ public class SceneFeatureIterator implements
 			final Filter cqlFilter )
 			throws FileNotFoundException,
 			IOException {
+
 		parserFis = new FileInputStream(
 				csvFile);
 		parserIsr = new InputStreamReader(

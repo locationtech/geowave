@@ -53,6 +53,9 @@ public abstract class AbstractLockingManagement implements
 					}
 				}
 				catch (Exception ex) {
+					// HP Fortify "Log Forging" false positive
+					// What Fortify considers "user input" comes only
+					// from users with OS-level access anyway
 					LOGGER.error(
 							"Cannot instantiate lock management class " + val,
 							ex);
