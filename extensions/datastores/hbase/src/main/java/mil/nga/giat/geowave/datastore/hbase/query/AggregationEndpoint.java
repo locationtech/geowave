@@ -267,6 +267,7 @@ public class AggregationEndpoint extends
 					aggregation.aggregate(
 							results);
 				}
+				results.clear();
 			}
 		}
 		return aggregation.getResult();
