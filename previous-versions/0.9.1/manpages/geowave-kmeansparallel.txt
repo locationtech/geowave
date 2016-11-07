@@ -1,0 +1,175 @@
+//:geowave-kmeansparallel(1)
+//:======================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave analytic kmeansparallel - KMeans Parallel Clustering
+
+SYNOPSIS
+//:--------
+
+*geowave analytic kmeansparallel* [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+The geowave analytic kmeansparallel operator will execute a KMeans Parallel Clustering analytic
+
+OPTIONS
+//:-------
+
+-cce, --centroidExtractorClass::
+
+   Centroid Exractor Class implements
+   mil.nga.giat.geowave.analytics.extract.CentroidExtractor
+
+-cid, --centroidIndexId::
+
+   Index Identifier for Centroids
+
+-cfc, --centroidWrapperFactoryClass::
+
+   A factory class that implements
+   mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory
+
+-czl, --centroidZoomLevel::
+
+   Zoom Level Number
+
+-cct, --clusteringConverganceTolerance::
+
+   Convergence Tolerance
+
+-cmi, --clusteringMaxIterations::
+
+   Maximum number of iterations when finding optimal clusters
+
+-crc, --clusteringMaxReducerCount::
+
+   Maximum Clustering Reducer Count
+
+-zl, --clusteringZoomLevels::
+
+   Number of Zoom Levels to Process
+
+-dde, --commonDimensionExtractClass::
+
+   Dimension Extractor Class implements
+   mil.nga.giat.geowave.analytics.extract.DimensionExtractor
+
+-cdf, --commonDistanceFunctionClass::
+
+   Distance Function Class implements
+   mil.nga.giat.geowave.analytics.distance.DistanceFn
+
+-eit, --extractAdapterId::
+
+   Input Data Type ID
+
+-ens, --extractDataNamespaceUri::
+
+   Output Data Namespace URI
+
+-ede, --extractDimensionExtractClass::
+
+   Class to extract dimensions into a simple feature output
+
+-ei, --extractIndexId::
+
+   Extract from a specific index
+
+-emx, --extractMaxInputSplit::
+
+   Maximum input split size
+
+-emn, --extractMinInputSplit::
+
+   Minimum input split size
+
+-eot, --extractOutputDataTypeId::
+
+   Output Data Type ID
+
+-eq, --extractQuery::
+
+   Query
+
+-erc, --extractReducerCount::
+
+   Number of Reducers For initial data extraction and de-duplication
+
+-b, --globalBatchId::
+
+   Batch ID
+
+-pb, --globalParentBatchId::
+
+   Batch ID
+
+-hns, --hullDataNamespaceUri::
+
+   Data Type Namespace for a centroid item
+
+-hdt, --hullDataTypeId::
+
+   Data Type ID for a centroid item
+
+-hid, --hullIndexId::
+
+   Index Identifier for Centroids
+
+-hpe, --hullProjectionClass::
+
+   Class to project on to 2D space. Implements
+   mil.nga.giat.geowave.analytics.tools.Projection
+
+-hrc, --hullReducerCount::
+
+   Centroid Reducer Count
+
+-hfc, --hullWrapperFactoryClass::
+
+   Class to create analytic item to capture hulls. Implements
+   mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory
+
+-conf, --mapReduceConfigFile::
+
+   MapReduce Configuration
+
+-hdfsbase, --mapReduceHdfsBaseDir::
+
+   Fully qualified path to the base directory in hdfs
+
+-hdfs, --mapReduceHdfsHostPort::
+
+   HDFS hostname and port in the format hostname:port
+
+-jobtracker, --mapReduceJobtrackerHostPort::
+
+   Hadoop job tracker hostname and port in the format hostname:port
+
+-resourceman, --mapReduceYarnResourceManager::
+
+   Yarn resource manager hostname and port in the format hostname:port
+
+-ofc, --outputOutputFormat::
+
+   Output Format Class
+
+-orc, --outputReducerCount::
+
+   Number of Reducers For Output
+
+-sxs, --sampleMaxSampleSize::
+
+   Max Sample Size
+
+-sms, --sampleMinSampleSize::
+
+   Minimum Sample Size
+
+-ssi, --sampleSampleIterations::
+
+   Minimum number of sample iterations
