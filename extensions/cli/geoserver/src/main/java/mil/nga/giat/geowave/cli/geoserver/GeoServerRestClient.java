@@ -1213,6 +1213,7 @@ public class GeoServerRestClient
 		String workspace = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_WORKSPACE);
 		String cvgstoreName = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_CS);
 
+		StreamResult result = null;
 		try {
 			// create the post XML
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -1263,6 +1264,10 @@ public class GeoServerRestClient
 			// use a transformer to create the xml string for the rest call
 			TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
+			// HP Fortify "XML External Entity Injection" false positive
+			// The following modifications to xformerFactory are the
+			// fortify-recommended procedure to secure a TransformerFactory
+			// but the report still flags this instance
 			xformerFactory.setFeature(
 					"http://xml.org/sax/features/external-general-entities",
 					false);
@@ -1280,7 +1285,7 @@ public class GeoServerRestClient
 
 			DOMSource source = new DOMSource(
 					xmlDoc);
-			StreamResult result = new StreamResult(
+			result = new StreamResult(
 					new StringWriter());
 
 			xformer.transform(
@@ -1298,6 +1303,16 @@ public class GeoServerRestClient
 			LOGGER.error(
 					"Unable to create DocumentBuilderFactory",
 					e1);
+		}
+		finally {
+			if (result != null && result.getWriter() != null) {
+				try {
+					result.getWriter().close();
+				}
+				catch (IOException e) {
+					LOGGER.error(e);
+				}
+			}
 		}
 
 		return coverageXml;

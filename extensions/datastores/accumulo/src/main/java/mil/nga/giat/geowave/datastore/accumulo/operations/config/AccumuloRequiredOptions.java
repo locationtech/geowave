@@ -16,6 +16,8 @@ public class AccumuloRequiredOptions extends
 	public static final String ZOOKEEPER_CONFIG_KEY = "zookeeper";
 	public static final String INSTANCE_CONFIG_KEY = "instance";
 	public static final String USER_CONFIG_KEY = "user";
+	// HP Fortify "Hardcoded Password" false positive
+	// This is a password label, not a password
 	public static final String PASSWORD_CONFIG_KEY = "password";
 
 	@Parameter(names = {

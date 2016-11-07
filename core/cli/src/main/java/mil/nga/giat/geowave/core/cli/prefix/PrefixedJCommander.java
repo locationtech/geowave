@@ -59,6 +59,9 @@ public class PrefixedJCommander extends
 	public PrefixedJCommander() {
 		super();
 		try {
+			// HP Fortify "Access Specifier Manipulation"
+			// This field is being modified by trusted code,
+			// in a way that is not influenced by user input
 			Field commandsField = JCommander.class.getDeclaredField("m_commands");
 			commandsField.setAccessible(true);
 			childCommanders = (Map<Object, JCommander>) commandsField.get(this);
