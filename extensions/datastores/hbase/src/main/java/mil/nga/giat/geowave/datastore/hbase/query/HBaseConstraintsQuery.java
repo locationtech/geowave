@@ -233,8 +233,6 @@ public class HBaseConstraintsQuery extends
 						options.getCoprocessorJar());
 			}
 
-			final MultiRowRangeFilter multiFilter = getMultiFilter();
-
 			final Aggregation aggregation = base.aggregation.getRight();
 
 			final AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType
@@ -268,9 +266,13 @@ public class HBaseConstraintsQuery extends
 							PersistenceUtils.toBinary(
 									index.getIndexModel())));
 
-			requestBuilder.setRangefilter(
-					ByteString.copyFrom(
-							multiFilter.toByteArray()));
+			final MultiRowRangeFilter multiFilter = getFilter(
+					base.getAllRanges());
+			if (multiFilter != null) {
+				requestBuilder.setRangefilter(
+						ByteString.copyFrom(
+								multiFilter.toByteArray()));
+			}
 			if (base.aggregation.getLeft() != null) {
 				final ByteArrayId adapterId = base.aggregation.getLeft().getAdapterId();
 				if (isCommonIndexAggregation()) {
@@ -376,62 +378,7 @@ public class HBaseConstraintsQuery extends
 		}
 
 		return new Wrapper(
-				Iterators.singletonIterator(
-						total));
-	}
-
-	protected MultiRowRangeFilter getMultiFilter() {
-		// create the multi-row filter
-		final List<RowRange> rowRanges = new ArrayList<RowRange>();
-
-		final List<ByteArrayRange> ranges = base.getAllRanges();
-
-		if ((ranges == null) || ranges.isEmpty()) {
-			rowRanges.add(
-					new RowRange(
-							HConstants.EMPTY_BYTE_ARRAY,
-							true,
-							HConstants.EMPTY_BYTE_ARRAY,
-							false));
-		}
-		else {
-			for (final ByteArrayRange range : ranges) {
-				if (range.getStart() != null) {
-					final byte[] startRow = range.getStart().getBytes();
-					byte[] stopRow;
-					if (!range.isSingleValue()) {
-						stopRow = HBaseUtils.getNextPrefix(
-								range.getEnd().getBytes());
-					}
-					else {
-						stopRow = HBaseUtils.getNextPrefix(
-								range.getStart().getBytes());
-					}
-
-					final RowRange rowRange = new RowRange(
-							startRow,
-							true,
-							stopRow,
-							true);
-
-					rowRanges.add(
-							rowRange);
-				}
-			}
-		}
-
-		// Create the multi-range filter
-		try {
-			final MultiRowRangeFilter filter = new MultiRowRangeFilter(
-					rowRanges);
-
-			return filter;
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Error creating range filter." + e);
-		}
-
-		return null;
+				total != null ? Iterators.singletonIterator(
+						total) : Iterators.emptyIterator());
 	}
 }

@@ -37,8 +37,7 @@ public class AggregationEndpoint extends
 		Coprocessor,
 		CoprocessorService
 {
-	private static final Logger LOGGER = Logger.getLogger(
-			AggregationEndpoint.class);
+	private static final Logger LOGGER = Logger.getLogger(AggregationEndpoint.class);
 
 	private RegionCoprocessorEnvironment env;
 
@@ -92,13 +91,11 @@ public class AggregationEndpoint extends
 				final Persistable aggregationParams = PersistenceUtils.fromBinary(
 						parameterBytes,
 						Persistable.class);
-				aggregation.setParameters(
-						aggregationParams);
+				aggregation.setParameters(aggregationParams);
 			}
 		}
 		catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			LOGGER.error(
-					"Could not create instance of Aggregation Type (" + aggregationType + ")" + e);
+			LOGGER.error("Could not create instance of Aggregation Type (" + aggregationType + ")" + e);
 		}
 		HBaseDistributableFilter hdFilter = null;
 		if (aggregation != null) {
@@ -116,57 +113,48 @@ public class AggregationEndpoint extends
 								hdFilter);
 					}
 					else {
-						LOGGER.error(
-								"Error creating distributable filter.");
+						LOGGER.error("Error creating distributable filter.");
 					}
 				}
 				else {
-					LOGGER.error(
-							"Input distributable filter is undefined.");
+					LOGGER.error("Input distributable filter is undefined.");
 				}
 			}
 			catch (final Exception e) {
-				LOGGER.error(
-						"Error creating distributable filter." + e);
+				LOGGER.error("Error creating distributable filter." + e);
 			}
 
 			if (request.hasRangefilter()) {
 				final byte[] rfilterBytes = request.getRangefilter().toByteArray();
 
 				try {
-					final MultiRowRangeFilter rangeFilter = MultiRowRangeFilter.parseFrom(
-							rfilterBytes);
+					final MultiRowRangeFilter rangeFilter = MultiRowRangeFilter.parseFrom(rfilterBytes);
 
 					if (filterList == null) {
 						filterList = new FilterList(
 								rangeFilter);
 					}
 					else {
-						filterList.addFilter(
-								rangeFilter);
+						filterList.addFilter(rangeFilter);
 					}
 				}
 				catch (final Exception e) {
-					LOGGER.error(
-							"Error creating range filter." + e);
+					LOGGER.error("Error creating range filter." + e);
 				}
 			}
 			else {
-				LOGGER.error(
-						"Input range filter is undefined.");
+				LOGGER.error("Input range filter is undefined.");
 			}
 
 			if (request.hasAdapter()) {
 				final byte[] adapterBytes = request.getAdapter().toByteArray();
 				if ((adapterBytes.length > 0)) {
 					if (adapterBytes[0] == 0) {
-						final ByteBuffer buf = ByteBuffer.wrap(
-								adapterBytes);
+						final ByteBuffer buf = ByteBuffer.wrap(adapterBytes);
 						buf.get();
 						final int length = buf.getInt();
 						final byte[] adapterIdBytes = new byte[length];
-						buf.get(
-								adapterIdBytes);
+						buf.get(adapterIdBytes);
 						adapterId = new ByteArrayId(
 								adapterIdBytes);
 					}
@@ -198,30 +186,25 @@ public class AggregationEndpoint extends
 						adapterId,
 						hdFilter);
 
-				final byte[] bvalue = PersistenceUtils.toBinary(
-						mvalue);
-				value = ByteString.copyFrom(
-						bvalue);
+				final byte[] bvalue = PersistenceUtils.toBinary(mvalue);
+				value = ByteString.copyFrom(bvalue);
 			}
 			catch (final IOException ioe) {
-				LOGGER.error(
-						"Error during aggregation." + ioe);
+				LOGGER.error("Error during aggregation." + ioe);
 
 				ResponseConverter.setControllerException(
 						controller,
 						ioe);
 			}
 			catch (final Exception e) {
-				LOGGER.error(
-						"Error during aggregation." + e);
+				LOGGER.error("Error during aggregation." + e);
 			}
 		}
 
 		response = AggregationProtos.AggregationResponse.newBuilder().setValue(
 				value).build();
 
-		done.run(
-				response);
+		done.run(response);
 	}
 
 	private Mergeable getValue(
@@ -232,43 +215,39 @@ public class AggregationEndpoint extends
 			final HBaseDistributableFilter hdFilter )
 			throws IOException {
 		final Scan scan = new Scan();
-		scan.setMaxVersions(
-				1);
+		scan.setMaxVersions(1);
 
 		if (filter != null) {
-			scan.setFilter(
-					filter);
+			scan.setFilter(filter);
 		}
 		if (adapterId != null) {
-			scan.addFamily(
-					adapterId.getBytes());
+			scan.addFamily(adapterId.getBytes());
 		}
 
 		try (InternalScanner scanner = env.getRegion().getScanner(
 				scan)) {
-
 			final List<Cell> results = new ArrayList<Cell>();
-			while (scanner.next(
-					results)) {
-				if ((dataAdapter != null) && (hdFilter != null)) {
-					final Object row = hdFilter.decodeRow(
-							dataAdapter);
+			boolean hasNext;
+			do {
+				hasNext = scanner.next(results);
+				if (!results.isEmpty()) {
+					if ((dataAdapter != null) && (hdFilter != null)) {
+						final Object row = hdFilter.decodeRow(dataAdapter);
 
-					if (row != null) {
-						aggregation.aggregate(
-								row);
+						if (row != null) {
+							aggregation.aggregate(row);
+						}
 					}
+					else if (hdFilter != null) {
+						aggregation.aggregate(hdFilter.getPersistenceEncoding());
+					}
+					else {
+						aggregation.aggregate(null);
+					}
+					results.clear();
 				}
-				else if (hdFilter != null) {
-					aggregation.aggregate(
-							hdFilter.getPersistenceEncoding());
-				}
-				else {
-					aggregation.aggregate(
-							results);
-				}
-				results.clear();
 			}
+			while (hasNext);
 		}
 		return aggregation.getResult();
 	}
