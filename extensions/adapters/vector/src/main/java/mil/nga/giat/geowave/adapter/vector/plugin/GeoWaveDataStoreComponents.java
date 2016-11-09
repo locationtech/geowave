@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +50,8 @@ public class GeoWaveDataStoreComponents
 		this.indexStore = indexStore;
 		this.dataStatisticsStore = dataStatisticsStore;
 		this.gtStore = gtStore;
-		adapterIndices = gtStore.getIndicesForAdapter(adapter);
+		adapterIndices = gtStore.getIndicesForAdapter(
+				adapter);
 		this.transactionAllocator = transactionAllocator;
 	}
 
@@ -61,10 +61,6 @@ public class GeoWaveDataStoreComponents
 
 	public GeotoolsFeatureDataAdapter getAdapter() {
 		return adapter;
-	}
-
-	public boolean isLooseQuery() {
-		return gtStore.isLooseQuery();
 	}
 
 	public DataStore getDataStore() {
@@ -89,7 +85,8 @@ public class GeoWaveDataStoreComponents
 		return getGTstore().getIndexQueryStrategy().getIndices(
 				stats,
 				query,
-				gtStore.getIndicesForAdapter(adapter));
+				gtStore.getIndicesForAdapter(
+						adapter));
 	}
 
 	public void remove(
@@ -99,13 +96,15 @@ public class GeoWaveDataStoreComponents
 
 		final QueryOptions options = new QueryOptions(
 				adapter);
-		options.setAuthorizations(transaction.composeAuthorizations());
+		options.setAuthorizations(
+				transaction.composeAuthorizations());
 
 		dataStore.delete(
 				options,
 				new DataIdQuery(
 						adapter.getAdapterId(),
-						adapter.getDataId(feature)));
+						adapter.getDataId(
+								feature)));
 	}
 
 	public void remove(
@@ -115,13 +114,15 @@ public class GeoWaveDataStoreComponents
 
 		final QueryOptions options = new QueryOptions(
 				adapter);
-		options.setAuthorizations(transaction.composeAuthorizations());
+		options.setAuthorizations(
+				transaction.composeAuthorizations());
 
 		dataStore.delete(
 				options,
 				new DataIdQuery(
 						new ByteArrayId(
-								StringUtils.stringToBinary(fid)),
+								StringUtils.stringToBinary(
+										fid)),
 						adapter.getAdapterId()));
 
 	}
@@ -138,10 +139,11 @@ public class GeoWaveDataStoreComponents
 
 		try (IndexWriter indexWriter = dataStore.createWriter(
 				adapter,
-				this.adapterIndices)) {
+				adapterIndices)) {
 			while (featureIt.hasNext()) {
 				final SimpleFeature feature = featureIt.next();
-				fidList.add(feature.getID());
+				fidList.add(
+						feature.getID());
 				indexWriter.write(
 						feature,
 						visibilityWriter);
@@ -161,7 +163,7 @@ public class GeoWaveDataStoreComponents
 
 		try (IndexWriter indexWriter = dataStore.createWriter(
 				adapter,
-				this.adapterIndices)) {
+				adapterIndices)) {
 			indexWriter.write(
 					feature,
 					visibilityWriter);
@@ -177,6 +179,7 @@ public class GeoWaveDataStoreComponents
 	public void releaseTransaction(
 			final String txID )
 			throws IOException {
-		transactionAllocator.releaseTransaction(txID);
+		transactionAllocator.releaseTransaction(
+				txID);
 	}
 }
