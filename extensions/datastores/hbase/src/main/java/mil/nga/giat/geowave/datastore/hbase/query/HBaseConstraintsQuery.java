@@ -49,8 +49,7 @@ public class HBaseConstraintsQuery extends
 {
 	protected final ConstraintsQuery base;
 
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseConstraintsQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
 
 	public HBaseConstraintsQuery(
 			final List<ByteArrayId> adapterIds,
@@ -66,10 +65,8 @@ public class HBaseConstraintsQuery extends
 		this(
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(
-						index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(
-						index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
+				query != null ? query.createFilters(index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
@@ -112,8 +109,7 @@ public class HBaseConstraintsQuery extends
 		if (isAggregation()) {
 			// Because aggregations are done client-side make sure to set
 			// the adapter ID here
-			this.adapterIds = Collections.singletonList(
-					aggregation.getLeft().getAdapterId());
+			this.adapterIds = Collections.singletonList(aggregation.getLeft().getAdapterId());
 		}
 	}
 
@@ -142,10 +138,8 @@ public class HBaseConstraintsQuery extends
 
 		// Without custom filters, we need all the filters on the client side
 		for (final QueryFilter distributable : base.distributableFilters) {
-			if (!filters.contains(
-					distributable)) {
-				filters.add(
-						distributable);
+			if (!filters.contains(distributable)) {
+				filters.add(distributable);
 			}
 		}
 		return filters;
@@ -187,8 +181,7 @@ public class HBaseConstraintsQuery extends
 					while (it.hasNext()) {
 						final Object input = it.next();
 						if (input != null) {
-							aggregationFunction.aggregate(
-									input);
+							aggregationFunction.aggregate(input);
 						}
 					}
 					try {
@@ -201,8 +194,7 @@ public class HBaseConstraintsQuery extends
 					}
 
 					return new Wrapper(
-							Iterators.singletonIterator(
-									aggregationFunction.getResult()));
+							Iterators.singletonIterator(aggregationFunction.getResult()));
 				}
 			}
 
@@ -220,8 +212,7 @@ public class HBaseConstraintsQuery extends
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
-		final String tableName = StringUtils.stringFromBinary(
-				index.getId().getBytes());
+		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		Mergeable total = null;
 
 		try {
@@ -237,76 +228,51 @@ public class HBaseConstraintsQuery extends
 
 			final AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType
 					.newBuilder();
-			aggregationBuilder.setName(
-					aggregation.getClass().getName());
+			aggregationBuilder.setName(aggregation.getClass().getName());
 
 			if (aggregation.getParameters() != null) {
-				final byte[] paramBytes = PersistenceUtils.toBinary(
-						aggregation.getParameters());
-				aggregationBuilder.setParams(
-						ByteString.copyFrom(
-								paramBytes));
+				final byte[] paramBytes = PersistenceUtils.toBinary(aggregation.getParameters());
+				aggregationBuilder.setParams(ByteString.copyFrom(paramBytes));
 			}
 
 			final AggregationProtos.AggregationRequest.Builder requestBuilder = AggregationProtos.AggregationRequest
 					.newBuilder();
-			requestBuilder.setAggregation(
-					aggregationBuilder.build());
+			requestBuilder.setAggregation(aggregationBuilder.build());
 
-			final byte[] filterBytes = PersistenceUtils.toBinary(
-					base.distributableFilters);
-			final ByteString filterByteString = ByteString.copyFrom(
-					filterBytes);
+			final byte[] filterBytes = PersistenceUtils.toBinary(base.distributableFilters);
+			final ByteString filterByteString = ByteString.copyFrom(filterBytes);
 
-			requestBuilder.setFilter(
-					filterByteString);
+			requestBuilder.setFilter(filterByteString);
 
-			requestBuilder.setModel(
-					ByteString.copyFrom(
-							PersistenceUtils.toBinary(
-									index.getIndexModel())));
+			requestBuilder.setModel(ByteString.copyFrom(PersistenceUtils.toBinary(index.getIndexModel())));
 
-			final MultiRowRangeFilter multiFilter = getFilter(
-					base.getAllRanges());
+			final MultiRowRangeFilter multiFilter = getFilter(base.getAllRanges());
 			if (multiFilter != null) {
-				requestBuilder.setRangefilter(
-						ByteString.copyFrom(
-								multiFilter.toByteArray()));
+				requestBuilder.setRangefilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}
 			if (base.aggregation.getLeft() != null) {
 				final ByteArrayId adapterId = base.aggregation.getLeft().getAdapterId();
 				if (isCommonIndexAggregation()) {
 					final int binaryLength = 5 + adapterId.getBytes().length;
 
-					final ByteBuffer buf = ByteBuffer.allocate(
-							binaryLength);
-					buf.put(
-							(byte) 0);
-					buf.putInt(
-							adapterId.getBytes().length);
-					buf.put(
-							adapterId.getBytes());
-					requestBuilder.setAdapter(
-							ByteString.copyFrom(
-									buf.array()));
+					final ByteBuffer buf = ByteBuffer.allocate(binaryLength);
+					buf.put((byte) 0);
+					buf.putInt(adapterId.getBytes().length);
+					buf.put(adapterId.getBytes());
+					requestBuilder.setAdapter(ByteString.copyFrom(buf.array()));
 				}
 				else {
-					final DataAdapter dataAdapter = adapterStore.getAdapter(
-							adapterId);
-					requestBuilder.setAdapter(
-							ByteString.copyFrom(
-									new byte[] {
-										1
-									}).concat(
-											ByteString.copyFrom(
-													PersistenceUtils.toBinary(
-															dataAdapter))));
+					final DataAdapter dataAdapter = adapterStore.getAdapter(adapterId);
+					requestBuilder.setAdapter(ByteString.copyFrom(
+							new byte[] {
+								1
+							}).concat(
+							ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter))));
 				}
 			}
 			final AggregationProtos.AggregationRequest request = requestBuilder.build();
 
-			final Table table = operations.getTable(
-					tableName);
+			final Table table = operations.getTable(tableName);
 
 			byte[] startRow = null;
 			byte[] endRow = null;
@@ -348,37 +314,33 @@ public class HBaseConstraintsQuery extends
 							bvalue,
 							Mergeable.class);
 
-					LOGGER.debug(
-							"Value from region " + regionCount + " is " + mvalue);
+					LOGGER.debug("Value from region " + regionCount + " is " + mvalue);
 
 					if (total == null) {
 						total = mvalue;
 					}
 					else {
-						total.merge(
-								mvalue);
+						total.merge(mvalue);
 					}
 				}
 				else {
-					LOGGER.debug(
-							"Empty response for region " + regionCount);
+					LOGGER.debug("Empty response for region " + regionCount);
 				}
 			}
 
 		}
 		catch (final Exception e) {
 			LOGGER.error(
-					"Error during aggregation." + e,
+					"Error during aggregation.",
 					e);
 		}
 		catch (final Throwable e) {
 			LOGGER.error(
-					"Error during aggregation." + e,
+					"Error during aggregation.",
 					e);
 		}
 
 		return new Wrapper(
-				total != null ? Iterators.singletonIterator(
-						total) : Iterators.emptyIterator());
+				total != null ? Iterators.singletonIterator(total) : Iterators.emptyIterator());
 	}
 }

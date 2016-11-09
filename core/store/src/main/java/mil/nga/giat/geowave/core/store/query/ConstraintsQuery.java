@@ -42,8 +42,7 @@ public class ConstraintsQuery
 		this.aggregation = aggregation;
 		this.indexMetaData = indexMetaData != null ? indexMetaData : new IndexMetaData[] {};
 		this.index = index;
-		final SplitFilterLists lists = splitList(
-				queryFilters);
+		final SplitFilterLists lists = splitList(queryFilters);
 		final List<QueryFilter> clientFilters = lists.clientFilters;
 		if ((duplicateCounts != null) && !duplicateCounts.isAnyEntryHaveDuplicates()) {
 			clientDedupeFilter = null;
@@ -56,8 +55,7 @@ public class ConstraintsQuery
 					0,
 					clientDedupeFilter);
 		}
-		parentQuery.setClientFilters(
-				clientFilters);
+		parentQuery.setClientFilters(clientFilters);
 		distributableFilters = lists.distributableFilters;
 		if (!distributableFilters.isEmpty() && (clientDedupeFilter != null)) {
 			distributableFilters.add(
@@ -94,10 +92,9 @@ public class ConstraintsQuery
 				}
 			}
 			final List<ByteArrayRange> retVal = new ArrayList<ByteArrayRange>();
-			retVal.add(
-					new ByteArrayRange(
-							start,
-							end));
+			retVal.add(new ByteArrayRange(
+					start,
+					end));
 			return retVal;
 		}
 		else {
@@ -124,12 +121,10 @@ public class ConstraintsQuery
 		}
 		for (final QueryFilter filter : allFilters) {
 			if (filter instanceof DistributableQueryFilter) {
-				distributableFilters.add(
-						(DistributableQueryFilter) filter);
+				distributableFilters.add((DistributableQueryFilter) filter);
 			}
 			else {
-				clientFilters.add(
-						filter);
+				clientFilters.add(filter);
 			}
 		}
 		return new SplitFilterLists(

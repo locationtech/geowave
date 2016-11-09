@@ -47,7 +47,9 @@ abstract public class AbstractHBaseRowQuery<T> extends
 					authorizations);
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to get the scanned results " + e);
+			LOGGER.error(
+					"Unable to get the scanned results.",
+					e);
 		}
 
 		if (results != null) {

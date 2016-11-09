@@ -87,7 +87,9 @@ public class HBaseEntryIteratorWrapper<T> extends
 			result = (Result) row;
 		}
 		catch (final ClassCastException e) {
-			LOGGER.error("Row is not an HBase row Result.");
+			LOGGER.error(
+					"Row is not an HBase row Result.",
+					e);
 			return null;
 		}
 

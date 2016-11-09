@@ -95,11 +95,33 @@ public class AggregationEndpoint extends
 			}
 		}
 		catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			LOGGER.error("Could not create instance of Aggregation Type (" + aggregationType + ")" + e);
+			LOGGER.error(
+					"Could not create instance of Aggregation Type (" + aggregationType + ")",
+					e);
 		}
 		HBaseDistributableFilter hdFilter = null;
 		if (aggregation != null) {
+
+			if (request.hasRangefilter()) {
+				final byte[] rfilterBytes = request.getRangefilter().toByteArray();
+
+				try {
+					final MultiRowRangeFilter rangeFilter = MultiRowRangeFilter.parseFrom(rfilterBytes);
+					filterList = new FilterList(
+							rangeFilter);
+				}
+				catch (final Exception e) {
+					LOGGER.error(
+							"Error creating range filter.",
+							e);
+				}
+			}
+			else {
+				LOGGER.error("Input range filter is undefined.");
+			}
 			try {
+				// Add distributable filters if requested, this has to be last
+				// in the filter list for the dedupe filter to work correctly
 				if (request.hasFilter() && request.hasModel()) {
 					hdFilter = new HBaseDistributableFilter();
 
@@ -109,8 +131,13 @@ public class AggregationEndpoint extends
 					if (hdFilter.init(
 							filterBytes,
 							modelBytes)) {
-						filterList = new FilterList(
-								hdFilter);
+						if (filterList == null) {
+							filterList = new FilterList(
+									hdFilter);
+						}
+						else {
+							filterList.addFilter(hdFilter);
+						}
 					}
 					else {
 						LOGGER.error("Error creating distributable filter.");
@@ -121,29 +148,9 @@ public class AggregationEndpoint extends
 				}
 			}
 			catch (final Exception e) {
-				LOGGER.error("Error creating distributable filter." + e);
-			}
-
-			if (request.hasRangefilter()) {
-				final byte[] rfilterBytes = request.getRangefilter().toByteArray();
-
-				try {
-					final MultiRowRangeFilter rangeFilter = MultiRowRangeFilter.parseFrom(rfilterBytes);
-
-					if (filterList == null) {
-						filterList = new FilterList(
-								rangeFilter);
-					}
-					else {
-						filterList.addFilter(rangeFilter);
-					}
-				}
-				catch (final Exception e) {
-					LOGGER.error("Error creating range filter." + e);
-				}
-			}
-			else {
-				LOGGER.error("Input range filter is undefined.");
+				LOGGER.error(
+						"Error creating distributable filter.",
+						e);
 			}
 
 			if (request.hasAdapter()) {
@@ -190,14 +197,18 @@ public class AggregationEndpoint extends
 				value = ByteString.copyFrom(bvalue);
 			}
 			catch (final IOException ioe) {
-				LOGGER.error("Error during aggregation." + ioe);
+				LOGGER.error(
+						"Error during aggregation.",
+						ioe);
 
 				ResponseConverter.setControllerException(
 						controller,
 						ioe);
 			}
 			catch (final Exception e) {
-				LOGGER.error("Error during aggregation." + e);
+				LOGGER.error(
+						"Error during aggregation.",
+						e);
 			}
 		}
 

@@ -341,7 +341,9 @@ public class BasicHBaseOperations implements
 		catch (
 
 		final IOException e) {
-			LOGGER.error("Error verifying/adding coprocessor." + e);
+			LOGGER.error(
+					"Error verifying/adding coprocessor.",
+					e);
 		}
 	}
 }

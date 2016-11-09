@@ -145,7 +145,9 @@ public class HBaseUtils
 					writableAdapter.getAdapterId().getString());
 		}
 		catch (final IOException e) {
-			LOGGER.warn("Writing to table failed." + e);
+			LOGGER.warn(
+					"Writing to table failed.",
+					e);
 		}
 
 		return ingestInfo;
@@ -432,7 +434,9 @@ public class HBaseUtils
 						writableAdapter.getAdapterId().getString());
 			}
 			catch (final IOException e) {
-				LOGGER.warn("Writing to table failed." + e);
+				LOGGER.warn(
+						"Writing to table failed.",
+						e);
 			}
 
 		}

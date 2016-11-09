@@ -186,7 +186,9 @@ public class HBaseDistributableFilter extends
 			}
 		}
 		catch (final Exception e) {
-			LOGGER.error("Error applying distributed filter." + e);
+			LOGGER.error(
+					"Error applying distributed filter.",
+					e);
 		}
 
 		return returnCode;
