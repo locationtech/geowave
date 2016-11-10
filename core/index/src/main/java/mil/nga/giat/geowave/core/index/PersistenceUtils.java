@@ -117,6 +117,10 @@ public class PersistenceUtils
 
 			try {
 				// use the no arg constructor and make sure its accessible
+
+				// HP Fortify "Access Specifier Manipulation"
+				// This method is being modified by trusted code,
+				// in a way that is not influenced by user input
 				final Constructor<?> noArgConstructor = factoryType.getDeclaredConstructor();
 				noArgConstructor.setAccessible(true);
 				factoryClassInst = noArgConstructor.newInstance();

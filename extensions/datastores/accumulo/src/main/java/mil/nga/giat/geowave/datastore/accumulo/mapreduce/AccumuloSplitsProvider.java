@@ -212,6 +212,9 @@ public class AccumuloSplitsProvider extends
 
 			String location = hostNameCache.get(ipAddress);
 			if (location == null) {
+				// HP Fortify "Often Misused: Authentication"
+				// These methods are not being used for
+				// authentication
 				final InetAddress inetAddress = InetAddress.getByName(ipAddress);
 				location = inetAddress.getHostName();
 				hostNameCache.put(

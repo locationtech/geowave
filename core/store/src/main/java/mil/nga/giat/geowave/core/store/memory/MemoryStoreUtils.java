@@ -41,7 +41,7 @@ public class MemoryStoreUtils
 		}
 		catch (final IOException e) {
 			LOGGER.error(
-					"invalid visibility " + Arrays.toString(visibility),
+					"invalid visibility",
 					e);
 			return false;
 		}
