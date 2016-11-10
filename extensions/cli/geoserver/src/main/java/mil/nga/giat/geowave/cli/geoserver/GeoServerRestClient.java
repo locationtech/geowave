@@ -1268,18 +1268,8 @@ public class GeoServerRestClient
 			// The following modifications to xformerFactory are the
 			// fortify-recommended procedure to secure a TransformerFactory
 			// but the report still flags this instance
-			xformerFactory.setFeature(
-					"http://xml.org/sax/features/external-general-entities",
-					false);
-			xformerFactory.setFeature(
-					"http://xml.org/sax/features/external-parameter-entities",
-					false);
-			xformerFactory.setAttribute(
-					XMLConstants.ACCESS_EXTERNAL_DTD,
-					"");
-			xformerFactory.setAttribute(
-					XMLConstants.ACCESS_EXTERNAL_STYLESHEET,
-					"");
+			xformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, 
+					true);
 
 			Transformer xformer = xformerFactory.newTransformer();
 
