@@ -37,7 +37,7 @@
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
 		<accumulo.version>1.7.2</accumulo.version>
-		<vfs2.version>2.0</vfs2.version>
+		<vfs2.version>2.1</vfs2.version>
 		<hbase.version>1.2.3</hbase.version>
 		<hadoop.version>2.7.3</hadoop.version>
 		<avro.version>1.7.6</avro.version>

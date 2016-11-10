@@ -117,7 +117,7 @@ public class GeoWaveGTDataStore extends
 		adapterStore = config.getAdapterStore();
 		adapterIndexMappingStore = config.getAdapterIndexMappingStore();
 	}
-	
+
 	public AuthorizationSPI getAuthorizationSPI() {
 		return authorizationSPI;
 	}
