@@ -140,10 +140,7 @@ public class HBaseDistributableFilter extends
 		this.filterList.addAll(filterList);
 
 		this.model = model;
-		for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
-			commonIndexFieldIds.add(numericDimension.getFieldId());
-		}
-
+		
 		commonIndexFieldIds.clear();
 		for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
 			commonIndexFieldIds.add(numericDimension.getFieldId());
@@ -286,16 +283,14 @@ public class HBaseDistributableFilter extends
 	protected FlattenedUnreadData aggregateFieldData(
 			final Cell cell,
 			final PersistentDataset<CommonIndexValue> commonData ) {
-		final ByteArrayId colQual = new ByteArrayId(
-				CellUtil.cloneQualifier(cell));
-
-		final byte[] valueBytes = CellUtil.cloneValue(cell);
+		final byte[] qualBuf = CellUtil.cloneQualifier(cell);
+		final byte[] valBuf = CellUtil.cloneValue(cell);
 
 		final FlattenedDataSet dataSet = DataStoreUtils.decomposeFlattenedFields(
-				colQual.getBytes(),
-				valueBytes,
+				qualBuf,
+				valBuf,
 				null,
-				-1);
+				model.getDimensions().length - 1);
 
 		final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
 		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {

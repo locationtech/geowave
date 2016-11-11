@@ -59,7 +59,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 			"yyyy-MM-dd'T'hh:mm:ss'Z'");
 
 	@GeoWaveTestStore(value = {
-//		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
 	}, options = {
 		/**

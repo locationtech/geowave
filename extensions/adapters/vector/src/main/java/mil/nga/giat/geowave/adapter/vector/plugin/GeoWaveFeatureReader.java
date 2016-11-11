@@ -362,7 +362,7 @@ public class GeoWaveFeatureReader implements
 					transaction.composeAuthorizations());
 			queryOptions.setAggregation(
 					new CountAggregation(),
-					null);
+					components.getAdapter());
 
 			try (final CloseableIterator<CountResult> result = components.getDataStore().query(
 					queryOptions,
