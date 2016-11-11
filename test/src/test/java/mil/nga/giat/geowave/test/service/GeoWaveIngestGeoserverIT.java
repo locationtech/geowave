@@ -65,6 +65,10 @@ public class GeoWaveIngestGeoserverIT
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
+	}, options = {
+		"enableCustomFilters=true",
+		"enableCoprocessors=true",
+		"verifyCoprocessors=true"
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
