@@ -30,10 +30,10 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
-import mil.nga.giat.geowave.test.GeoWaveRasterIT;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT;
 
 /**
  * This special class is here to test the HBase implementation of merging

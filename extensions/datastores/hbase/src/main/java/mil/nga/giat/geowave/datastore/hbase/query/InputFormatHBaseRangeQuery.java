@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -80,7 +79,8 @@ public class InputFormatHBaseRangeQuery extends
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final Iterator<Result> resultsIterator,
-			final double[] maxResolutionSubsamplingPerDimension ) {
+			final double[] maxResolutionSubsamplingPerDimension,
+			boolean decodePersistenceEncoding ) {
 		// TODO Since currently we are not supporting server side
 		// iterator/coprocessors, we also cannot run
 		// server side filters and hence they have to run on clients itself. So
@@ -98,8 +98,7 @@ public class InputFormatHBaseRangeQuery extends
 
 	@Override
 	protected Scan getMultiScanner(
-			final Integer limit,
-			final List<Filter> distributableFilters ) {
+			final Integer limit ) {
 		final Scan scanner = new Scan();
 
 		scanner.setStartRow(range.getStart().getBytes());
