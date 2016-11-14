@@ -36,7 +36,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
 
 	@GeoWaveTestStore({
-		// GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

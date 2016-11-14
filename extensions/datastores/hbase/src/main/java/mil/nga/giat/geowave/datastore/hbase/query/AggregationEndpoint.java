@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
+import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorException;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
@@ -102,8 +103,8 @@ public class AggregationEndpoint extends
 		HBaseDistributableFilter hdFilter = null;
 		if (aggregation != null) {
 
-			if (request.hasRangefilter()) {
-				final byte[] rfilterBytes = request.getRangefilter().toByteArray();
+			if (request.hasRangeFilter()) {
+				final byte[] rfilterBytes = request.getRangeFilter().toByteArray();
 
 				try {
 					final MultiRowRangeFilter rangeFilter = MultiRowRangeFilter.parseFrom(rfilterBytes);
@@ -191,7 +192,9 @@ public class AggregationEndpoint extends
 						filterList,
 						dataAdapter,
 						adapterId,
-						hdFilter);
+						hdFilter,
+						request.getBlockCaching(),
+						request.getCacheSize());
 
 				final byte[] bvalue = PersistenceUtils.toBinary(mvalue);
 				value = ByteString.copyFrom(bvalue);
@@ -223,10 +226,17 @@ public class AggregationEndpoint extends
 			final Filter filter,
 			final DataAdapter dataAdapter,
 			final ByteArrayId adapterId,
-			final HBaseDistributableFilter hdFilter )
+			final HBaseDistributableFilter hdFilter,
+			final boolean blockCaching,
+			final int scanCacheSize )
 			throws IOException {
 		final Scan scan = new Scan();
 		scan.setMaxVersions(1);
+		scan.setCacheBlocks(blockCaching);
+
+		if (scanCacheSize != HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING) {
+			scan.setCaching(scanCacheSize);
+		}
 
 		if (filter != null) {
 			scan.setFilter(filter);
