@@ -12,6 +12,9 @@ public class RandomProbabilitySampleFn implements
 			final double weight,
 			final double normalizingConstant,
 			final int sampleSize ) {
+		// HP Fortify "Insecure Randomness" false positive
+		// This random number is not used for any purpose
+		// related to security or cryptography
 		return Math.log(random.nextDouble()) / (weight / normalizingConstant);
 	}
 

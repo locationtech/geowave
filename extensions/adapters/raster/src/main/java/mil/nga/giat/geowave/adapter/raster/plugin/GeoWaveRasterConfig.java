@@ -101,7 +101,7 @@ public class GeoWaveRasterConfig
 
 	public static GeoWaveRasterConfig readFromConfigParams(
 			final String configParams )
-			throws Exception {
+			throws NullPointerException {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(configParams);
 
 		if (result != null) {
@@ -122,7 +122,9 @@ public class GeoWaveRasterConfig
 
 	public static GeoWaveRasterConfig readFromURL(
 			final URL xmlURL )
-			throws Exception {
+			throws IOException,
+			ParserConfigurationException,
+			SAXException {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(xmlURL.toString());
 
 		if (result != null) {

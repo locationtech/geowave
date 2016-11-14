@@ -57,7 +57,9 @@ public class HBaseStoreTestEnvironment extends
 			propertyParser.parsePropsFile();
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to load property file: {}" + HBASE_PROPS_FILE);
+			LOGGER.error(
+					"Unable to load property file: {}" + HBASE_PROPS_FILE,
+					e);
 		}
 
 		if (!TestUtils.isSet(zookeeper)) {
@@ -100,8 +102,9 @@ public class HBaseStoreTestEnvironment extends
 				hbaseLocalCluster.start();
 			}
 			catch (final Exception e) {
-				LOGGER.error("Exception starting hbaseLocalCluster: " + e);
-				e.printStackTrace();
+				LOGGER.error(
+						"Exception starting hbaseLocalCluster",
+						e);
 				Assert.fail();
 			}
 		}

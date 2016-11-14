@@ -55,7 +55,9 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 			}
 		}
 		catch (final Exception e) {
-			LOGGER.info("Unable to send file [" + file.getAbsolutePath() + "] to Kafka topic: " + e.getMessage());
+			LOGGER.info(
+					"Unable to send file [" + file.getAbsolutePath() + "] to Kafka topic: " + e.getMessage(),
+					e);
 		}
 	}
 

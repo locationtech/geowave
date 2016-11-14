@@ -13,7 +13,6 @@ import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 public class FilterableTextRangeConstraint extends
 		TextQueryConstraint
 {
-
 	private final ByteArrayId fieldId;
 	private final boolean caseSensitive;
 	private final String start;

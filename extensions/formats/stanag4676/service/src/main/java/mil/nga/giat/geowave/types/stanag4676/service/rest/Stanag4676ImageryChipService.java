@@ -505,9 +505,17 @@ public class Stanag4676ImageryChipService
 			return dataStore;
 		}
 		String confPropFilename = context.getInitParameter("config.properties");
+		// HP Fortify "Log Forging" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		LOGGER.info("Creating datastore singleton for 4676 service.   conf prop filename: " + confPropFilename);
-		InputStream is = context.getResourceAsStream(confPropFilename);
-		final Properties props = ServiceUtils.loadProperties(is);
+		Properties props = null;
+		try (InputStream is = context.getResourceAsStream(confPropFilename)) {
+			props = ServiceUtils.loadProperties(is);
+		}
+		catch (IOException e) {
+			LOGGER.error(e);
+		}
 		LOGGER.info("Found " + props.size() + " props");
 		final Map<String, String> strMap = new HashMap<String, String>();
 
@@ -521,6 +529,9 @@ public class Stanag4676ImageryChipService
 			strMap.put(
 					key,
 					value);
+			// HP Fortify "Log Forging" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 			LOGGER.info("    Key/Value: " + key + "/" + value);
 		}
 

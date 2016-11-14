@@ -163,56 +163,60 @@ public abstract class MultiLevelClusteringJobRunner extends
 				Clustering.RETAIN_GROUP_ASSIGNMENTS,
 				false);
 
-		final FileSystem fs = FileSystem.get(config);
-
 		// run clustering for each level
 		final String outputBaseDir = propertyManagement.getPropertyAsString(
 				MapReduceParameters.MRConfig.HDFS_BASE_DIR,
 				"/tmp");
-		for (int i = 0; (status == 0) && (i < zoomLevels); i++) {
-			final int zoomLevel = i + 1;
-			clusteringRunner.setZoomLevel(zoomLevel);
-			hullRunner.setZoomLevel(zoomLevel);
-			// need to get this removed at some point.
-			propertyManagement.store(
-					CentroidParameters.Centroid.ZOOM_LEVEL,
-					zoomLevel);
-			status = clusteringRunner.run(
-					config,
-					propertyManagement);
-			if (status == 0) {
-				final Path nextPath = new Path(
-						outputBaseDir + "/" + "level_" + zoomLevel);
-				if (fs.exists(nextPath)) {
-					fs.delete(
-							nextPath,
-							true);
-				}
-
-				groupAssignmentRunner.setOutputFormatConfiguration(new SequenceFileOutputFormatConfiguration(
-						nextPath));
-				groupAssignmentRunner.setZoomLevel(zoomLevel);
-
-				status = retainGroupAssigments ? groupAssignmentRunner.run(
+		FileSystem fs = null;
+		try {
+			fs = FileSystem.get(config);
+			for (int i = 0; (status == 0) && (i < zoomLevels); i++) {
+				final int zoomLevel = i + 1;
+				clusteringRunner.setZoomLevel(zoomLevel);
+				hullRunner.setZoomLevel(zoomLevel);
+				// need to get this removed at some point.
+				propertyManagement.store(
+						CentroidParameters.Centroid.ZOOM_LEVEL,
+						zoomLevel);
+				status = clusteringRunner.run(
 						config,
-						propertyManagement) : 0;
-
+						propertyManagement);
 				if (status == 0) {
-					status = hullRunner.run(
-							config,
-							propertyManagement);
-				}
-				if (retainGroupAssigments) {
-					clusteringRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
-							nextPath));
-					hullRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
-							nextPath));
-					groupAssignmentRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
-							nextPath));
-				}
+					final Path nextPath = new Path(
+							outputBaseDir + "/" + "level_" + zoomLevel);
+					if (fs.exists(nextPath)) {
+						fs.delete(
+								nextPath,
+								true);
+					}
 
+					groupAssignmentRunner.setOutputFormatConfiguration(new SequenceFileOutputFormatConfiguration(
+							nextPath));
+					groupAssignmentRunner.setZoomLevel(zoomLevel);
+
+					status = retainGroupAssigments ? groupAssignmentRunner.run(
+							config,
+							propertyManagement) : 0;
+
+					if (status == 0) {
+						status = hullRunner.run(
+								config,
+								propertyManagement);
+					}
+					if (retainGroupAssigments) {
+						clusteringRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+								nextPath));
+						hullRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+								nextPath));
+						groupAssignmentRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
+								nextPath));
+					}
+				}
 			}
+			return status;
 		}
-		return status;
+		finally {
+			if (fs != null) fs.close();
+		}
 	}
 }

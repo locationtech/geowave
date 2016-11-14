@@ -74,7 +74,9 @@ public abstract class AccumuloFilteredIndexQuery extends
 			exists = accumuloOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()));
 		}
 		catch (final IOException e) {
-			LOGGER.error("e");
+			LOGGER.error(
+					"Table does not exist",
+					e);
 		}
 		if (!exists) {
 			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));

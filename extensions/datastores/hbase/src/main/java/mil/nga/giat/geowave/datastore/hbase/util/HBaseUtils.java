@@ -102,7 +102,9 @@ public class HBaseUtils
 				mutation.add(row);
 			}
 			catch (final IOException e) {
-				LOGGER.warn("Could not add row to mutation.");
+				LOGGER.warn(
+						"Could not add row to mutation.",
+						e);
 			}
 			mutations.add(mutation);
 		}
@@ -424,7 +426,9 @@ public class HBaseUtils
 					mutation.add(row);
 				}
 				catch (final IOException e) {
-					LOGGER.warn("Could not add row to mutation.");
+					LOGGER.warn(
+							"Could not add row to mutation.",
+							e);
 				}
 				mutations.add(mutation);
 			}

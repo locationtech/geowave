@@ -47,6 +47,9 @@ public class HadoopOptions
 		if (name != null) {
 			try (FileInputStream in = new FileInputStream(
 					name)) {
+				// HP Fortify "Path Manipulation" false positive
+				// What fortify identifies as "user input" comes
+				// only from users with OS-level access anyway
 				config.addResource(
 						in,
 						name);

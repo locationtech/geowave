@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.IDefaultProvider;
 import com.beust.jcommander.JCommander;
@@ -22,6 +24,8 @@ import com.beust.jcommander.JCommander;
 public class PrefixedJCommander extends
 		JCommander
 {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(PrefixedJCommander.class);
 
 	// Allows us to override the commanders list that's being stored
 	// in our parent class.
@@ -55,6 +59,9 @@ public class PrefixedJCommander extends
 	public PrefixedJCommander() {
 		super();
 		try {
+			// HP Fortify "Access Specifier Manipulation"
+			// This field is being modified by trusted code,
+			// in a way that is not influenced by user input
 			Field commandsField = JCommander.class.getDeclaredField("m_commands");
 			commandsField.setAccessible(true);
 			childCommanders = (Map<Object, JCommander>) commandsField.get(this);
@@ -63,6 +70,9 @@ public class PrefixedJCommander extends
 			// This is a programmer error, and will only happen if another
 			// version
 			// of JCommander is being used.
+			LOGGER.error(
+					"Another version of JCommander is being used",
+					e);
 			throw new RuntimeException(
 					e);
 		}

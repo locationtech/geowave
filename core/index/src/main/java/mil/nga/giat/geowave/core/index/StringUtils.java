@@ -118,7 +118,7 @@ public class StringUtils
 
 	public static Map<String, String> parseParams(
 			final String params )
-			throws Exception {
+			throws NullPointerException {
 		final Map<String, String> paramsMap = new HashMap<String, String>();
 		final String[] paramsSplit = params.split(";");
 		for (final String param : paramsSplit) {

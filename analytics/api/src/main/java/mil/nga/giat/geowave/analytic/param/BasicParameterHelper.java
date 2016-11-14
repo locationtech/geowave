@@ -173,7 +173,9 @@ public class BasicParameterHelper implements
 				storeValue = Class.forName(value.toString());
 			}
 			catch (ClassNotFoundException e) {
-				LOGGER.error("Class " + value.toString() + " for property " + parent + " is not found");
+				LOGGER.error(
+						"Class " + value.toString() + " for property " + parent + " is not found",
+						e);
 			}
 		}
 		propertyManagement.store(

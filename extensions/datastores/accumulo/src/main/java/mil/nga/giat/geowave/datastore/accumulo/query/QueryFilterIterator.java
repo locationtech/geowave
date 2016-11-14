@@ -68,6 +68,10 @@ public class QueryFilterIterator extends
 								e);
 				throw (factoryError);
 			}
+
+			// HP Fortify "Access Specifier Manipulation"
+			// This object is being modified by trusted code,
+			// in a way that is not influenced by user input
 			f.setAccessible(true);
 			Object o;
 			try {

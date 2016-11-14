@@ -145,6 +145,8 @@ public class TdriveIngestPlugin extends
 					e);
 		}
 		finally {
+			// HP Fortify "Unreleased Resource" false positive
+			// These streams are closed in this "finally" block
 			IOUtils.closeQuietly(br);
 			IOUtils.closeQuietly(fr);
 			IOUtils.closeQuietly(fis);

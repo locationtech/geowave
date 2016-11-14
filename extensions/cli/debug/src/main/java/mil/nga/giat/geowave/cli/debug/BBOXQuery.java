@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -24,6 +26,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class BBOXQuery extends
 		AbstractGeoWaveQuery
 {
+	private static Logger LOGGER = Logger.getLogger(BBOXQuery.class);
+
 	@Parameter(names = {
 		"-e",
 		"--east"
@@ -93,7 +97,9 @@ public class BBOXQuery extends
 				}
 			}
 			catch (final IOException e) {
-				e.printStackTrace();
+				LOGGER.warn(
+						"Unable to read result",
+						e);
 			}
 		}
 		else {

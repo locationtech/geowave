@@ -57,8 +57,10 @@ public class GenericAvroSerializer<T>
 			encoder.flush();
 			return os.toByteArray();
 		}
-		catch (final Exception e) {
-			LOGGER.error("Unable to serialize Avro record to byte[]: " + e.getMessage());
+		catch (final IOException e) {
+			LOGGER.error(
+					"Unable to serialize Avro record to byte[]: " + e.getMessage(),
+					e);
 			return null;
 		}
 	}
@@ -84,18 +86,15 @@ public class GenericAvroSerializer<T>
 					decoder);
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to deserialize byte[] to Avro object: " + e.getMessage());
+			LOGGER.error(
+					"Unable to deserialize byte[] to Avro object: " + e.getMessage(),
+					e);
 			return null;
 		}
 	}
 
 	private static String getSchemaName(
 			final Schema schema ) {
-		try {
-			return schema.getNamespace() + "." + schema.getName();
-		}
-		catch (final Exception e) {
-			return null;
-		}
+		return schema.getNamespace() + "." + schema.getName();
 	}
 }

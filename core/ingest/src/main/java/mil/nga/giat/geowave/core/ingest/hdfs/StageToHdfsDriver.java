@@ -78,26 +78,27 @@ public class StageToHdfsDriver extends
 				basePath);
 
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			if (!fs.exists(hdfsBaseDirectory)) {
-				fs.mkdirs(hdfsBaseDirectory);
-			}
-			try {
-				final StageRunData runData = new StageRunData(
-						hdfsBaseDirectory,
-						fs);
-				processInput(
-						inputPath,
-						stageToHdfsPlugins,
-						runData);
-				runData.close();
-				return true;
-			}
-			catch (final IOException e) {
-				LOGGER.fatal(
-						"Unexpected I/O exception when reading input files",
-						e);
-				return false;
+			try (final FileSystem fs = FileSystem.get(conf)) {
+				if (!fs.exists(hdfsBaseDirectory)) {
+					fs.mkdirs(hdfsBaseDirectory);
+				}
+				try {
+					final StageRunData runData = new StageRunData(
+							hdfsBaseDirectory,
+							fs);
+					processInput(
+							inputPath,
+							stageToHdfsPlugins,
+							runData);
+					runData.close();
+					return true;
+				}
+				catch (final IOException e) {
+					LOGGER.fatal(
+							"Unexpected I/O exception when reading input files",
+							e);
+					return false;
+				}
 			}
 		}
 		catch (final IOException e) {

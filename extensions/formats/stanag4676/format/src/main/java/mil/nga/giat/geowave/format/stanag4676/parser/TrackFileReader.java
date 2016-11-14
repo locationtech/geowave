@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.format.stanag4676.parser;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.UUID;
@@ -19,7 +21,7 @@ public class TrackFileReader implements
 {
 
 	private TrackDecoder decoder;
-	private static Logger LOGGER = LoggerFactory.getLogger(TrackFileReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TrackFileReader.class);
 	private boolean streaming = false;
 	private ProcessMessage handler = null;
 	private TrackRun run = new TrackRun();
@@ -90,7 +92,11 @@ public class TrackFileReader implements
 			try {
 				bis.close();
 			}
-			catch (final Exception e2) {}
+			catch (final IOException e2) {
+				LOGGER.error(
+						"Unable to close the InputStream",
+						e2);
+			}
 		}
 
 	}
@@ -111,17 +117,22 @@ public class TrackFileReader implements
 					f);
 			read(fis);
 		}
-		catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		catch (final FileNotFoundException | NullPointerException | SecurityException e) {
+			LOGGER.error(
+					"Unable to create input stream",
+					e);
 		}
 		finally {
 			{
-				if (fis != null) {
-					try {
-						fis.close();
-					}
-					catch (final Exception e2) {}
+				try {
+					// HP Fortify "Null Dereference" false positive
+					// NullPointerException is caught below
+					fis.close();
+				}
+				catch (final IOException | NullPointerException e2) {
+					LOGGER.error(
+							"Unable to close the InputStream",
+							e2);
 				}
 			}
 		}
@@ -146,8 +157,10 @@ public class TrackFileReader implements
 					try {
 						handler.notify(msg);
 					}
-					catch (final Exception ex) {
-						ex.printStackTrace();
+					catch (final IOException | InterruptedException ex) {
+						LOGGER.warn(
+								"Unable to process notify message",
+								ex);
 					}
 				}
 				else {

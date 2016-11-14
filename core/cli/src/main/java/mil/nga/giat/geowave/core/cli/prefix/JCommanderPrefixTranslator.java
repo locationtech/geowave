@@ -39,6 +39,9 @@ public class JCommanderPrefixTranslator
 
 	public JCommanderPrefixTranslator() {
 		try {
+			// HP Fortify "Access Specifier Manipulation"
+			// These fields are being modified by trusted code,
+			// in a way that is not influenced by user input
 			paraField = Parameterized.class.getDeclaredField("m_field");
 			paraField.setAccessible(true);
 

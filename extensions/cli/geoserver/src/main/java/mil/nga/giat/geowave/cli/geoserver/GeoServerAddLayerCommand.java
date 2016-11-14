@@ -126,16 +126,10 @@ public class GeoServerAddLayerCommand implements
 		@Override
 		public AddOption convert(
 				final String value ) {
-			AddOption convertedValue = null;
+			AddOption convertedValue = AddOption.valueOf(value.toUpperCase());
 
-			try {
-				convertedValue = AddOption.valueOf(value.toUpperCase());
-			}
-			catch (Exception e) {
-				// Nothing to do. Exception thrown below.
-			}
-
-			if (convertedValue == null) {
+			if (convertedValue != AddOption.ALL && convertedValue != AddOption.RASTER
+					&& convertedValue != AddOption.VECTOR) {
 				throw new ParameterException(
 						"Value " + value + "can not be converted to an add option. " + "Available values are: "
 								+ StringUtils.join(

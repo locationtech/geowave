@@ -250,6 +250,9 @@ public class MinimalBinDistanceHistogram implements
 					smallestdiffcount = 1;
 				}
 				else {
+					// HP Fortify "Insecure Randomness" false positive
+					// This random number is not used for any purpose
+					// related to security or cryptography
 					if (((diff - smallestdiff) < 1E-12) && (prng.nextDouble() <= (1.0 / ++smallestdiffcount))) {
 						smallestdiffloc = i;
 					}

@@ -173,7 +173,7 @@ public class IngestFromKafkaDriver
 			final AvroFormatPlugin<?, ?> avroFormatPlugin,
 			final KafkaIngestRunData ingestRunData,
 			final List<String> queue )
-			throws Exception {
+			throws IllegalArgumentException {
 		final ExecutorService executorService = Executors.newFixedThreadPool(queue.size());
 		return executorService.submit(new Runnable() {
 
@@ -199,12 +199,11 @@ public class IngestFromKafkaDriver
 			final String formatPluginName,
 			final AvroFormatPlugin<T, ?> avroFormatPlugin,
 			final KafkaIngestRunData ingestRunData,
-			final List<String> queue )
-			throws Exception {
+			final List<String> queue ) {
 
 		final ConsumerConnector consumer = buildKafkaConsumer();
 		if (consumer == null) {
-			throw new Exception(
+			throw new RuntimeException(
 					"Kafka consumer connector is null, unable to create message streams");
 		}
 		try {

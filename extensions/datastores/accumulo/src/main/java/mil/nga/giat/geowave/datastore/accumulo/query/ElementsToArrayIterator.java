@@ -93,6 +93,9 @@ public class ElementsToArrayIterator extends
 							getSource().getTopValue());
 				}
 				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to decode entries",
+							e);
 					return;
 				}
 

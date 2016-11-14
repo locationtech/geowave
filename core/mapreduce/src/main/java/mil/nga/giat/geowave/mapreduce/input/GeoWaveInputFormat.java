@@ -148,7 +148,9 @@ public class GeoWaveInputFormat<T> extends
 		}
 		catch (Exception e) {
 			LOGGER
-					.warn("Adapter Ids witih adapters are included in the query options.This, the adapter must be accessible from the data store for use by the consumer/Mapper.");
+					.warn(
+							"Adapter Ids witih adapters are included in the query options.This, the adapter must be accessible from the data store for use by the consumer/Mapper.",
+							e);
 		}
 		GeoWaveInputConfigurator.setQueryOptions(
 				CLASS,

@@ -73,6 +73,9 @@ public class ConfigOptions
 	 */
 	public static File getDefaultPropertyPath() {
 		// File location
+		// HP Fortify "Path Manipulation" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		final String cachePath = String.format(
 				"%s%s%s",
 				System.getProperty("user.home"),
@@ -90,6 +93,9 @@ public class ConfigOptions
 	 * @return Default Property File
 	 */
 	public static File getDefaultPropertyFile() {
+		// HP Fortify "Path Manipulation" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		final File defaultPath = getDefaultPropertyPath();
 		final String version = VersionUtils.getVersion();
 
@@ -134,6 +140,9 @@ public class ConfigOptions
 	public static File formatConfigFile(
 			String version,
 			File defaultPath ) {
+		// HP Fortify "Path Manipulation" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		final String configFile = String.format(
 				"%s%s%s%s%s",
 				defaultPath.getAbsolutePath(),
@@ -179,11 +188,15 @@ public class ConfigOptions
 			}
 		}
 		catch (FileNotFoundException e) {
-			LOGGER.error("Could not find the property file.");
+			LOGGER.error(
+					"Could not find the property file.",
+					e);
 			return false;
 		}
 		catch (IOException e) {
-			LOGGER.error("Exception writing property file.");
+			LOGGER.error(
+					"Exception writing property file.",
+					e);
 			return false;
 		}
 		return true;

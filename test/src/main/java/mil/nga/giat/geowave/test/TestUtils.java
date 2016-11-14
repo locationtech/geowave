@@ -27,6 +27,7 @@ import org.geotools.data.simple.SimpleFeatureIterator;
 import org.junit.Assert;
 import org.opengis.feature.simple.SimpleFeature;
 
+import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -180,7 +181,7 @@ public class TestUtils
 		try {
 			listStats.execute(new ManualOperationParams());
 		}
-		catch (final Exception e) {
+		catch (final ParameterException e) {
 			throw new RuntimeException(
 					e);
 		}

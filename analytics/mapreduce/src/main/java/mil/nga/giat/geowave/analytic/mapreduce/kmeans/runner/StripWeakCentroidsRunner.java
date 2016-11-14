@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.analytic.clustering.CentroidManager;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager.CentroidProcessingFn;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManagerGeoWave;
 import mil.nga.giat.geowave.analytic.mapreduce.MapReduceJobRunner;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.hadoop.conf.Configuration;
@@ -136,7 +137,10 @@ public class StripWeakCentroidsRunner<T> implements
 				try {
 					centroidManager.delete(toDelete);
 				}
-				catch (final Exception e) {
+				catch (final IOException e) {
+					LOGGER.warn(
+							"Unable to delete the centriod mamager",
+							e);
 					return -1;
 				}
 
@@ -183,9 +187,11 @@ public class StripWeakCentroidsRunner<T> implements
 				}
 				if (!Double.isNaN(prior)) {
 					final double chg = Math.abs(prior - centroid.getAssociationCount());
-					if (Math.max(
-							max,
-							chg) == chg) {
+					if (FloatCompareUtils.checkDoublesEqual(
+							Math.max(
+									max,
+									chg),
+							chg)) {
 						position = count;
 						max = chg;
 					}

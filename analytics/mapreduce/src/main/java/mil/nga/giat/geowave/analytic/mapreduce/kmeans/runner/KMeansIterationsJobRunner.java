@@ -135,7 +135,7 @@ public class KMeansIterationsJobRunner<T> implements
 	private boolean checkForConvergence(
 			final CentroidManager<T> centroidManager,
 			final DistanceFn<T> distanceFunction )
-			throws Exception {
+			throws IOException {
 		final AtomicInteger grpCount = new AtomicInteger(
 				0);
 		final AtomicInteger failuresCount = new AtomicInteger(
@@ -241,7 +241,7 @@ public class KMeansIterationsJobRunner<T> implements
 		try {
 			centroidManager.delete(deletionKeys.toArray(new String[deletionKeys.size()]));
 		}
-		catch (final Exception e) {
+		catch (final IOException e) {
 			throw new RuntimeException(
 					e);
 		}

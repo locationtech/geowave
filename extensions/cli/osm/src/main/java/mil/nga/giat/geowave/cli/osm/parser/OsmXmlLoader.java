@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.cli.osm.parser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -63,19 +64,19 @@ public class OsmXmlLoader implements
 
 	public List<Node> getNodesById(
 			Way way )
-			throws Exception {
+			throws IOException {
 		List<Node> wayNodes = new ArrayList<Node>(
 				way.getWayNodes().size());
 		for (WayNode wn : way.getWayNodes()) {
 			Node n = getNodeById(wn);
 			if (n == null) {
-				throw new Exception(
-						String.format(
-								"Error while parsing OSM XML: Node %s in Way %s "
-										+ "(length: %s) is not declared in the document!",
-								wn.getNodeId(),
-								way.getId(),
-								way.getWayNodes().size()));
+				throw new IOException(
+						String
+								.format(
+										"Error while parsing OSM XML: Node %s in Way %s (length: %s) is not declared in the document!",
+										wn.getNodeId(),
+										way.getId(),
+										way.getWayNodes().size()));
 			}
 			wayNodes.add(n);
 		}

@@ -5,15 +5,19 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportCommand;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 
+import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 public class SimpleFeatureSerializationProvider
 {
+
+	private static final Logger LOGGER = Logger.getLogger(SimpleFeatureSerializationProvider.class);
 
 	public static class WholeFeatureReader implements
 			FieldReader<byte[][]>
@@ -85,8 +89,9 @@ public class SimpleFeatureSerializationProvider
 				output.close();
 			}
 			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error(
+						"Unable to write to output",
+						e);
 			}
 			return baos.toByteArray();
 		}

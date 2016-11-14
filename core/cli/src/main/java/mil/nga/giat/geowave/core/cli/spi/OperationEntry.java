@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.Operation;
@@ -17,6 +20,8 @@ import mil.nga.giat.geowave.core.cli.api.Operation;
  */
 public final class OperationEntry
 {
+	private static Logger LOGGER = LoggerFactory.getLogger(OperationEntry.class);
+
 	private final String operationName;
 	private final Class<?> operationClass;
 	private final Class<?> parentOperationClass;
@@ -90,6 +95,9 @@ public final class OperationEntry
 			return (Operation) this.operationClass.newInstance();
 		}
 		catch (InstantiationException | IllegalAccessException e) {
+			LOGGER.error(
+					"Unable to create new instance",
+					e);
 			return null;
 		}
 	}

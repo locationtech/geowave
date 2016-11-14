@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
 
@@ -113,7 +114,7 @@ public class KafkaTestUtils
 		try {
 			kafkaToGeowave.getDriver().waitFutures();
 		}
-		catch (final Exception e) {
+		catch (InterruptedException | ExecutionException e) {
 			throw new RuntimeException(
 					e);
 		}

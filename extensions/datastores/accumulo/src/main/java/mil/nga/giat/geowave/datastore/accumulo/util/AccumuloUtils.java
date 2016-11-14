@@ -239,7 +239,9 @@ public class AccumuloUtils
 						v);
 			}
 			catch (final IOException e) {
-				LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
+				LOGGER.error(
+						"Could not decode row from iterator. Ensure whole row iterators are being used.",
+						e);
 				return null;
 			}
 		}
