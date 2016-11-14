@@ -50,6 +50,7 @@ import mil.nga.giat.geowave.core.store.index.writer.IndexCompositeWriter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class MemoryDataStore implements
@@ -435,21 +436,18 @@ public class MemoryDataStore implements
 		});
 		boolean isAggregation = (queryOptions.getAggregation() != null);
 		if (isAggregation) {
-
-// KAM: Geotools unit tests are passing simple feature entries to aggregate and failing. Need to fix this
-//			DataAdapter adapterAggregation = queryOptions.getAggregation().getKey();
 			Aggregation agg = queryOptions.getAggregation().getRight();
 			for (CloseableIterator r : results) {
 				while (r.hasNext()) {
 					Object entry = r.next();
-//					if (adapterAggregation != null) {
-//						agg.aggregate(entry);
-//					}
-//					else {
+					if (agg instanceof CommonIndexAggregation) {
 						agg.aggregate(adapter.encode(
 								entry,
 								index.getIndexModel()));
-//					}
+					}
+					else {
+						agg.aggregate(entry);
+					}
 				}
 				try {
 					r.close();
