@@ -140,7 +140,7 @@ public class HBaseDistributableFilter extends
 		this.filterList.addAll(filterList);
 
 		this.model = model;
-		
+
 		commonIndexFieldIds.clear();
 		for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
 			commonIndexFieldIds.add(numericDimension.getFieldId());

@@ -128,8 +128,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
-		final Scan multiScanner = getMultiScanner(
-				limit);
+		final Scan multiScanner = getMultiScanner(limit);
 
 		final List<Iterator<Result>> resultsIterators = new ArrayList<Iterator<Result>>();
 		final List<ResultScanner> results = new ArrayList<ResultScanner>();
