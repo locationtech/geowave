@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test;
+package mil.nga.giat.geowave.test.basic;
 
 import java.awt.image.Raster;
 import java.awt.image.SampleModel;
@@ -37,11 +37,13 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeoWaveRasterIT
+public class GeoWaveBasicRasterIT
 {
 	private static final double DOUBLE_TOLERANCE = 1E-10d;
 	@GeoWaveTestStore({
@@ -50,7 +52,7 @@ public class GeoWaveRasterIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveRasterIT.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicRasterIT.class);
 	private static long startMillis;
 
 	@BeforeClass

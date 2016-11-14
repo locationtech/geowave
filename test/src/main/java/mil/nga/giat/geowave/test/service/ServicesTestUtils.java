@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStoreImpl;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 public class ServicesTestUtils
@@ -31,7 +33,13 @@ public class ServicesTestUtils
 			for (final GeoWaveStoreType type : GeoWaveStoreType.values()) {
 				final Properties storeProps = new Properties();
 				final DataStorePluginOptions storeOptions = type.getTestEnvironment().getDataStoreOptions(
-						TestUtils.TEST_NAMESPACE);
+						new GeoWaveTestStoreImpl(
+								TestUtils.TEST_NAMESPACE,
+								new GeoWaveStoreType[] {
+									type
+								},
+								new String[] {},
+								GeoWaveTestStore.class));
 				storeOptions.save(
 						storeProps,
 						DataStorePluginOptions.getStoreNamespace(storeOptions.getType()));

@@ -181,7 +181,9 @@ public class HBaseSecondaryIndexDataStore extends
 				}
 			}
 			catch (final IOException e) {
-				LOGGER.warn("Could not get the results from scanner " + e);
+				LOGGER.warn(
+						"Could not get the results from scanner ",
+						e);
 			}
 		}
 

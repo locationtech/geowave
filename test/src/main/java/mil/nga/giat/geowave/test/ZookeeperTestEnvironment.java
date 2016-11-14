@@ -81,9 +81,6 @@ public class ZookeeperTestEnvironment implements
 				}
 
 				zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
-				System.setProperty(
-						ZK_PROPERTY_NAME,
-						zookeeper);
 			}
 		}
 	}
@@ -101,7 +98,6 @@ public class ZookeeperTestEnvironment implements
 		}
 
 		zookeeper = null;
-		System.clearProperty(ZK_PROPERTY_NAME);
 	}
 
 	public String getZookeeper() {
