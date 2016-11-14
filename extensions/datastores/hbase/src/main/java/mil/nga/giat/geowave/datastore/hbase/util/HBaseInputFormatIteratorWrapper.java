@@ -77,7 +77,8 @@ public class HBaseInputFormatIteratorWrapper<T> implements
 				rowId,
 				serializationTool.getAdapterStore(),
 				clientFilter,
-				index);
+				index,
+				true);
 
 		if (value == null) {
 			return null;

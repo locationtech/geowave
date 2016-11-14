@@ -3,16 +3,6 @@ package mil.nga.giat.geowave.adapter.vector.plugin;
 import java.io.IOException;
 import java.util.Map;
 
-import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
-import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
-import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
-import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-
 import org.geotools.data.FeatureReader;
 import org.geotools.data.FeatureWriter;
 import org.geotools.data.Query;
@@ -23,6 +13,16 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
+
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
+import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
 @SuppressWarnings("unchecked")
 public class GeoWaveFeatureSource extends
@@ -125,18 +125,13 @@ public class GeoWaveFeatureSource extends
 			return (int) ((CountDataStatistics) countStats).getCount();
 		}
 		else {
-			final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
+			try (GeoWaveFeatureReader reader = new GeoWaveFeatureReader(
 					query,
 					new GeoWaveEmptyTransaction(
 							components),
-					components);
-			int count = 0;
-			while (reader.hasNext()) {
-				reader.next();
-				count++;
+					components)) {
+				return (int) reader.getCount();
 			}
-			reader.close();
-			return count;
 		}
 
 	}

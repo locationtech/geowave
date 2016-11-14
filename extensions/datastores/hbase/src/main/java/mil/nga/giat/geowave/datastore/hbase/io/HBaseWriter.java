@@ -74,7 +74,9 @@ public class HBaseWriter implements
 						final RetriesExhaustedWithDetailsException exception,
 						final BufferedMutator mutator )
 						throws RetriesExhaustedWithDetailsException {
-					LOGGER.error(exception);
+					LOGGER.error(
+							"Error in buffered mutator",
+							exception);
 				}
 			});
 			mutator = admin.getConnection().getBufferedMutator(
