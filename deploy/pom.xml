@@ -347,6 +347,7 @@
 											<exclude>*:pom:*</exclude>
 											<exclude>log4j:log4j</exclude>
 											<exclude>commons-codec:commons-codec</exclude>
+											<exclude>com.google.guava:guava:*</exclude>
 											
 											<!-- even though guava should exist in geoserver's classpath, 
 												<exclude>com.google.guava:guava</exclude> -->

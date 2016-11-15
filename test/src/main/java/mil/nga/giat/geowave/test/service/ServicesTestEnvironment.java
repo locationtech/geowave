@@ -136,7 +136,7 @@ public class ServicesTestEnvironment implements
 						":",
 						";"));
 				gsWebapp.setClassLoader(classLoader);
-				gsWebapp.setParentLoaderPriority(true);
+				gsWebapp.setParentLoaderPriority(false);
 
 				final File warDir = new File(
 						GEOWAVE_WAR_DIR);
