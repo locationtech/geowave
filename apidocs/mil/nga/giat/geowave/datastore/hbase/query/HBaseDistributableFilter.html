@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":9,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":10,"i9":10,"i10":9,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -231,26 +231,30 @@ extends org.apache.hadoop.hbase.filter.FilterBase</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#getAdapterEncoding-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">getAdapterEncoding</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#getPersistenceEncoding--">getPersistenceEncoding</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#getPersistenceEncoding-org.apache.hadoop.hbase.Cell-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">getPersistenceEncoding</a></span>(org.apache.hadoop.hbase.Cell&nbsp;cell,
                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#init-byte:A-byte:A-">init</a></span>(byte[]&nbsp;filterBytes,
     byte[]&nbsp;modelBytes)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#init-java.util.List-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;&nbsp;filterList,
     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseDistributableFilter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#parseFrom-byte:A-">parseFrom</a></span>(byte[]&nbsp;pbBytes)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#toByteArray--">toByteArray</a></span>()</code>&nbsp;</td>
 </tr>
@@ -410,6 +414,15 @@ extends org.apache.hadoop.hbase.filter.FilterBase</pre>
 <pre>protected static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;getPersistenceEncoding(org.apache.hadoop.hbase.Cell&nbsp;cell,
                                                                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                                                                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</pre>
+</li>
+</ul>
+<a name="getPersistenceEncoding--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPersistenceEncoding</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;getPersistenceEncoding()</pre>
 </li>
 </ul>
 <a name="getAdapterEncoding-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">

@@ -140,6 +140,10 @@ public @interface <span class="memberNameLabel">GeoWaveTestStore</span></pre>
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/test/annotation/GeoWaveTestStore.html#namespace--">namespace</a></span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/test/annotation/GeoWaveTestStore.html#options--">options</a></span></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -175,7 +179,7 @@ public @interface <span class="memberNameLabel">GeoWaveTestStore</span></pre>
 <li class="blockList"><a name="namespace--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>namespace</h4>
 <pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace</pre>
@@ -186,6 +190,27 @@ public @interface <span class="memberNameLabel">GeoWaveTestStore</span></pre>
 <dl>
 <dt>Default:</dt>
 <dd>"mil_nga_giat_geowave_test"</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="options--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>options</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;options</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a "key=value" pair that will override default options for the
+         client-side configuration of this datastore</dd>
+</dl>
+<dl>
+<dt>Default:</dt>
+<dd>""</dd>
 </dl>
 </li>
 </ul>

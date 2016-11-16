@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -100,7 +100,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">mil.nga.giat.geowave.test.StoreTestEnvironment</a></li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.test.HBaseStoreTestEnvironment</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -109,13 +114,12 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="interface in mil.nga.giat.geowave.test">StoreTestEnvironment</a>, <a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></dd>
+<dd><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">HBaseStoreTestEnvironment</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="interface in mil.nga.giat.geowave.test">StoreTestEnvironment</a></pre>
+extends <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">StoreTestEnvironment</a></pre>
 </li>
 </ul>
 </div>
@@ -158,8 +162,8 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironmen
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html#getDataStoreOptions-java.lang.String-">getDataStoreOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a>[]</code></td>
@@ -170,14 +174,25 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironmen
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html#getInstance--">getInstance</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html#initOptions-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">initOptions</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html#setup--">setup</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html#tearDown--">tearDown</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.test.StoreTestEnvironment">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.test.<a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">StoreTestEnvironment</a></h3>
+<code><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#getDataStoreOptions-mil.nga.giat.geowave.test.annotation.GeoWaveTestStore-">getDataStoreOptions</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -238,16 +253,29 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironmen
 <pre>public static&nbsp;<a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">HBaseStoreTestEnvironment</a>&nbsp;getInstance()</pre>
 </li>
 </ul>
-<a name="getDataStoreOptions-java.lang.String-">
+<a name="initOptions-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getDataStoreOptions</h4>
-<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;getDataStoreOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<h4>initOptions</h4>
+<pre>protected&nbsp;void&nbsp;initOptions(<a href="../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#getDataStoreOptions-java.lang.String-">getDataStoreOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="interface in mil.nga.giat.geowave.test">StoreTestEnvironment</a></code></dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#initOptions-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">initOptions</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">StoreTestEnvironment</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getDataStoreFactory--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataStoreFactory</h4>
+<pre>protected&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;&nbsp;getDataStoreFactory()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">StoreTestEnvironment</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -258,10 +286,6 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironmen
 <li class="blockList">
 <h4>setup</h4>
 <pre>public&nbsp;void&nbsp;setup()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#setup--">setup</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
-</dl>
 </li>
 </ul>
 <a name="tearDown--">
@@ -271,10 +295,6 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironmen
 <li class="blockList">
 <h4>tearDown</h4>
 <pre>public&nbsp;void&nbsp;tearDown()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#tearDown--">tearDown</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
-</dl>
 </li>
 </ul>
 <a name="getDependentEnvironments--">
@@ -284,10 +304,6 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironmen
 <li class="blockList">
 <h4>getDependentEnvironments</h4>
 <pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a>[]&nbsp;getDependentEnvironments()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html#getDependentEnvironments--">getDependentEnvironments</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.html" title="interface in mil.nga.giat.geowave.test">TestEnvironment</a></code></dd>
-</dl>
 </li>
 </ul>
 </li>

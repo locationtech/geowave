@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":10,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -231,30 +231,34 @@ extends org.geotools.data.store.DataFeatureCollection</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getOpenIterator--">getOpenIterator</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>protected mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveFeatureCollection.QueryConstraints</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getQueryConstraints--">getQueryConstraints</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getSchema--">getSchema</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getStatsQueryName--">getStatsQueryName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#isDistributedRenderQuery--">isDistributedRenderQuery</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#isDistributedRenderQuery-org.geotools.data.Query-">isDistributedRenderQuery</a></span>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#openIterator--">openIterator</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#reader--">reader</a></span>()</code>&nbsp;</td>
 </tr>
@@ -417,6 +421,22 @@ extends org.geotools.data.store.DataFeatureCollection</pre>
 <li class="blockList">
 <h4>isDistributedRenderQuery</h4>
 <pre>protected static final&nbsp;boolean&nbsp;isDistributedRenderQuery(org.geotools.data.Query&nbsp;query)</pre>
+</li>
+</ul>
+<a name="getQueryConstraints--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getQueryConstraints</h4>
+<pre>protected&nbsp;mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveFeatureCollection.QueryConstraints&nbsp;getQueryConstraints()
+                                                                                                            throws org.opengis.referencing.operation.TransformException,
+                                                                                                                   org.opengis.referencing.FactoryException</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>org.opengis.referencing.operation.TransformException</code></dd>
+<dd><code>org.opengis.referencing.FactoryException</code></dd>
+</dl>
 </li>
 </ul>
 <a name="openIterator--">
