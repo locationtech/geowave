@@ -31,13 +31,17 @@ public @interface GeoWaveTestStore {
 	 */
 	public String namespace() default TestUtils.TEST_NAMESPACE;
 
+	/**
+	 * @return a "key=value" pair that will override default options for the
+	 *         client-side configuration of this datastore
+	 */
+	public String[] options() default "";
+
 	public static enum GeoWaveStoreType {
 		ACCUMULO(
 				AccumuloStoreTestEnvironment.getInstance()),
 		HBASE(
 				HBaseStoreTestEnvironment.getInstance());
-		// HBASE(
-		// HBaseStoreTestEnvironment.getInstance());
 		private final StoreTestEnvironment testEnvironment;
 
 		private GeoWaveStoreType(

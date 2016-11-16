@@ -29,7 +29,6 @@ import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
@@ -118,7 +117,7 @@ public class AggregationIterator extends
 		if ((queryFilterIterator != null) && queryFilterIterator.isSet()) {
 			final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 			final Text currentRow = key.getRow();
-			FlattenedUnreadData unreadData = queryFilterIterator.aggregateFieldData(
+			final FlattenedUnreadData unreadData = queryFilterIterator.aggregateFieldData(
 					key,
 					value,
 					commonData);
@@ -151,7 +150,13 @@ public class AggregationIterator extends
 			final Text currentRow,
 			final CommonIndexModel model,
 			final CommonIndexedPersistenceEncoding persistenceEncoding ) {
-		if (persistenceEncoding.getAdapterId().getString().equals(
+		if (adapter == null) {
+			aggregationFunction.aggregate(persistenceEncoding);
+			if (startRowOfAggregation == null) {
+				startRowOfAggregation = currentRow;
+			}
+		}
+		else if (persistenceEncoding.getAdapterId().getString().equals(
 				adapter.getAdapterId().getString())) {
 			final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
 			if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
@@ -211,11 +216,13 @@ public class AggregationIterator extends
 						Persistable.class);
 				aggregationFunction.setParameters(aggregationParams);
 			}
-			final String adapterStr = options.get(ADAPTER_OPTION_NAME);
-			final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
-			adapter = PersistenceUtils.fromBinary(
-					adapterBytes,
-					DataAdapter.class);
+			if (options.containsKey(ADAPTER_OPTION_NAME)) {
+				final String adapterStr = options.get(ADAPTER_OPTION_NAME);
+				final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
+				adapter = PersistenceUtils.fromBinary(
+						adapterBytes,
+						DataAdapter.class);
+			}
 
 			// now go from index strategy, constraints, and max decomp to a set
 			// of accumulo ranges
