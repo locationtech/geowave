@@ -17,11 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
-import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 public class ServicesTestEnvironment implements
@@ -129,8 +127,6 @@ public class ServicesTestEnvironment implements
 							"Unable to create classloader");
 				}
 
-				// new WebAppClassLoader(
-				// gsWebapp);
 				classLoader.addClassPath(System.getProperty(
 						"java.class.path").replace(
 						":",
@@ -171,13 +167,6 @@ public class ServicesTestEnvironment implements
 				while (!jettyServer.isRunning() && !jettyServer.isStarted()) {
 					Thread.sleep(1000);
 				}
-
-				// use this to test normal stop behavior, that is, to check
-				// stuff that need to be done on container shutdown (and
-				// yes, this will make jetty stop just after you started
-				// it...)
-
-				// jettyServer.stop();
 
 			}
 			catch (final RuntimeException e) {

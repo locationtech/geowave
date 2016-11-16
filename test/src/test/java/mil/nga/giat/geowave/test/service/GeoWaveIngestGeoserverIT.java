@@ -11,15 +11,12 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -73,8 +70,11 @@ public class GeoWaveIngestGeoserverIT
 	@BeforeClass
 	public static void setupIngestTest()
 			throws URISyntaxException {
+		// just use the default user/password
 		geoserverServiceClient = new GeoserverServiceClient(
-				ServicesTestEnvironment.GEOWAVE_BASE_URL);
+				ServicesTestEnvironment.GEOWAVE_BASE_URL,
+				ServicesTestEnvironment.GEOSERVER_USER,
+				ServicesTestEnvironment.GEOSERVER_PASS);
 
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
@@ -362,29 +362,26 @@ public class GeoWaveIngestGeoserverIT
 		final HttpGet command = new HttpGet(
 				builder.build());
 
-		final HttpClient httpClient = createClient();
-		final HttpResponse resp = httpClient.execute(command);
-		try (InputStream is = resp.getEntity().getContent()) {
+		final Pair<CloseableHttpClient, HttpClientContext> clientAndContext = GeoServerIT.createClientAndContext();
+		final CloseableHttpClient httpClient = clientAndContext.getLeft();
+		final HttpClientContext context = clientAndContext.getRight();
+		try {
+			final HttpResponse resp = httpClient.execute(
+					command,
+					context);
+			try (InputStream is = resp.getEntity().getContent()) {
 
-			final BufferedImage image = ImageIO.read(is);
+				final BufferedImage image = ImageIO.read(is);
 
-			Assert.assertNotNull(image);
-			Assert.assertTrue(image.getWidth() == width);
-			Assert.assertTrue(image.getHeight() == height);
-			return image;
+				Assert.assertNotNull(image);
+				Assert.assertTrue(image.getWidth() == width);
+				Assert.assertTrue(image.getHeight() == height);
+				return image;
+			}
 		}
-	}
-
-	static private HttpClient createClient() {
-		final CredentialsProvider provider = new BasicCredentialsProvider();
-		provider.setCredentials(
-				AuthScope.ANY,
-				new UsernamePasswordCredentials(
-						ServicesTestEnvironment.GEOSERVER_USER,
-						ServicesTestEnvironment.GEOSERVER_PASS));
-
-		return HttpClientBuilder.create().setDefaultCredentialsProvider(
-				provider).build();
+		finally {
+			httpClient.close();
+		}
 	}
 
 }
