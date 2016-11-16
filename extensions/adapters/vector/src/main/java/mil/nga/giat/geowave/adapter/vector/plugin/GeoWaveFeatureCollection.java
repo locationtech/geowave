@@ -282,13 +282,13 @@ public class GeoWaveFeatureCollection extends
 			featureCursor = reader.getNoData();
 		}
 		else if (isDistributedRenderQuery()) {
-				featureCursor = reader.renderData(
-						contraints.jtsBounds,
-						contraints.timeBounds,
-						getFilter(query),
-						limit,
-						(DistributedRenderOptions) query.getHints().get(
-								DistributedRenderProcess.OPTIONS));
+			featureCursor = reader.renderData(
+					contraints.jtsBounds,
+					contraints.timeBounds,
+					getFilter(query),
+					contraints.limit,
+					(DistributedRenderOptions) query.getHints().get(
+							DistributedRenderProcess.OPTIONS));
 		}
 		else if (query.getHints().containsKey(
 				SubsampleProcess.OUTPUT_WIDTH) && query.getHints().containsKey(
@@ -312,15 +312,6 @@ public class GeoWaveFeatureCollection extends
 					contraints.referencedEnvelope,
 					contraints.limit);
 
-		}
-		else if (getStatsQueryName() != null) {
-			featureCursor = reader.getData(
-					contraints.jtsBounds,
-					contraints.timeBounds,
-					(Integer) query.getHints().get(
-							LEVEL),
-					(String) query.getHints().get(
-							STATS_NAME));
 		}
 		else {
 			// get the data within the bounding box

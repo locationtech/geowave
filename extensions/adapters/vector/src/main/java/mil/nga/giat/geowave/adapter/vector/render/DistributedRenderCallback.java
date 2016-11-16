@@ -49,7 +49,8 @@ public class DistributedRenderCallback extends
 					0);
 			// check if their is a DistributedRender rendering
 			// transformation
-			if ((((ProcessFunction) style.getTransformation()).getName() != null)
+			if (style instanceof ProcessFunction && style.getTransformation() != null
+					&& (((ProcessFunction) style.getTransformation()).getName() != null)
 					&& ((ProcessFunction) style.getTransformation()).getName().equals(
 							DistributedRenderProcess.PROCESS_NAME)) {
 				// if their is a DistributedRender transformation, we need

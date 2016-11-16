@@ -268,7 +268,7 @@ public class GeoWaveIngestGeoserverIT
 				-90,
 				90,
 				SimpleIngest.FEATURE_NAME,
-				ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
+				ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
 				920,
 				360,
 				null);
