@@ -246,7 +246,8 @@ public class HBaseDataStore extends
 						dedupeFilter,
 						scanCallback,
 						null,
-						null));
+						null,
+						true));
 	}
 
 	@Override

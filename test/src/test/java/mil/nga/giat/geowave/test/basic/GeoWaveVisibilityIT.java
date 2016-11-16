@@ -1,7 +1,7 @@
 //                            BasicAccumuloOperations ops = new BasicAccumuloOperations(zookeeper, accumuloInstance, accumuloUser, accumuloPassword, "");
 //                            ops.insureAuthorization(accumuloUser, "a","b","c");
 
-package mil.nga.giat.geowave.test;
+package mil.nga.giat.geowave.test.basic;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,6 +35,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
+import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
@@ -273,7 +275,7 @@ public class GeoWaveVisibilityIT
 		}
 
 		queryOpts.setAggregation(
-				new CountAggregation<>(),
+				new CountAggregation(),
 				new FeatureDataAdapter(
 						getType()));
 		try (CloseableIterator<CountResult> it = (CloseableIterator) store.query(

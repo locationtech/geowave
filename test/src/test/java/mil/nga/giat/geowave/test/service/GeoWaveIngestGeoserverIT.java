@@ -62,9 +62,13 @@ public class GeoWaveIngestGeoserverIT
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
 
 	private static GeoserverServiceClient geoserverServiceClient = null;
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
+	}, options = {
+		"enableCustomFilters=true",
+		"enableCoprocessors=true",
+		"verifyCoprocessors=true"
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 

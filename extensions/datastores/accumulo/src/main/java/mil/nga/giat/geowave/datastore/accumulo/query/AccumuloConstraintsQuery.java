@@ -33,6 +33,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
@@ -131,9 +132,11 @@ public class AccumuloConstraintsQuery extends
 						QueryFilterIterator.QUERY_ITERATOR_NAME,
 						AggregationIterator.class);
 			}
-			iteratorSettings.addOption(
-					AggregationIterator.ADAPTER_OPTION_NAME,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(base.aggregation.getLeft())));
+			if (!(base.aggregation.getRight() instanceof CommonIndexAggregation) && base.aggregation.getLeft() != null) {
+				iteratorSettings.addOption(
+						AggregationIterator.ADAPTER_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(base.aggregation.getLeft())));
+			}
 			final Aggregation aggr = base.aggregation.getRight();
 			iteratorSettings.addOption(
 					AggregationIterator.AGGREGATION_OPTION_NAME,
