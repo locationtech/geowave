@@ -126,18 +126,13 @@ public class GeoWaveFeatureSource extends
 			return (int) ((CountDataStatistics) countStats).getCount();
 		}
 		else {
-			final FeatureReader<SimpleFeatureType, SimpleFeature> reader = new GeoWaveFeatureReader(
+			try (GeoWaveFeatureReader reader = new GeoWaveFeatureReader(
 					query,
 					new GeoWaveEmptyTransaction(
 							components),
-					components);
-			int count = 0;
-			while (reader.hasNext()) {
-				reader.next();
-				count++;
+					components)) {
+				return (int) reader.getCount();
 			}
-			reader.close();
-			return count;
 		}
 
 	}

@@ -51,6 +51,9 @@ public class StatsManager
 			return new CountDataStatistics<SimpleFeature>(
 					dataAdapter.getAdapterId());
 		}
+		// HP Fortify "Log Forging" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + " using count statistic");
 		return new CountDataStatistics<SimpleFeature>(
 				dataAdapter.getAdapterId(),

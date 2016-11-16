@@ -262,7 +262,9 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 			return true;
 		}
 		catch (final IOException e) {
-			LOGGER.warn("Unable to delete row from " + getTablename() + " " + e);
+			LOGGER.warn(
+					"Unable to delete row from " + getTablename(),
+					e);
 			return false;
 		}
 	}

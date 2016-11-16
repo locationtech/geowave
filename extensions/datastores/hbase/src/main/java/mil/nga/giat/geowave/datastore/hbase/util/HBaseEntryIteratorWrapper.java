@@ -22,6 +22,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 		EntryIteratorWrapper<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseEntryIteratorWrapper.class);
+	private boolean decodePersistenceEncoding = true;
 
 	private byte[] fieldSubsetBitmask;
 
@@ -36,7 +37,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final Iterator<Result> scannerIt,
 			final QueryFilter clientFilter,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
-			final double[] maxResolutionSubsamplingPerDimension ) {
+			final double[] maxResolutionSubsamplingPerDimension,
+			boolean decodePersistenceEncoding ) {
 		this(
 				adapterStore,
 				index,
@@ -44,7 +46,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 				clientFilter,
 				null,
 				fieldIds,
-				maxResolutionSubsamplingPerDimension);
+				maxResolutionSubsamplingPerDimension,
+				decodePersistenceEncoding);
 	}
 
 	public HBaseEntryIteratorWrapper(
@@ -54,7 +57,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final QueryFilter clientFilter,
 			final ScanCallback<T> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
-			final double[] maxResolutionSubsamplingPerDimension ) {
+			final double[] maxResolutionSubsamplingPerDimension,
+			boolean decodePersistenceEncoding ) {
 		super(
 				true,
 				adapterStore,
@@ -62,6 +66,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 				scannerIt,
 				clientFilter,
 				scanCallback);
+		this.decodePersistenceEncoding = decodePersistenceEncoding;
 		initializeBitPosition(maxResolutionSubsamplingPerDimension);
 		if (fieldIds != null) {
 			fieldSubsetBitmask = BitmaskUtils.generateFieldSubsetBitmask(
@@ -95,7 +100,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 					clientFilter,
 					index,
 					scanCallback,
-					fieldSubsetBitmask);
+					fieldSubsetBitmask,
+					decodePersistenceEncoding);
 		}
 		return null;
 	}

@@ -125,6 +125,8 @@ public class TrackFileReader implements
 		finally {
 			{
 				try {
+					// HP Fortify "Null Dereference" false positive
+					// NullPointerException is caught below
 					fis.close();
 				}
 				catch (final IOException | NullPointerException e2) {

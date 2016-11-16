@@ -93,22 +93,24 @@ public class GeoWaveFeatureCollection extends
 			return 0;
 		}
 
-		// fallback
-		int count = 0;
+		QueryConstraints constraints;
 		try {
-			final Iterator<SimpleFeature> iterator = openIterator();
-			while (iterator.hasNext()) {
-				iterator.next();
-				count++;
-			}
-			close(iterator);
+			constraints = getQueryConstraints();
+
+			return (int) reader.getCountInternal(
+					constraints.jtsBounds,
+					constraints.timeBounds,
+					getFilter(query),
+					constraints.limit);
 		}
-		catch (final Exception e) {
+		catch (TransformException | FactoryException e) {
+
 			LOGGER.warn(
-					"Error getting count",
+					"Unable to transform geometry, can't get count",
 					e);
 		}
-		return count;
+		// fallback
+		return 0;
 	}
 
 	@Override
@@ -237,75 +239,96 @@ public class GeoWaveFeatureCollection extends
 		return filter;
 	}
 
+	protected QueryConstraints getQueryConstraints()
+			throws TransformException,
+			FactoryException {
+		final ReferencedEnvelope referencedEnvelope = getEnvelope(query);
+		final Geometry jtsBounds = getBBox(
+				query,
+				referencedEnvelope);
+		final TemporalConstraintsSet timeBounds = getBoundedTime(query);
+		Integer limit = getLimit(query);
+		final Integer startIndex = getStartIndex(query);
+
+		// limit becomes a 'soft' constraint since GeoServer will inforce
+		// the limit
+		final Long max = (limit != null) ? limit.longValue() + (startIndex == null ? 0 : startIndex.longValue()) : null;
+		// limit only used if less than an integer max value.
+		limit = ((max != null) && (max.longValue() < Integer.MAX_VALUE)) ? max.intValue() : null;
+		return new QueryConstraints(
+				jtsBounds,
+				timeBounds,
+				referencedEnvelope,
+				limit);
+	}
+
 	@Override
 	protected Iterator<SimpleFeature> openIterator() {
-		Geometry jtsBounds;
-		TemporalConstraintsSet timeBounds;
-
 		try {
-			final ReferencedEnvelope referencedEnvelope = getEnvelope(query);
-			jtsBounds = getBBox(
-					query,
-					referencedEnvelope);
-			timeBounds = getBoundedTime(query);
-			Integer limit = getLimit(query);
-			final Integer startIndex = getStartIndex(query);
+			return openIterator(getQueryConstraints());
 
-			// limit becomes a 'soft' constraint since GeoServer will inforce
-			// the limit
-			final Long max = (limit != null) ? limit.longValue() + (startIndex == null ? 0 : startIndex.longValue())
-					: null;
-			// limit only used if less than an integer max value.
-			limit = ((max != null) && (max.longValue() < Integer.MAX_VALUE)) ? max.intValue() : null;
-
-			if (query.getFilter() == Filter.EXCLUDE) {
-				featureCursor = reader.getNoData();
-			}
-			else if (isDistributedRenderQuery()) {
-				featureCursor = reader.renderData(
-						jtsBounds,
-						timeBounds,
-						getFilter(query),
-						limit,
-						(DistributedRenderOptions) query.getHints().get(
-								DistributedRenderProcess.OPTIONS));
-			}
-			else if (query.getHints().containsKey(
-					SubsampleProcess.OUTPUT_WIDTH) && query.getHints().containsKey(
-					SubsampleProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
-					SubsampleProcess.OUTPUT_BBOX)) {
-				double pixelSize = 1;
-				if (query.getHints().containsKey(
-						SubsampleProcess.PIXEL_SIZE)) {
-					pixelSize = (Double) query.getHints().get(
-							SubsampleProcess.PIXEL_SIZE);
-				}
-				featureCursor = reader.getData(
-						jtsBounds,
-						timeBounds,
-						(Integer) query.getHints().get(
-								SubsampleProcess.OUTPUT_WIDTH),
-						(Integer) query.getHints().get(
-								SubsampleProcess.OUTPUT_HEIGHT),
-						pixelSize,
-						getFilter(query),
-						referencedEnvelope,
-						limit);
-
-			}
-			else {
-				// get the data within the bounding box
-				featureCursor = reader.getData(
-						jtsBounds,
-						timeBounds,
-						getFilter(query),
-						limit);
-			}
 		}
 		catch (TransformException | FactoryException e) {
 			LOGGER.warn(
 					"Unable to transform geometry",
 					e);
+		}
+		return featureCursor;
+	}
+
+	private Iterator<SimpleFeature> openIterator(
+			final QueryConstraints contraints ) {
+		if (query.getFilter() == Filter.EXCLUDE) {
+			featureCursor = reader.getNoData();
+		}
+		else if (isDistributedRenderQuery()) {
+				featureCursor = reader.renderData(
+						contraints.jtsBounds,
+						contraints.timeBounds,
+						getFilter(query),
+						limit,
+						(DistributedRenderOptions) query.getHints().get(
+								DistributedRenderProcess.OPTIONS));
+		}
+		else if (query.getHints().containsKey(
+				SubsampleProcess.OUTPUT_WIDTH) && query.getHints().containsKey(
+				SubsampleProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
+				SubsampleProcess.OUTPUT_BBOX)) {
+			double pixelSize = 1;
+			if (query.getHints().containsKey(
+					SubsampleProcess.PIXEL_SIZE)) {
+				pixelSize = (Double) query.getHints().get(
+						SubsampleProcess.PIXEL_SIZE);
+			}
+			featureCursor = reader.getData(
+					contraints.jtsBounds,
+					contraints.timeBounds,
+					(Integer) query.getHints().get(
+							SubsampleProcess.OUTPUT_WIDTH),
+					(Integer) query.getHints().get(
+							SubsampleProcess.OUTPUT_HEIGHT),
+					pixelSize,
+					getFilter(query),
+					contraints.referencedEnvelope,
+					contraints.limit);
+
+		}
+		else if (getStatsQueryName() != null) {
+			featureCursor = reader.getData(
+					contraints.jtsBounds,
+					contraints.timeBounds,
+					(Integer) query.getHints().get(
+							LEVEL),
+					(String) query.getHints().get(
+							STATS_NAME));
+		}
+		else {
+			// get the data within the bounding box
+			featureCursor = reader.getData(
+					contraints.jtsBounds,
+					contraints.timeBounds,
+					getFilter(query),
+					contraints.limit);
 		}
 		return featureCursor;
 	}
@@ -490,5 +513,25 @@ public class GeoWaveFeatureCollection extends
 					e);
 		}
 		return true;
+	}
+
+	private static class QueryConstraints
+	{
+		Geometry jtsBounds;
+		TemporalConstraintsSet timeBounds;
+		ReferencedEnvelope referencedEnvelope;
+		Integer limit;
+
+		public QueryConstraints(
+				final Geometry jtsBounds,
+				final TemporalConstraintsSet timeBounds,
+				final ReferencedEnvelope referencedEnvelope,
+				final Integer limit ) {
+			super();
+			this.jtsBounds = jtsBounds;
+			this.timeBounds = timeBounds;
+			this.referencedEnvelope = referencedEnvelope;
+			this.limit = limit;
+		}
 	}
 }

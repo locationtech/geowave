@@ -87,9 +87,13 @@ public class GeoServerIT
 	private String query;
 	private String update;
 
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
+	}, options = {
+		"enableCustomFilters=true",
+		"enableCoprocessors=true",
+		"verifyCoprocessors=true"
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
