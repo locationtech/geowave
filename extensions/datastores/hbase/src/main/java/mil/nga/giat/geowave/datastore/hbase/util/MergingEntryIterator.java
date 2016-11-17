@@ -46,7 +46,8 @@ public class MergingEntryIterator<T> extends
 			final ScanCallback<T> scanCallback,
 			final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
-			final double[] maxResolutionSubsamplingPerDimension ) {
+			final double[] maxResolutionSubsamplingPerDimension,
+			final boolean hasSkippingFilter ) {
 		super(
 				adapterStore,
 				index,
@@ -55,7 +56,8 @@ public class MergingEntryIterator<T> extends
 				scanCallback,
 				fieldIds,
 				maxResolutionSubsamplingPerDimension,
-				true);
+				true,
+				hasSkippingFilter);
 		this.mergingAdapters = mergingAdapters;
 		transforms = new HashMap<ByteArrayId, RowTransform>();
 	}

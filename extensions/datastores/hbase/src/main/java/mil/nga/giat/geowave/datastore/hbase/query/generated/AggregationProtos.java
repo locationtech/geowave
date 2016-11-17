@@ -741,16 +741,16 @@ public final class AggregationProtos
 		 */
 		mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationTypeOrBuilder getAggregationOrBuilder();
 
-		// optional bytes rangefilter = 2;
+		// optional bytes rangeFilter = 2;
 		/**
-		 * <code>optional bytes rangefilter = 2;</code>
+		 * <code>optional bytes rangeFilter = 2;</code>
 		 */
-		boolean hasRangefilter();
+		boolean hasRangeFilter();
 
 		/**
-		 * <code>optional bytes rangefilter = 2;</code>
+		 * <code>optional bytes rangeFilter = 2;</code>
 		 */
-		com.google.protobuf.ByteString getRangefilter();
+		com.google.protobuf.ByteString getRangeFilter();
 
 		// optional bytes filter = 3;
 		/**
@@ -784,6 +784,28 @@ public final class AggregationProtos
 		 * <code>optional bytes adapter = 5;</code>
 		 */
 		com.google.protobuf.ByteString getAdapter();
+
+		// optional bool blockCaching = 6;
+		/**
+		 * <code>optional bool blockCaching = 6;</code>
+		 */
+		boolean hasBlockCaching();
+
+		/**
+		 * <code>optional bool blockCaching = 6;</code>
+		 */
+		boolean getBlockCaching();
+
+		// optional int32 cacheSize = 7;
+		/**
+		 * <code>optional int32 cacheSize = 7;</code>
+		 */
+		boolean hasCacheSize();
+
+		/**
+		 * <code>optional int32 cacheSize = 7;</code>
+		 */
+		int getCacheSize();
 	}
 
 	/**
@@ -867,7 +889,7 @@ public final class AggregationProtos
 						}
 						case 18: {
 							bitField0_ |= 0x00000002;
-							rangefilter_ = input.readBytes();
+							rangeFilter_ = input.readBytes();
 							break;
 						}
 						case 26: {
@@ -883,6 +905,16 @@ public final class AggregationProtos
 						case 42: {
 							bitField0_ |= 0x00000010;
 							adapter_ = input.readBytes();
+							break;
+						}
+						case 48: {
+							bitField0_ |= 0x00000020;
+							blockCaching_ = input.readBool();
+							break;
+						}
+						case 56: {
+							bitField0_ |= 0x00000040;
+							cacheSize_ = input.readInt32();
 							break;
 						}
 					}
@@ -954,22 +986,22 @@ public final class AggregationProtos
 			return aggregation_;
 		}
 
-		// optional bytes rangefilter = 2;
+		// optional bytes rangeFilter = 2;
 		public static final int RANGEFILTER_FIELD_NUMBER = 2;
-		private com.google.protobuf.ByteString rangefilter_;
+		private com.google.protobuf.ByteString rangeFilter_;
 
 		/**
-		 * <code>optional bytes rangefilter = 2;</code>
+		 * <code>optional bytes rangeFilter = 2;</code>
 		 */
-		public boolean hasRangefilter() {
+		public boolean hasRangeFilter() {
 			return ((bitField0_ & 0x00000002) == 0x00000002);
 		}
 
 		/**
-		 * <code>optional bytes rangefilter = 2;</code>
+		 * <code>optional bytes rangeFilter = 2;</code>
 		 */
-		public com.google.protobuf.ByteString getRangefilter() {
-			return rangefilter_;
+		public com.google.protobuf.ByteString getRangeFilter() {
+			return rangeFilter_;
 		}
 
 		// optional bytes filter = 3;
@@ -1026,13 +1058,51 @@ public final class AggregationProtos
 			return adapter_;
 		}
 
+		// optional bool blockCaching = 6;
+		public static final int BLOCKCACHING_FIELD_NUMBER = 6;
+		private boolean blockCaching_;
+
+		/**
+		 * <code>optional bool blockCaching = 6;</code>
+		 */
+		public boolean hasBlockCaching() {
+			return ((bitField0_ & 0x00000020) == 0x00000020);
+		}
+
+		/**
+		 * <code>optional bool blockCaching = 6;</code>
+		 */
+		public boolean getBlockCaching() {
+			return blockCaching_;
+		}
+
+		// optional int32 cacheSize = 7;
+		public static final int CACHESIZE_FIELD_NUMBER = 7;
+		private int cacheSize_;
+
+		/**
+		 * <code>optional int32 cacheSize = 7;</code>
+		 */
+		public boolean hasCacheSize() {
+			return ((bitField0_ & 0x00000040) == 0x00000040);
+		}
+
+		/**
+		 * <code>optional int32 cacheSize = 7;</code>
+		 */
+		public int getCacheSize() {
+			return cacheSize_;
+		}
+
 		private void initFields() {
 			aggregation_ = mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationType
 					.getDefaultInstance();
-			rangefilter_ = com.google.protobuf.ByteString.EMPTY;
+			rangeFilter_ = com.google.protobuf.ByteString.EMPTY;
 			filter_ = com.google.protobuf.ByteString.EMPTY;
 			model_ = com.google.protobuf.ByteString.EMPTY;
 			adapter_ = com.google.protobuf.ByteString.EMPTY;
+			blockCaching_ = false;
+			cacheSize_ = 0;
 		}
 
 		private byte memoizedIsInitialized = -1;
@@ -1065,7 +1135,7 @@ public final class AggregationProtos
 			if (((bitField0_ & 0x00000002) == 0x00000002)) {
 				output.writeBytes(
 						2,
-						rangefilter_);
+						rangeFilter_);
 			}
 			if (((bitField0_ & 0x00000004) == 0x00000004)) {
 				output.writeBytes(
@@ -1081,6 +1151,16 @@ public final class AggregationProtos
 				output.writeBytes(
 						5,
 						adapter_);
+			}
+			if (((bitField0_ & 0x00000020) == 0x00000020)) {
+				output.writeBool(
+						6,
+						blockCaching_);
+			}
+			if (((bitField0_ & 0x00000040) == 0x00000040)) {
+				output.writeInt32(
+						7,
+						cacheSize_);
 			}
 			getUnknownFields().writeTo(
 					output);
@@ -1101,7 +1181,7 @@ public final class AggregationProtos
 			if (((bitField0_ & 0x00000002) == 0x00000002)) {
 				size += com.google.protobuf.CodedOutputStream.computeBytesSize(
 						2,
-						rangefilter_);
+						rangeFilter_);
 			}
 			if (((bitField0_ & 0x00000004) == 0x00000004)) {
 				size += com.google.protobuf.CodedOutputStream.computeBytesSize(
@@ -1117,6 +1197,16 @@ public final class AggregationProtos
 				size += com.google.protobuf.CodedOutputStream.computeBytesSize(
 						5,
 						adapter_);
+			}
+			if (((bitField0_ & 0x00000020) == 0x00000020)) {
+				size += com.google.protobuf.CodedOutputStream.computeBoolSize(
+						6,
+						blockCaching_);
+			}
+			if (((bitField0_ & 0x00000040) == 0x00000040)) {
+				size += com.google.protobuf.CodedOutputStream.computeInt32Size(
+						7,
+						cacheSize_);
 			}
 			size += getUnknownFields().getSerializedSize();
 			memoizedSerializedSize = size;
@@ -1148,10 +1238,10 @@ public final class AggregationProtos
 				result = result && getAggregation().equals(
 						other.getAggregation());
 			}
-			result = result && (hasRangefilter() == other.hasRangefilter());
-			if (hasRangefilter()) {
-				result = result && getRangefilter().equals(
-						other.getRangefilter());
+			result = result && (hasRangeFilter() == other.hasRangeFilter());
+			if (hasRangeFilter()) {
+				result = result && getRangeFilter().equals(
+						other.getRangeFilter());
 			}
 			result = result && (hasFilter() == other.hasFilter());
 			if (hasFilter()) {
@@ -1167,6 +1257,14 @@ public final class AggregationProtos
 			if (hasAdapter()) {
 				result = result && getAdapter().equals(
 						other.getAdapter());
+			}
+			result = result && (hasBlockCaching() == other.hasBlockCaching());
+			if (hasBlockCaching()) {
+				result = result && (getBlockCaching() == other.getBlockCaching());
+			}
+			result = result && (hasCacheSize() == other.hasCacheSize());
+			if (hasCacheSize()) {
+				result = result && (getCacheSize() == other.getCacheSize());
 			}
 			result = result && getUnknownFields().equals(
 					other.getUnknownFields());
@@ -1186,9 +1284,9 @@ public final class AggregationProtos
 				hash = (37 * hash) + AGGREGATION_FIELD_NUMBER;
 				hash = (53 * hash) + getAggregation().hashCode();
 			}
-			if (hasRangefilter()) {
+			if (hasRangeFilter()) {
 				hash = (37 * hash) + RANGEFILTER_FIELD_NUMBER;
-				hash = (53 * hash) + getRangefilter().hashCode();
+				hash = (53 * hash) + getRangeFilter().hashCode();
 			}
 			if (hasFilter()) {
 				hash = (37 * hash) + FILTER_FIELD_NUMBER;
@@ -1201,6 +1299,14 @@ public final class AggregationProtos
 			if (hasAdapter()) {
 				hash = (37 * hash) + ADAPTER_FIELD_NUMBER;
 				hash = (53 * hash) + getAdapter().hashCode();
+			}
+			if (hasBlockCaching()) {
+				hash = (37 * hash) + BLOCKCACHING_FIELD_NUMBER;
+				hash = (53 * hash) + hashBoolean(getBlockCaching());
+			}
+			if (hasCacheSize()) {
+				hash = (37 * hash) + CACHESIZE_FIELD_NUMBER;
+				hash = (53 * hash) + getCacheSize();
 			}
 			hash = (29 * hash) + getUnknownFields().hashCode();
 			memoizedHashCode = hash;
@@ -1359,7 +1465,7 @@ public final class AggregationProtos
 					aggregationBuilder_.clear();
 				}
 				bitField0_ = (bitField0_ & ~0x00000001);
-				rangefilter_ = com.google.protobuf.ByteString.EMPTY;
+				rangeFilter_ = com.google.protobuf.ByteString.EMPTY;
 				bitField0_ = (bitField0_ & ~0x00000002);
 				filter_ = com.google.protobuf.ByteString.EMPTY;
 				bitField0_ = (bitField0_ & ~0x00000004);
@@ -1367,6 +1473,10 @@ public final class AggregationProtos
 				bitField0_ = (bitField0_ & ~0x00000008);
 				adapter_ = com.google.protobuf.ByteString.EMPTY;
 				bitField0_ = (bitField0_ & ~0x00000010);
+				blockCaching_ = false;
+				bitField0_ = (bitField0_ & ~0x00000020);
+				cacheSize_ = 0;
+				bitField0_ = (bitField0_ & ~0x00000040);
 				return this;
 			}
 
@@ -1409,7 +1519,7 @@ public final class AggregationProtos
 				if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
 					to_bitField0_ |= 0x00000002;
 				}
-				result.rangefilter_ = rangefilter_;
+				result.rangeFilter_ = rangeFilter_;
 				if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
 					to_bitField0_ |= 0x00000004;
 				}
@@ -1422,6 +1532,14 @@ public final class AggregationProtos
 					to_bitField0_ |= 0x00000010;
 				}
 				result.adapter_ = adapter_;
+				if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+					to_bitField0_ |= 0x00000020;
+				}
+				result.blockCaching_ = blockCaching_;
+				if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+					to_bitField0_ |= 0x00000040;
+				}
+				result.cacheSize_ = cacheSize_;
 				result.bitField0_ = to_bitField0_;
 				onBuilt();
 				return result;
@@ -1445,8 +1563,8 @@ public final class AggregationProtos
 				if (other.hasAggregation()) {
 					mergeAggregation(other.getAggregation());
 				}
-				if (other.hasRangefilter()) {
-					setRangefilter(other.getRangefilter());
+				if (other.hasRangeFilter()) {
+					setRangeFilter(other.getRangeFilter());
 				}
 				if (other.hasFilter()) {
 					setFilter(other.getFilter());
@@ -1456,6 +1574,12 @@ public final class AggregationProtos
 				}
 				if (other.hasAdapter()) {
 					setAdapter(other.getAdapter());
+				}
+				if (other.hasBlockCaching()) {
+					setBlockCaching(other.getBlockCaching());
+				}
+				if (other.hasCacheSize()) {
+					setCacheSize(other.getCacheSize());
 				}
 				this.mergeUnknownFields(other.getUnknownFields());
 				return this;
@@ -1636,43 +1760,43 @@ public final class AggregationProtos
 				return aggregationBuilder_;
 			}
 
-			// optional bytes rangefilter = 2;
-			private com.google.protobuf.ByteString rangefilter_ = com.google.protobuf.ByteString.EMPTY;
+			// optional bytes rangeFilter = 2;
+			private com.google.protobuf.ByteString rangeFilter_ = com.google.protobuf.ByteString.EMPTY;
 
 			/**
-			 * <code>optional bytes rangefilter = 2;</code>
+			 * <code>optional bytes rangeFilter = 2;</code>
 			 */
-			public boolean hasRangefilter() {
+			public boolean hasRangeFilter() {
 				return ((bitField0_ & 0x00000002) == 0x00000002);
 			}
 
 			/**
-			 * <code>optional bytes rangefilter = 2;</code>
+			 * <code>optional bytes rangeFilter = 2;</code>
 			 */
-			public com.google.protobuf.ByteString getRangefilter() {
-				return rangefilter_;
+			public com.google.protobuf.ByteString getRangeFilter() {
+				return rangeFilter_;
 			}
 
 			/**
-			 * <code>optional bytes rangefilter = 2;</code>
+			 * <code>optional bytes rangeFilter = 2;</code>
 			 */
-			public Builder setRangefilter(
+			public Builder setRangeFilter(
 					com.google.protobuf.ByteString value ) {
 				if (value == null) {
 					throw new NullPointerException();
 				}
 				bitField0_ |= 0x00000002;
-				rangefilter_ = value;
+				rangeFilter_ = value;
 				onChanged();
 				return this;
 			}
 
 			/**
-			 * <code>optional bytes rangefilter = 2;</code>
+			 * <code>optional bytes rangeFilter = 2;</code>
 			 */
-			public Builder clearRangefilter() {
+			public Builder clearRangeFilter() {
 				bitField0_ = (bitField0_ & ~0x00000002);
-				rangefilter_ = getDefaultInstance().getRangefilter();
+				rangeFilter_ = getDefaultInstance().getRangeFilter();
 				onChanged();
 				return this;
 			}
@@ -1796,6 +1920,82 @@ public final class AggregationProtos
 			public Builder clearAdapter() {
 				bitField0_ = (bitField0_ & ~0x00000010);
 				adapter_ = getDefaultInstance().getAdapter();
+				onChanged();
+				return this;
+			}
+
+			// optional bool blockCaching = 6;
+			private boolean blockCaching_;
+
+			/**
+			 * <code>optional bool blockCaching = 6;</code>
+			 */
+			public boolean hasBlockCaching() {
+				return ((bitField0_ & 0x00000020) == 0x00000020);
+			}
+
+			/**
+			 * <code>optional bool blockCaching = 6;</code>
+			 */
+			public boolean getBlockCaching() {
+				return blockCaching_;
+			}
+
+			/**
+			 * <code>optional bool blockCaching = 6;</code>
+			 */
+			public Builder setBlockCaching(
+					boolean value ) {
+				bitField0_ |= 0x00000020;
+				blockCaching_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional bool blockCaching = 6;</code>
+			 */
+			public Builder clearBlockCaching() {
+				bitField0_ = (bitField0_ & ~0x00000020);
+				blockCaching_ = false;
+				onChanged();
+				return this;
+			}
+
+			// optional int32 cacheSize = 7;
+			private int cacheSize_;
+
+			/**
+			 * <code>optional int32 cacheSize = 7;</code>
+			 */
+			public boolean hasCacheSize() {
+				return ((bitField0_ & 0x00000040) == 0x00000040);
+			}
+
+			/**
+			 * <code>optional int32 cacheSize = 7;</code>
+			 */
+			public int getCacheSize() {
+				return cacheSize_;
+			}
+
+			/**
+			 * <code>optional int32 cacheSize = 7;</code>
+			 */
+			public Builder setCacheSize(
+					int value ) {
+				bitField0_ |= 0x00000040;
+				cacheSize_ = value;
+				onChanged();
+				return this;
+			}
+
+			/**
+			 * <code>optional int32 cacheSize = 7;</code>
+			 */
+			public Builder clearCacheSize() {
+				bitField0_ = (bitField0_ & ~0x00000040);
+				cacheSize_ = 0;
 				onChanged();
 				return this;
 			}
@@ -2621,15 +2821,16 @@ public final class AggregationProtos
 	static {
 		java.lang.String[] descriptorData = {
 			"\n\030AggregationService.proto\"/\n\017Aggregatio"
-					+ "nType\022\014\n\004name\030\001 \002(\t\022\016\n\006params\030\002 \001(\014\"\200\001\n\022"
+					+ "nType\022\014\n\004name\030\001 \002(\t\022\016\n\006params\030\002 \001(\014\"\251\001\n\022"
 					+ "AggregationRequest\022%\n\013aggregation\030\001 \002(\0132"
-					+ "\020.AggregationType\022\023\n\013rangefilter\030\002 \001(\014\022\016"
+					+ "\020.AggregationType\022\023\n\013rangeFilter\030\002 \001(\014\022\016"
 					+ "\n\006filter\030\003 \001(\014\022\r\n\005model\030\004 \001(\014\022\017\n\007adapter"
-					+ "\030\005 \001(\014\"$\n\023AggregationResponse\022\r\n\005value\030\001"
-					+ " \002(\0142L\n\022AggregationService\0226\n\taggregate\022"
-					+ "\023.AggregationRequest\032\024.AggregationRespon" + "seBQ\n4mil.nga.giat.geowave.datastore.hba"
-					+ "se.query.generatedB\021AggregationProtosH\001\210",
-			"\001\001\240\001\001"
+					+ "\030\005 \001(\014\022\024\n\014blockCaching\030\006 \001(\010\022\021\n\tcacheSiz"
+					+ "e\030\007 \001(\005\"$\n\023AggregationResponse\022\r\n\005value\030"
+					+ "\001 \002(\0142L\n\022AggregationService\0226\n\taggregate"
+					+ "\022\023.AggregationRequest\032\024.AggregationRespo"
+					+ "nseBQ\n4mil.nga.giat.geowave.datastore.hb",
+			"ase.query.generatedB\021AggregationProtosH\001" + "\210\001\001\240\001\001"
 		};
 		com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
 			public com.google.protobuf.ExtensionRegistry assignDescriptors(
@@ -2649,10 +2850,12 @@ public final class AggregationProtos
 						internal_static_AggregationRequest_descriptor,
 						new java.lang.String[] {
 							"Aggregation",
-							"Rangefilter",
+							"RangeFilter",
 							"Filter",
 							"Model",
 							"Adapter",
+							"BlockCaching",
+							"CacheSize",
 						});
 				internal_static_AggregationResponse_descriptor = getDescriptor().getMessageTypes().get(
 						2);

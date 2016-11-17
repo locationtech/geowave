@@ -12,7 +12,6 @@ import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
@@ -22,6 +21,7 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -47,6 +47,7 @@ public abstract class HBaseFilteredIndexQuery extends
 	protected final ScanCallback<?> scanCallback;
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(HBaseFilteredIndexQuery.class);
+	private boolean hasSkippingFilter = false;
 
 	public HBaseFilteredIndexQuery(
 			final List<ByteArrayId> adapterIds,
@@ -128,7 +129,9 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
-		final Scan multiScanner = getMultiScanner(limit);
+		final Scan multiScanner = getMultiScanner(
+				limit,
+				maxResolutionSubsamplingPerDimension);
 
 		final List<Iterator<Result>> resultsIterators = new ArrayList<Iterator<Result>>();
 		final List<ResultScanner> results = new ArrayList<ResultScanner>();
@@ -179,7 +182,8 @@ public abstract class HBaseFilteredIndexQuery extends
 	// experiment to test a single multi-scanner vs multiple single-range
 	// scanners
 	protected Scan getMultiScanner(
-			final Integer limit ) {
+			final Integer limit,
+			final double[] maxResolutionSubsamplingPerDimension ) {
 		// Single scan w/ multiple ranges
 		final Scan scanner = new Scan();
 
@@ -205,9 +209,33 @@ public abstract class HBaseFilteredIndexQuery extends
 			// scanner.setStartRow(filter.getRowRanges().get(0).getStartRow());
 		}
 
-		// Add distributable filters if requested, this has to be last in the
-		// filter list for the dedupe filter to work correctly
 		if (options.isEnableCustomFilters()) {
+			// Add skipping filter if requested
+			hasSkippingFilter = false;
+			if (maxResolutionSubsamplingPerDimension != null) {
+				if (maxResolutionSubsamplingPerDimension.length != index
+						.getIndexStrategy()
+						.getOrderedDimensionDefinitions().length) {
+					final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+					LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = "
+							+ maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = "
+							+ index.getIndexStrategy().getOrderedDimensionDefinitions().length);
+				}
+				else {
+					final int cardinalityToSubsample = IndexUtils.getBitPositionFromSubsamplingArray(
+							index.getIndexStrategy(),
+							maxResolutionSubsamplingPerDimension);
+
+					final FixedCardinalitySkippingFilter skippingFilter = new FixedCardinalitySkippingFilter(
+							cardinalityToSubsample);
+					filterList.addFilter(skippingFilter);
+					hasSkippingFilter = true;
+				}
+			}
+
+			// Add distributable filters if requested, this has to be last in
+			// the
+			// filter list for the dedupe filter to work correctly
 			final List<DistributableQueryFilter> distFilters = getDistributableFilters();
 			if (distFilters != null) {
 				final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
@@ -315,7 +343,8 @@ public abstract class HBaseFilteredIndexQuery extends
 					scanCallback,
 					fieldIds,
 					maxResolutionSubsamplingPerDimension,
-					decodePersistenceEncoding);
+					decodePersistenceEncoding,
+					hasSkippingFilter);
 		}
 		else {
 			return new MergingEntryIterator(
@@ -326,7 +355,8 @@ public abstract class HBaseFilteredIndexQuery extends
 					scanCallback,
 					mergingAdapters,
 					fieldIds,
-					maxResolutionSubsamplingPerDimension);
+					maxResolutionSubsamplingPerDimension,
+					hasSkippingFilter);
 		}
 	}
 
