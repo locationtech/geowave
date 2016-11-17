@@ -1,25 +1,29 @@
 package mil.nga.giat.geowave.adapter.vector.render;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import mil.nga.giat.geowave.core.index.Persistable;
-
 import org.apache.log4j.Logger;
+
+import ar.com.hjg.pngj.FilterType;
+import it.geosolutions.imageio.plugins.png.PNGWriter;
+import mil.nga.giat.geowave.core.index.Persistable;
 
 /**
  * This class wraps a rendered image as a GeoWave Persistable object. It
  * serializes and deserializes the BufferedImage as a png using ImageIO.
- * 
+ *
  */
-abstract public class PersistableRenderedImage implements
+public class PersistableRenderedImage implements
 		Persistable
 {
 	private final static Logger LOGGER = Logger.getLogger(PersistableRenderedImage.class);
+	private final static float DEFAULT_PNG_QUALITY = 0.8f;
 	public BufferedImage image;
 
 	protected PersistableRenderedImage() {}
@@ -40,12 +44,20 @@ abstract public class PersistableRenderedImage implements
 		}
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-			ImageIO.write(
+			// we could just use the expected output format, but that may not be
+			// correct, instead we use PNG
+
+			// it seems that even though the requested image may be jpeg
+			// example, the individual styles may need to retain transparency to
+			// be composited correctly
+			final PNGWriter writer = new PNGWriter();
+			image = (BufferedImage) writer.writePNG(
 					image,
-					"png",
-					baos);
+					baos,
+					DEFAULT_PNG_QUALITY,
+					FilterType.FILTER_NONE);
 		}
-		catch (final IOException e) {
+		catch (final Exception e) {
 			LOGGER.warn(
 					"Unable to serialize image",
 					e);

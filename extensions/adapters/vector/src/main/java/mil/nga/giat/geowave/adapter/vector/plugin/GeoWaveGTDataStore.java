@@ -90,7 +90,6 @@ public class GeoWaveGTDataStore extends
 			.loadVisibilityManagement();
 	private final AuthorizationSPI authorizationSPI;
 	private final IndexQueryStrategySPI indexQueryStrategy;
-	private final boolean looseQuery;
 	private final URI featureNameSpaceURI;
 	private int transactionBufferSize = 10000;
 	private final TransactionsAllocator transactionsAllocator;
@@ -108,7 +107,6 @@ public class GeoWaveGTDataStore extends
 		indexQueryStrategy = config.getIndexQueryStrategy();
 		transactionBufferSize = config.getTransactionBufferSize();
 		transactionsAllocator = new MemoryTransactionsAllocator();
-		looseQuery = config.isLooseQuery();
 	}
 
 	private void init(
@@ -118,10 +116,6 @@ public class GeoWaveGTDataStore extends
 		indexStore = config.getIndexStore();
 		adapterStore = config.getAdapterStore();
 		adapterIndexMappingStore = config.getAdapterIndexMappingStore();
-	}
-
-	public boolean isLooseQuery() {
-		return looseQuery;
 	}
 
 	public AuthorizationSPI getAuthorizationSPI() {

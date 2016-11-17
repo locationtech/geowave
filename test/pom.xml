@@ -234,6 +234,7 @@
 								<password>${password}</password>
 								<geoserver.version>${geoserver.version}</geoserver.version>
 								<testStoreType>${IT_STORE_TYPE}</testStoreType>
+								<log4j.configuration>file:${project.build.testOutputDirectory}/log4j-test.properties</log4j.configuration>
 							</systemPropertyVariables>
 							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->

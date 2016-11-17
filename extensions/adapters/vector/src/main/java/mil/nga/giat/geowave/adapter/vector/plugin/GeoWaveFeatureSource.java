@@ -7,6 +7,7 @@ import org.geotools.data.FeatureReader;
 import org.geotools.data.FeatureWriter;
 import org.geotools.data.Query;
 import org.geotools.data.store.ContentEntry;
+import org.geotools.data.store.ContentFeatureCollection;
 import org.geotools.data.store.ContentFeatureStore;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
@@ -195,6 +196,16 @@ public class GeoWaveFeatureSource extends
 	@Override
 	protected boolean canFilter() {
 		return true;
+	}
+
+	@Override
+	protected Query resolvePropertyNames(
+			Query query ) {
+		if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
+			// this is intentional to avoid retyping within ContentFeatureSource
+			query.setPropertyNames(Query.ALL_NAMES);
+		}
+		return super.resolvePropertyNames(query);
 	}
 
 	@Override
