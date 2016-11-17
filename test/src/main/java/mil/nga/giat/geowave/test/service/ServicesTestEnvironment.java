@@ -36,6 +36,12 @@ public class ServicesTestEnvironment implements
 		return singletonInstance;
 	}
 
+	private static String[] PARENT_CLASSLOADER_LIBRARIES = new String[] {
+		"hbase",
+		"hadoop",
+		"protobuf"
+	};
+
 	protected static final int JETTY_PORT = 9011;
 	protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
 	protected static final int ACCEPT_QUEUE_SIZE = 100;
@@ -126,12 +132,48 @@ public class ServicesTestEnvironment implements
 					throw new IOException(
 							"Unable to create classloader");
 				}
-
-				classLoader.addClassPath(System.getProperty(
+				final String classpath = System.getProperty(
 						"java.class.path").replace(
 						":",
-						";"));
+						";");
+				final String[] individualEntries = classpath.split(";");
+				final StringBuffer str = new StringBuffer();
+				for (final String e : individualEntries) {
+					// HBase has certain static initializers that use reflection
+					// to get annotated values
+
+					// because Class instances are not equal if they are loaded
+					// by different class loaders this HBase initialization
+					// fails
+
+					// furthermore HBase's runtime dependencies need to
+					// be loaded by the same classloader, the webapp's parent
+					// class loader
+
+					// but geowave hbase datastore implementation must be loaded
+					// by the same classloader as geotools or the SPI loader
+					// won't work
+
+					boolean addLibraryToWebappContext = true;
+					if (!e.contains("geowave")) {
+						for (final String parentLoaderLibrary : PARENT_CLASSLOADER_LIBRARIES) {
+							if (e.contains(parentLoaderLibrary)) {
+								addLibraryToWebappContext = false;
+								break;
+							}
+						}
+					}
+					if (addLibraryToWebappContext) {
+						str.append(
+								e).append(
+								";");
+					}
+				}
+				classLoader.addClassPath(str.toString());
 				gsWebapp.setClassLoader(classLoader);
+				// this has to be false for geoserver to load the correct guava
+				// classes (until hadoop updates guava support to a later
+				// version, slated for hadoop 3.x)
 				gsWebapp.setParentLoaderPriority(false);
 
 				final File warDir = new File(
