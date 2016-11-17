@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-extension-parent</artifactId>
@@ -55,6 +56,11 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+			<groupId>com.aol.simplereact</groupId>
+			<artifactId>cyclops-react</artifactId>
+			<version>1.0.0-RC4</version>
+		</dependency>
+		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-render</artifactId>
 		</dependency>
@@ -91,23 +97,23 @@
 	</dependencies>
 	<build>
 		<plugins>
-      		<plugin>
-        		<groupId>org.apache.avro</groupId>
-        		<artifactId>avro-maven-plugin</artifactId>
-        		<executions>
-          			<execution>
-            			<phase>generate-sources</phase>
-            			<goals>
-              				<goal>schema</goal>
-            			</goals>
-            			<configuration>
-              				<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
-              				<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
-              				<stringType>String</stringType>
-            			</configuration>
-          			</execution>
-        		</executions>
-      		</plugin>
-    	</plugins>
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+							<stringType>String</stringType>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>

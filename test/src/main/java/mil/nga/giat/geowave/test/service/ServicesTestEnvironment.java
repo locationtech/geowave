@@ -17,11 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
-import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 public class ServicesTestEnvironment implements
@@ -37,6 +35,12 @@ public class ServicesTestEnvironment implements
 		}
 		return singletonInstance;
 	}
+
+	private static String[] PARENT_CLASSLOADER_LIBRARIES = new String[] {
+		"hbase",
+		"hadoop",
+		"protobuf"
+	};
 
 	protected static final int JETTY_PORT = 9011;
 	protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
@@ -55,9 +59,10 @@ public class ServicesTestEnvironment implements
 	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
 	protected static final String GEOWAVE_WORKSPACE_PATH = GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
-	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "DecimatePoints-2px";
-	protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "DecimatePoints-10px";
-	protected static final String TEST_STYLE_NAME_MAJOR_SUBSAMPLE = "DecimatePoints-100px";
+	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "SubsamplePoints-2px";
+	protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "SubsamplePoints-10px";
+	protected static final String TEST_STYLE_NAME_MAJOR_SUBSAMPLE = "SubsamplePoints-100px";
+	protected static final String TEST_STYLE_NAME_DISTRIBUTED_RENDER = "DistributedRender";
 	protected static final String TEST_STYLE_PATH = "src/test/resources/sld/";
 	protected static final String TEST_SLD_NO_DIFFERENCE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_NO_DIFFERENCE
 			+ ".sld";
@@ -65,6 +70,8 @@ public class ServicesTestEnvironment implements
 			+ ".sld";
 	protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE
 			+ ".sld";
+	protected static final String TEST_SLD_DISTRIBUTED_RENDER_FILE = TEST_STYLE_PATH
+			+ TEST_STYLE_NAME_DISTRIBUTED_RENDER + ".sld";
 
 	private Server jettyServer;
 
@@ -125,15 +132,49 @@ public class ServicesTestEnvironment implements
 					throw new IOException(
 							"Unable to create classloader");
 				}
-
-				// new WebAppClassLoader(
-				// gsWebapp);
-				classLoader.addClassPath(System.getProperty(
+				final String classpath = System.getProperty(
 						"java.class.path").replace(
 						":",
-						";"));
+						";");
+				final String[] individualEntries = classpath.split(";");
+				final StringBuffer str = new StringBuffer();
+				for (final String e : individualEntries) {
+					// HBase has certain static initializers that use reflection
+					// to get annotated values
+
+					// because Class instances are not equal if they are loaded
+					// by different class loaders this HBase initialization
+					// fails
+
+					// furthermore HBase's runtime dependencies need to
+					// be loaded by the same classloader, the webapp's parent
+					// class loader
+
+					// but geowave hbase datastore implementation must be loaded
+					// by the same classloader as geotools or the SPI loader
+					// won't work
+
+					boolean addLibraryToWebappContext = true;
+					if (!e.contains("geowave")) {
+						for (final String parentLoaderLibrary : PARENT_CLASSLOADER_LIBRARIES) {
+							if (e.contains(parentLoaderLibrary)) {
+								addLibraryToWebappContext = false;
+								break;
+							}
+						}
+					}
+					if (addLibraryToWebappContext) {
+						str.append(
+								e).append(
+								";");
+					}
+				}
+				classLoader.addClassPath(str.toString());
 				gsWebapp.setClassLoader(classLoader);
-				gsWebapp.setParentLoaderPriority(true);
+				// this has to be false for geoserver to load the correct guava
+				// classes (until hadoop updates guava support to a later
+				// version, slated for hadoop 3.x)
+				gsWebapp.setParentLoaderPriority(false);
 
 				final File warDir = new File(
 						GEOWAVE_WAR_DIR);
@@ -168,13 +209,6 @@ public class ServicesTestEnvironment implements
 				while (!jettyServer.isRunning() && !jettyServer.isStarted()) {
 					Thread.sleep(1000);
 				}
-
-				// use this to test normal stop behavior, that is, to check
-				// stuff that need to be done on container shutdown (and
-				// yes, this will make jetty stop just after you started
-				// it...)
-
-				// jettyServer.stop();
 
 			}
 			catch (final RuntimeException e) {

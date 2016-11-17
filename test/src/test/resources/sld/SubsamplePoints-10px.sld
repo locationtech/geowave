@@ -6,13 +6,13 @@
        xmlns:xlink="http://www.w3.org/1999/xlink"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
      <NamedLayer>
-       <Name>DecimatePoints-10px</Name>
+       <Name>SubsamplePoints-10px</Name>
        <UserStyle>
-         <Title>DecimatePoints-10px</Title>
+         <Title>SubsamplePoints-10px</Title>
          <Abstract>An example of how to handle large datasets in a WMS request by decimating to pixel resolution.</Abstract>
          <FeatureTypeStyle>
            <Transformation>
-             <ogc:Function name="nga:Decimation">
+             <ogc:Function name="geowave:Subsample">
                <ogc:Function name="parameter">
                  <ogc:Literal>data</ogc:Literal>
                </ogc:Function>

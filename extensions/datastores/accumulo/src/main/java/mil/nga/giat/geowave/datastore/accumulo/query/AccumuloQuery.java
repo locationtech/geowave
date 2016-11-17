@@ -148,7 +148,7 @@ abstract public class AccumuloQuery
 
 	protected void addFieldSubsettingToIterator(
 			final ScannerBase scanner ) {
-		if (fieldIdsAdapterPair != null) {
+		if ((fieldIdsAdapterPair != null) && !isAggregation()) {
 			final List<String> fieldIds = fieldIdsAdapterPair.getLeft();
 			final DataAdapter<?> associatedAdapter = fieldIdsAdapterPair.getRight();
 			if ((fieldIds != null) && (!fieldIds.isEmpty()) && (associatedAdapter != null)) {
