@@ -157,23 +157,25 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/Entry
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-org.apache.commons.lang3.tuple.Pair-double:A-boolean-">HBaseEntryIteratorWrapper</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-org.apache.commons.lang3.tuple.Pair-double:A-boolean-boolean-">HBaseEntryIteratorWrapper</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;scannerIt,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
                          org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIds,
                          double[]&nbsp;maxResolutionSubsamplingPerDimension,
-                         boolean&nbsp;decodePersistenceEncoding)</code>&nbsp;</td>
+                         boolean&nbsp;decodePersistenceEncoding,
+                         boolean&nbsp;hasSkippingFilter)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-double:A-boolean-">HBaseEntryIteratorWrapper</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html#HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-double:A-boolean-boolean-">HBaseEntryIteratorWrapper</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;scannerIt,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&gt;&nbsp;scanCallback,
                          org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIds,
                          double[]&nbsp;maxResolutionSubsamplingPerDimension,
-                         boolean&nbsp;decodePersistenceEncoding)</code>&nbsp;</td>
+                         boolean&nbsp;decodePersistenceEncoding,
+                         boolean&nbsp;hasSkippingFilter)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -233,7 +235,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/Entry
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-org.apache.commons.lang3.tuple.Pair-double:A-boolean-">
+<a name="HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-org.apache.commons.lang3.tuple.Pair-double:A-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -245,10 +247,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/Entry
                                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
                                  org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIds,
                                  double[]&nbsp;maxResolutionSubsamplingPerDimension,
-                                 boolean&nbsp;decodePersistenceEncoding)</pre>
+                                 boolean&nbsp;decodePersistenceEncoding,
+                                 boolean&nbsp;hasSkippingFilter)</pre>
 </li>
 </ul>
-<a name="HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-double:A-boolean-">
+<a name="HBaseEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-double:A-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -261,7 +264,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/util/Entry
                                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/HBaseEntryIteratorWrapper.html" title="type parameter in HBaseEntryIteratorWrapper">T</a>&gt;&nbsp;scanCallback,
                                  org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIds,
                                  double[]&nbsp;maxResolutionSubsamplingPerDimension,
-                                 boolean&nbsp;decodePersistenceEncoding)</pre>
+                                 boolean&nbsp;decodePersistenceEncoding,
+                                 boolean&nbsp;hasSkippingFilter)</pre>
 </li>
 </ul>
 </li>
