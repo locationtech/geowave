@@ -247,7 +247,8 @@ public class HBaseDataStore extends
 						scanCallback,
 						null,
 						null,
-						true));
+						true,
+						false));
 	}
 
 	@Override

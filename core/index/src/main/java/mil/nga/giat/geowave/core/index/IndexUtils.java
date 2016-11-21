@@ -147,6 +147,52 @@ public class IndexUtils
 		return binnedQueries;
 	}
 
+	public static int getBitPositionFromSubsamplingArray(
+			final NumericIndexStrategy indexStrategy,
+			final double[] maxResolutionSubsamplingPerDimension ) {
+		return (int) Math.round(getDimensionalBitsUsed(
+				indexStrategy,
+				maxResolutionSubsamplingPerDimension) + (8 * indexStrategy.getByteOffsetFromDimensionalIndex()));
+	}
+
+	public static byte[] getNextRowForSkip(
+			final byte[] row,
+			final int bitPosition ) {
+		final int cardinality = bitPosition + 1;
+		final byte[] rowCopy = new byte[(int) Math.ceil(cardinality / 8.0)];
+
+		System.arraycopy(
+				row,
+				0,
+				rowCopy,
+				0,
+				rowCopy.length);
+
+		// number of bits not used in the last byte
+		int remainder = (8 - (cardinality % 8));
+		if (remainder == 8) {
+			remainder = 0;
+		}
+
+		final int numIncrements = (int) Math.pow(
+				2,
+				remainder);
+
+		if (remainder > 0) {
+			for (int i = 0; i < remainder; i++) {
+				rowCopy[rowCopy.length - 1] |= (1 << (i));
+			}
+		}
+
+		for (int i = 0; i < numIncrements; i++) {
+			if (!ByteArrayUtils.increment(rowCopy)) {
+				return null;
+			}
+		}
+
+		return rowCopy;
+	}
+
 	private static final double[] getBitsPerDimension(
 			final NumericIndexStrategy indexStrategy,
 			final double[] rangePerDimension ) {

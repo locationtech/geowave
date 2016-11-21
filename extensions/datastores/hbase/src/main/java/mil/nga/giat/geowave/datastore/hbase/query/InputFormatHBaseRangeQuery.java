@@ -80,7 +80,7 @@ public class InputFormatHBaseRangeQuery extends
 			final AdapterStore adapterStore,
 			final Iterator<Result> resultsIterator,
 			final double[] maxResolutionSubsamplingPerDimension,
-			boolean decodePersistenceEncoding ) {
+			final boolean decodePersistenceEncoding ) {
 		// TODO Since currently we are not supporting server side
 		// iterator/coprocessors, we also cannot run
 		// server side filters and hence they have to run on clients itself. So
@@ -98,7 +98,8 @@ public class InputFormatHBaseRangeQuery extends
 
 	@Override
 	protected Scan getMultiScanner(
-			final Integer limit ) {
+			final Integer limit,
+			final double[] maxResolutionSubsamplingPerDimension ) {
 		final Scan scanner = new Scan();
 
 		scanner.setStartRow(range.getStart().getBytes());
@@ -111,5 +112,4 @@ public class InputFormatHBaseRangeQuery extends
 		}
 		return scanner;
 	}
-
 }

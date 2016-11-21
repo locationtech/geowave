@@ -2,17 +2,14 @@ package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
-import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
 import org.apache.log4j.Logger;
 
@@ -42,7 +39,6 @@ import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 public class HBaseConstraintsQuery extends
 		HBaseFilteredIndexQuery
@@ -248,7 +244,7 @@ public class HBaseConstraintsQuery extends
 
 			final MultiRowRangeFilter multiFilter = getFilter(base.getAllRanges());
 			if (multiFilter != null) {
-				requestBuilder.setRangefilter(ByteString.copyFrom(multiFilter.toByteArray()));
+				requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}
 			if (base.aggregation.getLeft() != null) {
 				final ByteArrayId adapterId = base.aggregation.getLeft().getAdapterId();

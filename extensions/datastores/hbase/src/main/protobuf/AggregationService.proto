@@ -1,0 +1,29 @@
+option java_package = "mil.nga.giat.geowave.datastore.hbase.query.generated";
+option java_outer_classname = "AggregationProtos";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message AggregationType {
+  required string name = 1;
+  optional bytes params = 2;
+}
+
+message AggregationRequest {
+  required AggregationType aggregation = 1;
+  optional bytes rangeFilter = 2;
+  optional bytes filter = 3;
+  optional bytes model = 4;
+  optional bytes adapter = 5;
+  optional bool blockCaching = 6;
+  optional int32 cacheSize = 7;
+}
+
+message AggregationResponse {
+  required bytes value = 1;
+}
+
+service AggregationService {
+  rpc aggregate(AggregationRequest)
+    returns (AggregationResponse);
+}

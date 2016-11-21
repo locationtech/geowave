@@ -8,7 +8,6 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -30,6 +29,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 	private ByteArrayId skipUntilRow;
 
 	private boolean reachedEnd = false;
+	private boolean hasSkippingFilter = false;
 
 	public HBaseEntryIteratorWrapper(
 			final AdapterStore adapterStore,
@@ -38,7 +38,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final QueryFilter clientFilter,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final double[] maxResolutionSubsamplingPerDimension,
-			boolean decodePersistenceEncoding ) {
+			final boolean decodePersistenceEncoding,
+			final boolean hasSkippingFilter ) {
 		this(
 				adapterStore,
 				index,
@@ -47,7 +48,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 				null,
 				fieldIds,
 				maxResolutionSubsamplingPerDimension,
-				decodePersistenceEncoding);
+				decodePersistenceEncoding,
+				hasSkippingFilter);
 	}
 
 	public HBaseEntryIteratorWrapper(
@@ -58,7 +60,8 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final ScanCallback<T> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final double[] maxResolutionSubsamplingPerDimension,
-			boolean decodePersistenceEncoding ) {
+			final boolean decodePersistenceEncoding,
+			final boolean hasSkippingFilter ) {
 		super(
 				true,
 				adapterStore,
@@ -67,7 +70,15 @@ public class HBaseEntryIteratorWrapper<T> extends
 				clientFilter,
 				scanCallback);
 		this.decodePersistenceEncoding = decodePersistenceEncoding;
-		initializeBitPosition(maxResolutionSubsamplingPerDimension);
+		this.hasSkippingFilter = hasSkippingFilter;
+
+		if (!this.hasSkippingFilter) {
+			initializeBitPosition(maxResolutionSubsamplingPerDimension);
+		}
+		else {
+			bitPosition = null;
+		}
+
 		if (fieldIds != null) {
 			fieldSubsetBitmask = BitmaskUtils.generateFieldSubsetBitmask(
 					index.getIndexModel(),
@@ -108,6 +119,10 @@ public class HBaseEntryIteratorWrapper<T> extends
 
 	private boolean passesResolutionSkippingFilter(
 			final Result result ) {
+		if (hasSkippingFilter) {
+			return true;
+		}
+
 		if ((reachedEnd == true) || ((skipUntilRow != null) && (skipUntilRow.compareTo(new ByteArrayId(
 				result.getRow())) > 0))) {
 			return false;
@@ -119,46 +134,26 @@ public class HBaseEntryIteratorWrapper<T> extends
 	private void incrementSkipRow(
 			final Result result ) {
 		if (bitPosition != null) {
-			final int cardinality = bitPosition + 1;
-			final byte[] rowCopy = new byte[(int) Math.ceil(cardinality / 8.0)];
-			System.arraycopy(
+			final byte[] nextRow = IndexUtils.getNextRowForSkip(
 					result.getRow(),
-					0,
-					rowCopy,
-					0,
-					rowCopy.length);
-			// number of bits not used in the last byte
-			int remainder = (8 - (cardinality % 8));
-			if (remainder == 8) {
-				remainder = 0;
-			}
+					bitPosition);
 
-			final int numIncrements = (int) Math.pow(
-					2,
-					remainder);
-			if (remainder > 0) {
-				for (int i = 0; i < remainder; i++) {
-					rowCopy[rowCopy.length - 1] |= (1 << (i));
-				}
+			if (nextRow == null) {
+				reachedEnd = true;
 			}
-			for (int i = 0; i < numIncrements; i++) {
-				if (!ByteArrayUtils.increment(rowCopy)) {
-					reachedEnd = true;
-					return;
-				}
+			else {
+				skipUntilRow = new ByteArrayId(
+						nextRow);
 			}
-			skipUntilRow = new ByteArrayId(
-					rowCopy);
 		}
 	}
 
 	private void initializeBitPosition(
 			final double[] maxResolutionSubsamplingPerDimension ) {
 		if ((maxResolutionSubsamplingPerDimension != null) && (maxResolutionSubsamplingPerDimension.length > 0)) {
-			bitPosition = (int) Math.round(IndexUtils.getDimensionalBitsUsed(
+			bitPosition = IndexUtils.getBitPositionFromSubsamplingArray(
 					index.getIndexStrategy(),
-					maxResolutionSubsamplingPerDimension)
-					+ (8 * index.getIndexStrategy().getByteOffsetFromDimensionalIndex()));
+					maxResolutionSubsamplingPerDimension);
 		}
 	}
 
