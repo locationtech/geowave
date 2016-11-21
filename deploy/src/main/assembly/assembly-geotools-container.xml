@@ -51,6 +51,7 @@
 				<exclude>*:activation:*</exclude>
 				<exclude>*:servlet-api:*</exclude>
 				<exclude>*:*:jsr305</exclude>
+				<exclude>com.google.guava:guava:*</exclude>
 				<exclude>commons-beanutils</exclude>
 				<exclude>commons-digester</exclude>
 				<exclude>commons-collections</exclude>
