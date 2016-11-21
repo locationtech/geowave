@@ -640,21 +640,6 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a> in <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/package-summary.html">mil.nga.giat.geowave.adapter.vector.render</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
-<caption><span>Subinterfaces of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a> in <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/package-summary.html">mil.nga.giat.geowave.adapter.vector.render</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Interface and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributableRenderer.html" title="interface in mil.nga.giat.geowave.adapter.vector.render">DistributableRenderer</a></span></code>
-<div class="block">This interface is used to perform rendering within tablet servers.</div>
-</td>
-</tr>
-</tbody>
-</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/package-summary.html">mil.nga.giat.geowave.adapter.vector.render</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -664,57 +649,24 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributedRenderOptions.html" title="class in mil.nga.giat.geowave.adapter.vector.render">DistributedRenderOptions</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributedRenderResult.html" title="class in mil.nga.giat.geowave.adapter.vector.render">DistributedRenderResult</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributedRenderResult.CompositeGroupResult.html" title="class in mil.nga.giat.geowave.adapter.vector.render">DistributedRenderResult.CompositeGroupResult</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/PersistableComposite.html" title="class in mil.nga.giat.geowave.adapter.vector.render">PersistableComposite</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/PersistableRenderedImage.html" title="class in mil.nga.giat.geowave.adapter.vector.render">PersistableRenderedImage</a></span></code>
 <div class="block">This class wraps a rendered image as a GeoWave Persistable object.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/RenderedMaster.html" title="class in mil.nga.giat.geowave.adapter.vector.render">RenderedMaster</a></span></code>
-<div class="block">In addition to a main persisted image, this class also wraps rendered styles.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/RenderedStyle.html" title="class in mil.nga.giat.geowave.adapter.vector.render">RenderedStyle</a></span></code>
-<div class="block">This class represents a persisted BufferedImage with a given style ID so that
- it can be matched to the appropriate style ID for rendering in the correct
- order in the composite image.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/ServerDecimationOptions.html" title="class in mil.nga.giat.geowave.adapter.vector.render">ServerDecimationOptions</a></span></code>
-<div class="block">This class is responsible for persisting any options available to decimation
- when performing distributed rendering.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/ServerFeatureStyle.html" title="class in mil.nga.giat.geowave.adapter.vector.render">ServerFeatureStyle</a></span></code>
-<div class="block">This class persists and encapsulates the rules and tyle information
- associated with a GeoTools SLD.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/ServerMapArea.html" title="class in mil.nga.giat.geowave.adapter.vector.render">ServerMapArea</a></span></code>
-<div class="block">This class persists information associated with the requested map -
- Coordinate Reference System and bounding box.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/ServerPaintArea.html" title="class in mil.nga.giat.geowave.adapter.vector.render">ServerPaintArea</a></span></code>
-<div class="block">This class persists information about the image (width, height).</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/ServerRenderOptions.html" title="class in mil.nga.giat.geowave.adapter.vector.render">ServerRenderOptions</a></span></code>
-<div class="block">This class persists and encapsulates all of the main rendering information
- for a layer (any render configuration that is not self-contained within a
- single style).</div>
 </td>
 </tr>
 </tbody>

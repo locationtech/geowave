@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,30 +185,26 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getTransaction--">getTransaction</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#isLooseQuery--">isLooseQuery</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#releaseTransaction-java.lang.String-">releaseTransaction</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;txID)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#remove-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction-">remove</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;feature,
       <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#remove-java.lang.String-mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction-">remove</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
       <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#write-java.util.Iterator-java.util.Set-mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction-">write</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;featureIt,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fidList,
      <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#writeCommit-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction-">writeCommit</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;feature,
            <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a>&nbsp;transaction)</code>&nbsp;</td>
@@ -273,15 +269,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getAdapter</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;getAdapter()</pre>
-</li>
-</ul>
-<a name="isLooseQuery--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isLooseQuery</h4>
-<pre>public&nbsp;boolean&nbsp;isLooseQuery()</pre>
 </li>
 </ul>
 <a name="getDataStore--">

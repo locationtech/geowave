@@ -151,11 +151,18 @@ implements org.opengis.coverage.grid.GridCoverageReader</pre>
 <code>DEFAULT_WORLDFILE_EXT</code></li>
 </ul>
 <ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.geotools.coverageio.BaseGridCoverage2DReader">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.geotools.coverageio.BaseGridCoverage2DReader</h3>
+<code>multiLevelRoi</code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.geotools.coverage.grid.io.AbstractGridCoverage2DReader">
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.geotools.coverage.grid.io.AbstractGridCoverage2DReader</h3>
-<code>closeMe, coverageFactory, crs, dtLayout, EPS, gzipped, highestRes, hints, inStream, inStreamSPI, numOverviews, originalEnvelope, originalGridRange, overViewResolutions, raster2Model, source</code></li>
+<code>closeMe, coverageFactory, coverageName, crs, dtLayout, EPS, gzipped, highestRes, hints, inStream, inStreamSPI, numOverviews, originalEnvelope, originalGridRange, overViewResolutions, raster2Model, source</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.geotools.coverage.grid.io.GridCoverage2DReader">
@@ -220,14 +227,14 @@ implements org.opengis.coverage.grid.GridCoverageReader</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.geotools.coverageio.BaseGridCoverage2DReader</h3>
-<code>getCoverageName, getGridCoverageCount, getInfo, getInfo, getInputFile, hasMoreGridCoverages, parsePRJFile, parseWorldFile, read</code></li>
+<code>getCoverageName, getGridCoverageCount, getInfo, getInfo, getInputFile, getMultiLevelRoi, getMultiLevelROIProvider, hasMoreGridCoverages, parsePRJFile, parseWorldFile, read</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.geotools.coverage.grid.io.AbstractGridCoverage2DReader">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.geotools.coverage.grid.io.AbstractGridCoverage2DReader</h3>
-<code>checkName, createImageCoverage, createImageCoverage, createImageCoverage, createImageCoverage, decimationOnReadingControl, decimationOnReadingControl, dispose, finalize, getCoordinateReferenceSystem, getCoordinateReferenceSystem, getCrs, getCurrentSubname, getDatasetLayout, getDatasetLayout, getDynamicParameters, getDynamicParameters, getGridCoverageNames, getGroundControlPoints, getGroundControlPoints, getHighestRes, getImageLayout, getImageLayout, getMetadataNames, getMetadataNames, getMetadataValue, getMetadataValue, getNumOverviews, getNumOverviews, getOriginalEnvelope, getOriginalEnvelope, getOriginalGridRange, getOriginalGridRange, getOriginalGridToWorld, getOriginalGridToWorld, getOverviewGridEnvelope, getOverviewGridEnvelope, getReadingResolutions, getReadingResolutions, getRescaledRasterToModel, getResolution, getResolutionLevels, getResolutionLevels, getSource, listSubNames, read, setlayout, setLayout, setReadParams, setReadParams, skip</code></li>
+<code>addAllSiblings, addSiblings, checkName, createImageCoverage, createImageCoverage, createImageCoverage, createImageCoverage, decimationOnReadingControl, decimationOnReadingControl, dispose, finalize, getCoordinateReferenceSystem, getCoordinateReferenceSystem, getCrs, getCurrentSubname, getDatasetLayout, getDatasetLayout, getDynamicParameters, getDynamicParameters, getFiles, getGridCoverageNames, getGroundControlPoints, getGroundControlPoints, getHighestRes, getImageLayout, getImageLayout, getMetadataNames, getMetadataNames, getMetadataValue, getMetadataValue, getNumOverviews, getNumOverviews, getOriginalEnvelope, getOriginalEnvelope, getOriginalGridRange, getOriginalGridRange, getOriginalGridToWorld, getOriginalGridToWorld, getOverviewGridEnvelope, getOverviewGridEnvelope, getReadingResolutions, getReadingResolutions, getRescaledRasterToModel, getResolution, getResolutionLevels, getResolutionLevels, getSibling, getSource, getSourceAsFile, listSubNames, read, setlayout, setLayout, setReadParams, setReadParams, skip</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -248,7 +255,7 @@ implements org.opengis.coverage.grid.GridCoverageReader</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.geotools.coverage.grid.io.GridCoverage2DReader</h3>
-<code>getCoordinateReferenceSystem, getCoordinateReferenceSystem, getDatasetLayout, getDatasetLayout, getDynamicParameters, getDynamicParameters, getImageLayout, getImageLayout, getNumOverviews, getNumOverviews, getOriginalEnvelope, getOriginalEnvelope, getOriginalGridRange, getOriginalGridRange, getOriginalGridToWorld, getOriginalGridToWorld, getReadingResolutions, getReadingResolutions, getResolutionLevels, getResolutionLevels, read, read</code></li>
+<code>getCoordinateReferenceSystem, getCoordinateReferenceSystem, getDatasetLayout, getDatasetLayout, getDynamicParameters, getDynamicParameters, getImageLayout, getImageLayout, getInfo, getInfo, getNumOverviews, getNumOverviews, getOriginalEnvelope, getOriginalEnvelope, getOriginalGridRange, getOriginalGridRange, getOriginalGridToWorld, getOriginalGridToWorld, getReadingResolutions, getReadingResolutions, getResolutionLevels, getResolutionLevels, read, read</code></li>
 </ul>
 </li>
 </ul>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":10,"i14":10,"i15":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.geotools.data.store.DataFeatureCollection">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -137,25 +137,6 @@ extends org.geotools.data.store.DataFeatureCollection</pre>
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static org.geotools.factory.Hints.Key</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#LEVEL">LEVEL</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static org.geotools.factory.Hints.Key</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#SERVER_FEATURE_RENDERER">SERVER_FEATURE_RENDERER</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static org.geotools.factory.Hints.Key</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#STATS_NAME">STATS_NAME</a></span></code>&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.geotools.data.store.DataFeatureCollection">
 <!--   -->
@@ -239,26 +220,22 @@ extends org.geotools.data.store.DataFeatureCollection</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getSchema--">getSchema</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#getStatsQueryName--">getStatsQueryName</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#isDistributedRenderQuery--">isDistributedRenderQuery</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#isDistributedRenderQuery-org.geotools.data.Query-">isDistributedRenderQuery</a></span>(org.geotools.data.Query&nbsp;query)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#openIterator--">openIterator</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureCollection.html#reader--">reader</a></span>()</code>&nbsp;</td>
 </tr>
@@ -285,41 +262,6 @@ extends org.geotools.data.store.DataFeatureCollection</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="LEVEL">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>LEVEL</h4>
-<pre>public static final&nbsp;org.geotools.factory.Hints.Key LEVEL</pre>
-</li>
-</ul>
-<a name="SERVER_FEATURE_RENDERER">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>SERVER_FEATURE_RENDERER</h4>
-<pre>public static final&nbsp;org.geotools.factory.Hints.Key SERVER_FEATURE_RENDERER</pre>
-</li>
-</ul>
-<a name="STATS_NAME">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>STATS_NAME</h4>
-<pre>public static final&nbsp;org.geotools.factory.Hints.Key STATS_NAME</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -394,15 +336,6 @@ extends org.geotools.data.store.DataFeatureCollection</pre>
 <li class="blockList">
 <h4>getDistributedRenderFeatureType</h4>
 <pre>public static&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getDistributedRenderFeatureType()</pre>
-</li>
-</ul>
-<a name="getStatsQueryName--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getStatsQueryName</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getStatsQueryName()</pre>
 </li>
 </ul>
 <a name="isDistributedRenderQuery--">
@@ -603,13 +536,13 @@ extends org.geotools.data.store.DataFeatureCollection</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.geotools.data.store.DataFeatureCollection">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
