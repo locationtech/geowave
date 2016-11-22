@@ -8,17 +8,17 @@ public class VectorMRExportOptions extends
 	@Parameter(names = "--resourceManagerHostPort")
 	private String resourceManagerHostPort;
 
-	@Parameter(names = "--minSplits")
-	private int minSplits;
+	@Parameter(names = "--minSplits", description = "The min partitions for the input data")
+	private Integer minSplits;
 
-	@Parameter(names = "--maxSplits")
-	private int maxSplits;
+	@Parameter(names = "--maxSplits", description = "The max partitions for the input data")
+	private Integer maxSplits;
 
-	public int getMinSplits() {
+	public Integer getMinSplits() {
 		return minSplits;
 	}
 
-	public int getMaxSplits() {
+	public Integer getMaxSplits() {
 		return maxSplits;
 	}
 
@@ -32,12 +32,12 @@ public class VectorMRExportOptions extends
 	}
 
 	public void setMinSplits(
-			int minSplits ) {
+			Integer minSplits ) {
 		this.minSplits = minSplits;
 	}
 
 	public void setMaxSplits(
-			int maxSplits ) {
+			Integer maxSplits ) {
 		this.maxSplits = maxSplits;
 	}
 }
