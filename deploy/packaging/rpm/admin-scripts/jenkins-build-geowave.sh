@@ -11,17 +11,8 @@ echo "---------------------------------------------------------------"
 
 cd $WORKSPACE/deploy
 
-# Create an archive of all the ingest format plugins
-mkdir -p target/plugins >/dev/null 2>&1
-pushd target/plugins
-find $WORKSPACE/extensions/formats -name "*.jar" -not -path "*/service/target/*" -exec cp {} . \;
-tar cvzf ../plugins.tar.gz *.jar
-popd
-
 # Throughout the build, capture jace artifacts to support testing
 mkdir -p $WORKSPACE/deploy/target/geowave-jace/bin
-cp $WORKSPACE/extensions/formats/geotools-vector/target/*.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-format-vector.jar
-cp $WORKSPACE/examples/target/*.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-example.jar
 
 # Build each of the "fat jar" artifacts and rename to remove any version strings in the file name
 
