@@ -1268,7 +1268,8 @@ public class GeoServerRestClient
 			// The following modifications to xformerFactory are the
 			// fortify-recommended procedure to secure a TransformerFactory
 			// but the report still flags this instance
-			xformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, 
+			xformerFactory.setFeature(
+					XMLConstants.FEATURE_SECURE_PROCESSING,
 					true);
 
 			Transformer xformer = xformerFactory.newTransformer();

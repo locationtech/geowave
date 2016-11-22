@@ -123,6 +123,21 @@ public class GeoWaveStoreFinder
 		return missing;
 	}
 
+	private static List<String> getMatchingRequiredOptions(
+			final StoreFactoryFamilySpi factory,
+			final Map<String, String> configOptions ) {
+		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(factory
+				.getDataStoreFactory()
+				.createOptionsInstance());
+		final List<String> matching = new ArrayList<String>();
+		for (final ConfigOption option : options) {
+			if (!option.isOptional() && configOptions.containsKey(option.getName())) {
+				matching.add(option.getName());
+			}
+		}
+		return matching;
+	}
+
 	public static StoreFactoryFamilySpi findStoreFamily(
 			final Map<String, String> configOptions ) {
 		final Object storeHint = configOptions.get(STORE_HINT_KEY);
@@ -145,15 +160,17 @@ public class GeoWaveStoreFinder
 				return null;
 			}
 		}
-		int matchingFactoryOptionCount = -1;
+		int matchingFactoryRequiredOptionsCount = -1;
 		StoreFactoryFamilySpi matchingFactory = null;
-		boolean matchingFactoriesHaveSameOptionCount = false;
+		boolean matchingFactoriesHaveSameRequiredOptionsCount = false;
 		// if the hint is not provided, the factory finder will attempt to find
 		// a factory that does not have any missing options; if multiple
-		// factories will match, the one with the most options will be used with
+		// factories will match, the one with the most required matching options
+		// will be used with
 		// the assumption that it has the most specificity and closest match of
 		// the arguments; if there are multiple factories that match and have
-		// the same number of options, arbitrarily the last one will be chosen
+		// the same number of required matching options, arbitrarily the last
+		// one will be chosen
 		// and a warning message will be logged
 		LOGGER.debug("Finding Factories (size): " + internalStoreFamilies.size());
 
@@ -162,22 +179,25 @@ public class GeoWaveStoreFinder
 			final List<String> missingOptions = getMissingRequiredOptions(
 					factory,
 					configOptions);
+			final List<String> matchingOptions = getMatchingRequiredOptions(
+					factory,
+					configOptions);
 			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory
 					.getDataStoreFactory()
 					.createOptionsInstance());
 			LOGGER.debug("OPTIONS -- length: " + factoryOptions.length + ", " + factory.getName());
 			if (missingOptions.isEmpty()
-					&& ((matchingFactory == null) || (factoryOptions.length >= matchingFactoryOptionCount))) {
+					&& ((matchingFactory == null) || (matchingOptions.size() >= matchingFactoryRequiredOptionsCount))) {
 				matchingFactory = factory;
-				matchingFactoriesHaveSameOptionCount = (factoryOptions.length == matchingFactoryOptionCount);
-				matchingFactoryOptionCount = factoryOptions.length;
+				matchingFactoriesHaveSameRequiredOptionsCount = (matchingOptions.size() == matchingFactoryRequiredOptionsCount);
+				matchingFactoryRequiredOptionsCount = matchingOptions.size();
 			}
 		}
 
 		if (matchingFactory == null) {
 			LOGGER.error("Unable to find any valid store");
 		}
-		else if (matchingFactoriesHaveSameOptionCount) {
+		else if (matchingFactoriesHaveSameRequiredOptionsCount) {
 			LOGGER.warn("Multiple valid stores found with equal specificity for store");
 			LOGGER.warn(matchingFactory.getName() + " will be automatically chosen");
 		}

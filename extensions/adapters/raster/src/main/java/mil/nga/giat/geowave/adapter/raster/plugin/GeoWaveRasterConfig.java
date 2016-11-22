@@ -159,7 +159,8 @@ public class GeoWaveRasterConfig
 		dbf.setIgnoringElementContentWhitespace(true);
 		dbf.setIgnoringComments(true);
 
-		dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, 
+		dbf.setFeature(
+				XMLConstants.FEATURE_SECURE_PROCESSING,
 				true);
 
 		final DocumentBuilder db = dbf.newDocumentBuilder();

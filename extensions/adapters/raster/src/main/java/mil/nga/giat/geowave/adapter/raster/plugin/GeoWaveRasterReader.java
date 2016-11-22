@@ -140,7 +140,6 @@ public class GeoWaveRasterReader extends
 		super(
 				source,
 				uHints);
-		LOGGER.info("Reading from source");
 		this.source = source;
 		if (GeoWaveGTRasterFormat.isParamList(source)) {
 			try {
@@ -179,7 +178,6 @@ public class GeoWaveRasterReader extends
 		super(
 				new Object(),
 				new Hints());
-		LOGGER.info("Reading from config");
 		this.config = config;
 		init(config);
 	}
@@ -193,8 +191,6 @@ public class GeoWaveRasterReader extends
 		geowaveIndexStore = config.getIndexStore();
 		geowaveAdapterIndexMappingStore = config.getAdapterIndexMappingStore();
 		crs = GeoWaveGTRasterFormat.DEFAULT_CRS;
-		
-		LOGGER.info(geowaveDataStore.toString());
 	}
 
 	/**
