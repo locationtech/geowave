@@ -555,7 +555,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>hbase-singlejar</id>
+			<id>hbase-container-singlejar</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -570,9 +570,12 @@
 								</goals>
 								<configuration>
 									<artifactSet>
-										<excludes>
-											<exclude>org.slf4j:*</exclude>
-										</excludes>
+										<includes>
+											<include>mil.nga.giat:geowave-core-store</include>
+											<include>mil.nga.giat:geowave-core-geotime</include>
+											<include>mil.nga.giat:geowave-core-index</include>
+											<include>com.vividsolutions:jts-core</include>
+										</includes>
 									</artifactSet>
 									<filters>
 										<filter>
@@ -585,17 +588,6 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<manifestEntries>
-												<Specification-Title>GeoWave</Specification-Title>
-												<Specification-Vendor>LocationTech</Specification-Vendor>
-												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
-												<Implementation-Vendor>LocationTech</Implementation-Vendor>
-												<Implementation-Version>${project.version}</Implementation-Version>
-											</manifestEntries>
-										</transformer>
 										<transformer
 											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 									</transformers>

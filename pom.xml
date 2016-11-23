@@ -194,16 +194,19 @@
 						<groupId>jdk.tools</groupId>
 					</exclusion>
 				</exclusions>
+				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
 				<version>${hbase.version}</version>
+				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-server</artifactId>
 				<version>${hbase.version}</version>
+				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>

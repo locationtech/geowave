@@ -4,7 +4,7 @@
 # Use a naming convention within the HDFS directory structure to differentiate versions
 # Attempt to use a variety of common HDFS root usernames an optional user arg will override
 #
-# deploy-geowave-to-hdfs.sh [--user HDFS_ROOT_USERNAME]
+# deploy-geowave-accumulo-to-hdfs.sh [--user HDFS_ROOT_USERNAME]
 #
 
 # Test for installed apps required to run this script
