@@ -98,21 +98,22 @@ public class HBaseDistributableFilter extends
 	public boolean init(
 			final byte[] filterBytes,
 			final byte[] modelBytes ) {
-		final List<Persistable> decodedFilterList = PersistenceUtils.fromBinary(filterBytes);
-
-		if (decodedFilterList == null) {
-			LOGGER.error("Failed to decode filter list");
-			return false;
-		}
-
 		filterList.clear();
+		if ((filterBytes != null) && (filterBytes.length > 0)) {
+			final List<Persistable> decodedFilterList = PersistenceUtils.fromBinary(filterBytes);
 
-		for (final Persistable decodedFilter : decodedFilterList) {
-			if (decodedFilter instanceof DistributableQueryFilter) {
-				filterList.add((DistributableQueryFilter) decodedFilter);
+			if (decodedFilterList == null) {
+				LOGGER.error("Failed to decode filter list");
+				return false;
 			}
-			else {
-				LOGGER.warn("Unrecognized type for decoded filter!" + decodedFilter.getClass().getName());
+
+			for (final Persistable decodedFilter : decodedFilterList) {
+				if (decodedFilter instanceof DistributableQueryFilter) {
+					filterList.add((DistributableQueryFilter) decodedFilter);
+				}
+				else {
+					LOGGER.warn("Unrecognized type for decoded filter!" + decodedFilter.getClass().getName());
+				}
 			}
 		}
 

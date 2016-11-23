@@ -59,7 +59,6 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 			final T ingestPlugin ) {
 		this.dataStoreOptions = dataStoreOptions;
 		this.indexOptions = indexOptions;
-		;
 		this.ingestOptions = ingestOptions;
 		this.inputFile = inputFile;
 		this.typeName = typeName;

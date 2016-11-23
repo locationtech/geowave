@@ -48,7 +48,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexQueryManager;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericGreaterThanOrEqualToConstraint;
-import mil.nga.giat.geowave.core.store.index.numeric.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -219,7 +219,7 @@ public class SecondaryIndexingQueryIT
 			matches.close();
 			System.out.println("Found " + numMatches + " matches");
 			// TEMPORARY
-			if (secondaryIndex.getIndexStrategy() instanceof NumericIndexStrategy) {
+			if (secondaryIndex.getIndexStrategy() instanceof NumericFieldIndexStrategy) {
 				Assert.assertTrue(numMatches == 16);
 			}
 			else if (secondaryIndex.getIndexStrategy() instanceof TemporalIndexStrategy) {

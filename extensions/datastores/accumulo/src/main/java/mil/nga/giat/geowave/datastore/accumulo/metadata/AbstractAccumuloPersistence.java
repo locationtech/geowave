@@ -47,6 +47,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractAccumuloPersistence.class);
 	protected final AccumuloOperations accumuloOperations;
+	protected Text row = new Text();
 
 	// just attach iterators once per instance
 	private boolean iteratorsAttached = false;
@@ -80,11 +81,8 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 
 	protected ByteArrayId getPrimaryId(
 			final Key key ) {
-		if (key.getRow() != null) {
-			return new ByteArrayId(
-					key.getRow().getBytes());
-		}
-		return null;
+		return new ByteArrayId(
+				key.getRow().getBytes());
 	}
 
 	protected ByteArrayId getPeristenceTypeName(

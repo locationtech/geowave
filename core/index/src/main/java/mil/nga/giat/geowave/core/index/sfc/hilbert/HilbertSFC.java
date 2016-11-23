@@ -366,6 +366,18 @@ public class HilbertSFC implements
 	}
 
 	@Override
+	public long[] normalizeRange(
+			final double minValue,
+			final double maxValue,
+			final int dimension ) {
+		return getIdOperations.normalizeRange(
+				minValue,
+				maxValue,
+				dimension,
+				dimensionDefinitions[dimension]);
+	}
+
+	@Override
 	public long[] getCoordinates(
 			final byte[] id ) {
 		return getIdOperations.indicesFromHilbert(

@@ -461,11 +461,11 @@ public class DataStoreUtils
 		boolean sharedVisibility = false;
 		// organize FieldInfos by unique visibility
 		for (final FieldInfo<?> fieldInfo : originalList) {
-			final int fieldPosition = writableAdapter.getPositionOfOrderedField(
+			int fieldPosition = writableAdapter.getPositionOfOrderedField(
 					model,
 					fieldInfo.getDataValue().getId());
 			if (fieldPosition == -1) {
-				writableAdapter.getPositionOfOrderedField(
+				fieldPosition = writableAdapter.getPositionOfOrderedField(
 						model,
 						fieldInfo.getDataValue().getId());
 			}

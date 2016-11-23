@@ -13,13 +13,28 @@ public interface NumericIndexStrategy extends
 
 	/**
 	 * Return an integer coordinate in each dimension for the given insertion ID
+	 * plus a bin ID if that dimension is continuous
 	 * 
 	 * @param insertionId
 	 *            the insertion ID to determine the coordinates for
-	 * @return the integer coordinate that the given insertion ID represents
+	 * @return the integer coordinate that the given insertion ID represents and
+	 *         associated bin ID if that dimension is continuous
 	 */
-	public long[] getCoordinatesPerDimension(
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
 			ByteArrayId insertionId );
+
+	/**
+	 * Return an integer coordinate range in each dimension for the given data
+	 * range plus a bin ID if that dimension is continuous
+	 * 
+	 * @param dataRange
+	 *            the range to determine the coordinates for
+	 * @return the integer coordinate ranges that the given data ID represents
+	 *         and associated bin IDs if a dimension is continuous
+	 */
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			MultiDimensionalNumericData dataRange,
+			IndexMetaData... hints );
 
 	/**
 	 * Returns an array of dimension definitions that defines this index

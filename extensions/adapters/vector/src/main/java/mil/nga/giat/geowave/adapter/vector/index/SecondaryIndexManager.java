@@ -14,7 +14,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
-import mil.nga.giat.geowave.core.store.index.numeric.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy;
 
@@ -77,7 +77,7 @@ public class SecondaryIndexManager implements
 						numericField.getString()));
 			}
 			supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
-					new NumericIndexStrategy(),
+					new NumericFieldIndexStrategy(),
 					numericFields.toArray(new ByteArrayId[numericFields.size()]),
 					numericStatistics));
 			secondaryIndexStatistics.addAll(numericStatistics);
