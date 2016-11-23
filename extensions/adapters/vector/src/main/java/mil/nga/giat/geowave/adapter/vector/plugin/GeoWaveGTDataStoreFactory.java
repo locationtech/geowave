@@ -32,7 +32,7 @@ import mil.nga.giat.geowave.core.store.config.ConfigOption;
  * GeoWave as a DataStore to GeoTools. It should be defined within a file
  * META-INF/services/org.geotools.data.DataStoreFactorySpi to inject this into
  * GeoTools.
- * 
+ *
  */
 public class GeoWaveGTDataStoreFactory implements
 		DataStoreFactorySpi
@@ -73,19 +73,20 @@ public class GeoWaveGTDataStoreFactory implements
 			if (argumentSupersetStores == null) {
 				// initialize arguments map
 				argumentSupersetStores = new HashMap<String, Set<StoreFactoryFamilySpi>>();
-				for (StoreFactoryFamilySpi factory : dataStoreFactories) {
-					for (StoreFactoryFamilySpi otherFactory : dataStoreFactories) {
+				for (final StoreFactoryFamilySpi factory : dataStoreFactories) {
+					for (final StoreFactoryFamilySpi otherFactory : dataStoreFactories) {
 						if (factory != otherFactory) {
 							// if otherFactory arguments are superset of
 							// factory arguments
-							ConfigOption[] requiredOptions = GeoWaveStoreFinder.getRequiredOptions(factory);
-							ConfigOption[] otherRequiredOptions = GeoWaveStoreFinder.getRequiredOptions(otherFactory);
+							final ConfigOption[] requiredOptions = GeoWaveStoreFinder.getRequiredOptions(factory);
+							final ConfigOption[] otherRequiredOptions = GeoWaveStoreFinder
+									.getRequiredOptions(otherFactory);
 							boolean superSet = false;
 							if (otherRequiredOptions.length > requiredOptions.length) {
 								superSet = true;
-								for (ConfigOption requiredOption : requiredOptions) {
+								for (final ConfigOption requiredOption : requiredOptions) {
 									boolean foundInOtherOptions = false;
-									for (ConfigOption otherOption : otherRequiredOptions) {
+									for (final ConfigOption otherOption : otherRequiredOptions) {
 										if (otherOption.getName().equals(
 												requiredOption.getName())) {
 											foundInOtherOptions = true;
@@ -102,11 +103,11 @@ public class GeoWaveGTDataStoreFactory implements
 							if (superSet) {
 								// add otherfactory to factory's map entry
 								Set<StoreFactoryFamilySpi> supersetStores = argumentSupersetStores.get(factory
-										.getName());
+										.getType());
 								if (supersetStores == null) {
 									supersetStores = new HashSet<StoreFactoryFamilySpi>();
 									argumentSupersetStores.put(
-											factory.getName(),
+											factory.getType(),
 											supersetStores);
 								}
 								supersetStores.add(otherFactory);
@@ -201,13 +202,13 @@ public class GeoWaveGTDataStoreFactory implements
 
 	@Override
 	public String getDisplayName() {
-		return DISPLAY_NAME_PREFIX + geowaveStoreFactoryFamily.getName();
+		return DISPLAY_NAME_PREFIX + geowaveStoreFactoryFamily.getType().toUpperCase();
 	}
 
 	@Override
 	public String getDescription() {
 		return "A datastore that uses the GeoWave API for spatial data persistence in "
-				+ geowaveStoreFactoryFamily.getName() + ". " + geowaveStoreFactoryFamily.getDescription();
+				+ geowaveStoreFactoryFamily.getType() + ". " + geowaveStoreFactoryFamily.getDescription();
 	}
 
 	@Override
@@ -225,9 +226,9 @@ public class GeoWaveGTDataStoreFactory implements
 					geowaveStoreFactoryFamily,
 					params);
 
-			if (argumentSupersetStores.containsKey(geowaveStoreFactoryFamily.getName())) {
-				for (StoreFactoryFamilySpi supersetStore : argumentSupersetStores.get(geowaveStoreFactoryFamily
-						.getName())) {
+			if (argumentSupersetStores.containsKey(geowaveStoreFactoryFamily.getType())) {
+				for (final StoreFactoryFamilySpi supersetStore : argumentSupersetStores.get(geowaveStoreFactoryFamily
+						.getType())) {
 					// if we have can construct a superset store with these
 					// args, don't process with this factory
 					try {
@@ -332,8 +333,8 @@ public class GeoWaveGTDataStoreFactory implements
 	 * re-use instances of the same class, so each individual geowave data store
 	 * must be registered as a different class (the alternative is dynamic
 	 * compilation of classes to add to the classloader).
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	private static class GeoWaveStoreToGeoToolsDataStore implements
 			Function<StoreFactoryFamilySpi, DataStoreFactorySpi>

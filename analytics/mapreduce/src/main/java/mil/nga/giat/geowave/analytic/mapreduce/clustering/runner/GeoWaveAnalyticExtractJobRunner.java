@@ -222,19 +222,13 @@ public class GeoWaveAnalyticExtractJobRunner extends
 		setQueryOptions(runTimeProperties.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 		dataStoreOptions = store.getDataStoreOptions();
 
-		GeoWaveInputFormat.setDataStoreName(
+		GeoWaveInputFormat.setStoreOptions(
 				config,
-				dataStoreOptions.getType());
-		GeoWaveInputFormat.setStoreConfigOptions(
-				config,
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				config,
-				dataStoreOptions.getType());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				config,
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 
 		try (final FileSystem fs = FileSystem.get(config)) {
 			if (fs.exists(this.getHdfsOutputPath())) {

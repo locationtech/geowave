@@ -22,7 +22,6 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -104,12 +103,9 @@ public class RasterTileResizeJobRunner extends
 				job.getConfiguration(),
 				rasterResizeOptions.getMaxSplits());
 
-		GeoWaveInputFormat.setDataStoreName(
+		GeoWaveInputFormat.setStoreOptions(
 				job.getConfiguration(),
-				inputStoreOptions.getFactoryFamily().getDataStoreFactory().getName());
-		GeoWaveInputFormat.setStoreConfigOptions(
-				job.getConfiguration(),
-				inputStoreOptions.getFactoryOptionsAsMap());
+				inputStoreOptions);
 
 		final DataAdapter adapter = inputStoreOptions.createAdapterStore().getAdapter(
 				new ByteArrayId(
@@ -145,12 +141,9 @@ public class RasterTileResizeJobRunner extends
 						"Index does not exist in namespace '" + inputStoreOptions.getGeowaveNamespace() + "'");
 			}
 		}
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
-				outputStoreOptions.getFactoryFamily().getDataStoreFactory().getName());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				job.getConfiguration(),
-				ConfigUtils.populateListFromOptions(outputStoreOptions.getFactoryOptions()));
+				outputStoreOptions);
 		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				index);

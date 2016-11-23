@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.cli.osm.mapreduce.Convert;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -14,7 +13,7 @@ import mil.nga.giat.geowave.cli.osm.mapreduce.Convert.OsmProvider.OsmProvider;
 import mil.nga.giat.geowave.cli.osm.operations.options.OSMIngestCommandArgs;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -82,16 +81,11 @@ public class OSMConversionMapper extends
 			args.deserializeFromString(context.getConfiguration().get(
 					"arguments"));
 
-			Map<String, String> storeOptions = GeoWaveOutputFormat.getStoreConfigOptions(context);
-
-			AccumuloRequiredOptions req = new AccumuloRequiredOptions();
-			ConfigUtils.populateOptionsFromList(
-					req,
-					storeOptions);
+			final DataStorePluginOptions storeOptions = GeoWaveOutputFormat.getStoreOptions(context);
 
 			osmProvider = new OsmProvider(
 					args,
-					req);
+					(AccumuloRequiredOptions) storeOptions.getFactoryOptions());
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(

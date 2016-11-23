@@ -89,7 +89,7 @@ public class ConfigCacheIT
 
 	@Test
 	public void addStore() {
-		final String storeName = new MemoryDataStoreFactory().getName();
+		final String storeName = new MemoryDataStoreFactory().getType();
 
 		final AddStoreCommand command = new AddStoreCommand();
 		command.setParameters("abc");

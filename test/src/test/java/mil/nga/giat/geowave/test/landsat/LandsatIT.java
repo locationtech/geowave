@@ -188,7 +188,7 @@ public class LandsatIT
 				"=").append(
 				dataStoreOptions.getType());
 
-		final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
+		final Map<String, String> options = dataStoreOptions.getOptionsAsMap();
 
 		for (final Entry<String, String> entry : options.entrySet()) {
 			if (!entry.getKey().equals(

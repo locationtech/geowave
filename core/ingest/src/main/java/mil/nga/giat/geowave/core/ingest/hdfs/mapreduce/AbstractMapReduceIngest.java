@@ -27,7 +27,7 @@ import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 /**
  * This class can be sub-classed to run map-reduce jobs within the ingest
  * framework using plugins provided by types that are discovered through SPI.
- * 
+ *
  * @param <T>
  *            The type of map-reduce ingest plugin that can be persisted to the
  *            map-reduce job configuration and used by the mapper and/or reducer
@@ -142,13 +142,9 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		// set geowave output format
 		job.setOutputFormatClass(GeoWaveOutputFormat.class);
 
-		// set data store info
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
-				dataStoreOptions.getFactoryFamily().getDataStoreFactory().getName());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				job.getConfiguration(),
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
 		for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 			GeoWaveOutputFormat.addDataAdapter(

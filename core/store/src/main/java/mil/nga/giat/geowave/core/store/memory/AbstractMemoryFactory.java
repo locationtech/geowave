@@ -7,7 +7,7 @@ abstract public class AbstractMemoryFactory implements
 		GenericFactory
 {
 	@Override
-	public String getName() {
+	public String getType() {
 		return "memory";
 	}
 

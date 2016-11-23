@@ -165,7 +165,7 @@ public class GeoWaveStoreFinder
 			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory
 					.getDataStoreFactory()
 					.createOptionsInstance());
-			LOGGER.debug("OPTIONS -- length: " + factoryOptions.length + ", " + factory.getName());
+			LOGGER.debug("OPTIONS -- length: " + factoryOptions.length + ", " + factory.getType());
 			if (missingOptions.isEmpty()
 					&& ((matchingFactory == null) || (factoryOptions.length >= matchingFactoryOptionCount))) {
 				matchingFactory = factory;
@@ -179,7 +179,7 @@ public class GeoWaveStoreFinder
 		}
 		else if (matchingFactoriesHaveSameOptionCount) {
 			LOGGER.warn("Multiple valid stores found with equal specificity for store");
-			LOGGER.warn(matchingFactory.getName() + " will be automatically chosen");
+			LOGGER.warn(matchingFactory.getType() + " will be automatically chosen");
 		}
 		return matchingFactory;
 	}
@@ -239,7 +239,7 @@ public class GeoWaveStoreFinder
 			while (storeFactories.hasNext()) {
 				final T storeFactory = storeFactories.next();
 				if (storeFactory != null) {
-					final String name = storeFactory.getName();
+					final String name = storeFactory.getType();
 					registeredFactories.put(
 							ConfigUtils.cleanOptionName(name),
 							storeFactory);

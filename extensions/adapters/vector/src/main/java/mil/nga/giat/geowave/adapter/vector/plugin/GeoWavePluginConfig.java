@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataAccessFactory.Param;
@@ -37,6 +38,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
  * This class encapsulates the parameterized configuration that can be provided
@@ -128,7 +130,7 @@ public class GeoWavePluginConfig
 
 	public synchronized static List<Param> getPluginParams(
 			final StoreFactoryFamilySpi storeFactoryFamily ) {
-		List<Param> params = paramMap.get(storeFactoryFamily.getName());
+		List<Param> params = paramMap.get(storeFactoryFamily.getType());
 		if (params == null) {
 			final ConfigOption[] configOptions = GeoWaveStoreFinder.getAllOptions(storeFactoryFamily);
 			params = new ArrayList<Param>(
@@ -143,10 +145,22 @@ public class GeoWavePluginConfig
 			params.add(TRANSACTION_BUFFER_SIZE_PARAM);
 			params.add(QUERY_INDEX_STRATEGY);
 			paramMap.put(
-					storeFactoryFamily.getName(),
+					storeFactoryFamily.getType(),
 					params);
 		}
 		return params;
+	}
+
+	public GeoWavePluginConfig(
+			final DataStorePluginOptions params )
+			throws GeoWavePluginException {
+		this(
+				params.getFactoryFamily(),
+				// converting to Map<String,String> to Map<String,Serializable>
+				params.getOptionsAsMap().entrySet().stream().collect(
+						Collectors.toMap(
+								Map.Entry::getKey,
+								Map.Entry::getValue)));
 	}
 
 	public GeoWavePluginConfig(
@@ -160,7 +174,7 @@ public class GeoWavePluginConfig
 					"GeoWave Plugin: Missing namespace param");
 		}
 		final String namespace = param.toString();
-		name = storeFactoryFamily.getName() + "_" + namespace;
+		name = storeFactoryFamily.getType() + "_" + namespace;
 		final Map<String, String> paramStrs = new HashMap<String, String>();
 		// first converts serializable objects to String to avoid any issue if
 		// there's a difference how geotools is converting objects to how

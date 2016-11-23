@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -34,22 +35,30 @@ public class GeoWaveInputFormat<T> extends
 	private static final Class<?> CLASS = GeoWaveInputFormat.class;
 	protected static final Logger LOGGER = Logger.getLogger(CLASS);
 
-	public static void setDataStoreName(
-			final Configuration config,
-			final String dataStoreName ) {
-		GeoWaveConfiguratorBase.setDataStoreName(
-				CLASS,
-				config,
-				dataStoreName);
-	}
-
-	public static void setStoreConfigOptions(
+	public static void setStoreOptionsMap(
 			final Configuration config,
 			final Map<String, String> storeConfigOptions ) {
-		GeoWaveConfiguratorBase.setStoreConfigOptions(
+		GeoWaveConfiguratorBase.setStoreOptionsMap(
 				CLASS,
 				config,
 				storeConfigOptions);
+	}
+
+	public static void setStoreOptions(
+			final Configuration config,
+			final DataStorePluginOptions storeOptions ) {
+		if (storeOptions != null) {
+			GeoWaveConfiguratorBase.setStoreOptionsMap(
+					CLASS,
+					config,
+					storeOptions.getOptionsAsMap());
+		}
+		else {
+			GeoWaveConfiguratorBase.setStoreOptionsMap(
+					CLASS,
+					config,
+					null);
+		}
 	}
 
 	public static IndexStore getJobContextIndexStore(
@@ -125,7 +134,7 @@ public class GeoWaveInputFormat<T> extends
 	public static void setQueryOptions(
 			final Configuration config,
 			final QueryOptions queryOptions ) {
-		PrimaryIndex index = queryOptions.getIndex();
+		final PrimaryIndex index = queryOptions.getIndex();
 		if (index != null) {
 			// make available to the context index store
 			JobContextIndexStore.addIndex(
@@ -139,14 +148,14 @@ public class GeoWaveInputFormat<T> extends
 			// instead. It will fail, due to the 'null', if the query options
 			// does not
 			// contain the adapters
-			for (DataAdapter<?> adapter : queryOptions.getAdaptersArray(null)) {
+			for (final DataAdapter<?> adapter : queryOptions.getAdaptersArray(null)) {
 				// Also store for use the mapper and reducers
 				JobContextAdapterStore.addDataAdapter(
 						config,
 						adapter);
 			}
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			LOGGER
 					.warn(
 							"Adapter Ids witih adapters are included in the query options.This, the adapter must be accessible from the data store for use by the consumer/Mapper.",
@@ -203,7 +212,7 @@ public class GeoWaveInputFormat<T> extends
 			final TaskAttemptContext context )
 			throws IOException,
 			InterruptedException {
-		final Map<String, String> configOptions = getStoreConfigOptions(context);
+		final Map<String, String> configOptions = getStoreOptionsMap(context);
 		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
 		final AdapterStore adapterStore = getJobContextAdapterStore(context);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
@@ -228,7 +237,7 @@ public class GeoWaveInputFormat<T> extends
 	/**
 	 * Check whether a configuration is fully configured to be used with an
 	 * Accumulo {@link org.apache.hadoop.mapreduce.InputFormat}.
-	 * 
+	 *
 	 * @param context
 	 *            the Hadoop context for the configured job
 	 * @throws IOException
@@ -241,8 +250,8 @@ public class GeoWaveInputFormat<T> extends
 								// stores
 								// from the job context
 		try {
-			final Map<String, String> configOptions = getStoreConfigOptions(context);
-			StoreFactoryFamilySpi factoryFamily = GeoWaveStoreFinder.findStoreFamily(configOptions);
+			final Map<String, String> configOptions = getStoreOptionsMap(context);
+			final StoreFactoryFamilySpi factoryFamily = GeoWaveStoreFinder.findStoreFamily(configOptions);
 			if (factoryFamily == null) {
 				final String msg = "Unable to find GeoWave data store";
 				LOGGER.warn(msg);
@@ -260,16 +269,16 @@ public class GeoWaveInputFormat<T> extends
 		}
 	}
 
-	public static Map<String, String> getStoreConfigOptions(
+	public static DataStorePluginOptions getStoreOptions(
 			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getStoreConfigOptions(
+		return GeoWaveConfiguratorBase.getStoreOptions(
 				CLASS,
 				context);
 	}
 
-	public static String getDataStoreName(
+	public static Map<String, String> getStoreOptionsMap(
 			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getDataStoreName(
+		return GeoWaveConfiguratorBase.getStoreOptionsMap(
 				CLASS,
 				context);
 	}
@@ -279,7 +288,7 @@ public class GeoWaveInputFormat<T> extends
 			final JobContext context )
 			throws IOException,
 			InterruptedException {
-		final Map<String, String> configOptions = getStoreConfigOptions(context);
+		final Map<String, String> configOptions = getStoreOptionsMap(context);
 		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
 		final AdapterStore adapterStore = getJobContextAdapterStore(context);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
