@@ -102,9 +102,9 @@ public class RowRangeHistogramStatistics<T> extends
 				false);
 	}
 
-	public byte[][] quantile(
+	public double[] quantile(
 			final int bins ) {
-		final byte[][] result = new byte[bins][];
+		final double[] result = new double[bins];
 		final double binSize = 1.0 / bins;
 		for (int bin = 0; bin < bins; bin++) {
 			result[bin] = quantile(binSize * (bin + 1));
@@ -127,9 +127,9 @@ public class RowRangeHistogramStatistics<T> extends
 		return histogram.cdf(val);
 	}
 
-	public byte[] quantile(
+	public double quantile(
 			final double percentage ) {
-		return ByteUtils.toBytes(histogram.quantile((percentage)));
+		return histogram.quantile((percentage));
 	}
 
 	public double percentPopulationOverRange(
@@ -196,8 +196,8 @@ public class RowRangeHistogramStatistics<T> extends
 				"histogram[index=").append(
 				super.statisticsId.getString());
 		buffer.append(", bins={");
-		for (byte[] v : this.quantile(10)) {
-			buffer.append(ByteUtils.toDouble(v));
+		for (double v : this.quantile(10)) {
+			buffer.append(v);
 			buffer.append(' ');
 		}
 		buffer.deleteCharAt(buffer.length() - 1);
