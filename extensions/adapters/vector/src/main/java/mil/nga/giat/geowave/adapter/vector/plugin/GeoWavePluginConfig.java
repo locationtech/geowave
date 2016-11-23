@@ -61,7 +61,7 @@ public class GeoWavePluginConfig
 			GEOWAVE_NAMESPACE_KEY,
 			String.class,
 			"The table namespace associated with this data store",
-			true);
+			false);
 	private static final Param TRANSACTION_BUFFER_SIZE_PARAM = new Param(
 			TRANSACTION_BUFFER_SIZE,
 			Integer.class,
