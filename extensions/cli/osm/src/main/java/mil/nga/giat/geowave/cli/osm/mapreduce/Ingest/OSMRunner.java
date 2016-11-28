@@ -48,7 +48,7 @@ public class OSMRunner extends
 			throws Exception {
 		OSMIngestCommandArgs argv = new OSMIngestCommandArgs();
 		DataStorePluginOptions opts = new DataStorePluginOptions();
-		opts.selectPlugin(new AccumuloDataStoreFactory().getName());
+		opts.selectPlugin(new AccumuloDataStoreFactory().getType());
 
 		OperationParser parser = new OperationParser();
 		parser.addAdditionalObject(argv);
@@ -75,7 +75,7 @@ public class OSMRunner extends
 			DataStorePluginOptions inputStoreOptions ) {
 		this.ingestOptions = ingestOptions;
 		if (!inputStoreOptions.getType().equals(
-				new AccumuloDataStoreFactory().getName())) {
+				new AccumuloDataStoreFactory().getType())) {
 			throw new RuntimeException(
 					"Expected accumulo data store");
 		}

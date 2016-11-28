@@ -7,16 +7,16 @@ import java.util.Properties;
  */
 public interface PluginOptions
 {
-	String getType();
+	public String getType();
 
-	void selectPlugin(
+	public void selectPlugin(
 			String qualifier );
 
-	void save(
+	public void save(
 			Properties properties,
 			String namespace );
 
-	boolean load(
+	public boolean load(
 			Properties properties,
 			String namespace );
 }

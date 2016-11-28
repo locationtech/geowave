@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
@@ -108,14 +107,12 @@ public class KDEJobRunner extends
 
 			// first clone the outputDataStoreOptions, then set it to a tmp
 			// namespace
-			final Map<String, String> configOptions = outputDataStoreOptions.getFactoryOptionsAsMap();
+			final Map<String, String> configOptions = outputDataStoreOptions.getOptionsAsMap();
 			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
 					outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
 					configOptions);
 			options.setGeowaveNamespace(outputDataStoreOptions.getGeowaveNamespace() + "_tmp");
 			outputDataStoreOptions = new DataStorePluginOptions(
-					outputDataStoreOptions.getType(),
-					outputDataStoreOptions.getFactoryFamily(),
 					options);
 			kdeCoverageName = kdeCommandLineOptions.getCoverageName() + TMP_COVERAGE_SUFFIX;
 		}
@@ -189,12 +186,9 @@ public class KDEJobRunner extends
 				job.getConfiguration(),
 				kdeCommandLineOptions.getMaxSplits());
 
-		GeoWaveInputFormat.setDataStoreName(
+		GeoWaveInputFormat.setStoreOptions(
 				job.getConfiguration(),
-				inputDataStoreOptions.getType());
-		GeoWaveInputFormat.setStoreConfigOptions(
-				job.getConfiguration(),
-				inputDataStoreOptions.getFactoryOptionsAsMap());
+				inputDataStoreOptions);
 
 		if (kdeCommandLineOptions.getCqlFilter() != null) {
 			final Filter filter = ECQL.toFilter(kdeCommandLineOptions.getCqlFilter());
@@ -333,7 +327,9 @@ public class KDEJobRunner extends
 			return (job1Success && job2Success && postJob2Success) ? 0 : 1;
 		}
 		finally {
-			if (fs != null) fs.close();
+			if (fs != null) {
+				fs.close();
+			}
 		}
 	}
 
@@ -437,12 +433,9 @@ public class KDEJobRunner extends
 			final PrimaryIndex index )
 			throws IOException,
 			MismatchedIndexToAdapterMapping {
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
-				outputDataStoreOptions.getType());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				job.getConfiguration(),
-				outputDataStoreOptions.getFactoryOptionsAsMap());
+				outputDataStoreOptions);
 
 		GeoWaveOutputFormat.addDataAdapter(
 				job.getConfiguration(),

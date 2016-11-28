@@ -2,11 +2,13 @@ package mil.nga.giat.geowave.core.store;
 
 import com.beust.jcommander.Parameter;
 
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+
 /**
  * This interface doesn't actually do anything, is just used for tracking during
  * development.
  */
-public class StoreFactoryOptions
+abstract public class StoreFactoryOptions
 {
 
 	public final static String GEOWAVE_NAMESPACE_OPTION = "gwNamespace";
@@ -19,8 +21,14 @@ public class StoreFactoryOptions
 	}
 
 	public void setGeowaveNamespace(
-			String geowaveNamespace ) {
+			final String geowaveNamespace ) {
 		this.geowaveNamespace = geowaveNamespace;
 	}
 
+	public abstract StoreFactoryFamilySpi getStoreFactory();
+
+	public DataStorePluginOptions createPluginOptions() {
+		return new DataStorePluginOptions(
+				this);
+	}
 }

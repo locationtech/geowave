@@ -13,7 +13,7 @@ object GeoWaveContext {
 	def apply(dataStoreOptions: DataStorePluginOptions,
 						dataStoreName: String,
 						tableNameSpace: String) = new GeoWaveContext(
-		ConfigUtils.populateListFromOptions(dataStoreOptions.getFactoryOptions),
+		dataStoreOptions.getOptionsAsMap,
 		dataStoreName,
 		tableNameSpace);
 

@@ -1,17 +1,17 @@
 package mil.nga.giat.geowave.mapreduce;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
-
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
  * This class can run a basic job to query GeoWave. It manages datastore
@@ -31,7 +31,7 @@ public abstract class AbstractGeoWaveJobRunner extends
 	protected Integer maxInputSplits = null;
 
 	public AbstractGeoWaveJobRunner(
-			DataStorePluginOptions dataStoreOptions ) {
+			final DataStorePluginOptions dataStoreOptions ) {
 		this.dataStoreOptions = dataStoreOptions;
 	}
 
@@ -45,19 +45,13 @@ public abstract class AbstractGeoWaveJobRunner extends
 		// must use the assembled job configuration
 		final Configuration conf = job.getConfiguration();
 
-		GeoWaveInputFormat.setDataStoreName(
+		GeoWaveInputFormat.setStoreOptions(
 				conf,
-				dataStoreOptions.getType());
-		GeoWaveInputFormat.setStoreConfigOptions(
-				conf,
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				conf,
-				dataStoreOptions.getType());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				conf,
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 
 		job.setJarByClass(this.getClass());
 
@@ -106,7 +100,7 @@ public abstract class AbstractGeoWaveJobRunner extends
 
 	public void setQueryOptions(
 			final QueryOptions options ) {
-		this.queryOptions = options;
+		queryOptions = options;
 	}
 
 	public void setQuery(
