@@ -1432,6 +1432,13 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.core.store.query.ConstraintsQuery.AGGREGATION_RANGE_DECOMPOSITION">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/core/store/query/ConstraintsQuery.html#AGGREGATION_RANGE_DECOMPOSITION">AGGREGATION_RANGE_DECOMPOSITION</a></code></td>
+<td class="colLast"><code>10</code></td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.core.store.query.ConstraintsQuery.MAX_RANGE_DECOMPOSITION">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
@@ -1607,7 +1614,7 @@
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/AggregationIterator.html#AGGREGATION_QUERY_ITERATOR_PRIORITY">AGGREGATION_QUERY_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>10</code></td>
+<td class="colLast"><code>25</code></td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.AggregationIterator.CONSTRAINTS_OPTION_NAME">
@@ -1642,25 +1649,6 @@
 </li>
 <li class="blockList">
 <table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/ArrayToElementsIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">ArrayToElementsIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.ArrayToElementsIterator.MODEL">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/ArrayToElementsIterator.html#MODEL">MODEL</a></code></td>
-<td class="colLast"><code>"model"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/AttributeSubsettingIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AttributeSubsettingIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -1674,25 +1662,6 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/AttributeSubsettingIterator.html#WHOLE_ROW_ENCODED_KEY">WHOLE_ROW_ENCODED_KEY</a></code></td>
 <td class="colLast"><code>"wholerow"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/ElementsToArrayIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">ElementsToArrayIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.ElementsToArrayIterator.MODEL">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/ElementsToArrayIterator.html#MODEL">MODEL</a></code></td>
-<td class="colLast"><code>"model"</code></td>
 </tr>
 </tbody>
 </table>
@@ -1725,7 +1694,33 @@
 <!--   -->
 </a><code>protected&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/FixedCardinalitySkippingIterator.html#CARDINALITY_SKIPPING_ITERATOR_PRIORITY">CARDINALITY_SKIPPING_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>15</code></td>
+<td class="colLast"><code>35</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.accumulo.query.<a href="mil/nga/giat/geowave/datastore/accumulo/query/NumericIndexStrategyFilterIterator.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">NumericIndexStrategyFilterIterator</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.NumericIndexStrategyFilterIterator.IDX_FILTER_ITERATOR_NAME">
+<!--   -->
+</a><code>protected&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/NumericIndexStrategyFilterIterator.html#IDX_FILTER_ITERATOR_NAME">IDX_FILTER_ITERATOR_NAME</a></code></td>
+<td class="colLast"><code>"GEOWAVE_IDX_FILTER"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.NumericIndexStrategyFilterIterator.IDX_FILTER_ITERATOR_PRIORITY">
+<!--   -->
+</a><code>protected&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/NumericIndexStrategyFilterIterator.html#IDX_FILTER_ITERATOR_PRIORITY">IDX_FILTER_ITERATOR_PRIORITY</a></code></td>
+<td class="colLast"><code>22</code></td>
 </tr>
 </tbody>
 </table>
@@ -1765,7 +1760,7 @@
 <!--   -->
 </a><code>protected&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#QUERY_ITERATOR_PRIORITY">QUERY_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>10</code></td>
+<td class="colLast"><code>25</code></td>
 </tr>
 </tbody>
 </table>
@@ -1845,7 +1840,7 @@
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SingleEntryFilterIterator.html#ENTRY_FILTER_ITERATOR_PRIORITY">ENTRY_FILTER_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>15</code></td>
+<td class="colLast"><code>25</code></td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a name="mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator.WHOLE_ROW_ENCODED_KEY">
@@ -1866,7 +1861,7 @@
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/accumulo/query/SingleEntryFilterIterator.html#WHOLE_ROW_ITERATOR_PRIORITY">WHOLE_ROW_ITERATOR_PRIORITY</a></code></td>
-<td class="colLast"><code>14</code></td>
+<td class="colLast"><code>24</code></td>
 </tr>
 </tbody>
 </table>
@@ -2167,6 +2162,154 @@
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/generated/FilterProtos.SingleEntryFilter.html#DATAID_FIELD_NUMBER">DATAID_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.hbase.query.protobuf.<a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">AggregationProtos.AggregationRequest</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.ADAPTER_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#ADAPTER_FIELD_NUMBER">ADAPTER_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>5</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.ADAPTERID_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#ADAPTERID_FIELD_NUMBER">ADAPTERID_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>6</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.AGGREGATION_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#AGGREGATION_FIELD_NUMBER">AGGREGATION_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.BLOCKCACHING_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#BLOCKCACHING_FIELD_NUMBER">BLOCKCACHING_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>8</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.CACHESIZE_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#CACHESIZE_FIELD_NUMBER">CACHESIZE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>9</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.FILTER_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#FILTER_FIELD_NUMBER">FILTER_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.MODEL_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#MODEL_FIELD_NUMBER">MODEL_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>4</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.NUMERICINDEXSTRATEGYFILTER_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#NUMERICINDEXSTRATEGYFILTER_FIELD_NUMBER">NUMERICINDEXSTRATEGYFILTER_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>7</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest.RANGEFILTER_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html#RANGEFILTER_FIELD_NUMBER">RANGEFILTER_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.hbase.query.protobuf.<a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationResponse.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">AggregationProtos.AggregationResponse</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationResponse.VALUE_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationResponse.html#VALUE_FIELD_NUMBER">VALUE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.hbase.query.protobuf.<a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationType.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">AggregationProtos.AggregationType</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationType.NAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationType.html#NAME_FIELD_NUMBER">NAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationType.PARAMS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationType.html#PARAMS_FIELD_NUMBER">PARAMS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>mil.nga.giat.geowave.datastore.hbase.query.protobuf.<a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/FilterProtos.SingleEntryFilter.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">FilterProtos.SingleEntryFilter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.FilterProtos.SingleEntryFilter.ADAPTERID_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/FilterProtos.SingleEntryFilter.html#ADAPTERID_FIELD_NUMBER">ADAPTERID_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.FilterProtos.SingleEntryFilter.DATAID_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/FilterProtos.SingleEntryFilter.html#DATAID_FIELD_NUMBER">DATAID_FIELD_NUMBER</a></code></td>
 <td class="colLast"><code>2</code></td>
 </tr>
 </tbody>

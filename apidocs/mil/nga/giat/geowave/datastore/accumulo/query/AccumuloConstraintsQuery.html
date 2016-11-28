@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -224,26 +224,30 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#addScanIteratorSettings-org.apache.accumulo.core.client.ScannerBase-">addScanIteratorSettings</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#addIndexFilterToIterator-org.apache.accumulo.core.client.ScannerBase-">addIndexFilterToIterator</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#addScanIteratorSettings-org.apache.accumulo.core.client.ScannerBase-">addScanIteratorSettings</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#getRanges--">getRanges</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#initIterator-mil.nga.giat.geowave.core.store.adapter.AdapterStore-org.apache.accumulo.core.client.ScannerBase-">initIterator</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
             org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#isAggregation--">isAggregation</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#isQueryFiltersEnabled--">isQueryFiltersEnabled</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsQuery.html#setQueryFiltersEnabled-boolean-">setQueryFiltersEnabled</a></span>(boolean&nbsp;queryFiltersEnabled)</code>&nbsp;</td>
 </tr>
@@ -371,6 +375,15 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#addScanIteratorSettings-org.apache.accumulo.core.client.ScannerBase-">addScanIteratorSettings</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloFilteredIndexQuery</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="addIndexFilterToIterator-org.apache.accumulo.core.client.ScannerBase-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addIndexFilterToIterator</h4>
+<pre>protected&nbsp;void&nbsp;addIndexFilterToIterator(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</pre>
 </li>
 </ul>
 <a name="getRanges--">

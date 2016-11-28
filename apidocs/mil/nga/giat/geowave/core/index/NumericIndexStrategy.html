@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -141,19 +141,28 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>long[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-mil.nga.giat.geowave.core.index.ByteArrayId-">getCoordinatesPerDimension</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>
-<div class="block">Return an integer coordinate in each dimension for the given insertion ID</div>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getCoordinateRangesPerDimension-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-mil.nga.giat.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
+                               <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>
+<div class="block">Return an integer coordinate range in each dimension for the given data
+ range plus a bin ID if that dimension is continuous</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinates.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinates</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-mil.nga.giat.geowave.core.index.ByteArrayId-">getCoordinatesPerDimension</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>
+<div class="block">Return an integer coordinate in each dimension for the given insertion ID
+ plus a bin ID if that dimension is continuous</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getHighestPrecisionIdRangePerDimension--">getHighestPrecisionIdRangePerDimension</a></span>()</code>
 <div class="block">Get the range/size of a single insertion ID for each dimension at the
  highest precision supported by this index strategy</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html#getOrderedDimensionDefinitions--">getOrderedDimensionDefinitions</a></span>()</code>
 <div class="block">Returns an array of dimension definitions that defines this index
@@ -196,13 +205,34 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoordinatesPerDimension</h4>
-<pre>long[]&nbsp;getCoordinatesPerDimension(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</pre>
-<div class="block">Return an integer coordinate in each dimension for the given insertion ID</div>
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinates.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinates</a>&nbsp;getCoordinatesPerDimension(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</pre>
+<div class="block">Return an integer coordinate in each dimension for the given insertion ID
+ plus a bin ID if that dimension is continuous</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>insertionId</code> - the insertion ID to determine the coordinates for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the integer coordinate that the given insertion ID represents</dd>
+<dd>the integer coordinate that the given insertion ID represents and
+         associated bin ID if that dimension is continuous</dd>
+</dl>
+</li>
+</ul>
+<a name="getCoordinateRangesPerDimension-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-mil.nga.giat.geowave.core.index.IndexMetaData...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCoordinateRangesPerDimension</h4>
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]&nbsp;getCoordinateRangesPerDimension(<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
+                                                                   <a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
+<div class="block">Return an integer coordinate range in each dimension for the given data
+ range plus a bin ID if that dimension is continuous</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>dataRange</code> - the range to determine the coordinates for</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the integer coordinate ranges that the given data ID represents
+         and associated bin IDs if a dimension is continuous</dd>
 </dl>
 </li>
 </ul>

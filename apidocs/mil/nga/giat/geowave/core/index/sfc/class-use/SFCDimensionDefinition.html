@@ -311,6 +311,41 @@
                           <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><span class="typeNameLabel">PrimitiveHilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#normalizeDimension-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-double-long-boolean-boolean-">normalizeDimension</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition,
+                  double&nbsp;value,
+                  long&nbsp;bins,
+                  boolean&nbsp;isMin,
+                  boolean&nbsp;overInclusiveOnEdge)</code>
+<div class="block">Used to normalize the value based on the dimension definition, which
+ includes the dimensional bounds and the bits of precision.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>long[]</code></td>
+<td class="colLast"><span class="typeNameLabel">UnboundedHilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/UnboundedHilbertSFCOperations.html#normalizeRange-double-double-int-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-">normalizeRange</a></span>(double&nbsp;minValue,
+              double&nbsp;maxValue,
+              int&nbsp;dimension,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>long[]</code></td>
+<td class="colLast"><span class="typeNameLabel">PrimitiveHilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#normalizeRange-double-double-int-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-">normalizeRange</a></span>(double&nbsp;minValue,
+              double&nbsp;maxValue,
+              int&nbsp;dimension,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>long[]</code></td>
+<td class="colLast"><span class="typeNameLabel">HilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#normalizeRange-double-double-int-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-">normalizeRange</a></span>(double&nbsp;minValue,
+              double&nbsp;maxValue,
+              int&nbsp;dimension,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>
+<div class="block">Determines the coordinates per dimension of rows given a
+ multi-dimensional range will span within this space filling curve</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><span class="typeNameLabel">HilbertSFC.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#setOptimalOperations-int-java.util.List-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition:A-">setOptimalOperations</a></span>(int&nbsp;totalPrecision,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;bitsPerDimension,

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":9};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":9,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -261,6 +261,27 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
                           com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                           <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>&nbsp;</td>
 </tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#normalizeDimension-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-double-long-boolean-boolean-">normalizeDimension</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition,
+                  double&nbsp;value,
+                  long&nbsp;bins,
+                  boolean&nbsp;isMin,
+                  boolean&nbsp;overInclusiveOnEdge)</code>
+<div class="block">Used to normalize the value based on the dimension definition, which
+ includes the dimensional bounds and the bits of precision.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>long[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#normalizeRange-double-double-int-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-">normalizeRange</a></span>(double&nbsp;minValue,
+              double&nbsp;maxValue,
+              int&nbsp;dimension,
+              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>
+<div class="block">Determines the coordinates per dimension of rows given a
+ multi-dimensional range will span within this space filling curve</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -462,6 +483,38 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
                                                                     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
 </li>
 </ul>
+<a name="normalizeDimension-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-double-long-boolean-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>normalizeDimension</h4>
+<pre>public&nbsp;long&nbsp;normalizeDimension(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition,
+                               double&nbsp;value,
+                               long&nbsp;bins,
+                               boolean&nbsp;isMin,
+                               boolean&nbsp;overInclusiveOnEdge)
+                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
+<div class="block">Used to normalize the value based on the dimension definition, which
+ includes the dimensional bounds and the bits of precision. This ensures
+ the maximum amount of fidelity for represented values.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>boundedDimensionDefinition</code> - describes the min, max, and cardinality of a dimension</dd>
+<dd><code>value</code> - value to be normalized</dd>
+<dd><code>bins</code> - precomputed number of bins in this dimension the number of
+            bins expected based on the cardinality of the definition</dd>
+<dd><code>isMin</code> - flag indicating if this value is a minimum of a range in which
+            case it needs to be inclusive on a boundary, otherwise it is
+            exclusive</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>value after normalization</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - thrown when the value passed doesn't fit with in the
+             dimension definition provided</dd>
+</dl>
+</li>
+</ul>
 <a name="decomposeRange-mil.nga.giat.geowave.core.index.sfc.data.NumericData:A-com.google.uzaygezen.core.CompactHilbertCurve-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition:A-int-int-boolean-boolean-">
 <!--   -->
 </a>
@@ -523,7 +576,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <a name="getInsertionIdRangePerDimension-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getInsertionIdRangePerDimension</h4>
 <pre>public&nbsp;double[]&nbsp;getInsertionIdRangePerDimension(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
@@ -537,6 +590,36 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
             of each insertion ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the range of a single insertion ID for each dimension</dd>
+</dl>
+</li>
+</ul>
+<a name="normalizeRange-double-double-int-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>normalizeRange</h4>
+<pre>public&nbsp;long[]&nbsp;normalizeRange(double&nbsp;minValue,
+                             double&nbsp;maxValue,
+                             int&nbsp;dimension,
+                             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)
+                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#normalizeRange-double-double-int-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-">HilbertSFCOperations</a></code></span></div>
+<div class="block">Determines the coordinates per dimension of rows given a
+ multi-dimensional range will span within this space filling curve</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#normalizeRange-double-double-int-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition-">normalizeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in mil.nga.giat.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>minValue</code> - the minimum value</dd>
+<dd><code>maxValue</code> - the maximum value</dd>
+<dd><code>dimension</code> - the ordinal of the dimension on this space filling curve</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the range of coordinates in each dimension (ie. [0][0] would be
+         the min coordinate of the first dimension and [0][1] would be the
+         max coordinate of the first dimension)</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code></dd>
 </dl>
 </li>
 </ul>

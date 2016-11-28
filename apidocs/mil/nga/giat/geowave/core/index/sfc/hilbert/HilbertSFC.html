@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -271,12 +271,21 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#init-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition:A-">init</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefs)</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>long[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#normalizeRange-double-double-int-">normalizeRange</a></span>(double&nbsp;minValue,
+              double&nbsp;maxValue,
+              int&nbsp;dimension)</code>
+<div class="block">Determines the coordinates within this space filling curve for a
+ dimension given a range</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#setOptimalOperations-int-java.util.List-mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition:A-">setOptimalOperations</a></span>(int&nbsp;totalPrecision,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;bitsPerDimension,
                     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in mil.nga.giat.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefs)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
 </tr>
@@ -432,7 +441,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeRangeFully(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</pre>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.
- 
+
  This method will decompose the range all the way down to the unit
  interval of 1.</div>
 <dl>
@@ -458,7 +467,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
                                          int&nbsp;maxFilteredIndexedRanges)</pre>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.
- 
+
  This method will roll up the ranges based on the maxRanges parameter.
  Ranges will be "connected" based on the minimization of distance between
  the end of one range and the start of the next.</div>
@@ -590,6 +599,33 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the valid ranges per dimension of a single SFC ID derived from
          the the SFC transform.</dd>
+</dl>
+</li>
+</ul>
+<a name="normalizeRange-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>normalizeRange</h4>
+<pre>public&nbsp;long[]&nbsp;normalizeRange(double&nbsp;minValue,
+                             double&nbsp;maxValue,
+                             int&nbsp;dimension)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#normalizeRange-double-double-int-">SpaceFillingCurve</a></code></span></div>
+<div class="block">Determines the coordinates within this space filling curve for a
+ dimension given a range</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#normalizeRange-double-double-int-">normalizeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>minValue</code> - describes the minimum of a range in a single dimension used to
+            determine the SFC coordinate range</dd>
+<dd><code>maxValue</code> - describes the maximum of a range in a single dimension used to
+            determine the SFC coordinate range</dd>
+<dd><code>dimension</code> - the dimension</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the range of coordinates as an array where the first element is
+         the min and the second element is the max</dd>
 </dl>
 </li>
 </ul>

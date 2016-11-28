@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -228,6 +228,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>long[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#normalizeRange-double-double-int-">normalizeRange</a></span>(double&nbsp;minValue,
+              double&nbsp;maxValue,
+              int&nbsp;d)</code>
+<div class="block">Determines the coordinates within this space filling curve for a
+ dimension given a range</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
 </tr>
@@ -388,7 +397,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
                                          int&nbsp;maxFilteredIndexedRanges)</pre>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.
- 
+
  This method will roll up the ranges based on the maxRanges parameter.
  Ranges will be "connected" based on the minimization of distance between
  the end of one range and the start of the next.</div>
@@ -413,7 +422,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/RangeDecomposition.html" title="class in mil.nga.giat.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeRangeFully(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</pre>
 <div class="block">Returns a collection of ranges on the 1-d space filling curve that
  correspond to the n-dimensional range described in the query parameter.
- 
+
  This method will decompose the range all the way down to the unit
  interval of 1.</div>
 <dl>
@@ -487,13 +496,40 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <a name="equals-java.lang.Object-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
 <pre>public&nbsp;boolean&nbsp;equals(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="normalizeRange-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>normalizeRange</h4>
+<pre>public&nbsp;long[]&nbsp;normalizeRange(double&nbsp;minValue,
+                             double&nbsp;maxValue,
+                             int&nbsp;d)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#normalizeRange-double-double-int-">SpaceFillingCurve</a></code></span></div>
+<div class="block">Determines the coordinates within this space filling curve for a
+ dimension given a range</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#normalizeRange-double-double-int-">normalizeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>minValue</code> - describes the minimum of a range in a single dimension used to
+            determine the SFC coordinate range</dd>
+<dd><code>maxValue</code> - describes the maximum of a range in a single dimension used to
+            determine the SFC coordinate range</dd>
+<dd><code>d</code> - the dimension</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the range of coordinates as an array where the first element is
+         the min and the second element is the max</dd>
 </dl>
 </li>
 </ul>
