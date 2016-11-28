@@ -234,18 +234,27 @@ public class CompoundIndexStrategyTest
 					3
 				});
 		final ByteArrayId[] insertionIds = compoundIndexStrategy.decomposeByteArrayId(compoundIndexInsertionId);
-		final long[] simpleIndexCoordinatesPerDim = simpleIndexStrategy.getCoordinatesPerDimension(insertionIds[0]);
-		final long[] sfcIndexCoordinatesPerDim = sfcIndexStrategy.getCoordinatesPerDimension(insertionIds[1]);
-		final long[] coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(compoundIndexInsertionId);
-		Assert.assertTrue(Double.compare(
-				simpleIndexCoordinatesPerDim[0],
-				coordinatesPerDim[0]) == 0);
-		Assert.assertTrue(Double.compare(
-				sfcIndexCoordinatesPerDim[0],
-				coordinatesPerDim[1]) == 0);
-		Assert.assertTrue(Double.compare(
-				sfcIndexCoordinatesPerDim[1],
-				coordinatesPerDim[2]) == 0);
+		final MultiDimensionalCoordinates simpleIndexCoordinatesPerDim = simpleIndexStrategy
+				.getCoordinatesPerDimension(insertionIds[0]);
+		final MultiDimensionalCoordinates sfcIndexCoordinatesPerDim = sfcIndexStrategy
+				.getCoordinatesPerDimension(insertionIds[1]);
+		final MultiDimensionalCoordinates coordinatesPerDim = compoundIndexStrategy
+				.getCoordinatesPerDimension(compoundIndexInsertionId);
+		Assert.assertTrue(Long.compare(
+				simpleIndexCoordinatesPerDim.getCoordinate(
+						0).getCoordinate(),
+				coordinatesPerDim.getCoordinate(
+						0).getCoordinate()) == 0);
+		Assert.assertTrue(Long.compare(
+				sfcIndexCoordinatesPerDim.getCoordinate(
+						0).getCoordinate(),
+				coordinatesPerDim.getCoordinate(
+						1).getCoordinate()) == 0);
+		Assert.assertTrue(Long.compare(
+				sfcIndexCoordinatesPerDim.getCoordinate(
+						1).getCoordinate(),
+				coordinatesPerDim.getCoordinate(
+						2).getCoordinate()) == 0);
 	}
 
 	@Test

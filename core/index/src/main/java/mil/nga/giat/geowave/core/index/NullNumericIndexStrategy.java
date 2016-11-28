@@ -93,10 +93,10 @@ public class NullNumericIndexStrategy implements
 	}
 
 	@Override
-	public long[] getCoordinatesPerDimension(
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
 			final ByteArrayId insertionId ) {
 		// there are no dimensions so return an empty array
-		return new long[] {};
+		return new MultiDimensionalCoordinates();
 	}
 
 	@Override
@@ -123,6 +123,15 @@ public class NullNumericIndexStrategy implements
 	@Override
 	public List<IndexMetaData> createMetaData() {
 		return Collections.emptyList();
+	}
+
+	@Override
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			MultiDimensionalNumericData dataRange,
+			IndexMetaData... hints ) {
+		return new MultiDimensionalCoordinateRanges[] {
+			new MultiDimensionalCoordinateRanges()
+		};
 	}
 
 }

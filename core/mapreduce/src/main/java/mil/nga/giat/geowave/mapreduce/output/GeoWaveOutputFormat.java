@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
@@ -50,7 +51,7 @@ public class GeoWaveOutputFormat extends
 			throws IOException,
 			InterruptedException {
 		try {
-			final Map<String, String> configOptions = getStoreConfigOptions(context);
+			final Map<String, String> configOptions = getStoreOptionsMap(context);
 			final AdapterStore persistentAdapterStore = GeoWaveStoreFinder.createAdapterStore(configOptions);
 			final DataAdapter<?>[] adapters = JobContextAdapterStore.getDataAdapters(context);
 			for (final DataAdapter<?> a : adapters) {
@@ -62,17 +63,17 @@ public class GeoWaveOutputFormat extends
 			final IndexStore persistentIndexStore = GeoWaveStoreFinder.createIndexStore(configOptions);
 			final Index[] indices = JobContextIndexStore.getIndices(context);
 			if (LOGGER.isDebugEnabled()) {
-				StringBuilder sbDebug = new StringBuilder();
+				final StringBuilder sbDebug = new StringBuilder();
 
 				sbDebug.append("Config Options: ");
-				for (Map.Entry<String, String> entry : configOptions.entrySet()) {
+				for (final Map.Entry<String, String> entry : configOptions.entrySet()) {
 					sbDebug.append(entry.getKey() + "/" + entry.getValue() + ", ");
 				}
 				sbDebug.append("\n\tIndices Size: " + indices.length);
 				sbDebug.append("\n\tpersistentIndexStore: " + persistentIndexStore);
 				final String filename = "/META-INF/services/mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi";
 
-				InputStream is = context.getClass().getResourceAsStream(
+				final InputStream is = context.getClass().getResourceAsStream(
 						filename);
 				if (is == null) {
 					sbDebug.append("\n\tStoreFactoryFamilySpi: Unable to open file '" + filename + "'");
@@ -110,19 +111,27 @@ public class GeoWaveOutputFormat extends
 		}
 	}
 
-	public static void setDataStoreName(
+	public static void setStoreOptions(
 			final Configuration config,
-			final String dataStoreName ) {
-		GeoWaveConfiguratorBase.setDataStoreName(
-				CLASS,
-				config,
-				dataStoreName);
+			final DataStorePluginOptions storeOptions ) {
+		if (storeOptions != null) {
+			GeoWaveConfiguratorBase.setStoreOptionsMap(
+					CLASS,
+					config,
+					storeOptions.getOptionsAsMap());
+		}
+		else {
+			GeoWaveConfiguratorBase.setStoreOptionsMap(
+					CLASS,
+					config,
+					null);
+		}
 	}
 
-	public static void setStoreConfigOptions(
+	public static void setStoreOptionsMap(
 			final Configuration config,
 			final Map<String, String> storeConfigOptions ) {
-		GeoWaveConfiguratorBase.setStoreConfigOptions(
+		GeoWaveConfiguratorBase.setStoreOptionsMap(
 				CLASS,
 				config,
 				storeConfigOptions);
@@ -158,16 +167,16 @@ public class GeoWaveOutputFormat extends
 				context);
 	}
 
-	public static Map<String, String> getStoreConfigOptions(
+	public static DataStorePluginOptions getStoreOptions(
 			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getStoreConfigOptions(
+		return GeoWaveConfiguratorBase.getStoreOptions(
 				CLASS,
 				context);
 	}
 
-	public static String getDataStoreName(
+	public static Map<String, String> getStoreOptionsMap(
 			final JobContext context ) {
-		return GeoWaveConfiguratorBase.getDataStoreName(
+		return GeoWaveConfiguratorBase.getStoreOptionsMap(
 				CLASS,
 				context);
 	}
@@ -179,7 +188,7 @@ public class GeoWaveOutputFormat extends
 			InterruptedException {
 		// attempt to get each of the GeoWave stores from the job context
 		try {
-			final Map<String, String> configOptions = getStoreConfigOptions(context);
+			final Map<String, String> configOptions = getStoreOptionsMap(context);
 			if (GeoWaveStoreFinder.createDataStore(configOptions) == null) {
 				final String msg = "Unable to find GeoWave data store";
 				LOGGER.warn(msg);

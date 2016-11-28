@@ -407,12 +407,9 @@ public class BasicMapReduceIT
 					MapReduceTestUtils.EXPECTED_RESULTS_KEY,
 					ByteArrayUtils.byteArrayToString(buf.array()));
 
-			GeoWaveInputFormat.setDataStoreName(
+			GeoWaveInputFormat.setStoreOptions(
 					conf,
-					dataStoreOptions.getType());
-			GeoWaveInputFormat.setStoreConfigOptions(
-					conf,
-					dataStoreOptions.getFactoryOptionsAsMap());
+					dataStoreOptions);
 			job.setJarByClass(this.getClass());
 
 			job.setJobName("GeoWave Test (" + dataStoreOptions.getGeowaveNamespace() + ")");

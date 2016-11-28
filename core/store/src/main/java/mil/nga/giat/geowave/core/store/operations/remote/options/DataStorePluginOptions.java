@@ -30,8 +30,6 @@ public class DataStorePluginOptions extends
 	public static final String DATASTORE_PROPERTY_NAMESPACE = "store";
 	public static final String DEFAULT_PROPERTY_NAMESPACE = "storedefault";
 
-	private String storeType;
-
 	// This is the plugin loaded from SPI based on "datastore"
 	private StoreFactoryFamilySpi factoryPlugin = null;
 
@@ -42,29 +40,29 @@ public class DataStorePluginOptions extends
 	public DataStorePluginOptions() {}
 
 	/**
-	 * From the given options (like 'username', 'password') and the given
-	 * storeType (like 'accumulo'), setup this plugin options to be able to
-	 * create data stores.
+	 * From the given options (like 'username', 'password') setup this plugin
+	 * options to be able to create data stores.
 	 *
-	 * @param storeType
 	 * @param options
 	 */
 	public DataStorePluginOptions(
-			final String storeType,
-			final Map<String, String> options ) {
-		selectPlugin(storeType);
+			final Map<String, String> options )
+			throws IllegalArgumentException {
+		factoryPlugin = GeoWaveStoreFinder.findStoreFamily(options);
+		if (factoryPlugin == null) {
+			throw new IllegalArgumentException(
+					"Cannot find store plugin factory");
+		}
+		factoryOptions = factoryPlugin.getDataStoreFactory().createOptionsInstance();
 		ConfigUtils.populateOptionsFromList(
 				getFactoryOptions(),
 				options);
 	}
 
 	public DataStorePluginOptions(
-			final String storeType,
-			final StoreFactoryFamilySpi factoryPlugin,
 			final StoreFactoryOptions factoryOptions ) {
-		this.storeType = storeType;
-		this.factoryPlugin = factoryPlugin;
 		this.factoryOptions = factoryOptions;
+		factoryPlugin = factoryOptions.getStoreFactory();
 	}
 
 	/**
@@ -74,7 +72,6 @@ public class DataStorePluginOptions extends
 	@Override
 	public void selectPlugin(
 			final String qualifier ) {
-		storeType = qualifier;
 		if (qualifier != null) {
 			final Map<String, StoreFactoryFamilySpi> factories = GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
 			factoryPlugin = factories.get(qualifier);
@@ -90,8 +87,14 @@ public class DataStorePluginOptions extends
 		}
 	}
 
-	public Map<String, String> getFactoryOptionsAsMap() {
-		return ConfigUtils.populateListFromOptions(factoryOptions);
+	public Map<String, String> getOptionsAsMap() {
+		final Map<String, String> configOptions = ConfigUtils.populateListFromOptions(factoryOptions);
+		if (factoryPlugin != null) {
+			configOptions.put(
+					GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
+					factoryPlugin.getType());
+		}
+		return configOptions;
 	}
 
 	public void setFactoryOptions(
@@ -139,7 +142,10 @@ public class DataStorePluginOptions extends
 
 	@Override
 	public String getType() {
-		return storeType;
+		if (factoryPlugin == null) {
+			return null;
+		}
+		return factoryPlugin.getType();
 	}
 
 	public static String getStoreNamespace(

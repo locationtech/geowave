@@ -156,7 +156,7 @@ public class GeoServerIT
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
-		final Map<String, String> configOptions = dataStoreOptions.getFactoryOptionsAsMap();
+		final Map<String, String> configOptions = dataStoreOptions.getOptionsAsMap();
 		configOptions.put(
 				"gwNamespace",
 				TestUtils.TEST_NAMESPACE);

@@ -34,7 +34,7 @@ script:
   - travis_wait 50 .utility/run-tests.sh
 before_install:
   # This must match the dev-resources version from the parent pom:
-  - export DEV_RESOURCES_VERSION=1.1
+  - export DEV_RESOURCES_VERSION=1.2
   - export IT_STORE_TYPE=${STORE_TYPE}
   - export MAVEN_OPTS="-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2048m -XX:MaxMetaspaceSize=256m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
   - chmod +x .utility/pull-dev-resources.sh

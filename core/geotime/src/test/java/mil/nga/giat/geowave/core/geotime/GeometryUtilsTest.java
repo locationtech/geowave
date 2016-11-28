@@ -14,6 +14,8 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -224,7 +226,7 @@ public class GeometryUtilsTest
 		}
 
 		@Override
-		public long[] getCoordinatesPerDimension(
+		public MultiDimensionalCoordinates getCoordinatesPerDimension(
 				final ByteArrayId insertionId ) {
 			return null;
 		}
@@ -261,6 +263,14 @@ public class GeometryUtilsTest
 		@Override
 		public List<IndexMetaData> createMetaData() {
 			return Collections.emptyList();
+		}
+
+		@Override
+		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+				MultiDimensionalNumericData dataRange,
+				IndexMetaData... hints ) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}

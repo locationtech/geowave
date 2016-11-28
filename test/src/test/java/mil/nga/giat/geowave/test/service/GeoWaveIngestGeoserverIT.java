@@ -139,7 +139,7 @@ public class GeoWaveIngestGeoserverIT
 				"Unable to publish '" + dataStoreOptions.getType() + "' data store",
 				geoserverServiceClient.publishDatastore(
 						dataStoreOptions.getType(),
-						dataStoreOptions.getFactoryOptionsAsMap(),
+						dataStoreOptions.getOptionsAsMap(),
 						TestUtils.TEST_NAMESPACE,
 						null,
 						null,

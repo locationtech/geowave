@@ -110,11 +110,11 @@ public class BinnedNumericDataset implements
 		if (dimensionDefinitions.length == 0) {
 			return new BinnedNumericDataset[0];
 		}
-		final BinRange[][] binRangesPerDimension = new BinRange[dimensionDefinitions.length][];
+		final BinRange[][] binRangesPerDimension = getBinnedRangesPerDimension(
+				numericData,
+				dimensionDefinitions);
 		int numBinnedQueries = 1;
 		for (int d = 0; d < dimensionDefinitions.length; d++) {
-			binRangesPerDimension[d] = dimensionDefinitions[d]
-					.getNormalizedRanges(numericData.getDataPerDimension()[d]);
 			numBinnedQueries *= binRangesPerDimension[d].length;
 		}
 		// now we need to combine all permutations of bin ranges into
@@ -154,6 +154,20 @@ public class BinnedNumericDataset implements
 			}
 		}
 		return binnedQueries;
+	}
+
+	public static BinRange[][] getBinnedRangesPerDimension(
+			final MultiDimensionalNumericData numericData,
+			final NumericDimensionDefinition[] dimensionDefinitions ) {
+		if (dimensionDefinitions.length == 0) {
+			return new BinRange[0][];
+		}
+		final BinRange[][] binRangesPerDimension = new BinRange[dimensionDefinitions.length][];
+		for (int d = 0; d < dimensionDefinitions.length; d++) {
+			binRangesPerDimension[d] = dimensionDefinitions[d]
+					.getNormalizedRanges(numericData.getDataPerDimension()[d]);
+		}
+		return binRangesPerDimension;
 	}
 
 	@Override

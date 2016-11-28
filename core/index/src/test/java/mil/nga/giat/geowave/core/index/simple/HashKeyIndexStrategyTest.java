@@ -13,6 +13,7 @@ import java.util.Set;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
@@ -48,7 +49,6 @@ public class HashKeyIndexStrategyTest
 			SFCType.HILBERT);
 
 	private static final HashKeyIndexStrategy hashIdexStrategy = new HashKeyIndexStrategy(
-			sfcIndexStrategy.getOrderedDimensionDefinitions(),
 			3);
 	private static final CompoundIndexStrategy compoundIndexStrategy = new CompoundIndexStrategy(
 			hashIdexStrategy,
@@ -121,7 +121,7 @@ public class HashKeyIndexStrategyTest
 	public void testNumberOfDimensionsPerIndexStrategy() {
 		final int[] numDimensionsPerStrategy = compoundIndexStrategy.getNumberOfDimensionsPerIndexStrategy();
 		Assert.assertEquals(
-				2,
+				0,
 				numDimensionsPerStrategy[0]);
 		Assert.assertEquals(
 				2,
@@ -151,9 +151,11 @@ public class HashKeyIndexStrategyTest
 					dimension2Range
 				});
 		for (ByteArrayId id : compoundIndexStrategy.getInsertionIds(sfcIndexedRange)) {
-			long[] coords = compoundIndexStrategy.getCoordinatesPerDimension(id);
-			assertTrue(coords[0] > 0);
-			assertTrue(coords[1] > 0);
+			MultiDimensionalCoordinates coords = compoundIndexStrategy.getCoordinatesPerDimension(id);
+			assertTrue(coords.getCoordinate(
+					0).getCoordinate() > 0);
+			assertTrue(coords.getCoordinate(
+					1).getCoordinate() > 0);
 			MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(id);
 			assertEquals(
 					20.02,

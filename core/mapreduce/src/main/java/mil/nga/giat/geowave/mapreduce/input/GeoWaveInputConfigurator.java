@@ -101,7 +101,7 @@ public class GeoWaveInputConfigurator extends
 			final Configuration config ) {
 		final String input = config.get(enumToConfKey(
 				implementingClass,
-				GeoWaveMetaStore.INDEX));
+				GeoWaveConfg.INDEX));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
 			return PersistenceUtils.fromBinary(

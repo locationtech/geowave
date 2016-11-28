@@ -73,12 +73,9 @@ public class GroupAssigmentJobRunner extends
 		// the adapter
 		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties
 				.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
-		GeoWaveInputFormat.setDataStoreName(
+		GeoWaveInputFormat.setStoreOptions(
 				config,
-				dataStoreOptions.getType());
-		GeoWaveInputFormat.setStoreConfigOptions(
-				config,
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					CentroidParameters.Centroid.EXTRACTOR_CLASS,

@@ -63,7 +63,7 @@ public class ListPluginsCommand extends
 			final StoreFactoryFamilySpi dataStoreFactory = dataStoreFactoryEntry.getValue();
 			final String desc = dataStoreFactory.getDescription() == null ? "no description" : dataStoreFactory
 					.getDescription();
-			final String text = "  " + dataStoreFactory.getName() + ":\n    " + desc;
+			final String text = "  " + dataStoreFactory.getType() + ":\n    " + desc;
 			pw.println(text);
 			pw.println();
 		}

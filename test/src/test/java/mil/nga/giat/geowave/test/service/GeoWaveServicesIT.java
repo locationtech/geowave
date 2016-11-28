@@ -283,7 +283,7 @@ public class GeoWaveServicesIT
 				"Unable to publish accumulo datastore",
 				geoserverServiceClient.publishDatastore(
 						dataStoreOptions.getType(),
-						dataStoreOptions.getFactoryOptionsAsMap(),
+						dataStoreOptions.getOptionsAsMap(),
 						TestUtils.TEST_NAMESPACE,
 						null,
 						null,
@@ -314,7 +314,7 @@ public class GeoWaveServicesIT
 		success = false;
 
 		if (dsInfo != null) {
-			final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
+			final Map<String, String> options = dataStoreOptions.getOptionsAsMap();
 			final List<ConfigOption> configOptions = Arrays.asList(ConfigUtils
 					.createConfigOptionsFromJCommander(dataStoreOptions));
 			final Collection<String> nonPasswordRequiredFields = Collections2.transform(

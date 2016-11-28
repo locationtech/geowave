@@ -25,11 +25,18 @@ public class GeowaveRowId
 
 	public GeowaveRowId(
 			final byte[] rowId ) {
-		final byte[] metadata = Arrays.copyOfRange(
+		this(
 				rowId,
-				rowId.length - 12,
 				rowId.length);
-		final ByteBuffer metadataBuf = ByteBuffer.wrap(metadata);
+	}
+
+	public GeowaveRowId(
+			final byte[] rowId,
+			int length ) {
+		final ByteBuffer metadataBuf = ByteBuffer.wrap(
+				rowId,
+				length - 12,
+				12);
 		final int adapterIdLength = metadataBuf.getInt();
 		final int dataIdLength = metadataBuf.getInt();
 		final int numberOfDuplicates = metadataBuf.getInt();
@@ -37,8 +44,11 @@ public class GeowaveRowId
 		final ByteBuffer buf = ByteBuffer.wrap(
 				rowId,
 				0,
-				rowId.length - 12);
-		final byte[] insertionId = new byte[rowId.length - 12 - adapterIdLength - dataIdLength];
+				length - 12);
+		if (rowId.length - 12 - adapterIdLength - dataIdLength < 0) {
+			System.err.println("crap");
+		}
+		final byte[] insertionId = new byte[length - 12 - adapterIdLength - dataIdLength];
 		final byte[] adapterId = new byte[adapterIdLength];
 		final byte[] dataId = new byte[dataIdLength];
 		buf.get(insertionId);

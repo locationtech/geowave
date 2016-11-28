@@ -31,12 +31,9 @@ public class GeoWaveOutputFormatConfiguration implements
 			throws Exception {
 		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties
 				.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				configuration,
-				dataStoreOptions.getType());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				configuration,
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 	}
 
 	@Override
