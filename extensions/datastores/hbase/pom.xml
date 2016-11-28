@@ -88,6 +88,12 @@
 			<artifactId>annotations</artifactId>
 		</dependency>
 	</dependencies>
-
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.os72</groupId>
+				<artifactId>protoc-jar-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
