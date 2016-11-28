@@ -237,20 +237,26 @@ public class CompoundIndexStrategy implements
 							1));
 		}
 		else {
-			final int maxEstRangeDecompositionPerStrategy = (int) Math.ceil(Math.sqrt(maxEstimatedRangeDecomposition));
+			// for partitioning it works alright to just use permute ranges from
+			// both sub-strategies but in general this could be too much
+
+			// final int maxEstRangeDecompositionPerStrategy = (int) Math.ceil(
+			// Math.sqrt(
+			// maxEstimatedRangeDecomposition));
 			rangeForStrategy1 = subStrategy1.getQueryRanges(
 					ranges[0],
-					maxEstRangeDecompositionPerStrategy,
+					maxEstimatedRangeDecomposition,
+					extractHints(
+							hints,
+							0));
+			// final int maxEstRangeDecompositionStrategy2 =
+			// maxEstimatedRangeDecomposition / rangeForStrategy1.size();
+			rangeForStrategy2 = subStrategy2.getQueryRanges(
+					ranges[1],
+					maxEstimatedRangeDecomposition,
 					extractHints(
 							hints,
 							1));
-			final int maxEstRangeDecompositionStrategy2 = maxEstimatedRangeDecomposition / rangeForStrategy1.size();
-			rangeForStrategy2 = subStrategy2.getQueryRanges(
-					ranges[1],
-					maxEstRangeDecompositionStrategy2,
-					extractHints(
-							hints,
-							2));
 		}
 		final List<ByteArrayRange> range = getByteArrayRanges(
 				rangeForStrategy1,
@@ -338,21 +344,25 @@ public class CompoundIndexStrategy implements
 	}
 
 	@Override
-	public long[] getCoordinatesPerDimension(
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
 			final ByteArrayId insertionId ) {
 		final ByteArrayId[] insertionIds = decomposeByteArrayId(insertionId);
-		final long[] coordinates1 = subStrategy1.getCoordinatesPerDimension(insertionIds[0]);
-		final long[] coordinates2 = subStrategy2.getCoordinatesPerDimension(insertionIds[1]);
-		final long[] coordinates = new long[baseDefinitions.length];
+		final MultiDimensionalCoordinates coordinates1 = subStrategy1.getCoordinatesPerDimension(insertionIds[0]);
+		final MultiDimensionalCoordinates coordinates2 = subStrategy2.getCoordinatesPerDimension(insertionIds[1]);
+		final Coordinate[] coordinates = new Coordinate[baseDefinitions.length];
 		for (int i = 0; i < baseDefinitions.length; i++) {
 			if (strategy1Mappings[i] >= 0) {
-				coordinates[i] = coordinates1[strategy1Mappings[i]];
+				coordinates[i] = coordinates1.getCoordinate(strategy1Mappings[i]);
 			}
 			if (strategy2Mappings[i] >= 0) {
-				coordinates[i] = coordinates2[strategy2Mappings[i]];
+				coordinates[i] = coordinates2.getCoordinate(strategy2Mappings[i]);
 			}
 		}
-		return coordinates;
+		return new MultiDimensionalCoordinates(
+				ByteArrayUtils.combineArrays(
+						coordinates1.getMultiDimensionalId(),
+						coordinates2.getMultiDimensionalId()),
+				coordinates);
 	}
 
 	private void init() {
@@ -641,4 +651,37 @@ public class CompoundIndexStrategy implements
 		}
 	}
 
+	@Override
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			final MultiDimensionalNumericData dataRange,
+			final IndexMetaData... hints ) {
+		final MultiDimensionalCoordinateRanges[] ranges1 = subStrategy1.getCoordinateRangesPerDimension(
+				dataRange,
+				hints);
+		final MultiDimensionalCoordinateRanges[] ranges2 = subStrategy2.getCoordinateRangesPerDimension(
+				dataRange,
+				hints);
+		MultiDimensionalCoordinateRanges[] retVal = new MultiDimensionalCoordinateRanges[ranges1.length
+				* ranges2.length];
+		int r = 0;
+		for (final MultiDimensionalCoordinateRanges range1 : ranges1) {
+			for (final MultiDimensionalCoordinateRanges range2 : ranges2) {
+				final CoordinateRange[][] coordinateRangesPerDimensions = new CoordinateRange[baseDefinitions.length][];
+				for (int i = 0; i < baseDefinitions.length; i++) {
+					if (strategy1Mappings[i] >= 0) {
+						coordinateRangesPerDimensions[i] = range1.getRangeForDimension(strategy1Mappings[i]);
+					}
+					else if (strategy2Mappings[i] >= 0) {
+						coordinateRangesPerDimensions[i] = range2.getRangeForDimension(strategy2Mappings[i]);
+					}
+				}
+				retVal[r++] = new MultiDimensionalCoordinateRanges(
+						ByteArrayUtils.combineArrays(
+								range1.getMultiDimensionalId(),
+								range2.getMultiDimensionalId()),
+						coordinateRangesPerDimensions);
+			}
+		}
+		return retVal;
+	}
 }

@@ -20,10 +20,15 @@ import com.google.common.collect.ImmutableBiMap.Builder;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+
 import mil.nga.giat.geowave.core.index.FloatCompareUtils;
+import mil.nga.giat.geowave.core.index.Coordinate;
+import mil.nga.giat.geowave.core.index.CoordinateRange;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -51,7 +56,7 @@ public class TieredSFCIndexStrategy implements
 	private ImmutableBiMap<Integer, Byte> orderedSfcIndexToTierId;
 	private NumericDimensionDefinition[] baseDefinitions;
 	private long maxEstimatedDuplicateIdsPerDimension;
-	private Map<Integer, BigInteger> maxEstimatedDuplicatesPerDimensionalExtent = new HashMap<>();
+	private final Map<Integer, BigInteger> maxEstimatedDuplicatesPerDimensionalExtent = new HashMap<>();
 
 	protected TieredSFCIndexStrategy() {}
 
@@ -81,7 +86,7 @@ public class TieredSFCIndexStrategy implements
 			final NumericDimensionDefinition[] baseDefinitions,
 			final SpaceFillingCurve[] orderedSfcs,
 			final ImmutableBiMap<Integer, Byte> orderedSfcIndexToTierId,
-			long maxEstimatedDuplicateIdsPerDimension ) {
+			final long maxEstimatedDuplicateIdsPerDimension ) {
 		this.orderedSfcs = orderedSfcs;
 		this.baseDefinitions = baseDefinitions;
 		this.orderedSfcIndexToTierId = orderedSfcIndexToTierId;
@@ -92,7 +97,7 @@ public class TieredSFCIndexStrategy implements
 
 	private void initDuplicateIdLookup() {
 		for (int i = 0; i <= baseDefinitions.length; i++) {
-			long maxEstimatedDuplicateIds = (long) Math.pow(
+			final long maxEstimatedDuplicateIds = (long) Math.pow(
 					maxEstimatedDuplicateIdsPerDimension,
 					i);
 			maxEstimatedDuplicatesPerDimensionalExtent.put(
@@ -205,8 +210,8 @@ public class TieredSFCIndexStrategy implements
 
 	private static int getRanges(
 			final MultiDimensionalNumericData indexedData ) {
-		double[] mins = indexedData.getMinValuesPerDimension();
-		double[] maxes = indexedData.getMaxValuesPerDimension();
+		final double[] mins = indexedData.getMinValuesPerDimension();
+		final double[] maxes = indexedData.getMaxValuesPerDimension();
 		int ranges = 0;
 		for (int d = 0; d < mins.length; d++) {
 			if (!FloatCompareUtils.checkDoublesEqual(
@@ -246,16 +251,20 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
-	public long[] getCoordinatesPerDimension(
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
 			final ByteArrayId insertionId ) {
 		final byte[] rowId = insertionId.getBytes();
 		if (rowId.length > 0) {
 			final Integer orderedSfcIndex = orderedSfcIndexToTierId.inverse().get(
 					rowId[0]);
-			return getCoordinatesForId(
-					rowId,
-					baseDefinitions,
-					orderedSfcs[orderedSfcIndex]);
+			return new MultiDimensionalCoordinates(
+					new byte[] {
+						rowId[0]
+					},
+					getCoordinatesForId(
+							rowId,
+							baseDefinitions,
+							orderedSfcs[orderedSfcIndex]));
 		}
 		else {
 			LOGGER.warn("Row must at least contain a byte for tier");
@@ -281,14 +290,74 @@ public class TieredSFCIndexStrategy implements
 		return null;
 	}
 
-	protected static long[] getCoordinatesForId(
+	protected static Coordinate[] getCoordinatesForId(
 			final byte[] rowId,
 			final NumericDimensionDefinition[] baseDefinitions,
 			final SpaceFillingCurve sfc ) {
 		final SFCIdAndBinInfo sfcIdAndBinInfo = getSFCIdAndBinInfo(
 				rowId,
 				baseDefinitions);
-		return sfc.getCoordinates(sfcIdAndBinInfo.sfcId);
+		final long[] coordinateValues = sfc.getCoordinates(sfcIdAndBinInfo.sfcId);
+		final Coordinate[] retVal = new Coordinate[coordinateValues.length];
+		for (int i = 0; i < coordinateValues.length; i++) {
+			final byte[] bin = sfcIdAndBinInfo.binIds.get(i);
+			retVal[i] = new Coordinate(
+					coordinateValues[i],
+					bin);
+		}
+		return retVal;
+	}
+
+	@Override
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			final MultiDimensionalNumericData dataRange,
+			final IndexMetaData... hints ) {
+		final List<MultiDimensionalCoordinateRanges> coordRanges = new ArrayList<MultiDimensionalCoordinateRanges>();
+		final BinRange[][] binRangesPerDimension = BinnedNumericDataset.getBinnedRangesPerDimension(
+				dataRange,
+				baseDefinitions);
+		final TierIndexMetaData metaData = ((hints.length > 0) && (hints[0] != null) && (hints[0] instanceof TierIndexMetaData)) ? (TierIndexMetaData) hints[0]
+				: null;
+
+		for (int sfcIndex = orderedSfcs.length - 1; sfcIndex >= 0; sfcIndex--) {
+			if ((metaData != null) && (metaData.tierCounts[sfcIndex] == 0)) {
+				continue;
+			}
+			final SpaceFillingCurve sfc = orderedSfcs[sfcIndex];
+			final Byte tier = orderedSfcIndexToTierId.get(sfcIndex);
+			coordRanges.add(getCoordinateRanges(
+					binRangesPerDimension,
+					sfc,
+					baseDefinitions.length,
+					tier));
+		}
+		return coordRanges.toArray(new MultiDimensionalCoordinateRanges[] {});
+	}
+
+	protected static MultiDimensionalCoordinateRanges getCoordinateRanges(
+			final BinRange[][] binRangesPerDimension,
+			final SpaceFillingCurve sfc,
+			final int numDimensions,
+			final byte tier ) {
+		final CoordinateRange[][] coordinateRangesPerDimension = new CoordinateRange[numDimensions][];
+		for (int d = 0; d < coordinateRangesPerDimension.length; d++) {
+			coordinateRangesPerDimension[d] = new CoordinateRange[binRangesPerDimension[d].length];
+			for (int i = 0; i < binRangesPerDimension[d].length; i++) {
+				final long[] range = sfc.normalizeRange(
+						binRangesPerDimension[d][i].getNormalizedMin(),
+						binRangesPerDimension[d][i].getNormalizedMax(),
+						d);
+				coordinateRangesPerDimension[d][i] = new CoordinateRange(
+						range[0],
+						range[1],
+						binRangesPerDimension[d][i].getBinId());
+			}
+		}
+		return new MultiDimensionalCoordinateRanges(
+				new byte[] {
+					tier
+				},
+				coordinateRangesPerDimension);
 	}
 
 	protected static MultiDimensionalNumericData getRangeForId(

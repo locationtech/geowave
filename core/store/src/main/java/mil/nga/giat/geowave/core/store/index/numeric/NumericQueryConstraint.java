@@ -59,9 +59,9 @@ public class NumericQueryConstraint implements
 	public List<ByteArrayRange> getRange() {
 		return Collections.singletonList(new ByteArrayRange(
 				new ByteArrayId(
-						NumericIndexStrategy.toIndexByte(lowerValue.doubleValue())),
+						NumericFieldIndexStrategy.toIndexByte(lowerValue.doubleValue())),
 				new ByteArrayId(
-						NumericIndexStrategy.toIndexByte(upperValue.doubleValue()))));
+						NumericFieldIndexStrategy.toIndexByte(upperValue.doubleValue()))));
 	}
 
 	public FilterableConstraints intersect(

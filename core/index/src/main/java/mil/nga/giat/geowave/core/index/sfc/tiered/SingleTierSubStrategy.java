@@ -10,10 +10,13 @@ import java.util.Set;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
 import mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -22,7 +25,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
  * This class wraps a single SpaceFillingCurve implementation with a tiered
  * approach to indexing (an SFC with a tier ID). This can be utilized by an
  * overall HierarchicalNumericIndexStrategy as an encapsulated sub-strategy.
- * 
+ *
  */
 public class SingleTierSubStrategy implements
 		NumericIndexStrategy
@@ -77,13 +80,17 @@ public class SingleTierSubStrategy implements
 	}
 
 	@Override
-	public long[] getCoordinatesPerDimension(
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
 			final ByteArrayId insertionId ) {
 		final byte[] rowId = insertionId.getBytes();
-		return TieredSFCIndexStrategy.getCoordinatesForId(
-				rowId,
-				baseDefinitions,
-				sfc);
+		return new MultiDimensionalCoordinates(
+				new byte[] {
+					tier
+				},
+				TieredSFCIndexStrategy.getCoordinatesForId(
+						rowId,
+						baseDefinitions,
+						sfc));
 	}
 
 	@Override
@@ -242,5 +249,21 @@ public class SingleTierSubStrategy implements
 	@Override
 	public List<IndexMetaData> createMetaData() {
 		return Collections.<IndexMetaData> emptyList();
+	}
+
+	@Override
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			final MultiDimensionalNumericData dataRange,
+			final IndexMetaData... hints ) {
+		final BinRange[][] binRangesPerDimension = BinnedNumericDataset.getBinnedRangesPerDimension(
+				dataRange,
+				baseDefinitions);
+		return new MultiDimensionalCoordinateRanges[] {
+			TieredSFCIndexStrategy.getCoordinateRanges(
+					binRangesPerDimension,
+					sfc,
+					baseDefinitions.length,
+					tier)
+		};
 	}
 }

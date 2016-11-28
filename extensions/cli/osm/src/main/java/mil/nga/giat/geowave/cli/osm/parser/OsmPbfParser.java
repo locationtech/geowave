@@ -270,7 +270,7 @@ public class OsmPbfParser
 				// Weird spec - keys and values are mashed sequentially, and end
 				// of data for a particular node is denoted by a value of 0
 				if (nodes.getKeysValsCount() > 0) {
-					Map<CharSequence, CharSequence> tags = new HashMap<>(
+					Map<String, String> tags = new HashMap<>(
 							nodes.getKeysValsCount());
 					while (nodes.getKeysVals(tagLocation) > 0) {
 						String k = getStringById(nodes.getKeysVals(tagLocation));
@@ -381,10 +381,10 @@ public class OsmPbfParser
 			System.out.println("Complete!");
 		}
 
-		private Map<CharSequence, CharSequence> getTags(
+		private Map<String, String> getTags(
 				List<Integer> k,
 				List<Integer> v ) {
-			Map<CharSequence, CharSequence> tags = new HashMap<CharSequence, CharSequence>(
+			Map<String, String> tags = new HashMap<String, String>(
 					k.size());
 			for (int i = 0; i < k.size(); i++) {
 				tags.put(

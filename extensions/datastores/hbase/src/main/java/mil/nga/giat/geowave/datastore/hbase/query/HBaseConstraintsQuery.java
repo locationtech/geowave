@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -34,11 +34,12 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
+import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos;
 
 public class HBaseConstraintsQuery extends
 		HBaseFilteredIndexQuery
@@ -131,11 +132,25 @@ public class HBaseConstraintsQuery extends
 		if ((options != null) && options.isEnableCustomFilters()) {
 			return filters;
 		}
-
-		// Without custom filters, we need all the filters on the client side
-		for (final QueryFilter distributable : base.distributableFilters) {
-			if (!filters.contains(distributable)) {
-				filters.add(distributable);
+		// add a index filter to the front of the list if there isn't already a
+		// filter
+		if (base.distributableFilters.isEmpty()) {
+			final List<MultiDimensionalCoordinateRangesArray> coords = base.getCoordinateRanges();
+			if (!coords.isEmpty()) {
+				filters.add(
+						0,
+						new CoordinateRangeQueryFilter(
+								index.getIndexStrategy(),
+								coords.toArray(new MultiDimensionalCoordinateRangesArray[] {})));
+			}
+		}
+		else {
+			// Without custom filters, we need all the filters on the client
+			// side
+			for (final QueryFilter distributable : base.distributableFilters) {
+				if (!filters.contains(distributable)) {
+					filters.add(distributable);
+				}
 			}
 		}
 		return filters;
@@ -144,6 +159,11 @@ public class HBaseConstraintsQuery extends
 	@Override
 	protected List<DistributableQueryFilter> getDistributableFilters() {
 		return base.distributableFilters;
+	}
+
+	@Override
+	protected List<MultiDimensionalCoordinateRangesArray> getCoordinateRanges() {
+		return base.getCoordinateRanges();
 	}
 
 	@Override
@@ -234,12 +254,27 @@ public class HBaseConstraintsQuery extends
 			final AggregationProtos.AggregationRequest.Builder requestBuilder = AggregationProtos.AggregationRequest
 					.newBuilder();
 			requestBuilder.setAggregation(aggregationBuilder.build());
+			if ((base.distributableFilters != null) && !base.distributableFilters.isEmpty()) {
+				final byte[] filterBytes = PersistenceUtils.toBinary(base.distributableFilters);
+				final ByteString filterByteString = ByteString.copyFrom(filterBytes);
 
-			final byte[] filterBytes = PersistenceUtils.toBinary(base.distributableFilters);
-			final ByteString filterByteString = ByteString.copyFrom(filterBytes);
+				requestBuilder.setFilter(filterByteString);
+			}
+			else {
+				final List<MultiDimensionalCoordinateRangesArray> coords = base.getCoordinateRanges();
+				if (!coords.isEmpty()) {
+					final byte[] filterBytes = new HBaseNumericIndexStrategyFilter(
+							index.getIndexStrategy(),
+							coords.toArray(new MultiDimensionalCoordinateRangesArray[] {})).toByteArray();
+					final ByteString filterByteString = ByteString.copyFrom(
+							new byte[] {
+								0
+							}).concat(
+							ByteString.copyFrom(filterBytes));
 
-			requestBuilder.setFilter(filterByteString);
-
+					requestBuilder.setNumericIndexStrategyFilter(filterByteString);
+				}
+			}
 			requestBuilder.setModel(ByteString.copyFrom(PersistenceUtils.toBinary(index.getIndexModel())));
 
 			final MultiRowRangeFilter multiFilter = getFilter(base.getAllRanges());
@@ -249,21 +284,11 @@ public class HBaseConstraintsQuery extends
 			if (base.aggregation.getLeft() != null) {
 				final ByteArrayId adapterId = base.aggregation.getLeft().getAdapterId();
 				if (isCommonIndexAggregation()) {
-					final int binaryLength = 5 + adapterId.getBytes().length;
-
-					final ByteBuffer buf = ByteBuffer.allocate(binaryLength);
-					buf.put((byte) 0);
-					buf.putInt(adapterId.getBytes().length);
-					buf.put(adapterId.getBytes());
-					requestBuilder.setAdapter(ByteString.copyFrom(buf.array()));
+					requestBuilder.setAdapterId(ByteString.copyFrom(adapterId.getBytes()));
 				}
 				else {
 					final DataAdapter dataAdapter = adapterStore.getAdapter(adapterId);
-					requestBuilder.setAdapter(ByteString.copyFrom(
-							new byte[] {
-								1
-							}).concat(
-							ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter))));
+					requestBuilder.setAdapter(ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter)));
 				}
 			}
 			final AggregationProtos.AggregationRequest request = requestBuilder.build();
