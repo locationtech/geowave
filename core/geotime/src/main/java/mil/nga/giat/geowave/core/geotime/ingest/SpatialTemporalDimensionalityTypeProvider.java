@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
@@ -240,7 +241,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 	}
 
-	public static class SpatialTemporalIndexBuilder
+	public static class SpatialTemporalIndexBuilder extends
+			BaseIndexBuilder<SpatialTemporalIndexBuilder>
 	{
 		private final SpatialTemporalOptions options;
 
@@ -248,41 +250,33 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			options = new SpatialTemporalOptions();
 		}
 
-		private SpatialTemporalIndexBuilder(
-				final SpatialTemporalOptions options ) {
-			this.options = options;
-		}
-
 		public SpatialTemporalIndexBuilder setPointOnly(
 				final boolean pointOnly ) {
 			options.pointOnly = pointOnly;
-			return new SpatialTemporalIndexBuilder(
-					options);
+			return this;
 		}
 
 		public SpatialTemporalIndexBuilder setBias(
 				final Bias bias ) {
 			options.bias = bias;
-			return new SpatialTemporalIndexBuilder(
-					options);
+			return this;
 		}
 
 		public SpatialTemporalIndexBuilder setPeriodicity(
 				final Unit periodicity ) {
 			options.periodicity = periodicity;
-			return new SpatialTemporalIndexBuilder(
-					options);
+			return this;
 		}
 
-		public SpatialTemporalIndexBuilder setMaxDupicates(
+		public SpatialTemporalIndexBuilder setMaxDuplicates(
 				final long maxDuplicates ) {
 			options.maxDuplicates = maxDuplicates;
-			return new SpatialTemporalIndexBuilder(
-					options);
+			return this;
 		}
 
+		@Override
 		public PrimaryIndex createIndex() {
-			return internalCreatePrimaryIndex(options);
+			return createIndex(internalCreatePrimaryIndex(options));
 		}
 	}
 

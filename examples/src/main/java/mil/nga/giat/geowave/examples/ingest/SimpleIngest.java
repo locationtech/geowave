@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.examples.ingest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,9 +18,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.WholeFeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
@@ -75,7 +73,7 @@ public class SimpleIngest
 	 * DataStore is essentially the controller that take the accumulo
 	 * information, geowave configuration, and data type, and inserts/queries
 	 * from accumulo
-	 * 
+	 *
 	 * @param instance
 	 *            Accumulo instance configuration
 	 * @return DataStore object for the particular accumulo instance
@@ -104,7 +102,7 @@ public class SimpleIngest
 	/***
 	 * The class tells geowave about the accumulo instance it should connect to,
 	 * as well as what tables it should create/store it's data in
-	 * 
+	 *
 	 * @param zookeepers
 	 *            Zookeepers associated with the accumulo instance, comma
 	 *            separate
@@ -142,7 +140,7 @@ public class SimpleIngest
 	 * The dataadapter interface describes how to serialize a data type. Here we
 	 * are using an implementation that understands how to serialize OGC
 	 * SimpleFeature types.
-	 * 
+	 *
 	 * @param sft
 	 *            simple feature type you want to generate an adapter from
 	 * @return data adapter that handles serialization of the sft simple feature
@@ -160,18 +158,27 @@ public class SimpleIngest
 	 * range of the index (min/max values) -The range type (bounded/unbounded)
 	 * -The number of "levels" (different precisions, needed when the values
 	 * indexed has ranges on any dimension)
-	 * 
+	 *
 	 * @return GeoWave index for a default SPATIAL index
 	 */
 	public static PrimaryIndex createSpatialIndex() {
 
-		// Reasonable values for spatial and spatio-temporal are provided
-		// through static factory methods.
+		// Reasonable values for spatial and spatial-temporal are provided
+		// through index builders.
 		// They are intended to be a reasonable starting place - though creating
 		// a custom index may provide better
-		// performance is the distribution/characterization of the data is well
-		// known.
-		return new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		// performance as the distribution/characterization of the data is well
+		// known. There are many such customizations available through setters
+		// on the builder.
+
+		// for example to create a spatial-temporal index with 8 randomized
+		// partitions (pre-splits on accumulo or hbase) and a temporal bias
+		// (giving more precision to time than space) you could do something
+		// like this:
+		//@formatter:off
+		// return new SpatialTemporalIndexBuilder().setBias(Bias.TEMPORAL).setNumPartitions(8);
+		//@formatter:on
+		return new SpatialIndexBuilder().createIndex();
 	}
 
 	/***
@@ -180,7 +187,7 @@ public class SimpleIngest
 	 * what our data looks like so the serializer (FeatureDataAdapter for this
 	 * case) can know how to store it. Features/Attributes are also a general
 	 * convention of GIS systems in general.
-	 * 
+	 *
 	 * @return Simple Feature definition for our demo point feature
 	 */
 	public static SimpleFeatureType createPointFeatureType() {

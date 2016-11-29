@@ -50,11 +50,13 @@ public class ChooseLocalityPreservingQueryStrategyTest
 
 	protected final List<PrimaryIndex> indices = Arrays.asList(
 			IMAGE_CHIP_INDEX1,
-			new SpatialTemporalIndexBuilder().setBias(
+			new SpatialTemporalIndexBuilder().setNumPartitions(
+					5).setBias(
 					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
 					Unit.YEAR).setPointOnly(
 					false).createIndex(),
-			new SpatialTemporalIndexBuilder().setBias(
+			new SpatialTemporalIndexBuilder().setNumPartitions(
+					10).setBias(
 					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
 					Unit.DAY).setPointOnly(
 					false).createIndex(),
