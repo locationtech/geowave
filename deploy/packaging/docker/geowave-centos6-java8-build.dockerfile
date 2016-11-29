@@ -1,6 +1,6 @@
 FROM centos:centos6
 
-RUN yum -y install asciidoc boost boost-devel gcc-c++ git glibc.i686 tar unzip which wget xmlto && \
+RUN yum -y install asciidoc boost boost-devel gcc-c++ git glibc.i686 tar unzip which wget && \
 	yum clean all
 
 RUN cd /tmp && wget --no-check-certificate --no-cookies \

@@ -8,16 +8,16 @@ class geowave::server {
     notify => Service['geowave']
   }
 
-  if !defined(Package["geowave-core"]) {
-    package { "geowave-core":
+  if !defined(Package["geowave-${geowave::geowave_version}-core"]) {
+    package { "geowave-${geowave::geowave_version}-core":
       ensure => latest,
       tag    => 'geowave-package',
     }
   }
 
-  file {'/usr/local/geowave/geoserver/etc/jetty.xml':
+  file {'/usr/local/geowave/geoserver/start.ini':
     ensure  => file,
-    content => template('geowave/jetty.xml.erb'),
+    content => template('geowave/start.ini.erb'),
     owner   => 'geowave',
     group   => 'geowave',
     mode    => '644',
