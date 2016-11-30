@@ -28,7 +28,6 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -37,7 +36,6 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 
 public class VectorMRExportJobRunner extends
@@ -53,10 +51,10 @@ public class VectorMRExportJobRunner extends
 	private final String hdfsPath;
 
 	public VectorMRExportJobRunner(
-			DataStorePluginOptions storeOptions,
-			VectorMRExportOptions mrOptions,
-			String hdfsHostPort,
-			String hdfsPath ) {
+			final DataStorePluginOptions storeOptions,
+			final VectorMRExportOptions mrOptions,
+			final String hdfsHostPort,
+			final String hdfsPath ) {
 		this.storeOptions = storeOptions;
 		this.mrOptions = mrOptions;
 		this.hdfsHostPort = hdfsHostPort;
@@ -91,7 +89,7 @@ public class VectorMRExportJobRunner extends
 						@Override
 						public DataAdapter<?> apply(
 								final String input ) {
-							return (DataAdapter<?>) adapterStore.getAdapter(new ByteArrayId(
+							return adapterStore.getAdapter(new ByteArrayId(
 									input));
 						}
 					}));
@@ -146,12 +144,9 @@ public class VectorMRExportJobRunner extends
 							options.getIndex(),
 							null));
 		}
-		GeoWaveInputFormat.setDataStoreName(
+		GeoWaveInputFormat.setStoreOptions(
 				conf,
-				storeOptions.getType());
-		GeoWaveInputFormat.setStoreConfigOptions(
-				conf,
-				storeOptions.getFactoryOptionsAsMap());
+				storeOptions);
 		// the above code is a temporary placeholder until this gets merged with
 		// the new commandline options
 		GeoWaveInputFormat.setQueryOptions(
@@ -207,11 +202,11 @@ public class VectorMRExportJobRunner extends
 	public static void main(
 			final String[] args )
 			throws Exception {
-		ConfigOptions opts = new ConfigOptions();
-		OperationParser parser = new OperationParser();
+		final ConfigOptions opts = new ConfigOptions();
+		final OperationParser parser = new OperationParser();
 		parser.addAdditionalObject(opts);
-		VectorMRExportCommand command = new VectorMRExportCommand();
-		CommandLineOperationParams params = parser.parse(
+		final VectorMRExportCommand command = new VectorMRExportCommand();
+		final CommandLineOperationParams params = parser.parse(
 				command,
 				args);
 		opts.prepare(params);

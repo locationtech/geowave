@@ -170,12 +170,9 @@ public class ComparisonStatsJobRunner extends
 										+ kdeCommandLineOptions.getMinLevel() + "_"
 										+ kdeCommandLineOptions.getMaxLevel() + "_"
 										+ kdeCommandLineOptions.getCoverageName() + "/combined_pct"));
-				GeoWaveOutputFormat.setDataStoreName(
+				GeoWaveOutputFormat.setStoreOptions(
 						conf,
-						outputDataStoreOptions.getType());
-				GeoWaveOutputFormat.setStoreConfigOptions(
-						conf,
-						outputDataStoreOptions.getFactoryOptionsAsMap());
+						outputDataStoreOptions);
 
 				setup(
 						ingester,

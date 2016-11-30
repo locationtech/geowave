@@ -31,7 +31,7 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
-import mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos;
 
 public class AggregationEndpoint extends
 		AggregationProtos.AggregationService implements
@@ -73,7 +73,7 @@ public class AggregationEndpoint extends
 			final AggregationProtos.AggregationRequest request,
 			final RpcCallback<AggregationProtos.AggregationResponse> done ) {
 		FilterList filterList = null;
-		DataAdapter dataAdapter = null;
+		final DataAdapter dataAdapter = null;
 		ByteArrayId adapterId = null;
 		AggregationProtos.AggregationResponse response = null;
 		ByteString value = ByteString.EMPTY;
@@ -120,15 +120,40 @@ public class AggregationEndpoint extends
 			else {
 				LOGGER.error("Input range filter is undefined.");
 			}
+			if (request.hasNumericIndexStrategyFilter()) {
+				final byte[] nisFilterBytes = request.getNumericIndexStrategyFilter().toByteArray();
+
+				try {
+					final HBaseNumericIndexStrategyFilter numericIndexStrategyFilter = HBaseNumericIndexStrategyFilter
+							.parseFrom(nisFilterBytes);
+					if (filterList == null) {
+						filterList = new FilterList(
+								numericIndexStrategyFilter);
+					}
+					else {
+						filterList.addFilter(numericIndexStrategyFilter);
+					}
+				}
+				catch (final Exception e) {
+					LOGGER.error(
+							"Error creating index strategy filter.",
+							e);
+				}
+			}
+
 			try {
 				// Add distributable filters if requested, this has to be last
 				// in the filter list for the dedupe filter to work correctly
-				if (request.hasFilter() && request.hasModel()) {
+				if (request.hasModel()) {
 					hdFilter = new HBaseDistributableFilter();
-
-					final byte[] filterBytes = request.getFilter().toByteArray();
+					final byte[] filterBytes;
+					if (request.hasFilter()) {
+						filterBytes = request.getFilter().toByteArray();
+					}
+					else {
+						filterBytes = null;
+					}
 					final byte[] modelBytes = request.getModel().toByteArray();
-
 					if (hdFilter.init(
 							filterBytes,
 							modelBytes)) {
@@ -156,34 +181,18 @@ public class AggregationEndpoint extends
 
 			if (request.hasAdapter()) {
 				final byte[] adapterBytes = request.getAdapter().toByteArray();
-				if ((adapterBytes.length > 0)) {
-					if (adapterBytes[0] == 0) {
-						final ByteBuffer buf = ByteBuffer.wrap(adapterBytes);
-						buf.get();
-						final int length = buf.getInt();
-						final byte[] adapterIdBytes = new byte[length];
-						buf.get(adapterIdBytes);
-						adapterId = new ByteArrayId(
-								adapterIdBytes);
-					}
-					else {
-						// the first byte is just indicating what is stored, the
-						// rest is the adapter
-						final byte[] actualAdapterBytes = new byte[adapterBytes.length - 1];
-						System.arraycopy(
-								adapterBytes,
-								1,
-								actualAdapterBytes,
-								0,
-								actualAdapterBytes.length);
-						dataAdapter = PersistenceUtils.fromBinary(
-								actualAdapterBytes,
-								DataAdapter.class);
-						if (dataAdapter != null) {
-							adapterId = dataAdapter.getAdapterId();
-						}
-					}
-				}
+				final ByteBuffer buf = ByteBuffer.wrap(adapterBytes);
+				buf.get();
+				final int length = buf.getInt();
+				final byte[] adapterIdBytes = new byte[length];
+				buf.get(adapterIdBytes);
+				adapterId = new ByteArrayId(
+						adapterIdBytes);
+			}
+			else if (request.hasAdapterId()) {
+				final byte[] adapterIdBytes = request.getAdapterId().toByteArray();
+				adapterId = new ByteArrayId(
+						adapterIdBytes);
 			}
 
 			try {

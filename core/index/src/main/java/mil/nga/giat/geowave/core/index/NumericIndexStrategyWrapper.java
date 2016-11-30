@@ -57,7 +57,9 @@ public class NumericIndexStrategyWrapper implements
 	public List<ByteArrayRange> getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final IndexMetaData... hints ) {
-		return indexStrategy.getQueryRanges(indexedRange);
+		return indexStrategy.getQueryRanges(
+				indexedRange,
+				hints);
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public class NumericIndexStrategyWrapper implements
 	}
 
 	@Override
-	public long[] getCoordinatesPerDimension(
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
 			final ByteArrayId insertionId ) {
 		return indexStrategy.getCoordinatesPerDimension(insertionId);
 	}
@@ -120,6 +122,15 @@ public class NumericIndexStrategyWrapper implements
 
 	@Override
 	public List<IndexMetaData> createMetaData() {
-		return this.indexStrategy.createMetaData();
+		return indexStrategy.createMetaData();
+	}
+
+	@Override
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			final MultiDimensionalNumericData dataRange,
+			final IndexMetaData... hints ) {
+		return indexStrategy.getCoordinateRangesPerDimension(
+				dataRange,
+				hints);
 	}
 }

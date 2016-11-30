@@ -281,20 +281,9 @@ public class SpatialTemporalQueryIT
 			timeWriters.close();
 			rangeWriters.close();
 		}
-		final Map<String, Serializable> config = new HashMap<String, Serializable>();
-
-		final Map<String, String> mapOpts = dataStoreOptions.getFactoryOptionsAsMap();
-
-		for (final String key : mapOpts.keySet()) {
-			config.put(
-					key,
-					mapOpts.get(key));
-		}
-
 		geowaveGtDataStore = new GeoWaveGTDataStore(
 				new GeoWavePluginConfig(
-						dataStoreOptions.getFactoryFamily(),
-						config) {
+						dataStoreOptions) {
 					@Override
 					public IndexQueryStrategySPI getIndexQueryStrategy() {
 						return new IndexQueryStrategySPI() {

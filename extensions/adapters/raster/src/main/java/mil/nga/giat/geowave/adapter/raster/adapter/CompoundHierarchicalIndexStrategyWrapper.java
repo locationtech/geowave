@@ -9,8 +9,11 @@ import org.apache.log4j.Logger;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
+import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -105,14 +108,6 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 		firstHierarchicalStrategy = findHierarchicalStrategy(
 				rootStrategy,
 				parentStrategies);
-	}
-
-	@Override
-	public long[] getCoordinatesPerDimension(
-			final ByteArrayId insertionId ) {
-		return parentStrategies.get(
-				0).getCoordinatesPerDimension(
-				insertionId);
 	}
 
 	@Override
@@ -246,5 +241,23 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
+			ByteArrayId insertionId ) {
+		return parentStrategies.get(
+				0).getCoordinatesPerDimension(
+				insertionId);
+	}
+
+	@Override
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			MultiDimensionalNumericData dataRange,
+			IndexMetaData... hints ) {
+		return parentStrategies.get(
+				0).getCoordinateRangesPerDimension(
+				dataRange,
+				hints);
 	}
 }

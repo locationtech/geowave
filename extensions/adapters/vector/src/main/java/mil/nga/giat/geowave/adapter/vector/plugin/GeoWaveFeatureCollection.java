@@ -10,7 +10,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
-import org.geotools.factory.Hints;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.feature.visitor.MaxVisitor;
@@ -27,8 +26,8 @@ import org.opengis.referencing.operation.TransformException;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer;
-import mil.nga.giat.geowave.adapter.vector.render.RenderedMaster;
+import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderOptions;
+import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderResult;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
@@ -50,13 +49,6 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 public class GeoWaveFeatureCollection extends
 		DataFeatureCollection
 {
-
-	public static final Hints.Key LEVEL = new Hints.Key(
-			Integer.class);
-	public static final Hints.Key SERVER_FEATURE_RENDERER = new Hints.Key(
-			DistributableRenderer.class);
-	public static final Hints.Key STATS_NAME = new Hints.Key(
-			String.class);
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureCollection.class);
 	private final GeoWaveFeatureReader reader;
 	private CloseableIterator<SimpleFeature> featureCursor;
@@ -196,20 +188,14 @@ public class GeoWaveFeatureCollection extends
 
 	private static SimpleFeatureType createDistributedRenderFeatureType() {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-		typeBuilder.setName("image_type");
+		typeBuilder.setName("distributed_render");
 		typeBuilder.add(
-				"Image",
-				RenderedMaster.class);
+				"result",
+				DistributedRenderResult.class);
+		typeBuilder.add(
+				"options",
+				DistributedRenderOptions.class);
 		return typeBuilder.buildFeatureType();
-	}
-
-	protected String getStatsQueryName() {
-		final Object statsQueryName = query.getHints().get(
-				STATS_NAME);
-		if (statsQueryName == null) {
-			return null;
-		}
-		return statsQueryName.toString();
 	}
 
 	protected boolean isDistributedRenderQuery() {
@@ -219,7 +205,7 @@ public class GeoWaveFeatureCollection extends
 	protected static final boolean isDistributedRenderQuery(
 			final Query query ) {
 		return query.getHints().containsKey(
-				SERVER_FEATURE_RENDERER);
+				DistributedRenderProcess.OPTIONS);
 	}
 
 	private static SimpleFeatureType getSchema(
@@ -293,40 +279,32 @@ public class GeoWaveFeatureCollection extends
 					contraints.jtsBounds,
 					contraints.timeBounds,
 					getFilter(query),
-					(DistributableRenderer) query.getHints().get(
-							SERVER_FEATURE_RENDERER));
+					contraints.limit,
+					(DistributedRenderOptions) query.getHints().get(
+							DistributedRenderProcess.OPTIONS));
 		}
 		else if (query.getHints().containsKey(
-				DecimationProcess.OUTPUT_WIDTH) && query.getHints().containsKey(
-				DecimationProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
-				DecimationProcess.OUTPUT_BBOX)) {
+				SubsampleProcess.OUTPUT_WIDTH) && query.getHints().containsKey(
+				SubsampleProcess.OUTPUT_HEIGHT) && query.getHints().containsKey(
+				SubsampleProcess.OUTPUT_BBOX)) {
 			double pixelSize = 1;
 			if (query.getHints().containsKey(
-					DecimationProcess.PIXEL_SIZE)) {
+					SubsampleProcess.PIXEL_SIZE)) {
 				pixelSize = (Double) query.getHints().get(
-						DecimationProcess.PIXEL_SIZE);
+						SubsampleProcess.PIXEL_SIZE);
 			}
 			featureCursor = reader.getData(
 					contraints.jtsBounds,
 					contraints.timeBounds,
 					(Integer) query.getHints().get(
-							DecimationProcess.OUTPUT_WIDTH),
+							SubsampleProcess.OUTPUT_WIDTH),
 					(Integer) query.getHints().get(
-							DecimationProcess.OUTPUT_HEIGHT),
+							SubsampleProcess.OUTPUT_HEIGHT),
 					pixelSize,
 					getFilter(query),
 					contraints.referencedEnvelope,
 					contraints.limit);
 
-		}
-		else if (getStatsQueryName() != null) {
-			featureCursor = reader.getData(
-					contraints.jtsBounds,
-					contraints.timeBounds,
-					(Integer) query.getHints().get(
-							LEVEL),
-					(String) query.getHints().get(
-							STATS_NAME));
 		}
 		else {
 			// get the data within the bounding box
@@ -344,9 +322,9 @@ public class GeoWaveFeatureCollection extends
 			throws TransformException,
 			FactoryException {
 		if (query.getHints().containsKey(
-				DecimationProcess.OUTPUT_BBOX)) {
+				SubsampleProcess.OUTPUT_BBOX)) {
 			return ((ReferencedEnvelope) query.getHints().get(
-					DecimationProcess.OUTPUT_BBOX)).transform(
+					SubsampleProcess.OUTPUT_BBOX)).transform(
 					GeoWaveGTDataStore.DEFAULT_CRS,
 					true);
 		}

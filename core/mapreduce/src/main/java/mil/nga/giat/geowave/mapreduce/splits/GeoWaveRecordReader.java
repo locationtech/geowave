@@ -131,7 +131,7 @@ public abstract class GeoWaveRecordReader<T> extends
 		progressPerRange = new LinkedHashMap<RangeLocationPair, ProgressPerRange>();
 		RangeLocationPair prevRangeIndex = null;
 		float prevProgress = 0f;
-		if (!sum.equals(BigDecimal.ZERO)) {
+		if (sum.compareTo(BigDecimal.ZERO) > 0) {
 			try {
 				for (final Entry<RangeLocationPair, BigDecimal> entry : incrementalRangeSums.entrySet()) {
 					final BigDecimal value = entry.getValue();

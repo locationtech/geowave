@@ -135,7 +135,6 @@ public class IndexPluginOptions extends
 			retVal = new CustomIdIndex(
 					new CompoundIndexStrategy(
 							new HashKeyIndexStrategy(
-									index.getIndexStrategy().getOrderedDimensionDefinitions(),
 									numPartitions),
 							index.getIndexStrategy()),
 					index.getIndexModel(),

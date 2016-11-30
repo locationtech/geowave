@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 /***
  * Implementation of a ZOrder Space Filling Curve. Also called Morton, GeoHash,
  * etc.
- * 
+ *
  */
 public class ZOrderSFC implements
 		SpaceFillingCurve
@@ -34,7 +34,7 @@ public class ZOrderSFC implements
 	/***
 	 * Use the SFCFactory.createSpaceFillingCurve method - don't call this
 	 * constructor directly
-	 * 
+	 *
 	 */
 	public ZOrderSFC(
 			final SFCDimensionDefinition[] dimensionDefs ) {
@@ -233,5 +233,16 @@ public class ZOrderSFC implements
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public long[] normalizeRange(
+			final double minValue,
+			final double maxValue,
+			final int d ) {
+		return new long[] {
+			(long) (dimensionDefs[d].normalize(minValue) * binsPerDimension),
+			(long) (dimensionDefs[d].normalize(maxValue) * binsPerDimension)
+		};
 	}
 }

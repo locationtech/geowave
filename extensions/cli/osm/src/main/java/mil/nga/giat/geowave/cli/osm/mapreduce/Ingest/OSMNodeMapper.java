@@ -103,7 +103,7 @@ public class OSMNodeMapper extends
 				Schema.CQ.OSM_VISIBILITY,
 				p.getVisible());
 
-		for (Map.Entry<CharSequence, CharSequence> kvp : p.getTags().entrySet()) {
+		for (Map.Entry<String, String> kvp : p.getTags().entrySet()) {
 			put(
 					m,
 					Schema.CF.NODE,

@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,10 +60,6 @@ public class GeoWaveDataStoreComponents
 
 	public GeotoolsFeatureDataAdapter getAdapter() {
 		return adapter;
-	}
-
-	public boolean isLooseQuery() {
-		return gtStore.isLooseQuery();
 	}
 
 	public DataStore getDataStore() {
@@ -138,7 +133,7 @@ public class GeoWaveDataStoreComponents
 
 		try (IndexWriter indexWriter = dataStore.createWriter(
 				adapter,
-				this.adapterIndices)) {
+				adapterIndices)) {
 			while (featureIt.hasNext()) {
 				final SimpleFeature feature = featureIt.next();
 				fidList.add(feature.getID());
@@ -161,7 +156,7 @@ public class GeoWaveDataStoreComponents
 
 		try (IndexWriter indexWriter = dataStore.createWriter(
 				adapter,
-				this.adapterIndices)) {
+				adapterIndices)) {
 			indexWriter.write(
 					feature,
 					visibilityWriter);

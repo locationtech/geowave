@@ -13,8 +13,6 @@ import org.apache.log4j.Logger;
 
 abstract public class HBaseQuery
 {
-
-	private final static Logger LOGGER = Logger.getLogger(HBaseQuery.class);
 	protected List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 	protected Pair<List<String>, DataAdapter<?>> fieldIds;

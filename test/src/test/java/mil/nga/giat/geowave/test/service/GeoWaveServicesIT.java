@@ -102,8 +102,11 @@ public class GeoWaveServicesIT
 			SchemaException {
 
 		// initialize the service clients
+		// just use the default user, password
 		geoserverServiceClient = new GeoserverServiceClient(
-				ServicesTestEnvironment.GEOWAVE_BASE_URL);
+				ServicesTestEnvironment.GEOWAVE_BASE_URL,
+				ServicesTestEnvironment.GEOSERVER_USER,
+				ServicesTestEnvironment.GEOSERVER_PASS);
 		infoServiceClient = new InfoServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		ingestServiceClient = new IngestServiceClient(
@@ -280,7 +283,7 @@ public class GeoWaveServicesIT
 				"Unable to publish accumulo datastore",
 				geoserverServiceClient.publishDatastore(
 						dataStoreOptions.getType(),
-						dataStoreOptions.getFactoryOptionsAsMap(),
+						dataStoreOptions.getOptionsAsMap(),
 						TestUtils.TEST_NAMESPACE,
 						null,
 						null,
@@ -311,17 +314,17 @@ public class GeoWaveServicesIT
 		success = false;
 
 		if (dsInfo != null) {
-			final Map<String, String> options = dataStoreOptions.getFactoryOptionsAsMap();
-			List<ConfigOption> configOptions = Arrays.asList(ConfigUtils
+			final Map<String, String> options = dataStoreOptions.getOptionsAsMap();
+			final List<ConfigOption> configOptions = Arrays.asList(ConfigUtils
 					.createConfigOptionsFromJCommander(dataStoreOptions));
-			Collection<String> nonPasswordRequiredFields = Collections2.transform(
+			final Collection<String> nonPasswordRequiredFields = Collections2.transform(
 					Collections2.filter(
 							configOptions,
 							new Predicate<ConfigOption>() {
 
 								@Override
 								public boolean apply(
-										ConfigOption input ) {
+										final ConfigOption input ) {
 									return !input.isPassword() && !input.isOptional();
 								}
 							}),
@@ -329,7 +332,7 @@ public class GeoWaveServicesIT
 
 						@Override
 						public String apply(
-								ConfigOption input ) {
+								final ConfigOption input ) {
 							return input.getName();
 						}
 					});

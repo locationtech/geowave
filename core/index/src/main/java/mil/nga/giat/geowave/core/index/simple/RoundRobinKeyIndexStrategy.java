@@ -10,7 +10,10 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -155,12 +158,6 @@ public class RoundRobinKeyIndexStrategy implements
 	}
 
 	@Override
-	public long[] getCoordinatesPerDimension(
-			final ByteArrayId insertionId ) {
-		return new long[0];
-	}
-
-	@Override
 	public double[] getHighestPrecisionIdRangePerDimension() {
 		return new double[0];
 	}
@@ -206,5 +203,20 @@ public class RoundRobinKeyIndexStrategy implements
 	@Override
 	public List<IndexMetaData> createMetaData() {
 		return Collections.emptyList();
+	}
+
+	@Override
+	public MultiDimensionalCoordinates getCoordinatesPerDimension(
+			final ByteArrayId insertionId ) {
+		return new MultiDimensionalCoordinates();
+	}
+
+	@Override
+	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+			final MultiDimensionalNumericData dataRange,
+			final IndexMetaData... hints ) {
+		return new MultiDimensionalCoordinateRanges[] {
+			new MultiDimensionalCoordinateRanges()
+		};
 	}
 }

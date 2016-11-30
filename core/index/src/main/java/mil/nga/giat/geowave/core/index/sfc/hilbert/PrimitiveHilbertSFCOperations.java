@@ -5,15 +5,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.sfc.RangeDecomposition;
-import mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition;
-import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.uzaygezen.core.BacktrackingQueryBuilder;
@@ -30,6 +21,15 @@ import com.google.uzaygezen.core.ZoomingSpaceVisitorAdapter;
 import com.google.uzaygezen.core.ranges.LongRange;
 import com.google.uzaygezen.core.ranges.LongRangeHome;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.sfc.RangeDecomposition;
+import mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
+import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+
 /**
  * This supports Compact Hilbert SFC operations using a primitive long
  * internally to represent intermediate results. This can be significantly
@@ -38,8 +38,8 @@ import com.google.uzaygezen.core.ranges.LongRangeHome;
  * currently used if no single dimension is more than 48 bits of precision, and
  * for query decomposition it is currently used if the total precision is <= 62
  * bits.
- * 
- * 
+ *
+ *
  */
 public class PrimitiveHilbertSFCOperations implements
 		HilbertSFCOperations
@@ -109,7 +109,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 * Converts the incoming values (one per dimension) into a BitVector using
 	 * the Compact Hilbert instance. BitVector is a wrapper to allow values
 	 * longer than 64 bits.
-	 * 
+	 *
 	 * @param values
 	 *            n-dimensional point to transoform to a point on the hilbert
 	 *            SFC
@@ -212,7 +212,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 * Used to normalize the value based on the dimension definition, which
 	 * includes the dimensional bounds and the bits of precision. This ensures
 	 * the maximum amount of fidelity for represented values.
-	 * 
+	 *
 	 * @param boundedDimensionDefinition
 	 *            describes the min, max, and cardinality of a dimension
 	 * @param value
@@ -229,7 +229,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 *             thrown when the value passed doesn't fit with in the
 	 *             dimension definition provided
 	 */
-	private long normalizeDimension(
+	public long normalizeDimension(
 			final SFCDimensionDefinition boundedDimensionDefinition,
 			final double value,
 			final long bins,
@@ -265,7 +265,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 * Used to normalize the value based on the dimension definition, which
 	 * includes the dimensional bounds and the bits of precision. This ensures
 	 * the maximum amount of fidelity for represented values.
-	 * 
+	 *
 	 * @param boundedDimensionDefinition
 	 *            describes the min, max, and cardinality of a dimension
 	 * @param value
@@ -451,7 +451,7 @@ public class PrimitiveHilbertSFCOperations implements
 	 * decomposition stops when the range is equal or smaller than this value).
 	 * Values is based on the _maximumRangeDecompsed and _minRangeDecompsed
 	 * instance members.
-	 * 
+	 *
 	 * @param minRangeList
 	 *            minimum values for each dimension (ordered)
 	 * @param maxRangeList
@@ -525,5 +525,28 @@ public class PrimitiveHilbertSFCOperations implements
 			retVal[i] = dimensionDefinitions[i].getRange() / binsPerDimension[i];
 		}
 		return retVal;
+	}
+
+	@Override
+	public long[] normalizeRange(
+			final double minValue,
+			final double maxValue,
+			final int dimension,
+			final SFCDimensionDefinition boundedDimensionDefinition )
+			throws IllegalArgumentException {
+		return new long[] {
+			normalizeDimension(
+					boundedDimensionDefinition,
+					minValue,
+					binsPerDimension[dimension],
+					true,
+					true),
+			normalizeDimension(
+					boundedDimensionDefinition,
+					maxValue,
+					binsPerDimension[dimension],
+					false,
+					true)
+		};
 	}
 }

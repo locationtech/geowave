@@ -11,6 +11,8 @@ import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
 import mil.nga.giat.geowave.core.cli.prefix.JCommanderPropertiesTransformer;
 import mil.nga.giat.geowave.core.cli.prefix.JCommanderTranslationMap;
 import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 
 public class ConfigUtils
 {
@@ -58,17 +60,17 @@ public class ConfigUtils
 	 * create/populate an AbstractConfigOptions map.
 	 */
 	public static ConfigOption[] createConfigOptionsFromJCommander(
-			Object createOptionsInstance ) {
+			final Object createOptionsInstance ) {
 		ConfigOption[] opts = null;
 		if (createOptionsInstance != null) {
-			JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+			final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
 			translator.addObject(createOptionsInstance);
-			JCommanderTranslationMap map = translator.translate();
-			Collection<TranslationEntry> entries = map.getEntries().values();
+			final JCommanderTranslationMap map = translator.translate();
+			final Collection<TranslationEntry> entries = map.getEntries().values();
 			final List<ConfigOption> options = new ArrayList<ConfigOption>();
-			for (TranslationEntry entry : entries) {
+			for (final TranslationEntry entry : entries) {
 				if (!entry.isHidden()) {
-					ConfigOption opt = new ConfigOption(
+					final ConfigOption opt = new ConfigOption(
 							entry.getAsPropertyName(),
 							entry.getDescription(),
 							!entry.isRequired(),
@@ -89,11 +91,11 @@ public class ConfigUtils
 	 * Take the given options and populate the given options list. This is
 	 * JCommander specific.
 	 */
-	public static <T> T populateOptionsFromList(
-			T optionsObject,
-			Map<String, String> optionList ) {
+	public static <T extends StoreFactoryOptions> T populateOptionsFromList(
+			final T optionsObject,
+			final Map<String, String> optionList ) {
 		if (optionsObject != null) {
-			JCommanderPropertiesTransformer translator = new JCommanderPropertiesTransformer();
+			final JCommanderPropertiesTransformer translator = new JCommanderPropertiesTransformer();
 			translator.addObject(optionsObject);
 			translator.transformFromMap(optionList);
 		}
@@ -105,12 +107,15 @@ public class ConfigUtils
 	 * JCommander specific.
 	 */
 	public static Map<String, String> populateListFromOptions(
-			Object optionsObject ) {
-		Map<String, String> mapOptions = new HashMap<String, String>();
+			final StoreFactoryOptions optionsObject ) {
+		final Map<String, String> mapOptions = new HashMap<String, String>();
 		if (optionsObject != null) {
-			JCommanderPropertiesTransformer translator = new JCommanderPropertiesTransformer();
+			final JCommanderPropertiesTransformer translator = new JCommanderPropertiesTransformer();
 			translator.addObject(optionsObject);
 			translator.transformToMap(mapOptions);
+			mapOptions.put(
+					GeoWaveStoreFinder.STORE_HINT_KEY,
+					optionsObject.getStoreFactory().getType());
 		}
 		return mapOptions;
 	}
