@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
@@ -112,28 +113,25 @@ public class SpatialDimensionalityTypeProvider implements
 		};
 	}
 
-	public static class SpatialIndexBuilder
+	public static class SpatialIndexBuilder extends
+			BaseIndexBuilder<SpatialIndexBuilder>
 	{
 		private final SpatialOptions options;
 
 		public SpatialIndexBuilder() {
+			super();
 			options = new SpatialOptions();
-		}
-
-		private SpatialIndexBuilder(
-				final SpatialOptions options ) {
-			this.options = options;
 		}
 
 		public SpatialIndexBuilder setIncludeTimeInCommonIndexModel(
 				final boolean storeTime ) {
 			options.storeTime = storeTime;
-			return new SpatialIndexBuilder(
-					options);
+			return this;
 		}
 
+		@Override
 		public PrimaryIndex createIndex() {
-			return internalCreatePrimaryIndex(options);
+			return createIndex(internalCreatePrimaryIndex(options));
 		}
 	}
 
