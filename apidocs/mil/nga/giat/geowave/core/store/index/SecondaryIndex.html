@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -133,16 +133,27 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colOne" scope="col">Constructor and Description</th>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colLast" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId:A-">SecondaryIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index">FieldIndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy,
-              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;fieldIDs)</code>&nbsp;</td>
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#SecondaryIndex--">SecondaryIndex</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId:A-java.util.List-">SecondaryIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index">FieldIndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy,
-              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;fieldIDs,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">T</a>&gt;&gt;&nbsp;associatedStatistics)</code>&nbsp;</td>
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-mil.nga.giat.geowave.core.store.index.SecondaryIndexType-">SecondaryIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index">FieldIndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">T</a>&gt;&gt;&nbsp;associatedStatistics,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexType.html" title="enum in mil.nga.giat.geowave.core.store.index">SecondaryIndexType</a>&nbsp;secondaryIndexType)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-mil.nga.giat.geowave.core.store.index.SecondaryIndexType-java.util.List-">SecondaryIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index">FieldIndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">T</a>&gt;&gt;&nbsp;associatedStatistics,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexType.html" title="enum in mil.nga.giat.geowave.core.store.index">SecondaryIndexType</a>&nbsp;secondaryIndexType,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;partialFieldIds)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -172,8 +183,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#getAssociatedStatistics--">getAssociatedStatistics</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#getFieldIDs--">getFieldIDs</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#getFieldId--">getFieldId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
@@ -184,10 +195,18 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#getPartialFieldIds--">getPartialFieldIds</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexType.html" title="enum in mil.nga.giat.geowave.core.store.index">SecondaryIndexType</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#getSecondaryIndexType--">getSecondaryIndexType</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
 </tr>
@@ -213,25 +232,38 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId:A-">
+<a name="SecondaryIndex--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SecondaryIndex</h4>
+<pre>protected&nbsp;SecondaryIndex()</pre>
+</li>
+</ul>
+<a name="SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-mil.nga.giat.geowave.core.store.index.SecondaryIndexType-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>SecondaryIndex</h4>
 <pre>public&nbsp;SecondaryIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index">FieldIndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy,
-                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;fieldIDs)</pre>
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">T</a>&gt;&gt;&nbsp;associatedStatistics,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexType.html" title="enum in mil.nga.giat.geowave.core.store.index">SecondaryIndexType</a>&nbsp;secondaryIndexType)</pre>
 </li>
 </ul>
-<a name="SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId:A-java.util.List-">
+<a name="SecondaryIndex-mil.nga.giat.geowave.core.store.index.FieldIndexStrategy-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-mil.nga.giat.geowave.core.store.index.SecondaryIndexType-java.util.List-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SecondaryIndex</h4>
 <pre>public&nbsp;SecondaryIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index">FieldIndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy,
-                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;fieldIDs,
-                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">T</a>&gt;&gt;&nbsp;associatedStatistics)</pre>
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">T</a>&gt;&gt;&nbsp;associatedStatistics,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexType.html" title="enum in mil.nga.giat.geowave.core.store.index">SecondaryIndexType</a>&nbsp;secondaryIndexType,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;partialFieldIds)</pre>
 </li>
 </ul>
 </li>
@@ -255,13 +287,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 </dl>
 </li>
 </ul>
-<a name="getFieldIDs--">
+<a name="getFieldId--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getFieldIDs</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;getFieldIDs()</pre>
+<h4>getFieldId</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getFieldId()</pre>
 </li>
 </ul>
 <a name="getId--">
@@ -284,6 +316,24 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/I
 <li class="blockList">
 <h4>getAssociatedStatistics</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">T</a>&gt;&gt;&nbsp;getAssociatedStatistics()</pre>
+</li>
+</ul>
+<a name="getSecondaryIndexType--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSecondaryIndexType</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexType.html" title="enum in mil.nga.giat.geowave.core.store.index">SecondaryIndexType</a>&nbsp;getSecondaryIndexType()</pre>
+</li>
+</ul>
+<a name="getPartialFieldIds--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPartialFieldIds</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getPartialFieldIds()</pre>
 </li>
 </ul>
 <a name="hashCode--">

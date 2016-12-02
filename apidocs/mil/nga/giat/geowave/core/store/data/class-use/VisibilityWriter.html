@@ -178,14 +178,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DataStoreIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&nbsp;entry,
-     <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</code>&nbsp;</td>
+<td class="colFirst"><code>protected abstract <a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataStoreIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#getEntryInfo-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">getEntryInfo</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&nbsp;entry,
+            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DataStoreIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#writeInternal-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">writeInternal</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&nbsp;entry,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DataStoreIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#write-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&nbsp;entry,
+     <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -276,9 +276,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#writeInternal-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">writeInternal</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&nbsp;entry,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a></code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#getEntryInfo-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">getEntryInfo</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&nbsp;entry,
+            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -337,9 +337,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#writeInternal-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">writeInternal</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a></code></td>
+<td class="colLast"><span class="typeNameLabel">HBaseIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#getEntryInfo-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">getEntryInfo</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&nbsp;entry,
+            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
