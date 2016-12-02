@@ -43,7 +43,6 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -119,7 +118,7 @@ public class HBaseDataStore extends
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AdapterIndexMappingStore indexMappingStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final HBaseSecondaryIndexDataStore secondaryIndexDataStore,
 			final BasicHBaseOperations operations ) {
 		this(
 				indexStore,
@@ -136,7 +135,7 @@ public class HBaseDataStore extends
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AdapterIndexMappingStore indexMappingStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final HBaseSecondaryIndexDataStore secondaryIndexDataStore,
 			final BasicHBaseOperations operations,
 			final HBaseOptions options ) {
 		super(
@@ -150,6 +149,7 @@ public class HBaseDataStore extends
 
 		this.operations = operations;
 		this.options = options;
+		secondaryIndexDataStore.setDataStore(this);
 	}
 
 	@Override
@@ -178,7 +178,8 @@ public class HBaseDataStore extends
 	protected <T> void addAltIndexCallback(
 			final List<IngestCallback<T>> callbacks,
 			final String indexName,
-			final DataAdapter<T> adapter ) {
+			final DataAdapter<T> adapter,
+			final ByteArrayId primaryIndexId ) {
 		try {
 			callbacks.add(new AltIndexCallback<T>(
 					indexName,

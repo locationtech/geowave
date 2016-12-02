@@ -45,6 +45,7 @@ import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 
 public class FeatureDataAdapterTest
 {
@@ -478,11 +479,14 @@ public class FeatureDataAdapterTest
 						+ "munincipalPop:Integer," + "notes:String");
 		final List<SimpleFeatureUserDataConfiguration> secondaryIndexConfigs = new ArrayList<>();
 		secondaryIndexConfigs.add(new NumericSecondaryIndexConfiguration(
-				"landArea"));
+				"landArea",
+				SecondaryIndexType.JOIN));
 		secondaryIndexConfigs.add(new TextSecondaryIndexConfiguration(
-				"notes"));
+				"notes",
+				SecondaryIndexType.JOIN));
 		secondaryIndexConfigs.add(new TemporalSecondaryIndexConfiguration(
-				"since"));
+				"since",
+				SecondaryIndexType.JOIN));
 		final SimpleFeatureUserDataConfigurationSet config = new SimpleFeatureUserDataConfigurationSet(
 				sfType,
 				secondaryIndexConfigs);

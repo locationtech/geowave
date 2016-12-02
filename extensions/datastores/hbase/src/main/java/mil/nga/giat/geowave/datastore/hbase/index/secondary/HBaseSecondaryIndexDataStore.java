@@ -3,38 +3,39 @@ package mil.nga.giat.geowave.datastore.hbase.index.secondary;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.security.visibility.CellVisibility;
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.CastIterator;
 import mil.nga.giat.geowave.core.store.base.Writer;
-import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 public class HBaseSecondaryIndexDataStore extends
 		BaseSecondaryIndexDataStore<RowMutations>
@@ -42,6 +43,7 @@ public class HBaseSecondaryIndexDataStore extends
 	private final static Logger LOGGER = Logger.getLogger(HBaseSecondaryIndexDataStore.class);
 	private final BasicHBaseOperations hbaseOperations;
 	private final HBaseOptions hbaseOptions;
+	private DataStore dataStore = null;
 
 	public HBaseSecondaryIndexDataStore(
 			final BasicHBaseOperations hbaseOperations ) {
@@ -59,21 +61,24 @@ public class HBaseSecondaryIndexDataStore extends
 	}
 
 	@Override
+	public void setDataStore(
+			final DataStore dataStore ) {
+		this.dataStore = dataStore;
+	}
+
+	@Override
 	protected Writer<RowMutations> getWriter(
-			final SecondaryIndex<?> secondaryIndex ) {
-		final String secondaryIndexName = secondaryIndex.getIndexStrategy().getId();
+			final ByteArrayId secondaryIndexId ) {
+		final String secondaryIndexName = secondaryIndexId.getString();
 		if (writerCache.containsKey(secondaryIndexName)) {
 			return writerCache.get(secondaryIndexName);
 		}
 		HBaseWriter writer = null;
 		try {
 			writer = hbaseOperations.createWriter(
-					TABLE_PREFIX + secondaryIndexName,
-					new String[] {
-						StringUtils.stringFromBinary(secondaryIndex.getId().getBytes())
-					},
-					true,
-					secondaryIndex.getIndexStrategy().getNaturalSplits());
+					secondaryIndexName,
+					new String[] {},
+					false);
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -89,95 +94,137 @@ public class HBaseSecondaryIndexDataStore extends
 	}
 
 	@Override
-	protected RowMutations buildMutation(
+	protected RowMutations buildJoinMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName,
-			final byte[] attributeValue,
-			final byte[] visibility,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
 			final byte[] primaryIndexId,
-			final byte[] primaryIndexRowId )
-			throws Exception {
+			final byte[] primaryIndexRowId,
+			final byte[] attributeVisibility )
+			throws IOException {
 		final RowMutations m = new RowMutations(
 				secondaryIndexRowId);
-
 		final Put p = new Put(
 				secondaryIndexRowId);
 		p.setCellVisibility(new CellVisibility(
-				StringUtils.stringFromBinary(visibility)));
+				StringUtils.stringFromBinary(attributeVisibility)));
 		p.addColumn(
-				secondaryIndexId,
-				attributeName,
-				attributeValue);
-
-		p.addColumn(
-				secondaryIndexId,
-				primaryIndexId,
-				primaryIndexRowId);
-
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						primaryIndexId,
+						primaryIndexRowId),
+				EMPTY_VALUE);
 		m.add(p);
-
 		return m;
 	}
 
 	@Override
-	protected RowMutations buildDeleteMutation(
+	protected RowMutations buildMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName )
-			throws Exception {
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId,
+			final byte[] fieldValue,
+			final byte[] fieldVisibility )
+			throws IOException {
 		final RowMutations m = new RowMutations(
 				secondaryIndexRowId);
+		final Put p = new Put(
+				secondaryIndexRowId);
+		p.setCellVisibility(new CellVisibility(
+				StringUtils.stringFromBinary(fieldVisibility)));
+		p.addColumn(
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						fieldId,
+						dataId),
+				fieldValue);
+		m.add(p);
+		return m;
+	}
 
+	@Override
+	protected RowMutations buildJoinDeleteMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] primaryIndexId,
+			final byte[] primaryIndexRowId )
+			throws IOException {
+		final RowMutations m = new RowMutations(
+				secondaryIndexRowId);
 		final Delete d = new Delete(
 				secondaryIndexRowId);
 		d.addColumn(
-				secondaryIndexId,
-				attributeName);
-
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						primaryIndexId,
+						primaryIndexRowId));
 		m.add(d);
-
 		return m;
 	}
 
 	@Override
-	public CloseableIterator<ByteArrayId> query(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<ByteArrayRange> ranges,
-			final List<DistributableQueryFilter> constraints,
-			final ByteArrayId primaryIndexId,
-			final String... visibility ) {
+	protected RowMutations buildFullDeleteMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId )
+			throws IOException {
+		final RowMutations m = new RowMutations(
+				secondaryIndexRowId);
+		final Delete d = new Delete(
+				secondaryIndexRowId);
+		d.addColumn(
+				SecondaryIndexUtils.constructColumnFamily(
+						adapterId,
+						indexedAttributeFieldId),
+				SecondaryIndexUtils.constructColumnQualifier(
+						fieldId,
+						dataId));
+		m.add(d);
+		return m;
+	}
 
+	@Override
+	public <T> CloseableIterator<T> query(
+			final SecondaryIndex<T> secondaryIndex,
+			final ByteArrayId indexedAttributeFieldId,
+			final DataAdapter<T> adapter,
+			final PrimaryIndex primaryIndex,
+			final DistributableQuery query,
+			final String... authorizations ) {
 		final List<Scan> scans = new ArrayList<Scan>();
-
-		for (final ByteArrayRange range : ranges) {
-			final Scan scanner = new Scan();
-			if (range.getStart() != null) {
-				scanner.setStartRow(range.getStart().getBytes());
-				if (!range.isSingleValue()) {
-					scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
-				}
-				else {
-					scanner.setStopRow(HBaseUtils.getNextPrefix(range.getStart().getBytes()));
-				}
-			}
-
-			scans.add(scanner);
+		final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
+				adapter.getAdapterId(),
+				indexedAttributeFieldId);
+		final List<ByteArrayRange> scanRanges = query.getSecondaryIndexConstraints(secondaryIndex);
+		for (final ByteArrayRange scanRange : scanRanges) {
+			final Scan scan = new Scan();
+			scan.addFamily(columnFamily);
+			scan.setStartRow(scanRange.getStart().getBytes());
+			scan.setStopRow((scanRange.isSingleValue()) ? scanRange.getStart().getBytes() : scanRange
+					.getEnd()
+					.getBytes());
+			scans.add(scan);
 		}
-
 		final List<ResultScanner> results = new ArrayList<ResultScanner>();
-
-		// TODO Consider parallelization as list of scanners can be long and
-		// getScannedResults might be slow?
-		for (final Scan scanner : scans) {
+		for (final Scan scan : scans) {
 			try {
-				final ResultScanner rs = hbaseOperations.getScannedResults(
-						scanner,
-						TABLE_PREFIX + secondaryIndex.getIndexStrategy().getId(),
-						visibility);
-
-				if (rs != null) {
-					results.add(rs);
+				final ResultScanner resultScanner = hbaseOperations.getScannedResults(
+						scan,
+						secondaryIndex.getId().getString(),
+						authorizations);
+				if (resultScanner != null) {
+					results.add(resultScanner);
 				}
 			}
 			catch (final IOException e) {
@@ -186,78 +233,70 @@ public class HBaseSecondaryIndexDataStore extends
 						e);
 			}
 		}
-
-		final Collection<ByteArrayId> primaryIndexRowIds = new ArrayList<>();
-		for (final ResultScanner resultsScan : results) {
-			final Iterator<Result> it = resultsScan.iterator();
-			while (it.hasNext()) {
-				final Result result = it.next();
-
-				if (acceptRow(
-						result,
-						getFilter(constraints),
-						primaryIndexId)) {
-					for (final Cell cell : result.rawCells()) {
-						if (new ByteArrayId(
-								CellUtil.cloneQualifier(cell)).equals(primaryIndexId)) {
-							// found query match: keep track of
-							// primaryIndexRowId
-							primaryIndexRowIds.add(new ByteArrayId(
-									CellUtil.cloneValue(cell)));
+		if (!results.isEmpty()) {
+			final List<CloseableIterator<Object>> allResultsList = new ArrayList<>();
+			for (final ResultScanner resultsScan : results) {
+				if (secondaryIndex.getSecondaryIndexType().equals(
+						SecondaryIndexType.JOIN)) {
+					final List<CloseableIterator<Object>> allResults = new ArrayList<>();
+					try (final CloseableIterator<Pair<ByteArrayId, ByteArrayId>> joinEntryIterator = new HBaseSecondaryIndexJoinEntryIteratorWrapper<T>(
+							resultsScan,
+							columnFamily,
+							adapter)) {
+						while (joinEntryIterator.hasNext()) {
+							final Pair<ByteArrayId, ByteArrayId> entry = joinEntryIterator.next();
+							final ByteArrayId primaryIndexId = entry.getLeft();
+							final ByteArrayId primaryIndexRowId = entry.getRight();
+							final CloseableIterator<Object> intermediateResults = dataStore.query(
+									new QueryOptions(
+											adapter.getAdapterId(),
+											primaryIndexId),
+									new RowIdQuery(
+											primaryIndexRowId));
+							allResults.add(intermediateResults);
+							final CloseableIterator<Object> intermediateResultsWrapper = new CloseableIteratorWrapper<Object>(
+									new Closeable() {
+										@Override
+										public void close()
+												throws IOException {
+											for (CloseableIterator<Object> resultIter : allResults) {
+												resultIter.close();
+											}
+										}
+									},
+									Iterators.concat(new CastIterator<Object>(
+											allResults.iterator())));
+							allResultsList.add(intermediateResultsWrapper);
 						}
 					}
+					catch (final IOException e) {
+						LOGGER.error(
+								"Could not close iterator",
+								e);
+					}
+				}
+				else {
+					allResultsList.add(new HBaseSecondaryIndexEntryIteratorWrapper<T>(
+							resultsScan,
+							columnFamily,
+							adapter,
+							primaryIndex));
 				}
 			}
-		}
-
-		if (!primaryIndexRowIds.isEmpty()) {
-			return new CloseableIteratorWrapper<ByteArrayId>(
+			return new CloseableIteratorWrapper<T>(
 					new Closeable() {
 						@Override
 						public void close()
 								throws IOException {
-							for (final ResultScanner resultsScan : results) {
-								resultsScan.close();
+							for (final CloseableIterator<Object> closeableIterator : allResultsList) {
+								closeableIterator.close();
 							}
 						}
 					},
-					primaryIndexRowIds.iterator());
+					Iterators.concat(new CastIterator<T>(
+							allResultsList.iterator())));
 		}
-		return new CloseableIterator.Empty<ByteArrayId>();
+		return new CloseableIterator.Empty<T>();
 	}
 
-	private boolean acceptRow(
-			final Result result,
-			final DistributableQueryFilter filter,
-			final ByteArrayId primaryIndexId ) {
-		if (filter != null) {
-			for (final Cell cell : result.rawCells()) {
-				if (!new ByteArrayId(
-						CellUtil.cloneQualifier(cell)).equals(primaryIndexId)) {
-					final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding = new IndexedPersistenceEncoding<ByteArrayId>(
-							null, // not needed
-							null, // not needed
-							null, // not needed
-							0, // not needed
-							new PersistentDataset<ByteArrayId>(
-									new PersistentValue<ByteArrayId>(
-											new ByteArrayId(
-													CellUtil.cloneQualifier(cell)),
-											new ByteArrayId(
-													CellUtil.cloneValue(cell)))),
-							null);
-					if (filter.accept(
-							null,
-							persistenceEncoding)) {
-						return true;
-					}
-				}
-			}
-
-			return false;
-		}
-		// should not happen but if the filter is not passed in, it will accept
-		// everything
-		return true;
-	}
 }

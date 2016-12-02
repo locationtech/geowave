@@ -5,13 +5,18 @@ package mil.nga.giat.geowave.datastore.hbase;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -20,6 +25,9 @@ import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.DataStoreIndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
@@ -49,32 +57,19 @@ public class HBaseIndexWriter<T> extends
 				closable);
 		this.operations = operations;
 		this.options = options;
+		initializeSecondaryIndexTables();
 	}
 
 	@Override
-	public List<ByteArrayId> writeInternal(
-			final T entry,
-			final VisibilityWriter<T> visibilityWriter ) {
-
-		DataStoreEntryInfo entryInfo;
-		synchronized (this) {
-
-			ensureOpen();
-			if (writer == null) {
-				return Collections.emptyList();
-			}
-			entryInfo = HBaseUtils.write(
-					(WritableDataAdapter<T>) adapter,
-					index,
-					entry,
-					(HBaseWriter) writer,
-					visibilityWriter);
-
-			callback.entryIngested(
-					entryInfo,
-					entry);
-		}
-		return entryInfo.getRowIds();
+	protected DataStoreEntryInfo getEntryInfo(
+			T entry,
+			VisibilityWriter<T> visibilityWriter ) {
+		return HBaseUtils.write(
+				(WritableDataAdapter<T>) adapter,
+				index,
+				entry,
+				(HBaseWriter) writer,
+				visibilityWriter);
 	}
 
 	@Override
@@ -92,7 +87,7 @@ public class HBaseIndexWriter<T> extends
 		}
 	}
 
-	private synchronized void ensureOpen() {
+	protected synchronized void ensureOpen() {
 		if (writer == null) {
 			try {
 				writer = operations.createWriter(
@@ -107,6 +102,62 @@ public class HBaseIndexWriter<T> extends
 				LOGGER.error(
 						"Unable to open writer",
 						e);
+			}
+		}
+	}
+
+	private void initializeSecondaryIndexTables() {
+		if (adapter instanceof SecondaryIndexDataAdapter<?>) {
+			final Map<String, List<ByteArrayId>> tableToFieldMap = new HashMap<>();
+			final List<SecondaryIndex<T>> secondaryIndices = ((SecondaryIndexDataAdapter<T>) adapter)
+					.getSupportedSecondaryIndices();
+			// aggregate fields for each unique table
+			for (final SecondaryIndex<T> secondaryIndex : secondaryIndices) {
+				final String tableName = operations.getQualifiedTableName(secondaryIndex.getId().getString());
+				if (tableToFieldMap.containsKey(tableName)) {
+					final List<ByteArrayId> fieldIds = tableToFieldMap.get(tableName);
+					fieldIds.add(secondaryIndex.getFieldId());
+				}
+				else {
+					final List<ByteArrayId> fieldIds = new ArrayList<>();
+					fieldIds.add(secondaryIndex.getFieldId());
+					tableToFieldMap.put(
+							tableName,
+							fieldIds);
+				}
+			}
+			// ensure each table is configured for the appropriate column
+			// families
+			for (final Entry<String, List<ByteArrayId>> entry : tableToFieldMap.entrySet()) {
+				final String table = entry.getKey();
+				final List<ByteArrayId> fieldIds = entry.getValue();
+				final String[] columnFamilies = new String[fieldIds.size()];
+				int idx = 0;
+				for (final ByteArrayId fieldId : fieldIds) {
+					final byte[] cfBytes = SecondaryIndexUtils.constructColumnFamily(
+							adapter.getAdapterId(),
+							fieldId);
+					columnFamilies[idx++] = new ByteArrayId(
+							cfBytes).getString();
+				}
+				try {
+					if (operations.tableExists(table)) {
+						operations.addColumnFamiles(
+								columnFamilies,
+								table);
+					}
+					else {
+						operations.createTable(
+								columnFamilies,
+								TableName.valueOf(table),
+								null);
+					}
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to check if table " + table + " exists",
+							e);
+				}
 			}
 		}
 	}

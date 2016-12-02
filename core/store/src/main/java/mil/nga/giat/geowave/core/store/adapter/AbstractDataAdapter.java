@@ -191,28 +191,31 @@ abstract public class AbstractDataAdapter<T> implements
 			final IndexedAdapterPersistenceEncoding data,
 			final PrimaryIndex index ) {
 		final RowBuilder<T, Object> builder = newBuilder();
-		final CommonIndexModel indexModel = index.getIndexModel();
-		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
-			final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler = (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
-			if (fieldHandler == null) {
-				if (LOGGER.isInfoEnabled()) {
-					// dont waste time converting IDs to String if info is not
-					// enabled
-					LOGGER.info("Unable to find field handler for data adapter '"
-							+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
-							+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+		if (index != null) {
+			final CommonIndexModel indexModel = index.getIndexModel();
+			for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
+				final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler = (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
+				if (fieldHandler == null) {
+					if (LOGGER.isInfoEnabled()) {
+						// dont waste time converting IDs to String if info is
+						// not
+						// enabled
+						LOGGER.info("Unable to find field handler for data adapter '"
+								+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
+								+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
+					}
+					continue;
 				}
-				continue;
-			}
-			final CommonIndexValue value = data.getCommonData().getValue(
-					dimension.getFieldId());
-			if (value == null) {
-				continue;
-			}
-			final PersistentValue<Object>[] values = fieldHandler.toNativeValues(value);
-			if ((values != null) && (values.length > 0)) {
-				for (final PersistentValue<Object> v : values) {
-					builder.setField(v);
+				final CommonIndexValue value = data.getCommonData().getValue(
+						dimension.getFieldId());
+				if (value == null) {
+					continue;
+				}
+				final PersistentValue<Object>[] values = fieldHandler.toNativeValues(value);
+				if ((values != null) && (values.length > 0)) {
+					for (final PersistentValue<Object> v : values) {
+						builder.setField(v);
+					}
 				}
 			}
 		}

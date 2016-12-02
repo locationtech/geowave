@@ -13,7 +13,4 @@ public interface SimpleFeatureSecondaryIndexConfiguration extends
 	public String getIndexKey();
 
 	public Set<String> getAttributes();
-
-	public void setAttributes(
-			Set<String> attributes );
 }
