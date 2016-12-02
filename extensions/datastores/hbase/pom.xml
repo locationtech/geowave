@@ -88,7 +88,6 @@
 			<artifactId>annotations</artifactId>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -96,85 +95,5 @@
 				<artifactId>protoc-jar-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.hadoop</groupId>
-										<artifactId>hadoop-maven-plugins</artifactId>
-										<versionRange>[2.0.5-alpha,)</versionRange>
-										<goals>
-											<goal>protoc</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
-	<profiles>
-		<profile>
-			<id>hbase-singlejar</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>2.2</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<artifactSet>
-										<includes>
-											<include>mil.nga.giat:geowave-core-store</include>
-											<include>mil.nga.giat:geowave-core-geotime</include>
-											<include>mil.nga.giat:geowave-core-index</include>
-											<include>com.vividsolutions:jts-core</include>
-										</includes>
-									</artifactSet>
-									<filters>
-										<filter>
-											<artifact>*:*</artifact>
-											<excludes>
-												<exclude>META-INF/*.SF</exclude>
-												<exclude>META-INF/*.DSA</exclude>
-												<exclude>META-INF/*.RSA</exclude>
-											</excludes>
-										</filter>
-									</filters>
-									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-									</transformers>
-									<createDependencyReducedPom>false</createDependencyReducedPom>
-									<minimizeJar>false</minimizeJar>
-									<finalName>geowave-hbase</finalName>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
 </project>

@@ -22,13 +22,11 @@ mv $WORKSPACE/deploy/target/*-geoserver-singlejar.jar $WORKSPACE/deploy/target/g
 mvn package -P accumulo-container-singlejar $BUILD_ARGS "$@"
 mv $WORKSPACE/deploy/target/*-accumulo-singlejar.jar $WORKSPACE/deploy/target/geowave-accumulo.jar
 
+mvn package -P hbase-container-singlejar $BUILD_ARGS "$@"
+mv $WORKSPACE/deploy/target/*-hbase-singlejar.jar $WORKSPACE/deploy/target/geowave-hbase.jar
+
 mvn package -P geowave-tools-singlejar $BUILD_ARGS "$@"
 mv $WORKSPACE/deploy/target/*-tools.jar $WORKSPACE/deploy/target/geowave-tools.jar
-
-pushd $WORKSPACE/analytics/mapreduce
-mvn package -P analytics-singlejar $BUILD_ARGS "$@"
-mv $WORKSPACE/analytics/mapreduce/target/munged/geowave-analytic-mapreduce-*-analytics-singlejar.jar $WORKSPACE/deploy/target/geowave-analytic-mapreduce.jar
-popd
 
 # Copy the tools fat jar
 cp $WORKSPACE/deploy/target/geowave-tools.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-tools.jar
