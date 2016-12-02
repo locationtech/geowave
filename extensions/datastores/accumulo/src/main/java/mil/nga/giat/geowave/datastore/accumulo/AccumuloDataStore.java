@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.io.Closeable;
-import java.io.Flushable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -45,7 +44,6 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
@@ -54,7 +52,7 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -140,7 +138,7 @@ public class AccumuloDataStore extends
 			final IndexStore indexStore,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
 			final AdapterIndexMappingStore indexMappingStore,
 			final AccumuloOperations accumuloOperations ) {
 		this(
@@ -157,7 +155,7 @@ public class AccumuloDataStore extends
 			final IndexStore indexStore,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
+			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
 			final AdapterIndexMappingStore indexMappingStore,
 			final AccumuloOperations accumuloOperations,
 			final AccumuloOptions accumuloOptions ) {
@@ -172,6 +170,7 @@ public class AccumuloDataStore extends
 
 		this.accumuloOperations = accumuloOperations;
 		this.accumuloOptions = accumuloOptions;
+		secondaryIndexDataStore.setDataStore(this);
 	}
 
 	@Override
@@ -234,12 +233,13 @@ public class AccumuloDataStore extends
 	protected <T> void addAltIndexCallback(
 			final List<IngestCallback<T>> callbacks,
 			final String indexName,
-			final DataAdapter<T> adapter ) {
+			final DataAdapter<T> adapter,
+			final ByteArrayId primaryIndexId ) {
 		try {
 			callbacks.add(new AltIndexCallback<T>(
 					indexName,
 					(WritableDataAdapter<T>) adapter,
-					accumuloOptions));
+					primaryIndexId));
 
 		}
 		catch (final Exception e) {
@@ -250,22 +250,27 @@ public class AccumuloDataStore extends
 	}
 
 	private class AltIndexCallback<T> implements
-			IngestCallback<T>,
-			Closeable,
-			Flushable
+			IngestCallback<T>
 	{
-
+		private final ByteArrayId EMPTY_VISIBILITY = new ByteArrayId(
+				new byte[0]);
+		private final ByteArrayId EMPTY_FIELD_ID = new ByteArrayId(
+				new byte[0]);
 		private final WritableDataAdapter<T> adapter;
-		private Writer altIdxWriter;
 		private final String altIdxTableName;
+		private final ByteArrayId primaryIndexId;
+		private final ByteArrayId altIndexId;
 
 		public AltIndexCallback(
 				final String indexName,
 				final WritableDataAdapter<T> adapter,
-				final AccumuloOptions accumuloOptions )
+				final ByteArrayId primaryIndexId )
 				throws TableNotFoundException {
 			this.adapter = adapter;
 			altIdxTableName = indexName + ALT_INDEX_TABLE;
+			altIndexId = new ByteArrayId(
+					altIdxTableName);
+			this.primaryIndexId = primaryIndexId;
 			try {
 				if (accumuloOperations.tableExists(indexName)) {
 					if (!accumuloOperations.tableExists(altIdxTableName)) {
@@ -287,39 +292,26 @@ public class AccumuloDataStore extends
 			catch (final IOException e) {
 				LOGGER.error("Exception checking for index " + indexName + ": " + e);
 			}
-
-			altIdxWriter = accumuloOperations.createWriter(
-					altIdxTableName,
-					accumuloOptions.isCreateTable(),
-					true,
-					accumuloOptions.isEnableBlockCache(),
-					null);
-		}
-
-		@Override
-		public void close()
-				throws IOException {
-			altIdxWriter.close();
-			altIdxWriter = null;
 		}
 
 		@Override
 		public void entryIngested(
 				final DataStoreEntryInfo entryInfo,
 				final T entry ) {
-			AccumuloUtils.writeAltIndex(
-					adapter,
-					entryInfo,
-					entry,
-					altIdxWriter);
-
+			for (final ByteArrayId primaryIndexRowId : entryInfo.getRowIds()) {
+				final ByteArrayId dataId = adapter.getDataId(entry);
+				if ((dataId != null) && (dataId.getBytes() != null) && (dataId.getBytes().length > 0)) {
+					secondaryIndexDataStore.storeJoinEntry(
+							altIndexId,
+							dataId,
+							adapter.getAdapterId(),
+							EMPTY_FIELD_ID,
+							primaryIndexId,
+							primaryIndexRowId,
+							EMPTY_VISIBILITY);
+				}
+			}
 		}
-
-		@Override
-		public void flush() {
-			altIdxWriter.flush();
-		}
-
 	}
 
 	@Override
@@ -545,8 +537,8 @@ public class AccumuloDataStore extends
 
 						final Iterator<Map.Entry<Key, Value>> iterator = scanner.iterator();
 						while (iterator.hasNext()) {
-							result.add(new ByteArrayId(
-									iterator.next().getKey().getColumnQualifierData().getBackingArray()));
+							final byte[] cq = iterator.next().getKey().getColumnQualifierData().getBackingArray();
+							result.add(SecondaryIndexUtils.getPrimaryRowId(cq));
 						}
 					}
 					catch (final TableNotFoundException e) {

@@ -2,18 +2,17 @@ package mil.nga.giat.geowave.core.store.index;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+
+import org.apache.log4j.Logger;
 
 public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 		SecondaryIndexDataStore,
@@ -21,36 +20,60 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 {
 
 	private final static Logger LOGGER = Logger.getLogger(BaseSecondaryIndexDataStore.class);
-	protected static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	protected final Map<String, Writer<MutationType>> writerCache = new HashMap<>();
+	protected final static byte[] EMPTY_VALUE = new byte[0];
 
 	public BaseSecondaryIndexDataStore() {}
 
 	@Override
-	public void store(
-			final SecondaryIndex<?> secondaryIndex,
+	public void storeJoinEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
 			final ByteArrayId primaryIndexId,
 			final ByteArrayId primaryIndexRowId,
-			final List<FieldInfo<?>> indexedAttributes ) {
+			final ByteArrayId attributeVisibility ) {
 		try {
-			final Writer<MutationType> writer = getWriter(secondaryIndex);
+			final Writer<MutationType> writer = getWriter(secondaryIndexId);
 			if (writer != null) {
-				for (final FieldInfo<?> indexedAttribute : indexedAttributes) {
-					@SuppressWarnings("unchecked")
-					final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex
-							.getIndexStrategy()
-							.getInsertionIds(
-									Arrays.asList(indexedAttribute));
-					for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-						writer.write(buildMutation(
-								insertionId.getBytes(),
-								secondaryIndex.getId().getBytes(),
-								indexedAttribute.getDataValue().getId().getBytes(),
-								indexedAttribute.getWrittenValue(),
-								indexedAttribute.getVisibility(),
-								primaryIndexId.getBytes(),
-								primaryIndexRowId.getBytes()));
-					}
+				writer.write(buildJoinMutation(
+						indexedAttributeValue.getBytes(),
+						adapterId.getBytes(),
+						indexedAttributeFieldId.getBytes(),
+						primaryIndexId.getBytes(),
+						primaryIndexRowId.getBytes(),
+						attributeVisibility.getBytes()));
+			}
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to build secondary index row mutation.",
+					e);
+		}
+	}
+
+	@Override
+	public void storeEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId dataId,
+			final ByteArrayId attributeVisibility,
+			final List<FieldInfo<?>> attributes ) {
+		try {
+			final Writer<MutationType> writer = getWriter(secondaryIndexId);
+			if (writer != null) {
+				for (final FieldInfo<?> indexedAttribute : attributes) {
+					writer.write(buildMutation(
+							indexedAttributeValue.getBytes(),
+							adapterId.getBytes(),
+							indexedAttributeFieldId.getBytes(),
+							dataId.getBytes(),
+							indexedAttribute.getDataValue().getId().getBytes(),
+							indexedAttribute.getWrittenValue(),
+							indexedAttribute.getVisibility()));
 				}
 			}
 		}
@@ -79,24 +102,49 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 	}
 
 	@Override
-	public void delete(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<FieldInfo<?>> indexedAttributes ) {
+	public void deleteJoinEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId primaryIndexId,
+			final ByteArrayId primaryIndexRowId ) {
 		try {
-			final Writer<MutationType> writer = getWriter(secondaryIndex);
+			final Writer<MutationType> writer = getWriter(secondaryIndexId);
 			if (writer != null) {
-				for (final FieldInfo<?> indexedAttribute : indexedAttributes) {
-					@SuppressWarnings("unchecked")
-					final List<ByteArrayId> secondaryIndexInsertionIds = secondaryIndex
-							.getIndexStrategy()
-							.getInsertionIds(
-									Arrays.asList(indexedAttribute));
-					for (final ByteArrayId insertionId : secondaryIndexInsertionIds) {
-						writer.write(buildDeleteMutation(
-								insertionId.getBytes(),
-								secondaryIndex.getId().getBytes(),
-								indexedAttribute.getDataValue().getId().getBytes()));
-					}
+				writer.write(buildJoinDeleteMutation(
+						indexedAttributeValue.getBytes(),
+						adapterId.getBytes(),
+						indexedAttributeFieldId.getBytes(),
+						primaryIndexId.getBytes(),
+						primaryIndexRowId.getBytes()));
+			}
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Failed to delete from secondary index.",
+					e);
+		}
+	}
+
+	@Override
+	public void deleteEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId dataId,
+			final List<FieldInfo<?>> attributes ) {
+		try {
+			final Writer<MutationType> writer = getWriter(secondaryIndexId);
+			if (writer != null) {
+				for (FieldInfo<?> attribute : attributes) {
+					writer.write(buildFullDeleteMutation(
+							indexedAttributeValue.getBytes(),
+							adapterId.getBytes(),
+							indexedAttributeFieldId.getBytes(),
+							dataId.getBytes(),
+							attribute.getDataValue().getId().getBytes()));
 				}
 			}
 		}
@@ -125,6 +173,7 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 						e);
 			}
 		}
+		writerCache.clear();
 	}
 
 	@Override
@@ -132,23 +181,42 @@ public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 		close();
 	}
 
+	protected abstract MutationType buildJoinMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] primaryIndexId,
+			final byte[] primaryIndexRowId,
+			final byte[] attributeVisibility )
+			throws IOException;
+
 	protected abstract MutationType buildMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName,
-			final byte[] attributeValue,
-			final byte[] visibility,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId,
+			final byte[] fieldValue,
+			final byte[] fieldVisibility )
+			throws IOException;
+
+	protected abstract MutationType buildJoinDeleteMutation(
+			final byte[] secondaryIndexRowId,
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
 			final byte[] primaryIndexId,
 			final byte[] primaryIndexRowId )
-			throws Exception;
+			throws IOException;
 
-	protected abstract MutationType buildDeleteMutation(
+	protected abstract MutationType buildFullDeleteMutation(
 			final byte[] secondaryIndexRowId,
-			final byte[] secondaryIndexId,
-			final byte[] attributeName )
-			throws Exception;
+			final byte[] adapterId,
+			final byte[] indexedAttributeFieldId,
+			final byte[] dataId,
+			final byte[] fieldId )
+			throws IOException;
 
 	protected abstract Writer<MutationType> getWriter(
-			SecondaryIndex<?> secondaryIndex );
+			ByteArrayId secondaryIndexId );
 
 }
