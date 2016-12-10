@@ -25,6 +25,15 @@ public class HBaseDataStoreFactory extends
 		if (opts.getAdditionalOptions() == null) {
 			opts.setAdditionalOptions(new HBaseOptions());
 		}
+		else {
+			// Workaround: Bigtable does not need zookeeper, but the option is
+			// required.
+			if (opts.getAdditionalOptions().isBigtable()) {
+				if (opts.getZookeeper() == null) {
+					opts.setZookeeper("BIGTABLEZK");
+				}
+			}
+		}
 
 		final BasicHBaseOperations hbaseOperations = createOperations(opts);
 		return new HBaseDataStore(

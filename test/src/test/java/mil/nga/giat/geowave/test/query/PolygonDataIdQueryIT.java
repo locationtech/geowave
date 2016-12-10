@@ -43,6 +43,7 @@ public class PolygonDataIdQueryIT
 	private static final String DATA_ID = "dataId";
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

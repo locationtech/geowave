@@ -2,8 +2,6 @@ package mil.nga.giat.geowave.datastore.hbase;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -11,19 +9,23 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+
 public class HBaseCommandLineOptions
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseCommandLineOptions.class);
 	private final String zookeepers;
 	private final String namespace;
+	private final boolean bigtable;
 	private BasicHBaseOperations operations;
 
 	public HBaseCommandLineOptions(
 			final String zookeepers,
-			final String namespace ) {
+			final String namespace,
+			final boolean bigtable ) {
 		this.zookeepers = zookeepers;
 		this.namespace = namespace;
-
+		this.bigtable = bigtable;
 	}
 
 	public String getZookeepers() {
@@ -39,7 +41,8 @@ public class HBaseCommandLineOptions
 		if (operations == null) {
 			operations = new BasicHBaseOperations(
 					zookeepers,
-					namespace);
+					namespace,
+					bigtable);
 		}
 		return operations;
 	}
@@ -47,22 +50,26 @@ public class HBaseCommandLineOptions
 	public static HBaseCommandLineOptions parseOptions(
 			final CommandLine commandLine )
 			throws ParseException {
-		boolean success = true;
 		final String zookeepers = commandLine.getOptionValue("z");
 		final String namespace = commandLine.getOptionValue(
 				"n",
 				"");
-		if (zookeepers == null) {
-			success = false;
-			LOGGER.error("Zookeeper URL not set");
+		final String bigtableStr = commandLine.getOptionValue("bigtable");
+		boolean bigtable = false;
+		if (bigtableStr != null) {
+			bigtable = Boolean.parseBoolean(bigtableStr);
 		}
-		if (!success) {
+
+		if (zookeepers == null) {
+			LOGGER.error("Zookeeper URL not set");
 			throw new ParseException(
 					"Required option is missing");
 		}
+
 		return new HBaseCommandLineOptions(
 				zookeepers,
-				namespace);
+				namespace,
+				bigtable);
 	}
 
 	public static void applyOptions(
@@ -77,20 +84,8 @@ public class HBaseCommandLineOptions
 				"i",
 				"instance-id",
 				true,
-				"The Accumulo instance ID");
+				"The Instance ID");
 		allOptions.addOption(instanceId);
-		final Option user = new Option(
-				"u",
-				"user",
-				true,
-				"A valid Accumulo user ID");
-		allOptions.addOption(user);
-		final Option password = new Option(
-				"p",
-				"password",
-				true,
-				"The password for the user");
-		allOptions.addOption(password);
 		final Option visibility = new Option(
 				"v",
 				"visibility",
@@ -111,7 +106,8 @@ public class HBaseCommandLineOptions
 		if (operations == null) {
 			operations = new BasicHBaseOperations(
 					zookeepers,
-					namespace);
+					namespace,
+					bigtable);
 		}
 		return operations;
 	}

@@ -37,6 +37,7 @@
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
 		<accumulo.version>1.7.2</accumulo.version>
+		<bigtable.version>0.9.4</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
 		<hbase.version>1.2.3</hbase.version>
 		<hadoop.version>2.7.3</hadoop.version>
@@ -185,6 +186,11 @@
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-minicluster</artifactId>
 				<version>${accumulo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud.bigtable</groupId>
+				<artifactId>bigtable-hbase-1.2</artifactId>
+				<version>${bigtable.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>

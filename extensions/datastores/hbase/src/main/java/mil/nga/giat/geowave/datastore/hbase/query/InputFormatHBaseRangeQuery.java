@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -98,18 +99,14 @@ public class InputFormatHBaseRangeQuery extends
 
 	@Override
 	protected Scan getMultiScanner(
+			final FilterList filterList,
 			final Integer limit,
 			final double[] maxResolutionSubsamplingPerDimension ) {
-		final Scan scanner = new Scan();
+		final Scan scanner = createStandardScanner(limit);
 
 		scanner.setStartRow(range.getStart().getBytes());
 		scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
 
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			for (final ByteArrayId adapterId : adapterIds) {
-				scanner.addFamily(adapterId.getBytes());
-			}
-		}
 		return scanner;
 	}
 }

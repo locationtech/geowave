@@ -277,7 +277,7 @@ public class HBaseConstraintsQuery extends
 			}
 			requestBuilder.setModel(ByteString.copyFrom(PersistenceUtils.toBinary(index.getIndexModel())));
 
-			final MultiRowRangeFilter multiFilter = getFilter(base.getAllRanges());
+			final MultiRowRangeFilter multiFilter = getMultiRowRangeFilter(base.getAllRanges());
 			if (multiFilter != null) {
 				requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}

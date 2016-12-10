@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.Coprocessor;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
@@ -19,6 +20,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.log4j.Logger;
+
+import com.google.cloud.bigtable.hbase.BigtableConfiguration;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
@@ -34,6 +37,8 @@ public class BasicHBaseOperations implements
 	private static final String DEFAULT_TABLE_NAMESPACE = "";
 	public static final Object ADMIN_MUTEX = new Object();
 	private static final long SLEEP_INTERVAL = 10000L;
+	private static final String projectId = "geowave-bigtable-project-id";
+	private static final String instanceId = "geowave-bigtable-instance-id";
 
 	private final Connection conn;
 	private final String tableNamespace;
@@ -41,10 +46,25 @@ public class BasicHBaseOperations implements
 
 	public BasicHBaseOperations(
 			final String zookeeperInstances,
-			final String geowaveNamespace )
+			final String geowaveNamespace,
+			final boolean bigtable )
 			throws IOException {
-		conn = ConnectionPool.getInstance().getConnection(
-				zookeeperInstances);
+		if (bigtable) {
+			Configuration config = BigtableConfiguration.configure(
+					projectId,
+					instanceId);
+
+			// TODO: Bigtable configgy things? What about connection pooling?
+			config.setBoolean(
+					"hbase.online.schema.update.enable",
+					true);
+
+			conn = BigtableConfiguration.connect(config);
+		}
+		else {
+			conn = ConnectionPool.getInstance().getConnection(
+					zookeeperInstances);
+		}
 		tableNamespace = geowaveNamespace;
 
 		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
@@ -57,7 +77,8 @@ public class BasicHBaseOperations implements
 			throws IOException {
 		this(
 				zookeeperInstances,
-				DEFAULT_TABLE_NAMESPACE);
+				DEFAULT_TABLE_NAMESPACE,
+				false);
 	}
 
 	public BasicHBaseOperations(
@@ -83,11 +104,16 @@ public class BasicHBaseOperations implements
 			throws IOException {
 		return new BasicHBaseOperations(
 				options.getZookeeper(),
-				options.getGeowaveNamespace());
+				options.getGeowaveNamespace(),
+				options.getAdditionalOptions().isBigtable());
 	}
 
 	public Configuration getConfig() {
 		return conn.getConfiguration();
+	}
+
+	public boolean isSchemaUpdateEnabled() {
+		return schemaUpdateEnabled;
 	}
 
 	public static TableName getTableName(
