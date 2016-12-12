@@ -69,22 +69,22 @@
                     </execution>
                 </executions>
             </plugin>
-                    
+            
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-resources-userguide</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/content/devguide</outputDirectory>
+                            <outputDirectory>${project.build.directory}/content/userguide</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/content/devguide</directory>
+                                    <directory>${project.basedir}/content/userguide</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
@@ -107,16 +107,16 @@
                 <version>2.7</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-resources-devguide</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/content/userguide</outputDirectory>
+                            <outputDirectory>${project.build.directory}/content/devguide</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/content/userguide</directory>
+                                    <directory>${project.basedir}/content/devguide</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
@@ -165,13 +165,45 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources-commands</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/content/commands</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/content/commands</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <nonFilteredFileExtensions>
+                                <nonFilteredFileExtension>js</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>css</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>html</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                            </nonFilteredFileExtensions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
                      
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
                     <execution>
-                    <id>generate</id>
+                    <id>generate-devguide</id>
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
@@ -198,7 +230,7 @@
                 <version>1.7</version>
                 <executions>
                     <execution>
-                    <id>generate</id>
+                    <id>generate-userguide</id>
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
@@ -225,7 +257,7 @@
                 <version>1.7</version>
                 <executions>
                     <execution>
-                    <id>generate-test</id>
+                    <id>generate-quickstart</id>
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
@@ -238,6 +270,33 @@
                                     <map from="${project.basedir}/content/quickstart/" to="include::"/>
                                 </pathconvert>
                                 <echo file="${project.build.directory}/content/quickstart/quickstart.adoc">${asciidoc-files}[]</echo>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                    <id>generate-commands</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <fileset id="generate-index-file-commands" dir="${project.basedir}/content/commands" includes="*.adoc"/>
+                                <!--
+                                    Abusing this a bit to do some simple templating, I have a file list and need
+                                    a list of asciidoc includes that look like include::000-titlepage.adoc[]
+                                 -->
+                                <pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-commands">
+                                    <map from="${project.basedir}/content/commands/" to="include::"/>
+                                </pathconvert>
+                                <echo file="${project.build.directory}/content/commands/commands.adoc">${asciidoc-files}[]</echo>
                             </target>
                         </configuration>
                         <goals>
@@ -272,6 +331,7 @@
                     </attributes>
                 </configuration>
                 <executions>
+                
                 	<execution>
                         <id>generate-epub-userguide</id>
                         <phase>generate-resources</phase>
@@ -285,6 +345,7 @@
                     <sourceDocumentName>userguide.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
+                    
                     <execution>
                         <id>generate-pdf-userguide</id>
                         <phase>generate-resources</phase>
@@ -302,6 +363,7 @@
                     <sourceDocumentName>userguide.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
+                    
                     <execution>
                         <id>generate-html-userguide</id>
                         <phase>generate-resources</phase>
@@ -326,6 +388,7 @@
                             </attributes>
                         </configuration>
                     </execution>
+                    
                     <execution>
                         <id>generate-epub-devguide</id>
                         <phase>generate-resources</phase>
@@ -339,6 +402,7 @@
                     <sourceDocumentName>devguide.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
+                    
                     <execution>
                         <id>generate-pdf-devguide</id>
                         <phase>generate-resources</phase>
@@ -356,6 +420,7 @@
                     <sourceDocumentName>devguide.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
+                    
                     <execution>
                         <id>generate-html-devguide</id>
                         <phase>generate-resources</phase>
@@ -380,6 +445,7 @@
                             </attributes>
                         </configuration>
                     </execution>
+                    
                      <execution>
                         <id>generate-epub-quickstart</id>
                         <phase>generate-resources</phase>
@@ -393,7 +459,7 @@
                     		<sourceDocumentName>quickstart.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
-<!-- Remove Quick Start PDF from doc gen
+
                     <execution>
                         <id>generate-pdf-quickstart</id>
                         <phase>generate-resources</phase>
@@ -411,7 +477,7 @@
                     		<sourceDocumentName>quickstart.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
--->
+
                     <execution>
                         <id>generate-html-quickstart</id>
                         <phase>generate-resources</phase>
@@ -436,6 +502,64 @@
                             </attributes>
                         </configuration>
                     </execution>
+                    
+                    <execution>
+                        <id>generate-epub-commands</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>epub3</backend>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                            <sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
+                    		<sourceDocumentName>commands.adoc</sourceDocumentName>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-pdf-commands</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <requires>
+                                <require>asciidoctor-pdf</require>
+                            </requires>
+                            <backend>pdf</backend>
+                            <compact>true</compact>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                            <sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
+                    		<sourceDocumentName>commands.adoc</sourceDocumentName>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-html-commands</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html5</backend>
+                            <sourceHighlighter>highlightjs</sourceHighlighter>
+                            <sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
+                    		<sourceDocumentName>commands.adoc</sourceDocumentName>
+                            <attributes>
+                                <stylesdir>stylesheets</stylesdir>
+                                <stylesheet>geowave.css</stylesheet>
+                                <imagesdir>./images</imagesdir>
+                                <toc>right</toc>
+                                <icons>font</icons>
+                                <sectanchors>true</sectanchors>
+                                <idprefix/>
+                                <idseparator>-</idseparator>
+                                <docinfo1>true</docinfo1>
+                            </attributes>
+                        </configuration>
+                    </execution>
+                    
                 </executions>
             </plugin>
             

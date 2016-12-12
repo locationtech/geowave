@@ -17,9 +17,7 @@ More information on this data set is available at http://research.microsoft.com/
 Below are renderings of GeoLife data. They display the raw points as well as the results of a GeoWave kernel
 density analytic. The data corresponds to Mapbox zoom level 13.
 
-image::geolife-density-13-thumb.jpg[scaledwidth="100%",alt="Geolife density at city scale",link=images/geolife-density-13.jpg]
-
-image::geolife-points-13-thumb.jpg[scaledwidth="100%",alt="Geolife points at city scale",link=images/geolife-points-13.jpg]
+image::geolife-density-13-thumb.jpg[scaledwidth="100%",alt="Geolife density at city scale",link=images/geolife-density-13.jpg] image::geolife-points-13-thumb.jpg[scaledwidth="100%",alt="Geolife points at city scale",link=images/geolife-points-13.jpg]
 
 <<<
 
