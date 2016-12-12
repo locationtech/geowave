@@ -128,8 +128,7 @@ public class SimpleHBaseIngestTest
 		try {
 			hbaseOperations = new BasicHBaseOperations(
 					zookeeperLocalCluster.getZookeeperConnectionString(),
-					TEST_NAMESPACE,
-					false);
+					TEST_NAMESPACE);
 		}
 		catch (final IOException e) {
 			LOGGER.error("Exception connecting to hbaseLocalCluster: " + e);

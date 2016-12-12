@@ -67,9 +67,8 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		 * Here we are testing non-default HBase options, we may want to
 		 * consider testing some non-default Accumulo options as well
 		 */
-		"enableCustomFilters=true",
-		"enableCoprocessors=true",
-		"verifyCoprocessors=true"
+		"disableCustomFilters=true",
+		"disableCoprocessors=true",
 	})
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;

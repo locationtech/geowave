@@ -136,7 +136,7 @@ public class BigtableEmulator
 		DefaultExecutor executor = new DefaultExecutor();
 		int exitValue = executor.execute(cmdLine);
 
-		LOGGER.debug("gcloud install beta; exit code = " + exitValue);
+		LOGGER.warn("KAM >>> gcloud install beta; exit code = " + exitValue);
 
 		return (exitValue == 0);
 	}

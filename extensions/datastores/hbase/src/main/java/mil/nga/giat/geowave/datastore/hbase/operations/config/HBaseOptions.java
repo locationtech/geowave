@@ -11,33 +11,33 @@ public class HBaseOptions extends
 {
 	public static final String COPROCESSOR_JAR_KEY = "coprocessorJar";
 
-	@Parameter(names = "--bigtable")
-	protected boolean bigtable = false;
+	@Parameter(names = "--disableCustomServerSide", description = "Disable all custom server side processing, to include coprocessors and custom filters.  This will alleviate the requirement to have a GeoWave jar on HBase's region server classpath.")
+	protected boolean disableServiceSide = false;
 
 	@Parameter(names = "--scanCacheSize")
 	protected int scanCacheSize = HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING;
 
-	@Parameter(names = "--enableCustomFilters")
-	protected boolean enableCustomFilters = false;
+	@Parameter(names = "--disableCustomFilters")
+	protected boolean disableCustomFilters = false;
 
-	@Parameter(names = "--enableCoprocessors")
-	protected boolean enableCoprocessors = false;
+	@Parameter(names = "--disableCoprocessors")
+	protected boolean disableCoprocessors = false;
 
-	@Parameter(names = "--verifyCoprocessors")
-	protected boolean verifyCoprocessors = false;
+	@Parameter(names = "--disableVerifyCoprocessors")
+	protected boolean disableVerifyCoprocessors = false;
 
 	@Parameter(names = {
 		"--" + COPROCESSOR_JAR_KEY
 	}, description = "Path (HDFS URL) to the jar containing coprocessor classes")
 	private String coprocessorJar;
 
-	public boolean isBigtable() {
-		return bigtable;
+	public boolean isServerSideDisabled() {
+		return disableServiceSide;
 	}
 
-	public void setBigtable(
-			final boolean bigtable ) {
-		this.bigtable = bigtable;
+	public void setServerSideDisabled(
+			final boolean disableServiceSide ) {
+		this.disableServiceSide = disableServiceSide;
 	}
 
 	public int getScanCacheSize() {
@@ -50,30 +50,30 @@ public class HBaseOptions extends
 	}
 
 	public boolean isEnableCustomFilters() {
-		return enableCustomFilters && !bigtable;
+		return !disableCustomFilters && !disableServiceSide;
 	}
 
 	public void setEnableCustomFilters(
 			final boolean enableCustomFilters ) {
-		this.enableCustomFilters = enableCustomFilters;
+		this.disableCustomFilters = !enableCustomFilters;
 	}
 
 	public boolean isEnableCoprocessors() {
-		return enableCoprocessors && !bigtable;
+		return !disableCoprocessors && !disableServiceSide;
 	}
 
 	public void setEnableCoprocessors(
 			final boolean enableCoprocessors ) {
-		this.enableCoprocessors = enableCoprocessors;
+		this.disableCoprocessors = !enableCoprocessors;
 	}
 
 	public boolean isVerifyCoprocessors() {
-		return verifyCoprocessors && !bigtable;
+		return !disableVerifyCoprocessors && !disableServiceSide;
 	}
 
 	public void setVerifyCoprocessors(
 			final boolean verifyCoprocessors ) {
-		this.verifyCoprocessors = verifyCoprocessors;
+		this.disableVerifyCoprocessors = !verifyCoprocessors;
 	}
 
 	public String getCoprocessorJar() {
