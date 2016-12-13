@@ -8,11 +8,11 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.bigtable.metadata.BigTableAdapterIndexMappingStoreFactory;
 import mil.nga.giat.geowave.datastore.bigtable.metadata.BigTableAdapterStoreFactory;
+import mil.nga.giat.geowave.datastore.bigtable.metadata.BigTableDataStatisticsStoreFactory;
+import mil.nga.giat.geowave.datastore.bigtable.metadata.BigTableIndexStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStoreFactory;
 
 public class BigTableStoreFactoryFamily extends
 		AbstractBigTableFactory implements
@@ -25,12 +25,12 @@ public class BigTableStoreFactoryFamily extends
 
 	@Override
 	public GenericStoreFactory<DataStatisticsStore> getDataStatisticsStoreFactory() {
-		return new HBaseDataStatisticsStoreFactory();
+		return new BigTableDataStatisticsStoreFactory();
 	}
 
 	@Override
 	public GenericStoreFactory<IndexStore> getIndexStoreFactory() {
-		return new HBaseIndexStoreFactory();
+		return new BigTableIndexStoreFactory();
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class BigTableStoreFactoryFamily extends
 
 	@Override
 	public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory() {
-		return new HBaseAdapterIndexMappingStoreFactory();
+		return new BigTableAdapterIndexMappingStoreFactory();
 	}
 }
