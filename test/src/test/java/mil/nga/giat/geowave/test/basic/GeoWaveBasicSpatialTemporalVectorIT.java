@@ -60,15 +60,15 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	}, options = {
 		/**
 		 * Here we are testing non-default HBase options, we may want to
 		 * consider testing some non-default Accumulo options as well
 		 */
-		"enableCustomFilters=true",
-		"enableCoprocessors=true",
-		"verifyCoprocessors=true"
+		"disableCustomFilters=true",
+		"disableCoprocessors=true",
 	})
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;

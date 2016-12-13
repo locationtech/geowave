@@ -61,6 +61,7 @@ public class GeoWaveIngestGeoserverIT
 	private static GeoserverServiceClient geoserverServiceClient = null;
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	}, options = {
 		"enableCustomFilters=true",

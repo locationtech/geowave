@@ -46,6 +46,7 @@ public class DataStatisticsStoreIT
 {
 
 	@GeoWaveTestStore({
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

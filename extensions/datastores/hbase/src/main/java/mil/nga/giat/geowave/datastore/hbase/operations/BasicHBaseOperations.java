@@ -31,13 +31,25 @@ public class BasicHBaseOperations implements
 		DataStoreOperations
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
-	private static final String DEFAULT_TABLE_NAMESPACE = "";
+	protected static final String DEFAULT_TABLE_NAMESPACE = "";
 	public static final Object ADMIN_MUTEX = new Object();
 	private static final long SLEEP_INTERVAL = 10000L;
 
 	private final Connection conn;
 	private final String tableNamespace;
 	private final boolean schemaUpdateEnabled;
+
+	public BasicHBaseOperations(
+			final Connection connection,
+			final String geowaveNamespace )
+			throws IOException {
+		conn = connection;
+		tableNamespace = geowaveNamespace;
+
+		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
+				"hbase.online.schema.update.enable",
+				false);
+	}
 
 	public BasicHBaseOperations(
 			final String zookeeperInstances,
@@ -88,6 +100,10 @@ public class BasicHBaseOperations implements
 
 	public Configuration getConfig() {
 		return conn.getConfiguration();
+	}
+
+	public boolean isSchemaUpdateEnabled() {
+		return schemaUpdateEnabled;
 	}
 
 	public static TableName getTableName(

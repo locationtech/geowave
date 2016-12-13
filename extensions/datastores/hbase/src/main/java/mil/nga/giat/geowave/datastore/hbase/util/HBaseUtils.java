@@ -456,7 +456,7 @@ public class HBaseUtils
 				rowId);
 		final Delete d = new Delete(
 				rowId);
-		d.addColumn(
+		d.addColumns(
 				columnFamily,
 				columnQualifier);
 		m.add(d);
