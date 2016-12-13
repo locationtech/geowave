@@ -6,7 +6,6 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.bigtable.BigTableDataStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStoreFactory;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class BigtableStoreTestEnvironment extends

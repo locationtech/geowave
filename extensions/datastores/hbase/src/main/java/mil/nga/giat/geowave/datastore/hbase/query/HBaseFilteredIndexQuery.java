@@ -263,7 +263,7 @@ public abstract class HBaseFilteredIndexQuery extends
 	}
 
 	private boolean isBigtable() {
-		return (options != null && options.isServerSideDisabled());
+		return (options != null && options.isBigTable());
 	}
 
 	// Bigtable does not support MultiRowRangeFilters. This method returns a

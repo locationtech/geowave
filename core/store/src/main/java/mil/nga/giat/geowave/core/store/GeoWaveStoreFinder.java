@@ -11,6 +11,9 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -18,9 +21,6 @@ import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GeoWaveStoreFinder
 {
@@ -35,6 +35,8 @@ public class GeoWaveStoreFinder
 			String.class);
 
 	private static Map<String, StoreFactoryFamilySpi> registeredStoreFactoryFamilies = null;
+
+	// private static Map<String, Set<StoreFactoryFamilySpi>> supersetFactories;
 
 	public static DataStatisticsStore createDataStatisticsStore(
 			final Map<String, String> configOptions ) {
@@ -141,7 +143,7 @@ public class GeoWaveStoreFinder
 	public static StoreFactoryFamilySpi findStoreFamily(
 			final Map<String, String> configOptions ) {
 		final Object storeHint = configOptions.get(STORE_HINT_KEY);
-		Map<String, StoreFactoryFamilySpi> internalStoreFamilies = getRegisteredStoreFactoryFamilies();
+		final Map<String, StoreFactoryFamilySpi> internalStoreFamilies = getRegisteredStoreFactoryFamilies();
 		if (storeHint != null) {
 			final StoreFactoryFamilySpi factory = internalStoreFamilies.get(storeHint.toString());
 			if (factory != null) {
@@ -158,6 +160,13 @@ public class GeoWaveStoreFinder
 			else {
 				LOGGER.error("Unable to find store '" + storeHint.toString() + "'");
 				return null;
+			}
+		}
+		for (final Entry<String, StoreFactoryFamilySpi> entry : internalStoreFamilies.entrySet()) {
+			if (exactMatch(
+					entry.getValue(),
+					configOptions)) {
+				return entry.getValue();
 			}
 		}
 		int matchingFactoryRequiredOptionsCount = -1;
@@ -182,7 +191,7 @@ public class GeoWaveStoreFinder
 			final List<String> matchingOptions = getMatchingRequiredOptions(
 					factory,
 					configOptions);
-			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory
+			final ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory
 					.getDataStoreFactory()
 					.createOptionsInstance());
 			LOGGER.debug("OPTIONS -- length: " + factoryOptions.length + ", " + factory.getType());
@@ -211,6 +220,45 @@ public class GeoWaveStoreFinder
 				uniqueNames).toString();
 	}
 
+	public static boolean exactMatch(
+			final StoreFactoryFamilySpi geowaveStoreFactoryFamily,
+			final Map<String, String> params ) {
+		final ConfigOption[] requiredOptions = GeoWaveStoreFinder.getRequiredOptions(geowaveStoreFactoryFamily);
+		// first ensure all required options are fulfilled
+		for (final ConfigOption requiredOption : requiredOptions) {
+			if (!params.containsKey(requiredOption.getName())) {
+				return false;
+			}
+		}
+		// next ensure that all params match an available option
+		final Set<String> availableOptions = new HashSet<String>();
+		for (final ConfigOption option : GeoWaveStoreFinder.getAllOptions(geowaveStoreFactoryFamily)) {
+			availableOptions.add(option.getName());
+		}
+		for (final String optionName : params.keySet()) {
+			if (!availableOptions.contains(optionName) && !STORE_HINT_KEY.equals(optionName)) {
+				return false;
+			}
+		}
+
+		// lastly try to create the index store (pick a minimally required
+		// store)
+		try {
+			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
+					geowaveStoreFactoryFamily.getDataStoreFactory().createOptionsInstance(),
+					params);
+			geowaveStoreFactoryFamily.getIndexStoreFactory().createStore(
+					options);
+		}
+		catch (final Exception e) {
+			LOGGER.info(
+					"supplied map is not able to construct index store",
+					e);
+			return false;
+		}
+		return true;
+	}
+
 	public static synchronized Map<String, StoreFactoryFamilySpi> getRegisteredStoreFactoryFamilies() {
 		registeredStoreFactoryFamilies = getRegisteredFactories(
 				StoreFactoryFamilySpi.class,
@@ -224,13 +272,21 @@ public class GeoWaveStoreFinder
 		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily
 				.getDataStoreFactory()
 				.createOptionsInstance())));
+		// TODO the JCommander reflection does not follow inheritance, these are
+		// commonly inherited
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(new BaseDataStoreOptions())));
+		allOptions.add(new ConfigOption(
+				StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION,
+				StoreFactoryOptions.GEOWAVE_NAMESPACE_DESCRIPTION,
+				true,
+				String.class));
 		return allOptions.toArray(new ConfigOption[] {});
 	}
 
 	public static synchronized ConfigOption[] getAllOptions() {
 		final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
 		for (final StoreFactoryFamilySpi f : getRegisteredStoreFactoryFamilies().values()) {
-			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f
+			final ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f
 					.getDataStoreFactory()
 					.createOptionsInstance());
 			allOptions.addAll(Arrays.asList(factoryOptions));
@@ -248,6 +304,66 @@ public class GeoWaveStoreFinder
 		}
 		return requiredOptions.toArray(new ConfigOption[] {});
 	}
+
+	// private static Map<String, Set<StoreFactoryFamilySpi>>
+	// getSuperSetFactories(
+	// Map<String, Set<StoreFactoryFamilySpi>> supersetFactories,
+	// Map<String, StoreFactoryFamilySpi> registeredFactories){
+	// if (supersetFactories == null) {
+	// // initialize arguments map
+	// supersetFactories = new HashMap<String, Set<StoreFactoryFamilySpi>>();
+	// Collection <StoreFactoryFamilySpi> registeredFactoryValues =
+	// registeredFactories.values();
+	// for (final StoreFactoryFamilySpi factory : registeredFactoryValues) {
+	// for (final StoreFactoryFamilySpi otherFactory : registeredFactoryValues)
+	// {
+	// if (factory != otherFactory) {
+	// // if otherFactory arguments are superset of
+	// // factory arguments
+	// final ConfigOption[] requiredOptions =
+	// GeoWaveStoreFinder.getRequiredOptions(
+	// factory);
+	// final ConfigOption[] otherRequiredOptions =
+	// GeoWaveStoreFinder.getRequiredOptions(
+	// otherFactory);
+	// boolean superSet = false;
+	// if (otherRequiredOptions.length > requiredOptions.length) {
+	// superSet = true;
+	// for (final ConfigOption requiredOption : requiredOptions) {
+	// boolean foundInOtherOptions = false;
+	// for (final ConfigOption otherOption : otherRequiredOptions) {
+	// if (otherOption.getName().equals(
+	// requiredOption.getName())) {
+	// foundInOtherOptions = true;
+	// break;
+	// }
+	// }
+	// if (!foundInOtherOptions) {
+	// superSet = false;
+	// break;
+	// }
+	// }
+	// }
+	//
+	// if (superSet) {
+	// // add otherfactory to factory's map entry
+	// Set<StoreFactoryFamilySpi> supersetStores = supersetFactories.get(
+	// factory.getType());
+	// if (supersetStores == null) {
+	// supersetStores = new HashSet<StoreFactoryFamilySpi>();
+	// supersetFactories.put(
+	// factory.getType(),
+	// supersetStores);
+	// }
+	// supersetStores.add(
+	// otherFactory);
+	// }
+	// }
+	// }
+	// }
+	// }
+	// return supersetFactories;
+	// }
 
 	private static <T extends GenericFactory> Map<String, T> getRegisteredFactories(
 			final Class<T> cls,
