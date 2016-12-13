@@ -6,13 +6,12 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.datastore.bigtable.operations.BigTableOperations;
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
-import mil.nga.giat.geowave.datastore.hbase.AbstractHBaseStoreFactory;
 
 abstract public class AbstractBigTableStoreFactory<T> extends
 		AbstractBigTableFactory implements
 		GenericStoreFactory<T>
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractHBaseStoreFactory.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractBigTableStoreFactory.class);
 
 	protected BigTableOperations createOperations(
 			final BigTableOptions options ) {
