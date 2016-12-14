@@ -1,0 +1,8 @@
+[[steps-process]]
+<<<
+
+=== Download GDELT Data
+
+=== Config and Ingest
+
+=== Kernel Density Estimate (KDE)

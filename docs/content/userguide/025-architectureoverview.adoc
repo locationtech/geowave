@@ -5,7 +5,7 @@
 [NOTE]
 ==== 
 This is a brief overview of the GeoWave architecture. For an in-depth discussion, please see the 
-http://ngageoint.github.io/geowave/devguide.html#architecture [GeoWave Developer Guide.]
+http://ngageoint.github.io/geowave/devguide.html#architecture[GeoWave Developer Guide.]
 ====
 
 === Overview

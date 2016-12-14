@@ -5,7 +5,7 @@ The geowave command line utility comes with several plugins out of the box. You 
 
 [source]
 ----
-*geowave ingest listplugins*
+geowave ingest listplugins
 ----
 
 You can add more by simply copying a desired plugin into the /usr/local/geowave/tools/plugins directory.

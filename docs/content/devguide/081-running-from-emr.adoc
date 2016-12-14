@@ -10,9 +10,12 @@ up GeoWave on an EMR cluster, please see our http://ngageoint.github.io/geowave/
 
 === Provisioning
 
-The configuration files needed to use GeoWave from EMR are stored under the deploy/emr/release directory. EMR expects that all
-config files are available from S3 so the first step would be to create an S3 bucket and then copy the two scripts
-into the S3 bucket adjusting the path used in the command as needed.
+The configuration files needed to use GeoWave from EMR are automatically generated and stored in an s3 bucket at 
+s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/ and s3.amazonaws.com/geowave/latest/scripts/emr/hbase/. 
+EMR expects that all config files are available from S3 so the first step would be to create an S3 bucket and then 
+copy the bootstrap-geowave.sh script into your own S3 bucket adjusting the path used in the command as needed. 
+Alternatively, you can just reference the bootstrap-geowave.sh script in your command without transferring it into 
+a separate bucket.
 
 The command below is an example of using the API to launch an EMR cluster, you could also provide this same information
 from the console. There are a number of fields that are unique to each deployment most of which you'll see with a placeholder
@@ -32,16 +35,15 @@ in quickly setting up a cluster to test some capability.
 aws emr create-cluster \
   --name "geowave-emr" \
   --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
-  --ec2-attributes "KeyName=YOUR_KEYNAME,SubnetId=YOUR_SUBNET_ID" \
-  --region YOUR_REGION \
+  --ec2-attributes "KeyName=${YOUR_KEYNAME},SubnetId=${YOUR_SUBNET_ID}" \
+  --region ${YOUR_REGION} \
   --release-label emr-5.1.0 \
   --applications Name=Hadoop\
   --use-default-roles \
   --no-auto-terminate \
-  --bootstrap-actions Path=s3://YOUR_S3_BUCKET/bootstrap-geowave-accumulo.sh,Name=Bootstrap_GeoWave_Node <1> \
+  --bootstrap-actions Path=s3://${BOOTSTRAP_SCRIPT_DIR}/bootstrap-geowave.sh,Name=Bootstrap_GeoWave_Node \
   --tags "Name=geowave-emr-worker"
 ----
-<1> You could also use the bootstrap-geowave-hbase.sh script here.
 
 === Connecting
 
@@ -53,21 +55,21 @@ in the ec2-attributes KeyName portion of the command.
 * Example SOCKS Proxy connection: ```ssh -i YOUR_KEYFILE -ND 5556 ec2-user@MASTER_FQDN```
 
 After establishing the SOCKS proxy you'd then configure your browser to use the port you specified. A more detailed
-explanation can be found in the AWS docs: https://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-ssh-tunnel.html
+explanation can be found in the AWS docs https://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-ssh-tunnel.html[here].
 
 
 === Links
 
 After setting up a SOCKS proxy to the master node you should be able to connect to any of the following web consoles
 hosted from the cluster. The name of the master node can be found in the description of the EMR job in the AWS console.
-Example: Master public DNS: ec2-52-91-31-196.compute-1.amazonaws.com
+Example: Master public DNS: ec2-52-91-31-196.compute-1.amazonaws.com (This is refered to as the *MASTER_FQDN* in the links below)
 
-* Accumulo: http://MASTER_FQDN:50095
-* Ganglia Monitoring: http://MASTER_FQDN/ganglia/
-* GeoWave GeoServer: http://MASTER_FQDN:8000/geoserver/web
-* HDFS: http://MASTER_FQDN:50070
-* HUE: http://MASTER_FQDN:8888
-* YARN: http://MASTER_FQDN:8088
+* Accumulo: http://${MASTER_FQDN}:50095
+* Ganglia Monitoring: http://${MASTER_FQDN}/ganglia/
+* GeoWave GeoServer: http://${MASTER_FQDN}:8000/geoserver/web
+* HDFS: http://${MASTER_FQDN}:50070
+* HUE: http://${MASTER_FQDN}:8888
+* YARN: http://${MASTER_FQDN}:8088
 
 === Configuration
 

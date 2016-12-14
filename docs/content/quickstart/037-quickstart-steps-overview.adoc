@@ -1,0 +1,9 @@
+[[steps-overview]]
+<<<
+
+== Running The Steps
+
+The bootstrap script we are running in this tutorial has a few steps and runs a number of other scripts to setup the 
+environment, download the data, ingest the data, run the kde and set up the layers for geoserver. This section gives a 
+basic breakdown of each script. All scripts can be found in the geowave project under deploy/emr/4/gdelt-example/ 
+directory.
