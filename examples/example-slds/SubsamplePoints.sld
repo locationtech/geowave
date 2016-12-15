@@ -6,7 +6,7 @@
 	<NamedLayer>
 		<Name>Subsample At Requested Map Resolution</Name>
 		<UserStyle>
-			<Title>Decimate</Title>
+			<Title>Subsample</Title>
 			<Abstract>An example of how to handle large datasets in a WMS request
 				by subsampling the data within GeoWave based on the pixel
 				resolution.</Abstract>
