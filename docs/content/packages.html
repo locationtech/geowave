@@ -288,7 +288,7 @@
                     var fileName = $(this).find('Key').text();
                     var fileSize = $(this).find('Size').text();
                     if (fileSize !== '0' && !isInSkipList(fileName, _skipList)) {
-                        if(startsWith(fileName, eventHash.substring(1))) {
+                        if(startsWith(fileName, eventHash.substring(1) +”/”)) {
                             buffer.push([
                                 '<a href="' + _url + fileName + '" download="' + baseName(fileName)  + '" target="_blank">' + baseName(fileName) + '</a>',
                                 $(this).find('LastModified').text(),

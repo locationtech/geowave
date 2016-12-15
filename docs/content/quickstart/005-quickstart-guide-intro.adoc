@@ -1,8 +1,6 @@
 [[quickstart-guide-intro]]
 <<<
 
-image::logo.png[scaledwidth="25%"]
-
 = Quickstart Guide
 
 == What you will need
