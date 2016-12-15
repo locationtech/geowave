@@ -143,7 +143,8 @@ public class GeoWavePluginConfig
 				storeFactoryFamily.getType());
 		if (params == null) {
 			final ConfigOption[] configOptions = GeoWaveStoreFinder.getAllOptions(
-					storeFactoryFamily);
+					storeFactoryFamily,
+					false);
 			params = new ArrayList<Param>(
 					Lists.transform(
 							Lists.newArrayList(

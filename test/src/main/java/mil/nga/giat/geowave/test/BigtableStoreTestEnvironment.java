@@ -45,10 +45,10 @@ public class BigtableStoreTestEnvironment extends
 	public void setup() {
 		// Bigtable IT's rely on an external gcloud emulator
 		if (emulator == null) {
-		emulator = new BigtableEmulator(
-				null); // null uses tmp dir
+			emulator = new BigtableEmulator(
+					null); // null uses tmp dir
 		}
-		
+
 		// Make sure we clean up any old processes first
 		if (emulator.isRunning()) {
 			emulator.stop();

@@ -36,8 +36,6 @@ public class GeoWaveStoreFinder
 
 	private static Map<String, StoreFactoryFamilySpi> registeredStoreFactoryFamilies = null;
 
-	// private static Map<String, Set<StoreFactoryFamilySpi>> supersetFactories;
-
 	public static DataStatisticsStore createDataStatisticsStore(
 			final Map<String, String> configOptions ) {
 		final StoreFactoryFamilySpi factory = findStoreFamily(configOptions);
@@ -113,9 +111,9 @@ public class GeoWaveStoreFinder
 	private static List<String> getMissingRequiredOptions(
 			final StoreFactoryFamilySpi factory,
 			final Map<String, String> configOptions ) {
-		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(factory
-				.getDataStoreFactory()
-				.createOptionsInstance());
+		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(
+				factory.getDataStoreFactory().createOptionsInstance(),
+				false);
 		final List<String> missing = new ArrayList<String>();
 		for (final ConfigOption option : options) {
 			if (!option.isOptional() && !configOptions.containsKey(option.getName())) {
@@ -128,9 +126,9 @@ public class GeoWaveStoreFinder
 	private static List<String> getMatchingRequiredOptions(
 			final StoreFactoryFamilySpi factory,
 			final Map<String, String> configOptions ) {
-		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(factory
-				.getDataStoreFactory()
-				.createOptionsInstance());
+		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(
+				factory.getDataStoreFactory().createOptionsInstance(),
+				false);
 		final List<String> matching = new ArrayList<String>();
 		for (final ConfigOption option : options) {
 			if (!option.isOptional() && configOptions.containsKey(option.getName())) {
@@ -162,6 +160,12 @@ public class GeoWaveStoreFinder
 				return null;
 			}
 		}
+
+		// if the hint is not provided, the factory finder will attempt to find
+		// a factory that has an exact match meaning that all required params
+		// are provided and all provided params are defined as at least optional
+		// params
+
 		for (final Entry<String, StoreFactoryFamilySpi> entry : internalStoreFamilies.entrySet()) {
 			if (exactMatch(
 					entry.getValue(),
@@ -169,18 +173,17 @@ public class GeoWaveStoreFinder
 				return entry.getValue();
 			}
 		}
-		int matchingFactoryRequiredOptionsCount = -1;
-		StoreFactoryFamilySpi matchingFactory = null;
-		boolean matchingFactoriesHaveSameRequiredOptionsCount = false;
-		// if the hint is not provided, the factory finder will attempt to find
-		// a factory that does not have any missing options; if multiple
-		// factories will match, the one with the most required matching options
-		// will be used with
+		// if it cannot find and exact match it will attempt to does not have
+		// any missing options; if multiple/ factories will match, the one with
+		// the most required matching options will be used with
 		// the assumption that it has the most specificity and closest match of
 		// the arguments; if there are multiple factories that match and have
 		// the same number of required matching options, arbitrarily the last
 		// one will be chosen
 		// and a warning message will be logged
+		int matchingFactoryRequiredOptionsCount = -1;
+		StoreFactoryFamilySpi matchingFactory = null;
+		boolean matchingFactoriesHaveSameRequiredOptionsCount = false;
 		LOGGER.debug("Finding Factories (size): " + internalStoreFamilies.size());
 
 		for (final Entry<String, StoreFactoryFamilySpi> entry : internalStoreFamilies.entrySet()) {
@@ -191,10 +194,6 @@ public class GeoWaveStoreFinder
 			final List<String> matchingOptions = getMatchingRequiredOptions(
 					factory,
 					configOptions);
-			final ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory
-					.getDataStoreFactory()
-					.createOptionsInstance());
-			LOGGER.debug("OPTIONS -- length: " + factoryOptions.length + ", " + factory.getType());
 			if (missingOptions.isEmpty()
 					&& ((matchingFactory == null) || (matchingOptions.size() >= matchingFactoryRequiredOptionsCount))) {
 				matchingFactory = factory;
@@ -232,7 +231,9 @@ public class GeoWaveStoreFinder
 		}
 		// next ensure that all params match an available option
 		final Set<String> availableOptions = new HashSet<String>();
-		for (final ConfigOption option : GeoWaveStoreFinder.getAllOptions(geowaveStoreFactoryFamily)) {
+		for (final ConfigOption option : GeoWaveStoreFinder.getAllOptions(
+				geowaveStoreFactoryFamily,
+				true)) {
 			availableOptions.add(option.getName());
 		}
 		for (final String optionName : params.keySet()) {
@@ -267,103 +268,40 @@ public class GeoWaveStoreFinder
 	}
 
 	public static synchronized ConfigOption[] getAllOptions(
-			final StoreFactoryFamilySpi storeFactoryFamily ) {
+			final StoreFactoryFamilySpi storeFactoryFamily,
+			boolean includeHidden ) {
 		final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
-		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily
-				.getDataStoreFactory()
-				.createOptionsInstance())));
-		// TODO the JCommander reflection does not follow inheritance, these are
-		// commonly inherited
-		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(new BaseDataStoreOptions())));
-		allOptions.add(new ConfigOption(
-				StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION,
-				StoreFactoryOptions.GEOWAVE_NAMESPACE_DESCRIPTION,
-				true,
-				String.class));
-		return allOptions.toArray(new ConfigOption[] {});
-	}
-
-	public static synchronized ConfigOption[] getAllOptions() {
-		final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
-		for (final StoreFactoryFamilySpi f : getRegisteredStoreFactoryFamilies().values()) {
-			final ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f
-					.getDataStoreFactory()
-					.createOptionsInstance());
-			allOptions.addAll(Arrays.asList(factoryOptions));
-		}
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(
+				storeFactoryFamily.getDataStoreFactory().createOptionsInstance(),
+				includeHidden)));
+		// TODO our JCommanderPrefixTranslator's use of reflection does not
+		// follow inheritance, these are commonly inherited classes and options
+		// for all data stores provided as a stop gap until we can investigate
+		// allOptions.addAll(
+		// Arrays.asList(
+		// ConfigUtils.createConfigOptionsFromJCommander(
+		// new BaseDataStoreOptions())));
+		// allOptions.add(
+		// new ConfigOption(
+		// StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION,
+		// StoreFactoryOptions.GEOWAVE_NAMESPACE_DESCRIPTION,
+		// true,
+		// String.class));
 		return allOptions.toArray(new ConfigOption[] {});
 	}
 
 	public static synchronized ConfigOption[] getRequiredOptions(
 			final StoreFactoryFamilySpi storeFactoryFamily ) {
 		final List<ConfigOption> requiredOptions = new ArrayList<ConfigOption>();
-		for (final ConfigOption option : getAllOptions(storeFactoryFamily)) {
+		for (final ConfigOption option : getAllOptions(
+				storeFactoryFamily,
+				false)) {
 			if (!option.isOptional()) {
 				requiredOptions.add(option);
 			}
 		}
 		return requiredOptions.toArray(new ConfigOption[] {});
 	}
-
-	// private static Map<String, Set<StoreFactoryFamilySpi>>
-	// getSuperSetFactories(
-	// Map<String, Set<StoreFactoryFamilySpi>> supersetFactories,
-	// Map<String, StoreFactoryFamilySpi> registeredFactories){
-	// if (supersetFactories == null) {
-	// // initialize arguments map
-	// supersetFactories = new HashMap<String, Set<StoreFactoryFamilySpi>>();
-	// Collection <StoreFactoryFamilySpi> registeredFactoryValues =
-	// registeredFactories.values();
-	// for (final StoreFactoryFamilySpi factory : registeredFactoryValues) {
-	// for (final StoreFactoryFamilySpi otherFactory : registeredFactoryValues)
-	// {
-	// if (factory != otherFactory) {
-	// // if otherFactory arguments are superset of
-	// // factory arguments
-	// final ConfigOption[] requiredOptions =
-	// GeoWaveStoreFinder.getRequiredOptions(
-	// factory);
-	// final ConfigOption[] otherRequiredOptions =
-	// GeoWaveStoreFinder.getRequiredOptions(
-	// otherFactory);
-	// boolean superSet = false;
-	// if (otherRequiredOptions.length > requiredOptions.length) {
-	// superSet = true;
-	// for (final ConfigOption requiredOption : requiredOptions) {
-	// boolean foundInOtherOptions = false;
-	// for (final ConfigOption otherOption : otherRequiredOptions) {
-	// if (otherOption.getName().equals(
-	// requiredOption.getName())) {
-	// foundInOtherOptions = true;
-	// break;
-	// }
-	// }
-	// if (!foundInOtherOptions) {
-	// superSet = false;
-	// break;
-	// }
-	// }
-	// }
-	//
-	// if (superSet) {
-	// // add otherfactory to factory's map entry
-	// Set<StoreFactoryFamilySpi> supersetStores = supersetFactories.get(
-	// factory.getType());
-	// if (supersetStores == null) {
-	// supersetStores = new HashSet<StoreFactoryFamilySpi>();
-	// supersetFactories.put(
-	// factory.getType(),
-	// supersetStores);
-	// }
-	// supersetStores.add(
-	// otherFactory);
-	// }
-	// }
-	// }
-	// }
-	// }
-	// return supersetFactories;
-	// }
 
 	private static <T extends GenericFactory> Map<String, T> getRegisteredFactories(
 			final Class<T> cls,

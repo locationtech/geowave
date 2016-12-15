@@ -317,8 +317,9 @@ public class GeoWaveServicesIT
 
 		if (dsInfo != null) {
 			final Map<String, String> options = dataStoreOptions.getOptionsAsMap();
-			final List<ConfigOption> configOptions = Arrays.asList(ConfigUtils
-					.createConfigOptionsFromJCommander(dataStoreOptions));
+			final List<ConfigOption> configOptions = Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(
+					dataStoreOptions,
+					false));
 			final Collection<String> nonPasswordRequiredFields = Collections2.transform(
 					Collections2.filter(
 							configOptions,

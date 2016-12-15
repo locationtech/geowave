@@ -78,7 +78,7 @@ public class BigtableEmulator
 
 		return true;
 	}
-	
+
 	public boolean isRunning() {
 		return (watchdog != null && watchdog.isWatching());
 	}
@@ -86,7 +86,7 @@ public class BigtableEmulator
 	public void stop() {
 		// first, ask the watchdog nicely:
 		watchdog.destroyProcess();
-		
+
 		// then kill all the extra emulator processes like this:
 		final String KILL_CMD_1 = "for i in $(ps -ef | grep -i \"[b]eta emulators bigtable\" | awk '{print $2}'); do kill -9 $i; done";
 		final String KILL_CMD_2 = "for i in $(ps -ef | grep -i \"[c]btemulator\" | awk '{print $2}'); do kill -9 $i; done";
@@ -97,8 +97,12 @@ public class BigtableEmulator
 
 		PrintWriter scriptWriter;
 		try {
-			Writer w = new OutputStreamWriter(new FileOutputStream(bashFile), "UTF-8");
-			scriptWriter = new PrintWriter(w);
+			Writer w = new OutputStreamWriter(
+					new FileOutputStream(
+							bashFile),
+					"UTF-8");
+			scriptWriter = new PrintWriter(
+					w);
 			scriptWriter.println("#!/bin/bash");
 			scriptWriter.println("set -ev");
 			scriptWriter.println(KILL_CMD_1);
@@ -116,7 +120,7 @@ public class BigtableEmulator
 		catch (UnsupportedEncodingException e) {
 			LOGGER.error(
 					"Unable to create bigtable emulator kill script",
-					e);		
+					e);
 		}
 
 		CommandLine cmdLine = new CommandLine(

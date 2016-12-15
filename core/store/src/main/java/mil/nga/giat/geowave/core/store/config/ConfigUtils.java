@@ -60,7 +60,8 @@ public class ConfigUtils
 	 * create/populate an AbstractConfigOptions map.
 	 */
 	public static ConfigOption[] createConfigOptionsFromJCommander(
-			final Object createOptionsInstance ) {
+			final Object createOptionsInstance,
+			boolean includeHidden ) {
 		ConfigOption[] opts = null;
 		if (createOptionsInstance != null) {
 			final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
@@ -69,7 +70,7 @@ public class ConfigUtils
 			final Collection<TranslationEntry> entries = map.getEntries().values();
 			final List<ConfigOption> options = new ArrayList<ConfigOption>();
 			for (final TranslationEntry entry : entries) {
-				if (!entry.isHidden()) {
+				if (includeHidden || !entry.isHidden()) {
 					final ConfigOption opt = new ConfigOption(
 							entry.getAsPropertyName(),
 							entry.getDescription(),
