@@ -2,6 +2,7 @@ class geowave(
   $geowave_version        = $geowave::params::geowave_version,
   $hadoop_vendor_version  = $geowave::params::hadoop_vendor_version,
   $install_accumulo       = $geowave::params::install_accumulo,
+  $install_hbase          = $geowave::params::install_hbase,
   $install_app            = $geowave::params::install_app,
   $install_app_server     = $geowave::params::install_app_server,
   $http_port              = $geowave::params::http_port
@@ -12,6 +13,10 @@ class geowave(
 
   if $install_accumulo {
     class {'geowave::accumulo':}
+  }
+  
+  if $install_hbase {
+    class {'geowave::hbase':}
   }
 
   if $install_app {

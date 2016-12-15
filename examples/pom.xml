@@ -8,6 +8,9 @@
     </parent>
     <artifactId>geowave-example</artifactId>
     <name>GeoWave Examples</name>
+    <properties>    
+		<examples.finalName>${project.artifactId}-${project.version}-examples</examples.finalName>
+    </properties>
     <dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -107,7 +110,7 @@
                                     </transformers>
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <minimizeJar>false</minimizeJar>
-                                    <finalName>${project.build.finalName}</finalName>
+                                    <finalName>${examples.finalName}</finalName>
                                 </configuration>
                             </execution>
                         </executions>

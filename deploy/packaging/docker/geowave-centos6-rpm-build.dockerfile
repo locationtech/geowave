@@ -1,4 +1,4 @@
 FROM centos:centos6
 
-RUN yum -y install asciidoc rpm-build rpm2cpio tar unzip xmlto zip && \
+RUN yum -y install asciidoc rpm-build tar unzip xmlto zip && \
 	yum clean all
