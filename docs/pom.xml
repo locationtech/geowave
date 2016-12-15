@@ -221,7 +221,6 @@
 					</attributes>
 				</configuration>
 				<executions>
-
 					<execution>
 						<id>generate-epub-userguide</id>
 						<phase>generate-resources</phase>
@@ -235,7 +234,6 @@
 							<sourceDocumentName>userguide.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>generate-pdf-userguide</id>
 						<phase>generate-resources</phase>
@@ -253,7 +251,6 @@
 							<sourceDocumentName>userguide.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>generate-html-userguide</id>
 						<phase>generate-resources</phase>
@@ -278,7 +275,6 @@
 							</attributes>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>generate-epub-devguide</id>
 						<phase>generate-resources</phase>
@@ -292,7 +288,6 @@
 							<sourceDocumentName>devguide.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>generate-pdf-devguide</id>
 						<phase>generate-resources</phase>
@@ -310,7 +305,6 @@
 							<sourceDocumentName>devguide.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>generate-html-devguide</id>
 						<phase>generate-resources</phase>
@@ -335,7 +329,6 @@
 							</attributes>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>generate-epub-quickstart</id>
 						<phase>generate-resources</phase>
@@ -349,25 +342,6 @@
 							<sourceDocumentName>quickstart.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
-
-					<execution>
-						<id>generate-pdf-quickstart</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<requires>
-								<require>asciidoctor-pdf</require>
-							</requires>
-							<backend>pdf</backend>
-							<compact>true</compact>
-							<sourceHighlighter>coderay</sourceHighlighter>
-							<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory>
-							<sourceDocumentName>quickstart.adoc</sourceDocumentName>
-						</configuration>
-					</execution>
-
 					<execution>
 						<id>generate-html-quickstart</id>
 						<phase>generate-resources</phase>
@@ -392,7 +366,6 @@
 							</attributes>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>generate-epub-commands</id>
 						<phase>generate-resources</phase>
@@ -406,25 +379,6 @@
 							<sourceDocumentName>commands.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
-
-					<execution>
-						<id>generate-pdf-commands</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<requires>
-								<require>asciidoctor-pdf</require>
-							</requires>
-							<backend>pdf</backend>
-							<compact>true</compact>
-							<sourceHighlighter>coderay</sourceHighlighter>
-							<sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
-							<sourceDocumentName>commands.adoc</sourceDocumentName>
-						</configuration>
-					</execution>
-
 					<execution>
 						<id>generate-html-commands</id>
 						<phase>generate-resources</phase>
@@ -453,4 +407,53 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>extra-pdfs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>generate-pdf-quickstart</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+									<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory>
+									<sourceDocumentName>quickstart.adoc</sourceDocumentName>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-commands</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+									<sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
+									<sourceDocumentName>commands.adoc</sourceDocumentName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
