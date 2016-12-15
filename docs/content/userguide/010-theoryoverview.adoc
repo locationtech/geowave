@@ -1,0 +1,41 @@
+[[theoryoverview]]
+<<<
+== Theory
+
+[NOTE]
+==== 
+This is a brief overview of the theory and concepts behind GeoWave. For an in-depth discussion, please see the 
+http://ngageoint.github.io/geowave/devguide.html#theory[GeoWave Developer Guide.]
+====
+
+=== Spatial Index
+
+GeoWave creates a spatial index to represent multi-dimensional data in a manner that can be reduced to a series of ranges on a 1 dimensional number line.
+Examples of these include:
+
+* latitude, longitude
+* latitude, longitude, time
+* latitude, longitude, altitude, time
+* feature vector1, feature vector 2 (…), feature vector n
+
+This is due to the way big table based databases store the data – as a sorted set of key/value pairs.
+
+The goal is to provide a property that ensures values close in n-dimensional space are still close in 1-dimensional space.
+There are a few reasons for this, but primarily it’s so we can represent an n-dimensional range selector (bbox typically
+– but can be abstracted to a hyper-rectangle) as a smaller number of highly contiguous 1d ranges.
+
+image::sfc1.png[scaledwidth="100%",alt="Z-Curve: 2D -> 1D"]
+_Figure: Z-Order curve based dimensional decomposition_
+
+Fortunately there is already a type of transform that describes this operation in mathematics – it’s called a “Space
+Filling Curve” – or SFC for short. Different space filling curves have different properties, but they all take
+an n-dimensional space and describe a set of steps to trace all points in a single sequence.
+
+image::curves.png[scaledwidth="100%",alt="Various space filling curves"]
+_Figure: Haverkort, Walderveen Locality and Bounding-Box Quality of Two-Dimensional Space-Filling Curves 2008 arXiv:0806.4787v2_
+
+The trade-offs for the various curves are outside the scope of this user manual, but the paper cited for figure two is
+an excellent starting point to start learning about these curves.
+
+GeoWave supports two space filling curves: Z-Order and Hilbert, with the Hilbert type space filling curve being the 
+primary implementation. 

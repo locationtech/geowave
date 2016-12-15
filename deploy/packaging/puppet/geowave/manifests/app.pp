@@ -1,8 +1,8 @@
 class geowave::app {
 
   $geowave_base_app_rpms = [
-    "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-docs",
     "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-tools",
+    "geowave-${geowave::geowave_version}-docs",
   ]
 
   package { $geowave_base_app_rpms:
@@ -10,8 +10,8 @@ class geowave::app {
     tag    => 'geowave-package',
   }
 
-  if !defined(Package["geowave-core"]) {
-    package { "geowave-core":
+  if !defined(Package["geowave-${geowave::geowave_version}-core"]) {
+    package { "geowave-${geowave::geowave_version}-core":
       ensure => latest,
       tag    => 'geowave-package',
     }

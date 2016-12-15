@@ -1,18 +1,18 @@
 [[quickstart-guide-geoserver]]
 <<<
 
-GeoServer
+=== GeoServer
 
 Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :8000/geoserver/web/
 
-* Example: ec2-52-91-215-215.compute-1.amazonaws.com:8000/geoserver/web/
+- Example: ec2-52-91-215-215.compute-1.amazonaws.com:8000/geoserver/web/
 
 image::interacting-cluster-3.png[scaledwidth="100%",alt="select emr"]
 
 Log into Geoserver
 
-* Username: admin
-* Password: geoserver
+- Username: admin
+- Password: geoserver
 
 image::interacting-cluster-4.png[scaledwidth="100%",alt="select emr"]
 

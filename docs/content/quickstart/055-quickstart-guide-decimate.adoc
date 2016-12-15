@@ -5,28 +5,35 @@
 
 image::interacting-cluster-6.png[scaledwidth="100%",alt="select emr"]
 
-You may have notices that it took a fair amount of time to render the ~1.5 million points. To speed this process up we 
-can set the default style the Decimate Points style that was added in our script and can be found in the geowave 
-directory at geowave/examples/example-slds/DecimatePoints.sld. This can be done using the geowave cli commands or via 
-the geoserver GUI.
+You may have noticed that it took a fair amount of time to render the ~1.5 million points. To speed this process up we 
+can set the default style the Subsample Points style that we (or the quickstart version of the bootstrap script) 
+downloaded previously. The style can be found in the geowave directory at geowave/examples/example-slds/SubsamplePoints.sld 
+and can also be downloaded http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld[here].
+
+[NOTE]
+====
+If you haven't added the Subsample Points style into GeoServer yet please see the <<integrate-with-geoserver,Integrate with Geoserver>> section. 
+====
+
+This can be done using the geowave cli commands or via the geoserver GUI.
 
 Geowave CLI:
 
 [source, bash]
 ----
-geowave gs setls gdeltevent --styleName DecimatePoints
+geowave gs setls gdeltevent --styleName SubsamplePoints
 ----
 
 Geoserver GUI:
 
-* Click on the Layers link in the menu at the left side of the page and select the gdeltevent layer
-* Select the Publishing tab, open the Default Style dropdown and select DecimatePoints
+- Click on the Layers link in the menu at the left side of the page and select the gdeltevent layer
+- Select the Publishing tab, open the Default Style dropdown and select SubsamplePoints
 
 image::interacting-cluster-8.png[scaledwidth="100%",alt="select emr"]
 
-* Click the Save button at the bottom of the page and reopen the image by going back to the Layer Preview and clicking 
+- Click the Save button at the bottom of the page and reopen the image by going back to the Layer Preview and clicking 
 the OpenLayers link
-* You should see a noticeable difference in the time it takes to render the points
+- You should see a noticeable difference in the time it takes to render the points
 
 image::interacting-cluster-9.png[scaledwidth="100%",alt="select emr"]
 

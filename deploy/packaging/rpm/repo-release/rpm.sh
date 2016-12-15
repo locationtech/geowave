@@ -4,7 +4,7 @@
 #
 
 # Source all our reusable functionality, argument is the location of this script.
-. ../admin-scripts/rpm-functions.sh "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. ../rpm-functions.sh "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 declare -A ARGS
 while [ $# -gt 0 ]; do
@@ -22,6 +22,5 @@ case ${ARGS[command]} in
             --define "_topdir $(pwd)" \
             $(buildArg "${ARGS[buildarg]}") SPECS/*.spec ;;
     clean) clean ;;
-   update) echo "Nothing to update" ;;
         *) about ;;
 esac
