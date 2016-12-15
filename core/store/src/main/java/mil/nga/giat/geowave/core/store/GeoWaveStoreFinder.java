@@ -133,7 +133,7 @@ public class GeoWaveStoreFinder
 		final List<String> matching = new ArrayList<String>();
 		for (final ConfigOption option : options) {
 			if (!option.isOptional() && 
-					(configOptions.containsKey(option.getName()) || (!configOptions.get(option.getName()).equals("null")))) {
+					(configOptions.containsKey(option.getName()) && (!configOptions.get(option.getName()).equals("null")))) {
 				matching.add(option.getName());
 			}
 		}
