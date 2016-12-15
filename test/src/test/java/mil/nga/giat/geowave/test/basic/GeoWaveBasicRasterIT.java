@@ -58,7 +58,7 @@ public class GeoWaveBasicRasterIT
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING GeoWaveRasterIT       *");
+		LOGGER.warn("*         RUNNING GeoWaveBasicRasterIT       *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -67,7 +67,7 @@ public class GeoWaveBasicRasterIT
 	public static void reportTest() {
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED GeoWaveRasterIT         *");
+		LOGGER.warn("*      FINISHED GeoWaveBasicRasterIT         *");
 		LOGGER
 				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
 						+ "s elapsed.                 *");
