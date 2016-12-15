@@ -2,13 +2,11 @@ package mil.nga.giat.geowave.test.query;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -53,6 +51,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.PartitionStrategy;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -70,11 +69,17 @@ public class SpatialTemporalQueryIT
 	private static final int MULTI_MONTH_YEAR = 2000;
 	private static final int MULTI_YEAR_MIN = 1980;
 	private static final int MULTI_YEAR_MAX = 1995;
-	private static final PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
+	private static final PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+			PartitionStrategy.ROUND_ROBIN).setNumPartitions(
+			10).setPeriodicity(
 			Unit.DAY).createIndex();
-	private static final PrimaryIndex MONTH_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
+	private static final PrimaryIndex MONTH_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+			PartitionStrategy.HASH).setNumPartitions(
+			100).setPeriodicity(
 			Unit.MONTH).createIndex();
-	private static final PrimaryIndex YEAR_INDEX = new SpatialTemporalIndexBuilder().setPeriodicity(
+	private static final PrimaryIndex YEAR_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+			PartitionStrategy.HASH).setNumPartitions(
+			10).setPeriodicity(
 			Unit.YEAR).createIndex();
 	private FeatureDataAdapter timeStampAdapter;
 	private FeatureDataAdapter timeRangeAdapter;
@@ -281,20 +286,9 @@ public class SpatialTemporalQueryIT
 			timeWriters.close();
 			rangeWriters.close();
 		}
-		final Map<String, Serializable> config = new HashMap<String, Serializable>();
-
-		final Map<String, String> mapOpts = dataStoreOptions.getFactoryOptionsAsMap();
-
-		for (final String key : mapOpts.keySet()) {
-			config.put(
-					key,
-					mapOpts.get(key));
-		}
-
 		geowaveGtDataStore = new GeoWaveGTDataStore(
 				new GeoWavePluginConfig(
-						dataStoreOptions.getFactoryFamily(),
-						config) {
+						dataStoreOptions) {
 					@Override
 					public IndexQueryStrategySPI getIndexQueryStrategy() {
 						return new IndexQueryStrategySPI() {

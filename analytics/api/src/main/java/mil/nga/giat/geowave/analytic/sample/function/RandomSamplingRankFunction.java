@@ -28,6 +28,9 @@ public class RandomSamplingRankFunction<T> implements
 	public double rank(
 			final int sampleSize,
 			final T value ) {
+		// HP Fortify "Insecure Randomness" false positive
+		// This random number is not used for any purpose
+		// related to security or cryptography
 		return random.nextDouble();
 	}
 }

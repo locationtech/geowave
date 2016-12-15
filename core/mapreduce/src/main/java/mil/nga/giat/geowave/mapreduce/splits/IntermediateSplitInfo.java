@@ -14,7 +14,9 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class IntermediateSplitInfo implements
@@ -51,32 +53,67 @@ public class IntermediateSplitInfo implements
 			final byte[] end = rangeLocationPair.getRange().getEndKey();
 
 			final double cdfStart = stats.cdf(start);
-			final double cdfEnd = stats.cdf(end);
-			final byte[] expectedEnd = stats.quantile(cdfStart + ((cdfEnd - cdfStart) * fraction));
 
+			final double cdfEnd = stats.cdf(end);
+			final double expectedEndValue = stats.quantile(cdfStart + ((cdfEnd - cdfStart) * fraction));
 			final int maxCardinality = Math.max(
 					start.length,
 					end.length);
 
-			byte[] splitKey = expandBytes(
-					expectedEnd,
-					maxCardinality);
+			byte[] bytes = ByteUtils.toBytes(expectedEndValue);
+			byte[] splitKey;
+			if ((bytes.length < 8) && (bytes.length < maxCardinality)) {
+				// prepend with 0
+				bytes = expandBytes(
+						bytes,
+						Math.min(
+								8,
+								maxCardinality));
+			}
+			if (bytes.length < maxCardinality) {
+				splitKey = new byte[maxCardinality];
+				System.arraycopy(
+						bytes,
+						0,
+						splitKey,
+						0,
+						bytes.length);
+			}
+			else {
+				splitKey = bytes;
+			}
 
 			final String location = rangeLocationPair.getLocation();
 			final boolean startKeyInclusive = true;
 			final boolean endKeyInclusive = false;
-			if (Arrays.equals(
-					start,
-					splitKey) || Arrays.equals(
-					end,
-					splitKey)) {
-				// for now let's just return null
-				// TODO determine a more rigorous approach than just giving up
-				// on the split
-				// splitKey =
-				// SplitsProvider.getMidpoint(rangeLocationPair.getRange());
-				// if (splitKey == null) {
-				return null;
+			if (new ByteArrayId(
+					start).compareTo(new ByteArrayId(
+					splitKey)) >= 0 || new ByteArrayId(
+					end).compareTo(new ByteArrayId(
+					splitKey)) <= 0) {
+				splitKey = SplitsProvider.getMidpoint(rangeLocationPair.getRange());
+				if (splitKey == null) {
+					return null;
+				}
+
+				// if you can split the range only by setting the split to the
+				// end, but its not inclusive on the end, just clamp this to the
+				// start and don't split producing a new pair
+				if (Arrays.equals(
+						end,
+						splitKey) && !rangeLocationPair.getRange().isEndKeyInclusive()) {
+					rangeLocationPair = splitsProvider.constructRangeLocationPair(
+							splitsProvider.constructRange(
+									rangeLocationPair.getRange().getStartKey(),
+									rangeLocationPair.getRange().isStartKeyInclusive(),
+									splitKey,
+									endKeyInclusive),
+							location,
+							stats.cardinality(
+									rangeLocationPair.getRange().getStartKey(),
+									splitKey));
+					return null;
+				}
 				// }
 			}
 
@@ -109,7 +146,9 @@ public class IntermediateSplitInfo implements
 						index);
 			}
 			catch (final java.lang.IllegalArgumentException ex) {
-				LOGGER.info("Unable to split range: " + ex.getLocalizedMessage());
+				LOGGER.info(
+						"Unable to split range",
+						ex);
 				return null;
 			}
 		}
@@ -118,14 +157,22 @@ public class IntermediateSplitInfo implements
 				final byte valueBytes[],
 				final int numBytes ) {
 			final byte[] bytes = new byte[numBytes];
-			for (int i = 0; i < numBytes; i++) {
-				if (i < valueBytes.length) {
-					bytes[i] = valueBytes[i];
-				}
-				else {
+			int expansion = 0;
+			if (numBytes > valueBytes.length) {
+				expansion = (numBytes - valueBytes.length);
+				for (int i = 0; i < expansion; i++) {
 					bytes[i] = 0;
 				}
+				for (int i = 0; i < valueBytes.length; i++) {
+					bytes[expansion + i] = valueBytes[i];
+				}
 			}
+			else {
+				for (int i = 0; i < numBytes; i++) {
+					bytes[i] = valueBytes[i];
+				}
+			}
+
 			return bytes;
 		}
 	}

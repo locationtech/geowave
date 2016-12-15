@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.service.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import javax.servlet.ServletConfig;
@@ -39,8 +40,14 @@ public class InfoServiceImpl implements
 	public InfoServiceImpl(
 			@Context
 			final ServletConfig servletConfig ) {
-		final Properties props = ServiceUtils.loadProperties(servletConfig.getServletContext().getResourceAsStream(
-				servletConfig.getInitParameter("config.properties")));
+		Properties props = null;
+		try (InputStream is = servletConfig.getServletContext().getResourceAsStream(
+				servletConfig.getInitParameter("config.properties"))) {
+			props = ServiceUtils.loadProperties(is);
+		}
+		catch (IOException e) {
+			LOGGER.error(e);
+		}
 
 		serviceProperties = props;
 	}

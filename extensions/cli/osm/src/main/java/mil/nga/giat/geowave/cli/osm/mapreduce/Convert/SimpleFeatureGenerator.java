@@ -36,7 +36,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 public class SimpleFeatureGenerator
 {
 
-	private static final Logger log = LoggerFactory.getLogger(SimpleFeatureGenerator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureGenerator.class);
 
 	public List<SimpleFeature> mapOSMtoSimpleFeature(
 			final Map<Key, Value> items,
@@ -99,7 +99,7 @@ public class SimpleFeatureGenerator
 							osmProvider,
 							fd);
 					if (geom == null) {
-						log.error(
+						LOGGER.error(
 								"Unable to generate geometry for {} of type {}",
 								osmunion.Id,
 								osmunion.OsmType.toString());
@@ -121,14 +121,9 @@ public class SimpleFeatureGenerator
 				}
 				else if ((ad.key != null) && !ad.key.equals("null")) {
 					if (osmunion.tags.containsKey(ad.key)) {
-						try {
-							sfb.set(
-									FeatureDefinitionSet.normalizeOsmNames(ad.name),
-									ad.convert(osmunion.tags.get(ad.key)));
-						}
-						catch (final Exception e) {
-							System.out.println(e.toString());
-						}
+						sfb.set(
+								FeatureDefinitionSet.normalizeOsmNames(ad.name),
+								ad.convert(osmunion.tags.get(ad.key)));
 					}
 				}
 			}
@@ -171,7 +166,7 @@ public class SimpleFeatureGenerator
 	public static class OSMUnion
 	{
 
-		private final static Logger log = LoggerFactory.getLogger(OSMUnion.class);
+		private final static Logger LOGGER = LoggerFactory.getLogger(OSMUnion.class);
 
 		protected final FieldReader<Long> longReader = FieldUtils.getDefaultReaderForClass(Long.class);
 		protected final FieldReader<Integer> intReader = FieldUtils.getDefaultReaderForClass(Integer.class);
@@ -282,7 +277,7 @@ public class SimpleFeatureGenerator
 								null).getIds();
 					}
 					catch (final IOException e) {
-						log.error(
+						LOGGER.error(
 								"Error deserializing Avro encoded Relation member set",
 								e);
 					}

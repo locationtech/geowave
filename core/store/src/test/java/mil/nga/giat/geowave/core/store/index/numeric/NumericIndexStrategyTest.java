@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class NumericIndexStrategyTest
 {
-	private final NumericIndexStrategy strategy = new NumericIndexStrategy();
+	private final NumericFieldIndexStrategy strategy = new NumericFieldIndexStrategy();
 	private final ByteArrayId fieldId = new ByteArrayId(
 			"fieldId");
 	private final int number = 10;
@@ -67,7 +67,7 @@ public class NumericIndexStrategyTest
 
 	@Test
 	public void testLessThanOrEqualTo() {
-		final NumericIndexStrategy strategy = new NumericIndexStrategy();
+		final NumericFieldIndexStrategy strategy = new NumericFieldIndexStrategy();
 		final List<ByteArrayRange> ranges = strategy.getQueryRanges(new NumericLessThanOrEqualToConstraint(
 				fieldId,
 				number));

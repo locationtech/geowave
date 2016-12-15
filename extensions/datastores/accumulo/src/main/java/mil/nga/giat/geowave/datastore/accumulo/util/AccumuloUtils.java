@@ -239,7 +239,9 @@ public class AccumuloUtils
 						v);
 			}
 			catch (final IOException e) {
-				LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
+				LOGGER.error(
+						"Could not decode row from iterator. Ensure whole row iterators are being used.",
+						e);
 				return null;
 			}
 		}
@@ -383,65 +385,6 @@ public class AccumuloUtils
 					e);
 		}
 		return null;
-	}
-
-	public static <T> void removeFromAltIndex(
-			final WritableDataAdapter<T> writableAdapter,
-			final List<ByteArrayId> rowIds,
-			final T entry,
-			final Writer writer ) {
-
-		final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
-		final byte[] dataId = writableAdapter.getDataId(
-				entry).getBytes();
-
-		final List<Mutation> mutations = new ArrayList<Mutation>();
-
-		for (final ByteArrayId rowId : rowIds) {
-
-			final Mutation mutation = new Mutation(
-					new Text(
-							dataId));
-			mutation.putDelete(
-					new Text(
-							adapterId),
-					new Text(
-							rowId.getBytes()));
-
-			mutations.add(mutation);
-		}
-		writer.write(mutations);
-	}
-
-	public static <T> void writeAltIndex(
-			final WritableDataAdapter<T> writableAdapter,
-			final DataStoreEntryInfo entryInfo,
-			final T entry,
-			final Writer writer ) {
-
-		final byte[] adapterId = writableAdapter.getAdapterId().getBytes();
-		final byte[] dataId = writableAdapter.getDataId(
-				entry).getBytes();
-		if ((dataId != null) && (dataId.length > 0)) {
-			final List<Mutation> mutations = new ArrayList<Mutation>();
-
-			for (final ByteArrayId rowId : entryInfo.getRowIds()) {
-
-				final Mutation mutation = new Mutation(
-						new Text(
-								dataId));
-				mutation.put(
-						new Text(
-								adapterId),
-						new Text(
-								rowId.getBytes()),
-						new Value(
-								"".getBytes(StringUtils.GEOWAVE_CHAR_SET)));
-
-				mutations.add(mutation);
-			}
-			writer.write(mutations);
-		}
 	}
 
 	private static <T> List<Mutation> buildMutations(

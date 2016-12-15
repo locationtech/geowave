@@ -268,7 +268,7 @@ public class KDERasterResizeIT
 				"=").append(
 				outputDataStorePluginOptions.getType());
 
-		final Map<String, String> options = outputDataStorePluginOptions.getFactoryOptionsAsMap();
+		final Map<String, String> options = outputDataStorePluginOptions.getOptionsAsMap();
 
 		for (final Entry<String, String> entry : options.entrySet()) {
 			if (!entry.getKey().equals(

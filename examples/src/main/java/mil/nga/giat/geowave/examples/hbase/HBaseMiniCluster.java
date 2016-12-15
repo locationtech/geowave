@@ -24,7 +24,8 @@ public class HBaseMiniCluster
 	public static void main(
 			final String[] args )
 			throws Exception {
-		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System.getProperty("interactive")) : true;
+		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System
+				.getProperty("interactive")) : true;
 
 		final HBaseMiniCluster hbase = new HBaseMiniCluster();
 
@@ -46,7 +47,9 @@ public class HBaseMiniCluster
 								hbase.tearDown();
 							}
 							catch (final Exception e) {
-								System.out.println("Error shutting down hbase.");
+								LOGGER.error(
+										"Error shutting down hbase.",
+										e);
 							}
 							System.out.println("Shutting down!");
 						}
@@ -72,7 +75,9 @@ public class HBaseMiniCluster
 			propertyParser.parsePropsFile();
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to load property file: {}" + HBASE_PROPS_FILE);
+			LOGGER.error(
+					"Unable to load property file: {}" + HBASE_PROPS_FILE,
+					e);
 		}
 
 		if (System.getProperty(
@@ -93,7 +98,6 @@ public class HBaseMiniCluster
 		}
 		catch (final Exception e) {
 			LOGGER.error("Exception starting zookeeperLocalCluster: " + e);
-			e.printStackTrace();
 		}
 
 		zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
@@ -111,21 +115,31 @@ public class HBaseMiniCluster
 			// CoprocessorHost.REGION_COPROCESSOR_CONF_KEY,
 			// AggregationEndpoint.class.getName());
 
-			hbaseLocalCluster = new HbaseLocalCluster.Builder().setHbaseMasterPort(
-					Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY))).setHbaseMasterInfoPort(
-					Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_INFO_PORT_KEY))).setNumRegionServers(
-					Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY))).setHbaseRootDir(
-					propertyParser.getProperty(ConfigVars.HBASE_ROOT_DIR_KEY)).setZookeeperPort(
-					Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY))).setZookeeperConnectionString(
-					propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY)).setZookeeperZnodeParent(
-					propertyParser.getProperty(ConfigVars.HBASE_ZNODE_PARENT_KEY)).setHbaseWalReplicationEnabled(
-					Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY))).setHbaseConfiguration(
-					conf).build();
+			hbaseLocalCluster = new HbaseLocalCluster.Builder()
+					.setHbaseMasterPort(
+							Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY)))
+					.setHbaseMasterInfoPort(
+							Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_INFO_PORT_KEY)))
+					.setNumRegionServers(
+							Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY)))
+					.setHbaseRootDir(
+							propertyParser.getProperty(ConfigVars.HBASE_ROOT_DIR_KEY))
+					.setZookeeperPort(
+							Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY)))
+					.setZookeeperConnectionString(
+							propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
+					.setZookeeperZnodeParent(
+							propertyParser.getProperty(ConfigVars.HBASE_ZNODE_PARENT_KEY))
+					.setHbaseWalReplicationEnabled(
+							Boolean.parseBoolean(propertyParser
+									.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY)))
+					.setHbaseConfiguration(
+							conf)
+					.build();
 			hbaseLocalCluster.start();
 		}
 		catch (final Exception e) {
 			LOGGER.error("Exception starting hbaseLocalCluster: " + e);
-			e.printStackTrace();
 		}
 	}
 

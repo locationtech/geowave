@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.cli.osm.mapreduce.Convert;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.accumulo.core.client.ClientConfiguration;
@@ -12,10 +11,8 @@ import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.Authorizations;
-import org.apache.accumulo.core.util.Pair;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
@@ -30,7 +27,6 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
@@ -45,27 +41,27 @@ public class OSMConversionRunner extends
 		Tool
 {
 
-	private OSMIngestCommandArgs ingestOptions;
-	private AccumuloRequiredOptions accumuloOptions;
+	private final OSMIngestCommandArgs ingestOptions;
+	private final DataStorePluginOptions inputStoreOptions;
 
 	public static void main(
 			final String[] args )
 			throws Exception {
 
-		OSMIngestCommandArgs ingestArgs = new OSMIngestCommandArgs();
-		DataStorePluginOptions opts = new DataStorePluginOptions();
-		opts.selectPlugin(new AccumuloDataStoreFactory().getName());
+		final OSMIngestCommandArgs ingestArgs = new OSMIngestCommandArgs();
+		final DataStorePluginOptions opts = new DataStorePluginOptions();
+		opts.selectPlugin(new AccumuloDataStoreFactory().getType());
 
-		OperationParser parser = new OperationParser();
+		final OperationParser parser = new OperationParser();
 		parser.addAdditionalObject(ingestArgs);
 		parser.addAdditionalObject(opts);
 
-		CommandLineOperationParams params = parser.parse(args);
+		final CommandLineOperationParams params = parser.parse(args);
 		if (params.getSuccessCode() == 0) {
-			OSMConversionRunner runner = new OSMConversionRunner(
+			final OSMConversionRunner runner = new OSMConversionRunner(
 					ingestArgs,
 					opts);
-			int res = ToolRunner.run(
+			final int res = ToolRunner.run(
 					new Configuration(),
 					runner,
 					args);
@@ -77,16 +73,16 @@ public class OSMConversionRunner extends
 	}
 
 	public OSMConversionRunner(
-			OSMIngestCommandArgs ingestOptions,
-			DataStorePluginOptions inputStoreOptions ) {
+			final OSMIngestCommandArgs ingestOptions,
+			final DataStorePluginOptions inputStoreOptions ) {
 
 		this.ingestOptions = ingestOptions;
 		if (!inputStoreOptions.getType().equals(
-				new AccumuloDataStoreFactory().getName())) {
+				new AccumuloDataStoreFactory().getType())) {
 			throw new RuntimeException(
 					"Expected accumulo data store");
 		}
-		this.accumuloOptions = (AccumuloRequiredOptions) inputStoreOptions.getFactoryOptions();
+		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	@Override
@@ -95,6 +91,7 @@ public class OSMConversionRunner extends
 			throws Exception {
 
 		final Configuration conf = getConf();
+		final AccumuloRequiredOptions accumuloOptions = (AccumuloRequiredOptions) inputStoreOptions.getFactoryOptions();
 
 		// job settings
 
@@ -151,12 +148,9 @@ public class OSMConversionRunner extends
 				Arrays.asList(r));
 
 		// output format
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
-				"accumulo");
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				job.getConfiguration(),
-				ConfigUtils.populateListFromOptions(accumuloOptions));
+				inputStoreOptions);
 
 		final AdapterStore as = new AccumuloAdapterStore(
 				new BasicAccumuloOperations(

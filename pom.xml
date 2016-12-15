@@ -30,16 +30,16 @@
 	<scm>
 		<url>https://github.com/ngageoint/geowave.git</url>
 		<connection>scm:git:https://github.com/ngageoint/geowave.git</connection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<properties>
-		<geotools.version>14.2</geotools.version>
+		<geotools.version>16.0</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
-		<geoserver.version>2.8.2</geoserver.version>
+		<geoserver.version>2.10.0</geoserver.version>
 		<accumulo.version>1.7.2</accumulo.version>
 		<vfs2.version>2.1</vfs2.version>
-		<hbase.version>1.2.1</hbase.version>
-		<hadoop.version>2.7.2</hadoop.version>
+		<hbase.version>1.2.3</hbase.version>
+		<hadoop.version>2.7.3</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
 		<geotools.scope>compile</geotools.scope>
@@ -48,7 +48,7 @@
 		<hadoop.scope>compile</hadoop.scope>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.14</jersey.version>
-		<kafka.artifact>kafka_2.10</kafka.artifact>
+		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
@@ -63,8 +63,10 @@
 		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.reportPath>
 		<it.reportPath>${project.reporting.outputDirectory}/jacoco-it</it.reportPath>
 		<ut.reportPath>${project.reporting.outputDirectory}/jacoco-ut</ut.reportPath>
-		<sonar.jacoco.reportPath>${ut.reportPath}</sonar.jacoco.reportPath>
-		<sonar.jacoco.itReportPath>${it.reportPath}</sonar.jacoco.itReportPath>
+		<sonar.jacoco.reportPath>${jacoco.ut.reportPath}</sonar.jacoco.reportPath>
+		<sonar.jacoco.itReportPath>${jacoco.it.reportPath}</sonar.jacoco.itReportPath>
+		<surefire.report.path>${basedir}/target/surefire-reports</surefire.report.path>
+		<sonar.junit.reportsPath>${surefire.report.path}</sonar.junit.reportsPath>
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -74,6 +76,8 @@
 		<findbugs.effort>Max</findbugs.effort>
 		<findbugs.threshold>Medium</findbugs.threshold>
 		<findbugs.failOnError>true</findbugs.failOnError>
+		<findbugs.maxHeap>1024</findbugs.maxHeap>
+		<findbugs.filterFile>findbugs/findbugs-exclude.xml</findbugs.filterFile>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -135,6 +139,11 @@
 				<version>2.4.2</version>
 			</dependency>
 			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.4</version>
@@ -187,16 +196,19 @@
 						<groupId>jdk.tools</groupId>
 					</exclusion>
 				</exclusions>
+				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
 				<version>${hbase.version}</version>
+				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-server</artifactId>
 				<version>${hbase.version}</version>
+				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>
@@ -324,7 +336,7 @@
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>annotations</artifactId>
-				<version>3.0.0</version>
+				<version>${findbugs.version}</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
@@ -455,6 +467,22 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
 					<version>${findbugs.version}</version>
+					<configuration>
+						<failOnError>${findbugs.failOnError}</failOnError>
+						<threshold>${findbugs.threshold}</threshold>
+						<effort>${findbugs.effort}</effort>
+						<excludeFilterFile>${findbugs.filterFile}</excludeFilterFile>
+						<maxHeap>${findbugs.maxHeap}</maxHeap>
+						<jvmArgs>${test.args}</jvmArgs>
+						<omitVisitors>${findbugs.omitVisitors}</omitVisitors>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>mil.nga.giat</groupId>
+							<artifactId>geowave-dev-resources</artifactId>
+							<version>1.2</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.avro</groupId>
@@ -469,6 +497,27 @@
 							<configuration>
 								<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
 								<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+								<stringType>String</stringType>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>com.github.os72</groupId>
+					<artifactId>protoc-jar-maven-plugin</artifactId>
+					<version>3.1.0.1</version>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<protocVersion>2.5.0</protocVersion>
+								<outputDirectory>src/main/java</outputDirectory>
+								<inputDirectories>
+									<include>src/main/protobuf</include>
+								</inputDirectories>
 							</configuration>
 						</execution>
 					</executions>
@@ -477,15 +526,6 @@
 					<groupId>net.revelc.code</groupId>
 					<artifactId>formatter-maven-plugin</artifactId>
 					<version>0.5.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-maven-plugins</artifactId>
-					<version>${hadoop.version}</version>
-					<configuration>
-						<protocVersion>2.5.0</protocVersion>
-						<protocCommand>/Apps/Protoc/bin/protoc</protocCommand>
-					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -611,6 +651,7 @@
 						<exclude>**IT.java</exclude>
 						<exclude>**/*ITSuite.java</exclude>
 					</excludes>
+					<outputDirectory>${surefire.report.path}</outputDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -711,19 +752,13 @@
 					<dependency>
 						<groupId>mil.nga.giat</groupId>
 						<artifactId>geowave-dev-resources</artifactId>
-						<version>1.1</version>
+						<version>1.2</version>
 					</dependency>
 				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<configuration>
-					<failOnError>${findbugs.failOnError}</failOnError>
-					<threshold>${findbugs.threshold}</threshold>
-					<effort>${findbugs.effort}</effort>
-					<excludeFilterFile>${findbugs.filterFile}</excludeFilterFile>
-				</configuration>
 				<executions>
 					<execution>
 						<phase>verify</phase>
@@ -827,22 +862,30 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>${findbugs.version}</version>
 				<configuration>
-					<maxHeap>256</maxHeap>
-					<jvmArgs>${test.args}</jvmArgs>
 					<findbugsXmlOutput>true</findbugsXmlOutput>
 					<xmlOutput>true</xmlOutput>
-					<effort>${findbugs.effort}</effort>
-					<threshold>${findbugs.threshold}</threshold>
-					<failOnError>${findbugs.failOnError}</failOnError>
 					<xmlOutputDirectory>${project.basedir}/target/site</xmlOutputDirectory>
-					<omitVisitors>${findbugs.omitVisitors}</omitVisitors>
 				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>
 	<profiles>
+		<!-- skip all code quality tools if specified -->
+		<profile>
+			<id>skip-code-quality</id>
+			<activation>
+				<property>
+					<name>skip-quality</name>
+				</property>
+			</activation>
+			<properties>
+				<skipITs>true</skipITs>
+				<skipTests>true</skipTests>
+				<formatter.skip>true</formatter.skip>
+				<findbugs.skip>true</findbugs.skip>
+			</properties>
+		</profile>	
 		<profile>
 			<!-- Generate docs with: mvn -P docs -pl docs install -->
 			<id>docs</id>

@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.mapreduce.splits;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -20,6 +22,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -225,6 +228,7 @@ public abstract class SplitsProvider
 	protected static byte[] getKeyFromBigInteger(
 			final BigInteger value,
 			final int numBytes ) {
+		// TODO: does this account for the two extra bytes on BigInteger?
 		final byte[] valueBytes = value.toByteArray();
 		final byte[] bytes = new byte[numBytes];
 		final int pos = Math.abs(numBytes - valueBytes.length);
@@ -315,7 +319,7 @@ public abstract class SplitsProvider
 
 	protected static double getRangeLength(
 			final GeoWaveRowRange range ) {
-		if (range.getStartKey() == null || range.getEndKey() == null) {
+		if ((range.getStartKey() == null) || (range.getEndKey() == null)) {
 			return 1;
 		}
 		final byte[] start = range.getStartKey();
@@ -338,7 +342,7 @@ public abstract class SplitsProvider
 
 	protected static byte[] getMidpoint(
 			final GeoWaveRowRange range ) {
-		if (range.getStartKey() == null || range.getEndKey() == null) {
+		if ((range.getStartKey() == null) || (range.getEndKey() == null)) {
 			return null;
 		}
 
@@ -360,12 +364,21 @@ public abstract class SplitsProvider
 				extractBytes(
 						end,
 						maxDepth));
-		return getKeyFromBigInteger(
-				endBI.subtract(
-						startBI).divide(
-						TWO).add(
-						startBI),
-				maxDepth);
+		final BigInteger rangeBI = endBI.subtract(startBI);
+		if (rangeBI.equals(BigInteger.ZERO) || rangeBI.equals(BigInteger.ONE)) {
+			return end;
+		}
+		final byte[] valueBytes = rangeBI.divide(
+				TWO).add(
+				startBI).toByteArray();
+		final byte[] bytes = new byte[valueBytes.length - 2];
+		System.arraycopy(
+				valueBytes,
+				2,
+				bytes,
+				0,
+				bytes.length);
+		return bytes;
 	}
 
 	public static byte[] extractBytes(

@@ -48,7 +48,9 @@ public class ZookeeperTestEnvironment implements
 					propertyParser.parsePropsFile();
 				}
 				catch (final IOException e) {
-					LOGGER.error("Unable to load property file: {}" + HBaseStoreTestEnvironment.HBASE_PROPS_FILE);
+					LOGGER.error(
+							"Unable to load property file: {}" + HBaseStoreTestEnvironment.HBASE_PROPS_FILE,
+							e);
 				}
 
 				if (System.getProperty(
@@ -72,15 +74,13 @@ public class ZookeeperTestEnvironment implements
 					zookeeperLocalCluster.start();
 				}
 				catch (final Exception e) {
-					LOGGER.error("Exception starting zookeeperLocalCluster: " + e);
-					e.printStackTrace();
+					LOGGER.error(
+							"Exception starting zookeeperLocalCluster: " + e,
+							e);
 					Assert.fail();
 				}
 
 				zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
-				System.setProperty(
-						ZK_PROPERTY_NAME,
-						zookeeper);
 			}
 		}
 	}
@@ -98,7 +98,6 @@ public class ZookeeperTestEnvironment implements
 		}
 
 		zookeeper = null;
-		System.clearProperty(ZK_PROPERTY_NAME);
 	}
 
 	public String getZookeeper() {

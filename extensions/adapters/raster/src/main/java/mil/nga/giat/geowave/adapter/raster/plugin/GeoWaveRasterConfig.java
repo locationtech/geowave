@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.media.jai.Interpolation;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -101,7 +102,7 @@ public class GeoWaveRasterConfig
 
 	public static GeoWaveRasterConfig readFromConfigParams(
 			final String configParams )
-			throws Exception {
+			throws NullPointerException {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(configParams);
 
 		if (result != null) {
@@ -122,7 +123,9 @@ public class GeoWaveRasterConfig
 
 	public static GeoWaveRasterConfig readFromURL(
 			final URL xmlURL )
-			throws Exception {
+			throws IOException,
+			ParserConfigurationException,
+			SAXException {
 		GeoWaveRasterConfig result = CONFIG_CACHE.get(xmlURL.toString());
 
 		if (result != null) {
@@ -157,11 +160,8 @@ public class GeoWaveRasterConfig
 		dbf.setIgnoringComments(true);
 
 		dbf.setFeature(
-				"http://xml.org/sax/features/external-general-entities",
-				false);
-		dbf.setFeature(
-				"http://xml.org/sax/features/external-parameter-entities",
-				false);
+				XMLConstants.FEATURE_SECURE_PROCESSING,
+				true);
 
 		final DocumentBuilder db = dbf.newDocumentBuilder();
 

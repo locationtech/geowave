@@ -7,12 +7,12 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequire
 abstract public class AbstractAccumuloFactory implements
 		GenericFactory
 {
-	private static final String NAME = AccumuloDataStore.TYPE;
+	private static final String TYPE = AccumuloDataStore.TYPE;
 	private static final String DESCRIPTION = "A GeoWave store backed by tables in Apache Accumulo";
 
 	@Override
-	public String getName() {
-		return NAME;
+	public String getType() {
+		return TYPE;
 	}
 
 	@Override
@@ -23,7 +23,7 @@ abstract public class AbstractAccumuloFactory implements
 	/**
 	 * This helps implementation of child classes by returning the default
 	 * Accumulo options that are required.
-	 * 
+	 *
 	 * @return
 	 */
 	public StoreFactoryOptions createOptionsInstance() {

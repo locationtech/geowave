@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
  * This class forms the basis for GeoWave input and output format configuration.
@@ -31,27 +32,23 @@ public class GeoWaveConfiguratorBase
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveConfiguratorBase.class);
 	private static final String KEY_SEPARATOR = "-";
 
-	public static enum GeoWaveMetaStore {
+	public static enum GeoWaveConfg {
 		INDEX,
 		DATA_ADAPTER,
-	}
-
-	public static enum GeneralConfig {
-		DATA_STORE_NAME,
 		STORE_CONFIG_OPTION
 	}
 
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass, and suffixed by a custom String
-	 * 
+	 *
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key
 	 * @param e
 	 *            the enum used to provide the unique part of the configuration
 	 *            key
-	 * 
+	 *
 	 * @param suffix
 	 *            the custom suffix to be used in the configuration key
 	 * @return the configuration key
@@ -68,7 +65,7 @@ public class GeoWaveConfiguratorBase
 	/**
 	 * Provides a configuration key for a given feature enum, prefixed by the
 	 * implementingClass
-	 * 
+	 *
 	 * @param implementingClass
 	 *            the class whose name will be used as a prefix for the property
 	 *            configuration key
@@ -121,7 +118,7 @@ public class GeoWaveConfiguratorBase
 	public static DataStore getDataStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		return GeoWaveStoreFinder.createDataStore(getStoreConfigOptions(
+		return GeoWaveStoreFinder.createDataStore(getStoreOptionsMap(
 				implementingClass,
 				context));
 	}
@@ -129,61 +126,57 @@ public class GeoWaveConfiguratorBase
 	public static DataStatisticsStore getDataStatisticsStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		return GeoWaveStoreFinder.createDataStatisticsStore(getStoreConfigOptions(
+		return GeoWaveStoreFinder.createDataStatisticsStore(getStoreOptionsMap(
 				implementingClass,
 				context));
 	}
 
-	public static void setDataStoreName(
+	public static void setStoreOptionsMap(
 			final Class<?> implementingClass,
 			final Configuration config,
-			final String dataStoreName ) {
-		if (dataStoreName != null) {
-			config.set(
-					enumToConfKey(
-							implementingClass,
-							GeneralConfig.DATA_STORE_NAME),
-					dataStoreName);
-		}
-	}
-
-	public static void setStoreConfigOptions(
-			final Class<?> implementingClass,
-			final Configuration config,
-			final Map<String, String> dataStoreConfigOptions ) {
-		if ((dataStoreConfigOptions != null) && !dataStoreConfigOptions.isEmpty()) {
-			for (final Entry<String, String> entry : dataStoreConfigOptions.entrySet()) {
+			final Map<String, String> dataStoreOptions ) {
+		if ((dataStoreOptions != null) && !dataStoreOptions.isEmpty()) {
+			for (final Entry<String, String> entry : dataStoreOptions.entrySet()) {
 				config.set(
 						enumToConfKey(
 								implementingClass,
-								GeneralConfig.STORE_CONFIG_OPTION,
+								GeoWaveConfg.STORE_CONFIG_OPTION,
 								entry.getKey()),
 						entry.getValue());
 			}
 		}
+		else {
+			final Map<String, String> existingVals = config.getValByRegex(enumToConfKey(
+					implementingClass,
+					GeoWaveConfg.STORE_CONFIG_OPTION) + "*");
+			for (final String k : existingVals.keySet()) {
+				config.unset(k);
+			}
+		}
 	}
 
-	public static Map<String, String> getStoreConfigOptions(
+	public static DataStorePluginOptions getStoreOptions(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		final String dataStoreName = getDataStoreName(
-				implementingClass,
-				context);
-		final Map<String, String> configOptions = getConfigOptionsInternal(
+		final Map<String, String> options = getStoreOptionsMapInternal(
 				implementingClass,
 				getConfiguration(context));
-		if ((dataStoreName != null) && (!dataStoreName.isEmpty())) {
-			configOptions.put(
-					GeoWaveStoreFinder.STORE_HINT_OPTION.getName(),
-					dataStoreName);
+		try {
+			return new DataStorePluginOptions(
+					options);
 		}
-		return configOptions;
+		catch (final IllegalArgumentException e) {
+			LOGGER.warn(
+					"Unable to get data store options from job context",
+					e);
+			return null;
+		}
 	}
 
-	public static String getDataStoreName(
+	public static Map<String, String> getStoreOptionsMap(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		return getDataStoreNameInternal(
+		return getStoreOptionsMapInternal(
 				implementingClass,
 				getConfiguration(context));
 	}
@@ -196,7 +189,7 @@ public class GeoWaveConfiguratorBase
 			config.set(
 					enumToConfKey(
 							implementingClass,
-							GeoWaveMetaStore.INDEX,
+							GeoWaveConfg.INDEX,
 							index.getId().getString()),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index)));
 		}
@@ -220,7 +213,7 @@ public class GeoWaveConfiguratorBase
 			conf.set(
 					enumToConfKey(
 							implementingClass,
-							GeoWaveMetaStore.DATA_ADAPTER,
+							GeoWaveConfg.DATA_ADAPTER,
 							adapter.getAdapterId().getString()),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapter)));
 		}
@@ -242,7 +235,7 @@ public class GeoWaveConfiguratorBase
 			final ByteArrayId adapterId ) {
 		final String input = configuration.get(enumToConfKey(
 				implementingClass,
-				GeoWaveMetaStore.DATA_ADAPTER,
+				GeoWaveConfg.DATA_ADAPTER,
 				adapterId.getString()));
 		if (input != null) {
 			final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(input);
@@ -261,12 +254,12 @@ public class GeoWaveConfiguratorBase
 				getConfiguration(context));
 	}
 
-	private static Map<String, String> getConfigOptionsInternal(
+	private static Map<String, String> getStoreOptionsMapInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration ) {
 		final String prefix = enumToConfKey(
 				implementingClass,
-				GeneralConfig.STORE_CONFIG_OPTION) + KEY_SEPARATOR;
+				GeoWaveConfg.STORE_CONFIG_OPTION) + KEY_SEPARATOR;
 		final Map<String, String> enumMap = configuration.getValByRegex(prefix + "*");
 		final Map<String, String> retVal = new HashMap<String, String>();
 		for (final Entry<String, String> entry : enumMap.entrySet()) {
@@ -283,7 +276,7 @@ public class GeoWaveConfiguratorBase
 			final Configuration configuration ) {
 		final Map<String, String> input = configuration.getValByRegex(enumToConfKey(
 				implementingClass,
-				GeoWaveMetaStore.DATA_ADAPTER) + "*");
+				GeoWaveConfg.DATA_ADAPTER) + "*");
 		if (input != null) {
 			final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>(
 					input.size());
@@ -304,7 +297,7 @@ public class GeoWaveConfiguratorBase
 			final ByteArrayId indexId ) {
 		final String input = configuration.get(enumToConfKey(
 				implementingClass,
-				GeoWaveMetaStore.INDEX,
+				GeoWaveConfg.INDEX,
 				indexId.getString()));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
@@ -326,7 +319,7 @@ public class GeoWaveConfiguratorBase
 	public static IndexStore getJobContextIndexStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		final Map<String, String> configOptions = getStoreConfigOptions(
+		final Map<String, String> configOptions = getStoreOptionsMap(
 				implementingClass,
 				context);
 		return new JobContextIndexStore(
@@ -337,7 +330,7 @@ public class GeoWaveConfiguratorBase
 	public static AdapterStore getJobContextAdapterStore(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		final Map<String, String> configOptions = getStoreConfigOptions(
+		final Map<String, String> configOptions = getStoreOptionsMap(
 				implementingClass,
 				context);
 		return new JobContextAdapterStore(
@@ -350,7 +343,7 @@ public class GeoWaveConfiguratorBase
 			final Configuration configuration ) {
 		final Map<String, String> input = configuration.getValByRegex(enumToConfKey(
 				implementingClass,
-				GeoWaveMetaStore.INDEX) + "*");
+				GeoWaveConfg.INDEX) + "*");
 		if (input != null) {
 			final List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>(
 					input.size());
@@ -363,16 +356,6 @@ public class GeoWaveConfiguratorBase
 			return indices.toArray(new PrimaryIndex[indices.size()]);
 		}
 		return new PrimaryIndex[] {};
-	}
-
-	private static String getDataStoreNameInternal(
-			final Class<?> implementingClass,
-			final Configuration configuration ) {
-		return configuration.get(
-				enumToConfKey(
-						implementingClass,
-						GeneralConfig.DATA_STORE_NAME),
-				"");
 	}
 
 	// use reflection to pull the Configuration out of the JobContext for Hadoop

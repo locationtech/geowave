@@ -70,10 +70,16 @@ public class MapReduceTestEnvironment implements
 			if (hdfsProtocol) {
 				final Path tmpDir = new Path(
 						hdfsBaseDirectory);
-				final FileSystem fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
-				fs.delete(
-						tmpDir,
-						true);
+				FileSystem fs = null;
+				try {
+					fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
+					fs.delete(
+							tmpDir,
+							true);
+				}
+				finally {
+					if (fs != null) fs.close();
+				}
 			}
 			else {
 				FileUtils.deleteDirectory(new File(

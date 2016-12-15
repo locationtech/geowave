@@ -1,8 +1,5 @@
 package mil.nga.giat.geowave.analytic.param;
 
-import java.util.Map;
-
-import org.apache.directory.api.util.exception.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
@@ -11,12 +8,15 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 public class OutputStoreParameterHelper implements
 		ParameterHelper<PersistableStore>
 {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	final static Logger LOGGER = LoggerFactory.getLogger(OutputStoreParameterHelper.class);
 
 	@Override
@@ -30,12 +30,9 @@ public class OutputStoreParameterHelper implements
 			final Class<?> scope,
 			final PersistableStore value ) {
 		final DataStorePluginOptions options = value.getDataStoreOptions();
-		GeoWaveOutputFormat.setDataStoreName(
+		GeoWaveOutputFormat.setStoreOptions(
 				config,
-				options.getType());
-		GeoWaveOutputFormat.setStoreConfigOptions(
-				config,
-				options.getFactoryOptionsAsMap());
+				options);
 
 	}
 
@@ -44,13 +41,8 @@ public class OutputStoreParameterHelper implements
 			final JobContext context,
 			final Class<?> scope,
 			final PersistableStore defaultValue ) {
-		final Map<String, String> configOptions = GeoWaveOutputFormat.getStoreConfigOptions(context);
-		final String dataStoreName = GeoWaveOutputFormat.getDataStoreName(context);
-		if ((dataStoreName != null) && (!dataStoreName.isEmpty())) {
-			// Load the plugin, and populate the options object.
-			DataStorePluginOptions pluginOptions = new DataStorePluginOptions(
-					dataStoreName,
-					configOptions);
+		final DataStorePluginOptions pluginOptions = GeoWaveOutputFormat.getStoreOptions(context);
+		if (pluginOptions != null) {
 			return new PersistableStore(
 					pluginOptions);
 		}

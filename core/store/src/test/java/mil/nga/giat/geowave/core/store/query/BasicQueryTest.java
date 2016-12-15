@@ -15,7 +15,10 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
@@ -396,7 +399,7 @@ public class BasicQueryTest
 		}
 
 		@Override
-		public long[] getCoordinatesPerDimension(
+		public MultiDimensionalCoordinates getCoordinatesPerDimension(
 				final ByteArrayId insertionId ) {
 			return null;
 		}
@@ -433,6 +436,14 @@ public class BasicQueryTest
 		@Override
 		public List<IndexMetaData> createMetaData() {
 			return Collections.emptyList();
+		}
+
+		@Override
+		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+				MultiDimensionalNumericData dataRange,
+				IndexMetaData... hints ) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}

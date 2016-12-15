@@ -33,18 +33,18 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPersistenceEncoding;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class QueryFilterIterator extends
 		Filter
 {
 	private final static Logger LOGGER = Logger.getLogger(QueryFilterIterator.class);
 	protected static final String QUERY_ITERATOR_NAME = "GEOWAVE_QUERY_FILTER";
-	protected static final int QUERY_ITERATOR_PRIORITY = 10;
+	protected static final int QUERY_ITERATOR_PRIORITY = 25;
 	protected static final String FILTER = "filter";
 	protected static final String MODEL = "model";
 	private DistributableQueryFilter filter;
 	protected CommonIndexModel model;
+	protected Text currentRow = new Text();
 	private final List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
 
 	static {
@@ -68,6 +68,10 @@ public class QueryFilterIterator extends
 								e);
 				throw (factoryError);
 			}
+
+			// HP Fortify "Access Specifier Manipulation"
+			// This object is being modified by trusted code,
+			// in a way that is not influenced by user input
 			f.setAccessible(true);
 			Object o;
 			try {
@@ -145,13 +149,25 @@ public class QueryFilterIterator extends
 					value,
 					commonData);
 			return applyRowFilter(
-					key.getRow(),
+					key.getRow(currentRow),
 					commonData,
 					unreadData);
 		}
 		// if the query filter or index model did not get sent to this iterator,
 		// it'll just have to accept everything
 		return true;
+	}
+
+	@Override
+	public SortedKeyValueIterator<Key, Value> deepCopy(
+			final IteratorEnvironment env ) {
+		final QueryFilterIterator iterator = new QueryFilterIterator();
+		iterator.setSource(getSource().deepCopy(
+				env));
+		iterator.filter = filter;
+		iterator.commonIndexFieldIds.addAll(commonIndexFieldIds);
+		iterator.model = model;
+		return iterator;
 	}
 
 	protected boolean applyRowFilter(
@@ -169,7 +185,8 @@ public class QueryFilterIterator extends
 			final PersistentDataset<CommonIndexValue> commonData,
 			final FlattenedUnreadData unreadData ) {
 		final GeowaveRowId rowId = new GeowaveRowId(
-				currentRow.getBytes());
+				currentRow.getBytes(),
+				currentRow.getLength());
 		return new AccumuloCommonIndexedPersistenceEncoding(
 				new ByteArrayId(
 						rowId.getAdapterId()),

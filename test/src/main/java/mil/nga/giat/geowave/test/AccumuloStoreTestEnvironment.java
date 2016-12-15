@@ -19,14 +19,17 @@ import org.apache.commons.lang3.SystemUtils;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GenericStoreFactory;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
-public class AccumuloStoreTestEnvironment implements
+public class AccumuloStoreTestEnvironment extends
 		StoreTestEnvironment
 {
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new AccumuloDataStoreFactory();
 	private static AccumuloStoreTestEnvironment singletonInstance = null;
 
 	public static synchronized AccumuloStoreTestEnvironment getInstance() {
@@ -203,10 +206,8 @@ public class AccumuloStoreTestEnvironment implements
 				// hold on the log files and there is no hook to get
 				// notified when it is completely stopped
 
-				Thread.sleep(
-						2000);
-				FileUtils.deleteDirectory(
-						TEMP_DIR);
+				Thread.sleep(2000);
+				FileUtils.deleteDirectory(TEMP_DIR);
 			}
 			catch (final IOException | InterruptedException e) {
 				LOGGER.warn(
@@ -217,18 +218,18 @@ public class AccumuloStoreTestEnvironment implements
 	}
 
 	@Override
-	public DataStorePluginOptions getDataStoreOptions(
-			final String namespace ) {
-		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-		final AccumuloRequiredOptions opts = new AccumuloRequiredOptions();
-		opts.setGeowaveNamespace(namespace);
-		opts.setUser(accumuloUser);
-		opts.setPassword(accumuloPassword);
-		opts.setInstance(accumuloInstance);
-		opts.setZookeeper(zookeeper);
-		pluginOptions.selectPlugin(new AccumuloDataStoreFactory().getName());
-		pluginOptions.setFactoryOptions(opts);
-		return pluginOptions;
+	protected void initOptions(
+			final StoreFactoryOptions options ) {
+		final AccumuloRequiredOptions accumuloOpts = (AccumuloRequiredOptions) options;
+		accumuloOpts.setUser(accumuloUser);
+		accumuloOpts.setPassword(accumuloPassword);
+		accumuloOpts.setInstance(accumuloInstance);
+		accumuloOpts.setZookeeper(zookeeper);
+	}
+
+	@Override
+	protected GenericStoreFactory<DataStore> getDataStoreFactory() {
+		return STORE_FACTORY;
 	}
 
 	public String getZookeeper() {

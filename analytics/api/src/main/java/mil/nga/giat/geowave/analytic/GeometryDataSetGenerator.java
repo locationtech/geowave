@@ -147,6 +147,9 @@ public class GeometryDataSetGenerator
 		final double[] min = new double[range.length];
 		final double[] max = new double[range.length];
 		for (int i = 0; i < range.length; i++) {
+			// HP Fortify "Insecure Randomness" false positive
+			// This random number is not used for any purpose
+			// related to security or cryptography
 			min[i] = Math
 					.max(
 							minAxis[i]
@@ -284,6 +287,9 @@ public class GeometryDataSetGenerator
 		 */
 		final int clusterdItemsCount = (int) Math.ceil((minSetSize) * (1.0 - outlierFactor));
 		while (pointSet.size() < clusterdItemsCount) {
+			// HP Fortify "Insecure Randomness" false positive
+			// This random number is not used for any purpose
+			// related to security or cryptography
 			final int centerPos = rand.nextInt(Integer.MAX_VALUE) % minForCenter.size();
 
 			pointSet.add(createNewFeature(
@@ -395,6 +401,9 @@ public class GeometryDataSetGenerator
 
 		final int dims = coordSystem.getDimension();
 
+		// HP Fortify "Insecure Randomness" false positive
+		// This random number is not used for any purpose
+		// related to security or cryptography
 		final int shapeSize = includePolygons ? (rand.nextInt(Integer.MAX_VALUE) % 5) + 1 : 1;
 		final Coordinate[] shape = new Coordinate[shapeSize > 2 ? shapeSize + 1 : shapeSize];
 		final double[] constrainedMaxAxis = Arrays.copyOf(
@@ -406,6 +415,9 @@ public class GeometryDataSetGenerator
 		for (int s = 0; s < shapeSize; s++) {
 			final Coordinate coordinate = new Coordinate();
 			for (int i = 0; i < dims; i++) {
+				// HP Fortify "Insecure Randomness" false positive
+				// This random number is not used for any purpose
+				// related to security or cryptography
 				coordinate.setOrdinate(
 						i,
 						constrainedMinAxis[i] + (rand.nextDouble() * (constrainedMaxAxis[i] - constrainedMinAxis[i])));
@@ -646,6 +658,9 @@ public class GeometryDataSetGenerator
 			final Random rand = new Random();
 			final Vector2D originVec = coordinateTwo.subtract(coordinateOne);
 			for (int i = 0; i < points; i++) {
+				// HP Fortify "Insecure Randomness" false positive
+				// This random number is not used for any purpose
+				// related to security or cryptography
 				final double factor = rand.nextDouble();
 				final Vector2D projectionPoint = originVec.scalarMultiply(factor);
 				final double direction = rand.nextGaussian() * distanceFactor;

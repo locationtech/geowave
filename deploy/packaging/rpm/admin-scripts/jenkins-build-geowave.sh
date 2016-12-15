@@ -11,17 +11,8 @@ echo "---------------------------------------------------------------"
 
 cd $WORKSPACE/deploy
 
-# Create an archive of all the ingest format plugins
-mkdir -p target/plugins >/dev/null 2>&1
-pushd target/plugins
-find $WORKSPACE/extensions/formats -name "*.jar" -not -path "*/service/target/*" -exec cp {} . \;
-tar cvzf ../plugins.tar.gz *.jar
-popd
-
 # Throughout the build, capture jace artifacts to support testing
 mkdir -p $WORKSPACE/deploy/target/geowave-jace/bin
-cp $WORKSPACE/extensions/formats/geotools-vector/target/*.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-format-vector.jar
-cp $WORKSPACE/examples/target/*.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-example.jar
 
 # Build each of the "fat jar" artifacts and rename to remove any version strings in the file name
 
@@ -31,13 +22,11 @@ mv $WORKSPACE/deploy/target/*-geoserver-singlejar.jar $WORKSPACE/deploy/target/g
 mvn package -P accumulo-container-singlejar $BUILD_ARGS "$@"
 mv $WORKSPACE/deploy/target/*-accumulo-singlejar.jar $WORKSPACE/deploy/target/geowave-accumulo.jar
 
+mvn package -P hbase-container-singlejar $BUILD_ARGS "$@"
+mv $WORKSPACE/deploy/target/*-hbase-singlejar.jar $WORKSPACE/deploy/target/geowave-hbase.jar
+
 mvn package -P geowave-tools-singlejar $BUILD_ARGS "$@"
 mv $WORKSPACE/deploy/target/*-tools.jar $WORKSPACE/deploy/target/geowave-tools.jar
-
-pushd $WORKSPACE/analytics/mapreduce
-mvn package -P analytics-singlejar $BUILD_ARGS "$@"
-mv $WORKSPACE/analytics/mapreduce/target/munged/geowave-analytic-mapreduce-*-analytics-singlejar.jar $WORKSPACE/deploy/target/geowave-analytic-mapreduce.jar
-popd
 
 # Copy the tools fat jar
 cp $WORKSPACE/deploy/target/geowave-tools.jar $WORKSPACE/deploy/target/geowave-jace/bin/geowave-tools.jar

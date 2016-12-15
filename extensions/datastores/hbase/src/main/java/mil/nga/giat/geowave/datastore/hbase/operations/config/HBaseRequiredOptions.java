@@ -3,7 +3,9 @@ package mil.nga.giat.geowave.datastore.hbase.operations.config;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 
 public class HBaseRequiredOptions extends
 		StoreFactoryOptions
@@ -25,7 +27,7 @@ public class HBaseRequiredOptions extends
 	}
 
 	public void setZookeeper(
-			String zookeeper ) {
+			final String zookeeper ) {
 		this.zookeeper = zookeeper;
 	}
 
@@ -34,7 +36,12 @@ public class HBaseRequiredOptions extends
 	}
 
 	public void setAdditionalOptions(
-			HBaseOptions additionalOptions ) {
+			final HBaseOptions additionalOptions ) {
 		this.additionalOptions = additionalOptions;
+	}
+
+	@Override
+	public StoreFactoryFamilySpi getStoreFactory() {
+		return new HBaseStoreFactoryFamily();
 	}
 }

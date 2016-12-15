@@ -10,13 +10,16 @@ import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.propertyparser.PropertyParser;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.GenericStoreFactory;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
-public class HBaseStoreTestEnvironment implements
+public class HBaseStoreTestEnvironment extends
 		StoreTestEnvironment
 {
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new HBaseDataStoreFactory();
 	private static HBaseStoreTestEnvironment singletonInstance = null;
 
 	public static synchronized HBaseStoreTestEnvironment getInstance() {
@@ -34,20 +37,18 @@ public class HBaseStoreTestEnvironment implements
 	private HBaseStoreTestEnvironment() {}
 
 	@Override
-	public DataStorePluginOptions getDataStoreOptions(
-			final String namespace ) {
-		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-		final HBaseRequiredOptions opts = new HBaseRequiredOptions();
-		opts.setGeowaveNamespace(namespace);
-		opts.setZookeeper(zookeeper);
-		pluginOptions.selectPlugin(new HBaseDataStoreFactory().getName());
-		pluginOptions.setFactoryOptions(opts);
-		return pluginOptions;
+	protected void initOptions(
+			final StoreFactoryOptions options ) {
+		((HBaseRequiredOptions) options).setZookeeper(zookeeper);
+	}
+
+	@Override
+	protected GenericStoreFactory<DataStore> getDataStoreFactory() {
+		return STORE_FACTORY;
 	}
 
 	@Override
 	public void setup() {
-
 		PropertyParser propertyParser = null;
 
 		try {
@@ -56,7 +57,9 @@ public class HBaseStoreTestEnvironment implements
 			propertyParser.parsePropsFile();
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to load property file: {}" + HBASE_PROPS_FILE);
+			LOGGER.error(
+					"Unable to load property file: {}" + HBASE_PROPS_FILE,
+					e);
 		}
 
 		if (!TestUtils.isSet(zookeeper)) {
@@ -68,9 +71,10 @@ public class HBaseStoreTestEnvironment implements
 			}
 		}
 
-		if (hbaseLocalCluster == null) {
+		if ((hbaseLocalCluster == null)
+				&& !TestUtils.isSet(System.getProperty(ZookeeperTestEnvironment.ZK_PROPERTY_NAME))) {
 			try {
-				Configuration conf = new Configuration();
+				final Configuration conf = new Configuration();
 				conf.set(
 						"hbase.online.schema.update.enable",
 						"true");
@@ -98,8 +102,9 @@ public class HBaseStoreTestEnvironment implements
 				hbaseLocalCluster.start();
 			}
 			catch (final Exception e) {
-				LOGGER.error("Exception starting hbaseLocalCluster: " + e);
-				e.printStackTrace();
+				LOGGER.error(
+						"Exception starting hbaseLocalCluster",
+						e);
 				Assert.fail();
 			}
 		}

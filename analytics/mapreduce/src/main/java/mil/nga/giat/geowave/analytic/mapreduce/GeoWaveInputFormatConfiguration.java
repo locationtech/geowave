@@ -41,12 +41,9 @@ public class GeoWaveInputFormatConfiguration implements
 			throws Exception {
 		final DataStorePluginOptions dataStoreOptions = ((PersistableStore) runTimeProperties
 				.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
-		GeoWaveInputFormat.setDataStoreName(
+		GeoWaveInputFormat.setStoreOptions(
 				configuration,
-				dataStoreOptions.getType());
-		GeoWaveInputFormat.setStoreConfigOptions(
-				configuration,
-				dataStoreOptions.getFactoryOptionsAsMap());
+				dataStoreOptions);
 
 		final DistributableQuery query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
 

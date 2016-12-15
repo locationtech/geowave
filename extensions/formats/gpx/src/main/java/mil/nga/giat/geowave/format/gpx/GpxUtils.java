@@ -177,7 +177,7 @@ public class GpxUtils
 											break;
 										}
 										case "tags": {
-											final List<CharSequence> tags = new ArrayList<CharSequence>();
+											final List<String> tags = new ArrayList<String>();
 											while (!(event.isEndElement() && event
 													.asEndElement()
 													.getName()
@@ -214,7 +214,11 @@ public class GpxUtils
 				}
 			}
 		}
-		catch (IOException e) {}
+		catch (IOException e) {
+			LOGGER.error(
+					"Could not create the FileInputStream.",
+					e);
+		}
 
 		return metadata;
 	}

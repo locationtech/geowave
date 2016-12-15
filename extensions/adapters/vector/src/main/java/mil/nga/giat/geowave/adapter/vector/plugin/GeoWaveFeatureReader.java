@@ -23,6 +23,7 @@ import java.util.TimeZone;
 import org.apache.log4j.Logger;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.filter.FidFilterImpl;
 import org.geotools.geometry.jts.Decimator;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -44,17 +45,17 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
-import mil.nga.giat.geowave.adapter.vector.render.DistributableRenderer;
+import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderAggregation;
+import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderOptions;
+import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderResult;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureStatistic;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
-import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -65,6 +66,8 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for
@@ -113,9 +116,6 @@ public class GeoWaveFeatureReader implements
 
 	@Override
 	public SimpleFeatureType getFeatureType() {
-		if (featureCollection.isDistributedRenderQuery()) {
-			return GeoWaveFeatureCollection.getDistributedRenderFeatureType();
-		}
 		return components.getAdapter().getType();
 	}
 
@@ -152,14 +152,29 @@ public class GeoWaveFeatureReader implements
 		return new CloseableIterator.Empty<SimpleFeature>();
 	}
 
-	public CloseableIterator<SimpleFeature> issueQuery(
+	public long getCount() {
+		return featureCollection.getCount();
+	}
+
+	protected long getCountInternal(
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBounds,
-			final QueryIssuer issuer ) {
+			final Filter filter,
+			final Integer limit ) {
+		final CountQueryIssuer countIssuer = new CountQueryIssuer(
+				filter,
+				limit);
+		issueQuery(
+				jtsBounds,
+				timeBounds,
+				countIssuer);
+		return countIssuer.count;
+	}
 
-		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
-
+	private BasicQuery getQuery(
+			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Geometry jtsBounds,
+			final TemporalConstraintsSet timeBounds ) {
 		final Constraints timeConstraints = QueryIndexHelper.composeTimeBoundedConstraints(
 				components.getAdapter().getType(),
 				components.getAdapter().getTimeDescriptors(),
@@ -168,7 +183,7 @@ public class GeoWaveFeatureReader implements
 
 		final GeoConstraintsWrapper geoConstraints = QueryIndexHelper.composeGeometricConstraints(
 				getFeatureType(),
-				transaction.getDataStatistics(),
+				statsMap,
 				jtsBounds);
 
 		/**
@@ -180,22 +195,43 @@ public class GeoWaveFeatureReader implements
 				geoConstraints,
 				timeConstraints);
 		query.setExact(timeBounds.isExact());
+		return query;
+	}
+
+	public CloseableIterator<SimpleFeature> issueQuery(
+			final Geometry jtsBounds,
+			final TemporalConstraintsSet timeBounds,
+			final QueryIssuer issuer ) {
+
+		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
+
+		final BasicQuery query = getQuery(
+				statsMap,
+				jtsBounds,
+				timeBounds);
 
 		try (CloseableIterator<Index<?, ?>> indexIt = getComponents().getIndices(
 				statsMap,
 				query)) {
 			while (indexIt.hasNext()) {
 				final PrimaryIndex index = (PrimaryIndex) indexIt.next();
-				results.add(issuer.query(
-						index,
-						query));
 
+				final CloseableIterator<SimpleFeature> it = issuer.query(
+						index,
+						query);
+				if (it != null) {
+					results.add(it);
+				}
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
 					"unable to close index iterator for query",
 					e);
+		}
+		if (results.isEmpty()) {
+			return getNoData();
 		}
 		return interweaveTransaction(
 				issuer.getLimit(),
@@ -298,6 +334,61 @@ public class GeoWaveFeatureReader implements
 		}
 	}
 
+	private class CountQueryIssuer extends
+			BaseIssuer implements
+			QueryIssuer
+	{
+		private long count = 0;
+
+		public CountQueryIssuer(
+				final Filter filter,
+				final Integer limit ) {
+			super(
+					filter,
+					limit);
+		}
+
+		@Override
+		public CloseableIterator<SimpleFeature> query(
+				final PrimaryIndex index,
+				final BasicQuery query ) {
+			final QueryOptions queryOptions = new QueryOptions(
+					components.getAdapter(),
+					index,
+					limit,
+					null,
+					transaction.composeAuthorizations());
+			queryOptions.setAggregation(
+					new CountAggregation(),
+					components.getAdapter());
+
+			try (final CloseableIterator<CountResult> result = components.getDataStore().query(
+					queryOptions,
+					CQLQuery.createOptimalQuery(
+							filter,
+							components.getAdapter(),
+							index,
+							query))) {
+				if (result.hasNext()) {
+					final CountResult cntResult = result.next();
+					if (cntResult != null) {
+						count = cntResult.getCount();
+					}
+				}
+			}
+			catch (final IOException e) {
+				LOGGER.warn(
+						"Unable to close count iterator",
+						e);
+			}
+			return null;
+		}
+
+		public long getCount() {
+			return count;
+		}
+	}
+
 	private class EnvelopeQueryIssuer extends
 			BaseIssuer implements
 			QueryIssuer
@@ -392,15 +483,16 @@ public class GeoWaveFeatureReader implements
 			BaseIssuer implements
 			QueryIssuer
 	{
-		final DistributableRenderer renderer;
+		final DistributedRenderOptions renderOptions;
 
 		public RenderQueryIssuer(
 				final Filter filter,
-				final DistributableRenderer renderer ) {
+				final Integer limit,
+				final DistributedRenderOptions renderOptions ) {
 			super(
 					filter,
-					null);
-			this.renderer = renderer;
+					limit);
+			this.renderOptions = renderOptions;
 
 		}
 
@@ -417,70 +509,52 @@ public class GeoWaveFeatureReader implements
 						getSubset(),
 						components.getAdapter());
 			}
-			return components.getDataStore().query(
+			queryOptions.setAggregation(
+					new DistributedRenderAggregation(
+							renderOptions),
+					components.getAdapter());
+			try (CloseableIterator<DistributedRenderResult> resultIt = components.getDataStore().query(
 					queryOptions,
 					CQLQuery.createOptimalQuery(
 							filter,
 							components.getAdapter(),
 							index,
-							query));
-			// TODO: ? need to figure out how to add back CqlQueryRenderIterator
-			// renderer,
-		}
-	}
-
-	private class IdQueryIssuer extends
-			BaseIssuer implements
-			QueryIssuer
-	{
-		final List<ByteArrayId> ids;
-
-		public IdQueryIssuer(
-				final List<ByteArrayId> ids ) {
-			super(
-					null,
-					null);
-			this.ids = ids;
-
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public CloseableIterator<SimpleFeature> query(
-				final PrimaryIndex index,
-				final BasicQuery query ) {
-			final QueryOptions queryOptions = new QueryOptions(
-					components.getAdapter(),
-					index,
-					limit,
-					null,
-					transaction.composeAuthorizations());
-			if (subsetRequested()) {
-				queryOptions.setFieldIds(
-						getSubset(),
-						components.getAdapter());
+							query))) {
+				if (resultIt.hasNext()) {
+					final DistributedRenderResult result = resultIt.next();
+					return new CloseableIterator.Wrapper(
+							Iterators.singletonIterator(SimpleFeatureBuilder.build(
+									GeoWaveFeatureCollection.getDistributedRenderFeatureType(),
+									new Object[] {
+										result,
+										renderOptions
+									},
+									"render")));
+				}
 			}
-			return components.getDataStore().query(
-					queryOptions,
-					new DataIdQuery(
-							components.getAdapter().getAdapterId(),
-							ids));
-
+			catch (final IOException e) {
+				LOGGER.warn(
+						"Unable to get distributed rendering result",
+						e);
+			}
+			return new CloseableIterator.Wrapper(
+					Iterators.emptyIterator());
 		}
-
 	}
 
 	public CloseableIterator<SimpleFeature> renderData(
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBounds,
 			final Filter filter,
-			final DistributableRenderer renderer ) {
+			final Integer limit,
+			final DistributedRenderOptions renderOptions ) {
 		return issueQuery(
 				jtsBounds,
 				timeBounds,
 				new RenderQueryIssuer(
 						filter,
-						renderer));
+						limit,
+						renderOptions));
 	}
 
 	public CloseableIterator<SimpleFeature> getData(
@@ -560,22 +634,6 @@ public class GeoWaveFeatureReader implements
 						limit));
 	}
 
-	public CloseableIterator<SimpleFeature> getData(
-			final Geometry jtsBounds,
-			final TemporalConstraintsSet timeBounds,
-			final int level,
-			final String statsName ) {
-		return issueQuery(
-				jtsBounds,
-				timeBounds,
-				new IdQueryIssuer(
-						Arrays.asList(new ByteArrayId[] {
-							new ByteArrayId(
-									StringUtils.stringToBinary("l" + level + "_stats" + statsName))
-						})));
-
-	}
-
 	public GeoWaveFeatureCollection getFeatureCollection() {
 		return featureCollection;
 	}
@@ -639,12 +697,6 @@ public class GeoWaveFeatureReader implements
 		// temporalConstraints));
 		// }
 		// else {
-		if (components.isLooseQuery()) {
-			return new IndexOnlySpatialQuery(
-					geoConstraints.getConstraints().merge(
-							temporalConstraints),
-					geoConstraints.getGeometry());
-		}
 		return new SpatialQuery(
 				geoConstraints.getConstraints().merge(
 						temporalConstraints),

@@ -47,7 +47,9 @@ abstract public class AbstractHBaseRowQuery<T> extends
 					authorizations);
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to get the scanned results " + e);
+			LOGGER.error(
+					"Unable to get the scanned results.",
+					e);
 		}
 
 		if (results != null) {
@@ -60,7 +62,9 @@ abstract public class AbstractHBaseRowQuery<T> extends
 							results.iterator(),
 							null,
 							fieldIds,
-							maxResolutionSubsamplingPerDimension));
+							maxResolutionSubsamplingPerDimension,
+							true,
+							false));
 		}
 		else {
 			return new CloseableIterator.Empty<T>();

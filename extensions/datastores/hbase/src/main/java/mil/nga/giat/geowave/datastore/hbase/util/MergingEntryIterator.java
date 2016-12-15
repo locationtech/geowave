@@ -46,7 +46,8 @@ public class MergingEntryIterator<T> extends
 			final ScanCallback<T> scanCallback,
 			final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
-			final double[] maxResolutionSubsamplingPerDimension ) {
+			final double[] maxResolutionSubsamplingPerDimension,
+			final boolean hasSkippingFilter ) {
 		super(
 				adapterStore,
 				index,
@@ -54,7 +55,9 @@ public class MergingEntryIterator<T> extends
 				clientFilter,
 				scanCallback,
 				fieldIds,
-				maxResolutionSubsamplingPerDimension);
+				maxResolutionSubsamplingPerDimension,
+				true,
+				hasSkippingFilter);
 		this.mergingAdapters = mergingAdapters;
 		transforms = new HashMap<ByteArrayId, RowTransform>();
 	}
@@ -174,7 +177,9 @@ public class MergingEntryIterator<T> extends
 				transform.initOptions(mergingAdapter.getOptions(null));
 			}
 			catch (final IOException e) {
-				LOGGER.error("Unable to initialize merge strategy for adapter: " + mergingAdapter.getAdapterId());
+				LOGGER.error(
+						"Unable to initialize merge strategy for adapter: " + mergingAdapter.getAdapterId(),
+						e);
 			}
 			transforms.put(
 					mergingAdapter.getAdapterId(),

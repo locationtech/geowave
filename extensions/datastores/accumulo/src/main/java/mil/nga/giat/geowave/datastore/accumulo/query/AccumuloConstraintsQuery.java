@@ -18,6 +18,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -33,6 +35,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
@@ -115,7 +118,6 @@ public class AccumuloConstraintsQuery extends
 	@Override
 	protected void addScanIteratorSettings(
 			final ScannerBase scanner ) {
-
 		addFieldSubsettingToIterator(scanner);
 		IteratorSetting iteratorSettings = null;
 		if (isAggregation()) {
@@ -131,9 +133,11 @@ public class AccumuloConstraintsQuery extends
 						QueryFilterIterator.QUERY_ITERATOR_NAME,
 						AggregationIterator.class);
 			}
-			iteratorSettings.addOption(
-					AggregationIterator.ADAPTER_OPTION_NAME,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(base.aggregation.getLeft())));
+			if (!(base.aggregation.getRight() instanceof CommonIndexAggregation) && base.aggregation.getLeft() != null) {
+				iteratorSettings.addOption(
+						AggregationIterator.ADAPTER_OPTION_NAME,
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(base.aggregation.getLeft())));
+			}
 			final Aggregation aggr = base.aggregation.getRight();
 			iteratorSettings.addOption(
 					AggregationIterator.AGGREGATION_OPTION_NAME,
@@ -157,7 +161,10 @@ public class AccumuloConstraintsQuery extends
 			// don't bother setting max decomposition because it is just the
 			// default anyways
 		}
+
+		boolean usingDistributableFilter = false;
 		if ((base.distributableFilters != null) && !base.distributableFilters.isEmpty() && queryFiltersEnabled) {
+			usingDistributableFilter = true;
 			if (iteratorSettings == null) {
 				if (useWholeRowIterator()) {
 					iteratorSettings = new IteratorSetting(
@@ -198,8 +205,35 @@ public class AccumuloConstraintsQuery extends
 					QueryFilterIterator.QUERY_ITERATOR_NAME,
 					WholeRowIterator.class);
 		}
+		if (!usingDistributableFilter) {
+			// it ends up being duplicative and slower to add both a
+			// distributable query and the index constraints, but one of the two
+			// is important to limit client-side filtering
+			addIndexFilterToIterator(scanner);
+		}
 		if (iteratorSettings != null) {
 			scanner.addScanIterator(iteratorSettings);
+		}
+	}
+
+	protected void addIndexFilterToIterator(
+			final ScannerBase scanner ) {
+		final List<MultiDimensionalCoordinateRangesArray> coords = base.getCoordinateRanges();
+		if (!coords.isEmpty()) {
+			final IteratorSetting iteratorSetting = new IteratorSetting(
+					NumericIndexStrategyFilterIterator.IDX_FILTER_ITERATOR_PRIORITY,
+					NumericIndexStrategyFilterIterator.IDX_FILTER_ITERATOR_NAME,
+					NumericIndexStrategyFilterIterator.class);
+
+			iteratorSetting.addOption(
+					NumericIndexStrategyFilterIterator.INDEX_STRATEGY_KEY,
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexStrategy())));
+
+			iteratorSetting.addOption(
+					NumericIndexStrategyFilterIterator.COORDINATE_RANGE_KEY,
+					ByteArrayUtils.byteArrayToString(new ArrayOfArrays(
+							coords.toArray(new MultiDimensionalCoordinateRangesArray[] {})).toBinary()));
+			scanner.addScanIterator(iteratorSetting);
 		}
 	}
 

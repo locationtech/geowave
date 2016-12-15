@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.query.cql.FilterToCQLTool;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -18,6 +19,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.log4j.Logger;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
@@ -28,6 +30,8 @@ abstract public class AbstractGeoWaveQuery extends
 		DefaultOperation implements
 		Command
 {
+	private static Logger LOGGER = Logger.getLogger(AbstractGeoWaveQuery.class);
+
 	@Parameter(description = "<storename>")
 	private List<String> parameters = new ArrayList<String>();
 
@@ -95,7 +99,9 @@ abstract public class AbstractGeoWaveQuery extends
 			System.out.println("Got " + results + " results in " + stopWatch.toString());
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warn(
+					"Unable to read adapter",
+					e);
 		}
 	}
 

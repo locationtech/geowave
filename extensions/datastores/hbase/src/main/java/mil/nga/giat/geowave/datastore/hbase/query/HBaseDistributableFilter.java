@@ -5,6 +5,12 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.exceptions.DeserializationException;
+import org.apache.hadoop.hbase.filter.FilterBase;
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -27,16 +33,10 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.encoding.HBaseCommonIndexedPersistenceEncoding;
 
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.exceptions.DeserializationException;
-import org.apache.hadoop.hbase.filter.FilterBase;
-import org.apache.log4j.Logger;
-
 /**
  * This class wraps our Distributable filters in an HBase filter so that a
  * coprocessor can use them.
- * 
+ *
  * @author kent
  *
  */
@@ -45,7 +45,7 @@ public class HBaseDistributableFilter extends
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseDistributableFilter.class);
 
-	private List<DistributableQueryFilter> filterList;
+	private final List<DistributableQueryFilter> filterList;
 	protected CommonIndexModel model;
 	private final List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
 	private PersistentDataset<Object> adapterExtendedValues;
@@ -72,7 +72,7 @@ public class HBaseDistributableFilter extends
 		final byte[] filterBytes = new byte[pbBytes.length - modelLength - 4];
 		buf.get(filterBytes);
 
-		HBaseDistributableFilter newInstance = new HBaseDistributableFilter();
+		final HBaseDistributableFilter newInstance = new HBaseDistributableFilter();
 		newInstance.init(
 				filterBytes,
 				modelBytes);
@@ -80,6 +80,7 @@ public class HBaseDistributableFilter extends
 		return newInstance;
 	}
 
+	@Override
 	public byte[] toByteArray()
 			throws IOException {
 		final byte[] modelBinary = PersistenceUtils.toBinary(model);
@@ -97,21 +98,22 @@ public class HBaseDistributableFilter extends
 	public boolean init(
 			final byte[] filterBytes,
 			final byte[] modelBytes ) {
-		List<Persistable> decodedFilterList = PersistenceUtils.fromBinary(filterBytes);
-
-		if (decodedFilterList == null) {
-			LOGGER.error("Failed to decode filter list");
-			return false;
-		}
-
 		filterList.clear();
+		if ((filterBytes != null) && (filterBytes.length > 0)) {
+			final List<Persistable> decodedFilterList = PersistenceUtils.fromBinary(filterBytes);
 
-		for (Persistable decodedFilter : decodedFilterList) {
-			if (decodedFilter instanceof DistributableQueryFilter) {
-				filterList.add((DistributableQueryFilter) decodedFilter);
+			if (decodedFilterList == null) {
+				LOGGER.error("Failed to decode filter list");
+				return false;
 			}
-			else {
-				LOGGER.warn("Unrecognized type for decoded filter!" + decodedFilter.getClass().getName());
+
+			for (final Persistable decodedFilter : decodedFilterList) {
+				if (decodedFilter instanceof DistributableQueryFilter) {
+					filterList.add((DistributableQueryFilter) decodedFilter);
+				}
+				else {
+					LOGGER.warn("Unrecognized type for decoded filter!" + decodedFilter.getClass().getName());
+				}
 			}
 		}
 
@@ -133,15 +135,12 @@ public class HBaseDistributableFilter extends
 	}
 
 	public boolean init(
-			List<DistributableQueryFilter> filterList,
-			CommonIndexModel model ) {
+			final List<DistributableQueryFilter> filterList,
+			final CommonIndexModel model ) {
 		this.filterList.clear();
 		this.filterList.addAll(filterList);
 
 		this.model = model;
-		for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
-			commonIndexFieldIds.add(numericDimension.getFieldId());
-		}
 
 		commonIndexFieldIds.clear();
 		for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
@@ -153,7 +152,7 @@ public class HBaseDistributableFilter extends
 
 	@Override
 	public ReturnCode filterKeyValue(
-			Cell cell )
+			final Cell cell )
 			throws IOException {
 		commonData = new PersistentDataset<CommonIndexValue>();
 
@@ -184,8 +183,10 @@ public class HBaseDistributableFilter extends
 				returnCode = ReturnCode.INCLUDE;
 			}
 		}
-		catch (Exception e) {
-			LOGGER.error("Error applying distributed filter." + e);
+		catch (final Exception e) {
+			LOGGER.error(
+					"Error applying distributed filter.",
+					e);
 		}
 
 		return returnCode;
@@ -210,8 +211,12 @@ public class HBaseDistributableFilter extends
 				unreadData);
 	}
 
+	public CommonIndexedPersistenceEncoding getPersistenceEncoding() {
+		return persistenceEncoding;
+	}
+
 	public IndexedAdapterPersistenceEncoding getAdapterEncoding(
-			DataAdapter dataAdapter ) {
+			final DataAdapter dataAdapter ) {
 		final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
 		if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
 			((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
@@ -240,7 +245,7 @@ public class HBaseDistributableFilter extends
 
 	// Called by the aggregation endpoint, after filtering the current row
 	public Object decodeRow(
-			DataAdapter dataAdapter ) {
+			final DataAdapter dataAdapter ) {
 		return dataAdapter.decode(
 				getAdapterEncoding(dataAdapter),
 				new PrimaryIndex(
@@ -265,7 +270,7 @@ public class HBaseDistributableFilter extends
 			return false;
 		}
 
-		for (DistributableQueryFilter filter : filterList) {
+		for (final DistributableQueryFilter filter : filterList) {
 			if (!filter.accept(
 					model,
 					encoding)) {
@@ -279,16 +284,14 @@ public class HBaseDistributableFilter extends
 	protected FlattenedUnreadData aggregateFieldData(
 			final Cell cell,
 			final PersistentDataset<CommonIndexValue> commonData ) {
-		final ByteArrayId colQual = new ByteArrayId(
-				CellUtil.cloneQualifier(cell));
-
-		final byte[] valueBytes = CellUtil.cloneValue(cell);
+		final byte[] qualBuf = CellUtil.cloneQualifier(cell);
+		final byte[] valBuf = CellUtil.cloneValue(cell);
 
 		final FlattenedDataSet dataSet = DataStoreUtils.decomposeFlattenedFields(
-				colQual.getBytes(),
-				valueBytes,
+				qualBuf,
+				valBuf,
 				null,
-				-1);
+				model.getDimensions().length - 1);
 
 		final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
 		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {

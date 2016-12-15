@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response.Status;
 import mil.nga.giat.geowave.service.GeoserverService;
 import net.sf.json.JSONObject;
 
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -24,10 +25,26 @@ public class GeoserverServiceClient
 
 	public GeoserverServiceClient(
 			final String baseUrl ) {
+		this(
+				baseUrl,
+				null,
+				null);
+	}
 
+	public GeoserverServiceClient(
+			final String baseUrl,
+			String user,
+			String password ) {
+		ClientBuilder bldr = ClientBuilder.newBuilder();
+		if (user != null && password != null) {
+			HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(
+					user,
+					password);
+			bldr.register(feature);
+		}
 		geoserverService = WebResourceFactory.newResource(
 				GeoserverService.class,
-				ClientBuilder.newBuilder().register(
+				bldr.register(
 						MultiPartFeature.class).build().target(
 						baseUrl));
 	}

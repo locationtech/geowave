@@ -3,16 +3,19 @@ package mil.nga.giat.geowave.core.index.simple;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
@@ -23,9 +26,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class RoundRobinKeyIndexStrategyTest
 {
@@ -129,24 +129,26 @@ public class RoundRobinKeyIndexStrategyTest
 	public void testUniformityAndLargeKeySet() {
 		final RoundRobinKeyIndexStrategy strategy = new RoundRobinKeyIndexStrategy(
 				512);
-		Map<ByteArrayId, Integer> countMap = new HashMap<ByteArrayId, Integer>();
+		final Map<ByteArrayId, Integer> countMap = new HashMap<ByteArrayId, Integer>();
 		for (int i = 0; i < 2048; i++) {
-			List<ByteArrayId> ids = strategy.getInsertionIds(sfcIndexedRange);
+			final List<ByteArrayId> ids = strategy.getInsertionIds(sfcIndexedRange);
 			assertEquals(
 					1,
 					ids.size());
 			final ByteArrayId key = ids.get(0);
-			if (countMap.containsKey(key))
+			if (countMap.containsKey(key)) {
 				countMap.put(
 						key,
 						countMap.get(key) + 1);
-			else
+			}
+			else {
 				countMap.put(
 						key,
 						1);
+			}
 
 		}
-		for (Integer i : countMap.values()) {
+		for (final Integer i : countMap.values()) {
 			assertEquals(
 					4,
 					i.intValue());
@@ -178,12 +180,12 @@ public class RoundRobinKeyIndexStrategyTest
 						8));
 		Assert.assertTrue(testIds.containsAll(compoundIndexIds));
 
-		final long[] sfcIndexCoordinatesPerDim = sfcIndexStrategy.getCoordinatesPerDimension(ids2.get(0));
-		final long[] coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(ids.get(0));
+		final MultiDimensionalCoordinates sfcIndexCoordinatesPerDim = sfcIndexStrategy.getCoordinatesPerDimension(ids2
+				.get(0));
+		final MultiDimensionalCoordinates coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(ids
+				.get(0));
 
-		Assert.assertTrue(Arrays.equals(
-				sfcIndexCoordinatesPerDim,
-				coordinatesPerDim));
+		Assert.assertTrue(sfcIndexCoordinatesPerDim.equals(coordinatesPerDim));
 	}
 
 }

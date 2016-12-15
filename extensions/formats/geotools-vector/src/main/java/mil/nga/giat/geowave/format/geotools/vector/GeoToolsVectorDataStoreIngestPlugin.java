@@ -87,7 +87,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 
 	private static DataStore getDataStore(
 			final File file )
-			throws Exception {
+			throws IOException {
 		final Map<Object, Object> map = new HashMap<>();
 		if (isPropertiesFile(file)) {
 			try (FileInputStream fis = new FileInputStream(

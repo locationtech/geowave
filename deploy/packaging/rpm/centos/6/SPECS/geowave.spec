@@ -12,6 +12,7 @@
 %define geowave_home           /usr/local/geowave
 %define geowave_install        /usr/local/%{versioned_app_name}
 %define geowave_accumulo_home  %{geowave_install}/accumulo
+%define geowave_hbase_home     %{geowave_install}/hbase
 %define geowave_docs_home      %{geowave_install}/docs
 %define geowave_geoserver_home %{geowave_install}/geoserver
 %define geowave_tools_home     %{geowave_install}/tools
@@ -31,21 +32,22 @@ Summary:        GeoWave provides geospatial and temporal indexing on top of Accu
 License:        Apache2
 Group:          Applications/Internet
 Source0:        geowave-accumulo.jar
-Source1:        deploy-geowave-to-hdfs.sh
-Source2:        geoserver.zip
-Source3:        geowave-geoserver.jar
-Source4:        geowave-logrotate.sh
-Source5:        geowave-init.sh
-Source6:        bash_profile.sh
-Source7:        default.xml
-Source8:        namespace.xml
-Source9:        workspace.xml
-Source10:       geowave-tools.jar
-Source11:       site.tar.gz
-Source12:       puppet-scripts.tar.gz
-Source13:       manpages.tar.gz
-Source14:       plugins.tar.gz
-Source15:       geowave-analytic-mapreduce.jar
+Source1:        deploy-geowave-accumulo-to-hdfs.sh
+Source2:        geowave-hbase.jar
+Source3:        deploy-geowave-hbase-to-hdfs.sh
+Source4:        geoserver.zip
+Source5:        geowave-geoserver.jar
+Source6:        geowave-logrotate.sh
+Source7:        geowave-init.sh
+Source8:        bash_profile.sh
+Source9:        default.xml
+Source10:       namespace.xml
+Source11:       workspace.xml
+Source12:       geowave-tools.jar
+Source13:       site.tar.gz
+Source14:       puppet-scripts.tar.gz
+Source15:       manpages.tar.gz
+Source16:       plugins.tar.gz
 BuildRequires:  unzip
 BuildRequires:  zip
 BuildRequires:  xmlto
@@ -76,9 +78,10 @@ cp %{SOURCE0} %{SOURCE1} %{buildroot}%{geowave_accumulo_home}
 
 # Extract version info file for easy inspection
 unzip -p %{SOURCE0} build.properties > %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties
+unzip -p %{SOURCE2} build.properties > %{buildroot}%{geowave_hbase_home}/geowave-hbase-build.properties
 
 # Unpack and rename prepackaged jetty/geoserver
-unzip -qq  %{SOURCE2} -d %{buildroot}%{geowave_install}
+unzip -qq  %{SOURCE4} -d %{buildroot}%{geowave_install}
 mv %{buildroot}%{geowave_geoserver_home}-* %{buildroot}%{geowave_geoserver_home}
 
 # patch some config settings
@@ -92,48 +95,46 @@ rm -fr %{buildroot}%{geowave_geoserver_home}/logs/keepme.txt
 
 # Copy our geowave library into place
 mkdir -p %{buildroot}%{geowave_geoserver_libs}
-cp %{SOURCE3} %{buildroot}%{geowave_geoserver_libs}
+cp %{SOURCE5} %{buildroot}%{geowave_geoserver_libs}
 
 # Copy system service files into place
 mkdir -p %{buildroot}/etc/logrotate.d
-cp %{SOURCE4} %{buildroot}/etc/logrotate.d/geowave
+cp %{SOURCE6} %{buildroot}/etc/logrotate.d/geowave
 mkdir -p %{buildroot}/etc/init.d
-cp %{SOURCE5} %{buildroot}/etc/init.d/geowave
+cp %{SOURCE7} %{buildroot}/etc/init.d/geowave
 mkdir -p %{buildroot}/etc/profile.d
-cp %{SOURCE6} %{buildroot}/etc/profile.d/geowave.sh
+cp %{SOURCE9} %{buildroot}/etc/profile.d/geowave.sh
 
 # Copy over our custom workspace config files
 mkdir -p %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
-cp %{SOURCE7} %{buildroot}%{geowave_geoserver_data}/workspaces
-cp %{SOURCE8} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
-cp %{SOURCE9} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
+cp %{SOURCE9} %{buildroot}%{geowave_geoserver_data}/workspaces
+cp %{SOURCE10} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
+cp %{SOURCE11} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
 
 # Stage geowave tools
 mkdir -p %{buildroot}%{geowave_plugins_home}
-cp %{SOURCE10} %{buildroot}%{geowave_tools_home}
+cp %{SOURCE12} %{buildroot}%{geowave_tools_home}
 cp %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties %{buildroot}%{geowave_tools_home}/build.properties
 pushd %{buildroot}%{geowave_tools_home}
 zip -qg %{buildroot}%{geowave_tools_home}/geowave-tools.jar build.properties
 popd
 mv %{buildroot}%{geowave_tools_home}/build.properties %{buildroot}%{geowave_tools_home}/geowave-tools-build.properties
-unzip -p %{SOURCE10} geowave-tools.sh > %{buildroot}%{geowave_tools_home}/geowave-tools.sh
-tar xzf %{SOURCE14} -C %{buildroot}%{geowave_plugins_home}
-
-cp %{SOURCE15} %{buildroot}%{geowave_tools_home}
+unzip -p %{SOURCE12} geowave-tools.sh > %{buildroot}%{geowave_tools_home}/geowave-tools.sh
+tar xzf %{SOURCE16} -C %{buildroot}%{geowave_plugins_home}
 
 # Copy documentation into place
 mkdir -p %{buildroot}%{geowave_docs_home}
-tar -xzf %{SOURCE11} -C %{buildroot}%{geowave_docs_home} --strip=1
+tar -xzf %{SOURCE13} -C %{buildroot}%{geowave_docs_home} --strip=1
 
 # Copy man pages into place
 mkdir -p %{buildroot}/usr/local/share/man/man1
-tar -xvf %{SOURCE13} -C %{buildroot}/usr/local/share/man/man1
+tar -xvf %{SOURCE15} -C %{buildroot}/usr/local/share/man/man1
 rm -rf %{buildroot}%{geowave_docs_home}/manpages
 rm -f %{buildroot}%{geowave_docs_home}/*.pdfmarks
 
 # Puppet scripts
 mkdir -p %{buildroot}/etc/puppet/modules
-tar -xzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
+tar -xzf %{SOURCE14} -C %{buildroot}/etc/puppet/modules
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -141,6 +142,7 @@ tar -xzf %{SOURCE12} -C %{buildroot}/etc/puppet/modules
 Summary:        All GeoWave Components
 Group:          Applications/Internet
 Requires:       %{versioned_app_name}-accumulo = %{version}
+Requires:       %{versioned_app_name}-hbase = %{version}
 Requires:       %{versioned_app_name}-jetty = %{version}
 Requires:       %{versioned_app_name}-tools = %{version}
 
@@ -166,7 +168,7 @@ GeoWave provides geospatial and temporal indexing on top of Accumulo.
 This package installs the Accumulo components of GeoWave
 
 %post -n %{versioned_app_name}-accumulo
-/bin/bash %{geowave_accumulo_home}/deploy-geowave-to-hdfs.sh >> %{geowave_accumulo_home}/geowave-to-hdfs.log 2>&1
+/bin/bash %{geowave_accumulo_home}/deploy-geowave-accumulo-to-hdfs.sh >> %{geowave_accumulo_home}/geowave-accumulo-to-hdfs.log 2>&1
 
 %files -n %{versioned_app_name}-accumulo
 %defattr(644, geowave, geowave, 755)
@@ -174,7 +176,31 @@ This package installs the Accumulo components of GeoWave
 
 %attr(755, hdfs, hdfs) %{geowave_accumulo_home}
 %attr(644, hdfs, hdfs) %{geowave_accumulo_home}/geowave-accumulo.jar
-%attr(755, hdfs, hdfs) %{geowave_accumulo_home}/deploy-geowave-to-hdfs.sh
+%attr(755, hdfs, hdfs) %{geowave_accumulo_home}/deploy-geowave-accumulo-to-hdfs.sh
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%package -n     %{versioned_app_name}-hbase
+Summary:        GeoWave HBase Components
+Group:          Applications/Internet
+Provides:       %{versioned_app_name}-hbase = %{version}
+Requires:       %{versioned_app_name}-tools = %{version}
+Requires:       core
+
+%description -n %{versioned_app_name}-hbase
+GeoWave provides geospatial and temporal indexing on top of HBase.
+This package installs the HBase components of GeoWave
+
+%post -n %{versioned_app_name}-hbase
+/bin/bash %{geowave_hbase_home}/deploy-geowave-hbase-to-hdfs.sh >> %{geowave_accumulo_home}/geowave-hbase-to-hdfs.log 2>&1
+
+%files -n %{versioned_app_name}-hbase
+%defattr(644, geowave, geowave, 755)
+%dir %{geowave_install}
+
+%attr(755, hdfs, hdfs) %{geowave_hbase_home}
+%attr(644, hdfs, hdfs) %{geowave_hbase_home}/geowave-hbase.jar
+%attr(755, hdfs, hdfs) %{geowave_hbase_home}/deploy-geowave-hbase-to-hdfs.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -306,6 +332,8 @@ This package installs the geowave Puppet module to /etc/puppet/modules
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %changelog
+* Fri Nov 23 2016 Rich Fecher <rfecher@gmail.com> - 0.9.3
+- Add geowave-hbase
 * Fri Jun 5 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7-1
 - Add external config file
 * Fri May 22 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7

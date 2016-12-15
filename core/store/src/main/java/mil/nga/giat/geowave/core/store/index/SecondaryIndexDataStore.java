@@ -3,10 +3,11 @@ package mil.nga.giat.geowave.core.store.index;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 
 /**
  * This is responsible for persisting secondary index entries
@@ -14,43 +15,89 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 public interface SecondaryIndexDataStore
 {
 	/**
+	 * Set the reference to the primary data store
 	 * 
-	 * @param secondaryIndex
+	 * @param dataStore
+	 */
+	public void setDataStore(
+			DataStore dataStore );
+
+	/**
+	 * Stores a secondary index entry that will require a join against the
+	 * primary index upon lookup.
+	 * 
+	 * @param secondaryIndexId
+	 * @param indexedAttributeValue
+	 * @param adapterId
+	 * @param indexedAttributeFieldId
 	 * @param primaryIndexId
 	 * @param primaryIndexRowId
-	 * @param indexedAttributes
+	 * @param attributeVisibility
 	 */
-	public void store(
-			SecondaryIndex<?> secondaryIndex,
+	public void storeJoinEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
 			ByteArrayId primaryIndexId,
 			ByteArrayId primaryIndexRowId,
-			List<FieldInfo<?>> indexedAttributes );
+			ByteArrayId attributeVisibility );
 
 	/**
+	 * Stores a secondary index entry that will not require a join against the
+	 * primary index upon lookup.
 	 * 
-	 * @param secondaryIndex
-	 * @param primaryIndexId
-	 * @param indexedAttributes
+	 * @param secondaryIndexId
+	 * @param indexedAttributeValue
+	 * @param adapterId
+	 * @param indexedAttributeFieldId
+	 * @param dataId
+	 * @param attributeVisibility
+	 * @param attributes
 	 */
-	public void delete(
-			final SecondaryIndex<?> secondaryIndex,
-			final List<FieldInfo<?>> indexedAttributes );
+	public void storeEntry(
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			ByteArrayId dataId,
+			ByteArrayId attributeVisibility,
+			List<FieldInfo<?>> attributes );
 
 	/**
+	 * Execute a query against the given secondary index
 	 * 
 	 * @param secondaryIndex
-	 * @param ranges
-	 * @param constraints
-	 * @param primaryIndexId
-	 * @param visibility
+	 * @param indexedAttributeFieldId
+	 * @param adapter
+	 * @param primaryIndex
+	 * @param query
+	 * @param authorizations
 	 * @return
 	 */
-	public CloseableIterator<ByteArrayId> query(
-			SecondaryIndex<?> secondaryIndex,
-			List<ByteArrayRange> ranges,
-			List<DistributableQueryFilter> constraints,
-			ByteArrayId primaryIndexId,
-			String... visibility );
+	public <T> CloseableIterator<T> query(
+			final SecondaryIndex<T> secondaryIndex,
+			final ByteArrayId indexedAttributeFieldId,
+			final DataAdapter<T> adapter,
+			final PrimaryIndex primaryIndex,
+			final DistributableQuery query,
+			final String... authorizations );
+
+	public void deleteJoinEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId primaryIndexId,
+			final ByteArrayId primaryIndexRowId );
+
+	public void deleteEntry(
+			final ByteArrayId secondaryIndexId,
+			final ByteArrayId indexedAttributeValue,
+			final ByteArrayId adapterId,
+			final ByteArrayId indexedAttributeFieldId,
+			final ByteArrayId dataId,
+			final List<FieldInfo<?>> attributes );
 
 	public void flush();
 

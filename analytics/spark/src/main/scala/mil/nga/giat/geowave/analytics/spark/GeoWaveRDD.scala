@@ -60,10 +60,7 @@ object GeoWaveRDD {
 
     val conf = new org.apache.hadoop.conf.Configuration(sc.hadoopConfiguration)
 
-    GeoWaveInputFormat.setDataStoreName(conf,
-      geoWaveContext.dataStoreName)
-
-    GeoWaveInputFormat.setStoreConfigOptions(conf,
+    GeoWaveInputFormat.setStoreOptionsMap(conf,
       geoWaveContext.storeParameters)
 
     // index and adapters are not mandatory.
@@ -104,10 +101,8 @@ object GeoWaveRDD {
     //setup the configuration and the output format
     val conf = new org.apache.hadoop.conf.Configuration(sc.hadoopConfiguration)
 
-    GeoWaveOutputFormat.setDataStoreName(conf,
-      geoWaveContext.dataStoreName)
 
-    GeoWaveOutputFormat.setStoreConfigOptions(conf,
+    GeoWaveOutputFormat.setStoreOptionsMap(conf,
       geoWaveContext.storeParameters)
 
     GeoWaveOutputFormat.addIndex(conf, index)

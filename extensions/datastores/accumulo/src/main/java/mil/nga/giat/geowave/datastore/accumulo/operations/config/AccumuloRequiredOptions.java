@@ -3,7 +3,9 @@ package mil.nga.giat.geowave.datastore.accumulo.operations.config;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
+import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 
 /**
  * Default, required options needed in order to execute any command for
@@ -16,6 +18,8 @@ public class AccumuloRequiredOptions extends
 	public static final String ZOOKEEPER_CONFIG_KEY = "zookeeper";
 	public static final String INSTANCE_CONFIG_KEY = "instance";
 	public static final String USER_CONFIG_KEY = "user";
+	// HP Fortify "Hardcoded Password" false positive
+	// This is a password label, not a password
 	public static final String PASSWORD_CONFIG_KEY = "password";
 
 	@Parameter(names = {
@@ -50,7 +54,7 @@ public class AccumuloRequiredOptions extends
 	}
 
 	public void setZookeeper(
-			String zookeeper ) {
+			final String zookeeper ) {
 		this.zookeeper = zookeeper;
 	}
 
@@ -59,7 +63,7 @@ public class AccumuloRequiredOptions extends
 	}
 
 	public void setInstance(
-			String instance ) {
+			final String instance ) {
 		this.instance = instance;
 	}
 
@@ -68,7 +72,7 @@ public class AccumuloRequiredOptions extends
 	}
 
 	public void setUser(
-			String user ) {
+			final String user ) {
 		this.user = user;
 	}
 
@@ -77,7 +81,7 @@ public class AccumuloRequiredOptions extends
 	}
 
 	public void setPassword(
-			String password ) {
+			final String password ) {
 		this.password = password;
 	}
 
@@ -86,7 +90,12 @@ public class AccumuloRequiredOptions extends
 	}
 
 	public void setAdditionalOptions(
-			AccumuloOptions additionalOptions ) {
+			final AccumuloOptions additionalOptions ) {
 		this.additionalOptions = additionalOptions;
+	}
+
+	@Override
+	public StoreFactoryFamilySpi getStoreFactory() {
+		return new AccumuloStoreFactoryFamily();
 	}
 }

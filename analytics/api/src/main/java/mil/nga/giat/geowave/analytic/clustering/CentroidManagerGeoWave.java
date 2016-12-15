@@ -406,7 +406,11 @@ public class CentroidManagerGeoWave<T> implements
 					try {
 						it.close();
 					}
-					catch (final IOException e) {}
+					catch (final IOException e) {
+						LOGGER.warn(
+								"Unable to close the iterator",
+								e);
+					}
 				}
 			}
 
@@ -776,8 +780,9 @@ public class CentroidManagerGeoWave<T> implements
 							"file://" + parentDir + "/" + this.batchId + ".shp"));
 		}
 		catch (final MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(
+					"Error creating URL",
+					e);
 		}
 		params.put(
 				"create spatial index",
@@ -820,8 +825,10 @@ public class CentroidManagerGeoWave<T> implements
 				writer.write();
 			}
 		}
-		catch (final Exception problem) {
-			problem.printStackTrace();
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Problem with the FeatureWritter",
+					e);
 			transaction.rollback();
 		}
 		finally {

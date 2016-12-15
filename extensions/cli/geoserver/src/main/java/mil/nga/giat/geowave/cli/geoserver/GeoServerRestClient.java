@@ -28,6 +28,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.beust.jcommander.ParameterException;
+
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
@@ -39,17 +47,9 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import com.beust.jcommander.ParameterException;
-
 public class GeoServerRestClient
 {
-	private final static Logger logger = Logger.getLogger(GeoServerRestClient.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
 	static private class DataAdapterInfo
@@ -58,16 +58,17 @@ public class GeoServerRestClient
 		Boolean isRaster;
 	}
 
-	private GeoServerConfig config;
+	private final GeoServerConfig config;
 	private WebTarget webTarget = null;
 
 	public GeoServerRestClient(
-			GeoServerConfig config ) {
+			final GeoServerConfig config ) {
 		this.config = config;
+		LOGGER.setLevel(Level.DEBUG);
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public GeoServerConfig getConfig() {
@@ -89,7 +90,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Convenience - add layer(s) for the given store to geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param storeName
 	 * @param adapterId
@@ -97,26 +98,26 @@ public class GeoServerRestClient
 	 * @return
 	 */
 	public Response addLayer(
-			String workspaceName,
+			final String workspaceName,
 			final String storeName,
 			final String adapterId,
 			final String defaultStyle ) {
 		// retrieve the adapter info list for the store
-		ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(
+		final ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(
 				storeName,
 				adapterId);
 
-		logger.debug("Finished retrieving adapter list");
+		LOGGER.debug("Finished retrieving adapter list");
 
-		if (adapterInfoList.size() > 1 && adapterId == null) {
-			logger.debug("addlayer doesn't know how to deal with multiple adapters");
+		if ((adapterInfoList.size() > 1) && (adapterId == null)) {
+			LOGGER.debug("addlayer doesn't know how to deal with multiple adapters");
 
-			String descr = "Please use -a, or choose one of these with -id:";
-			JSONObject jsonObj = getJsonFromAdapters(
+			final String descr = "Please use -a, or choose one of these with -id:";
+			final JSONObject jsonObj = getJsonFromAdapters(
 					adapterInfoList,
 					descr);
 
-			logger.debug(jsonObj);
+			LOGGER.debug(jsonObj);
 
 			return Response.ok(
 					jsonObj.toString(defaultIndentation)).build();
@@ -124,27 +125,27 @@ public class GeoServerRestClient
 
 		// verify the workspace exists
 		if (!workspaceExists(workspaceName)) {
-			logger.debug("addlayer needs to create the " + workspaceName + " workspace");
+			LOGGER.debug("addlayer needs to create the " + workspaceName + " workspace");
 
-			Response addWsResponse = addWorkspace(workspaceName);
+			final Response addWsResponse = addWorkspace(workspaceName);
 			if (addWsResponse.getStatus() != Status.CREATED.getStatusCode()) {
 				return addWsResponse;
 			}
 		}
 
-		String cvgStoreName = storeName + GeoServerConfig.DEFAULT_CS;
-		String dataStoreName = storeName + GeoServerConfig.DEFAULT_DS;
+		final String cvgStoreName = storeName + GeoServerConfig.DEFAULT_CS;
+		final String dataStoreName = storeName + GeoServerConfig.DEFAULT_DS;
 
 		// iterate through data adapters
-		for (DataAdapterInfo dataAdapterInfo : adapterInfoList) {
+		for (final DataAdapterInfo dataAdapterInfo : adapterInfoList) {
 			// handle coverage stores & coverages
 			if (dataAdapterInfo.isRaster) {
 				// verify coverage store exists
-				Response getCsResponse = getCoverageStore(
+				final Response getCsResponse = getCoverageStore(
 						workspaceName,
 						cvgStoreName);
 				if (getCsResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-					Response addCsResponse = addCoverageStore(
+					final Response addCsResponse = addCoverageStore(
 							workspaceName,
 							cvgStoreName,
 							storeName,
@@ -161,17 +162,17 @@ public class GeoServerRestClient
 				}
 
 				// See if the coverage already exists
-				Response getCvResponse = getCoverage(
+				final Response getCvResponse = getCoverage(
 						workspaceName,
 						cvgStoreName,
 						dataAdapterInfo.adapterId);
 				if (getCvResponse.getStatus() == Status.OK.getStatusCode()) {
-					logger.debug(dataAdapterInfo.adapterId + " layer already exists");
+					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
 					continue;
 				}
 
 				// We have a coverage store. Add the layer per the adapter ID
-				Response addCvResponse = addCoverage(
+				final Response addCvResponse = addCoverage(
 						workspaceName,
 						cvgStoreName,
 						dataAdapterInfo.adapterId);
@@ -182,11 +183,11 @@ public class GeoServerRestClient
 			// handle datastores and feature layers
 			else {
 				// verify datastore exists
-				Response getDsResponse = getDatastore(
+				final Response getDsResponse = getDatastore(
 						workspaceName,
 						dataStoreName);
 				if (getDsResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-					Response addDsResponse = addDatastore(
+					final Response addDsResponse = addDatastore(
 							workspaceName,
 							dataStoreName,
 							storeName);
@@ -198,20 +199,20 @@ public class GeoServerRestClient
 					return getDsResponse;
 				}
 
-				logger.debug("Checking for existing feature layer: " + dataAdapterInfo.adapterId);
+				LOGGER.debug("Checking for existing feature layer: " + dataAdapterInfo.adapterId);
 
 				// See if the feature layer already exists
-				Response getFlResponse = getFeatureLayer(dataAdapterInfo.adapterId);
+				final Response getFlResponse = getFeatureLayer(dataAdapterInfo.adapterId);
 				if (getFlResponse.getStatus() == Status.OK.getStatusCode()) {
-					logger.debug(dataAdapterInfo.adapterId + " layer already exists");
+					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
 					continue;
 				}
 
-				logger.debug("Get feature layer: " + dataAdapterInfo.adapterId + " returned "
+				LOGGER.debug("Get feature layer: " + dataAdapterInfo.adapterId + " returned "
 						+ getFlResponse.getStatus());
 
 				// We have a datastore. Add the layer per the adapter ID
-				Response addFlResponse = addFeatureLayer(
+				final Response addFlResponse = addFeatureLayer(
 						workspaceName,
 						dataStoreName,
 						dataAdapterInfo.adapterId,
@@ -224,7 +225,7 @@ public class GeoServerRestClient
 
 		// Report back to the caller the adapter IDs and the types that were
 		// used to create the layers
-		JSONObject jsonObj = getJsonFromAdapters(
+		final JSONObject jsonObj = getJsonFromAdapters(
 				adapterInfoList,
 				"Successfully added:");
 
@@ -234,27 +235,27 @@ public class GeoServerRestClient
 
 	/**
 	 * Get JSON object(s) from adapter list
-	 * 
+	 *
 	 * @param adapterInfoList
 	 * @param description
 	 * @return JSONObject
 	 */
 	private JSONObject getJsonFromAdapters(
-			ArrayList<DataAdapterInfo> adapterInfoList,
-			String description ) {
-		StringBuffer buf = new StringBuffer();
+			final ArrayList<DataAdapterInfo> adapterInfoList,
+			final String description ) {
+		final StringBuffer buf = new StringBuffer();
 
 		// If we made it this far, let's just iterate through the adapter IDs
 		// and build the JSON response data
 		buf.append("{'description':'" + description + "', " + "'layers':[");
 
 		for (int i = 0; i < adapterInfoList.size(); i++) {
-			DataAdapterInfo info = adapterInfoList.get(i);
+			final DataAdapterInfo info = adapterInfoList.get(i);
 
 			buf.append("{'id':'" + info.adapterId + "',");
 			buf.append("'type':'" + (info.isRaster ? "raster" : "vector") + "'}");
 
-			if (i < adapterInfoList.size() - 1) {
+			if (i < (adapterInfoList.size() - 1)) {
 				buf.append(",");
 			}
 		}
@@ -266,7 +267,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Check if workspace exists
-	 * 
+	 *
 	 * @param workspace
 	 * @return true if workspace exists, false if not
 	 */
@@ -276,14 +277,14 @@ public class GeoServerRestClient
 			workspace = config.getWorkspace();
 		}
 
-		Response getWsResponse = getWorkspaces();
+		final Response getWsResponse = getWorkspaces();
 		if (getWsResponse.getStatus() == Status.OK.getStatusCode()) {
-			JSONObject jsonResponse = JSONObject.fromObject(getWsResponse.getEntity());
+			final JSONObject jsonResponse = JSONObject.fromObject(getWsResponse.getEntity());
 
 			final JSONArray workspaces = jsonResponse.getJSONArray("workspaces");
 
 			for (int i = 0; i < workspaces.size(); i++) {
-				String wsName = workspaces.getJSONObject(
+				final String wsName = workspaces.getJSONObject(
 						i).getString(
 						"name");
 
@@ -293,7 +294,7 @@ public class GeoServerRestClient
 			}
 		}
 		else {
-			logger.error("Error retieving GeoServer workspace list");
+			LOGGER.error("Error retieving GeoServer workspace list");
 		}
 
 		return false;
@@ -301,7 +302,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Get list of workspaces from geoserver
-	 * 
+	 *
 	 * @return
 	 */
 	public Response getWorkspaces() {
@@ -331,7 +332,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Add workspace to geoserver
-	 * 
+	 *
 	 * @param workspace
 	 * @return
 	 */
@@ -346,7 +347,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Delete workspace from geoserver
-	 * 
+	 *
 	 * @param workspace
 	 * @return
 	 */
@@ -360,21 +361,21 @@ public class GeoServerRestClient
 
 	/**
 	 * Get the string version of a datastore JSONObject from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param datastoreName
 	 * @return
 	 */
 	public Response getDatastore(
 			final String workspaceName,
-			String datastoreName ) {
+			final String datastoreName ) {
 		final Response resp = getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
 
-			JSONObject datastore = JSONObject.fromObject(resp.readEntity(String.class));
+			final JSONObject datastore = JSONObject.fromObject(resp.readEntity(String.class));
 
 			if (datastore != null) {
 				return Response.ok(
@@ -387,12 +388,12 @@ public class GeoServerRestClient
 
 	/**
 	 * Get list of Datastore names from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @return
 	 */
 	public Response getDatastores(
-			String workspaceName ) {
+			final String workspaceName ) {
 		final Response resp = getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/datastores.json").request().get();
 
@@ -419,30 +420,30 @@ public class GeoServerRestClient
 
 	/**
 	 * Add a geowave datastore to geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param datastoreName
 	 * @param gwStoreName
 	 * @return
 	 */
 	public Response addDatastore(
-			String workspaceName,
+			final String workspaceName,
 			String datastoreName,
-			String gwStoreName ) {
-		DataStorePluginOptions inputStoreOptions = getStorePlugin(gwStoreName);
+			final String gwStoreName ) {
+		final DataStorePluginOptions inputStoreOptions = getStorePlugin(gwStoreName);
 
-		if (datastoreName == null || datastoreName.isEmpty()) {
+		if ((datastoreName == null) || datastoreName.isEmpty()) {
 			datastoreName = gwStoreName + GeoServerConfig.DEFAULT_DS;
 		}
 
-		String lockMgmt = "memory";
-		String authMgmtPrvdr = "empty";
-		String authDataUrl = "";
-		String queryIndexStrategy = "Best Match";
+		final String lockMgmt = "memory";
+		final String authMgmtPrvdr = "empty";
+		final String authDataUrl = "";
+		final String queryIndexStrategy = "Best Match";
 
 		final String dataStoreJson = createDatastoreJson(
 				inputStoreOptions.getType(),
-				inputStoreOptions.getFactoryOptionsAsMap(),
+				inputStoreOptions.getOptionsAsMap(),
 				datastoreName,
 				lockMgmt,
 				authMgmtPrvdr,
@@ -460,14 +461,14 @@ public class GeoServerRestClient
 
 	/**
 	 * Delete a geowave datastore from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param datastoreName
 	 * @return
 	 */
 	public Response deleteDatastore(
-			String workspaceName,
-			String datastoreName ) {
+			final String workspaceName,
+			final String datastoreName ) {
 		return getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName).queryParam(
 				"recurse",
@@ -476,7 +477,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Get a layer from geoserver
-	 * 
+	 *
 	 * @param layerName
 	 * @return
 	 */
@@ -486,7 +487,7 @@ public class GeoServerRestClient
 				"rest/layers/" + layerName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
-			JSONObject layer = JSONObject.fromObject(resp.readEntity(String.class));
+			final JSONObject layer = JSONObject.fromObject(resp.readEntity(String.class));
 
 			if (layer != null) {
 				return Response.ok(
@@ -499,7 +500,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Get list of layers from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 *            : if null, don't filter on workspace
 	 * @param datastoreName
@@ -509,11 +510,11 @@ public class GeoServerRestClient
 	 * @return
 	 */
 	public Response getFeatureLayers(
-			String workspaceName,
-			String datastoreName,
-			boolean geowaveOnly ) {
-		boolean wsFilter = (workspaceName != null && !workspaceName.isEmpty());
-		boolean dsFilter = (datastoreName != null && !datastoreName.isEmpty());
+			final String workspaceName,
+			final String datastoreName,
+			final boolean geowaveOnly ) {
+		final boolean wsFilter = ((workspaceName != null) && !workspaceName.isEmpty());
+		final boolean dsFilter = ((datastoreName != null) && !datastoreName.isEmpty());
 
 		final Response resp = getWebTarget().path(
 				"rest/layers.json").request().get();
@@ -533,11 +534,11 @@ public class GeoServerRestClient
 			final Map<String, List<String>> namespaceLayersMap = new HashMap<String, List<String>>();
 			final Pattern p = Pattern.compile("workspaces/(.*?)/datastores/(.*?)/");
 			for (int i = 0; i < layerArray.size(); i++) {
-				boolean include = !geowaveOnly && !wsFilter && !dsFilter; // no
-																			// filtering
-																			// of
-																			// any
-																			// kind
+				final boolean include = !geowaveOnly && !wsFilter && !dsFilter; // no
+				// filtering
+				// of
+				// any
+				// kind
 
 				if (include) { // just grab it...
 					layerInfoArray.add(layerArray.getJSONObject(i));
@@ -565,10 +566,10 @@ public class GeoServerRestClient
 				}
 
 				// filter on datastore?
-				if (!dsFilter || (ds != null && ds.equals(datastoreName))) {
+				if (!dsFilter || ((ds != null) && ds.equals(datastoreName))) {
 
 					// filter on workspace?
-					if (!wsFilter || (ws != null && ws.equals(workspaceName))) {
+					if (!wsFilter || ((ws != null) && ws.equals(workspaceName))) {
 						final JSONObject datastore = JSONObject.fromObject(
 								getDatastore(
 										ds,
@@ -577,7 +578,7 @@ public class GeoServerRestClient
 
 						// only process GeoWave layers
 						if (geowaveOnly) {
-							if (datastore != null && datastore.containsKey("type") && datastore.getString(
+							if ((datastore != null) && datastore.containsKey("type") && datastore.getString(
 									"type").startsWith(
 									"GeoWave Datastore")) {
 
@@ -595,7 +596,7 @@ public class GeoServerRestClient
 								}
 
 								if (entryArray == null) {
-									logger
+									LOGGER
 											.error("entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
 								}
 								else {
@@ -682,7 +683,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Add feature layer to geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param datastoreName
 	 * @param layerName
@@ -711,7 +712,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Delete a feature layer from geoserver
-	 * 
+	 *
 	 * @param layerName
 	 * @return
 	 */
@@ -723,7 +724,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Change the default style of a layer
-	 * 
+	 *
 	 * @param layerName
 	 * @param styleName
 	 * @return
@@ -741,7 +742,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Get a geoserver style
-	 * 
+	 *
 	 * @param styleName
 	 * @return
 	 */
@@ -767,7 +768,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Get a list of geoserver styles
-	 * 
+	 *
 	 * @return
 	 */
 	public Response getStyles() {
@@ -798,7 +799,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Add a style to geoserver
-	 * 
+	 *
 	 * @param styleName
 	 * @param fileInStream
 	 * @return
@@ -822,7 +823,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Delete a style from geoserver
-	 * 
+	 *
 	 * @param styleName
 	 * @return
 	 */
@@ -835,21 +836,21 @@ public class GeoServerRestClient
 
 	/**
 	 * Get coverage store from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param coverageName
 	 * @return
 	 */
 	public Response getCoverageStore(
 			final String workspaceName,
-			String coverageName ) {
+			final String coverageName ) {
 		final Response resp = getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json").request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
 
-			JSONObject cvgstore = JSONObject.fromObject(resp.readEntity(String.class));
+			final JSONObject cvgstore = JSONObject.fromObject(resp.readEntity(String.class));
 
 			if (cvgstore != null) {
 				return Response.ok(
@@ -862,12 +863,12 @@ public class GeoServerRestClient
 
 	/**
 	 * Get a list of coverage stores from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @return
 	 */
 	public Response getCoverageStores(
-			String workspaceName ) {
+			final String workspaceName ) {
 		final Response resp = getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/coveragestores.json").request().get();
 
@@ -894,7 +895,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Add coverage store to geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param cvgStoreName
 	 * @param gwStoreName
@@ -904,20 +905,20 @@ public class GeoServerRestClient
 	 * @return
 	 */
 	public Response addCoverageStore(
-			String workspaceName,
+			final String workspaceName,
 			String cvgStoreName,
-			String gwStoreName,
-			Boolean equalizeHistogramOverride,
-			String interpolationOverride,
-			Boolean scaleTo8Bit ) {
-		DataStorePluginOptions inputStoreOptions = getStorePlugin(gwStoreName);
+			final String gwStoreName,
+			final Boolean equalizeHistogramOverride,
+			final String interpolationOverride,
+			final Boolean scaleTo8Bit ) {
+		final DataStorePluginOptions inputStoreOptions = getStorePlugin(gwStoreName);
 
-		if (cvgStoreName == null || cvgStoreName.isEmpty()) {
+		if ((cvgStoreName == null) || cvgStoreName.isEmpty()) {
 			cvgStoreName = gwStoreName + GeoServerConfig.DEFAULT_CS;
 		}
 
 		// Get the store's db config
-		Map<String, String> storeConfigMap = inputStoreOptions.getFactoryOptionsAsMap();
+		final Map<String, String> storeConfigMap = inputStoreOptions.getOptionsAsMap();
 
 		// Add in geoserver coverage store info
 		storeConfigMap.put(
@@ -950,14 +951,14 @@ public class GeoServerRestClient
 
 	/**
 	 * Delete coverage store form geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param cvgstoreName
 	 * @return
 	 */
 	public Response deleteCoverageStore(
-			String workspaceName,
-			String cvgstoreName ) {
+			final String workspaceName,
+			final String cvgstoreName ) {
 		return getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName).queryParam(
 				"recurse",
@@ -966,14 +967,14 @@ public class GeoServerRestClient
 
 	/**
 	 * Get a list of coverages (raster layers) from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param cvsstoreName
 	 * @return
 	 */
 	public Response getCoverages(
-			String workspaceName,
-			String cvsstoreName ) {
+			final String workspaceName,
+			final String cvsstoreName ) {
 		final Response resp = getWebTarget()
 				.path(
 						"rest/workspaces/" + workspaceName + "/coveragestores/" + cvsstoreName + "/coverages.json")
@@ -1003,7 +1004,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Get coverage from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param cvgStoreName
 	 * @param coverageName
@@ -1011,8 +1012,8 @@ public class GeoServerRestClient
 	 */
 	public Response getCoverage(
 			final String workspaceName,
-			String cvgStoreName,
-			String coverageName ) {
+			final String cvgStoreName,
+			final String coverageName ) {
 		final Response resp = getWebTarget()
 				.path(
 						"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages/"
@@ -1023,7 +1024,7 @@ public class GeoServerRestClient
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
 
-			JSONObject cvg = JSONObject.fromObject(resp.readEntity(String.class));
+			final JSONObject cvg = JSONObject.fromObject(resp.readEntity(String.class));
 
 			if (cvg != null) {
 				return Response.ok(
@@ -1036,7 +1037,7 @@ public class GeoServerRestClient
 
 	/**
 	 * Add coverage to geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param cvgStoreName
 	 * @param coverageName
@@ -1046,9 +1047,9 @@ public class GeoServerRestClient
 			final String workspaceName,
 			final String cvgStoreName,
 			final String coverageName ) {
-		String jsonString = "{'coverage':" + "{'name':'" + coverageName + "'," + "'nativeCoverageName':'"
+		final String jsonString = "{'coverage':" + "{'name':'" + coverageName + "'," + "'nativeCoverageName':'"
 				+ coverageName + "'}}";
-		logger.debug("Posting JSON: " + jsonString + " to " + workspaceName + "/" + cvgStoreName);
+		LOGGER.debug("Posting JSON: " + jsonString + " to " + workspaceName + "/" + cvgStoreName);
 
 		return getWebTarget().path(
 				"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages").request().post(
@@ -1059,16 +1060,16 @@ public class GeoServerRestClient
 
 	/**
 	 * Delete coverage from geoserver
-	 * 
+	 *
 	 * @param workspaceName
 	 * @param cvgstoreName
 	 * @param coverageName
 	 * @return
 	 */
 	public Response deleteCoverage(
-			String workspaceName,
-			String cvgstoreName,
-			String coverageName ) {
+			final String workspaceName,
+			final String cvgstoreName,
+			final String coverageName ) {
 		return getWebTarget()
 				.path(
 						"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName + "/coverages/"
@@ -1203,18 +1204,19 @@ public class GeoServerRestClient
 	}
 
 	private String createCoverageXml(
-			Map<String, String> geowaveStoreConfig,
-			Boolean equalizeHistogramOverride,
-			String interpolationOverride,
-			Boolean scaleTo8Bit ) {
+			final Map<String, String> geowaveStoreConfig,
+			final Boolean equalizeHistogramOverride,
+			final String interpolationOverride,
+			final Boolean scaleTo8Bit ) {
 		String coverageXml = null;
 
-		String workspace = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_WORKSPACE);
-		String cvgstoreName = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_CS);
+		final String workspace = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_WORKSPACE);
+		final String cvgstoreName = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_CS);
 
+		StreamResult result = null;
 		try {
 			// create the post XML
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
 			factory.setFeature(
 					"http://xml.org/sax/features/external-general-entities",
@@ -1223,63 +1225,58 @@ public class GeoServerRestClient
 					"http://xml.org/sax/features/external-parameter-entities",
 					false);
 
-			Document xmlDoc = factory.newDocumentBuilder().newDocument();
+			final Document xmlDoc = factory.newDocumentBuilder().newDocument();
 
-			Element rootEl = xmlDoc.createElement("coverageStore");
+			final Element rootEl = xmlDoc.createElement("coverageStore");
 			xmlDoc.appendChild(rootEl);
 
-			Element nameEl = xmlDoc.createElement("name");
+			final Element nameEl = xmlDoc.createElement("name");
 			nameEl.appendChild(xmlDoc.createTextNode(cvgstoreName));
 			rootEl.appendChild(nameEl);
 
-			Element wsEl = xmlDoc.createElement("workspace");
+			final Element wsEl = xmlDoc.createElement("workspace");
 			wsEl.appendChild(xmlDoc.createTextNode(workspace));
 			rootEl.appendChild(wsEl);
 
-			Element typeEl = xmlDoc.createElement("type");
+			final Element typeEl = xmlDoc.createElement("type");
 			typeEl.appendChild(xmlDoc.createTextNode("GeoWaveRasterFormat"));
 			rootEl.appendChild(typeEl);
 
-			Element enabledEl = xmlDoc.createElement("enabled");
+			final Element enabledEl = xmlDoc.createElement("enabled");
 			enabledEl.appendChild(xmlDoc.createTextNode("true"));
 			rootEl.appendChild(enabledEl);
 
-			Element configEl = xmlDoc.createElement("configure");
+			final Element configEl = xmlDoc.createElement("configure");
 			configEl.appendChild(xmlDoc.createTextNode("all"));
 			rootEl.appendChild(configEl);
 
 			// Method using custom URL & handler:
-			String storeConfigUrl = createParamUrl(
+			final String storeConfigUrl = createParamUrl(
 					geowaveStoreConfig,
 					equalizeHistogramOverride,
 					interpolationOverride,
 					scaleTo8Bit);
 
-			Element urlEl = xmlDoc.createElement("url");
+			final Element urlEl = xmlDoc.createElement("url");
 			urlEl.appendChild(xmlDoc.createTextNode(storeConfigUrl));
 			rootEl.appendChild(urlEl);
 
 			// use a transformer to create the xml string for the rest call
-			TransformerFactory xformerFactory = TransformerFactory.newInstance();
+			final TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
+			// HP Fortify "XML External Entity Injection" false positive
+			// The following modifications to xformerFactory are the
+			// fortify-recommended procedure to secure a TransformerFactory
+			// but the report still flags this instance
 			xformerFactory.setFeature(
-					"http://xml.org/sax/features/external-general-entities",
-					false);
-			xformerFactory.setFeature(
-					"http://xml.org/sax/features/external-parameter-entities",
-					false);
-			xformerFactory.setAttribute(
-					XMLConstants.ACCESS_EXTERNAL_DTD,
-					"");
-			xformerFactory.setAttribute(
-					XMLConstants.ACCESS_EXTERNAL_STYLESHEET,
-					"");
+					XMLConstants.FEATURE_SECURE_PROCESSING,
+					true);
 
-			Transformer xformer = xformerFactory.newTransformer();
+			final Transformer xformer = xformerFactory.newTransformer();
 
-			DOMSource source = new DOMSource(
+			final DOMSource source = new DOMSource(
 					xmlDoc);
-			StreamResult result = new StreamResult(
+			result = new StreamResult(
 					new StringWriter());
 
 			xformer.transform(
@@ -1288,30 +1285,44 @@ public class GeoServerRestClient
 
 			coverageXml = result.getWriter().toString();
 		}
-		catch (TransformerException e) {
-			e.printStackTrace();
+		catch (final TransformerException e) {
+			LOGGER.error(
+					"Unable to create transformer",
+					e);
 		}
-		catch (ParserConfigurationException e) {
-			e.printStackTrace();
+		catch (final ParserConfigurationException e1) {
+			LOGGER.error(
+					"Unable to create DocumentBuilderFactory",
+					e1);
+		}
+		finally {
+			if ((result != null) && (result.getWriter() != null)) {
+				try {
+					result.getWriter().close();
+				}
+				catch (final IOException e) {
+					LOGGER.error(e);
+				}
+			}
 		}
 
 		return coverageXml;
 	}
 
 	private String createParamUrl(
-			Map<String, String> geowaveStoreConfig,
-			Boolean equalizeHistogramOverride,
-			String interpolationOverride,
-			Boolean scaleTo8Bit ) {
+			final Map<String, String> geowaveStoreConfig,
+			final Boolean equalizeHistogramOverride,
+			final String interpolationOverride,
+			final Boolean scaleTo8Bit ) {
 		// Retrieve store config
-		String user = geowaveStoreConfig.get("user");
-		String pass = geowaveStoreConfig.get("password");
-		String zookeeper = geowaveStoreConfig.get("zookeeper");
-		String instance = geowaveStoreConfig.get("instance");
-		String gwNamespace = geowaveStoreConfig.get("gwNamespace");
+		final String user = geowaveStoreConfig.get("user");
+		final String pass = geowaveStoreConfig.get("password");
+		final String zookeeper = geowaveStoreConfig.get("zookeeper");
+		final String instance = geowaveStoreConfig.get("instance");
+		final String gwNamespace = geowaveStoreConfig.get("gwNamespace");
 
 		// Create the custom geowave url w/ params
-		StringBuffer buf = new StringBuffer();
+		final StringBuffer buf = new StringBuffer();
 		buf.append("user=");
 		buf.append(user);
 		buf.append(";password=");
@@ -1339,8 +1350,8 @@ public class GeoServerRestClient
 	}
 
 	public DataStorePluginOptions getStorePlugin(
-			String storeName ) {
-		StoreLoader inputStoreLoader = new StoreLoader(
+			final String storeName ) {
+		final StoreLoader inputStoreLoader = new StoreLoader(
 				storeName);
 		if (!inputStoreLoader.loadFromConfig(config.getPropFile())) {
 			throw new ParameterException(
@@ -1351,15 +1362,15 @@ public class GeoServerRestClient
 	}
 
 	public ArrayList<String> getStoreAdapters(
-			String storeName,
-			String adapterId ) {
-		ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(
+			final String storeName,
+			final String adapterId ) {
+		final ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(
 				storeName,
 				adapterId);
 
-		ArrayList<String> adapterIdList = new ArrayList<String>();
+		final ArrayList<String> adapterIdList = new ArrayList<String>();
 
-		for (DataAdapterInfo info : adapterInfoList) {
+		for (final DataAdapterInfo info : adapterInfoList) {
 			adapterIdList.add(info.adapterId);
 		}
 
@@ -1367,46 +1378,48 @@ public class GeoServerRestClient
 	}
 
 	private ArrayList<DataAdapterInfo> getStoreAdapterInfo(
-			String storeName,
-			String adapterId ) {
-		DataStorePluginOptions dsPlugin = getStorePlugin(storeName);
+			final String storeName,
+			final String adapterId ) {
+		final DataStorePluginOptions dsPlugin = getStorePlugin(storeName);
 
-		AdapterStore adapterStore = dsPlugin.createAdapterStore();
+		final AdapterStore adapterStore = dsPlugin.createAdapterStore();
 
-		ArrayList<DataAdapterInfo> adapterInfoList = new ArrayList<DataAdapterInfo>();
+		final ArrayList<DataAdapterInfo> adapterInfoList = new ArrayList<DataAdapterInfo>();
 
-		logger.debug("Adapter list for " + storeName + " with adapterId = " + adapterId + ": ");
+		LOGGER.debug("Adapter list for " + storeName + " with adapterId = " + adapterId + ": ");
 
 		try (final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
 			while (it.hasNext()) {
 				final DataAdapter<?> adapter = it.next();
 
-				DataAdapterInfo info = getAdapterInfo(
+				final DataAdapterInfo info = getAdapterInfo(
 						adapterId,
 						adapter);
 
 				if (info != null) {
 					adapterInfoList.add(info);
-					logger.debug("> '" + info.adapterId + "' adapter passed filter");
+					LOGGER.debug("> '" + info.adapterId + "' adapter passed filter");
 				}
 			}
 
 		}
 		catch (final IOException e) {
-			System.err.println("unable to close adapter iterator while looking up coverage names");
+			LOGGER.error(
+					"Unable to close adapter iterator while looking up coverage names",
+					e);
 		}
 
-		logger.debug("getStoreAdapterInfo(" + storeName + ") got " + adapterInfoList.size() + " ids");
+		LOGGER.debug("getStoreAdapterInfo(" + storeName + ") got " + adapterInfoList.size() + " ids");
 
 		return adapterInfoList;
 	}
 
 	private DataAdapterInfo getAdapterInfo(
-			String adapterId,
-			DataAdapter adapter ) {
-		logger.debug("getAdapterInfo for id = " + adapterId);
+			final String adapterId,
+			final DataAdapter adapter ) {
+		LOGGER.debug("getAdapterInfo for id = " + adapterId);
 
-		DataAdapterInfo info = new DataAdapterInfo();
+		final DataAdapterInfo info = new DataAdapterInfo();
 		info.adapterId = adapter.getAdapterId().getString();
 		info.isRaster = false;
 
@@ -1414,30 +1427,30 @@ public class GeoServerRestClient
 			info.isRaster = true;
 		}
 
-		logger.debug("> Adapter ID: " + info.adapterId);
-		logger.debug("> Adapter Type: " + adapter.getClass().getSimpleName());
+		LOGGER.debug("> Adapter ID: " + info.adapterId);
+		LOGGER.debug("> Adapter Type: " + adapter.getClass().getSimpleName());
 
-		if (adapterId == null || adapterId.equals(AddOption.ALL.name())) {
-			logger.debug("id is null or all");
+		if ((adapterId == null) || adapterId.equals(AddOption.ALL.name())) {
+			LOGGER.debug("id is null or all");
 			return info;
 		}
 
 		if (adapterId.equals(adapter.getAdapterId().getString())) {
-			logger.debug("id matches adapter id");
+			LOGGER.debug("id matches adapter id");
 			return info;
 		}
 
-		if (adapterId.equals(AddOption.RASTER.name()) && adapter instanceof RasterDataAdapter) {
-			logger.debug("id is all-raster and adapter is raster type");
+		if (adapterId.equals(AddOption.RASTER.name()) && (adapter instanceof RasterDataAdapter)) {
+			LOGGER.debug("id is all-raster and adapter is raster type");
 			return info;
 		}
 
-		if (adapterId.equals(AddOption.VECTOR.name()) && adapter instanceof GeotoolsFeatureDataAdapter) {
-			logger.debug("id is all-vector and adapter is vector type");
+		if (adapterId.equals(AddOption.VECTOR.name()) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
+			LOGGER.debug("id is all-vector and adapter is vector type");
 			return info;
 		}
 
-		logger.debug("No match!");
+		LOGGER.debug("No match!");
 
 		return null;
 	}

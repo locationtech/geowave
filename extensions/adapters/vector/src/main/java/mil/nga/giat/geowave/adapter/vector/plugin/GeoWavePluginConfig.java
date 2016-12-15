@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataAccessFactory.Param;
@@ -37,6 +38,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
  * This class encapsulates the parameterized configuration that can be provided
@@ -51,7 +53,6 @@ public class GeoWavePluginConfig
 	public static final String GEOWAVE_NAMESPACE_KEY = StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION;
 	// name matches the workspace parameter provided to the factory
 	protected static final String FEATURE_NAMESPACE_KEY = "namespace";
-	protected static final String LOOSE_QUERY_KEY = "namespace";
 	protected static final String LOCK_MGT_KEY = "Lock Management";
 	protected static final String AUTH_MGT_KEY = "Authorization Management Provider";
 	protected static final String AUTH_URL_KEY = "Authorization Data URL";
@@ -62,7 +63,7 @@ public class GeoWavePluginConfig
 			GEOWAVE_NAMESPACE_KEY,
 			String.class,
 			"The table namespace associated with this data store",
-			true);
+			false);
 	private static final Param TRANSACTION_BUFFER_SIZE_PARAM = new Param(
 			TRANSACTION_BUFFER_SIZE,
 			Integer.class,
@@ -73,13 +74,6 @@ public class GeoWavePluginConfig
 			FEATURE_NAMESPACE_KEY,
 			String.class,
 			"The overriding namespace for all feature types maintained within this data store",
-			false);
-
-	private static final Param LOOSE_QUERY = new Param(
-			LOOSE_QUERY_KEY,
-			Boolean.class,
-			"When constraints are a subset of the indexed dimension types, the data store will be queried faster with a small false positive rate.  Defaults to off and is only recommended to enable if false positives are acceptable.",
-			false,
 			false);
 
 	private static final Param LOCK_MGT = new Param(
@@ -124,7 +118,6 @@ public class GeoWavePluginConfig
 	private final Integer transactionBufferSize;
 	private final IndexQueryStrategySPI indexQueryStrategy;
 	private final AdapterIndexMappingStore adapterIndexMappingStore;
-	private final Boolean looseQuery;
 
 	private static Map<String, List<Param>> paramMap = new HashMap<String, List<Param>>();
 
@@ -137,7 +130,7 @@ public class GeoWavePluginConfig
 
 	public synchronized static List<Param> getPluginParams(
 			final StoreFactoryFamilySpi storeFactoryFamily ) {
-		List<Param> params = paramMap.get(storeFactoryFamily.getName());
+		List<Param> params = paramMap.get(storeFactoryFamily.getType());
 		if (params == null) {
 			final ConfigOption[] configOptions = GeoWaveStoreFinder.getAllOptions(storeFactoryFamily);
 			params = new ArrayList<Param>(
@@ -151,12 +144,23 @@ public class GeoWavePluginConfig
 			params.add(AUTH_URL);
 			params.add(TRANSACTION_BUFFER_SIZE_PARAM);
 			params.add(QUERY_INDEX_STRATEGY);
-			params.add(LOOSE_QUERY);
 			paramMap.put(
-					storeFactoryFamily.getName(),
+					storeFactoryFamily.getType(),
 					params);
 		}
 		return params;
+	}
+
+	public GeoWavePluginConfig(
+			final DataStorePluginOptions params )
+			throws GeoWavePluginException {
+		this(
+				params.getFactoryFamily(),
+				// converting to Map<String,String> to Map<String,Serializable>
+				params.getOptionsAsMap().entrySet().stream().collect(
+						Collectors.toMap(
+								Map.Entry::getKey,
+								Map.Entry::getValue)));
 	}
 
 	public GeoWavePluginConfig(
@@ -170,7 +174,7 @@ public class GeoWavePluginConfig
 					"GeoWave Plugin: Missing namespace param");
 		}
 		final String namespace = param.toString();
-		name = storeFactoryFamily.getName() + "_" + namespace;
+		name = storeFactoryFamily.getType() + "_" + namespace;
 		final Map<String, String> paramStrs = new HashMap<String, String>();
 		// first converts serializable objects to String to avoid any issue if
 		// there's a difference how geotools is converting objects to how
@@ -189,17 +193,12 @@ public class GeoWavePluginConfig
 						param.toString()) : (URI) param;
 			}
 			catch (final URISyntaxException e) {
-				LOGGER.error("Malformed Feature Namespace URI : " + param);
+				LOGGER.error(
+						"Malformed Feature Namespace URI : " + param,
+						e);
 			}
 		}
 		featureNameSpaceURI = namespaceURI;
-		param = params.get(LOOSE_QUERY_KEY);
-		if (param != null) {
-			looseQuery = param.equals(Boolean.valueOf(true));
-		}
-		else {
-			looseQuery = false;
-		}
 		param = params.get(TRANSACTION_BUFFER_SIZE);
 		Integer bufferSizeFromParam = 10000;
 		if (param != null) {
@@ -207,7 +206,9 @@ public class GeoWavePluginConfig
 				bufferSizeFromParam = param instanceof Integer ? (Integer) param : Integer.parseInt(param.toString());
 			}
 			catch (final Exception e) {
-				LOGGER.error("Malformed buffer size : " + param);
+				LOGGER.error(
+						"Malformed buffer size : " + param,
+						e);
 			}
 		}
 		transactionBufferSize = bufferSizeFromParam;
@@ -252,10 +253,6 @@ public class GeoWavePluginConfig
 		authorizationFactory = getAuthorizationFactory(params);
 		authorizationURL = getAuthorizationURL(params);
 		indexQueryStrategy = getIndexQueryStrategy(params);
-	}
-
-	public boolean isLooseQuery() {
-		return looseQuery == null ? false : looseQuery;
 	}
 
 	public String getName() {
