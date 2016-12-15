@@ -31,7 +31,7 @@
 				<exclude>commons-codec:commons-codec</exclude>
 				<!-- even though guava should exist in geoserver's classpath it is version 
 					11.0.1 and is missing the necessary BaseEncoding class <exclude>com.google.guava:guava</exclude> -->
-
+				<exclude>com.google.guava:guava</exclude> 
 				<!-- even though commons-lang should exist in geoserver's classpath it 
 					is version 2.1 which is missing necessary classes, <exclude>*:commons-lang:*</exclude> -->
 

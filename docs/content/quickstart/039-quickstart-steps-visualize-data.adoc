@@ -1,0 +1,36 @@
+[[steps-visualize]]
+<<<
+
+=== Integrate with GeoServer
+
+Once the data has been ingested and the KDE has completed you can setup GeoServer to display it. 
+
+Configue the local host.
+
+[source, bash]
+----
+geowave config geoserver --url "$HOSTNAME:8000"
+----
+
+Add layers for the point and kde representations of the data.
+
+[source, bash]
+----
+geowave gs addlayer gdelt
+geowave gs addlayer gdelt-kde
+----
+
+Add the KDEColorMap and SubsamplePoints style
+
+[source, bash]
+----
+geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
+geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld
+----
+
+Set the kde layer default style to kdecolormap
+
+[source, bash]
+----
+geowave gs setls gdeltevent_kde --styleName kdecolormap
+----

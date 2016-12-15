@@ -72,7 +72,7 @@ public class WRS2GeometryStore
 	}
 
 	private static final String WRS2_TYPE_NAME = "wrs2_asc_desc";
-	private static final String WRS2_SHAPE_URL = "https://landsat.usgs.gov/documents/wrs2_asc_desc.zip";
+	private static final String WRS2_SHAPE_URL = "https://landsat.usgs.gov/sites/default/files/documents/wrs2_asc_desc.zip";
 	private static final String WRS2_SHAPE_NAME = "wrs2_asc_desc.shp";
 	private static final String WRS2_SHAPE_ZIP = "wrs2_asc_desc.zip";
 	private static final String WRS2_SHAPE_DIRECTORY = "wrs2_asc_desc";

@@ -5,8 +5,8 @@ class geowave::accumulo {
     tag    => 'geowave-package',
   }
 
-  if !defined(Package["geowave-core"]) {
-    package { "geowave-core":
+  if !defined(Package["geowave-${geowave::geowave_version}-core"]) {
+    package { "geowave--${geowave::geowave_version}-core":
       ensure => latest,
       tag    => 'geowave-package',
     }

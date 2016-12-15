@@ -1,33 +1,33 @@
 [[quickstart-guide-breakdown]]
 <<<
 
-=== Bootstrap Script Breakdown
+== Quickstart Bootstrap Script Breakdown
 
-The bootstrap script we are running in this tutorial has a few steps and runs a number of other scripts to setup the 
+The quickstart bootstrap scripts listed as an option in this tutorial have a few steps and runs a number of other scripts to setup the 
 environment, download the data, ingest the data, run the kde and set up the layers for geoserver. This section gives a 
-basic breakdown of each script. All scripts can be found in the geowave project under deploy/emr/4/gdelt-example/ 
+basic breakdown of each script. All scripts can be found in the geowave s3 bucket in the geowave/latest/scripts/emr/quickstart/ 
 directory.
 
-* bootstrap-geowave.sh
-** This is the main script and has five major steps:
-*** Download and source the other scripts
-*** Delays the rest of the script until EMR is done setting up the desired environment
-*** Configures zookeeper and accumulo
-*** Runs the install_geowave and setup-geowave scripts
-*** Initializes all volumes
+- bootstrap-geowave.sh
+ * This is the main script and has five major steps:
+  ** Download and source the other scripts
+  ** Delays the rest of the script until EMR is done setting up the desired environment
+  ** Configures zookeeper and accumulo
+  ** Runs the install_geowave and setup-geowave scripts
+  ** Initializes all volumes
 
-* geowave-install-lib.sh
-** This script is a group of methods that are called by the bootstrap-geowave script. It contains the majority of the 
+- geowave-install-lib.sh
+ * This script is a group of methods that are called by the bootstrap-geowave script. It contains the majority of the 
 actual code that will be run.
 
-* geowave-env.sh
-** Defines variables (port numbers, timeframe, bounding box, versions, etc.) for the other scripts.
+*=- geowave-env.sh
+ * Defines variables (port numbers, timeframe, bounding box, versions, etc.) for the other scripts.
 
-* ingest-and-kde-gdelt.sh
-** Creates an accumulo user and namespace, downloads the gdelt dataset defined in the geowave-env script, ingests that data, 
+- ingest-and-kde-gdelt.sh
+ * Creates an accumulo user and namespace, downloads the gdelt dataset defined in the geowave-env script, ingests that data, 
 and runs a kde on the data. It also calls the setup-geoserver-geowave-workspace script. A good script to look though if you 
 want to see the commands used to perform these actions.
 
-* setup-geoserver-geowave-workspace.sh
-** Uses the geowave cli commands and the styles downloaded by the script to setup your geoserver workspace, stores and 
+- setup-geoserver-geowave-workspace.sh
+ * Uses the geowave cli commands and the styles downloaded by the script to setup your geoserver workspace, stores and 
 layers. This can also be done by the user through the geoserver GUI.

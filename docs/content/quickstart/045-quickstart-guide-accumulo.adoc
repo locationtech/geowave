@@ -1,13 +1,13 @@
 [[quickstart-guide-accumulo]]
 <<<
 
-Accumulo Overview
+=== Accumulo Overview
 
 You can follow the progress of the data ingest and scan (kde) performed by the cluster on hte accumulo web server.
 
 Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :50095
 
-* Example: ec2-52-91-215-215.compute-1.amazonaws.com:50095
+- Example: ec2-52-91-215-215.compute-1.amazonaws.com:50095
 
 You should see the following page:
 

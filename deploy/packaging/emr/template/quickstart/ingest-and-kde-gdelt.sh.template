@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "Ingesting GeoWave sample data and running kernel density estimate..."
+source geowave-env.sh
+
+# Grab whatever gdelt data matches $TIME_REGEX. The example is set to 201602
+sudo mkdir $STAGING_DIR/gdelt;cd $STAGING_DIR/gdelt
+sudo wget http://data.gdeltproject.org/events/md5sums
+for file in `cat md5sums | cut -d' ' -f3 | grep "^${TIME_REGEX}"` ; do sudo wget http://data.gdeltproject.org/events/$file ; done
+md5sum -c md5sums 2>&1 | grep "^${TIME_REGEX}"
+cd $STAGING_DIR
+
+# Ingest the data. Indexed spatial only in this example. It can also be indexed using spatial-temporal
+geowave config addstore gdelt --gwNamespace geowave.gdelt \
+$DATASTORE_PARAMS_TOKEN
+
+geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin --numPartitions $NUM_PARTITIONS
+geowave ingest localtogw $STAGING_DIR/gdelt gdelt gdelt-spatial -f gdelt --gdelt.cql "BBOX(geometry,${WEST},${SOUTH},${EAST},${NORTH})"
+geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+$DATASTORE_PARAMS_TOKEN
+
+
+# Run a kde to produce a heatmap
+hadoop jar ${GEOWAVE_TOOLS_JAR} analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde --hdfsHostPort ${HOSTNAME}:${HDFS_PORT} --jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} --tileSize 1 gdelt gdelt-kde
+
+# Run the geoserver workspace setup script
+cd $STAGING_DIR
+./setup-geoserver-geowave-workspace.sh
+
