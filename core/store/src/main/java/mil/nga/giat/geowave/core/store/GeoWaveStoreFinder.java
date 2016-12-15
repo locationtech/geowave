@@ -116,7 +116,9 @@ public class GeoWaveStoreFinder
 				.createOptionsInstance());
 		final List<String> missing = new ArrayList<String>();
 		for (final ConfigOption option : options) {
-			if (!option.isOptional() && (configOptions.get(option.getName()).equals("null"))) {
+			if (!option.isOptional()
+					&& (!configOptions.containsKey(option.getName()) || (configOptions.get(option.getName())
+							.equals("null")))) {
 				missing.add(option.getName());
 			}
 		}
@@ -131,7 +133,9 @@ public class GeoWaveStoreFinder
 				.createOptionsInstance());
 		final List<String> matching = new ArrayList<String>();
 		for (final ConfigOption option : options) {
-			if (!option.isOptional() && (!configOptions.get(option.getName()).equals("null"))) {
+			if (!option.isOptional() && (configOptions.containsKey(option.getName()) && (!configOptions.get(
+					option.getName()).equals(
+					"null")))) {
 				matching.add(option.getName());
 			}
 		}
