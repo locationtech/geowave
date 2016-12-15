@@ -5,7 +5,7 @@ class geowave::server {
   package { "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-jetty":
     ensure => latest,
     tag    => 'geowave-package',
-    notify => Service['geowave']
+    notify => Service['geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}']
   }
 
   if !defined(Package["geowave-${geowave::geowave_version}-core"]) {
@@ -22,7 +22,7 @@ class geowave::server {
     group   => 'geowave',
     mode    => '644',
     require => Package["geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-jetty"],
-    notify  => Service['geowave']
+    notify  => Service['geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}']
   }
 
 }

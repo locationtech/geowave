@@ -13,6 +13,8 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+BUILD_ARGS_MATRIX=${ARGS[buildargsmatrix]}
+DOCKER_ARGS=${ARGS[dockerargs]}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TIME_TAG=$(date +"%Y%m%d%H%M")
 SKIP_EXTRA="-Dfindbugs.skip -Dformatter.skip -DskipTests"
@@ -23,7 +25,6 @@ GEOSERVER_VERSION=geoserver-2.10.0-bin.zip
 GEOSERVER_ARTIFACT=$WORKSPACE/deploy/packaging/rpm/centos/6/SOURCES/geoserver.zip
 LOCAL_REPO_DIR=/var/www/html/repos/snapshots
 LOCK_DIR=/var/lock/subsys
-BUILD_ARGS_MATRIX=${ARGS[buildargsmatrix]}
 
 if [ -z $GEOSERVER_DOWNLOAD_BASE ]; then
 	GEOSERVER_DOWNLOAD_BASE=https://s3.amazonaws.com/geowave-deploy/third-party-downloads/geoserver
@@ -55,7 +56,7 @@ mkdir $DOCKER_ROOT
 $WORKSPACE/deploy/packaging/docker/pull-s3-caches.sh $DOCKER_ROOT
 $WORKSPACE/deploy/packaging/rpm/centos/6/rpm.sh --command clean
 	
-docker run --rm \
+docker run $DOCKER_ARGS --rm \
 	-e WORKSPACE=/usr/src/geowave \
 	-e MAVEN_OPTS="-Xmx1500m" \
 	-v $DOCKER_ROOT:/root \
@@ -64,7 +65,7 @@ docker run --rm \
 	/bin/bash -c \
 	"cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"
 	
-docker run --rm \
+docker run $DOCKER_ARGS --rm \
     -e WORKSPACE=/usr/src/geowave \
 	-e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
 	-e BUILD_SUFFIX="common" \
@@ -75,7 +76,7 @@ docker run --rm \
     /bin/bash -c \
     "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-rpm.sh"
 
-docker run --rm \
+docker run $DOCKER_ARGS --rm \
     -e WORKSPACE=/usr/src/geowave \
     -e LOCAL_REPO_DIR=/usr/src/repo \
     -e LOCK_DIR=/usr/src/lock \
@@ -93,7 +94,7 @@ do
 	export BUILD_ARGS="$build_args"
 	
 	$WORKSPACE/deploy/packaging/rpm/centos/6/rpm.sh --command clean
-	docker run --rm \
+	docker run --rm $DOCKER_ARGS \
 		-e WORKSPACE=/usr/src/geowave \
 		-e BUILD_ARGS="$build_args" \
 		-e MAVEN_OPTS="-Xmx1500m" \
@@ -103,7 +104,7 @@ do
 		/bin/bash -c \
 		"cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-vendor.sh $SKIP_EXTRA"
 
-	docker run --rm \
+	docker run --rm $DOCKER_ARGS \
     	-e WORKSPACE=/usr/src/geowave \
     	-e BUILD_ARGS="$build_args" \
 		-e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
@@ -116,7 +117,7 @@ do
     	/bin/bash -c \
     	"cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-rpm.sh"
     
-    docker run --rm \
+    docker run --rm $DOCKER_ARGS \
     	-e WORKSPACE=/usr/src/geowave \
     	-e BUILD_ARGS="$build_args" \
     	-e LOCAL_REPO_DIR=/usr/src/repo \
