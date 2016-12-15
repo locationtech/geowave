@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -130,31 +131,108 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
-		final Scan multiScanner = getMultiScanner(
-				limit,
-				maxResolutionSubsamplingPerDimension);
-
 		final List<Iterator<Result>> resultsIterators = new ArrayList<Iterator<Result>>();
 		final List<ResultScanner> results = new ArrayList<ResultScanner>();
 
-		try {
-			final ResultScanner rs = operations.getScannedResults(
-					multiScanner,
-					tableName,
-					authorizations);
+		if (isBigtable()) {
+			final List<Scan> scanners = getScannerList(limit);
 
-			if (rs != null) {
-				results.add(rs);
-				final Iterator<Result> it = rs.iterator();
-				if (it.hasNext()) {
-					resultsIterators.add(it);
+			for (final Scan scanner : scanners) {
+				try {
+					final ResultScanner rs = operations.getScannedResults(
+							scanner,
+							tableName,
+							authorizations);
+
+					if (rs != null) {
+						results.add(rs);
+						final Iterator<Result> it = rs.iterator();
+						if (it.hasNext()) {
+							resultsIterators.add(it);
+						}
+					}
+				}
+				catch (final IOException e) {
+					LOGGER.warn("Could not get the results from scanner " + e);
 				}
 			}
 		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Could not get the results from scanner",
-					e);
+		else {
+			final FilterList filterList = new FilterList();
+
+			final Scan multiScanner = getMultiScanner(
+					filterList,
+					limit,
+					maxResolutionSubsamplingPerDimension);
+
+			if (isEnableCustomFilters()) {
+				// Add skipping filter if requested
+				hasSkippingFilter = false;
+				if (maxResolutionSubsamplingPerDimension != null) {
+					if (maxResolutionSubsamplingPerDimension.length != index
+							.getIndexStrategy()
+							.getOrderedDimensionDefinitions().length) {
+						LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = "
+								+ maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = "
+								+ index.getIndexStrategy().getOrderedDimensionDefinitions().length);
+					}
+					else {
+						final int cardinalityToSubsample = IndexUtils.getBitPositionFromSubsamplingArray(
+								index.getIndexStrategy(),
+								maxResolutionSubsamplingPerDimension);
+
+						final FixedCardinalitySkippingFilter skippingFilter = new FixedCardinalitySkippingFilter(
+								cardinalityToSubsample);
+						filterList.addFilter(skippingFilter);
+						hasSkippingFilter = true;
+					}
+				}
+
+				// Add distributable filters if requested, this has to be last
+				// in the filter list for the dedupe filter to work correctly
+				final List<DistributableQueryFilter> distFilters = getDistributableFilters();
+				if ((distFilters != null) && !distFilters.isEmpty()) {
+					final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
+					hbdFilter.init(
+							distFilters,
+							index.getIndexModel());
+
+					filterList.addFilter(hbdFilter);
+				}
+				else {
+					final List<MultiDimensionalCoordinateRangesArray> coords = getCoordinateRanges();
+					if ((coords != null) && !coords.isEmpty()) {
+						final HBaseNumericIndexStrategyFilter numericIndexFilter = new HBaseNumericIndexStrategyFilter(
+								index.getIndexStrategy(),
+								coords.toArray(new MultiDimensionalCoordinateRangesArray[] {}));
+						filterList.addFilter(numericIndexFilter);
+					}
+				}
+			}
+
+			if (!filterList.getFilters().isEmpty()) {
+				multiScanner.setFilter(filterList);
+			}
+
+			try {
+				final ResultScanner rs = operations.getScannedResults(
+						multiScanner,
+						tableName,
+						authorizations);
+
+				if (rs != null) {
+					results.add(rs);
+					final Iterator<Result> it = rs.iterator();
+					if (it.hasNext()) {
+						resultsIterators.add(it);
+					}
+				}
+			}
+			catch (final IOException e) {
+				LOGGER.warn(
+						"Could not get the results from scanner",
+						e);
+			}
 		}
 
 		if (results.iterator().hasNext()) {
@@ -180,35 +258,64 @@ public abstract class HBaseFilteredIndexQuery extends
 		return new CloseableIterator.Empty();
 	}
 
-	// experiment to test a single multi-scanner vs multiple single-range
-	// scanners
-	protected Scan getMultiScanner(
-			final Integer limit,
-			final double[] maxResolutionSubsamplingPerDimension ) {
-		// Single scan w/ multiple ranges
-		final Scan scanner = new Scan();
+	private boolean isEnableCustomFilters() {
+		return (options != null && options.isEnableCustomFilters());
+	}
 
-		// Performance tuning per store options
-		if (options.getScanCacheSize() != HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING) {
-			scanner.setCaching(options.getScanCacheSize());
+	private boolean isBigtable() {
+		return (options != null && options.isBigTable());
+	}
+
+	// Bigtable does not support MultiRowRangeFilters. This method returns a
+	// single scan per range
+	protected List<Scan> getScannerList(
+			final Integer limit ) {
+
+		List<ByteArrayRange> ranges = getRanges();
+		if ((ranges == null) || ranges.isEmpty()) {
+			ranges = Collections.singletonList(new ByteArrayRange(
+					null,
+					null));
 		}
-		scanner.setCacheBlocks(options.isEnableBlockCache());
 
-		final FilterList filterList = new FilterList();
+		final List<Scan> scanners = new ArrayList<Scan>();
+		if ((ranges != null) && (ranges.size() > 0)) {
+			for (final ByteArrayRange range : ranges) {
+				final Scan scanner = createStandardScanner(limit);
 
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			for (final ByteArrayId adapterId : adapterIds) {
-				scanner.addFamily(adapterId.getBytes());
+				if (range.getStart() != null) {
+					scanner.setStartRow(range.getStart().getBytes());
+					if (!range.isSingleValue()) {
+						scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
+					}
+					else {
+						scanner.setStopRow(HBaseUtils.getNextPrefix(range.getStart().getBytes()));
+					}
+				}
+
+				scanners.add(scanner);
 			}
 		}
 
+		return scanners;
+	}
+
+	// Default (not Bigtable) case - use a single multi-row-range filter
+	protected Scan getMultiScanner(
+			final FilterList filterList,
+			final Integer limit,
+			final double[] maxResolutionSubsamplingPerDimension ) {
+		// Single scan w/ multiple ranges
+		final Scan multiScanner = createStandardScanner(limit);
+
 		final List<ByteArrayRange> ranges = getRanges();
 
-		final MultiRowRangeFilter filter = getFilter(ranges);
+		final MultiRowRangeFilter filter = getMultiRowRangeFilter(ranges);
 		if (filter != null) {
 			filterList.addFilter(filter);
+
 			final List<RowRange> rowRanges = filter.getRowRanges();
-			scanner.setStartRow(rowRanges.get(
+			multiScanner.setStartRow(rowRanges.get(
 					0).getStartRow());
 
 			final RowRange stopRowRange = rowRanges.get(rowRanges.size() - 1);
@@ -228,66 +335,56 @@ public abstract class HBaseFilteredIndexQuery extends
 			else {
 				stopRowExclusive = stopRowRange.getStopRow();
 			}
-			scanner.setStopRow(stopRowExclusive);
+			multiScanner.setStopRow(stopRowExclusive);
 		}
 
-		if (options.isEnableCustomFilters()) {
-			// Add skipping filter if requested
-			hasSkippingFilter = false;
-			if (maxResolutionSubsamplingPerDimension != null) {
-				if (maxResolutionSubsamplingPerDimension.length != index
-						.getIndexStrategy()
-						.getOrderedDimensionDefinitions().length) {
-					final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
-					LOGGER.warn("Unable to subsample for table '" + tableName + "'. Subsample dimensions = "
-							+ maxResolutionSubsamplingPerDimension.length + " when indexed dimensions = "
-							+ index.getIndexStrategy().getOrderedDimensionDefinitions().length);
-				}
-				else {
-					final int cardinalityToSubsample = IndexUtils.getBitPositionFromSubsamplingArray(
-							index.getIndexStrategy(),
-							maxResolutionSubsamplingPerDimension);
+		return multiScanner;
+	}
 
-					final FixedCardinalitySkippingFilter skippingFilter = new FixedCardinalitySkippingFilter(
-							cardinalityToSubsample);
-					filterList.addFilter(skippingFilter);
-					hasSkippingFilter = true;
-				}
-			}
+	protected Scan createStandardScanner(
+			final Integer limit ) {
+		final Scan scanner = new Scan();
 
-			// Add distributable filters if requested, this has to be last in
-			// the filter list for the dedupe filter to work correctly
-			final List<DistributableQueryFilter> distFilters = getDistributableFilters();
-			if ((distFilters != null) && !distFilters.isEmpty()) {
-				final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
-				hbdFilter.init(
-						distFilters,
-						index.getIndexModel());
-
-				filterList.addFilter(hbdFilter);
-			}
-			else {
-				final List<MultiDimensionalCoordinateRangesArray> coords = getCoordinateRanges();
-				if ((coords != null) && !coords.isEmpty()) {
-					final HBaseNumericIndexStrategyFilter numericIndexFilter = new HBaseNumericIndexStrategyFilter(
-							index.getIndexStrategy(),
-							coords.toArray(new MultiDimensionalCoordinateRangesArray[] {}));
-					filterList.addFilter(numericIndexFilter);
-				}
-			}
-		}
-
-		// Set the filter list for the scan and return the scan list (with the
-		// single multi-range scan)
-		scanner.setFilter(filterList);
+		// Performance tuning per store options
+		scanner.setCaching(getScanCacheSize());
+		scanner.setCacheBlocks(isEnableBlockCache());
 
 		// Only return the most recent version
 		scanner.setMaxVersions(1);
 
+		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+			for (final ByteArrayId adapterId : adapterIds) {
+				scanner.addFamily(adapterId.getBytes());
+			}
+		}
+
+		if ((limit != null) && (limit > 0) && (limit < scanner.getBatch())) {
+			scanner.setBatch(limit);
+		}
+
 		return scanner;
 	}
 
-	protected MultiRowRangeFilter getFilter(
+	private int getScanCacheSize() {
+		if (options != null) {
+			if (options.getScanCacheSize() != HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING) {
+				return options.getScanCacheSize();
+			}
+		}
+
+		// Need to get default from config.
+		return 10000;
+	}
+
+	private boolean isEnableBlockCache() {
+		if (options != null) {
+			return options.isEnableBlockCache();
+		}
+
+		return true;
+	}
+
+	protected MultiRowRangeFilter getMultiRowRangeFilter(
 			final List<ByteArrayRange> ranges ) {
 		// create the multi-row filter
 		final List<RowRange> rowRanges = new ArrayList<RowRange>();

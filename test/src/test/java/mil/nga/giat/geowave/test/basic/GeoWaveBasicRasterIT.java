@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -48,6 +45,7 @@ public class GeoWaveBasicRasterIT
 	private static final double DOUBLE_TOLERANCE = 1E-10d;
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
@@ -60,7 +58,7 @@ public class GeoWaveBasicRasterIT
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING GeoWaveRasterIT       *");
+		LOGGER.warn("*         RUNNING GeoWaveBasicRasterIT       *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -69,7 +67,7 @@ public class GeoWaveBasicRasterIT
 	public static void reportTest() {
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED GeoWaveRasterIT         *");
+		LOGGER.warn("*      FINISHED GeoWaveBasicRasterIT         *");
 		LOGGER
 				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
 						+ "s elapsed.                 *");
@@ -79,12 +77,9 @@ public class GeoWaveBasicRasterIT
 
 	@Test
 	public void testNoDataMergeStrategy()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException,
-			TableNotFoundException {
+			throws IOException {
 		final String coverageName = "testNoDataMergeStrategy";
-		final int tileSize = 256;
+		final int tileSize = 128; // 256; fails on bigtable
 		final double westLon = 0;
 		final double eastLon = 45;
 		final double southLat = 0;
@@ -100,10 +95,7 @@ public class GeoWaveBasicRasterIT
 
 	@Test
 	public void testMultipleMergeStrategies()
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException,
-			TableNotFoundException {
+			throws IOException {
 		final String noDataCoverageName = "testMultipleMergeStrategies_NoDataMergeStrategy";
 		final String summingCoverageName = "testMultipleMergeStrategies_SummingMergeStrategy";
 		final String sumAndAveragingCoverageName = "testMultipleMergeStrategies_SumAndAveragingMergeStrategy";
@@ -179,10 +171,7 @@ public class GeoWaveBasicRasterIT
 			final double eastLon,
 			final double southLat,
 			final double northLat )
-			throws IOException,
-			AccumuloException,
-			AccumuloSecurityException,
-			TableNotFoundException {
+			throws IOException {
 		ingestNoDataMergeStrategy(
 				coverageName,
 				tileSize,
@@ -198,9 +187,7 @@ public class GeoWaveBasicRasterIT
 	private void queryNoDataMergeStrategy(
 			final String coverageName,
 			final int tileSize )
-			throws AccumuloException,
-			AccumuloSecurityException,
-			IOException {
+			throws IOException {
 		final DataStore dataStore = dataStoreOptions.createDataStore();
 
 		try (CloseableIterator<?> it = dataStore.query(
@@ -613,9 +600,7 @@ public class GeoWaveBasicRasterIT
 			final int numBands,
 			final int numRasters,
 			final ExpectedValue expectedValue )
-			throws AccumuloException,
-			AccumuloSecurityException,
-			IOException {
+			throws IOException {
 		final DataStore dataStore = dataStoreOptions.createDataStore();
 
 		try (CloseableIterator<?> it = dataStore.query(

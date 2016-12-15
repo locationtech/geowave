@@ -2,114 +2,54 @@ package mil.nga.giat.geowave.datastore.hbase.operations.config;
 
 import org.apache.hadoop.hbase.HConstants;
 
-import mil.nga.giat.geowave.core.store.DataStoreOptions;
-
 import com.beust.jcommander.Parameter;
 
-public class HBaseOptions implements
-		DataStoreOptions
+import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
+
+public class HBaseOptions extends
+		BaseDataStoreOptions
 {
 	public static final String COPROCESSOR_JAR_KEY = "coprocessorJar";
 
-	@Parameter(names = "--persistAdapter", hidden = true, arity = 1)
-	protected boolean persistAdapter = true;
-
-	@Parameter(names = "--persistIndex", hidden = true, arity = 1)
-	protected boolean persistIndex = true;
-
-	@Parameter(names = "--persistDataStatistics", hidden = true, arity = 1)
-	protected boolean persistDataStatistics = true;
-
-	@Parameter(names = "--createTable", hidden = true, arity = 1)
-	protected boolean createTable = true;
-
-	@Parameter(names = "--useLocalityGroups", hidden = true, arity = 1)
-	protected boolean useLocalityGroups = true;
-
-	@Parameter(names = "--useAltIndex", hidden = true, arity = 1)
-	protected boolean useAltIndex = false;
-
-	@Parameter(names = "--enableBlockCache", hidden = true, arity = 1)
-	protected boolean enableBlockCache = true;
+	@Parameter(names = "--disableServer", description = "Disable all custom GeoWave server side processing, to include coprocessors and custom filters.  This will alleviate the requirement to have a GeoWave jar on HBase's region server classpath.")
+	protected boolean disableServiceSide = false;
 
 	@Parameter(names = "--scanCacheSize")
 	protected int scanCacheSize = HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING;
 
-	@Parameter(names = "--enableCustomFilters")
-	protected boolean enableCustomFilters = false;
+	protected boolean disableCustomFilters = false;
 
-	@Parameter(names = "--enableCoprocessors")
-	protected boolean enableCoprocessors = false;
+	protected boolean disableCoprocessors = false;
 
-	@Parameter(names = "--verifyCoprocessors")
-	protected boolean verifyCoprocessors = false;
+	@Parameter(names = "--disableVerifyCoprocessors")
+	protected boolean disableVerifyCoprocessors = false;
+
+	protected boolean bigTable = false;
 
 	@Parameter(names = {
 		"--" + COPROCESSOR_JAR_KEY
 	}, description = "Path (HDFS URL) to the jar containing coprocessor classes")
 	private String coprocessorJar;
 
-	public boolean isPersistDataStatistics() {
-		return persistDataStatistics;
+	public void setBigTable(
+			boolean bigTable ) {
+		this.bigTable = bigTable;
+		if (bigTable) {
+			setServerSideDisabled(true);
+		}
 	}
 
-	public void setPersistDataStatistics(
-			final boolean persistDataStatistics ) {
-		this.persistDataStatistics = persistDataStatistics;
+	public boolean isBigTable() {
+		return bigTable;
 	}
 
-	public boolean isPersistAdapter() {
-		return persistAdapter;
+	public boolean isServerSideDisabled() {
+		return disableServiceSide;
 	}
 
-	public void setPersistAdapter(
-			final boolean persistAdapter ) {
-		this.persistAdapter = persistAdapter;
-	}
-
-	public boolean isPersistIndex() {
-		return persistIndex;
-	}
-
-	public void setPersistIndex(
-			final boolean persistIndex ) {
-		this.persistIndex = persistIndex;
-	}
-
-	public boolean isCreateTable() {
-		return createTable;
-	}
-
-	public void setCreateTable(
-			final boolean createTable ) {
-		this.createTable = createTable;
-	}
-
-	public boolean isUseLocalityGroups() {
-		return useLocalityGroups;
-	}
-
-	public void setUseLocalityGroups(
-			final boolean useLocalityGroups ) {
-		this.useLocalityGroups = useLocalityGroups;
-	}
-
-	public boolean isUseAltIndex() {
-		return useAltIndex;
-	}
-
-	public void setUseAltIndex(
-			final boolean useAltIndex ) {
-		this.useAltIndex = useAltIndex;
-	}
-
-	public boolean isEnableBlockCache() {
-		return enableBlockCache;
-	}
-
-	public void setEnableBlockCache(
-			boolean enableBlockCache ) {
-		this.enableBlockCache = enableBlockCache;
+	public void setServerSideDisabled(
+			final boolean disableServiceSide ) {
+		this.disableServiceSide = disableServiceSide;
 	}
 
 	public int getScanCacheSize() {
@@ -117,35 +57,35 @@ public class HBaseOptions implements
 	}
 
 	public void setScanCacheSize(
-			int scanCacheSize ) {
+			final int scanCacheSize ) {
 		this.scanCacheSize = scanCacheSize;
 	}
 
 	public boolean isEnableCustomFilters() {
-		return enableCustomFilters;
+		return !disableCustomFilters && !disableServiceSide;
 	}
 
 	public void setEnableCustomFilters(
-			boolean enableCustomFilters ) {
-		this.enableCustomFilters = enableCustomFilters;
+			final boolean enableCustomFilters ) {
+		this.disableCustomFilters = !enableCustomFilters;
 	}
 
 	public boolean isEnableCoprocessors() {
-		return enableCoprocessors;
+		return !disableCoprocessors && !disableServiceSide;
 	}
 
 	public void setEnableCoprocessors(
-			boolean enableCoprocessors ) {
-		this.enableCoprocessors = enableCoprocessors;
+			final boolean enableCoprocessors ) {
+		this.disableCoprocessors = !enableCoprocessors;
 	}
 
 	public boolean isVerifyCoprocessors() {
-		return verifyCoprocessors;
+		return !disableVerifyCoprocessors && !disableServiceSide;
 	}
 
 	public void setVerifyCoprocessors(
-			boolean verifyCoprocessors ) {
-		this.verifyCoprocessors = verifyCoprocessors;
+			final boolean verifyCoprocessors ) {
+		this.disableVerifyCoprocessors = !verifyCoprocessors;
 	}
 
 	public String getCoprocessorJar() {
@@ -153,7 +93,7 @@ public class HBaseOptions implements
 	}
 
 	public void setCoprocessorJar(
-			String coprocessorJar ) {
+			final String coprocessorJar ) {
 		this.coprocessorJar = coprocessorJar;
 	}
 }

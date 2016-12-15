@@ -25,6 +25,8 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.datastore.bigtable.operations.BigTableOperations;
+import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
 import mil.nga.giat.geowave.datastore.hbase.cli.CombineStatisticsCommand;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
@@ -33,7 +35,6 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT;
 
 /**
  * This special class is here to test the HBase implementation of merging
@@ -46,6 +47,7 @@ public class DataStatisticsStoreIT
 {
 
 	@GeoWaveTestStore({
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
@@ -84,9 +86,9 @@ public class DataStatisticsStoreIT
 	@Test
 	public void testInsert()
 			throws IOException {
-		DataStatisticsStore store = dataStore.createDataStatisticsStore();
+		final DataStatisticsStore store = dataStore.createDataStatisticsStore();
 
-		DataStatistics<?> stat = new CountDataStatistics<String>(
+		final DataStatistics<?> stat = new CountDataStatistics<String>(
 				new ByteArrayId(
 						"blah"));
 		stat.entryIngested(
@@ -101,28 +103,27 @@ public class DataStatisticsStoreIT
 
 		store.incorporateStatistics(stat);
 
-		HBaseRequiredOptions opts = (HBaseRequiredOptions) dataStore.getFactoryOptions();
-		BasicHBaseOperations ops = BasicHBaseOperations.createOperations(opts);
+		final BasicHBaseOperations ops = createOperations();
 
-		Scan scan = new Scan();
+		final Scan scan = new Scan();
 		scan.setStartRow(stat.getStatisticsId().getBytes());
 		scan.setStopRow(HBaseUtils.getNextPrefix(stat.getStatisticsId().getBytes()));
 		scan.addFamily(new ByteArrayId(
 				"STATS").getBytes());
 
-		ResultScanner rs = ops.getScannedResults(
+		final ResultScanner rs = ops.getScannedResults(
 				scan,
 				"GEOWAVE_METADATA");
-		Iterator<Result> res = rs.iterator();
-		byte[] row = res.next().getRow();
+		final Iterator<Result> res = rs.iterator();
+		final byte[] row = res.next().getRow();
 		Assert.assertEquals(
 				stat.getStatisticsId().getBytes().length + HBaseUtils.UNIQUE_ADDED_BYTES,
 				row.length);
 
-		byte[] bytes = new byte[stat.getStatisticsId().getBytes().length];
-		ByteBuffer bb = ByteBuffer.wrap(row);
+		final byte[] bytes = new byte[stat.getStatisticsId().getBytes().length];
+		final ByteBuffer bb = ByteBuffer.wrap(row);
 		bb.get(bytes);
-		ByteArrayId bad = new ByteArrayId(
+		final ByteArrayId bad = new ByteArrayId(
 				bytes);
 		Assert.assertEquals(
 				stat.getStatisticsId().getString(),
@@ -135,14 +136,27 @@ public class DataStatisticsStoreIT
 						stat.getStatisticsId()));
 	}
 
+	private BasicHBaseOperations createOperations()
+			throws IOException {
+		if (dataStore.getFactoryOptions() instanceof HBaseRequiredOptions) {
+			final HBaseRequiredOptions opts = (HBaseRequiredOptions) dataStore.getFactoryOptions();
+			return BasicHBaseOperations.createOperations(opts);
+		}
+		else if (dataStore.getFactoryOptions() instanceof BigTableOptions) {
+			final BigTableOptions opts = (BigTableOptions) dataStore.getFactoryOptions();
+			return BigTableOperations.createOperations(opts);
+		}
+		return null;
+	}
+
 	@Test
 	public void testQuery()
 			throws IOException {
 		ByteArrayId adapterId = null;
 		ByteArrayId statisticsId = null;
 		for (int i = 0; i < 3; i++) {
-			DataStatisticsStore store = dataStore.createDataStatisticsStore();
-			DataStatistics<?> stat = new CountDataStatistics<String>(
+			final DataStatisticsStore store = dataStore.createDataStatisticsStore();
+			final DataStatistics<?> stat = new CountDataStatistics<String>(
 					new ByteArrayId(
 							"blah2"));
 			stat.entryIngested(
@@ -159,10 +173,10 @@ public class DataStatisticsStoreIT
 			store.incorporateStatistics(stat);
 		}
 
-		DataStatisticsStore store = dataStore.createDataStatisticsStore();
+		final DataStatisticsStore store = dataStore.createDataStatisticsStore();
 
 		@SuppressWarnings("unchecked")
-		CountDataStatistics<String> stat = (CountDataStatistics<String>) store.getDataStatistics(
+		final CountDataStatistics<String> stat = (CountDataStatistics<String>) store.getDataStatistics(
 				adapterId,
 				statisticsId);
 
@@ -172,7 +186,7 @@ public class DataStatisticsStoreIT
 				stat.getCount());
 
 		@SuppressWarnings("unchecked")
-		CountDataStatistics<String> stat2 = (CountDataStatistics<String>) store.getDataStatistics(
+		final CountDataStatistics<String> stat2 = (CountDataStatistics<String>) store.getDataStatistics(
 				adapterId,
 				statisticsId);
 
@@ -183,21 +197,20 @@ public class DataStatisticsStoreIT
 
 		// This code then makes sure that there are indeed 3 records in the
 		// database!
-		HBaseRequiredOptions opts = (HBaseRequiredOptions) dataStore.getFactoryOptions();
-		BasicHBaseOperations ops = BasicHBaseOperations.createOperations(opts);
+		final BasicHBaseOperations ops = createOperations();
 
-		Scan scan = new Scan();
+		final Scan scan = new Scan();
 		scan.setStartRow(statisticsId.getBytes());
 		scan.setStopRow(HBaseUtils.getNextPrefix(statisticsId.getBytes()));
 		scan.addFamily(new ByteArrayId(
 				"STATS").getBytes());
 
-		ResultScanner rs = ops.getScannedResults(
+		final ResultScanner rs = ops.getScannedResults(
 				scan,
 				"GEOWAVE_METADATA");
 
 		int count = 0;
-		Iterator<Result> res = rs.iterator();
+		final Iterator<Result> res = rs.iterator();
 		while (res.hasNext()) {
 			res.next();
 			count += 1;
@@ -214,8 +227,8 @@ public class DataStatisticsStoreIT
 		ByteArrayId adapterId = null;
 		ByteArrayId statisticsId = null;
 		for (int i = 0; i < 3; i++) {
-			DataStatisticsStore store = dataStore.createDataStatisticsStore();
-			DataStatistics<?> stat = new CountDataStatistics<String>(
+			final DataStatisticsStore store = dataStore.createDataStatisticsStore();
+			final DataStatistics<?> stat = new CountDataStatistics<String>(
 					new ByteArrayId(
 							"blah3"));
 			stat.entryIngested(
@@ -232,10 +245,10 @@ public class DataStatisticsStoreIT
 			store.incorporateStatistics(stat);
 		}
 
-		DataStatisticsStore store = dataStore.createDataStatisticsStore();
+		final DataStatisticsStore store = dataStore.createDataStatisticsStore();
 
 		// Must load it up first... (so it gets into cache)
-		Object ignoreVal = store.getDataStatistics(
+		final Object ignoreVal = store.getDataStatistics(
 				adapterId,
 				statisticsId);
 		Assert.assertNotNull(ignoreVal);
@@ -244,17 +257,16 @@ public class DataStatisticsStoreIT
 				adapterId,
 				statisticsId);
 
-		Object val = store.getDataStatistics(
+		final Object val = store.getDataStatistics(
 				adapterId,
 				statisticsId);
 		Assert.assertNull(val);
 
 		// This code then makes sure that there are indeed 0 records in the
 		// database!
-		HBaseRequiredOptions opts = (HBaseRequiredOptions) dataStore.getFactoryOptions();
-		BasicHBaseOperations ops = BasicHBaseOperations.createOperations(opts);
+		final BasicHBaseOperations ops = createOperations();
 
-		Scan scan = new Scan();
+		final Scan scan = new Scan();
 		scan.setStartRow(statisticsId.getBytes());
 		scan.setStopRow(HBaseUtils.getNextPrefix(statisticsId.getBytes()));
 		scan.addColumn(
@@ -263,12 +275,12 @@ public class DataStatisticsStoreIT
 				new ByteArrayId(
 						"blah3").getBytes());
 
-		ResultScanner rs = ops.getScannedResults(
+		final ResultScanner rs = ops.getScannedResults(
 				scan,
 				"GEOWAVE_METADATA");
 
 		int count = 0;
-		Iterator<Result> res = rs.iterator();
+		final Iterator<Result> res = rs.iterator();
 		while (res.hasNext()) {
 			res.next();
 			count += 1;
@@ -286,8 +298,8 @@ public class DataStatisticsStoreIT
 		// Insert Records
 		ByteArrayId statisticsId = null;
 		for (int i = 0; i < 3; i++) {
-			DataStatisticsStore store = dataStore.createDataStatisticsStore();
-			DataStatistics<?> stat = new CountDataStatistics<String>(
+			final DataStatisticsStore store = dataStore.createDataStatisticsStore();
+			final DataStatistics<?> stat = new CountDataStatistics<String>(
 					new ByteArrayId(
 							"blah4"));
 			stat.entryIngested(
@@ -304,7 +316,7 @@ public class DataStatisticsStoreIT
 		}
 
 		// Combine the statistics
-		CombineStatisticsCommand combineCommand = new CombineStatisticsCommand();
+		final CombineStatisticsCommand combineCommand = new CombineStatisticsCommand();
 		combineCommand.setInputStoreOptions(dataStore);
 		combineCommand.setParameters(
 				null,
@@ -312,10 +324,9 @@ public class DataStatisticsStoreIT
 		combineCommand.execute(new ManualOperationParams());
 
 		// Assert that there is only one row
-		HBaseRequiredOptions opts = (HBaseRequiredOptions) dataStore.getFactoryOptions();
-		BasicHBaseOperations ops = BasicHBaseOperations.createOperations(opts);
+		final BasicHBaseOperations ops = createOperations();
 
-		Scan scan = new Scan();
+		final Scan scan = new Scan();
 		scan.setStartRow(statisticsId.getBytes());
 		scan.setStopRow(HBaseUtils.getNextPrefix(statisticsId.getBytes()));
 		scan.addColumn(
@@ -324,12 +335,12 @@ public class DataStatisticsStoreIT
 				new ByteArrayId(
 						"blah4").getBytes());
 
-		ResultScanner rs = ops.getScannedResults(
+		final ResultScanner rs = ops.getScannedResults(
 				scan,
 				"GEOWAVE_METADATA");
 
 		int count = 0;
-		Iterator<Result> res = rs.iterator();
+		final Iterator<Result> res = rs.iterator();
 		Result r = null;
 		while (res.hasNext()) {
 			r = res.next();
@@ -341,10 +352,10 @@ public class DataStatisticsStoreIT
 				count);
 
 		// Assert it has the right value.
-		Cell cell = r.listCells().get(
+		final Cell cell = r.listCells().get(
 				0);
 		@SuppressWarnings("unchecked")
-		CountDataStatistics<String> stat = (CountDataStatistics<String>) PersistenceUtils.fromBinary(
+		final CountDataStatistics<String> stat = (CountDataStatistics<String>) PersistenceUtils.fromBinary(
 				CellUtil.cloneValue(cell),
 				Persistable.class);
 

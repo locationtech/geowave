@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
+import mil.nga.giat.geowave.test.BigtableStoreTestEnvironment;
 import mil.nga.giat.geowave.test.HBaseStoreTestEnvironment;
 import mil.nga.giat.geowave.test.StoreTestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -40,6 +41,8 @@ public @interface GeoWaveTestStore {
 	public static enum GeoWaveStoreType {
 		ACCUMULO(
 				AccumuloStoreTestEnvironment.getInstance()),
+		BIGTABLE(
+				BigtableStoreTestEnvironment.getInstance()),
 		HBASE(
 				HBaseStoreTestEnvironment.getInstance());
 		private final StoreTestEnvironment testEnvironment;
@@ -52,6 +55,5 @@ public @interface GeoWaveTestStore {
 		public StoreTestEnvironment getTestEnvironment() {
 			return testEnvironment;
 		}
-
 	}
 }

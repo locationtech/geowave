@@ -45,6 +45,7 @@ public class GeoWaveVectorSerializationIT
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveVectorSerializationIT.class);
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

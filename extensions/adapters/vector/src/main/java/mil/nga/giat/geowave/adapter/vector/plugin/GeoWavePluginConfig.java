@@ -48,7 +48,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
  */
 public class GeoWavePluginConfig
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWavePluginConfig.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			GeoWavePluginConfig.class);
 
 	public static final String GEOWAVE_NAMESPACE_KEY = StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION;
 	// name matches the workspace parameter provided to the factory
@@ -106,6 +107,21 @@ public class GeoWavePluginConfig
 			null,
 			getIndexQueryStrategyOptions());
 
+	private static final List<Param> BASE_GEOWAVE_PLUGIN_PARAMS = Arrays.asList(
+			new Param[] {
+				FEATURE_NAMESPACE,
+				GEOWAVE_NAMESPACE,
+				LOCK_MGT,
+				AUTH_MGT,
+				AUTH_URL,
+				TRANSACTION_BUFFER_SIZE_PARAM,
+				QUERY_INDEX_STRATEGY
+			});
+	public static final List<String> BASE_GEOWAVE_PLUGIN_PARAM_KEYS = Arrays.asList(
+			BASE_GEOWAVE_PLUGIN_PARAMS.stream().map(
+					p -> p.key).toArray(
+							size -> new String[size]));
+
 	private final AdapterStore adapterStore;
 	private final DataStore dataStore;
 	private final IndexStore indexStore;
@@ -121,29 +137,21 @@ public class GeoWavePluginConfig
 
 	private static Map<String, List<Param>> paramMap = new HashMap<String, List<Param>>();
 
-	public static List<Param> getAuthPluginParams() {
-		final List<Param> accumuloParams = new ArrayList<Param>();
-		accumuloParams.add(AUTH_MGT);
-		accumuloParams.add(AUTH_URL);
-		return accumuloParams;
-	}
-
 	public synchronized static List<Param> getPluginParams(
 			final StoreFactoryFamilySpi storeFactoryFamily ) {
-		List<Param> params = paramMap.get(storeFactoryFamily.getType());
+		List<Param> params = paramMap.get(
+				storeFactoryFamily.getType());
 		if (params == null) {
-			final ConfigOption[] configOptions = GeoWaveStoreFinder.getAllOptions(storeFactoryFamily);
+			final ConfigOption[] configOptions = GeoWaveStoreFinder.getAllOptions(
+					storeFactoryFamily,
+					false);
 			params = new ArrayList<Param>(
 					Lists.transform(
-							Lists.newArrayList(configOptions),
+							Lists.newArrayList(
+									configOptions),
 							new GeoWaveConfigOptionToGeoToolsConfigOption()));
-			params.add(FEATURE_NAMESPACE);
-			params.add(GEOWAVE_NAMESPACE);
-			params.add(LOCK_MGT);
-			params.add(AUTH_MGT);
-			params.add(AUTH_URL);
-			params.add(TRANSACTION_BUFFER_SIZE_PARAM);
-			params.add(QUERY_INDEX_STRATEGY);
+			params.addAll(
+					BASE_GEOWAVE_PLUGIN_PARAMS);
 			paramMap.put(
 					storeFactoryFamily.getType(),
 					params);
@@ -168,7 +176,8 @@ public class GeoWavePluginConfig
 			final Map<String, Serializable> params )
 			throws GeoWavePluginException {
 
-		Serializable param = params.get(GEOWAVE_NAMESPACE_KEY);
+		Serializable param = params.get(
+				GEOWAVE_NAMESPACE_KEY);
 		if (param == null) {
 			throw new GeoWavePluginException(
 					"GeoWave Plugin: Missing namespace param");
@@ -185,7 +194,8 @@ public class GeoWavePluginConfig
 					e.getValue() == null ? null : e.getValue().toString());
 		}
 
-		param = params.get(FEATURE_NAMESPACE_KEY);
+		param = params.get(
+				FEATURE_NAMESPACE_KEY);
 		URI namespaceURI = null;
 		if (param != null) {
 			try {
@@ -199,11 +209,13 @@ public class GeoWavePluginConfig
 			}
 		}
 		featureNameSpaceURI = namespaceURI;
-		param = params.get(TRANSACTION_BUFFER_SIZE);
+		param = params.get(
+				TRANSACTION_BUFFER_SIZE);
 		Integer bufferSizeFromParam = 10000;
 		if (param != null) {
 			try {
-				bufferSizeFromParam = param instanceof Integer ? (Integer) param : Integer.parseInt(param.toString());
+				bufferSizeFromParam = param instanceof Integer ? (Integer) param : Integer.parseInt(
+						param.toString());
 			}
 			catch (final Exception e) {
 				LOGGER.error(
@@ -213,7 +225,8 @@ public class GeoWavePluginConfig
 		}
 		transactionBufferSize = bufferSizeFromParam;
 
-		param = params.get(LOCK_MGT_KEY);
+		param = params.get(
+				LOCK_MGT_KEY);
 
 		final Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
 		LockingManagementFactory factory = null;
@@ -224,35 +237,30 @@ public class GeoWavePluginConfig
 				break;
 			}
 		}
-
+		final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
+				storeFactoryFamily.getAdapterStoreFactory().createOptionsInstance(),
+				paramStrs);
 		adapterStore = storeFactoryFamily.getAdapterStoreFactory().createStore(
-				ConfigUtils.populateOptionsFromList(
-						storeFactoryFamily.getAdapterStoreFactory().createOptionsInstance(),
-						paramStrs));
+				options);
 
 		dataStore = storeFactoryFamily.getDataStoreFactory().createStore(
-				ConfigUtils.populateOptionsFromList(
-						storeFactoryFamily.getDataStoreFactory().createOptionsInstance(),
-						paramStrs));
+				options);
 
 		dataStatisticsStore = storeFactoryFamily.getDataStatisticsStoreFactory().createStore(
-				ConfigUtils.populateOptionsFromList(
-						storeFactoryFamily.getDataStatisticsStoreFactory().createOptionsInstance(),
-						paramStrs));
+				options);
 
 		indexStore = storeFactoryFamily.getIndexStoreFactory().createStore(
-				ConfigUtils.populateOptionsFromList(
-						storeFactoryFamily.getIndexStoreFactory().createOptionsInstance(),
-						paramStrs));
+				options);
 		adapterIndexMappingStore = storeFactoryFamily.getAdapterIndexMappingStoreFactory().createStore(
-				ConfigUtils.populateOptionsFromList(
-						storeFactoryFamily.getAdapterIndexMappingStoreFactory().createOptionsInstance(),
-						paramStrs));
+				options);
 		lockingManagementFactory = factory;
 
-		authorizationFactory = getAuthorizationFactory(params);
-		authorizationURL = getAuthorizationURL(params);
-		indexQueryStrategy = getIndexQueryStrategy(params);
+		authorizationFactory = getAuthorizationFactory(
+				params);
+		authorizationURL = getAuthorizationURL(
+				params);
+		indexQueryStrategy = getIndexQueryStrategy(
+				params);
 	}
 
 	public String getName() {
@@ -263,7 +271,8 @@ public class GeoWavePluginConfig
 			final Map<String, Serializable> params )
 
 			throws GeoWavePluginException {
-		final Serializable param = params.get(AUTH_MGT_KEY);
+		final Serializable param = params.get(
+				AUTH_MGT_KEY);
 		final Iterator<AuthorizationFactorySPI> authIt = getAuthorizationFactoryList();
 		AuthorizationFactorySPI authFactory = new EmptyAuthorizationFactory();
 		while (authIt.hasNext()) {
@@ -303,7 +312,8 @@ public class GeoWavePluginConfig
 	public static IndexQueryStrategySPI getIndexQueryStrategy(
 			final Map<String, Serializable> params )
 			throws GeoWavePluginException {
-		final Serializable param = params.get(QUERY_INDEX_STRATEGY_KEY);
+		final Serializable param = params.get(
+				QUERY_INDEX_STRATEGY_KEY);
 		if (param != null) {
 			final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
 			while (it.hasNext()) {
@@ -322,7 +332,8 @@ public class GeoWavePluginConfig
 			final Map<String, Serializable> params )
 			throws GeoWavePluginException {
 
-		final Serializable param = params.get(AUTH_URL_KEY);
+		final Serializable param = params.get(
+				AUTH_URL_KEY);
 		if (param == null) {
 			return null;
 
@@ -364,7 +375,8 @@ public class GeoWavePluginConfig
 		final List<String> options = new ArrayList<String>();
 		final Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
 		while (it.hasNext()) {
-			options.add(it.next().toString());
+			options.add(
+					it.next().toString());
 		}
 		final Map<String, List<String>> map = new HashMap<String, List<String>>();
 		map.put(
@@ -382,7 +394,8 @@ public class GeoWavePluginConfig
 
 		final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
 		while (it.hasNext()) {
-			options.add(it.next().toString());
+			options.add(
+					it.next().toString());
 		}
 		final Map<String, List<String>> map = new HashMap<String, List<String>>();
 		map.put(
@@ -395,7 +408,8 @@ public class GeoWavePluginConfig
 		final List<String> options = new ArrayList<String>();
 		final Iterator<AuthorizationFactorySPI> it = getAuthorizationFactoryList();
 		while (it.hasNext()) {
-			options.add(it.next().toString());
+			options.add(
+					it.next().toString());
 		}
 		final Map<String, List<String>> map = new HashMap<String, List<String>>();
 		map.put(
@@ -405,17 +419,20 @@ public class GeoWavePluginConfig
 	}
 
 	private static Iterator<LockingManagementFactory> getLockManagementFactoryList() {
-		final ServiceLoader<LockingManagementFactory> ldr = ServiceLoader.load(LockingManagementFactory.class);
+		final ServiceLoader<LockingManagementFactory> ldr = ServiceLoader.load(
+				LockingManagementFactory.class);
 		return ldr.iterator();
 	}
 
 	private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
-		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(AuthorizationFactorySPI.class);
+		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(
+				AuthorizationFactorySPI.class);
 		return ldr.iterator();
 	}
 
 	private static Iterator<IndexQueryStrategySPI> getInxexQueryStrategyList() {
-		final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader.load(IndexQueryStrategySPI.class);
+		final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader.load(
+				IndexQueryStrategySPI.class);
 		return ldr.iterator();
 	}
 

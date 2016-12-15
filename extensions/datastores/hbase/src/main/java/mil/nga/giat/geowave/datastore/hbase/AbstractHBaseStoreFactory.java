@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.datastore.hbase;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +20,7 @@ abstract public class AbstractHBaseStoreFactory<T> extends
 		try {
 			return BasicHBaseOperations.createOperations(options);
 		}
-		catch (final Exception e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Unable to create HBase operations from config options",
 					e);
