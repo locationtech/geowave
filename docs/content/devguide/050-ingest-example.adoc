@@ -1,0 +1,46 @@
+[[ingest-example]]
+=== Ingest Example
+
+GeoWave can ingest any data type that has been listed as an ingest plugin. Let's start out with the GeoTools datastore; this
+wraps a bunch of GeoTools supported formats. This includes all file-based datastores supported within GeoTools.
+We will use the shapefile capability for our example here.
+
+==== Something recognizable
+
+The naturalearthdata side has a few shapefile we can use use. On the page
+http://www.naturalearthdata.com/downloads/50m-cultural-vectors/[50m Cultural Vectors]
+
+Let's download the Admin 0 - Countries shapefile:
+http://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip[ne_50m_admin_0_countries.zip]
+
+[source, bash]
+----
+$ mkdir ingest
+$ mv ne_50m_admin_0_countries.zip ingest/
+$ cd ingest
+$ unzip ne_50m_admin_0_countries.zip
+$ rm ne_50m_admin_0_countries.zip
+$ cd ..
+$ geowave config addstore -t accumulo mystore \ <1>
+      --gwNamespace geowave.50m_admin_0_countries \ <2>
+      --zookeeper ${ZOOKEEPER_HOSTNAME}:2181 \ <3>
+      --instance ${ACCUMULO_INSTANCE_NAME} \
+      --user ${USERNAME} \
+      --password ${PASSWORD}
+$ geowave config addindex -t spatial myindex \ <4>
+      --partitionStrategy round_robin \
+	  --numPartitions ${NUM_PARTITIONS} \ <5>
+$ geowave ingest localToGW ./ingest mystore myindex \ <6>
+	  -f geotools-vector \ <7>
+
+----
+<1> This will create a re-usable named configuration `mystore` that can be referenced as a store by other commandline operations such as ingest. The type (-t) can also be set to hbase if you prefer to use HBase as your datastore
+<2> We preface the table name with the Accumulo namespace we configured earlier in Accumulo followed by a dot (NAMESPACE.TABLE_NAME). The <<085-accumulo-config.adoc#accumulo-configuration, Accumulo Configuration>> section can explain this further.
+<3> If you are using an HBase datastore, zookeeper is the only required option here  
+<4> This will create a re-usable named configuration `myindex` that can be referenced as an index by other commandline operations such as ingest
+<5> The index is spatial and pre-split based on the number of partitions you may desire - this is an optional parameter but an example of customization you may choose on index configuration, in this case data is randomized into different splits which can help avoid hotspotting to a single node/core
+<6> Notice the ingest command uses the named configurations `mystore` and `myindex`
+<7> Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
+
+
+After running the ingest command you should see the various index tables in you datastore.

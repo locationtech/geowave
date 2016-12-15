@@ -1,0 +1,54 @@
+[[ingest-plugins]]
+=== Ingest Plugins
+
+The geowave command line utility comes with several plugins out of the box. You can list the available plugins that are registered with your commandline tool.
+
+[source]
+----
+geowave ingest listplugins
+----
+
+You can add more by simply copying a desired plugin into the /usr/local/geowave/tools/plugins directory.
+
+Available index types currently registered as plugins:
+
+- spatial_temporal
+ * This dimensionality type matches all indices that only require Geometry and Time.
+
+- spatial
+ * This dimensionality type matches all indices that only require Geometry.
+
+Available ingest formats currently registered as plugins:
+
+- geotools-vector
+ * all file-based vector datastores supported within geotools
+
+- geolife
+ * files from Microsoft Research GeoLife trajectory data set
+
+- gdelt
+ * files from Google Ideas GDELT data set
+
+- stanag4676
+ * xml files representing track data that adheres to the schema defined by STANAG-4676
+
+- geotools-raster
+ * all file-based raster formats supported within geotools
+
+- gpx
+ * xml files adhering to the schema of gps exchange format
+
+- tdrive
+ * files from Microsoft Research T-Drive trajectory data set
+
+- avro
+ * This can read an Avro file encoded with the SimpleFeatureCollection schema.  This schema is also used by the export tool, so this format handles re-ingesting exported datasets.
+
+Available datastores currently registered:
+
+- accumulo
+ * A GeoWave store backed by tables in Apache Accumulo
+
+- hbase
+ * A GeoWave store backed by tables in Apache HBase
+

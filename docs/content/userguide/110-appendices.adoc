@@ -1,0 +1,25 @@
+[[appendices]]
+<<<
+== Appendices
+
+[[version-appendix]]
+[appendix]
+<<<
+=== Version
+
+This documentation was generated for GeoWave version ${project.version} from commit ${buildNumber}.
+
+=== Topics in need of documentation
+
+* Ingest Examples
+* Query Iterators
+* Query CQL
+* MapReduce Input Format
+* Analytics - Kernel Density
+* Analytics - K-Means Clustering
+* Examples - Shapefile
+* Examples - OSM GPX Data
+* Examples - OSM Feature Data
+* Index Tuning
+* Supported Types
+* Editing from GitHub

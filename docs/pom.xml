@@ -55,6 +55,7 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
@@ -68,6 +69,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
@@ -79,35 +81,10 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/content</outputDirectory>
+							<outputDirectory>${project.build.directory}/content/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.basedir}/content</directory>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-							<nonFilteredFileExtensions>
-								<nonFilteredFileExtension>js</nonFilteredFileExtension>
-								<nonFilteredFileExtension>css</nonFilteredFileExtension>
-								<nonFilteredFileExtension>html</nonFilteredFileExtension>
-								<nonFilteredFileExtension>eot</nonFilteredFileExtension>
-								<nonFilteredFileExtension>svg</nonFilteredFileExtension>
-								<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
-								<nonFilteredFileExtension>woff</nonFilteredFileExtension>
-							</nonFilteredFileExtensions>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-resources-quickstart</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/content/quickstart</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.basedir}/content/quickstart</directory>
+									<directory>${project.basedir}/content/</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
@@ -124,24 +101,47 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.7</version>
 				<executions>
 					<execution>
-						<id>generate</id>
+						<id>generate-devguide</id>
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<fileset id="generate-index-file" dir="${project.basedir}/content"
+								<fileset id="generate-index-file" dir="${project.basedir}/content/devguide"
 									includes="*.adoc" />
 								<!-- Abusing this a bit to do some simple templating, I have a file 
 									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
 								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files"
 									refid="generate-index-file">
-									<map from="${project.basedir}/content/" to="include::" />
+									<map from="${project.basedir}/content/devguide/" to="include::" />
 								</pathconvert>
-								<echo file="${project.build.directory}/content/documentation.adoc">${asciidoc-files}[]</echo>
+								<echo
+									file="${project.build.directory}/content/devguide/devguide.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-userguide</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file" dir="${project.basedir}/content/userguide"
+									includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files"
+									refid="generate-index-file">
+									<map from="${project.basedir}/content/userguide/" to="include::" />
+								</pathconvert>
+								<echo
+									file="${project.build.directory}/content/userguide/userguide.adoc">${asciidoc-files}[]</echo>
 							</target>
 						</configuration>
 						<goals>
@@ -169,8 +169,32 @@
 							<goal>run</goal>
 						</goals>
 					</execution>
+
+					<execution>
+						<id>generate-commands</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-commands" dir="${project.basedir}/content/commands"
+									includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files"
+									refid="generate-index-file-commands">
+									<map from="${project.basedir}/content/commands/" to="include::" />
+								</pathconvert>
+								<echo
+									file="${project.build.directory}/content/commands/commands.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
+
+
 
 			<plugin>
 				<groupId>org.asciidoctor</groupId>
@@ -197,8 +221,9 @@
 					</attributes>
 				</configuration>
 				<executions>
+
 					<execution>
-						<id>generate-epub</id>
+						<id>generate-epub-userguide</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>process-asciidoc</goal>
@@ -206,12 +231,13 @@
 						<configuration>
 							<backend>epub3</backend>
 							<sourceHighlighter>coderay</sourceHighlighter>
-							<sourceDirectory>${project.build.directory}/content</sourceDirectory>
-							<sourceDocumentName>documentation.adoc</sourceDocumentName>
+							<sourceDirectory>${project.build.directory}/content/userguide</sourceDirectory>
+							<sourceDocumentName>userguide.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
+
 					<execution>
-						<id>generate-pdf</id>
+						<id>generate-pdf-userguide</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>process-asciidoc</goal>
@@ -223,12 +249,13 @@
 							<backend>pdf</backend>
 							<compact>true</compact>
 							<sourceHighlighter>coderay</sourceHighlighter>
-							<sourceDirectory>${project.build.directory}/content</sourceDirectory>
-							<sourceDocumentName>documentation.adoc</sourceDocumentName>
+							<sourceDirectory>${project.build.directory}/content/userguide</sourceDirectory>
+							<sourceDocumentName>userguide.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
+
 					<execution>
-						<id>generate-html</id>
+						<id>generate-html-userguide</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>process-asciidoc</goal>
@@ -236,8 +263,8 @@
 						<configuration>
 							<backend>html5</backend>
 							<sourceHighlighter>highlightjs</sourceHighlighter>
-							<sourceDirectory>${project.build.directory}/content</sourceDirectory>
-							<sourceDocumentName>documentation.adoc</sourceDocumentName>
+							<sourceDirectory>${project.build.directory}/content/userguide</sourceDirectory>
+							<sourceDocumentName>userguide.adoc</sourceDocumentName>
 							<attributes>
 								<stylesdir>stylesheets</stylesdir>
 								<stylesheet>geowave.css</stylesheet>
@@ -251,6 +278,64 @@
 							</attributes>
 						</configuration>
 					</execution>
+
+					<execution>
+						<id>generate-epub-devguide</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>epub3</backend>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<sourceDirectory>${project.build.directory}/content/devguide</sourceDirectory>
+							<sourceDocumentName>devguide.adoc</sourceDocumentName>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>generate-pdf-devguide</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<requires>
+								<require>asciidoctor-pdf</require>
+							</requires>
+							<backend>pdf</backend>
+							<compact>true</compact>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<sourceDirectory>${project.build.directory}/content/devguide</sourceDirectory>
+							<sourceDocumentName>devguide.adoc</sourceDocumentName>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>generate-html-devguide</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html5</backend>
+							<sourceHighlighter>highlightjs</sourceHighlighter>
+							<sourceDirectory>${project.build.directory}/content/devguide</sourceDirectory>
+							<sourceDocumentName>devguide.adoc</sourceDocumentName>
+							<attributes>
+								<stylesdir>stylesheets</stylesdir>
+								<stylesheet>geowave.css</stylesheet>
+								<imagesdir>./images</imagesdir>
+								<toc>right</toc>
+								<icons>font</icons>
+								<sectanchors>true</sectanchors>
+								<idprefix />
+								<idseparator>-</idseparator>
+								<docinfo1>true</docinfo1>
+							</attributes>
+						</configuration>
+					</execution>
+
 					<execution>
 						<id>generate-epub-quickstart</id>
 						<phase>generate-resources</phase>
@@ -264,13 +349,25 @@
 							<sourceDocumentName>quickstart.adoc</sourceDocumentName>
 						</configuration>
 					</execution>
-					<!-- Remove Quick Start PDF from doc gen <execution> <id>generate-pdf-quickstart</id> 
-						<phase>generate-resources</phase> <goals> <goal>process-asciidoc</goal> </goals> 
-						<configuration> <requires> <require>asciidoctor-pdf</require> </requires> 
-						<backend>pdf</backend> <compact>true</compact> <sourceHighlighter>coderay</sourceHighlighter> 
-						<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory> 
-						<sourceDocumentName>quickstart.adoc</sourceDocumentName> </configuration> 
-						</execution> -->
+
+					<execution>
+						<id>generate-pdf-quickstart</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<requires>
+								<require>asciidoctor-pdf</require>
+							</requires>
+							<backend>pdf</backend>
+							<compact>true</compact>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory>
+							<sourceDocumentName>quickstart.adoc</sourceDocumentName>
+						</configuration>
+					</execution>
+
 					<execution>
 						<id>generate-html-quickstart</id>
 						<phase>generate-resources</phase>
@@ -295,9 +392,65 @@
 							</attributes>
 						</configuration>
 					</execution>
+
+					<execution>
+						<id>generate-epub-commands</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>epub3</backend>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
+							<sourceDocumentName>commands.adoc</sourceDocumentName>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>generate-pdf-commands</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<requires>
+								<require>asciidoctor-pdf</require>
+							</requires>
+							<backend>pdf</backend>
+							<compact>true</compact>
+							<sourceHighlighter>coderay</sourceHighlighter>
+							<sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
+							<sourceDocumentName>commands.adoc</sourceDocumentName>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>generate-html-commands</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html5</backend>
+							<sourceHighlighter>highlightjs</sourceHighlighter>
+							<sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
+							<sourceDocumentName>commands.adoc</sourceDocumentName>
+							<attributes>
+								<stylesdir>stylesheets</stylesdir>
+								<stylesheet>geowave.css</stylesheet>
+								<imagesdir>./images</imagesdir>
+								<toc>right</toc>
+								<icons>font</icons>
+								<sectanchors>true</sectanchors>
+								<idprefix />
+								<idseparator>-</idseparator>
+								<docinfo1>true</docinfo1>
+							</attributes>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>

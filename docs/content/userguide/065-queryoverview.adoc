@@ -1,0 +1,27 @@
+[[query-overview]]
+<<<
+== Query
+
+=== Overview
+
+image::queryoverview1.png[scaledwidth="100%",alt="Query Architecture"]
+
+A query in GeoWave currently consists of a set of ranges on the dimensions of the primary index. Up to 3 dimensions
+(plus temporal optionally) can take advantage of any complex OGC geometry for the query window. For dimensions of 4
+or greater the query can only be a set of ranges on each dimension (i.e. hyper-rectangle, etc.).
+
+The query geometry is decomposed by GeoWave into a series of ranges on a one dimensional number line - based on a compact
+Hilbert space filling curve ordering. These ranges are sent through an Accumulo batch scanner to all the tablet servers.
+These ranges represent the coarse grain filtering.
+
+At the same time the query geometry has been serialized and sent to custom Accumulo iterators. These iterators then do
+a second stage filtering on each feature for an exact intersection test. Only if the stored geometry and the query
+geometry intersect does the processing chain continue.
+
+A second order filter can then be applied - this is used to remove features based on additional attributes - typically
+time or other feature attributes. These operators can only exclude items from the set defined by the range - they cannot
+include additional features. Think "AND" operators - not "OR".
+
+A final filter is possible on the client set - after all the returned results have been aggregated together. Currently
+this is only used for final de-duplication. Whenever possible the distributed filter options should be used - as it splits
+the work load among all the tablet servers.
