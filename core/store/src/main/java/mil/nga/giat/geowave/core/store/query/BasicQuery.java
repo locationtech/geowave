@@ -11,10 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.math.DoubleMath;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
@@ -36,6 +32,10 @@ import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
+
+import org.apache.log4j.Logger;
+
+import com.google.common.math.DoubleMath;
 
 /**
  * The Basic Query class represent a hyper-cube(s) query across all dimensions
@@ -651,10 +651,8 @@ public class BasicQuery implements
 
 	public boolean secondaryIndexSupports(
 			final SecondaryIndex index ) {
-		for (final ByteArrayId id : index.getFieldIDs()) {
-			if (additionalConstraints.containsKey(id)) {
-				return true;
-			}
+		if (additionalConstraints.containsKey(index.getFieldId())) {
+			return true;
 		}
 		return false;
 	}
@@ -734,10 +732,8 @@ public class BasicQuery implements
 	public List<FilterableConstraints> getSecondaryIndexQueryConstraints(
 			final SecondaryIndex<?> index ) {
 		final List<FilterableConstraints> constraints = new ArrayList<>();
-		for (final ByteArrayId id : index.getFieldIDs()) {
-			if (additionalConstraints.get(id) != null) {
-				constraints.add(additionalConstraints.get(id));
-			}
+		if (additionalConstraints.get(index.getFieldId()) != null) {
+			constraints.add(additionalConstraints.get(index.getFieldId()));
 		}
 		return constraints;
 	}

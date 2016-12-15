@@ -870,6 +870,21 @@
 		</plugins>
 	</reporting>
 	<profiles>
+		<!-- skip all code quality tools if specified -->
+		<profile>
+			<id>skip-code-quality</id>
+			<activation>
+				<property>
+					<name>skip-quality</name>
+				</property>
+			</activation>
+			<properties>
+				<skipITs>true</skipITs>
+				<skipTests>true</skipTests>
+				<formatter.skip>true</formatter.skip>
+				<findbugs.skip>true</findbugs.skip>
+			</properties>
+		</profile>	
 		<profile>
 			<!-- Generate docs with: mvn -P docs -pl docs install -->
 			<id>docs</id>

@@ -68,7 +68,7 @@ public class IndexPluginOptions extends
 
 	@Override
 	public void selectPlugin(
-			String qualifier ) {
+			final String qualifier ) {
 		// Load the Index options.
 		indexType = qualifier;
 		if (qualifier != null) {
@@ -107,52 +107,56 @@ public class IndexPluginOptions extends
 	}
 
 	public PrimaryIndex createPrimaryIndex() {
-		PrimaryIndex index = indexPlugin.createPrimaryIndex();
-		return wrapIndexWithOptions(index);
+		final PrimaryIndex index = indexPlugin.createPrimaryIndex();
+		return wrapIndexWithOptions(
+				index,
+				this);
 	}
 
-	private PrimaryIndex wrapIndexWithOptions(
-			final PrimaryIndex index ) {
+	private static PrimaryIndex wrapIndexWithOptions(
+			final PrimaryIndex index,
+			final IndexPluginOptions options ) {
 		PrimaryIndex retVal = index;
-		if ((numPartitions > 1) && partitionStrategy.equals(PartitionStrategy.ROUND_ROBIN)) {
+		if ((options.numPartitions > 1) && options.partitionStrategy.equals(PartitionStrategy.ROUND_ROBIN)) {
 			retVal = new CustomIdIndex(
 					new CompoundIndexStrategy(
 							new RoundRobinKeyIndexStrategy(
-									numPartitions),
+									options.numPartitions),
 							index.getIndexStrategy()),
 					index.getIndexModel(),
 					new ByteArrayId(
 							index.getId().getString() + "_" + PartitionStrategy.ROUND_ROBIN.name() + "_"
-									+ numPartitions));
+									+ options.numPartitions));
 		}
-		else if (numPartitions > 1) {
+		else if (options.numPartitions > 1) {
 			// default to round robin partitioning (none is not valid if there
 			// are more than 1 partition)
-			if (partitionStrategy.equals(PartitionStrategy.NONE)) {
+			if (options.partitionStrategy.equals(PartitionStrategy.NONE)) {
 				LOGGER
 						.warn("Partition strategy is necessary when using more than 1 partition, defaulting to 'hash' partitioning.");
 			}
 			retVal = new CustomIdIndex(
 					new CompoundIndexStrategy(
 							new HashKeyIndexStrategy(
-									numPartitions),
+									options.numPartitions),
 							index.getIndexStrategy()),
 					index.getIndexModel(),
 					new ByteArrayId(
-							index.getId().getString() + "_" + PartitionStrategy.HASH.name() + "_" + numPartitions));
+							index.getId().getString() + "_" + PartitionStrategy.HASH.name() + "_"
+									+ options.numPartitions));
 		}
-		if ((getNameOverride() != null) && (getNameOverride().length() > 0)) {
+		if ((options.getNameOverride() != null) && (options.getNameOverride().length() > 0)) {
 			retVal = new CustomIdIndex(
 					retVal.getIndexStrategy(),
 					retVal.getIndexModel(),
 					new ByteArrayId(
-							getNameOverride()));
+							options.getNameOverride()));
 		}
 		return retVal;
 	}
 
 	public static String getIndexNamespace(
-			String name ) {
+			final String name ) {
 		return String.format(
 				"%s.%s",
 				INDEX_PROPERTY_NAMESPACE,
@@ -163,5 +167,46 @@ public class IndexPluginOptions extends
 		NONE,
 		HASH,
 		ROUND_ROBIN;
+	}
+
+	abstract public static class BaseIndexBuilder<T extends IndexBuilder> implements
+			IndexBuilder
+	{
+		private final IndexPluginOptions options;
+
+		public BaseIndexBuilder() {
+			this(
+					new IndexPluginOptions());
+		}
+
+		private BaseIndexBuilder(
+				final IndexPluginOptions options ) {
+			this.options = options;
+		}
+
+		public T setNumPartitions(
+				final int numPartitions ) {
+			options.numPartitions = numPartitions;
+			return (T) this;
+		}
+
+		public T setPartitionStrategy(
+				final PartitionStrategy partitionStrategy ) {
+			options.partitionStrategy = partitionStrategy;
+			return (T) this;
+		}
+
+		public T setNameOverride(
+				final String nameOverride ) {
+			options.nameOverride = nameOverride;
+			return (T) this;
+		}
+
+		public PrimaryIndex createIndex(
+				final PrimaryIndex dimensionalityIndex ) {
+			return wrapIndexWithOptions(
+					dimensionalityIndex,
+					options);
+		}
 	}
 }

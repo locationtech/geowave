@@ -40,12 +40,10 @@ public class PropertyConstraintSet
 	public List<ByteArrayRange> getRangesFor(
 			final SecondaryIndex<?> index ) {
 		final List<ByteArrayRange> result = new LinkedList<ByteArrayRange>();
-		for (final ByteArrayId fieldId : index.getFieldIDs()) {
-			final FilterableConstraints c = constraints.get(fieldId);
-			if (c != null) {
-				result.addAll(index.getIndexStrategy().getQueryRanges(
-						c));
-			}
+		final FilterableConstraints c = constraints.get(index.getFieldId());
+		if (c != null) {
+			result.addAll(index.getIndexStrategy().getQueryRanges(
+					c));
 		}
 		return result;
 	}
@@ -53,13 +51,11 @@ public class PropertyConstraintSet
 	public List<DistributableQueryFilter> getFiltersFor(
 			final SecondaryIndex<?> index ) {
 		final List<DistributableQueryFilter> result = new LinkedList<DistributableQueryFilter>();
-		for (final ByteArrayId fieldId : index.getFieldIDs()) {
-			final FilterableConstraints c = constraints.get(fieldId);
-			if (c != null) {
-				final DistributableQueryFilter filter = c.getFilter();
-				if (filter != null) {
-					result.add(filter);
-				}
+		final FilterableConstraints c = constraints.get(index.getFieldId());
+		if (c != null) {
+			final DistributableQueryFilter filter = c.getFilter();
+			if (filter != null) {
+				result.add(filter);
 			}
 		}
 		return result;
