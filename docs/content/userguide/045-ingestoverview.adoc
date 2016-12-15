@@ -1,0 +1,12 @@
+[[ingest-overview]]
+<<<
+== Ingest
+
+=== Overview
+
+In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format
+that can be persisted into the data store. Also, the ingest process requires an Index which is a definition of all the
+configured parameters that define how data is translated to row IDs (how it is indexed) and what common fields need to
+be maintained within the table to be used by fine-grained and secondary filters.
+
+The full list of GeoWave ingest commands can be found in the http://ngageoint.github.io/geowave/commands.html#ingest-commands[GeoWave CLI Appendix^].

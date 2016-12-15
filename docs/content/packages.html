@@ -27,10 +27,12 @@
                     </div>
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href="documentation.html">Documentation</a></li>
+                            <li><a href="userguide.html#installation-from-rpm">Documentation</a></li>
                             <li class="active"><a href="#packages" role="tab" data-toggle="tab">Packages</a></li>
-                            <li><a href="#release" role="tab" data-toggle="tab">Release</a></li>
-                            <li><a href="#dev" role="tab" data-toggle="tab">Development</a></li>
+                            <li><a href="#release" role="tab" data-toggle="tab">Release RPMs</a></li>
+                            <li><a href="#dev" role="tab" data-toggle="tab">Development RPMs</a></li>
+							<li><a href="#release-jars" role="tab" data-toggle="tab">Release JARs</a></li>
+                            <li><a href="#dev-jars" role="tab" data-toggle="tab">Development JARs</a></li>
                         </ul>
                     </div>
                 </div>
@@ -52,73 +54,113 @@
                             <div class="page-header col-md-12">
                                 <h2> GeoWave Packages</h2>
                                 <p>
-                                    This site contains links to RPM packaged versions of GeoWave as well as compressed archives which
-                                    include other content like service and logrotate scripts in addition to the source code.
-                                    Individual files can be download or you can configure a host to install and keep updated with
-                                    YUM using the command below.
+                                    This site contains links to GeoWave jar files, RPM packaged versions of GeoWave and compressed 
+									archives (which include other content like service and logrotate scripts in addition to the source code). 
+									Individual files can be download or you can configure a host to install and keep updated with YUM 
+									using the commands below.
                                 </p>
                                 <br/>
-                                <h4>Configure a host to use GeoWave RPMs</h4>
+                                <h4>Configure a host to use GeoWave Release RPMs</h4>
                         <pre>
-
-        rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
-        yum --enablerepo=geowave search geowave-$VERSION-$VENDOR (example: geowave-0.9.0-cdh5)
+						
+		rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
+		yum --enablerepo=geowave search geowave-$VERSION-$VENDOR (example: geowave-0.9.3-apache)
+                        </pre>
+                                <br/>
+								<h4>Configure a host to use GeoWave Development RPMs</h4>
+                        <pre>
+						
+		rpm -Uvh http://s3.amazonaws.com/geowave-rpms/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm
+		yum --enablerepo=geowave search geowave-$VERSION-$VENDOR (example: geowave-0.9.3-apache)
                         </pre>
                                 <br/>
                                 <p>
-                                <h4>Packages Available</h4>
-                                <ul class="package-listing">
-                                    <li>
-                                        <b>geowave-*-accumulo</b><br/>
-                                        This package installs the Accumulo components of GeoWave
-                                    </li>
-                                    <li>
-                                        <b>geowave-*-core</b><br/>
-                                        This package installs the GeoWave home directory and user account
-                                    </li>
-                                    <li>
-                                        <b>geowave-*-docs</b><br/>
-                                        This package installs the GeoWave documentation
-                                    </li>
-                                    <li>
-                                        <b>geowave-*-tools</b><br/>
-                                        This package installs the GeoWave command line tools (ingest, stats etc.)
-                                    </li>
-                                    <li>
-                                        <b>geowave-*-jetty</b><br/>
-                                        This package installs the web application server
-                                    </li>
-                                    <li>
-                                        <b>geowave-*-puppet</b><br/>
-                                        This package installs the GeoWave Puppet module into /etc/puppet/modules on a Puppet Server
-                                    </li>
-                                    <li>
-                                        <b>geowave-*-single-host</b><br/>
-                                        This package installs all the components on a single host and will likely be useful for dev environments
-                                    </li>
-                                    <li>
-                                        <b>geowave-*.src.rpm</b><br/>
-                                        The source RPM file that contains definitions for all the component RPMs listed above
-                                    </li>
-                                    <li>
-                                        <b>geowave-GIT-COMMIT-HASH.tar.gz</b><br/>
-                                        All of the prebuilt component jars packaged into a compressed archive instead of an RPM format
-                                    </li>
-                                    <li>
-                                        <b>geowave-repo</b><br/>
-                                        This package will install the GeoWave RPM repo config file into /etc/yum.repos.d
-                                    </li>
-                                    <li>
-                                        <b>geowave-repo-dev</b><br/>
-                                        This package will install the GeoWave Development RPM repo config file into /etc/yum.repos.d
-                                    </li>
-                                </ul>
+								<div class="row">
+									<div class="col-lg-6">
+										<h4>Packages/RPMs Available</h4>
+										<ul class="package-listing">
+											<li>
+												<b>geowave-*-accumulo</b><br/>
+												This package installs the Accumulo components of GeoWave
+											</li>
+											<li>
+												<b>geowave-*-hbase</b><br/>
+												This package installs the HBase components of GeoWave
+											</li>
+											<li>
+												<b>geowave-*-core</b><br/>
+												This package installs the GeoWave home directory and user account
+											</li>
+											<li>
+												<b>geowave-*-docs</b><br/>
+												This package installs the GeoWave documentation
+											</li>
+											<li>
+												<b>geowave-*-tools</b><br/>
+												This package installs the GeoWave command line tools (ingest, stats etc.)
+											</li>
+											<li>
+												<b>geowave-*-jetty</b><br/>
+												This package installs the web application server
+											</li>
+											<li>
+												<b>geowave-*-puppet</b><br/>
+												This package installs the GeoWave Puppet module into /etc/puppet/modules on a Puppet Server
+											</li>
+											<li>
+												<b>geowave-*-single-host</b><br/>
+												This package installs all the components on a single host and will likely be useful for dev environments
+											</li>
+											<li>
+												<b>geowave-*.src.rpm</b><br/>
+												The source RPM file that contains definitions for all the component RPMs listed above
+											</li>
+											<li>
+												<b>geowave-GIT-COMMIT-HASH.tar.gz</b><br/>
+												All of the prebuilt component jars packaged into a compressed archive instead of an RPM format
+											</li>
+											<li>
+												<b>geowave-repo</b><br/>
+												This package will install the GeoWave RPM repo config file into /etc/yum.repos.d
+											</li>
+											<li>
+												<b>geowave-repo-dev</b><br/>
+												This package will install the GeoWave Development RPM repo config file into /etc/yum.repos.d
+											</li>
+										</ul>
+									</div>
+									<div class="col-lg-6">
+										<h4>JARs Available</h4>
+										<ul class="jar-listing">
+											<li>
+												<b>geowave-*.jar</b><br/>
+												GeoWave jar
+											</li>
+											<li>
+												<b>geowave-*-tools.jar</b><br/>
+												Tools jar used for GeoWave CLI commands
+											</li>
+											<li>
+												<b>geowave-*-accumulo-singlejar.jar</b><br/>
+												Accumulo datastore jar to be placed in HDFS
+											</li>
+											<li>
+												<b>geowave-*-hbase-singlejar.jar</b><br/>
+												HBase datastore jar to be placed in HDFS
+											</li>
+											<li>
+												<b>geowave-*-geoserver-singlejar.jar</b><br/>
+												GeoServer jar, added to the geoserver WEB-INF lib to add GeoWave as a GeoServer plugin
+											</li>
+										</ul>
+									</div>
+								</div>
                                 </p>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="release">
                             <div class="page-header col-md-12">
-                                <h3>Release Packages</h3>
+                                <h3>Release Packages/RPMs</h3>
                                 <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
                                     <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
                                 </p>
@@ -136,13 +178,47 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="dev">
                             <div class="page-header col-md-12">
-                                <h3>Development Packages</h3>
+                                <h3>Development Packages/RPMs</h3>
                                 <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
                                     <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
                                 </p>
                                 <p>
                                     These are built for every commit that passes automated tests. There
                                     are RPMs, SRPMs and .tar.gz archives included in the list, use the search to filter.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="file-listing display compact" cellspacing="0" width="100%">
+                                        <thead><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead>
+                                    </table>
+                                </div>
+                                <div class="timestamp"></div>
+                            </div>
+                        </div>
+						<div role="tabpanel" class="tab-pane" id="release-jars">
+                            <div class="page-header col-md-12">
+                                <h3>Release Jars</h3>
+                                <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
+                                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                                </p>
+                                <p>
+                                    These are stable releases and are the recommended option to use for your deployment.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="file-listing display compact" cellspacing="0" width="100%">
+                                        <thead><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead>
+                                    </table>
+                                </div>
+                                <div class="timestamp"></div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="dev-jars">
+                            <div class="page-header col-md-12">
+                                <h3>Development Jars</h3>
+                                <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
+                                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                                </p>
+                                <p>
+                                    These are built for every commit that passes automated tests.
                                 </p>
                                 <div class="table-responsive">
                                     <table class="file-listing display compact" cellspacing="0" width="100%">
@@ -212,7 +288,7 @@
                     var fileName = $(this).find('Key').text();
                     var fileSize = $(this).find('Size').text();
                     if (fileSize !== '0' && !isInSkipList(fileName, _skipList)) {
-                        if(startsWith(fileName, eventHash.substring(1))) {
+                        if(startsWith(fileName, eventHash.substring(1) +”/”)) {
                             buffer.push([
                                 '<a href="' + _url + fileName + '" download="' + baseName(fileName)  + '" target="_blank">' + baseName(fileName) + '</a>',
                                 $(this).find('LastModified').text(),

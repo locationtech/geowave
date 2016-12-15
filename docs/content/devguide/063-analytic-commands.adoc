@@ -1,0 +1,5 @@
+[[analytic-commands]]
+
+=== Analytic Commands
+
+The full list of GeoWave analytic commands can be found in the http://ngageoint.github.io/geowave/commands.html#analytic-commands[GeoWave CLI Appendix^].
