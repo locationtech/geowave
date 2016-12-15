@@ -1,6 +1,6 @@
 class geowave::service {
 
-  service { 'geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}':
+  service { 'geowave':
     ensure     => 'running',
     enable     => true,
     hasstatus  => true,

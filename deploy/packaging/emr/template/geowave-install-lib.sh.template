@@ -96,7 +96,7 @@ file { '/etc/geowave/geowave.config':
 	mode    => 644,
 	content => 'export JAVA_OPTS="${GEOSERVER_MEMORY}"',
 	require => Package['geowave-${GEOWAVE_VERSION}-core'],
-	notify  => Service['geowave-${GEOWAVE_VERSION}-apache'],
+	notify  => Service['geowave'],
 }
 EOF
 
