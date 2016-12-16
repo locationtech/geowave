@@ -116,8 +116,12 @@
 												The source RPM file that contains definitions for all the component RPMs listed above
 											</li>
 											<li>
-												<b>geowave-GIT-COMMIT-HASH.tar.gz</b><br/>
-												All of the prebuilt component jars packaged into a compressed archive instead of an RPM format
+												<b>geowave-$TIME_TAG.tar.gz</b><br/>
+												All of the prebuilt component jars and other artifacts that are common to all vendors packaged into a compressed archive instead of an RPM format
+											</li>
+											<li>
+												<b>geowave-$TIME_TAG-$VENDOR.tar.gz</b><br/>
+												All of the prebuilt component jars and other artifacts that are vendor-specific packaged into a compressed archive instead of an RPM format
 											</li>
 											<li>
 												<b>geowave-repo</b><br/>
@@ -133,10 +137,6 @@
 										<h4>JARs Available</h4>
 										<ul class="jar-listing">
 											<li>
-												<b>geowave-*.jar</b><br/>
-												GeoWave jar
-											</li>
-											<li>
 												<b>geowave-*-tools.jar</b><br/>
 												Tools jar used for GeoWave CLI commands
 											</li>
@@ -150,7 +150,7 @@
 											</li>
 											<li>
 												<b>geowave-*-geoserver-singlejar.jar</b><br/>
-												GeoServer jar, added to the geoserver WEB-INF lib to add GeoWave as a GeoServer plugin
+												GeoServer jar, added to the geoserver WEB-INF/lib to add GeoWave as a GeoServer plugin
 											</li>
 										</ul>
 									</div>
@@ -196,7 +196,7 @@
                         </div>
 						<div role="tabpanel" class="tab-pane" id="release-jars">
                             <div class="page-header col-md-12">
-                                <h3>Release Jars</h3>
+                                <h3>Release JARs</h3>
                                 <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
                                     <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
                                 </p>
@@ -213,7 +213,7 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="dev-jars">
                             <div class="page-header col-md-12">
-                                <h3>Development Jars</h3>
+                                <h3>Development JARs</h3>
                                 <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
                                     <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
                                 </p>
@@ -288,7 +288,7 @@
                     var fileName = $(this).find('Key').text();
                     var fileSize = $(this).find('Size').text();
                     if (fileSize !== '0' && !isInSkipList(fileName, _skipList)) {
-                        if(startsWith(fileName, eventHash.substring(1) +”/”)) {
+                        if(startsWith(fileName, eventHash.substring(1) + '/')) {
                             buffer.push([
                                 '<a href="' + _url + fileName + '" download="' + baseName(fileName)  + '" target="_blank">' + baseName(fileName) + '</a>',
                                 $(this).find('LastModified').text(),
