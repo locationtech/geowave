@@ -19,4 +19,4 @@ export HDFS_PORT=8020
 export RESOURCE_MAN_PORT=8032
 export NUM_PARTITIONS=32
 export GEOWAVE_TOOL_JAVA_OPT=-Xmx4g
-export GEOWAVE_TOOLS_JAR=/usr/local/geowave/tools/geowave-$GEOWAVE_VERSION_TOKEN-apache.jar
+export GEOWAVE_TOOLS_JAR=/usr/local/geowave/tools/geowave-tools-$GEOWAVE_VERSION_TOKEN-apache.jar
