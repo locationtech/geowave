@@ -1,5 +1,5 @@
 //:geowave-dbscan(1)
-//:======================
+//:=================
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave analytic dbscan - Density Based Scanner
 SYNOPSIS
 //:--------
 
-*geowave analytic dbscan* [options] <storename>
+geowave analytic dbscan [options] <storename>
 
 DESCRIPTION
 //:-----------
@@ -44,157 +44,117 @@ After completion, the data is written back from HDFS to Accumulo using a job cal
 OPTIONS
 //:-------
 
--dt, --clusteringDistanceThresholds::
+- -dt, --clusteringDistanceThresholds
+ * Comma separated list of distance thresholds, per dimension
 
-   Comma separated list of distance thresholds, per dimension
-
--du, --clusteringGeometricDistanceUnit::
-
-   Geometric distance unit (m=meters,km=kilometers, see symbols for
+- -du, --clusteringGeometricDistanceUnit
+ * Geometric distance unit (m=meters,km=kilometers, see symbols for
    javax.units.BaseUnit)
 
--cmi, --clusteringMaxIterations::
+- -cmi, --clusteringMaxIterations
+ * Maximum number of iterations when finding optimal clusters
 
-   Maximum number of iterations when finding optimal clusters
+- -cms, --clusteringMinimumSize
+ * Minimum Cluster Size
 
--cms, --clusteringMinimumSize::
+- -cdf, --commonDistanceFunctionClass
+ * Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn
 
-   Minimum Cluster Size
+- -eit, --extractAdapterId
+ * Input Data Type ID
 
--cdf, --commonDistanceFunctionClass::
+- -ei, --extractIndexId
+ * Extract from a specific index
 
-   Distance Function Class implements
-   mil.nga.giat.geowave.analytics.distance.DistanceFn
+- -emx, --extractMaxInputSplit
+ * Maximum input split size
 
--eit, --extractAdapterId::
+- -emn, --extractMinInputSplit
+ * Minimum input split size
 
-   Input Data Type ID
+- -eq, --extractQuery
+ * Query
 
--ei, --extractIndexId::
+- -b, --globalBatchId
+ * Batch ID
 
-   Extract from a specific index
+- -hdt, --hullDataTypeId
+ * Data Type ID for a centroid item
 
--emx, --extractMaxInputSplit::
+- -hhb, --hullHullBuilder
+ * Hull Builder
 
-   Maximum input split size
+- -hpe, --hullProjectionClass
+ * Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection
 
--emn, --extractMinInputSplit::
+- -conf, --mapReduceConfigFile
+ * MapReduce Configuration
 
-   Minimum input split size
+- -hdfsbase, --mapReduceHdfsBaseDir
+ * Fully qualified path to the base directory in hdfs
 
--eq, --extractQuery::
+- -hdfs, --mapReduceHdfsHostPort
+ * HDFS hostname and port in the format hostname:port
 
-   Query
+- -jobtracker, --mapReduceJobtrackerHostPort
+ * Hadoop job tracker hostname and port in the format hostname:port
 
--b, --globalBatchId::
+- -resourceman, --mapReduceYarnResourceManager
+ * Yarn resource manager hostname and port in the format hostname:port
 
-   Batch ID
+- -ons, --outputDataNamespaceUri
+ * Output namespace for objects that will be written to GeoWave
 
--hdt, --hullDataTypeId::
+- -odt, --outputDataTypeId
+ * Output Data ID assigned to objects that will be written to GeoWave
 
-   Data Type ID for a centroid item
+- -oid, --outputIndexId
+ * Output Index ID for objects that will be written to GeoWave
 
--hhb, --hullHullBuilder::
+- -ofc, --outputOutputFormat
+ * Output Format Class
 
-   Hull Builder
+- --oop, --outputHdfsOutputPath
+ * Output HDFS File Path when used with a output format "SequenceFileOutputFormatConfiguration"
 
--hpe, --hullProjectionClass::
+- -orc, --outputReducerCount
+ * Number of Reducers For Output
 
-   Class to project on to 2D space. Implements
-   mil.nga.giat.geowave.analytics.tools.Projection
+- -pmd, --partitionMaxDistance
+ * Maximum Partition Distance
 
--conf, --mapReduceConfigFile::
+- -pms, --partitionMaxMemberSelection::
+ * Maximum number of members selected from a partition
 
-   MapReduce Configuration
+- -pdr, --partitionPartitionDecreaseRate
+ * Rate of decrease for precision(within (0,1])
 
--hdfsbase, --mapReduceHdfsBaseDir::
+- -pd, --partitionPartitionDistance
+ * Partition Distance
 
-   Fully qualified path to the base directory in hdfs
+- -pdt, --partitionDistanceThresholds
+ *   Partition Distance Threshold
 
--hdfs, --mapReduceHdfsHostPort::
+- -pdu, --partitionGeometricDistanceUnit
+ * Partition Geometric Distance Unit
 
-   HDFS hostname and port in the format hostname:port
+- -pp, --partitionPartitionPrecision
+ * Partition Precision
 
--jobtracker, --mapReduceJobtrackerHostPort::
+- -pc, --partitionPartitionerClass
+ * Index Identifier for Centroids
 
-   Hadoop job tracker hostname and port in the format hostname:port
+- -psp, --partitionSecondaryPartitionerClass
+ * Perform secondary partitioning with the provided class
 
--resourceman, --mapReduceYarnResourceManager::
+- --query.adapters
+ * Comma-separated data adapters to query; by default all are used
 
-   Yarn resource manager hostname and port in the format hostname:port
+- --query.auth
+ * The comma-separated list of authorizations used during extract; by default all authorizations are used.
 
--ons, --outputDataNamespaceUri::
+- --query.fields
+ * The comma-separated set of field names to extract; by default all are extracted
 
-   Output namespace for objects that will be written to GeoWave
-
--odt, --outputDataTypeId::
-
-   Output Data ID assigned to objects that will be written to GeoWave
-
--oid, --outputIndexId::
-
-   Output Index ID for objects that will be written to GeoWave
-
--ofc, --outputOutputFormat::
-
-   Output Format Class
-
---oop, --outputHdfsOutputPath::
-
-   Output HDFS File Path when used with a output format "SequenceFileOutputFormatConfiguration"
-
--orc, --outputReducerCount::
-
-   Number of Reducers For Output
-
--pmd, --partitionMaxDistance::
-
-   Maximum Partition Distance
-
--pms, --partitionMaxMemberSelection::
-
-   Maximum number of members selected from a partition
-
--pdr, --partitionPartitionDecreaseRate::
-
-   Rate of decrease for precision(within (0,1])
-
--pd, --partitionPartitionDistance::
-
-   Partition Distance
-
--pdt, --partitionDistanceThresholds::
-
-  Partition Distance Threshold
-
--pdu, --partitionGeometricDistanceUnit::
-
-  Partition Geometric Distance Unit
-
--pp, --partitionPartitionPrecision::
-
-   Partition Precision
-
--pc, --partitionPartitionerClass::
-
-   Index Identifier for Centroids
-
--psp, --partitionSecondaryPartitionerClass::
-
-   Perform secondary partitioning with the provided class
-
---query.adapters::
-
-   Comma-separated data adapters to query; by default all are used
-
---query.auth::
-
-   The comma-separated list of authorizations used during extract; by default all authorizations are used.
-
---query.fields::
-
-   The comma-separated set of field names to extract; by default all are extracted
-
---query.index::
-
-   The input index to pull the data from (if different than expected)
+- --query.index
+ * The input index to pull the data from (if different than expected)

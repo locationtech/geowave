@@ -1,15 +1,16 @@
 //:geowave-addindexgrp(1)
-//:================
+//:======================
 //::doctype: manpage
 
 NAME
 //:----
 
 geowave config addindexgrp - Group multiple index configurations together given a name
+
 SYNOPSIS
 //:--------
 
-*geowave config addindexgrp* [options] <name> <comma separated list of indexes>
+geowave config addindexgrp [options] <name> <comma separated list of indexes>
 
 DESCRIPTION
 //:-----------

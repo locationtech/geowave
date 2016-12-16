@@ -1,5 +1,5 @@
 //:geowave-rmadapter(1)
-//:================
+//:====================
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave remote rmadapter - Remove an adapter from the remote store and all assoc
 SYNOPSIS
 //:--------
 
-*geowave remote rmadapter* [options] <store name> [<adapterId>]
+geowave remote rmadapter [options] <store name> [<adapterId>]
 
 DESCRIPTION
 //:-----------

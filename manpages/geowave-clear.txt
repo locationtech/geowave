@@ -10,7 +10,7 @@ geowave remote clear - Clear ALL data from a GeoWave store and delete tables
 SYNOPSIS
 //:--------
 
-*geowave remote clear* [options] <store name>
+geowave remote clear [options] <store name>
 
 DESCRIPTION
 //:-----------

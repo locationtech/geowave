@@ -1,5 +1,5 @@
 //:geowave-recalcstats(1)
-//:================
+//:======================
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave remote recalcstats - Calculate the statistics of an existing GeoWave dat
 SYNOPSIS
 //:--------
 
-*geowave remote recalcstats* [options] <store name> <adapterId> <statId>
+geowave remote recalcstats [options] <store name> <adapterId> <statId>
 
 DESCRIPTION
 //:-----------
@@ -20,7 +20,6 @@ The geowave remote recalcstats operator will calculate the statistics of an exis
 OPTIONS
 //:-------
 
---auth::
-
-   The authorizations used for the statistics calculation as a subset of the
+- --auth
+ * The authorizations used for the statistics calculation as a subset of the
    accumulo user authorization; by default all authorizations are used.

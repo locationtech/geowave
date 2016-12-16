@@ -1,5 +1,5 @@
 //:geowave-nn(1)
-//:======================
+//:=============
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave analytic nn - Nearest Neighbors
 SYNOPSIS
 //:--------
 
-*geowave analytic nn* [options] <storename>
+geowave analytic nn [options] <storename>
 
 DESCRIPTION
 //:-----------
@@ -49,55 +49,41 @@ another point.
 OPTIONS
 //:-------
 
--cdf, --commonDistanceFunctionClass::
+- -cdf, --commonDistanceFunctionClass
+ * Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn
 
-   Distance Function Class implements
-   mil.nga.giat.geowave.analytics.distance.DistanceFn
+- -eit, --extractAdapterId
+ * Input Data Type ID
 
--eit, --extractAdapterId::
+- -ei, --extractIndexId
+ * Extract from a specific index
 
-   Input Data Type ID
+- -emx, --extractMaxInputSplit
+ * Maximum input split size
 
--ei, --extractIndexId::
+- -emn, --extractMinInputSplit
+ * Minimum input split size
 
-   Extract from a specific index
+- -eq, --extractQuery
+ * Query
 
--emx, --extractMaxInputSplit::
+- -oop, --outputHdfsOutputPath
+ * Output HDFS File Path
+ 
+- -ofc, --outputOutputFormat
+ * Output Format Class
 
-   Maximum input split size
+- -orc, --outputReducerCount
+ * Number of Reducers For Output
 
--emn, --extractMinInputSplit::
+- -pms, --partitionMaxMemberSelection
+ * Maximum number of members selected from a partition
 
-   Minimum input split size
+- -pd, --partitionPartitionDistance
+ * Partition Distance
 
--eq, --extractQuery::
+- -pc, --partitionPartitionerClass
+ * Index Identifier for Centroids
 
-   Query
-
--oop, --outputHdfsOutputPath::
-
-   Output HDFS File Path
-
--ofc, --outputOutputFormat::
-
-   Output Format Class
-
--orc, --outputReducerCount::
-
-   Number of Reducers For Output
-
--pms, --partitionMaxMemberSelection::
-
-   Maximum number of members selected from a partition
-
--pd, --partitionPartitionDistance::
-
-   Partition Distance
-
--pc, --partitionPartitionerClass::
-
-   Index Identifier for Centroids
-
--psp, --partitionSecondaryPartitionerClass::
-
-   Perform secondary partitioning with the provided class
+- -psp, --partitionSecondaryPartitionerClass
+ * Perform secondary partitioning with the provided class

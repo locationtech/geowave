@@ -1,5 +1,5 @@
 //:geowave-listindex(1)
-//:================
+//:====================
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave remote listindex - Display all indices in this remote store
 SYNOPSIS
 //:--------
 
-*geowave remote listindex* [options] <store name>
+geowave remote listindex [options] <store name>
 
 DESCRIPTION
 //:-----------

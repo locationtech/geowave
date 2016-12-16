@@ -206,7 +206,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected org.apache.hadoop.hbase.client.Scan</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/InputFormatHBaseRangeQuery.html#getMultiScanner-java.lang.Integer-double:A-">getMultiScanner</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/InputFormatHBaseRangeQuery.html#getMultiScanner-org.apache.hadoop.hbase.filter.FilterList-java.lang.Integer-double:A-">getMultiScanner</a></span>(org.apache.hadoop.hbase.filter.FilterList&nbsp;filterList,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
                double[]&nbsp;maxResolutionSubsamplingPerDimension)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -229,7 +230,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseFilteredIndexQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getFilter-java.util.List-">getFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#internalQuery-mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations-mil.nga.giat.geowave.core.store.adapter.AdapterStore-double:A-java.lang.Integer-boolean-">internalQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#setClientFilters-java.util.List-">setClientFilters</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#createStandardScanner-java.lang.Integer-">createStandardScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getMultiRowRangeFilter-java.util.List-">getMultiRowRangeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getScannerList-java.lang.Integer-">getScannerList</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#internalQuery-mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations-mil.nga.giat.geowave.core.store.adapter.AdapterStore-double:A-java.lang.Integer-boolean-">internalQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#setClientFilters-java.util.List-">setClientFilters</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.query.HBaseQuery">
@@ -297,17 +298,18 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query
 </dl>
 </li>
 </ul>
-<a name="getMultiScanner-java.lang.Integer-double:A-">
+<a name="getMultiScanner-org.apache.hadoop.hbase.filter.FilterList-java.lang.Integer-double:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getMultiScanner</h4>
-<pre>protected&nbsp;org.apache.hadoop.hbase.client.Scan&nbsp;getMultiScanner(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
+<pre>protected&nbsp;org.apache.hadoop.hbase.client.Scan&nbsp;getMultiScanner(org.apache.hadoop.hbase.filter.FilterList&nbsp;filterList,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
                                                               double[]&nbsp;maxResolutionSubsamplingPerDimension)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getMultiScanner-java.lang.Integer-double:A-">getMultiScanner</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseFilteredIndexQuery</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html#getMultiScanner-org.apache.hadoop.hbase.filter.FilterList-java.lang.Integer-double:A-">getMultiScanner</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.hbase.query">HBaseFilteredIndexQuery</a></code></dd>
 </dl>
 </li>
 </ul>

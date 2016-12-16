@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":10,"i16":10};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -111,6 +111,10 @@ var activeTableTab = "activeTableTab";
 <dt>All Implemented Interfaces:</dt>
 <dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a></dd>
 </dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html" title="class in mil.nga.giat.geowave.datastore.bigtable.operations">BigTableOperations</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">BasicHBaseOperations</span>
@@ -138,6 +142,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#ADMIN_MUTEX">ADMIN_MUTEX</a></span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#DEFAULT_TABLE_NAMESPACE">DEFAULT_TABLE_NAMESPACE</a></span></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -156,13 +164,17 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#BasicHBaseOperations-org.apache.hadoop.hbase.client.Connection-">BasicHBaseOperations</a></span>(org.apache.hadoop.hbase.client.Connection&nbsp;connector)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#BasicHBaseOperations-java.lang.String-">BasicHBaseOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperInstances)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#BasicHBaseOperations-org.apache.hadoop.hbase.client.Connection-java.lang.String-">BasicHBaseOperations</a></span>(org.apache.hadoop.hbase.client.Connection&nbsp;connection,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#BasicHBaseOperations-java.lang.String-">BasicHBaseOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperInstances)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#BasicHBaseOperations-java.lang.String-org.apache.hadoop.hbase.client.Connection-">BasicHBaseOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                     org.apache.hadoop.hbase.client.Connection&nbsp;connector)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#BasicHBaseOperations-java.lang.String-java.lang.String-">BasicHBaseOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperInstances,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>&nbsp;</td>
 </tr>
@@ -254,9 +266,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#tableExists-java.lang.String-">tableExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#isSchemaUpdateEnabled--">isSchemaUpdateEnabled</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#tableExists-java.lang.String-">tableExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>&nbsp;</td>
+</tr>
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#verifyCoprocessor-java.lang.String-java.lang.String-java.lang.String-">verifyCoprocessor</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNameStr,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coprocessorName,
@@ -284,6 +300,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="DEFAULT_TABLE_NAMESPACE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_TABLE_NAMESPACE</h4>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> DEFAULT_TABLE_NAMESPACE</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations.DEFAULT_TABLE_NAMESPACE">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
 <a name="ADMIN_MUTEX">
 <!--   -->
 </a>
@@ -301,6 +330,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="BasicHBaseOperations-org.apache.hadoop.hbase.client.Connection-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BasicHBaseOperations</h4>
+<pre>public&nbsp;BasicHBaseOperations(org.apache.hadoop.hbase.client.Connection&nbsp;connection,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)
+                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="BasicHBaseOperations-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
@@ -378,6 +422,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataSto
 <li class="blockList">
 <h4>getConfig</h4>
 <pre>public&nbsp;org.apache.hadoop.conf.Configuration&nbsp;getConfig()</pre>
+</li>
+</ul>
+<a name="isSchemaUpdateEnabled--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isSchemaUpdateEnabled</h4>
+<pre>public&nbsp;boolean&nbsp;isSchemaUpdateEnabled()</pre>
 </li>
 </ul>
 <a name="getTableName-java.lang.String-">

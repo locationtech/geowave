@@ -1,5 +1,5 @@
 //:geowave-localToGW(1)
-//:======================
+//:====================
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave ingest localToGW - Ingest supported files in local file system directly,
 SYNOPSIS
 //:--------
 
-*geowave ingest localToGW* [options] <file or directory> <storename> <comma delimited index/group list>
+geowave ingest localToGW [options] <file or directory> <storename> <comma delimited index/group list>
 
 DESCRIPTION
 //:-----------
@@ -20,20 +20,17 @@ The geowave ingest localToGW operator will run the ingest code (parse to feature
 OPTIONS
 //:-------
 
--x, --extension::
+- -x, --extension
+ * individual or comma-delimited set of file extensions to accept
 
-   individual or comma-delimited set of file extensions to accept (optional)
-
--f, --formats::
-
-   Explicitly set the ingest formats by name (or multiple comma-delimited
+- -f, --formats
+ * Explicitly set the ingest formats by name (or multiple comma-delimited
    formats), if not set all available ingest formats will be used
 
--t, --threads::
+- -t, --threads
+ * number of threads to use for ingest
+ * Default is 1
 
-   number of threads to use for ingest, default to 1 (optional)
-   Default: 1
-
--v, --visibility::
-
-   The visibility of the data ingested (optional; default is 'public')
+- -v, --visibility
+* The visibility of the data ingested
+* Default is 'public'

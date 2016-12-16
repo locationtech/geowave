@@ -1,5 +1,5 @@
 //:geowave-rmindexgrp(1)
-//:================
+//:=====================
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave config rmindexgrp - removes an index group from GeoWave configuration
 SYNOPSIS
 //:--------
 
-*geowave config rmindexgrp* [options] <name>
+geowave config rmindexgrp [options] <name>
 
 DESCRIPTION
 //:-----------

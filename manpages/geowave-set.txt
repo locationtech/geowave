@@ -1,5 +1,5 @@
 //:geowave-set(1)
-//:================
+//:==============
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave config set - will set a valid property name within the cache
 SYNOPSIS
 //:--------
 
-*geowave config set* [options]
+geowave config set [options]
 
 DESCRIPTION
 //:-----------

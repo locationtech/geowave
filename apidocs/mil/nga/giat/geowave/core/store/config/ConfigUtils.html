@@ -152,7 +152,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/config/ConfigUtils.html#createConfigOptionsFromJCommander-java.lang.Object-">createConfigOptionsFromJCommander</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;createOptionsInstance)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/config/ConfigUtils.html#createConfigOptionsFromJCommander-java.lang.Object-boolean-">createConfigOptionsFromJCommander</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;createOptionsInstance,
+                                 boolean&nbsp;includeHidden)</code>
 <div class="block">This method will use the parameter descriptions from JCommander to
  create/populate an AbstractConfigOptions map.</div>
 </td>
@@ -246,13 +247,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;getOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;strs)</pre>
 </li>
 </ul>
-<a name="createConfigOptionsFromJCommander-java.lang.Object-">
+<a name="createConfigOptionsFromJCommander-java.lang.Object-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createConfigOptionsFromJCommander</h4>
-<pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a>[]&nbsp;createConfigOptionsFromJCommander(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;createOptionsInstance)</pre>
+<pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/config/ConfigOption.html" title="class in mil.nga.giat.geowave.core.store.config">ConfigOption</a>[]&nbsp;createConfigOptionsFromJCommander(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;createOptionsInstance,
+                                                               boolean&nbsp;includeHidden)</pre>
 <div class="block">This method will use the parameter descriptions from JCommander to
  create/populate an AbstractConfigOptions map.</div>
 </li>

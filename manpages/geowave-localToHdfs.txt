@@ -10,7 +10,7 @@ geowave ingest localToHdfs - Stage supported files in local file system to HDFS
 SYNOPSIS
 //:--------
 
-*geowave ingest localToHdfs* [options] <file or directory> <hdfs host:port> <path to base directory to write to>
+geowave ingest localToHdfs [options] <file or directory> <hdfs host:port> <path to base directory to write to>
 
 DESCRIPTION
 //:-----------
@@ -20,11 +20,9 @@ The geowave ingest localToHdfs operator will stage supported files in the local 
 OPTIONS
 //:-------
 
--x, --extension::
+- -x, --extension
+ * individual or comma-delimited set of file extensions to accept
 
-   individual or comma-delimited set of file extensions to accept (optional)
-
--f, --formats::
-
-   Explicitly set the ingest formats by name (or multiple comma-delimited
+- -f, --formats
+ * Explicitly set the ingest formats by name (or multiple comma-delimited
    formats), if not set all available ingest formats will be used

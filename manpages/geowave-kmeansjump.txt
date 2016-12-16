@@ -1,5 +1,5 @@
 //:geowave-kmeansjump(1)
-//:======================
+//:=====================
 //::doctype: manpage
 
 NAME
@@ -10,7 +10,7 @@ geowave analytic kmeansjump - KMeans Clustering using Jump Method
 SYNOPSIS
 //:--------
 
-*geowave analytic kmeansjump* [options] <storename>
+geowave analytic kmeansjump [options] <storename>
 
 DESCRIPTION
 //:-----------
@@ -51,186 +51,137 @@ performance variables.
 OPTIONS
 //:-------
 
--cce, --centroidExtractorClass::
+- -cce, --centroidExtractorClass
+ * Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor
 
-   Centroid Exractor Class implements
-   mil.nga.giat.geowave.analytics.extract.CentroidExtractor
+- -cid, --centroidIndexId
+ * Index Identifier for Centroids
 
--cid, --centroidIndexId::
+- -cfc, --centroidWrapperFactoryClass
+ * A factory class that implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory
 
-   Index Identifier for Centroids
+- -czl, --centroidZoomLevel
+ * Zoom Level Number
 
--cfc, --centroidWrapperFactoryClass::
+- -cct, --clusteringConverganceTolerance
+ * Convergence Tolerance
 
-   A factory class that implements
-   mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory
+- -cmi, --clusteringMaxIterations
+ * Maximum number of iterations when finding optimal clusters
 
--czl, --centroidZoomLevel::
+- -crc, --clusteringMaxReducerCount
+ * Maximum Clustering Reducer Count
 
-   Zoom Level Number
+- -zl, --clusteringZoomLevels
+ * Number of Zoom Levels to Process
 
--cct, --clusteringConverganceTolerance::
+- -dde, --commonDimensionExtractClass
+ * Dimension Extractor Class implements mil.nga.giat.geowave.analytics.extract.DimensionExtractor
 
-   Convergence Tolerance
+- -cdf, --commonDistanceFunctionClass
+ * Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn
 
--cmi, --clusteringMaxIterations::
+- -eit, --extractAdapterId
+ * Input Data Type ID
 
-   Maximum number of iterations when finding optimal clusters
+- -ens, --extractDataNamespaceUri
+ * Output Data Namespace URI
 
--crc, --clusteringMaxReducerCount::
+- -ede, --extractDimensionExtractClass
+ * Class to extract dimensions into a simple feature output
 
-   Maximum Clustering Reducer Count
+- -ei, --extractIndexId
+ * Extract from a specific index
 
--zl, --clusteringZoomLevels::
+- -emx, --extractMaxInputSplit
+ * Maximum input split size
 
-   Number of Zoom Levels to Process
+- -emn, --extractMinInputSplit
+ * Minimum input split size
 
--dde, --commonDimensionExtractClass::
+- -eot, --extractOutputDataTypeId
+ * Output Data Type ID
 
-   Dimension Extractor Class implements
-   mil.nga.giat.geowave.analytics.extract.DimensionExtractor
+- -eq, --extractQuery
+ * Query
 
--cdf, --commonDistanceFunctionClass::
+- -erc, --extractReducerCount
+ * Number of Reducers For initial data extraction and de-duplication
 
-   Distance Function Class implements
-   mil.nga.giat.geowave.analytics.distance.DistanceFn
+- -b, --globalBatchId
+ * Batch ID
 
--eit, --extractAdapterId::
+- -pb, --globalParentBatchId
+ * Batch ID
 
-   Input Data Type ID
+- -hns, --hullDataNamespaceUri
+ * Data Type Namespace for a centroid item
 
--ens, --extractDataNamespaceUri::
+- -hdt, --hullDataTypeId
+ * Data Type ID for a centroid item
 
-   Output Data Namespace URI
+- -hid, --hullIndexId
+ * Index Identifier for Centroids
 
--ede, --extractDimensionExtractClass::
+- -hpe, --hullProjectionClass
+ * Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection
 
-   Class to extract dimensions into a simple feature output
+- -hrc, --hullReducerCount
+ * Centroid Reducer Count
 
--ei, --extractIndexId::
+- -hfc, --hullWrapperFactoryClass
+ * Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory
 
-   Extract from a specific index
+- -jkp, --jumpKplusplusMin
+ * The minimum k when K means ++ takes over sampling
 
--emx, --extractMaxInputSplit::
+- -jrc, --jumpRangeOfCentroids
+ * Comma-separated range of centroids (e.g. 2,100)
 
-   Maximum input split size
+- -conf, --mapReduceConfigFile
+ * MapReduce Configuration
 
--emn, --extractMinInputSplit::
+- -hdfsbase, --mapReduceHdfsBaseDir
+ * Fully qualified path to the base directory in hdfs
 
-   Minimum input split size
+- -hdfs, --mapReduceHdfsHostPort
+ * HDFS hostname and port in the format hostname:port
 
--eot, --extractOutputDataTypeId::
+- -jobtracker, --mapReduceJobtrackerHostPort
+ * Hadoop job tracker hostname and port in the format hostname:port
 
-   Output Data Type ID
+- -resourceman, --mapReduceYarnResourceManager
+ * Yarn resource manager hostname and port in the format hostname:port
 
--eq, --extractQuery::
+- -ofc, --outputOutputFormat
+ * Output Format Class
 
-   Query
+- -orc, --outputReducerCount
+ * Number of Reducers For Output
 
--erc, --extractReducerCount::
+- --query.adapters
+ * Comma-separated data adapters to query; by default all are used
 
-   Number of Reducers For initial data extraction and de-duplication
+- --query.auth
+ * The comma-separated list of authorizations used during extract; by default all authorizations are used.
 
--b, --globalBatchId::
+- --query.fields
+ * The comma-separated set of field names to extract; by default all are extracted
 
-   Batch ID
+- --query.index
+ * The specific index to query; by default one is chosen for each adapter.
 
--pb, --globalParentBatchId::
+- -sxs, --sampleMaxSampleSize
+ * Max Sample Size
 
-   Batch ID
+- -sms, --sampleMinSampleSize
+ * Minimum Sample Size
 
--hns, --hullDataNamespaceUri::
+- -ssi, --sampleSampleIterations
+ * Minimum number of sample iterations
 
-   Data Type Namespace for a centroid item
+- -srf, --sampleSampleRankFunction
+ * The rank function used when sampling the first N highest rank items
 
--hdt, --hullDataTypeId::
-
-   Data Type ID for a centroid item
-
--hid, --hullIndexId::
-
-   Index Identifier for Centroids
-
--hpe, --hullProjectionClass::
-
-   Class to project on to 2D space. Implements
-   mil.nga.giat.geowave.analytics.tools.Projection
-
--hrc, --hullReducerCount::
-
-   Centroid Reducer Count
-
--hfc, --hullWrapperFactoryClass::
-
-   Class to create analytic item to capture hulls. Implements
-   mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory
-
--jkp, --jumpKplusplusMin::
-
-   The minimum k when K means ++ takes over sampling
-
--jrc, --jumpRangeOfCentroids::
-
-   Comma-separated range of centroids (e.g. 2,100)
-
--conf, --mapReduceConfigFile::
-
-   MapReduce Configuration
-
--hdfsbase, --mapReduceHdfsBaseDir::
-
-   Fully qualified path to the base directory in hdfs
-
--hdfs, --mapReduceHdfsHostPort::
-
-   HDFS hostname and port in the format hostname:port
-
--jobtracker, --mapReduceJobtrackerHostPort::
-
-   Hadoop job tracker hostname and port in the format hostname:port
-
--resourceman, --mapReduceYarnResourceManager::
-
-   Yarn resource manager hostname and port in the format hostname:port
-
--ofc, --outputOutputFormat::
-
-   Output Format Class
-
--orc, --outputReducerCount::
-
-   Number of Reducers For Output
-
---query.adapters::
-
-  Comma-separated data adapters to query; by default all are used
-
---query.auth::
-
-   The comma-separated list of authorizations used during extract; by default all authorizations are used.
-
---query.fields::
-
-   The comma-separated set of field names to extract; by default all are extracted
-
-   --query.index::
-
--sxs, --sampleMaxSampleSize::
-
-   Max Sample Size
-
--sms, --sampleMinSampleSize::
-
-   Minimum Sample Size
-
--ssi, --sampleSampleIterations::
-
-   Minimum number of sample iterations
-
--srf, --sampleSampleRankFunction::
-
-   The rank function used when sampling the first N highest rank items
-
--sss, --sampleSampleSize::
-
-   Sample Size
+- -sss, --sampleSampleSize
+ * Sample Size
