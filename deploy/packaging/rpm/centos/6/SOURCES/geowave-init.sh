@@ -115,6 +115,7 @@ case "$1" in
   start) start ;;
   stop)  stop ;;
   restart)
+	sleep 1 # in certain cases there is a race condition when puppet restarts the app repeatedly, this is to circumvent that
     stop "restart"
     echo
     start

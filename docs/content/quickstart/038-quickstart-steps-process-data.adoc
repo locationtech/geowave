@@ -62,7 +62,7 @@ Add a GeoWave store (Accumulo).
 
 [source, bash]
 ----
-geowave config addstore gdelt-kde --gwNamespace geowave.gdelt \
+geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance $ACCUMULO_INSTANCE --user geowave --password geowave
 ----
 
@@ -70,7 +70,7 @@ Add a GeoWave store (HBase).
 
 [source, bash]
 ----
-geowave config addstore gdelt-kde --gwNamespace geowave.gdelt \
+geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
