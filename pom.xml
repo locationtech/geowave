@@ -780,9 +780,9 @@
 			   Make sure you have the branch active in git you want to tag.
 			   If something goes wrong pushing, you will most likely have outstanding
 			   commits in your local repo you will have to revert/remove.
-			1. mvn release:prepare -DdryRun=true 
+			1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests -Dfindbugs.skip"
 			2. Inspect and ensure the correct pom.xml files will be modified
-			3. mvn release:prepare
+			3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip"
 			4. mvn release:clean
 			-->
 			<plugin>
@@ -800,6 +800,7 @@
 		<module>analytics</module>
 		<module>core</module>
 		<module>deploy</module>
+		<module>docs</module>
 		<module>examples</module>
 		<module>extensions</module>
 		<module>services</module>
@@ -889,13 +890,6 @@
 				<formatter.skip>true</formatter.skip>
 				<findbugs.skip>true</findbugs.skip>
 			</properties>
-		</profile>	
-		<profile>
-			<!-- Generate docs with: mvn -P docs -pl docs install -->
-			<id>docs</id>
-			<modules>
-				<module>docs</module>
-			</modules>
 		</profile>
 		<profile>
 			<id>cloudera</id>
