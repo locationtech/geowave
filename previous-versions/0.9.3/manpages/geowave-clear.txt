@@ -1,0 +1,23 @@
+//:geowave-clear(1)
+//:================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote clear - Clear ALL data from a GeoWave store and delete tables
+
+SYNOPSIS
+//:--------
+
+geowave remote clear [options] <store name>
+
+DESCRIPTION
+//:-----------
+
+The geowave remote clear operator will clear ALL data from a GeoWave store and delete tables
+
+OPTIONS
+//:-------
+
+There are currently no options for this command
