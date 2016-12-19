@@ -1,0 +1,23 @@
+//:geowave-listindex(1)
+//:====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote listindex - Display all indices in this remote store
+
+SYNOPSIS
+//:--------
+
+geowave remote listindex [options] <store name>
+
+DESCRIPTION
+//:-----------
+
+The geowave remote listindex operator will display all indices in a specific remote store
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

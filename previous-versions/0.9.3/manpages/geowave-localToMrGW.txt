@@ -1,0 +1,38 @@
+//:geowave-localToMrGW(1)
+//:======================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave ingest localToMrGW - Copy supported files from local file system to HDFS and ingest from HDFS
+
+SYNOPSIS
+//:--------
+
+geowave ingest localToMrGW [options] <file or directory> <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>
+
+DESCRIPTION
+//:-----------
+
+The geowave ingest localToMrGW operator will Copy supported files from local file system to HDFS and ingest from HDFS
+
+OPTIONS
+//:-------
+
+- -x, --extension
+ * individual or comma-delimited set of file extensions to accept
+
+- -f, --formats
+ * Explicitly set the ingest formats by name (or multiple comma-delimited
+   formats), if not set all available ingest formats will be used
+
+- --jobtracker
+ * Hadoop job tracker hostname and port in the format hostname:port
+
+- --resourceman
+ * Yarn resource manager hostname and port in the format hostname:port
+
+- -v, --visibility
+ * The visibility of the data ingested
+ * Default is 'public'
