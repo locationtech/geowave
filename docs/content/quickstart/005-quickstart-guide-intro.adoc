@@ -1,7 +1,9 @@
 [[quickstart-guide-intro]]
 <<<
 
-= Quickstart Guide
+_v${project.version}_
+
+= GeoWave Quickstart Guide image:geowave-icon-logo-cropped.png[width="28%"]
 
 == What you will need
 - <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>

@@ -1,5 +1,9 @@
-= GeoWave Documentation
-v${project.version}
+[[userguide-intro]]
+<<<
+
+_v${project.version}_
+
+= GeoWave User Guide image:geowave-icon-logo-cropped.png[width="28%"]
 
 ////
 PDF Generation gives an error if you try to use icons
