@@ -1,5 +1,9 @@
-= GeoWave Command Appendix
-v${project.version}
+[[commands-intro]]
+<<<
+
+_v${project.version}_
+
+= GeoWave CLI Appendix image:geowave-icon-logo-cropped.png[width="28%"]
 
 ////
 PDF Generation gives an error if you try to use icons
