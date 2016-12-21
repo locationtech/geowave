@@ -401,47 +401,6 @@ public class AccumuloDataStore extends
 				sanitizedQueryOptions.getLimit());
 	}
 
-	protected static byte[] getRowIdBytes(
-			final GeowaveRowId rowElements ) {
-		final ByteBuffer buf = ByteBuffer.allocate(12 + rowElements.getDataId().length
-				+ rowElements.getAdapterId().length + rowElements.getInsertionId().length);
-		buf.put(rowElements.getInsertionId());
-		buf.put(rowElements.getAdapterId());
-		buf.put(rowElements.getDataId());
-		buf.putInt(rowElements.getAdapterId().length);
-		buf.putInt(rowElements.getDataId().length);
-		buf.putInt(rowElements.getNumberOfDuplicates());
-		return buf.array();
-	}
-
-	protected static GeowaveRowId getRowIdObject(
-			final byte[] row ) {
-		final byte[] metadata = Arrays.copyOfRange(
-				row,
-				row.length - 12,
-				row.length);
-		final ByteBuffer metadataBuf = ByteBuffer.wrap(metadata);
-		final int adapterIdLength = metadataBuf.getInt();
-		final int dataIdLength = metadataBuf.getInt();
-		final int numberOfDuplicates = metadataBuf.getInt();
-
-		final ByteBuffer buf = ByteBuffer.wrap(
-				row,
-				0,
-				row.length - 12);
-		final byte[] indexId = new byte[row.length - 12 - adapterIdLength - dataIdLength];
-		final byte[] adapterId = new byte[adapterIdLength];
-		final byte[] dataId = new byte[dataIdLength];
-		buf.get(indexId);
-		buf.get(adapterId);
-		buf.get(dataId);
-		return new GeowaveRowId(
-				indexId,
-				dataId,
-				adapterId,
-				numberOfDuplicates);
-	}
-
 	@SuppressFBWarnings(value = "DLS_DEAD_LOCAL_STORE", justification = "i is part of loop condition")
 	@Override
 	protected CloseableIterator<Object> getEntryRows(

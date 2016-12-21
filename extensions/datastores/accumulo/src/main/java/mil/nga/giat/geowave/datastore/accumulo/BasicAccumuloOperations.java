@@ -20,7 +20,6 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.BatchWriterConfig;
-import org.apache.accumulo.core.client.ClientSideIteratorScanner;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.IteratorSetting;
@@ -226,8 +225,7 @@ public class BasicAccumuloOperations implements
 	@Override
 	public Writer createWriter(
 			final String tableName,
-			final boolean createTable )
-			throws TableNotFoundException {
+			final boolean createTable ) {
 		return createWriter(
 				tableName,
 				createTable,
@@ -242,8 +240,7 @@ public class BasicAccumuloOperations implements
 			final boolean createTable,
 			final boolean enableVersioning,
 			final boolean enableBlockCache,
-			final Set<ByteArrayId> splits )
-			throws TableNotFoundException {
+			final Set<ByteArrayId> splits ) {
 		final String qName = getQualifiedTableName(tableName);
 		if (createTable) {
 			createTable(
@@ -258,10 +255,18 @@ public class BasicAccumuloOperations implements
 				timeoutMillis,
 				TimeUnit.MILLISECONDS);
 		config.setMaxWriteThreads(numThreads);
-		return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
-				connector.createBatchWriter(
-						qName,
-						config));
+		try {
+			return new mil.nga.giat.geowave.datastore.accumulo.BatchWriterWrapper(
+					connector.createBatchWriter(
+							qName,
+							config));
+		}
+		catch (final TableNotFoundException e) {
+			LOGGER.error(
+					"Table does not exist",
+					e);
+			return null;
+		}
 	}
 
 	@Override
@@ -352,7 +357,6 @@ public class BasicAccumuloOperations implements
 		return false;
 	}
 
-	@Override
 	public String getTableNameSpace() {
 		return tableNamespace;
 	}

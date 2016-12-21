@@ -140,13 +140,12 @@ public interface AccumuloOperations extends
 	 *            false and the table does not exist, a TableNotFoundException
 	 *            will be thrown.
 	 * @return The appropriate writer
-	 * @throws TableNotFoundException
-	 *             The table does not exist in this Accumulo instance
 	 */
 	public Writer createWriter(
 			final String tableName,
-			final boolean createTable )
-			throws TableNotFoundException;
+			final boolean createTable );
+
+	public String getTableNameSpace();
 
 	/**
 	 * Creates a new writer that can be used by an index. The basic

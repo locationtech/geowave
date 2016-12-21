@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
@@ -151,6 +152,17 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>14.0-rc1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aol.simplereact</groupId>
+				<artifactId>cyclops-react</artifactId>
+				<version>1.0.0-RC4</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>jcl-over-slf4j</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -772,19 +784,16 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- for incrementing version numbers and tagging repositories 
-			To Use:
-			0. Ensure all files checked into master (clean environment).  Make sure
-			   you have access to both mvn and git on your command line, and you are
-			   in a terminal that has push access (credentials are setup and correct).
-			   Make sure you have the branch active in git you want to tag.
-			   If something goes wrong pushing, you will most likely have outstanding
-			   commits in your local repo you will have to revert/remove.
-			1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests -Dfindbugs.skip"
-			2. Inspect and ensure the correct pom.xml files will be modified
-			3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip"
-			4. mvn release:clean
-			-->
+			<!-- for incrementing version numbers and tagging repositories To Use: 
+				0. Ensure all files checked into master (clean environment). Make sure you 
+				have access to both mvn and git on your command line, and you are in a terminal 
+				that has push access (credentials are setup and correct). Make sure you have 
+				the branch active in git you want to tag. If something goes wrong pushing, 
+				you will most likely have outstanding commits in your local repo you will 
+				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
+				-Dfindbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
+				modified 3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
+				4. mvn release:clean -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>

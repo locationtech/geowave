@@ -19,10 +19,10 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.CloseableIterator.Empty;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -34,9 +34,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.IngestCallbackList;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -50,7 +48,8 @@ import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 
-public abstract class BaseDataStore
+public abstract class BaseDataStore implements
+		DataStore
 {
 	private final static Logger LOGGER = Logger.getLogger(BaseDataStore.class);
 
@@ -61,8 +60,8 @@ public abstract class BaseDataStore
 	protected final DataStatisticsStore statisticsStore;
 	protected final SecondaryIndexDataStore secondaryIndexDataStore;
 	protected final AdapterIndexMappingStore indexMappingStore;
-	private final DataStoreOperations baseOperations;
-	private final DataStoreOptions baseOptions;
+	protected final DataStoreOperations baseOperations;
+	protected final DataStoreOptions baseOptions;
 
 	public BaseDataStore(
 			final IndexStore indexStore,
@@ -96,6 +95,7 @@ public abstract class BaseDataStore
 		}
 	}
 
+	@Override
 	public <T> IndexWriter<T> createWriter(
 			final DataAdapter<T> adapter,
 			final PrimaryIndex... indices )
@@ -174,6 +174,7 @@ public abstract class BaseDataStore
 	 * core.store.query.QueryOptions,
 	 * mil.nga.giat.geowave.core.store.query.Query)
 	 */
+	@Override
 	public <T> CloseableIterator<T> query(
 			final QueryOptions queryOptions,
 			final Query query ) {
@@ -325,6 +326,7 @@ public abstract class BaseDataStore
 		return new CloseableIterator.Empty();
 	}
 
+	@Override
 	public boolean delete(
 			final QueryOptions queryOptions,
 			final Query query ) {

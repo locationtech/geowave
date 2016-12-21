@@ -103,7 +103,7 @@ public class AccumuloSplitsProvider extends
 		}
 
 		final String tableName = AccumuloUtils.getQualifiedTableName(
-				operations.getTableNameSpace(),
+				accumuloOperations.getTableNameSpace(),
 				index.getId().getString());
 		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
 		final TreeSet<Range> ranges;

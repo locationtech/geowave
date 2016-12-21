@@ -23,6 +23,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
@@ -92,7 +93,7 @@ public class SimpleHBaseIngestTest
 		zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
 
 		try {
-			Configuration conf = new Configuration();
+			final Configuration conf = new Configuration();
 			conf.set(
 					"hbase.online.schema.update.enable",
 					"true");

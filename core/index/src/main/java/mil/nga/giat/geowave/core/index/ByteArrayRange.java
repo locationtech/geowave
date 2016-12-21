@@ -1,12 +1,13 @@
 package mil.nga.giat.geowave.core.index;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /***
  * Defines a unit interval on a number line
- * 
+ *
  */
 public class ByteArrayRange implements
 		Comparable<ByteArrayRange>
@@ -16,7 +17,7 @@ public class ByteArrayRange implements
 	protected boolean singleValue;
 
 	/***
-	 * 
+	 *
 	 * @param start
 	 *            start of unit interval
 	 * @param end
@@ -32,7 +33,7 @@ public class ByteArrayRange implements
 	}
 
 	/***
-	 * 
+	 *
 	 * @param start
 	 *            start of unit interval
 	 * @param end
@@ -41,7 +42,7 @@ public class ByteArrayRange implements
 	public ByteArrayRange(
 			final ByteArrayId start,
 			final ByteArrayId end,
-			boolean singleValue ) {
+			final boolean singleValue ) {
 		this.start = start;
 		this.end = end;
 		this.singleValue = singleValue;
@@ -55,6 +56,11 @@ public class ByteArrayRange implements
 		return end;
 	}
 
+	public ByteArrayId getEndAsNextPrefix() {
+		return new ByteArrayId(
+				getNextPrefix(end.getBytes()));
+	}
+
 	public boolean isSingleValue() {
 		return singleValue;
 	}
@@ -63,53 +69,69 @@ public class ByteArrayRange implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((end == null) ? 0 : end.hashCode());
-		result = prime * result + (singleValue ? 1231 : 1237);
-		result = prime * result + ((start == null) ? 0 : start.hashCode());
+		result = (prime * result) + ((end == null) ? 0 : end.hashCode());
+		result = (prime * result) + (singleValue ? 1231 : 1237);
+		result = (prime * result) + ((start == null) ? 0 : start.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		ByteArrayRange other = (ByteArrayRange) obj;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final ByteArrayRange other = (ByteArrayRange) obj;
 		if (end == null) {
-			if (other.end != null) return false;
+			if (other.end != null) {
+				return false;
+			}
 		}
-		else if (!end.equals(other.end)) return false;
-		if (singleValue != other.singleValue) return false;
+		else if (!end.equals(other.end)) {
+			return false;
+		}
+		if (singleValue != other.singleValue) {
+			return false;
+		}
 		if (start == null) {
-			if (other.start != null) return false;
+			if (other.start != null) {
+				return false;
+			}
 		}
-		else if (!start.equals(other.start)) return false;
+		else if (!start.equals(other.start)) {
+			return false;
+		}
 		return true;
 	}
 
 	public boolean intersects(
-			ByteArrayRange other ) {
-		return ((getStart().compareTo(other.getEnd())) <= 0 && (getEnd().compareTo(other.getStart())) >= 0);
+			final ByteArrayRange other ) {
+		return (((getStart().compareTo(other.getEnd())) <= 0) && ((getEnd().compareTo(other.getStart())) >= 0));
 	}
 
 	public ByteArrayRange intersection(
-			ByteArrayRange other ) {
+			final ByteArrayRange other ) {
 		return new ByteArrayRange(
-				this.start.compareTo(other.start) <= 0 ? other.start : this.start,
-				this.end.compareTo(other.end) >= 0 ? other.end : this.end);
+				start.compareTo(other.start) <= 0 ? other.start : start,
+				end.compareTo(other.end) >= 0 ? other.end : end);
 	}
 
 	public ByteArrayRange union(
-			ByteArrayRange other ) {
+			final ByteArrayRange other ) {
 		return new ByteArrayRange(
-				this.start.compareTo(other.start) <= 0 ? this.start : other.start,
-				this.end.compareTo(other.end) >= 0 ? this.end : other.end);
+				start.compareTo(other.start) <= 0 ? start : other.start,
+				end.compareTo(other.end) >= 0 ? end : other.end);
 	}
 
 	@Override
 	public int compareTo(
-			ByteArrayRange other ) {
+			final ByteArrayRange other ) {
 		final int diff = getStart().compareTo(
 				other.getStart());
 		return diff != 0 ? diff : getEnd().compareTo(
@@ -122,8 +144,8 @@ public class ByteArrayRange implements
 	}
 
 	public static final List<ByteArrayRange> mergeIntersections(
-			List<ByteArrayRange> ranges,
-			MergeOperation op ) {
+			final List<ByteArrayRange> ranges,
+			final MergeOperation op ) {
 		// sort order so the first range can consume following ranges
 		Collections.<ByteArrayRange> sort(ranges);
 		final List<ByteArrayRange> result = new ArrayList<ByteArrayRange>();
@@ -150,4 +172,26 @@ public class ByteArrayRange implements
 		return result;
 	}
 
+	private static byte[] getNextPrefix(
+			final byte[] rowKeyPrefix ) {
+		int offset = rowKeyPrefix.length;
+		while (offset > 0) {
+			if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
+				break;
+			}
+			offset--;
+		}
+
+		if (offset == 0) {
+			return new byte[0];
+		}
+
+		final byte[] newStopRow = Arrays.copyOfRange(
+				rowKeyPrefix,
+				0,
+				offset);
+		// And increment the last one
+		newStopRow[newStopRow.length - 1]++;
+		return newStopRow;
+	}
 }

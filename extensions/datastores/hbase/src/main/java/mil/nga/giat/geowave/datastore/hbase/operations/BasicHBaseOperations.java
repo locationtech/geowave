@@ -309,11 +309,6 @@ public class BasicHBaseOperations implements
 		return conn.getRegionLocator(getTableName(getQualifiedTableName(tableName)));
 	}
 
-	@Override
-	public String getTableNameSpace() {
-		return tableNamespace;
-	}
-
 	public Table getTable(
 			final String tableName )
 			throws IOException {

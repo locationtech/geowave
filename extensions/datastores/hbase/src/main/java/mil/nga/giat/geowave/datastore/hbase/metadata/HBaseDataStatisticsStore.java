@@ -131,17 +131,6 @@ public class HBaseDataStatisticsStore extends
 
 	}
 
-	@Override
-	public void transformVisibility(
-			final ByteArrayId adapterId,
-			final String transformingRegex,
-			final String replacement,
-			final String... authorizations ) {
-		// TODO Unimplemented
-		LOGGER.error("This method transformVisibility is not yet coded. Need to fix it");
-
-	}
-
 	/**
 	 * This function is used to change the scan object created in the superclass
 	 * to enable prefixing.

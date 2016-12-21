@@ -29,7 +29,7 @@ public class ConstraintsQuery
 	public final List<MultiDimensionalNumericData> constraints;
 	public final List<DistributableQueryFilter> distributableFilters;
 
-	private final IndexMetaData[] indexMetaData;
+	public final IndexMetaData[] indexMetaData;
 	private final PrimaryIndex index;
 
 	public ConstraintsQuery(
