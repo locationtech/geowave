@@ -92,7 +92,7 @@ public class SecondaryIndexIT
 {
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private FeatureDataAdapter dataAdapter;

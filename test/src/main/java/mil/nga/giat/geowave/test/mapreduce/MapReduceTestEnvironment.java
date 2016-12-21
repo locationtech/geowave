@@ -44,7 +44,6 @@ public class MapReduceTestEnvironment implements
 			hdfs = "file:///";
 
 			hdfsBaseDirectory = TestUtils.TEMP_DIR.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
-
 			hdfsProtocol = false;
 		}
 		else {

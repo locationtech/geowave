@@ -64,32 +64,6 @@ public class BasicHBaseOperations implements
 				false);
 	}
 
-	public BasicHBaseOperations(
-			final String zookeeperInstances )
-			throws IOException {
-		this(
-				zookeeperInstances,
-				DEFAULT_TABLE_NAMESPACE);
-	}
-
-	public BasicHBaseOperations(
-			final Connection connector ) {
-		this(
-				DEFAULT_TABLE_NAMESPACE,
-				connector);
-	}
-
-	public BasicHBaseOperations(
-			final String tableNamespace,
-			final Connection connector ) {
-		this.tableNamespace = tableNamespace;
-		conn = connector;
-
-		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
-				"hbase.online.schema.update.enable",
-				false);
-	}
-
 	public static BasicHBaseOperations createOperations(
 			final HBaseRequiredOptions options )
 			throws IOException {
