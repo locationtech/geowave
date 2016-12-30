@@ -77,20 +77,21 @@ public class DynamoDBIndexWriter<T> extends
 		}
 		for (final ByteArrayId insertionId : ingestInfo.getInsertionIds()) {
 			final Map<String, AttributeValue> map = new HashMap<String, AttributeValue>();
-			final ByteBuffer idBuffer = ByteBuffer.allocate(ingestInfo.getDataId().length + adapterId.length + 4);
-			idBuffer.putInt(ingestInfo.getDataId().length);
-			idBuffer.put(ingestInfo.getDataId());
-			idBuffer.put(adapterId);
-			idBuffer.rewind();
-			map.put(
-					DynamoDBRow.GW_ID_KEY,
-					new AttributeValue().withB(idBuffer));
+			final byte[] insertionIdBytes = insertionId.getBytes();
+			final ByteBuffer rangeKeyBuffer = ByteBuffer.allocate(insertionIdBytes.length
+					+ ingestInfo.getDataId().length + adapterId.length + 8);
+			rangeKeyBuffer.put(insertionIdBytes);
+			rangeKeyBuffer.put(adapterId);
+			rangeKeyBuffer.put(ingestInfo.getDataId());
+			rangeKeyBuffer.putInt(adapterId.length);
+			rangeKeyBuffer.putInt(ingestInfo.getDataId().length);
+			rangeKeyBuffer.rewind();
 			map.put(
 					DynamoDBRow.GW_PARTITION_ID_KEY,
 					new AttributeValue().withN(Long.toString(counter++ % PARTITIONS)));
 			map.put(
-					DynamoDBRow.GW_IDX_KEY,
-					new AttributeValue().withB(ByteBuffer.wrap(insertionId.getBytes())));
+					DynamoDBRow.GW_RANGE_KEY,
+					new AttributeValue().withB(rangeKeyBuffer));
 			allFields.rewind();
 			map.put(
 					DynamoDBRow.GW_VALUE_KEY,

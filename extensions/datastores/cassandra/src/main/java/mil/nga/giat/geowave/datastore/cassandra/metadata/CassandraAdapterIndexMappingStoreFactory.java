@@ -17,8 +17,7 @@ public class CassandraAdapterIndexMappingStoreFactory extends
 					"Expected " + CassandraRequiredOptions.class.getSimpleName());
 		}
 
-		final CassandraOperations cassandraOperations = createOperations(
-				(CassandraRequiredOptions) options);
+		final CassandraOperations cassandraOperations = createOperations((CassandraRequiredOptions) options);
 		return new CassandraAdapterIndexMappingStore(
 				cassandraOperations);
 	}

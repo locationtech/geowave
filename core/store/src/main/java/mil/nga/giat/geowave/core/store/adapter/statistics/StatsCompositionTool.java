@@ -25,7 +25,7 @@ import mil.nga.giat.geowave.core.store.callback.ScanCallback;
  */
 public class StatsCompositionTool<T> implements
 		IngestCallback<T>,
-		ScanCallback<T>,
+		ScanCallback<T, Object>,
 		DeleteCallback<T>,
 		AutoCloseable,
 		Closeable,
@@ -101,6 +101,7 @@ public class StatsCompositionTool<T> implements
 	@Override
 	public void entryScanned(
 			final DataStoreEntryInfo entryInfo,
+			Object nativeDataStoreObj,
 			final T entry ) {
 		if (statisticsBuilders == null) {
 			return;
@@ -110,6 +111,7 @@ public class StatsCompositionTool<T> implements
 			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
 				builder.entryScanned(
 						entryInfo,
+						nativeDataStoreObj,
 						entry);
 			}
 			updateCount++;

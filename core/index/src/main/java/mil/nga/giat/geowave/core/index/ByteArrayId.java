@@ -33,6 +33,10 @@ public class ByteArrayId implements
 		return id;
 	}
 
+	public byte[] getNextPrefix() {
+		return getNextPrefix(id);
+	}
+
 	public String getString() {
 		if (stringId == null) {
 			stringId = StringUtils.stringFromBinary(id);
@@ -42,8 +46,8 @@ public class ByteArrayId implements
 
 	public String getHexString() {
 
-		StringBuffer str = new StringBuffer();
-		for (byte b : id) {
+		final StringBuffer str = new StringBuffer();
+		for (final byte b : id) {
 			str.append(String.format(
 					"%02X ",
 					b));
@@ -85,12 +89,12 @@ public class ByteArrayId implements
 	public static byte[] toBytes(
 			final ByteArrayId[] ids ) {
 		int len = 4;
-		for (ByteArrayId id : ids) {
+		for (final ByteArrayId id : ids) {
 			len += (id.id.length + 4);
 		}
 		final ByteBuffer buffer = ByteBuffer.allocate(len);
 		buffer.putInt(ids.length);
-		for (ByteArrayId id : ids) {
+		for (final ByteArrayId id : ids) {
 			buffer.putInt(id.id.length);
 			buffer.put(id.id);
 		}
@@ -98,7 +102,7 @@ public class ByteArrayId implements
 	}
 
 	public static ByteArrayId[] fromBytes(
-			byte[] idData ) {
+			final byte[] idData ) {
 		final ByteBuffer buffer = ByteBuffer.wrap(idData);
 		final int len = buffer.getInt();
 		final ByteArrayId[] result = new ByteArrayId[len];
@@ -114,16 +118,39 @@ public class ByteArrayId implements
 
 	@Override
 	public int compareTo(
-			ByteArrayId o ) {
+			final ByteArrayId o ) {
 
-		for (int i = 0, j = 0; i < id.length && j < o.id.length; i++, j++) {
-			int a = (id[i] & 0xff);
-			int b = (o.id[j] & 0xff);
+		for (int i = 0, j = 0; (i < id.length) && (j < o.id.length); i++, j++) {
+			final int a = (id[i] & 0xff);
+			final int b = (o.id[j] & 0xff);
 			if (a != b) {
 				return a - b;
 			}
 		}
 		return id.length - o.id.length;
 
+	}
+
+	private static byte[] getNextPrefix(
+			final byte[] rowKeyPrefix ) {
+		int offset = rowKeyPrefix.length;
+		while (offset > 0) {
+			if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
+				break;
+			}
+			offset--;
+		}
+
+		if (offset == 0) {
+			return new byte[0];
+		}
+
+		final byte[] newStopRow = Arrays.copyOfRange(
+				rowKeyPrefix,
+				0,
+				offset);
+		// And increment the last one
+		newStopRow[newStopRow.length - 1]++;
+		return newStopRow;
 	}
 }

@@ -6,10 +6,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -17,6 +15,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.Deleter;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
@@ -39,7 +38,7 @@ public class DynamoDBDataStore extends
 	public final static String TYPE = "dynamodb";
 
 	private final static Logger LOGGER = Logger.getLogger(DynamoDBDataStore.class);
-	private DynamoDBOperations dynamodbOperations;
+	private final DynamoDBOperations dynamodbOperations;
 
 	public DynamoDBDataStore(
 			final DynamoDBOperations operations ) {
@@ -95,7 +94,7 @@ public class DynamoDBDataStore extends
 				index,
 				sanitizedQuery,
 				filter,
-				sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, DynamoDBRow>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getAggregation(),
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				IndexMetaDataSet.getIndexMetadata(
@@ -132,7 +131,7 @@ public class DynamoDBDataStore extends
 				dynamodbOperations,
 				index,
 				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, DynamoDBRow>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
@@ -158,7 +157,7 @@ public class DynamoDBDataStore extends
 				adapter,
 				index,
 				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, DynamoDBRow>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -174,9 +173,9 @@ public class DynamoDBDataStore extends
 			final AdapterStore adapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> scanCallback,
+			final ScanCallback<Object, Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations ) {
+			final String... authorizations ) {
 		// TODO
 		return null;
 	}
@@ -202,29 +201,21 @@ public class DynamoDBDataStore extends
 	}
 
 	@Override
-	protected Closeable createIndexDeleter(
+	protected Deleter createIndexDeleter(
 			final String indexTableName,
-			final String[] authorizations )
+			final boolean isAltIndex,
+			final String... authorizations )
 			throws Exception {
 		// TODO
 		return null;
 	}
 
 	@Override
-	protected void addToBatch(
-			final Closeable deleter,
-			final List<ByteArrayId> ids )
-			throws Exception {
-
-		// TODO
-	}
-
-	@Override
 	protected <T> void addAltIndexCallback(
-			List<IngestCallback<T>> callbacks,
-			String indexName,
-			DataAdapter<T> adapter,
-			ByteArrayId primaryIndexId ) {
+			final List<IngestCallback<T>> callbacks,
+			final String indexName,
+			final DataAdapter<T> adapter,
+			final ByteArrayId primaryIndexId ) {
 		// TODO Auto-generated method stub
 
 	}

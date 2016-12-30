@@ -105,7 +105,7 @@ public class InputFormatHBaseRangeQuery extends
 		final Scan scanner = createStandardScanner(limit);
 
 		scanner.setStartRow(range.getStart().getBytes());
-		scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
+		scanner.setStopRow(range.getEndAsNextPrefix().getBytes());
 
 		return scanner;
 	}

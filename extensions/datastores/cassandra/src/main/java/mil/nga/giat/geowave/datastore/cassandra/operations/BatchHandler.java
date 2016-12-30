@@ -16,7 +16,7 @@ public class BatchHandler
 {
 	protected final Session session;
 	private static final int RF = 3;
-	private Type type;
+	private Type type = Type.UNLOGGED;
 	protected final Map<Set<Host>, BatchStatement> batches = new HashMap<>();
 
 	public BatchHandler(
@@ -38,13 +38,11 @@ public class BatchHandler
 						statement);
 
 		while (it.hasNext() && (replicas < RF)) {
-			hosts.add(
-					it.next());
+			hosts.add(it.next());
 			replicas++;
 		}
 
-		BatchStatement tokenBatch = batches.get(
-				hosts);
+		BatchStatement tokenBatch = batches.get(hosts);
 
 		if (tokenBatch == null) {
 			tokenBatch = new BatchStatement(
@@ -55,8 +53,7 @@ public class BatchHandler
 					tokenBatch);
 		}
 		synchronized (tokenBatch) {
-			tokenBatch.add(
-					statement);
+			tokenBatch.add(statement);
 		}
 		return tokenBatch;
 	}

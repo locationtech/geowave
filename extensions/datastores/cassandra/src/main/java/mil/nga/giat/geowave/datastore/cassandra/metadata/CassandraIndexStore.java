@@ -13,8 +13,7 @@ public class CassandraIndexStore extends
 		IndexStore
 {
 
-	private final static Logger LOGGER = Logger.getLogger(
-			CassandraIndexStore.class);
+	private final static Logger LOGGER = Logger.getLogger(CassandraIndexStore.class);
 	protected static final String INDEX_CF = "INDEX";
 
 	public CassandraIndexStore(
@@ -26,8 +25,7 @@ public class CassandraIndexStore extends
 	@Override
 	public void addIndex(
 			final Index index ) {
-		addObject(
-				index);
+		addObject(index);
 
 	}
 

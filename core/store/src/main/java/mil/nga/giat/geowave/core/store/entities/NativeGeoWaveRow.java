@@ -1,12 +1,14 @@
 package mil.nga.giat.geowave.core.store.entities;
 
-import java.nio.ByteBuffer;
-
 public interface NativeGeoWaveRow
 {
-	public ByteBuffer getAdapterAndDataId();
+	public byte[] getDataId();
 
-	public ByteBuffer getValue();
+	public byte[] getAdapterId();
 
-	public ByteBuffer getIndex();
+	public byte[] getFieldMask();
+
+	public byte[] getValue();
+
+	public byte[] getIndex();
 }

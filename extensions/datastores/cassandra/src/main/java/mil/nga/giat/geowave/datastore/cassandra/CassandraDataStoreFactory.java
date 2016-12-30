@@ -17,10 +17,7 @@ public class CassandraDataStoreFactory extends
 		}
 
 		final CassandraOperations cassandraOperations = createOperations((CassandraRequiredOptions) options);
-		// return new CassandraDataStore(
-		// cassandraOperations,
-		// ((CassandraOptions) options).getHBaseOptions());
-		return null;
-
+		return new CassandraDataStore(
+				cassandraOperations);
 	}
 }

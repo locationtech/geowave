@@ -17,8 +17,7 @@ public class CassandraAdapterStoreFactory extends
 			throw new AssertionError(
 					"Expected " + CassandraRequiredOptions.class.getSimpleName());
 		}
-		final CassandraOperations cassandraOperations = createOperations(
-				(CassandraRequiredOptions) options);
+		final CassandraOperations cassandraOperations = createOperations((CassandraRequiredOptions) options);
 		return new CassandraAdapterStore(
 				cassandraOperations);
 	}

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
@@ -169,8 +168,8 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			final URL savedFilterResource,
 			final PrimaryIndex index )
 			throws Exception {
-		LOGGER.info("deleting from " + index.getId() + " index");
-		System.out.println("deleting from " + index.getId() + " index");
+		LOGGER.info("deleting from " + index.getId().getString() + " index");
+		System.out.println("deleting from " + index.getId().getString() + " index");
 		boolean success = false;
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
 		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
@@ -320,8 +319,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 							expectedStat.getStatisticsId());
 
 					// Only test RANGE and COUNT in the multithreaded case. None
-					// of the other
-					// statistics will match!
+					// of the other statistics will match!
 					if (multithreaded) {
 						if (!(expectedStat.getStatisticsId().getString().startsWith(
 								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat

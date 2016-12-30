@@ -33,6 +33,7 @@
 		<tag>HEAD</tag>
 	</scm>
 	<properties>
+		<guava.version>14.0-rc1</guava.version>
 		<geotools.version>16.0</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
@@ -49,6 +50,7 @@
 		<hadoop.scope>compile</hadoop.scope>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.14</jersey.version>
+		<scala.version>2.11.8</scala.version>
 		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
@@ -81,6 +83,26 @@
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-library</artifactId>
+				<version>${scala.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-compiler</artifactId>
+				<version>${scala.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>jline</artifactId>
+				<version>2.11.0-M3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-reflect</artifactId>
+				<version>${scala.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
@@ -151,7 +173,7 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>14.0-rc1</version>
+				<version>${guava.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.aol.simplereact</groupId>
@@ -646,7 +668,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.6.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -790,9 +812,12 @@
 				that has push access (credentials are setup and correct). Make sure you have 
 				the branch active in git you want to tag. If something goes wrong pushing, 
 				you will most likely have outstanding commits in your local repo you will 
-				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
-				-Dfindbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
-				modified 3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
+				have to revert/remove. 
+				1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
+				-Dfindbugs.skip" 
+				2. Inspect and ensure the correct pom.xml files will be 
+				modified 
+				3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
 				4. mvn release:clean -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -1,6 +1,3 @@
-//                            BasicAccumuloOperations ops = new BasicAccumuloOperations(zookeeper, accumuloInstance, accumuloUser, accumuloPassword, "");
-//                            ops.insureAuthorization(accumuloUser, "a","b","c");
-
 package mil.nga.giat.geowave.test.basic;
 
 import java.io.IOException;

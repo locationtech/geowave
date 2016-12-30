@@ -1,20 +1,20 @@
 package mil.nga.giat.geowave.datastore.dynamodb.query;
 
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
@@ -24,8 +24,10 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
+import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
@@ -37,6 +39,7 @@ import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 public class DynamoDBConstraintsQuery extends
 		DynamoDBFilteredIndexQuery
 {
+	private static final Logger LOGGER = Logger.getLogger(DynamoDBConstraintsQuery.class);
 	private static final int MAX_RANGE_DECOMPOSITION = -1;
 	protected final ConstraintsQuery base;
 	private boolean queryFiltersEnabled;
@@ -47,7 +50,7 @@ public class DynamoDBConstraintsQuery extends
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, DynamoDBRow> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
@@ -77,7 +80,7 @@ public class DynamoDBConstraintsQuery extends
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, DynamoDBRow> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
@@ -91,7 +94,7 @@ public class DynamoDBConstraintsQuery extends
 				index,
 				queryFilters,
 				clientDedupeFilter,
-				scanCallback,
+				(ScanCallback) scanCallback,
 				fieldIdsAdapterPair,
 				visibilityCounts,
 				authorizations);
@@ -133,40 +136,80 @@ public class DynamoDBConstraintsQuery extends
 	}
 
 	@Override
-	protected Iterator initIterator(
+	public CloseableIterator<Object> query(
 			final AdapterStore adapterStore,
-			final Iterator<Map<String, AttributeValue>> results ) {
+			final double[] maxResolutionSubsamplingPerDimension,
+			final Integer limit ) {
+		final CloseableIterator<Object> results = super.query(
+				adapterStore,
+				maxResolutionSubsamplingPerDimension,
+				limit);
 		if (isAggregation()) {
 			// aggregate the stats to a single value here
-			Mergeable mergedAggregationResult = null;
 			if (!results.hasNext()) {
-				return Iterators.emptyIterator();
+				return new CloseableIterator.Wrapper<Object>(
+						Iterators.emptyIterator());
 			}
 			else {
-				while (results.hasNext()) {
-					final Map<String, AttributeValue> input = results.next();
-					if (input.get(DynamoDBRow.GW_VALUE_KEY) != null) {
-						if (mergedAggregationResult == null) {
-							mergedAggregationResult = PersistenceUtils.fromBinary(
-									input.get(
-											DynamoDBRow.GW_VALUE_KEY).getB().array(),
-									Mergeable.class);
-						}
-						else {
-							mergedAggregationResult.merge(PersistenceUtils.fromBinary(
-									input.get(
-											DynamoDBRow.GW_VALUE_KEY).getB().array(),
-									Mergeable.class));
+				final Aggregation aggregationFunction = base.aggregation.getRight();
+				synchronized (aggregationFunction) {
+					aggregationFunction.clearResult();
+					while (results.hasNext()) {
+						final Object input = results.next();
+						if (input != null) {
+							// TODO this is a hack for now
+							if (aggregationFunction instanceof CommonIndexAggregation) {
+								aggregationFunction.aggregate(null);
+							}
+							else {
+								aggregationFunction.aggregate(input);
+							}
 						}
 					}
+					try {
+						results.close();
+					}
+					catch (final IOException e) {
+						LOGGER.warn(
+								"Unable to close hbase scanner",
+								e);
+					}
+					return new Wrapper(
+							Iterators.singletonIterator(aggregationFunction.getResult()));
 				}
 			}
-			return Iterators.singletonIterator(mergedAggregationResult);
+		}
+		return results;
+	}
+
+	@Override
+	protected List<QueryFilter> getAllFiltersList() {
+		final List<QueryFilter> filters = super.getAllFiltersList();
+		// add a index filter to the front of the list if there isn't already a
+		// filter
+		if (base.distributableFilters.isEmpty()) {
+			final List<MultiDimensionalCoordinateRangesArray> coords = base.getCoordinateRanges();
+			if (!coords.isEmpty()) {
+				filters.add(
+						0,
+						new CoordinateRangeQueryFilter(
+								index.getIndexStrategy(),
+								coords.toArray(new MultiDimensionalCoordinateRangesArray[] {})));
+			}
 		}
 		else {
-			return super.initIterator(
-					adapterStore,
-					results);
+			// Without custom filters, we need all the filters on the client
+			// side
+			for (final QueryFilter distributable : base.distributableFilters) {
+				if (!filters.contains(distributable)) {
+					filters.add(distributable);
+				}
+			}
 		}
+		return filters;
+	}
+
+	protected boolean isCommonIndexAggregation() {
+		return base.isAggregation() && (base.aggregation.getRight() instanceof CommonIndexAggregation);
 	}
 }

@@ -1,13 +1,18 @@
 package mil.nga.giat.geowave.datastore.cassandra.metadata;
 
+import java.util.Iterator;
+
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import com.datastax.driver.core.Row;
+import com.datastax.driver.core.querybuilder.Select;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 
 public class CassandraDataStatisticsStore extends
@@ -16,8 +21,7 @@ public class CassandraDataStatisticsStore extends
 {
 
 	protected static final String STATISTICS_CF = "STATS";
-	private final static Logger LOGGER = Logger.getLogger(
-			CassandraDataStatisticsStore.class);
+	private final static Logger LOGGER = Logger.getLogger(CassandraDataStatisticsStore.class);
 
 	public CassandraDataStatisticsStore(
 			final CassandraOperations operations ) {
@@ -30,10 +34,9 @@ public class CassandraDataStatisticsStore extends
 			final DataStatistics<?> statistics ) {
 		// because we're using the combiner, we should simply be able to add the
 		// object
-		addObject(
-				statistics);
+		addObject(statistics);
 
-		// TODO if we do allow caching after we add a statistic to DynamoDB we
+		// TODO if we do allow caching after we add a statistic to Cassandra we
 		// do need to make sure we update our cache, but for now we aren't using
 		// the cache at all
 
@@ -49,7 +52,7 @@ public class CassandraDataStatisticsStore extends
 		// TODO consider adding a setting to use the cache for statistics, but
 		// because it could change with each new entry, it seems that there
 		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same DynamoDB tables
+		// of GeoWave are able to connect to the same Cassandra tables
 	}
 
 	@Override
@@ -61,7 +64,7 @@ public class CassandraDataStatisticsStore extends
 		// TODO consider adding a setting to use the cache for statistics, but
 		// because it could change with each new entry, it seems that there
 		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same DynamoDB tables
+		// of GeoWave are able to connect to the same Cassandra tables
 		return null;
 	}
 
@@ -74,7 +77,7 @@ public class CassandraDataStatisticsStore extends
 		// TODO consider adding a setting to use the cache for statistics, but
 		// because it could change with each new entry, it seems that there
 		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same DynamoDB tables
+		// of GeoWave are able to connect to the same Cassandra tables
 		return true;
 	}
 
@@ -90,14 +93,19 @@ public class CassandraDataStatisticsStore extends
 	}
 
 	@Override
+	protected Select getSelect() {
+		return operations.getSelect(
+				getTablename(),
+				SECONDARY_ID_KEY,
+				VALUE_KEY);
+	}
+
+	@Override
 	protected DataStatistics<?> entryToValue(
 			final Row entry ) {
-		final DataStatistics<?> stats = super.entryToValue(
-				entry);
+		final DataStatistics<?> stats = super.entryToValue(entry);
 		if (stats != null) {
-			stats.setDataAdapterId(
-					getSecondaryId(
-							entry));
+			stats.setDataAdapterId(getSecondaryId(entry));
 		}
 		return stats;
 	}
@@ -120,15 +128,13 @@ public class CassandraDataStatisticsStore extends
 		removeStatistics(
 				statistics.getDataAdapterId(),
 				statistics.getStatisticsId());
-		addObject(
-				statistics);
+		addObject(statistics);
 	}
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
 			final String... authorizations ) {
-		return getObjects(
-				authorizations);
+		return getObjects(authorizations);
 	}
 
 	@Override
@@ -152,6 +158,11 @@ public class CassandraDataStatisticsStore extends
 	}
 
 	@Override
+	protected boolean hasSecondaryId() {
+		return true;
+	}
+
+	@Override
 	protected String getPersistenceTypeName() {
 		return STATISTICS_CF;
 	}
@@ -169,5 +180,82 @@ public class CassandraDataStatisticsStore extends
 		deleteObjects(
 				adapterId,
 				authorizations);
+	}
+
+	/**
+	 * This function converts results and merges data statistic elements
+	 * together that have the same id.
+	 */
+	@Override
+	protected Iterator<DataStatistics<?>> getNativeIteratorWrapper(
+			final Iterator<Row> results ) {
+		return new StatisticsNativeIteratorWrapper(
+				results);
+	}
+
+	/**
+	 * A special version of NativeIteratorWrapper (defined in the parent) which
+	 * will combine records that have the same dataid & statsId
+	 */
+	private class StatisticsNativeIteratorWrapper implements
+			Iterator<DataStatistics<?>>
+	{
+		final private Iterator<Row> it;
+		private DataStatistics<?> nextVal = null;
+
+		public StatisticsNativeIteratorWrapper(
+				final Iterator<Row> resultIterator ) {
+			it = resultIterator;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return (nextVal != null) || it.hasNext();
+		}
+
+		@Override
+		public DataStatistics<?> next() {
+			DataStatistics<?> currentStatistics = nextVal;
+			nextVal = null;
+			while (it.hasNext()) {
+				final Row row = it.next();
+
+				// This entryToValue function has the side effect of adding the
+				// object to the cache.
+				// We need to make sure to add the merged version of the stat at
+				// the end of this
+				// function, before it is returned.
+				final DataStatistics<?> statEntry = entryToValue(row);
+
+				if (currentStatistics == null) {
+					currentStatistics = statEntry;
+				}
+				else {
+					if (statEntry.getStatisticsId().equals(
+							currentStatistics.getStatisticsId()) && statEntry.getDataAdapterId().equals(
+							currentStatistics.getDataAdapterId())) {
+						currentStatistics.merge(statEntry);
+					}
+					else {
+						nextVal = statEntry;
+						break;
+					}
+				}
+			}
+
+			// Add this entry to cache (see comment above)
+			addObjectToCache(
+					getPrimaryId(currentStatistics),
+					getSecondaryId(currentStatistics),
+					currentStatistics);
+			return currentStatistics;
+		}
+
+		@Override
+		public void remove() {
+			throw new NotImplementedException(
+					"Transforming iterator cannot use remove()");
+		}
+
 	}
 }

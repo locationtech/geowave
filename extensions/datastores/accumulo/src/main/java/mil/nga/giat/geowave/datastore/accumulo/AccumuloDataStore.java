@@ -2,9 +2,7 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -44,10 +42,10 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.Deleter;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -364,7 +362,7 @@ public class AccumuloDataStore extends
 		final AccumuloRowPrefixQuery<Object> prefixQuery = new AccumuloRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, Object>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
@@ -390,7 +388,7 @@ public class AccumuloDataStore extends
 				adapter,
 				index,
 				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, Object>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -408,12 +406,10 @@ public class AccumuloDataStore extends
 			final AdapterStore adapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> scanCallback,
+			final ScanCallback<Object, Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations ) {
-
+			final String... authorizations ) {
 		try {
-
 			final ScannerBase scanner = accumuloOperations.createScanner(
 					index.getId().getString(),
 					authorizations);
@@ -525,40 +521,23 @@ public class AccumuloDataStore extends
 			final String tableName,
 			final String columnFamily,
 			final String... additionalAuthorizations ) {
-		BatchDeleter deleter = null;
-		try {
-			deleter = accumuloOperations.createBatchDeleter(
-					tableName,
-					additionalAuthorizations);
-
-			deleter.setRanges(Arrays.asList(new Range()));
-			deleter.fetchColumnFamily(new Text(
-					columnFamily));
-			deleter.delete();
-			return true;
-		}
-		catch (final TableNotFoundException | MutationsRejectedException e) {
-			LOGGER.warn(
-					"Unable to delete row from table [" + tableName + "].",
-					e);
-			return false;
-		}
-		finally {
-			if (deleter != null) {
-				deleter.close();
-			}
-		}
-
+		return accumuloOperations.deleteAll(
+				tableName,
+				columnFamily,
+				additionalAuthorizations);
 	}
 
 	private static class ClosableBatchDeleter implements
-			Closeable
+			Deleter<Object>
 	{
 		private final BatchDeleter deleter;
+		private final boolean isAltIndex;
 
 		public ClosableBatchDeleter(
-				final BatchDeleter deleter ) {
+				final BatchDeleter deleter,
+				final boolean isAltIndex ) {
 			this.deleter = deleter;
+			this.isAltIndex = isAltIndex;
 		}
 
 		@Override
@@ -569,37 +548,48 @@ public class AccumuloDataStore extends
 		public BatchDeleter getDeleter() {
 			return deleter;
 		}
+
+		@Override
+		public void delete(
+				final DataStoreEntryInfo entry,
+				final Object nativeDataStoreEntry,
+				final DataAdapter<?> adapter ) {
+			final List<Range> rowRanges = new ArrayList<Range>();
+			if (isAltIndex) {
+				rowRanges.add(Range.exact(new Text(
+						entry.getDataId())));
+			}
+			else {
+				final List<ByteArrayId> rowIds = entry.getRowIds();
+				for (final ByteArrayId id : rowIds) {
+					rowRanges.add(Range.exact(new Text(
+							id.getBytes())));
+				}
+			}
+			final BatchDeleter batchDeleter = getDeleter();
+			batchDeleter.setRanges(rowRanges);
+			try {
+				batchDeleter.delete();
+			}
+			catch (MutationsRejectedException | TableNotFoundException e) {
+				LOGGER.warn(
+						"Unable to delete row: " + entry.toString(),
+						e);
+			}
+		}
 	}
 
 	@Override
-	protected Closeable createIndexDeleter(
+	protected Deleter createIndexDeleter(
 			final String indexTableName,
-			final String[] authorizations )
+			final boolean isAltIndex,
+			final String... authorizations )
 			throws Exception {
 		return new ClosableBatchDeleter(
 				accumuloOperations.createBatchDeleter(
 						indexTableName,
-						authorizations));
-	}
-
-	@Override
-	protected void addToBatch(
-			final Closeable deleter,
-			final List<ByteArrayId> ids )
-			throws Exception {
-		final List<Range> rowRanges = new ArrayList<Range>();
-		for (final ByteArrayId id : ids) {
-			rowRanges.add(Range.exact(new Text(
-					id.getBytes())));
-		}
-		if (deleter instanceof ClosableBatchDeleter) {
-			final BatchDeleter batchDeleter = ((ClosableBatchDeleter) deleter).getDeleter();
-			batchDeleter.setRanges(rowRanges);
-			batchDeleter.delete();
-		}
-		else {
-			LOGGER.error("Deleter incompatible with data store type");
-		}
+						authorizations),
+				isAltIndex);
 	}
 
 	@Override

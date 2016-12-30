@@ -21,12 +21,12 @@ abstract public class AbstractHBaseRowQuery<T> extends
 {
 
 	private static final Logger LOGGER = Logger.getLogger(AbstractHBaseRowQuery.class);
-	protected final ScanCallback<T> scanCallback;
+	protected final ScanCallback<T, ?> scanCallback;
 
 	public AbstractHBaseRowQuery(
 			final PrimaryIndex index,
 			final String[] authorizations,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, ?> scanCallback ) {
 		super(
 				index,
 				authorizations);

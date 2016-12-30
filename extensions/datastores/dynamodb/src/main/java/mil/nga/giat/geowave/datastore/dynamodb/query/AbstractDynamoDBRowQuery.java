@@ -27,13 +27,13 @@ abstract public class AbstractDynamoDBRowQuery<T> extends
 		DynamoDBQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(AbstractDynamoDBRowQuery.class);
-	protected final ScanCallback<T> scanCallback;
+	protected final ScanCallback<T, DynamoDBRow> scanCallback;
 
 	public AbstractDynamoDBRowQuery(
 			final DynamoDBOperations dynamodbOperations,
 			final PrimaryIndex index,
 			final String[] authorizations,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, DynamoDBRow> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
 				dynamodbOperations,
@@ -57,7 +57,8 @@ abstract public class AbstractDynamoDBRowQuery<T> extends
 								results,
 								new WrapAsNativeRow()),
 						null,
-						this.scanCallback));
+						this.scanCallback,
+						true));
 	}
 
 	abstract protected Integer getScannerLimit();

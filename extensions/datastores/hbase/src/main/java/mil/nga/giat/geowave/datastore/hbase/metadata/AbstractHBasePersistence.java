@@ -177,17 +177,11 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 				authorizations);
 	}
 
-	protected ByteArrayId getRowId(
-			final T object ) {
-		return getPrimaryId(object);
-	}
-
 	@Override
 	protected void addObject(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final T object ) {
-		final ByteArrayId id = getRowId(object);
 		addObjectToCache(
 				primaryId,
 				secondaryId,
@@ -201,9 +195,9 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 					METADATA_CFS,
 					true);
 			final RowMutations mutation = new RowMutations(
-					id.getBytes());
+					primaryId.getBytes());
 			final Put row = new Put(
-					id.getBytes());
+					primaryId.getBytes());
 			row.addColumn(
 					toBytes(getColumnFamily()),
 					toBytes(getColumnQualifier(object)),

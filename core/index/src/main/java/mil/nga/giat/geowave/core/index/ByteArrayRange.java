@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.core.index;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class ByteArrayRange implements
 
 	public ByteArrayId getEndAsNextPrefix() {
 		return new ByteArrayId(
-				getNextPrefix(end.getBytes()));
+				end.getNextPrefix());
 	}
 
 	public boolean isSingleValue() {
@@ -170,28 +169,5 @@ public class ByteArrayRange implements
 			result.add(r1);
 		}
 		return result;
-	}
-
-	private static byte[] getNextPrefix(
-			final byte[] rowKeyPrefix ) {
-		int offset = rowKeyPrefix.length;
-		while (offset > 0) {
-			if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
-				break;
-			}
-			offset--;
-		}
-
-		if (offset == 0) {
-			return new byte[0];
-		}
-
-		final byte[] newStopRow = Arrays.copyOfRange(
-				rowKeyPrefix,
-				0,
-				offset);
-		// And increment the last one
-		newStopRow[newStopRow.length - 1]++;
-		return newStopRow;
 	}
 }
