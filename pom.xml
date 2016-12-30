@@ -33,6 +33,7 @@
 		<tag>HEAD</tag>
 	</scm>
 	<properties>
+		<guava.version>14.0-rc1</guava.version>
 		<geotools.version>16.0</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
@@ -70,7 +71,8 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=256m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xms1g
+			-Xmx2g -XX:MaxMetaspaceSize=256m</test.args>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
@@ -151,7 +153,7 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>14.0-rc1</version>
+				<version>${guava.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.aol.simplereact</groupId>

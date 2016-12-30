@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -118,6 +119,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-exec</artifactId>
 			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.datastax.cassandra</groupId>
+			<artifactId>cassandra-driver-core</artifactId>
+			<version>3.1.2</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -285,7 +291,8 @@
 						<configuration>
 							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 								<mkdir dir="${project.reporting.outputDirectory}" />
-								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
+								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"
+									classpathref="maven.plugin.classpath" />
 								<jacoco:report>
 									<executiondata>
 										<fileset dir="../" includes="**/coverage-reports/*.exec" />
@@ -293,10 +300,14 @@
 
 									<structure name="GeoWave">
 										<classfiles>
-											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
+											<fileset dir="../"
+												includes="**/target/classes/**,**/target/munged/classes/**"
+												excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
-											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
+											<fileset dir="../"
+												includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
+												excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
@@ -356,4 +367,69 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>cassandra</id>
+			<properties>
+				<guava.version>16.0.1</guava.version>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cassandra-maven-plugin</artifactId>
+						<version>3.5</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>start</goal>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<startNativeTransport>true</startNativeTransport>
+							<!-- <rpcPort>9160</rpcPort>
+							<jmxPort>7199</jmxPort>
+							<storagePort>7000</storagePort>
+							<stopPort>8081</stopPort> -->
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.18.1</version>
+						<executions>
+							<execution>
+								<configuration>
+									<environmentVariables>
+										<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
+										<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
+									</environmentVariables>
+									<systemPropertyVariables>
+										<testStoreType>CASSANDRA</testStoreType>
+										<log4j.configuration>file:${project.build.testOutputDirectory}/log4j-test.properties</log4j.configuration>
+									</systemPropertyVariables>
+									<!-- Sonar currently just supports surefire so "trick" Sonar into 
+										thinking they are surefire reports -->
+									<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
+									<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>
+									<excludes>
+										<exclude>**/*IT.java</exclude>
+									</excludes>
+									<includes>
+										<include>**/*ITSuite.java</include>
+									</includes>
+								</configuration>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
