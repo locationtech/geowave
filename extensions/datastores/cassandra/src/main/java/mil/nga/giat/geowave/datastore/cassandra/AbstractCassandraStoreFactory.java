@@ -11,19 +11,20 @@ abstract public class AbstractCassandraStoreFactory<T> extends
 		AbstractCassandraFactory implements
 		GenericStoreFactory<T>
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractCassandraStoreFactory.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			AbstractCassandraStoreFactory.class);
 
 	protected CassandraOperations createOperations(
 			final CassandraRequiredOptions options ) {
-		// try {
-		// return CassandraOperations.createOperations(options);
-		// }
-		// catch (final Exception e) {
-		// LOGGER.error(
-		// "Unable to create Cassandra operations from config options",
-		// e);
-		// return null;
-		// }
-		return null;
+		try {
+			return new CassandraOperations(
+					options);
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to create Cassandra operations from config options",
+					e);
+			return null;
+		}
 	}
 }

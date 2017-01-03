@@ -31,7 +31,7 @@ public class SessionPool
 							contactPoints.split(
 									","))
 					.build()
-					.newSession();
+					.connect();
 			sessionCache.put(
 					contactPoints,
 					session);

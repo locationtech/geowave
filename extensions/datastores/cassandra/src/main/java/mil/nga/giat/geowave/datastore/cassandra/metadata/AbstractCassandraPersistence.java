@@ -1,9 +1,7 @@
 package mil.nga.giat.geowave.datastore.cassandra.metadata;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +33,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 	private final static Logger LOGGER = Logger.getLogger(
 			AbstractCassandraPersistence.class);
 	protected final CassandraOperations operations;
-	
+
 	public AbstractCassandraPersistence(
 			final CassandraOperations operations ) {
 		super(
@@ -85,7 +83,8 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				id,
 				secondaryId,
 				object);
-		if (!operations.tableExists(getTablename())) {
+		if (!operations.tableExists(
+				getTablename())) {
 			// create table
 			final Create create = operations.getCreateTable(
 					getTablename());
@@ -98,6 +97,9 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 			create.addColumn(
 					VALUE_KEY,
 					DataType.blob());
+			operations.executeCreateTable(
+					create,
+					getTablename());
 		}
 		final Insert insert = operations.getInsert(
 				getTablename());
@@ -120,11 +122,11 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				insert);
 	}
 
-
 	protected CloseableIterator<T> getAllObjectsWithSecondaryId(
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
-		if (!operations.tableExists(getTablename())) {
+		if (!operations.tableExists(
+				getTablename())) {
 			return new CloseableIterator.Wrapper<>(
 					Iterators.emptyIterator());
 		}
@@ -215,7 +217,8 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
-		if (!operations.tableExists(getTablename())) {
+		if (!operations.tableExists(
+				getTablename())) {
 			return Iterators.emptyIterator();
 		}
 		final Select select = operations.getSelect(

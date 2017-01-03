@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.StreamSupport;
 
 import com.aol.cyclops.control.LazyReact;
+import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
@@ -24,6 +25,7 @@ import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.schemabuilder.Create;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -73,6 +75,25 @@ public class CassandraOperations implements
 		}
 		session = SessionPool.getInstance().getSession(
 				options.getContactPoint());
+		// TODO consider exposing important keyspace options through commandline
+		// such as understanding how to properly enable cassandra in production
+		// - with data centers and snitch, for now because this is only creating
+		// a keyspace "if not exists" a user can create a keyspace matching
+		// their geowave namespace with any settings they want manually
+		session.execute(
+				SchemaBuilder
+						.createKeyspace(
+								gwNamespace)
+						.ifNotExists()
+						.with()
+						.replication(
+								ImmutableMap.of(
+										"class",
+										"SimpleStrategy",
+										"replication_factor",
+										options.getAdditionalOptions().getReplicationFactor()))
+						.durableWrites(
+								options.getAdditionalOptions().isDurableWrites()));
 		this.options = options.getAdditionalOptions();
 	}
 
@@ -82,9 +103,15 @@ public class CassandraOperations implements
 		Boolean tableExists = tableExistsCache.get(
 				tableName);
 		if (tableExists == null) {
-			tableExists = session.getCluster().getMetadata().getKeyspace(
-					gwNamespace).getTable(
-							tableName) != null;
+			final KeyspaceMetadata keyspace = session.getCluster().getMetadata().getKeyspace(
+					gwNamespace);
+			if (keyspace != null) {
+				tableExists = keyspace.getTable(
+						tableName) != null;
+			}
+			else {
+				tableExists = false;
+			}
 			tableExistsCache.put(
 					tableName,
 					tableExists);
