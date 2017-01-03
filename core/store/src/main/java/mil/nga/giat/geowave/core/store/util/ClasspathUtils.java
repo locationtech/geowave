@@ -26,24 +26,28 @@ public class ClasspathUtils
 
 	public static String setupPathingJarClassPath(
 			final File dir,
-			final Class context )
+			final Class context,
+			final URL... additionalClasspathUrls )
 			throws IOException {
 		return setupPathingJarClassPath(
 				new File(
 						dir.getParentFile().getAbsolutePath() + File.separator + "pathing",
 						"pathing.jar"),
 				null,
-				context);
+				context,
+				additionalClasspathUrls);
 	}
 
 	public static String setupPathingJarClassPath(
 			final File jarFile,
 			final String mainClass,
-			final Class context )
+			final Class context,
+			final URL... additionalClasspathUrls )
 			throws IOException {
 
 		final String classpath = getClasspath(
-				context);
+				context,
+				additionalClasspathUrls);
 		final File jarDir = jarFile.getParentFile();
 		if (!jarDir.exists()) {
 			try {
@@ -93,7 +97,8 @@ public class ClasspathUtils
 	}
 
 	private static String getClasspath(
-			final Class context )
+			final Class context,
+			final URL... additionalUrls )
 			throws IOException {
 
 		try {
@@ -111,7 +116,11 @@ public class ClasspathUtils
 					classloaders);
 
 			final StringBuilder classpathBuilder = new StringBuilder();
-
+			for (final URL u : additionalUrls) {
+				append(
+						classpathBuilder,
+						u);
+			}
 			// assume 0 is the system classloader and skip it
 			for (int i = 0; i < classloaders.size(); i++) {
 				final ClassLoader classLoader = classloaders.get(

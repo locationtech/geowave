@@ -32,10 +32,12 @@ public class CassandraStoreTestEnvironment extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(
 			CassandraStoreTestEnvironment.class);
 
-	private static CassandraDataStoreFactory STORE_FACTORY;
+	private static CassandraDataStoreFactory STORE_FACTORY = new CassandraDataStoreFactory();
 	private static CassandraStoreTestEnvironment singletonInstance = null;
 	protected static final File TEMP_DIR = new File(
-			"./target/cassandra_temp/");
+			System.getProperty(
+					"user.dir") + File.separator + "target" + File.separator + "cassandra_temp",
+			"cassandra");
 
 	private static class StartGeoWaveCluster extends
 			StartCassandraClusterMojo
@@ -54,7 +56,7 @@ public class CassandraStoreTestEnvironment extends
 			stopKey = "cassandra-maven-plugin";
 			maxMemory = 512;
 			cassandraDir = TEMP_DIR;
-			cassandraDir.mkdirs();
+			cassandraDir.getParentFile().mkdirs();
 			project = new MavenProject();
 			project.setFile(
 					cassandraDir);
@@ -105,15 +107,17 @@ public class CassandraStoreTestEnvironment extends
 
 		@Override
 		protected void createCassandraJar(
-				File jarFile,
-				String mainClass,
-				File cassandraDir )
+				final File jarFile,
+				final String mainClass,
+				final File cassandraDir )
 				throws IOException {
-			ClasspathUtils.setupPathingJarClassPath(jarFile, mainClass, this.getClass());
-//			super.createCassandraJar(
-//					jarFile,
-//					mainClass,
-//					cassandraDir);
+			ClasspathUtils.setupPathingJarClassPath(
+					jarFile,
+					mainClass,
+					this.getClass(),
+					new File(
+							cassandraDir,
+							"conf").toURI().toURL());
 		}
 
 		public void start() {
