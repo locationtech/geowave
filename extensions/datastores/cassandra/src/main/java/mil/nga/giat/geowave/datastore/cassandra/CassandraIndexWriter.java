@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
@@ -45,8 +44,7 @@ public class CassandraIndexWriter<T> extends
 	protected void ensureOpen() {
 		if (writer == null) {
 			writer = operations.createWriter(
-					StringUtils.stringFromBinary(
-							index.getId().getBytes()),
+					index.getId().getString(),
 					true);
 		}
 	}

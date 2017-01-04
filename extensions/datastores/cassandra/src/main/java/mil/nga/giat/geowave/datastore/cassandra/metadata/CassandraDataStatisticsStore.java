@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.datastore.cassandra.metadata;
 import org.apache.log4j.Logger;
 
 import com.datastax.driver.core.Row;
+import com.datastax.driver.core.querybuilder.Select;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -87,6 +88,14 @@ public class CassandraDataStatisticsStore extends
 				statisticsId,
 				adapterId,
 				authorizations);
+	}
+
+	@Override
+	protected Select getSelect() {
+		return operations.getSelect(
+				getTablename(),
+				SECONDARY_ID_KEY,
+				VALUE_KEY);
 	}
 
 	@Override

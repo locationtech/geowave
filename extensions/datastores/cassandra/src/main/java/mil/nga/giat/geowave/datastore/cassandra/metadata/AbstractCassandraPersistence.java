@@ -26,9 +26,11 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 abstract public class AbstractCassandraPersistence<T extends Persistable> extends
 		AbstractGeowavePersistence<T>
 {
-	private static final String PRIMARY_ID_KEY = "I";
-	private static final String SECONDARY_ID_KEY = "S";
-	private static final String VALUE_KEY = "V";
+	protected static final String PRIMARY_ID_KEY = "I";
+	protected static final String SECONDARY_ID_KEY = "S";
+	protected static final String VALUE_KEY = "V";
+
+	private static final Object CREATE_TABLE_MUTEX = new Object();
 
 	private final static Logger LOGGER = Logger.getLogger(
 			AbstractCassandraPersistence.class);
@@ -45,17 +47,6 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 			final Row row ) {
 		final ByteBuffer v = row.getBytes(
 				SECONDARY_ID_KEY);
-		if (v != null) {
-			return new ByteArrayId(
-					v.array());
-		}
-		return null;
-	}
-
-	protected ByteArrayId getPrimaryId(
-			final Row row ) {
-		final ByteBuffer v = row.getBytes(
-				PRIMARY_ID_KEY);
 		if (v != null) {
 			return new ByteArrayId(
 					v.array());
@@ -83,23 +74,25 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				id,
 				secondaryId,
 				object);
-		if (!operations.tableExists(
-				getTablename())) {
-			// create table
-			final Create create = operations.getCreateTable(
-					getTablename());
-			create.addPartitionKey(
-					PRIMARY_ID_KEY,
-					DataType.blob());
-			create.addColumn(
-					SECONDARY_ID_KEY,
-					DataType.blob());
-			create.addColumn(
-					VALUE_KEY,
-					DataType.blob());
-			operations.executeCreateTable(
-					create,
-					getTablename());
+		synchronized (CREATE_TABLE_MUTEX) {
+			if (!operations.tableExists(
+					getTablename())) {
+				// create table
+				final Create create = operations.getCreateTable(
+						getTablename());
+				create.addPartitionKey(
+						PRIMARY_ID_KEY,
+						DataType.blob());
+				create.addColumn(
+						SECONDARY_ID_KEY,
+						DataType.blob());
+				create.addColumn(
+						VALUE_KEY,
+						DataType.blob());
+				operations.executeCreateTable(
+						create,
+						getTablename());
+			}
 		}
 		final Insert insert = operations.getInsert(
 				getTablename());
@@ -221,9 +214,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				getTablename())) {
 			return Iterators.emptyIterator();
 		}
-		final Select select = operations.getSelect(
-				getTablename(),
-				VALUE_KEY);
+		final Select select = getSelect();
 		if (primaryId != null) {
 			final Where where = select.where(
 					QueryBuilder.eq(
@@ -236,10 +227,17 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 								SECONDARY_ID_KEY,
 								ByteBuffer.wrap(
 										secondaryId.getBytes())));
+				select.allowFiltering();
 			}
 		}
 		return operations.getSession().execute(
 				select).iterator();
+	}
+
+	protected Select getSelect() {
+		return operations.getSelect(
+				getTablename(),
+				VALUE_KEY);
 	}
 
 	public boolean deleteObjects(

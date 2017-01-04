@@ -32,7 +32,8 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 public class GeometryUtils
 {
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
-	private final static Logger LOGGER = Logger.getLogger(GeometryUtils.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
 
 	public static Constraints basicConstraintsFromGeometry(
@@ -91,18 +92,21 @@ public class GeometryUtils
 			retVal = false;
 			for (int gi = 0; gi < n; gi++) {
 				constructListOfConstraintSetsFromGeometry(
-						geometry.getGeometryN(gi),
+						geometry.getGeometryN(
+								gi),
 						destinationListOfSets,
 						checkTopoEquality);
 			}
 		}
 		else {
 			final Envelope env = geometry.getEnvelopeInternal();
-			destinationListOfSets.add(basicConstraintSetFromEnvelope(env));
+			destinationListOfSets.add(
+					basicConstraintSetFromEnvelope(
+							env));
 			if (checkTopoEquality) {
 				retVal = new GeometryFactory().toGeometry(
 						env).equalsTopo(
-						geometry);
+								geometry);
 			}
 		}
 		return retVal;
@@ -155,7 +159,8 @@ public class GeometryUtils
 			final Envelope env ) {
 
 		return new Constraints(
-				basicConstraintSetFromEnvelope(env));
+				basicConstraintSetFromEnvelope(
+						env));
 	}
 
 	/**
@@ -252,12 +257,14 @@ public class GeometryUtils
 		int dimensions = DEFAULT_DIMENSIONALITY;
 
 		if (!geometry.isEmpty()) {
-			dimensions = Double.isNaN(geometry.getCoordinate().getOrdinate(
-					Coordinate.Z)) ? 2 : 3;
+			dimensions = Double.isNaN(
+					geometry.getCoordinate().getOrdinate(
+							Coordinate.Z)) ? 2 : 3;
 		}
 
 		return new WKBWriter(
-				dimensions).write(geometry);
+				dimensions).write(
+						geometry);
 	}
 
 	/**
@@ -270,7 +277,8 @@ public class GeometryUtils
 	public static Geometry geometryFromBinary(
 			final byte[] binary ) {
 		try {
-			return new WKBReader().read(binary);
+			return new WKBReader().read(
+					binary);
 		}
 		catch (final ParseException e) {
 			LOGGER.warn(
@@ -289,11 +297,12 @@ public class GeometryUtils
 	public static Geometry infinity() {
 		// unless we make this synchronized, we will want to instantiate a new
 		// geometry factory because geometry factories are not thread safe
-		return new GeometryFactory().toGeometry(new Envelope(
-				Double.NEGATIVE_INFINITY,
-				Double.POSITIVE_INFINITY,
-				Double.NEGATIVE_INFINITY,
-				Double.POSITIVE_INFINITY));
+		return new GeometryFactory().toGeometry(
+				new Envelope(
+						Double.NEGATIVE_INFINITY,
+						Double.POSITIVE_INFINITY,
+						Double.NEGATIVE_INFINITY,
+						Double.POSITIVE_INFINITY));
 	}
 
 	public static class GeoConstraintsWrapper

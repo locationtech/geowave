@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,13 +8,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.stream.StreamSupport;
 
-import com.aol.cyclops.control.LazyReact;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.ResultSetFuture;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.Insert;
@@ -26,7 +22,6 @@ import com.datastax.driver.core.schemabuilder.Create;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.spotify.futures.CompletableFuturesExtra;
@@ -34,7 +29,6 @@ import com.spotify.futures.CompletableFuturesExtra;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
@@ -57,9 +51,10 @@ public class CassandraOperations implements
 	protected final static ExecutorService READ_RESPONSE_THREADS = MoreExecutors.getExitingExecutorService(
 			(ThreadPoolExecutor) Executors.newFixedThreadPool(
 					READ_RESPONSE_THREAD_SIZE));
-
+	private static final Object CREATE_TABLE_MUTEX = new Object();
 	private final Map<String, PreparedStatement> preparedRangeReadsPerTable = new HashMap<>();
 	private final Map<String, PreparedStatement> preparedRowReadPerTable = new HashMap<>();
+	private final Map<String, PreparedStatement> preparedWritesPerTable = new HashMap<>();
 	private static Map<String, Boolean> tableExistsCache = new HashMap<>();
 
 	private final CassandraOptions options;
@@ -127,12 +122,14 @@ public class CassandraOperations implements
 			final String table ) {
 		return SchemaBuilder.createTable(
 				gwNamespace,
-				table);
+				table).ifNotExists();
 	}
 
 	public void executeCreateTable(
 			final Create create,
 			final String tableName ) {
+		System.out.println(
+				"create " + tableName);
 		session.execute(
 				create);
 		tableExistsCache.put(
@@ -142,6 +139,8 @@ public class CassandraOperations implements
 
 	public Insert getInsert(
 			final String table ) {
+		System.out.println(
+				"insert " + table);
 		return QueryBuilder.insertInto(
 				gwNamespace,
 				table);
@@ -150,8 +149,8 @@ public class CassandraOperations implements
 	public Select getSelect(
 			final String table,
 			final String... columns ) {
-		return QueryBuilder.select(
-				columns).from(
+		return (columns.length == 0 ? QueryBuilder.select() : QueryBuilder.select(
+				columns)).from(
 						gwNamespace,
 						table);
 	}
@@ -160,9 +159,31 @@ public class CassandraOperations implements
 		return options;
 	}
 
-	public BatchedWrite getBatchedWrite() {
+	public BatchedWrite getBatchedWrite(
+			final String tableName ) {
+		PreparedStatement preparedWrite;
+		synchronized (preparedWritesPerTable) {
+			preparedWrite = preparedWritesPerTable.get(
+					tableName);
+			if (preparedWrite == null) {
+				final Insert insert = getInsert(
+						tableName);
+				for (final CassandraField f : CassandraField.values()) {
+					insert.value(
+							f.getFieldName(),
+							QueryBuilder.bindMarker(
+									f.getBindMarkerName()));
+				}
+				preparedWrite = session.prepare(
+						insert);
+				preparedWritesPerTable.put(
+						tableName,
+						preparedWrite);
+			}
+		}
 		return new BatchedWrite(
 				session,
+				preparedWrite,
 				options.getBatchWriteSize());
 	}
 
@@ -178,6 +199,11 @@ public class CassandraOperations implements
 						tableName);
 				select
 						.where(
+								QueryBuilder.eq(
+										CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+										QueryBuilder.bindMarker(
+												CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName())))
+						.and(
 								QueryBuilder.gte(
 										CassandraRow.CassandraField.GW_IDX_KEY.getFieldName(),
 										QueryBuilder.bindMarker(
@@ -212,20 +238,26 @@ public class CassandraOperations implements
 			final String tableName,
 			final byte[] rowIdx ) {
 		PreparedStatement preparedRead;
-		synchronized (preparedRangeReadsPerTable) {
-			preparedRead = preparedRangeReadsPerTable.get(
+		synchronized (preparedRowReadPerTable) {
+			preparedRead = preparedRowReadPerTable.get(
 					tableName);
 			if (preparedRead == null) {
 				final Select select = getSelect(
 						tableName);
-				select.where(
-						QueryBuilder.eq(
-								CassandraRow.CassandraField.GW_IDX_KEY.getFieldName(),
-								QueryBuilder.bindMarker(
-										CassandraRow.CassandraField.GW_IDX_KEY.getBindMarkerName())));
+				select
+						.where(
+								QueryBuilder.eq(
+										CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+										QueryBuilder.bindMarker(
+												CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName())))
+						.and(
+								QueryBuilder.eq(
+										CassandraRow.CassandraField.GW_IDX_KEY.getFieldName(),
+										QueryBuilder.bindMarker(
+												CassandraRow.CassandraField.GW_IDX_KEY.getBindMarkerName())));
 				preparedRead = session.prepare(
 						select);
-				preparedRangeReadsPerTable.put(
+				preparedRowReadPerTable.put(
 						tableName,
 						preparedRead);
 			}
@@ -245,43 +277,66 @@ public class CassandraOperations implements
 				null);
 	}
 
+	// public CloseableIterator<CassandraRow> executeQuery(
+	// final Statement... statements ) {
+	// // first create a list of asynchronous query executions
+	// final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(
+	// statements.length);
+	// for (final Statement s : statements) {
+	// futures.add(
+	// session.executeAsync(
+	// s));
+	// }
+	// for (ResultSetFuture f : futures) {
+	// Futures.addCallback(
+	// f,
+	// new IngestCallback(),
+	// CassandraOperations.WRITE_RESPONSE_THREADS);
+	// }
+	// // convert the list of futures to an asynchronously as completed
+	// // iterator on cassandra rows
+	// final
+	// com.aol.cyclops.internal.react.stream.CloseableIterator<CassandraRow>
+	// results = new LazyReact()
+	// .fromStreamFutures(
+	// Lists.transform(
+	// futures,
+	// new ListenableFutureToCompletableFuture()).stream())
+	// .flatMap(
+	// r -> StreamSupport.stream(
+	// r.spliterator(),
+	// false))
+	// .map(
+	// r -> new CassandraRow(
+	// r))
+	// .iterator();
+	// // now convert cyclops-react closeable iterator to a geowave closeable
+	// // iterator
+	// return new CloseableIteratorWrapper<CassandraRow>(
+	// new Closeable() {
+	//
+	// @Override
+	// public void close()
+	// throws IOException {
+	// results.close();
+	// }
+	// },
+	// results);
+	// }
 	public CloseableIterator<CassandraRow> executeQuery(
 			final Statement... statements ) {
-		// first create a list of asynchronous query executions
-		final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(
-				statements.length);
+		final List<CassandraRow> rows = new ArrayList<>();
 		for (final Statement s : statements) {
-			futures.add(
-					session.executeAsync(
-							s));
+			final ResultSet r = session.execute(
+					s);
+			for (final Row row : r) {
+				rows.add(
+						new CassandraRow(
+								row));
+			}
 		}
-		// convert the list of futures to an asynchronously as completed
-		// iterator on cassandra rows
-		final com.aol.cyclops.internal.react.stream.CloseableIterator<CassandraRow> results = new LazyReact()
-				.fromStreamFutures(
-						Lists.transform(
-								futures,
-								new ListenableFutureToCompletableFuture()).stream())
-				.flatMap(
-						r -> StreamSupport.stream(
-								r.spliterator(),
-								false))
-				.map(
-						r -> new CassandraRow(
-								r))
-				.iterator();
-		// now convert cyclops-react closeable iterator to a geowave closeable
-		// iterator
-		return new CloseableIteratorWrapper<CassandraRow>(
-				new Closeable() {
-
-					@Override
-					public void close()
-							throws IOException {
-						results.close();
-					}
-				},
-				results);
+		return new CloseableIterator.Wrapper<CassandraRow>(
+				rows.iterator());
 	}
 
 	public Writer createWriter(
@@ -291,17 +346,19 @@ public class CassandraOperations implements
 				tableName,
 				this);
 		if (createTable) {
-			if (!tableExists(
-					tableName)) {
-				final Create create = getCreateTable(
-						tableName);
-				for (final CassandraField f : CassandraField.values()) {
-					f.addColumn(
-							create);
+			synchronized (CREATE_TABLE_MUTEX) {
+				if (!tableExists(
+						tableName)) {
+					final Create create = getCreateTable(
+							tableName);
+					for (final CassandraField f : CassandraField.values()) {
+						f.addColumn(
+								create);
+					}
+					executeCreateTable(
+							create,
+							tableName);
 				}
-				executeCreateTable(
-						create,
-						tableName);
 			}
 		}
 		return writer;

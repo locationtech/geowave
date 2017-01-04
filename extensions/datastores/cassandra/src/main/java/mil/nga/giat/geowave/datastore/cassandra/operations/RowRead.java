@@ -57,6 +57,13 @@ public class RowRead
 						ByteBuffer.wrap(
 								row),
 						ByteBuffer.class);
+				boundRead.set(
+						CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
+						ByteBuffer.wrap(
+								new byte[] {
+									(byte) p
+								}),
+						ByteBuffer.class);
 				statements[p] = boundRead;
 			}
 			try (CloseableIterator<CassandraRow> it = operations.executeQuery(

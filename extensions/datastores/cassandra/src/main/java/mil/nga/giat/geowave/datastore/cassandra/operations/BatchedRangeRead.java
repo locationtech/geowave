@@ -1,16 +1,17 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections.iterators.EmptyIterator;
-
+import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 
 public class BatchedRangeRead
 {
@@ -43,9 +44,36 @@ public class BatchedRangeRead
 	}
 
 	public Iterator<CassandraRow> results() {
+		final List<BoundStatement> statements = new ArrayList<>();
 		for (int p = 0; p < CassandraIndexWriter.PARTITIONS; p++) {
+			for (final ByteArrayRange range : ranges) {
+				final BoundStatement boundRead = new BoundStatement(
+						preparedRead);
+				boundRead.set(
+						CassandraField.GW_IDX_KEY.getLowerBoundBindMarkerName(),
+						ByteBuffer.wrap(
+								range.getStart().getBytes()),
+						ByteBuffer.class);
+
+				boundRead.set(
+						CassandraField.GW_IDX_KEY.getUpperBoundBindMarkerName(),
+						ByteBuffer.wrap(
+								range.getEndAsNextPrefix().getBytes()),
+						ByteBuffer.class);
+				boundRead.set(
+						CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
+						ByteBuffer.wrap(
+								new byte[] {
+									(byte) p
+								}),
+						ByteBuffer.class);
+				statements.add(
+						boundRead);
+			}
 
 		}
-		return EmptyIterator.INSTANCE;
+		return operations.executeQuery(
+				statements.toArray(
+						new BoundStatement[] {}));
 	}
 }
