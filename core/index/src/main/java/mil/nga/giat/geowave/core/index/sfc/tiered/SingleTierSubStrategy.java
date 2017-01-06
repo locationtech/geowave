@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
+import mil.nga.giat.geowave.core.index.sfc.binned.BinnedSFCUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
@@ -62,7 +63,7 @@ public class SingleTierSubStrategy implements
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
-		return TieredSFCIndexStrategy.getQueryRanges(
+		return BinnedSFCUtils.getQueryRanges(
 				binnedQueries,
 				sfc,
 				maxRangeDecomposition,
@@ -73,7 +74,7 @@ public class SingleTierSubStrategy implements
 	public MultiDimensionalNumericData getRangeForId(
 			final ByteArrayId insertionId ) {
 		final byte[] rowId = insertionId.getBytes();
-		return TieredSFCIndexStrategy.getRangeForId(
+		return BinnedSFCUtils.getRangeForId(
 				rowId,
 				baseDefinitions,
 				sfc);
@@ -87,7 +88,7 @@ public class SingleTierSubStrategy implements
 				new byte[] {
 					tier
 				},
-				TieredSFCIndexStrategy.getCoordinatesForId(
+				BinnedSFCUtils.getCoordinatesForId(
 						rowId,
 						baseDefinitions,
 						sfc));
@@ -259,7 +260,7 @@ public class SingleTierSubStrategy implements
 				dataRange,
 				baseDefinitions);
 		return new MultiDimensionalCoordinateRanges[] {
-			TieredSFCIndexStrategy.getCoordinateRanges(
+			BinnedSFCUtils.getCoordinateRanges(
 					binRangesPerDimension,
 					sfc,
 					baseDefinitions.length,

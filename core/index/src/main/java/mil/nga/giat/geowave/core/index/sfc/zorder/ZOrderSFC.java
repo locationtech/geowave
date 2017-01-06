@@ -164,11 +164,6 @@ public class ZOrderSFC implements
 	}
 
 	@Override
-	public int getBitsOfPrecision() {
-		return cardinalityPerDimension * dimensionDefs.length;
-	}
-
-	@Override
 	public byte[] toBinary() {
 		final List<byte[]> dimensionDefBinaries = new ArrayList<byte[]>(
 				dimensionDefs.length);
