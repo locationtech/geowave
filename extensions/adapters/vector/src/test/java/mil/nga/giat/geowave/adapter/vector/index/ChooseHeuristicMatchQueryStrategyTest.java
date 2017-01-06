@@ -53,13 +53,11 @@ public class ChooseHeuristicMatchQueryStrategyTest
 			new SpatialTemporalIndexBuilder().setNumPartitions(
 					5).setBias(
 					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
-					Unit.YEAR).setPointOnly(
-					false).createIndex(),
+					Unit.YEAR).createIndex(),
 			new SpatialTemporalIndexBuilder().setNumPartitions(
 					10).setBias(
 					SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
-					Unit.DAY).setPointOnly(
-					false).createIndex(),
+					Unit.DAY).createIndex(),
 			new SpatialIndexBuilder().createIndex(),
 			IMAGE_CHIP_INDEX2);
 
