@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
@@ -58,8 +59,10 @@ public class DynamoDBConstraintsQuery extends
 				dynamodbOperations,
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(
+						index.getIndexStrategy()) : null,
+				query != null ? query.createFilters(
+						index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
@@ -145,7 +148,8 @@ public class DynamoDBConstraintsQuery extends
 			else {
 				while (results.hasNext()) {
 					final Map<String, AttributeValue> input = results.next();
-					if (input.get(DynamoDBRow.GW_VALUE_KEY) != null) {
+					if (input.get(
+							DynamoDBRow.GW_VALUE_KEY) != null) {
 						if (mergedAggregationResult == null) {
 							mergedAggregationResult = PersistenceUtils.fromBinary(
 									input.get(
@@ -153,20 +157,26 @@ public class DynamoDBConstraintsQuery extends
 									Mergeable.class);
 						}
 						else {
-							mergedAggregationResult.merge(PersistenceUtils.fromBinary(
-									input.get(
-											DynamoDBRow.GW_VALUE_KEY).getB().array(),
-									Mergeable.class));
+							mergedAggregationResult.merge(
+									PersistenceUtils.fromBinary(
+											input.get(
+													DynamoDBRow.GW_VALUE_KEY).getB().array(),
+											Mergeable.class));
 						}
 					}
 				}
 			}
-			return Iterators.singletonIterator(mergedAggregationResult);
+			return Iterators.singletonIterator(
+					mergedAggregationResult);
 		}
 		else {
 			return super.initIterator(
 					adapterStore,
 					results);
 		}
+	}
+
+	protected boolean isCommonIndexAggregation() {
+		return base.isAggregation() && (base.aggregation.getRight() instanceof CommonIndexAggregation);
 	}
 }

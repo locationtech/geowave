@@ -14,12 +14,12 @@ public class NativeEntryIteratorWrapper<T> extends
 		EntryIteratorWrapper<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(NativeEntryIteratorWrapper.class);
-
 	public NativeEntryIteratorWrapper(
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator scannerIt,
-			final QueryFilter clientFilter ) {
+			final QueryFilter clientFilter,
+			boolean decodePersistenceEncoding) {
 		super(
 				false,
 				adapterStore,
@@ -34,7 +34,8 @@ public class NativeEntryIteratorWrapper<T> extends
 			final PrimaryIndex index,
 			final Iterator scannerIt,
 			final QueryFilter clientFilter,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T> scanCallback,
+			boolean decodePersistenceEncoding ) {
 		super(
 				false,
 				adapterStore,
@@ -49,7 +50,7 @@ public class NativeEntryIteratorWrapper<T> extends
 			final Object row,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final boolean wholeRowEncoding ) {
+			final boolean wholeRowEncoding) {
 		NativeGeoWaveRow entry = null;
 		try {
 			entry = (NativeGeoWaveRow) row;

@@ -51,7 +51,8 @@ abstract public class AbstractCassandraRowQuery<T> extends
 						index,
 						results,
 						null,
-						this.scanCallback));
+						this.scanCallback,
+						true));
 	}
 
 	abstract protected Integer getScannerLimit();

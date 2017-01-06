@@ -192,7 +192,6 @@ public class HBaseConstraintsQuery extends
 			if ((it != null) && it.hasNext()) {
 				final Aggregation aggregationFunction = base.aggregation.getRight();
 				synchronized (aggregationFunction) {
-
 					aggregationFunction.clearResult();
 					while (it.hasNext()) {
 						final Object input = it.next();

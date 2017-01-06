@@ -117,7 +117,8 @@ public abstract class CassandraFilteredIndexQuery extends
 						0)
 						: new FilterList<QueryFilter>(
 								clientFilters),
-				scanCallback);
+				scanCallback,
+				false);
 	}
 
 }

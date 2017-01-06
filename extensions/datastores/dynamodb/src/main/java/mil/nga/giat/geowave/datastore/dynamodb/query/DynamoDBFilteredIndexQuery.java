@@ -121,7 +121,8 @@ public abstract class DynamoDBFilteredIndexQuery extends
 				clientFilters.isEmpty() ? null : clientFilters.size() == 1 ? clientFilters.get(0)
 						: new FilterList<QueryFilter>(
 								clientFilters),
-				scanCallback);
+				scanCallback,
+				true);
 	}
 
 	public static class WrapAsNativeRow implements

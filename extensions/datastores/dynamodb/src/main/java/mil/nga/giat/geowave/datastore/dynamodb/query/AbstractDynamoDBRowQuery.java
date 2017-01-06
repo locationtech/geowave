@@ -26,7 +26,8 @@ import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 abstract public class AbstractDynamoDBRowQuery<T> extends
 		DynamoDBQuery
 {
-	private static final Logger LOGGER = Logger.getLogger(AbstractDynamoDBRowQuery.class);
+	private static final Logger LOGGER = Logger.getLogger(
+			AbstractDynamoDBRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractDynamoDBRowQuery(
@@ -57,7 +58,8 @@ abstract public class AbstractDynamoDBRowQuery<T> extends
 								results,
 								new WrapAsNativeRow()),
 						null,
-						this.scanCallback));
+						this.scanCallback,
+						false));
 	}
 
 	abstract protected Integer getScannerLimit();

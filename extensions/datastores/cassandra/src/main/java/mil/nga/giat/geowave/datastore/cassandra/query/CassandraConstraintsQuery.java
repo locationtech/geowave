@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
@@ -150,13 +151,19 @@ public class CassandraConstraintsQuery extends
 			else {
 				final Aggregation aggregationFunction = base.aggregation.getRight();
 				synchronized (aggregationFunction) {
-
 					aggregationFunction.clearResult();
 					while (results.hasNext()) {
 						final Object input = results.next();
-						if (input != null) {
+						// TODO this is a hack for now
+						if (aggregationFunction instanceof CommonIndexAggregation) {
 							aggregationFunction.aggregate(
-									input);
+									null);
+						}
+						else {
+							if (input != null) {
+								aggregationFunction.aggregate(
+										input);
+							}
 						}
 					}
 					try {
