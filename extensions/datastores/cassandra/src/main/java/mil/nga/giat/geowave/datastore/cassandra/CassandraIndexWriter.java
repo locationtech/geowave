@@ -73,22 +73,14 @@ public class CassandraIndexWriter<T> extends
 					bytes);
 		}
 		for (final ByteArrayId insertionId : ingestInfo.getInsertionIds()) {
-			final ByteBuffer idBuffer = ByteBuffer.allocate(
-					ingestInfo.getDataId().length + adapterId.length + 4);
-			idBuffer.putInt(
-					ingestInfo.getDataId().length);
-			idBuffer.put(
-					ingestInfo.getDataId());
-			idBuffer.put(
-					adapterId);
-			idBuffer.rewind();
 			allFields.rewind();
 			rows.add(
 					new CassandraRow(
 							new byte[] {
 								(byte) (counter++ % PARTITIONS)
 							},
-							idBuffer.array(),
+							ingestInfo.getDataId(),
+							adapterId,
 							insertionId.getBytes(),
 							allFields.array()));
 		}

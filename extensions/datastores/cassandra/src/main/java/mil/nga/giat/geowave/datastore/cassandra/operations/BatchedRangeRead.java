@@ -9,6 +9,7 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
@@ -43,7 +44,7 @@ public class BatchedRangeRead
 				range);
 	}
 
-	public Iterator<CassandraRow> results() {
+	public CloseableIterator<CassandraRow> results() {
 		final List<BoundStatement> statements = new ArrayList<>();
 		for (int p = 0; p < CassandraIndexWriter.PARTITIONS; p++) {
 			for (final ByteArrayRange range : ranges) {

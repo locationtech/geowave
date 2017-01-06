@@ -12,6 +12,8 @@ import com.google.common.collect.Iterators;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -76,7 +78,7 @@ abstract public class CassandraQuery
 		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
-	protected Iterator<CassandraRow> getResults(
+	protected CloseableIterator<CassandraRow> getResults(
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
 		final List<ByteArrayRange> ranges = getRanges();
@@ -91,8 +93,8 @@ abstract public class CassandraQuery
 							tableName);
 					rowRead.setRow(
 							r.getStart().getBytes());
-					return Iterators.singletonIterator(
-							rowRead.result());
+					return new Wrapper(Iterators.singletonIterator(
+							rowRead.result()));
 				}
 				else {
 					final BatchedRangeRead rangeRead = cassandraOperations.getBatchedRangeRead(
@@ -107,7 +109,7 @@ abstract public class CassandraQuery
 					ranges);
 			return rangeRead.results();
 		}
-		return EmptyIterator.INSTANCE;
+		return new Wrapper(EmptyIterator.INSTANCE);
 	}
 
 	public String[] getAdditionalAuthorizations() {

@@ -109,7 +109,7 @@ public class CassandraDataStore extends
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore ) {
-		final CassandraConstraintsQuery dynamodbQuery = new CassandraConstraintsQuery(
+		final CassandraConstraintsQuery cassandraQuery = new CassandraConstraintsQuery(
 				operations,
 				adapterIdsToQuery,
 				index,
@@ -135,7 +135,7 @@ public class CassandraDataStore extends
 						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
-		return dynamodbQuery.query(
+		return cassandraQuery.query(
 				tempAdapterStore,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				sanitizedQueryOptions.getLimit());

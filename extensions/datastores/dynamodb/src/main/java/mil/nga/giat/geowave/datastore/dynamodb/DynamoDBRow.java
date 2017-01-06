@@ -11,11 +11,13 @@ public class DynamoDBRow implements
 		NativeGeoWaveRow
 {
 	public static final String GW_PARTITION_ID_KEY = "P";
-	public static final String GW_ID_KEY = "I";
-	public static final String GW_IDX_KEY = "X";
+	public static final String GW_RANGE_KEY = "R";
 	public static final String GW_VALUE_KEY = "V";
 
 	private final Map<String, AttributeValue> objMap;
+	private byte[] dataId;
+	private byte[] idx;
+	private byte[] adapterId;
 
 	public DynamoDBRow(
 			final Map<String, AttributeValue> objMap ) {
@@ -23,20 +25,48 @@ public class DynamoDBRow implements
 	}
 
 	@Override
-	public ByteBuffer getAdapterAndDataId() {
-		return objMap.get(
-				GW_ID_KEY).getB();
+	public byte[] getDataId() {
+		initIds();
+		return dataId;
 	}
 
 	@Override
-	public ByteBuffer getValue() {
-		return objMap.get(
-				GW_VALUE_KEY).getB();
+	public byte[] getAdapterId() {
+		initIds();
+		return adapterId;
 	}
 
 	@Override
-	public ByteBuffer getIndex() {
+	public byte[] getValue() {
 		return objMap.get(
-				GW_IDX_KEY).getB();
+				GW_VALUE_KEY).getB().array();
+	}
+
+	@Override
+	public byte[] getIndex() {
+		initIds();
+		return idx;
+	}
+
+	public synchronized void initIds() {
+		if (dataId == null) {
+			final ByteBuffer rangeKey = objMap.get(
+					GW_RANGE_KEY).getB();
+			final int size = rangeKey.remaining();
+			rangeKey.position(
+					size - 8);
+			final int adapterIdLength = rangeKey.getInt();
+			final int dataIdLength = rangeKey.getInt();
+			idx = new byte[size - adapterIdLength - dataIdLength - 8];
+			adapterId = new byte[adapterIdLength];
+			dataId = new byte[adapterIdLength];
+			rangeKey.rewind();
+			rangeKey.get(
+					idx);
+			rangeKey.get(
+					adapterId);
+			rangeKey.get(
+					dataId);
+		}
 	}
 }

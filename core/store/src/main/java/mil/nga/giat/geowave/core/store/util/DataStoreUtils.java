@@ -613,17 +613,10 @@ public class DataStoreUtils
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback ) {
-		final ByteBuffer idBuf = row.getAdapterAndDataId();
-		final int totalLength = idBuf.array().length;
-		final byte[] dataId = new byte[idBuf.getInt()];
-		idBuf.get(
-				dataId);
-
-		final byte[] adapterId = new byte[totalLength - dataId.length - 4];
-		idBuf.get(
-				adapterId);
+		final byte[] dataId = row.getDataId();
+		final byte[] adapterId = row.getAdapterId();
 		final GeowaveRowId rowId = new GeowaveRowId(
-				row.getIndex().array(),
+				row.getIndex(),
 				dataId,
 				adapterId,
 				1);
@@ -688,7 +681,7 @@ public class DataStoreUtils
 
 		final List<FlattenedFieldInfo> flattenedFieldInfoList = new ArrayList<FlattenedFieldInfo>();
 		final CommonIndexModel indexModel = index.getIndexModel();
-		final byte[] flattenedValue = row.getValue().array();
+		final byte[] flattenedValue = row.getValue();
 		final ByteBuffer input = ByteBuffer.wrap(
 				flattenedValue);
 		int i = 0;

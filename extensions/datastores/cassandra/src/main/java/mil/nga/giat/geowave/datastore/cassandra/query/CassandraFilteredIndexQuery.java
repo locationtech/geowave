@@ -85,7 +85,7 @@ public abstract class CassandraFilteredIndexQuery extends
 			return new CloseableIterator.Empty();
 		}
 
-		final Iterator<CassandraRow> results = getResults(
+		final CloseableIterator<CassandraRow> results = getResults(
 				maxResolutionSubsamplingPerDimension,
 				limit);
 
@@ -108,7 +108,7 @@ public abstract class CassandraFilteredIndexQuery extends
 
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
-			final Iterator<CassandraRow> results ) {
+			final CloseableIterator<CassandraRow> results ) {
 		return new NativeEntryIteratorWrapper<>(
 				adapterStore,
 				index,

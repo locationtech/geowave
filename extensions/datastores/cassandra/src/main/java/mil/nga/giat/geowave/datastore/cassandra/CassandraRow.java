@@ -43,16 +43,19 @@ public class CassandraRow implements
 
 	public static enum CassandraField {
 		GW_PARTITION_ID_KEY(
-				"P",
+				"partition",
 				ColumnType.PARTITION_KEY),
 		GW_IDX_KEY(
-				"X",
+				"idx",
 				ColumnType.CLUSTER_COLUMN),
-		GW_ID_KEY(
-				"I",
-				ColumnType.OTHER_COLUMN),
+		GW_DATA_ID_KEY(
+				"data_id",
+				ColumnType.CLUSTER_COLUMN),
+		GW_ADAPTER_ID_KEY(
+				"adapter_id",
+				ColumnType.CLUSTER_COLUMN),
 		GW_VALUE_KEY(
-				"V",
+				"value",
 				ColumnType.OTHER_COLUMN);
 		private final String fieldName;
 		private ColumnType columnType;
@@ -89,17 +92,20 @@ public class CassandraRow implements
 	}
 
 	private final byte[] partitionId;
-	private final byte[] id;
+	private final byte[] dataId;
+	private final byte[] adapterId;
 	private final byte[] idx;
 	private final byte[] value;
 
 	public CassandraRow(
 			final byte[] partitionId,
-			final byte[] id,
+			final byte[] dataId,
+			final byte[] adapterId,
 			final byte[] idx,
 			final byte[] value ) {
 		this.partitionId = partitionId;
-		this.id = id;
+		this.dataId = dataId;
+		this.adapterId = adapterId;
 		this.idx = idx;
 		this.value = value;
 	}
@@ -108,28 +114,28 @@ public class CassandraRow implements
 			final Row row ) {
 		partitionId = row.getBytes(
 				CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
-		id = row.getBytes(
-				CassandraField.GW_ID_KEY.getFieldName()).array();
+		dataId = row.getBytes(
+				CassandraField.GW_DATA_ID_KEY.getFieldName()).array();
+		adapterId = row.getBytes(
+				CassandraField.GW_ADAPTER_ID_KEY.getFieldName()).array();
 		idx = row.getBytes(
 				CassandraField.GW_IDX_KEY.getFieldName()).array();
 		value = row.getBytes(
 				CassandraField.GW_VALUE_KEY.getFieldName()).array();
 	}
 
-	public byte[] getRawPartitionId() {
+	public byte[] getPartitionId() {
 		return partitionId;
 	}
 
-	public byte[] getRawId() {
-		return id;
+	@Override
+	public byte[] getDataId() {
+		return dataId;
 	}
 
-	public byte[] getRawIdx() {
-		return idx;
-	}
-
-	public byte[] getRawValue() {
-		return value;
+	@Override
+	public byte[] getAdapterId() {
+		return adapterId;
 	}
 
 	public BoundStatement bindInsertion(
@@ -147,9 +153,14 @@ public class CassandraRow implements
 						idx),
 				ByteBuffer.class);
 		retVal.set(
-				CassandraField.GW_ID_KEY.getBindMarkerName(),
+				CassandraField.GW_DATA_ID_KEY.getBindMarkerName(),
 				ByteBuffer.wrap(
-						id),
+						dataId),
+				ByteBuffer.class);
+		retVal.set(
+				CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+				ByteBuffer.wrap(
+						adapterId),
 				ByteBuffer.class);
 		retVal.set(
 				CassandraField.GW_VALUE_KEY.getBindMarkerName(),
@@ -160,20 +171,12 @@ public class CassandraRow implements
 	}
 
 	@Override
-	public ByteBuffer getAdapterAndDataId() {
-		return ByteBuffer.wrap(
-				id);
+	public byte[] getValue() {
+		return value;
 	}
 
 	@Override
-	public ByteBuffer getValue() {
-		return ByteBuffer.wrap(
-				value);
-	}
-
-	@Override
-	public ByteBuffer getIndex() {
-		return ByteBuffer.wrap(
-				idx);
+	public byte[] getIndex() {
+		return idx;
 	}
 }

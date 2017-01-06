@@ -1,10 +1,10 @@
 package mil.nga.giat.geowave.datastore.cassandra.query;
 
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 
 import com.google.common.collect.Iterators;
 
@@ -12,8 +12,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
@@ -36,6 +37,8 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 public class CassandraConstraintsQuery extends
 		CassandraFilteredIndexQuery
 {
+	private static final Logger LOGGER = Logger.getLogger(
+			CassandraConstraintsQuery.class);
 	private static final int MAX_RANGE_DECOMPOSITION = -1;
 	protected final ConstraintsQuery base;
 	private boolean queryFiltersEnabled;
@@ -134,40 +137,48 @@ public class CassandraConstraintsQuery extends
 	}
 
 	@Override
-	protected Iterator initIterator(
+	protected CloseableIterator initIterator(
 			final AdapterStore adapterStore,
-			final Iterator<CassandraRow> results ) {
+			final CloseableIterator<CassandraRow> results ) {
 		if (isAggregation()) {
 			// aggregate the stats to a single value here
-			Mergeable mergedAggregationResult = null;
+			final Mergeable mergedAggregationResult = null;
 			if (!results.hasNext()) {
-				return Iterators.emptyIterator();
+				return new CloseableIterator.Wrapper<CassandraRow>(
+						Iterators.emptyIterator());
 			}
 			else {
-				while (results.hasNext()) {
-					final CassandraRow input = results.next();
-					if (input.getRawValue() != null) {
-						if (mergedAggregationResult == null) {
-							mergedAggregationResult = PersistenceUtils.fromBinary(
-									input.getRawValue(),
-									Mergeable.class);
-						}
-						else {
-							mergedAggregationResult.merge(
-									PersistenceUtils.fromBinary(
-											input.getRawValue(),
-											Mergeable.class));
+				final Aggregation aggregationFunction = base.aggregation.getRight();
+				synchronized (aggregationFunction) {
+
+					aggregationFunction.clearResult();
+					while (results.hasNext()) {
+						final Object input = results.next();
+						if (input != null) {
+							aggregationFunction.aggregate(
+									input);
 						}
 					}
+					try {
+						results.close();
+					}
+					catch (final IOException e) {
+						LOGGER.warn(
+								"Unable to close hbase scanner",
+								e);
+					}
+
+					return new Wrapper(
+							Iterators.singletonIterator(
+									aggregationFunction.getResult()));
 				}
 			}
-			return Iterators.singletonIterator(
-					mergedAggregationResult);
 		}
 		else {
-			return super.initIterator(
-					adapterStore,
-					results);
+			return new Wrapper(
+					super.initIterator(
+							adapterStore,
+							results));
 		}
 	}
 }
