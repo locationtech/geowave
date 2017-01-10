@@ -59,7 +59,7 @@ abstract public class AbstractDynamoDBRowQuery<T> extends
 								new WrapAsNativeRow()),
 						null,
 						this.scanCallback,
-						false));
+						true));
 	}
 
 	abstract protected Integer getScannerLimit();

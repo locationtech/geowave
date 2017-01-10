@@ -65,6 +65,10 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 		return null;
 	}
 
+	protected boolean hasSecondaryId() {
+		return false;
+	}
+
 	@Override
 	protected void addObject(
 			final ByteArrayId id,
@@ -83,9 +87,11 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				create.addPartitionKey(
 						PRIMARY_ID_KEY,
 						DataType.blob());
-				create.addColumn(
-						SECONDARY_ID_KEY,
-						DataType.blob());
+				if (hasSecondaryId()) {
+					create.addClusteringColumn(
+							SECONDARY_ID_KEY,
+							DataType.blob());
+				}
 				create.addColumn(
 						VALUE_KEY,
 						DataType.blob());
@@ -124,13 +130,11 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 					Iterators.emptyIterator());
 		}
 		final ResultSet results = operations.getSession().execute(
-				operations.getSelect(
-						getTablename(),
-						VALUE_KEY).where(
-								QueryBuilder.eq(
-										SECONDARY_ID_KEY,
-										ByteBuffer.wrap(
-												secondaryId.getBytes()))));
+				getSelect().allowFiltering().where(
+						QueryBuilder.eq(
+								SECONDARY_ID_KEY,
+								ByteBuffer.wrap(
+										secondaryId.getBytes()))));
 		return new CloseableIterator.Wrapper<T>(
 				Iterators.transform(
 						results.iterator(),

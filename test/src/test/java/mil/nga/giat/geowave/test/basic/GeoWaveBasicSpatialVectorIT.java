@@ -89,11 +89,11 @@ public class GeoWaveBasicSpatialVectorIT extends
 
 		mark = System.currentTimeMillis();
 
-		TestUtils.testLocalIngest(
-				dataStore,
-				DimensionalityType.SPATIAL,
-				TORNADO_TRACKS_SHAPEFILE_FILE,
-				nthreads);
+//		TestUtils.testLocalIngest(
+//				dataStore,
+//				DimensionalityType.SPATIAL,
+//				TORNADO_TRACKS_SHAPEFILE_FILE,
+//				nthreads);
 
 		dur = (System.currentTimeMillis() - mark);
 		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
@@ -107,8 +107,8 @@ public class GeoWaveBasicSpatialVectorIT extends
 					new URL[] {
 						new File(
 								HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
+//						new File(
+//								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"bounding box constraint only");
@@ -131,8 +131,8 @@ public class GeoWaveBasicSpatialVectorIT extends
 					new URL[] {
 						new File(
 								HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
+//						new File(
+//								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"polygon constraint only");
@@ -153,8 +153,8 @@ public class GeoWaveBasicSpatialVectorIT extends
 						new File[] {
 							new File(
 									HAIL_SHAPEFILE_FILE),
-							new File(
-									TORNADO_TRACKS_SHAPEFILE_FILE)
+//							new File(
+//									TORNADO_TRACKS_SHAPEFILE_FILE)
 						},
 						TestUtils.DEFAULT_SPATIAL_INDEX,
 						true);

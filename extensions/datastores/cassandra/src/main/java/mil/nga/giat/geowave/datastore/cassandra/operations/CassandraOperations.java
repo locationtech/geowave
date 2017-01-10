@@ -128,10 +128,6 @@ public class CassandraOperations implements
 	public void executeCreateTable(
 			final Create create,
 			final String tableName ) {
-		System.out.println(
-				"create " + tableName);
-		System.out.println(
-				"create " + create.getQueryString());
 		session.execute(
 				create);
 		tableExistsCache.put(
@@ -141,8 +137,6 @@ public class CassandraOperations implements
 
 	public Insert getInsert(
 			final String table ) {
-		System.out.println(
-				"insert " + table);
 		return QueryBuilder.insertInto(
 				gwNamespace,
 				table);
@@ -176,7 +170,6 @@ public class CassandraOperations implements
 							QueryBuilder.bindMarker(
 									f.getBindMarkerName()));
 				}
-				System.err.println(insert.getQueryString());
 				preparedWrite = session.prepare(
 						insert);
 				preparedWritesPerTable.put(

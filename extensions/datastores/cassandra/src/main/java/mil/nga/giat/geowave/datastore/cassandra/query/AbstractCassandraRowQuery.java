@@ -42,7 +42,7 @@ abstract public class AbstractCassandraRowQuery<T> extends
 	public CloseableIterator<T> query(
 			final double[] maxResolutionSubsamplingPerDimension,
 			final AdapterStore adapterStore ) {
-		final Iterator<CassandraRow> results = getResults(
+		final CloseableIterator<CassandraRow> results = getResults(
 				maxResolutionSubsamplingPerDimension,
 				getScannerLimit());
 		return new CloseableIterator.Wrapper<T>(

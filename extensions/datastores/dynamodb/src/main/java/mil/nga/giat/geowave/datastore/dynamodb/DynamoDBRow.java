@@ -12,6 +12,7 @@ public class DynamoDBRow implements
 {
 	public static final String GW_PARTITION_ID_KEY = "P";
 	public static final String GW_RANGE_KEY = "R";
+	public static final String GW_FIELD_MASK_KEY = "F";
 	public static final String GW_VALUE_KEY = "V";
 
 	private final Map<String, AttributeValue> objMap;
@@ -40,6 +41,11 @@ public class DynamoDBRow implements
 	public byte[] getValue() {
 		return objMap.get(
 				GW_VALUE_KEY).getB().array();
+	}
+	
+	public byte[] getFieldMask(){
+		return objMap.get(
+				GW_FIELD_MASK_KEY).getB().array();		
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
@@ -24,6 +25,7 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
+import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
@@ -89,7 +91,6 @@ public class CassandraConstraintsQuery extends
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
-
 		super(
 				operations,
 				adapterIds,
@@ -138,14 +139,18 @@ public class CassandraConstraintsQuery extends
 	}
 
 	@Override
-	protected CloseableIterator initIterator(
-			final AdapterStore adapterStore,
-			final CloseableIterator<CassandraRow> results ) {
+	public CloseableIterator<Object> query(
+			AdapterStore adapterStore,
+			double[] maxResolutionSubsamplingPerDimension,
+			Integer limit ) {
+		CloseableIterator<Object> results = super.query(
+				adapterStore,
+				maxResolutionSubsamplingPerDimension,
+				limit);
 		if (isAggregation()) {
 			// aggregate the stats to a single value here
-			final Mergeable mergedAggregationResult = null;
 			if (!results.hasNext()) {
-				return new CloseableIterator.Wrapper<CassandraRow>(
+				return new CloseableIterator.Wrapper<Object>(
 						Iterators.emptyIterator());
 			}
 			else {
@@ -154,13 +159,13 @@ public class CassandraConstraintsQuery extends
 					aggregationFunction.clearResult();
 					while (results.hasNext()) {
 						final Object input = results.next();
-						// TODO this is a hack for now
-						if (aggregationFunction instanceof CommonIndexAggregation) {
-							aggregationFunction.aggregate(
-									null);
-						}
-						else {
-							if (input != null) {
+						if (input != null) {
+							// TODO this is a hack for now
+							if (aggregationFunction instanceof CommonIndexAggregation) {
+								aggregationFunction.aggregate(
+										null);
+							}
+							else {
 								aggregationFunction.aggregate(
 										input);
 							}
@@ -174,18 +179,42 @@ public class CassandraConstraintsQuery extends
 								"Unable to close hbase scanner",
 								e);
 					}
-
 					return new Wrapper(
 							Iterators.singletonIterator(
 									aggregationFunction.getResult()));
 				}
 			}
 		}
-		else {
-			return new Wrapper(
-					super.initIterator(
-							adapterStore,
-							results));
+		return results;
+	}
+
+	@Override
+	protected List<QueryFilter> getAllFiltersList() {
+		final List<QueryFilter> filters = super.getAllFiltersList();
+		// add a index filter to the front of the list if there isn't already a
+		// filter
+		if (base.distributableFilters.isEmpty()) {
+			final List<MultiDimensionalCoordinateRangesArray> coords = base.getCoordinateRanges();
+			if (!coords.isEmpty()) {
+				filters.add(
+						0,
+						new CoordinateRangeQueryFilter(
+								index.getIndexStrategy(),
+								coords.toArray(
+										new MultiDimensionalCoordinateRangesArray[] {})));
+			}
 		}
+		else {
+			// Without custom filters, we need all the filters on the client
+			// side
+			for (final QueryFilter distributable : base.distributableFilters) {
+				if (!filters.contains(
+						distributable)) {
+					filters.add(
+							distributable);
+				}
+			}
+		}
+		return filters;
 	}
 }

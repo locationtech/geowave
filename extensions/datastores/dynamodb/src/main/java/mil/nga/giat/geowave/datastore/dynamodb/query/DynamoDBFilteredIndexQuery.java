@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.datastore.dynamodb.query;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -25,6 +27,7 @@ import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.FilteredIndexQuery;
+import mil.nga.giat.geowave.core.store.util.MergingEntryIterator;
 import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
@@ -34,7 +37,8 @@ public abstract class DynamoDBFilteredIndexQuery extends
 		FilteredIndexQuery
 {
 	protected List<QueryFilter> clientFilters;
-	private final static Logger LOGGER = Logger.getLogger(DynamoDBFilteredIndexQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			DynamoDBFilteredIndexQuery.class);
 	protected final ScanCallback<?> scanCallback;
 
 	public DynamoDBFilteredIndexQuery(
@@ -60,7 +64,8 @@ public abstract class DynamoDBFilteredIndexQuery extends
 					0,
 					clientDedupeFilter);
 		}
-		clientFilters.addAll(queryFilters);
+		clientFilters.addAll(
+				queryFilters);
 		this.scanCallback = scanCallback;
 	}
 
@@ -79,13 +84,18 @@ public abstract class DynamoDBFilteredIndexQuery extends
 			final Integer limit ) {
 		boolean exists = false;
 		try {
-			exists = dynamodbOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()));
+			exists = dynamodbOperations.tableExists(
+					StringUtils.stringFromBinary(
+							index.getId().getBytes()));
 		}
 		catch (final IOException e) {
-			LOGGER.error("e");
+			LOGGER.error(
+					"e");
 		}
 		if (!exists) {
-			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
+			LOGGER.warn(
+					"Table does not exist " + StringUtils.stringFromBinary(
+							index.getId().getBytes()));
 			return new CloseableIterator.Empty();
 		}
 
@@ -94,7 +104,8 @@ public abstract class DynamoDBFilteredIndexQuery extends
 				limit);
 
 		if (results == null) {
-			LOGGER.error("Could not get scanner instance, getScanner returned null");
+			LOGGER.error(
+					"Could not get scanner instance, getScanner returned null");
 			return new CloseableIterator.Empty();
 		}
 		Iterator it = initIterator(
@@ -112,17 +123,50 @@ public abstract class DynamoDBFilteredIndexQuery extends
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final Iterator<Map<String, AttributeValue>> results ) {
-		return new NativeEntryIteratorWrapper<>(
-				adapterStore,
-				index,
-				Iterators.transform(
-						results,
-						new WrapAsNativeRow()),
-				clientFilters.isEmpty() ? null : clientFilters.size() == 1 ? clientFilters.get(0)
-						: new FilterList<QueryFilter>(
-								clientFilters),
-				scanCallback,
-				true);
+		final List<QueryFilter> filters = getAllFiltersList();
+		final QueryFilter queryFilter = filters.isEmpty() ? null : filters.size() == 1 ? filters.get(
+				0)
+				: new FilterList<QueryFilter>(
+						filters);
+
+		final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters = new HashMap<ByteArrayId, RowMergingDataAdapter>();
+		for (final ByteArrayId adapterId : adapterIds) {
+			final DataAdapter adapter = adapterStore.getAdapter(
+					adapterId);
+			if ((adapter instanceof RowMergingDataAdapter)
+					&& (((RowMergingDataAdapter) adapter).getTransform() != null)) {
+				mergingAdapters.put(
+						adapterId,
+						(RowMergingDataAdapter) adapter);
+			}
+		}
+		if (mergingAdapters.isEmpty()) {
+			return new NativeEntryIteratorWrapper<>(
+					adapterStore,
+					index,
+					results,
+					queryFilter,
+					scanCallback,
+					true);
+		}
+		else {
+			return new MergingEntryIterator(
+					adapterStore,
+					index,
+					results,
+					queryFilter,
+					scanCallback,
+					mergingAdapters);
+		}
+	}
+
+	protected List<QueryFilter> getAllFiltersList() {
+		// This method is so that it can be overridden to also add distributed
+		// filter list
+		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
+		filters.addAll(
+				clientFilters);
+		return filters;
 	}
 
 	public static class WrapAsNativeRow implements

@@ -54,6 +54,9 @@ public class CassandraRow implements
 		GW_ADAPTER_ID_KEY(
 				"adapter_id",
 				ColumnType.CLUSTER_COLUMN),
+		GW_FIELD_MASK_KEY(
+				"field_mask",
+				ColumnType.OTHER_COLUMN),
 		GW_VALUE_KEY(
 				"value",
 				ColumnType.OTHER_COLUMN);
@@ -95,6 +98,7 @@ public class CassandraRow implements
 	private final byte[] dataId;
 	private final byte[] adapterId;
 	private final byte[] idx;
+	private final byte[] fieldMask;
 	private final byte[] value;
 
 	public CassandraRow(
@@ -102,11 +106,13 @@ public class CassandraRow implements
 			final byte[] dataId,
 			final byte[] adapterId,
 			final byte[] idx,
+			final byte[] fieldMask,
 			final byte[] value ) {
 		this.partitionId = partitionId;
 		this.dataId = dataId;
 		this.adapterId = adapterId;
 		this.idx = idx;
+		this.fieldMask = fieldMask;
 		this.value = value;
 	}
 
@@ -120,8 +126,14 @@ public class CassandraRow implements
 				CassandraField.GW_ADAPTER_ID_KEY.getFieldName()).array();
 		idx = row.getBytes(
 				CassandraField.GW_IDX_KEY.getFieldName()).array();
+		fieldMask = row.getBytes(
+				CassandraField.GW_FIELD_MASK_KEY.getFieldName()).array();
 		value = row.getBytes(
 				CassandraField.GW_VALUE_KEY.getFieldName()).array();
+	}
+
+	public byte[] getFieldMask() {
+		return fieldMask;
 	}
 
 	public byte[] getPartitionId() {
@@ -156,6 +168,11 @@ public class CassandraRow implements
 				CassandraField.GW_DATA_ID_KEY.getBindMarkerName(),
 				ByteBuffer.wrap(
 						dataId),
+				ByteBuffer.class);
+		retVal.set(
+				CassandraField.GW_FIELD_MASK_KEY.getBindMarkerName(),
+				ByteBuffer.wrap(
+						fieldMask),
 				ByteBuffer.class);
 		retVal.set(
 				CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),

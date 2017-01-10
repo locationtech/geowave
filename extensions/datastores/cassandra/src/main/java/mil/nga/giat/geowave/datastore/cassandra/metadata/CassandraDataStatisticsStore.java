@@ -161,6 +161,11 @@ public class CassandraDataStatisticsStore extends
 	}
 
 	@Override
+	protected boolean hasSecondaryId() {
+		return true;
+	}
+
+	@Override
 	protected String getPersistenceTypeName() {
 		return STATISTICS_CF;
 	}

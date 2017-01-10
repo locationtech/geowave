@@ -82,6 +82,8 @@ public class CassandraIndexWriter<T> extends
 							ingestInfo.getDataId(),
 							adapterId,
 							insertionId.getBytes(),
+							//TODO: add field mask
+							new byte[]{},
 							allFields.array()));
 		}
 		return rows;

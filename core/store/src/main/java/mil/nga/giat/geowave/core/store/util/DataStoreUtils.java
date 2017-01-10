@@ -64,6 +64,10 @@ public class DataStoreUtils
 	private final static Logger LOGGER = Logger.getLogger(
 			DataStoreUtils.class);
 
+	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID when
+	// needed for uniqueness
+	public final static int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
+	public final static byte UNIQUE_ID_DELIMITER = 0;
 	@SuppressWarnings({
 		"rawtypes",
 		"unchecked"
@@ -89,7 +93,41 @@ public class DataStoreUtils
 		}
 		return count;
 	}
+	
+	public static boolean rowIdsMatch(
+			final NativeGeoWaveRow rowId1,
+			final NativeGeoWaveRow rowId2 ) {
 
+		if (!Arrays.equals(
+				rowId1.getAdapterId(),
+				rowId2.getAdapterId())) {
+			return false;
+		}
+
+		if (Arrays.equals(
+				rowId1.getDataId(),
+				rowId2.getDataId())) {
+			return true;
+		}
+
+		return Arrays.equals(
+				removeUniqueId(rowId1.getDataId()),
+				removeUniqueId(rowId2.getDataId()));
+	}
+
+	public static byte[] removeUniqueId(
+			byte[] dataId ) {
+		if ((dataId.length < UNIQUE_ADDED_BYTES) || (dataId[dataId.length - UNIQUE_ADDED_BYTES] != UNIQUE_ID_DELIMITER)) {
+			return dataId;
+		}
+
+		dataId = Arrays.copyOfRange(
+				dataId,
+				0,
+				dataId.length - UNIQUE_ADDED_BYTES);
+
+		return dataId;
+	}
 	public static <T> void readFieldInfo(
 			final List<FieldInfo<?>> fieldInfoList,
 			final PersistentDataset<CommonIndexValue> indexData,
@@ -777,6 +815,7 @@ public class DataStoreUtils
 				indexData,
 				unknownData,
 				extendedData);
+
 		if ((clientFilter == null) || clientFilter.accept(
 				index.getIndexModel(),
 				encodedRow)) {

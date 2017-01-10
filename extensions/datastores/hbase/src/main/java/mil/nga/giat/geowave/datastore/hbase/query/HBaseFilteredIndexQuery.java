@@ -39,7 +39,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.MergingEntryIterator;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseMergingEntryIterator;
 
 public abstract class HBaseFilteredIndexQuery extends
 		HBaseQuery implements
@@ -479,7 +479,7 @@ public abstract class HBaseFilteredIndexQuery extends
 					hasSkippingFilter);
 		}
 		else {
-			return new MergingEntryIterator(
+			return new HBaseMergingEntryIterator(
 					adapterStore,
 					index,
 					resultsIterator,
