@@ -53,8 +53,7 @@ public class DynamoDBIndexWriter<T> extends
 	protected void ensureOpen() {
 		if (writer == null) {
 			writer = dynamodbOperations.createWriter(
-					StringUtils.stringFromBinary(
-							index.getId().getBytes()),
+					StringUtils.stringFromBinary(index.getId().getBytes()),
 					true);
 		}
 	}
@@ -66,56 +65,40 @@ public class DynamoDBIndexWriter<T> extends
 		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
 		int totalLength = 0;
 		for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {
-			final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(
-					4 + fieldInfo.getWrittenValue().length);
-			fieldInfoBytes.putInt(
-					fieldInfo.getWrittenValue().length);
-			fieldInfoBytes.put(
-					fieldInfo.getWrittenValue());
-			fieldInfoBytesList.add(
-					fieldInfoBytes.array());
+			final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
+			fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
+			fieldInfoBytes.put(fieldInfo.getWrittenValue());
+			fieldInfoBytesList.add(fieldInfoBytes.array());
 			totalLength += fieldInfoBytes.array().length;
 		}
-		final ByteBuffer allFields = ByteBuffer.allocate(
-				totalLength);
+		final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
 		for (final byte[] bytes : fieldInfoBytesList) {
-			allFields.put(
-					bytes);
+			allFields.put(bytes);
 		}
 		for (final ByteArrayId insertionId : ingestInfo.getInsertionIds()) {
 			final Map<String, AttributeValue> map = new HashMap<String, AttributeValue>();
 			final byte[] insertionIdBytes = insertionId.getBytes();
-			final ByteBuffer rangeKeyBuffer = ByteBuffer.allocate(
-					insertionIdBytes.length + ingestInfo.getDataId().length + adapterId.length + 8);
-			rangeKeyBuffer.put(
-					insertionIdBytes);
-			rangeKeyBuffer.put(
-					adapterId);
-			rangeKeyBuffer.put(
-					ingestInfo.getDataId());
-			rangeKeyBuffer.putInt(
-					adapterId.length);
-			rangeKeyBuffer.putInt(
-					ingestInfo.getDataId().length);
+			final ByteBuffer rangeKeyBuffer = ByteBuffer.allocate(insertionIdBytes.length
+					+ ingestInfo.getDataId().length + adapterId.length + 8);
+			rangeKeyBuffer.put(insertionIdBytes);
+			rangeKeyBuffer.put(adapterId);
+			rangeKeyBuffer.put(ingestInfo.getDataId());
+			rangeKeyBuffer.putInt(adapterId.length);
+			rangeKeyBuffer.putInt(ingestInfo.getDataId().length);
 			rangeKeyBuffer.rewind();
 			map.put(
 					DynamoDBRow.GW_PARTITION_ID_KEY,
-					new AttributeValue().withN(
-							Long.toString(
-									counter++ % PARTITIONS)));
+					new AttributeValue().withN(Long.toString(counter++ % PARTITIONS)));
 			map.put(
 					DynamoDBRow.GW_RANGE_KEY,
-					new AttributeValue().withB(
-							rangeKeyBuffer));
+					new AttributeValue().withB(rangeKeyBuffer));
 			allFields.rewind();
 			map.put(
 					DynamoDBRow.GW_VALUE_KEY,
-					new AttributeValue().withB(
-							allFields));
-			mutations.add(
-					new WriteRequest(
-							new PutRequest(
-									map)));
+					new AttributeValue().withB(allFields));
+			mutations.add(new WriteRequest(
+					new PutRequest(
+							map)));
 		}
 		return mutations;
 	}
@@ -130,10 +113,9 @@ public class DynamoDBIndexWriter<T> extends
 				entry,
 				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
 		if (entryInfo != null) {
-			writer.write(
-					getWriteRequests(
-							adapterId,
-							entryInfo));
+			writer.write(getWriteRequests(
+					adapterId,
+					entryInfo));
 		}
 		return entryInfo;
 	}

@@ -21,8 +21,7 @@ import org.slf4j.LoggerFactory;
 public class ClasspathUtils
 {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			ClasspathUtils.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClasspathUtils.class);
 
 	public static String setupPathingJarClassPath(
 			final File dir,
@@ -54,8 +53,7 @@ public class ClasspathUtils
 				jarDir.mkdirs();
 			}
 			catch (final Exception e) {
-				LOGGER.error(
-						"Failed to create pathing jar directory: " + e);
+				LOGGER.error("Failed to create pathing jar directory: " + e);
 				return null;
 			}
 		}
@@ -65,8 +63,7 @@ public class ClasspathUtils
 				jarFile.delete();
 			}
 			catch (final Exception e) {
-				LOGGER.error(
-						"Failed to delete old pathing jar: " + e);
+				LOGGER.error("Failed to delete old pathing jar: " + e);
 				return null;
 			}
 		}
@@ -107,13 +104,11 @@ public class ClasspathUtils
 			ClassLoader cl = context.getClassLoader();
 
 			while (cl != null) {
-				classloaders.add(
-						cl);
+				classloaders.add(cl);
 				cl = cl.getParent();
 			}
 
-			Collections.reverse(
-					classloaders);
+			Collections.reverse(classloaders);
 
 			final StringBuilder classpathBuilder = new StringBuilder();
 			for (final URL u : additionalUrls) {
@@ -123,8 +118,7 @@ public class ClasspathUtils
 			}
 			// assume 0 is the system classloader and skip it
 			for (int i = 0; i < classloaders.size(); i++) {
-				final ClassLoader classLoader = classloaders.get(
-						i);
+				final ClassLoader classLoader = classloaders.get(i);
 
 				if (classLoader instanceof URLClassLoader) {
 
@@ -150,8 +144,7 @@ public class ClasspathUtils
 				}
 			}
 
-			classpathBuilder.deleteCharAt(
-					0);
+			classpathBuilder.deleteCharAt(0);
 			return classpathBuilder.toString();
 
 		}
@@ -170,18 +163,16 @@ public class ClasspathUtils
 				url.toURI());
 
 		// do not include dirs containing hadoop or accumulo site files
-		if (!containsSiteFile(
-				file)) {
+		if (!containsSiteFile(file)) {
 			classpathBuilder.append(
 					" ").append(
-							file.getAbsolutePath().replace(
-									"C:\\",
-									"file:/C:/").replace(
-											"\\",
-											"/"));
+					file.getAbsolutePath().replace(
+							"C:\\",
+							"file:/C:/").replace(
+							"\\",
+							"/"));
 			if (file.isDirectory()) {
-				classpathBuilder.append(
-						"/");
+				classpathBuilder.append("/");
 			}
 		}
 	}
@@ -189,15 +180,14 @@ public class ClasspathUtils
 	private static boolean containsSiteFile(
 			final File f ) {
 		if (f.isDirectory()) {
-			final File[] sitefile = f.listFiles(
-					new FileFilter() {
-						@Override
-						public boolean accept(
-								final File pathname ) {
-							return pathname.getName().endsWith(
-									"site.xml");
-						}
-					});
+			final File[] sitefile = f.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(
+						final File pathname ) {
+					return pathname.getName().endsWith(
+							"site.xml");
+				}
+			});
 
 			return (sitefile != null) && (sitefile.length > 0);
 		}

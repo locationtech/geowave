@@ -40,8 +40,7 @@ public class BatchedRangeRead
 
 	public void addQueryRange(
 			final ByteArrayRange range ) {
-		ranges.add(
-				range);
+		ranges.add(range);
 	}
 
 	public CloseableIterator<CassandraRow> results() {
@@ -52,29 +51,23 @@ public class BatchedRangeRead
 						preparedRead);
 				boundRead.set(
 						CassandraField.GW_IDX_KEY.getLowerBoundBindMarkerName(),
-						ByteBuffer.wrap(
-								range.getStart().getBytes()),
+						ByteBuffer.wrap(range.getStart().getBytes()),
 						ByteBuffer.class);
 
 				boundRead.set(
 						CassandraField.GW_IDX_KEY.getUpperBoundBindMarkerName(),
-						ByteBuffer.wrap(
-								range.getEndAsNextPrefix().getBytes()),
+						ByteBuffer.wrap(range.getEndAsNextPrefix().getBytes()),
 						ByteBuffer.class);
 				boundRead.set(
 						CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-						ByteBuffer.wrap(
-								new byte[] {
-									(byte) p
-								}),
+						ByteBuffer.wrap(new byte[] {
+							(byte) p
+						}),
 						ByteBuffer.class);
-				statements.add(
-						boundRead);
+				statements.add(boundRead);
 			}
 
 		}
-		return operations.executeQuery(
-				statements.toArray(
-						new BoundStatement[] {}));
+		return operations.executeQuery(statements.toArray(new BoundStatement[] {}));
 	}
 }

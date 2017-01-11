@@ -7,6 +7,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
@@ -51,7 +52,8 @@ public class CassandraIndexWriter<T> extends
 
 	private static <T> List<CassandraRow> getRows(
 			final byte[] adapterId,
-			final DataStoreEntryInfo ingestInfo ) {
+			final DataStoreEntryInfo ingestInfo,
+			final boolean ensureUniqueId ) {
 		final List<CassandraRow> rows = new ArrayList<CassandraRow>();
 		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
 		int totalLength = 0;
@@ -74,6 +76,15 @@ public class CassandraIndexWriter<T> extends
 		}
 		for (final ByteArrayId insertionId : ingestInfo.getInsertionIds()) {
 			allFields.rewind();
+			ByteArrayId uniqueInsertionId;
+			if (ensureUniqueId) {
+				uniqueInsertionId = DataStoreUtils.ensureUniqueId(
+						insertionId.getBytes(),
+						true);
+			}
+			else {
+				uniqueInsertionId = insertionId;
+			}
 			rows.add(
 					new CassandraRow(
 							new byte[] {
@@ -81,9 +92,9 @@ public class CassandraIndexWriter<T> extends
 							},
 							ingestInfo.getDataId(),
 							adapterId,
-							insertionId.getBytes(),
-							//TODO: add field mask
-							new byte[]{},
+							uniqueInsertionId.getBytes(),
+							// TODO: add field mask
+							new byte[] {},
 							allFields.array()));
 		}
 		return rows;
@@ -102,7 +113,9 @@ public class CassandraIndexWriter<T> extends
 			writer.write(
 					getRows(
 							adapterId,
-							entryInfo));
+							entryInfo,
+							(adapter instanceof RowMergingDataAdapter)
+									&& (((RowMergingDataAdapter) adapter).getTransform() != null)));
 		}
 		return entryInfo;
 	}

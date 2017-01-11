@@ -84,7 +84,7 @@ public class HBaseUtils
 
 		for (ByteArrayId rowId : ingestInfo.getRowIds()) {
 			if (ensureUniqueId) {
-				rowId = ensureUniqueId(
+				rowId = DataStoreUtils.ensureUniqueId(
 						rowId.getBytes(),
 						true);
 			}
@@ -497,61 +497,6 @@ public class HBaseUtils
 			}
 		}
 
-	}
-
-	public static ByteArrayId ensureUniqueId(
-			final byte[] id,
-			final boolean hasMetadata ) {
-
-		final ByteBuffer buf = ByteBuffer.allocate(id.length + UNIQUE_ADDED_BYTES);
-
-		byte[] metadata = null;
-		byte[] data;
-		if (hasMetadata) {
-			metadata = Arrays.copyOfRange(
-					id,
-					id.length - 12,
-					id.length);
-
-			final ByteBuffer metadataBuf = ByteBuffer.wrap(metadata);
-			final int adapterIdLength = metadataBuf.getInt();
-			int dataIdLength = metadataBuf.getInt();
-			dataIdLength += UNIQUE_ADDED_BYTES;
-			final int duplicates = metadataBuf.getInt();
-
-			final ByteBuffer newMetaData = ByteBuffer.allocate(metadata.length);
-			newMetaData.putInt(adapterIdLength);
-			newMetaData.putInt(dataIdLength);
-			newMetaData.putInt(duplicates);
-
-			metadata = newMetaData.array();
-
-			data = Arrays.copyOfRange(
-					id,
-					0,
-					id.length - 12);
-		}
-		else {
-			data = id;
-		}
-
-		buf.put(data);
-
-		final long timestamp = System.nanoTime();
-		final UUID uuid = UUID.randomUUID();
-		buf.put(new byte[] {
-			UNIQUE_ID_DELIMITER
-		});
-		buf.putLong(timestamp);
-		buf.putLong(uuid.getMostSignificantBits());
-		buf.putLong(uuid.getLeastSignificantBits());
-
-		if (hasMetadata) {
-			buf.put(metadata);
-		}
-
-		return new ByteArrayId(
-				buf.array());
 	}
 
 	public static boolean rowIdsMatch(

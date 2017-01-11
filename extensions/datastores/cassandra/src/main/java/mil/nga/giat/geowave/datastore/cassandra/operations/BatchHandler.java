@@ -38,13 +38,11 @@ public class BatchHandler
 						statement);
 
 		while (it.hasNext() && (replicas < RF)) {
-			hosts.add(
-					it.next());
+			hosts.add(it.next());
 			replicas++;
 		}
 
-		BatchStatement tokenBatch = batches.get(
-				hosts);
+		BatchStatement tokenBatch = batches.get(hosts);
 
 		if (tokenBatch == null) {
 			tokenBatch = new BatchStatement(
@@ -55,8 +53,7 @@ public class BatchHandler
 					tokenBatch);
 		}
 		synchronized (tokenBatch) {
-			tokenBatch.add(
-					statement);
+			tokenBatch.add(statement);
 		}
 		return tokenBatch;
 	}

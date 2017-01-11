@@ -34,14 +34,12 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class CassandraStoreTestEnvironment extends
 		StoreTestEnvironment
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			CassandraStoreTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CassandraStoreTestEnvironment.class);
 
 	private static CassandraDataStoreFactory STORE_FACTORY = new CassandraDataStoreFactory();
 	private static CassandraStoreTestEnvironment singletonInstance = null;
 	protected static final File TEMP_DIR = new File(
-			System.getProperty(
-					"user.dir") + File.separator + "target",
+			System.getProperty("user.dir") + File.separator + "target",
 			"cassandra_temp");
 	protected static final String NODE_DIRECTORY_PREFIX = "cassandra";
 
@@ -69,41 +67,32 @@ public class CassandraStoreTestEnvironment extends
 					TEMP_DIR,
 					NODE_DIRECTORY_PREFIX);
 			project = new MavenProject();
-			project.setFile(
-					cassandraDir);
+			project.setFile(cassandraDir);
 			Field f;
 			try {
-				f = StartCassandraClusterMojo.class.getDeclaredField(
-						"clusterSize");
-				f.setAccessible(
-						true);
+				f = StartCassandraClusterMojo.class.getDeclaredField("clusterSize");
+				f.setAccessible(true);
 				f.set(
 						this,
 						4);
-				f = AbstractCassandraMojo.class.getDeclaredField(
-						"pluginArtifact");
+				f = AbstractCassandraMojo.class.getDeclaredField("pluginArtifact");
 
-				f.setAccessible(
-						true);
+				f.setAccessible(true);
 				final DefaultArtifact a = new DefaultArtifact(
 						"group",
 						"artifact",
-						VersionRange.createFromVersionSpec(
-								"version"),
+						VersionRange.createFromVersionSpec("version"),
 						null,
 						"type",
 						null,
 						new DefaultArtifactHandler());
-				a.setFile(
-						cassandraDir);
+				a.setFile(cassandraDir);
 				f.set(
 						this,
 						a);
 
-				f = AbstractCassandraMojo.class.getDeclaredField(
-						"pluginDependencies");
-				f.setAccessible(
-						true);
+				f = AbstractCassandraMojo.class.getDeclaredField("pluginDependencies");
+				f.setAccessible(true);
 				f.set(
 						this,
 						new ArrayList<>());
@@ -130,8 +119,7 @@ public class CassandraStoreTestEnvironment extends
 					cassandraDir,
 					listenAddress,
 					rpcAddress,
-					BigInteger.valueOf(
-							initialToken.longValue()),
+					BigInteger.valueOf(initialToken.longValue()),
 					seeds,
 					false,
 					jmxPort);
@@ -175,18 +163,14 @@ public class CassandraStoreTestEnvironment extends
 			stopKey = "cassandra-maven-plugin";
 			Field f;
 			try {
-				f = StopCassandraClusterMojo.class.getDeclaredField(
-						"clusterSize");
-				f.setAccessible(
-						true);
+				f = StopCassandraClusterMojo.class.getDeclaredField("clusterSize");
+				f.setAccessible(true);
 				f.set(
 						this,
 						4);
-				f = StopCassandraClusterMojo.class.getDeclaredField(
-						"rpcAddress");
+				f = StopCassandraClusterMojo.class.getDeclaredField("rpcAddress");
 
-				f.setAccessible(
-						true);
+				f.setAccessible(true);
 				f.set(
 						this,
 						"127.0.0.1");
@@ -228,34 +212,27 @@ public class CassandraStoreTestEnvironment extends
 			maxMemory = 512;
 			cassandraDir = TEMP_DIR;
 			project = new MavenProject();
-			project.setFile(
-					cassandraDir);
+			project.setFile(cassandraDir);
 			Field f;
 			try {
-				f = AbstractCassandraMojo.class.getDeclaredField(
-						"pluginArtifact");
+				f = AbstractCassandraMojo.class.getDeclaredField("pluginArtifact");
 
-				f.setAccessible(
-						true);
+				f.setAccessible(true);
 				final DefaultArtifact a = new DefaultArtifact(
 						"group",
 						"artifact",
-						VersionRange.createFromVersionSpec(
-								"version"),
+						VersionRange.createFromVersionSpec("version"),
 						null,
 						"type",
 						null,
 						new DefaultArtifactHandler());
-				a.setFile(
-						cassandraDir);
+				a.setFile(cassandraDir);
 				f.set(
 						this,
 						a);
 
-				f = AbstractCassandraMojo.class.getDeclaredField(
-						"pluginDependencies");
-				f.setAccessible(
-						true);
+				f = AbstractCassandraMojo.class.getDeclaredField("pluginDependencies");
+				f.setAccessible(true);
 				f.set(
 						this,
 						new ArrayList<>());
@@ -306,11 +283,9 @@ public class CassandraStoreTestEnvironment extends
 			stopKey = "cassandra-maven-plugin";
 			Field f;
 			try {
-				f = StopCassandraMojo.class.getDeclaredField(
-						"rpcAddress");
+				f = StopCassandraMojo.class.getDeclaredField("rpcAddress");
 
-				f.setAccessible(
-						true);
+				f.setAccessible(true);
 				f.set(
 						this,
 						"127.0.0.1");
@@ -347,8 +322,7 @@ public class CassandraStoreTestEnvironment extends
 	protected void initOptions(
 			final StoreFactoryOptions options ) {
 		final CassandraRequiredOptions cassandraOpts = (CassandraRequiredOptions) options;
-		cassandraOpts.setContactPoint(
-				"127.0.0.1");
+		cassandraOpts.setContactPoint("127.0.0.1");
 	}
 
 	@Override
@@ -381,8 +355,7 @@ public class CassandraStoreTestEnvironment extends
 		try {
 			// it seems sometimes one of the nodes processes is still holding
 			// onto a file, so wait a short time to be able to reliably clean up
-			Thread.sleep(
-					1000);
+			Thread.sleep(1000);
 		}
 		catch (final InterruptedException e) {
 			LOGGER.warn(
@@ -394,8 +367,7 @@ public class CassandraStoreTestEnvironment extends
 
 	private static void cleanTempDir() {
 		try {
-			FileUtils.deleteDirectory(
-					TEMP_DIR);
+			FileUtils.deleteDirectory(TEMP_DIR);
 		}
 		catch (final IOException e) {
 			LOGGER.warn(

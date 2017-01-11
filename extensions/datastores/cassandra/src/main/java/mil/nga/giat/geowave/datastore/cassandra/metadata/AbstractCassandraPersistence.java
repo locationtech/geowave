@@ -13,7 +13,6 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.querybuilder.Select.Where;
 import com.datastax.driver.core.schemabuilder.Create;
-import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -28,6 +27,8 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 {
 	protected static final String PRIMARY_ID_KEY = "I";
 	protected static final String SECONDARY_ID_KEY = "S";
+	// serves as unique ID for instances where primary+secondary are repeated
+	protected static final String TIMESTAMP_ID_KEY = "T";
 	protected static final String VALUE_KEY = "V";
 
 	private static final Object CREATE_TABLE_MUTEX = new Object();
@@ -91,6 +92,9 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 					create.addClusteringColumn(
 							SECONDARY_ID_KEY,
 							DataType.blob());
+					create.addClusteringColumn(
+							TIMESTAMP_ID_KEY,
+							DataType.timeuuid());
 				}
 				create.addColumn(
 						VALUE_KEY,
@@ -111,6 +115,9 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 					SECONDARY_ID_KEY,
 					ByteBuffer.wrap(
 							secondaryId.getBytes()));
+			insert.value(
+					TIMESTAMP_ID_KEY,
+					QueryBuilder.now());
 		}
 		insert.value(
 				VALUE_KEY,
@@ -136,9 +143,8 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 								ByteBuffer.wrap(
 										secondaryId.getBytes()))));
 		return new CloseableIterator.Wrapper<T>(
-				Iterators.transform(
-						results.iterator(),
-						new EntryToValueFunction()));
+				getNativeIteratorWrapper(
+						results.iterator()));
 	}
 
 	@Override
@@ -168,9 +174,8 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 							secondaryId).getString() + "' not found");
 			return null;
 		}
-		final Row entry = results.next();
-		return entryToValue(
-				entry);
+		return getNativeIteratorWrapper(
+				results).next();
 	}
 
 	protected CloseableIterator<T> getObjects(
@@ -178,9 +183,8 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 		final Iterator<Row> results = getFullResults(
 				authorizations);
 		return new CloseableIterator.Wrapper<T>(
-				Iterators.transform(
-						results,
-						new EntryToValueFunction()));
+				getNativeIteratorWrapper(
+						results));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -210,6 +214,12 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				authorizations);
 	}
 
+	protected ByteArrayId getRowId(
+			final T object ) {
+		return getPrimaryId(
+				object);
+	}
+
 	protected Iterator<Row> getResults(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
@@ -231,7 +241,6 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 								SECONDARY_ID_KEY,
 								ByteBuffer.wrap(
 										secondaryId.getBytes())));
-				select.allowFiltering();
 			}
 		}
 		return operations.getSession().execute(
@@ -286,15 +295,37 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 
 	}
 
-	private class EntryToValueFunction implements
-			Function<Row, T>
+	protected Iterator<T> getNativeIteratorWrapper(
+			final Iterator<Row> results ) {
+		return new NativeIteratorWrapper(
+				results);
+	}
+
+	private class NativeIteratorWrapper implements
+			Iterator<T>
 	{
+		final private Iterator<Row> it;
+
+		private NativeIteratorWrapper(
+				final Iterator<Row> it ) {
+			this.it = it;
+		}
 
 		@Override
-		public T apply(
-				final Row entry ) {
+		public boolean hasNext() {
+			return it.hasNext();
+		}
+
+		@Override
+		public T next() {
+			final Row row = it.next();
 			return entryToValue(
-					entry);
+					row);
+		}
+
+		@Override
+		public void remove() {
+			it.remove();
 		}
 
 	}

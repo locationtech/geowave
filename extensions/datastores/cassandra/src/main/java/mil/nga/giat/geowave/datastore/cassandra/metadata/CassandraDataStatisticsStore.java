@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.datastore.cassandra.metadata;
 
+import java.util.Iterator;
+
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import com.datastax.driver.core.Row;
@@ -9,6 +12,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 
 public class CassandraDataStatisticsStore extends
@@ -183,5 +187,87 @@ public class CassandraDataStatisticsStore extends
 		deleteObjects(
 				adapterId,
 				authorizations);
+	}
+
+	/**
+	 * This function converts results and merges data statistic elements
+	 * together that have the same id.
+	 */
+	@Override
+	protected Iterator<DataStatistics<?>> getNativeIteratorWrapper(
+			final Iterator<Row> results ) {
+		return new StatisticsNativeIteratorWrapper(
+				results);
+	}
+
+	/**
+	 * A special version of NativeIteratorWrapper (defined in the parent) which
+	 * will combine records that have the same dataid & statsId
+	 */
+	private class StatisticsNativeIteratorWrapper implements
+			Iterator<DataStatistics<?>>
+	{
+		final private Iterator<Row> it;
+		private DataStatistics<?> nextVal = null;
+
+		public StatisticsNativeIteratorWrapper(
+				final Iterator<Row> resultIterator ) {
+			it = resultIterator;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return (nextVal != null) || it.hasNext();
+		}
+
+		@Override
+		public DataStatistics<?> next() {
+			DataStatistics<?> currentStatistics = nextVal;
+			nextVal = null;
+			while (it.hasNext()) {
+				final Row row = it.next();
+
+				// This entryToValue function has the side effect of adding the
+				// object to the cache.
+				// We need to make sure to add the merged version of the stat at
+				// the end of this
+				// function, before it is returned.
+				final DataStatistics<?> statEntry = entryToValue(
+						row);
+
+				if (currentStatistics == null) {
+					currentStatistics = statEntry;
+				}
+				else {
+					if (statEntry.getStatisticsId().equals(
+							currentStatistics.getStatisticsId())
+							&& statEntry.getDataAdapterId().equals(
+									currentStatistics.getDataAdapterId())) {
+						currentStatistics.merge(
+								statEntry);
+					}
+					else {
+						nextVal = statEntry;
+						break;
+					}
+				}
+			}
+
+			// Add this entry to cache (see comment above)
+			addObjectToCache(
+					getPrimaryId(
+							currentStatistics),
+					getSecondaryId(
+							currentStatistics),
+					currentStatistics);
+			return currentStatistics;
+		}
+
+		@Override
+		public void remove() {
+			throw new NotImplementedException(
+					"Transforming iterator cannot use remove()");
+		}
+
 	}
 }

@@ -11,8 +11,7 @@ abstract public class AbstractCassandraStoreFactory<T> extends
 		AbstractCassandraFactory implements
 		GenericStoreFactory<T>
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			AbstractCassandraStoreFactory.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractCassandraStoreFactory.class);
 
 	protected CassandraOperations createOperations(
 			final CassandraRequiredOptions options ) {

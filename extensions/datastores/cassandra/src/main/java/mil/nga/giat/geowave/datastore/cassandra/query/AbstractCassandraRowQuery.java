@@ -21,8 +21,7 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 abstract public class AbstractCassandraRowQuery<T> extends
 		CassandraQuery
 {
-	private static final Logger LOGGER = Logger.getLogger(
-			AbstractCassandraRowQuery.class);
+	private static final Logger LOGGER = Logger.getLogger(AbstractCassandraRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractCassandraRowQuery(

@@ -3,8 +3,12 @@ package mil.nga.giat.geowave.datastore.cassandra;
 import java.io.Closeable;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -12,6 +16,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.Deleter;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
@@ -20,6 +25,7 @@ import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraAdapterStore;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraDataStatisticsStore;
@@ -54,28 +60,25 @@ public class CassandraDataStore extends
 	@Override
 	protected boolean deleteAll(
 			final String tableName,
-			final String columnFamily,
+			final String adapterId,
 			final String... additionalAuthorizations ) {
-		// TODO Auto-generated method stub
-		return false;
+		return operations.deleteAll(
+				tableName,
+				new ByteArrayId(
+						adapterId).getBytes(),
+				additionalAuthorizations);
 	}
 
 	@Override
-	protected void addToBatch(
-			final Closeable idxDeleter,
-			final List<ByteArrayId> rowIds )
-			throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected Closeable createIndexDeleter(
+	protected Deleter createIndexDeleter(
 			final String indexTableName,
-			final String[] authorizations )
+			final boolean isAltIndex,
+			final String... authorizations )
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return new CassandraRowDeleter(
+				operations,
+				indexTableName,
+				authorizations);
 	}
 
 	@Override
@@ -84,7 +87,6 @@ public class CassandraDataStore extends
 			final List<ByteArrayId> dataIds,
 			final ByteArrayId adapterId,
 			final String... authorizations ) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -96,9 +98,30 @@ public class CassandraDataStore extends
 			final DataAdapter<?> adapter,
 			final ScanCallback<Object> callback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations ) {
-		// TODO Auto-generated method stub
-		return null;
+			final String... authorizations ) {
+		final CloseableIterator<CassandraRow> it = operations.getRows(
+				index.getId().getString(),
+				Lists.transform(
+						dataIds,
+						new Function<ByteArrayId, byte[]>() {
+							@Override
+							public byte[] apply(
+									final ByteArrayId input ) {
+								return input.getBytes();
+							}
+						}).toArray(
+								new byte[][] {}),
+				adapter.getAdapterId().getBytes(),
+				authorizations);
+		return new CloseableIteratorWrapper<>(
+				it,
+				new NativeEntryIteratorWrapper<Object>(
+						adapterStore,
+						index,
+						it,
+						null,
+						callback,
+						true));
 	}
 
 	@Override

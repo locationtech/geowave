@@ -33,8 +33,7 @@ public class CassandraRowIdsQuery<T> extends
 			final String[] authorizations ) {
 		super(
 				cassandraOperations,
-				Collections.<ByteArrayId> singletonList(
-						adapter.getAdapterId()),
+				Collections.<ByteArrayId> singletonList(adapter.getAdapterId()),
 				index,
 				(Query) null,
 				dedupFilter,
@@ -52,11 +51,10 @@ public class CassandraRowIdsQuery<T> extends
 	protected List<ByteArrayRange> getRanges() {
 		final List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
 		for (final ByteArrayId row : rows) {
-			ranges.add(
-					new ByteArrayRange(
-							row,
-							row,
-							true));
+			ranges.add(new ByteArrayRange(
+					row,
+					row,
+					true));
 		}
 		return ranges;
 	}

@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -93,7 +94,7 @@ public class DataStoreUtils
 		}
 		return count;
 	}
-	
+
 	public static boolean rowIdsMatch(
 			final NativeGeoWaveRow rowId1,
 			final NativeGeoWaveRow rowId2 ) {
@@ -111,13 +112,16 @@ public class DataStoreUtils
 		}
 
 		return Arrays.equals(
-				removeUniqueId(rowId1.getDataId()),
-				removeUniqueId(rowId2.getDataId()));
+				removeUniqueId(
+						rowId1.getDataId()),
+				removeUniqueId(
+						rowId2.getDataId()));
 	}
 
 	public static byte[] removeUniqueId(
 			byte[] dataId ) {
-		if ((dataId.length < UNIQUE_ADDED_BYTES) || (dataId[dataId.length - UNIQUE_ADDED_BYTES] != UNIQUE_ID_DELIMITER)) {
+		if ((dataId.length < UNIQUE_ADDED_BYTES)
+				|| (dataId[dataId.length - UNIQUE_ADDED_BYTES] != UNIQUE_ID_DELIMITER)) {
 			return dataId;
 		}
 
@@ -128,6 +132,7 @@ public class DataStoreUtils
 
 		return dataId;
 	}
+
 	public static <T> void readFieldInfo(
 			final List<FieldInfo<?>> fieldInfoList,
 			final PersistentDataset<CommonIndexValue> indexData,
@@ -840,5 +845,72 @@ public class DataStoreUtils
 			return pair;
 		}
 		return null;
+	}
+
+	public static ByteArrayId ensureUniqueId(
+			final byte[] id,
+			final boolean hasMetadata ) {
+
+		final ByteBuffer buf = ByteBuffer.allocate(
+				id.length + UNIQUE_ADDED_BYTES);
+
+		byte[] metadata = null;
+		byte[] data;
+		if (hasMetadata) {
+			metadata = Arrays.copyOfRange(
+					id,
+					id.length - 12,
+					id.length);
+
+			final ByteBuffer metadataBuf = ByteBuffer.wrap(
+					metadata);
+			final int adapterIdLength = metadataBuf.getInt();
+			int dataIdLength = metadataBuf.getInt();
+			dataIdLength += UNIQUE_ADDED_BYTES;
+			final int duplicates = metadataBuf.getInt();
+
+			final ByteBuffer newMetaData = ByteBuffer.allocate(
+					metadata.length);
+			newMetaData.putInt(
+					adapterIdLength);
+			newMetaData.putInt(
+					dataIdLength);
+			newMetaData.putInt(
+					duplicates);
+
+			metadata = newMetaData.array();
+
+			data = Arrays.copyOfRange(
+					id,
+					0,
+					id.length - 12);
+		}
+		else {
+			data = id;
+		}
+
+		buf.put(
+				data);
+
+		final long timestamp = System.nanoTime();
+		final UUID uuid = UUID.randomUUID();
+		buf.put(
+				new byte[] {
+					UNIQUE_ID_DELIMITER
+				});
+		buf.putLong(
+				timestamp);
+		buf.putLong(
+				uuid.getMostSignificantBits());
+		buf.putLong(
+				uuid.getLeastSignificantBits());
+
+		if (hasMetadata) {
+			buf.put(
+					metadata);
+		}
+
+		return new ByteArrayId(
+				buf.array());
 	}
 }

@@ -177,17 +177,12 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 				authorizations);
 	}
 
-	protected ByteArrayId getRowId(
-			final T object ) {
-		return getPrimaryId(object);
-	}
-
 	@Override
 	protected void addObject(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final T object ) {
-		final ByteArrayId id = getRowId(object);
+		final ByteArrayId id = getPrimaryId(object);
 		addObjectToCache(
 				primaryId,
 				secondaryId,

@@ -107,8 +107,7 @@ public class FeatureDataAdapter extends
 		HadoopDataAdapter<SimpleFeature, FeatureWritable>,
 		SecondaryIndexDataAdapter<SimpleFeature>
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			FeatureDataAdapter.class);
+	private final static Logger LOGGER = Logger.getLogger(FeatureDataAdapter.class);
 
 	// the original coordinate system will always be represented internally by
 	// the persisted type
@@ -178,8 +177,7 @@ public class FeatureDataAdapter extends
 				updateVisibility(
 						type,
 						defaultVisibilityManagement));
-		setFeatureType(
-				type);
+		setFeatureType(type);
 	}
 
 	private static SimpleFeatureType updateVisibility(
@@ -196,8 +194,7 @@ public class FeatureDataAdapter extends
 	protected void setFeatureType(
 			final SimpleFeatureType type ) {
 		persistedType = type;
-		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(
-				type.getCoordinateReferenceSystem())) {
+		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(type.getCoordinateReferenceSystem())) {
 			reprojectedType = SimpleFeatureTypeBuilder.retype(
 					type,
 					GeoWaveGTDataStore.DEFAULT_CRS);
@@ -235,9 +232,8 @@ public class FeatureDataAdapter extends
 		final List<NativeFieldHandler<SimpleFeature, Object>> nativeHandlers = new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(
 				type.getAttributeCount());
 		for (final AttributeDescriptor attrDesc : type.getAttributeDescriptors()) {
-			nativeHandlers.add(
-					new FeatureAttributeHandler(
-							attrDesc));
+			nativeHandlers.add(new FeatureAttributeHandler(
+					attrDesc));
 		}
 		return nativeHandlers;
 	}
@@ -246,8 +242,7 @@ public class FeatureDataAdapter extends
 			final SimpleFeatureType featureType ) {
 		final VisibilityConfiguration config = new VisibilityConfiguration(
 				featureType);
-		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(
-				featureType);
+		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(featureType);
 		if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
 			return (new FeatureTimeRangeHandler(
 					new FeatureAttributeHandler(
@@ -281,39 +276,31 @@ public class FeatureDataAdapter extends
 			final VisibilityConfiguration config = new VisibilityConfiguration(
 					internalType);
 
-			nativeFieldHandlers = typeToFieldHandlers(
-					(SimpleFeatureType) typeObj);
+			nativeFieldHandlers = typeToFieldHandlers((SimpleFeatureType) typeObj);
 			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>();
-			final IndexFieldHandler<SimpleFeature, Time, Object> timeHandler = getTimeRangeHandler(
-					internalType);
+			final IndexFieldHandler<SimpleFeature, Time, Object> timeHandler = getTimeRangeHandler(internalType);
 			if (timeHandler != null) {
-				defaultHandlers.add(
-						timeHandler);
+				defaultHandlers.add(timeHandler);
 			}
 
 			final AttributeDescriptor descriptor = internalType.getGeometryDescriptor();
-			defaultHandlers.add(
-					new FeatureGeometryHandler(
-							descriptor,
-							config.getManager().createVisibilityHandler(
-									descriptor.getLocalName(),
-									fieldVisiblityHandler,
-									config.getAttributeName())));
+			defaultHandlers.add(new FeatureGeometryHandler(
+					descriptor,
+					config.getManager().createVisibilityHandler(
+							descriptor.getLocalName(),
+							fieldVisiblityHandler,
+							config.getAttributeName())));
 			return defaultHandlers;
 		}
-		LOGGER.warn(
-				"Simple Feature Type could not be used for handling the indexed data");
-		return super.getDefaultTypeMatchingHandlers(
-				reprojectedType);
+		LOGGER.warn("Simple Feature Type could not be used for handling the indexed data");
+		return super.getDefaultTypeMatchingHandlers(reprojectedType);
 	}
 
 	public void setNamespace(
 			final String namespaceURI ) {
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-		builder.init(
-				reprojectedType);
-		builder.setNamespaceURI(
-				namespaceURI);
+		builder.init(reprojectedType);
+		builder.setNamespaceURI(namespaceURI);
 		reprojectedType = builder.buildFeatureType();
 	}
 
@@ -322,14 +309,11 @@ public class FeatureDataAdapter extends
 	@Override
 	public FieldReader<Object> getReader(
 			final ByteArrayId fieldId ) {
-		FieldReader<Object> reader = idToReaderMap.get(
-				fieldId);
+		FieldReader<Object> reader = idToReaderMap.get(fieldId);
 		if (reader == null) {
-			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(
-					fieldId.getString());
+			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(fieldId.getString());
 			final Class<?> bindingClass = descriptor.getType().getBinding();
-			reader = (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(
-					bindingClass);
+			reader = (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(bindingClass);
 
 			idToReaderMap.put(
 					fieldId,
@@ -344,12 +328,10 @@ public class FeatureDataAdapter extends
 			final ByteArrayId fieldId ) {
 		final VisibilityConfiguration config = new VisibilityConfiguration(
 				reprojectedType);
-		if (reprojectedType.getDescriptor(
-				config.getAttributeName()) == null) {
+		if (reprojectedType.getDescriptor(config.getAttributeName()) == null) {
 			return fieldVisiblityHandler;
 		}
-		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(
-				fieldId.getString());
+		final AttributeDescriptor descriptor = reprojectedType.getDescriptor(fieldId.getString());
 
 		return config.getManager().createVisibilityHandler(
 				descriptor.getLocalName(),
@@ -360,13 +342,10 @@ public class FeatureDataAdapter extends
 	@Override
 	public FieldWriter<SimpleFeature, Object> getWriter(
 			final ByteArrayId fieldId ) {
-		FieldWriter<SimpleFeature, Object> writer = idToWriterMap.get(
-				fieldId);
+		FieldWriter<SimpleFeature, Object> writer = idToWriterMap.get(fieldId);
 		if (writer == null) {
-			final FieldVisibilityHandler<SimpleFeature, Object> handler = getVisbilityHandler(
-					fieldId);
-			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(
-					fieldId.getString());
+			final FieldVisibilityHandler<SimpleFeature, Object> handler = getVisbilityHandler(fieldId);
+			final AttributeDescriptor descriptor = reprojectedType.getDescriptor(fieldId.getString());
 
 			final Class<?> bindingClass = descriptor.getType().getBinding();
 			if (handler != null) {
@@ -375,12 +354,10 @@ public class FeatureDataAdapter extends
 						handler);
 			}
 			else {
-				writer = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(
-						bindingClass);
+				writer = (FieldWriter<SimpleFeature, Object>) FieldUtils.getDefaultWriterForClass(bindingClass);
 			}
 			if (writer == null) {
-				LOGGER.error(
-						"BasicWriter not found for binding type:" + bindingClass.getName().toString());
+				LOGGER.error("BasicWriter not found for binding type:" + bindingClass.getName().toString());
 			}
 
 			idToWriterMap.put(
@@ -393,15 +370,11 @@ public class FeatureDataAdapter extends
 	@Override
 	protected byte[] defaultTypeDataToBinary() {
 		// serialize the feature type
-		final String encodedType = DataUtilities.encodeType(
-				persistedType);
-		final String axis = FeatureDataUtils.getAxis(
-				persistedType.getCoordinateReferenceSystem());
+		final String encodedType = DataUtilities.encodeType(persistedType);
+		final String axis = FeatureDataUtils.getAxis(persistedType.getCoordinateReferenceSystem());
 		final String typeName = reprojectedType.getTypeName();
-		final byte[] typeNameBytes = StringUtils.stringToBinary(
-				typeName);
-		final byte[] axisBytes = StringUtils.stringToBinary(
-				axis);
+		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
+		final byte[] axisBytes = StringUtils.stringToBinary(axis);
 		byte[] attrBytes = new byte[0];
 
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
@@ -418,8 +391,7 @@ public class FeatureDataAdapter extends
 				new VisibilityConfiguration(
 						persistedType));
 		try {
-			attrBytes = StringUtils.stringToBinary(
-					userDataConfiguration.asJsonString());
+			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -431,45 +403,29 @@ public class FeatureDataAdapter extends
 
 		byte[] namespaceBytes;
 		if ((namespace != null) && (namespace.length() > 0)) {
-			namespaceBytes = StringUtils.stringToBinary(
-					namespace);
+			namespaceBytes = StringUtils.stringToBinary(namespace);
 		}
 		else {
 			namespaceBytes = new byte[0];
 		}
-		final byte[] encodedTypeBytes = StringUtils.stringToBinary(
-				encodedType);
-		final byte[] secondaryIndexBytes = PersistenceUtils.toBinary(
-				secondaryIndexManager);
+		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
+		final byte[] secondaryIndexBytes = PersistenceUtils.toBinary(secondaryIndexManager);
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
-		final ByteBuffer buf = ByteBuffer.allocate(
-				encodedTypeBytes.length + typeNameBytes.length + namespaceBytes.length + attrBytes.length
-						+ axisBytes.length + secondaryIndexBytes.length + 21);
-		buf.put(
-				VERSION);
-		buf.putInt(
-				typeNameBytes.length);
-		buf.putInt(
-				namespaceBytes.length);
-		buf.putInt(
-				attrBytes.length);
-		buf.putInt(
-				axisBytes.length);
-		buf.putInt(
-				encodedTypeBytes.length);
-		buf.put(
-				typeNameBytes);
-		buf.put(
-				namespaceBytes);
-		buf.put(
-				attrBytes);
-		buf.put(
-				axisBytes);
-		buf.put(
-				encodedTypeBytes);
-		buf.put(
-				secondaryIndexBytes);
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length
+				+ namespaceBytes.length + attrBytes.length + axisBytes.length + secondaryIndexBytes.length + 21);
+		buf.put(VERSION);
+		buf.putInt(typeNameBytes.length);
+		buf.putInt(namespaceBytes.length);
+		buf.putInt(attrBytes.length);
+		buf.putInt(axisBytes.length);
+		buf.putInt(encodedTypeBytes.length);
+		buf.put(typeNameBytes);
+		buf.put(namespaceBytes);
+		buf.put(attrBytes);
+		buf.put(axisBytes);
+		buf.put(encodedTypeBytes);
+		buf.put(secondaryIndexBytes);
 
 		return buf.array();
 	}
@@ -487,13 +443,11 @@ public class FeatureDataAdapter extends
 					e);
 		}
 		// deserialize the feature type
-		final ByteBuffer buf = ByteBuffer.wrap(
-				bytes);
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		// for now...do a gentle migration
 		final byte versionId = buf.get();
 		if (versionId != VERSION) {
-			LOGGER.warn(
-					"Mismatched Feature Data Adapter version");
+			LOGGER.warn("Mismatched Feature Data Adapter version");
 		}
 		final byte[] typeNameBytes = new byte[buf.getInt()];
 		final byte[] namespaceBytes = new byte[buf.getInt()];
@@ -501,21 +455,14 @@ public class FeatureDataAdapter extends
 		final byte[] attrBytes = new byte[buf.getInt()];
 		final byte[] axisBytes = new byte[buf.getInt()];
 		final byte[] encodedTypeBytes = new byte[buf.getInt()];
-		buf.get(
-				typeNameBytes);
-		buf.get(
-				namespaceBytes);
-		buf.get(
-				attrBytes);
-		buf.get(
-				axisBytes);
-		buf.get(
-				encodedTypeBytes);
+		buf.get(typeNameBytes);
+		buf.get(namespaceBytes);
+		buf.get(attrBytes);
+		buf.get(axisBytes);
+		buf.get(encodedTypeBytes);
 
-		final String typeName = StringUtils.stringFromBinary(
-				typeNameBytes);
-		String namespace = StringUtils.stringFromBinary(
-				namespaceBytes);
+		final String typeName = StringUtils.stringFromBinary(typeNameBytes);
+		String namespace = StringUtils.stringFromBinary(namespaceBytes);
 		if (namespace.length() == 0) {
 			namespace = null;
 		}
@@ -524,18 +471,15 @@ public class FeatureDataAdapter extends
 		// version
 		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
 				- namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 29];
-		buf.get(
-				secondaryIndexBytes);
+		buf.get(secondaryIndexBytes);
 
-		final String encodedType = StringUtils.stringFromBinary(
-				encodedTypeBytes);
+		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
 		try {
 			final SimpleFeatureType myType = FeatureDataUtils.decodeType(
 					namespace,
 					typeName,
 					encodedType,
-					StringUtils.stringFromBinary(
-							axisBytes));
+					StringUtils.stringFromBinary(axisBytes));
 
 			final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
 			userDataConfiguration.addConfigurations(
@@ -552,8 +496,7 @@ public class FeatureDataAdapter extends
 							myType));
 			try {
 				userDataConfiguration.fromJsonString(
-						StringUtils.stringFromBinary(
-								attrBytes),
+						StringUtils.stringFromBinary(attrBytes),
 						myType);
 
 			}
@@ -562,8 +505,7 @@ public class FeatureDataAdapter extends
 						"Failure to decode simple feature user data configuration",
 						e);
 			}
-			setFeatureType(
-					myType);
+			setFeatureType(myType);
 
 			// advertise the reprojected type externally
 			return reprojectedType;
@@ -584,8 +526,7 @@ public class FeatureDataAdapter extends
 	@Override
 	public ByteArrayId getAdapterId() {
 		return new ByteArrayId(
-				StringUtils.stringToBinary(
-						reprojectedType.getTypeName()));
+				StringUtils.stringToBinary(reprojectedType.getTypeName()));
 	}
 
 	@Override
@@ -599,8 +540,7 @@ public class FeatureDataAdapter extends
 	public ByteArrayId getDataId(
 			final SimpleFeature entry ) {
 		return new ByteArrayId(
-				StringUtils.stringToBinary(
-						entry.getID()));
+				StringUtils.stringToBinary(entry.getID()));
 	}
 
 	FeatureRowBuilder builder;
@@ -648,8 +588,7 @@ public class FeatureDataAdapter extends
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
 			final ByteArrayId statisticsId ) {
-		return statsManager.getVisibilityHandler(
-				statisticsId);
+		return statsManager.getVisibilityHandler(statisticsId);
 	}
 
 	@Override
@@ -658,15 +597,13 @@ public class FeatureDataAdapter extends
 	}
 
 	public synchronized void resetTimeDescriptors() {
-		timeDescriptors = inferTimeAttributeDescriptor(
-				persistedType);
+		timeDescriptors = inferTimeAttributeDescriptor(persistedType);
 	}
 
 	@Override
 	public synchronized TimeDescriptors getTimeDescriptors() {
 		if (timeDescriptors == null) {
-			timeDescriptors = inferTimeAttributeDescriptor(
-					persistedType);
+			timeDescriptors = inferTimeAttributeDescriptor(persistedType);
 		}
 		return timeDescriptors;
 	}
@@ -686,8 +623,7 @@ public class FeatureDataAdapter extends
 		// Up the meta-data so that it is clear and visible any inference that
 		// has occurred here. Also, this is critical to
 		// serialization/deserialization
-		config.updateType(
-				persistType);
+		config.updateType(persistType);
 		return timeDescriptors;
 	}
 
@@ -711,8 +647,7 @@ public class FeatureDataAdapter extends
 		@Override
 		public FeatureWritable toWritable(
 				final SimpleFeature entry ) {
-			writable.setFeature(
-					entry);
+			writable.setFeature(entry);
 			return writable;
 		}
 
@@ -737,21 +672,17 @@ public class FeatureDataAdapter extends
 	public int getPositionOfOrderedField(
 			final CommonIndexModel model,
 			final ByteArrayId fieldId ) {
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(
-				model);
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
 		// first check CommonIndexModel dimensions
-		if (dimensionFieldIds.contains(
-				fieldId)) {
-			return dimensionFieldIds.indexOf(
-					fieldId);
+		if (dimensionFieldIds.contains(fieldId)) {
+			return dimensionFieldIds.indexOf(fieldId);
 		}
 		if (fieldToPositionMap.isEmpty()) {
 			initializePositionMaps();
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
-		Integer position = fieldToPositionMap.get(
-				fieldId);
+		Integer position = fieldToPositionMap.get(fieldId);
 		if (position == null) {
 			return -1;
 		}
@@ -762,27 +693,23 @@ public class FeatureDataAdapter extends
 	public ByteArrayId getFieldIdForPosition(
 			final CommonIndexModel model,
 			final int position ) {
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(
-				model);
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
 		if (position >= dimensionFieldIds.size()) {
 			if (fieldToPositionMap.isEmpty()) {
 				initializePositionMaps();
 			}
 			final int adjustedPosition = position - dimensionFieldIds.size();
 			// check other fields
-			return positionToFieldMap.get(
-					adjustedPosition);
+			return positionToFieldMap.get(adjustedPosition);
 		}
 		// otherwise check CommonIndexModel dimensions
-		return dimensionFieldIds.get(
-				position);
+		return dimensionFieldIds.get(position);
 	}
 
 	private void initializePositionMaps() {
 		try {
 			for (int i = 0; i < reprojectedType.getAttributeCount(); i++) {
-				final AttributeDescriptor ad = reprojectedType.getDescriptor(
-						i);
+				final AttributeDescriptor ad = reprojectedType.getDescriptor(i);
 				final ByteArrayId currFieldId = new ByteArrayId(
 						ad.getLocalName());
 				fieldToPositionMap.forcePut(
@@ -800,17 +727,14 @@ public class FeatureDataAdapter extends
 
 	private List<ByteArrayId> getDimensionFieldIds(
 			final CommonIndexModel model ) {
-		final List<ByteArrayId> retVal = modelToDimensionsMap.get(
-				model.getId());
+		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());
 		if (retVal != null) {
 			return retVal;
 		}
 		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
-			if (!dimensionFieldIds.contains(
-					dimension.getFieldId())) {
-				dimensionFieldIds.add(
-						dimension.getFieldId());
+			if (!dimensionFieldIds.contains(dimension.getFieldId())) {
+				dimensionFieldIds.add(dimension.getFieldId());
 			}
 		}
 		modelToDimensionsMap.put(

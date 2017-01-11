@@ -17,8 +17,7 @@ import mil.nga.giat.geowave.core.store.util.ClasspathUtils;
 public class MiniAccumuloClusterFactory
 {
 
-	private static final Logger LOGGER = Logger.getLogger(
-			MiniAccumuloClusterFactory.class);
+	private static final Logger LOGGER = Logger.getLogger(MiniAccumuloClusterFactory.class);
 
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 
@@ -42,8 +41,7 @@ public class MiniAccumuloClusterFactory
 			return null;
 		}
 
-		config.setClasspathItems(
-				jarPath);
+		config.setClasspathItems(jarPath);
 
 		final MiniAccumuloClusterImpl retVal = new GeoWaveMiniAccumuloClusterImpl(
 				config);
@@ -56,20 +54,16 @@ public class MiniAccumuloClusterFactory
 			// directory in the mini accumulo cluster directory
 			// (mini accumulo cluster will always set this
 			// directory as hadoop_home)
-			LOGGER.info(
-					"Running YARN on windows requires a local installation of Hadoop");
-			LOGGER.info(
-					"'HADOOP_HOME' must be set and 'PATH' must contain %HADOOP_HOME%/bin");
+			LOGGER.info("Running YARN on windows requires a local installation of Hadoop");
+			LOGGER.info("'HADOOP_HOME' must be set and 'PATH' must contain %HADOOP_HOME%/bin");
 
 			final Map<String, String> env = System.getenv();
 			// HP Fortify "Path Manipulation" false positive
 			// What Fortify considers "user input" comes only
 			// from users with OS-level access anyway
-			String hadoopHome = System.getProperty(
-					"hadoop.home.dir");
+			String hadoopHome = System.getProperty("hadoop.home.dir");
 			if (hadoopHome == null) {
-				hadoopHome = env.get(
-						"HADOOP_HOME");
+				hadoopHome = env.get("HADOOP_HOME");
 			}
 			boolean success = false;
 			if (hadoopHome != null) {
@@ -92,8 +86,8 @@ public class MiniAccumuloClusterFactory
 				}
 			}
 			if (!success) {
-				LOGGER.error(
-						"'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
+				LOGGER
+						.error("'HADOOP_HOME' environment variable is not set or <HADOOP_HOME>/bin/winutils.exe does not exist");
 
 				// return mini accumulo cluster anyways
 				return retVal;

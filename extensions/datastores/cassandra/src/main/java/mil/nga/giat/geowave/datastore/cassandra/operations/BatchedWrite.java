@@ -29,26 +29,25 @@ public class BatchedWrite extends
 
 	public void insert(
 			final CassandraRow row ) {
-//		final BatchStatement currentBatch = addStatement(
-//				row.bindInsertion(
-//						preparedInsert));
-//		synchronized (currentBatch) {
-//			if (currentBatch.size() >= batchSize) {
-//				writeBatch(
-//						currentBatch);
-//			}
-//		}
+		// final BatchStatement currentBatch = addStatement(
+		// row.bindInsertion(
+		// preparedInsert));
+		// synchronized (currentBatch) {
+		// if (currentBatch.size() >= batchSize) {
+		// writeBatch(
+		// currentBatch);
+		// }
+		// }
 		session.execute(row.bindInsertion(preparedInsert));
 	}
 
 	private void writeBatch(
 			final BatchStatement batch ) {
-		final ResultSet future = session.execute(
-				batch);
-//		Futures.addCallback(
-//				future,
-//				new IngestCallback(),
-//				CassandraOperations.WRITE_RESPONSE_THREADS);
+		final ResultSet future = session.execute(batch);
+		// Futures.addCallback(
+		// future,
+		// new IngestCallback(),
+		// CassandraOperations.WRITE_RESPONSE_THREADS);
 		batch.clear();
 	}
 
@@ -57,8 +56,7 @@ public class BatchedWrite extends
 			throws Exception {
 		for (final BatchStatement batch : batches.values()) {
 			synchronized (batch) {
-				writeBatch(
-						batch);
+				writeBatch(batch);
 			}
 		}
 	}

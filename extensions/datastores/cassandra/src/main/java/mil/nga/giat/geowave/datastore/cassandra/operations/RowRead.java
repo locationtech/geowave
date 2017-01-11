@@ -17,8 +17,7 @@ import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 
 public class RowRead
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			RowRead.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(RowRead.class);
 	private final CassandraOperations operations;
 	private final PreparedStatement preparedRead;
 	private byte[] row;
@@ -54,20 +53,17 @@ public class RowRead
 						preparedRead);
 				boundRead.set(
 						CassandraField.GW_IDX_KEY.getBindMarkerName(),
-						ByteBuffer.wrap(
-								row),
+						ByteBuffer.wrap(row),
 						ByteBuffer.class);
 				boundRead.set(
 						CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-						ByteBuffer.wrap(
-								new byte[] {
-									(byte) p
-								}),
+						ByteBuffer.wrap(new byte[] {
+							(byte) p
+						}),
 						ByteBuffer.class);
 				statements[p] = boundRead;
 			}
-			try (CloseableIterator<CassandraRow> it = operations.executeQuery(
-					statements)) {
+			try (CloseableIterator<CassandraRow> it = operations.executeQuery(statements)) {
 				if (it.hasNext()) {
 					// there should only be one entry with this index
 					return it.next();

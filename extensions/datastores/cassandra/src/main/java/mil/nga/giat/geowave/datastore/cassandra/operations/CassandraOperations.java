@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.IntStream;
 
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
@@ -22,6 +25,7 @@ import com.datastax.driver.core.schemabuilder.Create;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.spotify.futures.CompletableFuturesExtra;
@@ -31,6 +35,7 @@ import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraWriter;
@@ -362,7 +367,107 @@ public class CassandraOperations implements
 
 	@Override
 	public void deleteAll()
-			throws Exception {}
+			throws Exception {
+		session.execute(
+				SchemaBuilder.dropKeyspace(
+						gwNamespace).ifExists());
+	}
+
+	public boolean deleteAll(
+			final String tableName,
+			final byte[] adapterId,
+			final String... additionalAuthorizations ) {
+		session.execute(
+				QueryBuilder.delete().from(
+						gwNamespace,
+						tableName).where(
+								QueryBuilder.eq(
+										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+										ByteBuffer.wrap(
+												adapterId))));
+		return true;
+	}
+
+	public boolean deleteRows(
+			final String tableName,
+			final byte[][] dataIds,
+			final byte[] adapterId,
+			final String... additionalAuthorizations ) {
+		session.execute(
+				QueryBuilder
+						.delete()
+						.from(
+								gwNamespace,
+								tableName)
+						.where(
+								QueryBuilder.eq(
+										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+										ByteBuffer.wrap(
+												adapterId)))
+						.and(
+								QueryBuilder.in(
+										CassandraField.GW_DATA_ID_KEY.getFieldName(),
+										Lists.transform(
+												Arrays.asList(
+														dataIds),
+												new ByteArrayToByteBuffer()))));
+		return true;
+	}
+
+	public CloseableIterator<CassandraRow> getRows(
+			final String tableName,
+			final byte[][] dataIds,
+			final byte[] adapterId,
+			final String... additionalAuthorizations ) {
+		return executeQuery(
+				QueryBuilder
+						.select()
+						.from(
+								gwNamespace,
+								tableName)
+						.where(
+								QueryBuilder.eq(
+										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+										ByteBuffer.wrap(
+												adapterId)))
+						.and(
+								QueryBuilder.in(
+										CassandraField.GW_DATA_ID_KEY.getFieldName(),
+										Lists.transform(
+												Arrays.asList(
+														dataIds),
+												new ByteArrayToByteBuffer())))
+						.and(
+								QueryBuilder.in(
+										CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+										IntStream.range(
+												0,
+												CassandraIndexWriter.PARTITIONS))));
+	}
+
+	public boolean deleteRow(
+			final String tableName,
+			final byte[] dataId,
+			final byte[] adapterId,
+			final String... additionalAuthorizations ) {
+		session.execute(
+				QueryBuilder
+						.delete()
+						.from(
+								gwNamespace,
+								tableName)
+						.where(
+								QueryBuilder.eq(
+										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+										ByteBuffer.wrap(
+												adapterId)))
+						.and(
+								QueryBuilder.eq(
+										CassandraField.GW_DATA_ID_KEY.getFieldName(),
+										ByteBuffer.wrap(
+												dataId))));
+		return true;
+	}
 
 	private static class ListenableFutureToCompletableFuture implements
 			Function<ListenableFuture<ResultSet>, CompletableFuture<ResultSet>>
@@ -374,4 +479,15 @@ public class CassandraOperations implements
 					input);
 		}
 	}
+
+	private static class ByteArrayToByteBuffer implements
+			Function<byte[], ByteBuffer>
+	{
+		@Override
+		public ByteBuffer apply(
+				final byte[] input ) {
+			return ByteBuffer.wrap(
+					input);
+		}
+	};
 }

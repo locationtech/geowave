@@ -22,16 +22,10 @@ public class SessionPool
 
 	public synchronized Session getSession(
 			final String contactPoints ) {
-		Session session = sessionCache.get(
-				contactPoints);
+		Session session = sessionCache.get(contactPoints);
 		if (session == null) {
-			session = Cluster
-					.builder()
-					.addContactPoints(
-							contactPoints.split(
-									","))
-					.build()
-					.connect();
+			session = Cluster.builder().addContactPoints(
+					contactPoints.split(",")).build().connect();
 			sessionCache.put(
 					contactPoints,
 					session);

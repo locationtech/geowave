@@ -26,8 +26,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class MergingEntryIterator<T> extends
 		NativeEntryIteratorWrapper<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			NativeEntryIteratorWrapper.class);
+	private final static Logger LOGGER = Logger.getLogger(NativeEntryIteratorWrapper.class);
 
 	private final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters;
 	private final Map<ByteArrayId, RowTransform> transforms;
@@ -68,15 +67,13 @@ public class MergingEntryIterator<T> extends
 
 		final ByteArrayId adapterId = new ByteArrayId(
 				nextResult.getAdapterId());
-		final RowMergingDataAdapter mergingAdapter = mergingAdapters.get(
-				adapterId);
+		final RowMergingDataAdapter mergingAdapter = mergingAdapters.get(adapterId);
 
 		final ArrayList<NativeGeoWaveRow> resultsToMerge = new ArrayList<NativeGeoWaveRow>();
 
 		if ((mergingAdapter != null) && (mergingAdapter.getTransform() != null)) {
 
-			resultsToMerge.add(
-					nextResult);
+			resultsToMerge.add(nextResult);
 
 			// Peek ahead to see if it needs to be merged with the next result
 			while (scannerIt.hasNext()) {
@@ -86,8 +83,7 @@ public class MergingEntryIterator<T> extends
 						nextResult,
 						peekedValue)) {
 
-					resultsToMerge.add(
-							peekedValue);
+					resultsToMerge.add(peekedValue);
 					peekedValue = null;
 				}
 				else {
@@ -124,10 +120,8 @@ public class MergingEntryIterator<T> extends
 							final NativeGeoWaveRow row1,
 							final NativeGeoWaveRow row2 ) {
 
-						final ByteBuffer buf1 = ByteBuffer.wrap(
-								row1.getDataId());
-						final ByteBuffer buf2 = ByteBuffer.wrap(
-								row2.getDataId());
+						final ByteBuffer buf1 = ByteBuffer.wrap(row1.getDataId());
+						final ByteBuffer buf2 = ByteBuffer.wrap(row2.getDataId());
 						buf1.get();
 						buf2.get();
 
@@ -158,15 +152,12 @@ public class MergingEntryIterator<T> extends
 			final NativeGeoWaveRow row,
 			final NativeGeoWaveRow rowToMerge ) {
 
-		RowTransform transform = transforms.get(
-				mergingAdapter.getAdapterId());
+		RowTransform transform = transforms.get(mergingAdapter.getAdapterId());
 		if (transform == null) {
 			transform = mergingAdapter.getTransform();
 			// set strategy
 			try {
-				transform.initOptions(
-						mergingAdapter.getOptions(
-								null));
+				transform.initOptions(mergingAdapter.getOptions(null));
 			}
 			catch (final IOException e) {
 				LOGGER.error(
@@ -185,22 +176,19 @@ public class MergingEntryIterator<T> extends
 						row.getFieldMask()),
 				row.getValue());
 
-		mergeable.merge(
-				transform.getRowAsMergeableObject(
-						new ByteArrayId(
-								rowToMerge.getAdapterId()),
-						new ByteArrayId(
-								rowToMerge.getFieldMask()),
-						rowToMerge.getValue()));
+		mergeable.merge(transform.getRowAsMergeableObject(
+				new ByteArrayId(
+						rowToMerge.getAdapterId()),
+				new ByteArrayId(
+						rowToMerge.getFieldMask()),
+				rowToMerge.getValue()));
 
 		return new NativeGeoWaveRowImpl(
-				DataStoreUtils.removeUniqueId(
-						row.getDataId()),
+				DataStoreUtils.removeUniqueId(row.getDataId()),
 				row.getAdapterId(),
 				row.getIndex(),
 				row.getFieldMask(),
-				transform.getBinaryFromMergedObject(
-						mergeable));
+				transform.getBinaryFromMergedObject(mergeable));
 
 	}
 

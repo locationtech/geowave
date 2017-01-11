@@ -25,7 +25,8 @@ public class ByteArrayId implements
 
 	public ByteArrayId(
 			final String id ) {
-		this.id = StringUtils.stringToBinary(id);
+		this.id = StringUtils.stringToBinary(
+				id);
 		stringId = id;
 	}
 
@@ -33,20 +34,27 @@ public class ByteArrayId implements
 		return id;
 	}
 
+	public byte[] getNextPrefix() {
+		return getNextPrefix(
+				id);
+	}
+
 	public String getString() {
 		if (stringId == null) {
-			stringId = StringUtils.stringFromBinary(id);
+			stringId = StringUtils.stringFromBinary(
+					id);
 		}
 		return stringId;
 	}
 
 	public String getHexString() {
 
-		StringBuffer str = new StringBuffer();
-		for (byte b : id) {
-			str.append(String.format(
-					"%02X ",
-					b));
+		final StringBuffer str = new StringBuffer();
+		for (final byte b : id) {
+			str.append(
+					String.format(
+							"%02X ",
+							b));
 		}
 		return str.toString();
 	}
@@ -60,7 +68,8 @@ public class ByteArrayId implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + Arrays.hashCode(id);
+		result = (prime * result) + Arrays.hashCode(
+				id);
 		return result;
 	}
 
@@ -85,27 +94,33 @@ public class ByteArrayId implements
 	public static byte[] toBytes(
 			final ByteArrayId[] ids ) {
 		int len = 4;
-		for (ByteArrayId id : ids) {
+		for (final ByteArrayId id : ids) {
 			len += (id.id.length + 4);
 		}
-		final ByteBuffer buffer = ByteBuffer.allocate(len);
-		buffer.putInt(ids.length);
-		for (ByteArrayId id : ids) {
-			buffer.putInt(id.id.length);
-			buffer.put(id.id);
+		final ByteBuffer buffer = ByteBuffer.allocate(
+				len);
+		buffer.putInt(
+				ids.length);
+		for (final ByteArrayId id : ids) {
+			buffer.putInt(
+					id.id.length);
+			buffer.put(
+					id.id);
 		}
 		return buffer.array();
 	}
 
 	public static ByteArrayId[] fromBytes(
-			byte[] idData ) {
-		final ByteBuffer buffer = ByteBuffer.wrap(idData);
+			final byte[] idData ) {
+		final ByteBuffer buffer = ByteBuffer.wrap(
+				idData);
 		final int len = buffer.getInt();
 		final ByteArrayId[] result = new ByteArrayId[len];
 		for (int i = 0; i < len; i++) {
 			final int idSize = buffer.getInt();
 			final byte[] id = new byte[idSize];
-			buffer.get(id);
+			buffer.get(
+					id);
 			result[i] = new ByteArrayId(
 					id);
 		}
@@ -114,16 +129,39 @@ public class ByteArrayId implements
 
 	@Override
 	public int compareTo(
-			ByteArrayId o ) {
+			final ByteArrayId o ) {
 
-		for (int i = 0, j = 0; i < id.length && j < o.id.length; i++, j++) {
-			int a = (id[i] & 0xff);
-			int b = (o.id[j] & 0xff);
+		for (int i = 0, j = 0; (i < id.length) && (j < o.id.length); i++, j++) {
+			final int a = (id[i] & 0xff);
+			final int b = (o.id[j] & 0xff);
 			if (a != b) {
 				return a - b;
 			}
 		}
 		return id.length - o.id.length;
 
+	}
+
+	private static byte[] getNextPrefix(
+			final byte[] rowKeyPrefix ) {
+		int offset = rowKeyPrefix.length;
+		while (offset > 0) {
+			if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
+				break;
+			}
+			offset--;
+		}
+
+		if (offset == 0) {
+			return new byte[0];
+		}
+
+		final byte[] newStopRow = Arrays.copyOfRange(
+				rowKeyPrefix,
+				0,
+				offset);
+		// And increment the last one
+		newStopRow[newStopRow.length - 1]++;
+		return newStopRow;
 	}
 }
