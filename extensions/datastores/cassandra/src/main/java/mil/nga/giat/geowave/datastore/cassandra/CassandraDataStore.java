@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.cassandra.index.secondary.CassandraSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraAdapterStore;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraDataStatisticsStore;
@@ -51,7 +52,8 @@ public class CassandraDataStore extends
 						operations),
 				new CassandraAdapterIndexMappingStore(
 						operations),
-				null,
+				new CassandraSecondaryIndexDataStore(
+						operations),
 				operations,
 				operations.getOptions());
 		this.operations = operations;
@@ -110,7 +112,7 @@ public class CassandraDataStore extends
 								return input.getBytes();
 							}
 						}).toArray(
-								new byte[][] {}),
+						new byte[][] {}),
 				adapter.getAdapterId().getBytes(),
 				authorizations);
 		return new CloseableIteratorWrapper<>(

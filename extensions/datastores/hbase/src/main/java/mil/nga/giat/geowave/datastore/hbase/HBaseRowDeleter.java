@@ -17,8 +17,7 @@ import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 public class HBaseRowDeleter implements
 		Deleter
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			HBaseRowDeleter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HBaseRowDeleter.class);
 	private final HBaseWriter writer;
 	private final boolean isAltIndex;
 
@@ -41,22 +40,19 @@ public class HBaseRowDeleter implements
 			final DataAdapter<?> adapter ) {
 		final List<Delete> deletes = new ArrayList<Delete>();
 		if (isAltIndex) {
-			deletes.add(
-					new Delete(
-							entry.getDataId()));
+			deletes.add(new Delete(
+					entry.getDataId()));
 		}
 		else {
 			final List<ByteArrayId> rowIds = entry.getRowIds();
 			for (final ByteArrayId id : rowIds) {
-				deletes.add(
-						new Delete(
-								id.getBytes()));
+				deletes.add(new Delete(
+						id.getBytes()));
 			}
 		}
 		if (writer instanceof HBaseWriter) {
 			try {
-				writer.delete(
-						deletes);
+				writer.delete(deletes);
 			}
 			catch (final IOException e) {
 				LOGGER.warn(

@@ -33,8 +33,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 
 	private static final Object CREATE_TABLE_MUTEX = new Object();
 
-	private final static Logger LOGGER = Logger.getLogger(
-			AbstractCassandraPersistence.class);
+	private final static Logger LOGGER = Logger.getLogger(AbstractCassandraPersistence.class);
 	protected final CassandraOperations operations;
 
 	public AbstractCassandraPersistence(
@@ -46,8 +45,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 
 	protected ByteArrayId getSecondaryId(
 			final Row row ) {
-		final ByteBuffer v = row.getBytes(
-				SECONDARY_ID_KEY);
+		final ByteBuffer v = row.getBytes(SECONDARY_ID_KEY);
 		if (v != null) {
 			return new ByteArrayId(
 					v.array());
@@ -57,8 +55,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 
 	protected ByteArrayId getPersistenceTypeName(
 			final Row row ) {
-		final ByteBuffer v = row.getBytes(
-				PRIMARY_ID_KEY);
+		final ByteBuffer v = row.getBytes(PRIMARY_ID_KEY);
 		if (v != null) {
 			return new ByteArrayId(
 					v.array());
@@ -80,11 +77,9 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				secondaryId,
 				object);
 		synchronized (CREATE_TABLE_MUTEX) {
-			if (!operations.tableExists(
-					getTablename())) {
+			if (!operations.tableExists(getTablename())) {
 				// create table
-				final Create create = operations.getCreateTable(
-						getTablename());
+				final Create create = operations.getCreateTable(getTablename());
 				create.addPartitionKey(
 						PRIMARY_ID_KEY,
 						DataType.blob());
@@ -104,26 +99,21 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 						getTablename());
 			}
 		}
-		final Insert insert = operations.getInsert(
-				getTablename());
+		final Insert insert = operations.getInsert(getTablename());
 		insert.value(
 				PRIMARY_ID_KEY,
-				ByteBuffer.wrap(
-						id.getBytes()));
+				ByteBuffer.wrap(id.getBytes()));
 		if (secondaryId != null) {
 			insert.value(
 					SECONDARY_ID_KEY,
-					ByteBuffer.wrap(
-							secondaryId.getBytes()));
+					ByteBuffer.wrap(secondaryId.getBytes()));
 			insert.value(
 					TIMESTAMP_ID_KEY,
 					QueryBuilder.now());
 		}
 		insert.value(
 				VALUE_KEY,
-				ByteBuffer.wrap(
-						PersistenceUtils.toBinary(
-								object)));
+				ByteBuffer.wrap(PersistenceUtils.toBinary(object)));
 		operations.getSession().execute(
 				insert);
 	}
@@ -131,8 +121,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 	protected CloseableIterator<T> getAllObjectsWithSecondaryId(
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
-		if (!operations.tableExists(
-				getTablename())) {
+		if (!operations.tableExists(getTablename())) {
 			return new CloseableIterator.Wrapper<>(
 					Iterators.emptyIterator());
 		}
@@ -140,11 +129,9 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				getSelect().allowFiltering().where(
 						QueryBuilder.eq(
 								SECONDARY_ID_KEY,
-								ByteBuffer.wrap(
-										secondaryId.getBytes()))));
+								ByteBuffer.wrap(secondaryId.getBytes()))));
 		return new CloseableIterator.Wrapper<T>(
-				getNativeIteratorWrapper(
-						results.iterator()));
+				getNativeIteratorWrapper(results.iterator()));
 	}
 
 	@Override
@@ -168,10 +155,9 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				secondaryId,
 				authorizations);
 		if (!results.hasNext()) {
-			LOGGER.warn(
-					"Object '" + getCombinedId(
-							primaryId,
-							secondaryId).getString() + "' not found");
+			LOGGER.warn("Object '" + getCombinedId(
+					primaryId,
+					secondaryId).getString() + "' not found");
 			return null;
 		}
 		return getNativeIteratorWrapper(
@@ -180,11 +166,9 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 
 	protected CloseableIterator<T> getObjects(
 			final String... authorizations ) {
-		final Iterator<Row> results = getFullResults(
-				authorizations);
+		final Iterator<Row> results = getFullResults(authorizations);
 		return new CloseableIterator.Wrapper<T>(
-				getNativeIteratorWrapper(
-						results));
+				getNativeIteratorWrapper(results));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -197,10 +181,8 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 				Persistable.class);
 		if (result != null) {
 			addObjectToCache(
-					getPrimaryId(
-							result),
-					getSecondaryId(
-							result),
+					getPrimaryId(result),
+					getSecondaryId(result),
 					result);
 		}
 		return result;
@@ -216,31 +198,25 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 
 	protected ByteArrayId getRowId(
 			final T object ) {
-		return getPrimaryId(
-				object);
+		return getPrimaryId(object);
 	}
 
 	protected Iterator<Row> getResults(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
-		if (!operations.tableExists(
-				getTablename())) {
+		if (!operations.tableExists(getTablename())) {
 			return Iterators.emptyIterator();
 		}
 		final Select select = getSelect();
 		if (primaryId != null) {
-			final Where where = select.where(
-					QueryBuilder.eq(
-							PRIMARY_ID_KEY,
-							ByteBuffer.wrap(
-									primaryId.getBytes())));
+			final Where where = select.where(QueryBuilder.eq(
+					PRIMARY_ID_KEY,
+					ByteBuffer.wrap(primaryId.getBytes())));
 			if (secondaryId != null) {
-				where.and(
-						QueryBuilder.eq(
-								SECONDARY_ID_KEY,
-								ByteBuffer.wrap(
-										secondaryId.getBytes())));
+				where.and(QueryBuilder.eq(
+						SECONDARY_ID_KEY,
+						ByteBuffer.wrap(secondaryId.getBytes())));
 			}
 		}
 		return operations.getSession().execute(
@@ -286,8 +262,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 
 		if (results.hasNext()) {
 			// may as well cache the result
-			return (entryToValue(
-					results.next()) != null);
+			return (entryToValue(results.next()) != null);
 		}
 		else {
 			return false;
@@ -319,8 +294,7 @@ abstract public class AbstractCassandraPersistence<T extends Persistable> extend
 		@Override
 		public T next() {
 			final Row row = it.next();
-			return entryToValue(
-					row);
+			return entryToValue(row);
 		}
 
 		@Override

@@ -82,7 +82,7 @@ abstract public class CassandraQuery
 			final Integer limit ) {
 		final List<ByteArrayRange> ranges = getRanges();
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
-		if (ranges != null) {
+		if (ranges != null && !ranges.isEmpty()) {
 			if (ranges.size() == 1) {
 				final ByteArrayRange r = ranges.get(0);
 				if (r.isSingleValue()) {
@@ -101,6 +101,10 @@ abstract public class CassandraQuery
 					tableName,
 					ranges);
 			return rangeRead.results();
+		}
+		else{
+			//query everything
+			cassandraOperations.executeQuery(cassandraOperations.getSelect(tableName));
 		}
 		return new Wrapper(
 				EmptyIterator.INSTANCE);

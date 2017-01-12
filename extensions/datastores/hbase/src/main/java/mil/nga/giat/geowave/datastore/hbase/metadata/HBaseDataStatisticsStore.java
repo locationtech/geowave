@@ -25,8 +25,7 @@ public class HBaseDataStatisticsStore extends
 {
 
 	protected static final String STATISTICS_CF = "STATS";
-	private final static Logger LOGGER = Logger.getLogger(
-			HBaseDataStatisticsStore.class);
+	private final static Logger LOGGER = Logger.getLogger(HBaseDataStatisticsStore.class);
 
 	public HBaseDataStatisticsStore(
 			final BasicHBaseOperations operations ) {
@@ -40,16 +39,14 @@ public class HBaseDataStatisticsStore extends
 		removeStatistics(
 				statistics.getDataAdapterId(),
 				statistics.getStatisticsId());
-		addObject(
-				statistics);
+		addObject(statistics);
 
 	}
 
 	@Override
 	public void incorporateStatistics(
 			final DataStatistics<?> statistics ) {
-		addObject(
-				statistics);
+		addObject(statistics);
 
 	}
 
@@ -65,8 +62,7 @@ public class HBaseDataStatisticsStore extends
 	@Override
 	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
 			final String... authorizations ) {
-		return getObjects(
-				authorizations);
+		return getObjects(authorizations);
 	}
 
 	@Override
@@ -124,13 +120,10 @@ public class HBaseDataStatisticsStore extends
 	@Override
 	protected DataStatistics<?> entryToValue(
 			final Cell entry ) {
-		final DataStatistics<?> stats = super.entryToValue(
-				entry);
+		final DataStatistics<?> stats = super.entryToValue(entry);
 		if (stats != null) {
-			stats.setDataAdapterId(
-					new ByteArrayId(
-							CellUtil.cloneQualifier(
-									entry)));
+			stats.setDataAdapterId(new ByteArrayId(
+					CellUtil.cloneQualifier(entry)));
 		}
 		return stats;
 	}
@@ -160,19 +153,14 @@ public class HBaseDataStatisticsStore extends
 				primaryId,
 				secondaryId);
 		if (primaryId != null) {
-			final ByteBuffer buf = ByteBuffer.allocate(
-					primaryId.getBytes().length + 1);
-			buf.put(
-					primaryId.getBytes());
-			buf.put(
-					new byte[] {
-						0
-					});
+			final ByteBuffer buf = ByteBuffer.allocate(primaryId.getBytes().length + 1);
+			buf.put(primaryId.getBytes());
+			buf.put(new byte[] {
+				0
+			});
 			// So this will set the stop row to just after all the possible
 			// suffixes to this primaryId.
-			scan.setStopRow(
-					HBaseUtils.getNextPrefix(
-							buf.array()));
+			scan.setStopRow(HBaseUtils.getNextPrefix(buf.array()));
 		}
 		return scan;
 	}
@@ -221,19 +209,16 @@ public class HBaseDataStatisticsStore extends
 				// We need to make sure to add the merged version of the stat at
 				// the end of this
 				// function, before it is returned.
-				final DataStatistics<?> statEntry = entryToValue(
-						cell);
+				final DataStatistics<?> statEntry = entryToValue(cell);
 
 				if (currentStatistics == null) {
 					currentStatistics = statEntry;
 				}
 				else {
 					if (statEntry.getStatisticsId().equals(
-							currentStatistics.getStatisticsId())
-							&& statEntry.getDataAdapterId().equals(
-									currentStatistics.getDataAdapterId())) {
-						currentStatistics.merge(
-								statEntry);
+							currentStatistics.getStatisticsId()) && statEntry.getDataAdapterId().equals(
+							currentStatistics.getDataAdapterId())) {
+						currentStatistics.merge(statEntry);
 					}
 					else {
 						nextVal = statEntry;
@@ -244,10 +229,8 @@ public class HBaseDataStatisticsStore extends
 
 			// Add this entry to cache (see comment above)
 			addObjectToCache(
-					getPrimaryId(
-							currentStatistics),
-					getSecondaryId(
-							currentStatistics),
+					getPrimaryId(currentStatistics),
+					getSecondaryId(currentStatistics),
 					currentStatistics);
 			return currentStatistics;
 		}

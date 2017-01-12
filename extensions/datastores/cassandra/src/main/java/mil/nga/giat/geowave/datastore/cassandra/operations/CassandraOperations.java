@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,10 +14,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.StreamSupport;
 
+import com.aol.cyclops.control.LazyReact;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
@@ -29,6 +34,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.spotify.futures.CompletableFuturesExtra;
@@ -43,6 +49,7 @@ import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraWriter;
+import mil.nga.giat.geowave.datastore.cassandra.operations.BatchedWrite.IngestCallback;
 import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraOptions;
 import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
 import mil.nga.giat.geowave.datastore.cassandra.util.SessionPool;
@@ -282,52 +289,51 @@ public class CassandraOperations implements
 				null);
 	}
 
-	// public CloseableIterator<CassandraRow> executeQuery(
-	// final Statement... statements ) {
-	// // first create a list of asynchronous query executions
-	// final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(
-	// statements.length);
-	// for (final Statement s : statements) {
-	// futures.add(
-	// session.executeAsync(
-	// s));
-	// }
-	// for (ResultSetFuture f : futures) {
-	// Futures.addCallback(
-	// f,
-	// new IngestCallback(),
-	// CassandraOperations.WRITE_RESPONSE_THREADS);
-	// }
-	// // convert the list of futures to an asynchronously as completed
-	// // iterator on cassandra rows
-	// final
-	// com.aol.cyclops.internal.react.stream.CloseableIterator<CassandraRow>
-	// results = new LazyReact()
-	// .fromStreamFutures(
-	// Lists.transform(
-	// futures,
-	// new ListenableFutureToCompletableFuture()).stream())
-	// .flatMap(
-	// r -> StreamSupport.stream(
-	// r.spliterator(),
-	// false))
-	// .map(
-	// r -> new CassandraRow(
-	// r))
-	// .iterator();
-	// // now convert cyclops-react closeable iterator to a geowave closeable
-	// // iterator
-	// return new CloseableIteratorWrapper<CassandraRow>(
-	// new Closeable() {
-	//
-	// @Override
-	// public void close()
-	// throws IOException {
-	// results.close();
-	// }
-	// },
-	// results);
-	// }
+	public CloseableIterator<CassandraRow> executeQueryAsync(
+			final Statement... statements ) {
+		// first create a list of asynchronous query executions
+		final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(
+				statements.length);
+		for (final Statement s : statements) {
+			futures.add(
+					session.executeAsync(
+							s));
+		}
+		for (final ResultSetFuture f : futures) {
+			Futures.addCallback(
+					f,
+					new IngestCallback(),
+					CassandraOperations.WRITE_RESPONSE_THREADS);
+		}
+		// convert the list of futures to an asynchronously as completed
+		// iterator on cassandra rows
+		final com.aol.cyclops.internal.react.stream.CloseableIterator<CassandraRow> results = new LazyReact()
+				.fromStreamFutures(
+						Lists.transform(
+								futures,
+								new ListenableFutureToCompletableFuture()).stream())
+				.flatMap(
+						r -> StreamSupport.stream(
+								r.spliterator(),
+								false))
+				.map(
+						r -> new CassandraRow(
+								r))
+				.iterator();
+		// now convert cyclops-react closeable iterator to a geowave closeable
+		// iterator
+		return new CloseableIteratorWrapper<CassandraRow>(
+				new Closeable() {
+
+					@Override
+					public void close()
+							throws IOException {
+						results.close();
+					}
+				},
+				results);
+	}
+
 	public CloseableIterator<CassandraRow> executeQuery(
 			final Statement... statements ) {
 		final List<CassandraRow> rows = new ArrayList<>();
@@ -436,25 +442,6 @@ public class CassandraOperations implements
 				QueryBuilder.select().from(
 						gwNamespace,
 						tableName).allowFiltering());
-		// .where(
-		// QueryBuilder.eq(
-		// CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-		// ByteBuffer.wrap(
-		// adapterId)))
-		// .and(
-		// QueryBuilder.in(
-		// CassandraField.GW_DATA_ID_KEY.getFieldName(),
-		// Lists.transform(
-		// Arrays.asList(
-		// dataIds),
-		// new ByteArrayToByteBuffer())))
-		// .where(
-		// QueryBuilder.gte(
-		// CassandraField.GW_IDX_KEY.getFieldName(),
-		// ByteBuffer.wrap(
-		// new byte[] {
-		// Byte.MIN_VALUE
-		// }))));
 		return new CloseableIteratorWrapper<CassandraRow>(
 				everything,
 				Iterators.filter(
@@ -472,19 +459,6 @@ public class CassandraOperations implements
 														adapterIdObj);
 							}
 						}));
-		// .and(
-		// QueryBuilder.in(
-		// CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-		// IntStream
-		// .range(
-		// 0,
-		// CassandraIndexWriter.PARTITIONS)
-		// .mapToObj(
-		// i -> ByteBuffer.wrap(
-		// new byte[] {
-		// (byte) i
-		// })).collect(
-		// Collectors.toList()))));
 	}
 
 	public boolean deleteRow(

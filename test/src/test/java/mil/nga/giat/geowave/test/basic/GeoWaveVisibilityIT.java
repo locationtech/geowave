@@ -46,6 +46,7 @@ public class GeoWaveVisibilityIT
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

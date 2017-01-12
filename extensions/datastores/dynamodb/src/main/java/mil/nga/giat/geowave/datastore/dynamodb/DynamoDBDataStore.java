@@ -37,8 +37,7 @@ public class DynamoDBDataStore extends
 {
 	public final static String TYPE = "dynamodb";
 
-	private final static Logger LOGGER = Logger.getLogger(
-			DynamoDBDataStore.class);
+	private final static Logger LOGGER = Logger.getLogger(DynamoDBDataStore.class);
 	private final DynamoDBOperations dynamodbOperations;
 
 	public DynamoDBDataStore(

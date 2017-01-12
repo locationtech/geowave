@@ -21,8 +21,7 @@ public class CassandraDataStatisticsStore extends
 {
 
 	protected static final String STATISTICS_CF = "STATS";
-	private final static Logger LOGGER = Logger.getLogger(
-			CassandraDataStatisticsStore.class);
+	private final static Logger LOGGER = Logger.getLogger(CassandraDataStatisticsStore.class);
 
 	public CassandraDataStatisticsStore(
 			final CassandraOperations operations ) {
@@ -35,8 +34,7 @@ public class CassandraDataStatisticsStore extends
 			final DataStatistics<?> statistics ) {
 		// because we're using the combiner, we should simply be able to add the
 		// object
-		addObject(
-				statistics);
+		addObject(statistics);
 
 		// TODO if we do allow caching after we add a statistic to DynamoDB we
 		// do need to make sure we update our cache, but for now we aren't using
@@ -105,12 +103,9 @@ public class CassandraDataStatisticsStore extends
 	@Override
 	protected DataStatistics<?> entryToValue(
 			final Row entry ) {
-		final DataStatistics<?> stats = super.entryToValue(
-				entry);
+		final DataStatistics<?> stats = super.entryToValue(entry);
 		if (stats != null) {
-			stats.setDataAdapterId(
-					getSecondaryId(
-							entry));
+			stats.setDataAdapterId(getSecondaryId(entry));
 		}
 		return stats;
 	}
@@ -133,15 +128,13 @@ public class CassandraDataStatisticsStore extends
 		removeStatistics(
 				statistics.getDataAdapterId(),
 				statistics.getStatisticsId());
-		addObject(
-				statistics);
+		addObject(statistics);
 	}
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
 			final String... authorizations ) {
-		return getObjects(
-				authorizations);
+		return getObjects(authorizations);
 	}
 
 	@Override
@@ -232,19 +225,16 @@ public class CassandraDataStatisticsStore extends
 				// We need to make sure to add the merged version of the stat at
 				// the end of this
 				// function, before it is returned.
-				final DataStatistics<?> statEntry = entryToValue(
-						row);
+				final DataStatistics<?> statEntry = entryToValue(row);
 
 				if (currentStatistics == null) {
 					currentStatistics = statEntry;
 				}
 				else {
 					if (statEntry.getStatisticsId().equals(
-							currentStatistics.getStatisticsId())
-							&& statEntry.getDataAdapterId().equals(
-									currentStatistics.getDataAdapterId())) {
-						currentStatistics.merge(
-								statEntry);
+							currentStatistics.getStatisticsId()) && statEntry.getDataAdapterId().equals(
+							currentStatistics.getDataAdapterId())) {
+						currentStatistics.merge(statEntry);
 					}
 					else {
 						nextVal = statEntry;
@@ -255,10 +245,8 @@ public class CassandraDataStatisticsStore extends
 
 			// Add this entry to cache (see comment above)
 			addObjectToCache(
-					getPrimaryId(
-							currentStatistics),
-					getSecondaryId(
-							currentStatistics),
+					getPrimaryId(currentStatistics),
+					getSecondaryId(currentStatistics),
 					currentStatistics);
 			return currentStatistics;
 		}

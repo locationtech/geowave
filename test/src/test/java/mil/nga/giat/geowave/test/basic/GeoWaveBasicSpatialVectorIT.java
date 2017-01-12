@@ -21,8 +21,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeoWaveBasicSpatialVectorIT extends
 		AbstractGeoWaveBasicVectorIT
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			GeoWaveBasicSpatialVectorIT.class);
+	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicSpatialVectorIT.class);
 	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";
 	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
 			+ "hail-polygon-filter.shp";
@@ -48,46 +47,35 @@ public class GeoWaveBasicSpatialVectorIT extends
 	@BeforeClass
 	public static void reportTestStart() {
 		startMillis = System.currentTimeMillis();
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"*  RUNNING GeoWaveBasicSpatialVectorIT  *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*  RUNNING GeoWaveBasicSpatialVectorIT  *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@AfterClass
 	public static void reportTestFinish() {
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"* FINISHED GeoWaveBasicSpatialVectorIT  *");
-		LOGGER.warn(
-				"*         " + ((System.currentTimeMillis() - startMillis) / 1000) + "s elapsed.                 *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED GeoWaveBasicSpatialVectorIT  *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test
 	public void testMultiThreadedIngestAndQuerySpatialPointsAndLines() {
-		testIngestAndQuerySpatialPointsAndLines(
-				4);
+		testIngestAndQuerySpatialPointsAndLines(4);
 	}
 
 	public void testIngestAndQuerySpatialPointsAndLines(
 			final int nthreads ) {
 		long mark = System.currentTimeMillis();
 
-		LOGGER.debug(
-				"Testing DataStore Type: " + dataStore.getType());
+		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
 
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
@@ -97,8 +85,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 				nthreads);
 
 		long dur = (System.currentTimeMillis() - mark);
-		LOGGER.debug(
-				"Ingest (points) duration = " + dur + " ms with " + nthreads + " thread(s).");
+		LOGGER.debug("Ingest (points) duration = " + dur + " ms with " + nthreads + " thread(s).");
 
 		mark = System.currentTimeMillis();
 
@@ -109,8 +96,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 				nthreads);
 
 		dur = (System.currentTimeMillis() - mark);
-		LOGGER.debug(
-				"Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
+		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
 
 		try {
 			mark = System.currentTimeMillis();
@@ -128,16 +114,13 @@ public class GeoWaveBasicSpatialVectorIT extends
 					"bounding box constraint only");
 
 			dur = (System.currentTimeMillis() - mark);
-			LOGGER.debug(
-					"BBOX query duration = " + dur + " ms.");
+			LOGGER.debug("BBOX query duration = " + dur + " ms.");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage()
-							+ "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 		try {
 			mark = System.currentTimeMillis();
@@ -155,15 +138,13 @@ public class GeoWaveBasicSpatialVectorIT extends
 					"polygon constraint only");
 
 			dur = (System.currentTimeMillis() - mark);
-			LOGGER.debug(
-					"POLY query duration = " + dur + " ms.");
+			LOGGER.debug("POLY query duration = " + dur + " ms.");
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage()
+					+ "'");
 		}
 
 		if ((nthreads > 0)) {
@@ -180,11 +161,9 @@ public class GeoWaveBasicSpatialVectorIT extends
 			}
 			catch (final Exception e) {
 				e.printStackTrace();
-				TestUtils.deleteAll(
-						dataStore);
-				Assert.fail(
-						"Error occurred while testing a bounding box stats on spatial index: '"
-								+ e.getLocalizedMessage() + "'");
+				TestUtils.deleteAll(dataStore);
+				Assert.fail("Error occurred while testing a bounding box stats on spatial index: '"
+						+ e.getLocalizedMessage() + "'");
 			}
 		}
 		try {
@@ -195,15 +174,12 @@ public class GeoWaveBasicSpatialVectorIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing deletion of an entry using spatial index: '" + e.getLocalizedMessage()
-							+ "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
-		TestUtils.deleteAll(
-				dataStore);
+		TestUtils.deleteAll(dataStore);
 	}
 
 	@Override

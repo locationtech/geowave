@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.datastore.cassandra.operations;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.datastax.driver.core.BoundStatement;
