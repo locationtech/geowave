@@ -1,9 +1,7 @@
 package mil.nga.giat.geowave.datastore.cassandra.query;
 
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections.iterators.EmptyIterator;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
@@ -29,7 +27,8 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.RowRead;
  */
 abstract public class CassandraQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(CassandraQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			CassandraQuery.class);
 	protected final List<ByteArrayId> adapterIds;
 	protected final PrimaryIndex index;
 	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
@@ -81,19 +80,26 @@ abstract public class CassandraQuery
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
 		final List<ByteArrayRange> ranges = getRanges();
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
-		if (ranges != null && !ranges.isEmpty()) {
+		final String tableName = StringUtils.stringFromBinary(
+				index.getId().getBytes());
+		if ((ranges != null) && !ranges.isEmpty()) {
 			if (ranges.size() == 1) {
-				final ByteArrayRange r = ranges.get(0);
+				final ByteArrayRange r = ranges.get(
+						0);
 				if (r.isSingleValue()) {
-					final RowRead rowRead = cassandraOperations.getRowRead(tableName);
-					rowRead.setRow(r.getStart().getBytes());
+					final RowRead rowRead = cassandraOperations.getRowRead(
+							tableName);
+					rowRead.setRow(
+							r.getStart().getBytes());
 					return new Wrapper(
-							Iterators.singletonIterator(rowRead.result()));
+							Iterators.singletonIterator(
+									rowRead.result()));
 				}
 				else {
-					final BatchedRangeRead rangeRead = cassandraOperations.getBatchedRangeRead(tableName);
-					rangeRead.addQueryRange(r);
+					final BatchedRangeRead rangeRead = cassandraOperations.getBatchedRangeRead(
+							tableName);
+					rangeRead.addQueryRange(
+							r);
 					return rangeRead.results();
 				}
 			}
@@ -102,12 +108,10 @@ abstract public class CassandraQuery
 					ranges);
 			return rangeRead.results();
 		}
-		else{
-			//query everything
-			cassandraOperations.executeQuery(cassandraOperations.getSelect(tableName));
-		}
-		return new Wrapper(
-				EmptyIterator.INSTANCE);
+		// query everything
+		return cassandraOperations.executeQuery(
+				cassandraOperations.getSelect(
+						tableName));
 	}
 
 	public String[] getAdditionalAuthorizations() {

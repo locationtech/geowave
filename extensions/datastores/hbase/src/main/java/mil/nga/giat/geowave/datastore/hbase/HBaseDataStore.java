@@ -204,7 +204,7 @@ public class HBaseDataStore extends
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> scanCallback,
+			final ScanCallback<Object, Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String... authorizations ) {
 
@@ -411,7 +411,7 @@ public class HBaseDataStore extends
 		final HBaseRowPrefixQuery<Object> prefixQuery = new HBaseRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -435,7 +435,7 @@ public class HBaseDataStore extends
 				adapter,
 				index,
 				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -593,7 +593,7 @@ public class HBaseDataStore extends
 
 		@Override
 		public void entryIngested(
-				final DataStoreEntryInfo<?> entryInfo,
+				final DataStoreEntryInfo entryInfo,
 				final T entry ) {
 			HBaseUtils.writeAltIndex(
 					adapter,

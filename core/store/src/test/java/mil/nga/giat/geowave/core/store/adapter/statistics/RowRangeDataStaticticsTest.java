@@ -48,7 +48,6 @@ public class RowRangeDataStaticticsTest
 						"50632"));
 		stats.entryIngested(
 				new DataStoreEntryInfo(
-						null,
 						"23".getBytes(),
 						ids,
 						ids,
@@ -81,7 +80,6 @@ public class RowRangeDataStaticticsTest
 						"8062"));
 		stats2.entryIngested(
 				new DataStoreEntryInfo(
-						null,
 						"32".getBytes(),
 						ids,
 						ids,

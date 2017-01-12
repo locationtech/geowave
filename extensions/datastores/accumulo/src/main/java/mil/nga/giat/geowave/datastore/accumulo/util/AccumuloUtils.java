@@ -53,6 +53,7 @@ import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
@@ -142,7 +143,7 @@ public class AccumuloUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
 		final GeowaveRowId rowId = new GeowaveRowId(
 				key.getRow().copyBytes());
 		return (T) decodeRowObj(
@@ -186,8 +187,8 @@ public class AccumuloUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
-		final Pair<T, DataStoreEntryInfo<?>> pair = decodeRow(
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
+		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
 				key,
 				value,
 				wholeRowEncoding,
@@ -202,7 +203,7 @@ public class AccumuloUtils
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Pair<T, DataStoreEntryInfo<?>> decodeRow(
+	public static <T> Pair<T, DataStoreEntryInfo> decodeRow(
 			final Key k,
 			final Value v,
 			final boolean wholeRowEncoding,
@@ -211,7 +212,7 @@ public class AccumuloUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
 			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
@@ -309,12 +310,11 @@ public class AccumuloUtils
 				LOGGER.error("Error, adapter was null when it should not be");
 			}
 			else {
-				final Pair<T, DataStoreEntryInfo<?>> pair = Pair.of(
+				final Pair<T, DataStoreEntryInfo> pair = Pair.of(
 						adapter.decode(
 								encodedRow,
 								index),
 						new DataStoreEntryInfo(
-								null,
 								rowId.getDataId(),
 								Arrays.asList(new ByteArrayId(
 										rowId.getInsertionId())),
@@ -324,6 +324,8 @@ public class AccumuloUtils
 				if (scanCallback != null) {
 					scanCallback.entryScanned(
 							pair.getRight(),
+							// TODO: wrap rowMapping as a NativeGeoWaveRow
+							null,
 							pair.getLeft());
 				}
 				return pair;
@@ -332,7 +334,7 @@ public class AccumuloUtils
 		return null;
 	}
 
-	public static <T> DataStoreEntryInfo<?> write(
+	public static <T> DataStoreEntryInfo write(
 			final WritableDataAdapter<T> writableAdapter,
 			final PrimaryIndex index,
 			final T entry,
@@ -342,7 +344,7 @@ public class AccumuloUtils
 		// we need to make sure at least this user has authorization
 		// on the visibility that is being written
 		try {
-			final DataStoreEntryInfo<?> ingestInfo = DataStoreUtils.getIngestInfo(
+			final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
 					writableAdapter,
 					index,
 					entry,
@@ -376,7 +378,7 @@ public class AccumuloUtils
 
 	private static <T> List<Mutation> buildMutations(
 			final byte[] adapterId,
-			final DataStoreEntryInfo<?> ingestInfo,
+			final DataStoreEntryInfo ingestInfo,
 			final PrimaryIndex index,
 			final WritableDataAdapter<T> writableAdapter ) {
 		final List<Mutation> mutations = new ArrayList<Mutation>();

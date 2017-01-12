@@ -58,7 +58,7 @@ public class HBaseUtils
 
 	private static <T> List<RowMutations> buildMutations(
 			final byte[] adapterId,
-			final DataStoreEntryInfo<?> ingestInfo,
+			final DataStoreEntryInfo ingestInfo,
 			final PrimaryIndex index,
 			final WritableDataAdapter<T> writableAdapter,
 			final boolean ensureUniqueId ) {
@@ -196,7 +196,7 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, ?> scanCallback,
 			final byte[] fieldSubsetBitmask,
 			final boolean decodeRow ) {
 
@@ -243,7 +243,7 @@ public class HBaseUtils
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
 			final boolean decodeRow ) {
-		final Pair<Object, DataStoreEntryInfo<?>> pair = decodeRow(
+		final Pair<Object, DataStoreEntryInfo> pair = decodeRow(
 				row,
 				rowId,
 				dataAdapter,
@@ -257,7 +257,7 @@ public class HBaseUtils
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Pair<Object, DataStoreEntryInfo<?>> decodeRow(
+	public static Pair<Object, DataStoreEntryInfo> decodeRow(
 			final Result row,
 			final GeowaveRowId rowId,
 			final DataAdapter dataAdapter,
@@ -364,12 +364,11 @@ public class HBaseUtils
 				LOGGER.error("Error, adapter was null when it should not be");
 			}
 			else {
-				final Pair<Object, DataStoreEntryInfo<?>> pair = Pair.of(
+				final Pair<Object, DataStoreEntryInfo> pair = Pair.of(
 						decodeRow ? adapter.decode(
 								encodedRow,
 								index) : encodedRow,
 						new DataStoreEntryInfo(
-								null,
 								rowId.getDataId(),
 								Arrays.asList(new ByteArrayId(
 										rowId.getInsertionId())),
@@ -379,6 +378,8 @@ public class HBaseUtils
 				if ((scanCallback != null) && decodeRow) {
 					scanCallback.entryScanned(
 							pair.getRight(),
+							// TODO wrap HBase result as NativeGeoWaveRow
+							null,
 							pair.getLeft());
 				}
 				return pair;
@@ -389,7 +390,7 @@ public class HBaseUtils
 
 	public static <T> void writeAltIndex(
 			final WritableDataAdapter<T> writableAdapter,
-			final DataStoreEntryInfo<?> entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry,
 			final HBaseWriter writer ) {
 

@@ -20,7 +20,7 @@ public class NativeEntryIteratorWrapper<T> extends
 			final PrimaryIndex index,
 			final Iterator scannerIt,
 			final QueryFilter clientFilter,
-			boolean decodePersistenceEncoding ) {
+			final boolean decodePersistenceEncoding ) {
 		super(
 				false,
 				adapterStore,
@@ -35,8 +35,8 @@ public class NativeEntryIteratorWrapper<T> extends
 			final PrimaryIndex index,
 			final Iterator scannerIt,
 			final QueryFilter clientFilter,
-			final ScanCallback<T> scanCallback,
-			boolean decodePersistenceEncoding ) {
+			final ScanCallback<T, ? extends NativeGeoWaveRow> scanCallback,
+			final boolean decodePersistenceEncoding ) {
 		super(
 				false,
 				adapterStore,
@@ -65,6 +65,6 @@ public class NativeEntryIteratorWrapper<T> extends
 				adapterStore,
 				clientFilter,
 				index,
-				scanCallback);
+				(ScanCallback<T, NativeGeoWaveRow>) scanCallback);
 	}
 }

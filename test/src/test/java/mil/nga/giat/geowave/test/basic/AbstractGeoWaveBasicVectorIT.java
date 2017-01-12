@@ -407,7 +407,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 
 		@Override
 		public void entryIngested(
-				final DataStoreEntryInfo<?> entryInfo,
+				final DataStoreEntryInfo entryInfo,
 				final SimpleFeature entry ) {
 			for (final DataStatistics<SimpleFeature> stats : statsCache.values()) {
 				stats.entryIngested(

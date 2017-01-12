@@ -17,7 +17,7 @@ public class FieldIdStatisticVisibility<T> implements
 
 	@Override
 	public byte[] getVisibility(
-			final DataStoreEntryInfo<?> entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry ) {
 		for (final FieldInfo<?> f : entryInfo.getFieldInfo()) {
 			if (f.getDataValue().getId().equals(

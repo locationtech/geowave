@@ -36,7 +36,7 @@ public abstract class CassandraFilteredIndexQuery extends
 {
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(CassandraFilteredIndexQuery.class);
-	protected final ScanCallback<?> scanCallback;
+	protected final ScanCallback<?, CassandraRow> scanCallback;
 
 	public CassandraFilteredIndexQuery(
 			final CassandraOperations cassandraOperations,
@@ -44,7 +44,7 @@ public abstract class CassandraFilteredIndexQuery extends
 			final PrimaryIndex index,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, CassandraRow> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {

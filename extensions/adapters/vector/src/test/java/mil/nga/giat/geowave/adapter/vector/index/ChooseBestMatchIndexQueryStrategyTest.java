@@ -120,7 +120,6 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		for (final ByteArrayRange range : temporalRanges) {
 			rangeTempStats.entryIngested(
 					new DataStoreEntryInfo(
-							null,
 							new byte[] {
 								1
 							},
@@ -130,7 +129,6 @@ public class ChooseBestMatchIndexQueryStrategyTest
 					null);
 			rangeTempStats.entryIngested(
 					new DataStoreEntryInfo(
-							null,
 							new byte[] {
 								1
 							},
@@ -151,7 +149,6 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		for (final ByteArrayRange range : spatialRanges) {
 			rangeStats.entryIngested(
 					new DataStoreEntryInfo(
-							null,
 							new byte[] {
 								1
 							},

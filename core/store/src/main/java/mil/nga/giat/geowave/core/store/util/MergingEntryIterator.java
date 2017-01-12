@@ -38,7 +38,7 @@ public class MergingEntryIterator<T> extends
 			final PrimaryIndex index,
 			final Iterator<NativeGeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback,
 			final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters ) {
 		super(
 				adapterStore,
@@ -120,8 +120,8 @@ public class MergingEntryIterator<T> extends
 							final NativeGeoWaveRow row1,
 							final NativeGeoWaveRow row2 ) {
 
-						final ByteBuffer buf1 = ByteBuffer.wrap(row1.getDataId());
-						final ByteBuffer buf2 = ByteBuffer.wrap(row2.getDataId());
+						final ByteBuffer buf1 = ByteBuffer.wrap(row1.getIndex());
+						final ByteBuffer buf2 = ByteBuffer.wrap(row2.getIndex());
 						buf1.get();
 						buf2.get();
 
@@ -184,9 +184,9 @@ public class MergingEntryIterator<T> extends
 				rowToMerge.getValue()));
 
 		return new NativeGeoWaveRowImpl(
-				DataStoreUtils.removeUniqueId(row.getDataId()),
+				row.getDataId(),
 				row.getAdapterId(),
-				row.getIndex(),
+				DataStoreUtils.removeUniqueId(row.getIndex()),
 				row.getFieldMask(),
 				transform.getBinaryFromMergedObject(mergeable));
 

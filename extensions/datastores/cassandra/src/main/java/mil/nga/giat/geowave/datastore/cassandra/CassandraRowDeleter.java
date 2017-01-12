@@ -8,7 +8,7 @@ import mil.nga.giat.geowave.core.store.base.Deleter;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 
 public class CassandraRowDeleter implements
-		Deleter
+		Deleter<CassandraRow>
 {
 	private final String tableName;
 	private final CassandraOperations operations;
@@ -29,12 +29,12 @@ public class CassandraRowDeleter implements
 
 	@Override
 	public void delete(
-			final DataStoreEntryInfo<?> entry,
+			final DataStoreEntryInfo entry,
+			final CassandraRow nativeRow,
 			final DataAdapter<?> adapter ) {
 		operations.deleteRow(
 				tableName,
-				(CassandraRow) entry.getNativeRow(),
+				nativeRow,
 				additionalAuthorizations);
 	}
-
 }

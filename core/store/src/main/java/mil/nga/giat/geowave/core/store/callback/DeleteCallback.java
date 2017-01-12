@@ -22,6 +22,6 @@ public interface DeleteCallback<T>
 	 *            the entry that was ingested
 	 */
 	public void entryDeleted(
-			final DataStoreEntryInfo<?> entryInfo,
+			final DataStoreEntryInfo entryInfo,
 			final T entry );
 }

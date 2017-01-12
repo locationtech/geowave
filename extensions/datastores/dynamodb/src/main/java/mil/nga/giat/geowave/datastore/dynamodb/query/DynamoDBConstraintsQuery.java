@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 
 /**
  * This class represents basic numeric contraints applied to an DynamoDB Query
@@ -49,7 +50,7 @@ public class DynamoDBConstraintsQuery extends
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, DynamoDBRow> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
@@ -79,7 +80,7 @@ public class DynamoDBConstraintsQuery extends
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, DynamoDBRow> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
@@ -93,7 +94,7 @@ public class DynamoDBConstraintsQuery extends
 				index,
 				queryFilters,
 				clientDedupeFilter,
-				scanCallback,
+				(ScanCallback) scanCallback,
 				fieldIdsAdapterPair,
 				visibilityCounts,
 				authorizations);

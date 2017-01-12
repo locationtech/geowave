@@ -38,7 +38,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 {
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(DynamoDBFilteredIndexQuery.class);
-	protected final ScanCallback<?> scanCallback;
+	protected final ScanCallback<?, DynamoDBRow> scanCallback;
 
 	public DynamoDBFilteredIndexQuery(
 			final DynamoDBOperations dynamodbOperations,
@@ -46,7 +46,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 			final PrimaryIndex index,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, DynamoDBRow> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {

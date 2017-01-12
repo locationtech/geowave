@@ -294,7 +294,7 @@ public class AccumuloDataStore extends
 
 		@Override
 		public void entryIngested(
-				final DataStoreEntryInfo<?> entryInfo,
+				final DataStoreEntryInfo entryInfo,
 				final T entry ) {
 			for (final ByteArrayId primaryIndexRowId : entryInfo.getRowIds()) {
 				final ByteArrayId dataId = adapter.getDataId(entry);
@@ -362,7 +362,7 @@ public class AccumuloDataStore extends
 		final AccumuloRowPrefixQuery<Object> prefixQuery = new AccumuloRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, Object>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
@@ -388,7 +388,7 @@ public class AccumuloDataStore extends
 				adapter,
 				index,
 				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, Object>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -406,7 +406,7 @@ public class AccumuloDataStore extends
 			final AdapterStore adapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> scanCallback,
+			final ScanCallback<Object, Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String... authorizations ) {
 		try {
@@ -528,7 +528,7 @@ public class AccumuloDataStore extends
 	}
 
 	private static class ClosableBatchDeleter implements
-			Deleter
+			Deleter<Object>
 	{
 		private final BatchDeleter deleter;
 		private final boolean isAltIndex;
@@ -551,7 +551,8 @@ public class AccumuloDataStore extends
 
 		@Override
 		public void delete(
-				final DataStoreEntryInfo<?> entry,
+				final DataStoreEntryInfo entry,
+				final Object nativeDataStoreEntry,
 				final DataAdapter<?> adapter ) {
 			final List<Range> rowRanges = new ArrayList<Range>();
 			if (isAltIndex) {

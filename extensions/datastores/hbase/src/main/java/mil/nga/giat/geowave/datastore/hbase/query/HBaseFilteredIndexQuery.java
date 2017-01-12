@@ -46,7 +46,7 @@ public abstract class HBaseFilteredIndexQuery extends
 		FilteredIndexQuery
 {
 
-	protected final ScanCallback<?> scanCallback;
+	protected final ScanCallback<?, ?> scanCallback;
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(HBaseFilteredIndexQuery.class);
 	private boolean hasSkippingFilter = false;
@@ -54,7 +54,7 @@ public abstract class HBaseFilteredIndexQuery extends
 	public HBaseFilteredIndexQuery(
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, ?> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String... authorizations ) {
 		super(

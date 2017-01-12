@@ -15,7 +15,7 @@ import mil.nga.giat.geowave.core.store.base.Deleter;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
 public class HBaseRowDeleter implements
-		Deleter
+		Deleter<Object>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HBaseRowDeleter.class);
 	private final HBaseWriter writer;
@@ -36,7 +36,8 @@ public class HBaseRowDeleter implements
 
 	@Override
 	public void delete(
-			final DataStoreEntryInfo<?> entry,
+			final DataStoreEntryInfo entry,
+			final Object nativeDataStoreEntry,
 			final DataAdapter<?> adapter ) {
 		final List<Delete> deletes = new ArrayList<Delete>();
 		if (isAltIndex) {

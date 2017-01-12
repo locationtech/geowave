@@ -43,7 +43,7 @@ public class HBaseMergingEntryIterator<T> extends
 			final PrimaryIndex index,
 			final Iterator<Result> scannerIt,
 			final QueryFilter clientFilter,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, ?> scanCallback,
 			final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final double[] maxResolutionSubsamplingPerDimension,

@@ -218,7 +218,7 @@ public abstract class BaseDataStore implements
 									idQuery.getDataIds(),
 									(DataAdapter<Object>) adapterStore.getAdapter(idQuery.getAdapterId()),
 									filter,
-									(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+									(ScanCallback<Object, Object>) sanitizedQueryOptions.getScanCallback(),
 									sanitizedQueryOptions.getAuthorizations(),
 									sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension()));
 						}
@@ -277,7 +277,7 @@ public abstract class BaseDataStore implements
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<Object> adapter,
 			final DedupeFilter dedupeFilter,
-			final ScanCallback<Object> callback,
+			final ScanCallback<Object, Object> callback,
 			final String[] authorizations,
 			final double[] maxResolutionSubsamplingPerDimension )
 			throws IOException {
@@ -401,10 +401,11 @@ public abstract class BaseDataStore implements
 					}
 					final Deleter internalIdxDeleter = idxDeleter;
 					final Deleter internalAltIdxDeleter = altIdxDeleter;
-					final ScanCallback<Object> callback = new ScanCallback<Object>() {
+					final ScanCallback<Object, Object> callback = new ScanCallback<Object, Object>() {
 						@Override
 						public void entryScanned(
 								final DataStoreEntryInfo entryInfo,
+								final Object nativeDataStoreEntry,
 								final Object entry ) {
 							callbackCache.getDeleteCallback(
 									(WritableDataAdapter<Object>) adapter,
@@ -414,10 +415,12 @@ public abstract class BaseDataStore implements
 							try {
 								internalIdxDeleter.delete(
 										entryInfo,
+										nativeDataStoreEntry,
 										adapter);
 								if (internalAltIdxDeleter != null) {
 									internalAltIdxDeleter.delete(
 											entryInfo,
+											nativeDataStoreEntry,
 											adapter);
 								}
 							}
@@ -525,7 +528,7 @@ public abstract class BaseDataStore implements
 		try (final CloseableIterator<DataStatistics<?>> it = statisticsStore.getDataStatistics(adapter.getAdapterId())) {
 
 			while (it.hasNext()) {
-				final DataStatistics stats = it.next();
+				final DataStatistics<?> stats = it.next();
 				statisticsStore.removeStatistics(
 						adapter.getAdapterId(),
 						stats.getStatisticsId(),
@@ -570,7 +573,7 @@ public abstract class BaseDataStore implements
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> callback,
+			final ScanCallback<Object, Object> callback,
 			final DedupeFilter dedupeFilter,
 			final String... authorizations );
 

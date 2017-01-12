@@ -11,7 +11,6 @@ import com.google.common.collect.Iterators;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
-import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -51,7 +50,7 @@ public class CassandraConstraintsQuery extends
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, CassandraRow> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
@@ -81,7 +80,7 @@ public class CassandraConstraintsQuery extends
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, CassandraRow> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
@@ -137,10 +136,10 @@ public class CassandraConstraintsQuery extends
 
 	@Override
 	public CloseableIterator<Object> query(
-			AdapterStore adapterStore,
-			double[] maxResolutionSubsamplingPerDimension,
-			Integer limit ) {
-		CloseableIterator<Object> results = super.query(
+			final AdapterStore adapterStore,
+			final double[] maxResolutionSubsamplingPerDimension,
+			final Integer limit ) {
+		final CloseableIterator<Object> results = super.query(
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
 				limit);

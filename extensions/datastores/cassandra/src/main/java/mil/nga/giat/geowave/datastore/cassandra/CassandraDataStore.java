@@ -98,7 +98,7 @@ public class CassandraDataStore extends
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> callback,
+			final ScanCallback<Object, Object> callback,
 			final DedupeFilter dedupeFilter,
 			final String... authorizations ) {
 		final CloseableIterator<CassandraRow> it = operations.getRows(
@@ -122,7 +122,7 @@ public class CassandraDataStore extends
 						index,
 						it,
 						null,
-						callback,
+						(ScanCallback) callback,
 						true));
 	}
 
@@ -140,7 +140,7 @@ public class CassandraDataStore extends
 				index,
 				sanitizedQuery,
 				filter,
-				sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<?, CassandraRow>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getAggregation(),
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				IndexMetaDataSet.getIndexMetadata(
@@ -177,7 +177,7 @@ public class CassandraDataStore extends
 				operations,
 				index,
 				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, CassandraRow>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
@@ -203,7 +203,7 @@ public class CassandraDataStore extends
 				adapter,
 				index,
 				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, CassandraRow>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 

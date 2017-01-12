@@ -61,7 +61,6 @@ public class RowHistogramDataStaticticsTest
 					100000));
 			stats1.entryIngested(
 					new DataStoreEntryInfo(
-							null,
 							new byte[] {
 								1
 							},
@@ -71,7 +70,6 @@ public class RowHistogramDataStaticticsTest
 					1);
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
-							null,
 							new byte[] {
 								1
 							},
@@ -99,7 +97,6 @@ public class RowHistogramDataStaticticsTest
 					200000));
 			stats1.entryIngested(
 					new DataStoreEntryInfo(
-							null,
 							new byte[] {
 								1
 							},
@@ -109,7 +106,6 @@ public class RowHistogramDataStaticticsTest
 					1);
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
-							null,
 							new byte[] {
 								1
 							},

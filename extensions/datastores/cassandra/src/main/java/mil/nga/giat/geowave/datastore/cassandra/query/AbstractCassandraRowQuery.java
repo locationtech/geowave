@@ -22,13 +22,13 @@ abstract public class AbstractCassandraRowQuery<T> extends
 		CassandraQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(AbstractCassandraRowQuery.class);
-	protected final ScanCallback<T> scanCallback;
+	protected final ScanCallback<T, CassandraRow> scanCallback;
 
 	public AbstractCassandraRowQuery(
 			final CassandraOperations operations,
 			final PrimaryIndex index,
 			final String[] authorizations,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, CassandraRow> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
 				operations,

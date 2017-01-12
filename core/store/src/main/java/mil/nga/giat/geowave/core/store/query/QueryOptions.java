@@ -66,10 +66,11 @@ public class QueryOptions implements
 	 */
 	private static final long serialVersionUID = 544085046847603371L;
 
-	private static ScanCallback<Object> DEFAULT_CALLBACK = new ScanCallback<Object>() {
+	private static ScanCallback<Object, Object> DEFAULT_CALLBACK = new ScanCallback<Object, Object>() {
 		@Override
 		public void entryScanned(
 				final DataStoreEntryInfo entryInfo,
+				final Object nativeDataStoreEntry,
 				final Object entry ) {}
 	};
 
@@ -87,7 +88,7 @@ public class QueryOptions implements
 	private Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregationAdapterPair;
 	private Integer limit = -1;
 	private double[] maxResolutionSubsamplingPerDimension = null;
-	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
+	private transient ScanCallback<?, ?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
 	private Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
 
@@ -164,7 +165,7 @@ public class QueryOptions implements
 			final DataAdapter<?> adapter,
 			final PrimaryIndex index,
 			final Integer limit,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, ?> scanCallback,
 			final String[] authorizations ) {
 		super();
 		setAdapter(adapter);
@@ -307,7 +308,7 @@ public class QueryOptions implements
 		return ((adapterIds == null) || adapterIds.isEmpty());
 	}
 
-	public ScanCallback<?> getScanCallback() {
+	public ScanCallback<?, ?> getScanCallback() {
 		return scanCallback == null ? DEFAULT_CALLBACK : scanCallback;
 	}
 
@@ -317,7 +318,7 @@ public class QueryOptions implements
 	 *            constraints
 	 */
 	public void setScanCallback(
-			final ScanCallback<?> scanCallback ) {
+			final ScanCallback<?, ?> scanCallback ) {
 		this.scanCallback = scanCallback;
 	}
 

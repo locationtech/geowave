@@ -64,9 +64,8 @@ public class DataStoreUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(DataStoreUtils.class);
 
-	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID when
-	// needed for uniqueness
-	public final static int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
+	// we append a 0 byte, 8 bytes of timestamp
+	public final static int UNIQUE_ADDED_BYTES = 1 + 8;
 	public final static byte UNIQUE_ID_DELIMITER = 0;
 	@SuppressWarnings({
 		"rawtypes",
@@ -408,7 +407,6 @@ public class DataStoreUtils
 				}
 			}
 			return new DataStoreEntryInfo(
-					null,
 					dataId,
 					insertionIds,
 					rowIds,
@@ -417,7 +415,6 @@ public class DataStoreUtils
 		LOGGER.warn("Indexing failed to produce insertion ids; entry [" + dataWriter.getDataId(
 				entry).getString() + "] not saved.");
 		return new DataStoreEntryInfo(
-				null,
 				dataId,
 				Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST,
@@ -596,7 +593,7 @@ public class DataStoreUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, R> scanCallback ) {
 		final byte[] dataId = row.getDataId();
 		final byte[] adapterId = row.getAdapterId();
 		final GeowaveRowId rowId = new GeowaveRowId(
@@ -619,8 +616,8 @@ public class DataStoreUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
-		final Pair<T, DataStoreEntryInfo<R>> pair = decodeRow(
+			final ScanCallback<T, R> scanCallback ) {
+		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
 				row,
 				rowId,
 				null,
@@ -633,14 +630,14 @@ public class DataStoreUtils
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T, R extends NativeGeoWaveRow> Pair<T, DataStoreEntryInfo<R>> decodeRow(
+	public static <T, R extends NativeGeoWaveRow> Pair<T, DataStoreEntryInfo> decodeRow(
 			final R row,
 			final GeowaveRowId rowId,
 			DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, R> scanCallback ) {
 		if (dataAdapter == null) {
 			if (adapterStore != null) {
 				dataAdapter = (DataAdapter<T>) adapterStore.getAdapter(new ByteArrayId(
@@ -745,12 +742,11 @@ public class DataStoreUtils
 		if ((clientFilter == null) || clientFilter.accept(
 				index.getIndexModel(),
 				encodedRow)) {
-			final Pair<T, DataStoreEntryInfo<R>> pair = Pair.of(
+			final Pair<T, DataStoreEntryInfo> pair = Pair.of(
 					dataAdapter.decode(
 							encodedRow,
 							index),
-					new DataStoreEntryInfo<R>(
-							row,
+					new DataStoreEntryInfo(
 							rowId.getDataId(),
 							Arrays.asList(new ByteArrayId(
 									rowId.getInsertionId())),
@@ -760,6 +756,7 @@ public class DataStoreUtils
 			if (scanCallback != null) {
 				scanCallback.entryScanned(
 						pair.getRight(),
+						row,
 						pair.getLeft());
 			}
 			return pair;
@@ -783,13 +780,13 @@ public class DataStoreUtils
 
 			final ByteBuffer metadataBuf = ByteBuffer.wrap(metadata);
 			final int adapterIdLength = metadataBuf.getInt();
-			int dataIdLength = metadataBuf.getInt();
-			dataIdLength += UNIQUE_ADDED_BYTES;
+			int idLength = metadataBuf.getInt();
+			idLength += UNIQUE_ADDED_BYTES;
 			final int duplicates = metadataBuf.getInt();
 
 			final ByteBuffer newMetaData = ByteBuffer.allocate(metadata.length);
 			newMetaData.putInt(adapterIdLength);
-			newMetaData.putInt(dataIdLength);
+			newMetaData.putInt(idLength);
 			newMetaData.putInt(duplicates);
 
 			metadata = newMetaData.array();
@@ -806,13 +803,10 @@ public class DataStoreUtils
 		buf.put(data);
 
 		final long timestamp = System.nanoTime();
-		final UUID uuid = UUID.randomUUID();
 		buf.put(new byte[] {
 			UNIQUE_ID_DELIMITER
 		});
 		buf.putLong(timestamp);
-		buf.putLong(uuid.getMostSignificantBits());
-		buf.putLong(uuid.getLeastSignificantBits());
 
 		if (hasMetadata) {
 			buf.put(metadata);

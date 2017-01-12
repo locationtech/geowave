@@ -23,7 +23,7 @@ public class HBaseRowIdsQuery<T> extends
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final Collection<ByteArrayId> rows,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, ?> scanCallback,
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(

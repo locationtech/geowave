@@ -94,7 +94,7 @@ public class DynamoDBDataStore extends
 				index,
 				sanitizedQuery,
 				filter,
-				sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, DynamoDBRow>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getAggregation(),
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				IndexMetaDataSet.getIndexMetadata(
@@ -131,7 +131,7 @@ public class DynamoDBDataStore extends
 				dynamodbOperations,
 				index,
 				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, DynamoDBRow>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
@@ -157,7 +157,7 @@ public class DynamoDBDataStore extends
 				adapter,
 				index,
 				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, DynamoDBRow>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -173,7 +173,7 @@ public class DynamoDBDataStore extends
 			final AdapterStore adapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> scanCallback,
+			final ScanCallback<Object, Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String... authorizations ) {
 		// TODO

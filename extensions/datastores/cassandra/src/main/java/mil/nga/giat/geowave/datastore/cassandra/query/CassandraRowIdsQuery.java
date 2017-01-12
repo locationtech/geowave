@@ -12,6 +12,7 @@ import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 
 /**
@@ -28,7 +29,7 @@ public class CassandraRowIdsQuery<T> extends
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final Collection<ByteArrayId> rows,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, CassandraRow> scanCallback,
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(
