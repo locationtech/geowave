@@ -21,7 +21,7 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 public class CassandraIndexWriter<T> extends
 		DataStoreIndexWriter<T, CassandraRow>
 {
-	public static final Integer PARTITIONS = 32;
+	public static final Integer PARTITIONS = 4;
 	protected final CassandraOperations operations;
 	private static long counter = 0;
 
@@ -57,16 +57,31 @@ public class CassandraIndexWriter<T> extends
 		final List<CassandraRow> rows = new ArrayList<CassandraRow>();
 		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
 		int totalLength = 0;
-		for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {
-			final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
-			fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
-			fieldInfoBytes.put(fieldInfo.getWrittenValue());
-			fieldInfoBytesList.add(fieldInfoBytes.array());
-			totalLength += fieldInfoBytes.array().length;
+		// TODO potentially another hack, but if there is only one field, don't
+		// need to write the length
+		if (ingestInfo.getFieldInfo().size() == 1) {
+			fieldInfoBytesList.add(
+					ingestInfo.getFieldInfo().get(
+							0).getWrittenValue());
 		}
-		final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
+		else {
+			for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {
+				final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(
+						4 + fieldInfo.getWrittenValue().length);
+				fieldInfoBytes.putInt(
+						fieldInfo.getWrittenValue().length);
+				fieldInfoBytes.put(
+						fieldInfo.getWrittenValue());
+				fieldInfoBytesList.add(
+						fieldInfoBytes.array());
+				totalLength += fieldInfoBytes.array().length;
+			}
+		}
+		final ByteBuffer allFields = ByteBuffer.allocate(
+				totalLength);
 		for (final byte[] bytes : fieldInfoBytesList) {
-			allFields.put(bytes);
+			allFields.put(
+					bytes);
 		}
 		for (final ByteArrayId insertionId : ingestInfo.getInsertionIds()) {
 			allFields.rewind();
@@ -79,16 +94,17 @@ public class CassandraIndexWriter<T> extends
 			else {
 				uniqueInsertionId = insertionId;
 			}
-			rows.add(new CassandraRow(
-					new byte[] {
-						(byte) (counter++ % PARTITIONS)
-					},
-					ingestInfo.getDataId(),
-					adapterId,
-					uniqueInsertionId.getBytes(),
-					// TODO: add field mask
-					new byte[] {},
-					allFields.array()));
+			rows.add(
+					new CassandraRow(
+							new byte[] {
+								(byte) (counter++ % PARTITIONS)
+							},
+							ingestInfo.getDataId(),
+							adapterId,
+							uniqueInsertionId.getBytes(),
+							// TODO: add field mask
+							new byte[] {},
+							allFields.array()));
 		}
 		return rows;
 	}
@@ -103,11 +119,12 @@ public class CassandraIndexWriter<T> extends
 				entry,
 				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
 		if (entryInfo != null) {
-			writer.write(getRows(
-					adapterId,
-					entryInfo,
-					(adapter instanceof RowMergingDataAdapter)
-							&& (((RowMergingDataAdapter) adapter).getTransform() != null)));
+			writer.write(
+					getRows(
+							adapterId,
+							entryInfo,
+							(adapter instanceof RowMergingDataAdapter)
+									&& (((RowMergingDataAdapter) adapter).getTransform() != null)));
 		}
 		return entryInfo;
 	}

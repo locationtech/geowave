@@ -34,6 +34,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -49,7 +50,6 @@ import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraWriter;
-import mil.nga.giat.geowave.datastore.cassandra.operations.BatchedWrite.IngestCallback;
 import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraOptions;
 import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
 import mil.nga.giat.geowave.datastore.cassandra.util.SessionPool;
@@ -270,15 +270,13 @@ public class CassandraOperations implements
 		final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(
 				statements.length);
 		for (final Statement s : statements) {
-			futures.add(
-					session.executeAsync(
-							s));
-		}
-		for (final ResultSetFuture f : futures) {
+			ResultSetFuture f = session.executeAsync(
+					s);
+			futures.add(f);
 			Futures.addCallback(
 					f,
-					new IngestCallback(),
-					CassandraOperations.WRITE_RESPONSE_THREADS);
+					new QueryCallback(),
+					CassandraOperations.READ_RESPONSE_THREADS);
 		}
 		// convert the list of futures to an asynchronously as completed
 		// iterator on cassandra rows
@@ -452,4 +450,25 @@ public class CassandraOperations implements
 			return ByteBuffer.wrap(input);
 		}
 	};
+	// callback class
+	protected static class QueryCallback implements
+			FutureCallback<ResultSet>
+	{
+
+		@Override
+		public void onSuccess(
+				final ResultSet result ) {
+			// placeholder: put any logging or on success logic here.
+		}
+
+		@Override
+		public void onFailure(
+				final Throwable t ) {
+			// go ahead and wrap in a runtime exception for this case, but you
+			// can do logging or start counting errors.
+			t.printStackTrace();
+			throw new RuntimeException(
+					t);
+		}
+	}
 }

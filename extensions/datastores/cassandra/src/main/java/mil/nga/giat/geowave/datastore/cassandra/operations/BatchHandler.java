@@ -16,7 +16,7 @@ public class BatchHandler
 {
 	protected final Session session;
 	private static final int RF = 3;
-	private Type type;
+	private Type type = Type.UNLOGGED;
 	protected final Map<Set<Host>, BatchStatement> batches = new HashMap<>();
 
 	public BatchHandler(

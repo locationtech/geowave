@@ -67,6 +67,6 @@ public class BatchedRangeRead
 			}
 
 		}
-		return operations.executeQuery(statements.toArray(new BoundStatement[] {}));
+		return operations.executeQueryAsync(statements.toArray(new BoundStatement[] {}));
 	}
 }
