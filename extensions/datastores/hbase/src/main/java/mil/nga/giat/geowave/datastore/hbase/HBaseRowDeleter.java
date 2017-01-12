@@ -37,7 +37,7 @@ public class HBaseRowDeleter implements
 
 	@Override
 	public void delete(
-			final DataStoreEntryInfo entry,
+			final DataStoreEntryInfo<?> entry,
 			final DataAdapter<?> adapter ) {
 		final List<Delete> deletes = new ArrayList<Delete>();
 		if (isAltIndex) {

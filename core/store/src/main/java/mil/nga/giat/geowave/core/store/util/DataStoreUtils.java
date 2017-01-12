@@ -439,6 +439,7 @@ public class DataStoreUtils
 				}
 			}
 			return new DataStoreEntryInfo(
+					null,
 					dataId,
 					insertionIds,
 					rowIds,
@@ -448,6 +449,7 @@ public class DataStoreUtils
 				"Indexing failed to produce insertion ids; entry [" + dataWriter.getDataId(
 						entry).getString() + "] not saved.");
 		return new DataStoreEntryInfo(
+				null,
 				dataId,
 				Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST,
@@ -679,7 +681,7 @@ public class DataStoreUtils
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback ) {
-		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
+		final Pair<T, DataStoreEntryInfo<R>> pair = decodeRow(
 				row,
 				rowId,
 				null,
@@ -692,7 +694,7 @@ public class DataStoreUtils
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T, R extends NativeGeoWaveRow> Pair<T, DataStoreEntryInfo> decodeRow(
+	public static <T, R extends NativeGeoWaveRow> Pair<T, DataStoreEntryInfo<R>> decodeRow(
 			final R row,
 			final GeowaveRowId rowId,
 			DataAdapter<T> dataAdapter,
@@ -824,11 +826,12 @@ public class DataStoreUtils
 		if ((clientFilter == null) || clientFilter.accept(
 				index.getIndexModel(),
 				encodedRow)) {
-			final Pair<T, DataStoreEntryInfo> pair = Pair.of(
+			final Pair<T, DataStoreEntryInfo<R>> pair = Pair.of(
 					dataAdapter.decode(
 							encodedRow,
 							index),
-					new DataStoreEntryInfo(
+					new DataStoreEntryInfo<R>(
+							row,
 							rowId.getDataId(),
 							Arrays.asList(
 									new ByteArrayId(

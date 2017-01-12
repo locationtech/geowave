@@ -174,7 +174,7 @@ public class RowRangeHistogramStatistics<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
+			final DataStoreEntryInfo<?> entryInfo,
 			final T entry ) {
 		for (final ByteArrayId ids : entryInfo.getRowIds()) {
 			final byte[] idBytes = ids.getBytes();

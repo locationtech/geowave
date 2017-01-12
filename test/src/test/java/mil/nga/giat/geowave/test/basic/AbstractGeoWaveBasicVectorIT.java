@@ -184,9 +184,9 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			final PrimaryIndex index )
 			throws Exception {
 		LOGGER.info(
-				"deleting from " + index.getId() + " index");
+				"deleting from " + index.getId().getString() + " index");
 		System.out.println(
-				"deleting from " + index.getId() + " index");
+				"deleting from " + index.getId().getString() + " index");
 		boolean success = false;
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
 		final DistributableQuery query = TestUtils.resourceToQuery(
@@ -437,7 +437,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 
 		@Override
 		public void entryIngested(
-				final DataStoreEntryInfo entryInfo,
+				final DataStoreEntryInfo<?> entryInfo,
 				final SimpleFeature entry ) {
 			for (final DataStatistics<SimpleFeature> stats : statsCache.values()) {
 				stats.entryIngested(

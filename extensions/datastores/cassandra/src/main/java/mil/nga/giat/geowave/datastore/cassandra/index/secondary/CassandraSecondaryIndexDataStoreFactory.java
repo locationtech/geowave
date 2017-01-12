@@ -17,8 +17,9 @@ public class CassandraSecondaryIndexDataStoreFactory extends
 					"Expected " + CassandraRequiredOptions.class.getSimpleName());
 		}
 
-		final CassandraOperations cassandraOperations = createOperations((CassandraRequiredOptions) options);
+		final CassandraOperations cassandraOperations = createOperations(
+				(CassandraRequiredOptions) options);
 		// TODO secondary index
-		return null;
+		return new CassandraSecondaryIndexDataStore();
 	}
 }

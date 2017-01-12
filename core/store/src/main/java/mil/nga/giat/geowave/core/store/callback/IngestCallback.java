@@ -22,7 +22,7 @@ public interface IngestCallback<T>
 	 *            the entry that was ingested
 	 */
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
+			final DataStoreEntryInfo<?> entryInfo,
 			T entry );
 
 }

@@ -52,7 +52,7 @@ public class CassandraIndexWriter<T> extends
 
 	private static <T> List<CassandraRow> getRows(
 			final byte[] adapterId,
-			final DataStoreEntryInfo ingestInfo,
+			final DataStoreEntryInfo<CassandraRow> ingestInfo,
 			final boolean ensureUniqueId ) {
 		final List<CassandraRow> rows = new ArrayList<CassandraRow>();
 		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
@@ -101,10 +101,10 @@ public class CassandraIndexWriter<T> extends
 	}
 
 	@Override
-	protected DataStoreEntryInfo getEntryInfo(
+	protected DataStoreEntryInfo<CassandraRow> getEntryInfo(
 			final T entry,
 			final VisibilityWriter<T> visibilityWriter ) {
-		final DataStoreEntryInfo entryInfo = DataStoreUtils.getIngestInfo(
+		final DataStoreEntryInfo<CassandraRow> entryInfo = DataStoreUtils.getIngestInfo(
 				(WritableDataAdapter<T>) adapter,
 				index,
 				entry,

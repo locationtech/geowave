@@ -42,7 +42,7 @@ public class SecondaryIndexDataManager<T> implements
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
+			final DataStoreEntryInfo<?> entryInfo,
 			final T entry ) {
 		// loop secondary indices for adapter
 		for (final SecondaryIndex<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
@@ -118,7 +118,7 @@ public class SecondaryIndexDataManager<T> implements
 
 	@Override
 	public void entryDeleted(
-			final DataStoreEntryInfo entryInfo,
+			final DataStoreEntryInfo<?> entryInfo,
 			final T entry ) {
 		// loop secondary indices for adapter
 		for (final SecondaryIndex<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
@@ -190,7 +190,7 @@ public class SecondaryIndexDataManager<T> implements
 	}
 
 	private FieldInfo<?> getFieldInfo(
-			final DataStoreEntryInfo entryInfo,
+			final DataStoreEntryInfo<?> entryInfo,
 			final ByteArrayId fieldID ) {
 		for (final FieldInfo<?> info : entryInfo.getFieldInfo()) {
 			if (info.getDataValue().getId().equals(

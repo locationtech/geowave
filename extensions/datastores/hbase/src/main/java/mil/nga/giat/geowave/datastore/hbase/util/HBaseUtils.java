@@ -2,18 +2,13 @@ package mil.nga.giat.geowave.datastore.hbase.util;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
-import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
@@ -49,19 +44,11 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.client.Delete;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
-
 @SuppressWarnings("rawtypes")
 public class HBaseUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			HBaseUtils.class);
 
 	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID when
 	// needed for uniqueness
@@ -72,7 +59,7 @@ public class HBaseUtils
 
 	private static <T> List<RowMutations> buildMutations(
 			final byte[] adapterId,
-			final DataStoreEntryInfo ingestInfo,
+			final DataStoreEntryInfo<?> ingestInfo,
 			final PrimaryIndex index,
 			final WritableDataAdapter<T> writableAdapter,
 			final boolean ensureUniqueId ) {
@@ -99,14 +86,16 @@ public class HBaseUtils
 							fieldInfo.getDataValue().getId().getBytes(),
 							fieldInfo.getWrittenValue());
 				}
-				mutation.add(row);
+				mutation.add(
+						row);
 			}
 			catch (final IOException e) {
 				LOGGER.warn(
 						"Could not add row to mutation.",
 						e);
 			}
-			mutations.add(mutation);
+			mutations.add(
+					mutation);
 		}
 
 		return mutations;
@@ -158,8 +147,8 @@ public class HBaseUtils
 	public static String getQualifiedTableName(
 			final String tableNamespace,
 			final String unqualifiedTableName ) {
-		return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName : tableNamespace + "_"
-				+ unqualifiedTableName;
+		return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName
+				: tableNamespace + "_" + unqualifiedTableName;
 	}
 
 	public static <T> DataStoreEntryInfo write(
@@ -212,7 +201,7 @@ public class HBaseUtils
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback,
 			final byte[] fieldSubsetBitmask,
-			boolean decodeRow ) {
+			final boolean decodeRow ) {
 
 		final GeowaveRowId rowId = new GeowaveRowId(
 				row.getRow());
@@ -234,7 +223,7 @@ public class HBaseUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			boolean decodeRow ) {
+			final boolean decodeRow ) {
 		return decodeRowObj(
 				row,
 				rowId,
@@ -256,8 +245,8 @@ public class HBaseUtils
 			final PrimaryIndex index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
-			boolean decodeRow ) {
-		final Pair<Object, DataStoreEntryInfo> pair = decodeRow(
+			final boolean decodeRow ) {
+		final Pair<Object, DataStoreEntryInfo<?>> pair = decodeRow(
 				row,
 				rowId,
 				dataAdapter,
@@ -271,7 +260,7 @@ public class HBaseUtils
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Pair<Object, DataStoreEntryInfo> decodeRow(
+	public static Pair<Object, DataStoreEntryInfo<?>> decodeRow(
 			final Result row,
 			final GeowaveRowId rowId,
 			final DataAdapter dataAdapter,
@@ -280,9 +269,10 @@ public class HBaseUtils
 			final PrimaryIndex index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
-			boolean decodeRow ) {
+			final boolean decodeRow ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
-			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
+			LOGGER.error(
+					"Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
 		}
 		DataAdapter adapter = dataAdapter;
@@ -318,14 +308,17 @@ public class HBaseUtils
 			}
 
 			if (adapter == null) {
-				adapter = adapterStore.getAdapter(adapterId);
+				adapter = adapterStore.getAdapter(
+						adapterId);
 				if (adapter == null) {
-					LOGGER.error("DataAdapter does not exist");
+					LOGGER.error(
+							"DataAdapter does not exist");
 					return null;
 				}
 			}
 			if (!adapterMatchVerified) {
-				if (!adapterId.equals(adapter.getAdapterId())) {
+				if (!adapterId.equals(
+						adapter.getAdapterId())) {
 					return null;
 				}
 				adapterMatchVerified = true;
@@ -375,21 +368,25 @@ public class HBaseUtils
 				encodedRow)) {
 			// cannot get here unless adapter is found (not null)
 			if (adapter == null) {
-				LOGGER.error("Error, adapter was null when it should not be");
+				LOGGER.error(
+						"Error, adapter was null when it should not be");
 			}
 			else {
-				final Pair<Object, DataStoreEntryInfo> pair = Pair.of(
+				final Pair<Object, DataStoreEntryInfo<?>> pair = Pair.of(
 						decodeRow ? adapter.decode(
 								encodedRow,
 								index) : encodedRow,
 						new DataStoreEntryInfo(
+								null,
 								rowId.getDataId(),
-								Arrays.asList(new ByteArrayId(
-										rowId.getInsertionId())),
-								Arrays.asList(new ByteArrayId(
-										row.getRow())),
+								Arrays.asList(
+										new ByteArrayId(
+												rowId.getInsertionId())),
+								Arrays.asList(
+										new ByteArrayId(
+												row.getRow())),
 								fieldInfoList));
-				if (scanCallback != null && decodeRow) {
+				if ((scanCallback != null) && decodeRow) {
 					scanCallback.entryScanned(
 							pair.getRight(),
 							pair.getLeft());
@@ -402,7 +399,7 @@ public class HBaseUtils
 
 	public static <T> void writeAltIndex(
 			final WritableDataAdapter<T> writableAdapter,
-			final DataStoreEntryInfo entryInfo,
+			final DataStoreEntryInfo<?> entryInfo,
 			final T entry,
 			final HBaseWriter writer ) {
 
@@ -422,15 +419,18 @@ public class HBaseUtils
 					row.addColumn(
 							adapterId,
 							rowId.getBytes(),
-							"".getBytes(StringUtils.UTF8_CHAR_SET));
-					mutation.add(row);
+							"".getBytes(
+									StringUtils.UTF8_CHAR_SET));
+					mutation.add(
+							row);
 				}
 				catch (final IOException e) {
 					LOGGER.warn(
 							"Could not add row to mutation.",
 							e);
 				}
-				mutations.add(mutation);
+				mutations.add(
+						mutation);
 			}
 			try {
 				writer.write(
@@ -459,7 +459,8 @@ public class HBaseUtils
 		d.addColumns(
 				columnFamily,
 				columnQualifier);
-		m.add(d);
+		m.add(
+				d);
 		return m;
 	}
 
@@ -516,8 +517,10 @@ public class HBaseUtils
 		}
 
 		return Arrays.equals(
-				removeUniqueId(rowId1.getRowId()),
-				removeUniqueId(rowId2.getRowId()));
+				removeUniqueId(
+						rowId1.getRowId()),
+				removeUniqueId(
+						rowId2.getRowId()));
 	}
 
 	public static byte[] removeUniqueId(
@@ -527,7 +530,8 @@ public class HBaseUtils
 				row);
 		byte[] dataId = rowId.getDataId();
 
-		if ((dataId.length < UNIQUE_ADDED_BYTES) || (dataId[dataId.length - UNIQUE_ADDED_BYTES] != UNIQUE_ID_DELIMITER)) {
+		if ((dataId.length < UNIQUE_ADDED_BYTES)
+				|| (dataId[dataId.length - UNIQUE_ADDED_BYTES] != UNIQUE_ID_DELIMITER)) {
 			return row;
 		}
 

@@ -303,7 +303,7 @@ public class AccumuloDataStore extends
 
 		@Override
 		public void entryIngested(
-				final DataStoreEntryInfo entryInfo,
+				final DataStoreEntryInfo<?> entryInfo,
 				final T entry ) {
 			for (final ByteArrayId primaryIndexRowId : entryInfo.getRowIds()) {
 				final ByteArrayId dataId = adapter.getDataId(
@@ -418,10 +418,8 @@ public class AccumuloDataStore extends
 			final DataAdapter<?> adapter,
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String... authorizations) {
-
+			final String... authorizations ) {
 		try {
-
 			final ScannerBase scanner = accumuloOperations.createScanner(
 					index.getId().getString(),
 					authorizations);
@@ -577,7 +575,7 @@ public class AccumuloDataStore extends
 
 		@Override
 		public void delete(
-				final DataStoreEntryInfo entry,
+				final DataStoreEntryInfo<?> entry,
 				final DataAdapter<?> adapter ) {
 			final List<Range> rowRanges = new ArrayList<Range>();
 			if (isAltIndex) {

@@ -11,13 +11,13 @@ public class MemoryEntryRow implements
 		Comparable<MemoryEntryRow>
 {
 	final EntryRowID rowId;
-	final DataStoreEntryInfo info;
+	final DataStoreEntryInfo<?> info;
 	final Object entry;
 
 	public MemoryEntryRow(
 			final ByteArrayId rowId,
 			final Object entry,
-			final DataStoreEntryInfo info ) {
+			final DataStoreEntryInfo<?> info ) {
 		super();
 		this.rowId = new EntryRowID(
 				rowId.getBytes());

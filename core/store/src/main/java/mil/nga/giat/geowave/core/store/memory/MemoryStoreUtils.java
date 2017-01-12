@@ -108,7 +108,7 @@ public class MemoryStoreUtils
 	private static <T> List<MemoryEntryRow> buildRows(
 			final byte[] adapterId,
 			final T entry,
-			final DataStoreEntryInfo ingestInfo ) {
+			final DataStoreEntryInfo<?> ingestInfo ) {
 		final List<MemoryEntryRow> rows = new ArrayList<MemoryEntryRow>();
 		for (final ByteArrayId rowId : ingestInfo.getRowIds()) {
 			rows.add(new MemoryEntryRow(

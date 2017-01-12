@@ -60,7 +60,7 @@ public class DynamoDBIndexWriter<T> extends
 
 	private static <T> List<WriteRequest> getWriteRequests(
 			final byte[] adapterId,
-			final DataStoreEntryInfo ingestInfo ) {
+			final DataStoreEntryInfo<DynamoDBRow> ingestInfo ) {
 		final List<WriteRequest> mutations = new ArrayList<WriteRequest>();
 		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
 		int totalLength = 0;
@@ -104,10 +104,10 @@ public class DynamoDBIndexWriter<T> extends
 	}
 
 	@Override
-	protected DataStoreEntryInfo getEntryInfo(
+	protected DataStoreEntryInfo<DynamoDBRow> getEntryInfo(
 			final T entry,
 			final VisibilityWriter<T> visibilityWriter ) {
-		final DataStoreEntryInfo entryInfo = DataStoreUtils.getIngestInfo(
+		final DataStoreEntryInfo<DynamoDBRow> entryInfo = DataStoreUtils.getIngestInfo(
 				(WritableDataAdapter<T>) adapter,
 				index,
 				entry,

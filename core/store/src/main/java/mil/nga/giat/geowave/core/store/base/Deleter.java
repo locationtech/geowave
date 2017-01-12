@@ -6,6 +6,6 @@ public interface Deleter extends
 		AutoCloseable
 {
 	public void delete(
-			DataStoreEntryInfo entry,
+			DataStoreEntryInfo<?> entry,
 			DataAdapter<?> adapter );
 }

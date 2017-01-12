@@ -22,9 +22,11 @@ public class RowRangeDataStaticticsTest
 				new ByteArrayId(
 						"20030"));
 
-		assertFalse(stats.isSet());
+		assertFalse(
+				stats.isSet());
 
-		stats.fromBinary(stats.toBinary());
+		stats.fromBinary(
+				stats.toBinary());
 	}
 
 	@Test
@@ -48,23 +50,27 @@ public class RowRangeDataStaticticsTest
 						"50632"));
 		stats.entryIngested(
 				new DataStoreEntryInfo(
+						null,
 						"23".getBytes(),
 						ids,
 						ids,
 						Collections.<FieldInfo<?>> emptyList()),
 				1);
 
-		assertTrue(Arrays.equals(
-				new ByteArrayId(
-						"0123").getBytes(),
-				stats.getMin()));
+		assertTrue(
+				Arrays.equals(
+						new ByteArrayId(
+								"0123").getBytes(),
+						stats.getMin()));
 
-		assertTrue(Arrays.equals(
-				new ByteArrayId(
-						"5064").getBytes(),
-				stats.getMax()));
+		assertTrue(
+				Arrays.equals(
+						new ByteArrayId(
+								"5064").getBytes(),
+						stats.getMax()));
 
-		assertTrue(stats.isSet());
+		assertTrue(
+				stats.isSet());
 
 		// merge
 
@@ -80,35 +86,42 @@ public class RowRangeDataStaticticsTest
 						"8062"));
 		stats2.entryIngested(
 				new DataStoreEntryInfo(
+						null,
 						"32".getBytes(),
 						ids,
 						ids,
 						Collections.<FieldInfo<?>> emptyList()),
 				1);
 
-		stats.merge(stats2);
+		stats.merge(
+				stats2);
 
-		assertTrue(Arrays.equals(
-				new ByteArrayId(
-						"0123").getBytes(),
-				stats.getMin()));
+		assertTrue(
+				Arrays.equals(
+						new ByteArrayId(
+								"0123").getBytes(),
+						stats.getMin()));
 
-		assertTrue(Arrays.equals(
-				new ByteArrayId(
-						"8062").getBytes(),
-				stats.getMax()));
+		assertTrue(
+				Arrays.equals(
+						new ByteArrayId(
+								"8062").getBytes(),
+						stats.getMax()));
 
-		stats2.fromBinary(stats.toBinary());
+		stats2.fromBinary(
+				stats.toBinary());
 
-		assertTrue(Arrays.equals(
-				new ByteArrayId(
-						"0123").getBytes(),
-				stats2.getMin()));
+		assertTrue(
+				Arrays.equals(
+						new ByteArrayId(
+								"0123").getBytes(),
+						stats2.getMin()));
 
-		assertTrue(Arrays.equals(
-				new ByteArrayId(
-						"8062").getBytes(),
-				stats2.getMax()));
+		assertTrue(
+				Arrays.equals(
+						new ByteArrayId(
+								"8062").getBytes(),
+						stats2.getMax()));
 
 		stats.toString();
 	}

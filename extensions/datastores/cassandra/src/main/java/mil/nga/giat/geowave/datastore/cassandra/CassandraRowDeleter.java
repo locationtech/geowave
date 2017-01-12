@@ -29,12 +29,11 @@ public class CassandraRowDeleter implements
 
 	@Override
 	public void delete(
-			final DataStoreEntryInfo entry,
+			final DataStoreEntryInfo<?> entry,
 			final DataAdapter<?> adapter ) {
 		operations.deleteRow(
 				tableName,
-				entry.getDataId(),
-				adapter.getAdapterId().getBytes(),
+				(CassandraRow) entry.getNativeRow(),
 				additionalAuthorizations);
 	}
 

@@ -36,7 +36,7 @@ public class RowHistogramFixedDataStaticticsTest
 		for (long i = 0; i < 10000; i++) {
 			final List<ByteArrayId> ids = Arrays.asList(genId(i));
 			stats.entryIngested(
-					new DataStoreEntryInfo(
+					new DataStoreEntryInfo(null,
 							Long.toString(
 									i).getBytes(),
 							ids,
@@ -76,7 +76,7 @@ public class RowHistogramFixedDataStaticticsTest
 
 			ByteArrayId id = genId(j);
 			stats2.entryIngested(
-					new DataStoreEntryInfo(
+					new DataStoreEntryInfo(null,
 							Long.toString(
 									j).getBytes(),
 							Arrays.asList(id),

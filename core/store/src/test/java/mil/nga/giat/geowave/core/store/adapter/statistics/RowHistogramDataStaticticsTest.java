@@ -8,12 +8,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.Test;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram.FixedBinNumericHistogramFactory;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-
-import org.junit.Test;
 
 public class RowHistogramDataStaticticsTest
 {
@@ -22,8 +22,8 @@ public class RowHistogramDataStaticticsTest
 			347);
 
 	private ByteArrayId genId(
-			long bottom,
-			long top ) {
+			final long bottom,
+			final long top ) {
 		return new ByteArrayId(
 				String.format(
 						"\12%6h",
@@ -56,11 +56,13 @@ public class RowHistogramDataStaticticsTest
 	public void testIngest() {
 
 		for (long i = 0; i < 10000; i++) {
-			List<ByteArrayId> ids = Arrays.asList(genId(
-					0,
-					100000));
+			final List<ByteArrayId> ids = Arrays.asList(
+					genId(
+							0,
+							100000));
 			stats1.entryIngested(
 					new DataStoreEntryInfo(
+							null,
 							new byte[] {
 								1
 							},
@@ -70,6 +72,7 @@ public class RowHistogramDataStaticticsTest
 					1);
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
+							null,
 							new byte[] {
 								1
 							},
@@ -80,23 +83,30 @@ public class RowHistogramDataStaticticsTest
 		}
 
 		for (int i = 1000; i < 100000; i += 1000) {
-			byte[] half = genId(
+			final byte[] half = genId(
 					i,
 					i + 1).getBytes();
-			double diff = Math.abs(stats1.cdf(half) - stats2.cdf(half));
+			final double diff = Math.abs(
+					stats1.cdf(
+							half)
+							- stats2.cdf(
+									half));
 			assertTrue(
 					"iteration " + i + " = " + diff,
 					diff < 0.02);
 		}
 
-		System.out.println("-------------------------");
+		System.out.println(
+				"-------------------------");
 
 		for (long j = 10000; j < 20000; j++) {
-			List<ByteArrayId> ids = Arrays.asList(genId(
-					100000,
-					200000));
+			final List<ByteArrayId> ids = Arrays.asList(
+					genId(
+							100000,
+							200000));
 			stats1.entryIngested(
 					new DataStoreEntryInfo(
+							null,
 							new byte[] {
 								1
 							},
@@ -106,6 +116,7 @@ public class RowHistogramDataStaticticsTest
 					1);
 			stats2.entryIngested(
 					new DataStoreEntryInfo(
+							null,
 							new byte[] {
 								1
 							},
@@ -116,26 +127,38 @@ public class RowHistogramDataStaticticsTest
 		}
 
 		for (int i = 1000; i < 100000; i += 1000) {
-			byte[] half = genId(
+			final byte[] half = genId(
 					i,
 					i + 1).getBytes();
-			double diff = Math.abs(stats1.cdf(half) - stats2.cdf(half));
+			final double diff = Math.abs(
+					stats1.cdf(
+							half)
+							- stats2.cdf(
+									half));
 			assertTrue(
 					"iteration " + i + " = " + diff,
 					diff < 0.02);
 		}
 
-		byte[] nearfull = genId(
+		final byte[] nearfull = genId(
 				79998,
 				89999).getBytes();
-		double diff = Math.abs(stats1.cdf(nearfull) - stats2.cdf(nearfull));
+		double diff = Math.abs(
+				stats1.cdf(
+						nearfull)
+						- stats2.cdf(
+								nearfull));
 		assertTrue(
 				"nearfull = " + diff,
 				diff < 0.02);
-		byte[] nearempty = genId(
+		final byte[] nearempty = genId(
 				9998,
 				9999).getBytes();
-		diff = Math.abs(stats1.cdf(nearempty) - stats2.cdf(nearempty));
+		diff = Math.abs(
+				stats1.cdf(
+						nearempty)
+						- stats2.cdf(
+								nearempty));
 		assertTrue(
 				"nearempty = " + diff,
 				diff < 0.02);
