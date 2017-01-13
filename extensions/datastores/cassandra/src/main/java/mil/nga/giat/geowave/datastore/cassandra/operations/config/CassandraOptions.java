@@ -14,6 +14,29 @@ public class CassandraOptions extends
 	@Parameter(names = "--replicas", description = "The number of replicas to use when creating a new keyspace.")
 	private int replicationFactor = 3;
 
+	// TODO: it'd be nice to offer an option to organize the data where the
+	// space filling curve cluster column precedes the adapter ID so you can
+	// query across adapters efficiently (ie. get all the points regardless of
+	// feature type)
+	// within geoserver this is not a default use case, but this is analgous to
+	// the option of setting locality groups in accumulo
+	// TODO: this is technically a property of the table and should be persisted
+	// as table metadata
+	// @Parameter(names = "--comingleTypes", description = "Store different
+	// types together to quickly query across different types (this will have
+	// performance implications on querying for a single type when storing
+	// comingling multiple types in the same table).")
+	// private boolean comingleTypes = false;
+
+	// public boolean isComingleTypes() {
+	// return comingleTypes;
+	// }
+	//
+	// public void setComingleTypes(
+	// boolean comingleTypes ) {
+	// this.comingleTypes = comingleTypes;
+	// }
+
 	public int getBatchWriteSize() {
 		return batchWriteSize;
 	}

@@ -45,14 +45,14 @@ public class CassandraRow implements
 		GW_PARTITION_ID_KEY(
 				"partition",
 				ColumnType.PARTITION_KEY),
+		GW_ADAPTER_ID_KEY(
+				"adapter_id",
+				ColumnType.CLUSTER_COLUMN),
 		GW_IDX_KEY(
 				"idx",
 				ColumnType.CLUSTER_COLUMN),
 		GW_DATA_ID_KEY(
 				"data_id",
-				ColumnType.CLUSTER_COLUMN),
-		GW_ADAPTER_ID_KEY(
-				"adapter_id",
 				ColumnType.CLUSTER_COLUMN),
 		GW_FIELD_MASK_KEY(
 				"field_mask",

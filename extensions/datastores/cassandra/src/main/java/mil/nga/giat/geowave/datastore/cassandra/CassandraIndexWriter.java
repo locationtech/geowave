@@ -60,9 +60,10 @@ public class CassandraIndexWriter<T> extends
 		// TODO potentially another hack, but if there is only one field, don't
 		// need to write the length
 		if (ingestInfo.getFieldInfo().size() == 1) {
-			fieldInfoBytesList.add(
-					ingestInfo.getFieldInfo().get(
-							0).getWrittenValue());
+			byte[] value = ingestInfo.getFieldInfo().get(
+					0).getWrittenValue();
+			fieldInfoBytesList.add(value);
+			totalLength += value.length;
 		}
 		else {
 			for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {

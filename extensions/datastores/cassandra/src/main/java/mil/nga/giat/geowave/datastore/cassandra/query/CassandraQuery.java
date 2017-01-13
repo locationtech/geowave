@@ -1,11 +1,16 @@
 package mil.nga.giat.geowave.datastore.cassandra.query;
 
+import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -15,9 +20,12 @@ import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.operations.BatchedRangeRead;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
+import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations.ByteArrayIdToByteBuffer;
 import mil.nga.giat.geowave.datastore.cassandra.operations.RowRead;
 
 /**
@@ -83,21 +91,24 @@ abstract public class CassandraQuery
 		final String tableName = StringUtils.stringFromBinary(
 				index.getId().getBytes());
 		if ((ranges != null) && !ranges.isEmpty()) {
-			if (ranges.size() == 1) {
+			if ((ranges.size() == 1) && (adapterIds.size() == 1)) {
 				final ByteArrayRange r = ranges.get(
 						0);
 				if (r.isSingleValue()) {
 					final RowRead rowRead = cassandraOperations.getRowRead(
 							tableName);
 					rowRead.setRow(
-							r.getStart().getBytes());
+							r.getStart().getBytes(),
+							adapterIds.get(
+									0).getBytes());
 					return new Wrapper(
 							Iterators.singletonIterator(
 									rowRead.result()));
 				}
 				else {
 					final BatchedRangeRead rangeRead = cassandraOperations.getBatchedRangeRead(
-							tableName);
+							tableName,
+							adapterIds);
 					rangeRead.addQueryRange(
 							r);
 					return rangeRead.results();
@@ -105,13 +116,34 @@ abstract public class CassandraQuery
 			}
 			final BatchedRangeRead rangeRead = cassandraOperations.getBatchedRangeRead(
 					tableName,
+					adapterIds,
 					ranges);
 			return rangeRead.results();
 		}
 		// query everything
 		return cassandraOperations.executeQuery(
-				cassandraOperations.getSelect(
-						tableName));
+				cassandraOperations
+						.getSelect(
+								tableName)
+						.where(
+								QueryBuilder.in(
+										CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+										IntStream
+												.range(
+														0,
+														CassandraIndexWriter.PARTITIONS)
+												.mapToObj(
+														i -> ByteBuffer.wrap(
+																new byte[] {
+																	(byte) i
+																})).collect(
+																		Collectors.toList())))
+						.and(
+								QueryBuilder.in(
+										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+										Lists.transform(
+												adapterIds,
+												new ByteArrayIdToByteBuffer()))));
 	}
 
 	public String[] getAdditionalAuthorizations() {
