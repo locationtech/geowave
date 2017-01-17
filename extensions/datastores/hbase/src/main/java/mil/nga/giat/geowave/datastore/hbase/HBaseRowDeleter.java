@@ -51,17 +51,14 @@ public class HBaseRowDeleter implements
 						id.getBytes()));
 			}
 		}
-		if (writer instanceof HBaseWriter) {
-			try {
-				writer.delete(deletes);
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to delete rows",
-						e);
-			}
+		try {
+			writer.delete(deletes);
 		}
-
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unable to delete rows",
+					e);
+		}
 	}
 
 }

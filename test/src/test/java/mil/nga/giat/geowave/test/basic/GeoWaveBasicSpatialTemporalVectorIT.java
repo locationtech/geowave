@@ -61,6 +61,8 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.HBASE
 	}, options = {
 		/**

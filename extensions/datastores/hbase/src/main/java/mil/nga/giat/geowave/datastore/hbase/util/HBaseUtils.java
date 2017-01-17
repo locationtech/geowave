@@ -14,7 +14,6 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -25,23 +24,19 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
-import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
+import mil.nga.giat.geowave.datastore.hbase.HBaseRow;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
 @SuppressWarnings("rawtypes")
@@ -49,130 +44,11 @@ public class HBaseUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
 
-	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID when
-	// needed for uniqueness
-	public final static int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
-	public final static byte UNIQUE_ID_DELIMITER = 0;
-	private static final UniformVisibilityWriter DEFAULT_VISIBILITY = new UniformVisibilityWriter(
-			new UnconstrainedVisibilityHandler());
-
-	private static <T> List<RowMutations> buildMutations(
-			final byte[] adapterId,
-			final DataStoreEntryInfo ingestInfo,
-			final PrimaryIndex index,
-			final WritableDataAdapter<T> writableAdapter,
-			final boolean ensureUniqueId ) {
-		final List<RowMutations> mutations = new ArrayList<RowMutations>();
-		final List<FieldInfo<?>> fieldInfoList = DataStoreUtils.composeFlattenedFields(
-				ingestInfo.getFieldInfo(),
-				index.getIndexModel(),
-				writableAdapter);
-
-		for (ByteArrayId rowId : ingestInfo.getRowIds()) {
-			if (ensureUniqueId) {
-				rowId = DataStoreUtils.ensureUniqueId(
-						rowId.getBytes(),
-						true);
-			}
-			final RowMutations mutation = new RowMutations(
-					rowId.getBytes());
-			try {
-				final Put row = new Put(
-						rowId.getBytes());
-				for (final FieldInfo fieldInfo : fieldInfoList) {
-					row.addColumn(
-							adapterId,
-							fieldInfo.getDataValue().getId().getBytes(),
-							fieldInfo.getWrittenValue());
-				}
-				mutation.add(row);
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Could not add row to mutation.",
-						e);
-			}
-			mutations.add(mutation);
-		}
-
-		return mutations;
-	}
-
-	// Retrieves the next incremental HBase prefix following the passed-in
-	// prefix
-	// Using a private HBase method called from the constructor of Scan
-	public static byte[] getNextPrefix(
-			final byte[] prefix ) {
-		return new Scan().setRowPrefixFilter(
-				prefix).getStopRow();
-	}
-
-	public static <T> DataStoreEntryInfo write(
-			final WritableDataAdapter<T> writableAdapter,
-			final PrimaryIndex index,
-			final T entry,
-			final HBaseWriter writer,
-			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
-				writableAdapter,
-				index,
-				entry,
-				customFieldVisibilityWriter);
-
-		final List<RowMutations> mutations = buildMutations(
-				writableAdapter.getAdapterId().getBytes(),
-				ingestInfo,
-				index,
-				writableAdapter,
-				(writableAdapter instanceof RowMergingDataAdapter)
-						&& (((RowMergingDataAdapter) writableAdapter).getTransform() != null));
-
-		try {
-			writer.write(
-					mutations,
-					writableAdapter.getAdapterId().getString());
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Writing to table failed.",
-					e);
-		}
-
-		return ingestInfo;
-	}
-
 	public static String getQualifiedTableName(
 			final String tableNamespace,
 			final String unqualifiedTableName ) {
 		return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName : tableNamespace + "_"
 				+ unqualifiedTableName;
-	}
-
-	public static <T> DataStoreEntryInfo write(
-			final WritableDataAdapter<T> writableAdapter,
-			final PrimaryIndex index,
-			final T entry,
-			final HBaseWriter writer ) {
-		return write(
-				writableAdapter,
-				index,
-				entry,
-				writer,
-				DEFAULT_VISIBILITY);
-	}
-
-	@SuppressWarnings({
-		"rawtypes",
-		"unchecked"
-	})
-	private static <T> FieldInfo<T> getFieldInfo(
-			final PersistentValue<T> fieldValue,
-			final byte[] value,
-			final byte[] visibility ) {
-		return new FieldInfo<T>(
-				fieldValue,
-				value,
-				visibility);
 	}
 
 	public static List<ByteArrayRange> constraintsToByteArrayRanges(
@@ -190,40 +66,15 @@ public class HBaseUtils
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T decodeRow(
-			final Result row,
-			final AdapterStore adapterStore,
-			final QueryFilter clientFilter,
-			final PrimaryIndex index,
-			final ScanCallback<T, ?> scanCallback,
-			final byte[] fieldSubsetBitmask,
-			final boolean decodeRow ) {
-
-		final GeowaveRowId rowId = new GeowaveRowId(
-				row.getRow());
-		return (T) decodeRowObj(
-				row,
-				rowId,
-				null,
-				adapterStore,
-				clientFilter,
-				index,
-				scanCallback,
-				fieldSubsetBitmask,
-				decodeRow);
-	}
-
 	public static Object decodeRow(
 			final Result row,
-			final GeowaveRowId rowId,
+			final GeoWaveRow rowId,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
 			final boolean decodeRow ) {
-		return decodeRowObj(
+		return decodeRowInternal(
 				row,
-				rowId,
 				null,
 				adapterStore,
 				clientFilter,
@@ -231,35 +82,11 @@ public class HBaseUtils
 				null,
 				null,
 				decodeRow);
-	}
-
-	private static Object decodeRowObj(
-			final Result row,
-			final GeowaveRowId rowId,
-			final DataAdapter dataAdapter,
-			final AdapterStore adapterStore,
-			final QueryFilter clientFilter,
-			final PrimaryIndex index,
-			final ScanCallback scanCallback,
-			final byte[] fieldSubsetBitmask,
-			final boolean decodeRow ) {
-		final Pair<Object, DataStoreEntryInfo> pair = decodeRow(
-				row,
-				rowId,
-				dataAdapter,
-				adapterStore,
-				clientFilter,
-				index,
-				scanCallback,
-				fieldSubsetBitmask,
-				decodeRow);
-		return pair != null ? pair.getLeft() : null;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Pair<Object, DataStoreEntryInfo> decodeRow(
+	private static Object decodeRowInternal(
 			final Result row,
-			final GeowaveRowId rowId,
 			final DataAdapter dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -278,8 +105,8 @@ public class HBaseUtils
 		// decode the persistence model into the native data type
 		final PersistentDataset<CommonIndexValue> indexData = new PersistentDataset<CommonIndexValue>();
 		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
-
 		final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
+		final CommonIndexModel indexModel = index.getIndexModel();
 
 		// for now we are assuming all entries in a row are of the same type
 		// and use the same adapter
@@ -317,7 +144,6 @@ public class HBaseUtils
 				adapterMatchVerified = true;
 			}
 			for (final Entry<byte[], NavigableMap<Long, byte[]>> cqEntry : cfEntry.getValue().entrySet()) {
-				final CommonIndexModel indexModel = index.getIndexModel();
 				byte[] byteValue = cqEntry.getValue().lastEntry().getValue();
 				byte[] qualifier = cqEntry.getKey();
 
@@ -345,13 +171,16 @@ public class HBaseUtils
 			}
 		}
 
+		HBaseRow hbaseRow = new HBaseRow(
+				row.getRow());
+
 		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
 				adapterId,
 				new ByteArrayId(
-						rowId.getDataId()),
+						hbaseRow.getDataId()),
 				new ByteArrayId(
-						rowId.getInsertionId()),
-				rowId.getNumberOfDuplicates(),
+						hbaseRow.getIndex()),
+				hbaseRow.getNumberOfDuplicates(),
 				indexData,
 				unknownData,
 				extendedData);
@@ -369,20 +198,20 @@ public class HBaseUtils
 								encodedRow,
 								index) : encodedRow,
 						new DataStoreEntryInfo(
-								rowId.getDataId(),
+								hbaseRow.getDataId(),
 								Arrays.asList(new ByteArrayId(
-										rowId.getInsertionId())),
+										hbaseRow.getIndex())),
 								Arrays.asList(new ByteArrayId(
 										row.getRow())),
 								fieldInfoList));
 				if ((scanCallback != null) && decodeRow) {
 					scanCallback.entryScanned(
 							pair.getRight(),
-							// TODO wrap HBase result as NativeGeoWaveRow
-							null,
+							new HBaseRow(
+									row),
 							pair.getLeft());
 				}
-				return pair;
+				return pair.getLeft();
 			}
 		}
 		return null;
@@ -484,50 +313,5 @@ public class HBaseUtils
 				scanner.close();
 			}
 		}
-
-	}
-
-	public static boolean rowIdsMatch(
-			final GeowaveRowId rowId1,
-			final GeowaveRowId rowId2 ) {
-
-		if (!Arrays.equals(
-				rowId1.getAdapterId(),
-				rowId2.getAdapterId())) {
-			return false;
-		}
-
-		if (Arrays.equals(
-				rowId1.getDataId(),
-				rowId2.getDataId())) {
-			return true;
-		}
-
-		return Arrays.equals(
-				removeUniqueId(rowId1.getRowId()),
-				removeUniqueId(rowId2.getRowId()));
-	}
-
-	public static byte[] removeUniqueId(
-			final byte[] row ) {
-
-		final GeowaveRowId rowId = new GeowaveRowId(
-				row);
-		byte[] dataId = rowId.getDataId();
-
-		if ((dataId.length < UNIQUE_ADDED_BYTES) || (dataId[dataId.length - UNIQUE_ADDED_BYTES] != UNIQUE_ID_DELIMITER)) {
-			return row;
-		}
-
-		dataId = Arrays.copyOfRange(
-				dataId,
-				0,
-				dataId.length - UNIQUE_ADDED_BYTES);
-
-		return new GeowaveRowId(
-				rowId.getInsertionId(),
-				dataId,
-				rowId.getAdapterId(),
-				rowId.getNumberOfDuplicates()).getRowId();
 	}
 }

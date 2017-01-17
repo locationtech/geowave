@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
@@ -49,6 +50,7 @@ public class AccumuloConstraintsQuery extends
 	private boolean queryFiltersEnabled;
 
 	public AccumuloConstraintsQuery(
+			final DataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
@@ -61,6 +63,7 @@ public class AccumuloConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
+				dataStore,
 				adapterIds,
 				index,
 				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
@@ -76,6 +79,7 @@ public class AccumuloConstraintsQuery extends
 	}
 
 	public AccumuloConstraintsQuery(
+			final DataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
@@ -90,6 +94,7 @@ public class AccumuloConstraintsQuery extends
 			final String[] authorizations ) {
 
 		super(
+				dataStore,
 				adapterIds,
 				index,
 				scanCallback,

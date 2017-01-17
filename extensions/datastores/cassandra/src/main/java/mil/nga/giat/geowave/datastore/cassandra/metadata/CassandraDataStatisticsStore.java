@@ -36,7 +36,7 @@ public class CassandraDataStatisticsStore extends
 		// object
 		addObject(statistics);
 
-		// TODO if we do allow caching after we add a statistic to DynamoDB we
+		// TODO if we do allow caching after we add a statistic to Cassandra we
 		// do need to make sure we update our cache, but for now we aren't using
 		// the cache at all
 
@@ -52,7 +52,7 @@ public class CassandraDataStatisticsStore extends
 		// TODO consider adding a setting to use the cache for statistics, but
 		// because it could change with each new entry, it seems that there
 		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same DynamoDB tables
+		// of GeoWave are able to connect to the same Cassandra tables
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class CassandraDataStatisticsStore extends
 		// TODO consider adding a setting to use the cache for statistics, but
 		// because it could change with each new entry, it seems that there
 		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same DynamoDB tables
+		// of GeoWave are able to connect to the same Cassandra tables
 		return null;
 	}
 
@@ -77,7 +77,7 @@ public class CassandraDataStatisticsStore extends
 		// TODO consider adding a setting to use the cache for statistics, but
 		// because it could change with each new entry, it seems that there
 		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same DynamoDB tables
+		// of GeoWave are able to connect to the same Cassandra tables
 		return true;
 	}
 

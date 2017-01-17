@@ -526,4 +526,19 @@ public class MemoryDataStore implements
 	public DataStatisticsStore getStatsStore() {
 		return statsStore;
 	}
+
+	@Override
+	public Object decodeRow(
+			Object row,
+			boolean wholeRowEncoding,
+			QueryFilter clientFilter,
+			DataAdapter dataAdapter,
+			AdapterStore adapterStore,
+			PrimaryIndex index,
+			ScanCallback scanCallback,
+			byte[] fieldSubsetBitmask,
+			boolean decodeRow ) {
+		LOGGER.error("DecodeRow method not implemented!");
+		return null;
+	}
 }

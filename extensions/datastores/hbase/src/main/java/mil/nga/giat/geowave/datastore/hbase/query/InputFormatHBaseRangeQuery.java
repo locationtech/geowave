@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseInputFormatIteratorWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 /**
  * * Represents a query operation for a range of HBase row IDs. This class is
@@ -50,6 +50,7 @@ public class InputFormatHBaseRangeQuery extends
 	}
 
 	public InputFormatHBaseRangeQuery(
+			final DataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final ByteArrayRange range,
@@ -57,6 +58,7 @@ public class InputFormatHBaseRangeQuery extends
 			final boolean isOutputWritable,
 			final QueryOptions queryOptions ) {
 		super(
+				dataStore,
 				getAdapterIds(
 						index,
 						adapterStore,
@@ -105,7 +107,7 @@ public class InputFormatHBaseRangeQuery extends
 		final Scan scanner = createStandardScanner(limit);
 
 		scanner.setStartRow(range.getStart().getBytes());
-		scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
+		scanner.setStopRow(range.getEndAsNextPrefix().getBytes());
 
 		return scanner;
 	}

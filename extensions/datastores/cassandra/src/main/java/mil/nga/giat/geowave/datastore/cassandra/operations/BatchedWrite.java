@@ -37,27 +37,21 @@ public class BatchedWrite extends
 	public void insert(
 			final CassandraRow row ) {
 		if (ASYNC) {
-			final BatchStatement currentBatch = addStatement(
-					row.bindInsertion(
-							preparedInsert));
+			final BatchStatement currentBatch = addStatement(row.bindInsertion(preparedInsert));
 			synchronized (currentBatch) {
 				if (currentBatch.size() >= batchSize) {
-					writeBatch(
-							currentBatch);
+					writeBatch(currentBatch);
 				}
 			}
 		}
 		else {
-			session.execute(
-					row.bindInsertion(
-							preparedInsert));
+			session.execute(row.bindInsertion(preparedInsert));
 		}
 	}
 
 	private void writeBatch(
 			final BatchStatement batch ) {
-		final ResultSetFuture future = session.executeAsync(
-				batch);
+		final ResultSetFuture future = session.executeAsync(batch);
 		Futures.addCallback(
 				future,
 				new IngestCallback(),
@@ -70,8 +64,7 @@ public class BatchedWrite extends
 			throws Exception {
 		for (final BatchStatement batch : batches.values()) {
 			synchronized (batch) {
-				writeBatch(
-						batch);
+				writeBatch(batch);
 			}
 		}
 		// TODO need to wait for all asynchronous batches to finish writing

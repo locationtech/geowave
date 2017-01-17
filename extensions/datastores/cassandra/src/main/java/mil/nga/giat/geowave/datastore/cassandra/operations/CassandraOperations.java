@@ -61,12 +61,10 @@ public class CassandraOperations implements
 	private final String gwNamespace;
 	private final static int WRITE_RESPONSE_THREAD_SIZE = 16;
 	private final static int READ_RESPONSE_THREAD_SIZE = 16;
-	protected final static ExecutorService WRITE_RESPONSE_THREADS = MoreExecutors.getExitingExecutorService(
-			(ThreadPoolExecutor) Executors.newFixedThreadPool(
-					WRITE_RESPONSE_THREAD_SIZE));
-	protected final static ExecutorService READ_RESPONSE_THREADS = MoreExecutors.getExitingExecutorService(
-			(ThreadPoolExecutor) Executors.newFixedThreadPool(
-					READ_RESPONSE_THREAD_SIZE));
+	protected final static ExecutorService WRITE_RESPONSE_THREADS = MoreExecutors
+			.getExitingExecutorService((ThreadPoolExecutor) Executors.newFixedThreadPool(WRITE_RESPONSE_THREAD_SIZE));
+	protected final static ExecutorService READ_RESPONSE_THREADS = MoreExecutors
+			.getExitingExecutorService((ThreadPoolExecutor) Executors.newFixedThreadPool(READ_RESPONSE_THREAD_SIZE));
 	private static final Object CREATE_TABLE_MUTEX = new Object();
 	private final CassandraOptions options;
 	private final KeyspaceState state;
@@ -85,39 +83,35 @@ public class CassandraOperations implements
 		state = KeyspaceStatePool.getInstance().getCachedState(
 				options.getContactPoint(),
 				gwNamespace);
+		this.options = options.getAdditionalOptions();
+		initKeyspace();
+	}
+
+	public void initKeyspace() {
 		// TODO consider exposing important keyspace options through commandline
 		// such as understanding how to properly enable cassandra in production
 		// - with data centers and snitch, for now because this is only creating
 		// a keyspace "if not exists" a user can create a keyspace matching
 		// their geowave namespace with any settings they want manually
-		session.execute(
-				SchemaBuilder
-						.createKeyspace(
-								gwNamespace)
-						.ifNotExists()
-						.with()
-						.replication(
-								ImmutableMap.of(
-										"class",
-										"SimpleStrategy",
-										"replication_factor",
-										options.getAdditionalOptions().getReplicationFactor()))
-						.durableWrites(
-								options.getAdditionalOptions().isDurableWrites()));
-		this.options = options.getAdditionalOptions();
+		session.execute(SchemaBuilder.createKeyspace(
+				gwNamespace).ifNotExists().with().replication(
+				ImmutableMap.of(
+						"class",
+						"SimpleStrategy",
+						"replication_factor",
+						options.getReplicationFactor())).durableWrites(
+				options.isDurableWrites()));
 	}
 
 	@Override
 	public boolean tableExists(
 			final String tableName ) {
-		Boolean tableExists = state.tableExistsCache.get(
-				tableName);
+		Boolean tableExists = state.tableExistsCache.get(tableName);
 		if (tableExists == null) {
 			final KeyspaceMetadata keyspace = session.getCluster().getMetadata().getKeyspace(
 					gwNamespace);
 			if (keyspace != null) {
-				tableExists = keyspace.getTable(
-						tableName) != null;
+				tableExists = keyspace.getTable(tableName) != null;
 			}
 			else {
 				tableExists = false;
@@ -143,8 +137,7 @@ public class CassandraOperations implements
 	public void executeCreateTable(
 			final Create create,
 			final String tableName ) {
-		session.execute(
-				create);
+		session.execute(create);
 		state.tableExistsCache.put(
 				tableName,
 				true);
@@ -160,10 +153,9 @@ public class CassandraOperations implements
 	public Select getSelect(
 			final String table,
 			final String... columns ) {
-		return (columns.length == 0 ? QueryBuilder.select() : QueryBuilder.select(
-				columns)).from(
-						gwNamespace,
-						table);
+		return (columns.length == 0 ? QueryBuilder.select() : QueryBuilder.select(columns)).from(
+				gwNamespace,
+				table);
 	}
 
 	public BaseDataStoreOptions getOptions() {
@@ -174,19 +166,15 @@ public class CassandraOperations implements
 			final String tableName ) {
 		PreparedStatement preparedWrite;
 		synchronized (state.preparedWritesPerTable) {
-			preparedWrite = state.preparedWritesPerTable.get(
-					tableName);
+			preparedWrite = state.preparedWritesPerTable.get(tableName);
 			if (preparedWrite == null) {
-				final Insert insert = getInsert(
-						tableName);
+				final Insert insert = getInsert(tableName);
 				for (final CassandraField f : CassandraField.values()) {
 					insert.value(
 							f.getFieldName(),
-							QueryBuilder.bindMarker(
-									f.getBindMarkerName()));
+							QueryBuilder.bindMarker(f.getBindMarkerName()));
 				}
-				preparedWrite = session.prepare(
-						insert);
+				preparedWrite = session.prepare(insert);
 				state.preparedWritesPerTable.put(
 						tableName,
 						preparedWrite);
@@ -204,34 +192,31 @@ public class CassandraOperations implements
 			final List<ByteArrayRange> ranges ) {
 		PreparedStatement preparedRead;
 		synchronized (state.preparedRangeReadsPerTable) {
-			preparedRead = state.preparedRangeReadsPerTable.get(
-					tableName);
+			preparedRead = state.preparedRangeReadsPerTable.get(tableName);
 			if (preparedRead == null) {
-				final Select select = getSelect(
-						tableName);
+				final Select select = getSelect(tableName);
 				select
 						.where(
 								QueryBuilder.eq(
 										CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-										QueryBuilder.bindMarker(
-												CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName())))
+										QueryBuilder.bindMarker(CassandraRow.CassandraField.GW_PARTITION_ID_KEY
+												.getBindMarkerName())))
 						.and(
 								QueryBuilder.in(
 										CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-										QueryBuilder.bindMarker(
-												CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName())))
+										QueryBuilder.bindMarker(CassandraRow.CassandraField.GW_ADAPTER_ID_KEY
+												.getBindMarkerName())))
 						.and(
 								QueryBuilder.gte(
 										CassandraRow.CassandraField.GW_IDX_KEY.getFieldName(),
-										QueryBuilder.bindMarker(
-												CassandraRow.CassandraField.GW_IDX_KEY.getLowerBoundBindMarkerName())))
+										QueryBuilder.bindMarker(CassandraRow.CassandraField.GW_IDX_KEY
+												.getLowerBoundBindMarkerName())))
 						.and(
 								QueryBuilder.lt(
 										CassandraRow.CassandraField.GW_IDX_KEY.getFieldName(),
-										QueryBuilder.bindMarker(
-												CassandraRow.CassandraField.GW_IDX_KEY.getUpperBoundBindMarkerName())));
-				preparedRead = session.prepare(
-						select);
+										QueryBuilder.bindMarker(CassandraRow.CassandraField.GW_IDX_KEY
+												.getUpperBoundBindMarkerName())));
+				preparedRead = session.prepare(select);
 				state.preparedRangeReadsPerTable.put(
 						tableName,
 						preparedRead);
@@ -260,29 +245,26 @@ public class CassandraOperations implements
 			final ByteArrayId adapterId ) {
 		PreparedStatement preparedRead;
 		synchronized (state.preparedRowReadPerTable) {
-			preparedRead = state.preparedRowReadPerTable.get(
-					tableName);
+			preparedRead = state.preparedRowReadPerTable.get(tableName);
 			if (preparedRead == null) {
-				final Select select = getSelect(
-						tableName);
+				final Select select = getSelect(tableName);
 				select
 						.where(
 								QueryBuilder.eq(
 										CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-										QueryBuilder.bindMarker(
-												CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName())))
+										QueryBuilder.bindMarker(CassandraRow.CassandraField.GW_PARTITION_ID_KEY
+												.getBindMarkerName())))
 						.and(
 								QueryBuilder.in(
 										CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-										QueryBuilder.bindMarker(
-												CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName())))
+										QueryBuilder.bindMarker(CassandraRow.CassandraField.GW_ADAPTER_ID_KEY
+												.getBindMarkerName())))
 						.and(
 								QueryBuilder.eq(
 										CassandraRow.CassandraField.GW_IDX_KEY.getFieldName(),
-										QueryBuilder.bindMarker(
-												CassandraRow.CassandraField.GW_IDX_KEY.getBindMarkerName())));
-				preparedRead = session.prepare(
-						select);
+										QueryBuilder.bindMarker(CassandraRow.CassandraField.GW_IDX_KEY
+												.getBindMarkerName())));
+				preparedRead = session.prepare(select);
 				state.preparedRowReadPerTable.put(
 						tableName,
 						preparedRead);
@@ -293,7 +275,7 @@ public class CassandraOperations implements
 				preparedRead,
 				this,
 				rowIdx,
-				adapterId.getBytes());
+				adapterId == null ? null : adapterId.getBytes());
 
 	}
 
@@ -353,12 +335,10 @@ public class CassandraOperations implements
 			final Statement... statements ) {
 		final List<CassandraRow> rows = new ArrayList<>();
 		for (final Statement s : statements) {
-			final ResultSet r = session.execute(
-					s);
+			final ResultSet r = session.execute(s);
 			for (final Row row : r) {
-				rows.add(
-						new CassandraRow(
-								row));
+				rows.add(new CassandraRow(
+						row));
 			}
 		}
 		return new CloseableIterator.Wrapper<CassandraRow>(
@@ -373,13 +353,10 @@ public class CassandraOperations implements
 				this);
 		if (createTable) {
 			synchronized (CREATE_TABLE_MUTEX) {
-				if (!tableExists(
-						tableName)) {
-					final Create create = getCreateTable(
-							tableName);
+				if (!tableExists(tableName)) {
+					final Create create = getCreateTable(tableName);
 					for (final CassandraField f : CassandraField.values()) {
-						f.addColumn(
-								create);
+						f.addColumn(create);
 					}
 					executeCreateTable(
 							create,
@@ -393,23 +370,21 @@ public class CassandraOperations implements
 	@Override
 	public void deleteAll()
 			throws Exception {
-		session.execute(
-				SchemaBuilder.dropKeyspace(
-						gwNamespace).ifExists());
+		state.tableExistsCache.clear();
+		session.execute(SchemaBuilder.dropKeyspace(
+				gwNamespace).ifExists());
 	}
 
 	public boolean deleteAll(
 			final String tableName,
 			final byte[] adapterId,
 			final String... additionalAuthorizations ) {
-		session.execute(
-				QueryBuilder.delete().from(
-						gwNamespace,
-						tableName).where(
-								QueryBuilder.eq(
-										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-										ByteBuffer.wrap(
-												adapterId))));
+		session.execute(QueryBuilder.delete().from(
+				gwNamespace,
+				tableName).where(
+				QueryBuilder.eq(
+						CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+						ByteBuffer.wrap(adapterId))));
 		return true;
 	}
 
@@ -418,24 +393,17 @@ public class CassandraOperations implements
 			final byte[][] dataIds,
 			final byte[] adapterId,
 			final String... additionalAuthorizations ) {
-		session.execute(
-				QueryBuilder
-						.delete()
-						.from(
-								gwNamespace,
-								tableName)
-						.where(
-								QueryBuilder.eq(
-										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-										ByteBuffer.wrap(
-												adapterId)))
-						.and(
-								QueryBuilder.in(
-										CassandraField.GW_DATA_ID_KEY.getFieldName(),
-										Lists.transform(
-												Arrays.asList(
-														dataIds),
-												new ByteArrayToByteBuffer()))));
+		session.execute(QueryBuilder.delete().from(
+				gwNamespace,
+				tableName).where(
+				QueryBuilder.eq(
+						CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+						ByteBuffer.wrap(adapterId))).and(
+				QueryBuilder.in(
+						CassandraField.GW_DATA_ID_KEY.getFieldName(),
+						Lists.transform(
+								Arrays.asList(dataIds),
+								new ByteArrayToByteBuffer()))));
 		return true;
 	}
 
@@ -449,14 +417,12 @@ public class CassandraOperations implements
 		final Set<ByteArrayId> dataIdsSet = new HashSet<ByteArrayId>(
 				dataIds.length);
 		for (int i = 0; i < dataIds.length; i++) {
-			dataIdsSet.add(
-					new ByteArrayId(
-							dataIds[i]));
+			dataIdsSet.add(new ByteArrayId(
+					dataIds[i]));
 		}
-		final CloseableIterator<CassandraRow> everything = executeQuery(
-				QueryBuilder.select().from(
-						gwNamespace,
-						tableName).allowFiltering());
+		final CloseableIterator<CassandraRow> everything = executeQuery(QueryBuilder.select().from(
+				gwNamespace,
+				tableName).allowFiltering());
 		return new CloseableIteratorWrapper<CassandraRow>(
 				everything,
 				Iterators.filter(
@@ -466,12 +432,9 @@ public class CassandraOperations implements
 							@Override
 							public boolean apply(
 									final CassandraRow input ) {
-								return dataIdsSet.contains(
-										new ByteArrayId(
-												input.getDataId()))
-										&& new ByteArrayId(
-												input.getAdapterId()).equals(
-														adapterIdObj);
+								return dataIdsSet.contains(new ByteArrayId(
+										input.getDataId())) && new ByteArrayId(
+										input.getAdapterId()).equals(adapterIdObj);
 							}
 						}));
 	}
@@ -480,27 +443,18 @@ public class CassandraOperations implements
 			final String tableName,
 			final CassandraRow row,
 			final String... additionalAuthorizations ) {
-		session.execute(
-				QueryBuilder
-						.delete()
-						.from(
-								gwNamespace,
-								tableName)
-						.where(
-								QueryBuilder.eq(
-										CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-										ByteBuffer.wrap(
-												row.getPartitionId())))
-						.and(
-								QueryBuilder.eq(
-										CassandraField.GW_IDX_KEY.getFieldName(),
-										ByteBuffer.wrap(
-												row.getIndex())))
-						.and(
-								QueryBuilder.eq(
-										CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-										ByteBuffer.wrap(
-												row.getAdapterId()))));
+		session.execute(QueryBuilder.delete().from(
+				gwNamespace,
+				tableName).where(
+				QueryBuilder.eq(
+						CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+						ByteBuffer.wrap(row.getPartitionId()))).and(
+				QueryBuilder.eq(
+						CassandraField.GW_IDX_KEY.getFieldName(),
+						ByteBuffer.wrap(row.getIndex()))).and(
+				QueryBuilder.eq(
+						CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+						ByteBuffer.wrap(row.getAdapterId()))));
 
 		return true;
 	}
@@ -511,8 +465,7 @@ public class CassandraOperations implements
 		@Override
 		public CompletableFuture<ResultSet> apply(
 				final ListenableFuture<ResultSet> input ) {
-			return CompletableFuturesExtra.toCompletableFuture(
-					input);
+			return CompletableFuturesExtra.toCompletableFuture(input);
 		}
 	}
 
@@ -522,8 +475,7 @@ public class CassandraOperations implements
 		@Override
 		public ByteBuffer apply(
 				final byte[] input ) {
-			return ByteBuffer.wrap(
-					input);
+			return ByteBuffer.wrap(input);
 		}
 	};
 
@@ -533,8 +485,7 @@ public class CassandraOperations implements
 		@Override
 		public ByteBuffer apply(
 				final ByteArrayId input ) {
-			return ByteBuffer.wrap(
-					input.getBytes());
+			return ByteBuffer.wrap(input.getBytes());
 		}
 	}
 

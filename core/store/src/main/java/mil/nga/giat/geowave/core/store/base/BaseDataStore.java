@@ -2,7 +2,9 @@ package mil.nga.giat.geowave.core.store.base;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -27,14 +29,27 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.IngestCallbackList;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.DecodePackage;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
+import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -47,6 +62,7 @@ import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public abstract class BaseDataStore implements
 		DataStore
@@ -79,6 +95,11 @@ public abstract class BaseDataStore implements
 
 		baseOperations = operations;
 		baseOptions = options;
+	}
+
+	@Override
+	public AdapterStore getAdapterStore() {
+		return adapterStore;
 	}
 
 	public void store(
@@ -618,4 +639,366 @@ public abstract class BaseDataStore implements
 			final DataAdapter adapter,
 			final PrimaryIndex index );
 
+	/**
+	 * General-purpose entry ingest
+	 */
+	public <T, R> DataStoreEntryInfo write(
+			final WritableDataAdapter<T> writableAdapter,
+			final PrimaryIndex index,
+			final T entry,
+			final Writer writer,
+			final VisibilityWriter<T> customFieldVisibilityWriter ) {
+
+		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
+				writableAdapter,
+				index,
+				entry,
+				customFieldVisibilityWriter);
+
+		verifyVisibility(
+				customFieldVisibilityWriter,
+				ingestInfo);
+
+		final Iterable<GeoWaveRow> rows = toGeoWaveRows(
+				writableAdapter,
+				index,
+				ingestInfo);
+
+		try {
+			write(
+					writer,
+					rows,
+					writableAdapter.getAdapterId().getString());
+		}
+		catch (final Exception e) {
+			LOGGER.warn(
+					"Writing to table failed.",
+					e);
+		}
+
+		return ingestInfo;
+	}
+
+	protected void verifyVisibility(
+			VisibilityWriter customFieldVisibilityWriter,
+			DataStoreEntryInfo ingestInfo ) {
+		// TODO: Implement/override vis for all datastore types
+	}
+
+	/**
+	 * DataStore-agnostic method to accept ingest info and return generic
+	 * geowave rows
+	 * 
+	 * @param writableAdapter
+	 * @param index
+	 * @param ingestInfo
+	 * 
+	 * @return list of GeoWaveRow
+	 */
+	public <T> Iterable<GeoWaveRow> toGeoWaveRows(
+			final WritableDataAdapter<T> writableAdapter,
+			final PrimaryIndex index,
+			final DataStoreEntryInfo ingestInfo ) {
+		final List<FieldInfo<?>> fieldInfoList = DataStoreUtils.composeFlattenedFields(
+				ingestInfo.getFieldInfo(),
+				index.getIndexModel(),
+				writableAdapter);
+
+		final boolean ensureUniqueId = (writableAdapter instanceof RowMergingDataAdapter)
+				&& (((RowMergingDataAdapter) writableAdapter).getTransform() != null);
+
+		final Iterable<GeoWaveRow> geowaveRows = getRowsFromIngest(
+				writableAdapter.getAdapterId().getBytes(),
+				ingestInfo,
+				fieldInfoList,
+				ensureUniqueId);
+
+		return geowaveRows;
+	}
+
+	/**
+	 * DataStore-specific method to create its row impl on ingest Called from
+	 * toGeoWaveRows method above.
+	 * 
+	 * @param adapterId
+	 * @param ingestInfo
+	 * @param fieldInfoList
+	 * @param ensureUniqueId
+	 * @return
+	 */
+	protected abstract Iterable<GeoWaveRow> getRowsFromIngest(
+			final byte[] adapterId,
+			final DataStoreEntryInfo ingestInfo,
+			final List<FieldInfo<?>> fieldInfoList,
+			final boolean ensureUniqueId );
+
+	/**
+	 * DataStore-specific method that accepts a writer and a list of rows,
+	 * converts them to db mutations and passes them to the writer.
+	 */
+	public abstract void write(
+			Writer writer,
+			Iterable<GeoWaveRow> rows,
+			final String columnFamily );
+
+	/**
+	 * Basic method that decodes a native row Currently overridden by Accumulo
+	 * and HBase; Unification in progress
+	 * 
+	 * Override this method if you can't pass in a GeoWaveRow!
+	 */
+	public Object decodeRow(
+			final Object inputRow,
+			final boolean wholeRowEncoding,
+			final QueryFilter clientFilter,
+			final DataAdapter adapter,
+			final AdapterStore adapterStore,
+			final PrimaryIndex index,
+			final ScanCallback scanCallback,
+			final byte[] fieldSubsetBitmask,
+			final boolean decodeRow ) {
+		// The base case for decoding requires the input row to be a GeoWaveRow
+		if (!(inputRow instanceof GeoWaveRow)) {
+			return null;
+		}
+
+		GeoWaveRow geowaveRow = (GeoWaveRow) inputRow;
+		ByteArrayId adapterId = new ByteArrayId(
+				geowaveRow.getAdapterId());
+
+		DecodePackage decodePackage = new DecodePackage(
+				index,
+				true);
+
+		if (!decodePackage.setOrRetrieveAdapter(
+				adapter,
+				adapterId,
+				adapterStore)) {
+			// Fail quietly? Some IT's hit this a lot
+			// LOGGER.error("Could not decode row from iterator. Either adapter
+			// or adapter store must be non-null.");
+			return null;
+		}
+
+		final List<FlattenedFieldInfo> flattenedFieldInfoList = new ArrayList<FlattenedFieldInfo>();
+		final CommonIndexModel indexModel = index.getIndexModel();
+		final ByteBuffer input = ByteBuffer.wrap(geowaveRow.getValue());
+
+		// this in particular is a terrible hack to find raster data
+		if (decodePackage.getDataAdapter().getFieldIdForPosition(
+				indexModel,
+				indexModel.getDimensions().length).equals(
+				new ByteArrayId(
+						"image"))) {
+			final ByteArrayId fieldId = new ByteArrayId(
+					"image");
+			final FieldReader<?> reader = decodePackage.getDataAdapter().getReader(
+					fieldId);
+			final byte[] bytes = input.array();
+			final PersistentValue<Object> val = new PersistentValue<Object>(
+					fieldId,
+					reader.readField(bytes));
+			decodePackage.getExtendedData().addValue(
+					val);
+			decodePackage.getFieldInfo().add(
+					DataStoreUtils.getFieldInfo(
+							val,
+							bytes,
+							new byte[] {}));
+		}
+		else {
+			// Get the list of valid field positions from the row's field mask
+			List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(geowaveRow.getFieldMask());
+
+			// Collect the valid fields
+			int fieldIndex = 0;
+			while (input.hasRemaining()) {
+				final int fieldLength = input.getInt();
+
+				final byte[] fieldValueBytes = new byte[fieldLength];
+				input.get(fieldValueBytes);
+
+				if (fieldPositions.contains(fieldIndex)) {
+					flattenedFieldInfoList.add(new FlattenedFieldInfo(
+							fieldIndex,
+							fieldValueBytes));
+				}
+
+				fieldIndex++;
+			}
+
+			// below this likely needs some work
+			final Set<ByteArrayId> visitedFieldIds = new HashSet<>();
+			for (final FlattenedFieldInfo flatInfo : flattenedFieldInfoList) {
+				final ByteArrayId fieldId = decodePackage.getDataAdapter().getFieldIdForPosition(
+						indexModel,
+						flatInfo.getFieldPosition());
+				if (!visitedFieldIds.contains(fieldId)) {
+					visitedFieldIds.add(fieldId);
+					final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldId);
+					if (indexFieldReader != null) {
+						final CommonIndexValue indexValue = indexFieldReader.readField(flatInfo.getValue());
+						final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
+								fieldId,
+								indexValue);
+						decodePackage.getIndexData().addValue(
+								val);
+						decodePackage.getFieldInfo().add(
+								DataStoreUtils.getFieldInfo(
+										val,
+										flatInfo.getValue(),
+										new byte[] {}));
+					}
+					else {
+						final FieldReader<?> extFieldReader = decodePackage.getDataAdapter().getReader(
+								fieldId);
+						if (extFieldReader != null) {
+							final Object value = extFieldReader.readField(flatInfo.getValue());
+							final PersistentValue<Object> val = new PersistentValue<Object>(
+									fieldId,
+									value);
+							decodePackage.getExtendedData().addValue(
+									val);
+							decodePackage.getFieldInfo().add(
+									DataStoreUtils.getFieldInfo(
+											val,
+											flatInfo.getValue(),
+											new byte[] {}));
+						}
+						else {
+							LOGGER.error("field reader not found for data entry, the value may be ignored");
+							decodePackage.getUnknownData().addValue(
+									new PersistentValue<byte[]>(
+											fieldId,
+											flatInfo.getValue()));
+						}
+					}
+				}
+			}
+		}
+
+		return getDecodedRow(
+				geowaveRow,
+				decodePackage,
+				clientFilter,
+				scanCallback);
+	}
+
+	/**
+	 * Generic field reader - updates fieldInfoList from field input data
+	 */
+	protected void readFieldInfo(
+			final DecodePackage decodePackage,
+			final byte[] compositeFieldIdBytes,
+			final byte[] commonVisiblity,
+			final byte[] byteValue ) {
+		final ByteArrayId compositeFieldId = new ByteArrayId(
+				compositeFieldIdBytes);
+		final List<FlattenedFieldInfo> fieldInfos = DataStoreUtils.decomposeFlattenedFields(
+				compositeFieldId.getBytes(),
+				byteValue,
+				commonVisiblity,
+				-1).getFieldsRead();
+		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
+			final ByteArrayId fieldId = decodePackage.getDataAdapter().getFieldIdForPosition(
+					decodePackage.getIndex().getIndexModel(),
+					fieldInfo.getFieldPosition());
+			final FieldReader<? extends CommonIndexValue> indexFieldReader = decodePackage
+					.getIndex()
+					.getIndexModel()
+					.getReader(
+							fieldId);
+			if (indexFieldReader != null) {
+				final CommonIndexValue indexValue = indexFieldReader.readField(fieldInfo.getValue());
+				indexValue.setVisibility(commonVisiblity);
+				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
+						fieldId,
+						indexValue);
+				decodePackage.getIndexData().addValue(
+						val);
+				decodePackage.getFieldInfo().add(
+						DataStoreUtils.getFieldInfo(
+								val,
+								fieldInfo.getValue(),
+								commonVisiblity));
+			}
+			else {
+				final FieldReader<?> extFieldReader = decodePackage.getDataAdapter().getReader(
+						fieldId);
+				if (extFieldReader != null) {
+					final Object value = extFieldReader.readField(fieldInfo.getValue());
+					final PersistentValue<Object> val = new PersistentValue<Object>(
+							fieldId,
+							value);
+					decodePackage.getExtendedData().addValue(
+							val);
+					decodePackage.getFieldInfo().add(
+							DataStoreUtils.getFieldInfo(
+									val,
+									fieldInfo.getValue(),
+									commonVisiblity));
+				}
+				else {
+					LOGGER.error("field reader not found for data entry, the value may be ignored");
+					decodePackage.getUnknownData().addValue(
+							new PersistentValue<byte[]>(
+									fieldId,
+									fieldInfo.getValue()));
+				}
+			}
+		}
+	}
+
+	/**
+	 * build a persistence encoding object first, pass it through the client
+	 * filters and if its accepted, use the data adapter to decode the
+	 * persistence model into the native data type
+	 */
+	protected Object getDecodedRow(
+			GeoWaveRow geowaveRow,
+			DecodePackage decodePackage,
+			QueryFilter clientFilter,
+			ScanCallback scanCallback ) {
+		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
+				decodePackage.getDataAdapter().getAdapterId(),
+				new ByteArrayId(
+						geowaveRow.getDataId()),
+				new ByteArrayId(
+						geowaveRow.getIndex()),
+				geowaveRow.getNumberOfDuplicates(),
+				decodePackage.getIndexData(),
+				decodePackage.getUnknownData(),
+				decodePackage.getExtendedData());
+
+		if ((clientFilter == null) || clientFilter.accept(
+				decodePackage.getIndex().getIndexModel(),
+				encodedRow)) {
+			if (!decodePackage.isDecodeRow()) {
+				return encodedRow;
+			}
+
+			final Object decodedRow = decodePackage.getDataAdapter().decode(
+					encodedRow,
+					decodePackage.getIndex());
+
+			if (scanCallback != null) {
+				final DataStoreEntryInfo entryInfo = new DataStoreEntryInfo(
+						geowaveRow.getDataId(),
+						Arrays.asList(new ByteArrayId(
+								geowaveRow.getIndex())),
+						Arrays.asList(new ByteArrayId(
+								geowaveRow.getRowId())),
+						decodePackage.getFieldInfo());
+
+				scanCallback.entryScanned(
+						entryInfo,
+						geowaveRow,
+						decodedRow);
+			}
+
+			return decodedRow;
+		}
+
+		return null;
+	}
 }

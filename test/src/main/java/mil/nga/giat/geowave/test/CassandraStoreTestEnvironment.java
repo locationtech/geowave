@@ -316,6 +316,8 @@ public class CassandraStoreTestEnvironment extends
 		return singletonInstance;
 	}
 
+	private boolean running = false;
+
 	private CassandraStoreTestEnvironment() {}
 
 	@Override
@@ -332,25 +334,33 @@ public class CassandraStoreTestEnvironment extends
 
 	@Override
 	public void setup() {
-		if (TEMP_DIR.exists()) {
-			cleanTempDir();
-		}
-		TEMP_DIR.mkdirs();
-		if (CLUSTERED_MODE) {
-			new StartGeoWaveCluster().start();
-		}
-		else {
-			new StartGeoWaveStandalone().start();
+		if (!running) {
+			if (TEMP_DIR.exists()) {
+				cleanTempDir();
+			}
+			if (!TEMP_DIR.mkdirs()) {
+				LOGGER.warn("Unable to create temporary cassandra directory");
+			}
+			if (CLUSTERED_MODE) {
+				new StartGeoWaveCluster().start();
+			}
+			else {
+				new StartGeoWaveStandalone().start();
+			}
+			running = true;
 		}
 	}
 
 	@Override
 	public void tearDown() {
-		if (CLUSTERED_MODE) {
-			new StopGeoWaveCluster().stop();
-		}
-		else {
-			new StopGeoWaveStandalone().stop();
+		if (running) {
+			if (CLUSTERED_MODE) {
+				new StopGeoWaveCluster().stop();
+			}
+			else {
+				new StopGeoWaveStandalone().stop();
+			}
+			running = false;
 		}
 		try {
 			// it seems sometimes one of the nodes processes is still holding

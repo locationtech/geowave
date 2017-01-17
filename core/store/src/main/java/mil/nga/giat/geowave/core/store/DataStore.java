@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.core.store;
 
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -73,4 +76,22 @@ public interface DataStore
 			final QueryOptions queryOptions,
 			final Query query );
 
+	/**
+	 * Public access to AdapterStore
+	 */
+	public AdapterStore getAdapterStore();
+
+	/**
+	 * General-purpose row decoder
+	 */
+	public Object decodeRow(
+			final Object row,
+			final boolean wholeRowEncoding,
+			final QueryFilter clientFilter,
+			final DataAdapter dataAdapter,
+			final AdapterStore adapterStore,
+			final PrimaryIndex index,
+			final ScanCallback scanCallback,
+			final byte[] fieldSubsetBitmask,
+			final boolean decodeRow );
 }

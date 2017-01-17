@@ -7,6 +7,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -25,6 +26,7 @@ public class CassandraRowIdsQuery<T> extends
 	final Collection<ByteArrayId> rows;
 
 	public CassandraRowIdsQuery(
+			final DataStore dataStore,
 			final CassandraOperations cassandraOperations,
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
@@ -33,6 +35,7 @@ public class CassandraRowIdsQuery<T> extends
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(
+				dataStore,
 				cassandraOperations,
 				Collections.<ByteArrayId> singletonList(adapter.getAdapterId()),
 				index,
@@ -45,6 +48,7 @@ public class CassandraRowIdsQuery<T> extends
 				null,
 				null,
 				authorizations);
+
 		this.rows = rows;
 	}
 

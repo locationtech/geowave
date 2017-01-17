@@ -202,19 +202,19 @@ public class AccumuloStoreTestEnvironment extends
 			}
 		}
 		if (TEMP_DIR != null) {
-			// try {
-			// sleep because mini accumulo processes still have a
-			// hold on the log files and there is no hook to get
-			// notified when it is completely stopped
+			try {
+				// sleep because mini accumulo processes still have a
+				// hold on the log files and there is no hook to get
+				// notified when it is completely stopped
 
-			// Thread.sleep(2000);
-			// FileUtils.deleteDirectory(TEMP_DIR);
-			// }
-			// catch (final IOException | InterruptedException e) {
-			// LOGGER.warn(
-			// "Unable to delete mini Accumulo temporary directory",
-			// e);
-			// }
+				Thread.sleep(2000);
+				FileUtils.deleteDirectory(TEMP_DIR);
+			}
+			catch (final IOException | InterruptedException e) {
+				LOGGER.warn(
+						"Unable to delete mini Accumulo temporary directory",
+						e);
+			}
 		}
 	}
 

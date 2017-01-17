@@ -5,6 +5,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
@@ -20,12 +21,14 @@ public class HBaseRowPrefixQuery<T> extends
 	final ByteArrayId rowPrefix;
 
 	public HBaseRowPrefixQuery(
+			final DataStore dataStore,
 			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
 			final ScanCallback<T, ?> scanCallback,
 			final Integer limit,
 			final String[] authorizations ) {
 		super(
+				dataStore,
 				index,
 				authorizations,
 				scanCallback);

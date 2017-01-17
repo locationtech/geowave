@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-analytic-parent</artifactId>
@@ -6,6 +7,9 @@
 		<relativePath>../</relativePath>
 		<version>0.9.4-SNAPSHOT</version>
 	</parent>
+	<properties>
+		<findbugs.skip>true</findbugs.skip>
+	</properties>
 	<artifactId>geowave-analytic-spark</artifactId>
 	<name>GeoWave Spark Analytics</name>
 	<dependencies>
@@ -159,30 +163,16 @@
 	</repositories>
 
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>net.alchim31.maven</groupId>
-					<artifactId>scala-maven-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>scala-maven-plugin</artifactId>
+				<version>3.2.2</version>
 				<configuration>
 					<jvmArgs>
 						<jvmArg>-Xms1024m</jvmArg>
 						<jvmArg>-Xmx8G</jvmArg>
 						<jvmArg>-Duser.timezone=UTC</jvmArg>
-						<jvmArg>-XX:MaxPermSize=1024m</jvmArg>
 					</jvmArgs>
 					<args>
 						<arg>-nowarn</arg>
@@ -205,23 +195,6 @@
 						<phase>process-test-resources</phase>
 						<goals>
 							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<target>2.3.2</target>
-					<source>2.3.2</source>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
 						</goals>
 					</execution>
 				</executions>

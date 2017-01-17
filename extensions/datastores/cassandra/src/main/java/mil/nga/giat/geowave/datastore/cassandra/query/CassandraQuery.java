@@ -17,9 +17,12 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreQuery;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraDataStore;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
@@ -33,24 +36,21 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.RowRead;
  * Cassandra data store. The query is defined by the set of parameters passed
  * into the constructor.
  */
-abstract public class CassandraQuery
+abstract public class CassandraQuery extends
+		DataStoreQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			CassandraQuery.class);
-	protected final List<ByteArrayId> adapterIds;
-	protected final PrimaryIndex index;
-	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
-	protected final DifferingFieldVisibilityEntryCount visibilityCounts;
+	private final static Logger LOGGER = Logger.getLogger(CassandraQuery.class);
+
 	final CassandraOperations cassandraOperations;
 
-	private final String[] authorizations;
-
 	public CassandraQuery(
+			final DataStore dataStore,
 			final CassandraOperations cassandraOperations,
 			final PrimaryIndex index,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		this(
+				dataStore,
 				cassandraOperations,
 				null,
 				index,
@@ -60,28 +60,22 @@ abstract public class CassandraQuery
 	}
 
 	public CassandraQuery(
+			final DataStore dataStore,
 			final CassandraOperations cassandraOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
+		super(
+				dataStore,
+				adapterIds,
+				index,
+				fieldIdsAdapterPair,
+				visibilityCounts,
+				authorizations);
+
 		this.cassandraOperations = cassandraOperations;
-		this.adapterIds = adapterIds;
-		this.index = index;
-		this.fieldIdsAdapterPair = fieldIdsAdapterPair;
-		this.visibilityCounts = visibilityCounts;
-		this.authorizations = authorizations;
-	}
-
-	abstract protected List<ByteArrayRange> getRanges();
-
-	protected boolean isAggregation() {
-		return false;
-	}
-
-	protected boolean useWholeRowIterator() {
-		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
 	protected CloseableIterator<CassandraRow> getResults(
@@ -131,7 +125,7 @@ abstract public class CassandraQuery
 										IntStream
 												.range(
 														0,
-														CassandraIndexWriter.PARTITIONS)
+														CassandraDataStore.PARTITIONS)
 												.mapToObj(
 														i -> ByteBuffer.wrap(
 																new byte[] {
@@ -144,9 +138,5 @@ abstract public class CassandraQuery
 										Lists.transform(
 												adapterIds,
 												new ByteArrayIdToByteBuffer()))));
-	}
-
-	public String[] getAdditionalAuthorizations() {
-		return authorizations;
 	}
 }

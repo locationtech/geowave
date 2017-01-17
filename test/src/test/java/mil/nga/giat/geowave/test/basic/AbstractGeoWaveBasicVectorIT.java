@@ -16,11 +16,14 @@ import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -237,8 +240,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			final PrimaryIndex index,
 			final boolean multithreaded ) {
 		// In the multithreaded case, only test min/max and count. Stats will be
-		// ingested
-		// in a different order and will not match.
+		// ingested/ in a different order and will not match.
 		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
 				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
@@ -319,8 +321,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 							expectedStat.getStatisticsId());
 
 					// Only test RANGE and COUNT in the multithreaded case. None
-					// of the other
-					// statistics will match!
+					// of the other statistics will match!
 					if (multithreaded) {
 						if (!(expectedStat.getStatisticsId().getString().startsWith(
 								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat

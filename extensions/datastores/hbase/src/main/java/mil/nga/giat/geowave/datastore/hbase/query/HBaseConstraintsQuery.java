@@ -24,6 +24,7 @@ import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -49,6 +50,7 @@ public class HBaseConstraintsQuery extends
 	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
 
 	public HBaseConstraintsQuery(
+			final DataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
@@ -60,6 +62,7 @@ public class HBaseConstraintsQuery extends
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String[] authorizations ) {
 		this(
+				dataStore,
 				adapterIds,
 				index,
 				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
@@ -74,6 +77,7 @@ public class HBaseConstraintsQuery extends
 	}
 
 	public HBaseConstraintsQuery(
+			final DataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
@@ -87,6 +91,7 @@ public class HBaseConstraintsQuery extends
 			final String[] authorizations ) {
 
 		super(
+				dataStore,
 				adapterIds,
 				index,
 				scanCallback,

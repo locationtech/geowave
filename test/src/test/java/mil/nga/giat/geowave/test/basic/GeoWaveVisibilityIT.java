@@ -1,6 +1,3 @@
-//                            BasicAccumuloOperations ops = new BasicAccumuloOperations(zookeeper, accumuloInstance, accumuloUser, accumuloPassword, "");
-//                            ops.insureAuthorization(accumuloUser, "a","b","c");
-
 package mil.nga.giat.geowave.test.basic;
 
 import java.io.IOException;
@@ -46,7 +43,6 @@ public class GeoWaveVisibilityIT
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

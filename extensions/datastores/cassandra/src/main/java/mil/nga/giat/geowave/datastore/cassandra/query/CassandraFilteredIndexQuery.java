@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
@@ -39,6 +40,7 @@ public abstract class CassandraFilteredIndexQuery extends
 	protected final ScanCallback<?, CassandraRow> scanCallback;
 
 	public CassandraFilteredIndexQuery(
+			final DataStore dataStore,
 			final CassandraOperations cassandraOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -49,6 +51,7 @@ public abstract class CassandraFilteredIndexQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
+				dataStore,
 				cassandraOperations,
 				adapterIds,
 				index,
@@ -125,6 +128,7 @@ public abstract class CassandraFilteredIndexQuery extends
 		}
 		if (mergingAdapters.isEmpty()) {
 			return new NativeEntryIteratorWrapper<>(
+					dataStore,
 					adapterStore,
 					index,
 					results,
@@ -134,6 +138,7 @@ public abstract class CassandraFilteredIndexQuery extends
 		}
 		else {
 			return new MergingEntryIterator(
+					dataStore,
 					adapterStore,
 					index,
 					results,

@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraDataStore;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations.ByteArrayIdToByteBuffer;
@@ -48,33 +48,29 @@ public class BatchedRangeRead
 
 	public void addQueryRange(
 			final ByteArrayRange range ) {
-		ranges.add(
-				range);
+		ranges.add(range);
 	}
 
 	public CloseableIterator<CassandraRow> results() {
 		final List<BoundStatement> statements = new ArrayList<>();
-		for (int p = 0; p < CassandraIndexWriter.PARTITIONS; p++) {
+		for (int p = 0; p < CassandraDataStore.PARTITIONS; p++) {
 			for (final ByteArrayRange range : ranges) {
 				final BoundStatement boundRead = new BoundStatement(
 						preparedRead);
 				boundRead.set(
 						CassandraField.GW_IDX_KEY.getLowerBoundBindMarkerName(),
-						ByteBuffer.wrap(
-								range.getStart().getBytes()),
+						ByteBuffer.wrap(range.getStart().getBytes()),
 						ByteBuffer.class);
 
 				boundRead.set(
 						CassandraField.GW_IDX_KEY.getUpperBoundBindMarkerName(),
-						ByteBuffer.wrap(
-								range.getEndAsNextPrefix().getBytes()),
+						ByteBuffer.wrap(range.getEndAsNextPrefix().getBytes()),
 						ByteBuffer.class);
 				boundRead.set(
 						CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-						ByteBuffer.wrap(
-								new byte[] {
-									(byte) p
-								}),
+						ByteBuffer.wrap(new byte[] {
+							(byte) p
+						}),
 						ByteBuffer.class);
 
 				boundRead.set(
@@ -82,15 +78,11 @@ public class BatchedRangeRead
 						Lists.transform(
 								adapterIds,
 								new ByteArrayIdToByteBuffer()),
-						TypeCodec.list(
-								TypeCodec.blob()));
-				statements.add(
-						boundRead);
+						TypeCodec.list(TypeCodec.blob()));
+				statements.add(boundRead);
 			}
 
 		}
-		return operations.executeQueryAsync(
-				statements.toArray(
-						new BoundStatement[] {}));
+		return operations.executeQueryAsync(statements.toArray(new BoundStatement[] {}));
 	}
 }

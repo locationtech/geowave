@@ -25,12 +25,12 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.bigtable.operations.BigTableOperations;
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
 import mil.nga.giat.geowave.datastore.hbase.cli.CombineStatisticsCommand;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
@@ -88,7 +88,7 @@ public class DataStatisticsStoreIT
 			throws IOException {
 		final DataStatisticsStore store = dataStore.createDataStatisticsStore();
 
-		final DataStatistics<?> stat = new CountDataStatistics<String>(
+		final CountDataStatistics<String> stat = new CountDataStatistics<String>(
 				new ByteArrayId(
 						"blah"));
 		stat.entryIngested(
@@ -107,7 +107,7 @@ public class DataStatisticsStoreIT
 
 		final Scan scan = new Scan();
 		scan.setStartRow(stat.getStatisticsId().getBytes());
-		scan.setStopRow(HBaseUtils.getNextPrefix(stat.getStatisticsId().getBytes()));
+		scan.setStopRow(stat.getStatisticsId().getNextPrefix());
 		scan.addFamily(new ByteArrayId(
 				"STATS").getBytes());
 
@@ -117,7 +117,7 @@ public class DataStatisticsStoreIT
 		final Iterator<Result> res = rs.iterator();
 		final byte[] row = res.next().getRow();
 		Assert.assertEquals(
-				stat.getStatisticsId().getBytes().length + HBaseUtils.UNIQUE_ADDED_BYTES,
+				stat.getStatisticsId().getBytes().length + DataStoreUtils.UNIQUE_ADDED_BYTES,
 				row.length);
 
 		final byte[] bytes = new byte[stat.getStatisticsId().getBytes().length];
@@ -128,12 +128,21 @@ public class DataStatisticsStoreIT
 		Assert.assertEquals(
 				stat.getStatisticsId().getString(),
 				bad.getString());
-
+		final CountDataStatistics<String> storedStat = (CountDataStatistics<String>) store.getDataStatistics(
+				stat.getDataAdapterId(),
+				stat.getStatisticsId());
 		Assert.assertEquals(
-				stat,
-				store.getDataStatistics(
-						stat.getDataAdapterId(),
-						stat.getStatisticsId()));
+				stat.getCount(),
+				storedStat.getCount());
+		Assert.assertEquals(
+				stat.getDataAdapterId(),
+				storedStat.getDataAdapterId());
+		Assert.assertEquals(
+				stat.getStatisticsId(),
+				storedStat.getStatisticsId());
+		Assert.assertArrayEquals(
+				stat.getVisibility(),
+				storedStat.getVisibility());
 	}
 
 	private BasicHBaseOperations createOperations()
@@ -201,7 +210,7 @@ public class DataStatisticsStoreIT
 
 		final Scan scan = new Scan();
 		scan.setStartRow(statisticsId.getBytes());
-		scan.setStopRow(HBaseUtils.getNextPrefix(statisticsId.getBytes()));
+		scan.setStopRow(statisticsId.getNextPrefix());
 		scan.addFamily(new ByteArrayId(
 				"STATS").getBytes());
 
@@ -268,7 +277,7 @@ public class DataStatisticsStoreIT
 
 		final Scan scan = new Scan();
 		scan.setStartRow(statisticsId.getBytes());
-		scan.setStopRow(HBaseUtils.getNextPrefix(statisticsId.getBytes()));
+		scan.setStopRow(statisticsId.getNextPrefix());
 		scan.addColumn(
 				new ByteArrayId(
 						"STATS").getBytes(),
@@ -328,7 +337,7 @@ public class DataStatisticsStoreIT
 
 		final Scan scan = new Scan();
 		scan.setStartRow(statisticsId.getBytes());
-		scan.setStopRow(HBaseUtils.getNextPrefix(statisticsId.getBytes()));
+		scan.setStopRow(statisticsId.getNextPrefix());
 		scan.addColumn(
 				new ByteArrayId(
 						"STATS").getBytes(),

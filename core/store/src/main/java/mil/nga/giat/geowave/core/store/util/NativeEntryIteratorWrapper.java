@@ -4,9 +4,10 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
@@ -16,29 +17,16 @@ public class NativeEntryIteratorWrapper<T> extends
 	private final static Logger LOGGER = Logger.getLogger(NativeEntryIteratorWrapper.class);
 
 	public NativeEntryIteratorWrapper(
+			final DataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator scannerIt,
 			final QueryFilter clientFilter,
+			final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
 			final boolean decodePersistenceEncoding ) {
 		super(
 				false,
-				adapterStore,
-				index,
-				scannerIt,
-				clientFilter,
-				null);
-	}
-
-	public NativeEntryIteratorWrapper(
-			final AdapterStore adapterStore,
-			final PrimaryIndex index,
-			final Iterator scannerIt,
-			final QueryFilter clientFilter,
-			final ScanCallback<T, ? extends NativeGeoWaveRow> scanCallback,
-			final boolean decodePersistenceEncoding ) {
-		super(
-				false,
+				dataStore,
 				adapterStore,
 				index,
 				scannerIt,
@@ -52,19 +40,23 @@ public class NativeEntryIteratorWrapper<T> extends
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
 			final boolean wholeRowEncoding ) {
-		NativeGeoWaveRow entry = null;
+		GeoWaveRow entry = null;
 		try {
-			entry = (NativeGeoWaveRow) row;
+			entry = (GeoWaveRow) row;
 		}
 		catch (final ClassCastException e) {
 			LOGGER.error("Row is not a native geowave row entry.");
 			return null;
 		}
-		return DataStoreUtils.decodeRow(
+		return (T) dataStore.decodeRow(
 				entry,
-				adapterStore,
+				wholeRowEncoding,
 				clientFilter,
+				null,
+				adapterStore,
 				index,
-				(ScanCallback<T, NativeGeoWaveRow>) scanCallback);
+				scanCallback,
+				null,
+				false);
 	}
 }

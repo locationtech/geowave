@@ -19,14 +19,17 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class HBaseMergingEntryIterator<T> extends
 		HBaseEntryIteratorWrapper<T>
@@ -39,6 +42,7 @@ public class HBaseMergingEntryIterator<T> extends
 	private Result peekedValue;
 
 	public HBaseMergingEntryIterator(
+			final DataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<Result> scannerIt,
@@ -49,6 +53,7 @@ public class HBaseMergingEntryIterator<T> extends
 			final double[] maxResolutionSubsamplingPerDimension,
 			final boolean hasSkippingFilter ) {
 		super(
+				dataStore,
 				adapterStore,
 				index,
 				scannerIt,
@@ -76,7 +81,7 @@ public class HBaseMergingEntryIterator<T> extends
 		}
 		peekedValue = null;
 
-		final GeowaveRowId rowId = new GeowaveRowId(
+		final GeoWaveRow rowId = new GeoWaveRowImpl(
 				nextResult.getRow());
 		final ByteArrayId adapterId = new ByteArrayId(
 				rowId.getAdapterId());
@@ -91,10 +96,10 @@ public class HBaseMergingEntryIterator<T> extends
 			// Peek ahead to see if it needs to be merged with the next result
 			while (scannerIt.hasNext()) {
 				peekedValue = (Result) scannerIt.next();
-				final GeowaveRowId nextRowId = new GeowaveRowId(
+				final GeoWaveRow nextRowId = new GeoWaveRowImpl(
 						peekedValue.getRow());
 
-				if (HBaseUtils.rowIdsMatch(
+				if (DataStoreUtils.rowIdsMatch(
 						rowId,
 						nextRowId)) {
 
@@ -135,12 +140,12 @@ public class HBaseMergingEntryIterator<T> extends
 							final Result row1,
 							final Result row2 ) {
 
-						final ByteBuffer buf1 = ByteBuffer.wrap(new GeowaveRowId(
+						final ByteBuffer buf1 = ByteBuffer.wrap(new GeoWaveRowImpl(
 								row1.getRow()).getDataId());
-						final ByteBuffer buf2 = ByteBuffer.wrap(new GeowaveRowId(
+						final ByteBuffer buf2 = ByteBuffer.wrap(new GeoWaveRowImpl(
 								row2.getRow()).getDataId());
-						buf1.get();
-						buf2.get();
+						buf1.position(buf1.remaining() - DataStoreUtils.UNIQUE_ADDED_BYTES + 1);
+						buf2.position(buf2.remaining() - DataStoreUtils.UNIQUE_ADDED_BYTES + 1);
 
 						final long ts1 = buf1.getLong();
 						final long ts2 = buf2.getLong();
@@ -207,8 +212,14 @@ public class HBaseMergingEntryIterator<T> extends
 							CellUtil.cloneQualifier(cellToMerge)),
 					CellUtil.cloneValue(cellToMerge)));
 
+			GeoWaveRow tempRow = new GeoWaveRowImpl(
+					row.getRow());
 			mergedCells[cellNum] = CellUtil.createCell(
-					HBaseUtils.removeUniqueId(row.getRow()),
+					new GeoWaveRowImpl(
+							DataStoreUtils.removeUniqueId(tempRow.getDataId()),
+							tempRow.getAdapterId(),
+							tempRow.getIndex(),
+							tempRow.getNumberOfDuplicates()).getRowId(),
 					CellUtil.cloneFamily(cell),
 					CellUtil.cloneQualifier(cell),
 					cell.getTimestamp(),

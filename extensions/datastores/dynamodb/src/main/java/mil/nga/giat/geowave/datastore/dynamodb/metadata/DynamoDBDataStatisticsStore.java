@@ -1,7 +1,9 @@
 package mil.nga.giat.geowave.datastore.dynamodb.metadata;
 
+import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -172,5 +174,82 @@ public class DynamoDBDataStatisticsStore extends
 		deleteObjects(
 				adapterId,
 				authorizations);
+	}
+
+	/**
+	 * This function converts results and merges data statistic elements
+	 * together that have the same id.
+	 */
+	@Override
+	protected Iterator<DataStatistics<?>> getNativeIteratorWrapper(
+			final Iterator<Map<String, AttributeValue>> results ) {
+		return new StatisticsNativeIteratorWrapper(
+				results);
+	}
+
+	/**
+	 * A special version of NativeIteratorWrapper (defined in the parent) which
+	 * will combine records that have the same dataid & statsId
+	 */
+	private class StatisticsNativeIteratorWrapper implements
+			Iterator<DataStatistics<?>>
+	{
+		final private Iterator<Map<String, AttributeValue>> it;
+		private DataStatistics<?> nextVal = null;
+
+		public StatisticsNativeIteratorWrapper(
+				final Iterator<Map<String, AttributeValue>> resultIterator ) {
+			it = resultIterator;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return (nextVal != null) || it.hasNext();
+		}
+
+		@Override
+		public DataStatistics<?> next() {
+			DataStatistics<?> currentStatistics = nextVal;
+			nextVal = null;
+			while (it.hasNext()) {
+				final Map<String, AttributeValue> row = it.next();
+
+				// This entryToValue function has the side effect of adding the
+				// object to the cache.
+				// We need to make sure to add the merged version of the stat at
+				// the end of this
+				// function, before it is returned.
+				final DataStatistics<?> statEntry = entryToValue(row);
+
+				if (currentStatistics == null) {
+					currentStatistics = statEntry;
+				}
+				else {
+					if (statEntry.getStatisticsId().equals(
+							currentStatistics.getStatisticsId()) && statEntry.getDataAdapterId().equals(
+							currentStatistics.getDataAdapterId())) {
+						currentStatistics.merge(statEntry);
+					}
+					else {
+						nextVal = statEntry;
+						break;
+					}
+				}
+			}
+
+			// Add this entry to cache (see comment above)
+			addObjectToCache(
+					getPrimaryId(currentStatistics),
+					getSecondaryId(currentStatistics),
+					currentStatistics);
+			return currentStatistics;
+		}
+
+		@Override
+		public void remove() {
+			throw new NotImplementedException(
+					"Transforming iterator cannot use remove()");
+		}
+
 	}
 }

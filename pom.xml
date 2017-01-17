@@ -38,6 +38,8 @@
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
 		<accumulo.version>1.7.2</accumulo.version>
+		<accumulo.api>1.7</accumulo.api>
+		<skipITs>true</skipITs>
 		<bigtable.version>0.9.4</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
 		<hbase.version>1.2.3</hbase.version>
@@ -223,6 +225,24 @@
 				<groupId>com.google.cloud.bigtable</groupId>
 				<artifactId>bigtable-hbase-1.2</artifactId>
 				<version>${bigtable.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>2.6.6</version>
+			</dependency>			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>2.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.dataformat</groupId>
+				<artifactId>jackson-dataformat-cbor</artifactId>
+				<version>2.6.6</version>
+			</dependency>			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.6.6</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -668,7 +688,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.6.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -812,12 +832,9 @@
 				that has push access (credentials are setup and correct). Make sure you have 
 				the branch active in git you want to tag. If something goes wrong pushing, 
 				you will most likely have outstanding commits in your local repo you will 
-				have to revert/remove. 
-				1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
-				-Dfindbugs.skip" 
-				2. Inspect and ensure the correct pom.xml files will be 
-				modified 
-				3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
+				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
+				-Dfindbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
+				modified 3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
 				4. mvn release:clean -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -1002,6 +1019,16 @@
 					<layout>default</layout>
 				</repository>
 			</repositories>
+		</profile>
+		<profile>
+			<id>compatibility</id>
+			<properties>
+				<accumulo.version>1.6.5</accumulo.version>
+				<accumulo.api>1.6</accumulo.api>
+				<hadoop.version>2.6.4</hadoop.version>
+				<geotools.version>15.2</geotools.version>
+				<geoserver.version>2.9.2</geoserver.version>
+			</properties>
 		</profile>
 		<profile>
 			<id>doclint-java8-disable</id>

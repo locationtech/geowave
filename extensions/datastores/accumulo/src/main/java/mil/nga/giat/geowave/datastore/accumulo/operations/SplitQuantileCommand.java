@@ -42,6 +42,7 @@ public class SplitQuantileCommand extends
 					final long number ) {
 				try {
 					AccumuloUtils.setSplitsByQuantile(
+							inputStoreOptions.createDataStore(),
 							connector,
 							namespace,
 							index,

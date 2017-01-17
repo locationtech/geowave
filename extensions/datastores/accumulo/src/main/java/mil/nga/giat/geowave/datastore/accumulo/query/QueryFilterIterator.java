@@ -45,7 +45,7 @@ public class QueryFilterIterator extends
 	private DistributableQueryFilter filter;
 	protected CommonIndexModel model;
 	protected Text currentRow = new Text();
-	private final List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
+	private List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
 
 	static {
 		initialize();
@@ -217,11 +217,11 @@ public class QueryFilterIterator extends
 				colQual.getBytes(),
 				valueBytes,
 				key.getColumnVisibilityData().getBackingArray(),
-				model.getDimensions().length - 1);
+				commonIndexFieldIds.size() - 1);
 		final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
 		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
 			final int ordinal = fieldInfo.getFieldPosition();
-			if (ordinal < model.getDimensions().length) {
+			if (ordinal < commonIndexFieldIds.size()) {
 				final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);
 				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
 				if (reader != null) {
@@ -276,9 +276,7 @@ public class QueryFilterIterator extends
 				model = PersistenceUtils.fromBinary(
 						modelBytes,
 						CommonIndexModel.class);
-				for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
-					commonIndexFieldIds.add(numericDimension.getFieldId());
-				}
+				commonIndexFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
 			}
 		}
 		catch (final Exception e) {

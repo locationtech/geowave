@@ -21,6 +21,7 @@ import org.opengis.referencing.operation.MathTransform;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
@@ -49,11 +50,11 @@ import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
-import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
@@ -664,7 +665,7 @@ public class FeatureDataAdapter extends
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
-	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = HashBiMap.create();
+	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = Maps.synchronizedBiMap(HashBiMap.create());
 	private transient BiMap<Integer, ByteArrayId> positionToFieldMap = null;
 	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new HashMap<>();
 
@@ -682,7 +683,7 @@ public class FeatureDataAdapter extends
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
-		Integer position = fieldToPositionMap.get(fieldId);
+		final Integer position = fieldToPositionMap.get(fieldId);
 		if (position == null) {
 			return -1;
 		}
@@ -716,7 +717,7 @@ public class FeatureDataAdapter extends
 						currFieldId,
 						i);
 			}
-			positionToFieldMap = fieldToPositionMap.inverse();
+			positionToFieldMap = Maps.synchronizedBiMap(fieldToPositionMap.inverse());
 		}
 		catch (final Exception e) {
 			LOGGER.error(
@@ -731,12 +732,7 @@ public class FeatureDataAdapter extends
 		if (retVal != null) {
 			return retVal;
 		}
-		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();
-		for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
-			if (!dimensionFieldIds.contains(dimension.getFieldId())) {
-				dimensionFieldIds.add(dimension.getFieldId());
-			}
-		}
+		final List<ByteArrayId> dimensionFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
 		modelToDimensionsMap.put(
 				model.getId(),
 				dimensionFieldIds);

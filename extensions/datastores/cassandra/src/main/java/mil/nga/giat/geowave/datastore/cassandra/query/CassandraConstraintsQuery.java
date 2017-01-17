@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -39,14 +40,14 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 public class CassandraConstraintsQuery extends
 		CassandraFilteredIndexQuery
 {
-	private static final Logger LOGGER = Logger.getLogger(
-			CassandraConstraintsQuery.class);
+	private static final Logger LOGGER = Logger.getLogger(CassandraConstraintsQuery.class);
 	// TODO: determine good values for max range decomposition in cassandra
 	private static final int MAX_RANGE_DECOMPOSITION = 10;
 	protected final ConstraintsQuery base;
 	private boolean queryFiltersEnabled;
 
 	public CassandraConstraintsQuery(
+			final DataStore dataStore,
 			final CassandraOperations operations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -60,13 +61,12 @@ public class CassandraConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
+				dataStore,
 				operations,
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(
-						index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(
-						index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
+				query != null ? query.createFilters(index.getIndexModel()) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
@@ -78,6 +78,7 @@ public class CassandraConstraintsQuery extends
 	}
 
 	public CassandraConstraintsQuery(
+			final DataStore dataStore,
 			final CassandraOperations operations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -92,6 +93,7 @@ public class CassandraConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
+				dataStore,
 				operations,
 				adapterIds,
 				index,
@@ -162,12 +164,10 @@ public class CassandraConstraintsQuery extends
 						if (input != null) {
 							// TODO this is a hack for now
 							if (aggregationFunction instanceof CommonIndexAggregation) {
-								aggregationFunction.aggregate(
-										null);
+								aggregationFunction.aggregate(null);
 							}
 							else {
-								aggregationFunction.aggregate(
-										input);
+								aggregationFunction.aggregate(input);
 							}
 						}
 					}
@@ -180,8 +180,7 @@ public class CassandraConstraintsQuery extends
 								e);
 					}
 					return new Wrapper(
-							Iterators.singletonIterator(
-									aggregationFunction.getResult()));
+							Iterators.singletonIterator(aggregationFunction.getResult()));
 				}
 			}
 		}
@@ -200,18 +199,15 @@ public class CassandraConstraintsQuery extends
 						0,
 						new CoordinateRangeQueryFilter(
 								index.getIndexStrategy(),
-								coords.toArray(
-										new MultiDimensionalCoordinateRangesArray[] {})));
+								coords.toArray(new MultiDimensionalCoordinateRangesArray[] {})));
 			}
 		}
 		else {
 			// Without custom filters, we need all the filters on the client
 			// side
 			for (final QueryFilter distributable : base.distributableFilters) {
-				if (!filters.contains(
-						distributable)) {
-					filters.add(
-							distributable);
+				if (!filters.contains(distributable)) {
+					filters.add(distributable);
 				}
 			}
 		}

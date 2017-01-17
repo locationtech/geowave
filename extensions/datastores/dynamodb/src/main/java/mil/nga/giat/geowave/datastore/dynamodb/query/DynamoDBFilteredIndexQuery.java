@@ -11,12 +11,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
@@ -31,6 +31,7 @@ import mil.nga.giat.geowave.core.store.util.MergingEntryIterator;
 import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.GuavaRowTranslationHelper;
 
 public abstract class DynamoDBFilteredIndexQuery extends
 		DynamoDBQuery implements
@@ -41,6 +42,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 	protected final ScanCallback<?, DynamoDBRow> scanCallback;
 
 	public DynamoDBFilteredIndexQuery(
+			final DataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -51,6 +53,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
+				dataStore,
 				dynamodbOperations,
 				adapterIds,
 				index,
@@ -85,7 +88,9 @@ public abstract class DynamoDBFilteredIndexQuery extends
 			exists = dynamodbOperations.tableExists(StringUtils.stringFromBinary(index.getId().getBytes()));
 		}
 		catch (final IOException e) {
-			LOGGER.error("e");
+			LOGGER.error(
+					"table doesn't exist",
+					e);
 		}
 		if (!exists) {
 			LOGGER.warn("Table does not exist " + StringUtils.stringFromBinary(index.getId().getBytes()));
@@ -102,7 +107,9 @@ public abstract class DynamoDBFilteredIndexQuery extends
 		}
 		Iterator it = initIterator(
 				adapterStore,
-				results);
+				Iterators.transform(
+						results,
+						new GuavaRowTranslationHelper()));
 		if ((limit != null) && (limit > 0)) {
 			it = Iterators.limit(
 					it,
@@ -114,7 +121,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
-			final Iterator<Map<String, AttributeValue>> results ) {
+			final Iterator<DynamoDBRow> results ) {
 		final List<QueryFilter> filters = getAllFiltersList();
 		final QueryFilter queryFilter = filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
 				: new FilterList<QueryFilter>(
@@ -132,6 +139,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 		}
 		if (mergingAdapters.isEmpty()) {
 			return new NativeEntryIteratorWrapper<>(
+					dataStore,
 					adapterStore,
 					index,
 					results,
@@ -141,6 +149,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 		}
 		else {
 			return new MergingEntryIterator(
+					dataStore,
 					adapterStore,
 					index,
 					results,
@@ -156,17 +165,5 @@ public abstract class DynamoDBFilteredIndexQuery extends
 		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
 		filters.addAll(clientFilters);
 		return filters;
-	}
-
-	public static class WrapAsNativeRow implements
-			Function<Map<String, AttributeValue>, DynamoDBRow>
-	{
-		@Override
-		public DynamoDBRow apply(
-				final Map<String, AttributeValue> input ) {
-			return new DynamoDBRow(
-					input);
-		}
-
 	}
 }

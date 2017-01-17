@@ -30,8 +30,7 @@ public class KeyspaceStatePool
 		final Pair<String, String> key = ImmutablePair.of(
 				contactPoints,
 				keyspace);
-		KeyspaceState state = keyspaceStateCache.get(
-				key);
+		KeyspaceState state = keyspaceStateCache.get(key);
 		if (state == null) {
 			state = new KeyspaceState();
 			keyspaceStateCache.put(

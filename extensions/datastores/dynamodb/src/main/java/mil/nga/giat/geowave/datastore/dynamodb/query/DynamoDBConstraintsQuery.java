@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -29,6 +30,7 @@ import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBIndexWriter;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 
@@ -40,11 +42,12 @@ public class DynamoDBConstraintsQuery extends
 		DynamoDBFilteredIndexQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(DynamoDBConstraintsQuery.class);
-	private static final int MAX_RANGE_DECOMPOSITION = -1;
+	private static final int MAX_RANGE_DECOMPOSITION = 1;
 	protected final ConstraintsQuery base;
 	private boolean queryFiltersEnabled;
 
 	public DynamoDBConstraintsQuery(
+			final DataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -58,6 +61,7 @@ public class DynamoDBConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
+				dataStore,
 				dynamodbOperations,
 				adapterIds,
 				index,
@@ -74,6 +78,7 @@ public class DynamoDBConstraintsQuery extends
 	}
 
 	public DynamoDBConstraintsQuery(
+			final DataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -89,6 +94,7 @@ public class DynamoDBConstraintsQuery extends
 			final String[] authorizations ) {
 
 		super(
+				dataStore,
 				dynamodbOperations,
 				adapterIds,
 				index,

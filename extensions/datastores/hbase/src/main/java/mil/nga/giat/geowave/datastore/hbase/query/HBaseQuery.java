@@ -2,27 +2,26 @@ package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreQuery;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-abstract public class HBaseQuery
+abstract public class HBaseQuery extends
+		DataStoreQuery
 {
-	protected List<ByteArrayId> adapterIds;
-	protected final PrimaryIndex index;
-	protected Pair<List<String>, DataAdapter<?>> fieldIds;
 	protected HBaseOptions options = null;
 
-	protected final String[] authorizations;
-
 	public HBaseQuery(
+			final DataStore dataStore,
 			final PrimaryIndex index,
 			final String... authorizations ) {
 		this(
+				dataStore,
 				null,
 				index,
 				null,
@@ -30,21 +29,19 @@ abstract public class HBaseQuery
 	}
 
 	public HBaseQuery(
+			final DataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String... authorizations ) {
-		this.adapterIds = adapterIds;
-		this.index = index;
-		this.fieldIds = fieldIds;
-		this.authorizations = authorizations;
+		super(
+				dataStore,
+				adapterIds,
+				index,
+				fieldIds,
+				null,
+				authorizations);
 	}
-
-	public String[] getAdditionalAuthorizations() {
-		return authorizations;
-	}
-
-	abstract protected List<ByteArrayRange> getRanges();
 
 	public void setOptions(
 			HBaseOptions options ) {
