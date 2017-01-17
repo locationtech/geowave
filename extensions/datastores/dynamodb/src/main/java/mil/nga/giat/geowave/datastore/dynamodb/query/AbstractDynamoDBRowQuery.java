@@ -11,6 +11,7 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -30,16 +31,19 @@ abstract public class AbstractDynamoDBRowQuery<T> extends
 	protected final ScanCallback<T, DynamoDBRow> scanCallback;
 
 	public AbstractDynamoDBRowQuery(
+			final BaseDataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final PrimaryIndex index,
 			final String[] authorizations,
 			final ScanCallback<T, DynamoDBRow> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
+				dataStore,
 				dynamodbOperations,
 				index,
 				visibilityCounts,
 				authorizations);
+
 		this.scanCallback = scanCallback;
 	}
 
@@ -51,6 +55,7 @@ abstract public class AbstractDynamoDBRowQuery<T> extends
 				getScannerLimit());
 		return new CloseableIterator.Wrapper<T>(
 				new NativeEntryIteratorWrapper<>(
+						dataStore,
 						adapterStore,
 						index,
 						Iterators.transform(

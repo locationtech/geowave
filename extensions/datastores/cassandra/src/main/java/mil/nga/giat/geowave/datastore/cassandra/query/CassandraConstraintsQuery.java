@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -46,6 +47,7 @@ public class CassandraConstraintsQuery extends
 	private boolean queryFiltersEnabled;
 
 	public CassandraConstraintsQuery(
+			final BaseDataStore dataStore,
 			final CassandraOperations operations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -59,6 +61,7 @@ public class CassandraConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
+				dataStore,
 				operations,
 				adapterIds,
 				index,
@@ -75,6 +78,7 @@ public class CassandraConstraintsQuery extends
 	}
 
 	public CassandraConstraintsQuery(
+			final BaseDataStore dataStore,
 			final CassandraOperations operations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -89,6 +93,7 @@ public class CassandraConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
+				dataStore,
 				operations,
 				adapterIds,
 				index,

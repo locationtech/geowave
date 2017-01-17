@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.Arr
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
 
@@ -94,10 +94,10 @@ public class HBaseNumericIndexStrategyFilter extends
 	private boolean inBounds(
 			final Cell cell ) {
 		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(new ByteArrayId(
-				new GeowaveRowId(
+				new GeoWaveRowImpl(
 						cell.getRowArray(),
 						cell.getRowOffset(),
-						cell.getRowLength()).getInsertionId()));
+						cell.getRowLength()).getIndex()));
 		return rangeCache.inBounds(coordinates);
 	}
 }

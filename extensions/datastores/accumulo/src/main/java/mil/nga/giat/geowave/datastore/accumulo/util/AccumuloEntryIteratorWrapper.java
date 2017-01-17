@@ -4,12 +4,14 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.KeyValue;
 import org.apache.accumulo.core.data.Value;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper;
@@ -30,28 +32,15 @@ public class AccumuloEntryIteratorWrapper<T> extends
 
 	public AccumuloEntryIteratorWrapper(
 			final boolean wholeRowEncoding,
-			final AdapterStore adapterStore,
-			final PrimaryIndex index,
-			final Iterator scannerIt,
-			final QueryFilter clientFilter ) {
-		super(
-				wholeRowEncoding,
-				adapterStore,
-				index,
-				scannerIt,
-				clientFilter,
-				null);
-	}
-
-	public AccumuloEntryIteratorWrapper(
-			final boolean wholeRowEncoding,
+			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator scannerIt,
 			final QueryFilter clientFilter,
-			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
+			final ScanCallback<T, GeoWaveRow> scanCallback ) {
 		super(
 				wholeRowEncoding,
+				dataStore,
 				adapterStore,
 				index,
 				scannerIt,
@@ -75,14 +64,21 @@ public class AccumuloEntryIteratorWrapper<T> extends
 					e);
 			return null;
 		}
-		return AccumuloUtils.decodeRow(
+
+		KeyValue inputRow = new KeyValue(
 				entry.getKey(),
-				entry.getValue(),
+				entry.getValue());
+
+		return (T) dataStore.decodeRow(
+				inputRow,
 				wholeRowEncoding,
-				adapterStore,
 				clientFilter,
+				null,
+				adapterStore,
 				index,
-				(ScanCallback<T, NativeGeoWaveRow>) scanCallback);
+				scanCallback,
+				null, // no field bitmask
+				true);
 	}
 
 }

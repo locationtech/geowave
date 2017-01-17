@@ -8,6 +8,7 @@ import java.util.List;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -20,6 +21,7 @@ public class HBaseRowIdsQuery<T> extends
 	final Collection<ByteArrayId> rows;
 
 	public HBaseRowIdsQuery(
+			final BaseDataStore dataStore,
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final Collection<ByteArrayId> rows,
@@ -27,6 +29,7 @@ public class HBaseRowIdsQuery<T> extends
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(
+				dataStore,
 				Collections.<ByteArrayId> emptyList(),
 				index,
 				(Query) null,
