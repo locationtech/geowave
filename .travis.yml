@@ -44,8 +44,6 @@ before_install:
   - chmod +x .utility/publish-docs.sh
   - chmod +x .utility/maven-coveralls-hack.sh
   - .utility/maven-coveralls-hack.sh
-  # Bigtable emulator needs this env var set
-  # - export BIGTABLE_EMULATOR_HOST=localhost:8128
 after_success:
   - .utility/publish-docs.sh
   - cd test; mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
