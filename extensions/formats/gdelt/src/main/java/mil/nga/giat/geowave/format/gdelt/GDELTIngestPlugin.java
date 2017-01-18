@@ -58,13 +58,18 @@ public class GDELTIngestPlugin extends
 
 	private boolean includeSupplementalFields;
 
-	private DataSchemaOptionProvider dataSchemaOptionProvider;
-
 	public GDELTIngestPlugin() {
 
 		// default to reduced data format
 		setIncludeSupplementalFields(false);
 
+		eventKey = new ByteArrayId(
+				StringUtils.stringToBinary(GDELTUtils.GDELT_EVENT_FEATURE));
+	}
+
+	public GDELTIngestPlugin(
+			DataSchemaOptionProvider dataSchemaOptionProvider ) {
+		setIncludeSupplementalFields(dataSchemaOptionProvider.includeSupplementalFields());
 		eventKey = new ByteArrayId(
 				StringUtils.stringToBinary(GDELTUtils.GDELT_EVENT_FEATURE));
 	}
@@ -76,12 +81,6 @@ public class GDELTIngestPlugin extends
 		gdeltEventType = GDELTUtils.createGDELTEventDataType(includeSupplementalFields);
 		gdeltEventBuilder = new SimpleFeatureBuilder(
 				gdeltEventType);
-	}
-
-	public void setDataSchemaOptionProvider(
-			final DataSchemaOptionProvider dataSchemaOptionProvider ) {
-		this.dataSchemaOptionProvider = dataSchemaOptionProvider;
-		setIncludeSupplementalFields(dataSchemaOptionProvider.includeSupplementalFields());
 	}
 
 	@Override
