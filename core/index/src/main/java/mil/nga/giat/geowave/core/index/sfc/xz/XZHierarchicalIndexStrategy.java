@@ -133,6 +133,7 @@ public class XZHierarchicalIndexStrategy implements
 
 		List<ByteArrayRange> queryRanges = rasterStrategy.getQueryRanges(
 				indexedRange,
+				maxEstimatedRangeDecomposition,
 				tieredHints);
 
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
