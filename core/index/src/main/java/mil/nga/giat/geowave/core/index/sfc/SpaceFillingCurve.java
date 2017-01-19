@@ -126,11 +126,4 @@ public interface SpaceFillingCurve extends
 	 * @return the range of a single insertion ID for each dimension
 	 */
 	public double[] getInsertionIdRangePerDimension();
-
-	/**
-	 * Get the total number of bits of precision for this space filling curve
-	 *
-	 * @return the total bits of precision
-	 */
-	public int getBitsOfPrecision();
 }

@@ -251,9 +251,19 @@ public class TieredSFCIndexStrategyTest
 	@Test
 	public void testOneEstimatedDuplicateInsertion()
 			throws Exception {
-		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex()
-				.getIndexStrategy();
+
+		final NumericIndexStrategy strategy = TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
+				new NumericDimensionDefinition[] {
+					new LongitudeDefinition(),
+					new LatitudeDefinition(
+							true)
+				},
+				new int[] {
+					31,
+					31
+				},
+				SFCType.HILBERT);
+
 		for (final int element : DEFINED_BITS_OF_PRECISION) {
 			final NumericData[] dataPerDimension = new NumericData[2];
 			final double precision = 360 / Math.pow(

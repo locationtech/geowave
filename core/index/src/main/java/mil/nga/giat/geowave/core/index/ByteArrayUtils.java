@@ -130,6 +130,35 @@ public class ByteArrayUtils
 	}
 
 	/**
+	 * Converts a long to a byte array
+	 * 
+	 * @param l
+	 *            the long
+	 * @return the byte array representing that long
+	 */
+	public static byte[] longToByteArray(
+			final long l ) {
+		ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+		bb.putLong(l);
+		return bb.array();
+	}
+
+	/**
+	 * Converts a byte array to a long
+	 * 
+	 * @param bytes
+	 *            the byte array the long
+	 * @return the long represented by the byte array
+	 */
+	public static long byteArrayToLong(
+			byte[] bytes ) {
+		ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+		bb.put(bytes);
+		bb.flip();
+		return bb.getLong();
+	}
+
+	/**
 	 * Combines two variable length byte arrays into one large byte array and
 	 * appends the length of each individual byte array in sequential order at
 	 * the end of the combined byte array.
