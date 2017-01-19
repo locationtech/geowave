@@ -42,15 +42,15 @@ public class ServicesTestUtils
 								GeoWaveTestStore.class));
 				storeOptions.save(
 						storeProps,
-						DataStorePluginOptions.getStoreNamespace(storeOptions.getType()));
+						DataStorePluginOptions.getStoreNamespace(type.name()));
 				try {
 					storeProps.store(
 							writer,
-							"Data Store Options for '" + storeOptions.getType() + "'");
+							"Data Store Options for '" + type.name() + "'");
 				}
 				catch (final IOException e) {
 					LOGGER.warn(
-							"Unable to write store options for '" + storeOptions.getType() + "'",
+							"Unable to write store options for '" + type.name() + "'",
 							e);
 				}
 			}

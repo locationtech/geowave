@@ -4,7 +4,7 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../../</relativePath>
-		<version>0.9.3-SNAPSHOT</version>
+		<version>0.9.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-service-4676</artifactId>
 	<packaging>war</packaging>
@@ -100,10 +100,6 @@
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
-				<exclusion>
-					<artifactId>javax.servlet</artifactId>
-					<groupId />
-				</exclusion>
 				<exclusion>
 					<artifactId>servlet-api</artifactId>
 					<groupId>org.mortbay.jetty</groupId>

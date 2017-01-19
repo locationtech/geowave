@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.3-SNAPSHOT</version>
+	<version>0.9.4-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -37,6 +36,8 @@
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
 		<accumulo.version>1.7.2</accumulo.version>
+		<accumulo.api>1.7</accumulo.api>
+		<bigtable.version>0.9.4</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
 		<hbase.version>1.2.3</hbase.version>
 		<hadoop.version>2.7.3</hadoop.version>
@@ -55,7 +56,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
-		<tools.finalName>${project.artifactId}-${project.version}-tools</tools.finalName>
 		<container.extension />
 		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
 			you have previously generated) -->
@@ -185,6 +185,11 @@
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-minicluster</artifactId>
 				<version>${accumulo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud.bigtable</groupId>
+				<artifactId>bigtable-hbase-1.2</artifactId>
+				<version>${bigtable.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -776,9 +781,9 @@
 			   Make sure you have the branch active in git you want to tag.
 			   If something goes wrong pushing, you will most likely have outstanding
 			   commits in your local repo you will have to revert/remove.
-			1. mvn release:prepare -DdryRun=true 
+			1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests -Dfindbugs.skip"
 			2. Inspect and ensure the correct pom.xml files will be modified
-			3. mvn release:prepare
+			3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip"
 			4. mvn release:clean
 			-->
 			<plugin>
@@ -796,6 +801,7 @@
 		<module>analytics</module>
 		<module>core</module>
 		<module>deploy</module>
+		<module>docs</module>
 		<module>examples</module>
 		<module>extensions</module>
 		<module>services</module>
@@ -885,20 +891,13 @@
 				<formatter.skip>true</formatter.skip>
 				<findbugs.skip>true</findbugs.skip>
 			</properties>
-		</profile>	
-		<profile>
-			<!-- Generate docs with: mvn -P docs -pl docs install -->
-			<id>docs</id>
-			<modules>
-				<module>docs</module>
-			</modules>
 		</profile>
 		<profile>
 			<id>cloudera</id>
 			<properties>
-				<accumulo.version>1.6.0-cdh5.1.4</accumulo.version>
-				<hbase.version>1.2.0-cdh5.7.1</hbase.version>
-				<hadoop.version>2.6.0-cdh5.4.0</hadoop.version>
+				<accumulo.version>1.7.2-cdh5.5.0</accumulo.version>
+				<hbase.version>1.2.0-cdh5.9.0</hbase.version>
+				<hadoop.version>2.6.0-cdh5.9.0</hadoop.version>
 			</properties>
 			<repositories>
 				<repository>
@@ -932,7 +931,6 @@
 		<profile>
 			<id>hortonworks</id>
 			<properties>
-				<!-- <hbase.version>1.1.1.2.3.0.0-2557</hbase.version> <hadoop.version>2.6.0.2.2.0.0-2041</hadoop.version> -->
 				<accumulo.version>1.7.0.2.4.2.0-258</accumulo.version>
 				<hbase.version>1.1.2.2.4.2.0-258</hbase.version>
 				<hadoop.version>2.7.1.2.4.2.0-258</hadoop.version>

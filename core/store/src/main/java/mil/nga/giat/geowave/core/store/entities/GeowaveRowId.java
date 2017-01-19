@@ -33,9 +33,19 @@ public class GeowaveRowId
 	public GeowaveRowId(
 			final byte[] rowId,
 			int length ) {
+		this(
+				rowId,
+				0,
+				length);
+	}
+
+	public GeowaveRowId(
+			final byte[] rowId,
+			int offset,
+			int length ) {
 		final ByteBuffer metadataBuf = ByteBuffer.wrap(
 				rowId,
-				length - 12,
+				length + offset - 12,
 				12);
 		final int adapterIdLength = metadataBuf.getInt();
 		final int dataIdLength = metadataBuf.getInt();
@@ -43,11 +53,8 @@ public class GeowaveRowId
 
 		final ByteBuffer buf = ByteBuffer.wrap(
 				rowId,
-				0,
+				offset,
 				length - 12);
-		if (rowId.length - 12 - adapterIdLength - dataIdLength < 0) {
-			System.err.println("crap");
-		}
 		final byte[] insertionId = new byte[length - 12 - adapterIdLength - dataIdLength];
 		final byte[] adapterId = new byte[adapterIdLength];
 		final byte[] dataId = new byte[dataIdLength];

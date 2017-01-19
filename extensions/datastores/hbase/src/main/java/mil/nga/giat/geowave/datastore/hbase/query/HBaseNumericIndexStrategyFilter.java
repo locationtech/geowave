@@ -96,6 +96,7 @@ public class HBaseNumericIndexStrategyFilter extends
 		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(new ByteArrayId(
 				new GeowaveRowId(
 						cell.getRowArray(),
+						cell.getRowOffset(),
 						cell.getRowLength()).getInsertionId()));
 		return rangeCache.inBounds(coordinates);
 	}

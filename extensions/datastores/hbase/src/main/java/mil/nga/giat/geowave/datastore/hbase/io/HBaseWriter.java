@@ -19,6 +19,7 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.BufferedMutator.ExceptionListener;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -53,12 +54,14 @@ public class HBaseWriter implements
 				"hbase.online.schema.update.enable",
 				false);
 
-		LOGGER.debug("Schema Update Enabled = " + schemaUpdateEnabled);
+		if (LOGGER.getLevel() == Level.DEBUG) {
+			LOGGER.debug("Schema Update Enabled = " + schemaUpdateEnabled);
 
-		final String check = admin.getConfiguration().get(
-				"hbase.online.schema.update.enable");
-		if (check == null) {
-			LOGGER.warn("'hbase.online.schema.update.enable' property should be true for best performance");
+			final String check = admin.getConfiguration().get(
+					"hbase.online.schema.update.enable");
+			if (check == null) {
+				LOGGER.debug("'hbase.online.schema.update.enable' property should be true for best performance");
+			}
 		}
 	}
 
@@ -77,6 +80,10 @@ public class HBaseWriter implements
 					LOGGER.error(
 							"Error in buffered mutator",
 							exception);
+					// Get details
+					for (Throwable cause : exception.getCauses()) {
+						cause.printStackTrace();
+					}
 				}
 			});
 			mutator = admin.getConnection().getBufferedMutator(

@@ -4,7 +4,7 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-core-parent</artifactId>
 		<relativePath>../</relativePath>
-		<version>0.9.3-SNAPSHOT</version>
+		<version>0.9.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-geotime</artifactId>
 	<name>GeoWave Spatial and Temporal Support</name>

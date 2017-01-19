@@ -6,13 +6,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStore;
@@ -25,7 +23,6 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
-import mil.nga.giat.geowave.core.store.config.ConfigOption;
 
 /**
  * This factory is injected by GeoTools using Java SPI and is used to expose
@@ -50,9 +47,6 @@ public class GeoWaveGTDataStoreFactory implements
 		}
 	}
 
-	private static Map<String, Set<StoreFactoryFamilySpi>> argumentSupersetStores;
-	private static final Object lock = new Object();
-
 	public final static String DISPLAY_NAME_PREFIX = "GeoWave Datastore - ";
 	private static final Logger LOGGER = Logger.getLogger(GeoWaveGTDataStoreFactory.class);
 	private final List<DataStoreCacheEntry> dataStoreCache = new ArrayList<DataStoreCacheEntry>();
@@ -64,59 +58,9 @@ public class GeoWaveGTDataStoreFactory implements
 	 * entry listed in META-INF/services/org.geotools.data.DataStoreFactorySPI
 	 */
 	public GeoWaveGTDataStoreFactory() {
-
 		final Collection<StoreFactoryFamilySpi> dataStoreFactories = GeoWaveStoreFinder
 				.getRegisteredStoreFactoryFamilies()
 				.values();
-
-		synchronized (lock) {
-			if (argumentSupersetStores == null) {
-				// initialize arguments map
-				argumentSupersetStores = new HashMap<String, Set<StoreFactoryFamilySpi>>();
-				for (final StoreFactoryFamilySpi factory : dataStoreFactories) {
-					for (final StoreFactoryFamilySpi otherFactory : dataStoreFactories) {
-						if (factory != otherFactory) {
-							// if otherFactory arguments are superset of
-							// factory arguments
-							final ConfigOption[] requiredOptions = GeoWaveStoreFinder.getRequiredOptions(factory);
-							final ConfigOption[] otherRequiredOptions = GeoWaveStoreFinder
-									.getRequiredOptions(otherFactory);
-							boolean superSet = false;
-							if (otherRequiredOptions.length > requiredOptions.length) {
-								superSet = true;
-								for (final ConfigOption requiredOption : requiredOptions) {
-									boolean foundInOtherOptions = false;
-									for (final ConfigOption otherOption : otherRequiredOptions) {
-										if (otherOption.getName().equals(
-												requiredOption.getName())) {
-											foundInOtherOptions = true;
-											break;
-										}
-									}
-									if (!foundInOtherOptions) {
-										superSet = false;
-										break;
-									}
-								}
-							}
-
-							if (superSet) {
-								// add otherfactory to factory's map entry
-								Set<StoreFactoryFamilySpi> supersetStores = argumentSupersetStores.get(factory
-										.getType());
-								if (supersetStores == null) {
-									supersetStores = new HashSet<StoreFactoryFamilySpi>();
-									argumentSupersetStores.put(
-											factory.getType(),
-											supersetStores);
-								}
-								supersetStores.add(otherFactory);
-							}
-						}
-					}
-				}
-			}
-		}
 
 		if (dataStoreFactories.isEmpty()) {
 			LOGGER.error("No GeoWave DataStore found!  Geotools datastore for GeoWave is unavailable");
@@ -220,40 +164,20 @@ public class GeoWaveGTDataStoreFactory implements
 	@Override
 	public boolean canProcess(
 			final Map<String, Serializable> params ) {
-		try {
-			// rely on validation in GeoWavePluginConfig's constructor
-			new GeoWavePluginConfig(
-					geowaveStoreFactoryFamily,
-					params);
+		final Map<String, String> dataStoreParams = params
+				.entrySet()
+				.stream()
+				.filter(
+						e -> !GeoWavePluginConfig.BASE_GEOWAVE_PLUGIN_PARAM_KEYS.contains(
+								e.getKey()))
+				.collect(
+						Collectors.toMap(
+								e -> e.getKey() == null ? null : e.getKey().toString(),
+								e -> e.getValue() == null ? null : e.getValue().toString()));
 
-			if (argumentSupersetStores.containsKey(geowaveStoreFactoryFamily.getType())) {
-				for (final StoreFactoryFamilySpi supersetStore : argumentSupersetStores.get(geowaveStoreFactoryFamily
-						.getType())) {
-					// if we have can construct a superset store with these
-					// args, don't process with this factory
-					try {
-						new GeoWavePluginConfig(
-								supersetStore,
-								params);
-						return false;
-					}
-					catch (final Exception e) {
-						LOGGER
-								.info(
-										"supplied map does not contain all necessary parameters to construct GeoWaveGTDataStore",
-										e);
-					}
-				}
-			}
-
-			return true;
-		}
-		catch (final Exception e1) {
-			LOGGER.info(
-					"supplied map does not contain all necessary parameters to construct GeoWaveGTDataStore",
-					e1);
-			return false;
-		}
+		return GeoWaveStoreFinder.exactMatch(
+				geowaveStoreFactoryFamily,
+				dataStoreParams);
 	}
 
 	@Override
@@ -298,7 +222,6 @@ public class GeoWaveGTDataStoreFactory implements
 				Iterator<DataStoreFactorySpi>
 		{
 			private final Iterator<DataStoreFactorySpi> it;
-			private int i = 1;
 
 			private GeoWaveGTDataStoreFactoryIterator() {
 				final Iterator<StoreFactoryFamilySpi> geowaveDataStoreIt = GeoWaveStoreFinder
@@ -308,8 +231,7 @@ public class GeoWaveGTDataStoreFactory implements
 				geowaveDataStoreIt.next();
 				it = Iterators.transform(
 						geowaveDataStoreIt,
-						new GeoWaveStoreToGeoToolsDataStore(
-								i++));
+						new GeoWaveStoreToGeoToolsDataStore());
 			}
 
 			@Override
@@ -339,16 +261,14 @@ public class GeoWaveGTDataStoreFactory implements
 	private static class GeoWaveStoreToGeoToolsDataStore implements
 			Function<StoreFactoryFamilySpi, DataStoreFactorySpi>
 	{
-		private final int i;
+		private int i = 0;
 
-		public GeoWaveStoreToGeoToolsDataStore(
-				final int i ) {
-			this.i = i;
-		}
+		public GeoWaveStoreToGeoToolsDataStore() {}
 
 		@Override
 		public DataStoreFactorySpi apply(
 				final StoreFactoryFamilySpi input ) {
+			i++;
 			switch (i) {
 				case 1:
 					return new GeoWaveGTDataStoreFactory1(

@@ -1,20 +1,38 @@
 [[quickstart-guide-intro]]
 <<<
 
-== Quickstart Guide
+_v${project.version}_
 
-=== What you will need
-* <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>
-* <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, VPC (Network Interface/Subnet Id)>>
-* <<110-appendices.adoc#create-ec2-security-group, EC2 Security Group>>
-* <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>>
-* <<110-appendices.adoc#aws-cli-setup, AWS CLI>> setup on your local machine (optional)
-** Not needed if you plan on using the EMR GUI to create the cluster
+= GeoWave Quickstart Guide image:geowave-icon-logo-cropped.png[width="28%"]
 
-=== Creating the Cluster
+== What you will need
+- <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>
+- <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, VPC (Network Interface/Subnet Id)>>
+- <<110-appendices.adoc#create-ec2-security-group, EC2 Security Group>>
+- <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>> (optional)
+ * Only needed if you would like to use your own bootstrap script or add a step to the cluster
+- <<110-appendices.adoc#aws-cli-setup, AWS CLI>> setup on your local machine (optional)
+ * Not needed if you plan on using the EMR GUI to create the cluster
 
-Download the bootstrap-quickstart-geowave.sh script https://s3.amazonaws.com/geowave-guide-bucket/bootstrap-quickstart-geowave.sh[here] and upload it to your S3 bucket.
+== Creating the Cluster
 
-*Note:* You can also clone the GeoWave project from https://github.com/ngageoint/geowave[GitHub] and find the script under deploy/emr/4/gdelt-example/
+We will be using the GeoWave bootstrap script to provision our cluster. Then we will walk through the cli commands 
+to download, ingest, analyze and visualize the data.
 
-If you have not created an S3 bucket please see the <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>> section.
+GeoWave currently supports the use of either Accumulo or HBase, so the version of the bootstrap script you 
+use will be dependent upon which system you want to use as your datastore.
+
+- For Accumulo use: s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh
+- For HBase use: s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh
+
+[NOTE]
+====
+We have also provided scripts that will perform all of the steps automatically. This will allow you to verify your 
+own steps, or test out other geowave commands and features on an already conditioned data set.
+
+If you would prefer to have all of the steps run automatically, please use these bootstrap scripts instead of the 
+ones listed previously:
+
+- For Accumulo use: s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh
+- For HBase use: s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh
+====

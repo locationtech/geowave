@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+#
+# Installing additional components on an EMR node depends on several config files
+# controlled by the EMR framework which may affect the is_master and configure_zookeeper
+# functions at some point in the future. I've grouped each unit of work into a function 
+# with a descriptive name to help with understanding and maintainability
+#
+# You can change these but there is probably no need
+# Accumulo
+USER=accumulo
+# NOTE: This password, the Accumulo instance secret and the geoserver password are left at
+# The default settings. The default EMR Security group setting only allows ssh/22 open to
+# external access so access to internal consoles and web UIs has to be done over SSH.
+# At some point in the future when this is revisited remember that nodes can be added to an
+# EMR at any point after creation so the password set during the initial spin-up would have
+# to be persisted somewhere and provided to the newly created nodes at some later date.
+USERPW=secret # TODO: Can't change until trace.password in accumulo-site.xml is updated
+ACCUMULO_VERSION=1.7.2
+ACCUMULO_TSERVER_OPTS=3GB
+INSTALL_DIR=/opt
+ACCUMULO_DOWNLOAD_BASE_URL=https://archive.apache.org/dist/accumulo
+ACCUMULO_INSTANCE=accumulo
+ACCUMULO_HOME="${INSTALL_DIR}/accumulo"
+HDFS_USER=hdfs
+ZK_IPADDR=
+
+# Using zookeeper packaged by Apache BigTop for ease of installation
+configure_zookeeper() {
+	if is_master ; then
+		sudo yum -y install zookeeper-server # EMR 4.3.0 includes Apache Bigtop.repo config
+		sudo initctl start zookeeper-server  # EMR uses Amazon Linux which uses Upstart
+		# Zookeeper installed on this node, record internal ip from instance metadata
+		ZK_IPADDR=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+	else
+		# Zookeeper intalled on master node, parse config file to find EMR master node
+		ZK_IPADDR=$(xmllint --xpath "//property[name='yarn.resourcemanager.hostname']/value/text()"  /etc/hadoop/conf/yarn-site.xml)
+	fi
+}
+
+
+create_accumulo_user() {
+ 	id $USER
+	if [ $? != 0 ]; then
+		sudo adduser $USER
+		sudo sh -c "echo '$USERPW' | passwd $USER --stdin"
+	fi
+}
+
+install_accumulo() {
+	wait_until_hdfs_is_available
+	ARCHIVE_FILE="accumulo-${ACCUMULO_VERSION}-bin.tar.gz"
+	LOCAL_ARCHIVE="${INSTALL_DIR}/${ARCHIVE_FILE}"
+	sudo sh -c "curl '${ACCUMULO_DOWNLOAD_BASE_URL}/${ACCUMULO_VERSION}/${ARCHIVE_FILE}' > $LOCAL_ARCHIVE"
+	sudo sh -c "tar xzf $LOCAL_ARCHIVE -C $INSTALL_DIR"
+	sudo rm -f $LOCAL_ARCHIVE
+	sudo ln -s "${INSTALL_DIR}/accumulo-${ACCUMULO_VERSION}" "${INSTALL_DIR}/accumulo"
+	sudo chown -R accumulo:accumulo "${INSTALL_DIR}/accumulo-${ACCUMULO_VERSION}"
+	sudo sh -c "echo 'export PATH=$PATH:${INSTALL_DIR}/accumulo/bin' > /etc/profile.d/accumulo.sh"
+}
+
+configure_accumulo() {
+	sudo cp $INSTALL_DIR/accumulo/conf/examples/${ACCUMULO_TSERVER_OPTS}/native-standalone/* $INSTALL_DIR/accumulo/conf/
+	sudo sed -i "s/<value>localhost:2181<\/value>/<value>${ZK_IPADDR}:2181<\/value>/" $INSTALL_DIR/accumulo/conf/accumulo-site.xml
+	sudo sed -i '/HDP 2.0 requirements/d' $INSTALL_DIR/accumulo/conf/accumulo-site.xml
+	sudo sed -i "s/\${LOG4J_JAR}/\${LOG4J_JAR}:\/usr\/lib\/hadoop\/lib\/*:\/usr\/lib\/hadoop\/client\/*/" $INSTALL_DIR/accumulo/bin/accumulo
+
+	# Crazy escaping to get this shell to fill in values but root to write out the file
+	ENV_FILE="export ACCUMULO_HOME=$INSTALL_DIR/accumulo; export HADOOP_HOME=/usr/lib/hadoop; export ACCUMULO_LOG_DIR=$INSTALL_DIR/accumulo/logs; export JAVA_HOME=/usr/lib/jvm/java; export ZOOKEEPER_HOME=/usr/lib/zookeeper; export HADOOP_PREFIX=/usr/lib/hadoop; export HADOOP_CONF_DIR=/etc/hadoop/conf"
+	echo $ENV_FILE > /tmp/acc_env
+	sudo sh -c "cat /tmp/acc_env > $INSTALL_DIR/accumulo/conf/accumulo-env.sh"
+	sudo chown -R $USER:$USER $INSTALL_DIR/accumulo
+	source $INSTALL_DIR/accumulo/conf/accumulo-env.sh
+	sudo -u $USER $INSTALL_DIR/accumulo/bin/build_native_library.sh
+
+	if is_master ; then
+	    sudo -u $HDFS_USER hadoop fs -chmod 777 /user # This is more for Spark than Accumulo but put here for expediency
+		sudo -u $HDFS_USER hadoop fs -mkdir /accumulo
+		sudo -u $HDFS_USER hadoop fs -chown accumulo:accumulo /accumulo
+		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/monitor"
+		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/gc"
+		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/tracers"
+		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/masters"
+		sudo sh -c "echo > $INSTALL_DIR/accumulo/conf/slaves"
+		sudo -u $USER $INSTALL_DIR/accumulo/bin/accumulo init --clear-instance-name --instance-name $ACCUMULO_INSTANCE --password $USERPW
+	else
+		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/monitor"
+		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/gc"
+		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/tracers"
+		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/masters"
+		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/slaves"
+	fi
+
+	# EMR starts worker instances first so there will be timing issues
+	# Test to ensure it's safe to continue before attempting to start things up
+	if is_master ; then
+		with_backoff is_accumulo_initialized
+	else
+		with_backoff is_accumulo_available
+	fi
+
+	sudo -u $USER $INSTALL_DIR/accumulo/bin/start-here.sh
+}
+
+configure_geowave_accumulo(){
+# Configure accumulo user and namespace
+export PATH=${PATH}:/opt/accumulo/bin
+
+cat <<EOF | accumulo shell -u root -p secret -e "createuser geowave"
+geowave
+geowave
+EOF
+accumulo shell -u root -p secret -e "createnamespace geowave"
+accumulo shell -u root -p secret -e "grant NameSpace.CREATE_TABLE -ns geowave -u geowave"
+accumulo shell -u root -p secret -e "config -s general.vfs.context.classpath.geowave=hdfs://${HOSTNAME}:8020/accumulo/lib/geowave-accumulo-${GEOWAVE_VERSION}-apache.jar"
+accumulo shell -u root -p secret -e "config -ns geowave -s table.classpath.context=geowave"	
+}
+
+is_accumulo_initialized() {
+	hadoop fs -ls /accumulo/instance_id
+	return $?
+}
+
+is_accumulo_available() {
+	$INSTALL_DIR/accumulo/bin/accumulo info
+	return $?
+}
+
+# Settings recommended for Accumulo
+os_tweaks() {
+	echo -e "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee --append /etc/sysctl.conf
+	echo -e "net.ipv6.conf.default.disable_ipv6 = 1" | sudo tee --append /etc/sysctl.conf
+	echo -e "net.ipv6.conf.lo.disable_ipv6 = 1" | sudo tee --append /etc/sysctl.conf
+	echo -e "vm.swappiness = 0" | sudo tee --append /etc/sysctl.conf
+	sudo sysctl -w vm.swappiness=0
+	echo -e "" | sudo tee --append /etc/security/limits.conf
+	echo -e "*\t\tsoft\tnofile\t65536" | sudo tee --append /etc/security/limits.conf
+	echo -e "*\t\thard\tnofile\t65536" | sudo tee --append /etc/security/limits.conf
+}

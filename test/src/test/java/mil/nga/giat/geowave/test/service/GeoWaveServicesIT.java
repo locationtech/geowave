@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.service.client.InfoServiceClient;
 import mil.nga.giat.geowave.service.client.IngestServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestDataStoreOptions;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
@@ -61,6 +62,7 @@ public class GeoWaveServicesIT
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
@@ -126,7 +128,7 @@ public class GeoWaveServicesIT
 					new File(
 							ASHLAND_GPX_FILE)
 				},
-				dataStoreOptions.getType(),
+				((TestDataStoreOptions) dataStoreOptions).getStoreType().name(),
 				TestUtils.TEST_NAMESPACE,
 				null,
 				ASHLAND_INGEST_TYPE,
@@ -147,7 +149,7 @@ public class GeoWaveServicesIT
 					new File(
 							ASHLAND_GPX_FILE)
 				},
-				dataStoreOptions.getType(),
+				((TestDataStoreOptions) dataStoreOptions).getStoreType().name(),
 				TestUtils.TEST_NAMESPACE,
 				null,
 				ASHLAND_INGEST_TYPE,
@@ -161,7 +163,7 @@ public class GeoWaveServicesIT
 		// verify the adapter type
 		LOGGER.info("Verify the adapter type.");
 		final JSONArray adapters = infoServiceClient.getAdapters(
-				dataStoreOptions.getType()).getJSONArray(
+				((TestDataStoreOptions) dataStoreOptions).getStoreType().name()).getJSONArray(
 				"adapters");
 		for (int i = 0; i < adapters.size(); i++) {
 			if (adapters.getJSONObject(
@@ -180,7 +182,7 @@ public class GeoWaveServicesIT
 		// verify the index type
 		LOGGER.info("Verify the index type.");
 		final JSONArray indices = infoServiceClient.getIndices(
-				dataStoreOptions.getType()).getJSONArray(
+				((TestDataStoreOptions) dataStoreOptions).getStoreType().name()).getJSONArray(
 				"indices");
 		for (int i = 0; i < indices.size(); i++) {
 			if (indices.getJSONObject(
@@ -280,7 +282,7 @@ public class GeoWaveServicesIT
 		// verify that we can publish a datastore
 		LOGGER.info("Verify that we can publish a datastore.");
 		assertTrue(
-				"Unable to publish accumulo datastore",
+				"Unable to publish datastore",
 				geoserverServiceClient.publishDatastore(
 						dataStoreOptions.getType(),
 						dataStoreOptions.getOptionsAsMap(),
@@ -309,14 +311,15 @@ public class GeoWaveServicesIT
 			}
 		}
 		assertTrue(
-				"Unable to get accumulo datastore",
+				"Unable to get datastore",
 				success);
 		success = false;
 
 		if (dsInfo != null) {
 			final Map<String, String> options = dataStoreOptions.getOptionsAsMap();
-			final List<ConfigOption> configOptions = Arrays.asList(ConfigUtils
-					.createConfigOptionsFromJCommander(dataStoreOptions));
+			final List<ConfigOption> configOptions = Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(
+					dataStoreOptions,
+					false));
 			final Collection<String> nonPasswordRequiredFields = Collections2.transform(
 					Collections2.filter(
 							configOptions,
@@ -393,7 +396,7 @@ public class GeoWaveServicesIT
 		LOGGER.info("Verify that we can recall the layer.");
 		final JSONObject layer = geoserverServiceClient.getLayer(GpxUtils.GPX_WAYPOINT_FEATURE);
 		assertTrue(
-				"Unable to publish accumulo datastore",
+				"Unable to get layer",
 				layer.getJSONObject(
 						"layer").getString(
 						"name").equals(

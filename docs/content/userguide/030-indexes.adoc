@@ -1,0 +1,24 @@
+[[architecture-indexes]]
+=== Indexes
+
+The core engine to quickly retrieve data from GeoWave is a SFC (space filling curve) based index. This index can be
+configured with several different parameters:
+
+* number of levels
+* number of dimensions
+* cardinality of each dimension
+* dimension type (bounded / unbounded)
+* value range of each dimension
+
+More on each of these properties will be described later; the intent of this list is to provide a notion of what
+type of configuration information is persisted.
+
+////
+TODO: Provide a link in the text above to the section where we describe more on these properties.
+////
+
+In order to insert data in a datastore the configuration of the index has to be known. The index is persisted in a
+special table and is referenced back via table name to a table with data in it. Therefore queries can retrieve data
+without requiring index configuration. There is a restriction that only one index configuration per table is supported -
+i.e. you can't store data on both a 2D and 3D index in the same table. (You could store 2D geometry types in a 3D index
+though).

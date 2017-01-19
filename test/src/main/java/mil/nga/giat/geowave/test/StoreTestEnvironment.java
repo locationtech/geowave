@@ -9,18 +9,22 @@ import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public abstract class StoreTestEnvironment implements
 		TestEnvironment
 {
 	protected abstract GenericStoreFactory<DataStore> getDataStoreFactory();
 
+	protected abstract GeoWaveStoreType getStoreType();
+
 	protected abstract void initOptions(
 			StoreFactoryOptions options );
 
 	public DataStorePluginOptions getDataStoreOptions(
 			final GeoWaveTestStore store ) {
-		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		final DataStorePluginOptions pluginOptions = new TestDataStoreOptions(
+				getStoreType());
 		final GenericStoreFactory<DataStore> factory = getDataStoreFactory();
 		StoreFactoryOptions opts = factory.createOptionsInstance();
 		initOptions(opts);

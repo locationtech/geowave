@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStoreFactory;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class HBaseStoreTestEnvironment extends
 		StoreTestEnvironment
@@ -120,6 +121,11 @@ public class HBaseStoreTestEnvironment extends
 					"Unable to delete mini hbase temporary directory",
 					e);
 		}
+	}
+
+	@Override
+	protected GeoWaveStoreType getStoreType() {
+		return GeoWaveStoreType.HBASE;
 	}
 
 	@Override

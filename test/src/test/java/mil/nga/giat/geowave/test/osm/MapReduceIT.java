@@ -46,6 +46,7 @@ public class MapReduceIT
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;

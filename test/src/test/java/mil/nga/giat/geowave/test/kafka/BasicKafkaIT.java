@@ -52,11 +52,11 @@ public class BasicKafkaIT
 		EXPECTED_COUNT_PER_ADAPTER_ID.put(
 				new ByteArrayId(
 						"gpxpoint"),
-				137291);
+				11911);
 		EXPECTED_COUNT_PER_ADAPTER_ID.put(
 				new ByteArrayId(
 						"gpxtrack"),
-				257);
+				5);
 	}
 
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE
@@ -65,6 +65,7 @@ public class BasicKafkaIT
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;

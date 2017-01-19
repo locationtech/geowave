@@ -160,7 +160,7 @@ public class HBaseSecondaryIndexDataStore extends
 				secondaryIndexRowId);
 		final Delete d = new Delete(
 				secondaryIndexRowId);
-		d.addColumn(
+		d.addColumns(
 				SecondaryIndexUtils.constructColumnFamily(
 						adapterId,
 						indexedAttributeFieldId),

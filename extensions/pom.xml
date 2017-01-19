@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.3-SNAPSHOT</version>
+		<version>0.9.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-extension-parent</artifactId>
 	<name>GeoWave Extensions</name>
@@ -15,6 +15,7 @@
 		<module>adapters/vector</module>
 		<module>datastores/accumulo</module>
 		<module>datastores/hbase</module>
+		<module>datastores/bigtable</module>
 		<module>formats/geolife</module>
 		<module>formats/geotools-raster</module>
 		<module>formats/geotools-vector</module>

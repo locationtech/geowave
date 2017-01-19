@@ -31,7 +31,7 @@ public class BasicHBaseOperations implements
 		DataStoreOperations
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
-	private static final String DEFAULT_TABLE_NAMESPACE = "";
+	protected static final String DEFAULT_TABLE_NAMESPACE = "";
 	public static final Object ADMIN_MUTEX = new Object();
 	private static final long SLEEP_INTERVAL = 10000L;
 
@@ -40,11 +40,10 @@ public class BasicHBaseOperations implements
 	private final boolean schemaUpdateEnabled;
 
 	public BasicHBaseOperations(
-			final String zookeeperInstances,
+			final Connection connection,
 			final String geowaveNamespace )
 			throws IOException {
-		conn = ConnectionPool.getInstance().getConnection(
-				zookeeperInstances);
+		conn = connection;
 		tableNamespace = geowaveNamespace;
 
 		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
@@ -53,25 +52,12 @@ public class BasicHBaseOperations implements
 	}
 
 	public BasicHBaseOperations(
-			final String zookeeperInstances )
+			final String zookeeperInstances,
+			final String geowaveNamespace )
 			throws IOException {
-		this(
-				zookeeperInstances,
-				DEFAULT_TABLE_NAMESPACE);
-	}
-
-	public BasicHBaseOperations(
-			final Connection connector ) {
-		this(
-				DEFAULT_TABLE_NAMESPACE,
-				connector);
-	}
-
-	public BasicHBaseOperations(
-			final String tableNamespace,
-			final Connection connector ) {
-		this.tableNamespace = tableNamespace;
-		conn = connector;
+		conn = ConnectionPool.getInstance().getConnection(
+				zookeeperInstances);
+		tableNamespace = geowaveNamespace;
 
 		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
 				"hbase.online.schema.update.enable",
@@ -88,6 +74,10 @@ public class BasicHBaseOperations implements
 
 	public Configuration getConfig() {
 		return conn.getConfiguration();
+	}
+
+	public boolean isSchemaUpdateEnabled() {
+		return schemaUpdateEnabled;
 	}
 
 	public static TableName getTableName(

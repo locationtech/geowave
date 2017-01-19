@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Bootstrap a GeoWave cluster node
+#
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+# Config Settings you might want to update
+
+# GeoWave
+GEOWAVE_REPO_RPM=$GEOWAVE_REPO_RPM_TOKEN # TODO: Should have a prod->latest rpm
+GEOWAVE_VERSION=$GEOWAVE_VERSION_TOKEN
+GEOSERVER_PORT='8000'
+GEOSERVER_MEMORY="-Xmx512m -XX:MaxPermSize=128m"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# I've externalized commands into library functions for clarity, download and source
+if [ ! -f /tmp/geowave-install-lib.sh ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/$DATASTORE_TOKEN/geowave-install-lib.sh /tmp/geowave-install-lib.sh
+fi
+source /tmp/geowave-install-lib.sh
+
+# The EMR customize hooks run _before_ everything else, so Hadoop is not yet ready
+THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
+RUN_FLAG="${THIS_SCRIPT}.run"
+# On first boot skip past this script to allow EMR to set up the environment. Set a callback
+# which will poll for availability of HDFS and then install Accumulo and then GeoWave
+if [ ! -f "$RUN_FLAG" ]; then
+	touch "$RUN_FLAG"
+	TIMEOUT= is_master && TIMEOUT=3 || TIMEOUT=4
+	echo "bash -x $(realpath "${BASH_SOURCE[0]}") > /tmp/geowave-install.log" | at now + $TIMEOUT min
+	exit 0 # Bail and let EMR finish initializing
+fi
+
+$DATASTORE_BOOTSTRAP_TOKEN
+
+# Install GeoWave components on master node
+if is_master ; then
+	install_geowave	
+fi
+
+$DATASTORE_CONFIGURE_GEOWAVE_TOKEN
+
+$QUICKSTART_BOOTSTRAP_TOKEN

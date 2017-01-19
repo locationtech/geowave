@@ -1,0 +1,35 @@
+[[remote-commands]]
+
+=== Remote Commands
+
+Operations to manage a remote store
+
+==== *geowave remote calcstat*
+
+include::manpages/geowave-calcstat.txt[]
+
+==== *geowave remote clear*
+
+include::manpages/geowave-clear.txt[]
+
+==== *geowave remote listadapter*
+
+include::manpages/geowave-listadapter.txt[]
+
+==== *geowave remote listindex*
+
+include::manpages/geowave-listindex.txt[]
+
+==== *geowave remote liststats*
+
+include::manpages/geowave-liststats.txt[]
+
+==== *geowave remote recalcstats*
+
+include::manpages/geowave-recalcstats.txt[]
+
+==== *geowave remote rmstat*
+
+include::manpages/geowave-rmstat.txt[]
+
+--- +

@@ -1,6 +1,0 @@
-1) 'mvn clean assembly:assembly -P geotools-container -DskipTests'
-2) download and extract geoserver-standalone
-3) delete <GEOSERVER_HOME>/lib/slf4j-simple-1.0.1.jar
-4) extract/copy all jars in <geowave_gt>/target/geowave-gt-0.0.2-SNAPSHOT-geotools-container-bin.zip (or tar.gz) to <GEOSERVER_HOME>/webapps/geoserver/WEB-INF/lib
-5) move or copy slf4j-api and slf4j-log4j dependencies from <GEOSERVER_HOME>/webapps/geoserver/WEB-INF/lib to <GEOSERVER_HOME>/lib
-   

@@ -88,11 +88,10 @@ public class GeoServerIT
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	}, options = {
-		"enableCustomFilters=true",
-		"enableCoprocessors=true",
-		"verifyCoprocessors=true"
+		"disableServer=true",
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 

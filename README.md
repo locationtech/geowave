@@ -1,15 +1,18 @@
-# GeoWave
+<p align="center">
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" target="_blank"><img float="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" alt="GeoWave"></a><br/><br/>
+</p>
+
 ## About  
 
 | Continuous Integration | Code Coverage | Static Analysis | Chat |            
 |:------------------:|:-------------:|:---------------:|:----:|
-| <a href="https://travis-ci.org/ngageoint/geowave"><img alt="Travis-CI test status" src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/></a> | <a href='https://coveralls.io/r/ngageoint/?branch=master'><img src='https://coveralls.io/repos/ngageoint/geowave/badge.svg?branch=master' alt='Coverage Status' /></a> | <a href="https://scan.coverity.com/projects/3371"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/3371/badge.svg"/></a> | [![Join the chat at https://gitter.im/ngageoint/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ngageoint/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
+| <a href="https://travis-ci.org/ngageoint/geowave/branches"><img alt="Travis-CI test status" src="https://travis-ci.org/ngageoint/geowave.svg?branch=master"/></a> | <a href='https://coveralls.io/r/ngageoint/?branch=master'><img src='https://coveralls.io/repos/ngageoint/geowave/badge.svg?branch=master' alt='Coverage Status' /></a> | <a href="https://scan.coverity.com/projects/3371"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/3371/badge.svg"/></a> | [![Join the chat at https://gitter.im/ngageoint/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ngageoint/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
 
 GeoWave is an open source set of software that:
 
 * Capabilities
-  * Adds multi-dimensional indexing capability to [Apache Accumulo](https://accumulo.apache.org) 
-  * Adds support for geographic objects and geospatial operators to [Apache Accumulo](https://accumulo.apache.org)
+  * Adds multi-dimensional indexing capability to [Apache Accumulo](https://accumulo.apache.org) and [Apache HBase](https://hbase.apache.org)
+  * Adds support for geographic objects and geospatial operators to [Apache Accumulo](https://accumulo.apache.org) and [Apache HBase](https://hbase.apache.org)
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins
   * [GeoServer](http://geoserver.org/) plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services
@@ -24,14 +27,14 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 
 ## The Software
 * We have a [RPM repository](http://ngageoint.github.io/geowave/packages.html)
-  * See [Documentation: Installation from RPM](http://ngageoint.github.io/geowave/documentation.html#installation-from-rpm) for more info.
+  * See [Documentation: Installation from RPM](http://ngageoint.github.io/geowave/userguide.html#installation-from-rpm) for more info.
   * Deb packages if enough people request them
-* We have [Maven artifact repositories](http://ngageoint.github.io/geowave/documentation.html#maven-repositories-2) (indexes not enabled, but it works in a maven repo fragment)
+* We have [Maven artifact repositories](http://ngageoint.github.io/geowave/userguide.html#maven-repositories-2) (indexes not enabled, but it works in a maven repo fragment)
   * Releases: http://geowave-maven.s3-website-us-east-1.amazonaws.com/release
   * Snapshots: http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot (nightly)
 * We have a [vagrant dev environment](https://github.com/ngageoint/geowave-vagrant)
 * We have a development all in one RPM package: "geowave-cdh5-single-host"
-* And you can always [build from source](http://ngageoint.github.io/geowave/documentation.html#installation-from-source)
+* And you can always [build from source](http://ngageoint.github.io/geowave/userguide.html#installation-from-source)
   
  
 ## Community
@@ -43,13 +46,13 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 ## Some GeoWave rendered eye candy
 
 <p align="center">
-	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-13-thumb.jpg" alt="Geolife data at city scale"></a><br/><br/>
-	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/geolife-density-17-thumb.jpg" alt="Geolife data at block scale"></a><br/><br/>
-	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/images/osmgpx-thumb.jpg" alt="OSM GPX tracks at country scale"></a><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geolife-density-13-thumb.jpg" alt="Geolife data at city scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geolife-density-17.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geolife-density-17-thumb.jpg" alt="Geolife data at block scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/osmgpx.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/osmgpx-thumb.jpg" alt="OSM GPX tracks at country scale"></a><br/>
 	
 </p>
 
-See [Screenshots](http://ngageoint.github.io/geowave/documentation.html#screenshots-2) in the documentation for more information.
+See [Screenshots](http://ngageoint.github.io/geowave/userguide.html#example-screenshots) in the documentation for more information.
 
 ## Supported versions of core libraries
 
@@ -57,10 +60,10 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 
 | Geoserver | Geotools | Accumulo | Hadoop | PDAL | Mapnik | Java |
 |:---------:|:--------:|:--------:|:------:|:----:|:------:|:----:|
-| 2.8.x | 14.x | 1.6.x, 1.7.x | 2.x | 0.9.9 |  master (pull request pending) | Java7, Java8 |
+| 2.8.x, 2.10.x | 16.x | 1.6.x, 1.7.x | 2.x | 0.9.9 |  master (pull request pending) | Java7, Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
-* [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html) should both be installed on Geoserver (licensing prohibits us redistributing)
+* [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html) should both be installed on Geoserver for GeoWave versions 0.9.2.1 and below (licensing prohibits us redistributing)
    * At the time of writing, Oracle is migrating Java projects around and these links are subject to change.  Read the INSTALL files to determine the download file name for different operating systems and architectures.  They are stored in the same directory as the INSTALL file.  Here are some common download locations.
    * Java Advanced Imaging
       * Linux ([32-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-i586.tar.gz) and [64-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz))

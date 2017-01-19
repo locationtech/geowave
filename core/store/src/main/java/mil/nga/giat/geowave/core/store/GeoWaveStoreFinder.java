@@ -11,6 +11,9 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -18,9 +21,6 @@ import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GeoWaveStoreFinder
 {
@@ -111,12 +111,14 @@ public class GeoWaveStoreFinder
 	private static List<String> getMissingRequiredOptions(
 			final StoreFactoryFamilySpi factory,
 			final Map<String, String> configOptions ) {
-		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(factory
-				.getDataStoreFactory()
-				.createOptionsInstance());
+		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(
+				factory.getDataStoreFactory().createOptionsInstance(),
+				false);
 		final List<String> missing = new ArrayList<String>();
 		for (final ConfigOption option : options) {
-			if (!option.isOptional() && !configOptions.containsKey(option.getName())) {
+			if (!option.isOptional()
+					&& (!configOptions.containsKey(option.getName()) || (configOptions.get(option.getName())
+							.equals("null")))) {
 				missing.add(option.getName());
 			}
 		}
@@ -126,12 +128,14 @@ public class GeoWaveStoreFinder
 	private static List<String> getMatchingRequiredOptions(
 			final StoreFactoryFamilySpi factory,
 			final Map<String, String> configOptions ) {
-		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(factory
-				.getDataStoreFactory()
-				.createOptionsInstance());
+		final ConfigOption[] options = ConfigUtils.createConfigOptionsFromJCommander(
+				factory.getDataStoreFactory().createOptionsInstance(),
+				false);
 		final List<String> matching = new ArrayList<String>();
 		for (final ConfigOption option : options) {
-			if (!option.isOptional() && configOptions.containsKey(option.getName())) {
+			if (!option.isOptional() && (configOptions.containsKey(option.getName()) && (!configOptions.get(
+					option.getName()).equals(
+					"null")))) {
 				matching.add(option.getName());
 			}
 		}
@@ -141,7 +145,7 @@ public class GeoWaveStoreFinder
 	public static StoreFactoryFamilySpi findStoreFamily(
 			final Map<String, String> configOptions ) {
 		final Object storeHint = configOptions.get(STORE_HINT_KEY);
-		Map<String, StoreFactoryFamilySpi> internalStoreFamilies = getRegisteredStoreFactoryFamilies();
+		final Map<String, StoreFactoryFamilySpi> internalStoreFamilies = getRegisteredStoreFactoryFamilies();
 		if (storeHint != null) {
 			final StoreFactoryFamilySpi factory = internalStoreFamilies.get(storeHint.toString());
 			if (factory != null) {
@@ -160,18 +164,30 @@ public class GeoWaveStoreFinder
 				return null;
 			}
 		}
-		int matchingFactoryRequiredOptionsCount = -1;
-		StoreFactoryFamilySpi matchingFactory = null;
-		boolean matchingFactoriesHaveSameRequiredOptionsCount = false;
+
 		// if the hint is not provided, the factory finder will attempt to find
-		// a factory that does not have any missing options; if multiple
-		// factories will match, the one with the most required matching options
-		// will be used with
+		// a factory that has an exact match meaning that all required params
+		// are provided and all provided params are defined as at least optional
+		// params
+
+		for (final Entry<String, StoreFactoryFamilySpi> entry : internalStoreFamilies.entrySet()) {
+			if (exactMatch(
+					entry.getValue(),
+					configOptions)) {
+				return entry.getValue();
+			}
+		}
+		// if it cannot find and exact match it will attempt to does not have
+		// any missing options; if multiple/ factories will match, the one with
+		// the most required matching options will be used with
 		// the assumption that it has the most specificity and closest match of
 		// the arguments; if there are multiple factories that match and have
 		// the same number of required matching options, arbitrarily the last
 		// one will be chosen
 		// and a warning message will be logged
+		int matchingFactoryRequiredOptionsCount = -1;
+		StoreFactoryFamilySpi matchingFactory = null;
+		boolean matchingFactoriesHaveSameRequiredOptionsCount = false;
 		LOGGER.debug("Finding Factories (size): " + internalStoreFamilies.size());
 
 		for (final Entry<String, StoreFactoryFamilySpi> entry : internalStoreFamilies.entrySet()) {
@@ -182,10 +198,6 @@ public class GeoWaveStoreFinder
 			final List<String> matchingOptions = getMatchingRequiredOptions(
 					factory,
 					configOptions);
-			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(factory
-					.getDataStoreFactory()
-					.createOptionsInstance());
-			LOGGER.debug("OPTIONS -- length: " + factoryOptions.length + ", " + factory.getType());
 			if (missingOptions.isEmpty()
 					&& ((matchingFactory == null) || (matchingOptions.size() >= matchingFactoryRequiredOptionsCount))) {
 				matchingFactory = factory;
@@ -211,6 +223,47 @@ public class GeoWaveStoreFinder
 				uniqueNames).toString();
 	}
 
+	public static boolean exactMatch(
+			final StoreFactoryFamilySpi geowaveStoreFactoryFamily,
+			final Map<String, String> params ) {
+		final ConfigOption[] requiredOptions = GeoWaveStoreFinder.getRequiredOptions(geowaveStoreFactoryFamily);
+		// first ensure all required options are fulfilled
+		for (final ConfigOption requiredOption : requiredOptions) {
+			if (!params.containsKey(requiredOption.getName())) {
+				return false;
+			}
+		}
+		// next ensure that all params match an available option
+		final Set<String> availableOptions = new HashSet<String>();
+		for (final ConfigOption option : GeoWaveStoreFinder.getAllOptions(
+				geowaveStoreFactoryFamily,
+				true)) {
+			availableOptions.add(option.getName());
+		}
+		for (final String optionName : params.keySet()) {
+			if (!availableOptions.contains(optionName) && !STORE_HINT_KEY.equals(optionName)) {
+				return false;
+			}
+		}
+
+		// lastly try to create the index store (pick a minimally required
+		// store)
+		try {
+			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
+					geowaveStoreFactoryFamily.getDataStoreFactory().createOptionsInstance(),
+					params);
+			geowaveStoreFactoryFamily.getIndexStoreFactory().createStore(
+					options);
+		}
+		catch (final Exception e) {
+			LOGGER.info(
+					"supplied map is not able to construct index store",
+					e);
+			return false;
+		}
+		return true;
+	}
+
 	public static synchronized Map<String, StoreFactoryFamilySpi> getRegisteredStoreFactoryFamilies() {
 		registeredStoreFactoryFamilies = getRegisteredFactories(
 				StoreFactoryFamilySpi.class,
@@ -219,29 +272,34 @@ public class GeoWaveStoreFinder
 	}
 
 	public static synchronized ConfigOption[] getAllOptions(
-			final StoreFactoryFamilySpi storeFactoryFamily ) {
+			final StoreFactoryFamilySpi storeFactoryFamily,
+			boolean includeHidden ) {
 		final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
-		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(storeFactoryFamily
-				.getDataStoreFactory()
-				.createOptionsInstance())));
-		return allOptions.toArray(new ConfigOption[] {});
-	}
-
-	public static synchronized ConfigOption[] getAllOptions() {
-		final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
-		for (final StoreFactoryFamilySpi f : getRegisteredStoreFactoryFamilies().values()) {
-			ConfigOption[] factoryOptions = ConfigUtils.createConfigOptionsFromJCommander(f
-					.getDataStoreFactory()
-					.createOptionsInstance());
-			allOptions.addAll(Arrays.asList(factoryOptions));
-		}
+		allOptions.addAll(Arrays.asList(ConfigUtils.createConfigOptionsFromJCommander(
+				storeFactoryFamily.getDataStoreFactory().createOptionsInstance(),
+				includeHidden)));
+		// TODO our JCommanderPrefixTranslator's use of reflection does not
+		// follow inheritance, these are commonly inherited classes and options
+		// for all data stores provided as a stop gap until we can investigate
+		// allOptions.addAll(
+		// Arrays.asList(
+		// ConfigUtils.createConfigOptionsFromJCommander(
+		// new BaseDataStoreOptions())));
+		// allOptions.add(
+		// new ConfigOption(
+		// StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION,
+		// StoreFactoryOptions.GEOWAVE_NAMESPACE_DESCRIPTION,
+		// true,
+		// String.class));
 		return allOptions.toArray(new ConfigOption[] {});
 	}
 
 	public static synchronized ConfigOption[] getRequiredOptions(
 			final StoreFactoryFamilySpi storeFactoryFamily ) {
 		final List<ConfigOption> requiredOptions = new ArrayList<ConfigOption>();
-		for (final ConfigOption option : getAllOptions(storeFactoryFamily)) {
+		for (final ConfigOption option : getAllOptions(
+				storeFactoryFamily,
+				false)) {
 			if (!option.isOptional()) {
 				requiredOptions.add(option);
 			}

@@ -1,0 +1,49 @@
+[[about]]
+<<<
+== What is GeoWave
+
+GeoWave is a library for storage, index, and search of multi-dimensional data on top of a sorted key-value datastore.
+GeoWave includes specific tailored implementations that have advanced support for OGC spatial types (up to 3 dimensions),
+and both bounded and unbounded temporal values. Both single and ranged values are supported on all axes. GeoWave’s
+geospatial support is built on top of the GeoTools extensibility model. This means that it can integrate natively with
+any GeoTools compatible project (such as GeoServer and UDig), and can ingest GeoTools compatible data sources. GeoWave provides out-of-the-box
+support for the https://accumulo.apache.org[Apache Accumulo^] and https://hbase.apache.org[Apache HBase^] distributed key/value stores.
+
+GeoWave Features:
+
+* Adds multi-dimensional indexing capability to Apache Accumulo and Apache HBase
+* Adds support for geographic objects and geospatial operators to Apache Accumulo and Apache HBase
+* Provides a http://geoserver.org/[GeoServer^] plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services
+* Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
+
+GeoWave attempts to do for Accumulo and HBase as PostGIS does for PostgreSQL.
+
+<<<
+
+=== Origin
+
+GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with
+http://www.radiantblue.com/[RadiantBlue Technologies^] and http://www.boozallen.com/[Booz Allen Hamilton^]. The government
+has https://github.com/ngageoint/geowave/blob/master/NOTICE[unlimited rights^] and is releasing this software to
+increase the impact of government investments by providing developers with the opportunity to take things in new directions.
+The software use, modification, and distribution rights are stipulated within the http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0^] license.
+
+=== Intent
+
+==== Pluggable Backend
+GeoWave is intended to be a multidimensional indexing layer that can be added on top of any sorted key-value store.
+Accumulo was chosen as the initial target architecture and support for HBase has been added as well. Any datastore 
+which allows prefix based range scans should be straightforward extensions.
+
+==== Modular Design
+
+The architecture itself is designed to be extremely extensible with most of the functionality units defined by
+interfaces, and with default implementations of these interfaces to cover most use cases. The intent is that the out of the
+box functionality should satisfy 90% of use cases but the modular architecture allows
+for easy feature extension as well as integration into other platforms.
+
+==== Self-Describing Data
+
+GeoWave stores the information needed to manipulate data (such as configuration and format), in the database
+itself. This allows software to programmatically interrogate all the data stored in a single or set of GeoWave instances
+without needing bits of configuration from clients, application servers, or other external stores.

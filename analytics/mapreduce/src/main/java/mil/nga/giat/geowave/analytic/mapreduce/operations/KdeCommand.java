@@ -58,7 +58,6 @@ public class KdeCommand extends
 
 		String inputStore = parameters.get(0);
 		String outputStore = parameters.get(1);
-
 		// Config file
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);

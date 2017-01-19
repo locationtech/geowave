@@ -11,54 +11,62 @@ variables is given below the command.
 ----
 aws emr create-cluster \
 --name ${CLUSTER_NAME} \
---instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m3.xlarge \
+--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m4.xlarge \
 --ec2-attributes "KeyName=${YOUR_KEYNAME},SubnetId=${YOUR_SUBNET_ID},EmrManagedMasterSecurityGroup=${YOUR_SECURITY_GROUP},EmrManagedSlaveSecurityGroup=${YOUR_SECURITY_GROUP}" \
 --release-label ${EMR_VERSION} \
---applications Name=Ganglia Name=Hadoop Name=Hue Name=Spark \
+--applications Name=Hadoop Name=HBase \
 --use-default-roles \
 --no-auto-terminate \
---bootstrap-actions Path=s3://${YOUR_BUCKET_NAME}/bootstrap-quickstart-geowave.sh,Name=Bootstrap_GeoWave \
+--bootstrap-actions Path=s3.amazonaws.com/geowave/latest/scripts/emr/${DATASTORE}/bootstrap-geowave.sh,Name=Bootstrap_GeoWave \
 --tags ${YOUR_TAGNAME} \
 --region ${YOUR_REGION} \
 ----
 
-* ${CLUSTER_NAME} - The name you want to show up in the Cluster list in AWS
-** Example: “geowave-guide-cluster”
-* ${NUM_WORKERS} - The number core/worker nodes you want
-** You will be working with a relatively small amount of data in this walkthrough so we recommend using two
-* ${YOUR_KEYNAME} - The name of the key value pair you want to use for this cluster
-** Example: geowave-guide-keypair
-** If you have not created a keypair for this cluster please follow the steps <<110-appendices.adoc#create-ec2-key-pair, here>>.
-* ${YOUR_SUBNET_ID} - The subnet id linked with your security group(s)
-** Example: subnet-bc123123
-** If you are unsure of which subnet to use please see the VPC (network interface/subnet id) section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here>>.
-* ${YOUR_SECURITY_GROUP} - This is the security group(s) you want the cluster to be assigned to.
-** Example: sg-1a123456
-** If your AWS EMR account has default security groups setup you can leave the EmrManagedMasterSecurityGroup and EmrManagedSlaveSecurityGroup out of --ec2-attributes
-** If you are unsure of which groups to use here please see the EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
-* ${EMR_VERSION} - The version of EMR that you want to use for your cluster
-** Example: emr-4.7.0
-** GeoWave version 0.9.2.1 suports up to EMR version 4.7.2
-* ${YOUR_BUCKET_NAME} - The name of the bucket you uploaded the bootstrap-geowave.sh file to
-* ${YOUR_TAGNAME} - Tag name for the cluster you are creating
-** Example: “geowave-guide”
-** The --tags is completely optional, but may help you search for this cluster if there are many on the aws account you are using
-* ${YOUR_REGION} - Your aws region
-** Example: “us-east-1”
+- ${CLUSTER_NAME} - The name you want to show up in the Cluster list in AWS
+ * Example: “geowave-guide-cluster”
+- ${NUM_WORKERS} - The number core/worker nodes you want
+ * You will be working with the relatively small amount of data in this walkthrough so we recommend using two
+- ${YOUR_KEYNAME} - The name of the key value pair you want to use for this cluster
+ * Example: geowave-guide-keypair
+ * If you have not created a keypair for this cluster please follow the steps <<110-appendices.adoc#create-ec2-key-pair, here>>.
+- ${YOUR_SUBNET_ID} - The subnet id linked with your security group(s)
+ * Example: subnet-bc123123
+ * If you are unsure of which subnet to use please see the VPC (network interface/subnet id) section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here>>.
+- ${YOUR_SECURITY_GROUP} - This is the security group(s) you want the cluster to be assigned to.
+ * Example: sg-1a123456
+ * If your AWS EMR account has default security groups setup you can leave the EmrManagedMasterSecurityGroup and EmrManagedSlaveSecurityGroup out of --ec2-attributes
+ * If you are unsure of which groups to use here please see the EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
+- ${EMR_VERSION} - The version of EMR that you want to use for your cluster
+ * Example: emr-5.1.0
+ * GeoWave version 0.9.3 suports up to EMR version 5.2.0
+- ${DATASTORE} - The datastore you want to use. GeoWave curently suports Accumulo and HBase.
+ * Example: accumulo
+- ${YOUR_TAGNAME} - Tag name for the cluster you are creating
+ * Example: “geowave-guide”
+ * The --tags is completely optional, but may help you search for this cluster if there are many on the aws account you are using
+- ${YOUR_REGION} - Your aws region
+ * Example: “us-east-1”
 
 If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a 
 message  detailing why the command failed.
 
 For more information on the create-cluster command please see the amazon documentation http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html[here].
 
-*Note:* The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired 
+[NOTE]
+====
+The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired 
 cluster. There are many things that could still go wrong and cause the cluster to fail. You can open the AWS EMR GUI to 
 follow the progress of your cluster’s creation.
+====
 
-The bootstrap-geowave.sh script will now setup the environment, then download and process one month of gdelt data. 
+Please view the <<running-the-steps,Running The Steps>> section of this document for a walkthrough of downloading, ingesting, 
+analyzing and visualizing data with GeoWave.  
 
-Please view the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data 
-can be visualized, or the <<bootstrap-script-breakdown,Bootstrap Script Breakdown>> section to see more detail about what 
-is being done by the bootstrap script.
+[NOTE]
+====
+If you used the quickstart version of bootstrap script the script will now setup the environment, then download and process one month of gdelt data.
 
-*Note:* The entire process takes approximately 25 minutes on a three node cluster.
+The entire process takes approximately 25 minutes on a three node cluster.
+
+Please see the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data can be visualized.
+====

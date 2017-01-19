@@ -1,15 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.3-SNAPSHOT</version>
+		<version>0.9.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-deploy</artifactId>
 	<name>GeoWave Deployment Configurations</name>
 	<properties>
+		<tools.finalName>${project.artifactId}-${project.version}-tools</tools.finalName>
+		<hbase.finalName>${project.artifactId}-${project.version}-hbase</hbase.finalName>
+		<accumulo.finalName>${project.artifactId}-${project.version}-accumulo</accumulo.finalName>
+		<geotools.finalName>${project.artifactId}-${project.version}-geoserver</geotools.finalName>
+		<jace.finalName>${project.artifactId}-${project.version}-jace</jace.finalName>
 		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
 		<BUILD_SHARED_LIBS>ON</BUILD_SHARED_LIBS>
@@ -24,21 +28,6 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-adapter-raster</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-analytic-mapreduce</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-accumulo</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-hbase</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
@@ -91,6 +80,21 @@
 		<profile>
 			<id>geowave-tools-singlejar</id>
 			<dependencies>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-analytic-mapreduce</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-accumulo</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-hbase</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-cli-osm</artifactId>
@@ -192,8 +196,7 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Main-Class>mil.nga.giat.geowave.core.cli.GeoWaveMain</Main-Class>
 												<Specification-Title>GeoWave</Specification-Title>
@@ -204,22 +207,18 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
@@ -234,127 +233,24 @@
 			</build>
 		</profile>
 		<profile>
-			<id>hbase-container</id>
-			<properties>
-				<hbase.scope>provided</hbase.scope>
-				<container.extension>-hbase-container</container.extension>
-			</properties>
-		</profile>
-		<profile>
-			<id>accumulo-container</id>
-			<properties>
-				<accumulo.scope>provided</accumulo.scope>
-				<container.extension>-accumulo-container</container.extension>
-			</properties>
-			<dependencyManagement>
-				<dependencies>
-					<dependency>
-						<!-- because distributable packages are built from this module, this 
-							is here to override the scope supplied by geowave-accumulo -->
-						<groupId>org.apache.accumulo</groupId>
-						<artifactId>accumulo-core</artifactId>
-						<version>${accumulo.version}</version>
-						<scope>${accumulo.scope}</scope>
-						<exclusions>
-							<exclusion>
-								<artifactId>maven-scm-provider-svnexe</artifactId>
-								<groupId>org.apache.maven.scm</groupId>
-							</exclusion>
-							<exclusion>
-								<artifactId>maven-scm-api</artifactId>
-								<groupId>org.apache.maven.scm</groupId>
-							</exclusion>
-							<exclusion>
-								<artifactId>httpclient</artifactId>
-								<groupId>org.apache.httpcomponents</groupId>
-							</exclusion>
-							<exclusion>
-								<artifactId>httpcore</artifactId>
-								<groupId>org.apache.httpcomponents</groupId>
-							</exclusion>
-							<exclusion>
-								<artifactId>commons-lang</artifactId>
-								<groupId>commons-lang</groupId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.hadoop</groupId>
-						<artifactId>hadoop-common</artifactId>
-						<version>${hadoop.version}</version>
-						<scope>${hadoop.scope}</scope>
-					</dependency>
-				</dependencies>
-			</dependencyManagement>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.2.1</version>
-						<configuration>
-							<descriptors>
-								<descriptor>src/main/assembly/assembly${container.extension}.xml</descriptor>
-							</descriptors>
-							<finalName>${project.build.finalName}${container.extension}</finalName>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>geotools-container</id>
-			<properties>
-				<geotools.scope>provided</geotools.scope>
-				<container.extension>-geotools-container</container.extension>
-			</properties>
-			<dependencyManagement>
-				<dependencies>
-					<dependency>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-						<version>16.0</version>
-					</dependency>
-				</dependencies>
-			</dependencyManagement>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.2.1</version>
-						<executions>
-							<execution>
-								<id>distro-assembly</id>
-								<phase>package</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-								<configuration>
-									<descriptors>
-										<descriptor>src/main/assembly/assembly${container.extension}.xml</descriptor>
-									</descriptors>
-									<finalName>${project.build.finalName}${container.extension}</finalName>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
 			<id>geotools-container-singlejar</id>
 			<properties>
 				<geotools.scope>provided</geotools.scope>
 				<container.extension>-geotools-container</container.extension>
+				<hbase.version>1.2.3</hbase.version>
 			</properties>
-			<dependencyManagement>
-				<dependencies>
-					<dependency>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-						<version>16.0</version>
-					</dependency>
-				</dependencies>
-			</dependencyManagement>
+			<dependencies>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-accumulo</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-hbase</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
@@ -377,8 +273,9 @@
 											<exclude>commons-codec:commons-codec</exclude>
 
 											<!-- the required version of guava should exist in geoserver's 
-												classpath, although in order to get guava's StopWatch working with HBase 1.2.x we need no later than guava 16.0<exclude>com.google.guava:guava</exclude> -->
-
+												classpath, although in order to get guava's StopWatch working with HBase 
+												1.2.x we need no later than guava 16.0 -->
+											<exclude>com.google.guava:guava</exclude>
 											<!-- even though commons-lang should exist in geoserver's classpath 
 												it is version 2.1 which is missing necessary classes, <exclude>*:commons-lang:*</exclude> -->
 
@@ -424,10 +321,9 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
-												<Specification-Title>GeoWave</Specification-Title>
+												<Specification-Title>GeoWave-Tools</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
 												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
@@ -435,28 +331,24 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-geoserver-singlejar</finalName>
+									<finalName>${geotools.finalName}</finalName>
 								</configuration>
 							</execution>
 						</executions>
@@ -466,24 +358,17 @@
 		</profile>
 		<profile>
 			<id>accumulo-container-singlejar</id>
-			<dependencyManagement>
-				<dependencies>
-					<dependency>
-						<!-- because distributable packages are built from this module, this 
-							is here to override the scope supplied by geowave-accumulo -->
-						<groupId>org.apache.accumulo</groupId>
-						<artifactId>accumulo-core</artifactId>
-						<version>${accumulo.version}</version>
-						<scope>provided</scope>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.hadoop</groupId>
-						<artifactId>hadoop-common</artifactId>
-						<version>${hadoop.version}</version>
-						<scope>provided</scope>
-					</dependency>
-				</dependencies>
-			</dependencyManagement>
+			<properties>
+				<accumulo.scope>provided</accumulo.scope>
+				<container.extension>-accumulo-container</container.extension>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-accumulo</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
@@ -513,10 +398,9 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
-												<Specification-Title>GeoWave</Specification-Title>
+												<Specification-Title>GeoWave-Accumulo</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
 												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
@@ -524,29 +408,25 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-accumulo-singlejar</finalName>
+									<finalName>${accumulo.finalName}</finalName>
 								</configuration>
 							</execution>
 						</executions>
@@ -556,6 +436,17 @@
 		</profile>
 		<profile>
 			<id>hbase-container-singlejar</id>
+			<properties>
+				<hbase.scope>provided</hbase.scope>
+				<container.extension>-hbase-container</container.extension>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-hbase</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
@@ -570,12 +461,9 @@
 								</goals>
 								<configuration>
 									<artifactSet>
-										<includes>
-											<include>mil.nga.giat:geowave-core-store</include>
-											<include>mil.nga.giat:geowave-core-geotime</include>
-											<include>mil.nga.giat:geowave-core-index</include>
-											<include>com.vividsolutions:jts-core</include>
-										</includes>
+										<excludes>
+											<exclude>org.slf4j:*</exclude>
+										</excludes>
 									</artifactSet>
 									<filters>
 										<filter>
@@ -588,12 +476,35 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+											<manifestEntries>
+												<Specification-Title>GeoWave-HBase</Specification-Title>
+												<Specification-Vendor>LocationTech</Specification-Vendor>
+												<Specification-Version>${project.version}</Specification-Version>
+												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Vendor>LocationTech</Implementation-Vendor>
+												<Implementation-Version>${project.version}</Implementation-Version>
+											</manifestEntries>
+										</transformer>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+
+										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
+											of overwriting -->
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
+										</transformer>
+										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/registryFile.jai</resource>
+										</transformer>
+										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/registryFile.jaiext</resource>
+										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-hbase-singlejar</finalName>
+									<finalName>${hbase.finalName}</finalName>
 								</configuration>
 							</execution>
 						</executions>
@@ -603,6 +514,16 @@
 		</profile>
 		<profile>
 			<id>generate-geowave-jace</id>
+			<dependencies>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-accumulo</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<!-- For now JACE bindings do not connect to HBase <dependency> <groupId>mil.nga.giat</groupId> 
+					<artifactId>geowave-datastore-hbase</artifactId> <version>${project.version}</version> 
+					</dependency> -->
+			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
@@ -627,12 +548,35 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+											<manifestEntries>
+												<Specification-Title>GeoWave-C++</Specification-Title>
+												<Specification-Vendor>LocationTech</Specification-Vendor>
+												<Specification-Version>${project.version}</Specification-Version>
+												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Vendor>LocationTech</Implementation-Vendor>
+												<Implementation-Version>${project.version}</Implementation-Version>
+											</manifestEntries>
+										</transformer>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+
+										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
+											of overwriting -->
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
+										</transformer>
+										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/registryFile.jai</resource>
+										</transformer>
+										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/registryFile.jaiext</resource>
+										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
 									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-jace</finalName>
+									<finalName>${jace.finalName}</finalName>
 								</configuration>
 							</execution>
 						</executions>
@@ -699,7 +643,7 @@
 									<outputSources>${project.build.directory}/dependency/jace/source</outputSources>
 									<classpath>
 										<path>${env.JAVA_HOME}/jre/lib/rt.jar</path>
-										<path>${project.build.directory}/${project.build.finalName}-jace.jar</path>
+										<path>${project.build.directory}/${jace.finalName}.jar</path>
 									</classpath>
 
 									<accessibility>PUBLIC</accessibility>
