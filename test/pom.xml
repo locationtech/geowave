@@ -9,6 +9,7 @@
 	</parent>
 	<properties>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
+		<skipITs>true</skipITs>
 	</properties>
 	<artifactId>geowave-test</artifactId>
 	<name>GeoWave Integration Tests</name>
@@ -248,10 +249,10 @@
 								<instance>${instance}</instance>
 								<username>${username}</username>
 								<password>${password}</password>
+								<testStoreType>${testStoreType}</testStoreType>
 								<geoserver.version>${geoserver.version}</geoserver.version>
 								<log4j.configuration>file:${project.build.testOutputDirectory}/log4j-test.properties</log4j.configuration>
 								<java.util.logging.config.file>${project.build.testOutputDirectory}/jul-test.properties</java.util.logging.config.file>
-								<testStoreType>${IT_STORE_TYPE}</testStoreType>
 							</systemPropertyVariables>
 							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->
@@ -334,6 +335,7 @@
 						<sourceDirectory>../core/mapreduce/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/accumulo/target/munged/main</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/hbase/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/datastores/bigtable/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/landsat8/src/main/java</sourceDirectory>
@@ -364,4 +366,28 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>hbase-it</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>HBASE</testStoreType>
+			</properties>
+		</profile>
+		<profile>
+			<id>accumulo-it</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>ACCUMULO</testStoreType>
+			</properties>
+		</profile>
+		<profile>
+			<id>bigtable-it</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>BIGTABLE</testStoreType>
+			</properties>
+		</profile>
+	</profiles>
 </project>
