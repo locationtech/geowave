@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3"
+	xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1"
+	creator="Oregon 400t" version="1.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.topografix.com/GPX/1/1, http://www.topografix.com/GPX/1/1/gpx.xsd, http://www.garmin.com/xmlschemas/GpxExtensions/v3, http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd, http://www.garmin.com/xmlschemas/TrackPointExtension/v1, http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
+	<name>Rockbuster Duathlon at Ashland State Park</name>
+	<desc>Team TopoGrafix tracklogs from the Rockbuster Duathlon at Ashland
+		State Park, April 21st, 2002. The course consisted of a two-mile run,
+		an seven mile mountain bike course, and a final two-mile run.
+
+		Braxton
+		carried an eTrex Venture in his Camelbak for the three laps on the
+		mountain bike loop. Vil carried his new eTrex Venture on the first
+		run, but the GPS shut off during the first mountain bike loop due to
+		battery vibration.
+	</desc>
+	<author>Vil and Dan</author>
+	<email>trails@topografix.com</email>
+	<url>http://www.topografix.com/team/photos.asp</url>
+	<urlname>Team TopoGrafix Pics at the Rockbuster Duathlon</urlname>
+	<time>2002-04-23T15:35:23Z</time>
+	<keywords>mountain biking, racing, ashland, framingham, rockbuster</keywords>
+	<bounds minlat="42.223808" minlon="-71.493169" maxlat="42.261090"
+		maxlon="-71.457800">
+	</bounds>
+
+	<metadata>
+		<link href="http://www.garmin.com">
+			<text>Garmin International</text>
+		</link>
+		<time>2009-10-17T22:58:43Z</time>
+	</metadata>
+	<trk>
+		<name>A track</name>
+		<trkseg>
+			<trkpt lat="47.644548" lon="-122.326897">
+				<ele>4.46</ele>
+				<time>2009-10-17T18:37:26Z</time>
+			</trkpt>
+			<trkpt lat="47.645548" lon="-122.326897">
+				<ele>4.634</ele>
+				<time>2009-10-17T18:38:26Z</time>
+			</trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>B track</name>
+		<number>2</number>
+		<trkseg>
+			<trkpt lat="48.644548" lon="-121.326897">
+				<ele>10.46</ele>
+				<time>2009-11-17T18:37:26Z</time>
+			</trkpt>
+			<trkpt lat="48.645548" lon="-121.326897">
+				<ele>11.634</ele>
+				<time>2009-11-17T18:38:26Z</time>
+				<fix>2d</fix>
+				<sat>8</sat>
+				<hdop>2.000000</hdop>
+				<vdop>2.100000</vdop>
+				<pdop>2.200000</pdop>
+			</trkpt>
+		</trkseg>
+	</trk>
+	<trk>
+		<name>Empty track</name>
+		<trkseg>
+		</trkseg>
+	</trk>
+	<wpt lat="42.246950" lon="-71.461807">
+		<name>AQUADUCT</name>
+		<desc>Aquaduct</desc>
+		<sym>Dam</sym>
+		<type>Dam</type>
+	</wpt>
+	<wpt lat="42.244646" lon="-71.468539">
+		<ele>92.659200</ele>
+		<name>TRANSITION</name>
+		<desc>The Transition area
+            The race started and finished here, and each racer passed through here twice during the race to switch from running to biking, and from biking back to running.</desc>
+		<sym>RV Park</sym>
+		<type>Dot</type>
+	</wpt>
+	<wpt lat="42.235540" lon="-71.476690">
+		<ele>128.016000</ele>
+		<desc>Zachary Hill</desc>
+		<sym>Summit</sym>
+		<type>Summit</type>
+	</wpt>
+	<rte>
+		<name>ROUT135ASP</name>
+		<desc>Route 135 ASP</desc>
+		<sym>Truck Stop</sym>
+		<type>Road</type>
+		<rtept lat="42.244646" lon="-71.476690">
+			<name>rtename1</name>
+		</rtept>
+		<rtept lat="42.244646" lon="-71.468539">
+			<name>rtename2</name>
+		</rtept>
+	</rte>
+	<rte>
+		<name>ROUT135ASP_EMpty</name>
+	</rte>
+</gpx>

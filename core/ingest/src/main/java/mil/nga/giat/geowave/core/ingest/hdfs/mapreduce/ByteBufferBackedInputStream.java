@@ -1,0 +1,83 @@
+package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
+public class ByteBufferBackedInputStream extends
+		InputStream
+{
+	private final ByteBuffer buf;
+
+	public ByteBufferBackedInputStream(
+			final ByteBuffer buf ) {
+		this.buf = buf;
+	}
+
+	@Override
+	public int read()
+			throws IOException {
+		if (!buf.hasRemaining()) {
+			return -1;
+		}
+		return buf.get() & 0xFF;
+	}
+
+	@Override
+	public int read(
+			final byte[] bytes,
+			final int off,
+			int len )
+			throws IOException {
+		if (!buf.hasRemaining()) {
+			return -1;
+		}
+
+		len = Math.min(
+				len,
+				buf.remaining());
+		buf.get(
+				bytes,
+				off,
+				len);
+		return len;
+	}
+
+	@Override
+	public int available()
+			throws IOException {
+		return buf.remaining();
+	}
+
+	@Override
+	public int read(
+			byte[] bytes )
+			throws IOException {
+		if (!buf.hasRemaining()) {
+			return -1;
+		}
+
+		int len = Math.min(
+				bytes.length,
+				buf.remaining());
+		buf.get(
+				bytes,
+				0,
+				len);
+		return len;
+	}
+
+	@Override
+	public synchronized void reset()
+			throws IOException {
+		buf.reset();
+	}
+
+	@Override
+	public long skip(
+			long len )
+			throws IOException {
+		buf.get(new byte[(int) len]);
+		return len;
+	}
+}

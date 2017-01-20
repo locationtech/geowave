@@ -1,0 +1,17 @@
+{
+	"type" : "record",
+	"name" : "WholeFile",
+	"namespace" : "mil.nga.giat.geowave.core.ingest.avro",
+		"fields" : [{
+				"name" : "originalFile",
+				"type" : "bytes",
+				"doc"  : "Original file data"
+			},
+			{
+				"name" : "originalFilePath",
+				"type" : ["string", "null"],
+				"doc"  : "Original file path"
+			}
+		],
+	"doc:" : "Stores the original files from a local file system in an avro"
+}

@@ -1,0 +1,30 @@
+package mil.nga.giat.geowave.core.store.adapter.statistics;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+
+public class FieldIdStatisticVisibility<T> implements
+		EntryVisibilityHandler<T>
+{
+	private final ByteArrayId fieldId;
+
+	public FieldIdStatisticVisibility(
+			final ByteArrayId fieldId ) {
+		this.fieldId = fieldId;
+	}
+
+	@Override
+	public byte[] getVisibility(
+			final DataStoreEntryInfo entryInfo,
+			final T entry ) {
+		for (final FieldInfo<?> f : entryInfo.getFieldInfo()) {
+			if (f.getDataValue().getId().equals(
+					fieldId)) {
+				return f.getVisibility();
+			}
+		}
+		return null;
+	}
+}

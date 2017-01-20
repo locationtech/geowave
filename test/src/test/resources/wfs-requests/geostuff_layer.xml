@@ -1,0 +1,56 @@
+<featureType>
+	<name xmlns:{0}="http://{0}">geostuff</name>
+	<nativeName>geostuff</nativeName>
+	<title>geostuff</title>
+	<description>GeoWave Resource</description>
+	<keywords>
+		<string>geostuff</string>
+	</keywords>
+	<nativeCRS>GEOGCS["WGS 84", DATUM["World Geodetic System 1984",
+		SPHEROID["WGS 84", 6378137.0, 298.257223563,
+		AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]],
+		PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], UNIT["degree",
+		0.017453292519943295], AXIS["Geodetic longitude", EAST],
+		AXIS["Geodetic latitude", NORTH], AUTHORITY["EPSG","4326"]]
+	</nativeCRS>
+	<srs>EPSG:4326</srs>
+	<nativeBoundingBox>
+		<minx>-180.0</minx>
+		<maxx>-90.0</maxx>
+		<miny>-90.0</miny>
+		<maxy>90.0</maxy>
+		<crs>EPSG:4326</crs>
+	</nativeBoundingBox>
+	<latLonBoundingBox>
+		<minx>-180.0</minx>
+		<maxx>-90.0</maxx>
+		<miny>-90.0</miny>
+		<maxy>90.0</maxy>
+		<crs>GEOGCS["WGS84(DD)", DATUM["WGS84", SPHEROID["WGS84", 6378137.0,
+			298.257223563]], PRIMEM["Greenwich", 0.0], UNIT["degree",
+			0.017453292519943295], AXIS["Geodetic longitude", EAST],
+			AXIS["Geodetic latitude", NORTH]]</crs>
+	</latLonBoundingBox>
+	<attributes>
+		<attribute>
+			<name>geometry</name>
+			<binding>com.vividsolutions.jts.geom.Geometry</binding>
+		</attribute>
+		<attribute>
+			<name>pid</name>
+			<binding>java.lang.String</binding>
+		</attribute>
+		<attribute>
+			<name>class</name>
+			<binding>java.lang.String</binding>
+		</attribute>
+		<attribute>
+			<name>pop</name>
+			<binding>java.lang.Long</binding>
+		</attribute>
+		<attribute>
+			<name>when</name>
+			<binding>java.util.Date</binding>
+		</attribute>
+	</attributes>
+</featureType>

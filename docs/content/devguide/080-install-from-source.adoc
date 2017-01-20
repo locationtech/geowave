@@ -1,0 +1,63 @@
+[[install-from-source]]
+<<<
+== Installation from Source
+
+=== GeoServer
+
+==== GeoServer Versions
+
+GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions look at
+the build matrix section of the .travis.yml file in the root directory of the project. All of the examples below use the variable
+$BUILD_ARGS to represent your choice of all the dependency versions.
+
+Example build args:
+
+[source, bash]
+----
+export BUILD_ARGS="-Daccumulo.version=1.7.2 -Daccumulo.api=1.7 -Dhbase.version=1.2.3 -Dhadoop.version=2.7.3 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0" <1>
+----
+<1> Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section
+
+==== GeoServer Install
+
+First we need to build the GeoServer plugin - from the GeoWave root directory:
+
+[source, bash]
+----
+mvn package -P geotools-container-singlejar $BUILD_ARGS <1>
+----
+<1> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
+
+let's assume you have GeoServer deployed in a Tomcat container in
+/opt/tomcat
+
+[source, bash]
+----
+cp deploy/target/*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+----
+
+and re-start Tomcat
+
+[NOTE]
+====
+If you used the RPMs to build and install GeoWave then GeoSever will have already been deployed via Jetty. The jar file is installed in /usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/ 
+
+You can restart Jetty by restarting the GeoWave service.
+====
+
+=== Accumulo
+
+==== Accumulo Versions
+
+GeoWave has been tested and works against accumulo 1.5.0 through 1.7.2 . Ensure you've set the desired
+version in the BUILD_ARGS environment variable
+
+==== Accumulo Install
+
+[source, bash]
+----
+mvn package -P accumulo-container-singlejar $BUILD_ARGS <1>
+----
+<1> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
+
+--- +

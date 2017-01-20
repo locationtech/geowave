@@ -1,0 +1,90 @@
+[
+    {
+        "name" : "AttributeValues",
+        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "type" : "record",
+        "fields" : [
+            {
+            	"name" : "fid",
+                "type" : "string"
+            },
+            {
+             	 "name" : "values",
+                 "type" : {
+                     "type" : "array",
+                     "items" : "bytes"
+                 }
+            },
+            {
+            	"name" : "classifications",
+                "type" : [
+                    "null",{
+                        "type" : "array",
+                        "items" : "string"
+                    }
+                ]
+            }
+         ]
+    },
+    {
+        "name" : "FeatureDefinition",
+        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "type" : "record",
+        "fields" : [
+             {
+             	"name" : "featureTypeName",
+             	"type" : "string"
+             },
+             {
+             	 "name" : "attributeNames",
+                 "type" : {
+                     "type" : "array",
+                     "items" : "string"
+                 }
+             },
+             {
+             	 "name" : "attributeTypes",
+                 "type" : {
+                     "type" : "array",
+                     "items" : "string"
+             	 }
+             },
+             {
+             	 "name" : "attributeDefaultClassifications",
+                 "type" : {
+                     "type" : "array",
+                     "items" : "string"
+             	 }
+             }
+         ]
+    },
+    {
+        "name" : "AvroSimpleFeature",
+        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "type" : "record",
+        "fields" : [
+            {
+            	"name" : "featureType",
+            	"type" : "FeatureDefinition"
+           	},
+            {
+            	"name" : "value",
+            	"type" : "AttributeValues"
+            }
+        ]
+    },
+    {
+        "name" : "AvroSimpleFeatureCollection",
+        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "type" : "record",
+        "fields" : [
+            {"name" : "featureType", "type" : "FeatureDefinition"},
+            {"name" : "simpleFeatureCollection",
+                "type" : {
+                    "type" : "array",
+                    "items" : "AttributeValues"
+                }
+            }
+        ]
+    }
+]

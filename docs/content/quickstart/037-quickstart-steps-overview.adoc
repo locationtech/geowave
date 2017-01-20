@@ -1,0 +1,41 @@
+[[steps-overview]]
+<<<
+
+== Running The Steps
+
+=== Connecting to the Cluster
+
+Once your cluster is running and bootstrapped, ssh into the cluster. 
+
+Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. You will use the “Master public DNS” 
+value as your hostname and the security key you assigned to the cluster to access it. 
+
+If you are unsure of how to do this, click on the blue SSH link to the right of your Master public DNS to open a popup that will walk you though it.
+
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+[NOTE]
+====
+The cluster status may show as waiting before the bootstrap script has completed. Please allow 5-7 minutes 
+for the cluster to bet setup and bootstrapped. This may take longer if you are using spot instances.  
+====
+
+=== Download and Source Files
+
+Next you will need to download a few files that we will use later in this guide. 
+
+[source, bash]
+----
+cd /mnt <1>
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/geowave-env.sh
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
+----
+<1> It is recommended to use the mnt directory for this guide.
+
+The geowave-env.sh script has a number of predefined variables that we will use in the other commands, so we will source it here.
+
+[source, bash]
+----
+source /mnt/geowave-env.sh
+----

@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+#
+# Installing additional components on an EMR node depends on several config files
+# controlled by the EMR framework which may affect the is_master and configure_zookeeper
+# functions at some point in the future. I've grouped each unit of work into a function 
+# with a descriptive name to help with understanding and maintainability
+#
+
+INTIAL_POLLING_INTERVAL=15 # This gets doubled for each attempt up to max_attempts
+
+# Parses a configuration file put in place by EMR to determine the role of this node
+
+is_master() {
+  if [ $(jq '.isMaster' /mnt/var/lib/info/instance.json) = 'true' ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Avoid race conditions and actually poll for availability of component dependencies
+# Credit: http://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs/8351489#8351489
+with_backoff() {
+  local max_attempts=${ATTEMPTS-5}
+  local timeout=${INTIAL_POLLING_INTERVAL-1}
+  local attempt=0
+  local exitCode=0
+
+  while (( $attempt < $max_attempts ))
+  do
+    set +e
+    "$@"
+    exitCode=$?
+    set -e
+
+    if [[ $exitCode == 0 ]]
+    then
+      break
+    fi
+
+    echo "Retrying $@ in $timeout.." 1>&2
+    sleep $timeout
+    attempt=$(( attempt + 1 ))
+    timeout=$(( timeout * 2 ))
+  done
+
+  if [[ $exitCode != 0 ]]
+  then
+    echo "Fail: $@ failed to complete after $max_attempts attempts" 1>&2
+  fi
+
+  return $exitCode
+}
+
+is_hdfs_available() {
+	hadoop fs -ls /
+	return $?
+}
+
+wait_until_hdfs_is_available() {
+	with_backoff is_hdfs_available
+	if [ $? != 0 ]; then
+		echo "HDFS not available before timeout. Exiting ..."
+		exit 1
+	fi
+}
+
+install_geowave() {
+	# Install the repo config file
+	sudo rpm -Uvh $GEOWAVE_REPO_BASE_URL_TOKEN$GEOWAVE_REPO_RPM
+
+	# EMR has a tar bundle installed puppet in /home/ec2-user 
+	# So as not to install incompatible puppet from the dependencies of geowave-puppet
+	# I'm doing this convoluted workaround to download and then install with no dep resolution
+	sudo yumdownloader --enablerepo $GEOWAVE_REPO_NAME_TOKEN --destdir /tmp geowave-${GEOWAVE_VERSION}-puppet
+	sudo rpm -Uvh --force --nodeps /tmp/geowave-${GEOWAVE_VERSION}-puppet.*.noarch.rpm 
+
+cat << EOF > /tmp/geowave.pp
+class { 'geowave::repo': 
+repo_base_url => '$GEOWAVE_REPO_BASE_URL_TOKEN',
+  repo_enabled  => 1,
+} ->
+class { 'geowave':
+	geowave_version				=> '${GEOWAVE_VERSION}',
+	hadoop_vendor_version 		=> 'apache',
+	install_$DATASTORE_TOKEN	=> true,
+	install_app           		=> true,
+	install_app_server    		=> true,
+	http_port             		=> '${GEOSERVER_PORT}',
+}
+
+file { '/etc/geowave/geowave.config':
+	ensure  => file,
+	owner   => 'geowave',
+	group   => 'geowave',
+	mode    => 644,
+	content => 'export JAVA_OPTS="${GEOSERVER_MEMORY}"',
+	require => Package['geowave-${GEOWAVE_VERSION}-core'],
+	notify  => Service['geowave'],
+}
+EOF
+
+	sudo sh -c "puppet apply /tmp/geowave.pp"
+	return 0
+}
+
+$DATASTORE_LIB_TOKEN

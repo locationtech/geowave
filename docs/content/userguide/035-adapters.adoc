@@ -1,0 +1,67 @@
+[[architecture-adapters]]
+=== Adapters
+
+In order to store geometry, attributes, and other information, a format is required that describes how to serialize and deserialize the data.
+GeoWave provides an interface that handles the serialization and deserialization of feature data. A default implementation
+supporting the GeoTools simple feature type is included by default. More on this specific implementation, as well
+as the interface, will be detailed later in this document. A pointer to the java class (expected to be on
+the classpath) is stored in the Adapter persistence table. This is loaded dynamically when the data is queried and the
+results are translated to the native data type
+
+==== Feature Serialization
+
+image::serialization1.png[scaledwidth="100%",alt="Feature Serialization"]
+
+GeoWave allows developers to create their own data adapters. Adapters not only determine how the data is actually stored
+(serialization/deserialization), but also contain a hierarchy of attribute types. The reason for this hierarchy has to
+do with extensibility vs. optimization. A data adapter could theoretically take a dependency on ffmpeg, store the
+feature as metadata in a video stream, and persist that value to the database. All questions of sanity of this solution
+aside, there are some additional specific issues with the way fine grain filtering is done - specifically due to the
+iterators. Iterators are part of the Accumulo extensibility module and allow for arbitrary code to be plugged in directly
+at the tablet server level into the core Accumulo kernel. With more code in the iterators there is both a greater chance
+of crashing (and taking down a tablet server - and possibly an Accumulo instance), greater use of memory (memory used by
+the iterator / class loader isn't available for caching, etc., and a greater O&M debt - the iterators have to be
+distributed to each client out of band - and require impersonating the Accumulo user (possibly root).
+
+Based on this, our goal was to minimize the code, and standardize on as few iterators as possible. This conflicted with
+the desire to allow maximum flexibility with arbitrary DataAdapters. A middle ground was found, and this hierarchy was
+created. Some standardization was put in place around how certain data types would be stored and serialized, but a
+"native data" portion was still left in place for arbitrary data - with the caveat that native data cannot be used in
+distributed (iterator based) filtering - only in client side filtering.
+
+==== Primary Index Data
+
+These are sets of data which are also used to construct the primary index (space filling curve). They will typically be
+geometry coordinates and optionally time - but could be any set of numeric values (think decomposed feature vectors, etc.).
+They cannot be null.
+
+==== Common Index Data
+
+These are a collection of attributes. There can be any number of attributes, but they must conform to the DimensionField
+interface - the attribute type must have a FieldReader and a FieldWriter that is within the classpath of the tablet
+servers. GeoWave provides a basic implementation for these attribute types:
+
+* Boolean
+* Byte
+* Short
+* Float
+* Double
+* BigDecimal
+* Integer
+* Long
+* BigInteger
+* String
+* Geometry
+* Date
+* Calendar
+
+The values that are not part of the primary index can be used for distributed secondary filtering, and can be null.
+The values that are associated with the primary index will be used for fine-grained filtering within an iterator.
+
+==== Native Data
+
+These can be literally anything. From the point of view of the data adapter they are just a binary (or Base64) encoded
+chunk of data. No distributed filtering can be performed on this data except for Accumulo's visibility filter - but the
+client side filtering extensibility point can still be used if necessary. The Data Adapter has to provide methods to
+serialize and deserialize these items in the form of Field Readers and Writers, but it is not necessary to have these
+methods on the classpath of any nodes.

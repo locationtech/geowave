@@ -1,0 +1,15 @@
+[[statistics]]
+<<<
+=== Statistics
+
+Adapters provide a set of statistics stored within a statistic store.  The set of available statistics is specific to each adapter and
+the set of attributes for those data items managed by the adapter. Statistics include:
+
+* Ranges over an attribute, including time.
+* Enveloping bounding box over all geometries.
+* Cardinality of the number of stored items.
+* Histograms over the range of values for an attribute.
+* Cardinality of discrete values of an attribute.
+
+Statistics are updated during data ingest and deletion.  Range and bounding box statistics reflect the largest range over time.
+Those statistics are not updated during deletion. Statistics based on cardinality are updated upon deletion.

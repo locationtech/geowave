@@ -1,0 +1,87 @@
+package mil.nga.giat.geowave.core.store.index.text;
+
+import java.nio.ByteBuffer;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+
+public class TextExactMatchFilter implements
+		DistributableQueryFilter
+{
+
+	private ByteArrayId fieldId;
+	private String matchValue;
+	private boolean caseSensitive;
+
+	protected TextExactMatchFilter() {
+		super();
+	}
+
+	public TextExactMatchFilter(
+			final ByteArrayId fieldId,
+			final String matchValue,
+			final boolean caseSensitive ) {
+		super();
+		this.fieldId = fieldId;
+		this.matchValue = matchValue;
+		this.caseSensitive = caseSensitive;
+	}
+
+	public ByteArrayId getFieldId() {
+		return fieldId;
+	}
+
+	public String getMatchValue() {
+		return matchValue;
+	}
+
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	@Override
+	public boolean accept(
+			final CommonIndexModel indexModel,
+			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
+		final ByteArrayId stringBytes = (ByteArrayId) persistenceEncoding.getCommonData().getValue(
+				fieldId);
+		if (stringBytes != null) {
+			String value = stringBytes.getString();
+			value = caseSensitive ? value : value.toLowerCase();
+			final String normalizedMatchValue = caseSensitive ? matchValue : matchValue.toLowerCase();
+			return normalizedMatchValue.equals(value);
+		}
+		return false;
+	}
+
+	@Override
+	public byte[] toBinary() {
+		final byte[] fieldIdBytes = fieldId.getBytes();
+		final byte[] matchValueBytes = StringUtils.stringToBinary(matchValue);
+		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldIdBytes.length + 4 + matchValueBytes.length + 4);
+		bb.putInt(fieldIdBytes.length);
+		bb.put(fieldIdBytes);
+		bb.putInt(matchValueBytes.length);
+		bb.put(matchValueBytes);
+		bb.putInt(caseSensitive ? 1 : 0);
+		return bb.array();
+	}
+
+	@Override
+	public void fromBinary(
+			byte[] bytes ) {
+		final ByteBuffer bb = ByteBuffer.wrap(bytes);
+		final byte[] fieldIdBytes = new byte[bb.getInt()];
+		bb.get(fieldIdBytes);
+		fieldId = new ByteArrayId(
+				fieldIdBytes);
+		final byte[] matchValueBytes = new byte[bb.getInt()];
+		bb.get(matchValueBytes);
+		matchValue = StringUtils.stringFromBinary(matchValueBytes);
+		caseSensitive = (bb.getInt() == 1) ? true : false;
+	}
+
+}
