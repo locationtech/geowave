@@ -37,6 +37,7 @@
 		<geoserver.version>2.10.0</geoserver.version>
 		<accumulo.version>1.7.2</accumulo.version>
 		<accumulo.api>1.7</accumulo.api>
+		<skipITs>true</skipITs>
 		<bigtable.version>0.9.4</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
 		<hbase.version>1.2.3</hbase.version>
@@ -969,6 +970,16 @@
 					<layout>default</layout>
 				</repository>
 			</repositories>
+		</profile>
+		<profile>
+			<id>compatibility</id>
+			<properties>
+				<accumulo.version>1.6.5</accumulo.version>
+				<accumulo.api>1.6</accumulo.api>
+				<hadoop.version>2.6.4</hadoop.version>
+				<geotools.version>15.2</geotools.version>
+				<geoserver.version>2.9.2</geoserver.version>
+			</properties>
 		</profile>
 		<profile>
 			<id>doclint-java8-disable</id>
