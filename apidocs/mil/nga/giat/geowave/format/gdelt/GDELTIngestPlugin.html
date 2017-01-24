@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -181,6 +181,9 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html#GDELTIngestPlugin--">GDELTIngestPlugin</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html#GDELTIngestPlugin-mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider-">GDELTIngestPlugin</a></span>(<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/DataSchemaOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">DataSchemaOptionProvider</a>&nbsp;dataSchemaOptionProvider)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -266,23 +269,19 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 </td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html#setDataSchemaOptionProvider-mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider-">setDataSchemaOptionProvider</a></span>(<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/DataSchemaOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">DataSchemaOptionProvider</a>&nbsp;dataSchemaOptionProvider)</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html#supportsFile-java.io.File-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>
 <div class="block">This method will be called for every file that matches the given
  extensions.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html#toAvroObjects-java.io.File-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input)</code>
 <div class="block">Converts the supported file into an Avro encoded Java object.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gdelt/GDELTIngestPlugin.html#toGeoWaveDataInternal-mil.nga.giat.geowave.core.ingest.avro.WholeFile-java.util.Collection-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&nbsp;hfile,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
@@ -320,10 +319,19 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <a name="GDELTIngestPlugin--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>GDELTIngestPlugin</h4>
 <pre>public&nbsp;GDELTIngestPlugin()</pre>
+</li>
+</ul>
+<a name="GDELTIngestPlugin-mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>GDELTIngestPlugin</h4>
+<pre>public&nbsp;GDELTIngestPlugin(<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/DataSchemaOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">DataSchemaOptionProvider</a>&nbsp;dataSchemaOptionProvider)</pre>
 </li>
 </ul>
 </li>
@@ -334,15 +342,6 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="setDataSchemaOptionProvider-mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setDataSchemaOptionProvider</h4>
-<pre>public&nbsp;void&nbsp;setDataSchemaOptionProvider(<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/DataSchemaOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">DataSchemaOptionProvider</a>&nbsp;dataSchemaOptionProvider)</pre>
-</li>
-</ul>
 <a name="getTypes--">
 <!--   -->
 </a>
