@@ -22,7 +22,7 @@ public class HBaseRowPrefixQuery<T> extends
 	public HBaseRowPrefixQuery(
 			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, ?> scanCallback,
 			final Integer limit,
 			final String[] authorizations ) {
 		super(

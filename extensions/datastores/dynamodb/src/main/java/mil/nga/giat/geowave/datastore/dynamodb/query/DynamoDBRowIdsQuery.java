@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 
 /**
  * Represents a query operation for a specific set of DynamoDB row IDs.
@@ -28,7 +29,7 @@ public class DynamoDBRowIdsQuery<T> extends
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final Collection<ByteArrayId> rows,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, DynamoDBRow> scanCallback,
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(

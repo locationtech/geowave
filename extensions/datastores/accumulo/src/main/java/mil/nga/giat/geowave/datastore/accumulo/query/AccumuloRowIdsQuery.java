@@ -26,7 +26,7 @@ public class AccumuloRowIdsQuery<T> extends
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final Collection<ByteArrayId> rows,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, Object> scanCallback,
 			final DedupeFilter dedupFilter,
 			final String[] authorizations ) {
 		super(

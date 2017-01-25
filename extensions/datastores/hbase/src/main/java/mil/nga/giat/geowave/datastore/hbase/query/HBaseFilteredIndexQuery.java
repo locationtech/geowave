@@ -39,14 +39,14 @@ import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.MergingEntryIterator;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseMergingEntryIterator;
 
 public abstract class HBaseFilteredIndexQuery extends
 		HBaseQuery implements
 		FilteredIndexQuery
 {
 
-	protected final ScanCallback<?> scanCallback;
+	protected final ScanCallback<?, ?> scanCallback;
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(HBaseFilteredIndexQuery.class);
 	private boolean hasSkippingFilter = false;
@@ -54,7 +54,7 @@ public abstract class HBaseFilteredIndexQuery extends
 	public HBaseFilteredIndexQuery(
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, ?> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String... authorizations ) {
 		super(
@@ -286,10 +286,10 @@ public abstract class HBaseFilteredIndexQuery extends
 				if (range.getStart() != null) {
 					scanner.setStartRow(range.getStart().getBytes());
 					if (!range.isSingleValue()) {
-						scanner.setStopRow(HBaseUtils.getNextPrefix(range.getEnd().getBytes()));
+						scanner.setStopRow(range.getEndAsNextPrefix().getBytes());
 					}
 					else {
-						scanner.setStopRow(HBaseUtils.getNextPrefix(range.getStart().getBytes()));
+						scanner.setStopRow(range.getStart().getNextPrefix());
 					}
 				}
 
@@ -401,10 +401,10 @@ public abstract class HBaseFilteredIndexQuery extends
 					final byte[] startRow = range.getStart().getBytes();
 					byte[] stopRow;
 					if (!range.isSingleValue()) {
-						stopRow = HBaseUtils.getNextPrefix(range.getEnd().getBytes());
+						stopRow = range.getEndAsNextPrefix().getBytes();
 					}
 					else {
-						stopRow = HBaseUtils.getNextPrefix(range.getStart().getBytes());
+						stopRow = range.getStart().getNextPrefix();
 					}
 
 					final RowRange rowRange = new RowRange(
@@ -479,7 +479,7 @@ public abstract class HBaseFilteredIndexQuery extends
 					hasSkippingFilter);
 		}
 		else {
-			return new MergingEntryIterator(
+			return new HBaseMergingEntryIterator(
 					adapterStore,
 					index,
 					resultsIterator,

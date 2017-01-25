@@ -40,6 +40,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.Deleter;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -203,9 +204,9 @@ public class HBaseDataStore extends
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> scanCallback,
+			final ScanCallback<Object, Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations ) {
+			final String... authorizations ) {
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
@@ -241,10 +242,10 @@ public class HBaseDataStore extends
 			Iterator<Result> resultIt;
 
 			if (!options.isEnableCustomFilters()) {
-				ArrayList<Result> filteredResults = new ArrayList<Result>();
+				final ArrayList<Result> filteredResults = new ArrayList<Result>();
 
 				for (Result result = results.next(); result != null; result = results.next()) {
-					byte[] rowId = result.getRow();
+					final byte[] rowId = result.getRow();
 
 					if (rowHasData(
 							rowId,
@@ -313,7 +314,7 @@ public class HBaseDataStore extends
 		buf.get(rawAdapterId);
 		buf.get(rawDataId);
 
-		for (ByteArrayId dataId : dataIds) {
+		for (final ByteArrayId dataId : dataIds) {
 			if (Arrays.equals(
 					rawDataId,
 					dataId.getBytes())) {
@@ -410,7 +411,7 @@ public class HBaseDataStore extends
 		final HBaseRowPrefixQuery<Object> prefixQuery = new HBaseRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -434,7 +435,7 @@ public class HBaseDataStore extends
 				adapter,
 				index,
 				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				filter,
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -448,29 +449,17 @@ public class HBaseDataStore extends
 	}
 
 	@Override
-	protected void addToBatch(
-			final Closeable idxDeleter,
-			final List<ByteArrayId> rowIds )
-			throws Exception {
-		final List<Delete> deletes = new ArrayList<Delete>();
-		for (final ByteArrayId id : rowIds) {
-			deletes.add(new Delete(
-					id.getBytes()));
-		}
-		if (idxDeleter instanceof HBaseWriter) {
-			((HBaseWriter) idxDeleter).delete(deletes);
-		}
-	}
-
-	@Override
-	protected Closeable createIndexDeleter(
+	protected Deleter createIndexDeleter(
 			final String indexTableName,
-			final String[] authorizations )
+			final boolean isAltIndex,
+			final String... authorizations )
 			throws Exception {
-		return operations.createWriter(
-				indexTableName,
-				new String[] {},
-				false);
+		return new HBaseRowDeleter(
+				operations.createWriter(
+						indexTableName,
+						new String[] {},
+						false),
+				isAltIndex);
 	}
 
 	@Override

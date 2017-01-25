@@ -218,7 +218,7 @@ public abstract class BaseDataStore implements
 									idQuery.getDataIds(),
 									(DataAdapter<Object>) adapterStore.getAdapter(idQuery.getAdapterId()),
 									filter,
-									(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+									(ScanCallback<Object, Object>) sanitizedQueryOptions.getScanCallback(),
 									sanitizedQueryOptions.getAuthorizations(),
 									sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension()));
 						}
@@ -277,7 +277,7 @@ public abstract class BaseDataStore implements
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<Object> adapter,
 			final DedupeFilter dedupeFilter,
-			final ScanCallback<Object> callback,
+			final ScanCallback<Object, Object> callback,
 			final String[] authorizations,
 			final double[] maxResolutionSubsamplingPerDimension )
 			throws IOException {
@@ -358,7 +358,7 @@ public abstract class BaseDataStore implements
 		// adapter to be queried
 		// once
 		final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
-
+		Deleter idxDeleter = null, altIdxDeleter = null;
 		try {
 			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
 					.getIndicesForAdapters(
@@ -372,14 +372,16 @@ public abstract class BaseDataStore implements
 				final String indexTableName = index.getId().getString();
 				final String altIdxTableName = indexTableName + ALT_INDEX_TABLE;
 
-				final Closeable idxDeleter = createIndexDeleter(
+				idxDeleter = createIndexDeleter(
 						indexTableName,
+						false,
 						queryOptions.getAuthorizations());
 
-				final Closeable altIdxDelete = baseOptions.isUseAltIndex()
-						&& baseOperations.tableExists(altIdxTableName) ? createIndexDeleter(
+				altIdxDeleter = baseOptions.isUseAltIndex() && baseOperations.tableExists(altIdxTableName) ? createIndexDeleter(
 						altIdxTableName,
-						queryOptions.getAuthorizations()) : null;
+						true,
+						queryOptions.getAuthorizations())
+						: null;
 
 				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 
@@ -397,11 +399,13 @@ public abstract class BaseDataStore implements
 								queryOptions.getAuthorizations());
 						continue;
 					}
-
-					final ScanCallback<Object> callback = new ScanCallback<Object>() {
+					final Deleter internalIdxDeleter = idxDeleter;
+					final Deleter internalAltIdxDeleter = altIdxDeleter;
+					final ScanCallback<Object, Object> callback = new ScanCallback<Object, Object>() {
 						@Override
 						public void entryScanned(
 								final DataStoreEntryInfo entryInfo,
+								final Object nativeDataStoreEntry,
 								final Object entry ) {
 							callbackCache.getDeleteCallback(
 									(WritableDataAdapter<Object>) adapter,
@@ -409,13 +413,15 @@ public abstract class BaseDataStore implements
 									entryInfo,
 									entry);
 							try {
-								addToBatch(
-										idxDeleter,
-										entryInfo.getRowIds());
-								if (altIdxDelete != null) {
-									addToBatch(
-											altIdxDelete,
-											Collections.singletonList(adapter.getDataId(entry)));
+								internalIdxDeleter.delete(
+										entryInfo,
+										nativeDataStoreEntry,
+										adapter);
+								if (internalAltIdxDeleter != null) {
+									internalAltIdxDeleter.delete(
+											entryInfo,
+											nativeDataStoreEntry,
+											adapter);
 								}
 							}
 							catch (final Exception e) {
@@ -482,10 +488,6 @@ public abstract class BaseDataStore implements
 					}
 					callbackCache.close();
 				}
-				if (altIdxDelete != null) {
-					altIdxDelete.close();
-				}
-				idxDeleter.close();
 			}
 
 			return aOk.get();
@@ -495,6 +497,21 @@ public abstract class BaseDataStore implements
 					"Failed delete operation " + query.toString(),
 					e);
 			return false;
+		}
+		finally {
+			try {
+				if (idxDeleter != null) {
+					idxDeleter.close();
+				}
+				if (altIdxDeleter != null) {
+					altIdxDeleter.close();
+				}
+			}
+			catch (final Exception e) {
+				LOGGER.warn(
+						"Unable to close deleter",
+						e);
+			}
 		}
 
 	}
@@ -511,7 +528,7 @@ public abstract class BaseDataStore implements
 		try (final CloseableIterator<DataStatistics<?>> it = statisticsStore.getDataStatistics(adapter.getAdapterId())) {
 
 			while (it.hasNext()) {
-				final DataStatistics stats = it.next();
+				final DataStatistics<?> stats = it.next();
 				statisticsStore.removeStatistics(
 						adapter.getAdapterId(),
 						stats.getStatisticsId(),
@@ -539,14 +556,10 @@ public abstract class BaseDataStore implements
 			final String columnFamily,
 			final String... additionalAuthorizations );
 
-	protected abstract void addToBatch(
-			Closeable idxDeleter,
-			List<ByteArrayId> rowIds )
-			throws Exception;
-
-	protected abstract Closeable createIndexDeleter(
+	protected abstract Deleter createIndexDeleter(
 			String indexTableName,
-			String[] authorizations )
+			boolean altIndex,
+			String... authorizations )
 			throws Exception;
 
 	protected abstract List<ByteArrayId> getAltIndexRowIds(
@@ -560,9 +573,9 @@ public abstract class BaseDataStore implements
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> dataIds,
 			final DataAdapter<?> adapter,
-			final ScanCallback<Object> callback,
+			final ScanCallback<Object, Object> callback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations );
+			final String... authorizations );
 
 	protected abstract CloseableIterator<Object> queryConstraints(
 			List<ByteArrayId> adapterIdsToQuery,

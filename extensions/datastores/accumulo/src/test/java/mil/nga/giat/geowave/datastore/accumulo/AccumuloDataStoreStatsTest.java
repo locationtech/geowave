@@ -315,11 +315,12 @@ public class AccumuloDataStoreStatsTest
 						adapter,
 						index,
 						-1,
-						new ScanCallback<TestGeometry>() {
+						new ScanCallback<TestGeometry, Object>() {
 
 							@Override
 							public void entryScanned(
 									final DataStoreEntryInfo entryInfo,
+									Object nativeDataStoreEntry,
 									final TestGeometry entry ) {
 								found.getAndSet(true);
 							}
@@ -434,11 +435,12 @@ public class AccumuloDataStoreStatsTest
 						adapter,
 						index,
 						-1,
-						new ScanCallback<TestGeometry>() {
+						new ScanCallback<TestGeometry, Object>() {
 
 							@Override
 							public void entryScanned(
 									final DataStoreEntryInfo entryInfo,
+									Object nativeDataStoreEntry,
 									final TestGeometry entry ) {
 								found.getAndSet(true);
 							}

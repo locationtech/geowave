@@ -12,8 +12,7 @@ public class CassandraAdapterStore extends
 		AbstractCassandraPersistence<DataAdapter<?>> implements
 		AdapterStore
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			CassandraAdapterStore.class);
+	private final static Logger LOGGER = Logger.getLogger(CassandraAdapterStore.class);
 	protected static final String ADAPTER_CF = "ADAPTER";
 
 	public CassandraAdapterStore(
@@ -25,8 +24,7 @@ public class CassandraAdapterStore extends
 	@Override
 	public void addAdapter(
 			final DataAdapter<?> adapter ) {
-		addObject(
-				adapter);
+		addObject(adapter);
 
 	}
 

@@ -10,6 +10,7 @@ env:
     - NAME='UT and Publish Docs with Latest ASF Versions' STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.3'             HADOOP_VERSION='2.7.3'             GEOTOOLS_VERSION='16.0'   GEOSERVER_VERSION='2.10.0' PLATFORM_VERSION='""'          BUILD_DOCS=true   IT_ONLY=false
     - NAME='Accumulo IT on Latest ASF Versions' STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.3'             HADOOP_VERSION='2.7.3'             GEOTOOLS_VERSION='16.0'   GEOSERVER_VERSION='2.10.0' PLATFORM_VERSION='""'          BUILD_DOCS=false  IT_ONLY=true
     - NAME='HBase IT on Latest ASF Versions' STORE_TYPE='HBASE'     ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.3'             HADOOP_VERSION='2.7.3'             GEOTOOLS_VERSION='16.0'   GEOSERVER_VERSION='2.10.0' PLATFORM_VERSION='""'          BUILD_DOCS=false  IT_ONLY=true
+    - NAME='Cassandra IT on Latest ASF Versions' STORE_TYPE='CASSANDRA'     ACCUMULO_VERSION='1.7.2'  ACCUMULO_API='1.7' HBASE_VERSION='1.2.3' HADOOP_VERSION='2.7.3' GEOTOOLS_VERSION='16.0'   GEOSERVER_VERSION='2.10.0' PLATFORM_VERSION='""' ADDITIONAL_ARGS='-P cassandra' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Bigtable IT on Latest ASF Versions' STORE_TYPE='BIGTABLE'     ACCUMULO_VERSION='1.7.2'              ACCUMULO_API='1.7' HBASE_VERSION='1.2.3'             HADOOP_VERSION='2.7.3'             GEOTOOLS_VERSION='16.0'   GEOSERVER_VERSION='2.10.0' PLATFORM_VERSION='""'          BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo IT on Latest CDH Versions' STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.2-cdh5.5.0'     ACCUMULO_API='1.7' HBASE_VERSION='1.2.0-cdh5.9.0'    HADOOP_VERSION='2.6.0-cdh5.9.0'    GEOTOOLS_VERSION='16.0'   GEOSERVER_VERSION='2.10.0' PLATFORM_VERSION='cloudera'    BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo IT on Latest HDP Versions' STORE_TYPE='ACCUMULO'  ACCUMULO_VERSION='1.7.0.2.4.2.0-258'  ACCUMULO_API='1.7' HBASE_VERSION='1.1.2.2.4.2.0-258' HADOOP_VERSION='2.7.1.2.4.2.0-258' GEOTOOLS_VERSION='16.0'   GEOSERVER_VERSION='2.10.0' PLATFORM_VERSION='hortonworks' BUILD_DOCS=false  IT_ONLY=true
@@ -48,7 +49,7 @@ before_install:
   - export BIGTABLE_EMULATOR_HOST=localhost:8128
 after_success:
   - .utility/publish-docs.sh
-  - cd test; mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION}
+  - cd test; mvn coveralls:report -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dhadoop.version=${HADOOP_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -P ${PLATFORM_VERSION} ${ADDITIONAL_ARGS}
 
 addons:
   apt_packages:
@@ -59,5 +60,5 @@ addons:
       description: Build submitted via Travis CI
     notification_email: GeoWave@nga.mil
     build_command_prepend: mvn clean
-    build_command: mvn clean compile -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -Dformatter.skip=true -P ${PLATFORM_VERSION}
+    build_command: mvn clean compile -Dfindbugs.skip -Daccumulo.version=${ACCUMULO_VERSION} -Daccumulo.api=${ACCUMULO_API} -Dhbase.version=${HBASE_VERSION} -Dgeotools.version=${GEOTOOLS_VERSION} -Dgeoserver.version=${GEOSERVER_VERSION} -DskipITs=true -DskipTests=true -Dformatter.skip=true -P ${PLATFORM_VERSION} ${ADDITIONAL_ARGS}
     branch_pattern: coverity_scan

@@ -101,13 +101,13 @@ public class DynamoDBOperations implements
 										DynamoDBRow.GW_PARTITION_ID_KEY,
 										ScalarAttributeType.N),
 								new AttributeDefinition(
-										DynamoDBRow.GW_IDX_KEY,
+										DynamoDBRow.GW_RANGE_KEY,
 										ScalarAttributeType.B)).withKeySchema(
 								new KeySchemaElement(
 										DynamoDBRow.GW_PARTITION_ID_KEY,
 										KeyType.HASH),
 								new KeySchemaElement(
-										DynamoDBRow.GW_IDX_KEY,
+										DynamoDBRow.GW_RANGE_KEY,
 										KeyType.RANGE)).withProvisionedThroughput(
 								new ProvisionedThroughput(
 										Long.valueOf(options.getReadCapacity()),

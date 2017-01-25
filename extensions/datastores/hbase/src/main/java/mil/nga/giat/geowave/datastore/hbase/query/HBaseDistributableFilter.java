@@ -47,7 +47,7 @@ public class HBaseDistributableFilter extends
 
 	private final List<DistributableQueryFilter> filterList;
 	protected CommonIndexModel model;
-	private final List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
+	private List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
 	private PersistentDataset<Object> adapterExtendedValues;
 
 	// CACHED decoded data:
@@ -126,10 +126,7 @@ public class HBaseDistributableFilter extends
 			return false;
 		}
 
-		commonIndexFieldIds.clear();
-		for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
-			commonIndexFieldIds.add(numericDimension.getFieldId());
-		}
+		commonIndexFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
 
 		return true;
 	}
@@ -142,10 +139,7 @@ public class HBaseDistributableFilter extends
 
 		this.model = model;
 
-		commonIndexFieldIds.clear();
-		for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
-			commonIndexFieldIds.add(numericDimension.getFieldId());
-		}
+		commonIndexFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
 
 		return true;
 	}
@@ -291,13 +285,13 @@ public class HBaseDistributableFilter extends
 				qualBuf,
 				valBuf,
 				null,
-				model.getDimensions().length - 1);
+				commonIndexFieldIds.size() - 1);
 
 		final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
 		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
 			final int ordinal = fieldInfo.getFieldPosition();
 
-			if (ordinal < model.getDimensions().length) {
+			if (ordinal < commonIndexFieldIds.size()) {
 				final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);
 				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
 				if (reader != null) {

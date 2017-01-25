@@ -24,12 +24,12 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(AbstractAccumuloRowQuery.class);
-	protected final ScanCallback<T> scanCallback;
+	protected final ScanCallback<T, ?> scanCallback;
 
 	public AbstractAccumuloRowQuery(
 			final PrimaryIndex index,
 			final String[] authorizations,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
 				index,

@@ -21,15 +21,14 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 abstract public class AbstractCassandraRowQuery<T> extends
 		CassandraQuery
 {
-	private static final Logger LOGGER = Logger.getLogger(
-			AbstractCassandraRowQuery.class);
-	protected final ScanCallback<T> scanCallback;
+	private static final Logger LOGGER = Logger.getLogger(AbstractCassandraRowQuery.class);
+	protected final ScanCallback<T, CassandraRow> scanCallback;
 
 	public AbstractCassandraRowQuery(
 			final CassandraOperations operations,
 			final PrimaryIndex index,
 			final String[] authorizations,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, CassandraRow> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
 				operations,
@@ -42,7 +41,7 @@ abstract public class AbstractCassandraRowQuery<T> extends
 	public CloseableIterator<T> query(
 			final double[] maxResolutionSubsamplingPerDimension,
 			final AdapterStore adapterStore ) {
-		final Iterator<CassandraRow> results = getResults(
+		final CloseableIterator<CassandraRow> results = getResults(
 				maxResolutionSubsamplingPerDimension,
 				getScannerLimit());
 		return new CloseableIterator.Wrapper<T>(
@@ -51,7 +50,8 @@ abstract public class AbstractCassandraRowQuery<T> extends
 						index,
 						results,
 						null,
-						this.scanCallback));
+						this.scanCallback,
+						true));
 	}
 
 	abstract protected Integer getScannerLimit();

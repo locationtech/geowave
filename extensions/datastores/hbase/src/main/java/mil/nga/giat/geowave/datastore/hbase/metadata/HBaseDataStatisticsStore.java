@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
@@ -92,10 +93,17 @@ public class HBaseDataStatisticsStore extends
 				authorizations);
 	}
 
+	/**
+	 * This function will append a UUID to the record that's inserted into the
+	 * database.
+	 */
 	@Override
 	protected ByteArrayId getPrimaryId(
 			final DataStatistics<?> persistedObject ) {
-		return persistedObject.getStatisticsId();
+		final byte[] parentRecord = persistedObject.getStatisticsId().getBytes();
+		return DataStoreUtils.ensureUniqueId(
+				parentRecord,
+				false);
 	}
 
 	@Override
@@ -148,11 +156,12 @@ public class HBaseDataStatisticsStore extends
 			final ByteBuffer buf = ByteBuffer.allocate(primaryId.getBytes().length + 1);
 			buf.put(primaryId.getBytes());
 			buf.put(new byte[] {
-				0
+				DataStoreUtils.UNIQUE_ID_DELIMITER
 			});
 			// So this will set the stop row to just after all the possible
 			// suffixes to this primaryId.
-			scan.setStopRow(HBaseUtils.getNextPrefix(buf.array()));
+			scan.setStopRow(new ByteArrayId(
+					buf.array()).getNextPrefix());
 		}
 		return scan;
 	}
@@ -166,6 +175,45 @@ public class HBaseDataStatisticsStore extends
 			final Iterator<Result> resultIterator ) {
 		return new StatisticsNativeIteratorWrapper(
 				resultIterator);
+	}
+
+	@Override
+	protected void addObjectToCache(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId,
+			final DataStatistics<?> object ) {
+		// don't use the cache at all for now
+
+		// TODO consider adding a setting to use the cache for statistics, but
+		// because it could change with each new entry, it seems that there
+		// could be too much potential for invalid caching if multiple instances
+		// of GeoWave are able to connect to the same HBase tables
+	}
+
+	@Override
+	protected Object getObjectFromCache(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId ) {
+		// don't use the cache at all
+
+		// TODO consider adding a setting to use the cache for statistics, but
+		// because it could change with each new entry, it seems that there
+		// could be too much potential for invalid caching if multiple instances
+		// of GeoWave are able to connect to the same HBase tables
+		return null;
+	}
+
+	@Override
+	protected boolean deleteObjectFromCache(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId ) {
+		// don't use the cache at all
+
+		// TODO consider adding a setting to use the cache for statistics, but
+		// because it could change with each new entry, it seems that there
+		// could be too much potential for invalid caching if multiple instances
+		// of GeoWave are able to connect to the same HBase tables
+		return true;
 	}
 
 	/**
@@ -195,12 +243,6 @@ public class HBaseDataStatisticsStore extends
 			while (it.hasNext()) {
 				final Cell cell = it.next().listCells().get(
 						0);
-
-				// This entryToValue function has the side effect of adding the
-				// object to the cache.
-				// We need to make sure to add the merged version of the stat at
-				// the end of this
-				// function, before it is returned.
 				final DataStatistics<?> statEntry = entryToValue(cell);
 
 				if (currentStatistics == null) {
@@ -218,12 +260,6 @@ public class HBaseDataStatisticsStore extends
 					}
 				}
 			}
-
-			// Add this entry to cache (see comment above)
-			addObjectToCache(
-					getPrimaryId(currentStatistics),
-					getSecondaryId(currentStatistics),
-					currentStatistics);
 			return currentStatistics;
 		}
 
@@ -233,22 +269,5 @@ public class HBaseDataStatisticsStore extends
 					"Transforming iterator cannot use remove()");
 		}
 
-	}
-
-	/**
-	 * This function will append a UUID to the record that's inserted into the
-	 * database.
-	 *
-	 * @param object
-	 * @return
-	 */
-	@Override
-	protected ByteArrayId getRowId(
-			final DataStatistics<?> object ) {
-		final byte[] parentRecord = super.getRowId(
-				object).getBytes();
-		return HBaseUtils.ensureUniqueId(
-				parentRecord,
-				false);
 	}
 }

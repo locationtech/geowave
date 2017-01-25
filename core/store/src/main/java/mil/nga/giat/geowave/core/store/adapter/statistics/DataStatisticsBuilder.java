@@ -16,7 +16,7 @@ import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 public class DataStatisticsBuilder<T> implements
 		IngestCallback<T>,
 		DeleteCallback<T>,
-		ScanCallback<T>
+		ScanCallback<T, Object>
 {
 	private final StatisticsProvider<T> statisticsProvider;
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
@@ -87,6 +87,7 @@ public class DataStatisticsBuilder<T> implements
 	@Override
 	public void entryScanned(
 			DataStoreEntryInfo entryInfo,
+			Object nativeDataStoreObj,
 			T entry ) {
 		final ByteArrayId visibility = new ByteArrayId(
 				visibilityHandler.getVisibility(

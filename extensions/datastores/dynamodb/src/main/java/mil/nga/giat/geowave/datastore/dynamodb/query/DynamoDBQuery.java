@@ -96,7 +96,7 @@ abstract public class DynamoDBQuery
 				if (r.isSingleValue()) {
 					for (final QueryRequest query : queries) {
 						query.addQueryFilterEntry(
-								DynamoDBRow.GW_IDX_KEY,
+								DynamoDBRow.GW_RANGE_KEY,
 								new Condition()
 										.withAttributeValueList(
 												new AttributeValue().withB(
@@ -149,7 +149,7 @@ abstract public class DynamoDBQuery
 			final ByteArrayRange r,
 			final QueryRequest query ) {
 		query.addKeyConditionsEntry(
-				DynamoDBRow.GW_IDX_KEY,
+				DynamoDBRow.GW_RANGE_KEY,
 				new Condition().withComparisonOperator(
 						ComparisonOperator.BETWEEN).withAttributeValueList(
 						new AttributeValue().withB(ByteBuffer.wrap(r.getStart().getBytes())),

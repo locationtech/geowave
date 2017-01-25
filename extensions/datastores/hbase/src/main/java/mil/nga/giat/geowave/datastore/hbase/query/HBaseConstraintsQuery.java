@@ -53,7 +53,7 @@ public class HBaseConstraintsQuery extends
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, ?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
@@ -79,7 +79,7 @@ public class HBaseConstraintsQuery extends
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, ?> scanCallback,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
@@ -192,7 +192,6 @@ public class HBaseConstraintsQuery extends
 			if ((it != null) && it.hasNext()) {
 				final Aggregation aggregationFunction = base.aggregation.getRight();
 				synchronized (aggregationFunction) {
-
 					aggregationFunction.clearResult();
 					while (it.hasNext()) {
 						final Object input = it.next();

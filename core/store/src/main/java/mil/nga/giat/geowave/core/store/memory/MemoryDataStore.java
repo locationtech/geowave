@@ -413,6 +413,7 @@ public class MemoryDataStore implements
 				}
 				((ScanCallback) queryOptions.getScanCallback()).entryScanned(
 						currentRow.getInfo(),
+						currentRow,
 						currentRow.entry);
 				nextRow = null;
 				return currentRow.entry;
@@ -428,7 +429,7 @@ public class MemoryDataStore implements
 			@Override
 			public void close()
 					throws IOException {
-				final ScanCallback<?> callback = queryOptions.getScanCallback();
+				final ScanCallback<?, ?> callback = queryOptions.getScanCallback();
 				if ((callback != null) && (callback instanceof Closeable)) {
 					((Closeable) callback).close();
 				}

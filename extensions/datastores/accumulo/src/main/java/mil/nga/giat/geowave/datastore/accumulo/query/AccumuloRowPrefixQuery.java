@@ -23,7 +23,7 @@ public class AccumuloRowPrefixQuery<T> extends
 	public AccumuloRowPrefixQuery(
 			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
-			final ScanCallback<T> scanCallback,
+			final ScanCallback<T, Object> scanCallback,
 			final Integer limit,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {

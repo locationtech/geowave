@@ -49,11 +49,11 @@ import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
-import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
@@ -682,26 +682,26 @@ public class FeatureDataAdapter extends
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
-		Integer position = fieldToPositionMap.get(fieldId);
+		final Integer position = fieldToPositionMap.get(fieldId);
 		if (position == null) {
 			return -1;
 		}
-		return position.intValue() + model.getDimensions().length;
+		return position.intValue() + dimensionFieldIds.size();
 	}
 
 	@Override
 	public ByteArrayId getFieldIdForPosition(
 			final CommonIndexModel model,
 			final int position ) {
-		if (position >= model.getDimensions().length) {
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+		if (position >= dimensionFieldIds.size()) {
 			if (fieldToPositionMap.isEmpty()) {
 				initializePositionMaps();
 			}
-			final int adjustedPosition = position - model.getDimensions().length;
+			final int adjustedPosition = position - dimensionFieldIds.size();
 			// check other fields
 			return positionToFieldMap.get(adjustedPosition);
 		}
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
 		// otherwise check CommonIndexModel dimensions
 		return dimensionFieldIds.get(position);
 	}
@@ -731,10 +731,7 @@ public class FeatureDataAdapter extends
 		if (retVal != null) {
 			return retVal;
 		}
-		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();
-		for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
-			dimensionFieldIds.add(dimension.getFieldId());
-		}
+		final List<ByteArrayId> dimensionFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
 		modelToDimensionsMap.put(
 				model.getId(),
 				dimensionFieldIds);

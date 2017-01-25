@@ -51,6 +51,12 @@ public class DataStoreEntryInfo
 		this.fieldInfo = fieldInfo;
 	}
 
+	@Override
+	public String toString() {
+		return new ByteArrayId(
+				dataId).getString();
+	}
+
 	public List<ByteArrayId> getInsertionIds() {
 		return insertionIds;
 	}

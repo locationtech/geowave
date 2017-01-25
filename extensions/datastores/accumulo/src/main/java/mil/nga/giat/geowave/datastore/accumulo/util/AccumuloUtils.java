@@ -3,21 +3,16 @@ package mil.nga.giat.geowave.datastore.accumulo.util;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -34,7 +29,6 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
@@ -51,23 +45,17 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.Writer;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedDataSet;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -83,7 +71,6 @@ import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
@@ -156,7 +143,7 @@ public class AccumuloUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
 		final GeowaveRowId rowId = new GeowaveRowId(
 				key.getRow().copyBytes());
 		return (T) decodeRowObj(
@@ -200,7 +187,7 @@ public class AccumuloUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
 		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
 				key,
 				value,
@@ -225,7 +212,7 @@ public class AccumuloUtils
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T> scanCallback ) {
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
 			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
@@ -337,6 +324,8 @@ public class AccumuloUtils
 				if (scanCallback != null) {
 					scanCallback.entryScanned(
 							pair.getRight(),
+							// TODO: wrap rowMapping as a NativeGeoWaveRow
+							null,
 							pair.getLeft());
 				}
 				return pair;
@@ -402,7 +391,7 @@ public class AccumuloUtils
 					new Text(
 							rowId.getBytes()));
 			for (final FieldInfo<?> fieldInfo : fieldInfoList) {
-				if (fieldInfo.getVisibility() != null && fieldInfo.getVisibility().length > 0) {
+				if ((fieldInfo.getVisibility() != null) && (fieldInfo.getVisibility().length > 0)) {
 					mutation.put(
 							new Text(
 									adapterId),

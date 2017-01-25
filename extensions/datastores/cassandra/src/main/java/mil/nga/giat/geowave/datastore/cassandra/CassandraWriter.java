@@ -5,23 +5,16 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.querybuilder.Insert;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-
 import mil.nga.giat.geowave.core.store.base.Writer;
-import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.operations.BatchedWrite;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 
 public class CassandraWriter implements
 		Writer<CassandraRow>
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			CassandraWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraWriter.class);
 	private final Object MUTEX = new Object();
-	private PreparedStatement preparedInsert;
-	private BatchedWrite batchedWrite;
+	private BatchedWrite batchedWrite = null;
 	private final CassandraOperations operations;
 	private final String tableName;
 
@@ -42,8 +35,7 @@ public class CassandraWriter implements
 	public void write(
 			final Iterable<CassandraRow> rows ) {
 		for (final CassandraRow row : rows) {
-			write(
-					row);
+			write(row);
 		}
 	}
 
@@ -51,28 +43,11 @@ public class CassandraWriter implements
 	public void write(
 			final CassandraRow row ) {
 		synchronized (MUTEX) {
-			if (preparedInsert == null) {
-				preparedInsert = operations.getSession().prepare(
-						getUnboundInsert());
-
-				batchedWrite = operations.getBatchedWrite();
+			if (batchedWrite == null) {
+				batchedWrite = operations.getBatchedWrite(tableName);
 			}
-			batchedWrite.insert(
-					row.bindInsertion(
-							preparedInsert));
+			batchedWrite.insert(row);
 		}
-	}
-
-	private Insert getUnboundInsert() {
-		final Insert insert = operations.getInsert(
-				tableName);
-		for (final CassandraField f : CassandraField.values()) {
-			insert.value(
-					f.getFieldName(),
-					QueryBuilder.bindMarker(
-							f.getBindMarkerName()));
-		}
-		return insert;
 	}
 
 	@Override

@@ -32,12 +32,12 @@ public abstract class AccumuloFilteredIndexQuery extends
 {
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(AccumuloFilteredIndexQuery.class);
-	protected final ScanCallback<?> scanCallback;
+	protected final ScanCallback<?, ?> scanCallback;
 
 	public AccumuloFilteredIndexQuery(
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, ?> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 
 /**
  * This class encapsulates the elements that compose the row ID in the
@@ -16,7 +17,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * 
  */
 @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "private class only accessed internally")
-public class GeowaveRowId
+public class GeowaveRowId implements
+		NativeGeoWaveRow
 {
 	private final byte[] insertionId;
 	private final byte[] dataId;
@@ -107,6 +109,23 @@ public class GeowaveRowId
 
 	public boolean isDeduplicationEnabled() {
 		return numberOfDuplicates >= 0;
+	}
+
+	@Override
+	public byte[] getFieldMask() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getIndex() {
+		return insertionId;
 	}
 
 }

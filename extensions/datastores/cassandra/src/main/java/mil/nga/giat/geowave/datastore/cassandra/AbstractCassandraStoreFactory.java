@@ -15,15 +15,15 @@ abstract public class AbstractCassandraStoreFactory<T> extends
 
 	protected CassandraOperations createOperations(
 			final CassandraRequiredOptions options ) {
-		// try {
-		// return CassandraOperations.createOperations(options);
-		// }
-		// catch (final Exception e) {
-		// LOGGER.error(
-		// "Unable to create Cassandra operations from config options",
-		// e);
-		// return null;
-		// }
-		return null;
+		try {
+			return new CassandraOperations(
+					options);
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to create Cassandra operations from config options",
+					e);
+			return null;
+		}
 	}
 }
