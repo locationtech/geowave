@@ -188,7 +188,7 @@ public class WholeFeatureDataAdapter extends
 	}
 
 	@Override
-	public SimpleFeatureType getType() {
+	public SimpleFeatureType getFeatureType() {
 		return featureType;
 	}
 
@@ -198,7 +198,7 @@ public class WholeFeatureDataAdapter extends
 	}
 
 	@Override
-	public ByteArrayId[] getSupportedStatisticsIds() {
+	public ByteArrayId[] getSupportedStatisticsTypes() {
 		return statsManager.getSupportedStatisticsIds();
 	}
 

@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -20,13 +22,9 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 		AbstractDataStatistics<T> implements
 		DeleteCallback<T>
 {
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"DIFFERING_VISIBILITY_COUNT");
-	private static final ByteArrayId SEPARATOR = new ByteArrayId(
-			"_");
-	private static final byte[] STATS_ID_AND_SEPARATOR = ArrayUtils.addAll(
-			STATS_ID.getBytes(),
-			SEPARATOR.getBytes());
+
 	private long entriesWithDifferingFieldVisibilities = 0;
 
 	protected DifferingFieldVisibilityEntryCount() {
@@ -43,28 +41,27 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	private DifferingFieldVisibilityEntryCount(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId statsId,
+			final ByteArrayId statisticsId,
 			final long entriesWithDifferingFieldVisibilities ) {
 		super(
 				dataAdapterId,
-				statsId);
+				composeId(statisticsId));
 		this.entriesWithDifferingFieldVisibilities = entriesWithDifferingFieldVisibilities;
 	}
 
 	public DifferingFieldVisibilityEntryCount(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId indexId ) {
+			final ByteArrayId statisticsId ) {
 		super(
 				dataAdapterId,
-				composeId(indexId));
+				composeId(statisticsId));
 	}
 
 	public static ByteArrayId composeId(
-			final ByteArrayId indexId ) {
-		return new ByteArrayId(
-				ArrayUtils.addAll(
-						STATS_ID_AND_SEPARATOR,
-						indexId.getBytes()));
+			final ByteArrayId statisticsId ) {
+		return composeId(
+				STATS_TYPE.getString(),
+				statisticsId.getString());
 	}
 
 	@Override
@@ -157,4 +154,24 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 		}
 		return combinedVisibilityCount;
 	}
+
+	/**
+	 * Convert Differing Visibility statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+		jo.put(
+				"count",
+				entriesWithDifferingFieldVisibilities);
+		return jo;
+	}
+
 }

@@ -83,7 +83,7 @@ public class NNMapReduceTest
 					"extra1"
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
-				ClusteringUtils.CLUSTERING_CRS).getType();
+				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),

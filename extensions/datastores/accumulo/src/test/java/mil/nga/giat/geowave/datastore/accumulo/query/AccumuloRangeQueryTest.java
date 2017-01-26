@@ -506,7 +506,7 @@ public class AccumuloRangeQueryTest
 		}
 
 		@Override
-		public ByteArrayId[] getSupportedStatisticsIds() {
+		public ByteArrayId[] getSupportedStatisticsTypes() {
 			return new ByteArrayId[0];
 		}
 

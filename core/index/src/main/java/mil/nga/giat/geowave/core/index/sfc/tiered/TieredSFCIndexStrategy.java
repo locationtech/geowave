@@ -13,6 +13,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableBiMap.Builder;
@@ -817,5 +819,36 @@ public class TieredSFCIndexStrategy implements
 						id.getBytes()[0]).intValue()]--;
 			}
 		}
+
+		/**
+		 * Convert Tiered Index Metadata statistics to a JSON object
+		 */
+
+		@Override
+		public JSONObject toJSONObject()
+				throws JSONException {
+			JSONObject jo = new JSONObject();
+			jo.put(
+					"type",
+					"TieredSFCIndexStrategy");
+
+			jo.put(
+					"TierCountsSize",
+					tierCounts.length);
+
+			if (null == orderedTierIdToSfcIndex) {
+				jo.put(
+						"orderedTierIdToSfcIndex",
+						"null");
+			}
+			else {
+				jo.put(
+						"orderedTierIdToSfcIndexSize",
+						orderedTierIdToSfcIndex.size());
+			}
+
+			return jo;
+		}
+
 	}
 }

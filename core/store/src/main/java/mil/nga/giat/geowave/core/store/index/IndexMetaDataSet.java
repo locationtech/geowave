@@ -3,8 +3,6 @@ package mil.nga.giat.geowave.core.store.index;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.IndexStrategy;
@@ -15,43 +13,45 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 public class IndexMetaDataSet<T> extends
 		AbstractDataStatistics<T> implements
 		DeleteCallback<T>
 {
 	private List<IndexMetaData> metaData;
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
-			"INDEX_METADATA_");
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"INDEX_METADATA");
 
 	protected IndexMetaDataSet() {}
 
 	private IndexMetaDataSet(
 			final ByteArrayId adapterId,
-			final ByteArrayId statsId,
+			final ByteArrayId statisticsId,
 			final List<IndexMetaData> metaData ) {
 		super(
 				adapterId,
-				statsId);
+				composeId(statisticsId));
 		this.metaData = metaData;
 	}
 
 	public IndexMetaDataSet(
 			final ByteArrayId adapterId,
-			final ByteArrayId indexId,
+			final ByteArrayId statisticsId,
 			final IndexStrategy<?, ?> indexStrategy ) {
 		super(
 				adapterId,
-				composeId(indexId));
+				composeId(statisticsId));
 		this.metaData = indexStrategy.createMetaData();
 	}
 
 	public static ByteArrayId composeId(
-			final ByteArrayId indexId ) {
-		return new ByteArrayId(
-				ArrayUtils.addAll(
-						STATS_ID.getBytes(),
-						indexId.getBytes()));
+			final ByteArrayId statisticsId ) {
+		return composeId(
+				STATS_TYPE.getString(),
+				statisticsId.getString());
 	}
 
 	@Override
@@ -139,4 +139,31 @@ public class IndexMetaDataSet<T> extends
 		}
 		return combinedMetaData != null ? combinedMetaData.toArray() : null;
 	}
+
+	/**
+	 * Convert Index Metadata statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		JSONArray mdArray = new JSONArray();
+		for (final IndexMetaData imd : this.metaData) {
+			mdArray.add(imd.toJSONObject());
+		}
+		jo.put(
+				"metadata",
+				mdArray);
+
+		return jo;
+	}
+
 }

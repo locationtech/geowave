@@ -168,7 +168,7 @@ public class RasterDataAdapter implements
 	private String[] namesPerBand;
 	private double[] backgroundValuesPerBand;
 	private boolean buildPyramid;
-	private ByteArrayId[] supportedStatsIds;
+	private ByteArrayId[] supportedStatsTypes;
 	private EntryVisibilityHandler<GridCoverage> visibilityHandler;
 	private RootMergeStrategy<?> mergeStrategy;
 	private boolean equalizeHistogram;
@@ -447,12 +447,12 @@ public class RasterDataAdapter implements
 			supportedStatsLength++;
 		}
 
-		supportedStatsIds = new ByteArrayId[supportedStatsLength];
-		supportedStatsIds[0] = OverviewStatistics.STATS_ID;
-		supportedStatsIds[1] = BoundingBoxDataStatistics.STATS_ID;
+		supportedStatsTypes = new ByteArrayId[supportedStatsLength];
+		supportedStatsTypes[0] = OverviewStatistics.STATS_TYPE;
+		supportedStatsTypes[1] = BoundingBoxDataStatistics.STATS_TYPE;
 
 		if (histogramConfig != null) {
-			supportedStatsIds[2] = HistogramStatistics.STATS_ID;
+			supportedStatsTypes[2] = HistogramStatistics.STATS_TYPE;
 		}
 		visibilityHandler = new FieldIdStatisticVisibility<GridCoverage>(
 				DATA_FIELD_ID);
@@ -1621,29 +1621,29 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public ByteArrayId[] getSupportedStatisticsIds() {
-		return supportedStatsIds;
+	public ByteArrayId[] getSupportedStatisticsTypes() {
+		return supportedStatsTypes;
 	}
 
 	@Override
 	public DataStatistics<GridCoverage> createDataStatistics(
-			final ByteArrayId statisticsId ) {
-		if (OverviewStatistics.STATS_ID.equals(statisticsId)) {
+			final ByteArrayId statisticsType ) {
+		if (OverviewStatistics.STATS_TYPE.equals(statisticsType)) {
 			return new OverviewStatistics(
 					new ByteArrayId(
 							coverageName));
 		}
-		else if (BoundingBoxDataStatistics.STATS_ID.equals(statisticsId)) {
+		else if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsType)) {
 			return new RasterBoundingBoxStatistics(
 					new ByteArrayId(
 							coverageName));
 		}
-		else if (RasterFootprintStatistics.STATS_ID.equals(statisticsId)) {
+		else if (RasterFootprintStatistics.STATS_TYPE.equals(statisticsType)) {
 			return new RasterFootprintStatistics(
 					new ByteArrayId(
 							coverageName));
 		}
-		else if (HistogramStatistics.STATS_ID.equals(statisticsId) && (histogramConfig != null)) {
+		else if (HistogramStatistics.STATS_TYPE.equals(statisticsType) && (histogramConfig != null)) {
 			return new HistogramStatistics(
 					new ByteArrayId(
 							coverageName),
@@ -1652,10 +1652,10 @@ public class RasterDataAdapter implements
 		// HP Fortify "Log Forging" false positive
 		// What Fortify considers "user input" comes only
 		// from users with OS-level access anyway
-		LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + " using count statistic");
+		LOGGER.warn("Unrecognized statistics type " + statisticsType.getString() + " using count statistic");
 		return new CountDataStatistics<GridCoverage>(
 				getAdapterId(),
-				statisticsId);
+				statisticsType);
 	}
 
 	public double[][] getNoDataValuesPerBand() {

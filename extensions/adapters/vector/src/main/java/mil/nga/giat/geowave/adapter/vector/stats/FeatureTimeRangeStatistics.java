@@ -31,7 +31,7 @@ public class FeatureTimeRangeStatistics extends
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 

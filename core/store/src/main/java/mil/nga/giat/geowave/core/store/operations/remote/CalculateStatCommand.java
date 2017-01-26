@@ -24,11 +24,16 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 @GeowaveOperation(name = "calcstat", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Calculate a specific statistic in the remote store, given adapter ID and statistic ID")
+/**
+ * This class calculates the statistic(s) in the given store and replaces the
+ * existing value.
+ */
 public class CalculateStatCommand extends
 		AbstractStatsCommand implements
 		Command
@@ -60,10 +65,10 @@ public class CalculateStatCommand extends
 				parameters);
 	}
 
-	protected boolean calculateStatistics(
+	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
 			final DataAdapter<?> adapter,
-			final String[] authorizations )
+			final StatsCommandLineOptions statsOptions )
 			throws IOException {
 
 		try {
@@ -81,12 +86,13 @@ public class CalculateStatCommand extends
 					"rawtypes",
 					"unchecked"
 				})
+				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 				DataStoreStatisticsProvider provider = new DataStoreStatisticsProvider(
 						adapter,
 						index,
 						isFirstTime) {
 					@Override
-					public ByteArrayId[] getSupportedStatisticsIds() {
+					public ByteArrayId[] getSupportedStatisticsTypes() {
 						return new ByteArrayId[] {
 							new ByteArrayId(
 									statId)

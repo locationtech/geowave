@@ -148,7 +148,7 @@ public class GeoWaveGTDataStore extends
 
 	protected PrimaryIndex[] getIndicesForAdapter(
 			final GeotoolsFeatureDataAdapter adapter ) {
-		PrimaryIndex[] currentSelections = preferredIndexes.get(adapter.getType().getName().toString());
+		PrimaryIndex[] currentSelections = preferredIndexes.get(adapter.getFeatureType().getName().toString());
 		if (currentSelections != null) {
 			return currentSelections;
 		}
@@ -161,7 +161,7 @@ public class GeoWaveGTDataStore extends
 			currentSelections = getPreferredIndices(adapter);
 		}
 		preferredIndexes.put(
-				adapter.getType().getName().toString(),
+				adapter.getFeatureType().getName().toString(),
 				currentSelections);
 		return currentSelections;
 	}
@@ -208,7 +208,7 @@ public class GeoWaveGTDataStore extends
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
-				names.add(((GeotoolsFeatureDataAdapter) adapter).getType().getName());
+				names.add(((GeotoolsFeatureDataAdapter) adapter).getFeatureType().getName());
 			}
 		}
 		adapters.close();
@@ -332,7 +332,7 @@ public class GeoWaveGTDataStore extends
 
 		List<PrimaryIndex> currentSelectionsList = new ArrayList<PrimaryIndex>(
 				2);
-		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getType());
+		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getFeatureType());
 		final boolean canUseTime = adapter.hasTemporalConstraints();
 
 		/**

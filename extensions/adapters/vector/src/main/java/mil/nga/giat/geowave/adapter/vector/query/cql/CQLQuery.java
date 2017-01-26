@@ -138,7 +138,7 @@ public class CQLQuery implements
 		final boolean isSpatial = index == null ? false : hasAtLeastSpatial(index);
 		final boolean isTemporal = index == null ? false : hasTime(index) && adapter.hasTemporalConstraints();
 		if (isSpatial) {
-			final String geomName = adapter.getType().getGeometryDescriptor().getLocalName();
+			final String geomName = adapter.getFeatureType().getGeometryDescriptor().getLocalName();
 			attrs.remove(geomName);
 		}
 		if (isTemporal) {
@@ -162,7 +162,7 @@ public class CQLQuery implements
 			// there is only space and time
 			final Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
 					cqlFilter,
-					adapter.getType().getCoordinateReferenceSystem());
+					adapter.getFeatureType().getCoordinateReferenceSystem());
 			final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(
 					adapter.getTimeDescriptors()).getConstraints(cqlFilter);
 			if (geometry != null) {

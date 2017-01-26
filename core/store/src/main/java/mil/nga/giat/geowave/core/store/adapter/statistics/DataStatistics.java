@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
@@ -19,4 +22,7 @@ public interface DataStatistics<T> extends
 			byte[] visibility );
 
 	public byte[] getVisibility();
+
+	public JSONObject toJSONObject()
+			throws JSONException;
 }

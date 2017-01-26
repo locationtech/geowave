@@ -38,7 +38,7 @@ public class AnalyticFeatureTest
 					"extra1"
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
-				ClusteringUtils.CLUSTERING_CRS).getType();
+				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 		final GeometryFactory factory = new GeometryFactory();
 		SimpleFeature feature = AnalyticFeature.createGeometryFeature(
 				ftype,

@@ -154,7 +154,7 @@ public class DeleteWriterTest
 	public void testDeleteByDataId() {
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID);
+				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				2,
 				countStats.getCount());
@@ -179,7 +179,7 @@ public class DeleteWriterTest
 		assertTrue(!it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID);
+				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				1,
 				countStats.getCount());
@@ -189,7 +189,7 @@ public class DeleteWriterTest
 	public void testDeleteByRowId() {
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID);
+				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				2,
 				countStats.getCount());
@@ -219,7 +219,7 @@ public class DeleteWriterTest
 		assertTrue(!it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID);
+				CountDataStatistics.STATS_TYPE);
 		// TODO: BUG
 		assertEquals(
 				1,

@@ -2,6 +2,9 @@ package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
@@ -114,4 +117,37 @@ abstract public class NumericRangeDataStatistics<T> extends
 		buffer.append("]");
 		return buffer.toString();
 	}
+
+	/**
+	 * Convert Feature Numeric Range statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				"GENERIC_RANGE");
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		if (!isSet()) {
+			jo.put(
+					"range",
+					"No Values");
+		}
+		else {
+			jo.put(
+					"range_min",
+					getMin());
+			jo.put(
+					"range_max",
+					getMax());
+		}
+
+		return jo;
+	}
+
 }

@@ -314,7 +314,7 @@ public class KMeansIterationsJobRunnerTest
 				}
 				for (int i = 0; i < 3; i++) {
 					final SimpleFeature nextFeature = AnalyticFeature.createGeometryFeature(
-							adapter.getType(),
+							adapter.getFeatureType(),
 							"b1",
 							UUID.randomUUID().toString(),
 							"nn" + i,
