@@ -327,7 +327,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat
 								.getStatisticsId()
 								.equals(
-										CountDataStatistics.STATS_ID))) {
+										CountDataStatistics.STATS_TYPE))) {
 							continue;
 						}
 					}
@@ -346,7 +346,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 						.getDataStatistics(
 								adapter.getAdapterId(),
 								FeatureBoundingBoxStatistics.composeId(adapter
-										.getType()
+										.getFeatureType()
 										.getGeometryDescriptor()
 										.getLocalName()));
 
@@ -397,7 +397,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 		// and compare results to what is available in the statistics data store
 		private StatisticsCache(
 				final StatisticsProvider<SimpleFeature> dataAdapter ) {
-			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsIds();
+			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsTypes();
 			for (final ByteArrayId statsId : statsIds) {
 				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(statsId);
 				statsCache.put(

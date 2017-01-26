@@ -8,6 +8,13 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 
+/**
+ * A class based on FilterableConstraints that uses a text value for query
+ * 
+ * @author geowave
+ *
+ */
+
 public class TextQueryConstraint implements
 		FilterableConstraints
 {

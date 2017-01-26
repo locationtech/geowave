@@ -44,7 +44,7 @@ public class AvroFeatureDataAdapter extends
 
 	public AvroFeatureDataAdapter(
 			final SimpleFeatureType type,
-			final List<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers ) {
+			final ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers ) {
 		super(
 				type,
 				customIndexHandlers);
@@ -59,7 +59,7 @@ public class AvroFeatureDataAdapter extends
 	}
 
 	@Override
-	protected List<NativeFieldHandler<SimpleFeature, Object>> typeToFieldHandlers(
+	protected List<NativeFieldHandler<SimpleFeature, Object>> getFieldHandlersFromFeatureType(
 			final SimpleFeatureType type ) {
 		final List<NativeFieldHandler<SimpleFeature, Object>> nativeHandlers = new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(
 				1);

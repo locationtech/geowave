@@ -2,6 +2,9 @@ package mil.nga.giat.geowave.core.index;
 
 import java.util.List;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 public interface IndexMetaData extends
 		Persistable,
 		Mergeable
@@ -23,4 +26,12 @@ public interface IndexMetaData extends
 	 */
 	public void insertionIdsRemoved(
 			List<ByteArrayId> insertionIds );
+
+	/**
+	 * Create a JSON object that shows all the metadata handled by this object
+	 * 
+	 */
+	public JSONObject toJSONObject()
+			throws JSONException;
+
 }

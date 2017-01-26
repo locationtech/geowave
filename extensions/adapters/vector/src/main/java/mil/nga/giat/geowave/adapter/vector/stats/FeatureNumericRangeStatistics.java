@@ -5,13 +5,16 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class FeatureNumericRangeStatistics extends
 		NumericRangeDataStatistics<SimpleFeature> implements
 		FeatureStatistic
 {
-	public static final String STATS_TYPE = "RANGE";
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"FEATURE_NUMERIC_RANGE");
 
 	protected FeatureNumericRangeStatistics() {
 		super();
@@ -23,14 +26,14 @@ public class FeatureNumericRangeStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName));
 	}
 
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 
@@ -79,6 +82,37 @@ public class FeatureNumericRangeStatistics extends
 		}
 		buffer.append("]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert Feature Numeric Range statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+		jo.put(
+				"field_identifier",
+				getFieldName());
+
+		if (!isSet()) {
+			jo.put(
+					"range",
+					"No Values");
+		}
+		else {
+			jo.put(
+					"range_min",
+					getMin());
+			jo.put(
+					"range_max",
+					getMax());
+		}
+
+		return jo;
 	}
 
 	public static class FeatureNumericRangeConfig implements

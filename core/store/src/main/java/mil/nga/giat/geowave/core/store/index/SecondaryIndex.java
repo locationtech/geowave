@@ -13,9 +13,19 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 
 /**
- * This class fully describes everything necessary to index data within GeoWave.
- * The key components are the indexing strategy and the common index model.
+ * This class fully describes everything necessary to index data within GeoWave
+ * using secondary indexing. <br>
+ * The key components are the indexing strategy and the common index model. <br>
+ * <br>
+ * Attributes for SecondaryIndex include:<br>
+ * indexStrategy = array of fieldIndexStrategy (numeric, temporal or text)<br>
+ * fieldId<br>
+ * associatedStatistics <br>
+ * secondaryIndexType - (join, full, partial)<br>
+ * secondaryIndexId - <br>
+ * partialFieldIds - list of fields that are part of the ...<br>
  */
+
 public class SecondaryIndex<T> implements
 		Index<FilterableConstraints, List<FieldInfo<?>>>
 {
@@ -92,6 +102,11 @@ public class SecondaryIndex<T> implements
 	public int hashCode() {
 		return getId().hashCode();
 	}
+
+	/**
+	 * Compare this object to the one passed as parameter to see if same object,
+	 * same class and that id is the same.
+	 */
 
 	@Override
 	public boolean equals(

@@ -5,7 +5,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 /**
  * This is a persistable version of the IndexFieldHandler so that customized
- * filed handlers can be automatically persisted with the data adapter. By
+ * field handlers can be automatically persisted with the data adapter. By
  * default the field handlers assume that they can be recreated without custom
  * serialization necessary but if it is necessary, the field handler should
  * implement this interface.

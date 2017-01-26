@@ -3,12 +3,24 @@ package mil.nga.giat.geowave.core.store.adapter.statistics;
 import java.nio.ByteBuffer;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 abstract public class AbstractDataStatistics<T> implements
 		DataStatistics<T>
 {
+	public static final ByteArrayId STATS_SEPARATOR = new ByteArrayId(
+			"_");
+	public static final String STATS_ID_SEPARATOR = "#";
+
+	/**
+	 * ID of source data adapter
+	 */
 	protected ByteArrayId dataAdapterId;
 	protected byte[] visibility;
+	/**
+	 * ID of statistic to be tracked
+	 */
 	protected ByteArrayId statisticsId;
 
 	protected AbstractDataStatistics() {}
@@ -82,7 +94,7 @@ abstract public class AbstractDataStatistics<T> implements
 			final String statsType,
 			final String name ) {
 		return new ByteArrayId(
-				statsType + "#" + name);
+				statsType + STATS_ID_SEPARATOR + name);
 	}
 
 	protected static String decomposeNameFromId(
@@ -106,6 +118,21 @@ abstract public class AbstractDataStatistics<T> implements
 
 		newStats.fromBinary(toBinary());
 		return newStats;
+	}
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				"AbstractDataStatistics");
+		jo.put(
+				"dataAdapterID",
+				dataAdapterId.getString());
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+		return jo;
 	}
 
 	@Override

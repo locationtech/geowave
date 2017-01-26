@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 public class OverviewStatistics extends
 		AbstractDataStatistics<GridCoverage>
 {
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"OVERVIEW");
 
 	private Resolution[] resolutions = new Resolution[] {};
@@ -31,7 +31,7 @@ public class OverviewStatistics extends
 			final ByteArrayId dataAdapterId ) {
 		super(
 				dataAdapterId,
-				STATS_ID);
+				STATS_TYPE);
 	}
 
 	@Override

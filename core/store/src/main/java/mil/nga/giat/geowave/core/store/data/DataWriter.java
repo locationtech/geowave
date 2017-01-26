@@ -14,7 +14,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 public interface DataWriter<RowType, FieldType>
 {
 	/**
-	 * Get a writer for an individual field given the ID
+	 * Get a writer for an individual field given the ID.
 	 * 
 	 * @param fieldId
 	 *            the unique field ID

@@ -42,6 +42,15 @@ public class TimeDescriptors
 				configuration);
 	}
 
+	public TimeDescriptors(
+			final AttributeDescriptor startRange,
+			final AttributeDescriptor endRange ) {
+		super();
+		time = null;
+		this.startRange = startRange;
+		this.endRange = endRange;
+	}
+
 	public void update(
 			final SimpleFeatureType type,
 			final TimeDescriptorConfiguration configuration ) {
@@ -54,15 +63,6 @@ public class TimeDescriptors
 		if (configuration.endRangeName != null) {
 			endRange = type.getDescriptor(configuration.endRangeName);
 		}
-	}
-
-	public TimeDescriptors(
-			final AttributeDescriptor startRange,
-			final AttributeDescriptor endRange ) {
-		super();
-		time = null;
-		this.startRange = startRange;
-		this.endRange = endRange;
 	}
 
 	public void setStartRange(

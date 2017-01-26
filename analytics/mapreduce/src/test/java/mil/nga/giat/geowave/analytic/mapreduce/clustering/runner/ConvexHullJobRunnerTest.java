@@ -55,7 +55,7 @@ public class ConvexHullJobRunnerTest
 					"extra1"
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
-				ClusteringUtils.CLUSTERING_CRS).getType();
+				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
 		hullRunner.setMapReduceIntegrater(new MapReduceIntegration() {
 			@Override

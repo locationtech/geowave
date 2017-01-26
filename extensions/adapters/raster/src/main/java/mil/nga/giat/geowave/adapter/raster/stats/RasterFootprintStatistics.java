@@ -21,7 +21,7 @@ public class RasterFootprintStatistics extends
 		AbstractDataStatistics<GridCoverage>
 {
 	private static final Logger LOGGER = Logger.getLogger(RasterFootprintStatistics.class);
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FOOTPRINT");
 	private Geometry footprint;
 
@@ -33,7 +33,7 @@ public class RasterFootprintStatistics extends
 			final ByteArrayId dataAdapterId ) {
 		super(
 				dataAdapterId,
-				STATS_ID);
+				STATS_TYPE);
 	}
 
 	@Override

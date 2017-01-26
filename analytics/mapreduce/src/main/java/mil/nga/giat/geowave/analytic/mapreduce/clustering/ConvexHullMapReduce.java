@@ -221,7 +221,7 @@ public class ConvexHullMapReduce
 			}
 
 			final SimpleFeature newPolygonFeature = AnalyticFeature.createGeometryFeature(
-					outputAdapter.getType(),
+					outputAdapter.getFeatureType(),
 					centroid.getBatchID(),
 					UUID.randomUUID().toString(),
 					centroid.getName(),

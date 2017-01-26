@@ -11,13 +11,8 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 public class MaxDuplicatesStatistics<T> extends
 		AbstractDataStatistics<T>
 {
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"MAX_DUPLICATES");
-	private static final ByteArrayId SEPARATOR = new ByteArrayId(
-			"_");
-	private static final byte[] STATS_ID_AND_SEPARATOR = ArrayUtils.addAll(
-			STATS_ID.getBytes(),
-			SEPARATOR.getBytes());
 	private int maxDuplicates = 0;
 
 	protected MaxDuplicatesStatistics() {
@@ -40,18 +35,20 @@ public class MaxDuplicatesStatistics<T> extends
 
 	public MaxDuplicatesStatistics(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId indexId ) {
+			final ByteArrayId statisticsId ) {
 		super(
 				dataAdapterId,
-				composeId(indexId));
+				composeId(statisticsId));
 	}
 
 	public static ByteArrayId composeId(
-			final ByteArrayId indexId ) {
+			final ByteArrayId statisticsId ) {
 		return new ByteArrayId(
 				ArrayUtils.addAll(
-						STATS_ID_AND_SEPARATOR,
-						indexId.getBytes()));
+						ArrayUtils.addAll(
+								STATS_TYPE.getBytes(),
+								STATS_SEPARATOR.getBytes()),
+						statisticsId.getBytes()));
 	}
 
 	@Override

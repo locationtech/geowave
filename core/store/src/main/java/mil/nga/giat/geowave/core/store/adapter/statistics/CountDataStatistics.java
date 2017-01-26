@@ -3,6 +3,9 @@ package mil.nga.giat.geowave.core.store.adapter.statistics;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
@@ -14,8 +17,8 @@ public class CountDataStatistics<T> extends
 		IngestCallback<T>,
 		DeleteCallback<T>
 {
-	public final static ByteArrayId STATS_ID = new ByteArrayId(
-			"DATA_COUNT");
+	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
+			"COUNT_DATA");
 
 	private long count = Long.MIN_VALUE;
 
@@ -25,17 +28,17 @@ public class CountDataStatistics<T> extends
 
 	public CountDataStatistics(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId statsID ) {
+			final ByteArrayId statisticsID ) {
 		super(
 				dataAdapterId,
-				statsID);
+				statisticsID);
 	}
 
 	public CountDataStatistics(
 			final ByteArrayId dataAdapterId ) {
 		super(
 				dataAdapterId,
-				STATS_ID);
+				STATS_TYPE);
 	}
 
 	public boolean isSet() {
@@ -114,5 +117,24 @@ public class CountDataStatistics<T> extends
 				count);
 		buffer.append("]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert Count statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+		jo.put(
+				"count",
+				count);
+		return jo;
 	}
 }

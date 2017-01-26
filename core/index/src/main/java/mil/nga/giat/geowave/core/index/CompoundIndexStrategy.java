@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
@@ -649,6 +652,26 @@ public class CompoundIndexStrategy implements
 						}
 					}));
 		}
+
+		/**
+		 * Convert Tiered Index Metadata statistics to a JSON object
+		 */
+
+		@Override
+		public JSONObject toJSONObject()
+				throws JSONException {
+			JSONObject jo = new JSONObject();
+			jo.put(
+					"type",
+					"CompoundIndexMetaDataWrapper");
+
+			jo.put(
+					"index",
+					index);
+
+			return jo;
+		}
+
 	}
 
 	@Override
@@ -684,4 +707,5 @@ public class CompoundIndexStrategy implements
 		}
 		return retVal;
 	}
+
 }

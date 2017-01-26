@@ -67,7 +67,7 @@ public class KMeansDistortionMapReduceTest
 				"extra1"
 			},
 			"http://geowave.test.net",
-			ClusteringUtils.CLUSTERING_CRS).getType();
+			ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 	final FeatureDataAdapter testObjectAdapter = new FeatureDataAdapter(
 			ftype);
 

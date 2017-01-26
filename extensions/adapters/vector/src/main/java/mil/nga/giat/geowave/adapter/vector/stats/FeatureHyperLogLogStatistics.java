@@ -8,6 +8,8 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
@@ -26,7 +28,8 @@ public class FeatureHyperLogLogStatistics extends
 		FeatureStatistic
 {
 	private final static Logger LOGGER = Logger.getLogger(FeatureHyperLogLogStatistics.class);
-	public static final String STATS_TYPE = "ATT_HYPERLLP";
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"ATT_HYPERLLP");
 
 	private HyperLogLogPlus loglog;
 	private int precision;
@@ -45,23 +48,23 @@ public class FeatureHyperLogLogStatistics extends
 	 */
 	public FeatureHyperLogLogStatistics(
 			final ByteArrayId dataAdapterId,
-			final String fieldName,
+			final String statisticsId,
 			int precision ) {
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
-						fieldName));
+						STATS_TYPE.getString(),
+						statisticsId));
 		loglog = new HyperLogLogPlus(
 				precision);
 		this.precision = precision;
 	}
 
 	public static final ByteArrayId composeId(
-			final String fieldName ) {
+			final String statisticsId ) {
 		return composeId(
-				STATS_TYPE,
-				fieldName);
+				STATS_TYPE.getString(),
+				statisticsId);
 	}
 
 	@Override
@@ -156,6 +159,36 @@ public class FeatureHyperLogLogStatistics extends
 				loglog.cardinality());
 		buffer.append("]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert FeatureCountMinSketch statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		jo.put(
+				"field_identifier",
+				getFieldName());
+
+		jo.put(
+				"cardinality",
+				loglog.cardinality());
+
+		jo.put(
+				"precision",
+				precision);
+
+		return jo;
 	}
 
 	public static class FeatureHyperLogLogConfig implements

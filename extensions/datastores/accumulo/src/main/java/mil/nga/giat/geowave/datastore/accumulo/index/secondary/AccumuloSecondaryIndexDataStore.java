@@ -194,6 +194,7 @@ public class AccumuloSecondaryIndexDataStore extends
 		final Scanner scanner = getScanner(
 				StringUtils.stringFromBinary(secondaryIndex.getId().getBytes()),
 				authorizations);
+
 		if (scanner != null) {
 			scanner.fetchColumnFamily(new Text(
 					SecondaryIndexUtils.constructColumnFamily(
@@ -203,6 +204,7 @@ public class AccumuloSecondaryIndexDataStore extends
 			for (final Range range : ranges) {
 				scanner.setRange(range);
 			}
+
 			if (!secondaryIndex.getSecondaryIndexType().equals(
 					SecondaryIndexType.JOIN)) {
 				final IteratorSetting iteratorSettings = new IteratorSetting(
@@ -252,6 +254,7 @@ public class AccumuloSecondaryIndexDataStore extends
 				}
 			}
 		}
+
 		return new CloseableIterator.Empty<T>();
 	}
 

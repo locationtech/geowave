@@ -124,13 +124,13 @@ public class BasicKafkaIT
 						.getDataStatistics(
 								adapter.getAdapterId(),
 								FeatureBoundingBoxStatistics.composeId(adapter
-										.getType()
+										.getFeatureType()
 										.getGeometryDescriptor()
 										.getLocalName()));
 				final CountDataStatistics<?> countStat = (CountDataStatistics<SimpleFeature>) statsStore
 						.getDataStatistics(
 								adapter.getAdapterId(),
-								CountDataStatistics.STATS_ID);
+								CountDataStatistics.STATS_TYPE);
 				// then query it
 				final GeometryFactory factory = new GeometryFactory();
 				final Envelope env = new Envelope(

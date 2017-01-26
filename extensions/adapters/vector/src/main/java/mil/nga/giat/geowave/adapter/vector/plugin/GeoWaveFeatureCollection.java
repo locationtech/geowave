@@ -10,6 +10,7 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
+import org.geotools.factory.Hints;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.feature.visitor.MaxVisitor;
@@ -49,6 +50,12 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 public class GeoWaveFeatureCollection extends
 		DataFeatureCollection
 {
+	public static final Hints.Key LEVEL = new Hints.Key(
+			Integer.class);
+	public static final Hints.Key SERVER_FEATURE_RENDERER = new Hints.Key(
+			DistributedRenderOptions.class);
+	public static final Hints.Key STATS_NAME = new Hints.Key(
+			String.class);
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureCollection.class);
 	private final GeoWaveFeatureReader reader;
 	private CloseableIterator<SimpleFeature> featureCursor;
@@ -74,8 +81,8 @@ public class GeoWaveFeatureCollection extends
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
 					.getTransaction()
 					.getDataStatistics();
-			if (statsMap.containsKey(CountDataStatistics.STATS_ID)) {
-				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_ID);
+			if (statsMap.containsKey(CountDataStatistics.STATS_TYPE)) {
+				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_TYPE);
 				if ((stats != null) && stats.isSet()) {
 					return (int) stats.getCount();
 				}
@@ -198,6 +205,15 @@ public class GeoWaveFeatureCollection extends
 		return typeBuilder.buildFeatureType();
 	}
 
+	protected String getStatsQueryName() {
+		final Object statsQueryName = query.getHints().get(
+				STATS_NAME);
+		if (statsQueryName == null) {
+			return null;
+		}
+		return statsQueryName.toString();
+	}
+
 	protected boolean isDistributedRenderQuery() {
 		return GeoWaveFeatureCollection.isDistributedRenderQuery(query);
 	}
@@ -214,7 +230,7 @@ public class GeoWaveFeatureCollection extends
 		if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
 			return getDistributedRenderFeatureType();
 		}
-		return reader.getComponents().getAdapter().getType();
+		return reader.getComponents().getAdapter().getFeatureType();
 	}
 
 	private Filter getFilter(

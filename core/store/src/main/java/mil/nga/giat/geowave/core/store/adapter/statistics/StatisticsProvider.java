@@ -14,7 +14,7 @@ import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
  */
 public interface StatisticsProvider<T>
 {
-	public ByteArrayId[] getSupportedStatisticsIds();
+	public ByteArrayId[] getSupportedStatisticsTypes();
 
 	public DataStatistics<T> createDataStatistics(
 			ByteArrayId statisticsId );

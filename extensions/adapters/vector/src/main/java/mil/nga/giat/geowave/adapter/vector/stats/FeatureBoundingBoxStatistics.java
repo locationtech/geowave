@@ -5,6 +5,9 @@ import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatist
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -19,7 +22,8 @@ public class FeatureBoundingBoxStatistics extends
 		FeatureStatistic
 {
 
-	private static final String STATS_TYPE = "BBOX";
+	private static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"FEATURE_BBOX");
 
 	private SimpleFeatureType persistedType;
 	private SimpleFeatureType reprojectedType;
@@ -31,10 +35,10 @@ public class FeatureBoundingBoxStatistics extends
 
 	public FeatureBoundingBoxStatistics(
 			final ByteArrayId dataAdapterId,
-			final String fieldName ) {
+			final String statisticsId ) {
 		this(
 				dataAdapterId,
-				fieldName,
+				statisticsId,
 				null,
 				null,
 				null);
@@ -42,15 +46,15 @@ public class FeatureBoundingBoxStatistics extends
 
 	public FeatureBoundingBoxStatistics(
 			final ByteArrayId dataAdapterId,
-			final String fieldName,
+			final String statisticsId,
 			final SimpleFeatureType persistedType,
 			final SimpleFeatureType reprojectedType,
 			final MathTransform transform ) {
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
-						fieldName));
+						STATS_TYPE.getString(),
+						statisticsId));
 		this.persistedType = persistedType;
 		this.reprojectedType = reprojectedType;
 		this.transform = transform;
@@ -59,7 +63,7 @@ public class FeatureBoundingBoxStatistics extends
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 
@@ -141,5 +145,45 @@ public class FeatureBoundingBoxStatistics extends
 		}
 		buffer.append("]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert Feature Bounding Box statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+		jo.put(
+				"statisticsId",
+				statisticsId.getString());
+
+		jo.put(
+				"field_identifier",
+				getFieldName());
+
+		if (isSet()) {
+			jo.put(
+					"minX",
+					minX);
+			jo.put(
+					"maxX",
+					maxX);
+			jo.put(
+					"minY",
+					minY);
+			jo.put(
+					"maxY",
+					maxY);
+		}
+		else {
+			jo.put(
+					"boundaries",
+					"No Values");
+		}
+		return jo;
 	}
 }
