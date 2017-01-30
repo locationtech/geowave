@@ -55,29 +55,7 @@ public class CassandraIndexWriter<T> extends
 			final DataStoreEntryInfo ingestInfo,
 			final boolean ensureUniqueId ) {
 		final List<CassandraRow> rows = new ArrayList<CassandraRow>();
-		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
-		int totalLength = 0;
-		// TODO potentially another hack, but if there is only one field, don't
-		// need to write the length
-		if (ingestInfo.getFieldInfo().size() == 1) {
-			byte[] value = ingestInfo.getFieldInfo().get(
-					0).getWrittenValue();
-			fieldInfoBytesList.add(value);
-			totalLength += value.length;
-		}
-		else {
-			for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {
-				final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
-				fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
-				fieldInfoBytes.put(fieldInfo.getWrittenValue());
-				fieldInfoBytesList.add(fieldInfoBytes.array());
-				totalLength += fieldInfoBytes.array().length;
-			}
-		}
-		final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
-		for (final byte[] bytes : fieldInfoBytesList) {
-			allFields.put(bytes);
-		}
+		ByteBuffer allFields = DataStoreUtils.serializeFields(ingestInfo);
 		for (final ByteArrayId insertionId : ingestInfo.getInsertionIds()) {
 			allFields.rewind();
 			byte[] uniqueDataId;

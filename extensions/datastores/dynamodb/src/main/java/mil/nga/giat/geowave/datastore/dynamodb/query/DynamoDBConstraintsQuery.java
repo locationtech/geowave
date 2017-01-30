@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBIndexWriter;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 
@@ -40,7 +41,7 @@ public class DynamoDBConstraintsQuery extends
 		DynamoDBFilteredIndexQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(DynamoDBConstraintsQuery.class);
-	private static final int MAX_RANGE_DECOMPOSITION = -1;
+	private static final int MAX_RANGE_DECOMPOSITION = 1;
 	protected final ConstraintsQuery base;
 	private boolean queryFiltersEnabled;
 

@@ -1,13 +1,8 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.URL;
 
 import org.apache.commons.exec.CommandLine;
@@ -85,62 +80,6 @@ public class DynamoDBLocal
 	public void stop() {
 		// first, ask the watchdog nicely:
 		watchdog.destroyProcess();
-
-		// hardStop();
-	}
-
-	private void hardStop() {
-		// then kill all the extra emulator processes like this:
-		final String KILL_CMD_1 = "for i in $(ps -ef | grep -i \"[b]eta emulators bigtable\" | awk '{print $2}'); do kill -9 $i; done";
-		final String KILL_CMD_2 = "for i in $(ps -ef | grep -i \"[c]btemulator\" | awk '{print $2}'); do kill -9 $i; done";
-
-		File bashFile = new File(
-				TestUtils.TEMP_DIR,
-				"kill-bigtable.sh");
-
-		PrintWriter scriptWriter;
-		try {
-			Writer w = new OutputStreamWriter(
-					new FileOutputStream(
-							bashFile),
-					"UTF-8");
-			scriptWriter = new PrintWriter(
-					w);
-			scriptWriter.println("#!/bin/bash");
-			scriptWriter.println("set -ev");
-			scriptWriter.println(KILL_CMD_1);
-			scriptWriter.println(KILL_CMD_2);
-			scriptWriter.close();
-
-			bashFile.setExecutable(true);
-		}
-		catch (FileNotFoundException e1) {
-			LOGGER.error(
-					"Unable to create dynamo local kill script",
-					e1);
-			return;
-		}
-		catch (UnsupportedEncodingException e) {
-			LOGGER.error(
-					"Unable to create dynamo local kill script",
-					e);
-		}
-
-		CommandLine cmdLine = new CommandLine(
-				bashFile.getAbsolutePath());
-		DefaultExecutor executor = new DefaultExecutor();
-		int exitValue = 0;
-
-		try {
-			exitValue = executor.execute(cmdLine);
-		}
-		catch (IOException ex) {
-			LOGGER.error(
-					"Unable to execute dynamo local kill script",
-					ex);
-		}
-
-		LOGGER.warn("Dynamo local " + (exitValue == 0 ? "stopped" : "failed to stop"));
 	}
 
 	private boolean isInstalled() {
@@ -215,6 +154,12 @@ public class DynamoDBLocal
 		cmdLine.addArgument("-inMemory");
 		cmdLine.addArgument("-port");
 		cmdLine.addArgument(HOST_PORT);
+		System.setProperty(
+				"aws.accessKeyId",
+				"dummy");
+		System.setProperty(
+				"aws.secretKey",
+				"dummy");
 
 		// Using a result handler makes the emulator run async
 		DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();

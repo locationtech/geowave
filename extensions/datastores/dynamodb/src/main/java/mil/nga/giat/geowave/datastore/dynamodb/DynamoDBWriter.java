@@ -3,9 +3,11 @@ package mil.nga.giat.geowave.datastore.dynamodb;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -13,10 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.BatchWriteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.BatchWriteItemResult;
 import com.amazonaws.services.dynamodbv2.model.WriteRequest;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.base.Writer;
 
 public class DynamoDBWriter implements
@@ -54,14 +58,12 @@ public class DynamoDBWriter implements
 	public void write(
 			final WriteRequest item ) {
 		synchronized (batchedItems) {
+			batchedItems.add(item);
 			if (batchedItems.size() >= NUM_ITEMS) {
 				do {
 					writeBatch(true);
 				}
 				while (batchedItems.size() >= NUM_ITEMS);
-			}
-			else {
-				batchedItems.add(item);
 			}
 		}
 	}
@@ -76,7 +78,7 @@ public class DynamoDBWriter implements
 		else {
 			batch = batchedItems.subList(
 					0,
-					NUM_ITEMS);
+					NUM_ITEMS + 1);
 		}
 		final Map<String, List<WriteRequest>> writes = new HashMap<>();
 		writes.put(
@@ -108,6 +110,7 @@ public class DynamoDBWriter implements
 		// });
 		// }
 		// else {
+
 		final BatchWriteItemResult response = client.batchWriteItem(new BatchWriteItemRequest(
 				writes));
 		retry(response.getUnprocessedItems());
