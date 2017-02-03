@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test;
+package mil.gma.giat.geowave.gdal;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -8,18 +8,72 @@ import java.net.URL;
 import java.nio.file.Files;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.fs.FileUtil;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
+import org.junit.Assert;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jcraft.jsch.Logger;
+//import com.jcraft.jsch.Logger;
 
 import kafka.utils.Os;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+
 
 public class InstallGdal
 {
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(InstallGdal.class);
+	
+	public static final File TEMP_DIR = new File("./target/temp");
+	
+	/**
+	 * Unzips the contents of a zip file to a target output directory
+	 *
+	 * @param zipInput
+	 *            input zip file
+	 * @param outputFolder
+	 *            zip file output folder
+	 *
+	 * @param deleteTargetDir
+	 *            delete the destination directory before extracting
+	 */
+	private static void unZipFile(
+			final File zipInput,
+			final String outputFolder,
+			final boolean deleteTargetDir ) {
 
+		try {
+			final File of = new File(
+					outputFolder);
+			if (!of.exists()) {
+				if (!of.mkdirs()) {
+					throw new IOException(
+							"Could not create temporary directory: " + of.toString());
+				}
+			}
+			else if (deleteTargetDir) {
+				FileUtil.fullyDelete(of);
+			}
+			final ZipFile z = new ZipFile(
+					zipInput);
+			z.extractAll(outputFolder);
+		}
+		catch (final ZipException e) {
+			LOGGER.warn(
+					"Unable to extract test data",
+					e);
+			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
+		}
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unable to create temporary directory: " + outputFolder,
+					e);
+			Assert.fail("Unable to extract test data: '" + e.getLocalizedMessage() + "'");
+		}
+	}
+	
 	public static void main(
 			final String[] args )
 			throws IOException {
@@ -30,7 +84,7 @@ public class InstallGdal
 		}
 		else {
 			gdalDir = new File(
-					TestUtils.TEMP_DIR,
+					TEMP_DIR,
 					"gdal");
 		}
 		if (!gdalDir.exists() && !gdalDir.mkdirs()) {
@@ -63,7 +117,7 @@ public class InstallGdal
 			}
 		}
 		if (file.endsWith("zip")) {
-			TestUtils.unZipFile(
+			unZipFile(
 					downloadFile,
 					gdalDir.getAbsolutePath(),
 					false);
@@ -71,7 +125,7 @@ public class InstallGdal
 		else {
 			final TarGZipUnArchiver unarchiver = new TarGZipUnArchiver();
 			unarchiver.enableLogging(new ConsoleLogger(
-					Logger.WARN,
+					org.codehaus.plexus.logging.Logger.LEVEL_WARN,
 					"GDAL Unarchive"));
 			unarchiver.setSourceFile(downloadFile);
 			unarchiver.setDestDirectory(gdalDir);
