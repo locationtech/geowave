@@ -10,7 +10,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
-import org.geotools.factory.Hints;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.feature.visitor.MaxVisitor;
@@ -50,12 +49,6 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 public class GeoWaveFeatureCollection extends
 		DataFeatureCollection
 {
-	public static final Hints.Key LEVEL = new Hints.Key(
-			Integer.class);
-	public static final Hints.Key SERVER_FEATURE_RENDERER = new Hints.Key(
-			DistributedRenderOptions.class);
-	public static final Hints.Key STATS_NAME = new Hints.Key(
-			String.class);
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureCollection.class);
 	private final GeoWaveFeatureReader reader;
 	private CloseableIterator<SimpleFeature> featureCursor;
@@ -203,15 +196,6 @@ public class GeoWaveFeatureCollection extends
 				"options",
 				DistributedRenderOptions.class);
 		return typeBuilder.buildFeatureType();
-	}
-
-	protected String getStatsQueryName() {
-		final Object statsQueryName = query.getHints().get(
-				STATS_NAME);
-		if (statsQueryName == null) {
-			return null;
-		}
-		return statsQueryName.toString();
 	}
 
 	protected boolean isDistributedRenderQuery() {

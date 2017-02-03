@@ -181,7 +181,7 @@ public class TestUtils
 		try {
 			listStats.execute(new ManualOperationParams());
 		}
-		catch (final Exception e) {
+		catch (final ParameterException e) {
 			throw new RuntimeException(
 					e);
 		}

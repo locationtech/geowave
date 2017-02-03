@@ -165,7 +165,7 @@ public class FeatureDataAdapter extends
 	 */
 	public FeatureDataAdapter(
 			final SimpleFeatureType featureType,
-			final ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers ) {
+			final List<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers ) {
 		this(
 				featureType,
 				customIndexHandlers,

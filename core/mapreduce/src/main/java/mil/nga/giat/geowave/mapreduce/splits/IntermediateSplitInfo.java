@@ -55,11 +55,12 @@ public class IntermediateSplitInfo implements
 			final double cdfStart = stats.cdf(start);
 
 			final double cdfEnd = stats.cdf(end);
-			byte[] bytes = stats.quantile(cdfStart + ((cdfEnd - cdfStart) * fraction));
+			final double expectedEndValue = stats.quantile(cdfStart + ((cdfEnd - cdfStart) * fraction));
 			final int maxCardinality = Math.max(
 					start.length,
 					end.length);
 
+			byte[] bytes = ByteUtils.toBytes(expectedEndValue);
 			byte[] splitKey;
 			if ((bytes.length < 8) && (bytes.length < maxCardinality)) {
 				// prepend with 0

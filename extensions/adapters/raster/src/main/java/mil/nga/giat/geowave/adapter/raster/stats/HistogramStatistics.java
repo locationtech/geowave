@@ -321,10 +321,6 @@ public class HistogramStatistics extends
 		return histograms.get(resolution);
 	}
 
-	/*
-	 * @Override public ByteArrayId getStatisticsId() { return STATS_TYPE; }
-	 */
-
 	@Override
 	public void merge(
 			final Mergeable statistics ) {

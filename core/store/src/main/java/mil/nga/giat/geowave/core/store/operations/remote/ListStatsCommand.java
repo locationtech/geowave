@@ -40,7 +40,7 @@ public class ListStatsCommand extends
 	@Override
 	public void execute(
 			OperationParams params )
-			throws Exception {
+			throws ParameterException {
 
 		// Ensure we have all the required arguments
 		if (parameters.size() < 1) {
@@ -70,10 +70,6 @@ public class ListStatsCommand extends
 
 		StringBuilder builder = new StringBuilder();
 
-		/*
-		 * JCommander.getConsole().println( statsOptions.getJsonFormatFlag() ?
-		 * "JSON" : "no json");
-		 */
 		try (CloseableIterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
 			if (statsOptions.getJsonFormatFlag()) {
 				JSONArray resultsArray = new JSONArray();

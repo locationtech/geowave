@@ -27,9 +27,6 @@ import com.google.common.base.Splitter;
  * Class to manage secondary indexes for a Simple Feature Type. It keeps a list
  * of supported secondary indices associated with all the attributes attached to
  * the SimpleFeatureType provided upon instantiation.
- * 
- * @author geowave
- *
  */
 
 public class SecondaryIndexManager implements
@@ -61,11 +58,6 @@ public class SecondaryIndexManager implements
 		initializeIndices();
 	}
 
-	/*
-	 * final List<ByteArrayId> numericFields = new ArrayList<>(); final
-	 * List<ByteArrayId> textFields = new ArrayList<>(); final List<ByteArrayId>
-	 * temporalFields = new ArrayList<>();
-	 */
 	/**
 	 * For every attribute of the SFT to be managed by this index, determine
 	 * type and if found, create a secondaryIndex of strategy type Temporal,

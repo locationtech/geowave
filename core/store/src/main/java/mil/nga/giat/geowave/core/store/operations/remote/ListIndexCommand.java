@@ -78,10 +78,4 @@ public class ListIndexCommand extends
 				result);
 	}
 
-	/*
-	 * public List<String> getParameters() { return parameters; }
-	 * 
-	 * public void setParameters(String storeName) { this.parameters = new
-	 * ArrayList<String>(); this.parameters.add(storeName); }
-	 */
 }

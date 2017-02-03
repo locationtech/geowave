@@ -141,11 +141,6 @@ public class VisibilityConfiguration implements
 	}
 
 	@SuppressWarnings("unchecked")
-	/**
-	 * 
-	 * @param persistType
-	 * @return
-	 */
 	private boolean configureManager(
 			final SimpleFeatureType persistType ) {
 		final Object visMgr = persistType.getUserData().get(

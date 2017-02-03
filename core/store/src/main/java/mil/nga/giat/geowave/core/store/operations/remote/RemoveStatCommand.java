@@ -68,13 +68,4 @@ public class RemoveStatCommand extends
 		return true;
 	}
 
-	/*
-	 * public List<String> getParameters() { return parameters; }
-	 * 
-	 * public void setParameters(String storeName, String adapterId, String
-	 * statId) { this.parameters = new ArrayList<String>();
-	 * this.parameters.add(storeName); this.parameters.add(adapterId);
-	 * this.parameters.add(statId); }
-	 */
-
 }

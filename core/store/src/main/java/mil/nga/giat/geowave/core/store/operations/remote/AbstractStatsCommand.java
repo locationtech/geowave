@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 
-import mil.nga.giat.geowave.core.cli.api.Operation;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -24,23 +24,15 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 /**
  * Common methods for dumping, manipulating and calculating stats.
  */
-
-public abstract class AbstractStatsCommand /* extends DefaultOperation */
-implements
-		Operation
+public abstract class AbstractStatsCommand extends
+		DefaultOperation
 {
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@ParametersDelegate
 	private StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
 
 	private DataStorePluginOptions inputStoreOptions = null;
-
-	public boolean prepare(
-			OperationParams params ) {
-		return true;
-	}
 
 	public void run(
 			OperationParams params,
@@ -150,16 +142,6 @@ implements
 		}
 		return authsArray;
 	}
-
-	/*
-	 * public StatsCommandLineOptions getStatsOptions() { return statsOptions; }
-	 * 
-	 * public void setStatsOptions(StatsCommandLineOptions statsOptions) {
-	 * this.statsOptions = statsOptions; }
-	 * 
-	 * public DataStorePluginOptions getInputStoreOptions() { return
-	 * inputStoreOptions; }
-	 */
 
 	public void setInputStoreOptions(
 			DataStorePluginOptions inputStoreOptions ) {

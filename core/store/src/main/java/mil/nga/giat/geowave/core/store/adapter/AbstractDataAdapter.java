@@ -85,11 +85,6 @@ abstract public class AbstractDataAdapter<T> implements
 				defaultTypeData);
 	}
 
-	/**
-	 * 
-	 * @param indexFieldHandlers
-	 * @param defaultIndexHandlerData
-	 */
 	protected void init(
 			final List<? extends IndexFieldHandler<T, ? extends CommonIndexValue, Object>> indexFieldHandlers,
 			final Object defaultIndexHandlerData ) {
@@ -164,16 +159,6 @@ abstract public class AbstractDataAdapter<T> implements
 		return new ArrayList<IndexFieldHandler<T, ? extends CommonIndexValue, Object>>();
 	}
 
-	/**
-	 * 
-	 * @param entry
-	 *            -
-	 * @param indexModel
-	 *            -
-	 * 
-	 * @return
-	 * 
-	 */
 	@Override
 	public AdapterPersistenceEncoding encode(
 			final T entry,
@@ -225,9 +210,6 @@ abstract public class AbstractDataAdapter<T> implements
 				extendedData);
 	}
 
-	/**
-	 * 
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public T decode(
@@ -333,9 +315,6 @@ abstract public class AbstractDataAdapter<T> implements
 		return buf.array();
 	}
 
-	/**
-	 * 
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void fromBinary(
@@ -380,10 +359,6 @@ abstract public class AbstractDataAdapter<T> implements
 				defaultTypeData);
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public FieldVisibilityHandler<T, Object> getFieldVisiblityHandler() {
 		return fieldVisiblityHandler;
 	}

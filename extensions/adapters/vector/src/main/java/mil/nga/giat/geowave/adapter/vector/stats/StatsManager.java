@@ -177,24 +177,6 @@ public class StatsManager
 								fieldName),
 						vis);
 			}
-
-			/*
-			 * 
-			 * //
-			 * ----------------------------------------------------------------
-			 * -----
-			 * 
-			 * else if
-			 * (String.class.isAssignableFrom(descriptor.getType().getBinding
-			 * ())) {
-			 * 
-			 * // HyperLogLog is fairly expensive in //
-			 * serialization/deserialization of the HyperLogLogPlus object //
-			 * and is not used anywhere at the moment
-			 * 
-			 * addStats(new FeatureHyperLogLogStatistics(adapterID, fieldName,
-			 * 16), vis); }
-			 */
 		}
 	}
 
