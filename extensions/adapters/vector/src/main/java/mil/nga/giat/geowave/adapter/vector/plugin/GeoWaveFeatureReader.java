@@ -116,9 +116,6 @@ public class GeoWaveFeatureReader implements
 
 	@Override
 	public SimpleFeatureType getFeatureType() {
-		if (featureCollection.isDistributedRenderQuery()) {
-			return GeoWaveFeatureCollection.getDistributedRenderFeatureType();
-		}
 		return components.getAdapter().getFeatureType();
 	}
 
