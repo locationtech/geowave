@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.format.gdelt;
+package mil.nga.giat.geowave.format.avro;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,11 +17,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
-public class GDELTIngestTest
+public class AVROIngestTest
 {
 	private DataSchemaOptionProvider optionsProvider;
-	private GDELTIngestPlugin ingester;
-	private GDELTIngestPlugin ingesterExt;
+	private AvroIngestPlugin ingester;
+	private AvroIngestPlugin ingesterExt;
 	private String filePath;
 	private int expectedCount;
 
@@ -30,14 +30,14 @@ public class GDELTIngestTest
 		optionsProvider = new DataSchemaOptionProvider();
 		optionsProvider.setSupplementalFields(true);
 
-		ingester = new GDELTIngestPlugin();
+		ingester = new GDELTIngestPlugin(); //TODO update constructor
 		ingester.init(null);
 
-		ingesterExt = new GDELTIngestPlugin(
+		ingesterExt = new GDELTIngestPlugin( //TODO delete this? Avro doesn't have this?
 				optionsProvider);
 		ingesterExt.init(null);
 
-		filePath = "20130401.export.CSV.zip";
+		filePath = "20130401.export.CSV.zip"; //TODO is this the right date to use from AVRO?
 		expectedCount = 14056;
 	}
 
@@ -49,7 +49,7 @@ public class GDELTIngestTest
 				this.getClass().getClassLoader().getResource(
 						filePath).getPath());
 
-		assertTrue(GDELTUtils.validate(toIngest));
+		assertTrue(GDELTUtils.validate(toIngest)); //TODO there is no avro equivalent utils. what do??????
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(new ByteArrayId(
 				"123".getBytes(StringUtils.UTF8_CHAR_SET)));
@@ -64,7 +64,7 @@ public class GDELTIngestTest
 		while (features.hasNext()) {
 			final GeoWaveData<SimpleFeature> feature = features.next();
 
-			if (isValidGDELTFeature(feature)) {
+			if (isValidGDELTFeature(feature)) { //TODO replace with isValidAVRO
 				featureCount++;
 			}
 		}
@@ -81,7 +81,7 @@ public class GDELTIngestTest
 		while (featuresExt.hasNext()) {
 			final GeoWaveData<SimpleFeature> featureExt = featuresExt.next();
 
-			if (isValidGDELTFeatureExt(featureExt)) {
+			if (isValidGDELTFeatureExt(featureExt)) { //TODO replace with isValidGDELT
 				featureCountExt++;
 			}
 		}
@@ -101,7 +101,7 @@ public class GDELTIngestTest
 		assertTrue(readExpectedCountExt);
 	}
 
-	private boolean isValidGDELTFeature(
+	private boolean isValidGDELTFeature( //TODO replace this function
 			final GeoWaveData<SimpleFeature> feature ) {
 		if ((feature.getValue().getAttribute(
 				GDELTUtils.GDELT_EVENT_ID_ATTRIBUTE) == null) || (feature.getValue().getAttribute(
@@ -114,7 +114,7 @@ public class GDELTIngestTest
 		return true;
 	}
 
-	private boolean isValidGDELTFeatureExt(
+	private boolean isValidGDELTFeatureExt( //TODO replace this function
 			final GeoWaveData<SimpleFeature> featureExt ) {
 		if ((featureExt.getValue().getAttribute(
 				GDELTUtils.GDELT_EVENT_ID_ATTRIBUTE) == null) || (featureExt.getValue().getAttribute(
