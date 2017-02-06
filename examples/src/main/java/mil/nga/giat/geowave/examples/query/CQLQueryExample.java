@@ -228,7 +228,7 @@ public class CQLQueryExample
 		type.getDescriptor(
 				"locationName").getUserData().put(
 				TextSecondaryIndexConfiguration.INDEX_KEY,
-				Boolean.TRUE);
+				"FULL");
 		return type;
 	}
 
