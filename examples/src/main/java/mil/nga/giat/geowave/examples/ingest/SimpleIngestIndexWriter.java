@@ -36,15 +36,15 @@ public class SimpleIngestIndexWriter extends
 					.error("Invalid arguments, expected: zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
 			System.exit(1);
 		}
-		namespace = args[5];
-		instance = args[2];
+		namespace = args[4];
+		instance = args[1];
 		try {
 			final BasicAccumuloOperations bao = si.getAccumuloOperationsInstance(
+					args[0],
 					args[1],
 					args[2],
 					args[3],
-					args[4],
-					args[5]);
+					args[4]);
 			geowaveDataStore = si.getAccumuloGeowaveDataStore(bao);
 		}
 		catch (final Exception e) {
