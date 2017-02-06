@@ -25,7 +25,8 @@ public class FeatureNumericHistogramStatistics extends
 		AbstractDataStatistics<SimpleFeature> implements
 		FeatureStatistic
 {
-	public static final String STATS_TYPE = "ATT_HISTOGRAM";
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"ATT_HISTOGRAM");
 	private DoubleHistogram positiveHistogram = new LocalDoubleHistogram();
 	private DoubleHistogram negativeHistogram = null;
 
@@ -49,14 +50,14 @@ public class FeatureNumericHistogramStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName));
 	}
 
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 

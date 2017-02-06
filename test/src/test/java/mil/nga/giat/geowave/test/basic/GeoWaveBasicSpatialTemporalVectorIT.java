@@ -68,7 +68,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		 * consider testing some non-default Accumulo options as well
 		 */
 		"disableCustomFilters=true",
-		"disableCoprocessors=true",
+		"disableCoprocessors=true"
 	})
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;
@@ -259,7 +259,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 					else {
 						endTimeAttribute = timeDesc.getTime().getLocalName();
 					}
-					final String geometryAttribute = gtAdapter.getType().getGeometryDescriptor().getLocalName();
+					final String geometryAttribute = gtAdapter.getFeatureType().getGeometryDescriptor().getLocalName();
 
 					final String cqlPredicate = String.format(
 							"BBOX(\"%s\",%f,%f,%f,%f) AND \"%s\" <= '%s' AND \"%s\" >= '%s'",

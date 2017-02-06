@@ -15,8 +15,6 @@ import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureGeometryExtractor;
 import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters.Clustering;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
@@ -63,7 +61,7 @@ public class OrthodromicDistancePartitionerTest
 					"extra1"
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
-				ClusteringUtils.CLUSTERING_CRS).getType();
+				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 		final GeometryFactory factory = new GeometryFactory();
 		SimpleFeature feature = AnalyticFeature.createGeometryFeature(
 				ftype,

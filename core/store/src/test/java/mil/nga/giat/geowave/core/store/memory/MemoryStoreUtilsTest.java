@@ -169,7 +169,7 @@ public class MemoryStoreUtilsTest
 		}
 
 		@Override
-		public ByteArrayId[] getSupportedStatisticsIds() {
+		public ByteArrayId[] getSupportedStatisticsTypes() {
 			return null;
 		}
 

@@ -31,6 +31,9 @@ public class FeatureFixedBinNumericStatistics extends
 		FeatureStatistic
 {
 
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"FEATURE_FIXED_BIN_NUMERIC_HISTOGRAM");
+
 	protected FeatureFixedBinNumericStatistics() {
 		super();
 	}
@@ -41,7 +44,7 @@ public class FeatureFixedBinNumericStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName));
 	}
 
@@ -52,7 +55,7 @@ public class FeatureFixedBinNumericStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName),
 				bins);
 	}
@@ -66,7 +69,7 @@ public class FeatureFixedBinNumericStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName),
 				bins,
 				minValue,
@@ -76,7 +79,7 @@ public class FeatureFixedBinNumericStatistics extends
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 
@@ -110,7 +113,7 @@ public class FeatureFixedBinNumericStatistics extends
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getFieldIdentifier() {
 		return getFieldName();
 	}
 

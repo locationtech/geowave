@@ -96,7 +96,7 @@ public class SimpleFeatureOutputReducer extends
 
 		final String inputID = StringUtils.stringFromBinary(key.getDataId().getBytes());
 		final SimpleFeature pointFeature = AnalyticFeature.createGeometryFeature(
-				outputAdapter.getType(),
+				outputAdapter.getFeatureType(),
 				batchID,
 				inputID,
 				inputID,

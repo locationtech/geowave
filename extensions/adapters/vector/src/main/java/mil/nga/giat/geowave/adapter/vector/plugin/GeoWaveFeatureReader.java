@@ -116,7 +116,7 @@ public class GeoWaveFeatureReader implements
 
 	@Override
 	public SimpleFeatureType getFeatureType() {
-		return components.getAdapter().getType();
+		return components.getAdapter().getFeatureType();
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public class GeoWaveFeatureReader implements
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBounds ) {
 		final Constraints timeConstraints = QueryIndexHelper.composeTimeBoundedConstraints(
-				components.getAdapter().getType(),
+				components.getAdapter().getFeatureType(),
 				components.getAdapter().getTimeDescriptors(),
 				statsMap,
 				timeBounds);
@@ -707,7 +707,7 @@ public class GeoWaveFeatureReader implements
 	public Object convertToType(
 			final String attrName,
 			final Object value ) {
-		final SimpleFeatureType featureType = components.getAdapter().getType();
+		final SimpleFeatureType featureType = components.getAdapter().getFeatureType();
 		final AttributeDescriptor descriptor = featureType.getDescriptor(attrName);
 		if (descriptor == null) {
 			return value;

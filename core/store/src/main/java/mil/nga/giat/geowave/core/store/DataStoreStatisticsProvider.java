@@ -33,51 +33,57 @@ public class DataStoreStatisticsProvider<T> implements
 	}
 
 	@Override
-	public ByteArrayId[] getSupportedStatisticsIds() {
-		final ByteArrayId[] idsFromAdapter = ((adapter instanceof StatisticsProvider) && includeAdapterStats) ? ((StatisticsProvider) adapter)
-				.getSupportedStatisticsIds() : new ByteArrayId[0];
+	public ByteArrayId[] getSupportedStatisticsTypes() {
+		final ByteArrayId[] idsFromAdapter;
+		if ((adapter instanceof StatisticsProvider) && includeAdapterStats) {
+			idsFromAdapter = ((StatisticsProvider) adapter).getSupportedStatisticsTypes();
+		}
+		else {
+			idsFromAdapter = new ByteArrayId[0];
+		}
+
 		final ByteArrayId[] newSet = Arrays.copyOf(
 				idsFromAdapter,
 				idsFromAdapter.length + 5);
-		newSet[idsFromAdapter.length] = RowRangeDataStatistics.STATS_ID;
-		newSet[idsFromAdapter.length + 1] = RowRangeHistogramStatistics.STATS_ID;
-		newSet[idsFromAdapter.length + 2] = IndexMetaDataSet.STATS_ID;
-		newSet[idsFromAdapter.length + 3] = DifferingFieldVisibilityEntryCount.STATS_ID;
-		newSet[idsFromAdapter.length + 4] = DuplicateEntryCount.STATS_ID;
+		newSet[idsFromAdapter.length] = RowRangeDataStatistics.STATS_TYPE;
+		newSet[idsFromAdapter.length + 1] = RowRangeHistogramStatistics.STATS_TYPE;
+		newSet[idsFromAdapter.length + 2] = IndexMetaDataSet.STATS_TYPE;
+		newSet[idsFromAdapter.length + 3] = DifferingFieldVisibilityEntryCount.STATS_TYPE;
+		newSet[idsFromAdapter.length + 4] = DuplicateEntryCount.STATS_TYPE;
 		return newSet;
 	}
 
 	@Override
 	public DataStatistics<T> createDataStatistics(
-			final ByteArrayId statisticsId ) {
-		if (statisticsId.equals(RowRangeDataStatistics.STATS_ID)) {
+			final ByteArrayId statisticsType ) {
+		if (statisticsType.equals(RowRangeDataStatistics.STATS_TYPE)) {
 			return new RowRangeDataStatistics(
 					index.getId());
 		}
-		if (statisticsId.equals(RowRangeHistogramStatistics.STATS_ID)) {
+		if (statisticsType.equals(RowRangeHistogramStatistics.STATS_TYPE)) {
 			return new RowRangeHistogramStatistics(
 					adapter.getAdapterId(),
 					index.getId(),
 					1024);
 		}
-		if (statisticsId.equals(IndexMetaDataSet.STATS_ID)) {
+		if (statisticsType.equals(IndexMetaDataSet.STATS_TYPE)) {
 			return new IndexMetaDataSet(
 					adapter.getAdapterId(),
 					index.getId(),
 					index.getIndexStrategy());
 		}
-		if (statisticsId.equals(DifferingFieldVisibilityEntryCount.STATS_ID)) {
+		if (statisticsType.equals(DifferingFieldVisibilityEntryCount.STATS_TYPE)) {
 			return new DifferingFieldVisibilityEntryCount<>(
 					adapter.getAdapterId(),
 					index.getId());
 		}
-		if (statisticsId.equals(DuplicateEntryCount.STATS_ID)) {
+		if (statisticsType.equals(DuplicateEntryCount.STATS_TYPE)) {
 			return new DuplicateEntryCount<>(
 					adapter.getAdapterId(),
 					index.getId());
 		}
 		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
-				.createDataStatistics(statisticsId) : null;
+				.createDataStatistics(statisticsType) : null;
 	}
 
 	@Override

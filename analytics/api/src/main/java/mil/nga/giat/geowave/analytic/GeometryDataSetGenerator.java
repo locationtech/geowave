@@ -176,7 +176,7 @@ public class GeometryDataSetGenerator
 				featureData.get(
 						0).getFeatureType());
 
-		LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getType().getTypeName());
+		LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getFeatureType().getTypeName());
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
 				index)) {

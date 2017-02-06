@@ -74,8 +74,8 @@ public class GeoWaveFeatureCollection extends
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
 					.getTransaction()
 					.getDataStatistics();
-			if (statsMap.containsKey(CountDataStatistics.STATS_ID)) {
-				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_ID);
+			if (statsMap.containsKey(CountDataStatistics.STATS_TYPE)) {
+				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_TYPE);
 				if ((stats != null) && stats.isSet()) {
 					return (int) stats.getCount();
 				}
@@ -214,7 +214,7 @@ public class GeoWaveFeatureCollection extends
 		if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
 			return getDistributedRenderFeatureType();
 		}
-		return reader.getComponents().getAdapter().getType();
+		return reader.getComponents().getAdapter().getFeatureType();
 	}
 
 	private Filter getFilter(

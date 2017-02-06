@@ -111,7 +111,7 @@ public class GeoWaveEmptyTransaction extends
 				this);
 
 		components.getGTstore().getListenerManager().fireFeaturesAdded(
-				components.getAdapter().getType().getTypeName(),
+				components.getAdapter().getFeatureType().getTypeName(),
 				Transaction.AUTO_COMMIT,
 				ReferencedEnvelope.reference(feature.getBounds()),
 				true);

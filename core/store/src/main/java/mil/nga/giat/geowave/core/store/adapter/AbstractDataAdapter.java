@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 
 /**
  * This class generically supports most of the operations necessary to implement
- * a Data Adapter and can be easily extended to support specific data types.
+ * a Data Adapter and can be easily extended to support specific data types.<br>
  * Many of the details are handled by mapping IndexFieldHandler's based on
  * either types or exact dimensions. These handler mappings can be supplied in
  * the constructor. The dimension matching handlers are used first when trying
@@ -90,23 +90,29 @@ abstract public class AbstractDataAdapter<T> implements
 			final Object defaultIndexHandlerData ) {
 		dimensionMatchingFieldHandlers = new HashMap<ByteArrayId, IndexFieldHandler<T, ? extends CommonIndexValue, Object>>();
 		typeMatchingFieldHandlers = new HashMap<Class<?>, IndexFieldHandler<T, ? extends CommonIndexValue, Object>>();
-		// split out the dimension matching index handlers from the type
-		// matching index handlers
+
+		// --------------------------------------------------------------------
+		// split out the dimension-matching index handlers from the
+		// type-matching index handlers
+
 		for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : indexFieldHandlers) {
 			if (indexHandler instanceof DimensionMatchingIndexFieldHandler) {
 				final ByteArrayId[] matchedDimensionFieldIds = ((DimensionMatchingIndexFieldHandler<T, ? extends CommonIndexValue, Object>) indexHandler)
 						.getSupportedIndexFieldIds();
+
 				for (final ByteArrayId matchedDimensionId : matchedDimensionFieldIds) {
 					dimensionMatchingFieldHandlers.put(
 							matchedDimensionId,
 							indexHandler);
 				}
+
 			}
 			else {
-				// alternatively we could put make the dimension matching field
+				// alternatively we could put make the dimension-matching field
 				// handlers match types as a last resort rather than this else,
 				// but they shouldn't conflict with an existing type matching
 				// class
+
 				typeMatchingFieldHandlers.put(
 						GenericTypeResolver.resolveTypeArguments(
 								indexHandler.getClass(),
@@ -115,15 +121,20 @@ abstract public class AbstractDataAdapter<T> implements
 			}
 		}
 
+		// --------------------------------------------------------------------
 		// add default handlers if the type is not already within the custom
 		// handlers
+
 		final List<IndexFieldHandler<T, ? extends CommonIndexValue, Object>> defaultTypeMatchingHandlers = getDefaultTypeMatchingHandlers(defaultIndexHandlerData);
+
 		for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> defaultFieldHandler : defaultTypeMatchingHandlers) {
 			final Class<?> defaultFieldHandlerClass = GenericTypeResolver.resolveTypeArguments(
 					defaultFieldHandler.getClass(),
 					IndexFieldHandler.class)[1];
+
 			// if the type matching handlers can already handle this class,
 			// don't overload it, otherwise, use this as a default handler
+
 			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> existingTypeHandler = FieldUtils
 					.getAssignableValueFromClassMap(
 							defaultFieldHandlerClass,
@@ -136,6 +147,13 @@ abstract public class AbstractDataAdapter<T> implements
 		}
 	}
 
+	/**
+	 * Returns an empty list of IndexFieldHandlers as default.
+	 * 
+	 * @param defaultIndexHandlerData
+	 *            - object parameter
+	 * @return Empty list of IndexFieldHandlers.
+	 */
 	protected List<IndexFieldHandler<T, ? extends CommonIndexValue, Object>> getDefaultTypeMatchingHandlers(
 			final Object defaultIndexHandlerData ) {
 		return new ArrayList<IndexFieldHandler<T, ? extends CommonIndexValue, Object>>();
@@ -147,25 +165,31 @@ abstract public class AbstractDataAdapter<T> implements
 			final CommonIndexModel indexModel ) {
 		final PersistentDataset<CommonIndexValue> indexData = new PersistentDataset<CommonIndexValue>();
 		final Set<ByteArrayId> nativeFieldsInIndex = new HashSet<ByteArrayId>();
+
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
+
 			final IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = getFieldHandler(dimension);
+
 			if (fieldHandler == null) {
 				if (LOGGER.isInfoEnabled()) {
-					// dont waste time converting IDs to String if info is not
-					// enabled
+					// Don't waste time converting IDs to String if "info" level
+					// is not enabled
 					LOGGER.info("Unable to find field handler for data adapter '"
 							+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
 							+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
 				}
 				continue;
 			}
+
 			final CommonIndexValue value = fieldHandler.toIndexValue(entry);
 			indexData.addValue(new PersistentValue<CommonIndexValue>(
 					dimension.getFieldId(),
 					value));
 			nativeFieldsInIndex.addAll(Arrays.asList(fieldHandler.getNativeFieldIds()));
 		}
+
 		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
+
 		// now for the other data
 		if (nativeFieldHandlers != null) {
 			for (final NativeFieldHandler<T, Object> fieldHandler : nativeFieldHandlers) {
@@ -178,6 +202,7 @@ abstract public class AbstractDataAdapter<T> implements
 						fieldHandler.getFieldValue(entry)));
 			}
 		}
+
 		return new AdapterPersistenceEncoding(
 				getAdapterId(),
 				getDataId(entry),
@@ -227,7 +252,13 @@ abstract public class AbstractDataAdapter<T> implements
 
 	abstract protected RowBuilder<T, Object> newBuilder();
 
-	protected IndexFieldHandler<T, ? extends CommonIndexValue, Object> getFieldHandler(
+	/**
+	 * Get index field handler for the provided dimension.
+	 * 
+	 * @param dimension
+	 * @return field handler
+	 */
+	private IndexFieldHandler<T, ? extends CommonIndexValue, Object> getFieldHandler(
 			final NumericDimensionField<? extends CommonIndexValue> dimension ) {
 		// first try explicit dimension matching
 		IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler = dimensionMatchingFieldHandlers

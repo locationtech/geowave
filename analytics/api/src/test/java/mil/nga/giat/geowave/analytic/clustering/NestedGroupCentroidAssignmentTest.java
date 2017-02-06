@@ -57,7 +57,7 @@ public class NestedGroupCentroidAssignmentTest
 					"extra1"
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
-				ClusteringUtils.CLUSTERING_CRS).getType();
+				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 		final GeometryFactory factory = new GeometryFactory();
 		final String grp1 = "g1";
 		final String grp2 = "g2";

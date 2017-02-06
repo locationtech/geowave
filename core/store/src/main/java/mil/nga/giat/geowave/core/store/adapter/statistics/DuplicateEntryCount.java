@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -15,13 +17,8 @@ public class DuplicateEntryCount<T> extends
 		AbstractDataStatistics<T> implements
 		DeleteCallback<T>
 {
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"DUPLICATE_ENTRY_COUNT");
-	private static final ByteArrayId SEPARATOR = new ByteArrayId(
-			"_");
-	private static final byte[] STATS_ID_AND_SEPARATOR = ArrayUtils.addAll(
-			STATS_ID.getBytes(),
-			SEPARATOR.getBytes());
 	private long entriesWithDuplicates = 0;
 
 	protected DuplicateEntryCount() {
@@ -58,7 +55,9 @@ public class DuplicateEntryCount<T> extends
 			final ByteArrayId indexId ) {
 		return new ByteArrayId(
 				ArrayUtils.addAll(
-						STATS_ID_AND_SEPARATOR,
+						ArrayUtils.addAll(
+								STATS_TYPE.getBytes(),
+								STATS_SEPARATOR.getBytes()),
 						indexId.getBytes()));
 	}
 
@@ -138,4 +137,27 @@ public class DuplicateEntryCount<T> extends
 		}
 		return combinedDuplicateCount;
 	}
+
+	/**
+	 * Convert Duplicate Count statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		jo.put(
+				"count",
+				entriesWithDuplicates);
+
+		return jo;
+	}
+
 }

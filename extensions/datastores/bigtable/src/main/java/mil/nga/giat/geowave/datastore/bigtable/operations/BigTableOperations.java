@@ -61,34 +61,42 @@ public class BigTableOperations extends
 
 		return BigtableConfiguration.connect(config);
 	}
-	
+
 	@Override
-	public ResultScanner getScannedResults(Scan scanner, String tableName, String... authorizations)
+	public ResultScanner getScannedResults(
+			Scan scanner,
+			String tableName,
+			String... authorizations )
 			throws IOException {
-		
-		if(tableExists(tableName)){
-			//TODO Cache locally b/c numerous checks can be expensive
-			return super.getScannedResults(scanner, tableName, authorizations);
+
+		if (tableExists(tableName)) {
+			// TODO Cache locally b/c numerous checks can be expensive
+			return super.getScannedResults(
+					scanner,
+					tableName,
+					authorizations);
 		}
 		return new ResultScanner() {
 			@Override
 			public Iterator<Result> iterator() {
 				return Collections.emptyIterator();
-			}		
-			
+			}
+
 			@Override
-			public Result[] next(int nbRows) throws IOException {
+			public Result[] next(
+					int nbRows )
+					throws IOException {
 				return null;
 			}
-			
+
 			@Override
-			public Result next() throws IOException {
+			public Result next()
+					throws IOException {
 				return null;
 			}
-			
+
 			@Override
-			public void close() {				
-			}
+			public void close() {}
 		};
 	}
 

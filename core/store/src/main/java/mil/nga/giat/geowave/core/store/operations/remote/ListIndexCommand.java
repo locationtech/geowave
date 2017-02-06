@@ -30,12 +30,11 @@ public class ListIndexCommand extends
 	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<String>();
 
-	private DataStorePluginOptions inputStoreOptions = null;
-
 	@Override
 	public void execute(
 			OperationParams params )
 			throws IOException {
+
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
@@ -43,42 +42,40 @@ public class ListIndexCommand extends
 
 		String inputStoreName = parameters.get(0);
 
-		// Attempt to load store.
+		// Get the config options from the properties file
+
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		}
+		// Attempt to load the desired input store
 
-		final CloseableIterator<Index<?, ?>> it = inputStoreOptions.createIndexStore().getIndices();
-		final StringBuffer buffer = new StringBuffer();
-		while (it.hasNext()) {
-			Index<?, ?> index = it.next();
-			buffer.append(
-					index.getId().getString()).append(
-					' ');
+		String result;
+
+		StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			result = "Cannot find store name: " + inputStoreLoader.getStoreName();
 		}
-		it.close();
+		else {
+
+			// Now that store is loaded, pull the list of indexes
+
+			DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+
+			final CloseableIterator<Index<?, ?>> it = inputStoreOptions.createIndexStore().getIndices();
+			final StringBuffer buffer = new StringBuffer();
+			while (it.hasNext()) {
+				Index<?, ?> index = it.next();
+				buffer.append(
+						index.getId().getString()).append(
+						' ');
+			}
+			it.close();
+			result = "Available indexes: " + buffer.toString();
+		}
 
 		JCommander.getConsole().println(
-				"Available indexes: " + buffer.toString());
+				result);
 	}
 
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-	}
 }

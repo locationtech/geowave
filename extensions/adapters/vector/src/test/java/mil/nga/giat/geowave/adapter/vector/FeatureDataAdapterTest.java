@@ -105,7 +105,7 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final CoordinateReferenceSystem crs = dataAdapter.getType().getCoordinateReferenceSystem();
+		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
 				"EPSG:4326"));
 		@SuppressWarnings("unchecked")
@@ -162,11 +162,11 @@ public class FeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"whennot").getUserData().get(
 						"time"));
 
@@ -206,11 +206,11 @@ public class FeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"pid").getUserData().get(
 						"visibility"));
 
@@ -267,11 +267,11 @@ public class FeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"when").getUserData().get(
 						"time"));
 
@@ -319,16 +319,16 @@ public class FeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"whennot").getUserData().get(
 						"end"));
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"when").getUserData().get(
 						"start"));
 
@@ -398,22 +398,22 @@ public class FeatureDataAdapterTest
 
 		assertEquals(
 				"http://foo",
-				dataAdapterCopy.getType().getName().getNamespaceURI());
+				dataAdapterCopy.getFeatureType().getName().getNamespaceURI());
 
 		assertEquals(
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"end").getUserData().get(
 						"end"));
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"start").getUserData().get(
 						"start"));
 
@@ -466,7 +466,7 @@ public class FeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getType().getCoordinateReferenceSystem().getCoordinateSystem(),
+				dataAdapterCopy.getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem(),
 				GeoWaveGTDataStore.DEFAULT_CRS.getCoordinateSystem());
 	}
 

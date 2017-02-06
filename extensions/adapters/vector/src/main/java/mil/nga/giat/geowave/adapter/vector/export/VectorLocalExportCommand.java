@@ -147,7 +147,7 @@ public class VectorLocalExportCommand extends
 				}
 			}
 			for (final GeotoolsFeatureDataAdapter adapter : featureAdapters) {
-				final SimpleFeatureType sft = adapter.getType();
+				final SimpleFeatureType sft = adapter.getFeatureType();
 				JCommander.getConsole().println(
 						"Exporting type '" + sft.getTypeName() + "'");
 				final QueryOptions queryOptions = new QueryOptions();

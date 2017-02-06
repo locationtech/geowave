@@ -322,7 +322,7 @@ public class GeoWaveRasterReader extends
 		final DataStatistics<?> statistics = geowaveStatisticsStore.getDataStatistics(
 				new ByteArrayId(
 						coverageName),
-				BoundingBoxDataStatistics.STATS_ID);
+				BoundingBoxDataStatistics.STATS_TYPE);
 		// try to use both the bounding box and the overview statistics to
 		// determine the width and height at the highest resolution
 		if (statistics instanceof BoundingBoxDataStatistics) {
@@ -362,7 +362,7 @@ public class GeoWaveRasterReader extends
 		DataStatistics<?> statistics = geowaveStatisticsStore.getDataStatistics(
 				new ByteArrayId(
 						coverageName),
-				BoundingBoxDataStatistics.STATS_ID);
+				BoundingBoxDataStatistics.STATS_TYPE);
 		int width = 0;
 		int height = 0;
 		// try to use both the bounding box and the overview statistics to
@@ -372,7 +372,7 @@ public class GeoWaveRasterReader extends
 			statistics = geowaveStatisticsStore.getDataStatistics(
 					new ByteArrayId(
 							coverageName),
-					OverviewStatistics.STATS_ID);
+					OverviewStatistics.STATS_TYPE);
 			if (statistics instanceof OverviewStatistics) {
 				final OverviewStatistics overviewStats = (OverviewStatistics) statistics;
 				width = (int) Math
@@ -1033,7 +1033,7 @@ public class GeoWaveRasterReader extends
 		final DataStatistics<?> stats = geowaveStatisticsStore.getDataStatistics(
 				new ByteArrayId(
 						coverageName),
-				OverviewStatistics.STATS_ID);
+				OverviewStatistics.STATS_TYPE);
 		if ((stats != null) && (stats instanceof OverviewStatistics)) {
 			final Resolution[] resolutions = ((OverviewStatistics) stats).getResolutions();
 			final double[][] retVal = new double[resolutions.length][];
@@ -1054,7 +1054,7 @@ public class GeoWaveRasterReader extends
 		final DataStatistics<?> stats = geowaveStatisticsStore.getDataStatistics(
 				new ByteArrayId(
 						coverageName),
-				HistogramStatistics.STATS_ID);
+				HistogramStatistics.STATS_TYPE);
 		if ((stats != null) && (stats instanceof HistogramStatistics)) {
 			return ((HistogramStatistics) stats).getHistogram(new Resolution(
 					new double[] {

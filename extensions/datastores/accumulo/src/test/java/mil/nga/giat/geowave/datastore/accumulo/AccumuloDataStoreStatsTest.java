@@ -263,7 +263,7 @@ public class AccumuloDataStoreStatsTest
 
 		CountDataStatistics<?> countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				"aaa",
 				"bbb");
 		assertEquals(
@@ -272,7 +272,7 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				"aaa");
 		assertEquals(
 				2,
@@ -280,7 +280,7 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				"bbb");
 		assertEquals(
 				1,
@@ -288,21 +288,21 @@ public class AccumuloDataStoreStatsTest
 
 		BoundingBoxDataStatistics<?> bboxStats = (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				BoundingBoxDataStatistics.STATS_ID,
+				BoundingBoxDataStatistics.STATS_TYPE,
 				"aaa");
 		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 26) && (bboxStats.getMinY() == 32)
 				&& (bboxStats.getMaxY() == 32));
 
 		bboxStats = (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				BoundingBoxDataStatistics.STATS_ID,
+				BoundingBoxDataStatistics.STATS_TYPE,
 				"bbb");
 		assertTrue((bboxStats.getMinX() == 27) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32)
 				&& (bboxStats.getMaxY() == 32));
 
 		bboxStats = (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				BoundingBoxDataStatistics.STATS_ID,
+				BoundingBoxDataStatistics.STATS_TYPE,
 				"aaa",
 				"bbb");
 		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32)
@@ -391,7 +391,7 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				"aaa");
 		assertEquals(
 				1,
@@ -399,7 +399,7 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				"bbb");
 		assertEquals(
 				1,
@@ -407,21 +407,21 @@ public class AccumuloDataStoreStatsTest
 
 		bboxStats = (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				BoundingBoxDataStatistics.STATS_ID,
+				BoundingBoxDataStatistics.STATS_TYPE,
 				"aaa");
 		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 26) && (bboxStats.getMinY() == 32)
 				&& (bboxStats.getMaxY() == 32));
 
 		bboxStats = (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				BoundingBoxDataStatistics.STATS_ID,
+				BoundingBoxDataStatistics.STATS_TYPE,
 				"bbb");
 		assertTrue((bboxStats.getMinX() == 27) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32)
 				&& (bboxStats.getMaxY() == 32));
 
 		bboxStats = (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				BoundingBoxDataStatistics.STATS_ID,
+				BoundingBoxDataStatistics.STATS_TYPE,
 				"aaa",
 				"bbb");
 		assertTrue((bboxStats.getMinX() == 25) && (bboxStats.getMaxX() == 27) && (bboxStats.getMinY() == 32)
@@ -472,7 +472,7 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID);
+				CountDataStatistics.STATS_TYPE);
 		assertNull(countStats);
 
 		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
@@ -489,7 +489,7 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				"bbb");
 		assertTrue(countStats != null);
 
@@ -499,13 +499,13 @@ public class AccumuloDataStoreStatsTest
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				"bbb");
 		assertNull(countStats);
 
 		final RowRangeDataStatistics<?> rowStats = (RowRangeDataStatistics<?>) statsStore.getDataStatistics(
 				null,
-				RowRangeDataStatistics.getId(index.getId()),
+				RowRangeDataStatistics.composeId(index.getId()),
 				"bbb");
 
 		assertTrue(rowStats != null);
@@ -652,11 +652,11 @@ public class AccumuloDataStoreStatsTest
 		@Override
 		public DataStatistics<TestGeometry> createDataStatistics(
 				final ByteArrayId statisticsId ) {
-			if (BoundingBoxDataStatistics.STATS_ID.equals(statisticsId)) {
+			if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsId)) {
 				return new GeoBoundingBoxStatistics(
 						getAdapterId());
 			}
-			else if (CountDataStatistics.STATS_ID.equals(statisticsId)) {
+			else if (CountDataStatistics.STATS_TYPE.equals(statisticsId)) {
 				return new CountDataStatistics<TestGeometry>(
 						getAdapterId());
 			}
@@ -702,7 +702,7 @@ public class AccumuloDataStoreStatsTest
 		}
 
 		@Override
-		public ByteArrayId[] getSupportedStatisticsIds() {
+		public ByteArrayId[] getSupportedStatisticsTypes() {
 			return SUPPORTED_STATS_IDS;
 		}
 
@@ -753,8 +753,8 @@ public class AccumuloDataStoreStatsTest
 	}
 
 	private final static ByteArrayId[] SUPPORTED_STATS_IDS = new ByteArrayId[] {
-		BoundingBoxDataStatistics.STATS_ID,
-		CountDataStatistics.STATS_ID
+		BoundingBoxDataStatistics.STATS_TYPE,
+		CountDataStatistics.STATS_TYPE
 	};
 
 	private static class GeoBoundingBoxStatistics extends

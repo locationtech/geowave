@@ -190,6 +190,7 @@ public class Stanag4676IngestPlugin extends
 			final FieldVisibilityHandler fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility
 					.isEmpty()) ? new GlobalVisibilityHandler(
 					globalVisibility) : null;
+
 			return new WritableDataAdapter[] {
 				new FeatureDataAdapter(
 						pointType,

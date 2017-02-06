@@ -660,11 +660,11 @@ public class CentroidManagerGeoWave<T> implements
 				final FeatureDataAdapter adapter,
 				final Class<? extends Geometry> shapeClass ) {
 			this.adapter = createFeatureAdapter(
-					adapter.getType(),
+					adapter.getFeatureType(),
 					shapeClass);
 			int p = 0;
 			this.shapeClass = shapeClass;
-			final List<AttributeDescriptor> descriptors = adapter.getType().getAttributeDescriptors();
+			final List<AttributeDescriptor> descriptors = adapter.getFeatureType().getAttributeDescriptors();
 			defaults = new Object[descriptors.size()];
 			for (final AttributeDescriptor descriptor : descriptors) {
 				defaults[p++] = descriptor.getDefaultValue();
@@ -673,14 +673,14 @@ public class CentroidManagerGeoWave<T> implements
 
 		@Override
 		public SimpleFeatureType getFeatureType() {
-			return adapter.getType();
+			return adapter.getFeatureType();
 		}
 
 		@Override
 		public SimpleFeature toSimpleFeature(
 				final AnalyticItemWrapper<T> item ) {
 			final SimpleFeature newFeature = SimpleFeatureBuilder.build(
-					adapter.getType(),
+					adapter.getFeatureType(),
 					defaults,
 					item.getID());
 			int i = 0;
@@ -722,7 +722,7 @@ public class CentroidManagerGeoWave<T> implements
 					BasicFeatureTypes.DEFAULT_NAMESPACE,
 					ClusteringUtils.CLUSTERING_CRS,
 					ClusterFeatureAttribute.values(),
-					shapeClass).getType();
+					shapeClass).getFeatureType();
 			this.shapeClass = shapeClass;
 			final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
 			defaults = new Object[descriptors.size()];

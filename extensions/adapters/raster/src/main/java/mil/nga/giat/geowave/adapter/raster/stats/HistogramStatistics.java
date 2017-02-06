@@ -41,8 +41,8 @@ public class HistogramStatistics extends
 		AbstractDataStatistics<GridCoverage>
 {
 	private static final Logger LOGGER = Logger.getLogger(HistogramStatistics.class);
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
-			"HISTOGRAM");
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"HISTOGRAM_STATS");
 
 	private final Map<Resolution, javax.media.jai.Histogram> histograms = new HashMap<Resolution, javax.media.jai.Histogram>();
 	private HistogramConfig histogramConfig;
@@ -56,7 +56,7 @@ public class HistogramStatistics extends
 			final HistogramConfig histogramConfig ) {
 		super(
 				dataAdapterId,
-				STATS_ID);
+				STATS_TYPE);
 		this.histogramConfig = histogramConfig;
 	}
 
@@ -319,11 +319,6 @@ public class HistogramStatistics extends
 	public javax.media.jai.Histogram getHistogram(
 			final Resolution resolution ) {
 		return histograms.get(resolution);
-	}
-
-	@Override
-	public ByteArrayId getStatisticsId() {
-		return STATS_ID;
 	}
 
 	@Override
