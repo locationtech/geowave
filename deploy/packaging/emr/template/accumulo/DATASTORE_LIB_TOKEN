@@ -103,6 +103,8 @@ configure_accumulo() {
 
 configure_geowave_accumulo(){
 # Configure accumulo user and namespace
+export PATH=${PATH}:/opt/accumulo/bin
+
 cat <<EOF | accumulo shell -u root -p secret -e "createuser geowave"
 geowave
 geowave

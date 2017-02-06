@@ -20,7 +20,8 @@ public class GDELTIngestFormat extends
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance(
 			IngestFormatOptionProvider options ) {
-		return new GDELTIngestPlugin();
+		return new GDELTIngestPlugin(
+				dataSchemaOptionProvider);
 	}
 
 	@Override
@@ -31,11 +32,6 @@ public class GDELTIngestFormat extends
 	@Override
 	public String getIngestFormatDescription() {
 		return "files from Google Ideas GDELT data set";
-	}
-
-	@Override
-	public void setPluginInstanceOptionProviders() {
-		((GDELTIngestPlugin) myInstance).setDataSchemaOptionProvider(dataSchemaOptionProvider);
 	}
 
 	@Override

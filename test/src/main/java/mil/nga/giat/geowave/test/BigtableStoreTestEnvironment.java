@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.test;
 
 import org.apache.log4j.Logger;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
@@ -44,6 +45,10 @@ public class BigtableStoreTestEnvironment extends
 	@Override
 	public void setup() {
 		// Bigtable IT's rely on an external gcloud emulator
+		EnvironmentVariables environmentVariables = new EnvironmentVariables();
+		environmentVariables.set(
+				"BIGTABLE_EMULATOR_HOST",
+				"localhost:8128");
 		if (emulator == null) {
 			emulator = new BigtableEmulator(
 					null); // null uses tmp dir

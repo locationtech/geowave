@@ -124,7 +124,7 @@ public class BasicMapReduceIT
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;

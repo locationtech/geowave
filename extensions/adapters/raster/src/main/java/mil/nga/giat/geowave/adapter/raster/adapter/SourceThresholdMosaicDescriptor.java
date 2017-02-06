@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.adapter.raster.adapter;
 
-import java.awt.image.renderable.ParameterBlock;
-
 import javax.media.jai.ParameterListDescriptor;
 import javax.media.jai.ParameterListDescriptorImpl;
 import javax.media.jai.PropertyGenerator;
