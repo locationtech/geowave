@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,14 +143,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.geotime.store.statistics.<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxX">maxX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxY">maxY</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minX">minX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minY">minY</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#STATS_ID">STATS_ID</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxX">maxX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxY">maxY</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minX">minX</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minY">minY</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics">
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.adapter.statistics.<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#dataAdapterId">dataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsId">statisticsId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#dataAdapterId">dataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsId">statisticsId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_ID_SEPARATOR">STATS_ID_SEPARATOR</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_SEPARATOR">STATS_SEPARATOR</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
 </ul>
 </li>
 </ul>
@@ -173,12 +173,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureBoundingBoxStatistics.html#FeatureBoundingBoxStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-">FeatureBoundingBoxStatistics</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureBoundingBoxStatistics.html#FeatureBoundingBoxStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">FeatureBoundingBoxStatistics</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statisticsId,
                             org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType,
                             org.opengis.feature.simple.SimpleFeatureType&nbsp;reprojectedType,
                             org.opengis.referencing.operation.MathTransform&nbsp;transform)</code>&nbsp;</td>
@@ -219,6 +219,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureBoundingBoxStatistics.html#getFieldName--">getFieldName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>net.sf.json.JSONObject</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureBoundingBoxStatistics.html#toJSONObject--">toJSONObject</a></span>()</code>
+<div class="block">Convert Feature Bounding Box statistics to a JSON object</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureBoundingBoxStatistics.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -274,7 +280,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 <li class="blockList">
 <h4>FeatureBoundingBoxStatistics</h4>
 <pre>public&nbsp;FeatureBoundingBoxStatistics(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
-                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statisticsId)</pre>
 </li>
 </ul>
 <a name="FeatureBoundingBoxStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">
@@ -284,7 +290,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 <li class="blockList">
 <h4>FeatureBoundingBoxStatistics</h4>
 <pre>public&nbsp;FeatureBoundingBoxStatistics(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
-                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statisticsId,
                                     org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType,
                                     org.opengis.feature.simple.SimpleFeatureType&nbsp;reprojectedType,
                                     org.opengis.referencing.operation.MathTransform&nbsp;transform)</pre>
@@ -358,13 +364,32 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/sta
 <a name="toString--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="toJSONObject--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toJSONObject</h4>
+<pre>public&nbsp;net.sf.json.JSONObject&nbsp;toJSONObject()
+                                    throws net.sf.json.JSONException</pre>
+<div class="block">Convert Feature Bounding Box statistics to a JSON object</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html#toJSONObject--">toJSONObject</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#toJSONObject--">toJSONObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in mil.nga.giat.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>net.sf.json.JSONException</code></dd>
 </dl>
 </li>
 </ul>

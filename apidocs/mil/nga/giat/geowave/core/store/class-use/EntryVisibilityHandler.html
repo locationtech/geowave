@@ -166,7 +166,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">StatsManager.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">StatsManager.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<div class="block">Get a visibility handler for the specified statistics object</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -179,9 +181,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">StatsManager.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.store.EntryVisibilityHandler-">addStats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;stats,
+<td class="colLast"><span class="typeNameLabel">StatsManager.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.store.EntryVisibilityHandler-">addStats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
         <a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</code>
-<div class="block">Supports replacement.</div>
+<div class="block">Adds/Replaces a stats object for the given adapter <br>
+ Supports object replacement.</div>
 </td>
 </tr>
 </tbody>

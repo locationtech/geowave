@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6};
+var methods = {"i0":6,"i1":6,"i2":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -137,6 +137,12 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.h
 <div class="block">Update the aggregation result by removing the entries provided</div>
 </td>
 </tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>net.sf.json.JSONObject</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#toJSONObject--">toJSONObject</a></span>()</code>
+<div class="block">Create a JSON object that shows all the metadata handled by this object</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.index.Mergeable">
@@ -183,7 +189,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.h
 <a name="insertionIdsRemoved-java.util.List-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>insertionIdsRemoved</h4>
 <pre>void&nbsp;insertionIdsRemoved(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;insertionIds)</pre>
@@ -191,6 +197,21 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.h
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>insertionIds</code> - the new indices to compute an updated aggregation result on</dd>
+</dl>
+</li>
+</ul>
+<a name="toJSONObject--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toJSONObject</h4>
+<pre>net.sf.json.JSONObject&nbsp;toJSONObject()
+                             throws net.sf.json.JSONException</pre>
+<div class="block">Create a JSON object that shows all the metadata handled by this object</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>net.sf.json.JSONException</code></dd>
 </dl>
 </li>
 </ul>

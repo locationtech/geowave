@@ -168,7 +168,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/C
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]</code></td>
@@ -181,13 +183,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/C
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
-<div class="block">Get a reader for an individual field</div>
+<div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
-<div class="block">Get a writer for an individual field given the ID</div>
+<div class="block">Get a writer for an individual field given the ID.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -196,7 +198,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/C
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BasicIndexModel.html#toBinary--">toBinary</a></span>()</code>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -254,7 +259,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/C
 <h4>getWriter</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getWriter(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">DataWriter</a></code></span></div>
-<div class="block">Get a writer for an individual field given the ID</div>
+<div class="block">Get a writer for an individual field given the ID.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">DataWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;</code></dd>
@@ -273,7 +278,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/C
 <h4>getReader</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getReader(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">DataReader</a></code></span></div>
-<div class="block">Get a reader for an individual field</div>
+<div class="block">Get a reader for an individual field.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html" title="interface in mil.nga.giat.geowave.core.store.data">DataReader</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;</code></dd>
@@ -330,9 +335,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/C
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of
+         the object.</dd>
 </dl>
 </li>
 </ul>
@@ -343,6 +354,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/C
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>

@@ -111,6 +111,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">StatsManager</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Object that manages statistics for an adapter</div>
 </li>
 </ul>
 </div>
@@ -130,13 +131,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#StatsManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-">StatsManager</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
-            org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType)</code>&nbsp;</td>
+            org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType)</code>
+<div class="block">Constructor - Creates a StatsManager that supports the specified adapter
+ with a persisted SimpleFeatureType</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#StatsManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">StatsManager</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
             org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType,
             org.opengis.feature.simple.SimpleFeatureType&nbsp;reprojectedType,
-            org.opengis.referencing.operation.MathTransform&nbsp;transform)</code>&nbsp;</td>
+            org.opengis.referencing.operation.MathTransform&nbsp;transform)</code>
+<div class="block">Constructor - Creates a StatsManager that supports the specified adapter
+ with a persisted and re-projected SimpleFeatureType that is translated by
+ the transform</div>
+</td>
 </tr>
 </table>
 </li>
@@ -155,23 +163,30 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.store.EntryVisibilityHandler-">addStats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;stats,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.store.EntryVisibilityHandler-">addStats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
         <a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</code>
-<div class="block">Supports replacement.</div>
+<div class="block">Adds/Replaces a stats object for the given adapter <br>
+ Supports object replacement.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#createDataStatistics-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">createDataStatistics</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<div class="block">Creates a stats object to be tracked for this adapter based on type</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getSupportedStatisticsIds--">getSupportedStatisticsIds</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getSupportedStatisticsIds--">getSupportedStatisticsIds</a></span>()</code>
+<div class="block">Get an array of stats object IDs for the Stats Manager</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<div class="block">Get a visibility handler for the specified statistics object</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -203,6 +218,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>StatsManager</h4>
 <pre>public&nbsp;StatsManager(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
                     org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType)</pre>
+<div class="block">Constructor - Creates a StatsManager that supports the specified adapter
+ with a persisted SimpleFeatureType</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>dataAdapter</code> - - adapter to be associated with this manager</dd>
+<dd><code>persistedType</code> - - the feature type to be associated with the given adapter</dd>
+</dl>
 </li>
 </ul>
 <a name="StatsManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">
@@ -215,6 +237,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                     org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType,
                     org.opengis.feature.simple.SimpleFeatureType&nbsp;reprojectedType,
                     org.opengis.referencing.operation.MathTransform&nbsp;transform)</pre>
+<div class="block">Constructor - Creates a StatsManager that supports the specified adapter
+ with a persisted and re-projected SimpleFeatureType that is translated by
+ the transform</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>dataAdapter</code> - - adapter to be associated with this manager</dd>
+<dd><code>persistedType</code> - - the feature type to be associated with the given adapter</dd>
+<dd><code>reprojectedType</code> - - feature type re-projected with new CRS. Used if stats object
+            is a Feature Bounding Box.</dd>
+<dd><code>transform</code> - - type of transform applied to persisted type. Used if stats
+            object is a Feature Bounding Box.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -233,6 +267,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>createDataStatistics</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;createDataStatistics(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
                                                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+<div class="block">Creates a stats object to be tracked for this adapter based on type</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>dataAdapter</code> - - adapter to be associated with this manager</dd>
+<dd><code>statisticsId</code> - - name of statistics type to be created</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>new statistics object of specified type</dd>
+</dl>
 </li>
 </ul>
 <a name="getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">
@@ -242,6 +284,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getVisibilityHandler</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+<div class="block">Get a visibility handler for the specified statistics object</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>statisticsId</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>- visibility handler for given stats object</dd>
+</dl>
 </li>
 </ul>
 <a name="addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.store.EntryVisibilityHandler-">
@@ -250,13 +299,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addStats</h4>
-<pre>public&nbsp;void&nbsp;addStats(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;stats,
+<pre>public&nbsp;void&nbsp;addStats(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</pre>
-<div class="block">Supports replacement.</div>
+<div class="block">Adds/Replaces a stats object for the given adapter <br>
+ Supports object replacement.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>stats</code> - </dd>
-<dd><code>visibilityHandler</code> - </dd>
+<dd><code>statsObj</code> - - data stats object to be tracked by adding or replacement</dd>
+<dd><code>visibilityHandler</code> - - type of visibility required to access the stats object</dd>
 </dl>
 </li>
 </ul>
@@ -267,6 +317,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getSupportedStatisticsIds</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsIds()</pre>
+<div class="block">Get an array of stats object IDs for the Stats Manager</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Array of stats object IDs as 'ByteArrayId'</dd>
+</dl>
 </li>
 </ul>
 </li>

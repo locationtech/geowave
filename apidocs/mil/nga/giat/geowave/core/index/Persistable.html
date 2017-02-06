@@ -110,8 +110,8 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">Persistable</span></pre>
-<div class="block">A simple inteface for persisting objects, PersistenceUtils provides
- convenience methods for serializing and deserializing these objects</div>
+<div class="block">A simple interface for persisting objects, PersistenceUtils provides
+ convenience methods for serializing and de-serializing these objects</div>
 </li>
 </ul>
 </div>
@@ -132,11 +132,16 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">toBinary</a></span>()</code>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -160,6 +165,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>byte[]&nbsp;toBinary()</pre>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of
+         the object.</dd>
+</dl>
 </li>
 </ul>
 <a name="fromBinary-byte:A-">
@@ -169,6 +181,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 </li>
 </ul>
 </li>

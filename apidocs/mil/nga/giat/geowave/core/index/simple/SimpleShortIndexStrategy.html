@@ -167,7 +167,9 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/Sim
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleShortIndexStrategy.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleShortIndexStrategy.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -177,7 +179,10 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/Sim
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleShortIndexStrategy.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/SimpleShortIndexStrategy.html#toBinary--">toBinary</a></span>()</code>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -232,6 +237,14 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/Sim
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of
+         the object.</dd>
+</dl>
 </li>
 </ul>
 <a name="fromBinary-byte:A-">
@@ -241,6 +254,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/simple/Sim
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 </li>
 </ul>
 <a name="cast-double-">

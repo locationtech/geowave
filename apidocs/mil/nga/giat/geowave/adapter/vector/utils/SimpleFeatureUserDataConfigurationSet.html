@@ -112,7 +112,7 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SimpleFeatureUserDataConfigurationSet</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Represents a set of configurations maintained within the user data of a
- simple feature type.</div>
+ simple feature type and is tracked by the type name.</div>
 </li>
 </ul>
 </div>
@@ -150,14 +150,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#SimpleFeatureUserDataConfigurationSet--">SimpleFeatureUserDataConfigurationSet</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#SimpleFeatureUserDataConfigurationSet--">SimpleFeatureUserDataConfigurationSet</a></span>()</code>
+<div class="block">Default Constructor<br></div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-">SimpleFeatureUserDataConfigurationSet</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-">SimpleFeatureUserDataConfigurationSet</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
+<div class="block">Constructor<br>
+ Creates a new SimpleFeatureUserDataConfigurationSet configured using the
+ passed in SimpleFeature type.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-java.util.List-">SimpleFeatureUserDataConfigurationSet</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
-                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;configurations)</code>&nbsp;</td>
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;configurations)</code>
+<div class="block">Constructor<br>
+ Creates a new SimpleFeatureUserDataConfigurationSet configured using the
+ passed in SimpleFeature type and adding the passed in configurations.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -177,7 +187,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#addConfigurations-java.lang.String-mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration-">addConfigurations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                 <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&nbsp;config)</code>&nbsp;</td>
+                 <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&nbsp;config)</code>
+<div class="block">Add the passed in configuration to the list of configurations for the
+ specified type name</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -185,16 +198,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#configureFromType-org.opengis.feature.simple.SimpleFeatureType-">configureFromType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#configureFromType-org.opengis.feature.simple.SimpleFeatureType-">configureFromType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
+<div class="block">Updates the entire list of SimpleFeatureUserDataConfiguration(s) with
+ information from the passed in SF type</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static org.opengis.feature.simple.SimpleFeatureType</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#configureType-org.opengis.feature.simple.SimpleFeatureType-">configureType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#configureType-org.opengis.feature.simple.SimpleFeatureType-">configureType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
+<div class="block">Method that reads user data configuration information from
+ <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#SIMPLE_FEATURE_CONFIG_FILE_PROP">"SIMPLE_FEATURE_CONFIG_FILE"</a> and updates the passed in SFT.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#fromJsonString-java.lang.String-org.opengis.feature.simple.SimpleFeatureType-">fromJsonString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jsonConfigString,
-              org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>&nbsp;</td>
+              org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
+<div class="block">Converts a JSON formatted config string to a
+ SimpleFeatureUserDataConfiguationSet and updates the passed in SFT</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&gt;</code></td>
@@ -202,11 +224,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#getConfigurationsForType-java.lang.String-">getConfigurationsForType</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#getConfigurationsForType-java.lang.String-">getConfigurationsForType</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
+<div class="block">Gets a List of all the SimpleFeatureUserDataConfigurations for the SFT
+ specified by the 'typeName' string</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#updateType-org.opengis.feature.simple.SimpleFeatureType-">updateType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#updateType-org.opengis.feature.simple.SimpleFeatureType-">updateType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
+<div class="block">Updates the SFT with the entire list of
+ SimpleFeatureUserDataConfiguration(s)</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -258,25 +286,42 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>SimpleFeatureUserDataConfigurationSet</h4>
 <pre>public&nbsp;SimpleFeatureUserDataConfigurationSet()</pre>
-</li>
-</ul>
-<a name="SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-java.util.List-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>SimpleFeatureUserDataConfigurationSet</h4>
-<pre>public&nbsp;SimpleFeatureUserDataConfigurationSet(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
-                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;configurations)</pre>
+<div class="block">Default Constructor<br></div>
 </li>
 </ul>
 <a name="SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>SimpleFeatureUserDataConfigurationSet</h4>
 <pre>public&nbsp;SimpleFeatureUserDataConfigurationSet(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
+<div class="block">Constructor<br>
+ Creates a new SimpleFeatureUserDataConfigurationSet configured using the
+ passed in SimpleFeature type. Will be accessed using the type name.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - - SFT to be configured</dd>
+</dl>
+</li>
+</ul>
+<a name="SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-java.util.List-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SimpleFeatureUserDataConfigurationSet</h4>
+<pre>public&nbsp;SimpleFeatureUserDataConfigurationSet(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;configurations)</pre>
+<div class="block">Constructor<br>
+ Creates a new SimpleFeatureUserDataConfigurationSet configured using the
+ passed in SimpleFeature type and adding the passed in configurations.
+ Will be accessed using the type name.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - </dd>
+<dd><code>configurations</code> - </dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -294,6 +339,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getConfigurations</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&gt;&nbsp;getConfigurations()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Map of all the SimpleFeatureUserDataConfiguration's by name</dd>
+</dl>
 </li>
 </ul>
 <a name="getConfigurationsForType-java.lang.String-">
@@ -303,6 +352,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getConfigurationsForType</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;getConfigurationsForType(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
+<div class="block">Gets a List of all the SimpleFeatureUserDataConfigurations for the SFT
+ specified by the 'typeName' string</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>typeName</code> - - SFT configuration desired</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>- List<SimpleFeatureUserDataConfigurations></dd>
+</dl>
 </li>
 </ul>
 <a name="addConfigurations-java.lang.String-mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration-">
@@ -313,6 +370,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>addConfigurations</h4>
 <pre>public&nbsp;void&nbsp;addConfigurations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                               <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&nbsp;config)</pre>
+<div class="block">Add the passed in configuration to the list of configurations for the
+ specified type name</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>typeName</code> - - name of type which will get an added configuration</dd>
+<dd><code>config</code> - - configuration to be added</dd>
+</dl>
 </li>
 </ul>
 <a name="configureFromType-org.opengis.feature.simple.SimpleFeatureType-">
@@ -322,6 +386,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>configureFromType</h4>
 <pre>public&nbsp;void&nbsp;configureFromType(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
+<div class="block">Updates the entire list of SimpleFeatureUserDataConfiguration(s) with
+ information from the passed in SF type</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - - SF type to be updated</dd>
+</dl>
 </li>
 </ul>
 <a name="updateType-org.opengis.feature.simple.SimpleFeatureType-">
@@ -331,6 +401,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>updateType</h4>
 <pre>public&nbsp;void&nbsp;updateType(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
+<div class="block">Updates the SFT with the entire list of
+ SimpleFeatureUserDataConfiguration(s)</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - - SF type to be updated</dd>
+</dl>
 </li>
 </ul>
 <a name="asJsonString--">
@@ -340,9 +416,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>asJsonString</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;asJsonString()
-                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+                    throws org.codehaus.jackson.JsonGenerationException,
+                           org.codehaus.jackson.map.JsonMappingException,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>JSON formatted string representing the
+         SimpleFeatureUserDataConfigurationSet represented by this object</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>org.codehaus.jackson.map.JsonMappingException</code></dd>
+<dd><code>org.codehaus.jackson.JsonGenerationException</code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
 </li>
@@ -355,9 +438,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>fromJsonString</h4>
 <pre>public&nbsp;void&nbsp;fromJsonString(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jsonConfigString,
                            org.opengis.feature.simple.SimpleFeatureType&nbsp;type)
-                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+                    throws org.codehaus.jackson.JsonParseException,
+                           org.codehaus.jackson.map.JsonMappingException,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Converts a JSON formatted config string to a
+ SimpleFeatureUserDataConfiguationSet and updates the passed in SFT</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>jsonConfigString</code> - - json formatted configuration string</dd>
+<dd><code>type</code> - - SFT to be updated from the JSON String</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>org.codehaus.jackson.map.JsonMappingException</code></dd>
+<dd><code>org.codehaus.jackson.JsonParseException</code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
 </li>
@@ -369,6 +461,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>configureType</h4>
 <pre>public static&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;configureType(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
+<div class="block">Method that reads user data configuration information from
+ <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#SIMPLE_FEATURE_CONFIG_FILE_PROP">"SIMPLE_FEATURE_CONFIG_FILE"</a> and updates the passed in SFT.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - - SFT to be updated</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the SFT passed in as a parameter</dd>
+</dl>
 </li>
 </ul>
 </li>

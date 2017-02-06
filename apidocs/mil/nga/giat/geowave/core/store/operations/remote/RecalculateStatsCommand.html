@@ -162,20 +162,22 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RecalculateStatsCommand.html#calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">calculateStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RecalculateStatsCommand.html#execute-mil.nga.giat.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>
 <div class="block">Execute the command, and return whether we want to continue execution</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RecalculateStatsCommand.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RecalculateStatsCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>
+<div class="block">Abstracted command method to be called when command selected</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -188,7 +190,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.operations.remote.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html" title="class in mil.nga.giat.geowave.core.store.operations.remote">AbstractStatsCommand</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#getInputStoreOptions--">getInputStoreOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#getStatsOptions--">getStatsOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#run-mil.nga.giat.geowave.core.cli.api.OperationParams-java.util.List-">run</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#setInputStoreOptions-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">setInputStoreOptions</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#setStatsOptions-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">setStatsOptions</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#getAuthorizations-java.lang.String-">getAuthorizations</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#run-mil.nga.giat.geowave.core.cli.api.OperationParams-java.util.List-">run</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#setInputStoreOptions-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">setInputStoreOptions</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.api.DefaultOperation">
@@ -260,19 +262,21 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 </dl>
 </li>
 </ul>
-<a name="calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">
+<a name="performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>calculateStatistics</h4>
-<pre>protected&nbsp;boolean&nbsp;calculateStatistics(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+<h4>performStatsCommand</h4>
+<pre>protected&nbsp;boolean&nbsp;performStatsCommand(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)
+                                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)
                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">AbstractStatsCommand</a></code></span></div>
+<div class="block">Abstracted command method to be called when command selected</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">calculateStatistics</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html" title="class in mil.nga.giat.geowave.core.store.operations.remote">AbstractStatsCommand</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">performStatsCommand</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html" title="class in mil.nga.giat.geowave.core.store.operations.remote">AbstractStatsCommand</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>

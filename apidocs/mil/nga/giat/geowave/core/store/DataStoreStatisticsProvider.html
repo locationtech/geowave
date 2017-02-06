@@ -155,11 +155,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html#createDataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">createDataStatistics</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html#createDataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">createDataStatistics</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsType)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html#getSupportedStatisticsIds--">getSupportedStatisticsIds</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></td>
@@ -206,16 +206,16 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getSupportedStatisticsIds--">
+<a name="getSupportedStatisticsTypes--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSupportedStatisticsIds</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsIds()</pre>
+<h4>getSupportedStatisticsTypes</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsTypes()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatisticsIds--">getSupportedStatisticsIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -225,7 +225,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <ul class="blockList">
 <li class="blockList">
 <h4>createDataStatistics</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;createDataStatistics(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;createDataStatistics(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsType)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#createDataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">createDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>

@@ -246,44 +246,45 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">getDefaultTypeMatchingHandlers</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;typeObj)</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-&nbsp;</td>
+<div class="block">Returns an empty list of IndexFieldHandlers as default.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getFeatureType--">getFeatureType</a></span>()</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                      int&nbsp;position)</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 &nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                          <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 &nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-<div class="block">Get a reader for an individual field</div>
+<div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getSupportedStatisticsIds--">getSupportedStatisticsIds</a></span>()</code>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-&nbsp;</td>
-</tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getTimeDescriptors--">getTimeDescriptors</a></span>()</code>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></span>()</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 &nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getType--">getType</a></span>()</code>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getTimeDescriptors--">getTimeDescriptors</a></span>()</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 &nbsp;</td>
 </tr>
@@ -297,7 +298,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/WholeFeatureDataAdapter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-<div class="block">Get a writer for an individual field given the ID</div>
+<div class="block">Get a writer for an individual field given the ID.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -330,7 +331,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.adapter.<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in mil.nga.giat.geowave.core.store.adapter">AbstractDataAdapter</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#getFieldHandler-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField-">getFieldHandler</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#getFieldVisiblityHandler--">getFieldVisiblityHandler</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#init-java.util.List-java.lang.Object-">init</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#toBinary--">toBinary</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#getFieldVisiblityHandler--">getFieldVisiblityHandler</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#init-java.util.List-java.lang.Object-">init</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -461,7 +462,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getReader(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">DataReader</a></code></span></div>
-<div class="block">Get a reader for an individual field</div>
+<div class="block">Get a reader for an individual field.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html" title="interface in mil.nga.giat.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
@@ -481,7 +482,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getWriter(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">DataWriter</a></code></span></div>
-<div class="block">Get a writer for an individual field given the ID</div>
+<div class="block">Get a writer for an individual field given the ID.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">DataWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
@@ -528,9 +529,15 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <h4>getDefaultTypeMatchingHandlers</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;getDefaultTypeMatchingHandlers(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;typeObj)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">AbstractDataAdapter</a></code></span></div>
+<div class="block">Returns an empty list of IndexFieldHandlers as default.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">getDefaultTypeMatchingHandlers</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in mil.nga.giat.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>typeObj</code> - - object parameter</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Empty list of IndexFieldHandlers.</dd>
 </dl>
 </li>
 </ul>
@@ -544,17 +551,17 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </li>
 </ul>
-<a name="getType--">
+<a name="getFeatureType--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getType</h4>
-<pre>public&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getType()</pre>
+<h4>getFeatureType</h4>
+<pre>public&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;getFeatureType()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html#getType--">getType</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a></code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html#getFeatureType--">getFeatureType</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -572,17 +579,17 @@ implements <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/Geotoo
 </dl>
 </li>
 </ul>
-<a name="getSupportedStatisticsIds--">
+<a name="getSupportedStatisticsTypes--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSupportedStatisticsIds</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsIds()</pre>
+<h4>getSupportedStatisticsTypes</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsTypes()</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatisticsIds--">getSupportedStatisticsIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 </dl>
 </li>
 </ul>

@@ -139,7 +139,7 @@
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is a persistable version of the IndexFieldHandler so that customized
- filed handlers can be automatically persisted with the data adapter.</div>
+ field handlers can be automatically persisted with the data adapter.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -176,7 +176,9 @@
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in mil.nga.giat.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">This class generically supports most of the operations necessary to implement
- a Data Adapter and can be easily extended to support specific data types.</div>
+ a Data Adapter and can be easily extended to support specific data types.<br>
+ Many of the details are handled by mapping IndexFieldHandler's based on
+ either types or exact dimensions.</div>
 </td>
 </tr>
 <tr class="altColor">

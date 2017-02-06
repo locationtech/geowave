@@ -307,7 +307,10 @@
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SecondaryIndexManager.html#SecondaryIndexManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-mil.nga.giat.geowave.adapter.vector.stats.StatsManager-">SecondaryIndexManager</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
                      org.opengis.feature.simple.SimpleFeatureType&nbsp;sft,
-                     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsManager</a>&nbsp;statsManager)</code>&nbsp;</td>
+                     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsManager</a>&nbsp;statsManager)</code>
+<div class="block">Create a SecondaryIndexManager for the given DataAdapter and
+ SimpleFeatureType, while providing</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -326,7 +329,9 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">StatsManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#createDataStatistics-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">createDataStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<div class="block">Creates a stats object to be tracked for this adapter based on type</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -338,13 +343,20 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#StatsManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-">StatsManager</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
-            org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType)</code>&nbsp;</td>
+            org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType)</code>
+<div class="block">Constructor - Creates a StatsManager that supports the specified adapter
+ with a persisted SimpleFeatureType</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#StatsManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">StatsManager</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
             org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType,
             org.opengis.feature.simple.SimpleFeatureType&nbsp;reprojectedType,
-            org.opengis.referencing.operation.MathTransform&nbsp;transform)</code>&nbsp;</td>
+            org.opengis.referencing.operation.MathTransform&nbsp;transform)</code>
+<div class="block">Constructor - Creates a StatsManager that supports the specified adapter
+ with a persisted and re-projected SimpleFeatureType that is translated by
+ the transform</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -589,7 +601,9 @@
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in mil.nga.giat.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;T&gt;</span></code>
 <div class="block">This class generically supports most of the operations necessary to implement
- a Data Adapter and can be easily extended to support specific data types.</div>
+ a Data Adapter and can be easily extended to support specific data types.<br>
+ Many of the details are handled by mapping IndexFieldHandler's based on
+ either types or exact dimensions.</div>
 </td>
 </tr>
 </tbody>
@@ -916,33 +930,35 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RemoveStatCommand.html#calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">calculateStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RemoveStatCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RecalculateStatsCommand.html#calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">calculateStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/RecalculateStatsCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">ListStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/ListStatsCommand.html#calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">calculateStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">ListStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/ListStatsCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">CalculateStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/CalculateStatCommand.html#calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">calculateStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">CalculateStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/CalculateStatCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#calculateStatistics-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-java.lang.String:A-">calculateStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;options,
+<td class="colLast"><span class="typeNameLabel">AbstractStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/AbstractStatsCommand.html#performStatsCommand-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;options,
                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StatsCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>
+<div class="block">Abstracted command method to be called when command selected</div>
+</td>
 </tr>
 </tbody>
 </table>

@@ -157,7 +157,9 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/rast
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/nodata/NoDataMergeStrategy.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/nodata/NoDataMergeStrategy.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/nodata/NoDataMetadata.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata">NoDataMetadata</a></code></td>
@@ -176,7 +178,10 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/rast
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/nodata/NoDataMergeStrategy.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/nodata/NoDataMergeStrategy.html#toBinary--">toBinary</a></span>()</code>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -265,9 +270,15 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/rast
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of
+         the object.</dd>
 </dl>
 </li>
 </ul>
@@ -278,6 +289,8 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/rast
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>

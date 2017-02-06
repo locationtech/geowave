@@ -140,7 +140,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/OverviewStatistics.html#STATS_ID">STATS_ID</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/OverviewStatistics.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -148,7 +148,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.adapter.statistics.<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#dataAdapterId">dataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsId">statisticsId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#dataAdapterId">dataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsId">statisticsId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_ID_SEPARATOR">STATS_ID_SEPARATOR</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_SEPARATOR">STATS_SEPARATOR</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
 </ul>
 </li>
 </ul>
@@ -197,7 +197,9 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/OverviewStatistics.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/OverviewStatistics.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster">Resolution</a>[]</code></td>
@@ -209,7 +211,10 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/OverviewStatistics.html#toBinary--">toBinary</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/OverviewStatistics.html#toBinary--">toBinary</a></span>()</code>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -217,7 +222,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.adapter.statistics.<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-byte:A-">binaryBuffer</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-int-">binaryBuffer</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#composeId-java.lang.String-java.lang.String-">composeId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#decomposeNameFromId-mil.nga.giat.geowave.core.index.ByteArrayId-">decomposeNameFromId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getDataAdapterId--">getDataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getStatisticsId--">getStatisticsId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setDataAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">setDataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setVisibility-byte:A-">setVisibility</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toString--">toString</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-byte:A-">binaryBuffer</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-int-">binaryBuffer</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#composeId-java.lang.String-java.lang.String-">composeId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#decomposeNameFromId-mil.nga.giat.geowave.core.index.ByteArrayId-">decomposeNameFromId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getDataAdapterId--">getDataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getStatisticsId--">getStatisticsId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setDataAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">setDataAdapterId</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setVisibility-byte:A-">setVisibility</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toJSONObject--">toJSONObject</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toString--">toString</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -240,13 +245,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="STATS_ID">
+<a name="STATS_TYPE">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>STATS_ID</h4>
-<pre>public static final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> STATS_ID</pre>
+<h4>STATS_TYPE</h4>
+<pre>public static final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> STATS_TYPE</pre>
 </li>
 </ul>
 </li>
@@ -290,6 +295,14 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of
+         the object.</dd>
+</dl>
 </li>
 </ul>
 <a name="fromBinary-byte:A-">
@@ -299,6 +312,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 </li>
 </ul>
 <a name="entryIngested-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-org.opengis.coverage.grid.GridCoverage-">

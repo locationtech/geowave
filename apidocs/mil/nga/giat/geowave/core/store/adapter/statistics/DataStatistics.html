@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -149,6 +149,10 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html#setVisibility-byte:A-">setVisibility</a></span>(byte[]&nbsp;visibility)</code>&nbsp;</td>
 </tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>net.sf.json.JSONObject</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html#toJSONObject--">toJSONObject</a></span>()</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.index.Mergeable">
@@ -224,10 +228,24 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <a name="getVisibility--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getVisibility</h4>
 <pre>byte[]&nbsp;getVisibility()</pre>
+</li>
+</ul>
+<a name="toJSONObject--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toJSONObject</h4>
+<pre>net.sf.json.JSONObject&nbsp;toJSONObject()
+                             throws net.sf.json.JSONException</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>net.sf.json.JSONException</code></dd>
+</dl>
 </li>
 </ul>
 </li>

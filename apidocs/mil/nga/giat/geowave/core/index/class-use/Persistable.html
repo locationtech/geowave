@@ -569,7 +569,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SecondaryIndexManager.html" title="class in mil.nga.giat.geowave.adapter.vector.index">SecondaryIndexManager</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SecondaryIndexManager.html" title="class in mil.nga.giat.geowave.adapter.vector.index">SecondaryIndexManager</a></span></code>
+<div class="block">Class to manage secondary indexes for a Simple Feature Type.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1559,7 +1561,7 @@
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</span></code>
 <div class="block">This is a persistable version of the IndexFieldHandler so that customized
- filed handlers can be automatically persisted with the data adapter.</div>
+ field handlers can be automatically persisted with the data adapter.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1590,7 +1592,9 @@
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in mil.nga.giat.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;T&gt;</span></code>
 <div class="block">This class generically supports most of the operations necessary to implement
- a Data Adapter and can be easily extended to support specific data types.</div>
+ a Data Adapter and can be easily extended to support specific data types.<br>
+ Many of the details are handled by mapping IndexFieldHandler's based on
+ either types or exact dimensions.</div>
 </td>
 </tr>
 </tbody>
@@ -1856,7 +1860,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndex</a>&lt;T&gt;</span></code>
-<div class="block">This class fully describes everything necessary to index data within GeoWave.</div>
+<div class="block">This class fully describes everything necessary to index data within GeoWave
+ using secondary indexing.</div>
 </td>
 </tr>
 </tbody>
