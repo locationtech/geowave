@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test;
+package mil.nga.giat.geowave.adapter.raster.plugin.gdal;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -12,13 +12,14 @@ import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.slf4j.LoggerFactory;
 
-import com.jcraft.jsch.Logger;
-
-import kafka.utils.Os;
+import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 
 public class InstallGdal
 {
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(InstallGdal.class);
+
+	public static final File DEFAULT_TEMP_DIR = new File(
+			"./target/temp");
 
 	public static void main(
 			final String[] args )
@@ -30,7 +31,7 @@ public class InstallGdal
 		}
 		else {
 			gdalDir = new File(
-					TestUtils.TEMP_DIR,
+					DEFAULT_TEMP_DIR,
 					"gdal");
 		}
 		if (!gdalDir.exists() && !gdalDir.mkdirs()) {
@@ -38,7 +39,7 @@ public class InstallGdal
 		}
 		URL url;
 		String file;
-		if (Os.isWindows()) {
+		if (isWindows()) {
 			file = "gdal-1.9.2-MSVC2010-x64.zip";
 			url = new URL(
 					"http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/windows/MSVC2010/"
@@ -63,7 +64,7 @@ public class InstallGdal
 			}
 		}
 		if (file.endsWith("zip")) {
-			TestUtils.unZipFile(
+			ZipUtils.unZipFile(
 					downloadFile,
 					gdalDir.getAbsolutePath(),
 					false);
@@ -71,7 +72,7 @@ public class InstallGdal
 		else {
 			final TarGZipUnArchiver unarchiver = new TarGZipUnArchiver();
 			unarchiver.enableLogging(new ConsoleLogger(
-					Logger.WARN,
+					org.codehaus.plexus.logging.Logger.LEVEL_WARN,
 					"GDAL Unarchive"));
 			unarchiver.setSourceFile(downloadFile);
 			unarchiver.setDestDirectory(gdalDir);
@@ -113,4 +114,11 @@ public class InstallGdal
 			LOGGER.warn("cannot delete " + downloadFile.getAbsolutePath());
 		}
 	}
+
+	private static boolean isWindows() {
+		String name = System.getProperty(
+				"os.name").toLowerCase();
+		return name.startsWith("windows");
+	}
+
 }
