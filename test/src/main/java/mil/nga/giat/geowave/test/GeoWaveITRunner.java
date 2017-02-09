@@ -51,6 +51,7 @@ public class GeoWaveITRunner extends
 			false);
 	public static final Object MUTEX = new Object();
 
+	public static final String STORE_TYPE_ENVIRONMENT_VARIABLE_NAME = "STORE_TYPE";
 	public static final String STORE_TYPE_PROPERTY_NAME = "testStoreType";
 
 	@Override
@@ -273,8 +274,10 @@ public class GeoWaveITRunner extends
 		final GeoWaveStoreRunnerConfig emptyConfig = new GeoWaveStoreRunnerConfig();
 		List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
 
-		final String storeTypeProp = System.getProperty(STORE_TYPE_PROPERTY_NAME);
-
+		String storeTypeProp = System.getenv(STORE_TYPE_ENVIRONMENT_VARIABLE_NAME);
+		if(!TestUtils.isSet(storeTypeProp)){
+			storeTypeProp = System.getProperty(STORE_TYPE_PROPERTY_NAME);
+		}
 		// See if user specified a single store type
 		if (TestUtils.isSet(storeTypeProp)) {
 			final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();

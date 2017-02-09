@@ -17,13 +17,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-core-mapreduce</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-core-cli</artifactId>
+			<artifactId>geowave-core-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

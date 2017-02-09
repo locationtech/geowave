@@ -3,9 +3,11 @@ package mil.nga.giat.geowave.adapter.vector.ingest;
 import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
 
 public class DataSchemaOptionProvider implements
-		Persistable
+		Persistable,
+		IngestFormatOptionProvider
 {
 	@Parameter(names = "--extended", description = "A flag to indicate whether extended data format should be used")
 	private boolean includeSupplementalFields = false;
@@ -29,6 +31,13 @@ public class DataSchemaOptionProvider implements
 				includeSupplementalFields = true;
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void setSupplementalFields (boolean supplementalFields) {
+		includeSupplementalFields = supplementalFields;
 	}
 
 }

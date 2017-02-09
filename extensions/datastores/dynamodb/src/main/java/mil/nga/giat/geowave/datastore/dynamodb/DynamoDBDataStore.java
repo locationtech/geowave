@@ -2,12 +2,17 @@ package mil.nga.giat.geowave.datastore.dynamodb;
 
 import java.io.Closeable;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -24,6 +29,8 @@ import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
+import mil.nga.giat.geowave.datastore.dynamodb.index.secondary.DynamoDBSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBAdapterStore;
 import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBDataStatisticsStore;
@@ -51,7 +58,8 @@ public class DynamoDBDataStore extends
 						operations),
 				new DynamoDBAdapterIndexMappingStore(
 						operations),
-				null,
+				new DynamoDBSecondaryIndexDataStore(
+						operations),
 				operations,
 				operations.getOptions().getBaseOptions());
 		dynamodbOperations = operations;
@@ -176,8 +184,28 @@ public class DynamoDBDataStore extends
 			final ScanCallback<Object, Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String... authorizations ) {
-		// TODO
-		return null;
+		final Iterator<DynamoDBRow> it = dynamodbOperations.getRows(
+				index.getId().getString(),
+				Lists.transform(
+						dataIds,
+						new Function<ByteArrayId, byte[]>() {
+							@Override
+							public byte[] apply(
+									final ByteArrayId input ) {
+								return input.getBytes();
+							}
+						}).toArray(
+						new byte[][] {}),
+				adapter.getAdapterId().getBytes(),
+				authorizations);
+		return new CloseableIterator.Wrapper<>(
+				new NativeEntryIteratorWrapper<Object>(
+						adapterStore,
+						index,
+						it,
+						null,
+						(ScanCallback) scanCallback,
+						true));
 	}
 
 	@Override
@@ -196,7 +224,6 @@ public class DynamoDBDataStore extends
 			final String tableName,
 			final String columnFamily,
 			final String... additionalAuthorizations ) {
-		// TODO
 		return false;
 	}
 
@@ -206,8 +233,10 @@ public class DynamoDBDataStore extends
 			final boolean isAltIndex,
 			final String... authorizations )
 			throws Exception {
-		// TODO
-		return null;
+		return new DynamoDBRowDeleter(
+				dynamodbOperations,
+				indexTableName,
+				authorizations);
 	}
 
 	@Override

@@ -24,13 +24,32 @@ public class DynamoDBTestEnvironment extends
 
 	private final static Logger LOGGER = Logger.getLogger(DynamoDBTestEnvironment.class);
 
+	protected DynamoDBLocal dynamoLocal;
+
 	private DynamoDBTestEnvironment() {}
 
 	@Override
-	public void setup() {}
+	public void setup() {
+		// DynamoDB IT's rely on an external dynamo local process
+		if (dynamoLocal == null) {
+			dynamoLocal = new DynamoDBLocal(
+					null); // null uses tmp dir
+		}
+
+		// Make sure we clean up any old processes first
+		if (dynamoLocal.isRunning()) {
+			dynamoLocal.stop();
+		}
+
+		if (!dynamoLocal.start()) {
+			LOGGER.error("Bigtable emulator startup failed");
+		}
+	}
 
 	@Override
-	public void tearDown() {}
+	public void tearDown() {
+		dynamoLocal.stop();
+	}
 
 	@Override
 	protected GenericStoreFactory<DataStore> getDataStoreFactory() {

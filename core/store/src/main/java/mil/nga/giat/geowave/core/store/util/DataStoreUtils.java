@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -63,8 +64,8 @@ public class DataStoreUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(DataStoreUtils.class);
 
-	// we append a 0 byte, 8 bytes of timestamp
-	public final static int UNIQUE_ADDED_BYTES = 1 + 8;
+	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID
+	public final static int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
 	public final static byte UNIQUE_ID_DELIMITER = 0;
 	@SuppressWarnings({
 		"rawtypes",
@@ -804,6 +805,36 @@ public class DataStoreUtils
 		return null;
 	}
 
+	// TODO: this doesn't account for varying visibilities, so this is
+	// potentially only temporary
+	public static ByteBuffer serializeFields(
+			DataStoreEntryInfo ingestInfo ) {
+		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
+		int totalLength = 0;
+		// TODO potentially another hack, but if there is only one field, don't
+		// need to write the length
+		if (ingestInfo.getFieldInfo().size() == 1) {
+			byte[] value = ingestInfo.getFieldInfo().get(
+					0).getWrittenValue();
+			fieldInfoBytesList.add(value);
+			totalLength += value.length;
+		}
+		else {
+			for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {
+				final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
+				fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
+				fieldInfoBytes.put(fieldInfo.getWrittenValue());
+				fieldInfoBytesList.add(fieldInfoBytes.array());
+				totalLength += fieldInfoBytes.array().length;
+			}
+		}
+		final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
+		for (final byte[] bytes : fieldInfoBytesList) {
+			allFields.put(bytes);
+		}
+		return allFields;
+	}
+
 	public static ByteArrayId ensureUniqueId(
 			final byte[] id,
 			final boolean hasMetadata ) {
@@ -846,8 +877,10 @@ public class DataStoreUtils
 		buf.put(new byte[] {
 			UNIQUE_ID_DELIMITER
 		});
+		UUID uuid = UUID.randomUUID();
 		buf.putLong(timestamp);
-
+		buf.putLong(uuid.getLeastSignificantBits());
+		buf.putLong(uuid.getMostSignificantBits());
 		if (hasMetadata) {
 			buf.put(metadata);
 		}

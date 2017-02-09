@@ -15,9 +15,9 @@ public class DynamoDBOptions extends
 	protected String endpoint;
 
 	@Parameter(names = "--initialWriteCapacity")
-	protected long writeCapacity = 10;
+	protected long writeCapacity = 5;
 	@Parameter(names = "--initialReadCapacity")
-	protected long readCapacity = 10;
+	protected long readCapacity = 5;
 
 	@ParametersDelegate
 	protected BaseDataStoreOptions baseOptions = new BaseDataStoreOptions();

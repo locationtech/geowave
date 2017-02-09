@@ -88,7 +88,7 @@ public class GeoServerIT
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	}, options = {
 		"disableServer=true",

@@ -12,23 +12,18 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 		IngestFormatPluginProviderSpi<I, SimpleFeature>
 {
 	protected final SimpleFeatureIngestOptions myOptions = new SimpleFeatureIngestOptions();
-	protected AbstractSimpleFeatureIngestPlugin<I> myInstance;
 
-	private synchronized AbstractSimpleFeatureIngestPlugin<I> getInstance(
+	private AbstractSimpleFeatureIngestPlugin<I> getInstance(
 			IngestFormatOptionProvider options ) {
-		if (myInstance == null) {
-			myInstance = newPluginInstance(options);
-			myInstance.setFilterProvider(myOptions.getCqlFilterOptionProvider());
-			myInstance.setTypeNameProvider(myOptions.getTypeNameOptionProvider());
-			myInstance.setSerializationFormatProvider(myOptions.getSerializationFormatOptionProvider());
-		}
+		AbstractSimpleFeatureIngestPlugin<I> myInstance = newPluginInstance(options);
+		myInstance.setFilterProvider(myOptions.getCqlFilterOptionProvider());
+		myInstance.setTypeNameProvider(myOptions.getTypeNameOptionProvider());
+		myInstance.setSerializationFormatProvider(myOptions.getSerializationFormatOptionProvider());
 		return myInstance;
 	}
 
 	abstract protected AbstractSimpleFeatureIngestPlugin<I> newPluginInstance(
 			IngestFormatOptionProvider options );
-
-	protected void setPluginInstanceOptionProviders() {}
 
 	@Override
 	public AvroFormatPlugin<I, SimpleFeature> createAvroFormatPlugin(

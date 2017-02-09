@@ -15,9 +15,9 @@ import com.amazonaws.services.dynamodbv2.model.WriteRequest;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.DataStoreIndexWriter;
@@ -27,7 +27,7 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 public class DynamoDBIndexWriter<T> extends
 		DataStoreIndexWriter<T, WriteRequest>
 {
-	public static final Integer PARTITIONS = 32;
+	public static final Integer PARTITIONS = 1;
 	protected final AmazonDynamoDBAsyncClient client;
 	protected final DynamoDBOperations dynamodbOperations;
 	private static long counter = 0;
@@ -60,32 +60,32 @@ public class DynamoDBIndexWriter<T> extends
 
 	private static <T> List<WriteRequest> getWriteRequests(
 			final byte[] adapterId,
-			final DataStoreEntryInfo ingestInfo ) {
+			final DataStoreEntryInfo ingestInfo,
+			boolean ensureUniqueId ) {
 		final List<WriteRequest> mutations = new ArrayList<WriteRequest>();
-		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
-		int totalLength = 0;
-		for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {
-			final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
-			fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
-			fieldInfoBytes.put(fieldInfo.getWrittenValue());
-			fieldInfoBytesList.add(fieldInfoBytes.array());
-			totalLength += fieldInfoBytes.array().length;
-		}
-		final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
-		for (final byte[] bytes : fieldInfoBytesList) {
-			allFields.put(bytes);
-		}
+
+		final ByteBuffer allFields = DataStoreUtils.serializeFields(ingestInfo);
 		for (final ByteArrayId insertionId : ingestInfo.getInsertionIds()) {
 			final Map<String, AttributeValue> map = new HashMap<String, AttributeValue>();
 			final byte[] insertionIdBytes = insertionId.getBytes();
-			final ByteBuffer rangeKeyBuffer = ByteBuffer.allocate(insertionIdBytes.length
-					+ ingestInfo.getDataId().length + adapterId.length + 8);
+			byte[] uniqueDataId;
+			if (ensureUniqueId) {
+				uniqueDataId = DataStoreUtils.ensureUniqueId(
+						ingestInfo.getDataId(),
+						false).getBytes();
+			}
+			else {
+				uniqueDataId = ingestInfo.getDataId();
+			}
+			final ByteBuffer rangeKeyBuffer = ByteBuffer.allocate(insertionIdBytes.length + uniqueDataId.length
+					+ adapterId.length + 8);
 			rangeKeyBuffer.put(insertionIdBytes);
 			rangeKeyBuffer.put(adapterId);
-			rangeKeyBuffer.put(ingestInfo.getDataId());
+			rangeKeyBuffer.put(uniqueDataId);
 			rangeKeyBuffer.putInt(adapterId.length);
-			rangeKeyBuffer.putInt(ingestInfo.getDataId().length);
+			rangeKeyBuffer.putInt(uniqueDataId.length);
 			rangeKeyBuffer.rewind();
+
 			map.put(
 					DynamoDBRow.GW_PARTITION_ID_KEY,
 					new AttributeValue().withN(Long.toString(counter++ % PARTITIONS)));
@@ -96,6 +96,7 @@ public class DynamoDBIndexWriter<T> extends
 			map.put(
 					DynamoDBRow.GW_VALUE_KEY,
 					new AttributeValue().withB(allFields));
+
 			mutations.add(new WriteRequest(
 					new PutRequest(
 							map)));
@@ -112,11 +113,15 @@ public class DynamoDBIndexWriter<T> extends
 				index,
 				entry,
 				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
+
 		if (entryInfo != null) {
 			writer.write(getWriteRequests(
 					adapterId,
-					entryInfo));
+					entryInfo,
+					(adapter instanceof RowMergingDataAdapter)
+							&& (((RowMergingDataAdapter) adapter).getTransform() != null)));
 		}
+
 		return entryInfo;
 	}
 
