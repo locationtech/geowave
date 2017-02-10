@@ -2,8 +2,10 @@ package mil.nga.giat.geowave.adapter.raster.plugin.gdal;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 
@@ -24,7 +26,8 @@ public class InstallGdal
 	public static void main(
 			final String[] args )
 			throws IOException {
-		final File gdalDir;
+
+		File gdalDir = null;
 		if (args.length > 0) {
 			gdalDir = new File(
 					args[0]);
@@ -34,9 +37,21 @@ public class InstallGdal
 					DEFAULT_TEMP_DIR,
 					"gdal");
 		}
-		if (!gdalDir.exists() && !gdalDir.mkdirs()) {
+
+		if (gdalDir.exists()) {
+			return;
+		}
+
+		if (!gdalDir.mkdirs()) {
 			LOGGER.warn("unable to create directory " + gdalDir.getAbsolutePath());
 		}
+
+		install(gdalDir);
+	}
+
+	private static void install(
+			File gdalDir )
+			throws IOException {
 		URL url;
 		String file;
 		if (isWindows()) {

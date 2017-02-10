@@ -181,6 +181,10 @@ public class AnalyzeRunner
 					final String bandId = entry.getKey();
 					final SimpleFeature feature = entry.getValue();
 					if (first) {
+						if (feature == null) {
+							throw new RuntimeException(
+									"feature is null");
+						}
 						// print scene info
 						System.out.println("\n<--   "
 								+ feature.getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME) + "   -->");

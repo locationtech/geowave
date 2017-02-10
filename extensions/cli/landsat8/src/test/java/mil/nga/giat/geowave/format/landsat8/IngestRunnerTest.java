@@ -25,7 +25,7 @@ import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 
-public class RasterIngestRunnerTest
+public class IngestRunnerTest
 {
 
 	@BeforeClass
@@ -56,13 +56,17 @@ public class RasterIngestRunnerTest
 
 		Landsat8RasterIngestCommandLineOptions ingestOptions = new Landsat8RasterIngestCommandLineOptions();
 		ingestOptions.setRetainImages(true);
-		ingestOptions.setCreatePyramid(false);
-		ingestOptions.setScale(10);
+		ingestOptions.setCreatePyramid(true);
 		ingestOptions.setCreateHistogram(true);
-		RasterIngestRunner runner = new RasterIngestRunner(
+		ingestOptions.setScale(100);
+
+		VectorOverrideCommandLineOptions vectorOverrideOptions = new VectorOverrideCommandLineOptions();
+
+		IngestRunner runner = new IngestRunner(
 				analyzeOptions,
 				downloadOptions,
 				ingestOptions,
+				vectorOverrideOptions,
 				Arrays.asList(
 						"memorystore",
 						"spatialindex"));
@@ -70,7 +74,7 @@ public class RasterIngestRunnerTest
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				new File(
-						RasterIngestRunnerTest.class.getClassLoader().getResource(
+						IngestRunnerTest.class.getClassLoader().getResource(
 								"geowave-config.properties").toURI()));
 		runner.runInternal(params);
 		try (CloseableIterator<Object> results = getStore(
