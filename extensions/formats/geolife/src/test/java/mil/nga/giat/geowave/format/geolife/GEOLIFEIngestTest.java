@@ -21,7 +21,6 @@ public class GEOLIFEIngestTest
 {
 	private DataSchemaOptionProvider optionsProvider;
 	private GeoLifeIngestPlugin ingester;
-	//private GDELTIngestPlugin ingesterExt;
 	private String filePath;
 	private int expectedCount;
 
@@ -33,12 +32,8 @@ public class GEOLIFEIngestTest
 		ingester = new GeoLifeIngestPlugin();
 		ingester.init(null);
 
-		/*ingesterExt = new GeoLifeIngestPlugin( //TODO delete this late if det. don't need
-				optionsProvider);
-		ingesterExt.init(null);*/
-
-		filePath = "20130401.export.CSV.zip"; // TODO this is probably not the right data to use
-		expectedCount = 14056; // TODO get the right expected count
+		filePath = "20081023025304.plt";
+		expectedCount = 908;
 	}
 
 	@Test
@@ -70,32 +65,17 @@ public class GEOLIFEIngestTest
 		}
 		features.close();
 
-//		final CloseableIterator<GeoWaveData<SimpleFeature>> featuresExt = ingesterExt.toGeoWaveData(
-//				toIngest,
-//				indexIds,
-//				"");
-
-//		assertTrue((featuresExt != null) && featuresExt.hasNext());
-//
-//		int featureCountExt = 0;
-//		while (featuresExt.hasNext()) {
-//			final GeoWaveData<SimpleFeature> featureExt = featuresExt.next();
-//
-//			if (isValidGDELTFeatureExt(featureExt)) {
-//				featureCountExt++;
-//			}
-//		}
-//		featuresExt.close();
 
 		final boolean readExpectedCount = (featureCount == expectedCount);
 		if (!readExpectedCount) {
 			System.out.println("Expected " + expectedCount + " features, ingested " + featureCount);
 		}
-
+		
 		assertTrue(readExpectedCount);
 	}
 	
-	/* PointBuilder things that should be set:
+	/* TODO get rid of these notes
+	 * PointBuilder things that should be set:
 	 * geometry
 	 * trackid
 	 * pointinstance
@@ -123,7 +103,7 @@ public class GEOLIFEIngestTest
 				"geometry") == null) || (feature.getValue().getAttribute(
 				"trackid") == null) || (feature.getValue().getAttribute(
 				"pointinstance") == null) || (feature.getValue().getAttribute(
-				"Latitue") == null) || (feature.getValue().getAttribute(
+				"Latitude") == null) || (feature.getValue().getAttribute(
 				"Longitude") == null)) {
 			return false;
 		}
