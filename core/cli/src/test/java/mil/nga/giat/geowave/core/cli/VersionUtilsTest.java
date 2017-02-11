@@ -7,21 +7,27 @@ import java.io.PrintStream;
 
 import org.junit.Test;
 
-public class VersionUtilsTest {
+public class VersionUtilsTest
+{
 
 	@Test
 	public void testVersion() {
-		String version = ""; //not sure what the version is
-		assertEquals(version, VersionUtils.getVersion());
+		String version = null; // change this value when it gives a version
+		assertEquals(
+				version,  // change this value when it gives a version
+				VersionUtils.getVersion());
 	}
-	
+
 	@Test
 	public void testPrintVersionInfo() {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(output));
+		System.setOut(new PrintStream(
+				output));
 		VersionUtils.printVersionInfo();
-		String expectedoutput = ""; //empty properties
-		assertEquals(expectedoutput, output);
+		String expectedoutput = "{}\n"; // change this value when it gives a version
+		assertEquals(
+				expectedoutput,
+				output.toString());
 	}
 
 }
