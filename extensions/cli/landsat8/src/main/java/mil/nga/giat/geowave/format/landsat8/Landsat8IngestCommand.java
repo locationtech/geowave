@@ -21,7 +21,7 @@ public class Landsat8IngestCommand extends
 {
 
 	@Parameter(description = "<storename> <comma delimited index/group list>")
-	private final List<String> parameters = new ArrayList<String>();
+	protected final List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
 	protected Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
