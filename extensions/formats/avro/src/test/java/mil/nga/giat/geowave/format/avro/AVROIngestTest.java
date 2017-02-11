@@ -24,7 +24,6 @@ public class AVROIngestTest
 {
 	private DataSchemaOptionProvider optionsProvider;
 	private AvroIngestPlugin ingester;
-	private AvroIngestPlugin ingesterExt;
 	private String filePath;
 	private int expectedCount;
 
@@ -33,11 +32,11 @@ public class AVROIngestTest
 		optionsProvider = new DataSchemaOptionProvider();
 		optionsProvider.setSupplementalFields(true);
 
-		ingester = new AvroIngestPlugin(); //TODO update constructor??
+		ingester = new AvroIngestPlugin();
 		ingester.init(null);
 
-		filePath = "20130401.export.CSV.zip"; //TODO is this the right data to use from AVRO?
-		expectedCount = 14056;
+		filePath = "tornado_tracksbasicIT-export.avro";
+		expectedCount = 474;
 	}
 
 	@Test
@@ -63,20 +62,12 @@ public class AVROIngestTest
 		while (features.hasNext()) {
 			final GeoWaveData<SimpleFeature> feature = features.next();
 
-			if (isValidGDELTFeature(feature)) { //TODO replace with isValidAVRO
+			if (isValidAVROFeature(feature)) {
 				featureCount++;
 			}
 		}
 		features.close();
-
-		final CloseableIterator<GeoWaveData<SimpleFeature>> featuresExt = ingesterExt.toGeoWaveData(
-				toIngest,
-				indexIds,
-				"");
-
-		assertTrue((featuresExt != null) && featuresExt.hasNext());
-
-
+		
 		final boolean readExpectedCount = (featureCount == expectedCount);
 		if (!readExpectedCount) {
 			System.out.println("Expected " + expectedCount + " features, ingested " + featureCount);
@@ -84,19 +75,17 @@ public class AVROIngestTest
 
 		assertTrue(readExpectedCount);
 	}
-	
-	/* Features avro should have:
-	 * adapter
-	 * primaryIndexIds
-	 * simpleFeature
-	 */
 
-	private boolean isValidGDELTFeature( //TODO replace this function
+	private boolean isValidAVROFeature( 
 			final GeoWaveData<SimpleFeature> feature ) {
 		if ((feature.getValue().getAttribute(
-				"adapter") == null) || (feature.getValue().getAttribute(
-				"primaryIndexIds") == null) || (feature.getValue().getAttribute(
-				"simpleFeature") == null)) {
+				"the_geom") == null) || (feature.getValue().getAttribute(
+				"DATE") == null) || (feature.getValue().getAttribute(
+				"OM") == null) || (feature.getValue().getAttribute(
+				"ELAT") == null) || (feature.getValue().getAttribute(
+				"ELON") == null) || (feature.getValue().getAttribute(
+				"SLAT") == null) || (feature.getValue().getAttribute(
+				"SLON") == null)) {
 			return false;
 		}
 		return true;
@@ -110,12 +99,7 @@ public class AVROIngestTest
 			return true;
 		}
 		catch (final IOException e) {
-			// TODO log this??
-			// just log as info as this may not have been intended to be read as
-			// avro vector data
-//			LOGGER.info(
-//					"Unable to read file as Avro vector data '" + file.getName() + "'",
-//					e);
+			// Do nothing for now
 		}
 
 		return false;

@@ -73,29 +73,6 @@ public class GEOLIFEIngestTest
 		
 		assertTrue(readExpectedCount);
 	}
-	
-	/* TODO get rid of these notes
-	 * PointBuilder things that should be set:
-	 * geometry
-	 * trackid
-	 * pointinstance
-	 * Timestamp
-	 * Latitude
-	 * Longitude
-	 */
-	/* PointBuilder things that can be null:
-	 * elevation
-	 */
-	/* TrackBuilder things that should be set:
-	 * geometry
-	 * StartTimeStamp?
-	 * EndTimeStamp?
-	 * NumberPoints
-	 * TrackId
-	 */
-	/* TrackBuilder things that can be null:
-	 * Duration
-	 */
 
 	private boolean isValidGeoLifeFeature(	
 			final GeoWaveData<SimpleFeature> feature ) {
