@@ -34,6 +34,7 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
@@ -152,8 +153,7 @@ public class DeleteWriterTest
 			rowId3s = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
 					factory.createPoint(new Coordinate(
 							-77.0352,
-							38.8895
-					)),
+							38.8895)),
 					"test_pt_1"));
 		}
 
@@ -161,6 +161,7 @@ public class DeleteWriterTest
 
 	@Test
 	public void testDeleteByDataId() {
+		BaseDataStore.testBulkDelete = false;
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
@@ -196,6 +197,7 @@ public class DeleteWriterTest
 
 	@Test
 	public void testDeleteByRowId() {
+		BaseDataStore.testBulkDelete = false;
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
@@ -234,17 +236,22 @@ public class DeleteWriterTest
 				2,
 				countStats.getCount());
 	}
-	
 
 	@Test
 	public void testDeleteBySpatialConstraint() {
+		BaseDataStore.testBulkDelete = true;
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				3,
 				countStats.getCount());
-		SpatialQuery spatialQuery = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-78, -77, 38, 39)));
+		SpatialQuery spatialQuery = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-78,
+						-77,
+						38,
+						39)));
 		final CloseableIterator it1 = mockDataStore.query(
 				new QueryOptions(),
 				spatialQuery);

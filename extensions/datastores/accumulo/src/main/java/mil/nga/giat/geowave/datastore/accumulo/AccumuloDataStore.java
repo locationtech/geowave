@@ -65,6 +65,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
@@ -321,32 +322,61 @@ public class AccumuloDataStore extends
 			final Query sanitizedQuery,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
-		final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
-				adapterIdsToQuery,
-				index,
-				sanitizedQuery,
-				filter,
-				sanitizedQueryOptions.getScanCallback(),
-				sanitizedQueryOptions.getAggregation(),
-				sanitizedQueryOptions.getFieldIdsAdapterPair(),
-				IndexMetaDataSet.getIndexMetadata(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				DuplicateEntryCount.getDuplicateCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				sanitizedQueryOptions.getAuthorizations());
-
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
+		final AccumuloConstraintsQuery accumuloQuery;
+		if (delete) {
+			accumuloQuery = new AccumuloConstraintsDelete(
+					adapterIdsToQuery,
+					index,
+					sanitizedQuery,
+					filter,
+					sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getAggregation(),
+					sanitizedQueryOptions.getFieldIdsAdapterPair(),
+					IndexMetaDataSet.getIndexMetadata(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DuplicateEntryCount.getDuplicateCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		}
+		else {
+			accumuloQuery = new AccumuloConstraintsQuery(
+					adapterIdsToQuery,
+					index,
+					sanitizedQuery,
+					filter,
+					sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getAggregation(),
+					sanitizedQueryOptions.getFieldIdsAdapterPair(),
+					IndexMetaDataSet.getIndexMetadata(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DuplicateEntryCount.getDuplicateCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		}
 		return accumuloQuery.query(
 				accumuloOperations,
 				tempAdapterStore,
@@ -360,7 +390,8 @@ public class AccumuloDataStore extends
 			final ByteArrayId rowPrefix,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			final List<ByteArrayId> adapterIdsToQuery ) {
+			final List<ByteArrayId> adapterIdsToQuery,
+			boolean delete ) {
 		final AccumuloRowPrefixQuery<Object> prefixQuery = new AccumuloRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
@@ -385,7 +416,8 @@ public class AccumuloDataStore extends
 			final List<ByteArrayId> rowIds,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
 		final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
 				adapter,
 				index,
@@ -451,7 +483,8 @@ public class AccumuloDataStore extends
 			final DataAdapter<?> adapter,
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations ) {
+			final String[] authorizations,
+			boolean delete ) {
 
 		try {
 

@@ -101,6 +101,14 @@ public abstract class AccumuloFilteredIndexQuery extends
 					it,
 					limit);
 		}
+		return initCloseableIterator(
+				scanner,
+				it);
+	}
+
+	protected CloseableIterator<Object> initCloseableIterator(
+			ScannerBase scanner,
+			Iterator it ) {
 		return new CloseableIteratorWrapper(
 				new ScannerClosableWrapper(
 						scanner),

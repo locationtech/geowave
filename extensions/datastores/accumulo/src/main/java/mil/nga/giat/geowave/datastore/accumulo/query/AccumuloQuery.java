@@ -72,6 +72,22 @@ abstract public class AccumuloQuery
 		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
+	protected ScannerBase createScanner(
+			final AccumuloOperations accumuloOperations,
+			String tableName,
+			boolean batchScanner,
+			String... authorizations )
+			throws TableNotFoundException {
+		if (batchScanner) {
+			return accumuloOperations.createBatchScanner(
+					tableName,
+					authorizations);
+		}
+		return accumuloOperations.createScanner(
+				tableName,
+				authorizations);
+	}
+
 	protected ScannerBase getScanner(
 			final AccumuloOperations accumuloOperations,
 			final double[] maxResolutionSubsamplingPerDimension,
@@ -81,8 +97,10 @@ abstract public class AccumuloQuery
 		ScannerBase scanner;
 		try {
 			if (!isAggregation() && (ranges != null) && (ranges.size() == 1)) {
-				scanner = accumuloOperations.createScanner(
+				scanner = createScanner(
+						accumuloOperations,
 						tableName,
+						false,
 						getAdditionalAuthorizations());
 				final ByteArrayRange r = ranges.get(0);
 				if (r.isSingleValue()) {
@@ -100,8 +118,10 @@ abstract public class AccumuloQuery
 				}
 			}
 			else {
-				scanner = accumuloOperations.createBatchScanner(
+				scanner = createScanner(
+						accumuloOperations,
 						tableName,
+						true,
 						getAdditionalAuthorizations());
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
 			}
