@@ -16,11 +16,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -50,6 +52,7 @@ public class DeleteWriterTest
 	private DataStore mockDataStore;
 	private List<ByteArrayId> rowId1s;
 	private List<ByteArrayId> rowId2s;
+	private List<ByteArrayId> rowId3s;
 	private WritableDataAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
 	private DataStatisticsStore statsStore;
 	protected AccumuloOptions options = new AccumuloOptions();
@@ -128,7 +131,7 @@ public class DeleteWriterTest
 								43.444,
 								28.232),
 					}),
-					"test_pt_1"));
+					"test_line_1"));
 
 			rowId2s = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
 					factory.createLineString(new Coordinate[] {
@@ -145,7 +148,13 @@ public class DeleteWriterTest
 								43.444,
 								28.232),
 					}),
-					"test_pt_2"));
+					"test_line_2"));
+			rowId3s = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
+					factory.createPoint(new Coordinate(
+							-77.0352,
+							38.8895
+					)),
+					"test_pt_1"));
 		}
 
 	}
@@ -156,7 +165,7 @@ public class DeleteWriterTest
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
-				2,
+				3,
 				countStats.getCount());
 		assertTrue(rowId1s.size() > 1);
 		final CloseableIterator it1 = mockDataStore.query(
@@ -171,7 +180,7 @@ public class DeleteWriterTest
 				new DataIdQuery(
 						adapter.getAdapterId(),
 						new ByteArrayId(
-								"test_pt_1"))));
+								"test_line_1"))));
 		final CloseableIterator it2 = mockDataStore.query(
 				new QueryOptions(),
 				new RowIdQuery(
@@ -181,7 +190,7 @@ public class DeleteWriterTest
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
-				1,
+				2,
 				countStats.getCount());
 	}
 
@@ -191,7 +200,7 @@ public class DeleteWriterTest
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
-				2,
+				3,
 				countStats.getCount());
 		assertEquals(
 				18,
@@ -201,11 +210,11 @@ public class DeleteWriterTest
 				new DataIdQuery(
 						adapter.getAdapterId(),
 						new ByteArrayId(
-								"test_pt_2")));
+								"test_line_2")));
 		assertTrue(it1.hasNext());
 		assertTrue(adapter.getDataId(
 				(TestGeometry) it1.next()).getString().equals(
-				"test_pt_2"));
+				"test_line_2"));
 		assertTrue(mockDataStore.delete(
 				new QueryOptions(
 						adapter,
@@ -222,7 +231,41 @@ public class DeleteWriterTest
 				CountDataStatistics.STATS_TYPE);
 		// TODO: BUG
 		assertEquals(
-				1,
+				2,
+				countStats.getCount());
+	}
+	
+
+	@Test
+	public void testDeleteBySpatialConstraint() {
+		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_TYPE);
+		assertEquals(
+				3,
+				countStats.getCount());
+		SpatialQuery spatialQuery = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-78, -77, 38, 39)));
+		final CloseableIterator it1 = mockDataStore.query(
+				new QueryOptions(),
+				spatialQuery);
+		assertTrue(it1.hasNext());
+		assertTrue(adapter.getDataId(
+				(TestGeometry) it1.next()).getString().equals(
+				"test_pt_1"));
+		assertTrue(mockDataStore.delete(
+				new QueryOptions(
+						adapter,
+						index),
+				spatialQuery));
+		final CloseableIterator it2 = mockDataStore.query(
+				new QueryOptions(),
+				spatialQuery);
+		assertTrue(!it2.hasNext());
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_TYPE);
+		assertEquals(
+				2,
 				countStats.getCount());
 	}
 }
