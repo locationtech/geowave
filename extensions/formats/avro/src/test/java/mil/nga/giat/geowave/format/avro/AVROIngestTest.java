@@ -67,7 +67,7 @@ public class AVROIngestTest
 			}
 		}
 		features.close();
-		
+
 		final boolean readExpectedCount = (featureCount == expectedCount);
 		if (!readExpectedCount) {
 			System.out.println("Expected " + expectedCount + " features, ingested " + featureCount);
@@ -76,7 +76,7 @@ public class AVROIngestTest
 		assertTrue(readExpectedCount);
 	}
 
-	private boolean isValidAVROFeature( 
+	private boolean isValidAVROFeature(
 			final GeoWaveData<SimpleFeature> feature ) {
 		if ((feature.getValue().getAttribute(
 				"the_geom") == null) || (feature.getValue().getAttribute(
@@ -91,7 +91,8 @@ public class AVROIngestTest
 		return true;
 	}
 
-	private boolean validate(File file){
+	private boolean validate(
+			File file ) {
 		try {
 			DataFileReader.openReader(
 					file,

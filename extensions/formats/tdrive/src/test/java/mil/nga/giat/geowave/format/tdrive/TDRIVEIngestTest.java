@@ -32,7 +32,6 @@ public class TDRIVEIngestTest
 		ingester = new TdriveIngestPlugin();
 		ingester.init(null);
 
-
 		filePath = "9879.txt";
 		expectedCount = 232;
 	}
@@ -65,7 +64,6 @@ public class TDRIVEIngestTest
 			}
 		}
 		features.close();
-
 
 		final boolean readExpectedCount = (featureCount == expectedCount);
 		if (!readExpectedCount) {

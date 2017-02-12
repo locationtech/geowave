@@ -65,16 +65,15 @@ public class GEOLIFEIngestTest
 		}
 		features.close();
 
-
 		final boolean readExpectedCount = (featureCount == expectedCount);
 		if (!readExpectedCount) {
 			System.out.println("Expected " + expectedCount + " features, ingested " + featureCount);
 		}
-		
+
 		assertTrue(readExpectedCount);
 	}
 
-	private boolean isValidGeoLifeFeature(	
+	private boolean isValidGeoLifeFeature(
 			final GeoWaveData<SimpleFeature> feature ) {
 		if ((feature.getValue().getAttribute(
 				"geometry") == null) || (feature.getValue().getAttribute(
