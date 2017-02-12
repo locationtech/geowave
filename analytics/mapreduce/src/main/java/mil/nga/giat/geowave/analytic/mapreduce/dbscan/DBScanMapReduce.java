@@ -286,7 +286,7 @@ public class DBScanMapReduce
 				if (cluster.isCompressed() && !processed.contains(cluster)) {
 					processed.add(cluster);
 					final SimpleFeature newPolygonFeature = AnalyticFeature.createGeometryFeature(
-							outputAdapter.getType(),
+							outputAdapter.getFeatureType(),
 							batchID,
 							UUID.randomUUID().toString(),
 							cluster.getId().getString(), // name

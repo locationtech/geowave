@@ -2,11 +2,13 @@ package mil.nga.giat.geowave.test.query;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -153,9 +155,9 @@ public class SpatialTemporalQueryIT
 		Calendar cal = getInitialDayCalendar();
 		final GeometryFactory geomFactory = new GeometryFactory();
 		final SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
-				timeStampAdapter.getType());
+				timeStampAdapter.getFeatureType());
 		final SimpleFeatureBuilder featureTimeRangeBuilder = new SimpleFeatureBuilder(
-				timeRangeAdapter.getType());
+				timeRangeAdapter.getFeatureType());
 		final IndexWriter timeWriters = dataStore.createWriter(
 				timeStampAdapter,
 				YEAR_INDEX,

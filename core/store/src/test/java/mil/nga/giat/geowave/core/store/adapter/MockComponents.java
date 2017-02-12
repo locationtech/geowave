@@ -200,10 +200,10 @@ public class MockComponents
 		}
 
 		@Override
-		public ByteArrayId[] getSupportedStatisticsIds() {
+		public ByteArrayId[] getSupportedStatisticsTypes() {
 			// TODO Auto-generated method stub
 			return new ByteArrayId[] {
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				new IntegerRangeDataStatistics(
 						getAdapterId(),
 						getAdapterId()).getStatisticsId()
@@ -213,7 +213,7 @@ public class MockComponents
 		@Override
 		public DataStatistics<Integer> createDataStatistics(
 				final ByteArrayId statisticsId ) {
-			if (statisticsId == CountDataStatistics.STATS_ID) {
+			if (statisticsId == CountDataStatistics.STATS_TYPE) {
 				return new CountDataStatistics<Integer>(
 						getAdapterId());
 			}
@@ -700,7 +700,6 @@ public class MockComponents
 			// TODO Auto-generated method stub
 			return null;
 		}
-
 	}
 
 	// *************************************************************************

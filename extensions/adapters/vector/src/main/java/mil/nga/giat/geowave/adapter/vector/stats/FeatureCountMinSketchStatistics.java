@@ -8,6 +8,8 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.clearspring.analytics.stream.frequency.CountMinSketch;
@@ -28,8 +30,9 @@ public class FeatureCountMinSketchStatistics extends
 		AbstractDataStatistics<SimpleFeature> implements
 		FeatureStatistic
 {
-	public static final String STATS_TYPE = "ATT_SKETCH";
-	private CountMinSketch sketch = null;;
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"ATT_SKETCH");
+	private CountMinSketch sketch = null;
 
 	protected FeatureCountMinSketchStatistics() {
 		super();
@@ -41,12 +44,12 @@ public class FeatureCountMinSketchStatistics extends
 
 	public FeatureCountMinSketchStatistics(
 			final ByteArrayId dataAdapterId,
-			final String fieldName ) {
+			final String statisticsId ) {
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
-						fieldName));
+						STATS_TYPE.getString(),
+						statisticsId));
 		sketch = new CountMinSketch(
 				0.001,
 				0.98,
@@ -55,14 +58,14 @@ public class FeatureCountMinSketchStatistics extends
 
 	public FeatureCountMinSketchStatistics(
 			final ByteArrayId dataAdapterId,
-			final String fieldName,
+			final String statisticsId,
 			final double errorFactor,
 			final double probabilityOfCorrectness ) {
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
-						fieldName));
+						STATS_TYPE.getString(),
+						statisticsId));
 		sketch = new CountMinSketch(
 				errorFactor,
 				probabilityOfCorrectness,
@@ -72,7 +75,7 @@ public class FeatureCountMinSketchStatistics extends
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 
@@ -159,6 +162,32 @@ public class FeatureCountMinSketchStatistics extends
 				sketch.size());
 		buffer.append("]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert FeatureCountMinSketch statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		jo.put(
+				"field_identifier",
+				getFieldName());
+
+		jo.put(
+				"size",
+				sketch.size());
+
+		return jo;
 	}
 
 	public static class FeatureCountMinSketchConfig implements

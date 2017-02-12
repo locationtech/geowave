@@ -4,6 +4,9 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 import com.vividsolutions.jts.geom.Envelope;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
@@ -16,12 +19,11 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 abstract public class BoundingBoxDataStatistics<T> extends
 		AbstractDataStatistics<T>
 {
-	public final static ByteArrayId STATS_ID = new ByteArrayId(
+	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
 			"BOUNDING_BOX");
 
 	protected double minX = Double.MAX_VALUE;
@@ -37,7 +39,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 			final ByteArrayId dataAdapterId ) {
 		super(
 				dataAdapterId,
-				STATS_ID);
+				STATS_TYPE);
 	}
 
 	public BoundingBoxDataStatistics(
@@ -199,4 +201,41 @@ abstract public class BoundingBoxDataStatistics<T> extends
 		buffer.append("]");
 		return buffer.toString();
 	}
+
+	/**
+	 * Convert Fixed Bin Numeric statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+		jo.put(
+				"statisticsId",
+				statisticsId.getString());
+
+		if (isSet()) {
+			jo.put(
+					"minX",
+					minX);
+			jo.put(
+					"maxX",
+					maxX);
+			jo.put(
+					"minY",
+					minY);
+			jo.put(
+					"maxY",
+					maxY);
+		}
+		else {
+			jo.put(
+					"boundaries",
+					"No Values");
+		}
+		return jo;
+	}
+
 }

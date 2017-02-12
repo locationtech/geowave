@@ -12,7 +12,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 public interface DataReader<FieldType>
 {
 	/**
-	 * Get a reader for an individual field
+	 * Get a reader for an individual field.
 	 * 
 	 * @param fieldId
 	 *            the ID of the field

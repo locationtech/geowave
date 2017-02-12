@@ -1,5 +1,5 @@
 <p align="center">
-	<a href="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" target="_blank"><img float="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" alt="GeoWave"></a><br/><br/>
+	<img float="center" src="https://raw.githubusercontent.com/ngageoint/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" alt="GeoWave"><br/><br/>
 </p>
 
 ## About  

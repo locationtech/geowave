@@ -214,7 +214,7 @@ public class GeoWaveTransactionManagement extends
 		bounds.include(original.getBounds());
 		bounds.include(updated.getBounds());
 		components.getGTstore().getListenerManager().fireFeaturesChanged(
-				components.getAdapter().getType().getTypeName(),
+				components.getAdapter().getFeatureType().getTypeName(),
 				transaction,
 				bounds,
 				false);
@@ -249,7 +249,7 @@ public class GeoWaveTransactionManagement extends
 				fid,
 				feature);
 		components.getGTstore().getListenerManager().fireFeaturesAdded(
-				components.getAdapter().getType().getTypeName(),
+				components.getAdapter().getFeatureType().getTypeName(),
 				transaction,
 				ReferencedEnvelope.reference(feature.getBounds()),
 				false);
@@ -277,7 +277,7 @@ public class GeoWaveTransactionManagement extends
 			}
 		}
 		components.getGTstore().getListenerManager().fireFeaturesRemoved(
-				components.getAdapter().getType().getTypeName(),
+				components.getAdapter().getFeatureType().getTypeName(),
 				transaction,
 				ReferencedEnvelope.reference(feature.getBounds()),
 				false);

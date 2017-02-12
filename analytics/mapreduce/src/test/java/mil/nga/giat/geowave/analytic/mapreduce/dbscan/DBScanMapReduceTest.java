@@ -82,7 +82,7 @@ public class DBScanMapReduceTest
 					"extra1"
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
-				ClusteringUtils.CLUSTERING_CRS).getType();
+				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
 		reduceDriver.getConfiguration().setClass(
 				GeoWaveConfiguratorBase.enumToConfKey(

@@ -37,7 +37,7 @@ public class GeoWaveFeatureWriter implements
 			final GeoWaveFeatureReader reader ) {
 		this.transaction = transaction;
 		myReader = reader;
-		featureType = components.getAdapter().getType();
+		featureType = components.getAdapter().getFeatureType();
 	}
 
 	@Override

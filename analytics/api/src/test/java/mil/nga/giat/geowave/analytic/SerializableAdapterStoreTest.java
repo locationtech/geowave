@@ -30,7 +30,7 @@ public class SerializableAdapterStoreTest
 					"extra1"
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
-				ClusteringUtils.CLUSTERING_CRS).getType();
+				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 		final SerializableAdapterStore store = new SerializableAdapterStore(
 				new MemoryAdapterStore(
 						new DataAdapter<?>[] {

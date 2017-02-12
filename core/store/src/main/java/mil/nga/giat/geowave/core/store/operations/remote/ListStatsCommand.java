@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +23,10 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions;
 
 @GeowaveOperation(name = "liststats", parentOperation = RemoteSection.class)
-@Parameters(commandDescription = "Print statistics of an existing GeoWave dataset to standard output")
+@Parameters(commandDescription = "Print statistics of an existing GeoWave dataset to standard output.  ")
 public class ListStatsCommand extends
 		AbstractStatsCommand implements
 		Command
@@ -50,24 +54,59 @@ public class ListStatsCommand extends
 	}
 
 	@Override
-	protected boolean calculateStatistics(
+	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
 			final DataAdapter<?> adapter,
-			final String[] authorizations )
+			final StatsCommandLineOptions statsOptions )
 			throws IOException {
 
+		if (adapter == null) {
+			throw new IOException(
+					"Provided adapter is null");
+		}
+
 		DataStatisticsStore statsStore = storeOptions.createDataStatisticsStore();
+		final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 
 		StringBuilder builder = new StringBuilder();
 
 		try (CloseableIterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
-			while (statsIt.hasNext()) {
-				final DataStatistics<?> stats = statsIt.next();
-				if ((adapter != null) && !stats.getDataAdapterId().equals(
-						adapter.getAdapterId())) {
-					continue;
-				}
+			if (statsOptions.getJsonFormatFlag()) {
+				JSONArray resultsArray = new JSONArray();
+				JSONObject outputObject = new JSONObject();
+
 				try {
+					// Output as JSON formatted strings
+					outputObject.put(
+							"adapter",
+							adapter.getAdapterId().getString());
+					while (statsIt.hasNext()) {
+						final DataStatistics<?> stats = statsIt.next();
+						if (!stats.getDataAdapterId().equals(
+								adapter.getAdapterId())) {
+							continue;
+						}
+						resultsArray.add(stats.toJSONObject());
+					}
+					outputObject.put(
+							"stats",
+							resultsArray);
+					builder.append(outputObject.toString());
+				}
+				catch (final JSONException ex) {
+					LOGGER.error(
+							"Unable to output statistic as JSON.  ",
+							ex);
+				}
+			}
+			// Output as strings
+			else {
+				while (statsIt.hasNext()) {
+					final DataStatistics<?> stats = statsIt.next();
+					if (!stats.getDataAdapterId().equals(
+							adapter.getAdapterId())) {
+						continue;
+					}
 					builder.append("[");
 					builder.append(String.format(
 							"%1$-20s",
@@ -76,22 +115,12 @@ public class ListStatsCommand extends
 					builder.append(stats.toString());
 					builder.append("\n");
 				}
-				catch (final Exception ex) {
-					LOGGER.error(
-							"Malformed statistic",
-							ex);
-				}
 			}
 			JCommander.getConsole().println(
 					builder.toString().trim());
 
 		}
-		catch (final Exception ex) {
-			LOGGER.error(
-					"Error while dumping statistics.",
-					ex);
-			return false;
-		}
+
 		return true;
 	}
 

@@ -15,6 +15,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions;
 
 @GeowaveOperation(name = "rmstat", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Remove a statistic from the remote store. You will be prompted with are you sure")
@@ -45,14 +46,15 @@ public class RemoveStatCommand extends
 	}
 
 	@Override
-	protected boolean calculateStatistics(
+	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
 			final DataAdapter<?> adapter,
-			final String[] authorizations )
+			final StatsCommandLineOptions statsOptions )
 			throws IOException {
 
 		// Remove the stat
 		DataStatisticsStore statStore = storeOptions.createDataStatisticsStore();
+		final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 
 		if (!statStore.removeStatistics(
 				adapter.getAdapterId(),
@@ -66,17 +68,4 @@ public class RemoveStatCommand extends
 		return true;
 	}
 
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String storeName,
-			String adapterId,
-			String statId ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-		this.parameters.add(adapterId);
-		this.parameters.add(statId);
-	}
 }

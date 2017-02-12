@@ -11,7 +11,7 @@ public interface GeotoolsFeatureDataAdapter extends
 		WritableDataAdapter<SimpleFeature>,
 		StatisticsProvider<SimpleFeature>
 {
-	public SimpleFeatureType getType();
+	public SimpleFeatureType getFeatureType();
 
 	public TimeDescriptors getTimeDescriptors();
 

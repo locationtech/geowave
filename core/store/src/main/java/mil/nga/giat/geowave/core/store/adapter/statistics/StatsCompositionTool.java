@@ -59,7 +59,7 @@ public class StatsCompositionTool<T> implements
 
 	private void init(
 			final StatisticsProvider<T> statisticsProvider ) {
-		final ByteArrayId[] statisticsIds = statisticsProvider.getSupportedStatisticsIds();
+		final ByteArrayId[] statisticsIds = statisticsProvider.getSupportedStatisticsTypes();
 		statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
 				statisticsIds.length);
 		for (final ByteArrayId id : statisticsIds) {
