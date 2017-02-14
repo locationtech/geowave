@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.adapter.raster.plugin;
+package mil.nga.giat.geowave.adapter.raster.plugin.gdal;
 
 import java.util.Collections;
 import java.util.HashMap;

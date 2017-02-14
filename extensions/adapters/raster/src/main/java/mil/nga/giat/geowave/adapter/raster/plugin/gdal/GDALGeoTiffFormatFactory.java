@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.adapter.raster.plugin;
+package mil.nga.giat.geowave.adapter.raster.plugin.gdal;
 
 import java.awt.RenderingHints.Key;
 import java.util.Map;

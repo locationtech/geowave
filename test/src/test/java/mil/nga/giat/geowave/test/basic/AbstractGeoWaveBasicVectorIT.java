@@ -19,6 +19,7 @@ import org.opengis.filter.Filter;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
@@ -70,7 +71,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
-		TestUtils.unZipFile(
+		ZipUtils.unZipFile(
 				new File(
 						GeoWaveBasicSpatialVectorIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
