@@ -254,7 +254,7 @@
 								<log4j.configuration>file:${project.build.testOutputDirectory}/log4j-test.properties</log4j.configuration>
 								<java.util.logging.config.file>${project.build.testOutputDirectory}/jul-test.properties</java.util.logging.config.file>
 							</systemPropertyVariables>
-							<!-- Sonar currently just supports surefire so "trick" Sonar into 
+							<!-- Sonar currently just supports surefire so "trick" Sonar into
 								thinking they are surefire reports -->
 							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
 							<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>

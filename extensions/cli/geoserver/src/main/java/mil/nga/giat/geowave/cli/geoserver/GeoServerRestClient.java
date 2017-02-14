@@ -67,6 +67,14 @@ public class GeoServerRestClient
 		LOGGER.setLevel(Level.DEBUG);
 	}
 
+	public GeoServerRestClient(
+			final GeoServerConfig config,
+			WebTarget webTarget ) {
+		this.config = config;
+		this.webTarget = webTarget;
+		LOGGER.setLevel(Level.DEBUG);
+	}
+
 	/**
 	 *
 	 * @return
