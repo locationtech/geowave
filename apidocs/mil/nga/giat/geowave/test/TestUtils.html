@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -284,22 +284,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a>&nbsp;expected,
                         double&nbsp;minPctError,
                         double&nbsp;maxPctError)</code>&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/TestUtils.html#unZipFile-java.io.File-java.lang.String-">unZipFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;zipInput,
-         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputFolder)</code>
-<div class="block">Unzips the contents of a zip file to a target output directory, deleting
- anything that existed beforehand</div>
-</td>
-</tr>
-<tr id="i15" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/TestUtils.html#unZipFile-java.io.File-java.lang.String-boolean-">unZipFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;zipInput,
-         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputFolder,
-         boolean&nbsp;deleteTargetDir)</code>
-<div class="block">Unzips the contents of a zip file to a target output directory</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -575,41 +559,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>featureToQuery</h4>
 <pre>protected static&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;featureToQuery(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter)</pre>
-</li>
-</ul>
-<a name="unZipFile-java.io.File-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>unZipFile</h4>
-<pre>public static&nbsp;void&nbsp;unZipFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;zipInput,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputFolder)</pre>
-<div class="block">Unzips the contents of a zip file to a target output directory, deleting
- anything that existed beforehand</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>zipInput</code> - input zip file</dd>
-<dd><code>outputFolder</code> - zip file output folder</dd>
-</dl>
-</li>
-</ul>
-<a name="unZipFile-java.io.File-java.lang.String-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>unZipFile</h4>
-<pre>public static&nbsp;void&nbsp;unZipFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;zipInput,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputFolder,
-                             boolean&nbsp;deleteTargetDir)</pre>
-<div class="block">Unzips the contents of a zip file to a target output directory</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>zipInput</code> - input zip file</dd>
-<dd><code>outputFolder</code> - zip file output folder</dd>
-<dd><code>deleteTargetDir</code> - delete the destination directory before extracting</dd>
-</dl>
 </li>
 </ul>
 <a name="replaceParameters-java.util.Map-java.io.File-">
