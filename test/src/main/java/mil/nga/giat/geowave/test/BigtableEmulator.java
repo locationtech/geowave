@@ -18,10 +18,9 @@ import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
+import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.slf4j.LoggerFactory;
-
-import com.jcraft.jsch.Logger;
 
 public class BigtableEmulator
 {
@@ -168,7 +167,7 @@ public class BigtableEmulator
 
 		final TarGZipUnArchiver unarchiver = new TarGZipUnArchiver();
 		unarchiver.enableLogging(new ConsoleLogger(
-				Logger.WARN,
+				Logger.LEVEL_WARN,
 				"Gcloud SDK Unarchive"));
 		unarchiver.setSourceFile(downloadFile);
 		unarchiver.setDestDirectory(sdkDir);

@@ -54,6 +54,7 @@
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
+		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
@@ -657,6 +658,11 @@
 						<exclude>**IT.java</exclude>
 						<exclude>**/*ITSuite.java</exclude>
 					</excludes>
+					<environmentVariables>
+						<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
+						<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
+						<GDAL_DIR>${gdal.dir}</GDAL_DIR>
+					</environmentVariables>
 					<outputDirectory>${surefire.report.path}</outputDirectory>
 				</configuration>
 			</plugin>

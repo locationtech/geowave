@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>mil.nga.giat</groupId>
@@ -8,6 +9,8 @@
 		<version>0.9.4-SNAPSHOT</version>
 	</parent>
 	<properties>
+		<!-- to maintain only one download of GDAL, re-use the IT build directory -->
+		<gdal.dir>${project.basedir}/../../../test/target/temp/gdal</gdal.dir>
 		<tools.scope>compile</tools.scope>
 	</properties>
 
@@ -75,83 +78,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>plugin-singlejar</id>
-			<properties>
-				<tools.scope>provided</tools.scope>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>2.2</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<filters>
-										<filter>
-											<artifact>junit:junit</artifact>
-											<includes>
-												<include>junit/framework/**</include>
-												<include>org/junit/**</include>
-											</includes>
-											<excludes>
-												<exclude>org/junit/experimental/**</exclude>
-												<exclude>org/junit/runners/**</exclude>
-											</excludes>
-										</filter>
-										<filter>
-											<artifact>*:*</artifact>
-											<excludes>
-												<exclude>META-INF/*.SF</exclude>
-												<exclude>META-INF/*.DSA</exclude>
-												<exclude>META-INF/*.RSA</exclude>
-											</excludes>
-										</filter>
-									</filters>
-
-									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<manifestEntries>
-												<Specification-Title>GeoWave</Specification-Title>
-												<Specification-Vendor>LocationTech</Specification-Vendor>
-												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
-												<Implementation-Vendor>LocationTech</Implementation-Vendor>
-												<Implementation-Version>${project.version}</Implementation-Version>
-											</manifestEntries>
-										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
-											of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jaiext</resource>
-										</transformer>
-									</transformers>
-									<createDependencyReducedPom>false</createDependencyReducedPom>
-									<minimizeJar>false</minimizeJar>
-									<finalName>geowave-landsat-plugin-${project.version}</finalName>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>
