@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-service-parent</artifactId>
@@ -8,13 +9,23 @@
 	</parent>
 	<artifactId>geowave-service-rest</artifactId>
 	<name>GeoWave Services Rest</name>
+	<repositories>
+		<repository>
+			<id>maven-restlet</id>
+			<name>Restlet repository</name>
+			<url>https://maven.restlet.com</url>
+		</repository>
+	</repositories>
+	<properties>
+		<restlet-version>2.3.9</restlet-version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-core-cli</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-	    <dependency>
+		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-core-store</artifactId>
 			<version>${project.version}</version>
@@ -28,9 +39,19 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-    	  <groupId>org.reflections</groupId>
-          <artifactId>reflections</artifactId>
-          <version>0.9.10</version>
-        </dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>${restlet-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.jackson</artifactId>
+			<version>${restlet-version}</version>
+		</dependency>
 	</dependencies>
 </project>
