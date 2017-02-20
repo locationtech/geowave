@@ -67,7 +67,8 @@ public class ServicesTestEnvironment implements
 	protected static final String TEST_STYLE_PATH = "src/test/resources/sld/";
 	protected static final String TEST_GEOSERVER_LOGGING_PATH = "src/test/resources/logging.xml";
 	protected static final String TEST_LOG_PROPERTIES_PATH = "src/test/resources/log4j-test.properties";
-	protected static final String TEST_GEOSERVER_LOG_PROPERTIES_PATH = GEOSERVER_WAR_DIR + "/data/logs/log4j-test.properties";
+	protected static final String TEST_GEOSERVER_LOG_PROPERTIES_PATH = GEOSERVER_WAR_DIR
+			+ "/data/logs/log4j-test.properties";
 	protected static final String EXISTING_GEOSERVER_LOGGING_PATH = GEOSERVER_WAR_DIR + "/data/logging.xml";
 	protected static final String TEST_SLD_NO_DIFFERENCE_FILE = TEST_STYLE_PATH + TEST_STYLE_NAME_NO_DIFFERENCE
 			+ ".sld";
@@ -112,8 +113,16 @@ public class ServicesTestEnvironment implements
 				jettyServer.setConnectors(new Connector[] {
 					conn
 				});
-				FileUtils.copyFile(new File(TEST_GEOSERVER_LOGGING_PATH), new File(EXISTING_GEOSERVER_LOGGING_PATH));
-				FileUtils.copyFile(new File(TEST_LOG_PROPERTIES_PATH), new File(TEST_GEOSERVER_LOG_PROPERTIES_PATH));
+				FileUtils.copyFile(
+						new File(
+								TEST_GEOSERVER_LOGGING_PATH),
+						new File(
+								EXISTING_GEOSERVER_LOGGING_PATH));
+				FileUtils.copyFile(
+						new File(
+								TEST_LOG_PROPERTIES_PATH),
+						new File(
+								TEST_GEOSERVER_LOG_PROPERTIES_PATH));
 				final WebAppContext gsWebapp = new WebAppContext();
 				gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
 				gsWebapp.setWar(GEOSERVER_WAR_DIR);

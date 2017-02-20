@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -52,6 +53,7 @@ public class InputFormatAccumuloRangeQuery extends
 	}
 
 	public InputFormatAccumuloRangeQuery(
+			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Range accumuloRange,
@@ -59,6 +61,7 @@ public class InputFormatAccumuloRangeQuery extends
 			final boolean isOutputWritable,
 			final QueryOptions queryOptions ) {
 		super(
+				dataStore,
 				getAdapterIds(
 						index,
 						adapterStore,
@@ -113,6 +116,7 @@ public class InputFormatAccumuloRangeQuery extends
 			final ScannerBase scanner ) {
 		return new InputFormatIteratorWrapper(
 				useWholeRowIterator(),
+				dataStore,
 				adapterStore,
 				index,
 				scanner.iterator(),
