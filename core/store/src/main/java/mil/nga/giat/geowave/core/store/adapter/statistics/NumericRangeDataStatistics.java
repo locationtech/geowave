@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 abstract public class NumericRangeDataStatistics<T> extends
 		AbstractDataStatistics<T>
@@ -63,8 +63,8 @@ abstract public class NumericRangeDataStatistics<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
+			final T entry,
+			final GeoWaveRow... kvs ) {
 		final NumericRange range = getRange(entry);
 		if (range != null) {
 			min = Math.min(

@@ -7,11 +7,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.base.EntryRowID;
-
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
@@ -19,6 +14,12 @@ import org.apache.accumulo.core.util.format.Formatter;
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 
 public class PersistentDataFormatter implements
 		Formatter
@@ -44,17 +45,17 @@ public class PersistentDataFormatter implements
 
 			@Override
 			public StringBuffer format(
-					Date date,
-					StringBuffer toAppendTo,
-					FieldPosition fieldPosition ) {
+					final Date date,
+					final StringBuffer toAppendTo,
+					final FieldPosition fieldPosition ) {
 				toAppendTo.append(Long.toString(date.getTime()));
 				return toAppendTo;
 			}
 
 			@Override
 			public Date parse(
-					String source,
-					ParsePosition pos ) {
+					final String source,
+					final ParsePosition pos ) {
 				return new Date(
 						Long.parseLong(source));
 			}
@@ -64,18 +65,20 @@ public class PersistentDataFormatter implements
 
 	@Override
 	public void initialize(
-			Iterable<Entry<Key, Value>> scanner,
-			boolean printTimestamps ) {
+			final Iterable<Entry<Key, Value>> scanner,
+			final boolean printTimestamps ) {
 		checkState(false);
 		si = scanner.iterator();
 		doTimestamps = printTimestamps;
 	}
 
+	@Override
 	public boolean hasNext() {
 		checkState(true);
 		return si.hasNext();
 	}
 
+	@Override
 	public String next() {
 		DateFormat timestampFormat = null;
 
@@ -87,30 +90,35 @@ public class PersistentDataFormatter implements
 	}
 
 	protected String next(
-			DateFormat timestampFormat ) {
+			final DateFormat timestampFormat ) {
 		checkState(true);
 		return formatEntry(
 				si.next(),
 				timestampFormat);
 	}
 
+	@Override
 	public void remove() {
 		checkState(true);
 		si.remove();
 	}
 
 	protected void checkState(
-			boolean expectInitialized ) {
-		if (expectInitialized && si == null) throw new IllegalStateException(
-				"Not initialized");
-		if (!expectInitialized && si != null) throw new IllegalStateException(
-				"Already initialized");
+			final boolean expectInitialized ) {
+		if (expectInitialized && (si == null)) {
+			throw new IllegalStateException(
+					"Not initialized");
+		}
+		if (!expectInitialized && (si != null)) {
+			throw new IllegalStateException(
+					"Already initialized");
+		}
 	}
 
 	// this should be replaced with something like Record.toString();
 	public String formatEntry(
-			Entry<Key, Value> entry,
-			boolean showTimestamps ) {
+			final Entry<Key, Value> entry,
+			final boolean showTimestamps ) {
 		DateFormat timestampFormat = null;
 
 		if (showTimestamps) {
@@ -134,32 +142,33 @@ public class PersistentDataFormatter implements
 	};
 
 	public String formatEntry(
-			Entry<Key, Value> entry,
-			DateFormat timestampFormat ) {
-		StringBuilder sb = new StringBuilder();
-		StringBuilder sbInsertion = new StringBuilder();
+			final Entry<Key, Value> entry,
+			final DateFormat timestampFormat ) {
+		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sbInsertion = new StringBuilder();
 
-		Key key = entry.getKey();
+		final Key key = entry.getKey();
 
-		EntryRowID rowId = new EntryRowID(
-				key.getRow().getBytes());
+		final GeoWaveKey rowId = new GeoWaveKeyImpl(
+				key.getRow().copyBytes(),
+				0);
 
 		byte[] insertionIdBytes;
-		insertionIdBytes = rowId.getInsertionId();
+		insertionIdBytes = rowId.getSortKey();
 
-		for (byte b : insertionIdBytes) {
+		for (final byte b : insertionIdBytes) {
 			sbInsertion.append(String.format(
 					"%02x",
 					b));
 		}
 
-		Text insertionIdText = new Text(
+		final Text insertionIdText = new Text(
 				sbInsertion.toString());
-		Text adapterIdText = new Text(
+		final Text adapterIdText = new Text(
 				StringUtils.stringFromBinary(rowId.getAdapterId()));
-		Text dataIdText = new Text(
+		final Text dataIdText = new Text(
 				StringUtils.stringFromBinary(rowId.getDataId()));
-		Text duplicatesText = new Text(
+		final Text duplicatesText = new Text(
 				Integer.toString(rowId.getNumberOfDuplicates()));
 
 		// append insertion Id
@@ -211,10 +220,10 @@ public class PersistentDataFormatter implements
 					timestampFormat.format(tmpDate.get()));
 		}
 
-		Value value = entry.getValue();
+		final Value value = entry.getValue();
 
 		// append value
-		if (value != null && value.getSize() > 0) {
+		if ((value != null) && (value.getSize() > 0)) {
 			sb.append("\t");
 			appendValue(
 					sb,
@@ -225,8 +234,8 @@ public class PersistentDataFormatter implements
 	}
 
 	private static StringBuilder appendText(
-			StringBuilder sb,
-			Text t ) {
+			final StringBuilder sb,
+			final Text t ) {
 		appendBytes(
 				sb,
 				t.getBytes(),
@@ -236,15 +245,15 @@ public class PersistentDataFormatter implements
 	}
 
 	public void appendValue(
-			StringBuilder sb,
-			Value value ) {
+			final StringBuilder sb,
+			final Value value ) {
 		try {
-			Persistable persistable = PersistenceUtils.fromBinary(
+			final Persistable persistable = PersistenceUtils.fromBinary(
 					value.get(),
 					Persistable.class);
 			sb.append(persistable.toString());
 		}
-		catch (Exception ex) {
+		catch (final Exception ex) {
 			LOGGER.info(
 					"Exception caught",
 					ex);
@@ -258,22 +267,25 @@ public class PersistentDataFormatter implements
 	}
 
 	private static void appendBytes(
-			StringBuilder sb,
-			byte ba[],
-			int offset,
-			int len ) {
+			final StringBuilder sb,
+			final byte ba[],
+			final int offset,
+			final int len ) {
 		for (int i = 0; i < len; i++) {
-			int c = 0xff & ba[offset + i];
-			if (c == '\\')
+			final int c = 0xff & ba[offset + i];
+			if (c == '\\') {
 				sb.append("\\\\");
-			else if (c >= 32 && c <= 126)
+			}
+			else if ((c >= 32) && (c <= 126)) {
 				sb.append((char) c);
-			else
+			}
+			else {
 				sb.append(
 						"\\x").append(
 						String.format(
 								"%02X",
 								c));
+			}
 		}
 	}
 

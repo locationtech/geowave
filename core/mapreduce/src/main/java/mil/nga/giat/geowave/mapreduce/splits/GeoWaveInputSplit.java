@@ -3,9 +3,7 @@ package mil.nga.giat.geowave.mapreduce.splits;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,39 +11,38 @@ import java.util.Set;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.InputSplit;
 
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 
 /**
  * The Class GeoWaveInputSplit. Encapsulates a GeoWave Index and a set of Row
  * ranges for use in Map Reduce jobs.
  */
-public abstract class GeoWaveInputSplit extends
+public class GeoWaveInputSplit extends
 		InputSplit implements
 		Writable
 {
-	private Map<PrimaryIndex, List<RangeLocationPair>> ranges;
+	private Map<ByteArrayId, SplitInfo> splitInfo;
 	private String[] locations;
 
 	protected GeoWaveInputSplit() {
-		ranges = new HashMap<PrimaryIndex, List<RangeLocationPair>>();
+		splitInfo = new HashMap<ByteArrayId, SplitInfo>();
 		locations = new String[] {};
 	}
 
 	protected GeoWaveInputSplit(
-			final Map<PrimaryIndex, List<RangeLocationPair>> ranges,
+			final Map<ByteArrayId, SplitInfo> splitInfo,
 			final String[] locations ) {
-		this.ranges = ranges;
+		this.splitInfo = splitInfo;
 		this.locations = locations;
 	}
 
-	public Set<PrimaryIndex> getIndices() {
-		return ranges.keySet();
+	public Set<ByteArrayId> getIndexIds() {
+		return splitInfo.keySet();
 	}
 
-	public List<RangeLocationPair> getRanges(
-			final PrimaryIndex index ) {
-		return ranges.get(index);
+	public SplitInfo getInfo(
+			final ByteArrayId indexId ) {
+		return splitInfo.get(indexId);
 	}
 
 	/**
@@ -56,8 +53,8 @@ public abstract class GeoWaveInputSplit extends
 	public long getLength()
 			throws IOException {
 		long diff = 0;
-		for (final Entry<PrimaryIndex, List<RangeLocationPair>> indexEntry : ranges.entrySet()) {
-			for (final RangeLocationPair range : indexEntry.getValue()) {
+		for (final Entry<ByteArrayId, SplitInfo> indexEntry : splitInfo.entrySet()) {
+			for (final RangeLocationPair range : indexEntry.getValue().getRangeLocationPairs()) {
 				diff += (long) range.getCardinality();
 			}
 		}
@@ -75,34 +72,19 @@ public abstract class GeoWaveInputSplit extends
 			final DataInput in )
 			throws IOException {
 		final int numIndices = in.readInt();
-		ranges = new HashMap<PrimaryIndex, List<RangeLocationPair>>(
+		splitInfo = new HashMap<ByteArrayId, SplitInfo>(
 				numIndices);
 		for (int i = 0; i < numIndices; i++) {
-			final int indexLength = in.readInt();
-			final byte[] indexBytes = new byte[indexLength];
-			in.readFully(indexBytes);
-			final PrimaryIndex index = PersistenceUtils.fromBinary(
-					indexBytes,
-					PrimaryIndex.class);
-			final int numRanges = in.readInt();
-			final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>(
-					numRanges);
-
-			for (int j = 0; j < numRanges; j++) {
-				try {
-					final RangeLocationPair range = getRangeLocationPairInstance();
-					range.readFields(in);
-					rangeList.add(range);
-				}
-				catch (InstantiationException | IllegalAccessException e) {
-					throw new IOException(
-							"Unable to instantiate range",
-							e);
-				}
-			}
-			ranges.put(
-					index,
-					rangeList);
+			final int indexIdLength = in.readInt();
+			final byte[] indexIdBytes = new byte[indexIdLength];
+			in.readFully(indexIdBytes);
+			final ByteArrayId indexId = new ByteArrayId(
+					indexIdBytes);
+			final SplitInfo si = new SplitInfo();
+			si.readFields(in);
+			splitInfo.put(
+					indexId,
+					si);
 		}
 		final int numLocs = in.readInt();
 		locations = new String[numLocs];
@@ -111,22 +93,17 @@ public abstract class GeoWaveInputSplit extends
 		}
 	}
 
-	protected abstract RangeLocationPair getRangeLocationPairInstance();
-
 	@Override
 	public void write(
 			final DataOutput out )
 			throws IOException {
-		out.writeInt(ranges.size());
-		for (final Entry<PrimaryIndex, List<RangeLocationPair>> range : ranges.entrySet()) {
-			final byte[] indexBytes = PersistenceUtils.toBinary(range.getKey());
-			out.writeInt(indexBytes.length);
-			out.write(indexBytes);
-			final List<RangeLocationPair> rangeList = range.getValue();
-			out.writeInt(rangeList.size());
-			for (final RangeLocationPair r : rangeList) {
-				r.write(out);
-			}
+		out.writeInt(splitInfo.size());
+		for (final Entry<ByteArrayId, SplitInfo> range : splitInfo.entrySet()) {
+			final byte[] indexIdBytes = range.getKey().getBytes();
+			out.writeInt(indexIdBytes.length);
+			out.write(indexIdBytes);
+			final SplitInfo rangeList = range.getValue();
+			rangeList.write(out);
 		}
 		out.writeInt(locations.length);
 		for (final String location : locations) {

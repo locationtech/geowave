@@ -11,10 +11,10 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.schemabuilder.Create;
 
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 
 public class CassandraRow extends
-		GeoWaveRowImpl
+		GeoWaveKeyImpl
 {
 	private final static Logger LOGGER = Logger.getLogger(
 			CassandraRow.class);

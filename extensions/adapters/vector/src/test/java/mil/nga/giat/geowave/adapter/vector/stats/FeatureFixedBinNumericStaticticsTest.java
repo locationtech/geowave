@@ -95,22 +95,14 @@ public class FeatureFixedBinNumericStaticticsTest
 		final Random rand = new Random(
 				7777);
 
-		stat.entryIngested(
-				null,
-				create(100.0));
-		stat.entryIngested(
-				null,
-				create(101.0));
-		stat.entryIngested(
-				null,
-				create(2.0));
+		stat.entryIngested(create(100.0));
+		stat.entryIngested(create(101.0));
+		stat.entryIngested(create(2.0));
 
 		double next = 1;
 		for (int i = 0; i < 10000; i++) {
 			next = next + (Math.round(rand.nextDouble()));
-			stat.entryIngested(
-					null,
-					create(next));
+			stat.entryIngested(create(next));
 		}
 
 		final FeatureFixedBinNumericStatistics stat2 = new FeatureFixedBinNumericStatistics(
@@ -122,18 +114,14 @@ public class FeatureFixedBinNumericStaticticsTest
 		final double skewvalue = next + (1000 * rand.nextDouble());
 		final SimpleFeature skewedFeature = create(skewvalue);
 		for (int i = 0; i < 10000; i++) {
-			stat2.entryIngested(
-					null,
-					skewedFeature);
+			stat2.entryIngested(skewedFeature);
 		}
 
 		next += 1000;
 		double max = 0;
 		for (long i = 0; i < 10000; i++) {
 			final double val = next + (1000 * rand.nextDouble());
-			stat2.entryIngested(
-					null,
-					create(val));
+			stat2.entryIngested(create(val));
 			max = Math.max(
 					val,
 					max);
@@ -183,9 +171,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		double next = 1;
 		for (int i = 0; i < 10000; i++) {
 			next = next + (rand.nextDouble() * 100.0);
-			stat1.entryIngested(
-					null,
-					create(next));
+			stat1.entryIngested(create(next));
 		}
 
 		FeatureFixedBinNumericStatistics stat2 = new FeatureFixedBinNumericStatistics(
@@ -196,9 +182,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		next = 4839434.547854578;
 		for (long i = 0; i < 10000; i++) {
 			final double val = next + (1000.0 * rand.nextDouble());
-			stat2.entryIngested(
-					null,
-					create(val));
+			stat2.entryIngested(create(val));
 		}
 
 		byte[] b = stat2.toBinary();
@@ -216,9 +200,7 @@ public class FeatureFixedBinNumericStaticticsTest
 
 		for (int i = 0; i < 40000; i++) {
 			next = (Math.round(rand.nextDouble()));
-			stat2.entryIngested(
-					null,
-					create(next));
+			stat2.entryIngested(create(next));
 		}
 
 		final FeatureFixedBinNumericStatistics stat3 = new FeatureFixedBinNumericStatistics(
@@ -229,9 +211,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		next = 54589058545734.049454545458;
 		for (long i = 0; i < 10000; i++) {
 			final double val = next + (rand.nextDouble());
-			stat3.entryIngested(
-					null,
-					create(val));
+			stat3.entryIngested(create(val));
 		}
 
 		b = stat2.toBinary();
@@ -265,9 +245,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		double next = 0;
 		for (int i = 0; i < 10000; i++) {
 			next = next + (100 * rand.nextDouble());
-			stat.entryIngested(
-					null,
-					create(next));
+			stat.entryIngested(create(next));
 			max = Math.max(
 					next,
 					max);
@@ -276,9 +254,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		next = 0;
 		for (int i = 0; i < 10000; i++) {
 			next = next - (100 * rand.nextDouble());
-			stat.entryIngested(
-					null,
-					create(next));
+			stat.entryIngested(create(next));
 			min = Math.min(
 					next,
 					min);
@@ -333,9 +309,7 @@ public class FeatureFixedBinNumericStaticticsTest
 		double next = 0;
 		for (int i = 0; i < 100000; i++) {
 			next = 1000 * rand.nextGaussian();
-			stat.entryIngested(
-					null,
-					create(next));
+			stat.entryIngested(create(next));
 			max = Math.max(
 					next,
 					max);

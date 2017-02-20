@@ -34,7 +34,7 @@
 	<attributes>
 		<attribute>
 			<name>geometry</name>
-			<binding>com.vividsolutions.jts.geom.Geometry</binding>
+			<binding>com.vividsolutions.jts.geom.Point</binding>
 		</attribute>
 		<attribute>
 			<name>pid</name>

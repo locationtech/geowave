@@ -154,7 +154,7 @@ public class QueryIndexHelper
 
 		final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(geoAttrName);
 		final FeatureBoundingBoxStatistics bboxStats = (FeatureBoundingBoxStatistics) statsMap.get(statId);
-		if ((bboxStats != null) && (bbox != null)) {
+		if ((bboxStats != null) && bboxStats.isSet() && (bbox != null)) {
 			final Geometry geo = bboxStats.composeGeometry(featureType
 					.getGeometryDescriptor()
 					.getType()

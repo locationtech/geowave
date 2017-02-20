@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.core.store;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 /**
  * This interface doesn't actually do anything, is just used for tracking during
@@ -31,4 +31,6 @@ abstract public class StoreFactoryOptions
 		return new DataStorePluginOptions(
 				this);
 	}
+
+	public abstract DataStoreOptions getStoreOptions();
 }

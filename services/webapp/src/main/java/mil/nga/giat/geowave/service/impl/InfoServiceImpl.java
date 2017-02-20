@@ -20,8 +20,8 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.service.InfoService;
 import mil.nga.giat.geowave.service.ServiceUtils;
 import net.sf.json.JSONArray;

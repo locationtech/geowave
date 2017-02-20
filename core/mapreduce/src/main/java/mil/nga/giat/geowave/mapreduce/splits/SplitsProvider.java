@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.mapreduce.splits;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,22 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
-import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
@@ -57,13 +57,24 @@ public abstract class SplitsProvider
 
 		final List<InputSplit> retVal = new ArrayList<InputSplit>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
-
+		final Map<ByteArrayId, List<ByteArrayId>> indexIdToAdaptersMap = new HashMap<>();
 		for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
 				.getAdaptersWithMinimalSetOfIndices(
 						adapterStore,
 						adapterIndexMappingStore,
 						indexStore)) {
+			indexIdToAdaptersMap.put(
+					indexAdapterPair.getKey().getId(),
+					Lists.transform(
+							indexAdapterPair.getValue(),
+							new Function<DataAdapter<Object>, ByteArrayId>() {
 
+								@Override
+								public ByteArrayId apply(
+										final DataAdapter<Object> input ) {
+									return input.getAdapterId();
+								}
+							}));
 			populateIntermediateSplits(
 					splits,
 					operations,
@@ -118,7 +129,10 @@ public abstract class SplitsProvider
 		}
 
 		for (final IntermediateSplitInfo split : splits) {
-			retVal.add(split.toFinalSplit());
+			retVal.add(split.toFinalSplit(
+					statsStore,
+					indexIdToAdaptersMap,
+					queryOptions.getAuthorizations()));
 		}
 		return retVal;
 	}
@@ -136,61 +150,30 @@ public abstract class SplitsProvider
 			String[] authorizations )
 			throws IOException;
 
-	protected GeoWaveRowRange getRangeMax(
-			final Index<?, ?> index,
-			final AdapterStore adapterStore,
-			final DataStatisticsStore statsStore,
-			final String[] authorizations ) {
-
-		final RowRangeDataStatistics<?> stats = (RowRangeDataStatistics<?>) statsStore.getDataStatistics(
-				index.getId(),
-				RowRangeDataStatistics.getId(index.getId()),
-				authorizations);
-		if (stats == null) {
-			LOGGER
-					.warn("Could not determine range of data from 'RowRangeDataStatistics'.  Range will not be clipped. This may result in some splits being empty.");
-			return defaultConstructRange();
-		}
-
-		final byte[] min = stats.getMin();
-		final byte[] max = stats.getMax();
-
-		return constructRange(
-				getKeyFromBigInteger(
-						new BigInteger(
-								min).subtract(BigInteger.ONE),
-						min.length),
-				true,
-				getKeyFromBigInteger(
-						new BigInteger(
-								max).add(BigInteger.ONE),
-						max.length),
-				true);
-	}
-
-	protected abstract GeoWaveRowRange constructRange(
-			byte[] startKey,
-			boolean isStartKeyInclusive,
-			byte[] endKey,
-			boolean isEndKeyInclusive );
-
-	protected abstract GeoWaveRowRange defaultConstructRange();
-
-	protected abstract RangeLocationPair constructRangeLocationPair(
-			GeoWaveRowRange range,
-			String location,
-			double cardinality );
-
-	public abstract GeoWaveInputSplit constructInputSplit(
-			Map<PrimaryIndex, List<RangeLocationPair>> splitInfo,
-			String[] locations );
-
 	protected double getCardinality(
 			final RowRangeHistogramStatistics<?> rangeStats,
-			final GeoWaveRowRange range ) {
+			final GeoWaveRowRange range,
+			final int partitionKeyLength ) {
+		if (range == null) {
+			if (rangeStats != null) {
+				return rangeStats.totalSampleSize();
+			}
+			else {
+				// with an infinite range and no histogram we have no info to
+				// base a cardinality on
+				return 1;
+			}
+		}
 		return rangeStats == null ? getRangeLength(range) : rangeStats.cardinality(
-				range.getStartKey(),
-				range.getEndKey());
+				range.getPartitionKey(),
+				range.getStartSortKey() == null ? null : ArrayUtils.subarray(
+						range.getStartSortKey(),
+						partitionKeyLength,
+						range.getStartSortKey().length),
+				range.getEndSortKey() == null ? null : ArrayUtils.subarray(
+						range.getEndSortKey(),
+						partitionKeyLength,
+						range.getEndSortKey().length));
 	}
 
 	protected RowRangeHistogramStatistics<?> getHistStats(
@@ -280,9 +263,9 @@ public abstract class SplitsProvider
 	protected static BigInteger getStart(
 			final GeoWaveRowRange range,
 			final int cardinality ) {
-		final byte[] start = range.getStartKey();
+		final byte[] start = range.getStartSortKey();
 		byte[] startBytes;
-		if (!range.isInfiniteStartKey() && (start != null)) {
+		if (!range.isInfiniteStartSortKey() && (start != null)) {
 			startBytes = extractBytes(
 					start,
 					cardinality);
@@ -299,9 +282,9 @@ public abstract class SplitsProvider
 	protected static BigInteger getEnd(
 			final GeoWaveRowRange range,
 			final int cardinality ) {
-		final byte[] end = range.getEndKey();
+		final byte[] end = range.getEndSortKey();
 		byte[] endBytes;
-		if (!range.isInfiniteStopKey() && (end != null)) {
+		if (!range.isInfiniteStopSortKey() && (end != null)) {
 			endBytes = extractBytes(
 					end,
 					cardinality);
@@ -319,11 +302,11 @@ public abstract class SplitsProvider
 
 	protected static double getRangeLength(
 			final GeoWaveRowRange range ) {
-		if ((range.getStartKey() == null) || (range.getEndKey() == null)) {
+		if ((range == null) || (range.getStartSortKey() == null) || (range.getEndSortKey() == null)) {
 			return 1;
 		}
-		final byte[] start = range.getStartKey();
-		final byte[] end = range.getEndKey();
+		final byte[] start = range.getStartSortKey();
+		final byte[] end = range.getEndSortKey();
 
 		final int maxDepth = Math.max(
 				end.length,
@@ -342,12 +325,12 @@ public abstract class SplitsProvider
 
 	protected static byte[] getMidpoint(
 			final GeoWaveRowRange range ) {
-		if ((range.getStartKey() == null) || (range.getEndKey() == null)) {
+		if ((range.getStartSortKey() == null) || (range.getEndSortKey() == null)) {
 			return null;
 		}
 
-		final byte[] start = range.getStartKey();
-		final byte[] end = range.getEndKey();
+		final byte[] start = range.getStartSortKey();
+		final byte[] end = range.getEndSortKey();
 		if (Arrays.equals(
 				start,
 				end)) {

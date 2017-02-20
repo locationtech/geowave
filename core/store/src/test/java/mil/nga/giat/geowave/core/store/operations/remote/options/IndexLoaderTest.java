@@ -9,8 +9,10 @@ import org.junit.Test;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexGroupCommand;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 
 public class IndexLoaderTest
 {

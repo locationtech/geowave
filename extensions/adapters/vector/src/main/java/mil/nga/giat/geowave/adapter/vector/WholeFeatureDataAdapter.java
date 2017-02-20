@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
@@ -212,8 +213,13 @@ public class WholeFeatureDataAdapter extends
 
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
+			final CommonIndexModel indexModel,
+			final DataAdapter<SimpleFeature> adapter,
 			final ByteArrayId statisticsId ) {
-		return statsManager.getVisibilityHandler(statisticsId);
+		return statsManager.getVisibilityHandler(
+				indexModel,
+				adapter,
+				statisticsId);
 	}
 
 	@Override

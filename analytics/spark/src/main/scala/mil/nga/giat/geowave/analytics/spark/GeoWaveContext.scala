@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.analytics.spark
 
 import mil.nga.giat.geowave.core.store.config.ConfigUtils
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions
 
 class GeoWaveContext(
 											val storeParameters: java.util.Map[String, String],

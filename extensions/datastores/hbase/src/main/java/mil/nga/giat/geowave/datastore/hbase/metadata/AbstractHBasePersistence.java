@@ -20,14 +20,14 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
-import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.ScannerClosableWrapper;
 
 public abstract class AbstractHBasePersistence<T extends Persistable> extends
-		AbstractGeowavePersistence<T>
+		AbstractGeoWavePersistence<T>
 {
 
 	private final static Logger LOGGER = Logger.getLogger(AbstractHBasePersistence.class);
@@ -37,10 +37,10 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 		HBaseDataStatisticsStore.STATISTICS_CF,
 		HBaseIndexStore.INDEX_CF
 	};
-	protected final BasicHBaseOperations operations;
+	protected final HBaseOperations operations;
 
 	public AbstractHBasePersistence(
-			final BasicHBaseOperations operations ) {
+			final HBaseOperations operations ) {
 		super(
 				operations);
 		this.operations = operations;

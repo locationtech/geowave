@@ -3,21 +3,6 @@ package mil.nga.giat.geowave.examples.ingest;
 import java.util.Set;
 import java.util.TreeSet;
 
-import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
@@ -32,6 +17,23 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
+
 public class SimpleIngestTest
 {
 	private final static Logger LOGGER = Logger.getLogger(SimpleIngestTest.class);
@@ -42,9 +44,9 @@ public class SimpleIngestTest
 	final PasswordToken AccumuloPass = new PasswordToken(
 			new byte[0]);
 	AccumuloOperations accumuloOperations;
-	AccumuloIndexStore indexStore;
-	AccumuloAdapterStore adapterStore;
-	AccumuloDataStatisticsStore statsStore;
+	IndexStore indexStore;
+	AdapterStore adapterStore;
+	DataStatisticsStore statsStore;
 	AccumuloDataStore mockDataStore;
 
 	@Before
@@ -61,17 +63,21 @@ public class SimpleIngestTest
 					"Failed to create mock accumulo connection",
 					e);
 		}
-		accumuloOperations = new BasicAccumuloOperations(
-				mockConnector);
+		accumuloOperations = new AccumuloOperations(
+				mockConnector,
+				accumuloOptions);
 
-		indexStore = new AccumuloIndexStore(
-				accumuloOperations);
+		indexStore = new IndexStoreImpl(
+				accumuloOperations,
+				accumuloOptions);
 
-		adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
+		adapterStore = new AdapterStoreImpl(
+				accumuloOperations,
+				accumuloOptions);
 
-		statsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
+		statsStore = new DataStatisticsStoreImpl(
+				accumuloOperations,
+				accumuloOptions);
 
 		mockDataStore = new AccumuloDataStore(
 				indexStore,
@@ -79,8 +85,9 @@ public class SimpleIngestTest
 				statsStore,
 				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
+				new AdapterIndexMappingStoreImpl(
+						accumuloOperations,
+						accumuloOptions),
 				accumuloOperations,
 				accumuloOptions);
 
@@ -90,10 +97,10 @@ public class SimpleIngestTest
 	}
 
 	protected static Set<Point> getCalcedPointSet() {
-		Set<Point> calcPoints = new TreeSet<Point>();
+		final Set<Point> calcPoints = new TreeSet<Point>();
 		for (int longitude = -180; longitude <= 180; longitude += 5) {
 			for (int latitude = -90; latitude <= 90; latitude += 5) {
-				Point p = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+				final Point p = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 						longitude,
 						latitude));
 				calcPoints.add(p);
@@ -103,17 +110,17 @@ public class SimpleIngestTest
 	}
 
 	protected static Set<Point> getStoredPointSet(
-			DataStore ds ) {
-		CloseableIterator itr = ds.query(
+			final DataStore ds ) {
+		final CloseableIterator itr = ds.query(
 				new QueryOptions(),
 				new BasicQuery(
 						new BasicQuery.Constraints()));
-		Set<Point> readPoints = new TreeSet<Point>();
+		final Set<Point> readPoints = new TreeSet<Point>();
 		while (itr.hasNext()) {
-			Object n = itr.next();
+			final Object n = itr.next();
 			if (n instanceof SimpleFeature) {
-				SimpleFeature gridCell = (SimpleFeature) n;
-				Point p = (Point) gridCell.getDefaultGeometry();
+				final SimpleFeature gridCell = (SimpleFeature) n;
+				final Point p = (Point) gridCell.getDefaultGeometry();
 				readPoints.add(p);
 			}
 		}
@@ -121,9 +128,9 @@ public class SimpleIngestTest
 	}
 
 	protected static void validate(
-			DataStore ds ) {
-		Set<Point> readPoints = getStoredPointSet(ds);
-		Set<Point> calcPoints = getCalcedPointSet();
+			final DataStore ds ) {
+		final Set<Point> readPoints = getStoredPointSet(ds);
+		final Set<Point> calcPoints = getCalcedPointSet();
 
 		Assert.assertTrue(readPoints.equals(calcPoints));
 	}

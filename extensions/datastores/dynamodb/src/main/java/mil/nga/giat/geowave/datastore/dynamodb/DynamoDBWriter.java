@@ -22,7 +22,7 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.PutItemResult;
 import com.amazonaws.services.dynamodbv2.model.WriteRequest;
 
-import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.operations.Writer;
 
 public class DynamoDBWriter implements
 		Writer<WriteRequest>

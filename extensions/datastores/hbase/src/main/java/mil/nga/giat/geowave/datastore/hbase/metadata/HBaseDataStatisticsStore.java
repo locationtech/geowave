@@ -16,7 +16,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 public class HBaseDataStatisticsStore extends
@@ -28,7 +28,7 @@ public class HBaseDataStatisticsStore extends
 	private final static Logger LOGGER = Logger.getLogger(HBaseDataStatisticsStore.class);
 
 	public HBaseDataStatisticsStore(
-			final BasicHBaseOperations operations ) {
+			final HBaseOperations operations ) {
 		super(
 				operations);
 	}

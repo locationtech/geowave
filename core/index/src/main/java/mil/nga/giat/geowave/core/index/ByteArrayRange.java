@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.index;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -142,17 +143,19 @@ public class ByteArrayRange implements
 		INTERSECTION
 	}
 
-	public static final List<ByteArrayRange> mergeIntersections(
-			final List<ByteArrayRange> ranges,
+	public static final Collection<ByteArrayRange> mergeIntersections(
+			final Collection<ByteArrayRange> ranges,
 			final MergeOperation op ) {
+		List<ByteArrayRange> rangeList = new ArrayList<>(
+				ranges);
 		// sort order so the first range can consume following ranges
-		Collections.<ByteArrayRange> sort(ranges);
+		Collections.<ByteArrayRange> sort(rangeList);
 		final List<ByteArrayRange> result = new ArrayList<ByteArrayRange>();
-		for (int i = 0; i < ranges.size();) {
-			ByteArrayRange r1 = ranges.get(i);
+		for (int i = 0; i < rangeList.size();) {
+			ByteArrayRange r1 = rangeList.get(i);
 			int j = i + 1;
-			for (; j < ranges.size(); j++) {
-				final ByteArrayRange r2 = ranges.get(j);
+			for (; j < rangeList.size(); j++) {
+				final ByteArrayRange r2 = rangeList.get(j);
 				if (r1.intersects(r2)) {
 					if (op.equals(MergeOperation.UNION)) {
 						r1 = r1.union(r2);

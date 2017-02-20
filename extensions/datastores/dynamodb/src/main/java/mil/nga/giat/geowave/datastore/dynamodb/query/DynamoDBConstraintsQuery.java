@@ -124,7 +124,7 @@ public class DynamoDBConstraintsQuery extends
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
-		return DataStoreUtils.constraintsToByteArrayRanges(
+		return DataStoreUtils.constraintsToQueryRanges(
 				base.constraints,
 				index.getIndexStrategy(),
 				MAX_RANGE_DECOMPOSITION,

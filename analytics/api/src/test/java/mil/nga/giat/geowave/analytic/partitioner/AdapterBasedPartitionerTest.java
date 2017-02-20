@@ -11,7 +11,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.geotools.referencing.CRS;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.FactoryException;
@@ -35,11 +37,14 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class AdapterBasedPartitionerTest
 {
+	@Rule
+	public TestName name = new TestName();
 	public static CoordinateReferenceSystem DEFAULT_CRS;
 	static {
 		try {
@@ -105,6 +110,9 @@ public class AdapterBasedPartitionerTest
 				"memory",
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
+		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace(namespace);
 		final PersistableStore store = new PersistableStore(
 				pluginOptions);
 

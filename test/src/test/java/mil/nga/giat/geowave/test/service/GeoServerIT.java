@@ -54,7 +54,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.service.client.GeoserverServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -62,12 +62,14 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.SERVICES
 })
-public class GeoServerIT
+public class GeoServerIT extends
+		AbstractGeoWaveIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIT.class);
 	private static final String WFS_URL_PREFIX = ServicesTestEnvironment.JETTY_BASE_URL + "/geoserver/wfs";
@@ -79,6 +81,7 @@ public class GeoServerIT
 	private static final String UPDATE_FILE = "src/test/resources/wfs-requests/update.xml";
 
 	private GeoserverServiceClient geoserverServiceClient;
+	private static long startMillis;
 
 	private String geostuff_layer;
 	private String insert;
@@ -95,7 +98,9 @@ public class GeoServerIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
-	private static long startMillis;
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
 
 	@BeforeClass
 	public static void startTimer() {

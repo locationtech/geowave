@@ -7,7 +7,7 @@ import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
  * signed long values. The strategy doesn't use any binning. The ids are simply
  * the byte arrays of the value. This index strategy will not perform well for
  * inserting ranges because there will be too much replication of data.
- * 
+ *
  */
 public class SimpleLongIndexStrategy extends
 		SimpleNumericIndexStrategy<Long>
@@ -19,23 +19,9 @@ public class SimpleLongIndexStrategy extends
 	}
 
 	@Override
-	public byte[] toBinary() {
-		return new byte[] {};
-	}
-
-	@Override
-	public void fromBinary(
-			final byte[] bytes ) {}
-
-	@Override
 	protected Long cast(
 			final double value ) {
 		return (long) value;
-	}
-
-	@Override
-	public int getByteOffsetFromDimensionalIndex() {
-		return 0;
 	}
 
 }

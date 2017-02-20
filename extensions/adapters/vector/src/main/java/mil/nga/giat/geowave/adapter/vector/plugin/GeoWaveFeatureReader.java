@@ -383,10 +383,6 @@ public class GeoWaveFeatureReader implements
 			}
 			return null;
 		}
-
-		public long getCount() {
-			return count;
-		}
 	}
 
 	private class EnvelopeQueryIssuer extends
@@ -623,7 +619,6 @@ public class GeoWaveFeatureReader implements
 			return components.getDataStore().query(
 					queryOptions,
 					new DataIdQuery(
-							components.getAdapter().getAdapterId(),
 							ids));
 		}
 		return issueQuery(

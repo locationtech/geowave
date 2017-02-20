@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.core.index;
 
-import java.util.List;
-
 public interface IndexMetaData extends
 		Persistable,
 		Mergeable
@@ -13,7 +11,7 @@ public interface IndexMetaData extends
 	 *            the new indices to compute an updated aggregation result on
 	 */
 	public void insertionIdsAdded(
-			List<ByteArrayId> insertionIds );
+			InsertionIds insertionIds );
 
 	/**
 	 * Update the aggregation result by removing the entries provided
@@ -22,5 +20,5 @@ public interface IndexMetaData extends
 	 *            the new indices to compute an updated aggregation result on
 	 */
 	public void insertionIdsRemoved(
-			List<ByteArrayId> insertionIds );
+			InsertionIds insertionIds );
 }

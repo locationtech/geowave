@@ -266,41 +266,41 @@ public class DBScanMapReduceTest
 				getPartitionDataFor(
 						mapperResults,
 						feature1.getID(),
-						true).getId(),
+						true).getCompositeKey(),
 				getPartitionDataFor(
 						mapperResults,
 						feature3.getID(),
-						true).getId());
+						true).getCompositeKey());
 
 		assertEquals(
 				getPartitionDataFor(
 						mapperResults,
 						feature6.getID(),
-						true).getId(),
+						true).getCompositeKey(),
 				getPartitionDataFor(
 						mapperResults,
 						feature3.getID(),
-						true).getId());
+						true).getCompositeKey());
 
 		assertEquals(
 				getPartitionDataFor(
 						mapperResults,
 						feature5.getID(),
-						true).getId(),
+						true).getCompositeKey(),
 				getPartitionDataFor(
 						mapperResults,
 						feature7.getID(),
-						true).getId());
+						true).getCompositeKey());
 
 		assertEquals(
 				getPartitionDataFor(
 						mapperResults,
 						feature5.getID(),
-						true).getId(),
+						true).getCompositeKey(),
 				getPartitionDataFor(
 						mapperResults,
 						feature4.getID(),
-						true).getId());
+						true).getCompositeKey());
 
 		final List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> partitions = getReducerDataFromMapperInput(mapperResults);
 

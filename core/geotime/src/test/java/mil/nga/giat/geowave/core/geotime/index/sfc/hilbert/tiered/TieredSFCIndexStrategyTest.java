@@ -22,7 +22,9 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -103,40 +105,40 @@ public class TieredSFCIndexStrategyTest
 				.createPrimaryIndex()
 				.getIndexStrategy();
 
-		final List<ByteArrayId> ids1 = strategy.getInsertionIds(indexedData);
+		final InsertionIds ids1 = strategy.getInsertionIds(indexedData);
 		assertEquals(
 				1,
-				ids1.size());
+				ids1.getCompositeInsertionIds().size());
 		assertEquals(
 				13,
-				ids1.get(
+				ids1.getCompositeInsertionIds().get(
 						0).getBytes().length);
 
 		// same bin
 		indexedData = new BasicNumericDataset(
 				dataPerDimension2);
-		final List<ByteArrayId> ids2 = strategy.getInsertionIds(indexedData);
+		final InsertionIds ids2 = strategy.getInsertionIds(indexedData);
 		assertEquals(
 				1,
-				ids2.size());
+				ids2.getCompositeInsertionIds().size());
 		assertTrue(compare(
-				ids1.get(
+				ids1.getCompositeInsertionIds().get(
 						0).getBytes(),
-				ids2.get(
+				ids2.getCompositeInsertionIds().get(
 						0).getBytes(),
 				5));
 
 		// different bin
 		indexedData = new BasicNumericDataset(
 				dataPerDimension3);
-		final List<ByteArrayId> ids3 = strategy.getInsertionIds(indexedData);
+		final InsertionIds ids3 = strategy.getInsertionIds(indexedData);
 		assertEquals(
 				1,
-				ids3.size());
+				ids3.getCompositeInsertionIds().size());
 		assertFalse(compare(
-				ids1.get(
+				ids1.getCompositeInsertionIds().get(
 						0).getBytes(),
-				ids3.get(
+				ids3.getCompositeInsertionIds().get(
 						0).getBytes(),
 				5));
 	}
@@ -179,7 +181,7 @@ public class TieredSFCIndexStrategyTest
 			}
 			final MultiDimensionalNumericData indexedData = new BasicNumericDataset(
 					dataPerDimension);
-			final List<ByteArrayId> ids = strategy.getInsertionIds(indexedData);
+			final InsertionIds ids = strategy.getInsertionIds(indexedData);
 			final NumericData[] queryRangePerDimension = new NumericData[2];
 			queryRangePerDimension[0] = new NumericRange(
 					dataPerDimension[0].getMin() + QUERY_RANGE_EPSILON,
@@ -189,10 +191,10 @@ public class TieredSFCIndexStrategyTest
 					dataPerDimension[1].getMax() - QUERY_RANGE_EPSILON);
 			final MultiDimensionalNumericData queryData = new BasicNumericDataset(
 					queryRangePerDimension);
-			final List<ByteArrayRange> queryRanges = strategy.getQueryRanges(queryData);
+			final QueryRanges queryRanges = strategy.getQueryRanges(queryData);
 			final Set<Byte> queryRangeTiers = new HashSet<Byte>();
 			boolean rangeAtTierFound = false;
-			for (final ByteArrayRange range : queryRanges) {
+			for (final ByteArrayRange range : queryRanges.getCompositeQueryRanges()) {
 				final byte tier = range.getStart().getBytes()[0];
 				queryRangeTiers.add(range.getStart().getBytes()[0]);
 				if (tier == DEFINED_BITS_OF_PRECISION[sfcIndex]) {
@@ -215,24 +217,24 @@ public class TieredSFCIndexStrategyTest
 
 			// ensure the first byte is equal to the appropriate number of bits
 			// of precision
-			if ((ids.get(
+			if ((ids.getCompositeInsertionIds().get(
 					0).getBytes()[0] == 0)
 					|| ((sfcIndex == (DEFINED_BITS_OF_PRECISION.length - 1)) || (DEFINED_BITS_OF_PRECISION[sfcIndex + 1] != (DEFINED_BITS_OF_PRECISION[sfcIndex] + 1)))) {
 				assertEquals(
 						"Insertion ID expected to be exact match at tier " + DEFINED_BITS_OF_PRECISION[sfcIndex],
 						DEFINED_BITS_OF_PRECISION[sfcIndex],
-						ids.get(
+						ids.getCompositeInsertionIds().get(
 								0).getBytes()[0]);
 				assertEquals(
 						"Insertion ID size expected to be 1 at tier " + DEFINED_BITS_OF_PRECISION[sfcIndex],
 						1,
-						ids.size());
+						ids.getCompositeInsertionIds().size());
 			}
 			else {
 				assertEquals(
 						"Insertion ID expected to be duplicated at tier " + DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
-						ids.get(
+						ids.getCompositeInsertionIds().get(
 								0).getBytes()[0]);
 				// if the precision is within the bounds of longitude but not
 				// within latitude we will end up with 2 (rectangular
@@ -243,7 +245,7 @@ public class TieredSFCIndexStrategyTest
 						"Insertion ID size expected to be " + expectedIds + " at tier "
 								+ DEFINED_BITS_OF_PRECISION[sfcIndex + 1],
 						expectedIds,
-						ids.size());
+						ids.getCompositeInsertionIds().size());
 			}
 		}
 	}
@@ -278,19 +280,19 @@ public class TieredSFCIndexStrategyTest
 			}
 			final MultiDimensionalNumericData indexedData = new BasicNumericDataset(
 					dataPerDimension);
-			final List<ByteArrayId> ids = strategy.getInsertionIds(
+			final InsertionIds ids = strategy.getInsertionIds(
 					indexedData,
 					1);
 			assertEquals(
 					"Insertion ID size expected to be 1 at tier " + element,
 					1,
-					ids.size());
+					ids.getCompositeInsertionIds().size());
 			// ensure the first byte is equal to the appropriate number of bits
 			// of precision
 			assertEquals(
 					"Insertion ID expected to be exact match at tier " + element,
 					element,
-					ids.get(
+					ids.getCompositeInsertionIds().get(
 							0).getBytes()[0]);
 
 		}
@@ -362,34 +364,34 @@ public class TieredSFCIndexStrategyTest
 				SFCType.HILBERT,
 				4);
 
-		final List<ByteArrayId> ids1 = strategy.getInsertionIds(indexedData);
+		final InsertionIds ids1 = strategy.getInsertionIds(indexedData);
 		assertEquals(
 				1,
-				ids1.size());
+				ids1.getCompositeInsertionIds().size());
 		assertEquals(
 				10,
-				ids1.get(
+				ids1.getCompositeInsertionIds().get(
 						0).getBytes().length);
 
 		// different bin bin
 		indexedData = new BasicNumericDataset(
 				dataPerDimension2);
-		final List<ByteArrayId> ids2 = strategy.getInsertionIds(indexedData);
+		final InsertionIds ids2 = strategy.getInsertionIds(indexedData);
 		assertEquals(
 				1,
-				ids2.size());
+				ids2.getCompositeInsertionIds().size());
 		// different tier
 		assertFalse(compare(
-				ids1.get(
+				ids1.getCompositeInsertionIds().get(
 						0).getBytes(),
-				ids2.get(
+				ids2.getCompositeInsertionIds().get(
 						0).getBytes(),
 				1));
 		// same time
 		assertTrue(compare(
-				ids1.get(
+				ids1.getCompositeInsertionIds().get(
 						0).getBytes(),
-				ids2.get(
+				ids2.getCompositeInsertionIds().get(
 						0).getBytes(),
 				1,
 				5));
@@ -397,12 +399,13 @@ public class TieredSFCIndexStrategyTest
 		// different bin
 		indexedData = new BasicNumericDataset(
 				dataPerDimension3);
-		final List<ByteArrayId> ids3 = strategy.getInsertionIds(indexedData);
+		final List<ByteArrayId> ids3 = strategy.getInsertionIds(
+				indexedData).getCompositeInsertionIds();
 		assertEquals(
 				1,
 				ids3.size());
 		assertFalse(compare(
-				ids1.get(
+				ids1.getCompositeInsertionIds().get(
 						0).getBytes(),
 				ids3.get(
 						0).getBytes(),

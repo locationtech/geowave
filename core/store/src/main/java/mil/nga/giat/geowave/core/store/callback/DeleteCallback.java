@@ -1,27 +1,28 @@
 package mil.nga.giat.geowave.core.store.callback;
 
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 /**
  * This interface provides a callback mechanism when deleting a collection of
  * entries.
- * 
+ *
  * @param <T>
- *            A generic type for ingested entries
+ *            A generic type for entries
+ * @param <R>
+ *            A generic type for rows
  */
-public interface DeleteCallback<T>
+public interface DeleteCallback<T, R extends GeoWaveRow>
 {
 	/**
-	 * This will be called after an entry is successfully ingested with the row
+	 * This will be called after an entry is successfully deleted with the row
 	 * IDs that were used
-	 * 
-	 * @param entryInfo
-	 *            information regarding what was written to include the
-	 *            insertion row IDs, fields, and visibilities
+	 *
+	 * @param row
+	 *            the raw row that was deleted
 	 * @param entry
-	 *            the entry that was ingested
+	 *            the entry that was deleted
 	 */
 	public void entryDeleted(
-			final DataStoreEntryInfo entryInfo,
-			final T entry );
+			final T entry,
+			final R... rows );
 }

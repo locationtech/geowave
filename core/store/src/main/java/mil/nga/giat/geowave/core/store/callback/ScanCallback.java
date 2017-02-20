@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.core.store.callback;
 
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 /**
  * This interface provides a callback mechanism when scanning entries
@@ -8,7 +8,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
  * @param <T>
  *            A generic type for ingested entries
  */
-public interface ScanCallback<T, N>
+public interface ScanCallback<T, R extends GeoWaveRow>
 {
 	/**
 	 * This will be called after an entry is successfully scanned with the row
@@ -20,14 +20,12 @@ public interface ScanCallback<T, N>
 	 * entry this method is called for each duplicate, each with a different row
 	 * id.
 	 *
-	 * @param entryInfo
-	 *            information regarding what was scanned to include the
-	 *            insertion row IDs, fields, and visibilities
 	 * @param entry
 	 *            the entry that was ingested
+	 * @param row
+	 *            the raw row scanned from the table for this entry
 	 */
 	public void entryScanned(
-			final DataStoreEntryInfo entryInfo,
-			final N nativeDataStoreEntry,
-			final T entry );
+			final T entry,
+			final R row );
 }

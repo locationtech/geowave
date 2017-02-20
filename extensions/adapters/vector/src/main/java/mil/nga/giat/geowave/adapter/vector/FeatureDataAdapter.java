@@ -39,6 +39,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -588,8 +589,13 @@ public class FeatureDataAdapter extends
 
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
+			CommonIndexModel indexModel,
+			DataAdapter<SimpleFeature> adapter,
 			final ByteArrayId statisticsId ) {
-		return statsManager.getVisibilityHandler(statisticsId);
+		return statsManager.getVisibilityHandler(
+				indexModel,
+				adapter,
+				statisticsId);
 	}
 
 	@Override
@@ -726,7 +732,7 @@ public class FeatureDataAdapter extends
 		}
 	}
 
-	private List<ByteArrayId> getDimensionFieldIds(
+	protected List<ByteArrayId> getDimensionFieldIds(
 			final CommonIndexModel model ) {
 		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());
 		if (retVal != null) {

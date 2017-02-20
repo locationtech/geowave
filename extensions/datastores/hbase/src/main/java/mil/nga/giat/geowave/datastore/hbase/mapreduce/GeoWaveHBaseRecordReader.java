@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.query.InputFormatHBaseRangeQuery;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader;
@@ -31,7 +31,7 @@ public class GeoWaveHBaseRecordReader<T> extends
 {
 
 	protected static final Logger LOGGER = Logger.getLogger(GeoWaveHBaseRecordReader.class);
-	protected BasicHBaseOperations operations;
+	protected HBaseOperations operations;
 
 	public GeoWaveHBaseRecordReader(
 			final DistributableQuery query,
@@ -39,7 +39,7 @@ public class GeoWaveHBaseRecordReader<T> extends
 			final boolean isOutputWritable,
 			final AdapterStore adapterStore,
 			final BaseDataStore dataStore,
-			final BasicHBaseOperations operations ) {
+			final HBaseOperations operations ) {
 		super(
 				query,
 				queryOptions,

@@ -103,9 +103,7 @@ public class TemporalRangeTest extends
 				new ByteArrayId(
 						"a"),
 				"when");
-		stats.entryIngested(
-				null,
-				newFeature);
+		stats.entryIngested(newFeature);
 
 		assertEquals(
 				DateUtilities.parseISO("2005-05-19T23:32:56Z"),

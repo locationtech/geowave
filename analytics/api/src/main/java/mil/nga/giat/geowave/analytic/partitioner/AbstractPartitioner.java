@@ -10,17 +10,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.model.IndexModelBuilder;
 import mil.nga.giat.geowave.analytic.model.SpatialIndexModelBuilder;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
@@ -29,19 +33,16 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
-
 /**
  * Basic support class for Partitioners (e.g {@link Paritioner}
- * 
+ *
  * @param <T>
  */
 public abstract class AbstractPartitioner<T> implements
 		Partitioner<T>
 {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private transient PrimaryIndex index = null;
@@ -110,19 +111,27 @@ public abstract class AbstractPartitioner<T> implements
 		if (numericData == null) {
 			return;
 		}
-		for (final ByteArrayId addId : getIndex().getIndexStrategy().getInsertionIds(
-				numericData.primary)) {
-			callback.partitionWith(new PartitionData(
-					addId,
-					true));
+		final InsertionIds primaryIds = getIndex().getIndexStrategy().getInsertionIds(
+				numericData.primary);
+		for (final SinglePartitionInsertionIds partitionInsertionIds : primaryIds.getPartitionKeys()) {
+			for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+				callback.partitionWith(new PartitionData(
+						partitionInsertionIds.getPartitionKey(),
+						sortKey,
+						true));
+			}
 		}
 
 		for (final MultiDimensionalNumericData expansionData : numericData.expansion) {
-			for (final ByteArrayId addId : getIndex().getIndexStrategy().getInsertionIds(
-					expansionData)) {
-				callback.partitionWith(new PartitionData(
-						addId,
-						false));
+			final InsertionIds expansionIds = getIndex().getIndexStrategy().getInsertionIds(
+					expansionData);
+			for (final SinglePartitionInsertionIds partitionInsertionIds : expansionIds.getPartitionKeys()) {
+				for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+					callback.partitionWith(new PartitionData(
+							partitionInsertionIds.getPartitionKey(),
+							sortKey,
+							false));
+				}
 			}
 		}
 	}
@@ -139,17 +148,21 @@ public abstract class AbstractPartitioner<T> implements
 	public MultiDimensionalNumericData getRangesForPartition(
 			final PartitionData partitionData ) {
 		return index.getIndexStrategy().getRangeForId(
-				partitionData.getId());
+				partitionData.getPartitionKey(),
+				partitionData.getSortKey());
 	}
 
 	protected void addPartitions(
 			final Set<PartitionData> masterList,
-			final List<ByteArrayId> addList,
+			final InsertionIds insertionIds,
 			final boolean isPrimary ) {
-		for (final ByteArrayId addId : addList) {
-			masterList.add(new PartitionData(
-					addId,
-					isPrimary));
+		for (final SinglePartitionInsertionIds partitionInsertionIds : insertionIds.getPartitionKeys()) {
+			for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+				masterList.add(new PartitionData(
+						partitionInsertionIds.getPartitionKey(),
+						sortKey,
+						isPrimary));
+			}
 		}
 	}
 
@@ -291,19 +304,20 @@ public abstract class AbstractPartitioner<T> implements
 	}
 
 	private void writeObject(
-			ObjectOutputStream stream )
+			final ObjectOutputStream stream )
 			throws IOException {
 		final byte[] indexData = PersistenceUtils.toBinary(this.index);
 		stream.writeInt(indexData.length);
 		stream.write(indexData);
 		stream.writeDouble(precisionFactor);
 		stream.writeInt(distancePerDimension.length);
-		for (double v : distancePerDimension)
+		for (final double v : distancePerDimension) {
 			stream.writeDouble(v);
+		}
 	}
 
 	private void readObject(
-			java.io.ObjectInputStream stream )
+			final java.io.ObjectInputStream stream )
 			throws IOException,
 			ClassNotFoundException {
 		final byte[] indexData = new byte[stream.readInt()];
@@ -322,29 +336,43 @@ public abstract class AbstractPartitioner<T> implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(distancePerDimension);
-		result = prime * result + ((index == null) ? 0 : index.hashCode());
+		result = (prime * result) + Arrays.hashCode(distancePerDimension);
+		result = (prime * result) + ((index == null) ? 0 : index.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(precisionFactor);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		AbstractPartitioner other = (AbstractPartitioner) obj;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final AbstractPartitioner other = (AbstractPartitioner) obj;
 		if (!Arrays.equals(
 				distancePerDimension,
-				other.distancePerDimension)) return false;
-		if (index == null) {
-			if (other.index != null) return false;
+				other.distancePerDimension)) {
+			return false;
 		}
-		else if (!index.equals(other.index)) return false;
-		if (Double.doubleToLongBits(precisionFactor) != Double.doubleToLongBits(other.precisionFactor)) return false;
+		if (index == null) {
+			if (other.index != null) {
+				return false;
+			}
+		}
+		else if (!index.equals(other.index)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(precisionFactor) != Double.doubleToLongBits(other.precisionFactor)) {
+			return false;
+		}
 		return true;
 	}
 

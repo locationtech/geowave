@@ -4,7 +4,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +16,7 @@ public class HBaseAdapterStore extends
 	protected static final String ADAPTER_CF = "ADAPTER";
 
 	public HBaseAdapterStore(
-			BasicHBaseOperations operation ) {
+			HBaseOperations operation ) {
 		super(
 				operation);
 	}

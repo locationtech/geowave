@@ -10,14 +10,14 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
 
 /**
  * This class fully describes everything necessary to index data within GeoWave.
  * The key components are the indexing strategy and the common index model.
  */
 public class SecondaryIndex<T> implements
-		Index<FilterableConstraints, List<FieldInfo<?>>>
+		Index<FilterableConstraints, List<PersistentValue<?>>>
 {
 	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	private FieldIndexStrategy<?, ?> indexStrategy;

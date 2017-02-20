@@ -1,14 +1,12 @@
 package mil.nga.giat.geowave.core.store.index.text;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.junit.Assert;
+import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import org.junit.Assert;
-import org.junit.Test;
+import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 
 public class TextIndexStrategyTest
 {
@@ -19,28 +17,21 @@ public class TextIndexStrategyTest
 
 	@Test
 	public void testInsertions() {
-		final List<FieldInfo<String>> fieldInfoList = new ArrayList<>();
-		final FieldInfo<String> fieldInfo = new FieldInfo<>(
-				new PersistentValue<String>(
-						null,
-						value),
-				null,
-				null);
-		fieldInfoList.add(fieldInfo);
-		final List<ByteArrayId> insertionIds = strategy.getInsertionIds(fieldInfoList);
-		Assert.assertTrue(insertionIds.contains(new ByteArrayId(
-				value)));
-		Assert.assertTrue(insertionIds.size() == 1);
+		final InsertionIds insertionIds = strategy.getInsertionIds(value);
+		Assert.assertTrue(insertionIds.getCompositeInsertionIds().contains(
+				new ByteArrayId(
+						value)));
+		Assert.assertTrue(insertionIds.getCompositeInsertionIds().size() == 1);
 	}
 
 	@Test
 	public void testEquals() {
-		final List<ByteArrayRange> ranges = strategy.getQueryRanges(new TextQueryConstraint(
+		final QueryRanges ranges = strategy.getQueryRanges(new TextQueryConstraint(
 				fieldId,
 				value,
 				false));
-		Assert.assertTrue(ranges.size() == 1);
-		Assert.assertTrue(ranges.get(
+		Assert.assertTrue(ranges.getCompositeQueryRanges().size() == 1);
+		Assert.assertTrue(ranges.getCompositeQueryRanges().get(
 				0).equals(
 				new ByteArrayRange(
 						new ByteArrayId(

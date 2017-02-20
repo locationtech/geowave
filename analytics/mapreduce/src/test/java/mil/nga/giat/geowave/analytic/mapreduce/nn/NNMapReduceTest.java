@@ -9,24 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.FeatureWritable;
-import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
-import mil.nga.giat.geowave.analytic.AnalyticFeature;
-import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
-import mil.nga.giat.geowave.analytic.distance.DistanceFn;
-import mil.nga.giat.geowave.analytic.distance.FeatureCentroidOrthodromicDistanceFn;
-import mil.nga.giat.geowave.analytic.mapreduce.kmeans.SimpleFeatureImplSerialization;
-import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
-import mil.nga.giat.geowave.analytic.param.CommonParameters;
-import mil.nga.giat.geowave.analytic.param.PartitionParameters;
-import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-
 import org.apache.hadoop.io.DataInputByteBuffer;
 import org.apache.hadoop.io.DataOutputByteBuffer;
 import org.apache.hadoop.io.Text;
@@ -41,6 +23,23 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.FeatureWritable;
+import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
+import mil.nga.giat.geowave.analytic.AnalyticFeature;
+import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
+import mil.nga.giat.geowave.analytic.distance.DistanceFn;
+import mil.nga.giat.geowave.analytic.distance.FeatureCentroidOrthodromicDistanceFn;
+import mil.nga.giat.geowave.analytic.mapreduce.kmeans.SimpleFeatureImplSerialization;
+import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
+import mil.nga.giat.geowave.analytic.param.CommonParameters;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters;
+import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class NNMapReduceTest
 {
@@ -282,9 +281,13 @@ public class NNMapReduceTest
 
 		writable1.setPartitionData(new PartitionData(
 				new ByteArrayId(
+						new byte[] {}),
+				new ByteArrayId(
 						"abc"),
 				true));
 		writable2.setPartitionData(new PartitionData(
+				new ByteArrayId(
+						new byte[] {}),
 				new ByteArrayId(
 						"abc"),
 				false));
@@ -292,10 +295,14 @@ public class NNMapReduceTest
 		assertTrue(writable1.compareTo(writable2) == 0);
 		writable2.setPartitionData(new PartitionData(
 				new ByteArrayId(
+						new byte[] {}),
+				new ByteArrayId(
 						"abd"),
 				false));
 		assertTrue(writable1.compareTo(writable2) < 0);
 		writable2.setPartitionData(new PartitionData(
+				new ByteArrayId(
+						new byte[] {}),
 				new ByteArrayId(
 						"abd"),
 				true));
@@ -358,8 +365,8 @@ public class NNMapReduceTest
 			final List<PartitionData> setTwo ) {
 		for (final PartitionData pdOne : setOne) {
 			for (final PartitionData pdTwo : setTwo) {
-				if (pdOne.getId().equals(
-						pdTwo.getId())) {
+				if (pdOne.getCompositeKey().equals(
+						pdTwo.getCompositeKey())) {
 					return true;
 				}
 			}

@@ -15,29 +15,37 @@ import mil.nga.giat.geowave.core.store.index.Index;
 public class PrefixIdQuery implements
 		Query
 {
-	private ByteArrayId rowPrefix;
+	private final ByteArrayId sortKeyPrefix;
+	private final ByteArrayId partitionKey;
 
 	public PrefixIdQuery(
-			ByteArrayId rowPrefix ) {
-		this.rowPrefix = rowPrefix;
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKeyPrefix ) {
+		this.partitionKey = partitionKey;
+		this.sortKeyPrefix = sortKeyPrefix;
 	}
 
-	public ByteArrayId getRowPrefix() {
-		return rowPrefix;
+	public ByteArrayId getPartitionKey() {
+		return partitionKey;
+	}
+
+	public ByteArrayId getSortKeyPrefix() {
+		return sortKeyPrefix;
 	}
 
 	@Override
 	public List<QueryFilter> createFilters(
-			CommonIndexModel indexModel ) {
-		List<QueryFilter> filters = new ArrayList<QueryFilter>();
+			final CommonIndexModel indexModel ) {
+		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
 		filters.add(new PrefixIdQueryFilter(
-				rowPrefix));
+				partitionKey,
+				sortKeyPrefix));
 		return filters;
 	}
 
 	@Override
 	public boolean isSupported(
-			Index index ) {
+			final Index index ) {
 		return true;
 	}
 

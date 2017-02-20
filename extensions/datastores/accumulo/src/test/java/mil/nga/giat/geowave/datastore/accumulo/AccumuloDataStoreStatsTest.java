@@ -10,47 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
-import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
-import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
-import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldTypeStatisticVisibility;
-import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
-import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
-import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.DataIdQuery;
-import mil.nga.giat.geowave.core.store.query.EverythingQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
@@ -65,6 +24,52 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
+import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
+import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.data.field.FieldReader;
+import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
+import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
+import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
+
 public class AccumuloDataStoreStatsTest
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStoreStatsTest.class);
@@ -75,11 +80,11 @@ public class AccumuloDataStoreStatsTest
 
 	AccumuloOperations accumuloOperations;
 
-	AccumuloIndexStore indexStore;
+	IndexStore indexStore;
 
-	AccumuloAdapterStore adapterStore;
+	AdapterStore adapterStore;
 
-	AccumuloDataStatisticsStore statsStore;
+	DataStatisticsStore statsStore;
 
 	AccumuloDataStore mockDataStore;
 
@@ -100,29 +105,35 @@ public class AccumuloDataStoreStatsTest
 					"Failed to create mock accumulo connection",
 					e);
 		}
-		accumuloOperations = new BasicAccumuloOperations(
-				mockConnector);
+		AccumuloOptions options = new AccumuloOptions();
+		accumuloOperations = new AccumuloOperations(
+				mockConnector,
+				options);
 
-		indexStore = new AccumuloIndexStore(
-				accumuloOperations);
+		indexStore = new IndexStoreImpl(
+				accumuloOperations,
+				options);
 
-		adapterStore = new AccumuloAdapterStore(
-				accumuloOperations);
+		adapterStore = new AdapterStoreImpl(
+				accumuloOperations,
+				options);
 
-		statsStore = new AccumuloDataStatisticsStore(
-				accumuloOperations);
+		statsStore = new DataStatisticsStoreImpl(
+				accumuloOperations,
+				options);
 
 		secondaryIndexDataStore = new AccumuloSecondaryIndexDataStore(
 				accumuloOperations,
-				new AccumuloOptions());
+				options);
 
 		mockDataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
 				statsStore,
 				secondaryIndexDataStore,
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
+				new AdapterIndexMappingStoreImpl(
+						accumuloOperations,
+						options),
 				accumuloOperations,
 				accumuloOptions);
 	}
@@ -207,34 +218,30 @@ public class AccumuloDataStoreStatsTest
 					33)
 		});
 
-		ByteArrayId rowId0, rowId1;
 		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
-			rowId0 = indexWriter.write(
+			indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
 									32)),
 							"test_pt"),
-					visWriterAAA).get(
-					0);
-			rowId1 = indexWriter.write(
+					visWriterAAA);
+			indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									26,
 									32)),
 							"test_pt_1"),
-					visWriterAAA).get(
-					0);
+					visWriterAAA);
 			indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									27,
 									32)),
 							"test_pt_2"),
-					visWriterBBB).get(
-					0);
+					visWriterBBB);
 		}
 
 		final SpatialQuery query = new SpatialQuery(
@@ -315,13 +322,12 @@ public class AccumuloDataStoreStatsTest
 						adapter,
 						index,
 						-1,
-						new ScanCallback<TestGeometry, Object>() {
+						new ScanCallback<TestGeometry, GeoWaveRow>() {
 
 							@Override
 							public void entryScanned(
-									final DataStoreEntryInfo entryInfo,
-									Object nativeDataStoreEntry,
-									final TestGeometry entry ) {
+									final TestGeometry entry,
+									final GeoWaveRow row ) {
 								found.getAndSet(true);
 							}
 						},
@@ -329,7 +335,6 @@ public class AccumuloDataStoreStatsTest
 							"aaa"
 						}),
 				new DataIdQuery(
-						adapter.getAdapterId(),
 						new ByteArrayId(
 								"test_pt_2".getBytes(StringUtils.GEOWAVE_CHAR_SET))));
 		assertFalse(found.get());
@@ -355,6 +360,14 @@ public class AccumuloDataStoreStatsTest
 					count);
 		}
 
+		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_ID,
+				"aaa",
+				"bbb");
+		assertEquals(
+				3,
+				countStats.getCount());
 		mockDataStore.delete(
 				new QueryOptions(
 						adapter,
@@ -365,7 +378,6 @@ public class AccumuloDataStoreStatsTest
 							"aaa"
 						}),
 				new DataIdQuery(
-						adapter.getAdapterId(),
 						new ByteArrayId(
 								"test_pt".getBytes(StringUtils.GEOWAVE_CHAR_SET))));
 
@@ -393,11 +405,19 @@ public class AccumuloDataStoreStatsTest
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
+				"aaa",
+				"bbb");
+
+		assertEquals(
+				2,
+				countStats.getCount());
+		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_ID,
 				"aaa");
 		assertEquals(
 				1,
 				countStats.getCount());
-
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_ID,
@@ -435,13 +455,12 @@ public class AccumuloDataStoreStatsTest
 						adapter,
 						index,
 						-1,
-						new ScanCallback<TestGeometry, Object>() {
+						new ScanCallback<TestGeometry, GeoWaveRow>() {
 
 							@Override
 							public void entryScanned(
-									final DataStoreEntryInfo entryInfo,
-									Object nativeDataStoreEntry,
-									final TestGeometry entry ) {
+									final TestGeometry entry,
+									final GeoWaveRow row ) {
 								found.getAndSet(true);
 							}
 						},
@@ -480,13 +499,11 @@ public class AccumuloDataStoreStatsTest
 		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
-			rowId0 = indexWriter.write(
-					new TestGeometry(
-							factory.createPoint(new Coordinate(
-									25,
-									32)),
-							"test_pt_2")).get(
-					0);
+			indexWriter.write(new TestGeometry(
+					factory.createPoint(new Coordinate(
+							25,
+							32)),
+					"test_pt_2"));
 		}
 
 		countStats = (CountDataStatistics<?>) statsStore.getDataStatistics(
@@ -495,7 +512,14 @@ public class AccumuloDataStoreStatsTest
 				"bbb");
 		assertTrue(countStats != null);
 
-		statsStore.deleteObjects(
+		RowRangeHistogramStatistics<?> histogramStats = (RowRangeHistogramStatistics<?>) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				RowRangeHistogramStatistics.composeId(index.getId()),
+				"bbb");
+
+		assertTrue(histogramStats != null);
+
+		statsStore.removeAllStatistics(
 				adapter.getAdapterId(),
 				"bbb");
 
@@ -505,13 +529,12 @@ public class AccumuloDataStoreStatsTest
 				"bbb");
 		assertNull(countStats);
 
-		final RowRangeDataStatistics<?> rowStats = (RowRangeDataStatistics<?>) statsStore.getDataStatistics(
-				null,
-				RowRangeDataStatistics.getId(index.getId()),
+		histogramStats = (RowRangeHistogramStatistics<?>) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				RowRangeHistogramStatistics.composeId(index.getId()),
 				"bbb");
 
-		assertTrue(rowStats != null);
-
+		assertNull(histogramStats);
 	}
 
 	protected static class TestGeometry
@@ -576,8 +599,7 @@ public class AccumuloDataStoreStatsTest
 			}
 		};
 
-		private final static EntryVisibilityHandler<TestGeometry> GEOMETRY_VISIBILITY_HANDLER = new FieldTypeStatisticVisibility<TestGeometry>(
-				GeometryWrapper.class);
+		private final static EntryVisibilityHandler<TestGeometry> GEOMETRY_VISIBILITY_HANDLER = new DefaultFieldStatisticVisibility();
 		private static final NativeFieldHandler<TestGeometry, Object> ID_FIELD_HANDLER = new NativeFieldHandler<TestGeometry, Object>() {
 
 			@Override
@@ -669,12 +691,6 @@ public class AccumuloDataStoreStatsTest
 		}
 
 		@Override
-		public EntryVisibilityHandler<TestGeometry> getVisibilityHandler(
-				final ByteArrayId statisticsId ) {
-			return GEOMETRY_VISIBILITY_HANDLER;
-		}
-
-		@Override
 		protected RowBuilder newBuilder() {
 			return new RowBuilder<TestGeometry, Object>() {
 				private String id;
@@ -751,6 +767,14 @@ public class AccumuloDataStoreStatsTest
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public EntryVisibilityHandler<TestGeometry> getVisibilityHandler(
+				final CommonIndexModel indexModel,
+				final DataAdapter<TestGeometry> adapter,
+				final ByteArrayId statisticsId ) {
+			return GEOMETRY_VISIBILITY_HANDLER;
 		}
 	}
 

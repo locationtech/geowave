@@ -23,12 +23,8 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 public class SimpleIngest
 {
@@ -79,24 +75,15 @@ public class SimpleIngest
 	 * @return DataStore object for the particular accumulo instance
 	 */
 	protected DataStore getAccumuloGeowaveDataStore(
-			final BasicAccumuloOperations instance ) {
-
+			final AccumuloOperations operations,
+			final AccumuloOptions options ) {
 		// GeoWave persists both the index and data adapter to the same accumulo
 		// namespace as the data. The intent here
 		// is that all data is discoverable without configuration/classes stored
 		// outside of the accumulo instance.
 		return new AccumuloDataStore(
-				new AccumuloIndexStore(
-						instance),
-				new AccumuloAdapterStore(
-						instance),
-				new AccumuloDataStatisticsStore(
-						instance),
-				new AccumuloSecondaryIndexDataStore(
-						instance),
-				new AccumuloAdapterIndexMappingStore(
-						instance),
-				instance);
+				operations,
+				options);
 	}
 
 	/***
@@ -120,20 +107,22 @@ public class SimpleIngest
 	 * @throws AccumuloException
 	 * @throws AccumuloSecurityException
 	 */
-	protected BasicAccumuloOperations getAccumuloOperationsInstance(
+	protected AccumuloOperations getAccumuloOperationsInstance(
 			final String zookeepers,
 			final String accumuloInstance,
 			final String accumuloUser,
 			final String accumuloPass,
-			final String geowaveNamespace )
+			final String geowaveNamespace,
+			final AccumuloOptions options )
 			throws AccumuloException,
 			AccumuloSecurityException {
-		return new BasicAccumuloOperations(
+		return new AccumuloOperations(
 				zookeepers,
 				accumuloInstance,
 				accumuloUser,
 				accumuloPass,
-				geowaveNamespace);
+				geowaveNamespace,
+				options);
 	}
 
 	/***

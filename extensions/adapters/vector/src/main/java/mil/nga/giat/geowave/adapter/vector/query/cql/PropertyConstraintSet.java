@@ -42,8 +42,9 @@ public class PropertyConstraintSet
 		final List<ByteArrayRange> result = new LinkedList<ByteArrayRange>();
 		final FilterableConstraints c = constraints.get(index.getFieldId());
 		if (c != null) {
+			// TODO GEOWAVE-1018 how to handle secondary index ranges?
 			result.addAll(index.getIndexStrategy().getQueryRanges(
-					c));
+					c).getCompositeQueryRanges());
 		}
 		return result;
 	}

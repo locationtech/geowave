@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 
-public class CastIterator<T> implements
+class CastIterator<T> implements
 		Iterator<CloseableIterator<T>>
 {
 

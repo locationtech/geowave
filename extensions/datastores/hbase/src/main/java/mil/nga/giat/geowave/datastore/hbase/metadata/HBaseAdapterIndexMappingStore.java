@@ -4,7 +4,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 /**
  * This class will persist Adapter Index Mappings within an Accumulo table for
@@ -25,7 +25,7 @@ public class HBaseAdapterIndexMappingStore extends
 	protected static final String ADAPTER_INDEX_CF = "AIM";
 
 	public HBaseAdapterIndexMappingStore(
-			final BasicHBaseOperations hbaseOperations ) {
+			final HBaseOperations hbaseOperations ) {
 		super(
 				hbaseOperations);
 	}

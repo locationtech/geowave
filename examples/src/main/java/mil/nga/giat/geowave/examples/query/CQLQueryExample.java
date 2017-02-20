@@ -34,10 +34,10 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 /**
  * This class is intended to provide a self-contained, easy-to-follow example of
@@ -158,13 +158,16 @@ public class CQLQueryExample
 
 		accumulo.start();
 
+		final AccumuloOptions options = new AccumuloOptions();
 		dataStore = new AccumuloDataStore(
-				new BasicAccumuloOperations(
+				new AccumuloOperations(
 						accumulo.getZooKeepers(),
 						accumulo.getInstanceName(),
 						ACCUMULO_USER,
 						ACCUMULO_PASSWORD,
-						TABLE_NAMESPACE));
+						TABLE_NAMESPACE,
+						options),
+				options);
 	}
 
 	private static void ingestCannedData()

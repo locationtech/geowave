@@ -11,7 +11,8 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 public class SimpleIngestIndexWriter extends
 		SimpleIngest
@@ -25,7 +26,7 @@ public class SimpleIngestIndexWriter extends
 			log.error("Invalid arguments, expected: dataStoreOptions");
 			System.exit(1);
 		}
-
+		final AccumuloOptions options = new AccumuloOptions();
 		final SimpleIngestIndexWriter si = new SimpleIngestIndexWriter();
 		DataStore geowaveDataStore = null;
 		String namespace = null;
@@ -39,13 +40,16 @@ public class SimpleIngestIndexWriter extends
 		namespace = args[5];
 		instance = args[2];
 		try {
-			final BasicAccumuloOperations bao = si.getAccumuloOperationsInstance(
+			final AccumuloOperations bao = si.getAccumuloOperationsInstance(
 					args[1],
 					args[2],
 					args[3],
 					args[4],
-					args[5]);
-			geowaveDataStore = si.getAccumuloGeowaveDataStore(bao);
+					args[5],
+					options);
+			geowaveDataStore = si.getAccumuloGeowaveDataStore(
+					bao,
+					options);
 		}
 		catch (final Exception e) {
 			log.error(

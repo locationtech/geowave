@@ -1,16 +1,15 @@
 package mil.nga.giat.geowave.core.store.index.numeric;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.QueryRanges;
+import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
 
 public class NumericIndexStrategyTest
 {
@@ -21,27 +20,20 @@ public class NumericIndexStrategyTest
 
 	@Test
 	public void testInsertions() {
-		final List<FieldInfo<Number>> fieldInfoList = new ArrayList<>();
-		final FieldInfo<Number> fieldInfo = new FieldInfo<>(
-				new PersistentValue<Number>(
-						null,
-						number),
-				null,
-				null);
-		fieldInfoList.add(fieldInfo);
-		final List<ByteArrayId> insertionIds = strategy.getInsertionIds(fieldInfoList);
-		Assert.assertTrue(insertionIds.contains(new ByteArrayId(
+		final InsertionIds insertionIds = strategy.getInsertionIds(number);
+		final List<ByteArrayId> compositieInsertionIds = insertionIds.getCompositeInsertionIds();
+		Assert.assertTrue(compositieInsertionIds.contains(new ByteArrayId(
 				Lexicoders.DOUBLE.toByteArray((double) number))));
-		Assert.assertTrue(insertionIds.size() == 1);
+		Assert.assertTrue(compositieInsertionIds.size() == 1);
 	}
 
 	@Test
 	public void testEquals() {
-		final List<ByteArrayRange> ranges = strategy.getQueryRanges(new NumericEqualsConstraint(
+		final QueryRanges ranges = strategy.getQueryRanges(new NumericEqualsConstraint(
 				fieldId,
 				number));
-		Assert.assertTrue(ranges.size() == 1);
-		Assert.assertTrue(ranges.get(
+		Assert.assertTrue(!ranges.isMultiRange());
+		Assert.assertTrue(ranges.getCompositeQueryRanges().get(
 				0).equals(
 				new ByteArrayRange(
 						new ByteArrayId(
@@ -52,11 +44,11 @@ public class NumericIndexStrategyTest
 
 	@Test
 	public void testGreaterThanOrEqualTo() {
-		final List<ByteArrayRange> ranges = strategy.getQueryRanges(new NumericGreaterThanOrEqualToConstraint(
+		final QueryRanges ranges = strategy.getQueryRanges(new NumericGreaterThanOrEqualToConstraint(
 				fieldId,
 				number));
-		Assert.assertTrue(ranges.size() == 1);
-		Assert.assertTrue(ranges.get(
+		Assert.assertTrue(!ranges.isMultiRange());
+		Assert.assertTrue(ranges.getCompositeQueryRanges().get(
 				0).equals(
 				new ByteArrayRange(
 						new ByteArrayId(
@@ -68,12 +60,12 @@ public class NumericIndexStrategyTest
 	@Test
 	public void testLessThanOrEqualTo() {
 		final NumericFieldIndexStrategy strategy = new NumericFieldIndexStrategy();
-		final List<ByteArrayRange> ranges = strategy.getQueryRanges(new NumericLessThanOrEqualToConstraint(
+		final QueryRanges ranges = strategy.getQueryRanges(new NumericLessThanOrEqualToConstraint(
 				fieldId,
 				number));
-		Assert.assertTrue(ranges.size() == 1);
+		Assert.assertTrue(!ranges.isMultiRange());
 
-		Assert.assertTrue(ranges.get(
+		Assert.assertTrue(ranges.getCompositeQueryRanges().get(
 				0).equals(
 				new ByteArrayRange(
 						new ByteArrayId(

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -38,7 +39,7 @@ public class ByteArrayRangeTest
 				new ByteArrayId(
 						"410"));
 
-		List<ByteArrayRange> l1 = new ArrayList<ByteArrayRange>(
+		Collection<ByteArrayRange> l1 = new ArrayList<ByteArrayRange>(
 				Arrays.asList(
 						bar4,
 						bar3,
@@ -48,7 +49,7 @@ public class ByteArrayRangeTest
 				l1,
 				MergeOperation.UNION);
 
-		List<ByteArrayRange> l2 = new ArrayList<ByteArrayRange>(
+		Collection<ByteArrayRange> l2 = new ArrayList<ByteArrayRange>(
 				Arrays.asList(
 						bar1,
 						bar4,
@@ -72,14 +73,14 @@ public class ByteArrayRangeTest
 								"232"),
 						new ByteArrayId(
 								"340")),
-				l1.get(0));
+				((ArrayList<ByteArrayRange>) l1).get(0));
 		assertEquals(
 				new ByteArrayRange(
 						new ByteArrayId(
 								"392"),
 						new ByteArrayId(
 								"410")),
-				l1.get(1));
+				((ArrayList<ByteArrayRange>) l1).get(1));
 
 	}
 
@@ -106,7 +107,7 @@ public class ByteArrayRangeTest
 				new ByteArrayId(
 						"410"));
 
-		List<ByteArrayRange> l1 = new ArrayList<ByteArrayRange>(
+		Collection<ByteArrayRange> l1 = new ArrayList<ByteArrayRange>(
 				Arrays.asList(
 						bar4,
 						bar3,
@@ -116,7 +117,7 @@ public class ByteArrayRangeTest
 				l1,
 				MergeOperation.INTERSECTION);
 
-		List<ByteArrayRange> l2 = new ArrayList<ByteArrayRange>(
+		Collection<ByteArrayRange> l2 = new ArrayList<ByteArrayRange>(
 				Arrays.asList(
 						bar1,
 						bar4,
@@ -140,14 +141,14 @@ public class ByteArrayRangeTest
 								"282"),
 						new ByteArrayId(
 								"300")),
-				l1.get(0));
+				((ArrayList<ByteArrayRange>) l1).get(0));
 		assertEquals(
 				new ByteArrayRange(
 						new ByteArrayId(
 								"392"),
 						new ByteArrayId(
 								"410")),
-				l1.get(1));
+				((ArrayList<ByteArrayRange>) l1).get(1));
 
 	}
 

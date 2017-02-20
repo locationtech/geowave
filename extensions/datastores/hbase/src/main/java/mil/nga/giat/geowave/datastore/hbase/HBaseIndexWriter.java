@@ -29,13 +29,13 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class HBaseIndexWriter<T> extends
 		DataStoreIndexWriter<T, RowMutations>
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseIndexWriter.class);
-	private final BasicHBaseOperations operations;
+	private final HBaseOperations operations;
 	protected final DataStoreOptions options;
 	protected final HBaseDataStore dataStore;
 
@@ -43,7 +43,7 @@ public class HBaseIndexWriter<T> extends
 			final HBaseDataStore dataStore,
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
-			final BasicHBaseOperations operations,
+			final HBaseOperations operations,
 			final DataStoreOptions options,
 			final IngestCallback<T> callback,
 			final Closeable closable ) {
@@ -96,7 +96,7 @@ public class HBaseIndexWriter<T> extends
 							adapter.getAdapterId().getString()
 						},
 						options.isCreateTable(),
-						index.getIndexStrategy().getNaturalSplits());
+						index.getIndexStrategy().getPartitionKeys());
 			}
 			catch (final IOException e) {
 				LOGGER.error(

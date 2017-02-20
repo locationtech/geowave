@@ -58,7 +58,7 @@ public class MinimalBinDistanceHistogram implements
 				System.currentTimeMillis());
 
 		bins = new ArrayList<Bin>(
-				1024);
+				nbins);
 	}
 
 	/**
@@ -301,7 +301,6 @@ public class MinimalBinDistanceHistogram implements
 	 */
 	public double quantile(
 			final double q ) {
-		assert ((bins != null) && (bins.size() > 0) && (nbins > 0));
 		double csum = 0;
 		final int binsCount = bins.size();
 		for (int b = 0; b < binsCount; b++) {

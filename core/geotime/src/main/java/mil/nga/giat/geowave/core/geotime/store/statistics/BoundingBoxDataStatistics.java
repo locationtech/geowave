@@ -13,10 +13,9 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 abstract public class BoundingBoxDataStatistics<T> extends
 		AbstractDataStatistics<T>
@@ -102,8 +101,8 @@ abstract public class BoundingBoxDataStatistics<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
+			final T entry,
+			final GeoWaveRow... rows ) {
 		final Envelope env = getEnvelope(entry);
 		if (env != null) {
 			minX = Math.min(
@@ -174,8 +173,9 @@ abstract public class BoundingBoxDataStatistics<T> extends
 		}
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"bbox[adapter=").append(
 				super.getDataAdapterId().getString());

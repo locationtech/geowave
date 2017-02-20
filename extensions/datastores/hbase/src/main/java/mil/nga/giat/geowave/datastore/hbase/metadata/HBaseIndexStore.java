@@ -6,7 +6,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class HBaseIndexStore extends
 		AbstractHBasePersistence<Index<?, ?>> implements
@@ -17,7 +17,7 @@ public class HBaseIndexStore extends
 	protected static final String INDEX_CF = "INDEX";
 
 	public HBaseIndexStore(
-			final BasicHBaseOperations operations ) {
+			final HBaseOperations operations ) {
 		super(
 				operations);
 	}

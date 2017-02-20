@@ -20,8 +20,8 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.format.landsat8.BandFeatureIterator;
 import mil.nga.giat.geowave.format.landsat8.Landsat8BasicCommandLineOptions;
 import mil.nga.giat.geowave.format.landsat8.Landsat8DownloadCommandLineOptions;
@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 import org.apache.log4j.Logger;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -46,7 +47,8 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 @RunWith(GeoWaveITRunner.class)
-public class LandsatIT
+public class LandsatIT extends
+		AbstractGeoWaveIT
 {
 	private static class RasterIngestTester extends
 			RasterIngestRunner
@@ -131,6 +133,10 @@ public class LandsatIT
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+	}
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
 	}
 
 	@Test

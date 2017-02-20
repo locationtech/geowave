@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 abstract public class AbstractHBaseStoreFactory<T> extends
 		AbstractHBaseFactory implements
@@ -15,10 +15,10 @@ abstract public class AbstractHBaseStoreFactory<T> extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractHBaseStoreFactory.class);
 
-	protected BasicHBaseOperations createOperations(
+	protected HBaseOperations createOperations(
 			final HBaseRequiredOptions options ) {
 		try {
-			return BasicHBaseOperations.createOperations(options);
+			return HBaseOperations.createOperations(options);
 		}
 		catch (final IOException e) {
 			LOGGER.error(

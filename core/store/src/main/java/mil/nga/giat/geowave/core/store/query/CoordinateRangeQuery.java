@@ -19,6 +19,15 @@ public class CoordinateRangeQuery implements
 	private NumericIndexStrategy indexStrategy;
 	private MultiDimensionalCoordinateRangesArray[] coordinateRanges;
 
+	public CoordinateRangeQuery() {}
+
+	public CoordinateRangeQuery(
+			final NumericIndexStrategy indexStrategy,
+			final MultiDimensionalCoordinateRangesArray[] coordinateRanges ) {
+		this.indexStrategy = indexStrategy;
+		this.coordinateRanges = coordinateRanges;
+	}
+
 	@Override
 	public List<QueryFilter> createFilters(
 			final CommonIndexModel indexModel ) {

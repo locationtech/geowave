@@ -7,19 +7,20 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.param.ParameterEnum;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-
 import org.apache.commons.codec.binary.Hex;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.JobContext;
 
+import mil.nga.giat.geowave.analytic.PropertyManagement;
+import mil.nga.giat.geowave.analytic.param.ParameterEnum;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+
 /**
  * Provide a partition for a data item.
- * 
- * 
+ *
+ *
  * Multiple partitions are permitted. Only one partition is consider primary. A
  * primary partition is the partition for an item in which the item is processed
  * on behalf of itself. All other partitions are those partitions that require
@@ -28,7 +29,7 @@ import org.apache.hadoop.mapreduce.JobContext;
  * discover neighbors in its partition. However, the item can be discovered as a
  * nearest neighbor in those partitions in which the item participates as a none
  * primary.
- * 
+ *
  * @param <T>
  */
 public interface Partitioner<T> extends
@@ -67,7 +68,7 @@ public interface Partitioner<T> extends
 	 * marked as primary or secondary. A secondary partition is a neighboring
 	 * partition to an item. The intent is inspect neighbor partitions to handle
 	 * edge cases.
-	 * 
+	 *
 	 */
 	public static class PartitionData implements
 			Serializable,
@@ -78,12 +79,24 @@ public interface Partitioner<T> extends
 		 */
 		private static final long serialVersionUID = 1L;
 
-		private ByteArrayId id;
+		private ByteArrayId partitionKey;
+		private ByteArrayId sortKey;
 		private ByteArrayId groupId = null;
 		private boolean isPrimary;
 
-		public ByteArrayId getId() {
-			return id;
+		public ByteArrayId getPartitionKey() {
+			return partitionKey;
+		}
+
+		public ByteArrayId getSortKey() {
+			return sortKey;
+		}
+
+		public ByteArrayId getCompositeKey() {
+			return new ByteArrayId(
+					ByteArrayUtils.combineArrays(
+							partitionKey.getBytes(),
+							sortKey.getBytes()));
 		}
 
 		public ByteArrayId getGroupId() {
@@ -102,16 +115,19 @@ public interface Partitioner<T> extends
 		public PartitionData() {}
 
 		public PartitionData(
-				final ByteArrayId id,
+				final ByteArrayId partitionKey,
+				final ByteArrayId sortKey,
 				final boolean primary ) {
 			super();
-			this.id = id;
+			this.partitionKey = partitionKey;
+			this.sortKey = sortKey;
 			this.isPrimary = primary;
 		}
 
 		@Override
 		public String toString() {
-			return "PartitionData [id=" + Hex.encodeHexString(id.getBytes()) + ", groupId="
+			return "PartitionData [partitionKey=" + Hex.encodeHexString(partitionKey.getBytes()) + ", sortKey="
+					+ Hex.encodeHexString(sortKey.getBytes()) + ", groupId="
 					+ (groupId == null ? "null" : groupId.getString()) + ", isPrimary=" + isPrimary + "]";
 		}
 
@@ -119,7 +135,8 @@ public interface Partitioner<T> extends
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = (prime * result) + ((id == null) ? 0 : id.hashCode());
+			result = (prime * result) + ((partitionKey == null) ? 0 : partitionKey.hashCode());
+			result = (prime * result) + ((sortKey == null) ? 0 : sortKey.hashCode());
 			return result;
 		}
 
@@ -136,12 +153,20 @@ public interface Partitioner<T> extends
 				return false;
 			}
 			final PartitionData other = (PartitionData) obj;
-			if (id == null) {
-				if (other.id != null) {
+			if (partitionKey == null) {
+				if (other.partitionKey != null) {
 					return false;
 				}
 			}
-			else if (!id.equals(other.id)) {
+			else if (!partitionKey.equals(other.partitionKey)) {
+				return false;
+			}
+			if (sortKey == null) {
+				if (other.sortKey != null) {
+					return false;
+				}
+			}
+			else if (!sortKey.equals(other.sortKey)) {
 				return false;
 			}
 			return true;
@@ -151,11 +176,16 @@ public interface Partitioner<T> extends
 		public void readFields(
 				final DataInput dInput )
 				throws IOException {
-			final int idSize = dInput.readInt();
-			final byte[] idBytes = new byte[idSize];
-			dInput.readFully(idBytes);
-			id = new ByteArrayId(
-					idBytes);
+			final int partitionKeySize = dInput.readInt();
+			final byte[] partitionKeyBytes = new byte[partitionKeySize];
+			dInput.readFully(partitionKeyBytes);
+			partitionKey = new ByteArrayId(
+					partitionKeyBytes);
+			final int sortKeySize = dInput.readInt();
+			final byte[] sortKeyBytes = new byte[sortKeySize];
+			dInput.readFully(sortKeyBytes);
+			sortKey = new ByteArrayId(
+					sortKeyBytes);
 
 			final int groupIdSize = dInput.readInt();
 			if (groupIdSize > 0) {
@@ -172,10 +202,12 @@ public interface Partitioner<T> extends
 		public void write(
 				final DataOutput dOutput )
 				throws IOException {
-			final byte[] outputId = id.getBytes();
-			dOutput.writeInt(outputId.length);
-			dOutput.write(outputId);
-
+			final byte[] outputPartitionKey = partitionKey.getBytes();
+			dOutput.writeInt(outputPartitionKey.length);
+			dOutput.write(outputPartitionKey);
+			final byte[] outputSortKey = sortKey.getBytes();
+			dOutput.writeInt(outputSortKey.length);
+			dOutput.write(outputSortKey);
 			if (groupId != null) {
 				final byte[] groupOutputId = groupId.getBytes();
 				dOutput.writeInt(groupOutputId.length);
@@ -190,7 +222,7 @@ public interface Partitioner<T> extends
 		}
 
 		public void setPrimary(
-				boolean isPrimary ) {
+				final boolean isPrimary ) {
 			this.isPrimary = isPrimary;
 		}
 	}

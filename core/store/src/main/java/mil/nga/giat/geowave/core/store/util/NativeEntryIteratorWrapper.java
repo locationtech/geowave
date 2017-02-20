@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -15,6 +16,7 @@ public class NativeEntryIteratorWrapper<T> extends
 		EntryIteratorWrapper<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(NativeEntryIteratorWrapper.class);
+	private final boolean decodePersistenceEncoding;
 
 	public NativeEntryIteratorWrapper(
 			final BaseDataStore dataStore,
@@ -25,38 +27,28 @@ public class NativeEntryIteratorWrapper<T> extends
 			final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
 			final boolean decodePersistenceEncoding ) {
 		super(
-				false,
 				dataStore,
 				adapterStore,
 				index,
 				scannerIt,
 				clientFilter,
 				scanCallback);
+		this.decodePersistenceEncoding = decodePersistenceEncoding;
 	}
 
 	@Override
 	protected T decodeRow(
-			final Object row,
+			final GeoWaveRow row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index,
-			final boolean wholeRowEncoding ) {
-		GeoWaveRow entry = null;
-		try {
-			entry = (GeoWaveRow) row;
-		}
-		catch (final ClassCastException e) {
-			LOGGER.error("Row is not a native geowave row entry.");
-			return null;
-		}
-		return (T) dataStore.decodeRow(
-				entry,
-				wholeRowEncoding,
+			final PrimaryIndex index ) {
+		return (T) BaseDataStoreUtils.decodeRow(
+				row,
 				clientFilter,
 				null,
 				adapterStore,
 				index,
 				scanCallback,
 				null,
-				false);
+				decodePersistenceEncoding);
 	}
 }

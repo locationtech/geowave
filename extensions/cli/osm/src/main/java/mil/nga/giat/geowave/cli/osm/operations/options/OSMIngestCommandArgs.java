@@ -11,7 +11,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.cli.osm.accumulo.osmschema.Constants;
-import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class OSMIngestCommandArgs

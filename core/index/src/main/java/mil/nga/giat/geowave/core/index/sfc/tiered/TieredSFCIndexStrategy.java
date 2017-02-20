@@ -12,24 +12,33 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableBiMap.Builder;
+import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-
-import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.CoordinateRange;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.QueryRanges;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
+import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
@@ -107,14 +116,14 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxRangeDecomposition,
 			final IndexMetaData... hints ) {
 		// TODO don't just pass max ranges along to the SFC, take tiering and
 		// binning into account to limit the number of ranges correctly
 
-		final List<ByteArrayRange> queryRanges = new ArrayList<ByteArrayRange>();
+		final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<SinglePartitionQueryRanges>();
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
@@ -135,15 +144,16 @@ public class TieredSFCIndexStrategy implements
 											// dividing by the tiers
 					tier));
 		}
-		return queryRanges;
+		return new QueryRanges(
+				queryRanges);
 	}
 
-	protected static List<ByteArrayRange> getQueryRanges(
+	protected static List<SinglePartitionQueryRanges> getQueryRanges(
 			final BinnedNumericDataset[] binnedQueries,
 			final SpaceFillingCurve sfc,
 			final int maxRanges,
 			final byte tier ) {
-		final List<ByteArrayRange> queryRanges = new ArrayList<ByteArrayRange>();
+		final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<SinglePartitionQueryRanges>();
 
 		int maxRangeDecompositionPerBin = maxRanges;
 		if ((maxRanges > 1) && (binnedQueries.length > 1)) {
@@ -161,17 +171,10 @@ public class TieredSFCIndexStrategy implements
 					// value)
 					},
 					binnedQuery.getBinId());
-			for (final ByteArrayRange range : rangeDecomp.getRanges()) {
-				queryRanges.add(new ByteArrayRange(
-						new ByteArrayId(
-								ByteArrayUtils.combineArrays(
-										tierAndBinId,
-										range.getStart().getBytes())),
-						new ByteArrayId(
-								ByteArrayUtils.combineArrays(
-										tierAndBinId,
-										range.getEnd().getBytes()))));
-			}
+			queryRanges.add(new SinglePartitionQueryRanges(
+					new ByteArrayId(
+							tierAndBinId),
+					Arrays.asList(rangeDecomp.getRanges())));
 		}
 		return queryRanges;
 	}
@@ -184,7 +187,7 @@ public class TieredSFCIndexStrategy implements
 	 * @return a List of query ranges
 	 */
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final IndexMetaData... hints ) {
 		return getQueryRanges(
@@ -201,7 +204,7 @@ public class TieredSFCIndexStrategy implements
 	 * @return a List of insertion ID's
 	 */
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
 		return internalGetInsertionIds(
 				indexedData,
@@ -224,7 +227,7 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final int maxDuplicateInsertionIdsPerDimension ) {
 		return internalGetInsertionIds(
@@ -232,7 +235,7 @@ public class TieredSFCIndexStrategy implements
 				BigInteger.valueOf(maxDuplicateInsertionIdsPerDimension));
 	}
 
-	private List<ByteArrayId> internalGetInsertionIds(
+	private InsertionIds internalGetInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final BigInteger maxDuplicateInsertionIds ) {
 		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
@@ -240,21 +243,25 @@ public class TieredSFCIndexStrategy implements
 				baseDefinitions);
 		// place each of these indices into a single row ID at a tier that will
 		// fit its min and max
-		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
+		final Set<SinglePartitionInsertionIds> retVal = new HashSet<SinglePartitionInsertionIds>(
 				ranges.length);
-		for (final BinnedNumericDataset range : ranges) {
-			rowIds.addAll(getRowIds(
-					range,
+		for (int i = 0; i < ranges.length; i++) {
+			retVal.add(getRowIds(
+					ranges[i],
 					maxDuplicateInsertionIds));
 		}
-		return rowIds;
+		return new InsertionIds(
+				retVal);
 	}
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId insertionId ) {
-		final byte[] rowId = insertionId.getBytes();
-		if (rowId.length > 0) {
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		if ((partitionKey != null) && (partitionKey.getBytes().length > 0)) {
+			final byte[] rowId = ByteArrayUtils.combineArrays(
+					partitionKey.getBytes(),
+					sortKey == null ? null : sortKey.getBytes());
 			final Integer orderedSfcIndex = orderedSfcIndexToTierId.inverse().get(
 					rowId[0]);
 			return new MultiDimensionalCoordinates(
@@ -267,15 +274,24 @@ public class TieredSFCIndexStrategy implements
 							orderedSfcs[orderedSfcIndex]));
 		}
 		else {
-			LOGGER.warn("Row must at least contain a byte for tier");
+			LOGGER.warn("Row's partition key must at least contain a byte for the tier");
 		}
 		return null;
 	}
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId insertionId ) {
-		final byte[] rowId = insertionId.getBytes();
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		final List<ByteArrayId> insertionIds = new SinglePartitionInsertionIds(
+				partitionKey,
+				sortKey).getCompositeInsertionIds();
+		if (insertionIds.isEmpty()) {
+			LOGGER.warn("Unexpected empty insertion ID in getRangeForId()");
+			return null;
+		}
+		final byte[] rowId = insertionIds.get(
+				0).getBytes();
 		if (rowId.length > 0) {
 			final Integer orderedSfcIndex = orderedSfcIndexToTierId.inverse().get(
 					rowId[0]);
@@ -446,7 +462,7 @@ public class TieredSFCIndexStrategy implements
 		return baseDefinitions;
 	}
 
-	synchronized private List<ByteArrayId> getRowIds(
+	synchronized private SinglePartitionInsertionIds getRowIds(
 			final BinnedNumericDataset index,
 			final BigInteger maxEstimatedDuplicateIds ) {
 		// most times this should be a single row ID, but if the lowest
@@ -459,7 +475,7 @@ public class TieredSFCIndexStrategy implements
 			// loop through space filling curves and stop when both the min and
 			// max of the ranges fit the same row ID
 			final byte tierId = orderedSfcIndexToTierId.get(sfcIndex);
-			final List<ByteArrayId> rowIdsAtTier = getRowIdsAtTier(
+			final SinglePartitionInsertionIds rowIdsAtTier = getRowIdsAtTier(
 					index,
 					tierId,
 					sfc,
@@ -471,10 +487,12 @@ public class TieredSFCIndexStrategy implements
 		}
 
 		// this should never happen because of the check for tier 0
-		return new ArrayList<ByteArrayId>();
+		return new SinglePartitionInsertionIds(
+				null,
+				new ArrayList<ByteArrayId>());
 	}
 
-	protected static List<ByteArrayId> getRowIdsAtTier(
+	protected static SinglePartitionInsertionIds getRowIdsAtTier(
 			final BinnedNumericDataset index,
 			final byte tierId,
 			final SpaceFillingCurve sfc,
@@ -490,10 +508,11 @@ public class TieredSFCIndexStrategy implements
 					index.getBinId());
 			final double[] maxValues = index.getMaxValuesPerDimension();
 			retVal.add(new ByteArrayId(
-					ByteArrayUtils.combineArrays(
-							tierAndBinId,
-							sfc.getId(maxValues))));
-			return retVal;
+					sfc.getId(maxValues)));
+			return new SinglePartitionInsertionIds(
+					new ByteArrayId(
+							tierAndBinId),
+					retVal);
 		}
 		else if ((maxEstimatedDuplicateIds == null) || (rowCount.compareTo(maxEstimatedDuplicateIds) <= 0)
 				|| (sfcIndex == 0)) {
@@ -505,7 +524,7 @@ public class TieredSFCIndexStrategy implements
 		return null;
 	}
 
-	protected static List<ByteArrayId> decomposeRangesForEntry(
+	protected static SinglePartitionInsertionIds decomposeRangesForEntry(
 			final BinnedNumericDataset index,
 			final byte tierId,
 			final SpaceFillingCurve sfc ) {
@@ -522,23 +541,22 @@ public class TieredSFCIndexStrategy implements
 		// this range does not fit into a single row ID at the lowest
 		// tier, decompose it
 		for (final ByteArrayRange range : rangeDecomp.getRanges()) {
-			final byte[] currentRowId = Arrays.copyOf(
+			byte[] currentRowId = Arrays.copyOf(
 					range.getStart().getBytes(),
 					range.getStart().getBytes().length);
 			retVal.add(new ByteArrayId(
-					ByteArrayUtils.combineArrays(
-							tierAndBinId,
-							currentRowId)));
+					currentRowId));
 			while (!Arrays.equals(
 					currentRowId,
 					range.getEnd().getBytes())) {
+				currentRowId = Arrays.copyOf(
+						currentRowId,
+						currentRowId.length);
 				// increment until we reach the end row ID
 				boolean overflow = !ByteArrayUtils.increment(currentRowId);
 				if (!overflow) {
 					retVal.add(new ByteArrayId(
-							ByteArrayUtils.combineArrays(
-									tierAndBinId,
-									currentRowId)));
+							currentRowId));
 				}
 				else {
 					// the increment caused an overflow which shouldn't
@@ -551,7 +569,10 @@ public class TieredSFCIndexStrategy implements
 				}
 			}
 		}
-		return retVal;
+		return new SinglePartitionInsertionIds(
+				new ByteArrayId(
+						tierAndBinId),
+				retVal);
 	}
 
 	@Override
@@ -705,20 +726,7 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
-		final Set<ByteArrayId> retVal = new HashSet<ByteArrayId>(
-				orderedSfcIndexToTierId.size());
-		for (final Byte tier : orderedSfcIndexToTierId.values()) {
-			retVal.add(new ByteArrayId(
-					new byte[] {
-						tier
-					}));
-		}
-		return retVal;
-	}
-
-	@Override
-	public int getByteOffsetFromDimensionalIndex() {
+	public int getPartitionKeyLength() {
 		int rowIdOffset = 1;
 		for (int dimensionIdx = 0; dimensionIdx < baseDefinitions.length; dimensionIdx++) {
 			final int binSize = baseDefinitions[dimensionIdx].getFixedBinIdSize();
@@ -802,20 +810,73 @@ public class TieredSFCIndexStrategy implements
 
 		@Override
 		public void insertionIdsAdded(
-				final List<ByteArrayId> ids ) {
-			for (final ByteArrayId id : ids) {
+				final InsertionIds ids ) {
+			for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
 				tierCounts[orderedTierIdToSfcIndex.get(
-						id.getBytes()[0]).intValue()]++;
+						partitionIds.getPartitionKey().getBytes()[0]).intValue()] += partitionIds.getSortKeys().size();
 			}
 		}
 
 		@Override
 		public void insertionIdsRemoved(
-				final List<ByteArrayId> ids ) {
-			for (final ByteArrayId id : ids) {
+				final InsertionIds ids ) {
+			for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
 				tierCounts[orderedTierIdToSfcIndex.get(
-						id.getBytes()[0]).intValue()]--;
+						partitionIds.getPartitionKey().getBytes()[0]).intValue()] -= partitionIds.getSortKeys().size();
 			}
 		}
+	}
+
+	@Override
+	public Set<ByteArrayId> getInsertionPartitionKeys(
+			final MultiDimensionalNumericData insertionData ) {
+		return internalGetInsertionKeys(
+				this,
+				insertionData);
+	}
+
+	protected static Set<ByteArrayId> internalGetInsertionKeys(
+			final NumericIndexStrategy strategy,
+			final MultiDimensionalNumericData insertionData ) {
+		final InsertionIds insertionIds = strategy.getInsertionIds(insertionData);
+		return Sets.newHashSet(Collections2.transform(
+				insertionIds.getPartitionKeys(),
+				new Function<SinglePartitionInsertionIds, ByteArrayId>() {
+					@Override
+					public ByteArrayId apply(
+							@Nonnull
+							final SinglePartitionInsertionIds input ) {
+						return input.getPartitionKey();
+					}
+				}));
+	}
+
+	@Override
+	public Set<ByteArrayId> getQueryPartitionKeys(
+			final MultiDimensionalNumericData queryData,
+			final IndexMetaData... hints ) {
+		return internalGetQueryPartitionKeys(
+				this,
+				queryData,
+				hints);
+	}
+
+	protected static Set<ByteArrayId> internalGetQueryPartitionKeys(
+			final NumericIndexStrategy strategy,
+			final MultiDimensionalNumericData queryData,
+			final IndexMetaData... hints ) {
+		final QueryRanges queryRanges = strategy.getQueryRanges(
+				queryData,
+				hints);
+		return Sets.newHashSet(Collections2.transform(
+				queryRanges.getPartitionQueryRanges(),
+				new Function<SinglePartitionQueryRanges, ByteArrayId>() {
+					@Override
+					public ByteArrayId apply(
+							@Nonnull
+							final SinglePartitionQueryRanges input ) {
+						return input.getPartitionKey();
+					}
+				}));
 	}
 }

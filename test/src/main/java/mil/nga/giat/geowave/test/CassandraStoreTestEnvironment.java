@@ -27,8 +27,9 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.util.ClasspathUtils;
-import mil.nga.giat.geowave.datastore.cassandra.CassandraDataStoreFactory;
-import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+//import mil.nga.giat.geowave.datastore.cassandra.CassandraDataStoreFactory;
+//import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class CassandraStoreTestEnvironment extends
@@ -36,7 +37,9 @@ public class CassandraStoreTestEnvironment extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(CassandraStoreTestEnvironment.class);
 
-	private static CassandraDataStoreFactory STORE_FACTORY = new CassandraDataStoreFactory();
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new AccumuloStoreFactoryFamily()
+			.getDataStoreFactory();// new
+	// CassandraDataStoreFactory();
 	private static CassandraStoreTestEnvironment singletonInstance = null;
 	protected static final File TEMP_DIR = new File(
 			System.getProperty("user.dir") + File.separator + "target",
@@ -323,8 +326,9 @@ public class CassandraStoreTestEnvironment extends
 	@Override
 	protected void initOptions(
 			final StoreFactoryOptions options ) {
-		final CassandraRequiredOptions cassandraOpts = (CassandraRequiredOptions) options;
-		cassandraOpts.setContactPoint("127.0.0.1");
+		// final CassandraRequiredOptions cassandraOpts =
+		// (CassandraRequiredOptions) options;
+		// cassandraOpts.setContactPoint("127.0.0.1");
 	}
 
 	@Override

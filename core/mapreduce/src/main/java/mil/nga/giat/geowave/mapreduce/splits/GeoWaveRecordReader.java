@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.mapreduce.splits;
 import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,15 +22,22 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
+import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.Reader;
+import mil.nga.giat.geowave.core.store.operations.ReaderClosableWrapper;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.mapreduce.MapReduceDataStoreOperations;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.input.InputFormatIteratorWrapper;
 
 /**
  * This class is used by the GeoWaveInputFormat to read data from a GeoWave data
@@ -38,7 +46,7 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
  * @param <T>
  *            The native type for the reader
  */
-public abstract class GeoWaveRecordReader<T> extends
+public class GeoWaveRecordReader<T> extends
 		RecordReader<GeoWaveInputKey, T>
 {
 
@@ -73,18 +81,19 @@ public abstract class GeoWaveRecordReader<T> extends
 	protected boolean isOutputWritable;
 	protected AdapterStore adapterStore;
 	protected BaseDataStore dataStore;
+	protected MapReduceDataStoreOperations operations;
 
 	public GeoWaveRecordReader(
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
 			final boolean isOutputWritable,
 			final AdapterStore adapterStore,
-			final BaseDataStore dataStore ) {
+			final MapReduceDataStoreOperations operations ) {
 		this.query = query;
 		this.queryOptions = queryOptions;
 		this.isOutputWritable = isOutputWritable;
 		this.adapterStore = adapterStore;
-		this.dataStore = dataStore;
+		this.operations = operations;
 	}
 
 	/**
@@ -100,30 +109,31 @@ public abstract class GeoWaveRecordReader<T> extends
 
 		numKeysRead = 0;
 
-		final Map<RangeLocationPair, CloseableIterator<?>> iteratorsPerRange = new LinkedHashMap<RangeLocationPair, CloseableIterator<?>>();
+		final Map<RangeLocationPair, CloseableIterator<Entry<GeoWaveInputKey, T>>> iteratorsPerRange = new LinkedHashMap<RangeLocationPair, CloseableIterator<Entry<GeoWaveInputKey, T>>>();
 
-		final Set<PrimaryIndex> indices = split.getIndices();
+		final Set<ByteArrayId> indices = split.getIndexIds();
 		BigDecimal sum = BigDecimal.ZERO;
 
 		final Map<RangeLocationPair, BigDecimal> incrementalRangeSums = new LinkedHashMap<RangeLocationPair, BigDecimal>();
 
-		for (final PrimaryIndex i : indices) {
-			final List<RangeLocationPair> ranges = split.getRanges(i);
+		for (final ByteArrayId i : indices) {
+			final SplitInfo splitInfo = split.getInfo(i);
 			List<QueryFilter> queryFilters = null;
 			if (query != null) {
-				queryFilters = query.createFilters(i.getIndexModel());
+				queryFilters = query.createFilters(splitInfo.getIndex().getIndexModel());
 			}
-			for (final RangeLocationPair r : ranges) {
+			for (final RangeLocationPair r : splitInfo.getRangeLocationPairs()) {
 				final QueryOptions rangeQueryOptions = new QueryOptions(
 						queryOptions);
-				rangeQueryOptions.setIndex(i);
+				rangeQueryOptions.setIndex(splitInfo.getIndex());
 				iteratorsPerRange.put(
 						r,
 						queryRange(
-								i,
+								splitInfo.getIndex(),
 								r.getRange(),
 								queryFilters,
-								rangeQueryOptions));
+								rangeQueryOptions,
+								splitInfo.isMixedVisibility()));
 				incrementalRangeSums.put(
 						r,
 						sum);
@@ -159,14 +169,14 @@ public abstract class GeoWaveRecordReader<T> extends
 								1f));
 
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				LOGGER.warn(
 						"Unable to calculate progress",
 						e);
 			}
 		}
 		// concatenate iterators
-		iterator = new CloseableIteratorWrapper<Object>(
+		iterator = new CloseableIteratorWrapper<Entry<GeoWaveInputKey, T>>(
 				new Closeable() {
 					@Override
 					public void close()
@@ -189,11 +199,44 @@ public abstract class GeoWaveRecordReader<T> extends
 
 	}
 
-	protected abstract CloseableIterator<?> queryRange(
-			PrimaryIndex i,
-			GeoWaveRowRange range,
-			List<QueryFilter> queryFilters,
-			QueryOptions rangeQueryOptions );
+	protected CloseableIterator<Entry<GeoWaveInputKey, T>> queryRange(
+			final PrimaryIndex i,
+			final GeoWaveRowRange range,
+			final List<QueryFilter> queryFilters,
+			final QueryOptions rangeQueryOptions,
+			final boolean mixedVisibility ) {
+
+		final QueryFilter singleFilter = ((queryFilters == null) || queryFilters.isEmpty()) ? null : queryFilters
+				.size() == 1 ? queryFilters.get(0) : new FilterList<QueryFilter>(
+				queryFilters);
+		try {
+			final Reader reader = operations.createReader(new RecordReaderParams(
+					i,
+					rangeQueryOptions.getAdapterIds(adapterStore),
+					rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+					rangeQueryOptions.getAggregation(),
+					rangeQueryOptions.getFieldIdsAdapterPair(),
+					mixedVisibility,
+					range,
+					queryOptions.getLimit(),
+					rangeQueryOptions.getAuthorizations()));
+			return new CloseableIteratorWrapper(
+					new ReaderClosableWrapper(
+							reader),
+					new InputFormatIteratorWrapper<>(
+							reader,
+							singleFilter,
+							adapterStore,
+							i,
+							isOutputWritable));
+		}
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unable to get adapter IDs",
+					e);
+		}
+		return new CloseableIterator.Empty();
+	}
 
 	@Override
 	public void close() {
@@ -217,6 +260,25 @@ public abstract class GeoWaveRecordReader<T> extends
 	}
 
 	@Override
+	public boolean nextKeyValue()
+			throws IOException,
+			InterruptedException {
+		if (iterator != null) {
+			if (iterator.hasNext()) {
+				++numKeysRead;
+				final Object value = iterator.next();
+				if (value instanceof Entry) {
+					final Entry<GeoWaveInputKey, T> entry = (Entry<GeoWaveInputKey, T>) value;
+					currentGeoWaveKey = entry.getKey();
+					currentValue = entry.getValue();
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
 	public T getCurrentValue()
 			throws IOException,
 			InterruptedException {
@@ -233,20 +295,20 @@ public abstract class GeoWaveRecordReader<T> extends
 	 * Mostly guava's concatenate method, but there is a need for a callback
 	 * between iterators
 	 */
-	protected static Iterator<Object> concatenateWithCallback(
-			final Iterator<Entry<RangeLocationPair, CloseableIterator<?>>> inputs,
+	protected static <T> Iterator<Entry<GeoWaveInputKey, T>> concatenateWithCallback(
+			final Iterator<Entry<RangeLocationPair, CloseableIterator<Entry<GeoWaveInputKey, T>>>> inputs,
 			final NextRangeCallback nextRangeCallback ) {
 		Preconditions.checkNotNull(inputs);
-		return new Iterator<Object>() {
-			Iterator<?> currentIterator = Iterators.emptyIterator();
-			Iterator<?> removeFrom;
+		return new Iterator<Entry<GeoWaveInputKey, T>>() {
+			Iterator<Entry<GeoWaveInputKey, T>> currentIterator = Iterators.emptyIterator();
+			Iterator<Entry<GeoWaveInputKey, T>> removeFrom;
 
 			@Override
 			public boolean hasNext() {
 				boolean currentHasNext;
 				while (!(currentHasNext = Preconditions.checkNotNull(
 						currentIterator).hasNext()) && inputs.hasNext()) {
-					final Entry<RangeLocationPair, CloseableIterator<?>> entry = inputs.next();
+					final Entry<RangeLocationPair, CloseableIterator<Entry<GeoWaveInputKey, T>>> entry = inputs.next();
 					nextRangeCallback.setRange(entry.getKey());
 					currentIterator = entry.getValue();
 				}
@@ -254,7 +316,7 @@ public abstract class GeoWaveRecordReader<T> extends
 			}
 
 			@Override
-			public Object next() {
+			public Entry<GeoWaveInputKey, T> next() {
 				if (!hasNext()) {
 					throw new NoSuchElementException();
 				}
@@ -273,4 +335,82 @@ public abstract class GeoWaveRecordReader<T> extends
 			}
 		};
 	}
+
+	private static float getOverallProgress(
+			final GeoWaveRowRange range,
+			final GeoWaveInputKey currentKey,
+			final ProgressPerRange progress ) {
+		final float rangeProgress = getProgressForRange(
+				range,
+				currentKey);
+		return progress.getOverallProgress(rangeProgress);
+	}
+
+	private static float getProgressForRange(
+			final byte[] start,
+			final byte[] end,
+			final byte[] position ) {
+		final int maxDepth = Math.min(
+				Math.max(
+						end.length,
+						start.length),
+				position.length);
+		final BigInteger startBI = new BigInteger(
+				SplitsProvider.extractBytes(
+						start,
+						maxDepth));
+		final BigInteger endBI = new BigInteger(
+				SplitsProvider.extractBytes(
+						end,
+						maxDepth));
+		final BigInteger positionBI = new BigInteger(
+				SplitsProvider.extractBytes(
+						position,
+						maxDepth));
+		return (float) (positionBI.subtract(
+				startBI).doubleValue() / endBI.subtract(
+				startBI).doubleValue());
+	}
+
+	private static float getProgressForRange(
+			final GeoWaveRowRange range,
+			final GeoWaveInputKey currentKey ) {
+		if (currentKey == null) {
+			return 0f;
+		}
+		if ((range != null) && (range.getStartSortKey() != null) && (range.getEndSortKey() != null)
+				&& (currentKey.getGeoWaveKey() != null)) {
+			// TODO GEOWAVE-1018 this doesn't account for partition keys at all
+			// just look at the row progress
+			return getProgressForRange(
+					range.getStartSortKey(),
+					range.getEndSortKey(),
+					GeoWaveKey.getCompositeId(currentKey.getGeoWaveKey()));
+
+		}
+		// if we can't figure it out, then claim no progress
+		return 0f;
+	}
+
+	@Override
+	public float getProgress()
+			throws IOException {
+		if ((numKeysRead > 0) && (currentGeoWaveKey == null)) {
+			return 1.0f;
+		}
+		if (currentGeoWaveRangeIndexPair == null) {
+			return 0.0f;
+		}
+		final ProgressPerRange progress = progressPerRange.get(currentGeoWaveRangeIndexPair);
+		if (progress == null) {
+			return getProgressForRange(
+					currentGeoWaveRangeIndexPair.getRange(),
+					currentGeoWaveKey);
+		}
+		return getOverallProgress(
+				currentGeoWaveRangeIndexPair.getRange(),
+				currentGeoWaveKey,
+				progress);
+	}
+
 }

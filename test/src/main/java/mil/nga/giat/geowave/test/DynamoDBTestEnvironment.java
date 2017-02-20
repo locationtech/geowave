@@ -5,14 +5,17 @@ import org.apache.log4j.Logger;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBDataStoreFactory;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+//import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBDataStoreFactory;
+//import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOptions;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class DynamoDBTestEnvironment extends
 		StoreTestEnvironment
 {
-	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new DynamoDBDataStoreFactory();
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new AccumuloStoreFactoryFamily()
+			.getDataStoreFactory();// new
+	// DynamoDBDataStoreFactory();
 	private static DynamoDBTestEnvironment singletonInstance = null;
 
 	public static synchronized DynamoDBTestEnvironment getInstance() {
@@ -64,7 +67,7 @@ public class DynamoDBTestEnvironment extends
 	@Override
 	protected void initOptions(
 			final StoreFactoryOptions options ) {
-		((DynamoDBOptions) options).setEndpoint("http://localhost:8000");
+		// ((DynamoDBOptions) options).setEndpoint("http://localhost:8000");
 	}
 
 	@Override

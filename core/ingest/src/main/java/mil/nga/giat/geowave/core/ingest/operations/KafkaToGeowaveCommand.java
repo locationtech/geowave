@@ -19,11 +19,11 @@ import mil.nga.giat.geowave.core.ingest.kafka.IngestFromKafkaDriver;
 import mil.nga.giat.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 
 @GeowaveOperation(name = "kafkaToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Subscribe to a Kafka topic and ingest into GeoWave")

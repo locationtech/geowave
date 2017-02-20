@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.datastore.hbase;
 
 import mil.nga.giat.geowave.core.store.GenericFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
 
 abstract public class AbstractHBaseFactory implements
 		GenericFactory

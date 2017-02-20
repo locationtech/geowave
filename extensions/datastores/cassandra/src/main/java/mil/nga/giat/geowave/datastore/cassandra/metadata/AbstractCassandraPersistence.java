@@ -19,11 +19,11 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 
 abstract public class AbstractCassandraPersistence<T extends Persistable> extends
-		AbstractGeowavePersistence<T>
+		AbstractGeoWavePersistence<T>
 {
 	protected static final String PRIMARY_ID_KEY = "I";
 	protected static final String SECONDARY_ID_KEY = "S";

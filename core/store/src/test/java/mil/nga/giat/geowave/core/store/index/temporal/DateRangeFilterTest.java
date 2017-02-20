@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.junit.Test;
+
 import junit.framework.Assert;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -12,8 +14,6 @@ import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
-
-import org.junit.Test;
 
 public class DateRangeFilterTest
 {
@@ -58,6 +58,7 @@ public class DateRangeFilterTest
 				null,
 				null,
 				null,
+				null,
 				0,
 				new PersistentDataset<ByteArrayId>(
 						new PersistentValue<ByteArrayId>(
@@ -73,6 +74,7 @@ public class DateRangeFilterTest
 
 		// should not match because date is out of range
 		final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding2 = new IndexedPersistenceEncoding<ByteArrayId>(
+				null,
 				null,
 				null,
 				null,
@@ -92,6 +94,7 @@ public class DateRangeFilterTest
 
 		// should not match because of attribute mismatch
 		final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding3 = new IndexedPersistenceEncoding<ByteArrayId>(
+				null,
 				null,
 				null,
 				null,

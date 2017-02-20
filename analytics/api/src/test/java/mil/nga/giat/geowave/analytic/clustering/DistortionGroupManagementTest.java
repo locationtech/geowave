@@ -8,7 +8,9 @@ import java.util.List;
 
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -35,7 +37,8 @@ import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 public class DistortionGroupManagementTest
 {
-
+	@Rule
+	public TestName name = new TestName();
 	final GeometryFactory factory = new GeometryFactory();
 	final SimpleFeatureType ftype;
 	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
@@ -54,7 +57,6 @@ public class DistortionGroupManagementTest
 				adapter,
 				index)) {
 			writer.write(entry);
-			writer.close();
 		}
 	}
 
@@ -69,7 +71,7 @@ public class DistortionGroupManagementTest
 		adapter = new FeatureDataAdapter(
 				ftype);
 
-		final String namespace = "test_" + getClass().getName();
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 
 		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();

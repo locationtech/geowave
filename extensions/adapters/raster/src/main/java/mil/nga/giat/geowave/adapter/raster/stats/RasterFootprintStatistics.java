@@ -15,7 +15,7 @@ import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 public class RasterFootprintStatistics extends
 		AbstractDataStatistics<GridCoverage>
@@ -72,8 +72,8 @@ public class RasterFootprintStatistics extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final GridCoverage entry ) {
+			final GridCoverage entry,
+			final GeoWaveRow... geoWaveRows ) {
 		if (entry instanceof FitToIndexGridCoverage) {
 			footprint = RasterUtils.combineIntoOneGeometry(
 					footprint,

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 public class OutputStoreParameterHelper implements

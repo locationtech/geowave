@@ -14,25 +14,24 @@ import org.opengis.referencing.operation.MathTransform;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
-import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldTypeStatisticVisibility;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 public class StatsManager
 {
 
 	private final static Logger LOGGER = Logger.getLogger(StatsManager.class);
-	private final static EntryVisibilityHandler<SimpleFeature> GEOMETRY_VISIBILITY_HANDLER = new FieldTypeStatisticVisibility<SimpleFeature>(
-			GeometryWrapper.class);
+	private final static EntryVisibilityHandler<SimpleFeature> DEFAULT_VISIBILITY_HANDLER = new DefaultFieldStatisticVisibility<SimpleFeature>();
 
 	private final List<DataStatistics<SimpleFeature>> statsList = new ArrayList<DataStatistics<SimpleFeature>>();
-	private final Map<ByteArrayId, EntryVisibilityHandler<SimpleFeature>> visibilityHandlers = new HashMap<ByteArrayId, EntryVisibilityHandler<SimpleFeature>>();
+	private final Map<ByteArrayId, ByteArrayId> statisticsIdToFieldIdMap = new HashMap<ByteArrayId, ByteArrayId>();
 
 	public DataStatistics<SimpleFeature> createDataStatistics(
 			final DataAdapter<SimpleFeature> dataAdapter,
@@ -61,11 +60,17 @@ public class StatsManager
 	}
 
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
+			CommonIndexModel indexModel,
+			DataAdapter<SimpleFeature> adapter,
 			final ByteArrayId statisticsId ) {
-		if (statisticsId.equals(CountDataStatistics.STATS_ID) || !visibilityHandlers.containsKey(statisticsId)) {
-			return GEOMETRY_VISIBILITY_HANDLER;
+		if (statisticsId.equals(CountDataStatistics.STATS_ID) || !statisticsIdToFieldIdMap.containsKey(statisticsId)) {
+			return DEFAULT_VISIBILITY_HANDLER;
 		}
-		return visibilityHandlers.get(statisticsId);
+		ByteArrayId fieldId = statisticsIdToFieldIdMap.get(statisticsId);
+		return new FieldIdStatisticVisibility<>(
+				fieldId,
+				indexModel,
+				adapter);
 	}
 
 	public StatsManager(
@@ -92,9 +97,8 @@ public class StatsManager
 						new FeatureTimeRangeStatistics(
 								dataAdapter.getAdapterId(),
 								descriptor.getLocalName()),
-						new FieldIdStatisticVisibility(
-								new ByteArrayId(
-										descriptor.getLocalName())));
+						new ByteArrayId(
+								descriptor.getLocalName()));
 			}
 			else if (Geometry.class.isAssignableFrom(descriptor.getType().getBinding())) {
 				addStats(
@@ -104,9 +108,8 @@ public class StatsManager
 								persistedType,
 								reprojectedType,
 								transform),
-						new FieldIdStatisticVisibility(
-								new ByteArrayId(
-										descriptor.getLocalName())));
+						new ByteArrayId(
+								descriptor.getLocalName()));
 			}
 
 			if (descriptor.getUserData().containsKey(
@@ -120,9 +123,8 @@ public class StatsManager
 							statConfig.create(
 									dataAdapter.getAdapterId(),
 									descriptor.getLocalName()),
-							new FieldIdStatisticVisibility(
-									new ByteArrayId(
-											descriptor.getLocalName())));
+							new ByteArrayId(
+									descriptor.getLocalName()));
 				}
 
 			}
@@ -131,17 +133,15 @@ public class StatsManager
 						new FeatureNumericRangeStatistics(
 								dataAdapter.getAdapterId(),
 								descriptor.getLocalName()),
-						new FieldIdStatisticVisibility(
-								new ByteArrayId(
-										descriptor.getLocalName())));
+						new ByteArrayId(
+								descriptor.getLocalName()));
 
 				addStats(
 						new FeatureFixedBinNumericStatistics(
 								dataAdapter.getAdapterId(),
 								descriptor.getLocalName()),
-						new FieldIdStatisticVisibility(
-								new ByteArrayId(
-										descriptor.getLocalName())));
+						new ByteArrayId(
+								descriptor.getLocalName()));
 
 			}
 			// else if (String.class.isAssignableFrom(
@@ -172,7 +172,7 @@ public class StatsManager
 	 */
 	public void addStats(
 			DataStatistics<SimpleFeature> stats,
-			EntryVisibilityHandler<SimpleFeature> visibilityHandler ) {
+			ByteArrayId fieldId ) {
 		int replaceStat = 0;
 		for (DataStatistics<SimpleFeature> currentStat : statsList) {
 			if (currentStat.getStatisticsId().equals(
@@ -183,9 +183,9 @@ public class StatsManager
 		}
 		if (replaceStat < statsList.size()) this.statsList.remove(replaceStat);
 		this.statsList.add(stats);
-		this.visibilityHandlers.put(
+		this.statisticsIdToFieldIdMap.put(
 				stats.getStatisticsId(),
-				visibilityHandler);
+				fieldId);
 	}
 
 	public ByteArrayId[] getSupportedStatisticsIds() {

@@ -5,21 +5,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.apache.log4j.Logger;
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexUtils;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-
-import org.apache.log4j.Logger;
-import org.opengis.feature.simple.SimpleFeature;
 
 public class ChooseBestMatchIndexQueryStrategy implements
 		IndexQueryStrategySPI
@@ -47,9 +47,11 @@ public class ChooseBestMatchIndexQueryStrategy implements
 				long min = Long.MAX_VALUE;
 				PrimaryIndex bestIdx = null;
 
-				while (!done && i < indices.length) {
-					nextIdx = (PrimaryIndex) indices[i++];
-					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
+				while (!done && (i < indices.length)) {
+					nextIdx = indices[i++];
+					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) {
+						continue;
+					}
 					final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx
 							.getIndexStrategy());
 					if (!stats.containsKey(RowRangeHistogramStatistics.composeId(nextIdx.getId()))) {
@@ -65,10 +67,10 @@ public class ChooseBestMatchIndexQueryStrategy implements
 						}
 					}
 					else {
-						final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
+						final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
 								constraints,
 								nextIdx.getIndexStrategy(),
-								ConstraintsQuery.MAX_RANGE_DECOMPOSITION);
+								BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION);
 						final long temp = DataStoreUtils.cardinality(
 								nextIdx,
 								stats,

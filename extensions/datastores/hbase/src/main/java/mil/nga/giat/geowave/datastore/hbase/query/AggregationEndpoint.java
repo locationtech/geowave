@@ -18,6 +18,8 @@ import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.protobuf.ResponseConverter;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
+import org.apache.hadoop.hbase.regionserver.Region.Operation;
+import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.log4j.Logger;
 
 import com.google.protobuf.ByteString;
@@ -29,6 +31,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos;
@@ -146,6 +149,11 @@ public class AggregationEndpoint extends
 				// in the filter list for the dedupe filter to work correctly
 				if (request.hasModel()) {
 					hdFilter = new HBaseDistributableFilter();
+
+					if (request.hasWholeRowFilter()) {
+						hdFilter.setWholeRowFilter(request.getWholeRowFilter());
+					}
+
 					final byte[] filterBytes;
 					if (request.hasFilter()) {
 						filterBytes = request.getFilter().toByteArray();
@@ -154,6 +162,7 @@ public class AggregationEndpoint extends
 						filterBytes = null;
 					}
 					final byte[] modelBytes = request.getModel().toByteArray();
+
 					if (hdFilter.init(
 							filterBytes,
 							modelBytes)) {
@@ -194,6 +203,19 @@ public class AggregationEndpoint extends
 				adapterId = new ByteArrayId(
 						adapterIdBytes);
 			}
+			final String[] authorizations;
+			if (request.hasVisLabels()) {
+				byte[] visBytes = request.getVisLabels().toByteArray();
+				if (visBytes.length > 0) {
+					authorizations = StringUtils.stringsFromBinary(visBytes);
+				}
+				else {
+					authorizations = null;
+				}
+			}
+			else {
+				authorizations = null;
+			}
 
 			try {
 				final Mergeable mvalue = getValue(
@@ -203,7 +225,8 @@ public class AggregationEndpoint extends
 						adapterId,
 						hdFilter,
 						request.getBlockCaching(),
-						request.getCacheSize());
+						request.getCacheSize(),
+						authorizations);
 
 				final byte[] bvalue = PersistenceUtils.toBinary(mvalue);
 				value = ByteString.copyFrom(bvalue);
@@ -237,7 +260,8 @@ public class AggregationEndpoint extends
 			final ByteArrayId adapterId,
 			final HBaseDistributableFilter hdFilter,
 			final boolean blockCaching,
-			final int scanCacheSize )
+			final int scanCacheSize,
+			String[] authorizations )
 			throws IOException {
 		final Scan scan = new Scan();
 		scan.setMaxVersions(1);
@@ -250,10 +274,17 @@ public class AggregationEndpoint extends
 		if (filter != null) {
 			scan.setFilter(filter);
 		}
+
 		if (adapterId != null) {
 			scan.addFamily(adapterId.getBytes());
 		}
 
+		if (authorizations != null) {
+			scan.setAuthorizations(new Authorizations(
+					authorizations));
+		}
+		env.getRegion().getCoprocessorHost().preScannerOpen(
+				scan);
 		try (InternalScanner scanner = env.getRegion().getScanner(
 				scan)) {
 			final List<Cell> results = new ArrayList<Cell>();
@@ -261,15 +292,20 @@ public class AggregationEndpoint extends
 			do {
 				hasNext = scanner.next(results);
 				if (!results.isEmpty()) {
-					if ((dataAdapter != null) && (hdFilter != null)) {
-						final Object row = hdFilter.decodeRow(dataAdapter);
+					if (hdFilter != null) {
+						if (dataAdapter != null) {
+							final Object row = hdFilter.decodeRow(dataAdapter);
 
-						if (row != null) {
-							aggregation.aggregate(row);
+							if (row != null) {
+								aggregation.aggregate(row);
+							}
+							else {
+								LOGGER.error("DataAdapter failed to decode row");
+							}
 						}
-					}
-					else if (hdFilter != null) {
-						aggregation.aggregate(hdFilter.getPersistenceEncoding());
+						else {
+							aggregation.aggregate(hdFilter.getPersistenceEncoding());
+						}
 					}
 					else {
 						aggregation.aggregate(null);

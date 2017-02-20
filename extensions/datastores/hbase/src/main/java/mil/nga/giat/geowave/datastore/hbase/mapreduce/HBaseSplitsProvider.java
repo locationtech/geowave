@@ -18,15 +18,15 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveInputSplit;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.IntermediateSplitInfo;
@@ -110,9 +110,9 @@ public class HBaseSplitsProvider extends
 			final String[] authorizations )
 			throws IOException {
 
-		BasicHBaseOperations hbaseOperations = null;
-		if (operations instanceof BasicHBaseOperations) {
-			hbaseOperations = (BasicHBaseOperations) operations;
+		HBaseOperations hbaseOperations = null;
+		if (operations instanceof HBaseOperations) {
+			hbaseOperations = (HBaseOperations) operations;
 		}
 		else {
 			LOGGER.error("HBaseSplitsProvider requires BasicHBaseOperations object.");
@@ -122,11 +122,12 @@ public class HBaseSplitsProvider extends
 		if ((query != null) && !query.isSupported(index)) {
 			return splits;
 		}
-		final ByteArrayRange fullrange = unwrapRange(getRangeMax(
-				index,
-				adapterStore,
-				statsStore,
-				authorizations));
+		final ByteArrayRange fullrange = unwrapRange(new GeoWaveRowRange(
+				null,
+				null,
+				null,
+				true,
+				true));
 
 		final String tableName = index.getId().getString();
 		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();

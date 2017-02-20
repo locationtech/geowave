@@ -4,16 +4,22 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.QueryRanges;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
@@ -30,6 +36,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 public class SingleTierSubStrategy implements
 		NumericIndexStrategy
 {
+	private final static Logger LOGGER = Logger.getLogger(SingleTierSubStrategy.class);
 	private SpaceFillingCurve sfc;
 	private NumericDimensionDefinition[] baseDefinitions;
 	public byte tier;
@@ -46,7 +53,7 @@ public class SingleTierSubStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final IndexMetaData... hints ) {
 		return getQueryRanges(
@@ -55,24 +62,34 @@ public class SingleTierSubStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxRangeDecomposition,
 			final IndexMetaData... hints ) {
 		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
-		return TieredSFCIndexStrategy.getQueryRanges(
-				binnedQueries,
-				sfc,
-				maxRangeDecomposition,
-				tier);
+		return new QueryRanges(
+				TieredSFCIndexStrategy.getQueryRanges(
+						binnedQueries,
+						sfc,
+						maxRangeDecomposition,
+						tier));
 	}
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId insertionId ) {
-		final byte[] rowId = insertionId.getBytes();
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		final List<ByteArrayId> insertionIds = new SinglePartitionInsertionIds(
+				partitionKey,
+				sortKey).getCompositeInsertionIds();
+		if (insertionIds.isEmpty()) {
+			LOGGER.warn("Unexpected empty insertion ID in getRangeForId()");
+			return null;
+		}
+		final byte[] rowId = insertionIds.get(
+				0).getBytes();
 		return TieredSFCIndexStrategy.getRangeForId(
 				rowId,
 				baseDefinitions,
@@ -81,8 +98,11 @@ public class SingleTierSubStrategy implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId insertionId ) {
-		final byte[] rowId = insertionId.getBytes();
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		final byte[] rowId = ByteArrayUtils.combineArrays(
+				partitionKey == null ? null : partitionKey.getBytes(),
+				sortKey == null ? null : sortKey.getBytes());
 		return new MultiDimensionalCoordinates(
 				new byte[] {
 					tier
@@ -94,7 +114,7 @@ public class SingleTierSubStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
 		return getInsertionIds(
 				indexedData,
@@ -102,7 +122,7 @@ public class SingleTierSubStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final int maxDuplicateInsertionIds ) {
 		// we need to duplicate per bin so we can't adhere to max duplication
@@ -110,21 +130,21 @@ public class SingleTierSubStrategy implements
 		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
 				indexedData,
 				baseDefinitions);
-		// place each of these indices into a single row ID at a tier that will
-		// fit its min and max
-		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
+		final Set<SinglePartitionInsertionIds> retVal = new HashSet<SinglePartitionInsertionIds>(
+				ranges.length);
 		for (final BinnedNumericDataset range : ranges) {
-			final List<ByteArrayId> binRowIds = TieredSFCIndexStrategy.getRowIdsAtTier(
+			final SinglePartitionInsertionIds binRowIds = TieredSFCIndexStrategy.getRowIdsAtTier(
 					range,
 					tier,
 					sfc,
 					null,
 					tier);
 			if (binRowIds != null) {
-				rowIds.addAll(binRowIds);
+				retVal.add(binRowIds);
 			}
 		}
-		return rowIds;
+		return new InsertionIds(
+				retVal);
 	}
 
 	@Override
@@ -230,12 +250,7 @@ public class SingleTierSubStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
-		return null;
-	}
-
-	@Override
-	public int getByteOffsetFromDimensionalIndex() {
+	public int getPartitionKeyLength() {
 		int rowIdOffset = 1;
 		for (int dimensionIdx = 0; dimensionIdx < baseDefinitions.length; dimensionIdx++) {
 			final int binSize = baseDefinitions[dimensionIdx].getFixedBinIdSize();
@@ -265,5 +280,23 @@ public class SingleTierSubStrategy implements
 					baseDefinitions.length,
 					tier)
 		};
+	}
+
+	@Override
+	public Set<ByteArrayId> getInsertionPartitionKeys(
+			final MultiDimensionalNumericData insertionData ) {
+		return TieredSFCIndexStrategy.internalGetInsertionKeys(
+				this,
+				insertionData);
+	}
+
+	@Override
+	public Set<ByteArrayId> getQueryPartitionKeys(
+			final MultiDimensionalNumericData queryData,
+			final IndexMetaData... hints ) {
+		return TieredSFCIndexStrategy.internalGetQueryPartitionKeys(
+				this,
+				queryData,
+				hints);
 	}
 }

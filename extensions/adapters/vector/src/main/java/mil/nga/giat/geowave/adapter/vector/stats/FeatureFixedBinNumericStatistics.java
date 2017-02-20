@@ -2,18 +2,18 @@ package mil.nga.giat.geowave.adapter.vector.stats;
 
 import java.util.Date;
 
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FixedBinNumericStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-
-import org.opengis.feature.simple.SimpleFeature;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 /**
- * 
+ *
  * Fixed number of bins for a histogram. Unless configured, the range will
  * expand dynamically, redistributing the data as necessary into the wider bins.
- * 
+ *
  * The advantage of constraining the range of the statistic is to ignore values
  * outside the range, such as erroneous values. Erroneous values force extremes
  * in the histogram. For example, if the expected range of values falls between
@@ -21,10 +21,10 @@ import org.opengis.feature.simple.SimpleFeature;
  * population between 0 and 1, a single bin represents the single value of
  * 10000. If there are extremes in the data, then use
  * {@link FeatureNumericHistogramStatistics} instead.
- * 
- * 
+ *
+ *
  * The default number of bins is 32.
- * 
+ *
  */
 public class FeatureFixedBinNumericStatistics extends
 		FixedBinNumericStatistics<SimpleFeature> implements
@@ -94,19 +94,22 @@ public class FeatureFixedBinNumericStatistics extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final SimpleFeature entry ) {
+			final SimpleFeature entry,
+			final GeoWaveRow... rows ) {
 		final Object o = entry.getAttribute(getFieldName());
 		if (o == null) {
 			return;
 		}
-		if (o instanceof Date)
+		if (o instanceof Date) {
 			add(
 					1,
 					((Date) o).getTime());
-		else if (o instanceof Number) add(
-				1,
-				((Number) o).doubleValue());
+		}
+		else if (o instanceof Number) {
+			add(
+					1,
+					((Number) o).doubleValue());
+		}
 	}
 
 	@Override
@@ -118,7 +121,7 @@ public class FeatureFixedBinNumericStatistics extends
 			StatsConfig<SimpleFeature>
 	{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 6309383518148391565L;
 		private double minValue = Double.MAX_VALUE;

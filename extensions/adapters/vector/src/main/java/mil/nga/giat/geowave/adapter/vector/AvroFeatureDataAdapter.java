@@ -3,7 +3,9 @@ package mil.nga.giat.geowave.adapter.vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -12,10 +14,8 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
  */
@@ -71,13 +71,49 @@ public class AvroFeatureDataAdapter extends
 	@Override
 	public FieldReader<Object> getReader(
 			final ByteArrayId fieldId ) {
-		return (FieldReader<Object>) new AvroFeatureReader();
+		if (fieldId.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
+			return new AvroFeatureReader();
+		}
+		return super.getReader(fieldId);
 	}
 
 	@Override
 	public FieldWriter<SimpleFeature, Object> getWriter(
 			final ByteArrayId fieldId ) {
-		return (FieldWriter<SimpleFeature, Object>) new AvroFeatureWriter();
+		if (fieldId.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
+			return new AvroFeatureWriter();
+		}
+		return super.getWriter(fieldId);
+	}
+
+	@Override
+	public int getPositionOfOrderedField(
+			final CommonIndexModel model,
+			final ByteArrayId fieldId ) {
+
+		if (fieldId.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
+			final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+			return dimensionFieldIds.size();
+		}
+		return super.getPositionOfOrderedField(
+				model,
+				fieldId);
+	}
+
+	@Override
+	public ByteArrayId getFieldIdForPosition(
+			final CommonIndexModel model,
+			final int position ) {
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+		if (position < dimensionFieldIds.size()) {
+			return dimensionFieldIds.get(position);
+		}
+		else if (position == dimensionFieldIds.size()) {
+			return AvroFeatureAttributeHandler.FIELD_ID;
+		}
+		return super.getFieldIdForPosition(
+				model,
+				position);
 	}
 
 	@Override

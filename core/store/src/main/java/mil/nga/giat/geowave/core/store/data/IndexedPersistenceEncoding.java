@@ -14,13 +14,15 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 public class IndexedPersistenceEncoding<T> extends
 		PersistenceEncoding<T>
 {
-	private final ByteArrayId indexInsertionId;
+	private final ByteArrayId insertionPartitionKey;
+	private final ByteArrayId insertionSortKey;
 	private final int duplicateCount;
 
 	public IndexedPersistenceEncoding(
 			final ByteArrayId adapterId,
 			final ByteArrayId dataId,
-			final ByteArrayId indexInsertionId,
+			final ByteArrayId insertionPartitionKey,
+			final ByteArrayId insertionSortKey,
 			final int duplicateCount,
 			final PersistentDataset<T> commonData,
 			final PersistentDataset<byte[]> unknownData ) {
@@ -29,18 +31,27 @@ public class IndexedPersistenceEncoding<T> extends
 				dataId,
 				commonData,
 				unknownData);
-		this.indexInsertionId = indexInsertionId;
+		this.insertionPartitionKey = insertionPartitionKey;
+		this.insertionSortKey = insertionSortKey;
 		this.duplicateCount = duplicateCount;
 	}
 
 	/**
-	 * Return the index ID, this is the ID that the entry inserted at given by
-	 * the index
-	 * 
-	 * @return the index ID
+	 * Return the partition key portion of the insertion ID
+	 *
+	 * @return the insertion partition key
 	 */
-	public ByteArrayId getIndexInsertionId() {
-		return indexInsertionId;
+	public ByteArrayId getInsertionPartitionKey() {
+		return insertionPartitionKey;
+	}
+
+	/**
+	 * Return the sort key portion of the insertion ID
+	 *
+	 * @return the insertion sort key
+	 */
+	public ByteArrayId getInsertionSortKey() {
+		return insertionSortKey;
 	}
 
 	@Override
@@ -51,7 +62,7 @@ public class IndexedPersistenceEncoding<T> extends
 	/**
 	 * Return the number of duplicates for this entry. Entries are duplicated
 	 * when a single row ID is insufficient to index it.
-	 * 
+	 *
 	 * @return the number of duplicates
 	 */
 	public int getDuplicateCount() {
@@ -60,7 +71,7 @@ public class IndexedPersistenceEncoding<T> extends
 
 	/**
 	 * Return a flag indicating if the entry has any duplicates
-	 * 
+	 *
 	 * @return is it duplicated?
 	 */
 	public boolean isDuplicated() {

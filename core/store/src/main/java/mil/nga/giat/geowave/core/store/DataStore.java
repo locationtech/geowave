@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store;
 
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -25,7 +26,7 @@ public interface DataStore
 	 *         operations
 	 */
 	public <T> IndexWriter createWriter(
-			DataAdapter<T> adapter,
+			WritableDataAdapter<T> adapter,
 			PrimaryIndex... index )
 			throws MismatchedIndexToAdapterMapping;
 

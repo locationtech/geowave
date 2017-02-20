@@ -18,6 +18,7 @@ public class HBaseStoreFactoryFamily extends
 		AbstractHBaseFactory implements
 		StoreFactoryFamilySpi
 {
+	public final static String TYPE = "hbase";
 	@Override
 	public GenericStoreFactory<DataStore> getDataStoreFactory() {
 		return new HBaseDataStoreFactory();

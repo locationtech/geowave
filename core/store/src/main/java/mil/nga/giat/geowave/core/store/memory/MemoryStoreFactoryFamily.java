@@ -1,47 +1,22 @@
 package mil.nga.giat.geowave.core.store.memory;
 
+import mil.nga.giat.geowave.core.store.BaseDataStoreFamily;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
-import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 
 public class MemoryStoreFactoryFamily extends
-		AbstractMemoryFactory implements
+		BaseDataStoreFamily implements
 		StoreFactoryFamilySpi
 {
+	private static final String TYPE = "memory";
+	private static final String DESCRIPTION = "A GeoWave store that is in memory typically only used for test purposes";
 
-	@Override
-	public GenericStoreFactory<DataStore> getDataStoreFactory() {
-		return new MemoryDataStoreFactory();
+	public MemoryStoreFactoryFamily() {
+		super(
+				TYPE,
+				DESCRIPTION,
+				new MemoryFactoryHelper());
 	}
-
-	@Override
-	public GenericStoreFactory<DataStatisticsStore> getDataStatisticsStoreFactory() {
-		return new MemoryDataStatisticsStoreFactory();
-	}
-
-	@Override
-	public GenericStoreFactory<IndexStore> getIndexStoreFactory() {
-		return new MemoryIndexStoreFactory();
-	}
-
-	@Override
-	public GenericStoreFactory<AdapterStore> getAdapterStoreFactory() {
-		return new MemoryAdapterStoreFactory();
-	}
-
-	@Override
-	public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore() {
-		return new MemorySecondaryIndexStoreFactory();
-	}
-
-	@Override
-	public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory() {
-		return new MemoryAdapterIndexMappingStoreFactory();
-	}
-
 }

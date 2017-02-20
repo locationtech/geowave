@@ -33,11 +33,11 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 
 public abstract class AbstractDynamoDBPersistence<T extends Persistable> extends
-		AbstractGeowavePersistence<T>
+		AbstractGeoWavePersistence<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractDynamoDBPersistence.class);
 	private static final String PRIMARY_ID_KEY = "I";

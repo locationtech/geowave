@@ -6,13 +6,16 @@ import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.datastore.bigtable.BigTableDataStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+//import mil.nga.giat.geowave.datastore.bigtable.BigTableDataStoreFactory;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class BigtableStoreTestEnvironment extends
 		StoreTestEnvironment
 {
-	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new BigTableDataStoreFactory();
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new AccumuloStoreFactoryFamily()
+			.getDataStoreFactory();// new
+	// BigTableDataStoreFactory();
 	private static BigtableStoreTestEnvironment singletonInstance = null;
 
 	public static synchronized BigtableStoreTestEnvironment getInstance() {

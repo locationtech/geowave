@@ -56,7 +56,6 @@ import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -69,45 +68,45 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 
 /**
- * 
+ *
  * Manages the population of centroids by group id and batch id.
- * 
+ *
  * Properties:
- * 
+ *
  * @formatter:off
- * 
+ *
  *                "CentroidManagerGeoWave.Centroid.WrapperFactoryClass" -
  *                {@link AnalyticItemWrapperFactory} to extract wrap spatial
  *                objects with Centroid management function
- * 
+ *
  *                "CentroidManagerGeoWave.Centroid.DataTypeId" -> The data type
  *                ID of the centroid simple feature
- * 
+ *
  *                "CentroidManagerGeoWave.Centroid.IndexId" -> The GeoWave index
  *                ID of the centroid simple feature
- * 
+ *
  *                "CentroidManagerGeoWave.Global.BatchId" -> Batch ID for
  *                updates
- * 
+ *
  *                "CentroidManagerGeoWave.Global.Zookeeper" -> Zookeeper URL
- * 
+ *
  *                "CentroidManagerGeoWave.Global.AccumuloInstance" -> Accumulo
  *                Instance Name
- * 
+ *
  *                "CentroidManagerGeoWave.Global.AccumuloUser" -> Accumulo User
  *                name
- * 
+ *
  *                "CentroidManagerGeoWave.Global.AccumuloPassword" -> Accumulo
  *                Password
- * 
+ *
  *                "CentroidManagerGeoWave.Global.AccumuloNamespace" -> Accumulo
  *                Table Namespace
- * 
+ *
  *                "CentroidManagerGeoWave.Common.AccumuloConnectFactory" ->
  *                {@link BasicAccumuloOperationsFactory}
- * 
+ *
  * @formatter:on
- * 
+ *
  * @param <T>
  *            The item type used to represent a centroid.
  */
@@ -153,10 +152,10 @@ public class CentroidManagerGeoWave<T> implements
 		this.dataStore = dataStore;
 		this.indexStore = indexStore;
 		index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-				StringUtils.stringToBinary(indexId)));
+				indexId));
 		this.adapterStore = adapterStore;
 		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(new ByteArrayId(
-				StringUtils.stringToBinary(centroidDataTypeId)));
+				centroidDataTypeId));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -240,7 +239,7 @@ public class CentroidManagerGeoWave<T> implements
 		final String indexId = scopedJob.getString(
 				CentroidParameters.Centroid.INDEX_ID,
 				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				context,
 				scope,
 				null);
@@ -248,16 +247,16 @@ public class CentroidManagerGeoWave<T> implements
 		dataStore = store.getDataStoreOptions().createDataStore();
 		indexStore = store.getDataStoreOptions().createIndexStore();
 		index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-				StringUtils.stringToBinary(indexId)));
+				indexId));
 		adapterStore = store.getDataStoreOptions().createAdapterStore();
 		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(new ByteArrayId(
-				StringUtils.stringToBinary(centroidDataTypeId)));
+				centroidDataTypeId));
 	}
 
 	/**
 	 * Creates a new centroid based on the old centroid with new coordinates and
 	 * dimension values
-	 * 
+	 *
 	 * @param feature
 	 * @param coordinate
 	 * @param extraNames
@@ -293,7 +292,7 @@ public class CentroidManagerGeoWave<T> implements
 			final String[] dataIds )
 			throws IOException {
 		final ByteArrayId adapterId = new ByteArrayId(
-				StringUtils.stringToBinary(centroidDataTypeId));
+				centroidDataTypeId);
 		for (final String dataId : dataIds) {
 
 			if (dataId != null) {
@@ -302,9 +301,8 @@ public class CentroidManagerGeoWave<T> implements
 								adapterId,
 								index.getId()),
 						new DataIdQuery(
-								adapterId,
 								new ByteArrayId(
-										StringUtils.stringToBinary(dataId))));
+										dataId)));
 			}
 		}
 	}
@@ -428,15 +426,14 @@ public class CentroidManagerGeoWave<T> implements
 	public AnalyticItemWrapper<T> getCentroid(
 			final String dataId ) {
 		final ByteArrayId adapterId = new ByteArrayId(
-				StringUtils.stringToBinary(centroidDataTypeId));
+				centroidDataTypeId);
 		try (CloseableIterator<T> it = dataStore.query(
 				new QueryOptions(
 						adapterId,
 						index.getId()),
 				new DataIdQuery(
-						adapterId,
 						new ByteArrayId(
-								StringUtils.stringToBinary(dataId))))) {
+								dataId)))) {
 			if (it.hasNext()) {
 				return centroidFactory.create(it.next());
 			}
@@ -563,7 +560,7 @@ public class CentroidManagerGeoWave<T> implements
 	@Override
 	public ByteArrayId getDataTypeId() {
 		return new ByteArrayId(
-				StringUtils.stringToBinary(centroidDataTypeId));
+				centroidDataTypeId);
 	}
 
 	@Override

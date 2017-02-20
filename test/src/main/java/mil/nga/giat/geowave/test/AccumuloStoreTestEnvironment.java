@@ -22,15 +22,16 @@ import org.junit.Assert;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class AccumuloStoreTestEnvironment extends
 		StoreTestEnvironment
 {
-	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new AccumuloDataStoreFactory();
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new AccumuloStoreFactoryFamily()
+			.getDataStoreFactory();
 	private static AccumuloStoreTestEnvironment singletonInstance = null;
 
 	public static synchronized AccumuloStoreTestEnvironment getInstance() {

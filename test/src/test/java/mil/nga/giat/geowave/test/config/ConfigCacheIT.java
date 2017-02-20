@@ -18,19 +18,18 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexGroupCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
+import mil.nga.giat.geowave.core.store.cli.config.CopyIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.CopyStoreCommand;
+import mil.nga.giat.geowave.core.store.cli.config.RemoveIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.RemoveIndexGroupCommand;
+import mil.nga.giat.geowave.core.store.cli.config.RemoveStoreCommand;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
-import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.config.CopyIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.CopyStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexGroupCommand;
-import mil.nga.giat.geowave.core.store.operations.config.RemoveStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
 public class ConfigCacheIT
 {
@@ -89,7 +88,7 @@ public class ConfigCacheIT
 
 	@Test
 	public void addStore() {
-		final String storeName = new MemoryDataStoreFactory().getType();
+		final String storeName = new MemoryStoreFactoryFamily().getType();
 
 		final AddStoreCommand command = new AddStoreCommand();
 		command.setParameters("abc");

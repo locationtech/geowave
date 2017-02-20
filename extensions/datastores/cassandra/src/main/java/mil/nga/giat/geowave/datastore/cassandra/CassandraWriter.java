@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.operations.Writer;
 import mil.nga.giat.geowave.datastore.cassandra.operations.BatchedWrite;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 

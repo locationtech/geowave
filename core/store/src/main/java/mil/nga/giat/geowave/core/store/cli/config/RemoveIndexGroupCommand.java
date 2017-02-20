@@ -1,0 +1,29 @@
+package mil.nga.giat.geowave.core.store.cli.config;
+
+import com.beust.jcommander.Parameters;
+
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexGroupPluginOptions;
+
+@GeowaveOperation(name = "rmindexgrp", parentOperation = ConfigSection.class)
+@Parameters(commandDescription = "Remove index group from Geowave configuration")
+public class RemoveIndexGroupCommand extends
+		AbstractRemoveCommand implements
+		Command
+{
+
+	@Override
+	public void execute(
+			OperationParams params ) {
+
+		// Search for properties relevant to the given name
+		String pattern = IndexGroupPluginOptions.getIndexGroupNamespace(getEntryName());
+		super.execute(
+				params,
+				pattern);
+
+	}
+}

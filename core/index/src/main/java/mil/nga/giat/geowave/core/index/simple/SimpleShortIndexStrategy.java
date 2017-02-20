@@ -19,23 +19,8 @@ public class SimpleShortIndexStrategy extends
 	}
 
 	@Override
-	public byte[] toBinary() {
-		return new byte[] {};
-	}
-
-	@Override
-	public void fromBinary(
-			final byte[] bytes ) {}
-
-	@Override
 	protected Short cast(
 			final double value ) {
 		return (short) value;
 	}
-
-	@Override
-	public int getByteOffsetFromDimensionalIndex() {
-		return 0;
-	}
-
 }

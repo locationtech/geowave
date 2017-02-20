@@ -105,7 +105,7 @@ public class PersistenceEncodingTest
 		final List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
-				index);
+				index).getCompositeInsertionIds();
 
 		assertEquals(
 				1,
@@ -133,7 +133,7 @@ public class PersistenceEncodingTest
 		final List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
-				index);
+				index).getCompositeInsertionIds();
 		assertEquals(
 				7,
 				ids.size());
@@ -180,7 +180,7 @@ public class PersistenceEncodingTest
 		final List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
-				index);
+				index).getCompositeInsertionIds();
 		assertEquals(
 				4,
 				ids.size());
@@ -212,7 +212,7 @@ public class PersistenceEncodingTest
 		final List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
-				index);
+				index).getCompositeInsertionIds();
 		assertEquals(
 				18,
 				ids.size());
@@ -235,7 +235,7 @@ public class PersistenceEncodingTest
 		final List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
-				index);
+				index).getCompositeInsertionIds();
 
 		assertEquals(
 				8,
@@ -263,7 +263,7 @@ public class PersistenceEncodingTest
 		final List<ByteArrayId> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
-				index);
+				index).getCompositeInsertionIds();
 		assertTrue(ids.size() < 100);
 	}
 

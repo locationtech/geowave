@@ -7,15 +7,16 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
-import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.PartitionIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
@@ -88,7 +89,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final IndexMetaData... hints ) {
 		return parentStrategies.get(
@@ -111,7 +112,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxEstimatedRangeDecomposition,
 			final IndexMetaData... hints ) {
@@ -129,7 +130,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
 		return parentStrategies.get(
 				0).getInsertionIds(
@@ -143,13 +144,13 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	}
 
 	@Override
-	public int getByteOffsetFromDimensionalIndex() {
+	public int getPartitionKeyLength() {
 		return parentStrategies.get(
-				0).getByteOffsetFromDimensionalIndex();
+				0).getPartitionKeyLength();
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final int maxEstimatedDuplicateIds ) {
 		return parentStrategies.get(
@@ -160,22 +161,18 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId insertionId ) {
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
 		return parentStrategies.get(
 				0).getRangeForId(
-				insertionId);
+				partitionKey,
+				sortKey);
 	}
 
 	@Override
 	public String getId() {
 		return parentStrategies.get(
 				0).getId();
-	}
-
-	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
-		return parentStrategies.get(
-				0).getNaturalSplits();
 	}
 
 	@Override
@@ -210,7 +207,8 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 			return (HierarchicalNumericIndexStrategy) indexStrategy;
 		}
 		if (indexStrategy instanceof CompoundIndexStrategy) {
-			final NumericIndexStrategy primaryIndex = ((CompoundIndexStrategy) indexStrategy).getPrimarySubStrategy();
+			final PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> primaryIndex = ((CompoundIndexStrategy) indexStrategy)
+					.getPrimarySubStrategy();
 			final NumericIndexStrategy secondaryIndex = ((CompoundIndexStrategy) indexStrategy)
 					.getSecondarySubStrategy();
 			// warn if round robin is used
@@ -219,16 +217,6 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 			}
 			else if (secondaryIndex instanceof RoundRobinKeyIndexStrategy) {
 				LOGGER.warn("Round Robin partitioning won't work correctly with raster merge strategies");
-			}
-			final HierarchicalNumericIndexStrategy primary = findHierarchicalStrategy(primaryIndex);
-
-			if (primary != null) {
-				// add it to beginning because we are recursing back from the
-				// leaf strategy up to the parent
-				parentStrategies.add(
-						0,
-						(CompoundIndexStrategy) indexStrategy);
-				return primary;
 			}
 			final HierarchicalNumericIndexStrategy secondary = findHierarchicalStrategy(secondaryIndex);
 			if (secondary != null) {
@@ -245,19 +233,39 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			ByteArrayId insertionId ) {
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
 		return parentStrategies.get(
 				0).getCoordinatesPerDimension(
-				insertionId);
+				partitionKey,
+				sortKey);
 	}
 
 	@Override
 	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-			MultiDimensionalNumericData dataRange,
-			IndexMetaData... hints ) {
+			final MultiDimensionalNumericData dataRange,
+			final IndexMetaData... hints ) {
 		return parentStrategies.get(
 				0).getCoordinateRangesPerDimension(
 				dataRange,
+				hints);
+	}
+
+	@Override
+	public Set<ByteArrayId> getInsertionPartitionKeys(
+			final MultiDimensionalNumericData insertionData ) {
+		return parentStrategies.get(
+				0).getInsertionPartitionKeys(
+				insertionData);
+	}
+
+	@Override
+	public Set<ByteArrayId> getQueryPartitionKeys(
+			final MultiDimensionalNumericData queryData,
+			final IndexMetaData... hints ) {
+		return parentStrategies.get(
+				0).getQueryPartitionKeys(
+				queryData,
 				hints);
 	}
 }

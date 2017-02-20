@@ -2,6 +2,12 @@ package mil.nga.giat.geowave.core.index;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -119,7 +125,9 @@ public class ByteArrayId implements
 	@Override
 	public int compareTo(
 			final ByteArrayId o ) {
-
+		if (o == null) {
+			return -1;
+		}
 		for (int i = 0, j = 0; (i < id.length) && (j < o.id.length); i++, j++) {
 			final int a = (id[i] & 0xff);
 			final int b = (o.id[j] & 0xff);
@@ -142,7 +150,23 @@ public class ByteArrayId implements
 		}
 
 		if (offset == 0) {
-			return new byte[0];
+			// TODO: is this correct? an empty byte array sorts before a single
+			// byte {0xFF}
+			// return new byte[0];
+
+			// it doesn't seem right, so instead, let's append several 0xFF
+			// bytes
+			return ByteArrayUtils.combineArrays(
+					rowKeyPrefix,
+					new byte[] {
+						(byte) 0xFF,
+						(byte) 0xFF,
+						(byte) 0xFF,
+						(byte) 0xFF,
+						(byte) 0xFF,
+						(byte) 0xFF,
+						(byte) 0xFF
+					});
 		}
 
 		final byte[] newStopRow = Arrays.copyOfRange(
@@ -152,5 +176,20 @@ public class ByteArrayId implements
 		// And increment the last one
 		newStopRow[newStopRow.length - 1]++;
 		return newStopRow;
+	}
+
+	public static List<ByteArrayId> transformStringList(
+			final List<String> str ) {
+		return Lists.transform(
+				str,
+				new Function<String, ByteArrayId>() {
+					@Override
+					public ByteArrayId apply(
+							@Nonnull
+							final String input ) {
+						return new ByteArrayId(
+								input);
+					}
+				});
 	}
 }

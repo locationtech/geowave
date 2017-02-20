@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -30,6 +31,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -39,7 +41,7 @@ import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos;
 
 public class HBaseConstraintsQuery extends
@@ -59,6 +61,7 @@ public class HBaseConstraintsQuery extends
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String[] authorizations ) {
 		this(
@@ -72,6 +75,7 @@ public class HBaseConstraintsQuery extends
 				aggregation,
 				indexMetaData,
 				duplicateCounts,
+				visibilityCounts,
 				fieldIds,
 				authorizations);
 	}
@@ -87,15 +91,16 @@ public class HBaseConstraintsQuery extends
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String[] authorizations ) {
-
 		super(
 				dataStore,
 				adapterIds,
 				index,
 				scanCallback,
 				fieldIds,
+				visibilityCounts,
 				authorizations);
 
 		base = new ConstraintsQuery(
@@ -124,7 +129,7 @@ public class HBaseConstraintsQuery extends
 	}
 
 	@Override
-	protected List<ByteArrayRange> getRanges() {
+	protected QueryRanges getRanges() {
 		return base.getRanges();
 	}
 
@@ -173,7 +178,7 @@ public class HBaseConstraintsQuery extends
 
 	@Override
 	public CloseableIterator<Object> query(
-			final BasicHBaseOperations operations,
+			final HBaseOperations operations,
 			final AdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
@@ -229,7 +234,7 @@ public class HBaseConstraintsQuery extends
 	}
 
 	private CloseableIterator<Object> aggregateWithCoprocessor(
-			final BasicHBaseOperations operations,
+			final HBaseOperations operations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
@@ -295,6 +300,15 @@ public class HBaseConstraintsQuery extends
 					requestBuilder.setAdapter(ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter)));
 				}
 			}
+
+			if (authorizations != null && authorizations.length > 0) {
+				requestBuilder.setVisLabels(ByteString.copyFrom(StringUtils.stringsToBinary(authorizations)));
+			}
+
+			if (useWholeRowIterator()) {
+				requestBuilder.setWholeRowFilter(true);
+			}
+
 			final AggregationProtos.AggregationRequest request = requestBuilder.build();
 
 			final Table table = operations.getTable(tableName);

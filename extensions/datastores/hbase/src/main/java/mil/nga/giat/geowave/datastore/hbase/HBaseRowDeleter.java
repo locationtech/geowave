@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.Deleter;
-import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
+import mil.nga.giat.geowave.core.store.operations.Deleter;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseWriter;
 
 public class HBaseRowDeleter implements
 		Deleter<Object>

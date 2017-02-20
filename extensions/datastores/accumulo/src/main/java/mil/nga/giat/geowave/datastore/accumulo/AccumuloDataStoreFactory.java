@@ -1,18 +1,26 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreFactory;
+import mil.nga.giat.geowave.core.store.StoreFactoryHelper;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 public class AccumuloDataStoreFactory extends
-		AbstractAccumuloStoreFactory<DataStore>
+		DataStoreFactory
 {
+	public AccumuloDataStoreFactory(
+			final String typeName,
+			final String description,
+			final StoreFactoryHelper helper ) {
+		super(
+				typeName,
+				description,
+				helper);
+	}
 
 	@Override
 	public DataStore createStore(
@@ -21,26 +29,15 @@ public class AccumuloDataStoreFactory extends
 			throw new AssertionError(
 					"Expected " + AccumuloRequiredOptions.class.getSimpleName());
 		}
-		AccumuloRequiredOptions opts = (AccumuloRequiredOptions) options;
-		if (opts.getAdditionalOptions() == null) {
-			opts.setAdditionalOptions(new AccumuloOptions());
+		final AccumuloRequiredOptions opts = (AccumuloRequiredOptions) options;
+		if (opts.getStoreOptions() == null) {
+			opts.setStoreOptions(new AccumuloOptions());
 		}
 
-		BasicAccumuloOperations accumuloOperations = createOperations(opts);
+		final DataStoreOperations accumuloOperations = helper.createOperations(opts);
 		return new AccumuloDataStore(
-				new AccumuloIndexStore(
-						accumuloOperations),
-				new AccumuloAdapterStore(
-						accumuloOperations),
-				new AccumuloDataStatisticsStore(
-						accumuloOperations),
-				new AccumuloSecondaryIndexDataStore(
-						accumuloOperations,
-						opts.getAdditionalOptions()),
-				new AccumuloAdapterIndexMappingStore(
-						accumuloOperations),
-				accumuloOperations,
-				opts.getAdditionalOptions());
+				(AccumuloOperations) accumuloOperations,
+				(AccumuloOptions) opts.getStoreOptions());
 
 	}
 }

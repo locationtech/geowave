@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+
+import com.google.common.base.Splitter;
+
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
@@ -12,18 +18,11 @@ import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy;
-
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-
-import com.google.common.base.Splitter;
 
 public class SecondaryIndexManager implements
 		Persistable
@@ -145,8 +144,7 @@ public class SecondaryIndexManager implements
 		for (final DataStatistics<SimpleFeature> statistic : statistics) {
 			statsManager.addStats(
 					statistic,
-					new FieldIdStatisticVisibility<SimpleFeature>(
-							statistic.getStatisticsId()));
+					fieldId);
 		}
 	}
 
@@ -162,7 +160,7 @@ public class SecondaryIndexManager implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		final List<Persistable> persistables = PersistenceUtils.fromBinary(bytes);
 		for (final Persistable persistable : persistables) {
 			supportedSecondaryIndices.add((SecondaryIndex<SimpleFeature>) persistable);

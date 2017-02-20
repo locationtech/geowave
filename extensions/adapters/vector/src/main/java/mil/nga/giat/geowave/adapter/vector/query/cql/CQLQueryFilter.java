@@ -3,6 +3,12 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 
+import org.apache.log4j.Logger;
+import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.Filter;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -15,12 +21,6 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-
-import org.apache.log4j.Logger;
-import org.geotools.filter.text.cql2.CQLException;
-import org.geotools.filter.text.ecql.ECQL;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
 
 public class CQLQueryFilter implements
 		DistributableQueryFilter
@@ -41,7 +41,7 @@ public class CQLQueryFilter implements
 			// another.
 			this.filter = FilterToCQLTool.toFilter(FilterToCQLTool.toCQL(filter));
 		}
-		catch (CQLException e) {
+		catch (final CQLException e) {
 			LOGGER.trace(
 					"Filter is not a CQL Expression",
 					e);
@@ -73,7 +73,8 @@ public class CQLQueryFilter implements
 				final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
 						persistenceEncoding.getAdapterId(),
 						persistenceEncoding.getDataId(),
-						persistenceEncoding.getIndexInsertionId(),
+						persistenceEncoding.getInsertionPartitionKey(),
+						persistenceEncoding.getInsertionSortKey(),
 						persistenceEncoding.getDuplicateCount(),
 						persistenceEncoding.getCommonData(),
 						new PersistentDataset<byte[]>(),

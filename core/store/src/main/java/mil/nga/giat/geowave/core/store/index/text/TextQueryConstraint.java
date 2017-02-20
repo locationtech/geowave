@@ -1,19 +1,17 @@
 package mil.nga.giat.geowave.core.store.index.text;
 
-import java.util.Collections;
-import java.util.List;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 
 public class TextQueryConstraint implements
 		FilterableConstraints
 {
-	private ByteArrayId fieldId;
-	private String matchValue;
-	private boolean caseSensitive;
+	private final ByteArrayId fieldId;
+	private final String matchValue;
+	private final boolean caseSensitive;
 
 	public TextQueryConstraint(
 			final ByteArrayId fieldId,
@@ -48,25 +46,26 @@ public class TextQueryConstraint implements
 				caseSensitive);
 	}
 
-	public List<ByteArrayRange> getRange() {
+	public QueryRanges getQueryRanges() {
 		// TODO case sensitivity
-		return Collections.singletonList(new ByteArrayRange(
-				new ByteArrayId(
-						matchValue),
-				new ByteArrayId(
-						matchValue)));
+		return new QueryRanges(
+				new ByteArrayRange(
+						new ByteArrayId(
+								matchValue),
+						new ByteArrayId(
+								matchValue)));
 	}
 
 	@Override
 	public FilterableConstraints intersect(
-			FilterableConstraints constaints ) {
+			final FilterableConstraints constaints ) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public FilterableConstraints union(
-			FilterableConstraints constaints ) {
+			final FilterableConstraints constaints ) {
 		// TODO Auto-generated method stub
 		return null;
 	}

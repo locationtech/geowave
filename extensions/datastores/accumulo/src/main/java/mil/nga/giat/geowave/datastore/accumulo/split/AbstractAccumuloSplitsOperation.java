@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.NullIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 abstract public class AbstractAccumuloSplitsOperation
 {
@@ -27,8 +27,8 @@ abstract public class AbstractAccumuloSplitsOperation
 	private final SplitCommandLineOptions splitOptions;
 
 	public AbstractAccumuloSplitsOperation(
-			DataStorePluginOptions storeOptions,
-			SplitCommandLineOptions splitOptions ) {
+			final DataStorePluginOptions storeOptions,
+			final SplitCommandLineOptions splitOptions ) {
 		this.storeOptions = storeOptions;
 		this.splitOptions = splitOptions;
 	}
@@ -39,8 +39,8 @@ abstract public class AbstractAccumuloSplitsOperation
 		try {
 			final IndexStore indexStore = storeOptions.createIndexStore();
 
-			AccumuloRequiredOptions options = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
-			BasicAccumuloOperations operations = BasicAccumuloOperations.createOperations(options);
+			final AccumuloRequiredOptions options = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
+			final AccumuloOperations operations = AccumuloOperations.createOperations(options);
 
 			final Connector connector = operations.getConnector();
 			final String namespace = options.getGeowaveNamespace();

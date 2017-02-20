@@ -118,11 +118,9 @@ public class FeatureHyperLogLogStaticticsTest
 				16);
 
 		for (int i = 0; i < 10000; i++) {
-			stat.entryIngested(
-					null,
-					create(
-							pidSetOne,
-							firstSet));
+			stat.entryIngested(create(
+					pidSetOne,
+					firstSet));
 		}
 
 		final FeatureHyperLogLogStatistics stat2 = new FeatureHyperLogLogStatistics(
@@ -132,11 +130,9 @@ public class FeatureHyperLogLogStaticticsTest
 				16);
 
 		for (int i = 0; i < 10000; i++) {
-			stat2.entryIngested(
-					null,
-					create(
-							pidSetTwo,
-							secondSet));
+			stat2.entryIngested(create(
+					pidSetTwo,
+					secondSet));
 		}
 
 		assertTrue(Math.abs(firstSet.size() - stat.cardinality()) < 10);

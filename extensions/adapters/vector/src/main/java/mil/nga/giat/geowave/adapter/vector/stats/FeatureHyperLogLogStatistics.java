@@ -3,23 +3,23 @@ package mil.nga.giat.geowave.adapter.vector.stats;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-
 import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+
 /**
  * Hyperloglog provides an estimated cardinality of the number of unique values
  * for an attribute.
- * 
- * 
+ *
+ *
  */
 public class FeatureHyperLogLogStatistics extends
 		AbstractDataStatistics<SimpleFeature> implements
@@ -36,7 +36,7 @@ public class FeatureHyperLogLogStatistics extends
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dataAdapterId
 	 * @param fieldName
 	 * @param precision
@@ -46,7 +46,7 @@ public class FeatureHyperLogLogStatistics extends
 	public FeatureHyperLogLogStatistics(
 			final ByteArrayId dataAdapterId,
 			final String fieldName,
-			int precision ) {
+			final int precision ) {
 		super(
 				dataAdapterId,
 				composeId(
@@ -88,7 +88,7 @@ public class FeatureHyperLogLogStatistics extends
 			try {
 				loglog = (HyperLogLogPlus) ((FeatureHyperLogLogStatistics) mergeable).loglog.merge(loglog);
 			}
-			catch (CardinalityMergeException e) {
+			catch (final CardinalityMergeException e) {
 				throw new RuntimeException(
 						"Unable to merge counters",
 						e);
@@ -101,14 +101,14 @@ public class FeatureHyperLogLogStatistics extends
 	public byte[] toBinary() {
 
 		try {
-			byte[] data = loglog.getBytes();
+			final byte[] data = loglog.getBytes();
 
 			final ByteBuffer buffer = super.binaryBuffer(4 + data.length);
 			buffer.putInt(data.length);
 			buffer.put(data);
 			return buffer.array();
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Exception while writing statistic",
 					e);
@@ -125,7 +125,7 @@ public class FeatureHyperLogLogStatistics extends
 		try {
 			loglog = HyperLogLogPlus.Builder.build(data);
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Exception while reading statistic",
 					e);
@@ -134,8 +134,8 @@ public class FeatureHyperLogLogStatistics extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final SimpleFeature entry ) {
+			final SimpleFeature entry,
+			final GeoWaveRow... rows ) {
 		final Object o = entry.getAttribute(getFieldName());
 		if (o == null) {
 			return;
@@ -143,8 +143,9 @@ public class FeatureHyperLogLogStatistics extends
 		loglog.offer(o.toString());
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"hyperloglog[adapter=").append(
 				super.getDataAdapterId().getString());
@@ -162,7 +163,7 @@ public class FeatureHyperLogLogStatistics extends
 			StatsConfig<SimpleFeature>
 	{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 6309383518148391565L;
 		private int precision = 16;
@@ -172,7 +173,7 @@ public class FeatureHyperLogLogStatistics extends
 		}
 
 		public FeatureHyperLogLogConfig(
-				int precision ) {
+				final int precision ) {
 			super();
 			this.precision = precision;
 		}
@@ -182,7 +183,7 @@ public class FeatureHyperLogLogStatistics extends
 		}
 
 		public void setPrecision(
-				int precision ) {
+				final int precision ) {
 			this.precision = precision;
 		}
 

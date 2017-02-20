@@ -152,7 +152,7 @@ public class IndexUtils
 			final double[] maxResolutionSubsamplingPerDimension ) {
 		return (int) Math.round(getDimensionalBitsUsed(
 				indexStrategy,
-				maxResolutionSubsamplingPerDimension) + (8 * indexStrategy.getByteOffsetFromDimensionalIndex()));
+				maxResolutionSubsamplingPerDimension) + (8 * indexStrategy.getPartitionKeyLength()));
 	}
 
 	public static byte[] getNextRowForSkip(

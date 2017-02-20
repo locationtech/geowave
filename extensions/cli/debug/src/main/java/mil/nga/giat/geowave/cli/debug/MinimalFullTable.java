@@ -27,12 +27,12 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 
 @GeowaveOperation(name = "fullscanMinimal", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "full table scan without any iterators or deserialization")
@@ -40,17 +40,18 @@ public class MinimalFullTable extends
 		DefaultOperation implements
 		Command
 {
-	private static Logger LOGGER = Logger.getLogger(MinimalFullTable.class);
+	private static Logger LOGGER = Logger.getLogger(
+			MinimalFullTable.class);
 
 	@Parameter(description = "<storename>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
 	private String indexId;
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws ParseException {
 		final Stopwatch stopWatch = new Stopwatch();
 
@@ -60,37 +61,44 @@ public class MinimalFullTable extends
 					"Requires arguments: <storename>");
 		}
 
-		String storeName = parameters.get(0);
+		final String storeName = parameters.get(
+				0);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load store.
-		StoreLoader storeOptions = new StoreLoader(
+		final StoreLoader storeOptions = new StoreLoader(
 				storeName);
-		if (!storeOptions.loadFromConfig(configFile)) {
+		if (!storeOptions.loadFromConfig(
+				configFile)) {
 			throw new ParameterException(
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}
 
-		String storeType = storeOptions.getDataStorePlugin().getType();
+		final String storeType = storeOptions.getDataStorePlugin().getType();
 
-		if (storeType.equals(AccumuloDataStore.TYPE)) {
+		if (storeType.equals(
+				AccumuloStoreFactoryFamily.TYPE)) {
 			try {
-				AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
+				final AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
 
-				final AccumuloOperations ops = new BasicAccumuloOperations(
+				final AccumuloOperations ops = new AccumuloOperations(
 						opts.getZookeeper(),
 						opts.getInstance(),
 						opts.getUser(),
 						opts.getPassword(),
-						opts.getGeowaveNamespace());
+						opts.getGeowaveNamespace(),
+						(AccumuloOptions) opts.getStoreOptions());
 
 				long results = 0;
-				final BatchScanner scanner = ops.createBatchScanner(indexId);
-				scanner.setRanges(Collections.singleton(new Range()));
-				Iterator<Entry<Key, Value>> it = scanner.iterator();
+				final BatchScanner scanner = ops.createBatchScanner(
+						indexId);
+				scanner.setRanges(
+						Collections.singleton(
+								new Range()));
+				final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
 				stopWatch.start();
 				while (it.hasNext()) {
@@ -100,7 +108,8 @@ public class MinimalFullTable extends
 				stopWatch.stop();
 
 				scanner.close();
-				System.out.println("Got " + results + " results in " + stopWatch.toString());
+				System.out.println(
+						"Got " + results + " results in " + stopWatch.toString());
 			}
 			catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
 				LOGGER.error(
@@ -108,7 +117,8 @@ public class MinimalFullTable extends
 						e);
 			}
 		}
-		else if (storeType.equals(HBaseDataStore.TYPE)) {
+		else if (storeType.equals(
+				HBaseStoreFactoryFamily.TYPE)) {
 			throw new UnsupportedOperationException(
 					"full scan for store type " + storeType + " not yet implemented.");
 		}

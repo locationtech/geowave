@@ -8,19 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.Assert;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.IndexMetaData;
-import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
-import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +16,20 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
+
+import junit.framework.Assert;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.QueryRanges;
+import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 public class GeometryUtilsTest
 {
@@ -192,46 +193,6 @@ public class GeometryUtilsTest
 				final byte[] bytes ) {}
 
 		@Override
-		public List<ByteArrayRange> getQueryRanges(
-				final MultiDimensionalNumericData indexedRange,
-				IndexMetaData... hints ) {
-			return null;
-		}
-
-		@Override
-		public List<ByteArrayRange> getQueryRanges(
-				final MultiDimensionalNumericData indexedRange,
-				final int maxEstimatedRangeDecomposition,
-				IndexMetaData... hints ) {
-			return null;
-		}
-
-		@Override
-		public List<ByteArrayId> getInsertionIds(
-				final MultiDimensionalNumericData indexedData ) {
-			return null;
-		}
-
-		@Override
-		public List<ByteArrayId> getInsertionIds(
-				final MultiDimensionalNumericData indexedData,
-				final int maxEstimatedDuplicateIds ) {
-			return null;
-		}
-
-		@Override
-		public MultiDimensionalNumericData getRangeForId(
-				final ByteArrayId insertionId ) {
-			return null;
-		}
-
-		@Override
-		public MultiDimensionalCoordinates getCoordinatesPerDimension(
-				final ByteArrayId insertionId ) {
-			return null;
-		}
-
-		@Override
 		public NumericDimensionDefinition[] getOrderedDimensionDefinitions() {
 			return new NumericDimensionDefinition[] {
 				new LongitudeDefinition(),
@@ -250,27 +211,75 @@ public class GeometryUtilsTest
 		}
 
 		@Override
-		public Set<ByteArrayId> getNaturalSplits() {
-			return null;
-		}
-
-		@Override
-		public int getByteOffsetFromDimensionalIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
 		public List<IndexMetaData> createMetaData() {
 			return Collections.emptyList();
 		}
 
 		@Override
 		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-				MultiDimensionalNumericData dataRange,
-				IndexMetaData... hints ) {
-			// TODO Auto-generated method stub
+				final MultiDimensionalNumericData dataRange,
+				final IndexMetaData... hints ) {
 			return null;
+		}
+
+		@Override
+		public QueryRanges getQueryRanges(
+				final MultiDimensionalNumericData indexedRange,
+				final IndexMetaData... hints ) {
+			return null;
+		}
+
+		@Override
+		public QueryRanges getQueryRanges(
+				final MultiDimensionalNumericData indexedRange,
+				final int maxEstimatedRangeDecomposition,
+				final IndexMetaData... hints ) {
+			return null;
+		}
+
+		@Override
+		public InsertionIds getInsertionIds(
+				final MultiDimensionalNumericData indexedData ) {
+			return null;
+		}
+
+		@Override
+		public InsertionIds getInsertionIds(
+				final MultiDimensionalNumericData indexedData,
+				final int maxEstimatedDuplicateIds ) {
+			return null;
+		}
+
+		@Override
+		public MultiDimensionalNumericData getRangeForId(
+				final ByteArrayId partitionKey,
+				final ByteArrayId sortKey ) {
+			return null;
+		}
+
+		@Override
+		public Set<ByteArrayId> getInsertionPartitionKeys(
+				final MultiDimensionalNumericData insertionData ) {
+			return null;
+		}
+
+		@Override
+		public Set<ByteArrayId> getQueryPartitionKeys(
+				final MultiDimensionalNumericData queryData,
+				final IndexMetaData... hints ) {
+			return null;
+		}
+
+		@Override
+		public MultiDimensionalCoordinates getCoordinatesPerDimension(
+				final ByteArrayId partitionKey,
+				final ByteArrayId sortKey ) {
+			return null;
+		}
+
+		@Override
+		public int getPartitionKeyLength() {
+			return 0;
 		}
 
 	}

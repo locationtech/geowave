@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -116,7 +117,6 @@ public class GeoWaveFeatureReaderTest extends
 		transaction1.commit();
 		transaction1.close();
 
-		// System.out.println(fids);
 		query = new Query(
 				"GeoWaveFeatureReaderTest",
 				ECQL.toFilter("IN ('" + fids.get(0) + "')"),

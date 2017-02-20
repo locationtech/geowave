@@ -9,15 +9,15 @@ env:
     # The rest skip the unit tests and run ITs only
     - NAME='UT and Publish Docs with Latest ASF Versions' MAVEN_PROFILES='""' BUILD_DOCS=true   IT_ONLY=false
     - NAME='Accumulo IT on Latest ASF Versions' MAVEN_PROFILES='accumulo-it' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='HBase IT on Latest ASF Versions' MAVEN_PROFILES='hbase-it' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='Cassandra IT on Latest ASF Versions' MAVEN_PROFILES='cassandra-it' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='DynamoDB IT on Latest ASF Versions' MAVEN_PROFILES='dynamodb-it' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='Bigtable IT on Latest ASF Versions' MAVEN_PROFILES='bigtable-it' BUILD_DOCS=false  IT_ONLY=true
+    #- NAME='HBase IT on Latest ASF Versions' MAVEN_PROFILES='hbase-it' BUILD_DOCS=false  IT_ONLY=true
+    #- NAME='Cassandra IT on Latest ASF Versions' MAVEN_PROFILES='cassandra-it' BUILD_DOCS=false  IT_ONLY=true
+    #- NAME='DynamoDB IT on Latest ASF Versions' MAVEN_PROFILES='dynamodb-it' BUILD_DOCS=false  IT_ONLY=true
+    #- NAME='Bigtable IT on Latest ASF Versions' MAVEN_PROFILES='bigtable-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it,cloudera' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it,hortonworks' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='accumulo-it,compatibility' BUILD_DOCS=false  IT_ONLY=true	 
-    - NAME='HBase IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it,cloudera' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='HBase IT on Latest HDP Versions'  MAVEN_PROFILES='hbase-it,hortonworks' BUILD_DOCS=false  IT_ONLY=true
+    #- NAME='HBase IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it,cloudera' BUILD_DOCS=false  IT_ONLY=true
+    #- NAME='HBase IT on Latest HDP Versions'  MAVEN_PROFILES='hbase-it,hortonworks' BUILD_DOCS=false  IT_ONLY=true
   global:
     - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
     - secure: "IcwzKevdTSsKK9YERJ/LV81pfDe7Fx7qBxYcy43b0/emsioZJsJV5XSYHfFRIqceMkzp8LFBU8qiZR3cPZPKQoCjaG1QcwDeKQpyczIkMwzWzydhLR5dAzVETbQC9i2hH4sWjVVHW5WU6UUc3gCz5rPyIXFUYVUYxFeMWxHCe8w="

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 public class MaxDuplicatesStatistics<T> extends
 		AbstractDataStatistics<T>
@@ -78,11 +78,13 @@ public class MaxDuplicatesStatistics<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		maxDuplicates = Math.max(
-				maxDuplicates,
-				entryInfo.getRowIds().size() - 1);
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		for (final GeoWaveRow kv : kvs) {
+			maxDuplicates = Math.max(
+					maxDuplicates,
+					kv.getNumberOfDuplicates());
+		}
 	}
 
 	@Override

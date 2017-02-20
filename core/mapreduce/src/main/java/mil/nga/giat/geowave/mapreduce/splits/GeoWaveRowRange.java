@@ -1,19 +1,122 @@
 package mil.nga.giat.geowave.mapreduce.splits;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.apache.hadoop.io.Writable;
 
-public interface GeoWaveRowRange extends
+public class GeoWaveRowRange implements
 		Writable
 {
-	byte[] getStartKey();
+	private byte[] partitionKey;
+	private byte[] startKey;
+	private byte[] endKey;
+	private boolean startKeyInclusive;
+	private boolean endKeyInclusive;
 
-	byte[] getEndKey();
+	protected GeoWaveRowRange() {}
 
-	boolean isStartKeyInclusive();
+	public GeoWaveRowRange(
+			final byte[] partitionKey,
+			final byte[] startKey,
+			final byte[] endKey,
+			final boolean startKeyInclusive,
+			final boolean endKeyInclusive ) {
+		this.partitionKey = partitionKey;
+		this.startKey = startKey;
+		this.endKey = endKey;
+		this.startKeyInclusive = startKeyInclusive;
+		this.endKeyInclusive = endKeyInclusive;
+	}
 
-	boolean isEndKeyInclusive();
+	@Override
+	public void write(
+			final DataOutput out )
+			throws IOException {
+		out.writeBoolean((partitionKey == null) || (partitionKey.length == 0));
+		out.writeBoolean(startKey == null);
+		out.writeBoolean(endKey == null);
+		if ((partitionKey != null) && (partitionKey.length > 0)) {
+			out.writeShort(partitionKey.length);
+			out.write(partitionKey);
+		}
+		if (startKey != null) {
+			out.writeShort(startKey.length);
+			out.write(startKey);
+		}
+		if (endKey != null) {
+			out.writeShort(endKey.length);
+			out.write(endKey);
+		}
+		out.writeBoolean(startKeyInclusive);
+		out.writeBoolean(endKeyInclusive);
+	}
 
-	boolean isInfiniteStartKey();
+	@Override
+	public void readFields(
+			final DataInput in )
+			throws IOException {
+		final boolean nullPartitionKey = in.readBoolean();
+		final boolean infiniteStartKey = in.readBoolean();
+		final boolean infiniteEndKey = in.readBoolean();
+		if (!nullPartitionKey) {
+			partitionKey = new byte[in.readShort()];
+			in.readFully(partitionKey);
+		}
+		if (!infiniteStartKey) {
+			startKey = new byte[in.readShort()];
+			in.readFully(startKey);
+		}
+		else {
+			startKey = null;
+		}
 
-	boolean isInfiniteStopKey();
+		if (!infiniteEndKey) {
+			endKey = new byte[in.readShort()];
+			in.readFully(endKey);
+		}
+		else {
+			endKey = null;
+		}
+
+		startKeyInclusive = in.readBoolean();
+		endKeyInclusive = in.readBoolean();
+	}
+
+	public byte[] getPartitionKey() {
+		return partitionKey;
+	}
+
+	public byte[] getStartSortKey() {
+		return startKey;
+	}
+
+	public byte[] getEndSortKey() {
+		return endKey;
+	}
+
+	public boolean isStartSortKeyInclusive() {
+		return startKeyInclusive;
+	}
+
+	public boolean isEndSortKeyInclusive() {
+		return endKeyInclusive;
+	}
+
+	public boolean isInfiniteStartSortKey() {
+		return startKey == null;
+	}
+
+	public boolean isInfiniteStopSortKey() {
+		return endKey == null;
+	}
+
+	@Override
+	public String toString() {
+		return "GeoWaveRowRange [partitionKey=" + Arrays.toString(partitionKey) + ", startKey="
+				+ Arrays.toString(startKey) + ", endKey=" + Arrays.toString(endKey) + ", startKeyInclusive="
+				+ startKeyInclusive + ", endKeyInclusive=" + endKeyInclusive + "]";
+	}
 }

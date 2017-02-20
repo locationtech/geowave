@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.core.store.index;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.IndexStrategy;
+import mil.nga.giat.geowave.core.index.SortedIndexStrategy;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.QueryConstraints;
 
@@ -10,6 +10,6 @@ public interface Index<QueryRangeType extends QueryConstraints, EntryRangeType> 
 {
 	public ByteArrayId getId();
 
-	public IndexStrategy<QueryRangeType, EntryRangeType> getIndexStrategy();
+	public SortedIndexStrategy<QueryRangeType, EntryRangeType> getIndexStrategy();
 
 }

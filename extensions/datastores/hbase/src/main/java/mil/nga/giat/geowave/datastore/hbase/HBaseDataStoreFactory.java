@@ -2,14 +2,14 @@ package mil.nga.giat.geowave.datastore.hbase;
 
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseAdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class HBaseDataStoreFactory extends
 		AbstractHBaseStoreFactory<DataStore>
@@ -26,7 +26,7 @@ public class HBaseDataStoreFactory extends
 			opts.setAdditionalOptions(new HBaseOptions());
 		}
 
-		final BasicHBaseOperations hbaseOperations = createOperations(opts);
+		final HBaseOperations hbaseOperations = createOperations(opts);
 		return new HBaseDataStore(
 				new HBaseIndexStore(
 						hbaseOperations),

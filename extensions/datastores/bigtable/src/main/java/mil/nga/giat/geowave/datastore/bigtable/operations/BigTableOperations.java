@@ -13,10 +13,10 @@ import org.apache.hadoop.hbase.client.Scan;
 import com.google.cloud.bigtable.hbase.BigtableConfiguration;
 
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class BigTableOperations extends
-		BasicHBaseOperations
+		HBaseOperations
 {
 
 	public BigTableOperations()

@@ -2,8 +2,8 @@ package mil.nga.giat.geowave.core.ingest;
 
 import java.util.List;
 
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
 public class IngestUtils
 {

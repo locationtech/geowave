@@ -166,15 +166,11 @@ public class QueryIndexHelperTest
 
 		final SimpleFeature notIntersectSingle1 = createSingleTimeFeature(startTime);
 
-		whenStats.entryIngested(
-				null,
-				notIntersectSingle1);
+		whenStats.entryIngested(notIntersectSingle1);
 
 		final SimpleFeature notIntersectSingle = createSingleTimeFeature(endTime);
 
-		whenStats.entryIngested(
-				null,
-				notIntersectSingle);
+		whenStats.entryIngested(notIntersectSingle);
 
 		final TemporalConstraintsSet resultConstraintsSet = QueryIndexHelper.clipIndexedTemporalConstraints(
 				statsMap,
@@ -246,25 +242,17 @@ public class QueryIndexHelperTest
 				statsStart1,
 				statsEnd1);
 
-		startStats.entryIngested(
-				null,
-				firstRangFeature);
+		startStats.entryIngested(firstRangFeature);
 
-		endStats.entryIngested(
-				null,
-				firstRangFeature);
+		endStats.entryIngested(firstRangFeature);
 
 		final SimpleFeature secondRangFeature = createFeature(
 				statsStart2,
 				statsEnd2);
 
-		startStats.entryIngested(
-				null,
-				secondRangFeature);
+		startStats.entryIngested(secondRangFeature);
 
-		endStats.entryIngested(
-				null,
-				secondRangFeature);
+		endStats.entryIngested(secondRangFeature);
 
 		final Date stime = DateUtilities.parseISO("2005-05-18T20:32:56Z");
 		final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
@@ -326,25 +314,17 @@ public class QueryIndexHelperTest
 				statsStart1,
 				statsEnd1);
 
-		startStats.entryIngested(
-				null,
-				firstRangFeature);
+		startStats.entryIngested(firstRangFeature);
 
-		endStats.entryIngested(
-				null,
-				firstRangFeature);
+		endStats.entryIngested(firstRangFeature);
 
 		final SimpleFeature secondRangFeature = createFeature(
 				statsStart2,
 				statsEnd2);
 
-		startStats.entryIngested(
-				null,
-				secondRangFeature);
+		startStats.entryIngested(secondRangFeature);
 
-		endStats.entryIngested(
-				null,
-				secondRangFeature);
+		endStats.entryIngested(secondRangFeature);
 
 		final Date stime = DateUtilities.parseISO("2005-05-18T20:32:56Z");
 		final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
@@ -414,17 +394,13 @@ public class QueryIndexHelperTest
 				22.25,
 				42.25)));
 
-		geoStats.entryIngested(
-				null,
-				firstFeature);
+		geoStats.entryIngested(firstFeature);
 
 		final SimpleFeature secondFeature = createGeoFeature(factory.createPoint(new Coordinate(
 				27.25,
 				41.25)));
 
-		geoStats.entryIngested(
-				null,
-				secondFeature);
+		geoStats.entryIngested(secondFeature);
 
 		final Envelope bounds = new Envelope(
 				21.23,
@@ -478,17 +454,13 @@ public class QueryIndexHelperTest
 				22.25,
 				42.25)));
 
-		geoStats.entryIngested(
-				null,
-				firstFeature);
+		geoStats.entryIngested(firstFeature);
 
 		final SimpleFeature secondFeature = createGeoFeature(factory.createPoint(new Coordinate(
 				27.25,
 				41.25)));
 
-		geoStats.entryIngested(
-				null,
-				secondFeature);
+		geoStats.entryIngested(secondFeature);
 
 		final Envelope bounds = new Envelope(
 				21.23,
@@ -545,9 +517,7 @@ public class QueryIndexHelperTest
 				geoType,
 				transform);
 
-		geoStats.entryIngested(
-				null,
-				mercFeat);
+		geoStats.entryIngested(mercFeat);
 
 		final Coordinate coord = ((Point) defaultCRSFeat.getDefaultGeometry()).getCoordinate();
 
@@ -658,25 +628,17 @@ public class QueryIndexHelperTest
 				statsStart1,
 				statsEnd1);
 
-		startStats.entryIngested(
-				null,
-				firstRangFeature);
+		startStats.entryIngested(firstRangFeature);
 
-		endStats.entryIngested(
-				null,
-				firstRangFeature);
+		endStats.entryIngested(firstRangFeature);
 
 		final SimpleFeature secondRangFeature = createFeature(
 				statsStart2,
 				statsEnd2);
 
-		startStats.entryIngested(
-				null,
-				secondRangFeature);
+		startStats.entryIngested(secondRangFeature);
 
-		endStats.entryIngested(
-				null,
-				secondRangFeature);
+		endStats.entryIngested(secondRangFeature);
 
 		final Date stime = DateUtilities.parseISO("2005-05-18T20:32:56Z");
 		final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
@@ -708,16 +670,12 @@ public class QueryIndexHelperTest
 				22.25,
 				42.25)));
 
-		geoStats.entryIngested(
-				null,
-				firstFeature);
+		geoStats.entryIngested(firstFeature);
 
 		final SimpleFeature secondFeature = createGeoFeature(factory.createPoint(new Coordinate(
 				27.25,
 				41.25)));
-		geoStats.entryIngested(
-				null,
-				secondFeature);
+		geoStats.entryIngested(secondFeature);
 
 		final Constraints constraints1 = QueryIndexHelper.composeConstraints(
 				rangeType,

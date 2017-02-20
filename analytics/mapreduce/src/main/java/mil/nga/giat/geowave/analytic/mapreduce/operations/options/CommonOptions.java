@@ -205,7 +205,7 @@ public class CommonOptions
 	public QueryOptions buildQueryOptions() {
 		final QueryOptions options = new QueryOptions();
 		if (queryOptions.getAdapterIds() != null && queryOptions.getAdapterIds().size() > 0)
-			options.setAdapter(Lists.transform(
+			options.setAdapterIds(Lists.transform(
 					queryOptions.getAdapterIds(),
 					new Function<String, ByteArrayId>() {
 						@Override

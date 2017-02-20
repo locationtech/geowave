@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.Deleter;
+import mil.nga.giat.geowave.core.store.operations.Deleter;
 
 public class DynamoDBRowDeleter implements
 		Deleter<DynamoDBRow>

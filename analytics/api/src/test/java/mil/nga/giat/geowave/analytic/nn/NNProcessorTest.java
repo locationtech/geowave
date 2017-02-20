@@ -15,17 +15,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.junit.Before;
+import org.junit.Test;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.nn.NNProcessor.CompleteNotifier;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.junit.Before;
-import org.junit.Test;
 
 public class NNProcessorTest
 {
@@ -77,6 +77,11 @@ public class NNProcessorTest
 		return new NNProcessor<Integer, Integer>(
 				new Partitioner<Object>() {
 
+					/**
+					 *
+					 */
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void initialize(
 							final JobContext context,
@@ -87,6 +92,8 @@ public class NNProcessorTest
 					public List<mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData> getCubeIdentifiers(
 							final Object entry ) {
 						return Collections.singletonList(new PartitionData(
+								new ByteArrayId(
+										new byte[] {}),
 								NNProcessorTest.partition((Integer) entry),
 								true));
 					}
@@ -135,6 +142,8 @@ public class NNProcessorTest
 				},
 				200,
 				new PartitionData(
+						new ByteArrayId(
+								new byte[] {}),
 						new ByteArrayId(
 								"123"),
 						true));

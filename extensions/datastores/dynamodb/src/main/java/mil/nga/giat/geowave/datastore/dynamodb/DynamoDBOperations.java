@@ -33,8 +33,8 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.DataStoreOperations;
-import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
+import mil.nga.giat.geowave.core.store.operations.Writer;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.GuavaRowTranslationHelper;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 

@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.datastore.hbase.metadata;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.datastore.hbase.AbstractHBaseStoreFactory;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
 
 public class HBaseAdapterStoreFactory extends
 		AbstractHBaseStoreFactory<AdapterStore>

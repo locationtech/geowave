@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
  * and always returning empty IDs and ranges. It can be used in cases when the
  * data is "indexed" by another means, and not using multi-dimensional numeric
  * data.
- * 
+ *
  */
 public class NullNumericIndexStrategy implements
 		NumericIndexStrategy
@@ -41,7 +41,7 @@ public class NullNumericIndexStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final IndexMetaData... hints ) {
 		return getQueryRanges(
@@ -50,17 +50,19 @@ public class NullNumericIndexStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxRangeDecomposition,
 			final IndexMetaData... hints ) {
 		// a null return here should be interpreted as negative to positive
 		// infinite
-		return null;
+		return new QueryRanges(
+				null,
+				null);
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
 		return getInsertionIds(
 				indexedData,
@@ -80,7 +82,8 @@ public class NullNumericIndexStrategy implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId insertionId ) {
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
 		// a null return here should be interpreted as negative to positive
 		// infinite
 		return null;
@@ -94,29 +97,27 @@ public class NullNumericIndexStrategy implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId insertionId ) {
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
 		// there are no dimensions so return an empty array
 		return new MultiDimensionalCoordinates();
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final int maxDuplicateInsertionIds ) {
-		// return a single empty ID
+		// return a single empty sort key as the ID
 		final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>();
 		retVal.add(new ByteArrayId(
 				new byte[] {}));
-		return retVal;
+		return new InsertionIds(
+				null,
+				retVal);
 	}
 
 	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
-		return null;
-	}
-
-	@Override
-	public int getByteOffsetFromDimensionalIndex() {
+	public int getPartitionKeyLength() {
 		return 0;
 	}
 
@@ -127,11 +128,24 @@ public class NullNumericIndexStrategy implements
 
 	@Override
 	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-			MultiDimensionalNumericData dataRange,
-			IndexMetaData... hints ) {
+			final MultiDimensionalNumericData dataRange,
+			final IndexMetaData... hints ) {
 		return new MultiDimensionalCoordinateRanges[] {
 			new MultiDimensionalCoordinateRanges()
 		};
+	}
+
+	@Override
+	public Set<ByteArrayId> getInsertionPartitionKeys(
+			final MultiDimensionalNumericData insertionData ) {
+		return null;
+	}
+
+	@Override
+	public Set<ByteArrayId> getQueryPartitionKeys(
+			final MultiDimensionalNumericData queryData,
+			final IndexMetaData... hints ) {
+		return null;
 	}
 
 }

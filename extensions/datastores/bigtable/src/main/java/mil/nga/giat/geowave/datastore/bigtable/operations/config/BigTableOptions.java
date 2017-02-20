@@ -10,7 +10,7 @@ import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.bigtable.BigTableStoreFactoryFamily;
 import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseOptions;
 
 public class BigTableOptions extends
 		StoreFactoryOptions

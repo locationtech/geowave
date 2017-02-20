@@ -83,4 +83,9 @@ public class BaseDataStoreOptions implements
 		this.enableBlockCache = enableBlockCache;
 	}
 
+	@Override
+	public boolean isServerSideLibraryEnabled() {
+		return false;
+	}
+
 }

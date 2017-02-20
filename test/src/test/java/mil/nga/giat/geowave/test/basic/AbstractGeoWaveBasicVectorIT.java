@@ -16,14 +16,11 @@ import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
-import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -38,26 +35,23 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
 
-abstract public class AbstractGeoWaveBasicVectorIT
+abstract public class AbstractGeoWaveBasicVectorIT extends
+		AbstractGeoWaveIT
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractGeoWaveBasicVectorIT.class);
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
@@ -91,8 +85,6 @@ abstract public class AbstractGeoWaveBasicVectorIT
 				null,
 				queryDescription);
 	}
-
-	abstract protected DataStorePluginOptions getDataStorePluginOptions();
 
 	protected void testQuery(
 			final URL savedFilterResource,
@@ -203,7 +195,6 @@ abstract public class AbstractGeoWaveBasicVectorIT
 							adapterId,
 							index.getId()),
 					new DataIdQuery(
-							adapterId,
 							dataId))) {
 
 				success = !hasAtLeastOne(geowaveStore.query(
@@ -211,7 +202,6 @@ abstract public class AbstractGeoWaveBasicVectorIT
 								adapterId,
 								index.getId()),
 						new DataIdQuery(
-								adapterId,
 								dataId)));
 			}
 		}
@@ -267,16 +257,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 									adapter.getAdapterId(),
 									cachedValues);
 						}
-						final DataStoreEntryInfo entryInfo = DataStoreUtils.getIngestInfo(
-								adapter,
-								index,
-								data.getValue(),
-								new UniformVisibilityWriter<SimpleFeature>(
-										new GlobalVisibilityHandler<SimpleFeature, Object>(
-												"")));
-						cachedValues.entryIngested(
-								entryInfo,
-								data.getValue());
+						cachedValues.entryIngested(data.getValue());
 					}
 				}
 			}
@@ -408,12 +389,12 @@ abstract public class AbstractGeoWaveBasicVectorIT
 
 		@Override
 		public void entryIngested(
-				final DataStoreEntryInfo entryInfo,
-				final SimpleFeature entry ) {
+				final SimpleFeature entry,
+				final GeoWaveRow... geowaveRows ) {
 			for (final DataStatistics<SimpleFeature> stats : statsCache.values()) {
 				stats.entryIngested(
-						entryInfo,
-						entry);
+						entry,
+						geowaveRows);
 			}
 			final Geometry geometry = ((Geometry) entry.getDefaultGeometry());
 			if ((geometry != null) && !geometry.isEmpty()) {
