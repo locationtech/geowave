@@ -30,7 +30,7 @@ public class SpatialQuery extends
 {
 	private final static Logger LOGGER = Logger.getLogger(SpatialQuery.class);
 	private Geometry queryGeometry;
-	CompareOperation compareOp = CompareOperation.OVERLAPS;
+	CompareOperation compareOp = CompareOperation.INTERSECTS;
 
 	/**
 	 * Convenience constructor used to construct a SpatialQuery object that has

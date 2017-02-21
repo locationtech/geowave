@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter;
+import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -596,12 +597,20 @@ public class BasicQuery implements
 	private Constraints constraints;
 	// field Id to constraint
 	private Map<ByteArrayId, FilterableConstraints> additionalConstraints = Collections.emptyMap();
+	BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.INTERSECTS;
 
 	protected BasicQuery() {}
 
 	public BasicQuery(
 			final Constraints constraints ) {
 		this.constraints = constraints;
+	}
+	
+	public BasicQuery(
+			final Constraints constraints,
+			final BasicQueryCompareOperation compareOp) {
+		this.constraints = constraints;
+		this.compareOp = compareOp;
 	}
 
 	public BasicQuery(
@@ -639,7 +648,8 @@ public class BasicQuery implements
 			final NumericDimensionField<?>[] unconstrainedDimensionFields ) {
 		return new BasicQueryFilter(
 				constraints,
-				orderedConstrainedDimensionFields);
+				orderedConstrainedDimensionFields,
+				compareOp);
 	}
 
 	@Override

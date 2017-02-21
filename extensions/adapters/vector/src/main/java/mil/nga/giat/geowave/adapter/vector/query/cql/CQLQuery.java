@@ -81,7 +81,7 @@ public class CQLQuery implements
 		return createOptimalQuery(
 				cql,
 				adapter,
-				CompareOperation.OVERLAPS,
+				CompareOperation.INTERSECTS,
 				index,
 				baseQuery);
 	}
@@ -109,7 +109,7 @@ public class CQLQuery implements
 		return createOptimalQuery(
 				cqlFilter,
 				adapter,
-				CompareOperation.OVERLAPS,
+				CompareOperation.INTERSECTS,
 				index,
 				baseQuery);
 	}
@@ -194,7 +194,7 @@ public class CQLQuery implements
 				// pursuing
 
 				// if (geoConstraints.isConstraintsMatchGeometry() &&
-				// CompareOperation.OVERLAPS.equals(geoCompareOp)) {
+				// CompareOperation.INTERSECTS.equals(geoCompareOp)) {
 				// baseQuery = new BasicQuery(
 				// constraints);
 				// }
