@@ -14,11 +14,13 @@ message AggregationRequest {
   optional bytes rangeFilter = 2;
   optional bytes filter = 3;
   optional bytes model = 4;
-  optional bytes adapter = 5;
-  optional bytes adapterId = 6;
-  optional bytes numericIndexStrategyFilter = 7;
-  optional bool blockCaching = 8;
-  optional int32 cacheSize = 9;
+  optional bytes visLabels = 5;
+  optional bytes adapter = 6;
+  optional bytes adapterId = 7;
+  optional bytes numericIndexStrategyFilter = 8;
+  optional bool blockCaching = 9;
+  optional int32 cacheSize = 10;
+  optional bool wholeRowFilter = 11;
 }
 
 message AggregationResponse {

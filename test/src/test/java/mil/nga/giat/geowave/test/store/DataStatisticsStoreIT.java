@@ -35,6 +35,7 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 /**
  * This special class is here to test the HBase implementation of merging
@@ -43,14 +44,18 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
  * DataStatistics to merge them as we pull the data out of the iterator.
  */
 @RunWith(GeoWaveITRunner.class)
-public class DataStatisticsStoreIT
+public class DataStatisticsStoreIT extends
+		AbstractGeoWaveIT
 {
-
 	@GeoWaveTestStore({
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStore;
+	}
 
 	private final static Logger LOGGER = Logger.getLogger(DataStatisticsStoreIT.class);
 	private static long startMillis;
@@ -75,12 +80,6 @@ public class DataStatisticsStoreIT
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-	}
-
-	@Before
-	public void clean()
-			throws IOException {
-		TestUtils.deleteAll(dataStore);
 	}
 
 	@Test

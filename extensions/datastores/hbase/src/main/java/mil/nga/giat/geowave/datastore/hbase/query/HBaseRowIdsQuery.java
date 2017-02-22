@@ -39,6 +39,7 @@ public class HBaseRowIdsQuery<T> extends
 				null,
 				null,
 				null,
+				null,
 				authorizations);
 		this.rows = rows;
 	}

@@ -7,6 +7,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
@@ -26,12 +27,14 @@ public class HBaseRowPrefixQuery<T> extends
 			final ByteArrayId rowPrefix,
 			final ScanCallback<T, ?> scanCallback,
 			final Integer limit,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
 				dataStore,
 				index,
 				authorizations,
-				scanCallback);
+				scanCallback,
+				visibilityCounts);
 		this.limit = limit;
 		this.rowPrefix = rowPrefix;
 	}

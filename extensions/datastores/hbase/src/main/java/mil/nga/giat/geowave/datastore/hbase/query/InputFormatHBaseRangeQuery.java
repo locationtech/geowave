@@ -72,6 +72,7 @@ public class InputFormatHBaseRangeQuery extends
 				null,
 				null,
 				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.range = range;

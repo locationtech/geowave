@@ -37,9 +37,11 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
-public class AttributesSubsetQueryIT
+public class AttributesSubsetQueryIT extends
+		AbstractGeoWaveIT
 {
 	private static final Logger LOGGER = Logger.getLogger(AttributesSubsetQueryIT.class);
 
@@ -52,6 +54,10 @@ public class AttributesSubsetQueryIT
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStore;
+	}
 
 	// constants for attributes of SimpleFeatureType
 	private static final String CITY_ATTRIBUTE = "city";
