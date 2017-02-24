@@ -61,7 +61,7 @@ public class DistributedQueryFilterTest
 				new NumericDimensionField[] {
 					new BasicQueryTest.ExampleDimensionOne()
 				},
-				BasicQueryCompareOperation.OVERLAPS));
+				BasicQueryCompareOperation.INTERSECTS));
 		filters.add(new DedupeFilter());
 		list = new DistributableFilterList(
 				true,
@@ -70,7 +70,7 @@ public class DistributedQueryFilterTest
 		assertTrue(list.logicalAnd);
 		assertEquals(
 				((BasicQueryFilter) list.filters.get(0)).compareOp,
-				BasicQueryCompareOperation.OVERLAPS);
+				BasicQueryCompareOperation.INTERSECTS);
 		assertEquals(
 				((BasicQueryFilter) list.filters.get(0)).constraints,
 				new BasicNumericDataset(

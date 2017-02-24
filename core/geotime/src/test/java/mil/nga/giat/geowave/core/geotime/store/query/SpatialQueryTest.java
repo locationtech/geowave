@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import org.junit.Test;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class SpatialQueryTest
@@ -49,14 +50,12 @@ public class SpatialQueryTest
 	}
 
 	private IndexedPersistenceEncoding createData(
-			final Coordinate[] coordinates ) {
-		final GeometryFactory factory = new GeometryFactory();
+			final Geometry geomData) {
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
 		commonData.addValue(new PersistentValue<CommonIndexValue>(
 				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID,
-				new GeometryWrapper(
-						factory.createLineString(coordinates))));
+				new GeometryWrapper(geomData)));
 
 		return new IndexedPersistenceEncoding(
 				new ByteArrayId(
@@ -74,67 +73,103 @@ public class SpatialQueryTest
 			final CompareOperation op,
 			final boolean[] expectedResults ) {
 		final GeometryFactory factory = new GeometryFactory();
+		//query geometry for testing
+		Coordinate[] queryCoord = new Coordinate[] {
+				new Coordinate(
+						24,
+						33),
+				new Coordinate(
+						28,
+						33),
+				new Coordinate(
+						28,
+						37),
+				new Coordinate(
+						24,
+						37),
+				new Coordinate(
+						24,
+						33)
+			};
+		//create spatial query object with geometric relationship operator
 		final SpatialQuery query = new SpatialQuery(
-				factory.createPolygon(new Coordinate[] {
-					new Coordinate(
-							24,
-							33),
-					new Coordinate(
-							28,
-							33),
-					new Coordinate(
-							28,
-							37),
-					new Coordinate(
-							24,
-							37),
-					new Coordinate(
-							24,
-							33)
-				}),
+				factory.createPolygon(queryCoord),
 				op);
+		
 		final SpatialQuery queryCopy = new SpatialQuery();
 		queryCopy.fromBinary(query.toBinary());
-
-		final IndexedPersistenceEncoding[] data = new IndexedPersistenceEncoding[] {
-			createData(new Coordinate[] {
+		
+		//This line is crossing query polygon
+		final Coordinate[] line1 = new Coordinate[] {
 				new Coordinate(
 						22,
 						32),
 				new Coordinate(
 						25,
 						36)
-			}),
-			createData(new Coordinate[] {
+			};
+		//This line is completely within the query polygon
+		final Coordinate[] line2 = new Coordinate[] {
 				new Coordinate(
 						25,
 						33.5),
 				new Coordinate(
 						26,
 						34)
-			}),
-			createData(new Coordinate[] {
+			};
+		//This line is completely outside of the query polygon
+		final Coordinate[] line3 = new Coordinate[] {
 				new Coordinate(
 						21,
 						33.5),
 				new Coordinate(
 						23,
 						34)
-			}),
-			createData(new Coordinate[] {
+			};
+		//This line is touching one of the corner of the query polygon
+		final Coordinate[] line4 = new Coordinate[] {
 				new Coordinate(
-						29,
-						33.5),
+						28,
+						33),
 				new Coordinate(
 						30,
 						34)
-			})
+			};
+		//this polygon is completely contained within the query polygon
+		final Coordinate[] smallPolygon = new Coordinate[] {
+				new Coordinate(
+						25,
+						34),
+				new Coordinate(
+						27,
+						34),
+				new Coordinate(
+						27,
+						36),
+				new Coordinate(
+						25,
+						36),
+				new Coordinate(
+						25,
+						34)
+			};
+		
+		//this polygon is same as query polygon
+		final Coordinate[] dataPolygon = queryCoord.clone();
+		
+		final IndexedPersistenceEncoding[] data = new IndexedPersistenceEncoding[] {
+			createData(factory.createLineString(line1)),
+			createData(factory.createLineString(line2)),
+			createData(factory.createLineString(line3)),
+			createData(factory.createLineString(line4)),
+			createData(factory.createPolygon(smallPolygon)),		
+			createData(factory.createPolygon(dataPolygon))
 		};
 
 		int pos = 0;
 		final CommonIndexModel model = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
 		for (final IndexedPersistenceEncoding dataItem : data) {
-			for (final QueryFilter filter : queryCopy.createFilters(model)) {
+			for (final QueryFilter filter : query.createFilters(model)) {
 				assertEquals(
 						"result: " + pos,
 						expectedResults[pos++],
@@ -153,19 +188,107 @@ public class SpatialQueryTest
 					false,
 					true,
 					false,
-					false
+					false,
+					true,
+					true
 				});
 	}
-
+	
 	@Test
 	public void testOverlaps() {
 		performOp(
 				CompareOperation.OVERLAPS,
 				new boolean[] {
+					false,
+					false,
+					false,
+					false,
+					false,
+					false
+				});
+	}
+
+	@Test
+	public void testIntersects() {
+		performOp(
+				CompareOperation.INTERSECTS,
+				new boolean[] {
 					true,
 					true,
 					false,
+					true,
+					true,
+					true
+				});
+	}
+	
+	@Test
+	public void testDisjoint() {
+		performOp(
+				CompareOperation.DISJOINT,
+				new boolean[] {
+					false,
+					false,
+					true,
+					false,
+					false,
 					false
+				});
+	}
+	
+	@Test
+	public void testTouches() {
+		performOp(
+				CompareOperation.TOUCHES,
+				new boolean[] {
+					false,
+					false,
+					false,
+					true,
+					false,
+					false
+				});
+	}
+	
+	@Test
+	public void testCrosses() {
+		performOp(
+				CompareOperation.CROSSES,
+				new boolean[] {
+					true,
+					false,
+					false,
+					false,
+					false,
+					false
+				});
+	}
+	
+	@Test
+	public void testWithin() {
+		performOp(
+				CompareOperation.WITHIN,
+				new boolean[] {
+					false,
+					false,
+					false,
+					false,
+					false,
+					true
+				});
+	}
+	
+	@Test
+	public void testEquals() {
+		performOp(
+				CompareOperation.EQUALS,
+				new boolean[] {
+					false,
+					false,
+					false,
+					false,
+					false,
+					true
 				});
 	}
 }

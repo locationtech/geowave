@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset;
@@ -47,6 +48,7 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
+				//checking if data range contains query range
 				return !((dataMin < queryMin) || (dataMax > queryMax));
 			}
 		},
@@ -57,7 +59,80 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				return !((dataMax < queryMin) || (dataMin > queryMax));
+				//per definition, it shouldn't allow only boundary points to 
+				//overlap (stricter than intersect, see DE-9IM definitions)
+				return !((dataMax <= queryMin) || (dataMin >= queryMax)) 
+						&& !EQUALS.compare(dataMin, dataMax, queryMin, queryMax)
+						&& !CONTAINS.compare(dataMin, dataMax, queryMin, queryMax)
+						&& !WITHIN.compare(dataMin, dataMax, queryMin, queryMax);
+			}
+		},
+		INTERSECTS {
+			@Override
+			public boolean compare(
+					double dataMin,
+					double dataMax,
+					double queryMin,
+					double queryMax ) {
+				// similar to overlap but a bit relaxed (allows boundary points to touch)
+				//this is equivalent to !((dataMax < queryMin) || (dataMin > queryMax));
+				return !DISJOINT.compare(dataMin, dataMax, queryMin, queryMax);
+			}
+		},
+		TOUCHES {
+			@Override
+			public boolean compare(
+					double dataMin,
+					double dataMax,
+					double queryMin,
+					double queryMax ) {
+				return (FloatCompareUtils.checkDoublesEqual(dataMin, queryMax)) 
+						|| (FloatCompareUtils.checkDoublesEqual(dataMax, queryMin));
+			}
+		},
+		WITHIN {
+			@Override
+			public boolean compare(
+					double dataMin,
+					double dataMax,
+					double queryMin,
+					double queryMax ) {
+				//checking if query range is within the data range
+				//this is equivalent to (queryMin >= dataMin) && (queryMax <= dataMax);
+				return CONTAINS.compare(queryMin, queryMax, dataMin, dataMax);
+			}
+		},
+		DISJOINT {
+			@Override
+			public boolean compare(
+					double dataMin,
+					double dataMax,
+					double queryMin,
+					double queryMax ) {
+				return ((dataMax < queryMin) || (dataMin > queryMax));
+			}
+		},
+		CROSSES {
+			@Override
+			public boolean compare(
+					double dataMin,
+					double dataMax,
+					double queryMin,
+					double queryMax ) {
+				//accordingly to the def. intersection point must be interior to both source geometries.
+				//this is not possible in 1D data so always returns false
+				return false;
+			}
+		},
+		EQUALS {
+			@Override
+			public boolean compare(
+					double dataMin,
+					double dataMax,
+					double queryMin,
+					double queryMax ) {
+				return (FloatCompareUtils.checkDoublesEqual(dataMin, queryMin)) 
+						&& (FloatCompareUtils.checkDoublesEqual(dataMax, queryMax));
 			}
 		}
 	};
@@ -66,7 +141,7 @@ public class BasicQueryFilter implements
 	protected NumericDimensionField<?>[] dimensionFields;
 	// this is referenced for serialization purposes only
 	protected MultiDimensionalNumericData constraints;
-	protected BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.OVERLAPS;
+	protected BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.INTERSECTS;
 
 	protected BasicQueryFilter() {}
 

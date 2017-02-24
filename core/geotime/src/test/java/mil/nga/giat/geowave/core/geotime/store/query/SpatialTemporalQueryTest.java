@@ -186,7 +186,7 @@ public class SpatialTemporalQueryTest
 		for (final CommonIndexedPersistenceEncoding dataItem : data) {
 			for (final QueryFilter filter : queryCopy.createFilters(model)) {
 				assertEquals(
-						"result: " + (pos + 1),
+						"result: " + pos,
 						expectedResults[pos++],
 						filter.accept(
 								model,
@@ -214,6 +214,20 @@ public class SpatialTemporalQueryTest
 			throws ParseException {
 		performOp(
 				CompareOperation.OVERLAPS,
+				new boolean[] {
+					false,
+					false,
+					false,
+					false,
+					false
+				});
+	}
+	
+	@Test
+	public void testIntersects()
+			throws ParseException {
+		performOp(
+				CompareOperation.INTERSECTS,
 				new boolean[] {
 					true,
 					true,
