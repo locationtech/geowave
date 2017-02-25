@@ -34,7 +34,7 @@ public abstract class AbstractRemoveCommand extends
 				0).trim();
 	}
 
-	public void execute(
+	protected void computeResults(
 			OperationParams params,
 			String pattern ) {
 
