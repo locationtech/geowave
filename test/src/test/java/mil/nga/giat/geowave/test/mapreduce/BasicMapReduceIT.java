@@ -125,7 +125,8 @@ public class BasicMapReduceIT
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
