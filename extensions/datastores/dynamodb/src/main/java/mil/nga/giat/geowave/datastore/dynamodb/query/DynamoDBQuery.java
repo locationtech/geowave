@@ -6,11 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.iterators.LazyIteratorChain;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
@@ -29,6 +27,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBIndexWriter;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
+import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 
@@ -90,6 +89,16 @@ abstract public class DynamoDBQuery
 	protected Iterator<Map<String, AttributeValue>> getResults(
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
+		return getResults(
+				maxResolutionSubsamplingPerDimension,
+				limit,
+				false);
+	}
+
+	protected Iterator<Map<String, AttributeValue>> getResults(
+			final double[] maxResolutionSubsamplingPerDimension,
+			final Integer limit,
+			final boolean async) {
 		final List<ByteArrayRange> ranges = getRanges();
 		final String tableName = dynamodbOperations.getQualifiedTableName(
 				StringUtils.stringFromBinary(
@@ -130,9 +139,16 @@ abstract public class DynamoDBQuery
 									tableName,
 									r))));
 
-			return Iterators.concat(
-					requests.parallelStream().map(
-							this::executeQueryRequest).iterator());
+			if(async){
+				return Iterators.concat(
+						requests.parallelStream().map(
+								this::executeAsyncQueryRequest).iterator()); 
+			}
+			else{
+				return Iterators.concat(
+						requests.parallelStream().map(
+								this::executeQueryRequest).iterator()); 
+			}
 		}
 		// query everything
 		final ScanRequest request = new ScanRequest(
@@ -189,6 +205,16 @@ abstract public class DynamoDBQuery
 				queryRequest);
 		return new LazyPaginatedQuery(
 				result,
+				queryRequest,
+				dynamodbOperations.getClient());
+	}
+
+	/**
+	 * Asynchronous version of the query request. Does not block
+	 */
+	public Iterator<Map<String, AttributeValue>> executeAsyncQueryRequest(
+			final QueryRequest queryRequest ) {
+		return new AsyncPaginatedQuery(
 				queryRequest,
 				dynamodbOperations.getClient());
 	}
