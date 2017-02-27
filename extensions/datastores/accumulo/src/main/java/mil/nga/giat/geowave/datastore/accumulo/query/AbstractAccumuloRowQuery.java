@@ -12,6 +12,8 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.filter.FilterList;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
@@ -23,7 +25,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
  *
  */
 abstract public class AbstractAccumuloRowQuery<T> extends
-AccumuloQuery
+		AccumuloQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(AbstractAccumuloRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
@@ -55,7 +57,21 @@ AccumuloQuery
 		addScanIteratorSettings(scanner);
 		return initCloseableIterator(
 				scanner,
-				scanner.iterator());
+				initIterator(
+						adapterStore,
+						scanner));
+	}
+
+	protected Iterator initIterator(
+			final AdapterStore adapterStore,
+			final ScannerBase scanner ) {
+		return new AccumuloEntryIteratorWrapper(
+				useWholeRowIterator(),
+				adapterStore,
+				index,
+				scanner.iterator(),
+				null,
+				scanCallback);
 	}
 
 	protected void addScanIteratorSettings(
@@ -74,7 +90,8 @@ AccumuloQuery
 	abstract protected Integer getScannerLimit();
 
 	protected CloseableIterator<T> initCloseableIterator(
-			ScannerBase scanner, Iterator it) {
+			ScannerBase scanner,
+			Iterator it ) {
 		return new CloseableIteratorWrapper(
 				new ScannerClosableWrapper(
 						scanner),

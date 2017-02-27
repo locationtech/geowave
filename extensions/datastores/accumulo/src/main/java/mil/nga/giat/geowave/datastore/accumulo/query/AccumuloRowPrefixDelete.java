@@ -18,23 +18,25 @@ import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityE
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 
-public class AccumuloRowPrefixDelete<T> extends AccumuloRowPrefixQuery <T>{
-	
+public class AccumuloRowPrefixDelete<T> extends
+		AccumuloRowPrefixQuery<T>
+{
+
 	private static final Logger LOGGER = Logger.getLogger(AccumuloRowPrefixDelete.class);
 
 	public AccumuloRowPrefixDelete(
-			PrimaryIndex index, 
-			ByteArrayId rowPrefix, 
-			ScanCallback scanCallback, 
+			PrimaryIndex index,
+			ByteArrayId rowPrefix,
+			ScanCallback scanCallback,
 			Integer limit,
-			DifferingFieldVisibilityEntryCount visibilityCounts, 
-			String[] authorizations) {
+			DifferingFieldVisibilityEntryCount visibilityCounts,
+			String[] authorizations ) {
 		super(
-				index, 
-				rowPrefix, 
-				scanCallback, 
-				limit, 
-				visibilityCounts, 
+				index,
+				rowPrefix,
+				scanCallback,
+				limit,
+				visibilityCounts,
 				authorizations);
 		// TODO Auto-generated constructor stub
 	}
@@ -53,7 +55,9 @@ public class AccumuloRowPrefixDelete<T> extends AccumuloRowPrefixQuery <T>{
 								((BatchDeleter) scanner).delete();
 							}
 							catch (MutationsRejectedException | TableNotFoundException e) {
-								LOGGER.warn("Unable to delete rows by query constraints",e);
+								LOGGER.warn(
+										"Unable to delete rows by query constraints",
+										e);
 							}
 						}
 						scanner.close();
@@ -73,5 +77,5 @@ public class AccumuloRowPrefixDelete<T> extends AccumuloRowPrefixQuery <T>{
 				tableName,
 				authorizations);
 	}
-	
+
 }

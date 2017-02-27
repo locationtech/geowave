@@ -90,8 +90,8 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
  * used in subsequent queries.
  */
 public class AccumuloDataStore extends
-BaseDataStore implements
-MapReduceDataStore
+		BaseDataStore implements
+		MapReduceDataStore
 {
 	public final static String TYPE = "accumulo";
 
@@ -204,8 +204,8 @@ MapReduceDataStore
 			if (adapter instanceof RowMergingDataAdapter) {
 				if (!DataAdapterAndIndexCache.getInstance(
 						RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID).add(
-								adapter.getAdapterId(),
-								indexName)) {
+						adapter.getAdapterId(),
+						indexName)) {
 					AccumuloUtils.attachRowMergingIterators(
 							((RowMergingDataAdapter<?, ?>) adapter),
 							accumuloOperations,
@@ -253,7 +253,7 @@ MapReduceDataStore
 	}
 
 	private class AltIndexCallback<T> implements
-	IngestCallback<T>
+			IngestCallback<T>
 	{
 		private final ByteArrayId EMPTY_VISIBILITY = new ByteArrayId(
 				new byte[0]);
@@ -268,7 +268,7 @@ MapReduceDataStore
 				final String indexName,
 				final WritableDataAdapter<T> adapter,
 				final ByteArrayId primaryIndexId )
-						throws TableNotFoundException {
+				throws TableNotFoundException {
 			this.adapter = adapter;
 			altIdxTableName = indexName + ALT_INDEX_TABLE;
 			altIndexId = new ByteArrayId(
@@ -352,7 +352,8 @@ MapReduceDataStore
 							statisticsStore,
 							sanitizedQueryOptions.getAuthorizations()),
 					sanitizedQueryOptions.getAuthorizations());
-		} else {
+		}
+		else {
 			accumuloQuery = new AccumuloConstraintsQuery(
 					adapterIdsToQuery,
 					index,
@@ -394,10 +395,10 @@ MapReduceDataStore
 			final List<ByteArrayId> adapterIdsToQuery,
 			boolean delete ) {
 		final AccumuloRowPrefixQuery<Object> prefixQuery;
-		if (delete){
+		if (delete) {
 			prefixQuery = new AccumuloRowPrefixDelete<Object>(
-					index, 
-					rowPrefix, 
+					index,
+					rowPrefix,
 					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 					sanitizedQueryOptions.getLimit(),
 					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
@@ -406,7 +407,8 @@ MapReduceDataStore
 							statisticsStore,
 							sanitizedQueryOptions.getAuthorizations()),
 					sanitizedQueryOptions.getAuthorizations());
-		} else {
+		}
+		else {
 			prefixQuery = new AccumuloRowPrefixQuery<Object>(
 					index,
 					rowPrefix,
@@ -435,16 +437,16 @@ MapReduceDataStore
 			final AdapterStore tempAdapterStore,
 			boolean delete ) {
 		final AccumuloRowIdsQuery<Object> q;
-		if(delete){
-			System.out.println("I am here");
+		if (delete) {
 			q = new AccumuloRowIdsDelete<Object>(
-					adapter, 
-					index, 
-					rowIds, 
+					adapter,
+					index,
+					rowIds,
 					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
 					filter,
 					sanitizedQueryOptions.getAuthorizations());
-		}else{
+		}
+		else {
 			q = new AccumuloRowIdsQuery<Object>(
 					adapter,
 					index,
@@ -653,7 +655,7 @@ MapReduceDataStore
 	}
 
 	private static class ClosableBatchDeleter implements
-	Closeable
+			Closeable
 	{
 		private final BatchDeleter deleter;
 
@@ -676,7 +678,7 @@ MapReduceDataStore
 	protected Closeable createIndexDeleter(
 			final String indexTableName,
 			final String[] authorizations )
-					throws Exception {
+			throws Exception {
 		return new ClosableBatchDeleter(
 				accumuloOperations.createBatchDeleter(
 						indexTableName,
@@ -687,7 +689,7 @@ MapReduceDataStore
 	protected void addToBatch(
 			final Closeable deleter,
 			final List<ByteArrayId> ids )
-					throws Exception {
+			throws Exception {
 		final List<Range> rowRanges = new ArrayList<Range>();
 		for (final ByteArrayId id : ids) {
 			rowRanges.add(Range.exact(new Text(
@@ -712,8 +714,8 @@ MapReduceDataStore
 			final IndexStore indexStore,
 			final Integer minSplits,
 			final Integer maxSplits )
-					throws IOException,
-					InterruptedException {
+			throws IOException,
+			InterruptedException {
 		return splitsProvider.getSplits(
 				accumuloOperations,
 				query,
@@ -735,8 +737,8 @@ MapReduceDataStore
 			final IndexStore indexStore,
 			final boolean isOutputWritable,
 			final InputSplit inputSplit )
-					throws IOException,
-					InterruptedException {
+			throws IOException,
+			InterruptedException {
 		return new GeoWaveAccumuloRecordReader(
 				query,
 				queryOptions,

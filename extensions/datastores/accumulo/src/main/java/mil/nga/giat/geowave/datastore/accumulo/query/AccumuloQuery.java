@@ -96,12 +96,12 @@ abstract public class AccumuloQuery
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		ScannerBase scanner;
 		try {
-			if (!isAggregation() && (ranges != null) && (ranges.size() == 1)) {
-				scanner = createScanner(
-						accumuloOperations,
-						tableName,
-						false,
-						getAdditionalAuthorizations());
+			scanner = createScanner(
+					accumuloOperations,
+					tableName,
+					isAggregation() || (ranges == null) || (ranges.size() != 1),
+					getAdditionalAuthorizations());
+			if (scanner instanceof Scanner) {
 				final ByteArrayRange r = ranges.get(0);
 				if (r.isSingleValue()) {
 					((Scanner) scanner).setRange(Range.exact(new Text(
@@ -117,12 +117,7 @@ abstract public class AccumuloQuery
 							limit));
 				}
 			}
-			else {
-				scanner = createScanner(
-						accumuloOperations,
-						tableName,
-						true,
-						getAdditionalAuthorizations());
+			else if (scanner instanceof BatchScanner) {
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
 			}
 			if (maxResolutionSubsamplingPerDimension != null) {

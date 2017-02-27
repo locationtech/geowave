@@ -19,23 +19,25 @@ import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 
-public class AccumuloRowIdsDelete<T> extends AccumuloRowIdsQuery<T> {
+public class AccumuloRowIdsDelete<T> extends
+		AccumuloRowIdsQuery<T>
+{
 
 	private static final Logger LOGGER = Logger.getLogger(AccumuloRowIdsDelete.class);
-	
+
 	public AccumuloRowIdsDelete(
-			DataAdapter adapter, 
-			PrimaryIndex index, 
+			DataAdapter adapter,
+			PrimaryIndex index,
 			Collection rows,
 			ScanCallback scanCallback,
-			DedupeFilter dedupFilter, 
-			String[] authorizations) {
+			DedupeFilter dedupFilter,
+			String[] authorizations ) {
 		super(
-				adapter, 
-				index, 
-				rows, 
-				scanCallback, 
-				dedupFilter, 
+				adapter,
+				index,
+				rows,
+				scanCallback,
+				dedupFilter,
 				authorizations);
 		// TODO Auto-generated constructor stub
 	}
@@ -54,7 +56,9 @@ public class AccumuloRowIdsDelete<T> extends AccumuloRowIdsQuery<T> {
 								((BatchDeleter) scanner).delete();
 							}
 							catch (MutationsRejectedException | TableNotFoundException e) {
-								LOGGER.warn("Unable to delete rows by query constraints",e);
+								LOGGER.warn(
+										"Unable to delete rows by query constraints",
+										e);
 							}
 						}
 						scanner.close();
@@ -74,6 +78,5 @@ public class AccumuloRowIdsDelete<T> extends AccumuloRowIdsQuery<T> {
 				tableName,
 				authorizations);
 	}
-	
-	
+
 }

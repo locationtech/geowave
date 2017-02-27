@@ -105,7 +105,9 @@ public class AccumuloConstraintsDelete extends
 								((BatchDeleter) scanner).delete();
 							}
 							catch (MutationsRejectedException | TableNotFoundException e) {
-								LOGGER.warn("Unable to delete rows by query constraints",e);
+								LOGGER.warn(
+										"Unable to delete rows by query constraints",
+										e);
 							}
 						}
 						scanner.close();
