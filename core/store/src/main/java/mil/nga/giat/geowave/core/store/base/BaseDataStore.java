@@ -99,7 +99,7 @@ public abstract class BaseDataStore
 	public <T> IndexWriter<T> createWriter(
 			final DataAdapter<T> adapter,
 			final PrimaryIndex... indices )
-			throws MismatchedIndexToAdapterMapping {
+					throws MismatchedIndexToAdapterMapping {
 		store(adapter);
 
 		indexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(
@@ -235,8 +235,8 @@ public abstract class BaseDataStore
 								callbackCache.getDeleteCallback(
 										(WritableDataAdapter<Object>) adapter,
 										index).entryDeleted(
-										entryInfo,
-										entry);
+												entryInfo,
+												entry);
 							}
 						});
 					}
@@ -330,14 +330,14 @@ public abstract class BaseDataStore
 			final String[] authorizations,
 			final double[] maxResolutionSubsamplingPerDimension,
 			boolean delete )
-			throws IOException {
+					throws IOException {
 		final String altIdxTableName = index.getId().getString() + ALT_INDEX_TABLE;
 
 		MemoryAdapterStore tempAdapterStore;
 
 		tempAdapterStore = new MemoryAdapterStore(
 				new DataAdapter[] {
-					adapter
+						adapter
 				});
 
 		if (baseOptions.isUseAltIndex() && baseOperations.tableExists(altIdxTableName)) {
@@ -448,118 +448,118 @@ public abstract class BaseDataStore
 
 					final Closeable altIdxDelete = baseOptions.isUseAltIndex()
 							&& baseOperations.tableExists(altIdxTableName) ? createIndexDeleter(
-							altIdxTableName,
-							queryOptions.getAuthorizations()) : null;
+									altIdxTableName,
+									queryOptions.getAuthorizations()) : null;
 
-					for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
+									for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
 
-						final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
-								statisticsStore,
-								secondaryIndexDataStore,
-								queriedAdapters.add(adapter.getAdapterId()));
+										final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
+												statisticsStore,
+												secondaryIndexDataStore,
+												queriedAdapters.add(adapter.getAdapterId()));
 
-						callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
+										callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
 
-						if (query instanceof EverythingQuery) {
-							deleteEntries(
-									adapter,
-									index,
-									queryOptions.getAuthorizations());
-							continue;
-						}
+										if (query instanceof EverythingQuery) {
+											deleteEntries(
+													adapter,
+													index,
+													queryOptions.getAuthorizations());
+											continue;
+										}
 
-						final ScanCallback<Object> callback = new ScanCallback<Object>() {
-							@Override
-							public void entryScanned(
-									final DataStoreEntryInfo entryInfo,
-									final Object entry ) {
-								callbackCache.getDeleteCallback(
-										(WritableDataAdapter<Object>) adapter,
-										index).entryDeleted(
-										entryInfo,
-										entry);
-								try {
-									addToBatch(
-											idxDeleter,
-											entryInfo.getRowIds());
-									if (altIdxDelete != null) {
-										addToBatch(
-												altIdxDelete,
-												Collections.singletonList(adapter.getDataId(entry)));
+										final ScanCallback<Object> callback = new ScanCallback<Object>() {
+											@Override
+											public void entryScanned(
+													final DataStoreEntryInfo entryInfo,
+													final Object entry ) {
+												callbackCache.getDeleteCallback(
+														(WritableDataAdapter<Object>) adapter,
+														index).entryDeleted(
+																entryInfo,
+																entry);
+												try {
+													addToBatch(
+															idxDeleter,
+															entryInfo.getRowIds());
+													if (altIdxDelete != null) {
+														addToBatch(
+																altIdxDelete,
+																Collections.singletonList(adapter.getDataId(entry)));
+													}
+												}
+												catch (final Exception e) {
+													LOGGER.error(
+															"Failed deletion",
+															e);
+													aOk.set(false);
+												}
+											}
+										};
+
+										CloseableIterator<?> dataIt = null;
+										queryOptions.setScanCallback(callback);
+										final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
+										if (query instanceof RowIdQuery) {
+											queryOptions.setLimit(-1);
+											dataIt = queryRowIds(
+													adapter,
+													index,
+													((RowIdQuery) query).getRowIds(),
+													null,
+													queryOptions,
+													adapterStore,
+													true);
+										}
+										else if (query instanceof DataIdQuery) {
+											final DataIdQuery idQuery = (DataIdQuery) query;
+											dataIt = getEntries(
+													index,
+													idQuery.getDataIds(),
+													adapter,
+													null,
+													callback,
+													queryOptions.getAuthorizations(),
+													null,
+													true);
+										}
+										else if (query instanceof PrefixIdQuery) {
+											dataIt = queryRowPrefix(
+													index,
+													((PrefixIdQuery) query).getRowPrefix(),
+													queryOptions,
+													adapterStore,
+													adapterIds,
+													true);
+										}
+										else {
+											dataIt = queryConstraints(
+													adapterIds,
+													index,
+													query,
+													null,
+													queryOptions,
+													adapterStore,
+													true);
+										}
+
+										while (dataIt.hasNext()) {
+											dataIt.next();
+										}
+										try {
+											dataIt.close();
+										}
+										catch (final Exception ex) {
+											LOGGER.warn(
+													"Cannot close iterator",
+													ex);
+										}
+										callbackCache.close();
 									}
-								}
-								catch (final Exception e) {
-									LOGGER.error(
-											"Failed deletion",
-											e);
-									aOk.set(false);
-								}
-							}
-						};
-
-						CloseableIterator<?> dataIt = null;
-						queryOptions.setScanCallback(callback);
-						final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
-						if (query instanceof RowIdQuery) {
-							queryOptions.setLimit(-1);
-							dataIt = queryRowIds(
-									adapter,
-									index,
-									((RowIdQuery) query).getRowIds(),
-									null,
-									queryOptions,
-									adapterStore,
-									true);
-						}
-						else if (query instanceof DataIdQuery) {
-							final DataIdQuery idQuery = (DataIdQuery) query;
-							dataIt = getEntries(
-									index,
-									idQuery.getDataIds(),
-									adapter,
-									null,
-									callback,
-									queryOptions.getAuthorizations(),
-									null,
-									true);
-						}
-						else if (query instanceof PrefixIdQuery) {
-							dataIt = queryRowPrefix(
-									index,
-									((PrefixIdQuery) query).getRowPrefix(),
-									queryOptions,
-									adapterStore,
-									adapterIds,
-									true);
-						}
-						else {
-							dataIt = queryConstraints(
-									adapterIds,
-									index,
-									query,
-									null,
-									queryOptions,
-									adapterStore,
-									true);
-						}
-
-						while (dataIt.hasNext()) {
-							dataIt.next();
-						}
-						try {
-							dataIt.close();
-						}
-						catch (final Exception ex) {
-							LOGGER.warn(
-									"Cannot close iterator",
-									ex);
-						}
-						callbackCache.close();
-					}
-					if (altIdxDelete != null) {
-						altIdxDelete.close();
-					}
-					idxDeleter.close();
+									if (altIdxDelete != null) {
+										altIdxDelete.close();
+									}
+									idxDeleter.close();
 				}
 
 				return aOk.get();
@@ -578,7 +578,7 @@ public abstract class BaseDataStore
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final String... additionalAuthorizations )
-			throws IOException {
+					throws IOException {
 		final String tableName = index.getId().getString();
 		final String altIdxTableName = tableName + ALT_INDEX_TABLE;
 		final String adapterId = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
@@ -617,12 +617,12 @@ public abstract class BaseDataStore
 	protected abstract void addToBatch(
 			Closeable idxDeleter,
 			List<ByteArrayId> rowIds )
-			throws Exception;
+					throws Exception;
 
 	protected abstract Closeable createIndexDeleter(
 			String indexTableName,
 			String[] authorizations )
-			throws Exception;
+					throws Exception;
 
 	protected abstract List<ByteArrayId> getAltIndexRowIds(
 			final String altIdxTableName,

@@ -67,7 +67,9 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
+import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
+import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
@@ -88,8 +90,8 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
  * used in subsequent queries.
  */
 public class AccumuloDataStore extends
-		BaseDataStore implements
-		MapReduceDataStore
+BaseDataStore implements
+MapReduceDataStore
 {
 	public final static String TYPE = "accumulo";
 
@@ -202,8 +204,8 @@ public class AccumuloDataStore extends
 			if (adapter instanceof RowMergingDataAdapter) {
 				if (!DataAdapterAndIndexCache.getInstance(
 						RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID).add(
-						adapter.getAdapterId(),
-						indexName)) {
+								adapter.getAdapterId(),
+								indexName)) {
 					AccumuloUtils.attachRowMergingIterators(
 							((RowMergingDataAdapter<?, ?>) adapter),
 							accumuloOperations,
@@ -251,7 +253,7 @@ public class AccumuloDataStore extends
 	}
 
 	private class AltIndexCallback<T> implements
-			IngestCallback<T>
+	IngestCallback<T>
 	{
 		private final ByteArrayId EMPTY_VISIBILITY = new ByteArrayId(
 				new byte[0]);
@@ -266,7 +268,7 @@ public class AccumuloDataStore extends
 				final String indexName,
 				final WritableDataAdapter<T> adapter,
 				final ByteArrayId primaryIndexId )
-				throws TableNotFoundException {
+						throws TableNotFoundException {
 			this.adapter = adapter;
 			altIdxTableName = indexName + ALT_INDEX_TABLE;
 			altIndexId = new ByteArrayId(
@@ -350,8 +352,7 @@ public class AccumuloDataStore extends
 							statisticsStore,
 							sanitizedQueryOptions.getAuthorizations()),
 					sanitizedQueryOptions.getAuthorizations());
-		}
-		else {
+		} else {
 			accumuloQuery = new AccumuloConstraintsQuery(
 					adapterIdsToQuery,
 					index,
@@ -392,17 +393,32 @@ public class AccumuloDataStore extends
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> adapterIdsToQuery,
 			boolean delete ) {
-		final AccumuloRowPrefixQuery<Object> prefixQuery = new AccumuloRowPrefixQuery<Object>(
-				index,
-				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
-				sanitizedQueryOptions.getLimit(),
-				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				sanitizedQueryOptions.getAuthorizations());
+		final AccumuloRowPrefixQuery<Object> prefixQuery;
+		if (delete){
+			prefixQuery = new AccumuloRowPrefixDelete<Object>(
+					index, 
+					rowPrefix, 
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getLimit(),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		} else {
+			prefixQuery = new AccumuloRowPrefixQuery<Object>(
+					index,
+					rowPrefix,
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getLimit(),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		}
 		return prefixQuery.query(
 				accumuloOperations,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
@@ -418,14 +434,25 @@ public class AccumuloDataStore extends
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
 			boolean delete ) {
-		final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
-				adapter,
-				index,
-				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
-				filter,
-				sanitizedQueryOptions.getAuthorizations());
-
+		final AccumuloRowIdsQuery<Object> q;
+		if(delete){
+			System.out.println("I am here");
+			q = new AccumuloRowIdsDelete<Object>(
+					adapter, 
+					index, 
+					rowIds, 
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					filter,
+					sanitizedQueryOptions.getAuthorizations());
+		}else{
+			q = new AccumuloRowIdsQuery<Object>(
+					adapter,
+					index,
+					rowIds,
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					filter,
+					sanitizedQueryOptions.getAuthorizations());
+		}
 		return q.query(
 				accumuloOperations,
 				tempAdapterStore,
@@ -626,7 +653,7 @@ public class AccumuloDataStore extends
 	}
 
 	private static class ClosableBatchDeleter implements
-			Closeable
+	Closeable
 	{
 		private final BatchDeleter deleter;
 
@@ -649,7 +676,7 @@ public class AccumuloDataStore extends
 	protected Closeable createIndexDeleter(
 			final String indexTableName,
 			final String[] authorizations )
-			throws Exception {
+					throws Exception {
 		return new ClosableBatchDeleter(
 				accumuloOperations.createBatchDeleter(
 						indexTableName,
@@ -660,7 +687,7 @@ public class AccumuloDataStore extends
 	protected void addToBatch(
 			final Closeable deleter,
 			final List<ByteArrayId> ids )
-			throws Exception {
+					throws Exception {
 		final List<Range> rowRanges = new ArrayList<Range>();
 		for (final ByteArrayId id : ids) {
 			rowRanges.add(Range.exact(new Text(
@@ -685,8 +712,8 @@ public class AccumuloDataStore extends
 			final IndexStore indexStore,
 			final Integer minSplits,
 			final Integer maxSplits )
-			throws IOException,
-			InterruptedException {
+					throws IOException,
+					InterruptedException {
 		return splitsProvider.getSplits(
 				accumuloOperations,
 				query,
@@ -708,8 +735,8 @@ public class AccumuloDataStore extends
 			final IndexStore indexStore,
 			final boolean isOutputWritable,
 			final InputSplit inputSplit )
-			throws IOException,
-			InterruptedException {
+					throws IOException,
+					InterruptedException {
 		return new GeoWaveAccumuloRecordReader(
 				query,
 				queryOptions,

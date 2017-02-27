@@ -1,0 +1,77 @@
+package mil.nga.giat.geowave.datastore.accumulo.query;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.Iterator;
+
+import org.apache.accumulo.core.client.BatchDeleter;
+import org.apache.accumulo.core.client.MutationsRejectedException;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.log4j.Logger;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+
+public class AccumuloRowPrefixDelete<T> extends AccumuloRowPrefixQuery <T>{
+	
+	private static final Logger LOGGER = Logger.getLogger(AccumuloRowPrefixDelete.class);
+
+	public AccumuloRowPrefixDelete(
+			PrimaryIndex index, 
+			ByteArrayId rowPrefix, 
+			ScanCallback scanCallback, 
+			Integer limit,
+			DifferingFieldVisibilityEntryCount visibilityCounts, 
+			String[] authorizations) {
+		super(
+				index, 
+				rowPrefix, 
+				scanCallback, 
+				limit, 
+				visibilityCounts, 
+				authorizations);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected CloseableIterator<T> initCloseableIterator(
+			ScannerBase scanner,
+			Iterator it ) {
+		return new CloseableIteratorWrapper(
+				new Closeable() {
+					@Override
+					public void close()
+							throws IOException {
+						if (scanner instanceof BatchDeleter) {
+							try {
+								((BatchDeleter) scanner).delete();
+							}
+							catch (MutationsRejectedException | TableNotFoundException e) {
+								LOGGER.warn("Unable to delete rows by query constraints",e);
+							}
+						}
+						scanner.close();
+					}
+				},
+				it);
+	}
+
+	@Override
+	protected ScannerBase createScanner(
+			AccumuloOperations accumuloOperations,
+			String tableName,
+			boolean batchScanner,
+			String... authorizations )
+			throws TableNotFoundException {
+		return accumuloOperations.createBatchDeleter(
+				tableName,
+				authorizations);
+	}
+	
+}

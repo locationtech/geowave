@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.util.Iterator;
+
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
@@ -21,7 +23,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
  *
  */
 abstract public class AbstractAccumuloRowQuery<T> extends
-		AccumuloQuery
+AccumuloQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(AbstractAccumuloRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
@@ -51,16 +53,9 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 			return null;
 		}
 		addScanIteratorSettings(scanner);
-		return new CloseableIteratorWrapper<T>(
-				new ScannerClosableWrapper(
-						scanner),
-				new AccumuloEntryIteratorWrapper(
-						useWholeRowIterator(),
-						adapterStore,
-						index,
-						scanner.iterator(),
-						null,
-						this.scanCallback));
+		return initCloseableIterator(
+				scanner,
+				scanner.iterator());
 	}
 
 	protected void addScanIteratorSettings(
@@ -77,4 +72,12 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 	}
 
 	abstract protected Integer getScannerLimit();
+
+	protected CloseableIterator<T> initCloseableIterator(
+			ScannerBase scanner, Iterator it) {
+		return new CloseableIteratorWrapper(
+				new ScannerClosableWrapper(
+						scanner),
+				it);
+	}
 }

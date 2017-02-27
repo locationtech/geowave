@@ -38,6 +38,7 @@ import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
+import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometry;
@@ -268,6 +269,81 @@ public class DeleteWriterTest
 				new QueryOptions(),
 				spatialQuery);
 		assertTrue(!it2.hasNext());
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_TYPE);
+		assertEquals(
+				2,
+				countStats.getCount());
+	}
+	
+	@Test
+	public void testDeleteByRowIds() {
+		BaseDataStore.testBulkDelete = true;
+		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_TYPE);
+		assertEquals(
+				3,
+				countStats.getCount());
+		assertEquals(
+				18,
+				rowId2s.size());
+		RowIdQuery rowIdQuery = new RowIdQuery(rowId2s);
+		final CloseableIterator it1 = mockDataStore.query(
+				new QueryOptions(),
+				rowIdQuery);
+		assertTrue(it1.hasNext());
+		assertTrue(adapter.getDataId(
+				(TestGeometry) it1.next()).getString().equals(
+				"test_line_2"));
+		assertTrue(mockDataStore.delete(
+				new QueryOptions(
+						adapter,
+						index),
+				rowIdQuery));
+		final CloseableIterator it2 = mockDataStore.query(
+				new QueryOptions(),
+				rowIdQuery);
+		assertTrue(!it2.hasNext());
+		countStats = (CountDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_TYPE);
+		assertEquals(
+				2,
+				countStats.getCount());
+	}
+	
+	@Test
+	 public void testDeleteByPrefixId() {
+		BaseDataStore.testBulkDelete = true;
+		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
+				adapter.getAdapterId(),
+				CountDataStatistics.STATS_TYPE);
+		assertEquals(
+				3,
+				countStats.getCount());
+		assertEquals(
+				18,
+				rowId2s.size());
+		PrefixIdQuery prefixIdQuery = new PrefixIdQuery(new ByteArrayId(
+				"test_line_2"));
+		final CloseableIterator it1 = mockDataStore.query(
+				new QueryOptions(),
+				prefixIdQuery);
+		assertTrue(it1.hasNext());
+		assertTrue(adapter.getDataId(
+				(TestGeometry) it1.next()).getString().equals(
+				"test_line_1"));
+		assertTrue(mockDataStore.delete(
+				new QueryOptions(
+						adapter,
+						index),
+				prefixIdQuery));
+		final CloseableIterator it2 = mockDataStore.query(
+				new QueryOptions(),
+				prefixIdQuery);
+		//assertTrue(!it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
