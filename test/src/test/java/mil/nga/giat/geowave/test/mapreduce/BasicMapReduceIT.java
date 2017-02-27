@@ -126,6 +126,9 @@ public class BasicMapReduceIT
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
+		// aperi: Disabled until we fix adapter Id issue for dynamodb
+		,
+		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
