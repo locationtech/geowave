@@ -69,7 +69,8 @@ abstract public class AccumuloQuery
 	}
 
 	protected boolean useWholeRowIterator() {
-		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
+		return false;// (visibilityCounts == null) ||
+						// visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
 	protected ScannerBase createScanner(

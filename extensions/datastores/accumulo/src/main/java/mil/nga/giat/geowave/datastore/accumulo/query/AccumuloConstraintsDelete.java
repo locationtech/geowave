@@ -97,20 +97,25 @@ public class AccumuloConstraintsDelete extends
 			Iterator it ) {
 		return new CloseableIteratorWrapper(
 				new Closeable() {
+					boolean closed = false;
+
 					@Override
 					public void close()
 							throws IOException {
-						if (scanner instanceof BatchDeleter) {
-							try {
-								((BatchDeleter) scanner).delete();
+						if (!closed) {
+							if (scanner instanceof BatchDeleter) {
+								try {
+									((BatchDeleter) scanner).delete();
+								}
+								catch (MutationsRejectedException | TableNotFoundException e) {
+									LOGGER.warn(
+											"Unable to delete rows by query constraints",
+											e);
+								}
 							}
-							catch (MutationsRejectedException | TableNotFoundException e) {
-								LOGGER.warn(
-										"Unable to delete rows by query constraints",
-										e);
-							}
+							scanner.close();
 						}
-						scanner.close();
+						closed = true;
 					}
 				},
 				it);
@@ -123,9 +128,11 @@ public class AccumuloConstraintsDelete extends
 			boolean batchScanner,
 			String... authorizations )
 			throws TableNotFoundException {
-		return accumuloOperations.createBatchDeleter(
+		BatchDeleter deleter = accumuloOperations.createBatchDeleter(
 				tableName,
 				authorizations);
+		deleter.removeScanIterator(BatchDeleter.class.getName() + ".NOVALUE");
+		return deleter;
 	}
 
 }

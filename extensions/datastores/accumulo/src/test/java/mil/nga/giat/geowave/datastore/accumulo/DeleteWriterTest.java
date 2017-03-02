@@ -3,18 +3,31 @@ package mil.nga.giat.geowave.datastore.accumulo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.conf.Property;
+import org.apache.accumulo.gc.SimpleGarbageCollector;
+import org.apache.accumulo.master.Master;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
@@ -46,12 +59,12 @@ import mil.nga.giat.geowave.core.store.query.RowIdQuery;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometry;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometryAdapter;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
+import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 
 public class DeleteWriterTest
 {
-	private final MockInstance mockInstance = new MockInstance();
-	private Connector mockConnector = null;
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteWriterTest.class);
 	private BasicAccumuloOperations operations;
 	private DataStore mockDataStore;
 	private List<ByteArrayId> rowIds1;
@@ -61,7 +74,7 @@ public class DeleteWriterTest
 	private DataStatisticsStore statsStore;
 	protected AccumuloOptions options = new AccumuloOptions();
 
-	private static final CommonIndexModel model = new SpatialDimensionalityTypeProvider()
+	private static final CommonIndexModel MODEL = new SpatialDimensionalityTypeProvider()
 			.createPrimaryIndex()
 			.getIndexModel();
 
@@ -70,7 +83,7 @@ public class DeleteWriterTest
 		new LatitudeDefinition()
 	};
 
-	private static final NumericIndexStrategy strategy = TieredSFCIndexFactory.createSingleTierStrategy(
+	private static final NumericIndexStrategy STRATEGY = TieredSFCIndexFactory.createSingleTierStrategy(
 			SPATIAL_DIMENSIONS,
 			new int[] {
 				16,
@@ -82,26 +95,58 @@ public class DeleteWriterTest
 			"yyyy-MM-dd HH:mm:ss.S");
 
 	private static final PrimaryIndex index = new PrimaryIndex(
-			strategy,
-			model);
+			STRATEGY,
+			MODEL);
+
+	protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
+	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
+	protected static final String HADOOP_DLL = "hadoop.dll";
+	// breaks on windows if temp directory isn't on same drive as project
+	protected static final File TEMP_DIR = new File(
+			"./target/accumulo_temp");
+	private static final boolean USE_MOCK = true;
+	protected MiniAccumuloClusterImpl miniAccumulo;
+	protected String zookeeper;
+	// just increment port so there is no potential conflict
+	protected static int port = 2181;
 
 	@Before
 	public void setUp()
-			throws IOException {
-
-		try {
-			mockConnector = mockInstance.getConnector(
+			throws IOException,
+			InterruptedException,
+			AccumuloException,
+			AccumuloSecurityException {
+		if (USE_MOCK) {
+			Connector mockConnector;
+			mockConnector = new MockInstance().getConnector(
 					"root",
 					new PasswordToken(
 							new byte[0]));
-
 			operations = new BasicAccumuloOperations(
 					mockConnector);
 		}
-		catch (AccumuloException | AccumuloSecurityException e) {
-			e.printStackTrace();
-		}
+		else {
+			if (TEMP_DIR.exists()) {
+				FileUtils.deleteDirectory(TEMP_DIR);
+			}
+			zookeeper = "localhost:" + port;
+			final MiniAccumuloConfigImpl config = new MiniAccumuloConfigImpl(
+					TEMP_DIR,
+					DEFAULT_MINI_ACCUMULO_PASSWORD);
+			config.setZooKeeperPort(port++);
+			config.setNumTservers(2);
 
+			miniAccumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
+					config,
+					DeleteWriterTest.class);
+
+			startMiniAccumulo(config);
+			operations = new BasicAccumuloOperations(
+					miniAccumulo.getConnector(
+							"root",
+							new PasswordToken(
+									DEFAULT_MINI_ACCUMULO_PASSWORD)));
+		}
 		operations.createTable(
 				"test_table",
 				true,
@@ -160,6 +205,60 @@ public class DeleteWriterTest
 					"test_pt_1"));
 		}
 
+	}
+
+	@After
+	public void tearDown() {
+		if (!USE_MOCK) {
+			try {
+				miniAccumulo.stop();
+			}
+			catch (final InterruptedException | IOException e) {
+				LOGGER.warn(
+						"unable to stop mini accumulo",
+						e);
+			}
+			if (TEMP_DIR != null) {
+				try {
+					// sleep because mini accumulo processes still have a
+					// hold on the log files and there is no hook to get
+					// notified when it is completely stopped
+
+					Thread.sleep(2000);
+					FileUtils.deleteDirectory(TEMP_DIR);
+				}
+				catch (final IOException | InterruptedException e) {
+					LOGGER.warn(
+							"unable to delete temp directory",
+							e);
+				}
+			}
+		}
+	}
+
+	private void startMiniAccumulo(
+			final MiniAccumuloConfigImpl config )
+			throws IOException,
+			InterruptedException {
+
+		final LinkedList<String> jvmArgs = new LinkedList<>();
+		jvmArgs.add("-XX:CompressedClassSpaceSize=512m");
+		jvmArgs.add("-XX:MaxMetaspaceSize=512m");
+		jvmArgs.add("-Xmx512m");
+
+		Runtime.getRuntime().addShutdownHook(
+				new Thread() {
+					@Override
+					public void run() {
+						tearDown();
+					}
+				});
+		final Map<String, String> siteConfig = config.getSiteConfig();
+		siteConfig.put(
+				Property.INSTANCE_ZK_HOST.getKey(),
+				zookeeper);
+		config.setSiteConfig(siteConfig);
+		miniAccumulo.start();
 	}
 
 	@Test
