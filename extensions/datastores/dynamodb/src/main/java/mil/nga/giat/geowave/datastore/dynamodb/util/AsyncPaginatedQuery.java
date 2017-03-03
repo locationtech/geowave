@@ -1,12 +1,9 @@
 package mil.nga.giat.geowave.datastore.dynamodb.util;
 
-import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.collections4.iterators.LazyIteratorChain;
 import org.slf4j.Logger;
@@ -22,13 +19,12 @@ public class AsyncPaginatedQuery extends
 		LazyIteratorChain<Map<String, AttributeValue>>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsyncPaginatedQuery.class);
-	private static final int MAX_ASYNC_QUERY_RESULTS = 1000;
+	private static final int MAX_ASYNC_QUERY_RESULTS = 100;
 	private static int totalAsyncRequestsInProgress = 0;
 
 	private final AmazonDynamoDBAsyncClient dynamoDBClient;
-	private final Lock lock = new ReentrantLock();
-	private final Condition noResult = lock.newCondition();
-	private Queue<QueryResult> asyncQueryResults;
+	private final Object monitorLock = new Object();
+	private Deque<QueryResult> asyncQueryResults;
 	private QueryRequest lastRequest;
 	private int asyncRequestsInProgress;
 
@@ -47,10 +43,15 @@ public class AsyncPaginatedQuery extends
 			final AmazonDynamoDBAsyncClient dynamoDBClient ) {
 		this.lastRequest = request;
 		this.dynamoDBClient = dynamoDBClient;
-		this.asyncQueryResults = new ArrayDeque<>(
-				MAX_ASYNC_QUERY_RESULTS);
+
+		/**
+		 * Link list because we need to store null values Queues like ArrayDeque
+		 * don't support null value insertion
+		 */
+		this.asyncQueryResults = new LinkedList<>();
 		this.asyncRequestsInProgress = 0;
-		makeAsyncQuery();
+
+		checkAndAsyncQuery();
 	}
 
 	/**
@@ -66,9 +67,8 @@ public class AsyncPaginatedQuery extends
 	protected Iterator<? extends Map<String, AttributeValue>> nextIterator(
 			int arg0 ) {
 
-		lock.lock();
-		try {
-			if (lastRequest == null && asyncQueryResults.isEmpty() == true) {
+		synchronized (monitorLock) {
+			if (lastRequest == null && asyncQueryResults.isEmpty()) {
 				return null;
 			}
 
@@ -77,9 +77,9 @@ public class AsyncPaginatedQuery extends
 				makeAsyncQuery();
 			}
 
-			while (asyncQueryResults.isEmpty() == true) {
+			while (asyncQueryResults.isEmpty()) {
 				try {
-					noResult.await();
+					monitorLock.wait();
 				}
 				catch (InterruptedException e) {
 					LOGGER.error("Exception in Async paginated query " + e);
@@ -88,10 +88,30 @@ public class AsyncPaginatedQuery extends
 			}
 			result = asyncQueryResults.remove();
 
-			return result.getItems().iterator();
+			return result == null ? null : result.getItems().iterator();
 		}
-		finally {
-			lock.unlock();
+	}
+
+	/**
+	 * Check if an async query should be fired and if necessary fire one Does
+	 * not need the monitor lock
+	 */
+	private void checkAndAsyncQuery() {
+		synchronized (AsyncPaginatedQuery.class) {
+			if (totalAsyncRequestsInProgress > MAX_ASYNC_QUERY_RESULTS) {
+				return;
+			}
+			++totalAsyncRequestsInProgress;
+		}
+		makeAsyncQuery();
+	}
+
+	/**
+	 * Reduce the number of total async requests in progress
+	 */
+	private void decTotalAsyncRequestsInProgress() {
+		synchronized (AsyncPaginatedQuery.class) {
+			--totalAsyncRequestsInProgress;
 		}
 	}
 
@@ -103,69 +123,58 @@ public class AsyncPaginatedQuery extends
 	 * Any waiting threads are signaled here
 	 */
 	private void makeAsyncQuery() {
-		lock.lock();
-		try {
+		synchronized (monitorLock) {
 			++asyncRequestsInProgress;
 			dynamoDBClient.queryAsync(
 					lastRequest,
 					new AsyncHandler<QueryRequest, QueryResult>() {
 
+						/**
+						 * On Error, add a null and notify the thread waiting
+						 * This makes sure that they are not stuck waiting
+						 */
 						@Override
 						public void onError(
 								Exception exception ) {
 							LOGGER.error(
 									"Query async failed with Exception ",
 									exception);
-							try {
-								lock.lock();
+							synchronized (monitorLock) {
 								--asyncRequestsInProgress;
-								noResult.signal();
-							}
-							finally {
-								lock.unlock();
+								decTotalAsyncRequestsInProgress();
+								asyncQueryResults.add(null);
+								monitorLock.notify();
 							}
 
 						}
 
+						/**
+						 * On Success, fire a new request if we can Notify the
+						 * waiting thread with the result
+						 */
 						@Override
 						public void onSuccess(
 								QueryRequest request,
 								QueryResult result ) {
 
-							lock.lock();
-							try {
+							synchronized (monitorLock) {
 								--asyncRequestsInProgress;
-								synchronized (AsyncPaginatedQuery.class) {
-									--totalAsyncRequestsInProgress;
-								}
+								decTotalAsyncRequestsInProgress();
 
 								if (result.getLastEvaluatedKey() != null && !result.getLastEvaluatedKey().isEmpty()) {
 									lastRequest.setExclusiveStartKey(result.getLastEvaluatedKey());
-
-									synchronized (AsyncPaginatedQuery.class) {
-										if (totalAsyncRequestsInProgress < MAX_ASYNC_QUERY_RESULTS) {
-											++totalAsyncRequestsInProgress;
-											makeAsyncQuery();
-										}
-									}
+									checkAndAsyncQuery();
 								}
 								else {
 									lastRequest = null;
 								}
 
 								asyncQueryResults.add(result);
-								noResult.signal();
-							}
-							finally {
-								lock.unlock();
+								monitorLock.notify();
 							}
 						}
 					});
 		}
-		finally {
-			lock.unlock();
-		}
-
 		return;
 	}
 
