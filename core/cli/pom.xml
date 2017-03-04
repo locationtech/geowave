@@ -9,16 +9,6 @@
 	<artifactId>geowave-core-cli</artifactId>
 	<name>GeoWave CLI</name>
 	<description>Command Line Interface for GeoWave Tools</description>
-	<repositories>
-		<repository>
-			<id>maven-restlet</id>
-			<name>Restlet repository</name>
-			<url>https://maven.restlet.com</url>
-		</repository>
-	</repositories>
-	<properties>
-		<restlet-version>2.3.9</restlet-version>
-	</properties>
 	<dependencies>	
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -49,9 +39,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet</artifactId>
-			<version>${restlet-version}</version>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-service-rest-resources</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

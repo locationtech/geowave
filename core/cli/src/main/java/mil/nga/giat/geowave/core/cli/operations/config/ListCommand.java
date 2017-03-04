@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.restlet.resource.Get;
+import org.shaded.restlet.resource.Get;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;

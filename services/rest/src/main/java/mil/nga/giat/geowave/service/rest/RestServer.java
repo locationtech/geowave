@@ -6,13 +6,14 @@ import org.reflections.Reflections;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
-import org.restlet.Application;
-import org.restlet.Component;
-import org.restlet.Server;
-import org.restlet.data.Protocol;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
-import org.restlet.routing.Router;
+import org.shaded.restlet.Application;
+import org.shaded.restlet.Component;
+import org.shaded.restlet.Server;
+import org.shaded.restlet.data.Protocol;
+import org.shaded.restlet.resource.Get;
+import org.shaded.restlet.resource.ServerResource;
+import org.shaded.restlet.routing.Router;
+import org.shaded.restlet.Restlet;
 
 public class RestServer extends
 		ServerResource
@@ -72,7 +73,7 @@ public class RestServer extends
 		// Setup router
 		Application myApp = new Application() {
 			@Override
-			public org.restlet.Restlet createInboundRoot() {
+			public Restlet createInboundRoot() {
 				router.setContext(getContext());
 				return router;
 			};
