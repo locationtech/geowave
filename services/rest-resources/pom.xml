@@ -50,6 +50,9 @@
 								<relocation>
 									<pattern>org.restlet</pattern>
 									<shadedPattern>org.shaded.restlet</shadedPattern>
+									<excludes>
+										<exclude>org.restlet.ext.jackson.*</exclude>
+									</excludes>
 								</relocation>
 							</relocations>
 							<transformers>
