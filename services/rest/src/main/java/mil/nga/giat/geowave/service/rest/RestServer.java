@@ -1,28 +1,23 @@
 package mil.nga.giat.geowave.service.rest;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.reflections.Reflections;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
-import org.restlet.Application;
-import org.restlet.Component;
-import org.restlet.Server;
-import org.restlet.data.Protocol;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
-import org.restlet.routing.Router;
-
-import javassist.ClassPool;
-import mil.nga.giat.geowave.core.cli.operations.HelpCommand;
+import org.shaded.restlet.Application;
+import org.shaded.restlet.Component;
+import org.shaded.restlet.Server;
+import org.shaded.restlet.data.Protocol;
+import org.shaded.restlet.resource.Get;
+import org.shaded.restlet.resource.ServerResource;
+import org.shaded.restlet.routing.Router;
+import org.shaded.restlet.Restlet;
 
 public class RestServer extends
 		ServerResource
 {
-
 	private ArrayList<Route> availableRoutes;
 
 	/**
@@ -50,7 +45,7 @@ public class RestServer extends
 		StringBuilder routeStringBuilder = new StringBuilder(
 				"Available Routes: (geowave/help is only that currently extends ServerResource)<br>");
 		for (Route route : availableRoutes) {
-			routeStringBuilder.append(route.getPath() + "<br>");
+			routeStringBuilder.append(route.getPath() + " -> " + route.getOperationAsGeneric() + "<br>");
 		}
 		return "<b>404</b>: Route not found<br><br>" + routeStringBuilder.toString();
 	}
@@ -78,7 +73,7 @@ public class RestServer extends
 		// Setup router
 		Application myApp = new Application() {
 			@Override
-			public org.restlet.Restlet createInboundRoot() {
+			public Restlet createInboundRoot() {
 				router.setContext(getContext());
 				return router;
 			};
