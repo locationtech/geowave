@@ -21,7 +21,7 @@ public class RemoveIndexCommand extends
 
 		// Search for properties relevant to the given name
 		String pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
-		super.execute(
+		super.computeResults(
 				params,
 				pattern);
 
