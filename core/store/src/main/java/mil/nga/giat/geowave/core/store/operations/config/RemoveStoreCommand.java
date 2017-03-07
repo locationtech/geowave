@@ -6,7 +6,12 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+
+import org.shaded.restlet.data.Status;
+import org.shaded.restlet.resource.Post;
 
 @GeowaveOperation(name = "rmstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Remove store from Geowave configuration")
@@ -15,8 +20,7 @@ public class RemoveStoreCommand extends
 		Command
 {
 
-	@Override
-	public void execute(
+	public void computeResults(
 			OperationParams params ) {
 
 		// Search for properties relevant to the given name
@@ -25,5 +29,26 @@ public class RemoveStoreCommand extends
 				params,
 				pattern);
 
+	}
+
+	@Override
+	public void execute(
+			OperationParams params ) {
+		computeResults(params);
+	}
+
+	@Post("json")
+	public void restPost() {
+		String name = getQueryValue("name");
+		if (name == null) {
+			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return;
+		}
+		setEntryName(name);
+		OperationParams params = new ManualOperationParams();
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				ConfigOptions.getDefaultPropertyFile());
+		computeResults(params);
 	}
 }
