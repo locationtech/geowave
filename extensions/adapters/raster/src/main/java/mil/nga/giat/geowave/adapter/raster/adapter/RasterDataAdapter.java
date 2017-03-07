@@ -54,6 +54,7 @@ import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.GeometryClipper;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.operation.projection.MapProjection;
 import org.geotools.referencing.operation.transform.AffineTransform2D;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.resources.coverage.CoverageUtilities;
@@ -137,6 +138,7 @@ public class RasterDataAdapter implements
 {
 	static {
 		SourceThresholdFixMosaicDescriptor.register(false);
+		MapProjection.SKIP_SANITY_CHECKS = true;
 	}
 
 	public final static String TILE_METADATA_PROPERTY_KEY = "TILE_METADATA";
@@ -499,14 +501,9 @@ public class RasterDataAdapter implements
 			final double[] tileRangePerDimension = new double[bounds.getDimensionCount()];
 			final double[] maxValuesPerDimension = bounds.getMaxValuesPerDimension();
 			final double[] minValuesPerDimension = bounds.getMinValuesPerDimension();
-			double maxSpan = -Double.MAX_VALUE;
 			for (int d = 0; d < tileRangePerDimension.length; d++) {
 				tileRangePerDimension[d] = ((maxValuesPerDimension[d] - minValuesPerDimension[d]) * tileSize)
 						/ gridEnvelope.getSpan(d);
-
-				maxSpan = Math.max(
-						gridEnvelope.getSpan(d),
-						maxSpan);
 			}
 			final TreeMap<Double, SubStrategy> substrategyMap = new TreeMap<Double, SubStrategy>();
 			for (final SubStrategy pyramidLevel : indexStrategy.getSubStrategies()) {
@@ -545,13 +542,7 @@ public class RasterDataAdapter implements
 				NavigableMap<Double, SubStrategy> map = substrategyMap.tailMap(
 						fullRes,
 						false);
-				final double toKey = maxSpan / tileSize;
-				if (map.firstKey() <= toKey) {
-					map = map.headMap(
-							toKey,
-							true);
-					pyramidLevels.addAll(map.values());
-				}
+				pyramidLevels.addAll(map.values());
 			}
 			if (pyramidLevels.isEmpty()) {
 				// this case shouldn't occur theoretically, but just in case,

@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -62,10 +63,10 @@ public class HistogramStatistics extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final List<byte[]> perEntryBinary = new ArrayList<byte[]>();
 		int totalBytes = 4;
 		for (final Entry<Resolution, javax.media.jai.Histogram> entry : histograms.entrySet()) {
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			byte[] keyBytes;
 			byte[] valueBytes = new byte[] {};
 			if (entry.getKey() != null) {
