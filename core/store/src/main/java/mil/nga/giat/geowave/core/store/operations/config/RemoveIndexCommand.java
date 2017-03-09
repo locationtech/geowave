@@ -11,9 +11,9 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import org.restlet.data.Status;
-import org.restlet.resource.Delete;
-import org.restlet.resource.Post;
+import org.shaded.restlet.data.Status;
+import org.shaded.restlet.resource.Delete;
+import org.shaded.restlet.resource.Post;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Properties;
@@ -46,7 +46,7 @@ public class RemoveIndexCommand extends
 	}
 
 
-	@Delete("json")
+	@Post("json")
 	public void restDelete() {
 		String pattern = getQueryValue("pattern");
 		if (pattern == null) {
