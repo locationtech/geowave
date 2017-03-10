@@ -20,14 +20,12 @@ public class RemoveStoreCommand extends
 		Command
 {
 
-	public void computeResults(
+	protected Void computeResults(
 			OperationParams params ) {
 
-		// Search for properties relevant to the given name
-		String pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
 		super.computeResults(
-				params,
-				pattern);
+				params);
+		return null;
 
 	}
 
@@ -37,18 +35,18 @@ public class RemoveStoreCommand extends
 		computeResults(params);
 	}
 
-	@Post("json")
-	public void restPost() {
-		String name = getQueryValue("name");
-		if (name == null) {
-			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return;
-		}
-		setEntryName(name);
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
-		computeResults(params);
-	}
+//	@Post("json")
+//	public void restPost() {
+//		String name = getQueryValue("name");
+//		if (name == null) {
+//			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+//			return;
+//		}
+//		setEntryName(name);
+//		OperationParams params = new ManualOperationParams();
+//		params.getContext().put(
+//				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+//				ConfigOptions.getDefaultPropertyFile());
+//		computeResults(params);
+//	}
 }

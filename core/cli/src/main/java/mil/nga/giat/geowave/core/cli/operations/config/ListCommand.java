@@ -21,10 +21,12 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 
-@GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
+
+@GeowaveOperation(name = "list", parentOperation = ConfigSection.class, restEnabled = GET)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
-		DefaultOperation implements
+		DefaultOperation<Pair<String, Properties>> implements
 		Command
 {
 
@@ -38,7 +40,7 @@ public class ListCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		Pair<String, Properties> list = getList(params);
+		Pair<String, Properties> list = computeResults(params);
 		String name = list.getKey();
 		Properties p = list.getValue();
 
@@ -56,19 +58,19 @@ public class ListCommand extends
 		}
 	}
 
-	@Get("json")
-	public Properties restGet() {
-		filter = getQueryValue("filter");
+//	@Get("json")
+//	public Properties restGet() {
+//		filter = getQueryValue("filter");
+//
+//		OperationParams params = new ManualOperationParams();
+//		params.getContext().put(
+//				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+//				ConfigOptions.getDefaultPropertyFile());
+//		return getList(
+//				params).getValue();
+//	}
 
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
-		return getList(
-				params).getValue();
-	}
-
-	private Pair<String, Properties> getList(
+	protected Pair<String, Properties> computeResults(
 			OperationParams params ) {
 
 		File f = (File) params.getContext().get(
