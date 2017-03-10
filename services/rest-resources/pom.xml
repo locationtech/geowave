@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>geowave-service-parent</artifactId>
+		<groupId>mil.nga.giat</groupId>
+		<relativePath>../</relativePath>
+		<version>0.9.4-SNAPSHOT</version>
+	</parent>
+	<artifactId>geowave-service-rest-resources</artifactId>
+	<name>GeoWave Services Rest Resources</name>
+	<repositories>
+		<repository>
+			<id>maven-restlet</id>
+			<name>Restlet repository</name>
+			<url>https://maven.restlet.com</url>
+		</repository>
+	</repositories>
+	<properties>
+		<restlet-version>2.3.9</restlet-version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet</artifactId>
+			<version>${restlet-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.jackson</artifactId>
+			<version>${restlet-version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<relocations>
+								<!-- Necessary to not conflict with the older version of restlet used by IT -->
+								<!-- See https://maven.apache.org/components/plugins/maven-shade-plugin/examples/class-relocation.html -->
+								<relocation>
+									<pattern>org.restlet</pattern>
+									<shadedPattern>org.shaded.restlet</shadedPattern>
+									<excludes>
+										<exclude>org.restlet.ext.jackson.*</exclude>
+									</excludes>
+								</relocation>
+							</relocations>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer" />
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
