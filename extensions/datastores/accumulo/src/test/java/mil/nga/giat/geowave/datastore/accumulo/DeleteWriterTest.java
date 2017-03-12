@@ -79,15 +79,15 @@ public class DeleteWriterTest
 			.getIndexModel();
 
 	private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
-		new LongitudeDefinition(),
-		new LatitudeDefinition()
+			new LongitudeDefinition(),
+			new LatitudeDefinition()
 	};
 
 	private static final NumericIndexStrategy STRATEGY = TieredSFCIndexFactory.createSingleTierStrategy(
 			SPATIAL_DIMENSIONS,
 			new int[] {
-				16,
-				16
+					16,
+					16
 			},
 			SFCType.HILBERT);
 
@@ -104,7 +104,6 @@ public class DeleteWriterTest
 	// breaks on windows if temp directory isn't on same drive as project
 	protected static final File TEMP_DIR = new File(
 			"./target/accumulo_temp");
-	private static final boolean USE_MOCK = true;
 	protected MiniAccumuloClusterImpl miniAccumulo;
 	protected String zookeeper;
 	// just increment port so there is no potential conflict
@@ -116,37 +115,14 @@ public class DeleteWriterTest
 			InterruptedException,
 			AccumuloException,
 			AccumuloSecurityException {
-		if (USE_MOCK) {
-			Connector mockConnector;
-			mockConnector = new MockInstance().getConnector(
-					"root",
-					new PasswordToken(
-							new byte[0]));
-			operations = new BasicAccumuloOperations(
-					mockConnector);
-		}
-		else {
-			if (TEMP_DIR.exists()) {
-				FileUtils.deleteDirectory(TEMP_DIR);
-			}
-			zookeeper = "localhost:" + port;
-			final MiniAccumuloConfigImpl config = new MiniAccumuloConfigImpl(
-					TEMP_DIR,
-					DEFAULT_MINI_ACCUMULO_PASSWORD);
-			config.setZooKeeperPort(port++);
-			config.setNumTservers(2);
+		Connector mockConnector;
+		mockConnector = new MockInstance().getConnector(
+				"root",
+				new PasswordToken(
+						new byte[0]));
+		operations = new BasicAccumuloOperations(
+				mockConnector);
 
-			miniAccumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
-					config,
-					DeleteWriterTest.class);
-
-			startMiniAccumulo(config);
-			operations = new BasicAccumuloOperations(
-					miniAccumulo.getConnector(
-							"root",
-							new PasswordToken(
-									DEFAULT_MINI_ACCUMULO_PASSWORD)));
-		}
 		operations.createTable(
 				"test_table",
 				true,
@@ -167,35 +143,35 @@ public class DeleteWriterTest
 				index)) {
 			rowIds1 = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
 					factory.createLineString(new Coordinate[] {
-						new Coordinate(
-								43.444,
-								28.232),
-						new Coordinate(
-								43.454,
-								28.242),
-						new Coordinate(
-								43.444,
-								28.252),
-						new Coordinate(
-								43.444,
-								28.232),
+							new Coordinate(
+									43.444,
+									28.232),
+							new Coordinate(
+									43.454,
+									28.242),
+							new Coordinate(
+									43.444,
+									28.252),
+							new Coordinate(
+									43.444,
+									28.232),
 					}),
 					"test_line_1"));
 
 			rowIds2 = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
 					factory.createLineString(new Coordinate[] {
-						new Coordinate(
-								43.444,
-								28.232),
-						new Coordinate(
-								43.454,
-								28.242),
-						new Coordinate(
-								43.444,
-								28.252),
-						new Coordinate(
-								43.444,
-								28.232),
+							new Coordinate(
+									43.444,
+									28.232),
+							new Coordinate(
+									43.454,
+									28.242),
+							new Coordinate(
+									43.444,
+									28.252),
+							new Coordinate(
+									43.444,
+									28.232),
 					}),
 					"test_line_2"));
 			rowIds3 = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
@@ -205,60 +181,6 @@ public class DeleteWriterTest
 					"test_pt_1"));
 		}
 
-	}
-
-	@After
-	public void tearDown() {
-		if (!USE_MOCK) {
-			try {
-				miniAccumulo.stop();
-			}
-			catch (final InterruptedException | IOException e) {
-				LOGGER.warn(
-						"unable to stop mini accumulo",
-						e);
-			}
-			if (TEMP_DIR != null) {
-				try {
-					// sleep because mini accumulo processes still have a
-					// hold on the log files and there is no hook to get
-					// notified when it is completely stopped
-
-					Thread.sleep(2000);
-					FileUtils.deleteDirectory(TEMP_DIR);
-				}
-				catch (final IOException | InterruptedException e) {
-					LOGGER.warn(
-							"unable to delete temp directory",
-							e);
-				}
-			}
-		}
-	}
-
-	private void startMiniAccumulo(
-			final MiniAccumuloConfigImpl config )
-			throws IOException,
-			InterruptedException {
-
-		final LinkedList<String> jvmArgs = new LinkedList<>();
-		jvmArgs.add("-XX:CompressedClassSpaceSize=512m");
-		jvmArgs.add("-XX:MaxMetaspaceSize=512m");
-		jvmArgs.add("-Xmx512m");
-
-		Runtime.getRuntime().addShutdownHook(
-				new Thread() {
-					@Override
-					public void run() {
-						tearDown();
-					}
-				});
-		final Map<String, String> siteConfig = config.getSiteConfig();
-		siteConfig.put(
-				Property.INSTANCE_ZK_HOST.getKey(),
-				zookeeper);
-		config.setSiteConfig(siteConfig);
-		miniAccumulo.start();
 	}
 
 	@Test
@@ -316,7 +238,7 @@ public class DeleteWriterTest
 		assertTrue(it1.hasNext());
 		assertTrue(adapter.getDataId(
 				(TestGeometry) it1.next()).getString().equals(
-				"test_line_2"));
+						"test_line_2"));
 		assertTrue(mockDataStore.delete(
 				new QueryOptions(),
 				new RowIdQuery(
@@ -355,7 +277,7 @@ public class DeleteWriterTest
 		assertTrue(it1.hasNext());
 		assertTrue(adapter.getDataId(
 				(TestGeometry) it1.next()).getString().equals(
-				"test_pt_1"));
+						"test_pt_1"));
 		assertTrue(mockDataStore.delete(
 				new QueryOptions(),
 				spatialQuery));
@@ -391,7 +313,7 @@ public class DeleteWriterTest
 		assertTrue(it1.hasNext());
 		assertTrue(adapter.getDataId(
 				(TestGeometry) it1.next()).getString().equals(
-				"test_pt_1"));
+						"test_pt_1"));
 		assertTrue(mockDataStore.delete(
 				new QueryOptions(),
 				rowIdQuery));
@@ -434,7 +356,7 @@ public class DeleteWriterTest
 		assertTrue(it1.hasNext());
 		assertTrue(adapter.getDataId(
 				(TestGeometry) it1.next()).getString().equals(
-				"test_pt_1"));
+						"test_pt_1"));
 		assertTrue(mockDataStore.delete(
 				new QueryOptions(),
 				prefixIdQuery));
