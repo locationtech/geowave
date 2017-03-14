@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.datastore.dynamodb.split;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -24,7 +25,6 @@ import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.mapreduce.DynamoDBRangeLocatorPair;
 import mil.nga.giat.geowave.datastore.dynamodb.mapreduce.DynamoDBRowRange;
 import mil.nga.giat.geowave.datastore.dynamodb.mapreduce.GeoWaveDynamoDBInputSplit;
-import mil.nga.giat.geowave.datastore.dynamodb.query.DynamoDBConstraintsQuery;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveInputSplit;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.IntermediateSplitInfo;
@@ -51,7 +51,7 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 
 	@Override
 	protected TreeSet<IntermediateSplitInfo> populateIntermediateSplits(TreeSet<IntermediateSplitInfo> splits,
-			DataStoreOperations operations, PrimaryIndex left, List<DataAdapter<Object>> value,
+			DataStoreOperations operations, PrimaryIndex left, List<DataAdapter<Object>> adapters,
 			Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache, AdapterStore adapterStore,
 			DataStatisticsStore statsStore, Integer maxSplits, DistributableQuery query, String[] authorizations)
 			throws IOException {
@@ -75,8 +75,7 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 			adapterStore,
 			statsStore,
 			authorizations));
-		
-		final String tableName = left.getId().getString();
+		final String tableName = dynamoDBOperations.getQualifiedTableName(left.getId().getString());
 		final NumericIndexStrategy indexStrategy = left.getIndexStrategy();
 
 		// Build list of row ranges from query
@@ -107,22 +106,43 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 			}
 		}
 		
-//		new DynamoDBConstraintsQuery(
-//			dataStore, 
-//			dynamoDBOperations, 
-//			adapterIds, 
-//			left, 
-//			query, 
-//			clientDedupeFilter, 
-//			scanCallback, 
-//			aggregation, 
-//			fieldIdsAdapterPair, 
-//			indexMetaData, 
-//			duplicateCounts, 
-//			visibilityCounts, 
-//			authorizations);
+		final Map<PrimaryIndex, List<RangeLocationPair>> splitInfo = new HashMap<PrimaryIndex, List<RangeLocationPair>>();
+		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
+		for(final ByteArrayRange range : ranges) {
+			final double cardinality = getCardinality(
+					getHistStats(
+							left,
+							adapters,
+							adapterStore,
+							statsStore,
+							statsCache,
+							authorizations),
+					wrapRange(range));
+
+			if (range.intersects(fullrange)) {
+				rangeList.add(constructRangeLocationPair(
+						wrapRange(range),
+						"Akash",
+						cardinality < 1 ? 1.0 : cardinality));
+			}
+			else {
+				LOGGER.info("Query split outside of range");
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.warn("Clipped range: " + rangeList.get(
+						rangeList.size() - 1).getRange());
+			}
+		}
 		
-		// TODO Auto-generated method stub
+		if (!rangeList.isEmpty()) {
+			splitInfo.put(
+					left,
+					rangeList);
+			splits.add(new IntermediateSplitInfo(
+					splitInfo,
+					this));
+		}
+		
 		return splits;
 	}
 

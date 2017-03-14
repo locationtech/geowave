@@ -49,6 +49,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.dynamodb.index.secondary.DynamoDBSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.dynamodb.mapreduce.GeoWaveDynamoDBRecordReader;
 import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBAdapterStore;
 import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBDataStatisticsStore;
@@ -386,8 +387,13 @@ public class DynamoDBDataStore extends
 	public RecordReader<GeoWaveInputKey, ?> createRecordReader(DistributableQuery query, QueryOptions queryOptions,
 			AdapterStore adapterStore, DataStatisticsStore statsStore, IndexStore indexStore, boolean isOutputWritable,
 			InputSplit inputSplit) throws IOException, InterruptedException {
-		// TODO Auto-generated method stub
-		return null;
+		return new GeoWaveDynamoDBRecordReader(
+			query,
+			queryOptions,
+			isOutputWritable,
+			adapterStore,
+			this,
+			dynamodbOperations);
 	}
 
 	@Override

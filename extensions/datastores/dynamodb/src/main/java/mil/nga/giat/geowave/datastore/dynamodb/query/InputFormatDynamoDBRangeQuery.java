@@ -1,77 +1,80 @@
 package mil.nga.giat.geowave.datastore.dynamodb.query;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
+import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBInputFormatIteratorWrapper;
 
 public class InputFormatDynamoDBRangeQuery extends DynamoDBConstraintsQuery {
+	private final static Logger LOGGER = Logger.getLogger(InputFormatDynamoDBRangeQuery.class);
+	private final ByteArrayRange range;
+	private final boolean isOutputWritable;
+	
+	private static List<ByteArrayId> getAdapterIds(
+			final PrimaryIndex index,
+			final AdapterStore adapterStore,
+			final QueryOptions queryOptions ) {
+		try {
+			return queryOptions.getAdapterIds(adapterStore);
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Adapter IDs not set and unattainable from the AdapterStore",
+					e);
+		}
+		return Collections.emptyList();
+	}
 	
 	public InputFormatDynamoDBRangeQuery(
 			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
 			final DynamoDBOperations dynamoDBOperations,
 			final PrimaryIndex index,
-//			final Range accumuloRange,
+			final ByteArrayRange range,
 			final List<QueryFilter> queryFilters,
 			final boolean isOutputWritable,
 			final QueryOptions queryOptions ) {
-		
-		/**
-		 * 	public DynamoDBConstraintsQuery(
-			final BaseDataStore dataStore,
-			final DynamoDBOperations dynamodbOperations,
-			final List<ByteArrayId> adapterIds,
-			final PrimaryIndex index,
-			final Query query,
-			final DedupeFilter clientDedupeFilter,
-			final ScanCallback<?, DynamoDBRow> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
-			final IndexMetaData[] indexMetaData,
-			final DuplicateEntryCount duplicateCounts,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
-			final String[] authorizations ) {
-		 */
-		
-		super(
-				dataStore,
-				dynamoDBOperations,
-				(List<ByteArrayId>)null,
-//				getAdapterIds(
-//						index,
-//						adapterStore,
-//						queryOptions),
-				index,
-				(Query)null,
-//				queryFilters,
-				(DedupeFilter) null,
-				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(),
-				(Pair<DataAdapter<?>, Aggregation<?, ?, ?>>) null,
-				(Pair<List<String>, DataAdapter<?>>) null,
-				(IndexMetaData[]) null,
-				(DuplicateEntryCount) null,
-				(DifferingFieldVisibilityEntryCount) null,
+		super(dataStore, 
+				dynamoDBOperations, 
+				getAdapterIds(index, adapterStore, queryOptions), 
+				index, 
+				null, 
+				queryFilters, 
+				null, 
+				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(), 
+				null, 
+				null, 
+				null, 
+				null, 
+				null, 
 				queryOptions.getAuthorizations());
 
-//		this.accumuloRange = accumuloRange;
-//		this.isOutputWritable = isOutputWritable;
+		this.range = range;
+		this.isOutputWritable = isOutputWritable;
+	}
+	
+	@Override
+	protected Iterator initIterator(
+			final AdapterStore adapterStore,
+			final Iterator<DynamoDBRow> results ) {
+		final List<QueryFilter> filters = getAllFiltersList();
+		return new DynamoDBInputFormatIteratorWrapper(dataStore, adapterStore, index, results, isOutputWritable, filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
+				: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
+						filters));
 	}
 
 }

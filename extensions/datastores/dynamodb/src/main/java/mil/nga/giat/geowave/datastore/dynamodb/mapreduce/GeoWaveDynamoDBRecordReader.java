@@ -1,15 +1,21 @@
 package mil.nga.giat.geowave.datastore.dynamodb.mapreduce;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
+import mil.nga.giat.geowave.datastore.dynamodb.query.InputFormatDynamoDBRangeQuery;
+import mil.nga.giat.geowave.datastore.dynamodb.split.DynamoDBSplitsProvider;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 
@@ -32,13 +38,45 @@ public class GeoWaveDynamoDBRecordReader<T> extends GeoWaveRecordReader<T> {
 	protected CloseableIterator queryRange(PrimaryIndex i, GeoWaveRowRange range, List queryFilters,
 			QueryOptions rangeQueryOptions) {
 		//this will take the inputsplit
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new InputFormatDynamoDBRangeQuery(
+			dataStore,
+			adapterStore,
+			dynamoDBOperations,
+			i,
+			DynamoDBSplitsProvider.unwrapRange(range),
+			queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(), //TODO aperi: figure out if this is correct or not
+			isOutputWritable,
+			rangeQueryOptions).query(
+			adapterStore,
+			rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+			rangeQueryOptions.getLimit());
 	}
 
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
-		// TODO Auto-generated method stub
+		if (iterator != null) {
+			if (iterator.hasNext()) {
+				++numKeysRead;
+				final Object value = iterator.next();
+				if (value instanceof Entry) {
+					final Entry<GeoWaveInputKey, T> entry = (Entry<GeoWaveInputKey, T>) value;
+					currentGeoWaveKey = entry.getKey();
+					// TODO implement progress reporting
+					// if (currentGeoWaveKey == null) {
+					// currentAccumuloKey = null;
+					// }
+					// else if (currentGeoWaveKey.getInsertionId() != null) {
+					// // just use the insertion ID for progress
+					// currentAccumuloKey = new Key(
+					// new Text(
+					// currentGeoWaveKey.getInsertionId().getBytes()));
+					// }
+					currentValue = entry.getValue();
+				}
+				return true;
+			}
+		}
 		return false;
 	}
 
