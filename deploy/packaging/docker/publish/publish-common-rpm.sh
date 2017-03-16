@@ -50,12 +50,12 @@ rpm2cpio *.rpm | cpio -idmv
 if command -v aws >/dev/null 2>&1 ; then
 	if [[ ! -z "$GEOWAVE_VERSION_URL" ]]; then
 		echo '###### Cleaning and copying documentation to S3'
-		aws s3 rm --recursive --quiet s3://geowave/${GEOWAVE_VERSION_URL}/docs/
-		aws s3 cp --acl public-read --quiet --recursive ${WORKSPACE}/target/site/ s3://geowave/${GEOWAVE_VERSION_URL}/docs/
+		aws s3 rm --recursive --quiet s3://geowave-new/${GEOWAVE_VERSION_URL}/docs/
+		aws s3 cp --acl public-read --quiet --recursive ${WORKSPACE}/target/site/ s3://geowave-new/${GEOWAVE_VERSION_URL}/docs/
 		echo '###### Cleaning and copying scripts to S3'
 		${WORKSPACE}/deploy/packaging/emr/generate-emr-scripts.sh --buildtype ${BUILD_TYPE} --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE}
-		aws s3 rm --recursive --quiet s3://geowave/${GEOWAVE_VERSION_URL}/scripts/
-		aws s3 cp --acl public-read --quiet --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/emr/
+		aws s3 rm --recursive --quiet s3://geowave-new/${GEOWAVE_VERSION_URL}/scripts/
+		aws s3 cp --acl public-read --quiet --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://geowave-new/${GEOWAVE_VERSION_URL}/scripts/emr/
 	else
 		echo '###### Skipping publish to S3: GEOWAVE_VERSION_URL not defined'
 	fi
@@ -72,6 +72,7 @@ rm -rf geowave
 
 echo '###### Copy rpm to repo and reindex'
 
+mkdir -p ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/{SRPMS,TARBALL,${ARGS[arch]}}/
 cp -R ${WORKSPACE}/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/*.rpm ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/${ARGS[arch]}/
 cp -fR ${WORKSPACE}/${ARGS[buildroot]}/SRPMS/*.rpm ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/SRPMS/
 cp -fR ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/*.tar.gz ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/TARBALL/
