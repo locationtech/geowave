@@ -133,4 +133,11 @@ public class DBScanCommand extends
 		this.inputStoreOptions = inputStoreOptions;
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

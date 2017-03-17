@@ -76,4 +76,11 @@ public class SetCommand extends
 		this.parameters.add(key);
 		this.parameters.add(value);
 	}
+
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

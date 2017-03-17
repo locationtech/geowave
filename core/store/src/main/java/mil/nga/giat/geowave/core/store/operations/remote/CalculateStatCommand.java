@@ -143,4 +143,11 @@ public class CalculateStatCommand extends
 		this.parameters.add(adapterId);
 		this.parameters.add(statId);
 	}
+
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

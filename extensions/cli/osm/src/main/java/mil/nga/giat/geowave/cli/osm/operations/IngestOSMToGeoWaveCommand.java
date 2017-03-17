@@ -175,4 +175,11 @@ public class IngestOSMToGeoWaveCommand extends
 			DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
+
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

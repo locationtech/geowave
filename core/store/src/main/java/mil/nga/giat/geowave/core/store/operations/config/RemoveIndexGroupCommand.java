@@ -22,9 +22,8 @@ public class RemoveIndexGroupCommand extends
 
 	protected Void computeResults(
 			OperationParams params ) {
-		
-		super.computeResults(
-				params);
+
+		super.computeResults(params);
 		return null;
 
 	}
@@ -35,18 +34,18 @@ public class RemoveIndexGroupCommand extends
 		computeResults(params);
 	}
 
-//	@Post("json")
-//	public void restPost() {
-//		String name = getQueryValue("name");
-//		if (name == null) {
-//			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-//			return;
-//		}
-//		setEntryName(name);
-//		OperationParams params = new ManualOperationParams();
-//		params.getContext().put(
-//				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-//				ConfigOptions.getDefaultPropertyFile());
-//		computeResults(params);
-//	}
+	// @Post("json")
+	// public void restPost() {
+	// String name = getQueryValue("name");
+	// if (name == null) {
+	// this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+	// return;
+	// }
+	// setEntryName(name);
+	// OperationParams params = new ManualOperationParams();
+	// params.getContext().put(
+	// ConfigOptions.PROPERTIES_FILE_CONTEXT,
+	// ConfigOptions.getDefaultPropertyFile());
+	// computeResults(params);
+	// }
 }

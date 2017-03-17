@@ -37,4 +37,11 @@ public class Landsat8IngestVectorCommand extends
 		runner.runInternal(params);
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

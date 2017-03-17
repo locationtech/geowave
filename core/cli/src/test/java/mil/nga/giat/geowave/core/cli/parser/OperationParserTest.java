@@ -125,6 +125,13 @@ public class OperationParserTest
 	public static class Op1 extends
 			DefaultOperation
 	{
+
+		@Override
+		protected Object computeResults(
+				OperationParams params ) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	@GeowaveOperation(name = "op", parentOperation = Op1.class)
@@ -141,6 +148,13 @@ public class OperationParserTest
 				OperationParams params )
 				throws Exception {
 
+		}
+
+		@Override
+		protected Object computeResults(
+				OperationParams params ) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 

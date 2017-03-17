@@ -137,4 +137,11 @@ public class KmeansJumpCommand extends
 			KMeansJumpOptions kmeansJumpOptions ) {
 		this.kmeansJumpOptions = kmeansJumpOptions;
 	}
+
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

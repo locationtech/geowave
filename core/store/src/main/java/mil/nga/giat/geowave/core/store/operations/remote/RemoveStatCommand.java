@@ -68,4 +68,11 @@ public class RemoveStatCommand extends
 		return true;
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

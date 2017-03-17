@@ -138,4 +138,11 @@ public class ListStatsCommand extends
 		}
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

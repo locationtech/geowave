@@ -70,4 +70,11 @@ public class ListPluginsCommand extends
 		pw.flush();
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

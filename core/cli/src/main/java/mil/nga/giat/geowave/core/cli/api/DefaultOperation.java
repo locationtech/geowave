@@ -23,35 +23,40 @@ public abstract class DefaultOperation<T> extends
 			OperationParams params ) {
 		return true;
 	}
-	
-	protected abstract T computeResults( OperationParams params );
-	
+
+	protected abstract T computeResults(
+			OperationParams params );
+
 	@Get("json")
 	public T restGet() {
-		if (getClass().getAnnotation(GeowaveOperation.class).restEnabled()==GeowaveOperation.RestEnabledType.GET){
+		if (getClass().getAnnotation(
+				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
 			return handleRequest();
-		} else {
+		}
+		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
-	
+
 	@Post("json")
 	public T restPost() {
-		if (getClass().getAnnotation(GeowaveOperation.class).restEnabled()==GeowaveOperation.RestEnabledType.POST){
+		if (getClass().getAnnotation(
+				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST) {
 			return handleRequest();
-		} else {
+		}
+		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
-	
-	private T handleRequest(){
+
+	private T handleRequest() {
 		OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				ConfigOptions.getDefaultPropertyFile());
 		return computeResults(params);
 	}
-	
+
 }

@@ -58,17 +58,17 @@ public class ListCommand extends
 		}
 	}
 
-//	@Get("json")
-//	public Properties restGet() {
-//		filter = getQueryValue("filter");
-//
-//		OperationParams params = new ManualOperationParams();
-//		params.getContext().put(
-//				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-//				ConfigOptions.getDefaultPropertyFile());
-//		return getList(
-//				params).getValue();
-//	}
+	// @Get("json")
+	// public Properties restGet() {
+	// filter = getQueryValue("filter");
+	//
+	// OperationParams params = new ManualOperationParams();
+	// params.getContext().put(
+	// ConfigOptions.PROPERTIES_FILE_CONTEXT,
+	// ConfigOptions.getDefaultPropertyFile());
+	// return getList(
+	// params).getValue();
+	// }
 
 	protected Pair<String, Properties> computeResults(
 			OperationParams params ) {

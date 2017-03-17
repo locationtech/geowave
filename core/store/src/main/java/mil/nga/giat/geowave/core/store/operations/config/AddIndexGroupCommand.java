@@ -104,4 +104,11 @@ public class AddIndexGroupCommand extends
 		this.parameters.add(commaSeparatedIndexes);
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -37,7 +37,7 @@ public abstract class AbstractRemoveCommand extends
 
 	protected Void computeResults(
 			OperationParams params ) {
-		
+
 		String pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
 		File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
@@ -64,7 +64,7 @@ public abstract class AbstractRemoveCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
-		
+
 		return null;
 	}
 
