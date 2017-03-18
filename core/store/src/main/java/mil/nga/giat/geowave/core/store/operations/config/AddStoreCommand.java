@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.shaded.restlet.data.Status;
+import org.shaded.restlet.resource.Post;
+import org.shaded.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,14 +18,21 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+//import mil.nga.giat.geowave.core.cli.api.ServerResource;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddStoreCommand implements
+public class AddStoreCommand extends
+		ServerResource implements
 		Command
 {
 
@@ -92,6 +102,11 @@ public class AddStoreCommand implements
 	@Override
 	public void execute(
 			OperationParams params ) {
+		computeResults(params);
+	}
+
+	public void computeResults(
+			OperationParams params ) {
 
 		File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
@@ -130,6 +145,35 @@ public class AddStoreCommand implements
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
+	}
+
+	@Post("json")
+	public void restPost() {
+
+		String name = getQueryValue("name");
+		if (name == null) {
+			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return;
+		}
+		parameters.add(name);
+		storeType = name;
+		if (getQueryValue("default") != null) {
+			makeDefault = true;
+		}
+
+		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+				name,
+				new MemoryStoreFactoryFamily());
+
+		OperationParams params = new ManualOperationParams();
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				ConfigOptions.getDefaultPropertyFile());
+
+		prepare(params);
+		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace("namespace");
+		computeResults(params);
 	}
 
 	public DataStorePluginOptions getPluginOptions() {
