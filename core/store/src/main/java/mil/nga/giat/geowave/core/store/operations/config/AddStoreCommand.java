@@ -149,11 +149,12 @@ public class AddStoreCommand extends
 				existingProps);
 	}
 
-	@Post("json")
+	@Post("form:json")
 	public void restPost(
 			Representation entity ) {
 
-		Form form = new Form(entity);
+		Form form = new Form(
+				entity);
 		String name = form.getFirstValue("name");
 
 		// String name = getQueryValue("name");

@@ -120,17 +120,35 @@ public class RestServerTest
 	// Tests geowave/config/addstore
 	@Test
 	public void geowave_config_addstore() {
-		org.shaded.restlet.resource.ClientResource resource = new ClientResource(
+		ClientResource resource = new ClientResource(
 				"http://localhost:5152/geowave/config/addstore");
 
-		JSONObject obj = new JSONObject();
-		obj.put(
+		Form form = new Form();
+		form.add(
 				"name",
-				"hbase");
+				"memory");
+		try {
 
-		JsonRepresentation jsonRepsresentation = new JsonRepresentation(
-				obj);
-		resource.post(jsonRepsresentation);
+			resource.post(
+					form).write(
+					System.out);
+
+		}
+		catch (ResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// JSONObject obj = new JSONObject();
+		// obj.put("name", "hbase");
+		//
+		// JsonRepresentation jsonRepsresentation = new JsonRepresentation(
+		// obj);
+		// resource.post(jsonRepsresentation);
 
 		// Representation response = resource.post(
 		// obj,
