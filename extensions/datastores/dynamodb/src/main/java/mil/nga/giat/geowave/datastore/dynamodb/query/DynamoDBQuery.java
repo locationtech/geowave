@@ -22,9 +22,11 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.DataStoreQuery;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBIndexWriter;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBDataStore;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
@@ -36,23 +38,20 @@ import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
  * data store. The query is defined by the set of parameters passed into the
  * constructor.
  */
-abstract public class DynamoDBQuery
+abstract public class DynamoDBQuery extends
+		DataStoreQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(DynamoDBQuery.class);
-	protected final List<ByteArrayId> adapterIds;
-	protected final PrimaryIndex index;
-	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
-	protected final DifferingFieldVisibilityEntryCount visibilityCounts;
 	final DynamoDBOperations dynamodbOperations;
 
-	private final String[] authorizations;
-
 	public DynamoDBQuery(
+			final BaseDataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final PrimaryIndex index,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		this(
+				dataStore,
 				dynamodbOperations,
 				null,
 				index,
@@ -62,28 +61,22 @@ abstract public class DynamoDBQuery
 	}
 
 	public DynamoDBQuery(
+			final BaseDataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
+		super(
+				dataStore,
+				adapterIds,
+				index,
+				fieldIdsAdapterPair,
+				visibilityCounts,
+				authorizations);
+
 		this.dynamodbOperations = dynamodbOperations;
-		this.adapterIds = adapterIds;
-		this.index = index;
-		this.fieldIdsAdapterPair = fieldIdsAdapterPair;
-		this.visibilityCounts = visibilityCounts;
-		this.authorizations = authorizations;
-	}
-
-	abstract protected List<ByteArrayRange> getRanges();
-
-	protected boolean isAggregation() {
-		return false;
-	}
-
-	protected boolean useWholeRowIterator() {
-		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
 	protected Iterator<Map<String, AttributeValue>> getResults(
@@ -105,7 +98,7 @@ abstract public class DynamoDBQuery
 						index.getId().getBytes()));
 		if ((ranges != null) && !ranges.isEmpty()) {
 			final List<QueryRequest> requests = new ArrayList<>();
-			if (ranges.size() == 1&& (adapterIds.size() == 1)) {
+			if (ranges.size() == 1 && (adapterIds.size() == 1)) {
 				final List<QueryRequest> queries = getPartitionRequests(
 						tableName);
 				final ByteArrayRange r = ranges.get(
@@ -133,11 +126,14 @@ abstract public class DynamoDBQuery
 				requests.addAll(
 						queries);
 			}
-			ranges.forEach(
+
+			else{
+          ranges.forEach(
 					(r -> requests.addAll(
 							addQueryRanges(
 									tableName,
 									r))));
+      }
 
 			if(async){
 				return Iterators.concat(
@@ -187,8 +183,8 @@ abstract public class DynamoDBQuery
 	private static List<QueryRequest> getPartitionRequests(
 			final String tableName ) {
 		final List<QueryRequest> requests = new ArrayList<>(
-				DynamoDBIndexWriter.PARTITIONS);
-		for (long p = 0; p < (DynamoDBIndexWriter.PARTITIONS); p++) {
+				DynamoDBDataStore.PARTITIONS);
+		for (long p = 0; p < (DynamoDBDataStore.PARTITIONS); p++) {
 			requests.add(new QueryRequest(
 					tableName).addKeyConditionsEntry(
 					DynamoDBRow.GW_PARTITION_ID_KEY,
@@ -217,9 +213,5 @@ abstract public class DynamoDBQuery
 		return new AsyncPaginatedQuery(
 				queryRequest,
 				dynamodbOperations.getClient());
-	}
-
-	public String[] getAdditionalAuthorizations() {
-		return authorizations;
 	}
 }

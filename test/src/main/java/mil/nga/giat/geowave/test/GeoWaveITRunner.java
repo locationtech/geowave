@@ -275,7 +275,7 @@ public class GeoWaveITRunner extends
 		List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
 
 		String storeTypeProp = System.getenv(STORE_TYPE_ENVIRONMENT_VARIABLE_NAME);
-		if(!TestUtils.isSet(storeTypeProp)){
+		if (!TestUtils.isSet(storeTypeProp)) {
 			storeTypeProp = System.getProperty(STORE_TYPE_PROPERTY_NAME);
 		}
 		// See if user specified a single store type

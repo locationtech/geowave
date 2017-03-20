@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -41,6 +42,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 	protected final ScanCallback<?, DynamoDBRow> scanCallback;
 
 	public DynamoDBFilteredIndexQuery(
+			final BaseDataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -51,6 +53,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
+				dataStore,
 				dynamodbOperations,
 				adapterIds,
 				index,
@@ -136,6 +139,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 		}
 		if (mergingAdapters.isEmpty()) {
 			return new NativeEntryIteratorWrapper<>(
+					dataStore,
 					adapterStore,
 					index,
 					results,
@@ -145,6 +149,7 @@ public abstract class DynamoDBFilteredIndexQuery extends
 		}
 		else {
 			return new MergingEntryIterator(
+					dataStore,
 					adapterStore,
 					index,
 					results,

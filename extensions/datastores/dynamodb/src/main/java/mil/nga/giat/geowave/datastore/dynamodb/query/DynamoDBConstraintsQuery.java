@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -29,7 +30,6 @@ import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBIndexWriter;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 
@@ -46,6 +46,7 @@ public class DynamoDBConstraintsQuery extends
 	private boolean queryFiltersEnabled;
 
 	public DynamoDBConstraintsQuery(
+			final BaseDataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -59,6 +60,7 @@ public class DynamoDBConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
+				dataStore,
 				dynamodbOperations,
 				adapterIds,
 				index,
@@ -75,6 +77,7 @@ public class DynamoDBConstraintsQuery extends
 	}
 
 	public DynamoDBConstraintsQuery(
+			final BaseDataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
@@ -90,6 +93,7 @@ public class DynamoDBConstraintsQuery extends
 			final String[] authorizations ) {
 
 		super(
+				dataStore,
 				dynamodbOperations,
 				adapterIds,
 				index,
