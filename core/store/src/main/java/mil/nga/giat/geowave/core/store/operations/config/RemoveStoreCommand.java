@@ -23,6 +23,7 @@ public class RemoveStoreCommand extends
 	protected Void computeResults(
 			OperationParams params ) {
 
+		pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
 		super.computeResults(params);
 		return null;
 

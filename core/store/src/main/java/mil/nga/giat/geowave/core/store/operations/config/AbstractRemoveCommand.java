@@ -25,6 +25,8 @@ public abstract class AbstractRemoveCommand extends
 	@Parameter(description = "<name>", required = true, arity = 1)
 	private List<String> parameters = new ArrayList<String>();
 
+	protected String pattern = null;
+
 	public String getEntryName() {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
@@ -38,7 +40,6 @@ public abstract class AbstractRemoveCommand extends
 	protected Void computeResults(
 			OperationParams params ) {
 
-		String pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
 		File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 

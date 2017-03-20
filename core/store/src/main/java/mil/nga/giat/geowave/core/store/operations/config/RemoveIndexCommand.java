@@ -35,10 +35,7 @@ public class RemoveIndexCommand extends
 	protected Void computeResults(
 			OperationParams params ) {
 
-		// Search for properties relevant to the given name
-		// TODO should pattern pass as part of params?
-		// String pattern =
-		// IndexPluginOptions.getIndexNamespace(getEntryName());
+		pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
 		return super.computeResults(params);
 
 	}

@@ -23,6 +23,7 @@ public class RemoveIndexGroupCommand extends
 	protected Void computeResults(
 			OperationParams params ) {
 
+		pattern = IndexGroupPluginOptions.getIndexGroupNamespace(getEntryName());
 		super.computeResults(params);
 		return null;
 
