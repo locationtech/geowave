@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.reflections.Reflections;
 
@@ -37,6 +38,8 @@ public class RestServer extends
 			availableRoutes.add(new Route(
 					operation));
 		}
+
+		Collections.sort(availableRoutes);
 	}
 
 	// Show a simple 404 if the route is unknown to the server
@@ -45,7 +48,13 @@ public class RestServer extends
 		StringBuilder routeStringBuilder = new StringBuilder(
 				"Available Routes: (geowave/help is only that currently extends ServerResource)<br>");
 		for (Route route : availableRoutes) {
-			routeStringBuilder.append(route.getPath() + " -> " + route.getOperationAsGeneric() + "<br>");
+			if (route.isServerResource()) {
+				routeStringBuilder.append(route.getPath() + " --> " + route.getOperationAsGeneric() + "<br>");
+			}
+			else {
+				routeStringBuilder.append("<span style='color:red'>" + route.getPath() + " -> "
+						+ route.getOperationAsGeneric() + "</span><br>");
+			}
 		}
 		return "<b>404</b>: Route not found<br><br>" + routeStringBuilder.toString();
 	}
@@ -99,7 +108,8 @@ public class RestServer extends
 	/**
 	 * Holds necessary information to create a Restlet route
 	 */
-	private static class Route
+	private static class Route implements
+			Comparable<Route>
 	{
 		private String path;
 		private Class<?> operation;
@@ -187,6 +197,12 @@ public class RestServer extends
 			}
 			GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
 			return pathFor(operationInfo.parentOperation()) + "/" + operationInfo.name();
+		}
+
+		@Override
+		public int compareTo(
+				Route route ) {
+			return path.compareTo(route.path);
 		}
 	}
 
