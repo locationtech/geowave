@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
@@ -35,6 +36,7 @@ public abstract class AccumuloFilteredIndexQuery extends
 	protected final ScanCallback<?, ?> scanCallback;
 
 	public AccumuloFilteredIndexQuery(
+			final BaseDataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final ScanCallback<?, ?> scanCallback,
@@ -42,6 +44,7 @@ public abstract class AccumuloFilteredIndexQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
+				dataStore,
 				adapterIds,
 				index,
 				fieldIdsAdapterPair,
@@ -112,6 +115,7 @@ public abstract class AccumuloFilteredIndexQuery extends
 			final ScannerBase scanner ) {
 		return new AccumuloEntryIteratorWrapper(
 				useWholeRowIterator(),
+				dataStore,
 				adapterStore,
 				index,
 				scanner.iterator(),

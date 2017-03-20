@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.accumulo.core.client.mapreduce.AccumuloFileOutputFormat;
 import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.KeyValue;
 import org.apache.accumulo.core.data.Value;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -60,14 +62,14 @@ public class AccumuloKeyValuePairGenerator<T>
 		this.visibilityWriter = visibilityWriter;
 	}
 
-	public List<AccumuloKeyValuePair> constructKeyValuePairs(
+	public List<KeyValue> constructKeyValuePairs(
 			byte[] adapterId,
 			T entry ) {
 
-		List<AccumuloKeyValuePair> keyValuePairs = new ArrayList<>();
+		List<KeyValue> keyValuePairs = new ArrayList<>();
 		Key key;
 		Value value;
-		AccumuloKeyValuePair keyValuePair;
+		KeyValue keyValuePair;
 		DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
 				adapter,
 				index,
@@ -98,7 +100,7 @@ public class AccumuloKeyValuePairGenerator<T>
 						System.currentTimeMillis());
 				value = new Value(
 						fieldInfo.getWrittenValue());
-				keyValuePair = new AccumuloKeyValuePair(
+				keyValuePair = new KeyValue(
 						key,
 						value);
 				keyValuePairs.add(keyValuePair);

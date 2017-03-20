@@ -72,5 +72,4 @@ public interface DataStore
 	public boolean delete(
 			final QueryOptions queryOptions,
 			final Query query );
-
 }
