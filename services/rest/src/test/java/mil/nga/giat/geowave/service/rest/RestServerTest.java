@@ -9,9 +9,12 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.shaded.restlet.Context;
 import org.restlet.ext.json.JsonRepresentation;
 import org.shaded.restlet.resource.ResourceException;
@@ -34,104 +37,25 @@ import java.util.Properties;
 
 public class RestServerTest
 {
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
+
 	@BeforeClass
 	public static void runServer() {
 		RestServer.main(new String[] {});
+
 	}
 
-	public Response request(
-			String path,
-			Method method ) {
-
-		Client client = new Client(
-				Protocol.HTTP);
-		Request request = new Request(
-				method,
-				"http://localhost:5152/" + path);
-
-		return client.handle(request);
-	}
-
-	// Tests geowave/config/list
+	// Tests geowave/config/set and list
 	@Test
-	public void geowave_config_list()
-			throws IOException,
+	public void geowave_config_set_list()
+			throws ResourceException,
+			IOException,
 			ParseException {
 
-		// OperationParams params = new ManualOperationParams();
-		// params.getContext().put(
-		// ConfigOptions.PROPERTIES_FILE_CONTEXT,
-		// ConfigOptions.getDefaultPropertyFile());
-		// File f = (File) params.getContext().get(
-		// ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		// Properties p = ConfigOptions.loadProperties(
-		// f,
-		// null);
-		//
-		// String key = "name";
-		// String value = "value";
-		//
-		// assert p != null;
-		//
-		// p.setProperty(
-		// key,
-		// value);
-		// ConfigOptions.writeProperties(
-		// f,
-		// p);
-		//
-		// Response response = request(
-		// "geowave/config/list",
-		// Method.GET);
-		//
-		// assertTrue(
-		// "Status is 200",
-		// response.getStatus().getCode() == 200);
-		//
-		// assertTrue(
-		// "Has a body",
-		// response.isEntityAvailable());
-		//
-		// assertTrue(
-		// "Body is JSON",
-		// response.getEntity().getMediaType().equals(
-		// MediaType.APPLICATION_JSON));
-		//
-		// String text = response.getEntity().getText();
-		//
-		// JSONParser parser = new JSONParser();
-		// JSONObject obj = (JSONObject) parser.parse(text);
-		//
-		// assertTrue(
-		// "JSON can be parsed",
-		// obj != null);
-		//
-		// String name = (String) obj.get("name");
-		//
-		// assertTrue(
-		// "List contains 'name'",
-		// name != null);
-		// assertTrue(
-		// "'name' is 'value'",
-		// name.equals("value"));
+		File configFile = tempFolder.newFile("test_config");
 
-	}
-
-	// Tests geowave/config/set
-	@Test
-	public void geowave_config_set()
-			throws ResourceException,
-			IOException {
-
-	}
-
-	// Tests geowave/config/addstore, cpstore, rmstore
-	@Test
-	public void geowave_config_store()
-			throws ResourceException,
-			IOException {
-
-		// create a new store named "store1", with type "hbase"
+		// create a new store named "store1", with type "memory"
 		ClientResource resourceAdd = new ClientResource(
 				"http://localhost:5152/geowave/config/addstore");
 		Form formAdd = new Form();
@@ -140,10 +64,89 @@ public class RestServerTest
 				"store1");
 		formAdd.add(
 				"storetype",
-				"hbase");
+				"memory");
+		formAdd.add(
+				"default",
+				"false");
+		formAdd.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceAdd.post(
+				formAdd).write(
+				System.out);
+
+		// set key=store1, value=store2
+		ClientResource resourceSet = new ClientResource(
+				"http://localhost:5152/geowave/config/set");
+		Form formSet = new Form();
+		formSet.add(
+				"key",
+				"store1");
+		formSet.add(
+				"value",
+				"store2");
+		formSet.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceSet.post(
+				formSet).write(
+				System.out);
+
+		// testing list
+		ClientResource resourceList = new ClientResource(
+				"http://localhost:5152/geowave/config/list");
+		resourceList.addQueryParameter(
+				"config_file",
+				configFile.getAbsolutePath());
+		String text = resourceList.get(
+				MediaType.APPLICATION_JSON).getText();
+
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(text);
+		String name = (String) obj.get("store1");
+		assertTrue(
+				"'name' is 'value'",
+				name.equals("store2"));
+
+		// remove the store named "store1"
+		ClientResource resourceRm = new ClientResource(
+				"http://localhost:5152/geowave/config/rmstore");
+		Form formRm = new Form();
+		formRm.add(
+				"name",
+				"store1");
+		formRm.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceRm.post(
+				formRm).write(
+				System.out);
+	}
+
+	// Tests geowave/config/addstore, cpstore, rmstore
+	@Test
+	public void geowave_config_store()
+			throws ResourceException,
+			IOException {
+
+		File configFile = tempFolder.newFile("test_config");
+
+		// create a new store named "store1", with type "memory"
+		ClientResource resourceAdd = new ClientResource(
+				"http://localhost:5152/geowave/config/addstore");
+		Form formAdd = new Form();
+		formAdd.add(
+				"name",
+				"store1");
+		formAdd.add(
+				"storetype",
+				"memory");
 		formAdd.add(
 				"default",
 				"true");
+		formAdd.add(
+				"config_file",
+				configFile.getAbsolutePath());
 		resourceAdd.post(
 				formAdd).write(
 				System.out);
@@ -161,6 +164,9 @@ public class RestServerTest
 		formCp.add(
 				"default",
 				"true");
+		formCp.add(
+				"config_file",
+				configFile.getAbsolutePath());
 		resourceCp.post(
 				formCp).write(
 				System.out);
@@ -172,9 +178,13 @@ public class RestServerTest
 		formRm.add(
 				"name",
 				"store1");
+		formRm.add(
+				"config_file",
+				configFile.getAbsolutePath());
 		resourceRm.post(
 				formRm).write(
 				System.out);
+
 		formRm.remove(0);
 		formRm.add(
 				"name",
@@ -197,7 +207,27 @@ public class RestServerTest
 	public void geowave_config_indexgrp()
 			throws ResourceException,
 			IOException {
-
+		// // add the index group named "indexgrp"
+		// ClientResource resourceAdd = new ClientResource(
+		// "http://localhost:5152/geowave/config/addindexgrp");
+		// Form formAdd = new Form();
+		// formAdd.add(
+		// "name",
+		// "indexgrp");
+		// resourceAdd.post(
+		// formAdd).write(
+		// System.out);
+		//
+		// // remove the index group named "indexgrp"
+		// ClientResource resourceRm = new ClientResource(
+		// "http://localhost:5152/geowave/config/rmindexgrp");
+		// Form formRm = new Form();
+		// formRm.add(
+		// "name",
+		// "indexgrp");
+		// resourceRm.post(
+		// formRm).write(
+		// System.out);
 	}
 
 }

@@ -20,21 +20,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-accumulo</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-bigtable</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-hbase</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
