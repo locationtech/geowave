@@ -10,6 +10,8 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
+import org.shaded.restlet.data.Form;
+import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Post;
 
@@ -37,9 +39,13 @@ public class RemoveStoreCommand extends
 		computeResults(params);
 	}
 
-	@Post("json")
-	public void restPost() {
-		String name = getQueryValue("name");
+	@Post("form:json")
+	public void restPost(
+			Representation entity ) {
+		Form form = new Form(
+				entity);
+		String name = form.getFirstValue("name");
+		// String name = getQueryValue("name");
 		if (name == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;

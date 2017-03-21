@@ -117,58 +117,87 @@ public class RestServerTest
 
 	}
 
-	// Tests geowave/config/addstore
+	// Tests geowave/config/set
 	@Test
-	public void geowave_config_addstore() {
-		ClientResource resource = new ClientResource(
-				"http://localhost:5152/geowave/config/addstore");
+	public void geowave_config_set()
+			throws ResourceException,
+			IOException {
 
-		Form form = new Form();
-		form.add(
-				"name",
-				"memory");
-		try {
-
-			resource.post(
-					form).write(
-					System.out);
-
-		}
-		catch (ResourceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// JSONObject obj = new JSONObject();
-		// obj.put("name", "hbase");
-		//
-		// JsonRepresentation jsonRepsresentation = new JsonRepresentation(
-		// obj);
-		// resource.post(jsonRepsresentation);
-
-		// Representation response = resource.post(
-		// obj,
-		// MediaType.APPLICATION_JSON);
-
-		/*
-		 * resource.setAttribute( "Content-Type", "application/json");
-		 * 
-		 * 
-		 * Representation response = resource.post(obj,
-		 * MediaType.APPLICATION_JSON);
-		 */
-		// if (resource.getResponse().getStatus().getCode() > 200) {
-		// try {
-		// System.out.println(response.getText());
-		// }
-		// catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
 	}
+
+	// Tests geowave/config/addstore, cpstore, rmstore
+	@Test
+	public void geowave_config_store()
+			throws ResourceException,
+			IOException {
+
+		// create a new store named "store1", with type "hbase"
+		ClientResource resourceAdd = new ClientResource(
+				"http://localhost:5152/geowave/config/addstore");
+		Form formAdd = new Form();
+		formAdd.add(
+				"name",
+				"store1");
+		formAdd.add(
+				"storetype",
+				"hbase");
+		formAdd.add(
+				"default",
+				"true");
+		resourceAdd.post(
+				formAdd).write(
+				System.out);
+
+		// create a new store named "store2"
+		ClientResource resourceCp = new ClientResource(
+				"http://localhost:5152/geowave/config/cpstore");
+		Form formCp = new Form();
+		formCp.add(
+				"name",
+				"store1");
+		formCp.add(
+				"newname",
+				"store2");
+		formCp.add(
+				"default",
+				"true");
+		resourceCp.post(
+				formCp).write(
+				System.out);
+
+		// remove the store named "store1" and "store2"
+		ClientResource resourceRm = new ClientResource(
+				"http://localhost:5152/geowave/config/rmstore");
+		Form formRm = new Form();
+		formRm.add(
+				"name",
+				"store1");
+		resourceRm.post(
+				formRm).write(
+				System.out);
+		formRm.remove(0);
+		formRm.add(
+				"name",
+				"store2");
+		resourceRm.post(
+				formRm).write(
+				System.out);
+	}
+
+	// Tests geowave/config/addindex, cpindex, rmindex
+	@Test
+	public void geowave_config_index()
+			throws ResourceException,
+			IOException {
+
+	}
+
+	// Tests geowave/config/addindexgrp, rmindexgrp
+	@Test
+	public void geowave_config_indexgrp()
+			throws ResourceException,
+			IOException {
+
+	}
+
 }

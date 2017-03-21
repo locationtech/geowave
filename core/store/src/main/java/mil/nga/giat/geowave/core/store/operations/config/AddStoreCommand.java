@@ -27,8 +27,15 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.datastore.bigtable.BigTableStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
@@ -156,21 +163,43 @@ public class AddStoreCommand extends
 		Form form = new Form(
 				entity);
 		String name = form.getFirstValue("name");
+		String type = form.getFirstValue("storetype");
+		String isdefault = form.getFirstValue("default");
 
-		// String name = getQueryValue("name");
-		if (name == null) {
+		if (name == null || type == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
 		parameters.add(name);
-		storeType = name;
-		if (getQueryValue("default") != null) {
+		storeType = type;
+		if (isdefault != null && isdefault.equals("true")) {
 			makeDefault = true;
 		}
 
-		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-				name,
-				new MemoryStoreFactoryFamily());
+		if (storeType.equals("memory")) {
+			GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+					storeType,
+					new MemoryStoreFactoryFamily());
+		}
+		else if (storeType.equals("hbase")) {
+			GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+					storeType,
+					new HBaseStoreFactoryFamily());
+		}
+		else if (storeType.equals("accumulo")) {
+			GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+					storeType,
+					new AccumuloStoreFactoryFamily());
+		}
+		else if (storeType.equals("bigtable")) {
+			GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+					storeType,
+					new BigTableStoreFactoryFamily());
+		}
+		else {
+			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return;
+		}
 
 		OperationParams params = new ManualOperationParams();
 		params.getContext().put(
@@ -178,7 +207,20 @@ public class AddStoreCommand extends
 				ConfigOptions.getDefaultPropertyFile());
 
 		prepare(params);
-		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+
+		final StoreFactoryOptions opts;
+		if (storeType.equals("memory")) {
+			opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		}
+		else if (storeType.equals("hbase")) {
+			opts = (HBaseRequiredOptions) pluginOptions.getFactoryOptions();
+		}
+		else if (storeType.equals("accumulo")) {
+			opts = (AccumuloRequiredOptions) pluginOptions.getFactoryOptions();
+		}
+		else { // storeType is "bigtable"
+			opts = (BigTableOptions) pluginOptions.getFactoryOptions();
+		}
 		opts.setGeowaveNamespace("namespace");
 		computeResults(params);
 	}

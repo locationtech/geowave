@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.shaded.restlet.data.Form;
+import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Post;
 import org.shaded.restlet.resource.ServerResource;
@@ -119,27 +121,28 @@ public class CopyStoreCommand extends
 
 	}
 
-	@Post("json")
-	public void restPost() {
-		String name = getQueryValue("name");
+	@Post("form:json")
+	public void restPost(
+			Representation entity ) {
+		Form form = new Form(
+				entity);
+		String name = form.getFirstValue("name");
+		String newname = form.getFirstValue("newname");
+		String isdefault = form.getFirstValue("default");
+
 		if (name == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
-		String newname = getQueryValue("newname");
 		if (newname == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
 		parameters.add(name);
 		parameters.add(newname);
-		if (getQueryValue("default") != null) {
+		if (isdefault != null && isdefault.equals("true")) {
 			makeDefault = true;
 		}
-
-		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-				newname,
-				new MemoryStoreFactoryFamily());
 
 		OperationParams params = new ManualOperationParams();
 		params.getContext().put(
