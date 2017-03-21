@@ -18,22 +18,28 @@ import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
-public class ListCommandTest {
+public class ListCommandTest
+{
 
 	@Test
 	public void testExecute() {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(output));
-		
-		String[] args = {"config", "list"};
+		System.setOut(new PrintStream(
+				output));
+
+		String[] args = {
+			"config",
+			"list"
+		};
 		OperationRegistry registry = OperationRegistry.getInstance();
-		OperationParser parser = new OperationParser(registry);
+		OperationParser parser = new OperationParser(
+				registry);
 		CommandLineOperationParams params = parser.parse(
 				GeowaveTopLevelSection.class,
 				args);
 		ListCommand lstcommand = new ListCommand();
 		lstcommand.execute(params);
-		
+
 		// can directly write to expectedoutput if knowing properties
 		File f = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
@@ -43,14 +49,16 @@ public class ListCommandTest {
 		List<String> keys = new ArrayList<String>();
 		keys.addAll(p.stringPropertyNames());
 		Collections.sort(keys);
-		StringBuffer expectedoutput = 
-				new StringBuffer("PROPERTIES (unknownversion-config.properties)\n");
+		StringBuffer expectedoutput = new StringBuffer(
+				"PROPERTIES (unknownversion-config.properties)\n");
 		for (String key : keys) {
 			String value = (String) p.get(key);
-			expectedoutput.append(key + ": " + value+"\n");
+			expectedoutput.append(key + ": " + value + "\n");
 		}
 
-		assertEquals(expectedoutput.toString(), output.toString());
+		assertEquals(
+				expectedoutput.toString(),
+				output.toString());
 	}
 
 }

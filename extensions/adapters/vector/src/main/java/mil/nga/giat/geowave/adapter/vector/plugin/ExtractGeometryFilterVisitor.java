@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -50,8 +51,21 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 /**
- * This class can be used to get Geometry from an OpenGIS filter object. GeoWave
- * then uses this geometry to perform a spatial intersection query.
+ * This class is used to exact single query geometry and its associated
+ * predicate from a CQL expression. There are three possible outcomes based on
+ * the extracted results. 1) If CQL expression is simple then we are able to
+ * extract query geometry and predicate successfully. 2) If CQL expression
+ * combines multiple dissimilar geometric relationships (i.e.
+ * "BBOX(geom,...) AND TOUCHES(geom,...)") then we wont be able combine that
+ * into a single query geometry and predicate. In which case, we will only
+ * return query geometry for the purpose of creating linear constraints and
+ * predicate value will be null. However, we are able to combine multiple
+ * geometric relationships into one query/predicate if their predicates are same
+ * (i.e. "INTERSECTS(geom,...) AND INTERSECTS(geom,...)") 3) In some case, we
+ * won't be able to extract query geometry and predicate at all. In that case,
+ * we simply return null. This occurs if CQL expression doesn't contain any
+ * geometric constraints or CQL expression has non-inclusive filter (i.e. NOT or
+ * DISJOINT(...)).
  * 
  */
 public class ExtractGeometryFilterVisitor extends
@@ -81,13 +95,17 @@ public class ExtractGeometryFilterVisitor extends
 	 * @param crs
 	 * @return null if empty constraint (infinite not supported)
 	 */
-	public static Geometry getConstraints(
+	public static ExtractGeometryFilterVisitorResult getConstraints(
 			final Filter filter,
 			CoordinateReferenceSystem crs ) {
-		final Geometry geo = (Geometry) filter.accept(
-				new ExtractGeometryFilterVisitor(
-						crs),
-				null);
+		final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
+				.accept(
+						new ExtractGeometryFilterVisitor(
+								crs),
+						null);
+		Geometry geo = geoAndCompareOpData.getGeometry();
+		// empty or infinite geometry simply return null as we can't create
+		// linear constraints from
 		if ((geo == null) || geo.isEmpty()) {
 			return null;
 		}
@@ -95,7 +113,7 @@ public class ExtractGeometryFilterVisitor extends
 		if (Double.isInfinite(area) || Double.isNaN(area)) {
 			return null;
 		}
-		return geo;
+		return geoAndCompareOpData;
 
 	}
 
@@ -142,14 +160,18 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final ExcludeFilter filter,
 			final Object data ) {
-		return null;
+		return new ExtractGeometryFilterVisitorResult(
+				null,
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final IncludeFilter filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	private Geometry infinity() {
@@ -173,7 +195,9 @@ public class ExtractGeometryFilterVisitor extends
 			return bbox.union(new GeometryFactory().toGeometry(bounds));
 		}
 		else {
-			return bbox(bounds);
+			return new ExtractGeometryFilterVisitorResult(
+					bbox(bounds),
+					CompareOperation.INTERSECTS);
 		}
 	}
 
@@ -206,24 +230,45 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final And filter,
 			final Object data ) {
-		Geometry mixed = infinity();
+		ExtractGeometryFilterVisitorResult finalResult = null;
 		for (final Filter f : filter.getChildren()) {
 			final Object obj = f.accept(
 					this,
 					data);
-			if ((obj != null) && (obj instanceof Geometry)) {
-				final Geometry geom = (Geometry) obj;
-				final double mixedArea = mixed.getArea();
-				final double geomArea = geom.getArea();
-				if (Double.isInfinite(mixedArea) || Double.isNaN(mixedArea)) {
-					mixed = geom;
+			if ((obj != null) && (obj instanceof ExtractGeometryFilterVisitorResult)) {
+				final ExtractGeometryFilterVisitorResult currentResult = (ExtractGeometryFilterVisitorResult) obj;
+				final Geometry currentGeom = currentResult.getGeometry();
+				final double currentArea = currentGeom.getArea();
+
+				if (finalResult == null) {
+					finalResult = currentResult;
 				}
-				else if (!Double.isInfinite(geomArea) && !Double.isNaN(geomArea)) {
-					mixed = mixed.intersection(geom);
+				else if (!Double.isInfinite(currentArea) && !Double.isNaN(currentArea)) {
+					// if predicates match then we can combine the geometry as
+					// well as predicate
+					if (currentResult.matchPredicate(finalResult)) {
+						finalResult = new ExtractGeometryFilterVisitorResult(
+								finalResult.getGeometry().intersection(
+										currentGeom),
+								currentResult.getCompareOp());
+					}
+					else {
+						// if predicate doesn't match then still combine
+						// geometry but set predicate to null
+						finalResult = new ExtractGeometryFilterVisitorResult(
+								finalResult.getGeometry().intersection(
+										currentGeom),
+								null);
+					}
+				}
+				else {
+					finalResult = new ExtractGeometryFilterVisitorResult(
+							finalResult.getGeometry(),
+							null);
 				}
 			}
 		}
-		return mixed;
+		return finalResult;
 	}
 
 	@Override
@@ -238,27 +283,56 @@ public class ExtractGeometryFilterVisitor extends
 		// result
 		// of !(finite envelope)
 
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final Or filter,
 			final Object data ) {
-		Geometry mixed = new GeometryFactory().toGeometry(new Envelope());
+		ExtractGeometryFilterVisitorResult finalResult = new ExtractGeometryFilterVisitorResult(
+				new GeometryFactory().toGeometry(new Envelope()),
+				null);
 		for (final Filter f : filter.getChildren()) {
-			final Geometry geom = (Geometry) f.accept(
+			final Object obj = f.accept(
 					this,
 					data);
-			final double geomArea = geom.getArea();
-			if (!Double.isInfinite(geomArea) && !Double.isNaN(geomArea)) {
-				mixed = mixed.union(geom);
+			if ((obj != null) && (obj instanceof ExtractGeometryFilterVisitorResult)) {
+				final ExtractGeometryFilterVisitorResult currentResult = (ExtractGeometryFilterVisitorResult) obj;
+				final Geometry currentGeom = currentResult.getGeometry();
+				final double currentArea = currentGeom.getArea();
+				if (finalResult.getGeometry().isEmpty()) {
+					finalResult = currentResult;
+				}
+				else if (!Double.isInfinite(currentArea) && !Double.isNaN(currentArea)) {
+					if (currentResult.matchPredicate(finalResult)) {
+						finalResult = new ExtractGeometryFilterVisitorResult(
+								finalResult.getGeometry().union(
+										currentGeom),
+								currentResult.getCompareOp());
+					}
+					else {
+						finalResult = new ExtractGeometryFilterVisitorResult(
+								finalResult.getGeometry().union(
+										currentGeom),
+								null);
+					}
+				}
+				else {
+					finalResult = new ExtractGeometryFilterVisitorResult(
+							finalResult.getGeometry(),
+							null);
+				}
 			}
 		}
-		if (mixed.isEmpty()) {
-			return infinity();
+		if (finalResult.getGeometry().isEmpty()) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
 		}
-		return mixed;
+		return finalResult;
 	}
 
 	@Override
@@ -266,7 +340,9 @@ public class ExtractGeometryFilterVisitor extends
 			final Beyond filter,
 			final Object data ) {
 		// beyond a certain distance from a finite object, no way to limit it
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
@@ -279,7 +355,14 @@ public class ExtractGeometryFilterVisitor extends
 		data = filter.getExpression2().accept(
 				this,
 				data);
-		return data;
+		// since predicate is defined relative to the query geometry we are
+		// using WITHIN
+		// which is converse of CONTAINS operator
+		// CQL Expression "CONTAINS(geo, QueryGeometry)" is equivalent to
+		// QueryGeometry.WITHIN(geo)
+		return new ExtractGeometryFilterVisitorResult(
+				(Geometry) data,
+				CompareOperation.WITHIN);
 	}
 
 	@Override
@@ -292,16 +375,20 @@ public class ExtractGeometryFilterVisitor extends
 		data = filter.getExpression2().accept(
 				this,
 				data);
-		return data;
+		return new ExtractGeometryFilterVisitorResult(
+				(Geometry) data,
+				CompareOperation.CROSSES);
 	}
 
 	@Override
 	public Object visit(
 			final Disjoint filter,
-			final Object data ) {
+			Object data ) {
 		// disjoint does not define a rectangle, but a hole in the
 		// Cartesian plane, no way to limit it
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
@@ -318,19 +405,21 @@ public class ExtractGeometryFilterVisitor extends
 			geometry = (Literal) filter.getExpression2();
 		}
 		if ((filter.getExpression2() instanceof PropertyName) && (filter.getExpression1() instanceof Literal)) {
-			geometry = (Literal) filter.getExpression2();
+			geometry = (Literal) filter.getExpression1();
 		}
 
 		// we cannot desume a bbox from this filter
 		if (geometry == null) {
-			return infinity();
+			return null;
 		}
 
 		Geometry geom = geometry.evaluate(
 				null,
 				Geometry.class);
 		if (geom == null) {
-			return infinity();
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
 		}
 		Pair<Geometry, Double> geometryAndDegrees;
 		try {
@@ -354,7 +443,9 @@ public class ExtractGeometryFilterVisitor extends
 					bbox);
 		}
 		else {
-			return geometryAndDegrees.getLeft();
+			return new ExtractGeometryFilterVisitorResult(
+					geometryAndDegrees.getLeft(),
+					CompareOperation.INTERSECTS);
 		}
 	}
 
@@ -368,7 +459,9 @@ public class ExtractGeometryFilterVisitor extends
 		data = filter.getExpression2().accept(
 				this,
 				data);
-		return data;
+		return new ExtractGeometryFilterVisitorResult(
+				(Geometry) data,
+				CompareOperation.EQUALS);
 	}
 
 	@Override
@@ -381,8 +474,9 @@ public class ExtractGeometryFilterVisitor extends
 		data = filter.getExpression2().accept(
 				this,
 				data);
-
-		return data;
+		return new ExtractGeometryFilterVisitorResult(
+				(Geometry) data,
+				CompareOperation.INTERSECTS);
 	}
 
 	@Override
@@ -396,7 +490,9 @@ public class ExtractGeometryFilterVisitor extends
 				this,
 				data);
 
-		return data;
+		return new ExtractGeometryFilterVisitorResult(
+				(Geometry) data,
+				CompareOperation.OVERLAPS);
 	}
 
 	@Override
@@ -410,7 +506,9 @@ public class ExtractGeometryFilterVisitor extends
 				this,
 				data);
 
-		return data;
+		return new ExtractGeometryFilterVisitorResult(
+				(Geometry) data,
+				CompareOperation.TOUCHES);
 	}
 
 	@Override
@@ -423,133 +521,175 @@ public class ExtractGeometryFilterVisitor extends
 		data = filter.getExpression2().accept(
 				this,
 				data);
-
-		return data;
+		// since predicate is defined relative to the query geometry we are
+		// using CONTAIN
+		// which is converse of WITHIN operator
+		// CQL Expression "WITHIN(geo, QueryGeometry)" is equivalent to
+		// QueryGeometry.CONTAINS(geo)
+		return new ExtractGeometryFilterVisitorResult(
+				(Geometry) data,
+				CompareOperation.CONTAINS);
 	}
 
 	@Override
 	public Object visit(
 			final Add expression,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final Divide expression,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final Function expression,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final Id filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final Multiply expression,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final NilExpression expression,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsBetween filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsEqualTo filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsGreaterThan filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsGreaterThanOrEqualTo filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsLessThan filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsLessThanOrEqualTo filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsLike filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsNotEqualTo filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyIsNull filter,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final PropertyName expression,
 			final Object data ) {
-		return null;
+		return new ExtractGeometryFilterVisitorResult(
+				null,
+				null);
 	}
 
 	@Override
 	public Object visit(
 			final Subtract expression,
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 	@Override
 	public Object visitNullFilter(
 			final Object data ) {
-		return infinity();
+		return new ExtractGeometryFilterVisitorResult(
+				infinity(),
+				null);
 	}
 
 }

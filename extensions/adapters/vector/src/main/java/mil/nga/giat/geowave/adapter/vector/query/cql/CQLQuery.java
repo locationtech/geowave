@@ -17,6 +17,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractAttributesFilter;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
+import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractTimeFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
@@ -97,6 +98,7 @@ public class CQLQuery implements
 		return createOptimalQuery(
 				cqlFilter,
 				adapter,
+				geoCompareOp,
 				index,
 				baseQuery);
 	}
@@ -160,16 +162,20 @@ public class CQLQuery implements
 		}
 		if (baseQuery == null) {
 			// there is only space and time
-			final Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
-					cqlFilter,
-					adapter.getFeatureType().getCoordinateReferenceSystem());
+			final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
+					.getConstraints(
+							cqlFilter,
+							adapter.getFeatureType().getCoordinateReferenceSystem());
 			final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(
 					adapter.getTimeDescriptors()).getConstraints(cqlFilter);
-			if (geometry != null) {
+
+			if (geometryAndCompareOp != null) {
+				Geometry geometry = geometryAndCompareOp.getGeometry();
 				final GeoConstraintsWrapper geoConstraints = GeometryUtils
 						.basicGeoConstraintsWrapperFromGeometry(geometry);
 
 				Constraints constraints = geoConstraints.getConstraints();
+				final CompareOperation extractedCompareOp = geometryAndCompareOp.getCompareOp();
 				if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
 					// determine which time constraints are associated with an
 					// indexable
@@ -202,7 +208,20 @@ public class CQLQuery implements
 				baseQuery = new SpatialQuery(
 						constraints,
 						geometry,
-						geoCompareOp);
+						extractedCompareOp);
+
+				// ExtractGeometryFilterVisitor sets predicate to NULL when CQL
+				// expression
+				// involves multiple dissimilar geometric relationships (i.e.
+				// "CROSSES(...) AND TOUCHES(...)")
+				// In which case, baseQuery is not sufficient to represent CQL
+				// expression.
+				// By setting Exact flag to false we are forcing CQLQuery to
+				// represent CQL expression but use
+				// linear constraint from baseQuery
+				if (extractedCompareOp == null) {
+					baseQuery.setExact(false);
+				}
 				// }
 			}
 			else if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
@@ -216,10 +235,13 @@ public class CQLQuery implements
 						temporalConstraints);
 			}
 		}
-		if (attrs.isEmpty() && ((baseQuery == null) || baseQuery.isExact())) {
+		// if baseQuery completely represents CQLQuery expression then use that
+		if (attrs.isEmpty() && (baseQuery != null) && baseQuery.isExact()) {
 			return baseQuery;
 		}
 		else {
+			// baseQuery is passed to CQLQuery just to extract out linear
+			// constraints only
 			return new CQLQuery(
 					baseQuery,
 					cqlFilter,
