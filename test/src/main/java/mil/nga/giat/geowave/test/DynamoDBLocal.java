@@ -23,7 +23,7 @@ public class DynamoDBLocal
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DynamoDBLocal.class);
 
 	// these need to move to config
-	private final static String DYNDB_URL = "http://dynamodb-local.s3-website-us-west-2.amazonaws.com/";
+	private final static String DYNDB_URL = "https://s3-us-west-2.amazonaws.com/dynamodb-local/";
 	private final static String DYNDB_TAR = "dynamodb_local_latest.tar.gz";
 	private static final String HOST_PORT = "8000";
 
