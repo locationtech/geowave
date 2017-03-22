@@ -62,7 +62,8 @@ import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class DynamoDBDataStore extends
-		BaseDataStore implements MapReduceDataStore
+		BaseDataStore implements
+		MapReduceDataStore
 {
 	public final static String TYPE = "dynamodb";
 	public static final Integer PARTITIONS = 1;
@@ -70,7 +71,7 @@ public class DynamoDBDataStore extends
 	private final static Logger LOGGER = Logger.getLogger(DynamoDBDataStore.class);
 	private final DynamoDBOperations dynamodbOperations;
 	private static int counter = 0;
-	
+
 	private final DynamoDBSplitsProvider splitsProvider = new DynamoDBSplitsProvider();
 
 	public DynamoDBDataStore(
@@ -384,31 +385,45 @@ public class DynamoDBDataStore extends
 	}
 
 	@Override
-	public RecordReader<GeoWaveInputKey, ?> createRecordReader(DistributableQuery query, QueryOptions queryOptions,
-			AdapterStore adapterStore, DataStatisticsStore statsStore, IndexStore indexStore, boolean isOutputWritable,
-			InputSplit inputSplit) throws IOException, InterruptedException {
+	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
+			DistributableQuery query,
+			QueryOptions queryOptions,
+			AdapterStore adapterStore,
+			DataStatisticsStore statsStore,
+			IndexStore indexStore,
+			boolean isOutputWritable,
+			InputSplit inputSplit )
+			throws IOException,
+			InterruptedException {
 		return new GeoWaveDynamoDBRecordReader(
-			query,
-			queryOptions,
-			isOutputWritable,
-			adapterStore,
-			this,
-			dynamodbOperations);
+				query,
+				queryOptions,
+				isOutputWritable,
+				adapterStore,
+				this,
+				dynamodbOperations);
 	}
 
 	@Override
-	public List<InputSplit> getSplits(DistributableQuery query, QueryOptions queryOptions, AdapterStore adapterStore,
-			DataStatisticsStore statsStore, IndexStore indexStore, Integer minSplits, Integer maxSplits)
-			throws IOException, InterruptedException {
+	public List<InputSplit> getSplits(
+			DistributableQuery query,
+			QueryOptions queryOptions,
+			AdapterStore adapterStore,
+			DataStatisticsStore statsStore,
+			IndexStore indexStore,
+			Integer minSplits,
+			Integer maxSplits )
+			throws IOException,
+			InterruptedException {
 		return splitsProvider.getSplits(
-				dynamodbOperations, 
-				query, 
-				queryOptions, 
-				adapterStore, 
-				statsStore, 
-				indexStore, 
-				indexMappingStore, 
-				minSplits, 
+				dynamodbOperations,
+				query,
+				queryOptions,
+				adapterStore,
+				statsStore,
+				indexStore,
+				indexMappingStore,
+				minSplits,
 				maxSplits);
 	}
 }

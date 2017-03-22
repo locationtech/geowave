@@ -31,9 +31,11 @@ import mil.nga.giat.geowave.mapreduce.splits.IntermediateSplitInfo;
 import mil.nga.giat.geowave.mapreduce.splits.RangeLocationPair;
 import mil.nga.giat.geowave.mapreduce.splits.SplitsProvider;
 
-public class DynamoDBSplitsProvider extends SplitsProvider {
+public class DynamoDBSplitsProvider extends
+		SplitsProvider
+{
 	private final static Logger LOGGER = Logger.getLogger(DynamoDBSplitsProvider.class);
-	
+
 	public static GeoWaveRowRange wrapRange(
 			final ByteArrayRange range ) {
 		return new DynamoDBRowRange(
@@ -50,12 +52,19 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 	}
 
 	@Override
-	protected TreeSet<IntermediateSplitInfo> populateIntermediateSplits(TreeSet<IntermediateSplitInfo> splits,
-			DataStoreOperations operations, PrimaryIndex left, List<DataAdapter<Object>> adapters,
-			Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache, AdapterStore adapterStore,
-			DataStatisticsStore statsStore, Integer maxSplits, DistributableQuery query, String[] authorizations)
+	protected TreeSet<IntermediateSplitInfo> populateIntermediateSplits(
+			TreeSet<IntermediateSplitInfo> splits,
+			DataStoreOperations operations,
+			PrimaryIndex left,
+			List<DataAdapter<Object>> adapters,
+			Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
+			AdapterStore adapterStore,
+			DataStatisticsStore statsStore,
+			Integer maxSplits,
+			DistributableQuery query,
+			String[] authorizations )
 			throws IOException {
-		
+
 		DynamoDBOperations dynamoDBOperations = null;
 		if (operations instanceof DynamoDBOperations) {
 			dynamoDBOperations = (DynamoDBOperations) operations;
@@ -68,13 +77,13 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 		if ((query != null) && !query.isSupported(left)) {
 			return splits;
 		}
-		
-		//build a range around the values 
+
+		// build a range around the values
 		final ByteArrayRange fullrange = unwrapRange(getRangeMax(
-			left,
-			adapterStore,
-			statsStore,
-			authorizations));
+				left,
+				adapterStore,
+				statsStore,
+				authorizations));
 		final String tableName = dynamoDBOperations.getQualifiedTableName(left.getId().getString());
 		final NumericIndexStrategy indexStrategy = left.getIndexStrategy();
 
@@ -105,10 +114,10 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 				LOGGER.trace("Protected range: " + fullrange);
 			}
 		}
-		
+
 		final Map<PrimaryIndex, List<RangeLocationPair>> splitInfo = new HashMap<PrimaryIndex, List<RangeLocationPair>>();
 		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
-		for(final ByteArrayRange range : ranges) {
+		for (final ByteArrayRange range : ranges) {
 			final double cardinality = getCardinality(
 					getHistStats(
 							left,
@@ -122,7 +131,7 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 			if (range.intersects(fullrange)) {
 				rangeList.add(constructRangeLocationPair(
 						wrapRange(range),
-						"Akash",
+						tableName,
 						cardinality < 1 ? 1.0 : cardinality));
 			}
 			else {
@@ -133,7 +142,7 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 						rangeList.size() - 1).getRange());
 			}
 		}
-		
+
 		if (!rangeList.isEmpty()) {
 			splitInfo.put(
 					left,
@@ -142,7 +151,7 @@ public class DynamoDBSplitsProvider extends SplitsProvider {
 					splitInfo,
 					this));
 		}
-		
+
 		return splits;
 	}
 

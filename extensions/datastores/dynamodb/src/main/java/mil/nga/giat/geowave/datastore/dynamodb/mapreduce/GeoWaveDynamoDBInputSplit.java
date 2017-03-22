@@ -8,7 +8,9 @@ import mil.nga.giat.geowave.datastore.dynamodb.split.DynamoDBSplitsProvider;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveInputSplit;
 import mil.nga.giat.geowave.mapreduce.splits.RangeLocationPair;
 
-public class GeoWaveDynamoDBInputSplit extends GeoWaveInputSplit {
+public class GeoWaveDynamoDBInputSplit extends
+		GeoWaveInputSplit
+{
 	public GeoWaveDynamoDBInputSplit() {
 		super();
 	}

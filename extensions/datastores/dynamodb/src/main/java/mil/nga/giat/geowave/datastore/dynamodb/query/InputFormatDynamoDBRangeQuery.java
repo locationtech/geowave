@@ -19,11 +19,13 @@ import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBInputFormatIteratorWrapper;
 
-public class InputFormatDynamoDBRangeQuery extends DynamoDBConstraintsQuery {
+public class InputFormatDynamoDBRangeQuery extends
+		DynamoDBConstraintsQuery
+{
 	private final static Logger LOGGER = Logger.getLogger(InputFormatDynamoDBRangeQuery.class);
 	private final ByteArrayRange range;
 	private final boolean isOutputWritable;
-	
+
 	private static List<ByteArrayId> getAdapterIds(
 			final PrimaryIndex index,
 			final AdapterStore adapterStore,
@@ -38,7 +40,7 @@ public class InputFormatDynamoDBRangeQuery extends DynamoDBConstraintsQuery {
 		}
 		return Collections.emptyList();
 	}
-	
+
 	public InputFormatDynamoDBRangeQuery(
 			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
@@ -48,33 +50,43 @@ public class InputFormatDynamoDBRangeQuery extends DynamoDBConstraintsQuery {
 			final List<QueryFilter> queryFilters,
 			final boolean isOutputWritable,
 			final QueryOptions queryOptions ) {
-		super(dataStore, 
-				dynamoDBOperations, 
-				getAdapterIds(index, adapterStore, queryOptions), 
-				index, 
-				null, 
-				queryFilters, 
-				null, 
-				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(), 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
+		super(
+				dataStore,
+				dynamoDBOperations,
+				getAdapterIds(
+						index,
+						adapterStore,
+						queryOptions),
+				index,
+				null,
+				queryFilters,
+				null,
+				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(),
+				null,
+				null,
+				null,
+				null,
+				null,
 				queryOptions.getAuthorizations());
 
 		this.range = range;
 		this.isOutputWritable = isOutputWritable;
 	}
-	
+
 	@Override
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
 			final Iterator<DynamoDBRow> results ) {
 		final List<QueryFilter> filters = getAllFiltersList();
-		return new DynamoDBInputFormatIteratorWrapper(dataStore, adapterStore, index, results, isOutputWritable, filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
-				: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
-						filters));
+		return new DynamoDBInputFormatIteratorWrapper(
+				dataStore,
+				adapterStore,
+				index,
+				results,
+				isOutputWritable,
+				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
+						: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
+								filters));
 	}
 
 }

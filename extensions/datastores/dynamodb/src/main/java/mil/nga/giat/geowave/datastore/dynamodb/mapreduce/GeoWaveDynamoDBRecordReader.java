@@ -19,42 +19,63 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 
-public class GeoWaveDynamoDBRecordReader<T> extends GeoWaveRecordReader<T> {
+public class GeoWaveDynamoDBRecordReader<T> extends
+		GeoWaveRecordReader<T>
+{
 
 	private DynamoDBOperations dynamoDBOperations;
-	
+
 	public GeoWaveDynamoDBRecordReader(
-			final DistributableQuery query, 
-			final QueryOptions queryOptions, 
+			final DistributableQuery query,
+			final QueryOptions queryOptions,
 			final boolean isOutputWritable,
-			final AdapterStore adapterStore, 
-			final BaseDataStore dataStore, 
-			final DynamoDBOperations dynamoDBOperations) {
-		super(query, queryOptions, isOutputWritable, adapterStore, dataStore);
+			final AdapterStore adapterStore,
+			final BaseDataStore dataStore,
+			final DynamoDBOperations dynamoDBOperations ) {
+		super(
+				query,
+				queryOptions,
+				isOutputWritable,
+				adapterStore,
+				dataStore);
 		this.dynamoDBOperations = dynamoDBOperations;
 	}
 
 	@Override
-	protected CloseableIterator queryRange(PrimaryIndex i, GeoWaveRowRange range, List queryFilters,
-			QueryOptions rangeQueryOptions) {
-		//this will take the inputsplit
-		
+	protected CloseableIterator queryRange(
+			PrimaryIndex i,
+			GeoWaveRowRange range,
+			List queryFilters,
+			QueryOptions rangeQueryOptions ) {
+		// this will take the inputsplit
+
 		return new InputFormatDynamoDBRangeQuery(
-			dataStore,
-			adapterStore,
-			dynamoDBOperations,
-			i,
-			DynamoDBSplitsProvider.unwrapRange(range),
-			queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(), //TODO aperi: figure out if this is correct or not
-			isOutputWritable,
-			rangeQueryOptions).query(
-			adapterStore,
-			rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-			rangeQueryOptions.getLimit());
+				dataStore,
+				adapterStore,
+				dynamoDBOperations,
+				i,
+				DynamoDBSplitsProvider.unwrapRange(range),
+				queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(), // TODO
+																					// aperi:
+																					// figure
+																					// out
+																					// if
+																					// this
+																					// is
+																					// correct
+																					// or
+																					// not
+				isOutputWritable,
+				rangeQueryOptions).query(
+				adapterStore,
+				rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				rangeQueryOptions.getLimit());
 	}
 
 	@Override
-	public boolean nextKeyValue() throws IOException, InterruptedException {
+	public boolean nextKeyValue()
+			throws IOException,
+			InterruptedException {
 		if (iterator != null) {
 			if (iterator.hasNext()) {
 				++numKeysRead;
@@ -81,7 +102,9 @@ public class GeoWaveDynamoDBRecordReader<T> extends GeoWaveRecordReader<T> {
 	}
 
 	@Override
-	public float getProgress() throws IOException, InterruptedException {
+	public float getProgress()
+			throws IOException,
+			InterruptedException {
 		// TODO Auto-generated method stub
 		return 0;
 	}

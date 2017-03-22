@@ -3,7 +3,9 @@ package mil.nga.giat.geowave.datastore.dynamodb.mapreduce;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.RangeLocationPair;
 
-public class DynamoDBRangeLocatorPair extends RangeLocationPair {
+public class DynamoDBRangeLocatorPair extends
+		RangeLocationPair
+{
 	public DynamoDBRangeLocatorPair(
 			final GeoWaveRowRange range,
 			final String location,

@@ -11,7 +11,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 
-public class DynamoDBRowRange implements GeoWaveRowRange {
+public class DynamoDBRowRange implements
+		GeoWaveRowRange
+{
 	private ByteArrayRange range;
 	private boolean infiniteStartKey = false;
 	private boolean infiniteEndKey = false;
