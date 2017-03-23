@@ -19,6 +19,6 @@ checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleCon
 
    // Deploy to geowave-rpms
    stage 'Deploying to s3://geowave-rpms/'
-   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/dev/ s3://geowave-rpms-new/dev/'
-   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/release/ s3://geowave-rpms-new/release/'
+   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/dev/ s3://geowave-rpms/dev/'
+   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/release/ s3://geowave-rpms/release/'
 }
