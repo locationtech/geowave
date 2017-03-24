@@ -20,6 +20,7 @@ public class RestServer extends
 		ServerResource
 {
 	private ArrayList<Route> availableRoutes;
+	private ArrayList<String> unavailableCommands;
 
 	/**
 	 * Run the Restlet server (localhost:5152)
@@ -32,11 +33,30 @@ public class RestServer extends
 
 	public RestServer() {
 		this.availableRoutes = new ArrayList<Route>();
+		this.unavailableCommands = new ArrayList<String>();
 
 		for (Class<?> operation : new Reflections(
 				"mil.nga.giat.geowave").getTypesAnnotatedWith(GeowaveOperation.class)) {
-			availableRoutes.add(new Route(
-					operation));
+
+			// try {
+			if (operation.getAnnotation(
+					GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET
+					|| operation.getAnnotation(
+							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST) {
+				availableRoutes.add(new Route(
+						operation.asSubclass(ServerResource.class)));
+			}
+			else {
+				GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
+				unavailableCommands.add(operation.getName() + " " + operationInfo.name());
+			}
+			// } catch (ClassCastException e){
+			// GeowaveOperation operationInfo =
+			// operation.getAnnotation(GeowaveOperation.class);
+			// unavailableCommands.add(operationInfo.parentOperation() + " " +
+			// operationInfo.name());
+			// }
+			//
 		}
 
 		Collections.sort(availableRoutes);
@@ -44,17 +64,14 @@ public class RestServer extends
 
 	// Show a simple 404 if the route is unknown to the server
 	@Get("html")
-	public String toString() {
+	public String listResources() {
 		StringBuilder routeStringBuilder = new StringBuilder(
-				"Available Routes: (geowave/help is only that currently extends ServerResource)<br>");
+				"Available Routes:<br>");
 		for (Route route : availableRoutes) {
-			if (route.isServerResource()) {
-				routeStringBuilder.append(route.getPath() + " --> " + route.getOperationAsGeneric() + "<br>");
-			}
-			else {
-				routeStringBuilder.append("<span style='color:red'>" + route.getPath() + " -> "
-						+ route.getOperationAsGeneric() + "</span><br>");
-			}
+			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
+		}
+		for (String command : unavailableCommands) {
+			routeStringBuilder.append("<span style='color:red'>" + command + "</span><br>");
 		}
 		return "<b>404</b>: Route not found<br><br>" + routeStringBuilder.toString();
 	}
@@ -65,16 +82,9 @@ public class RestServer extends
 		// Add paths for each command
 		final Router router = new Router();
 		for (Route route : availableRoutes) {
-			if (route.isServerResource()) {
-				router.attach(
-						route.getPath(),
-						route.getOperationAsResource());
-			}
-			else {
-				router.attach(
-						route.getPath(),
-						NonResourceCommand.class);
-			}
+			router.attach(
+					route.getPath(),
+					route.getOperation());
 		}
 		// Provide basic 404 error page for unknown route
 		router.attachDefault(RestServer.class);
@@ -112,8 +122,7 @@ public class RestServer extends
 			Comparable<Route>
 	{
 		private String path;
-		private Class<?> operation;
-		private boolean serverResource;
+		private Class<? extends ServerResource> operation;
 
 		/**
 		 * Create a new route given an operation
@@ -121,46 +130,11 @@ public class RestServer extends
 		 * @param operation
 		 */
 		public Route(
-				Class<?> operation ) {
+				Class<? extends ServerResource> operation ) {
 			this.path = pathFor(
 					operation).substring(
 					1);
 			this.operation = operation;
-
-			// check if operation extends ServerResource, which is required for
-			// Restlet to
-			// generate a route from the class
-			try {
-				operation.asSubclass(ServerResource.class);
-				serverResource = true;
-			}
-			catch (ClassCastException e) {
-				serverResource = false;
-			}
-		}
-
-		/**
-		 * @return true if the route represents an operation which extends
-		 *         ServerResource
-		 */
-		public boolean isServerResource() {
-			return serverResource;
-		}
-
-		/**
-		 * Return the operation as its ServerResource subclass if operation
-		 * extends ServerResource, otherwise return null.
-		 * 
-		 * @return the operation as its ServerResource subclass, or null if
-		 *         operation does not extend ServerResource
-		 */
-		public Class<? extends ServerResource> getOperationAsResource() {
-			if (serverResource) {
-				return operation.asSubclass(ServerResource.class);
-			}
-			else {
-				return null;
-			}
 		}
 
 		/**
@@ -168,7 +142,7 @@ public class RestServer extends
 		 * 
 		 * @return
 		 */
-		public Class<?> getOperationAsGeneric() {
+		public Class<? extends ServerResource> getOperation() {
 			return operation;
 		}
 
@@ -203,6 +177,17 @@ public class RestServer extends
 		public int compareTo(
 				Route route ) {
 			return path.compareTo(route.path);
+		}
+
+		@Override
+		public boolean equals(
+				Object route ) {
+			return route instanceof Route && path.equals(((Route) route).path);
+		}
+
+		@Override
+		public int hashCode() {
+			return path.hashCode();
 		}
 	}
 
