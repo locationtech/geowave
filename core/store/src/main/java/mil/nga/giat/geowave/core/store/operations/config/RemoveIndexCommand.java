@@ -2,7 +2,6 @@ package mil.nga.giat.geowave.core.store.operations.config;
 
 import com.beust.jcommander.Parameters;
 
-
 import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
@@ -33,18 +32,16 @@ public class RemoveIndexCommand extends
 
 	}
 
-
 	private void computeResults(
-			OperationParams params) {
+			OperationParams params ) {
 
-			// Search for properties relevant to the given name
+		// Search for properties relevant to the given name
 		String pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
 		super.computeResults(
 				params,
 				pattern);
 
 	}
-
 
 	@Post("json")
 	public void restDelete() {
@@ -57,8 +54,7 @@ public class RemoveIndexCommand extends
 		OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile()
-		);
+				ConfigOptions.getDefaultPropertyFile());
 		computeResults(params);
 	}
 
