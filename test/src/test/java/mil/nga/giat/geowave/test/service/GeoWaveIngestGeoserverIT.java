@@ -42,14 +42,15 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.SERVICES
 })
-public class GeoWaveIngestGeoserverIT
+public class GeoWaveIngestGeoserverIT extends
+		AbstractGeoWaveIT
 {
-
 	private static final Logger LOGGER = Logger.getLogger(GeoWaveIngestGeoserverIT.class);
 
 	private static final String WORKSPACE = "testomatic";
@@ -57,6 +58,8 @@ public class GeoWaveIngestGeoserverIT
 	private static final String WMS_URL_PREFIX = "/geoserver/wms";
 	private static final String REFERENCE_26_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.6.gif";
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
+
+	private static long startMillis;
 
 	private static GeoserverServiceClient geoserverServiceClient = null;
 	@GeoWaveTestStore(value = {
@@ -70,7 +73,9 @@ public class GeoWaveIngestGeoserverIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
-	private static long startMillis;
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
 
 	@BeforeClass
 	public static void setupIngestTest()

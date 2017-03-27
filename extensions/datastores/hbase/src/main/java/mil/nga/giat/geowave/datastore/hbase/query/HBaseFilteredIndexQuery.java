@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -57,12 +58,14 @@ public abstract class HBaseFilteredIndexQuery extends
 			final PrimaryIndex index,
 			final ScanCallback<?, ?> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
 				dataStore,
 				adapterIds,
 				index,
 				fieldIds,
+				visibilityCounts,
 				authorizations);
 		this.scanCallback = scanCallback;
 	}
@@ -195,9 +198,14 @@ public abstract class HBaseFilteredIndexQuery extends
 				final List<DistributableQueryFilter> distFilters = getDistributableFilters();
 				if ((distFilters != null) && !distFilters.isEmpty()) {
 					final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
+					if (useWholeRowIterator()) {
+						hbdFilter.setWholeRowFilter(true);
+					}
+
 					hbdFilter.init(
 							distFilters,
-							index.getIndexModel());
+							index.getIndexModel(),
+							authorizations);
 
 					filterList.addFilter(hbdFilter);
 				}

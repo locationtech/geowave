@@ -9,6 +9,7 @@ import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVectorSerializationIT;
+import mil.nga.giat.geowave.test.basic.GeoWaveVisibilityIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.LandsatIT;
@@ -28,16 +29,16 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
+	GeoWaveVisibilityIT.class,
 	GeoWaveBasicSpatialVectorIT.class,
 	GeoWaveBasicSpatialTemporalVectorIT.class,
+	GeoWaveBasicRasterIT.class,
 	GeoWaveVectorSerializationIT.class,
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
-	GeoWaveBasicRasterIT.class,
 	LandsatIT.class,
 	BulkIngestInputGenerationIT.class,
 	KDERasterResizeIT.class,
-	// GeoWaveKMeansIT.class,
 	GeoWaveNNIT.class,
 	GeoServerIT.class,
 	GeoWaveServicesIT.class,
@@ -49,6 +50,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	ConfigCacheIT.class,
 	DataStatisticsStoreIT.class,
 	SecondaryIndexIT.class
+// GeoWaveKMeansIT.class,
 })
 public class GeoWaveITSuite
 {
