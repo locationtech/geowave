@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.shaded.restlet.data.Form;
+import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.resource.Get;
 import org.shaded.restlet.resource.Post;
 import org.shaded.restlet.data.Status;
@@ -50,10 +52,19 @@ public class AddIndexGroupCommand extends
 	 * 
 	 * @return none
 	 */
-	@Post("json")
-	public void computeResults() { // TODO think about return type
-		String key = getQueryValue("key");
-		String value = getQueryValue("value");
+	@Post("form:json")
+	public void computeResults(
+			Representation entity ) { // TODO think about return type
+
+		Form form = new Form(
+				entity);
+		String key = form.getFirstValue("key");
+		String value = form.getFirstValue("value");
+
+		String configFileParameter = form.getFirstValue("config_file");
+		File configFile = (configFileParameter != null) ? new File(
+				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
+
 		if ((key == null || key.equals("")) || value == null) {
 			this.setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
@@ -66,7 +77,7 @@ public class AddIndexGroupCommand extends
 			OperationParams params = new ManualOperationParams();
 			params.getContext().put(
 					ConfigOptions.PROPERTIES_FILE_CONTEXT,
-					ConfigOptions.getDefaultPropertyFile());
+					configFile);
 
 			try {
 				addIndexGroup(params);

@@ -207,27 +207,39 @@ public class RestServerTest
 	public void geowave_config_indexgrp()
 			throws ResourceException,
 			IOException {
-		// // add the index group named "indexgrp"
-		// ClientResource resourceAdd = new ClientResource(
-		// "http://localhost:5152/geowave/config/addindexgrp");
-		// Form formAdd = new Form();
-		// formAdd.add(
-		// "name",
-		// "indexgrp");
-		// resourceAdd.post(
-		// formAdd).write(
-		// System.out);
-		//
-		// // remove the index group named "indexgrp"
-		// ClientResource resourceRm = new ClientResource(
-		// "http://localhost:5152/geowave/config/rmindexgrp");
-		// Form formRm = new Form();
-		// formRm.add(
-		// "name",
-		// "indexgrp");
-		// resourceRm.post(
-		// formRm).write(
-		// System.out);
+
+		File configFile = tempFolder.newFile("test_config");
+
+		// add the index group named "indexgrp"
+		ClientResource resourceAdd = new ClientResource(
+				"http://localhost:5152/geowave/config/addindexgrp");
+		Form formAdd = new Form();
+		formAdd.add(
+				"key",
+				"indexgrp1");
+		formAdd.add(
+				"value",
+				"value1");
+		formAdd.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceAdd.post(
+				formAdd).write(
+				System.out);
+
+		// remove the index group named "indexgrp"
+		ClientResource resourceRm = new ClientResource(
+				"http://localhost:5152/geowave/config/rmindexgrp");
+		Form formRm = new Form();
+		formRm.add(
+				"name",
+				"indexgrp1");
+		formRm.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceRm.post(
+				formRm).write(
+				System.out);
 	}
 
 }

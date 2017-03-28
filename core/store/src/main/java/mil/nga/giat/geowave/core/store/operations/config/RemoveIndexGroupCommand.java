@@ -1,6 +1,9 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
 import org.shaded.restlet.representation.Representation;
+
+import java.io.File;
+
 import org.shaded.restlet.data.Form;
 import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Post;
@@ -46,6 +49,11 @@ public class RemoveIndexGroupCommand extends
 				entity);
 		String name = form.getFirstValue("name");
 		// String name = getQueryValue("name");
+
+		String configFileParameter = form.getFirstValue("config_file");
+		File configFile = (configFileParameter != null) ? new File(
+				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
+
 		if (name == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
@@ -54,7 +62,7 @@ public class RemoveIndexGroupCommand extends
 		OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
+				configFile);
 		computeResults(params);
 	}
 }
