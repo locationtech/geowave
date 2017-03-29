@@ -17,7 +17,6 @@ public class FixedCardinalitySkippingFilter extends
 {
 	private Integer bitPosition;
 	private byte[] nextRow = null;
-	private boolean init = false;
 
 	public FixedCardinalitySkippingFilter() {}
 
@@ -50,23 +49,13 @@ public class FixedCardinalitySkippingFilter extends
 		final byte[] row = geowaveRow.getRowId();
 		
 		// Make sure we have the next row to include
-		if (!init) {
-			init = true;
-			getNextRowKey(
-					geowaveRow.getRowId());
+		if (nextRow == null) {
+			getNextRowKey(row);
 		}
 
 		// Compare current row w/ next row
-		ReturnCode returnCode = checkNextRow(
+		return checkNextRow(
 				row);
-		
-		// If we're at or past the next row, advance it
-		if (returnCode == ReturnCode.INCLUDE) {
-			getNextRowKey(
-					geowaveRow.getRowId());
-		}
-
-		return returnCode;
 	}
 
 	private ReturnCode checkNextRow(
@@ -77,6 +66,10 @@ public class FixedCardinalitySkippingFilter extends
 			return ReturnCode.SEEK_NEXT_USING_HINT;
 		}
 		else {
+			// Time to advance the cell hint
+			getNextRowKey(
+					row);
+			
 			return ReturnCode.INCLUDE;
 		}
 	}
