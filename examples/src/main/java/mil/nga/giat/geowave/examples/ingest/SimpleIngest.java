@@ -35,6 +35,7 @@ public class SimpleIngest
 
 	static Logger log = Logger.getLogger(SimpleIngest.class);
 	public static final String FEATURE_NAME = "GridPoint";
+	public static final double CENTER_DEG = 20.0;
 
 	public static List<SimpleFeature> getGriddedFeatures(
 			final SimpleFeatureBuilder pointBuilder,
@@ -68,6 +69,47 @@ public class SimpleIngest
 		}
 		return feats;
 	}
+	
+	public static List<SimpleFeature> getRandomFeatures(
+			final SimpleFeatureBuilder pointBuilder,
+			final int firstFeatureId,
+			final double bboxSizeDeg,
+			final int numFeatures) {
+
+		int featureId = firstFeatureId;
+		final List<SimpleFeature> feats = new ArrayList<>();
+		
+		double minLat = CENTER_DEG - (bboxSizeDeg/2);
+		double minLon = CENTER_DEG - (bboxSizeDeg/2);
+		
+		for (int i = 0; i < numFeatures; i++) {
+			double latitude = minLat + (Math.random() * bboxSizeDeg);
+			double longitude = minLon + (Math.random() * bboxSizeDeg);
+			
+				pointBuilder.set(
+						"geometry",
+						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+								longitude,
+								latitude)));
+				pointBuilder.set(
+						"TimeStamp",
+						new Date());
+				pointBuilder.set(
+						"Latitude",
+						latitude);
+				pointBuilder.set(
+						"Longitude",
+						longitude);
+				// Note since trajectoryID and comment are marked as nillable we
+				// don't need to set them (they default ot null).
+
+				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+				feats.add(sft);
+				featureId++;
+		}
+		return feats;
+	}
+
 
 	/***
 	 * DataStore is essentially the controller that take the accumulo

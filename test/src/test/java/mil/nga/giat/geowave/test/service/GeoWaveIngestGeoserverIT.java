@@ -29,6 +29,8 @@ import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import com.vividsolutions.jts.util.Stopwatch;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -58,6 +60,7 @@ public class GeoWaveIngestGeoserverIT extends
 	private static final String WMS_URL_PREFIX = "/geoserver/wms";
 	private static final String REFERENCE_26_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.6.gif";
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
+	private static final double BBOX_SIZE_DEG = 10.0;
 
 	private static long startMillis;
 
@@ -283,6 +286,179 @@ public class GeoWaveIngestGeoserverIT extends
 				ref,
 				0,
 				0.07);
+	}
+	
+	@Test
+	public void testSkippingPerformance()
+			throws IOException,
+			SchemaException,
+			URISyntaxException {
+		final DataStore ds = dataStoreOptions.createDataStore();
+		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
+		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+		
+		final List<SimpleFeature> features = SimpleIngest.getRandomFeatures(
+				new SimpleFeatureBuilder(
+						sft),
+				8675309,
+				BBOX_SIZE_DEG, // 10-deg bbox
+				100000); // 100k points
+		
+		LOGGER.warn(String.format(
+				"Beginning to ingest a random bbox of %d features",
+				features.size()));
+		int ingestedFeatures = 0;
+		final int featuresPer5Percent = features.size() / 20;
+		try (IndexWriter writer = ds.createWriter(
+				fda,
+				idx)) {
+			for (final SimpleFeature feat : features) {
+				writer.write(feat);
+				ingestedFeatures++;
+				if ((ingestedFeatures % featuresPer5Percent) == 0) {
+					LOGGER.info(String.format(
+							"Ingested %d percent of features",
+							(ingestedFeatures / featuresPer5Percent) * 5));
+				}
+			}
+		}
+
+		Assert.assertTrue(
+				"Unable to create 'testomatic' workspace",
+				geoserverServiceClient.createWorkspace(WORKSPACE));
+		Assert.assertTrue(
+				"Unable to publish '" + dataStoreOptions.getType() + "' data store",
+				geoserverServiceClient.publishDatastore(
+						dataStoreOptions.getType(),
+						dataStoreOptions.getOptionsAsMap(),
+						TestUtils.TEST_NAMESPACE,
+						null,
+						null,
+						null,
+						null,
+						WORKSPACE));
+		assertTrue(
+				"Unable to publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE)
+				}));
+		assertTrue(
+				"Unable to publish '" + ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE)
+				}));
+		assertTrue(
+				"Unable to publish '" + ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE)
+				}));
+
+		assertTrue(
+				"Unable to publish '" + ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE + "' style",
+				geoserverServiceClient.publishStyle(new File[] {
+					new File(
+							ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE)
+				}));
+		Assert.assertTrue(
+				"Unable to publish '" + SimpleIngest.FEATURE_NAME + "' layer",
+				geoserverServiceClient.publishLayer(
+						TestUtils.TEST_NAMESPACE,
+						"point",
+						SimpleIngest.FEATURE_NAME,
+						WORKSPACE));
+		
+		double minLon = SimpleIngest.CENTER_DEG - BBOX_SIZE_DEG/2; 
+		double minLat = SimpleIngest.CENTER_DEG - BBOX_SIZE_DEG/2; 
+		double maxLon = minLon + BBOX_SIZE_DEG;
+		double maxLat = minLat + BBOX_SIZE_DEG;
+		
+		Stopwatch stopwatch = new Stopwatch();
+		stopwatch.reset();
+		stopwatch.start();
+		
+		final BufferedImage biDirectRender = getWMSSingleTile(
+				minLon,
+				maxLon,
+				minLat,
+				maxLat,
+				SimpleIngest.FEATURE_NAME,
+				"point",
+				256,
+				256,
+				null);
+		
+		long dur = stopwatch.stop();
+		LOGGER.warn("GetTile took " + dur + " ms.");
+		stopwatch.reset();
+		stopwatch.start();
+
+		final BufferedImage biSubsamplingWithoutError = getWMSSingleTile(
+				minLon,
+				maxLon,
+				minLat,
+				maxLat,
+				SimpleIngest.FEATURE_NAME,
+				ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
+				256,
+				256,
+				null);
+		
+		dur = stopwatch.stop();
+		LOGGER.warn("GetTile took " + dur + " ms.");
+		stopwatch.reset();
+		stopwatch.start();
+
+		final BufferedImage biSubsamplingWithExpectedError = getWMSSingleTile(
+				minLon,
+				maxLon,
+				minLat,
+				maxLat,
+				SimpleIngest.FEATURE_NAME,
+				ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
+				256,
+				256,
+				null);
+
+		dur = stopwatch.stop();
+		LOGGER.warn("GetTile took " + dur + " ms.");
+		stopwatch.reset();
+		stopwatch.start();
+
+		final BufferedImage biSubsamplingWithLotsOfError = getWMSSingleTile(
+				minLon,
+				maxLon,
+				minLat,
+				maxLat,
+				SimpleIngest.FEATURE_NAME,
+				ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
+				256,
+				256,
+				null);
+
+		dur = stopwatch.stop();
+		LOGGER.warn("GetTile took " + dur + " ms.");
+		stopwatch.reset();
+		stopwatch.start();
+
+		final BufferedImage biDistributedRendering = getWMSSingleTile(
+				minLon,
+				maxLon,
+				minLat,
+				maxLat,
+				SimpleIngest.FEATURE_NAME,
+				ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
+				256,
+				256,
+				null);
+		
+		dur = stopwatch.stop();
+		LOGGER.warn("GetTile took " + dur + " ms.");
+		stopwatch.reset();
+		stopwatch.start();
 	}
 
 	@After

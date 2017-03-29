@@ -4,20 +4,19 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.KeyValueUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import mil.nga.giat.geowave.core.index.IndexUtils;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 
 public class FixedCardinalitySkippingFilter extends
 		FilterBase
 {
 	private Integer bitPosition;
 	private byte[] nextRow = null;
-	private ReturnCode returnCode;
-	private boolean init = false;
 
 	public FixedCardinalitySkippingFilter() {}
 
@@ -27,55 +26,56 @@ public class FixedCardinalitySkippingFilter extends
 	}
 
 	@Override
+	public Cell getNextCellHint(
+			Cell currentKV )
+			throws IOException {
+		if (nextRow != null) {
+			return KeyValueUtil.createFirstOnRow(nextRow);
+		}
+		
+		return super.getNextCellHint(currentKV);
+	}
+
+	@Override
 	public ReturnCode filterKeyValue(
 			final Cell cell )
 			throws IOException {
+		// Retrieve the row key
+		GeoWaveRowImpl geowaveRow = new GeoWaveRowImpl(
+				cell.getRowArray(),
+				cell.getRowOffset(),
+				cell.getRowLength());
+		
+		final byte[] row = geowaveRow.getRowId();
+		
 		// Make sure we have the next row to include
-		if (!init) {
-			init = true;
-			getNextRowKey(cell);
+		if (nextRow == null) {
+			getNextRowKey(row);
 		}
 
 		// Compare current row w/ next row
-		returnCode = checkNextRow(cell);
-
-		// If we're at or past the next row, advance it
-		if (returnCode != ReturnCode.SKIP) {
-			getNextRowKey(cell);
-		}
-
-		return returnCode;
+		return checkNextRow(
+				row);
 	}
 
 	private ReturnCode checkNextRow(
-			final Cell cell ) {
-		final byte[] row = CellUtil.cloneRow(cell);
-
-		final byte[] rowCopy = new byte[nextRow.length];
-
-		System.arraycopy(
+			final byte[] row ) {
+		if (Bytes.compareTo(
 				row,
-				0,
-				rowCopy,
-				0,
-				rowCopy.length);
-
-		final int cmp = Bytes.compareTo(
-				rowCopy,
-				nextRow);
-
-		if (cmp < 0) {
-			return ReturnCode.SKIP;
+				nextRow) < 0) {
+			return ReturnCode.SEEK_NEXT_USING_HINT;
 		}
 		else {
+			// Time to advance the cell hint
+			getNextRowKey(
+					row);
+			
 			return ReturnCode.INCLUDE;
 		}
 	}
 
 	private void getNextRowKey(
-			final Cell currentCell ) {
-		final byte[] row = CellUtil.cloneRow(currentCell);
-
+			final byte[] row ) {
 		nextRow = IndexUtils.getNextRowForSkip(
 				row,
 				bitPosition);
@@ -84,8 +84,10 @@ public class FixedCardinalitySkippingFilter extends
 	@Override
 	public byte[] toByteArray()
 			throws IOException {
-		final ByteBuffer buf = ByteBuffer.allocate(Integer.BYTES);
-		buf.putInt(bitPosition);
+		final ByteBuffer buf = ByteBuffer.allocate(
+				Integer.BYTES);
+		buf.putInt(
+				bitPosition);
 
 		return buf.array();
 	}
@@ -93,7 +95,8 @@ public class FixedCardinalitySkippingFilter extends
 	public static FixedCardinalitySkippingFilter parseFrom(
 			final byte[] bytes )
 			throws DeserializationException {
-		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		final ByteBuffer buf = ByteBuffer.wrap(
+				bytes);
 		final int bitpos = buf.getInt();
 
 		return new FixedCardinalitySkippingFilter(
