@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractAttributesFilter.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractTimeFilterVisitor.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html" target="_top">Frames</a></li>
@@ -120,8 +120,21 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ExtractGeometryFilterVisitor</span>
 extends org.geotools.filter.visitor.NullFilterVisitor</pre>
-<div class="block">This class can be used to get Geometry from an OpenGIS filter object. GeoWave
- then uses this geometry to perform a spatial intersection query.</div>
+<div class="block">This class is used to exact single query geometry and its associated
+ predicate from a CQL expression. There are three possible outcomes based on
+ the extracted results. 1) If CQL expression is simple then we are able to
+ extract query geometry and predicate successfully. 2) If CQL expression
+ combines multiple dissimilar geometric relationships (i.e.
+ "BBOX(geom,...) AND TOUCHES(geom,...)") then we wont be able combine that
+ into a single query geometry and predicate. In which case, we will only
+ return query geometry for the purpose of creating linear constraints and
+ predicate value will be null. However, we are able to combine multiple
+ geometric relationships into one query/predicate if their predicates are same
+ (i.e. "INTERSECTS(geom,...) AND INTERSECTS(geom,...)") 3) In some case, we
+ won't be able to extract query geometry and predicate at all. In that case,
+ we simply return null. This occurs if CQL expression doesn't contain any
+ geometric constraints or CQL expression has non-inclusive filter (i.e. NOT or
+ DISJOINT(...)).</div>
 </li>
 </ul>
 </div>
@@ -187,7 +200,7 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">ExtractGeometryFilterVisitorResult</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html#getConstraints-org.opengis.filter.Filter-org.opengis.referencing.crs.CoordinateReferenceSystem-">getConstraints</a></span>(org.opengis.filter.Filter&nbsp;filter,
               org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>&nbsp;</td>
 </tr>
@@ -440,8 +453,8 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getConstraints</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;getConstraints(org.opengis.filter.Filter&nbsp;filter,
-                                                                  org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
+<pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">ExtractGeometryFilterVisitorResult</a>&nbsp;getConstraints(org.opengis.filter.Filter&nbsp;filter,
+                                                                org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>filter</code> - </dd>
@@ -1045,7 +1058,7 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractAttributesFilter.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractTimeFilterVisitor.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html" target="_top">Frames</a></li>

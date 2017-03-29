@@ -83,14 +83,18 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.query.cql">mil.nga.giat.geowave.adapter.vector.query.cql</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.plugin">mil.nga.giat.geowave.adapter.vector.plugin</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.geotime.store.filter">mil.nga.giat.geowave.core.geotime.store.filter</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.query.cql">mil.nga.giat.geowave.adapter.vector.query.cql</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.geotime.store.filter">mil.nga.giat.geowave.core.geotime.store.filter</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.geotime.store.query">mil.nga.giat.geowave.core.geotime.store.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -99,6 +103,36 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.plugin">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a> in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a> that return <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ExtractGeometryFilterVisitorResult.</span><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html#getCompareOp--">getCompareOp</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin</a> with parameters of type <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html#ExtractGeometryFilterVisitorResult-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">ExtractGeometryFilterVisitorResult</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry,
+                                  <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.query.cql">
 <!--   -->
 </a>
@@ -162,11 +196,12 @@ the order they are declared.</div>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialQueryFilter</a></span>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation-">SpatialQueryFilter</a></span>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
                   <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionDefinitions,
                   <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.html" title="interface in mil.nga.giat.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
                   com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                  <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
+                  <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
+                  <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -185,18 +220,27 @@ the order they are declared.</div>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialQuery</a></span>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints,
             com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
-<div class="block">Convenience constructor used to construct a SpatialQuery object that has
- an X and Y dimension (axis).</div>
+<div class="block">Convenience constructor can be used when you already have linear
+ constraints for the query.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation-">SpatialQuery</a></span>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints,
+            com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+            <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
+            <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>
+<div class="block">Convenience constructor can be used when you already have linear
+ constraints for the query.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialQuery</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
 <div class="block">Convenience constructor used to construct a SpatialQuery object that has
  an X and Y dimension (axis).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startTime,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endTime,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
@@ -205,7 +249,7 @@ the order they are declared.</div>
  time is partnered with each polygon constraint.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>

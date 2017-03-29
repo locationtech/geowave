@@ -312,7 +312,9 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
                             com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
                             <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
 <div class="block">If more then on polygon is supplied in the geometry, then the range of
- time is partnered with each polygon constraint.</div>
+ time is partnered with each polygon constraint. Note: By default we are
+ using same compareOp for 1D Time filtering as the compareOp of the
+ Spatial query by calling getBaseCompareOp()</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>startTime</code> - </dd>

@@ -188,23 +188,33 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/B
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialQuery</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints,
             com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
-<div class="block">Convenience constructor used to construct a SpatialQuery object that has
- an X and Y dimension (axis).</div>
+<div class="block">Convenience constructor can be used when you already have linear
+ constraints for the query.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation-">SpatialQuery</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints,
+            com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+            <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
+            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>
+<div class="block">Convenience constructor can be used when you already have linear
+ constraints for the query.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-com.vividsolutions.jts.geom.Geometry-">SpatialQuery</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</code>
 <div class="block">Convenience constructor used to construct a SpatialQuery object that has
  an X and Y dimension (axis).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-com.vividsolutions.jts.geom.Geometry-java.util.Map-">SpatialQuery</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/FilterableConstraints.html" title="interface in mil.nga.giat.geowave.core.store.index">FilterableConstraints</a>&gt;&nbsp;additionalConstraints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialQuery</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
@@ -340,12 +350,36 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/B
 <pre>public&nbsp;SpatialQuery(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
-<div class="block">Convenience constructor used to construct a SpatialQuery object that has
- an X and Y dimension (axis).</div>
+<div class="block">Convenience constructor can be used when you already have linear
+ constraints for the query. The queryGeometry and compareOp is used for
+ fine grained post filtering.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>constraints</code> - linear constraints</dd>
 <dd><code>queryGeometry</code> - spatial geometry of the query</dd>
-<dd><code>overlaps</code> - if false, the only fully contained geometries are requested</dd>
+<dd><code>compareOp</code> - predicate associated query geometry</dd>
+</dl>
+</li>
+</ul>
+<a name="SpatialQuery-mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SpatialQuery</h4>
+<pre>public&nbsp;SpatialQuery(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.Constraints.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;constraints,
+                    com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                    <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
+                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in mil.nga.giat.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</pre>
+<div class="block">Convenience constructor can be used when you already have linear
+ constraints for the query. The queryGeometry and compareOp is used for
+ fine grained post filtering.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>constraints</code> - linear constraints</dd>
+<dd><code>queryGeometry</code> - spatial geometry of the query</dd>
+<dd><code>compareOp</code> - predicate associated query geometry</dd>
+<dd><code>nonSpatialCompareOp</code> - predicate associated non-spatial fields (i.e Time)</dd>
 </dl>
 </li>
 </ul>
