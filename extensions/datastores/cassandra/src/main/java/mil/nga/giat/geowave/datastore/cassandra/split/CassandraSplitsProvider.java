@@ -47,7 +47,7 @@ public class CassandraSplitsProvider extends
 		if (range instanceof CassandraRowRange) {
 			return ((CassandraRowRange) range).getRange();
 		}
-		LOGGER.error("HBaseSplitsProvider requires use of HBaseRowRange type.");
+		LOGGER.error("CassandraSplitsProvider requires use of CassandraRowRange type.");
 		return null;
 	}
 
@@ -70,7 +70,7 @@ public class CassandraSplitsProvider extends
 			cassandraOperations = (CassandraOperations) operations;
 		}
 		else {
-			LOGGER.error("AccumuloSplitsProvider requires AccumuloOperations object.");
+			LOGGER.error("CassandraSplitsProvider requires CassandraOperations object.");
 			return splits;
 		}
 
@@ -84,8 +84,11 @@ public class CassandraSplitsProvider extends
 				adapterStore,
 				statsStore,
 				authorizations));
-		final String tableName = cassandraOperations.tableExists(left.getId().getString()) ? left.getId().getString()
-				: "Akash";
+		//use empty tablename for now if the table doesn't exist, bt log the error
+		if(!cassandraOperations.tableExists(left.getId().getString())){
+			LOGGER.error("Table doesn't exist for given PrimaryIndex");
+		}
+		final String tableName = left.getId().getString();
 		final NumericIndexStrategy indexStrategy = left.getIndexStrategy();
 
 		// Build list of row ranges from query

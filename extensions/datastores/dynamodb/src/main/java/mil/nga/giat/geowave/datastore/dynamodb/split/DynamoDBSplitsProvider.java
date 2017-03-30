@@ -47,7 +47,7 @@ public class DynamoDBSplitsProvider extends
 		if (range instanceof DynamoDBRowRange) {
 			return ((DynamoDBRowRange) range).getRange();
 		}
-		LOGGER.error("HBaseSplitsProvider requires use of HBaseRowRange type.");
+		LOGGER.error("DynamoDBSplitsProvider requires use of DynamoDBRowRange type.");
 		return null;
 	}
 
@@ -70,7 +70,7 @@ public class DynamoDBSplitsProvider extends
 			dynamoDBOperations = (DynamoDBOperations) operations;
 		}
 		else {
-			LOGGER.error("AccumuloSplitsProvider requires AccumuloOperations object.");
+			LOGGER.error("DynamoDBSplitsProvider requires DynamoDBOperations object.");
 			return splits;
 		}
 

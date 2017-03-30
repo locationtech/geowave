@@ -1,14 +1,12 @@
 package mil.nga.giat.geowave.datastore.dynamodb.mapreduce;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -48,23 +46,13 @@ public class GeoWaveDynamoDBRecordReader<T> extends
 			List queryFilters,
 			QueryOptions rangeQueryOptions ) {
 		// this will take the inputsplit
-
 		return new InputFormatDynamoDBRangeQuery(
 				dataStore,
 				adapterStore,
 				dynamoDBOperations,
 				i,
 				DynamoDBSplitsProvider.unwrapRange(range),
-				queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(), // TODO
-																					// aperi:
-																					// figure
-																					// out
-																					// if
-																					// this
-																					// is
-																					// correct
-																					// or
-																					// not
+				queryFilters,
 				isOutputWritable,
 				rangeQueryOptions).query(
 				adapterStore,
@@ -84,15 +72,6 @@ public class GeoWaveDynamoDBRecordReader<T> extends
 					final Entry<GeoWaveInputKey, T> entry = (Entry<GeoWaveInputKey, T>) value;
 					currentGeoWaveKey = entry.getKey();
 					// TODO implement progress reporting
-					// if (currentGeoWaveKey == null) {
-					// currentAccumuloKey = null;
-					// }
-					// else if (currentGeoWaveKey.getInsertionId() != null) {
-					// // just use the insertion ID for progress
-					// currentAccumuloKey = new Key(
-					// new Text(
-					// currentGeoWaveKey.getInsertionId().getBytes()));
-					// }
 					currentValue = entry.getValue();
 				}
 				return true;

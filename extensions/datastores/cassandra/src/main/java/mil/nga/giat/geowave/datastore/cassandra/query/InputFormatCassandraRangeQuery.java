@@ -51,21 +51,6 @@ public class InputFormatCassandraRangeQuery extends
 			final List<QueryFilter> queryFilters,
 			final boolean isOutputWritable,
 			final QueryOptions queryOptions ) {
-
-		/**
-		 * 
-		 public CassandraConstraintsQuery( final BaseDataStore dataStore,
-		 * final CassandraOperations operations, final List<ByteArrayId>
-		 * adapterIds, final PrimaryIndex index, final Query query, final
-		 * DedupeFilter clientDedupeFilter, final ScanCallback<?, CassandraRow>
-		 * scanCallback, final Pair<DataAdapter<?>, Aggregation<?, ?, ?>>
-		 * aggregation, final Pair<List<String>, DataAdapter<?>>
-		 * fieldIdsAdapterPair, final IndexMetaData[] indexMetaData, final
-		 * DuplicateEntryCount duplicateCounts, final
-		 * DifferingFieldVisibilityEntryCount visibilityCounts, final String[]
-		 * authorizations ) {
-		 */
-
 		super(
 				dataStore,
 				cassandraOperations,
