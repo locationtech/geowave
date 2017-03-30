@@ -1,8 +1,21 @@
 package mil.nga.giat.geowave.cli.debug;
 
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.geotools.geometry.jts.Decimator;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.CRS;
+import org.geotools.referencing.operation.transform.ProjectiveTransform;
+import org.geotools.renderer.lite.RendererUtilities;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.opengis.referencing.operation.MathTransform2D;
+import org.opengis.referencing.operation.NoninvertibleTransformException;
+import org.opengis.referencing.operation.TransformException;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
@@ -51,6 +64,18 @@ public class BBOXQuery extends
 		"--south"
 	}, required = true, description = "Min Latitude of BBOX")
 	private Double south;
+
+	@Parameter(names = {
+		"-t",
+		"--tileSize"
+	}, required = false, description = "Tile size for subsampling")
+	private Integer tileSize;
+
+	@Parameter(names = {
+		"-p",
+		"--pixelSize"
+	}, required = false, description = "Pixel size for subsampling")
+	private Integer pixelSize;
 
 	@Parameter(names = {
 		"--useAggregation",
@@ -105,15 +130,26 @@ public class BBOXQuery extends
 		else {
 			stopWatch.start();
 
+			final QueryOptions queryOptions = new QueryOptions(
+					adapterId,
+					indexId);
+
+			if (tileSize != null) {
+				try {
+					queryOptions.setMaxResolutionSubsamplingPerDimension(getSpans());
+				}
+				catch (Exception e) {
+					LOGGER.error(e);
+				}
+			}
+
 			CloseableIterator<Object> it = dataStore.query(
-					new QueryOptions(
-							adapterId,
-							indexId),
+					queryOptions,
 					new SpatialQuery(
 							geom));
 
 			stopWatch.stop();
-			System.out.println("Ran BBOX query in " + stopWatch.toString());
+			LOGGER.warn("Ran BBOX query in " + stopWatch.toString());
 
 			stopWatch.reset();
 			stopWatch.start();
@@ -129,9 +165,38 @@ public class BBOXQuery extends
 			}
 
 			stopWatch.stop();
-			System.out.println("BBOX query results iteration took " + stopWatch.toString());
+			LOGGER.warn("BBOX query results iteration took " + stopWatch.toString());
 		}
 		return count;
+	}
+
+	private double[] getSpans()
+			throws MismatchedDimensionException,
+			NoSuchAuthorityCodeException,
+			FactoryException,
+			NoninvertibleTransformException,
+			TransformException {
+		final AffineTransform worldToScreen = RendererUtilities.worldToScreenTransform(
+				new ReferencedEnvelope(
+						new Envelope(
+								west,
+								east,
+								south,
+								north),
+						CRS.decode("EPSG:4326")),
+				new Rectangle(
+						tileSize,
+						tileSize));
+		final MathTransform2D fullTransform = (MathTransform2D) ProjectiveTransform.create(worldToScreen);
+
+		final double[] spans = Decimator.computeGeneralizationDistances(
+				fullTransform.inverse(),
+				new Rectangle(
+						tileSize,
+						tileSize),
+				pixelSize);
+
+		return spans;
 	}
 
 }
