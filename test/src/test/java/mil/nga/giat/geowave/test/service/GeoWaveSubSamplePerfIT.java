@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -49,17 +50,19 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 @Environments({
 	Environment.SERVICES
 })
-public class GeoWaveIngestGeoserverIT
+public class GeoWaveSubSamplePerfIT
 {
-
-	private static final Logger LOGGER = Logger.getLogger(GeoWaveIngestGeoserverIT.class);
+	private static final Logger LOGGER = Logger.getLogger(GeoWaveSubSamplePerfIT.class);
 
 	private static final String WORKSPACE = "testomatic";
 	private static final String WMS_VERSION = "1.3";
 	private static final String WMS_URL_PREFIX = "/geoserver/wms";
-	private static final String REFERENCE_26_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.6.gif";
-	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
-
+	
+	// Performance params
+	private static final double BBOX_SIZE_DEG = 10.0;
+	private static final int TILE_SIZE = 256;
+	private static final int RANDOM_POINT_COUNT = 1000000;
+	private static Stopwatch stopwatch = new Stopwatch();
 
 	private static GeoserverServiceClient geoserverServiceClient = null;
 	@GeoWaveTestStore(value = {
@@ -87,7 +90,7 @@ public class GeoWaveIngestGeoserverIT
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*    RUNNING GeoWaveIngestGeoserverIT   *");
+		LOGGER.warn("*    RUNNING GeoWaveSubSamplePerfIT   *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -96,7 +99,7 @@ public class GeoWaveIngestGeoserverIT
 	public static void reportTest() {
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*  FINISHED GeoWaveIngestGeoserverIT    *");
+		LOGGER.warn("*  FINISHED GeoWaveSubSamplePerfIT    *");
 		LOGGER
 				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
 						+ "s elapsed.                 *");
@@ -105,21 +108,27 @@ public class GeoWaveIngestGeoserverIT
 	}
 
 	@Test
-	public void testExamplesIngest()
+	public void testSubSamplePerformance()
 			throws IOException,
 			SchemaException,
 			URISyntaxException {
+		// Create the test data
 		final DataStore ds = dataStoreOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
-		final List<SimpleFeature> features = SimpleIngest.getGriddedFeatures(
+		
+		final List<SimpleFeature> features = SimpleIngest.getRandomFeatures(
 				new SimpleFeatureBuilder(
 						sft),
-				8675309);
-		LOGGER.debug(String.format(
-				"Beginning to ingest a uniform grid of %d features",
+				0,
+				BBOX_SIZE_DEG,
+				RANDOM_POINT_COUNT);
+		
+		LOGGER.warn(String.format(
+				"Beginning to ingest a random bbox of %d features",
 				features.size()));
+
 		int ingestedFeatures = 0;
 		final int featuresPer5Percent = features.size() / 20;
 		try (IndexWriter writer = ds.createWriter(
@@ -129,13 +138,14 @@ public class GeoWaveIngestGeoserverIT
 				writer.write(feat);
 				ingestedFeatures++;
 				if ((ingestedFeatures % featuresPer5Percent) == 0) {
-					LOGGER.debug(String.format(
+					LOGGER.warn(String.format(
 							"Ingested %d percent of features",
 							(ingestedFeatures / featuresPer5Percent) * 5));
 				}
 			}
 		}
 
+		// Setup GeoServer
 		Assert.assertTrue(
 				"Unable to create 'testomatic' workspace",
 				geoserverServiceClient.createWorkspace(WORKSPACE));
@@ -182,107 +192,39 @@ public class GeoWaveIngestGeoserverIT
 						"point",
 						SimpleIngest.FEATURE_NAME,
 						WORKSPACE));
-
-		final BufferedImage biDirectRender = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
-				SimpleIngest.FEATURE_NAME,
-				"point",
-				920,
-				360,
-				null);
-
-		BufferedImage ref = null;
-
-		final String geoserverVersion = (System.getProperty("geoserver.version") != null) ? System
-				.getProperty("geoserver.version") : "";
-
-		Assert.assertNotNull(geoserverVersion);
-
-		if (geoserverVersion.startsWith("2.5") || geoserverVersion.equals("2.6.0") || geoserverVersion.equals("2.6.1")) {
-			ref = ImageIO.read(new File(
-					REFERENCE_25_WMS_IMAGE_PATH));
-		}
-		else {
-			ref = ImageIO.read(new File(
-					REFERENCE_26_WMS_IMAGE_PATH));
-		}
-		// being a little lenient because of differences in O/S rendering
-		TestUtils.testTileAgainstReference(
-				biDirectRender,
-				ref,
-				0,
-				0.07);
-
-		final BufferedImage biSubsamplingWithoutError = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
-				SimpleIngest.FEATURE_NAME,
-				ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
-				920,
-				360,
-				null);
-		Assert.assertNotNull(ref);
-
-		// being a little lenient because of differences in O/S rendering
-		TestUtils.testTileAgainstReference(
-				biSubsamplingWithoutError,
-				ref,
-				0,
-				0.07);
-
-		final BufferedImage biSubsamplingWithExpectedError = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
-				SimpleIngest.FEATURE_NAME,
-				ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
-				920,
-				360,
-				null);
-		TestUtils.testTileAgainstReference(
-				biSubsamplingWithExpectedError,
-				ref,
-				0.05,
-				0.15);
-
-		final BufferedImage biSubsamplingWithLotsOfError = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
-				SimpleIngest.FEATURE_NAME,
-				ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
-				920,
-				360,
-				null);
-		TestUtils.testTileAgainstReference(
-				biSubsamplingWithLotsOfError,
-				ref,
-				0.3,
-				0.35);
-		final BufferedImage biDistributedRendering = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
-				SimpleIngest.FEATURE_NAME,
-				ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
-				920,
-				360,
-				null);
-		TestUtils.testTileAgainstReference(
-				biDistributedRendering,
-				ref,
-				0,
-				0.07);
+		
+		// Run GetTile on various subsample SLDs
+		perfTest("point");
+		perfTest(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);
+		perfTest(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
+		perfTest(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
+		perfTest(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER);
 	}
 	
+	private void perfTest(String styleName) throws IOException, URISyntaxException {
+		double minLon = SimpleIngest.CENTER_DEG - BBOX_SIZE_DEG/2; 
+		double minLat = SimpleIngest.CENTER_DEG - BBOX_SIZE_DEG/2; 
+		double maxLon = minLon + BBOX_SIZE_DEG;
+		double maxLat = minLat + BBOX_SIZE_DEG;
+
+		stopwatch.reset();
+		stopwatch.start();
+
+		final BufferedImage bImage = getWMSSingleTile(
+				minLon,
+				maxLon,
+				minLat,
+				maxLat,
+				SimpleIngest.FEATURE_NAME,
+				styleName,
+				TILE_SIZE,
+				TILE_SIZE,
+				null);
+		
+		long dur = stopwatch.stop();
+		LOGGER.warn("GetTile(" + styleName + ") took " + dur + " ms.");	
+	}
+
 	@After
 	public void cleanup() {
 
