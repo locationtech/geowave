@@ -1,11 +1,13 @@
 package mil.nga.giat.geowave.datastore.cassandra;
 
 import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Level;
+import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Function;
@@ -19,6 +21,7 @@ import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
@@ -32,12 +35,15 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.cassandra.index.secondary.CassandraSecondaryIndexDataStore;
+import mil.nga.giat.geowave.datastore.cassandra.mapreduce.GeoWaveCassandraRecordReader;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraAdapterIndexMappingStore;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraAdapterStore;
 import mil.nga.giat.geowave.datastore.cassandra.metadata.CassandraDataStatisticsStore;
@@ -46,14 +52,19 @@ import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations;
 import mil.nga.giat.geowave.datastore.cassandra.query.CassandraConstraintsQuery;
 import mil.nga.giat.geowave.datastore.cassandra.query.CassandraRowIdsQuery;
 import mil.nga.giat.geowave.datastore.cassandra.query.CassandraRowPrefixQuery;
+import mil.nga.giat.geowave.datastore.cassandra.split.CassandraSplitsProvider;
+import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class CassandraDataStore extends
-		BaseDataStore
+		BaseDataStore implements
+		MapReduceDataStore
 {
 	private final static Logger LOGGER = Logger.getLogger(CassandraDataStore.class);
 	public static final Integer PARTITIONS = 4;
 
 	private final CassandraOperations operations;
+	private final CassandraSplitsProvider splitsProvider = new CassandraSplitsProvider();
 	private static int counter = 0;
 
 	public CassandraDataStore(
@@ -331,5 +342,48 @@ public class CassandraDataStore extends
 			CassandraRow cassRow = (CassandraRow) geowaveRow;
 			((CassandraWriter) writer).write(cassRow);
 		}
+	}
+
+	@Override
+	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
+			DistributableQuery query,
+			QueryOptions queryOptions,
+			AdapterStore adapterStore,
+			DataStatisticsStore statsStore,
+			IndexStore indexStore,
+			boolean isOutputWritable,
+			InputSplit inputSplit )
+			throws IOException,
+			InterruptedException {
+		return new GeoWaveCassandraRecordReader(
+				query,
+				queryOptions,
+				isOutputWritable,
+				adapterStore,
+				this,
+				operations);
+	}
+
+	@Override
+	public List<InputSplit> getSplits(
+			DistributableQuery query,
+			QueryOptions queryOptions,
+			AdapterStore adapterStore,
+			DataStatisticsStore statsStore,
+			IndexStore indexStore,
+			Integer minSplits,
+			Integer maxSplits )
+			throws IOException,
+			InterruptedException {
+		return splitsProvider.getSplits(
+				operations,
+				query,
+				queryOptions,
+				adapterStore,
+				statsStore,
+				indexStore,
+				indexMappingStore,
+				minSplits,
+				maxSplits);
 	}
 }
