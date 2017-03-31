@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBDataStore;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
+import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 
@@ -81,6 +82,16 @@ abstract public class DynamoDBQuery extends
 	protected Iterator<Map<String, AttributeValue>> getResults(
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
+		return getResults(
+				maxResolutionSubsamplingPerDimension,
+				limit,
+				false);
+	}
+
+	protected Iterator<Map<String, AttributeValue>> getResults(
+			final double[] maxResolutionSubsamplingPerDimension,
+			final Integer limit,
+			final boolean async) {
 		final List<ByteArrayRange> ranges = getRanges();
 		final String tableName = dynamodbOperations.getQualifiedTableName(
 				StringUtils.stringFromBinary(
@@ -115,16 +126,25 @@ abstract public class DynamoDBQuery extends
 				requests.addAll(
 						queries);
 			}
+
 			else{
-				ranges.forEach(
-						(r -> requests.addAll(
-								addQueryRanges(
-										tableName,
-										r))));
+          ranges.forEach(
+					(r -> requests.addAll(
+							addQueryRanges(
+									tableName,
+									r))));
+      }
+
+			if(async){
+				return Iterators.concat(
+						requests.parallelStream().map(
+								this::executeAsyncQueryRequest).iterator()); 
 			}
-			return Iterators.concat(
-					requests.parallelStream().map(
-							this::executeQueryRequest).iterator());
+			else{
+				return Iterators.concat(
+						requests.parallelStream().map(
+								this::executeQueryRequest).iterator()); 
+			}
 		}
 		// query everything
 		final ScanRequest request = new ScanRequest(
@@ -181,6 +201,16 @@ abstract public class DynamoDBQuery extends
 				queryRequest);
 		return new LazyPaginatedQuery(
 				result,
+				queryRequest,
+				dynamodbOperations.getClient());
+	}
+
+	/**
+	 * Asynchronous version of the query request. Does not block
+	 */
+	public Iterator<Map<String, AttributeValue>> executeAsyncQueryRequest(
+			final QueryRequest queryRequest ) {
+		return new AsyncPaginatedQuery(
 				queryRequest,
 				dynamodbOperations.getClient());
 	}
