@@ -19,6 +19,7 @@ import org.opengis.referencing.operation.TransformException;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -39,7 +40,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class BBOXQuery extends
 		AbstractGeoWaveQuery
 {
-	private static Logger LOGGER = Logger.getLogger(BBOXQuery.class);
+	private static Logger LOGGER = Logger.getLogger(
+			BBOXQuery.class);
 
 	@Parameter(names = {
 		"-e",
@@ -83,14 +85,21 @@ public class BBOXQuery extends
 	}, required = false, description = "Compute count on the server side")
 	private Boolean useAggregation = Boolean.FALSE;
 
+	@Parameter(names = {
+		"--indexOnly",
+		"-ix"
+	}, required = false, description = "Use IndexOnlySpatialQuery")
+	private Boolean indexOnly = Boolean.FALSE;
+
 	private Geometry geom;
 
 	private void getBoxGeom() {
-		geom = new GeometryFactory().toGeometry(new Envelope(
-				west,
-				east,
-				south,
-				north));
+		geom = new GeometryFactory().toGeometry(
+				new Envelope(
+						west,
+						east,
+						south,
+						north));
 	}
 
 	@Override
@@ -104,6 +113,18 @@ public class BBOXQuery extends
 
 		getBoxGeom();
 
+		SpatialQuery spatialQuery;
+
+		// use IndexOnlySpatialQuery?
+		if (indexOnly) {
+			spatialQuery = new IndexOnlySpatialQuery(
+					geom);
+		}
+		else {
+			spatialQuery = new SpatialQuery(
+					geom);
+		}
+
 		long count = 0;
 		if (useAggregation) {
 			final QueryOptions options = new QueryOptions(
@@ -114,8 +135,7 @@ public class BBOXQuery extends
 					adapter);
 			try (final CloseableIterator<Object> it = dataStore.query(
 					options,
-					new SpatialQuery(
-							geom))) {
+					spatialQuery)) {
 				final CountResult result = ((CountResult) (it.next()));
 				if (result != null) {
 					count += result.getCount();
@@ -136,27 +156,30 @@ public class BBOXQuery extends
 
 			if (tileSize != null) {
 				try {
-					queryOptions.setMaxResolutionSubsamplingPerDimension(getSpans());
+					queryOptions.setMaxResolutionSubsamplingPerDimension(
+							getSpans());
 				}
 				catch (Exception e) {
-					LOGGER.error(e);
+					LOGGER.error(
+							e);
 				}
 			}
 
 			CloseableIterator<Object> it = dataStore.query(
 					queryOptions,
-					new SpatialQuery(
-							geom));
+					spatialQuery);
 
 			stopWatch.stop();
-			LOGGER.warn("Ran BBOX query in " + stopWatch.toString());
+			LOGGER.warn(
+					"Ran BBOX query in " + stopWatch.toString());
 
 			stopWatch.reset();
 			stopWatch.start();
 
 			while (it.hasNext()) {
 				if (debug) {
-					System.out.println(it.next());
+					System.out.println(
+							it.next());
 				}
 				else {
 					it.next();
@@ -165,7 +188,8 @@ public class BBOXQuery extends
 			}
 
 			stopWatch.stop();
-			LOGGER.warn("BBOX query results iteration took " + stopWatch.toString());
+			LOGGER.warn(
+					"BBOX query results iteration took " + stopWatch.toString());
 		}
 		return count;
 	}
@@ -183,11 +207,13 @@ public class BBOXQuery extends
 								east,
 								south,
 								north),
-						CRS.decode("EPSG:4326")),
+						CRS.decode(
+								"EPSG:4326")),
 				new Rectangle(
 						tileSize,
 						tileSize));
-		final MathTransform2D fullTransform = (MathTransform2D) ProjectiveTransform.create(worldToScreen);
+		final MathTransform2D fullTransform = (MathTransform2D) ProjectiveTransform.create(
+				worldToScreen);
 
 		final double[] spans = Decimator.computeGeneralizationDistances(
 				fullTransform.inverse(),
