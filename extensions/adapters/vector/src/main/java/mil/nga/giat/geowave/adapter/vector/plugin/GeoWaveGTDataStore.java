@@ -24,7 +24,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationSPI;
+import mil.nga.giat.geowave.adapter.auth.AuthorizationSPI;
 import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement;

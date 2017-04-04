@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.adapter.vector.auth;
+package mil.nga.giat.geowave.adapter.auth;
 
 import static org.junit.Assert.assertTrue;
 
@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import mil.nga.giat.geowave.adapter.auth.AuthorizationSPI;
+import mil.nga.giat.geowave.adapter.auth.JsonFileAuthorizationFactory;
 import org.junit.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
