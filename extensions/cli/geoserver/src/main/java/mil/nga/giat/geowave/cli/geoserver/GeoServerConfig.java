@@ -1,19 +1,17 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.security.utils.SecurityUtils;
 
 public class GeoServerConfig
 {
-	public static final String GEOSERVER_URL = "geoserver.url";
-	public static final String GEOSERVER_USER = "geoserver.user";
-	public static final String GEOSERVER_PASS = "geoserver.pass";
-	public static final String GEOSERVER_WORKSPACE = "geoserver.workspace";
-	public static final String GEOSERVER_CS = "geoserver.coverageStore";
-	public static final String GEOSERVER_DS = "geoserver.dataStore";
+	private final static Logger LOGGER = Logger.getLogger(GeoServerConfig.class);
 
 	public static final String DEFAULT_URL = "localhost:8080";
 	public static final String DEFAULT_USER = "admin";
@@ -31,6 +29,7 @@ public class GeoServerConfig
 	private String workspace = null;
 
 	private final File propFile;
+	private final Properties gsConfigProperties;
 
 	/**
 	 * Properties File holds defaults; updates config if empty.
@@ -41,43 +40,56 @@ public class GeoServerConfig
 			File propFile ) {
 		this.propFile = propFile;
 
-		Properties gsConfig = ConfigOptions.loadProperties(
+		gsConfigProperties = ConfigOptions.loadProperties(
 				propFile,
 				null);
 
 		boolean update = false;
 
-		url = gsConfig.getProperty(GEOSERVER_URL);
+		url = gsConfigProperties.getProperty(GEOSERVER_URL);
 		if (url == null) {
 			url = DEFAULT_URL;
-			gsConfig.setProperty(
+			gsConfigProperties.setProperty(
 					GEOSERVER_URL,
 					url);
 			update = true;
 		}
 
-		user = gsConfig.getProperty(GEOSERVER_USER);
+		user = gsConfigProperties.getProperty(GEOSERVER_USER);
 		if (user == null) {
 			user = DEFAULT_USER;
-			gsConfig.setProperty(
+			gsConfigProperties.setProperty(
 					GEOSERVER_USER,
 					user);
 			update = true;
 		}
 
-		pass = gsConfig.getProperty(GEOSERVER_PASS);
+		pass = gsConfigProperties.getProperty(GEOSERVER_PASS);
 		if (pass == null) {
 			pass = DEFAULT_PASS;
-			gsConfig.setProperty(
+			gsConfigProperties.setProperty(
 					GEOSERVER_PASS,
 					pass);
 			update = true;
 		}
+		else {
+			try {
+				// if password in config props is encrypted, need to decrypt it
+				pass = SecurityUtils.decryptHexEncodedValue(
+						pass,
+						SecurityUtils.defaultResourceLocation);
+			}
+			catch (Exception e) {
+				LOGGER.error(
+						"An error occurred decrypting password: " + e.getLocalizedMessage(),
+						e);
+			}
+		}
 
-		workspace = gsConfig.getProperty(GEOSERVER_WORKSPACE);
+		workspace = gsConfigProperties.getProperty(GEOSERVER_WORKSPACE);
 		if (workspace == null) {
 			workspace = DEFAULT_WORKSPACE;
-			gsConfig.setProperty(
+			gsConfigProperties.setProperty(
 					GEOSERVER_WORKSPACE,
 					workspace);
 			update = true;
@@ -86,7 +98,7 @@ public class GeoServerConfig
 		if (update) {
 			ConfigOptions.writeProperties(
 					propFile,
-					gsConfig);
+					gsConfigProperties);
 
 			System.out.println("GeoServer Config Saved");
 		}
@@ -96,11 +108,10 @@ public class GeoServerConfig
 	 * Secondary no-arg constructor for direct-access testing
 	 */
 	public GeoServerConfig() {
-		this.propFile = null;
-		this.user = DEFAULT_USER;
-		this.pass = DEFAULT_PASS;
-		this.url = DEFAULT_URL;
-		this.workspace = DEFAULT_WORKSPACE;
+		this(
+				new File(
+						System.getProperty("user.home") + File.separator + ConfigOptions.GEOWAVE_CACHE_PATH
+								+ File.separator + ConfigOptions.GEOWAVE_CACHE_FILE));
 	}
 
 	public String getUrl() {
@@ -145,5 +156,9 @@ public class GeoServerConfig
 
 	public File getPropFile() {
 		return propFile;
+	}
+
+	public Properties getGsConfigProperties() {
+		return gsConfigProperties;
 	}
 }

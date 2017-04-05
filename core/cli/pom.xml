@@ -9,11 +9,26 @@
 	<artifactId>geowave-core-cli</artifactId>
 	<name>GeoWave CLI</name>
 	<description>Command Line Interface for GeoWave Tools</description>
+	
+	<properties>
+		<beanutils.version>1.9.2</beanutils.version>
+	</properties>
+	
 	<dependencies>	
+		<dependency>
+            <groupId>mil.nga.giat</groupId>
+            <artifactId>geowave-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${beanutils.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.beust</groupId>
 			<artifactId>jcommander</artifactId>
@@ -31,7 +46,13 @@
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>3.20.0-GA</version>
-		</dependency>	
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<classifier>jdk15</classifier>
+			<version>2.4</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

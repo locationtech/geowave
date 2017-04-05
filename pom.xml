@@ -737,6 +737,10 @@
 									<title>Services</title>
 									<packages>mil.nga.giat.geowave.service*</packages>
 								</group>
+                                <group>
+                                    <title>Security</title>
+                                    <packages>mil.nga.giat.geowave.security*</packages>
+                                </group>
 								<group>
 									<title>Examples</title>
 									<packages>mil.nga.giat.geowave.example*</packages>
@@ -812,6 +816,7 @@
 		<module>examples</module>
 		<module>extensions</module>
 		<module>services</module>
+        <module>security</module>
 		<module>test</module>
 	</modules>
 	<repositories>

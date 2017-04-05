@@ -3,9 +3,11 @@ package mil.nga.giat.geowave.cli.geoserver;
 import java.io.File;
 import java.util.Properties;
 
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
@@ -20,7 +22,7 @@ public class ConfigGeoServerCommand implements
 	@Parameter(names = {
 		"-u",
 		"--url"
-	}, required = false, description = "GeoServer URL (for example http://localhost:8080/geoserver), or simply host:port and appropriate assumptions are made")
+	}, required = false, description = "GeoServer URL (for example http://localhost:8080/geoserver or https://localhost:8443/geoserver), or simply host:port and appropriate assumptions are made")
 	private String url;
 
 	@Parameter(names = {
@@ -29,10 +31,12 @@ public class ConfigGeoServerCommand implements
 	}, required = false, description = "GeoServer User")
 	private String name;
 
+	// GEOWAVE-811 - adding additional password options for added protection
 	@Parameter(names = {
 		"-p",
 		"--pass"
-	}, required = false, description = "GeoServer Password")
+	}, required = false, description = "GeoServer Password - can be specified as 'pass:<password>', 'file:<local file containing the password>', "
+			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin", converter = PasswordConverter.class)
 	private String pass;
 
 	@Parameter(names = {
@@ -61,25 +65,25 @@ public class ConfigGeoServerCommand implements
 		// all switches are optional
 		if (getUrl() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_URL,
+					GEOSERVER_URL,
 					getUrl());
 		}
 
 		if (getName() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_USER,
+					GEOSERVER_USER,
 					getName());
 		}
 
 		if (getPass() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_PASS,
+					GEOSERVER_PASS,
 					getPass());
 		}
 
 		if (getWorkspace() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_WORKSPACE,
+					GEOSERVER_WORKSPACE,
 					getWorkspace());
 		}
 

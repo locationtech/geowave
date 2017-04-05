@@ -34,8 +34,10 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
+import mil.nga.giat.geowave.security.utils.SecurityUtils;
 import mil.nga.giat.geowave.service.GeoserverService;
 import mil.nga.giat.geowave.service.ServiceUtils;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -55,7 +57,7 @@ public class GeoserverServiceImpl implements
 
 	private String geoserverUrl;
 	private final String geoserverUser;
-	private final String geoserverPass;
+	private String geoserverPass;
 	private final String defaultWorkspace;
 
 	public GeoserverServiceImpl(
@@ -84,6 +86,17 @@ public class GeoserverServiceImpl implements
 		geoserverPass = ServiceUtils.getProperty(
 				props,
 				"geoserver.password");
+
+		try {
+			geoserverPass = SecurityUtils.decryptHexEncodedValue(
+					geoserverPass,
+					SecurityUtils.defaultResourceLocation);
+		}
+		catch (Exception e) {
+			log.error(
+					"An error occurred decrypting password: " + e.getLocalizedMessage(),
+					e);
+		}
 
 		defaultWorkspace = ServiceUtils.getProperty(
 				props,
