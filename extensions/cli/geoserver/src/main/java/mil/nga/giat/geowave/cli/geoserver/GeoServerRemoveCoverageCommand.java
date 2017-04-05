@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +8,8 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import net.sf.json.JSONObject;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -19,7 +17,8 @@ import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove a GeoServer coverage")
-public class GeoServerRemoveCoverageCommand implements
+public class GeoServerRemoveCoverageCommand extends
+		DefaultOperation implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -43,17 +42,12 @@ public class GeoServerRemoveCoverageCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 		if (geoserverClient == null) {
-			// Get the local config for GeoServer
-			File propFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-			GeoServerConfig config = new GeoServerConfig(
-					propFile);
-
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					config);
+					new GeoServerConfig(
+							getGeoWaveConfigFile(params)));
 		}
 
 		// Successfully prepared

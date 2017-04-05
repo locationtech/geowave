@@ -26,7 +26,6 @@ import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 
 /**
  * Config options allows the user to override the default location for
@@ -37,7 +36,7 @@ public class ConfigOptions
 {
 	public static final String CHARSET = "ISO-8859-1";
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(ConfigSection.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ConfigOptions.class);
 
 	public final static String PROPERTIES_FILE_CONTEXT = "properties-file";
 	public final static String GEOWAVE_CACHE_PATH = ".geowave";
@@ -50,19 +49,19 @@ public class ConfigOptions
 		"-cf",
 		"--config-file"
 	}, description = "Override configuration file (default is <home>/.geowave/config.properties)")
-	private String configFile;
+	private static String configFile;
 
 	public ConfigOptions() {
 
 	}
 
-	public String getConfigFile() {
+	public static String getConfigFile() {
 		return configFile;
 	}
 
-	public void setConfigFile(
-			final String configFile ) {
-		this.configFile = configFile;
+	public static void setConfigFile(
+			final String configFilePath ) {
+		configFile = configFilePath;
 	}
 
 	/**
@@ -98,7 +97,6 @@ public class ConfigOptions
 		// from users with OS-level access anyway
 		final File defaultPath = getDefaultPropertyPath();
 		final String version = VersionUtils.getVersion();
-
 		if (version != null) {
 			return formatConfigFile(
 					version,
