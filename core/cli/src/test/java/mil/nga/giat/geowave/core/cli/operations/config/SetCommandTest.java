@@ -17,9 +17,15 @@ public class SetCommandTest {
 
 	@Test
 	public void testExecute() {
-		String[] args = {"config", "set", "name", "value"};
+		String[] args = {
+			"config",
+			"set",
+			"name",
+			"value"
+		};
 		OperationRegistry registry = OperationRegistry.getInstance();
-		OperationParser parser = new OperationParser(registry);
+		OperationParser parser = new OperationParser(
+				registry);
 		CommandLineOperationParams params = parser.parse(
 				GeowaveTopLevelSection.class,
 				args);
@@ -27,7 +33,10 @@ public class SetCommandTest {
 		SetCommand setcommand = new SetCommand();
 		String name = "name";
 		String value = "value";
-		setcommand.setParameters(name, value);
+		setcommand.setParameters(
+				name,
+				value);
+		setcommand.prepare(params);
 		setcommand.execute(params);
 		
 		File f = (File) params.getContext().get(

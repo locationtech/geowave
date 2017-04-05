@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONObject;
@@ -19,7 +20,8 @@ import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "getds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Get GeoServer DataStore info")
-public class GeoServerGetDatastoreCommand implements
+public class GeoServerGetDatastoreCommand extends
+		DefaultOperation implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -37,17 +39,12 @@ public class GeoServerGetDatastoreCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 		if (geoserverClient == null) {
-			// Get the local config for GeoServer
-			File propFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-			GeoServerConfig config = new GeoServerConfig(
-					propFile);
-
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					config);
+					new GeoServerConfig(
+							getGeoWaveConfigFile(params)));
 		}
 
 		// Successfully prepared

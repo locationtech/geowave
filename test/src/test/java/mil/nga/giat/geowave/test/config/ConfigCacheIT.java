@@ -331,6 +331,7 @@ public class ConfigCacheIT
 		command.setParameters(
 				"lala",
 				"5");
+		command.prepare(operationParams);
 		command.execute(operationParams);
 
 		final Properties props = ConfigOptions.loadProperties(

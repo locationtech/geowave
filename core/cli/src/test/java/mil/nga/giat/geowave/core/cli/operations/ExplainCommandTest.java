@@ -40,6 +40,7 @@ public class ExplainCommandTest {
 				GeowaveTopLevelSection.class,
 				args);
 		ExplainCommand expcommand = new ExplainCommand();
+		expcommand.prepare(params);
 		expcommand.execute(params);
 		
 		String expectedoutput = 

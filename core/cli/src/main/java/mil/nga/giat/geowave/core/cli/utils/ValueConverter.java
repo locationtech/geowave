@@ -7,16 +7,15 @@ import org.apache.commons.beanutils.ConvertUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used for general purpose value conversion via appache commons ConvertUtils
- * 
- * @author mark.carrier
  */
 public class ValueConverter
 {
-	private static Logger LOGGER = Logger.getLogger(ValueConverter.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ValueConverter.class);
 
 	/**
 	 * Private constructor to prevent accidental instantiation

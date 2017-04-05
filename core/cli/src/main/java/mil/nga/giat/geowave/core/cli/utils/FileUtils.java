@@ -4,6 +4,10 @@
 package mil.nga.giat.geowave.core.cli.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+import com.beust.jcommander.ParameterException;
 
 /**
  * Common file utilities, for performing common operations
@@ -88,5 +92,32 @@ public class FileUtils
 			return System.getProperty(variable);
 		}
 		return variable;
+	}
+
+	/**
+	 * Reads the content of a file
+	 * 
+	 * @param inputFile
+	 * @return
+	 */
+	public static String readFileContent(
+			File inputFile )
+			throws Exception {
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(
+					inputFile,
+					"UTF-8");
+			return scanner.nextLine();
+		}
+		catch (FileNotFoundException e) {
+			throw new ParameterException(
+					e);
+		}
+		finally {
+			if (scanner != null) {
+				scanner.close();
+			}
+		}
 	}
 }

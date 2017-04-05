@@ -6,20 +6,16 @@ package mil.nga.giat.geowave.core.cli.converters;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Properties;
-import java.util.Scanner;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.internal.Console;
-import com.beust.jcommander.internal.DefaultConsole;
-import com.beust.jcommander.internal.JDK6Console;
 
+import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 import mil.nga.giat.geowave.core.cli.utils.PropertiesUtils;
-import mil.nga.giat.geowave.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 /**
  * This class will allow support for user's passing in passwords through a
@@ -39,10 +35,16 @@ import mil.nga.giat.geowave.security.utils.SecurityUtils;
  * <li><b>stdin</b></li>
  * </ul>
  */
-public class PasswordConverter implements
-		IStringConverter<String>
+public class PasswordConverter extends
+		GeoWaveBaseConverter<String>
 {
-	private final static Logger LOGGER = Logger.getLogger(PasswordConverter.class);
+	public PasswordConverter(
+			String optionName ) {
+		super(
+				optionName);
+	}
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(PasswordConverter.class);
 	public static final String STDIN = "stdin";
 	private static final String SEPARATOR = ":";
 
@@ -52,7 +54,7 @@ public class PasswordConverter implements
 			@Override
 			String process(
 					String password ) {
-				return decryptPassword(password);
+				return decryptValue(password);
 			}
 		},
 		ENV(
@@ -60,7 +62,7 @@ public class PasswordConverter implements
 			@Override
 			String process(
 					String envVariable ) {
-				return decryptPassword(System.getenv(envVariable));
+				return decryptValue(System.getenv(envVariable));
 			}
 		},
 		FILE(
@@ -68,23 +70,18 @@ public class PasswordConverter implements
 			@Override
 			String process(
 					String value ) {
-				Scanner scanner = null;
 				try {
-					scanner = new Scanner(
-							new File(
-									value));
-					String password = scanner.nextLine();
-					return decryptPassword(password);
-				}
-				catch (FileNotFoundException e) {
-					throw new ParameterException(
-							e);
-				}
-				finally {
-					if (scanner != null) {
-						scanner.close();
+					String password = FileUtils.readFileContent(new File(
+							value));
+					if (password != null && !"".equals(password.trim())) {
+						return decryptValue(password);
 					}
 				}
+				catch (Exception ex) {
+					throw new ParameterException(
+							ex);
+				}
+				return null;
 			}
 		},
 		PROPFILE(
@@ -96,30 +93,36 @@ public class PasswordConverter implements
 					if (value.indexOf(SEPARATOR) != -1) {
 						String propertyFilePath = value.split(SEPARATOR)[0];
 						String propertyKey = value.split(SEPARATOR)[1];
-						propertyFilePath = propertyFilePath != null && !"".equals(propertyFilePath.trim()) ? propertyFilePath
-								.trim() : propertyFilePath;
-						propertyKey = propertyKey != null && !"".equals(propertyKey.trim()) ? propertyKey.trim()
-								: propertyKey;
-
-						File propsFile = new File(
-								propertyFilePath);
-						if (propsFile != null && propsFile.exists()) {
-							Properties properties = PropertiesUtils.fromFile(propsFile);
-							if (properties != null) {
-								return decryptPassword(properties.getProperty(propertyKey));
+						if (propertyFilePath != null && !"".equals(propertyFilePath.trim())) {
+							propertyFilePath = propertyFilePath.trim();
+							File propsFile = new File(
+									propertyFilePath);
+							if (propsFile != null && propsFile.exists()) {
+								Properties properties = PropertiesUtils.fromFile(propsFile);
+								if (propertyKey != null && !"".equals(propertyKey.trim())) {
+									propertyKey = propertyKey.trim();
+								}
+								if (properties != null && properties.containsKey(propertyKey)) {
+									return decryptValue(properties.getProperty(propertyKey));
+								}
+							}
+							else {
+								try {
+									throw new ParameterException(
+											new FileNotFoundException(
+													propsFile != null ? "Properties file not found at path: "
+															+ propsFile.getCanonicalPath()
+															: "No properties file specified"));
+								}
+								catch (IOException e) {
+									throw new ParameterException(
+											e);
+								}
 							}
 						}
 						else {
-							try {
-								throw new ParameterException(
-										new FileNotFoundException(
-												propsFile != null ? "Properties file not found at path: "
-														+ propsFile.getCanonicalPath() : "No properties file specified"));
-							}
-							catch (IOException e) {
-								throw new ParameterException(
-										e);
-							}
+							throw new ParameterException(
+									"No properties file path specified");
 						}
 					}
 					else {
@@ -137,6 +140,8 @@ public class PasswordConverter implements
 		},
 		STDIN(
 				PasswordConverter.STDIN) {
+			private String input = null;
+
 			@Override
 			public boolean matches(
 					String value ) {
@@ -144,32 +149,12 @@ public class PasswordConverter implements
 			}
 
 			@Override
-			public String convert(
+			String process(
 					String value ) {
-				getConsole().print(
-						"Enter password: ");
-				char[] passwordChars = getConsole().readPassword(
-						false);
-				String password = new String(
-						passwordChars);
-				return decryptPassword(password);
-			}
-
-			private Console console;
-
-			public Console getConsole() {
-				if (console == null) {
-					try {
-						Method consoleMethod = System.class.getDeclaredMethod("console");
-						Object console = consoleMethod.invoke(null);
-						console = new JDK6Console(
-								console);
-					}
-					catch (Throwable t) {
-						console = new DefaultConsole();
-					}
+				if (input == null) {
+					input = promptAndReadPassword("Enter password: ");
 				}
-				return console;
+				return input;
 			}
 		},
 		DEFAULT(
@@ -177,7 +162,7 @@ public class PasswordConverter implements
 			@Override
 			String process(
 					String password ) {
-				return decryptPassword(password);
+				return decryptValue(password);
 			}
 		};
 
@@ -186,24 +171,6 @@ public class PasswordConverter implements
 		private KeyType(
 				String prefix ) {
 			this.prefix = prefix;
-		}
-
-		protected String decryptPassword(
-				String password ) {
-			if (password != null) {
-				try {
-					return SecurityUtils.decryptHexEncodedValue(
-							password,
-							SecurityUtils.defaultResourceLocation);
-				}
-				catch (Exception e) {
-					LOGGER.error(
-							"An error occurred decrypting the provided password value: [" + e.getLocalizedMessage()
-									+ "]",
-							e);
-				}
-			}
-			return password;
 		}
 
 		public boolean matches(
@@ -227,9 +194,48 @@ public class PasswordConverter implements
 			String value ) {
 		for (KeyType keyType : KeyType.values()) {
 			if (keyType.matches(value)) {
-				return keyType.convert(value);
+				String convertedValue = keyType.convert(value);
+				// update the value in the configs properties file
+				if (updatePasswordInConfigs() && getPropertyKey() != null && !"".equals(getPropertyKey().trim())) {
+					Properties configProps = getGeoWaveConfigProperties();
+					if (configProps != null) {
+						// encrypt the value to be stored in the properties
+						convertedValue = encryptValue(convertedValue);
+						configProps.put(
+								getPropertyKey(),
+								convertedValue);
+						ConfigOptions.writeProperties(
+								getGeoWaveConfigFile(),
+								configProps);
+						LOGGER.debug(
+								"Configuration properties successfully updated with property [{}]",
+								getPropertyKey());
+					}
+				}
+				return convertedValue;
 			}
 		}
 		return value;
+	}
+
+	@Override
+	public boolean isPassword() {
+		return true;
+	}
+
+	@Override
+	public boolean isRequired() {
+		return true;
+	}
+
+	protected Properties getGeoWaveConfigProperties() {
+		File geowaveConfigPropsFile = getGeoWaveConfigFile();
+		return ConfigOptions.loadProperties(
+				geowaveConfigPropsFile,
+				null);
+	}
+
+	protected File getGeoWaveConfigFile() {
+		return ConfigOptions.getDefaultPropertyFile();
 	}
 }

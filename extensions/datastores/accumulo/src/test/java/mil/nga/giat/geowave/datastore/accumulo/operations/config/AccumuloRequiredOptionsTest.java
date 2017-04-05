@@ -8,12 +8,10 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequire
 import com.beust.jcommander.JCommander;
 
 /**
- * @author mcarrier
  *
  */
 public class AccumuloRequiredOptionsTest
 {
-
 	/**
 	 * @param args
 	 */

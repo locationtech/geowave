@@ -82,11 +82,11 @@ public class CalculateStatCommand extends
 					adapter.getAdapterId()).getIndices(
 					indexStore)) {
 
+				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 				@SuppressWarnings({
 					"rawtypes",
 					"unchecked"
 				})
-				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 				DataStoreStatisticsProvider provider = new DataStoreStatisticsProvider(
 						adapter,
 						index,
@@ -100,7 +100,11 @@ public class CalculateStatCommand extends
 					}
 				};
 
-				try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
+				try (@SuppressWarnings({
+					"rawtypes",
+					"unchecked"
+				})
+				StatsCompositionTool<?> statsTool = new StatsCompositionTool(
 						provider,
 						storeOptions.createDataStatisticsStore())) {
 					try (CloseableIterator<?> entryIt = dataStore.query(

@@ -1,9 +1,10 @@
 package mil.nga.giat.geowave.core.cli.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -12,13 +13,14 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class PropertiesUtils implements
 		Serializable
 {
-	private final static Logger LOGGER = Logger.getLogger(PropertiesUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(PropertiesUtils.class);
 
 	public static Properties fromFile(
 			final String propertyFilePath ) {
@@ -32,8 +34,14 @@ public class PropertiesUtils implements
 		if (propsFile != null && propsFile.exists()) {
 			properties = new Properties();
 			try {
-				properties.load(new FileReader(
-						propsFile));
+				InputStreamReader isr = new InputStreamReader(
+						new FileInputStream(
+								propsFile),
+						"UTF-8");
+				if (isr != null) {
+					properties.load(isr);
+					isr.close();
+				}
 			}
 			catch (FileNotFoundException fnfEx) {
 				LOGGER.error(
