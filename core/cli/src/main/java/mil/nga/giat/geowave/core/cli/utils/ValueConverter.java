@@ -11,8 +11,6 @@ import org.apache.log4j.Logger;
 
 /**
  * Used for general purpose value conversion via appache commons ConvertUtils
- * 
- * @author mark.carrier
  */
 public class ValueConverter
 {

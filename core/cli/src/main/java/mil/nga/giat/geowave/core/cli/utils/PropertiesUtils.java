@@ -1,9 +1,10 @@
 package mil.nga.giat.geowave.core.cli.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -32,8 +33,14 @@ public class PropertiesUtils implements
 		if (propsFile != null && propsFile.exists()) {
 			properties = new Properties();
 			try {
-				properties.load(new FileReader(
-						propsFile));
+				InputStreamReader isr = new InputStreamReader(
+						new FileInputStream(
+								propsFile),
+						"UTF-8");
+				if (isr != null) {
+					properties.load(isr);
+					isr.close();
+				}
 			}
 			catch (FileNotFoundException fnfEx) {
 				LOGGER.error(

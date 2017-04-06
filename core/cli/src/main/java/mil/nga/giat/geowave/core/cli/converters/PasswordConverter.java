@@ -72,7 +72,8 @@ public class PasswordConverter implements
 				try {
 					scanner = new Scanner(
 							new File(
-									value));
+									value),
+							"UTF-8");
 					String password = scanner.nextLine();
 					return decryptPassword(password);
 				}
@@ -96,30 +97,36 @@ public class PasswordConverter implements
 					if (value.indexOf(SEPARATOR) != -1) {
 						String propertyFilePath = value.split(SEPARATOR)[0];
 						String propertyKey = value.split(SEPARATOR)[1];
-						propertyFilePath = propertyFilePath != null && !"".equals(propertyFilePath.trim()) ? propertyFilePath
-								.trim() : propertyFilePath;
-						propertyKey = propertyKey != null && !"".equals(propertyKey.trim()) ? propertyKey.trim()
-								: propertyKey;
-
-						File propsFile = new File(
-								propertyFilePath);
-						if (propsFile != null && propsFile.exists()) {
-							Properties properties = PropertiesUtils.fromFile(propsFile);
-							if (properties != null) {
-								return decryptPassword(properties.getProperty(propertyKey));
+						if (propertyFilePath != null && !"".equals(propertyFilePath.trim())) {
+							propertyFilePath = propertyFilePath.trim();
+							File propsFile = new File(
+									propertyFilePath);
+							if (propsFile != null && propsFile.exists()) {
+								Properties properties = PropertiesUtils.fromFile(propsFile);
+								if (propertyKey != null && !"".equals(propertyKey.trim())) {
+									propertyKey = propertyKey.trim();
+								}
+								if (properties != null && properties.containsKey(propertyKey)) {
+									return decryptPassword(properties.getProperty(propertyKey));
+								}
+							}
+							else {
+								try {
+									throw new ParameterException(
+											new FileNotFoundException(
+													propsFile != null ? "Properties file not found at path: "
+															+ propsFile.getCanonicalPath()
+															: "No properties file specified"));
+								}
+								catch (IOException e) {
+									throw new ParameterException(
+											e);
+								}
 							}
 						}
 						else {
-							try {
-								throw new ParameterException(
-										new FileNotFoundException(
-												propsFile != null ? "Properties file not found at path: "
-														+ propsFile.getCanonicalPath() : "No properties file specified"));
-							}
-							catch (IOException e) {
-								throw new ParameterException(
-										e);
-							}
+							throw new ParameterException(
+									"No properties file path specified");
 						}
 					}
 					else {
@@ -161,9 +168,9 @@ public class PasswordConverter implements
 				if (console == null) {
 					try {
 						Method consoleMethod = System.class.getDeclaredMethod("console");
-						Object console = consoleMethod.invoke(null);
+						Object consoleObj = consoleMethod.invoke(null);
 						console = new JDK6Console(
-								console);
+								consoleObj);
 					}
 					catch (Throwable t) {
 						console = new DefaultConsole();
@@ -192,9 +199,7 @@ public class PasswordConverter implements
 				String password ) {
 			if (password != null) {
 				try {
-					return SecurityUtils.decryptHexEncodedValue(
-							password,
-							SecurityUtils.defaultResourceLocation);
+					return SecurityUtils.decryptHexEncodedValue(password);
 				}
 				catch (Exception e) {
 					LOGGER.error(

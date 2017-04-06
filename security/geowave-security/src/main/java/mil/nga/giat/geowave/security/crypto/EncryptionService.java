@@ -5,12 +5,9 @@ import java.security.Key;
 /**
  * An Encryption service represents a dedicated channel to encrypt content on
  * behalf of a specific application.
- * 
- * @author mark.carirer
  */
 public interface EncryptionService
 {
-
 	/**
 	 * Encrypts the provided data.
 	 * 

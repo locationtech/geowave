@@ -110,9 +110,7 @@ public class BasicAccumuloOperations implements
 				tableNamespace);
 		// GeoWave:811 - providing ability to support encrypted passwords
 		try {
-			this.password = SecurityUtils.decryptHexEncodedValue(
-					password,
-					GeoWaveEncryptionService.resourceLocation);
+			this.password = SecurityUtils.decryptHexEncodedValue(password);
 		}
 		catch (Exception e) {
 			LOGGER.error(

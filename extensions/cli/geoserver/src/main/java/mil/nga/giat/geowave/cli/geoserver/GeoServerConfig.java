@@ -75,9 +75,7 @@ public class GeoServerConfig
 		else {
 			try {
 				// if password in config props is encrypted, need to decrypt it
-				pass = SecurityUtils.decryptHexEncodedValue(
-						pass,
-						SecurityUtils.defaultResourceLocation);
+				pass = SecurityUtils.decryptHexEncodedValue(pass);
 			}
 			catch (Exception e) {
 				LOGGER.error(

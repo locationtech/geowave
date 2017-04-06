@@ -8,22 +8,56 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
-//import org.apache.log4j.Logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.security.crypto.impl.GeoWaveEncryptionService;
 
 /**
- *
+ * Security utility class for simpler interfacing with
  */
 public class SecurityUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SecurityUtils.class);
 
 	private static GeoWaveEncryptionService encService;
-	public static String defaultResourceLocation = GeoWaveEncryptionService.resourceLocation;
+	private static String resourceLocation;
 	private static final String WRAPPER = GeoWaveEncryptionService.WRAPPER;
+
+	static {
+		resourceLocation = new GeoWaveEncryptionService().getResourceLocation();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static String getResourceLocation() {
+		return resourceLocation;
+	}
+
+	/**
+	 * 
+	 * @param resourceLocation
+	 */
+	public static void setResourceLocation(
+			String resourceLoc ) {
+		resourceLocation = resourceLoc;
+	}
+
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 * @throws Exception
+	 */
+	public static String decryptValue(
+			byte[] value )
+			throws Exception {
+		return decryptValue(
+				value,
+				getResourceLocation());
+	}
 
 	/**
 	 * Method to decrypt a value
@@ -40,11 +74,12 @@ public class SecurityUtils
 			byte[] value,
 			String resourceLocation )
 			throws Exception {
-		LOGGER.trace("Decrypting base64-encoded value: [" + value + "]");
+
 		String strValue = new String(
 				value,
 				"UTF-8");
 		if (strValue != null && !"".equals(strValue.trim())) {
+			LOGGER.trace("Decrypting base64-encoded value: [" + strValue + "]");
 			if (getEncryptionService(
 					resourceLocation).isProperlyWrapped(
 					strValue.trim())) {
@@ -65,6 +100,14 @@ public class SecurityUtils
 			LOGGER.debug("WARNING: No value specified to decrypt.");
 			return strValue;
 		}
+	}
+
+	public static String decryptHexEncodedValue(
+			String value )
+			throws Exception {
+		return decryptHexEncodedValue(
+				value,
+				getResourceLocation());
 	}
 
 	/**
@@ -123,6 +166,20 @@ public class SecurityUtils
 	}
 
 	/**
+	 * 
+	 * @param value
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] encryptValue(
+			String value )
+			throws Exception {
+		return encryptValue(
+				value,
+				getResourceLocation());
+	}
+
+	/**
 	 * Method to encrypt a value
 	 * 
 	 * @param value
@@ -138,8 +195,8 @@ public class SecurityUtils
 			String resourceLocation )
 			throws Exception {
 		byte[] bytes = null;
-		LOGGER.trace("Encrypting and base64-encoding value: [" + value + "]");
-		if (value != null && !"".equals(value.trim())) {
+		if ((value != null) && (!"".equals(value.trim()))) {
+			LOGGER.trace("Encrypting and base64-encoding value: [" + value + "]");
 			if (!getEncryptionService(
 					resourceLocation).isProperlyWrapped(
 					value)) {
@@ -155,9 +212,25 @@ public class SecurityUtils
 		}
 		else {
 			LOGGER.debug("WARNING: No value specified to encrypt.");
-			bytes = value.getBytes("UTF-8");
 		}
 		return bytes;
+	}
+
+	/**
+	 * Method to encrypt and hex-encode a string value
+	 * 
+	 * @param value
+	 *            value to encrypt and hex-encode
+	 * @return If encryption is successful, encrypted and hex-encoded string
+	 *         value is returned wrapped with ENC{}
+	 * @throws Exception
+	 */
+	public static String encryptAndHexEncodeValue(
+			String value )
+			throws Exception {
+		return encryptAndHexEncodeValue(
+				value,
+				getResourceLocation());
 	}
 
 	/**
@@ -175,7 +248,7 @@ public class SecurityUtils
 			String resourceLocation )
 			throws Exception {
 		String encryptedValue = "";
-		LOGGER.trace("Encrypting and hex-encoding value: [" + value + "]");
+		LOGGER.info("Encrypting and hex-encoding value: [" + value + "]");
 		if (value != null && !"".equals(value.trim())) {
 			if (!getEncryptionService(
 					resourceLocation).isProperlyWrapped(
@@ -246,6 +319,11 @@ public class SecurityUtils
 						e);
 			}
 		}
+		else {
+			if (!resourceLocation.equals(encService.getResourceLocation())) {
+				encService.setResourceLocation(resourceLocation);
+			}
+		}
 		return encService;
 	}
 
@@ -268,9 +346,8 @@ public class SecurityUtils
 			LOGGER.error(
 					"Encountered UnsupportedEncodingException: " + e.getLocalizedMessage(),
 					e);
-			// Try platform default instead
-			return base64.encodeToString(input.getBytes());
 		}
+		return input;
 	}
 
 	/**
@@ -381,5 +458,4 @@ public class SecurityUtils
 			System.out.println(description);
 		}
 	}
-
 }

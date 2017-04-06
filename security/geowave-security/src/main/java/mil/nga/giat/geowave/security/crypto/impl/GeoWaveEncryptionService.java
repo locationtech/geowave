@@ -4,6 +4,7 @@
 package mil.nga.giat.geowave.security.crypto.impl;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -29,8 +30,6 @@ import mil.nga.giat.geowave.security.crypto.EncryptionService;
  * implementation-specifics are handled through an implementation of the
  * EncryptionService interface
  * 
- * @author mcarrier
- * 
  * @see EncryptionService
  * @see GeoWaveEncryptionServiceImpl
  *
@@ -39,7 +38,7 @@ public class GeoWaveEncryptionService
 {
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveEncryptionService.class);
 
-	public static String resourceLocation = "geowave_crypto_key.dat";
+	public String resourceLocation = "geowave_crypto_key.dat";
 	private byte[] token = null;
 	private Key rootKey = null;
 
@@ -54,7 +53,7 @@ public class GeoWaveEncryptionService
 	 * both are needed to decrypt a value that was encrypted with the SAME two
 	 * values (salt - below - and token file - specified at resourceLocation)
 	 */
-	private final byte[] salt = "Ge0W@v3-Ro0t-K3y".getBytes();
+	private byte[] salt = null;
 
 	public static final String PREFIX = "ENC{";
 	public static final String SUFFIX = "}";
@@ -64,17 +63,28 @@ public class GeoWaveEncryptionService
 			"\\{") + "([^}]+)" + SUFFIX.replace(
 			"{",
 			"\\{"));
-	private static final byte[] PrefixBytes = PREFIX.getBytes();
-	private static final byte[] SuffixBytes = SUFFIX.getBytes();
-	private static final int PrefixBytesLength = PrefixBytes.length;
-	private static final int SuffixBytesLength = SuffixBytes.length;
+	private byte[] PrefixBytes;
+	private byte[] SuffixBytes;
+	private int PrefixBytesLength;
+	private int SuffixBytesLength;
 
 	private final String KEY_ENCRYPTION_ALGORITHM = "AES";
 
 	private EncryptionService encryptionService;
 
-	public GeoWaveEncryptionService()
-			throws Exception {
+	public GeoWaveEncryptionService() {
+		try {
+			salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
+			PrefixBytes = PREFIX.getBytes("UTF-8");
+			SuffixBytes = SUFFIX.getBytes("UTF-8");
+			PrefixBytesLength = PrefixBytes.length;
+			SuffixBytesLength = SuffixBytes.length;
+		}
+		catch (UnsupportedEncodingException e) {
+			LOGGER.error(
+					e.getLocalizedMessage(),
+					e);
+		}
 		setEncryptionService(new GeoWaveEncryptionServiceImpl());
 	}
 
@@ -97,8 +107,8 @@ public class GeoWaveEncryptionService
 	 *            Path to resource to get the token
 	 */
 	public void setResourceLocation(
-			String resourceLocation ) {
-		this.resourceLocation = resourceLocation;
+			String resourceLoc ) {
+		resourceLocation = resourceLoc;
 		generateRootKeyFromToken();
 	}
 
@@ -227,7 +237,6 @@ public class GeoWaveEncryptionService
 					getResourceLocation()));
 			char[] password = strPassword != null ? strPassword.trim().toCharArray() : null;
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
 			SecretKey tmp = factory.generateSecret(new PBEKeySpec(
 					password,
 					salt,
@@ -274,10 +283,18 @@ public class GeoWaveEncryptionService
 			if (stream != null) {
 				@SuppressWarnings("resource")
 				Scanner s = new Scanner(
-						stream).useDelimiter("\\A");
+						stream,
+						"UTF-8").useDelimiter("\\A");
 				String content = s.hasNext() ? s.next() : "";
 				if (content != null) {
-					token = content.getBytes();
+					try {
+						token = content.getBytes("UTF-8");
+					}
+					catch (UnsupportedEncodingException e) {
+						LOGGER.error(
+								e.getLocalizedMessage(),
+								e);
+					}
 				}
 			}
 		}
@@ -417,7 +434,8 @@ public class GeoWaveEncryptionService
 			String codedString = matcher.group(1);
 			return new String(
 					getEncryptionService().decrypt(
-							fromString(codedString)));
+							fromString(codedString)),
+					"UTF-8");
 		}
 		else {
 			return data;

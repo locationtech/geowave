@@ -36,9 +36,7 @@ public class ConnectorPool
 
 		String decryptedPassword = password;
 		try {
-			decryptedPassword = SecurityUtils.decryptHexEncodedValue(
-					password,
-					SecurityUtils.defaultResourceLocation);
+			decryptedPassword = SecurityUtils.decryptHexEncodedValue(password);
 		}
 		catch (Exception e) {
 			LOGGER.error(

@@ -27,9 +27,8 @@ public class GeoWaveDemoAppShell
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
 				: "geowave";
 		// GeoWave:811 - providing ability to support encrypted passwords
-		final String password = SecurityUtils.decryptHexEncodedValue(
-				((System.getProperty("password") != null) ? System.getProperty("password") : "password"),
-				SecurityUtils.defaultResourceLocation);
+		final String password = SecurityUtils.decryptHexEncodedValue(((System.getProperty("password") != null) ? System
+				.getProperty("password") : "password"));
 
 		final String[] shellArgs = new String[] {
 			"-u",

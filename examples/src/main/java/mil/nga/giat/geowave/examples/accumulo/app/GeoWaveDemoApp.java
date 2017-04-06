@@ -38,9 +38,8 @@ public class GeoWaveDemoApp
 				.getProperty("interactive")) : true;
 
 		// GeoWave:811 - providing ability to support encrypted passwords
-		final String password = SecurityUtils.decryptHexEncodedValue(
-				((System.getProperty("password") != null) ? System.getProperty("password") : "password"),
-				SecurityUtils.defaultResourceLocation);
+		final String password = SecurityUtils.decryptHexEncodedValue(((System.getProperty("password") != null) ? System
+				.getProperty("password") : "password"));
 
 		final File tempDir = Files.createTempDir();
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")

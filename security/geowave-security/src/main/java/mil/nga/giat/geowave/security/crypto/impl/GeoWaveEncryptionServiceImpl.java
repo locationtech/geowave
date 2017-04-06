@@ -16,8 +16,6 @@ import mil.nga.giat.geowave.security.crypto.EncryptionService;
 /**
  * Encryption service implementation for encrypting and decrypting content
  * 
- * @author mark.carrier
- * 
  * @see EncryptionService
  */
 public class GeoWaveEncryptionServiceImpl implements
@@ -121,10 +119,11 @@ public class GeoWaveEncryptionServiceImpl implements
 	public byte[] decrypt(
 			byte[] valueToDecrypt )
 			throws Exception {
-		LOGGER.trace("ENTER :: decrpt");
+		LOGGER.trace("ENTER :: decrypt");
 		byte[] decodedValue = Base64.decodeBase64(valueToDecrypt);
 		byte[] iv = new byte[IV_LENGTH];
 		byte[] msg = new byte[decodedValue.length - iv.length];
+
 		System.arraycopy(
 				decodedValue,
 				0,
@@ -209,15 +208,15 @@ public class GeoWaveEncryptionServiceImpl implements
 	 */
 	private static String convertHashToString(
 			byte[] md5Bytes ) {
-		String returnVal = "";
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < md5Bytes.length; i++) {
-			// convert it to a hash value
-			returnVal += Integer.toString(
+			// convert it to a hash value and append
+			sb.append(Integer.toString(
 					(md5Bytes[i] & 0xff) + 0x100,
 					16).substring(
-					1);
+					1));
 		}
-		return returnVal;
+		return sb.toString();
 	}
 
 	/**

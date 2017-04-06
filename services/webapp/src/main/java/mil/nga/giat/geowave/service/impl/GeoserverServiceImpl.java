@@ -88,9 +88,7 @@ public class GeoserverServiceImpl implements
 				"geoserver.password");
 
 		try {
-			geoserverPass = SecurityUtils.decryptHexEncodedValue(
-					geoserverPass,
-					SecurityUtils.defaultResourceLocation);
+			geoserverPass = SecurityUtils.decryptHexEncodedValue(geoserverPass);
 		}
 		catch (Exception e) {
 			log.error(
