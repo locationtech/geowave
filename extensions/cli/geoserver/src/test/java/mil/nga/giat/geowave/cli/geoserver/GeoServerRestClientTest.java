@@ -44,16 +44,6 @@ public class GeoServerRestClientTest
 
 	}
 
-	public static void main(
-			String[] args ) {
-		GeoServerConfig config = new GeoServerConfig();
-		GeoServerRestClient client = new GeoServerRestClient(
-				config,
-				null);
-		boolean exists = client.workspaceExists("cite");
-		System.out.println("exists: " + exists);
-	}
-
 	@Before
 	public void prepare() {
 		webTarget = mockedWebTarget();
@@ -61,16 +51,6 @@ public class GeoServerRestClientTest
 		client = new GeoServerRestClient(
 				config,
 				webTarget);
-	}
-
-	@Test
-	public void testWorkspaceExists() {
-		config = new GeoServerConfig();
-		client = new GeoServerRestClient(
-				config,
-				null);
-		Assert.assertTrue(client.workspaceExists("cite"));
-		Assert.assertFalse(client.workspaceExists("geowave"));
 	}
 
 	@Test
