@@ -1,18 +1,21 @@
 package mil.nga.giat.geowave.datastore.accumulo.app;
 
-//import java.io.IOException;
-//import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 // @formatter:off
-
+/*if[accumulo.api=1.6]
+import org.apache.accumulo.core.util.shell.Shell;
+else[accumulo.api=1.6]*/
 import org.apache.accumulo.shell.Shell;
-
+/*end[accumulo.api=1.6]*/
 // @formatter:on
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-//import jline.WindowsTerminal;
-//import jline.console.ConsoleReader;
+import jline.WindowsTerminal;
+import jline.console.ConsoleReader;
+
 import mil.nga.giat.geowave.security.utils.SecurityUtils;
 
 public class GeoWaveDemoAppShell
@@ -26,6 +29,8 @@ public class GeoWaveDemoAppShell
 
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
 				: "geowave";
+		// final String password = (System.getProperty("password") != null) ?
+		// System.getProperty("password") : "password";
 		// GeoWave:811 - providing ability to support encrypted passwords
 		final String password = SecurityUtils.decryptHexEncodedValue(((System.getProperty("password") != null) ? System
 				.getProperty("password") : "password"));
