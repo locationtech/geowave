@@ -40,10 +40,14 @@ public class GeoServerConfig
 			File propFile ) {
 		this.propFile = propFile;
 
-		gsConfigProperties = ConfigOptions.loadProperties(
-				propFile,
-				null);
-
+		if (propFile != null && propFile.exists()) {
+			gsConfigProperties = ConfigOptions.loadProperties(
+					propFile,
+					null);
+		}
+		else {
+			gsConfigProperties = new Properties();
+		}
 		boolean update = false;
 
 		url = gsConfigProperties.getProperty(GEOSERVER_URL);
