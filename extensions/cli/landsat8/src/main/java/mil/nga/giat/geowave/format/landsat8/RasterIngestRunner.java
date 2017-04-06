@@ -526,7 +526,13 @@ public class RasterIngestRunner extends
 						return;
 					}
 				}
-				writer.write(mergedCoverage);
+				try {
+					writer.write(mergedCoverage);
+				}
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				lastSceneBands.clear();
 				if (!ingestOptions.isRetainImages()) {
 					for (final BandData b : sceneData.values()) {

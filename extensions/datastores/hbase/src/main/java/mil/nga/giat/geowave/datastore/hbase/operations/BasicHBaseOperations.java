@@ -10,6 +10,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableExistsException;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
@@ -30,7 +31,8 @@ import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 public class BasicHBaseOperations implements
 		DataStoreOperations
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			BasicHBaseOperations.class);
 	protected static final String DEFAULT_TABLE_NAMESPACE = "";
 	public static final Object ADMIN_MUTEX = new Object();
 	private static final long SLEEP_INTERVAL = 10000L;
@@ -82,7 +84,8 @@ public class BasicHBaseOperations implements
 
 	public static TableName getTableName(
 			final String tableName ) {
-		return TableName.valueOf(tableName);
+		return TableName.valueOf(
+				tableName);
 	}
 
 	public HBaseWriter createWriter(
@@ -103,12 +106,14 @@ public class BasicHBaseOperations implements
 			final boolean createTable,
 			final Set<ByteArrayId> splits )
 			throws IOException {
-		final String qTableName = getQualifiedTableName(sTableName);
+		final String qTableName = getQualifiedTableName(
+				sTableName);
 
 		if (createTable) {
 			createTable(
 					columnFamilies,
-					getTableName(qTableName),
+					getTableName(
+							qTableName),
 					splits);
 		}
 
@@ -128,22 +133,32 @@ public class BasicHBaseOperations implements
 				final HTableDescriptor desc = new HTableDescriptor(
 						name);
 				for (final String columnFamily : columnFamilies) {
-					desc.addFamily(new HColumnDescriptor(
-							columnFamily));
+					desc.addFamily(
+							new HColumnDescriptor(
+									columnFamily));
 				}
-				if ((splits != null) && !splits.isEmpty()) {
-					final byte[][] splitKeys = new byte[splits.size()][];
-					int i = 0;
-					for (final ByteArrayId split : splits) {
-						splitKeys[i++] = split.getBytes();
+
+				try {
+					if ((splits != null) && !splits.isEmpty()) {
+						final byte[][] splitKeys = new byte[splits.size()][];
+						int i = 0;
+						for (final ByteArrayId split : splits) {
+							splitKeys[i++] = split.getBytes();
+						}
+						conn.getAdmin().createTable(
+								desc,
+								splitKeys);
 					}
-					conn.getAdmin().createTable(
-							desc,
-							splitKeys);
+					else {
+						conn.getAdmin().createTable(
+								desc);
+					}
 				}
-				else {
-					conn.getAdmin().createTable(
-							desc);
+				catch (Exception e) {
+					// We can ignore TableExists on create
+					if (!(e instanceof TableExistsException)) {
+						throw (e);
+					}
 				}
 			}
 		}
@@ -153,7 +168,8 @@ public class BasicHBaseOperations implements
 			final String[] columnFamilies,
 			final String tableName )
 			throws IOException {
-		final TableName table = getTableName(tableName);
+		final TableName table = getTableName(
+				tableName);
 		final List<String> existingColumnFamilies = new ArrayList<>();
 		final List<String> newColumnFamilies = new ArrayList<>();
 		synchronized (ADMIN_MUTEX) {
@@ -163,16 +179,20 @@ public class BasicHBaseOperations implements
 						table);
 				final HColumnDescriptor[] existingColumnDescriptors = existingTableDescriptor.getColumnFamilies();
 				for (final HColumnDescriptor hColumnDescriptor : existingColumnDescriptors) {
-					existingColumnFamilies.add(hColumnDescriptor.getNameAsString());
+					existingColumnFamilies.add(
+							hColumnDescriptor.getNameAsString());
 				}
 				for (final String columnFamily : columnFamilies) {
-					if (!existingColumnFamilies.contains(columnFamily)) {
-						newColumnFamilies.add(columnFamily);
+					if (!existingColumnFamilies.contains(
+							columnFamily)) {
+						newColumnFamilies.add(
+								columnFamily);
 					}
 				}
 				for (final String newColumnFamily : newColumnFamilies) {
-					existingTableDescriptor.addFamily(new HColumnDescriptor(
-							newColumnFamily));
+					existingTableDescriptor.addFamily(
+							new HColumnDescriptor(
+									newColumnFamily));
 				}
 				conn.getAdmin().modifyTable(
 						table,
@@ -212,10 +232,12 @@ public class BasicHBaseOperations implements
 	public boolean tableExists(
 			final String tableName )
 			throws IOException {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		synchronized (ADMIN_MUTEX) {
 			return conn.getAdmin().isTableAvailable(
-					getTableName(qName));
+					getTableName(
+							qName));
 		}
 
 	}
@@ -224,10 +246,12 @@ public class BasicHBaseOperations implements
 			final String tableName,
 			final String columnFamily )
 			throws IOException {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		synchronized (ADMIN_MUTEX) {
 			final HTableDescriptor descriptor = conn.getAdmin().getTableDescriptor(
-					getTableName(qName));
+					getTableName(
+							qName));
 
 			if (descriptor != null) {
 				for (final HColumnDescriptor hColumnDescriptor : descriptor.getColumnFamilies()) {
@@ -247,13 +271,18 @@ public class BasicHBaseOperations implements
 			final String... authorizations )
 			throws IOException {
 		if (authorizations != null) {
-			scanner.setAuthorizations(new Authorizations(
-					authorizations));
+			scanner.setAuthorizations(
+					new Authorizations(
+							authorizations));
 		}
 
-		final Table table = conn.getTable(getTableName(getQualifiedTableName(tableName)));
+		final Table table = conn.getTable(
+				getTableName(
+						getQualifiedTableName(
+								tableName)));
 
-		final ResultScanner results = table.getScanner(scanner);
+		final ResultScanner results = table.getScanner(
+				scanner);
 
 		table.close();
 
@@ -262,10 +291,12 @@ public class BasicHBaseOperations implements
 
 	public boolean deleteTable(
 			final String tableName ) {
-		final String qName = getQualifiedTableName(tableName);
+		final String qName = getQualifiedTableName(
+				tableName);
 		try {
 			conn.getAdmin().deleteTable(
-					getTableName(qName));
+					getTableName(
+							qName));
 			return true;
 		}
 		catch (final IOException ex) {
@@ -280,7 +311,10 @@ public class BasicHBaseOperations implements
 	public RegionLocator getRegionLocator(
 			final String tableName )
 			throws IOException {
-		return conn.getRegionLocator(getTableName(getQualifiedTableName(tableName)));
+		return conn.getRegionLocator(
+				getTableName(
+						getQualifiedTableName(
+								tableName)));
 	}
 
 	@Override
@@ -291,7 +325,10 @@ public class BasicHBaseOperations implements
 	public Table getTable(
 			final String tableName )
 			throws IOException {
-		return conn.getTable(getTableName(getQualifiedTableName(tableName)));
+		return conn.getTable(
+				getTableName(
+						getQualifiedTableName(
+								tableName)));
 	}
 
 	public void verifyCoprocessor(
@@ -300,28 +337,38 @@ public class BasicHBaseOperations implements
 			final String coprocessorJar ) {
 		try {
 			final Admin admin = conn.getAdmin();
-			final TableName tableName = getTableName(getQualifiedTableName(tableNameStr));
-			final HTableDescriptor td = admin.getTableDescriptor(tableName);
+			final TableName tableName = getTableName(
+					getQualifiedTableName(
+							tableNameStr));
+			final HTableDescriptor td = admin.getTableDescriptor(
+					tableName);
 
-			if (!td.hasCoprocessor(coprocessorName)) {
-				LOGGER.debug(tableNameStr + " does not have coprocessor. Adding " + coprocessorName);
+			if (!td.hasCoprocessor(
+					coprocessorName)) {
+				LOGGER.debug(
+						tableNameStr + " does not have coprocessor. Adding " + coprocessorName);
 
 				// if (!schemaUpdateEnabled &&
 				// !admin.isTableDisabled(tableName)) {
-				LOGGER.debug("- disable table...");
-				admin.disableTable(tableName);
+				LOGGER.debug(
+						"- disable table...");
+				admin.disableTable(
+						tableName);
 				// }
 
-				LOGGER.debug("- add coprocessor...");
+				LOGGER.debug(
+						"- add coprocessor...");
 
 				// Retrieve coprocessor jar path from config
 				if (coprocessorJar == null) {
-					td.addCoprocessor(coprocessorName);
+					td.addCoprocessor(
+							coprocessorName);
 				}
 				else {
 					final Path hdfsJarPath = new Path(
 							coprocessorJar);
-					LOGGER.debug("Coprocessor jar path: " + hdfsJarPath.toString());
+					LOGGER.debug(
+							"Coprocessor jar path: " + hdfsJarPath.toString());
 					td.addCoprocessor(
 							coprocessorName,
 							hdfsJarPath,
@@ -329,14 +376,17 @@ public class BasicHBaseOperations implements
 							null);
 				}
 
-				LOGGER.debug("- modify table...");
+				LOGGER.debug(
+						"- modify table...");
 				admin.modifyTable(
 						tableName,
 						td);
 
 				// if (!schemaUpdateEnabled) {
-				LOGGER.debug("- enable table...");
-				admin.enableTable(tableName);
+				LOGGER.debug(
+						"- enable table...");
+				admin.enableTable(
+						tableName);
 			}
 			// }
 
@@ -346,10 +396,12 @@ public class BasicHBaseOperations implements
 			do {
 				regionsLeft = admin.getAlterStatus(
 						tableName).getFirst();
-				LOGGER.debug(regionsLeft + " regions remaining in table modify");
+				LOGGER.debug(
+						regionsLeft + " regions remaining in table modify");
 
 				try {
-					Thread.sleep(SLEEP_INTERVAL);
+					Thread.sleep(
+							SLEEP_INTERVAL);
 				}
 				catch (final InterruptedException e) {
 					LOGGER.warn(
@@ -360,7 +412,8 @@ public class BasicHBaseOperations implements
 			while (regionsLeft > 0);
 			// }
 
-			LOGGER.debug("Successfully added coprocessor");
+			LOGGER.debug(
+					"Successfully added coprocessor");
 		}
 		catch (
 

@@ -399,7 +399,7 @@ public class SpatialTemporalQueryIT
 
 	private static void write(
 			final IndexWriter[] writers,
-			final SimpleFeature feature ) {
+			final SimpleFeature feature ) throws IOException {
 		for (final IndexWriter writer : writers) {
 			writer.write(feature);
 		}
@@ -412,7 +412,7 @@ public class SpatialTemporalQueryIT
 			final int min,
 			final int max,
 			final int field,
-			final String name ) {
+			final String name ) throws IOException {
 		final GeometryFactory geomFactory = new GeometryFactory();
 		final int midPoint = (int) Math.floor((min + max) / 2.0);
 		cal.set(

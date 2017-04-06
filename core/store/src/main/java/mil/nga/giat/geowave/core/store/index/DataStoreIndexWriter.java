@@ -78,7 +78,8 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 
 	@Override
 	public List<ByteArrayId> write(
-			final T entry ) {
+			final T entry )
+			throws IOException {
 		return write(
 				entry,
 				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
@@ -87,29 +88,37 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 	@Override
 	public List<ByteArrayId> write(
 			final T entry,
-			final VisibilityWriter<T> fieldVisibilityWriter ) {
+			final VisibilityWriter<T> fieldVisibilityWriter )
+			throws IOException {
 
 		DataStoreEntryInfo entryInfo;
 		synchronized (this) {
 
 			ensureOpen();
+
 			if (writer == null) {
-				return Collections.emptyList();
+				throw new IOException(
+						"Null writer - empty list returned");
+				// return Collections.emptyList();
 			}
 			entryInfo = getEntryInfo(
 					entry,
 					fieldVisibilityWriter);
 			if (entryInfo == null) {
-				return Collections.emptyList();
+				throw new IOException(
+						"Null EntryInfo - empty list returned");
+				// return Collections.emptyList();
 			}
 			callback.entryIngested(
 					entryInfo,
 					entry);
 		}
+
 		return entryInfo.getRowIds();
 	}
 
-	protected abstract void ensureOpen();
+	protected abstract void ensureOpen()
+			throws IOException;
 
 	protected abstract DataStoreEntryInfo getEntryInfo(
 			final T entry,

@@ -147,6 +147,7 @@ public class HBaseUtils
 					writableAdapter.getAdapterId().getString());
 		}
 		catch (final IOException e) {
+			System.out.println("KAM: Writing to table failed.");
 			LOGGER.warn(
 					"Writing to table failed.",
 					e);

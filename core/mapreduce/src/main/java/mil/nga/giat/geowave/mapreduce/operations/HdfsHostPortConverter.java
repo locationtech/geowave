@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.adapter.raster.operations.options;
+package mil.nga.giat.geowave.mapreduce.operations;
 
 import com.beust.jcommander.IStringConverter;
 

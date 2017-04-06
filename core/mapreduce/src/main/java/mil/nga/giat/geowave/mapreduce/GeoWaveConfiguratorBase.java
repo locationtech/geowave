@@ -15,8 +15,10 @@ import org.apache.log4j.Logger;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -35,6 +37,7 @@ public class GeoWaveConfiguratorBase
 	public static enum GeoWaveConfg {
 		INDEX,
 		DATA_ADAPTER,
+		ADAPTER_TO_INDEX,
 		STORE_CONFIG_OPTION
 	}
 
@@ -205,6 +208,47 @@ public class GeoWaveConfiguratorBase
 				indexId);
 	}
 
+	public static void addAdapterToIndexMapping(
+			final Class<?> implementingClass,
+			final Configuration conf,
+			final AdapterToIndexMapping adapterToIndexMapping ) {
+		if (adapterToIndexMapping != null) {
+			conf.set(
+					enumToConfKey(
+							implementingClass,
+							GeoWaveConfg.ADAPTER_TO_INDEX,
+							adapterToIndexMapping.getAdapterId().getString()),
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapterToIndexMapping)));
+		}
+	}
+
+	public static AdapterToIndexMapping getAdapterToIndexMapping(
+			final Class<?> implementingClass,
+			final JobContext context,
+			final ByteArrayId adapterId ) {
+		return getAdapterToIndexMappingInternal(
+				implementingClass,
+				getConfiguration(context),
+				adapterId);
+	}
+
+	private static AdapterToIndexMapping getAdapterToIndexMappingInternal(
+			final Class<?> implementingClass,
+			final Configuration configuration,
+			final ByteArrayId adapterId ) {
+		final String input = configuration.get(enumToConfKey(
+				implementingClass,
+				GeoWaveConfg.ADAPTER_TO_INDEX,
+				adapterId.getString()));
+		if (input != null) {
+			final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(input);
+			return PersistenceUtils.fromBinary(
+					dataAdapterBytes,
+					AdapterToIndexMapping.class);
+		}
+		return null;
+	}
+
 	public static void addDataAdapter(
 			final Class<?> implementingClass,
 			final Configuration conf,
@@ -336,6 +380,17 @@ public class GeoWaveConfiguratorBase
 		return new JobContextAdapterStore(
 				context,
 				GeoWaveStoreFinder.createAdapterStore(configOptions));
+	}
+
+	public static AdapterIndexMappingStore getJobContextAdapterIndexMappingStore(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		final Map<String, String> configOptions = getStoreOptionsMap(
+				implementingClass,
+				context);
+		return new JobContextAdapterIndexMappingStore(
+				context,
+				GeoWaveStoreFinder.createAdapterIndexMappingStore(configOptions));
 	}
 
 	private static PrimaryIndex[] getIndicesInternal(

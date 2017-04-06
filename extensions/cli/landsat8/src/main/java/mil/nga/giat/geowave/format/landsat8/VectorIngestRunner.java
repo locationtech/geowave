@@ -132,7 +132,13 @@ public class VectorIngestRunner extends
 	protected void nextBand(
 			final SimpleFeature band,
 			final AnalysisInfo analysisInfo ) {
-		bandWriter.write(band);
+		try {
+			bandWriter.write(band);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		super.nextBand(
 				band,
 				analysisInfo);
@@ -172,7 +178,13 @@ public class VectorIngestRunner extends
 			}
 		}
 		if (fid != null) {
-			sceneWriter.write(bldr.buildFeature(fid));
+			try {
+				sceneWriter.write(bldr.buildFeature(fid));
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
