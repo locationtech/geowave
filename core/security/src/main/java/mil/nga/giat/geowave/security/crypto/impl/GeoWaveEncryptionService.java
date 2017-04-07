@@ -20,7 +20,8 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.security.crypto.EncryptionService;
 
@@ -36,7 +37,7 @@ import mil.nga.giat.geowave.security.crypto.EncryptionService;
  */
 public class GeoWaveEncryptionService
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveEncryptionService.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveEncryptionService.class);
 
 	public String resourceLocation = "geowave_crypto_key.dat";
 	private byte[] token = null;
@@ -63,22 +64,22 @@ public class GeoWaveEncryptionService
 			"\\{") + "([^}]+)" + SUFFIX.replace(
 			"{",
 			"\\{"));
-	private byte[] PrefixBytes;
-	private byte[] SuffixBytes;
-	private int PrefixBytesLength;
-	private int SuffixBytesLength;
+	private static final String KEY_ENCRYPTION_ALGORITHM = "AES";
+	private byte[] prefixBytes;
+	private byte[] suffixBytes;
+	private int prefixBytesLength;
+	private int suffixBytesLength;
 
-	private final String KEY_ENCRYPTION_ALGORITHM = "AES";
 
 	private EncryptionService encryptionService;
 
 	public GeoWaveEncryptionService() {
 		try {
 			salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
-			PrefixBytes = PREFIX.getBytes("UTF-8");
-			SuffixBytes = SUFFIX.getBytes("UTF-8");
-			PrefixBytesLength = PrefixBytes.length;
-			SuffixBytesLength = SuffixBytes.length;
+			prefixBytes = PREFIX.getBytes("UTF-8");
+			suffixBytes = SUFFIX.getBytes("UTF-8");
+			prefixBytesLength = prefixBytes.length;
+			suffixBytesLength = suffixBytes.length;
 		}
 		catch (UnsupportedEncodingException e) {
 			LOGGER.error(
@@ -155,15 +156,15 @@ public class GeoWaveEncryptionService
 	private boolean bytesSurroundedByWrapper(
 			byte[] data ) {
 		try {
-			for (int i = 0; i < PrefixBytesLength; i++) {
-				if (data[i] != PrefixBytes[i]) {
+			for (int i = 0; i < prefixBytesLength; i++) {
+				if (data[i] != prefixBytes[i]) {
 					return false;
 				}
 			}
 			int dataLength = data.length;
-			int allButPostfixLength = dataLength - SuffixBytesLength;
-			for (int i = 0; i < SuffixBytesLength; i++) {
-				if (data[allButPostfixLength + i] != SuffixBytes[i]) {
+			int allButPostfixLength = dataLength - suffixBytesLength;
+			for (int i = 0; i < suffixBytesLength; i++) {
+				if (data[allButPostfixLength + i] != suffixBytes[i]) {
 					return false;
 				}
 			}
@@ -185,11 +186,11 @@ public class GeoWaveEncryptionService
 	 */
 	private byte[] extractWrappedContents(
 			byte[] wrappedContents ) {
-		int justTheContentsLength = wrappedContents.length - PrefixBytesLength - SuffixBytesLength;
+		int justTheContentsLength = wrappedContents.length - prefixBytesLength - suffixBytesLength;
 		byte[] justTheContents = new byte[justTheContentsLength];
 		System.arraycopy(
 				wrappedContents,
-				PrefixBytesLength,
+				prefixBytesLength,
 				justTheContents,
 				0,
 				justTheContentsLength);
@@ -249,7 +250,7 @@ public class GeoWaveEncryptionService
 					rootKey);
 		}
 		catch (Exception ex) {
-			LOGGER.fatal(
+			LOGGER.error(
 					"An error occurred generating the root key from the specified token: " + ex.getLocalizedMessage(),
 					ex);
 		}
@@ -318,25 +319,25 @@ public class GeoWaveEncryptionService
 		byte[] encryptedBytes = getEncryptionService().encrypt(
 				data);
 		int encryptedBytesLength = encryptedBytes.length;
-		byte[] wrappedBytes = new byte[PrefixBytesLength + encryptedBytesLength + SuffixBytesLength];
+		byte[] wrappedBytes = new byte[prefixBytesLength + encryptedBytesLength + suffixBytesLength];
 		System.arraycopy(
-				PrefixBytes,
+				prefixBytes,
 				0,
 				wrappedBytes,
 				0,
-				PrefixBytesLength);
+				prefixBytesLength);
 		System.arraycopy(
 				encryptedBytes,
 				0,
 				wrappedBytes,
-				PrefixBytesLength,
+				prefixBytesLength,
 				encryptedBytesLength);
 		System.arraycopy(
-				SuffixBytes,
+				suffixBytes,
 				0,
 				wrappedBytes,
-				PrefixBytesLength + encryptedBytesLength,
-				SuffixBytesLength);
+				prefixBytesLength + encryptedBytesLength,
+				suffixBytesLength);
 		return wrappedBytes;
 	}
 

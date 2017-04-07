@@ -9,7 +9,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.security.crypto.EncryptionService;
 
@@ -21,7 +22,7 @@ import mil.nga.giat.geowave.security.crypto.EncryptionService;
 public class GeoWaveEncryptionServiceImpl implements
 		EncryptionService
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveEncryptionServiceImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveEncryptionServiceImpl.class);
 
 	private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 	private static final String SECURE_RANDOM_ALGORITHM = "SHA1PRNG";
