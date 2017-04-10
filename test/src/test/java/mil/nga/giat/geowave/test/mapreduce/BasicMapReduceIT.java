@@ -129,7 +129,7 @@ public class BasicMapReduceIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 		// aperi: Disabled until we fix adapter Id issue for dynamodb
-		,
+		,GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;

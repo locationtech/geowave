@@ -52,7 +52,8 @@ abstract public class AbstractDynamoDBRowQuery<T> extends
 			final AdapterStore adapterStore ) {
 		final Iterator<Map<String, AttributeValue>> results = getResults(
 				maxResolutionSubsamplingPerDimension,
-				getScannerLimit());
+				getScannerLimit(),
+				adapterStore);
 		return new CloseableIterator.Wrapper<T>(
 				new NativeEntryIteratorWrapper<>(
 						dataStore,

@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.dynamodb.query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -59,7 +60,7 @@ public class InputFormatDynamoDBRangeQuery extends
 						queryOptions),
 				index,
 				null,
-				queryFilters,
+				queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(),
 				null,
 				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(),
 				null,

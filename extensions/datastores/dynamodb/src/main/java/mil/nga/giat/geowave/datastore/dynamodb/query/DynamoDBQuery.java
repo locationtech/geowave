@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -20,7 +21,10 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreQuery;
@@ -29,7 +33,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBDataStore;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
-import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
+import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBAdapterStore;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 
@@ -81,17 +85,8 @@ abstract public class DynamoDBQuery extends
 
 	protected Iterator<Map<String, AttributeValue>> getResults(
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
-		return getResults(
-				maxResolutionSubsamplingPerDimension,
-				limit,
-				false);
-	}
-
-	protected Iterator<Map<String, AttributeValue>> getResults(
-			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
-			final boolean async) {
+			final AdapterStore adapterStore) {
 		final List<ByteArrayRange> ranges = getRanges();
 		final String tableName = dynamodbOperations.getQualifiedTableName(
 				StringUtils.stringFromBinary(
@@ -105,46 +100,44 @@ abstract public class DynamoDBQuery extends
 						0);
 				if (r.isSingleValue()) {
 					for (final QueryRequest query : queries) {
-						query.addQueryFilterEntry(
-								DynamoDBRow.GW_RANGE_KEY,
-								new Condition()
-										.withAttributeValueList(
-												new AttributeValue().withB(
-														ByteBuffer.wrap(
-																r.getStart().getBytes())))
-										.withComparisonOperator(
-												ComparisonOperator.EQ));
+						for (final ByteArrayId adapterID : adapterIds) {
+							byte[] start = ByteArrayUtils.combineArrays(adapterID.getBytes(), r.getStart().getBytes());
+							query.addQueryFilterEntry(
+									DynamoDBRow.GW_RANGE_KEY,
+									new Condition()
+											.withAttributeValueList(
+													new AttributeValue().withB(
+															ByteBuffer.wrap(start)))
+											.withComparisonOperator(
+													ComparisonOperator.EQ));
+						}
 					}
 				}
 				else {
 					for (final QueryRequest query : queries) {
-						addQueryRange(
-								r,
-								query);
+						for (final ByteArrayId adapterID : adapterIds) {
+							addQueryRange(
+									r,
+									query, 
+									adapterID);
+						}
 					}
 				}
 				requests.addAll(
 						queries);
 			}
-
 			else{
-          ranges.forEach(
-					(r -> requests.addAll(
-							addQueryRanges(
-									tableName,
-									r))));
-      }
-
-			if(async){
-				return Iterators.concat(
-						requests.parallelStream().map(
-								this::executeAsyncQueryRequest).iterator()); 
+				ranges.forEach(
+						(r -> requests.addAll(
+								addQueryRanges(
+										tableName,
+										r, 
+										adapterIds,
+										(DynamoDBAdapterStore)adapterStore))));
 			}
-			else{
-				return Iterators.concat(
-						requests.parallelStream().map(
-								this::executeQueryRequest).iterator()); 
-			}
+			return Iterators.concat(
+					requests.parallelStream().map(
+							this::executeQueryRequest).iterator());
 		}
 		// query everything
 		final ScanRequest request = new ScanRequest(
@@ -159,25 +152,45 @@ abstract public class DynamoDBQuery extends
 
 	private List<QueryRequest> addQueryRanges(
 			final String tableName,
-			final ByteArrayRange r ) {
+			final ByteArrayRange r,
+			final List<ByteArrayId> adapterIDs,
+			final DynamoDBAdapterStore adapterStore) {
 		final List<QueryRequest> retVal = getPartitionRequests(tableName);
 		for (final QueryRequest queryRequest : retVal) {
-			addQueryRange(
-					r,
-					queryRequest);
+			if(adapterIDs.isEmpty()) {
+				CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
+				List<ByteArrayId> adapterIDList = new ArrayList<ByteArrayId>();
+				adapters.forEachRemaining(new Consumer<DataAdapter<?>>() {
+					@Override
+					public void accept(DataAdapter<?> t) {
+						adapterIDList.add(t.getAdapterId());
+					}
+				});
+				adapterIDs.addAll(adapterIDList);
+			}
+			
+			for (final ByteArrayId adapterID : adapterIDs) {
+				addQueryRange(
+						r,
+						queryRequest, 
+						adapterID);
+			}
 		}
 		return retVal;
 	}
 
 	private void addQueryRange(
 			final ByteArrayRange r,
-			final QueryRequest query ) {
+			final QueryRequest query,
+			final ByteArrayId adapterID) {
+		byte[] start = ByteArrayUtils.combineArrays(adapterID.getBytes(), r.getStart().getBytes());
+		byte[] end = ByteArrayUtils.combineArrays(adapterID.getBytes(), r.getEndAsNextPrefix().getBytes());
 		query.addKeyConditionsEntry(
 				DynamoDBRow.GW_RANGE_KEY,
 				new Condition().withComparisonOperator(
 						ComparisonOperator.BETWEEN).withAttributeValueList(
-						new AttributeValue().withB(ByteBuffer.wrap(r.getStart().getBytes())),
-						new AttributeValue().withB(ByteBuffer.wrap(r.getEndAsNextPrefix().getBytes()))));
+						new AttributeValue().withB(ByteBuffer.wrap(start)),
+						new AttributeValue().withB(ByteBuffer.wrap(end))));
 	}
 
 	private static List<QueryRequest> getPartitionRequests(
@@ -201,16 +214,6 @@ abstract public class DynamoDBQuery extends
 				queryRequest);
 		return new LazyPaginatedQuery(
 				result,
-				queryRequest,
-				dynamodbOperations.getClient());
-	}
-
-	/**
-	 * Asynchronous version of the query request. Does not block
-	 */
-	public Iterator<Map<String, AttributeValue>> executeAsyncQueryRequest(
-			final QueryRequest queryRequest ) {
-		return new AsyncPaginatedQuery(
 				queryRequest,
 				dynamodbOperations.getClient());
 	}
