@@ -37,7 +37,6 @@ public class RemoveIndexCommand extends
 
 		pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
 		return super.computeResults(params);
-
 	}
 
 	@Post("json")
