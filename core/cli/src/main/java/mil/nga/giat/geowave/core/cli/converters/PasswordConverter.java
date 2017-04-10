@@ -81,13 +81,6 @@ public class PasswordConverter implements
 							ex);
 				}
 				return null;
-				/*
-				 * Scanner scanner = null; try { scanner = new Scanner( new
-				 * File( value), "UTF-8"); String password = scanner.nextLine();
-				 * return decryptPassword(password); } catch
-				 * (FileNotFoundException e) { throw new ParameterException( e);
-				 * } finally { if (scanner != null) { scanner.close(); } }
-				 */
 			}
 		},
 		PROPFILE(
@@ -146,6 +139,9 @@ public class PasswordConverter implements
 		},
 		STDIN(
 				PasswordConverter.STDIN) {
+
+			private String input = null;
+
 			@Override
 			public boolean matches(
 					String value ) {
@@ -153,32 +149,17 @@ public class PasswordConverter implements
 			}
 
 			@Override
-			public String convert(
+			String process(
 					String value ) {
-				getConsole().print(
-						"Enter password: ");
-				char[] passwordChars = getConsole().readPassword(
-						false);
-				String password = new String(
-						passwordChars);
-				return decryptPassword(password);
-			}
-
-			private Console console;
-
-			public Console getConsole() {
-				if (console == null) {
-					try {
-						Method consoleMethod = System.class.getDeclaredMethod("console");
-						Object consoleObj = consoleMethod.invoke(null);
-						console = new JDK6Console(
-								consoleObj);
-					}
-					catch (Throwable t) {
-						console = new DefaultConsole();
-					}
+				if (input == null) {
+					Console console = getConsole();
+					console.print("Enter password: ");
+					char[] passwordChars = console.readPassword(false);
+					String password = new String(
+							passwordChars);
+					input = decryptPassword(password);
 				}
-				return console;
+				return input;
 			}
 		},
 		DEFAULT(
@@ -195,6 +176,23 @@ public class PasswordConverter implements
 		private KeyType(
 				String prefix ) {
 			this.prefix = prefix;
+		}
+
+		private Console console;
+
+		public Console getConsole() {
+			if (console == null) {
+				try {
+					Method consoleMethod = System.class.getDeclaredMethod("console");
+					Object consoleObj = consoleMethod.invoke(null);
+					console = new JDK6Console(
+							consoleObj);
+				}
+				catch (Throwable t) {
+					console = new DefaultConsole();
+				}
+			}
+			return console;
 		}
 
 		protected String decryptPassword(

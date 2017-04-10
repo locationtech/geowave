@@ -10,20 +10,24 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.converters.DecryptionConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 @GeowaveOperation(name = "decrypt", parentOperation = SecuritySection.class)
-@Parameters(commandDescription = "Decrypts a hex-encoded value. Value can be specified as either -value <encrypted value>, "
-		+ "or -secure <be prompted for encrypted value to avoid it showing in terminal history>")
+@Parameters(commandDescription = "Decrypts a hex-encoded value. Value can be specified as either "
+		+ "-value <clear text value>, or -secure <be prompted for value to avoid it showing in terminal history>")
 public class DecryptValueCommand extends
-		SecurityCommands
+		DefaultOperation implements
+		Command
 {
 	private final static Logger sLog = LoggerFactory.getLogger(DecryptValueCommand.class);
 
 	@Parameter(names = {
 		"-value"
-	}, description = "Value to decrypt", required = true)
+	}, description = "Value to decrypt", required = true, converter = DecryptionConverter.class)
 	private String value;
 
 	@Override
@@ -32,7 +36,6 @@ public class DecryptValueCommand extends
 			throws Exception {
 
 		sLog.info("Decrypting hex-encoded value");
-		System.out.println("\nDecrypting value: " + getValue());
 		if (getValue() != null && !"".equals(getValue().trim())) {
 			String decryptedValue = new SecurityUtils().decryptHexEncodedValue(getValue());
 			System.out.println("decrypted: " + decryptedValue);

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
@@ -19,7 +21,8 @@ import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUt
 @GeowaveOperation(name = "new_token", parentOperation = SecuritySection.class)
 @Parameters(commandDescription = "Generate a new security token within home directory")
 public class NewTokenCommand extends
-		SecurityCommands
+		DefaultOperation implements
+		Command
 {
 	private final static Logger sLog = LoggerFactory.getLogger(NewTokenCommand.class);
 

@@ -10,24 +10,24 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.converters.EncryptionConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
-/**
- * @author mcarrier
- *
- */
 @GeowaveOperation(name = "encrypt", parentOperation = SecuritySection.class)
-@Parameters(commandDescription = "Encrypts and hex-encodes value. Value can be specified as either -value <clear text value>, "
-		+ "or -secure <be prompted for value to avoid it showing in terminal history>")
+@Parameters(commandDescription = "Encrypts and hex-encodes value. Value can be specified as either "
+		+ "-value <clear text value>, or -secure <be prompted for value, to avoid it showing in terminal history>")
 public class EncryptValueCommand extends
-		SecurityCommands
+		DefaultOperation implements
+		Command
 {
 	private final static Logger sLog = LoggerFactory.getLogger(EncryptValueCommand.class);
 
 	@Parameter(names = {
 		"-value"
-	}, description = "Value to encrypt", required = true)
+	}, description = "Value to encrypt", required = false, converter = EncryptionConverter.class)
 	private String value;
 
 	@Override

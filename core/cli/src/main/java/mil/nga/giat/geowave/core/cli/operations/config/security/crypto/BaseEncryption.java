@@ -4,10 +4,7 @@
 package mil.nga.giat.geowave.core.cli.operations.config.security.crypto;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.security.Key;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 
 /**
@@ -35,7 +33,6 @@ public abstract class BaseEncryption
 
 	public static String resourceName = "geowave_crypto_key.dat";
 	private String resourceLocation;
-	private byte[] token = null;
 	private Key key = null;
 
 	/**
@@ -50,6 +47,7 @@ public abstract class BaseEncryption
 	 * values (salt - below - and token file - specified at resourceLocation)
 	 */
 	private byte[] salt = null;
+	protected static File tokenFile = null;
 
 	public static final String PREFIX = "ENC{";
 	public static final String SUFFIX = "}";
@@ -68,9 +66,8 @@ public abstract class BaseEncryption
 
 	public BaseEncryption() {
 		try {
-			setResourceLocation(new File(
-					FileUtils.formatFilePath("~" + File.separator + ConfigOptions.GEOWAVE_CACHE_PATH),
-					resourceName).getCanonicalPath());
+			checkForToken();
+			setResourceLocation(tokenFile.getCanonicalPath());
 
 			salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
 
@@ -86,6 +83,50 @@ public abstract class BaseEncryption
 					t.getLocalizedMessage(),
 					t);
 		}
+	}
+
+	/**
+	 * Check if encryption token exists. If not, create one initially
+	 */
+	public static void checkForToken() throws Throwable {
+		tokenFile = new File(
+				mil.nga.giat.geowave.core.cli.utils.FileUtils.formatFilePath("~" + File.separator
+						+ ConfigOptions.GEOWAVE_CACHE_PATH),
+				resourceName);
+		if (tokenFile == null || !tokenFile.exists()) {
+			generateNewEncryptionToken(tokenFile);
+		}
+		if (tokenFile==null || !tokenFile.exists()) {
+			throw new Throwable("An error occurred generating a new encryption token.");
+		}
+	}
+
+	/**
+	 * Generate a new token value in a specified file
+	 * 
+	 * @param tokenFile
+	 * @return
+	 */
+	public static boolean generateNewEncryptionToken(
+			File tokenFile ) throws Exception {
+		boolean success = false;
+		try {
+			LOGGER.info(
+					"Writing new encryption token to file at path {}",
+					tokenFile.getCanonicalPath());
+			org.apache.commons.io.FileUtils.writeStringToFile(
+					tokenFile,
+					SecurityUtils.generateNewToken());
+			LOGGER.info("Completed writing new encryption token to file");
+			success = true;
+		}
+		catch (Exception ex) {
+			LOGGER.error(
+					"An error occurred writing new encryption token to file: " + ex.getLocalizedMessage(),
+					ex);
+			throw ex;
+		}
+		return success;
 	}
 
 	/*
@@ -212,16 +253,16 @@ public abstract class BaseEncryption
 	 */
 	private void generateRootKeyFromToken()
 			throws Throwable {
-		File tokenFile = new File(
-				getResourceLocation());
+		/*
+		 * File tokenFile = new File( getResourceLocation());
+		 */
 		if (!tokenFile.exists()) {
 			throw new Throwable(
 					"Token file not found at specified path [" + getResourceLocation() + "]");
 		}
 
 		try {
-			String strPassword = FileUtils.readFileContent(new File(
-					getResourceLocation()));
+			String strPassword = FileUtils.readFileContent(tokenFile);
 			char[] password = strPassword != null ? strPassword.trim().toCharArray() : null;
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 			SecretKey tmp = factory.generateSecret(new PBEKeySpec(
@@ -256,40 +297,6 @@ public abstract class BaseEncryption
 		return retval;
 	}
 
-	/**
-	 * Sets the resource token to null
-	 */
-	public synchronized void resetToken() {
-		token = null;
-	}
-
-	/**
-	 * Checks for a token at the specified location
-	 */
-	private synchronized void checkForToken() {
-		if (token == null) {
-			InputStream stream = this.getClass().getClassLoader().getResourceAsStream(
-					resourceLocation);
-			if (stream != null) {
-				@SuppressWarnings("resource")
-				Scanner s = new Scanner(
-						stream,
-						"UTF-8").useDelimiter("\\A");
-				String content = s.hasNext() ? s.next() : "";
-				if (content != null) {
-					try {
-						token = content.getBytes("UTF-8");
-					}
-					catch (UnsupportedEncodingException e) {
-						LOGGER.error(
-								e.getLocalizedMessage(),
-								e);
-					}
-				}
-			}
-		}
-	}
-
 	protected void setKey(
 			Key key ) {
 		this.key = key;
@@ -313,7 +320,6 @@ public abstract class BaseEncryption
 	public byte[] encrypt(
 			byte[] data )
 			throws Exception {
-		checkForToken();
 		byte[] encryptedBytes = encryptBytes(data);
 		int encryptedBytesLength = encryptedBytes.length;
 		byte[] wrappedBytes = new byte[PrefixBytesLength + encryptedBytesLength + SuffixBytesLength];
@@ -351,7 +357,6 @@ public abstract class BaseEncryption
 	public String encryptAndHexEncode(
 			String data )
 			throws Exception {
-		checkForToken();
 		if (data == null) {
 			return null;
 		}
@@ -373,7 +378,6 @@ public abstract class BaseEncryption
 	public byte[] decrypt(
 			byte[] data )
 			throws Exception {
-		checkForToken();
 		if (bytesSurroundedByWrapper(data)) {
 			return decryptBytes(extractWrappedContents(data));
 		}
@@ -404,7 +408,6 @@ public abstract class BaseEncryption
 			return decrypt(data);
 		}
 		else {
-			checkForToken();
 			return decryptBytes(data);
 		}
 	}
@@ -420,7 +423,6 @@ public abstract class BaseEncryption
 	public String decryptHexEncoded(
 			String data )
 			throws Exception {
-		checkForToken();
 		if (data == null) {
 			return null;
 		}
