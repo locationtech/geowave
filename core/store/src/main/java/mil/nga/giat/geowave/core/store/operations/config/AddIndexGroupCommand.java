@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexGroupPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
-@GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class, restEnabled=GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create an index group for usage in GeoWave")
 public class AddIndexGroupCommand extends
 		DefaultOperation implements

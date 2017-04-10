@@ -20,7 +20,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
-@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class, restEnabled=GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddIndexCommand implements
 		Command

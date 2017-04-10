@@ -17,7 +17,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
-@GeowaveOperation(name = "set", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "set", parentOperation = ConfigSection.class, restEnabled=GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Set property name within cache")
 public class SetCommand extends
 		DefaultOperation implements

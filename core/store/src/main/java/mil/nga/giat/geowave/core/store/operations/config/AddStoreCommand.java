@@ -20,7 +20,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class, restEnabled=GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddStoreCommand implements
 		Command
