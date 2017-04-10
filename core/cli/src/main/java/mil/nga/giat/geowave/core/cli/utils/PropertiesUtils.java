@@ -13,13 +13,14 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class PropertiesUtils implements
 		Serializable
 {
-	private final static Logger LOGGER = Logger.getLogger(PropertiesUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(PropertiesUtils.class);
 
 	public static Properties fromFile(
 			final String propertyFilePath ) {

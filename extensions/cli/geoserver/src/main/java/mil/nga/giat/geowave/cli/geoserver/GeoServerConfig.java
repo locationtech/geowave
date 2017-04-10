@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 public class GeoServerConfig
 {
@@ -79,7 +79,7 @@ public class GeoServerConfig
 		else {
 			try {
 				// if password in config props is encrypted, need to decrypt it
-				pass = SecurityUtils.decryptHexEncodedValue(pass);
+				pass = new SecurityUtils().decryptHexEncodedValue(pass);
 			}
 			catch (Exception e) {
 				LOGGER.error(

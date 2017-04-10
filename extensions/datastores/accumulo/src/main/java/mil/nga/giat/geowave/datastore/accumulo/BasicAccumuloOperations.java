@@ -45,8 +45,7 @@ import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
-import mil.nga.giat.geowave.security.crypto.impl.GeoWaveEncryptionService;
-import mil.nga.giat.geowave.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 /**
  * This class holds all parameters necessary for establishing Accumulo
@@ -110,7 +109,7 @@ public class BasicAccumuloOperations implements
 				tableNamespace);
 		// GeoWave:811 - providing ability to support encrypted passwords
 		try {
-			this.password = SecurityUtils.decryptHexEncodedValue(password);
+			this.password = new SecurityUtils().decryptHexEncodedValue(password);
 		}
 		catch (Exception e) {
 			LOGGER.error(
@@ -123,7 +122,7 @@ public class BasicAccumuloOperations implements
 				zookeeperUrl,
 				instanceName,
 				userName,
-				password);
+				this.password);
 	}
 
 	/**

@@ -1,8 +1,9 @@
 /**
  * 
  */
-package mil.nga.giat.geowave.security.crypto.impl;
+package mil.nga.giat.geowave.core.cli.operations.config.security.crypto;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
@@ -19,28 +20,23 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.security.crypto.EncryptionService;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 
 /**
- * Cryptography encryption/decryption capability in symmetric mode. This handles
- * the main wrapper functionalities for encrypting and decrypting, though
- * implementation-specifics are handled through an implementation of the
- * EncryptionService interface
- * 
- * @see EncryptionService
- * @see GeoWaveEncryptionServiceImpl
  *
  */
-public class GeoWaveEncryptionService
+public abstract class BaseEncryption
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveEncryptionService.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BaseEncryption.class);
 
-	public String resourceLocation = "geowave_crypto_key.dat";
+	public static String resourceName = "geowave_crypto_key.dat";
+	private String resourceLocation;
 	private byte[] token = null;
-	private Key rootKey = null;
+	private Key key = null;
 
 	/**
 	 * PROTECT this value. The salt value is the second-half of the protection
@@ -70,29 +66,33 @@ public class GeoWaveEncryptionService
 
 	private final String KEY_ENCRYPTION_ALGORITHM = "AES";
 
-	private EncryptionService encryptionService;
-
-	public GeoWaveEncryptionService() {
+	public BaseEncryption() {
 		try {
+			setResourceLocation(new File(
+					FileUtils.formatFilePath("~" + File.separator + ConfigOptions.GEOWAVE_CACHE_PATH),
+					resourceName).getCanonicalPath());
+
 			salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
+
 			PrefixBytes = PREFIX.getBytes("UTF-8");
 			SuffixBytes = SUFFIX.getBytes("UTF-8");
 			PrefixBytesLength = PrefixBytes.length;
 			SuffixBytesLength = SuffixBytes.length;
+
+			generateRootKeyFromToken();
 		}
-		catch (UnsupportedEncodingException e) {
+		catch (Throwable t) {
 			LOGGER.error(
-					e.getLocalizedMessage(),
-					e);
+					t.getLocalizedMessage(),
+					t);
 		}
-		setEncryptionService(new GeoWaveEncryptionServiceImpl());
 	}
 
 	/*
 	 * INTERNAL METHODS
 	 */
 	/**
-	 * Returns the path to the resource for the token
+	 * Returns the path on the file system to the resource for the token
 	 * 
 	 * @return Path to resource to get the token
 	 */
@@ -107,30 +107,9 @@ public class GeoWaveEncryptionService
 	 *            Path to resource to get the token
 	 */
 	public void setResourceLocation(
-			String resourceLoc ) {
+			String resourceLoc )
+			throws Throwable {
 		resourceLocation = resourceLoc;
-		generateRootKeyFromToken();
-	}
-
-	/**
-	 * Returns the encryption service instance for this token encryption class
-	 * 
-	 * @return the encryption service instance for this token encryption class
-	 */
-	public EncryptionService getEncryptionService() {
-		return encryptionService;
-	}
-
-	/**
-	 * Sets the encryption service instance for this token encryption class
-	 * 
-	 * @param encryptionService
-	 *            the encryption service instance for this token encryption
-	 *            class
-	 */
-	public void setEncryptionService(
-			EncryptionService encryptionService ) {
-		this.encryptionService = encryptionService;
 	}
 
 	/**
@@ -139,7 +118,7 @@ public class GeoWaveEncryptionService
 	 * @param data
 	 * @return boolean - true if properly wrapped, false otherwise
 	 */
-	public boolean isProperlyWrapped(
+	public static boolean isProperlyWrapped(
 			String data ) {
 		return ENCCodePattern.matcher(
 				data).matches();
@@ -231,9 +210,17 @@ public class GeoWaveEncryptionService
 	/**
 	 * 
 	 */
-	private void generateRootKeyFromToken() {
+	private void generateRootKeyFromToken()
+			throws Throwable {
+		File tokenFile = new File(
+				getResourceLocation());
+		if (!tokenFile.exists()) {
+			throw new Throwable(
+					"Token file not found at specified path [" + getResourceLocation() + "]");
+		}
+
 		try {
-			String strPassword = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(
+			String strPassword = FileUtils.readFileContent(new File(
 					getResourceLocation()));
 			char[] password = strPassword != null ? strPassword.trim().toCharArray() : null;
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -242,19 +229,22 @@ public class GeoWaveEncryptionService
 					salt,
 					65536,
 					256));
-			rootKey = new SecretKeySpec(
+			setKey(new SecretKeySpec(
 					tmp.getEncoded(),
-					KEY_ENCRYPTION_ALGORITHM);
-			getEncryptionService().setRootKey(
-					rootKey);
+					KEY_ENCRYPTION_ALGORITHM));
 		}
 		catch (Exception ex) {
-			LOGGER.fatal(
+			LOGGER.error(
 					"An error occurred generating the root key from the specified token: " + ex.getLocalizedMessage(),
 					ex);
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public static String generateRandomSecretKey()
 			throws Exception {
 		String retval = "";
@@ -300,6 +290,15 @@ public class GeoWaveEncryptionService
 		}
 	}
 
+	protected void setKey(
+			Key key ) {
+		this.key = key;
+	}
+
+	protected Key getKey() {
+		return this.key;
+	}
+
 	/*
 	 * ENCRYPTION METHODS
 	 */
@@ -315,8 +314,7 @@ public class GeoWaveEncryptionService
 			byte[] data )
 			throws Exception {
 		checkForToken();
-		byte[] encryptedBytes = getEncryptionService().encrypt(
-				data);
+		byte[] encryptedBytes = encryptBytes(data);
 		int encryptedBytesLength = encryptedBytes.length;
 		byte[] wrappedBytes = new byte[PrefixBytesLength + encryptedBytesLength + SuffixBytesLength];
 		System.arraycopy(
@@ -357,8 +355,7 @@ public class GeoWaveEncryptionService
 		if (data == null) {
 			return null;
 		}
-		byte[] encryptedBytes = getEncryptionService().encrypt(
-				data.getBytes("UTF-8"));
+		byte[] encryptedBytes = encryptBytes(data.getBytes("UTF-8"));
 		return PREFIX + toString(encryptedBytes) + SUFFIX;
 	}
 
@@ -378,8 +375,7 @@ public class GeoWaveEncryptionService
 			throws Exception {
 		checkForToken();
 		if (bytesSurroundedByWrapper(data)) {
-			return getEncryptionService().decrypt(
-					extractWrappedContents(data));
+			return decryptBytes(extractWrappedContents(data));
 		}
 		else {
 			return data;
@@ -409,8 +405,7 @@ public class GeoWaveEncryptionService
 		}
 		else {
 			checkForToken();
-			return getEncryptionService().decrypt(
-					data);
+			return decryptBytes(data);
 		}
 	}
 
@@ -433,12 +428,34 @@ public class GeoWaveEncryptionService
 		if (matcher.matches()) {
 			String codedString = matcher.group(1);
 			return new String(
-					getEncryptionService().decrypt(
-							fromString(codedString)),
+					decryptBytes(fromString(codedString)),
 					"UTF-8");
 		}
 		else {
 			return data;
 		}
 	}
+
+	/*
+	 * ABSTRACT METHODS
+	 */
+	/**
+	 * Encrypt the data as a byte array
+	 * 
+	 * @param valueToEncrypt
+	 *            value to encrypt
+	 */
+	abstract public byte[] encryptBytes(
+			byte[] valueToEncrypt )
+			throws Exception;
+
+	/**
+	 * Decrypt the encrypted data
+	 * 
+	 * @param valueToDecrypt
+	 *            value to encrypt
+	 */
+	abstract public byte[] decryptBytes(
+			byte[] valueToDecrypt )
+			throws Exception;
 }

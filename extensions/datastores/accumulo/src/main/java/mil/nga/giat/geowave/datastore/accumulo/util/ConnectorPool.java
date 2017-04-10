@@ -10,7 +10,7 @@ import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 public class ConnectorPool
 {
@@ -36,7 +36,7 @@ public class ConnectorPool
 
 		String decryptedPassword = password;
 		try {
-			decryptedPassword = SecurityUtils.decryptHexEncodedValue(password);
+			decryptedPassword = new SecurityUtils().decryptHexEncodedValue(password);
 		}
 		catch (Exception e) {
 			LOGGER.error(

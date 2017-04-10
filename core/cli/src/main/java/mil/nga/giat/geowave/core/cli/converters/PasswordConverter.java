@@ -8,9 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Properties;
-import java.util.Scanner;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
@@ -18,8 +18,9 @@ import com.beust.jcommander.internal.Console;
 import com.beust.jcommander.internal.DefaultConsole;
 import com.beust.jcommander.internal.JDK6Console;
 
+import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 import mil.nga.giat.geowave.core.cli.utils.PropertiesUtils;
-import mil.nga.giat.geowave.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 /**
  * This class will allow support for user's passing in passwords through a
@@ -42,7 +43,7 @@ import mil.nga.giat.geowave.security.utils.SecurityUtils;
 public class PasswordConverter implements
 		IStringConverter<String>
 {
-	private final static Logger LOGGER = Logger.getLogger(PasswordConverter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(PasswordConverter.class);
 	public static final String STDIN = "stdin";
 	private static final String SEPARATOR = ":";
 
@@ -68,24 +69,25 @@ public class PasswordConverter implements
 			@Override
 			String process(
 					String value ) {
-				Scanner scanner = null;
 				try {
-					scanner = new Scanner(
-							new File(
-									value),
-							"UTF-8");
-					String password = scanner.nextLine();
-					return decryptPassword(password);
-				}
-				catch (FileNotFoundException e) {
-					throw new ParameterException(
-							e);
-				}
-				finally {
-					if (scanner != null) {
-						scanner.close();
+					String password = FileUtils.readFileContent(new File(
+							value));
+					if (password != null && !"".equals(password.trim())) {
+						return decryptPassword(password);
 					}
 				}
+				catch (Exception ex) {
+					throw new ParameterException(
+							ex);
+				}
+				return null;
+				/*
+				 * Scanner scanner = null; try { scanner = new Scanner( new
+				 * File( value), "UTF-8"); String password = scanner.nextLine();
+				 * return decryptPassword(password); } catch
+				 * (FileNotFoundException e) { throw new ParameterException( e);
+				 * } finally { if (scanner != null) { scanner.close(); } }
+				 */
 			}
 		},
 		PROPFILE(
@@ -199,7 +201,7 @@ public class PasswordConverter implements
 				String password ) {
 			if (password != null) {
 				try {
-					return SecurityUtils.decryptHexEncodedValue(password);
+					return new SecurityUtils().decryptHexEncodedValue(password);
 				}
 				catch (Exception e) {
 					LOGGER.error(

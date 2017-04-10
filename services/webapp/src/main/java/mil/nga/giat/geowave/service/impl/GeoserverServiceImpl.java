@@ -34,7 +34,7 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
-import mil.nga.giat.geowave.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import mil.nga.giat.geowave.service.GeoserverService;
 import mil.nga.giat.geowave.service.ServiceUtils;
 
@@ -88,7 +88,7 @@ public class GeoserverServiceImpl implements
 				"geoserver.password");
 
 		try {
-			geoserverPass = SecurityUtils.decryptHexEncodedValue(geoserverPass);
+			geoserverPass = new SecurityUtils().decryptHexEncodedValue(geoserverPass);
 		}
 		catch (Exception e) {
 			log.error(

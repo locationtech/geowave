@@ -1,7 +1,7 @@
 /**
  * 
  */
-package mil.nga.giat.geowave.security.utils;
+package mil.nga.giat.geowave.core.cli.operations.config.security.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -11,28 +11,31 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.security.crypto.impl.GeoWaveEncryptionService;
+import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
+import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.GeoWaveEncryption;
+import net.jcip.annotations.ThreadSafe;
 
 /**
  * Security utility class for simpler interfacing with
  */
+@ThreadSafe
 public class SecurityUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SecurityUtils.class);
 
-	private static GeoWaveEncryptionService encService;
-	private static String resourceLocation;
-	private static final String WRAPPER = GeoWaveEncryptionService.WRAPPER;
+	private BaseEncryption encService;
+	private String resourceLocation;
+	private static final String WRAPPER = BaseEncryption.WRAPPER;
 
-	static {
-		resourceLocation = new GeoWaveEncryptionService().getResourceLocation();
+	public SecurityUtils() {
+		resourceLocation = new GeoWaveEncryption().getResourceLocation();
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public static String getResourceLocation() {
+	public String getResourceLocation() {
 		return resourceLocation;
 	}
 
@@ -40,7 +43,7 @@ public class SecurityUtils
 	 * 
 	 * @param resourceLocation
 	 */
-	public static void setResourceLocation(
+	public void setResourceLocation(
 			String resourceLoc ) {
 		resourceLocation = resourceLoc;
 	}
@@ -51,12 +54,14 @@ public class SecurityUtils
 	 * @return
 	 * @throws Exception
 	 */
-	public static String decryptValue(
+	public String decryptValue(
 			byte[] value )
-			throws Exception {
-		return decryptValue(
-				value,
-				getResourceLocation());
+			throws Throwable {
+		synchronized (value) {
+			return decryptValue(
+					value,
+					getResourceLocation());
+		}
 	}
 
 	/**
@@ -70,39 +75,38 @@ public class SecurityUtils
 	 * @return decrypted value
 	 * @throws Exception
 	 */
-	public static String decryptValue(
+	public String decryptValue(
 			byte[] value,
 			String resourceLocation )
-			throws Exception {
-
-		String strValue = new String(
-				value,
-				"UTF-8");
-		if (strValue != null && !"".equals(strValue.trim())) {
-			LOGGER.trace("Decrypting base64-encoded value: [" + strValue + "]");
-			if (getEncryptionService(
-					resourceLocation).isProperlyWrapped(
-					strValue.trim())) {
-				return new String(
-						getEncryptionService(
-								resourceLocation).decrypt(
-								value,
-								true),
-						"UTF-8");
+			throws Throwable {
+		synchronized (value) {
+			String strValue = new String(
+					value,
+					"UTF-8");
+			if (strValue != null && !"".equals(strValue.trim())) {
+				LOGGER.trace("Decrypting base64-encoded value: [" + strValue + "]");
+				if (BaseEncryption.isProperlyWrapped(strValue.trim())) {
+					return new String(
+							getEncryptionService(
+									resourceLocation).decrypt(
+									value,
+									true),
+							"UTF-8");
+				}
+				else {
+					LOGGER.debug("WARNING: Value to decrypt was not propertly encoded and wrapped with " + WRAPPER
+							+ ". Not decrypting value.");
+					return strValue;
+				}
 			}
 			else {
-				LOGGER.debug("WARNING: Value to decrypt was not propertly encoded and wrapped with " + WRAPPER
-						+ ". Not decrypting value.");
+				LOGGER.debug("WARNING: No value specified to decrypt.");
 				return strValue;
 			}
 		}
-		else {
-			LOGGER.debug("WARNING: No value specified to decrypt.");
-			return strValue;
-		}
 	}
 
-	public static String decryptHexEncodedValue(
+	public String decryptHexEncodedValue(
 			String value )
 			throws Exception {
 		return decryptHexEncodedValue(
@@ -120,49 +124,34 @@ public class SecurityUtils
 	 *            service resource location
 	 * @return decrypted value
 	 */
-	public static String decryptHexEncodedValue(
+	public String decryptHexEncodedValue(
 			String value,
 			String resourceLocation )
 			throws Exception {
-		String decryptedValue = "";
 		LOGGER.trace("Decrypting hex-encoded value: [" + value + "]");
-
 		if (value != null && !"".equals(value.trim())) {
-			if (getEncryptionService(
-					resourceLocation).isProperlyWrapped(
-					value.trim())) {
+			if (BaseEncryption.isProperlyWrapped(value.trim())) {
 				try {
-					decryptedValue = getEncryptionService(
+					return getEncryptionService(
 							resourceLocation).decryptHexEncoded(
 							value);
 				}
-				catch (RuntimeException re) {
+				catch (Throwable t) {
 					LOGGER.error(
-							"Encountered RuntimeException during content decryption: " + re.getLocalizedMessage(),
-							re);
-				}
-				catch (Exception e) {
-					LOGGER.error(
-							"Encountered Exception during content decryption: " + e.getLocalizedMessage(),
-							e);
-				}
-				catch (Throwable e) {
-					LOGGER.error(
-							"Encountered Throwable during content decryption: " + e.getLocalizedMessage(),
-							e);
+							"Encountered exception during content decryption: " + t.getLocalizedMessage(),
+							t);
 				}
 			}
 			else {
 				LOGGER.debug("WARNING: Value to decrypt was not propertly encoded and wrapped with " + WRAPPER
 						+ ". Not decrypting value.");
-				decryptedValue = value;
+				return value;
 			}
 		}
 		else {
 			LOGGER.debug("WARNING: No value specified to decrypt.");
-			decryptedValue = value;
 		}
-		return decryptedValue;
+		return "";
 	}
 
 	/**
@@ -171,9 +160,9 @@ public class SecurityUtils
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] encryptValue(
+	public byte[] encryptValue(
 			String value )
-			throws Exception {
+			throws Throwable {
 		return encryptValue(
 				value,
 				getResourceLocation());
@@ -190,16 +179,14 @@ public class SecurityUtils
 	 * @return encrypted value
 	 * @throws Exception
 	 */
-	public static byte[] encryptValue(
+	public byte[] encryptValue(
 			String value,
 			String resourceLocation )
-			throws Exception {
+			throws Throwable {
 		byte[] bytes = null;
 		if ((value != null) && (!"".equals(value.trim()))) {
 			LOGGER.trace("Encrypting and base64-encoding value: [" + value + "]");
-			if (!getEncryptionService(
-					resourceLocation).isProperlyWrapped(
-					value)) {
+			if (!BaseEncryption.isProperlyWrapped(value)) {
 				bytes = getEncryptionService(
 						resourceLocation).encrypt(
 						value.getBytes("UTF-8"));
@@ -225,7 +212,7 @@ public class SecurityUtils
 	 *         value is returned wrapped with ENC{}
 	 * @throws Exception
 	 */
-	public static String encryptAndHexEncodeValue(
+	public String encryptAndHexEncodeValue(
 			String value )
 			throws Exception {
 		return encryptAndHexEncodeValue(
@@ -243,48 +230,36 @@ public class SecurityUtils
 	 * @return If encryption is successful, encrypted and hex-encoded string
 	 *         value is returned wrapped with ENC{}
 	 */
-	public static String encryptAndHexEncodeValue(
+	public String encryptAndHexEncodeValue(
 			String value,
 			String resourceLocation )
 			throws Exception {
-		String encryptedValue = "";
 		LOGGER.info("Encrypting and hex-encoding value: [" + value + "]");
 		if (value != null && !"".equals(value.trim())) {
-			if (!getEncryptionService(
-					resourceLocation).isProperlyWrapped(
-					value)) {
+			if (!BaseEncryption.isProperlyWrapped(value)) {
 				try {
-					encryptedValue = getEncryptionService(
+					return getEncryptionService(
 							resourceLocation).encryptAndHexEncode(
 							value);
 				}
-				catch (RuntimeException re) {
+				catch (Throwable t) {
+					t.printStackTrace();
 					LOGGER.error(
-							"Encountered RuntimeException during content encryption: " + re.getLocalizedMessage(),
-							re);
-				}
-				catch (Exception e) {
-					LOGGER.error(
-							"Encountered Exception during content encryption: " + e.getLocalizedMessage(),
-							e);
-				}
-				catch (Throwable e) {
-					LOGGER.error(
-							"Encountered Throwable during content encryption: " + e.getLocalizedMessage(),
-							e);
+							"Encountered exception during content encryption: " + t.getLocalizedMessage(),
+							t);
 				}
 			}
 			else {
 				LOGGER.debug("WARNING: Value to encrypt already appears to be encrypted and already wrapped with "
 						+ WRAPPER + ". Not encrypting value.");
-				encryptedValue = value;
+				return value;
 			}
 		}
 		else {
 			LOGGER.debug("WARNING: No value specified to encrypt.");
-			encryptedValue = value;
+			return value;
 		}
-		return encryptedValue;
+		return "";
 	}
 
 	/**
@@ -297,11 +272,11 @@ public class SecurityUtils
 	 * @return An initialized instance of the encryption service
 	 * @throws Exception
 	 */
-	private static GeoWaveEncryptionService getEncryptionService(
+	private BaseEncryption getEncryptionService(
 			String resourceLocation )
-			throws Exception {
+			throws Throwable {
 		if (encService == null) {
-			encService = new GeoWaveEncryptionService();
+			encService = new GeoWaveEncryption();
 			try {
 				if (resourceLocation != null && !"".equals(resourceLocation.trim())) {
 					LOGGER.trace("Setting resource location for encryption service: [" + resourceLocation + "]");
@@ -309,6 +284,7 @@ public class SecurityUtils
 				}
 			}
 			catch (IllegalArgumentException e) {
+				e.printStackTrace();
 				LOGGER.error(
 						"Encountered IllegalArgumentException getting encryption service: " + e.getLocalizedMessage(),
 						e);
@@ -387,6 +363,11 @@ public class SecurityUtils
 		return convertHashToString(md5Bytes);
 	}
 
+	public static String generateNewToken()
+			throws Exception {
+		return BaseEncryption.generateRandomSecretKey();
+	}
+
 	/**
 	 * Main method for providing ability to encrypt or decrypt values based on
 	 * encoding (base64 or hex)
@@ -413,6 +394,7 @@ public class SecurityUtils
 
 		String operation = null, value = null, resourceLocation = null;
 
+		SecurityUtils securityUtils = new SecurityUtils();
 		if (args.length > 0) {
 			if (args.length != 0) {
 				operation = args[0];
@@ -426,22 +408,20 @@ public class SecurityUtils
 
 			// new token operation requires no other inputs
 			if (operation != null && operation.equals(newTokenValueKey)) {
-				String newTokenValue = GeoWaveEncryptionService.generateRandomSecretKey();
+				String newTokenValue = generateNewToken();
 				System.out.println(newTokenValue);
 			}
 			else if (operation != null && !"".equals(operation) && value != null && !"".equals(value)) {
 				if (decryptHexValueKey.equals(operation)) {
-					System.out.println("Decrypting hex-encoded value using "
-							+ ((resourceLocation == null) ? "default token" : resourceLocation));
-					String decrypted = decryptHexEncodedValue(
+					System.out.println("Decrypting hex-encoded value using " + resourceLocation);
+					String decrypted = securityUtils.decryptHexEncodedValue(
 							value,
 							resourceLocation);
 					System.out.println(decrypted);
 				}
 				else if (encryptHexValueKey.equals(operation)) {
-					System.out.println("Encrypting and hex-encoding value using "
-							+ ((resourceLocation == null) ? "default token" : resourceLocation));
-					String encrypted = encryptAndHexEncodeValue(
+					System.out.println("Encrypting and hex-encoding value using " + resourceLocation);
+					String encrypted = securityUtils.encryptAndHexEncodeValue(
 							value,
 							resourceLocation);
 					System.out.println(encrypted);

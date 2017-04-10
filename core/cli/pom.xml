@@ -12,14 +12,11 @@
 	
 	<properties>
 		<beanutils.version>1.9.2</beanutils.version>
+		<commons-codec.version>1.7</commons-codec.version>
+		<org.commons.io.version>2.4</org.commons.io.version>
 	</properties>
 	
 	<dependencies>	
-		<dependency>
-            <groupId>mil.nga.giat</groupId>
-            <artifactId>geowave-security</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -29,6 +26,16 @@
             <artifactId>commons-beanutils</artifactId>
             <version>${beanutils.version}</version>
         </dependency>
+        <dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		    <version>${commons-codec.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>${org.commons.io.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.beust</groupId>
 			<artifactId>jcommander</artifactId>
@@ -36,12 +43,13 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>	
+		</dependency>
+		<!-- for dynamically setting log level through GeowaveTopLevelSection class -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
-		</dependency>	
+		</dependency>
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
@@ -52,6 +60,11 @@
 			<artifactId>json-lib</artifactId>
 			<classifier>jdk15</classifier>
 			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
