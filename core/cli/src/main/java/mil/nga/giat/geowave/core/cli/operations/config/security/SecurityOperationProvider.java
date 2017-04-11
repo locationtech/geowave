@@ -8,9 +8,7 @@ public class SecurityOperationProvider implements
 
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
 		SecuritySection.class,
-		NewTokenCommand.class,
-		EncryptValueCommand.class,
-		DecryptValueCommand.class
+		NewTokenCommand.class
 	};
 
 	@Override

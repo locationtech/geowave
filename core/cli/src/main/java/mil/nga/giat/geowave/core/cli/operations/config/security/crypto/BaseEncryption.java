@@ -88,7 +88,8 @@ public abstract class BaseEncryption
 	/**
 	 * Check if encryption token exists. If not, create one initially
 	 */
-	public static void checkForToken() throws Throwable {
+	public static void checkForToken()
+			throws Throwable {
 		tokenFile = new File(
 				mil.nga.giat.geowave.core.cli.utils.FileUtils.formatFilePath("~" + File.separator
 						+ ConfigOptions.GEOWAVE_CACHE_PATH),
@@ -96,8 +97,9 @@ public abstract class BaseEncryption
 		if (tokenFile == null || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
 		}
-		if (tokenFile==null || !tokenFile.exists()) {
-			throw new Throwable("An error occurred generating a new encryption token.");
+		if (tokenFile == null || !tokenFile.exists()) {
+			throw new Throwable(
+					"An error occurred generating a new encryption token.");
 		}
 	}
 
@@ -108,7 +110,8 @@ public abstract class BaseEncryption
 	 * @return
 	 */
 	public static boolean generateNewEncryptionToken(
-			File tokenFile ) throws Exception {
+			File tokenFile )
+			throws Exception {
 		boolean success = false;
 		try {
 			LOGGER.info(

@@ -12,7 +12,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.internal.Console;
 import com.beust.jcommander.internal.DefaultConsole;
@@ -40,9 +39,12 @@ import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUt
  * <li><b>stdin</b></li>
  * </ul>
  */
-public class PasswordConverter implements
-		IStringConverter<String>
+public class PasswordConverter extends GeoWaveBaseConverter<String>
 {
+	public PasswordConverter(String optionName) {
+		super(optionName);
+	}
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(PasswordConverter.class);
 	public static final String STDIN = "stdin";
 	private static final String SEPARATOR = ":";
@@ -139,7 +141,6 @@ public class PasswordConverter implements
 		},
 		STDIN(
 				PasswordConverter.STDIN) {
-
 			private String input = null;
 
 			@Override
@@ -155,8 +156,7 @@ public class PasswordConverter implements
 					Console console = getConsole();
 					console.print("Enter password: ");
 					char[] passwordChars = console.readPassword(false);
-					String password = new String(
-							passwordChars);
+					String password = new String(passwordChars);
 					input = decryptPassword(password);
 				}
 				return input;
@@ -236,5 +236,10 @@ public class PasswordConverter implements
 			}
 		}
 		return value;
+	}
+
+	@Override
+	public boolean isPassword() {
+		return true;
 	}
 }
