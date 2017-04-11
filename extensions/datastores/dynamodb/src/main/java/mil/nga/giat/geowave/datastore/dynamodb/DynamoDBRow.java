@@ -40,10 +40,11 @@ public class DynamoDBRow extends
 
 	public DynamoDBRow(
 			final Map<String, AttributeValue> objMap ) {
-		final byte[] rowId = objMap.get(GW_RANGE_KEY).getB().array();
+		final byte[] rowId = objMap.get(
+				GW_RANGE_KEY).getB().array();
 		final int length = rowId.length;
 		final int offset = 0;
-		
+
 		final ByteBuffer metadataBuf = ByteBuffer.wrap(
 				rowId,
 				length + offset - 12,
@@ -59,7 +60,7 @@ public class DynamoDBRow extends
 		final byte[] index = new byte[length - 12 - adapterIdLength - dataIdLength];
 		final byte[] adapterId = new byte[adapterIdLength];
 		final byte[] dataId = new byte[dataIdLength];
-		//get adapterId first
+		// get adapterId first
 		buf.get(adapterId);
 		buf.get(index);
 		buf.get(dataId);
@@ -80,7 +81,7 @@ public class DynamoDBRow extends
 		this.value = objMap.get(
 				GW_VALUE_KEY).getB().array();
 	}
-	
+
 	@Override
 	public byte[] getRowId() {
 		final ByteBuffer buf = ByteBuffer.allocate(12 + dataId.length + adapterId.length + index.length);

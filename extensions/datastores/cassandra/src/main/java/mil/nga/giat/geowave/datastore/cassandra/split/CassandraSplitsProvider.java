@@ -84,8 +84,9 @@ public class CassandraSplitsProvider extends
 				adapterStore,
 				statsStore,
 				authorizations));
-		//use empty tablename for now if the table doesn't exist, bt log the error
-		if(!cassandraOperations.tableExists(left.getId().getString())){
+		// use empty tablename for now if the table doesn't exist, bt log the
+		// error
+		if (!cassandraOperations.tableExists(left.getId().getString())) {
 			LOGGER.error("Table doesn't exist for given PrimaryIndex");
 		}
 		final String tableName = left.getId().getString();

@@ -28,7 +28,6 @@ public class InputFormatDynamoDBRangeQuery extends
 	private final boolean isOutputWritable;
 
 	private static List<ByteArrayId> getAdapterIds(
-			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final QueryOptions queryOptions ) {
 		try {
@@ -55,7 +54,6 @@ public class InputFormatDynamoDBRangeQuery extends
 				dataStore,
 				dynamoDBOperations,
 				getAdapterIds(
-						index,
 						adapterStore,
 						queryOptions),
 				index,
@@ -72,6 +70,11 @@ public class InputFormatDynamoDBRangeQuery extends
 
 		this.range = range;
 		this.isOutputWritable = isOutputWritable;
+	}
+
+	@Override
+	protected List<ByteArrayRange> getRanges() {
+		return Collections.singletonList(range);
 	}
 
 	@Override

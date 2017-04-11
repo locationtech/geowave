@@ -701,7 +701,7 @@ public class HBaseDataStore extends
 
 					mutation.add(put);
 				}
-				
+
 				mutations.add(mutation);
 			}
 			catch (final Exception e) {
