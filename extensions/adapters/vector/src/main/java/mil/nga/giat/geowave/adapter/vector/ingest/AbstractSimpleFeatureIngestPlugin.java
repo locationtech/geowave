@@ -174,7 +174,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 						public boolean apply(
 								final GeoWaveData<SimpleFeature> input ) {
 							if ((internalTypeNameProvider != null)
-									&& internalTypeNameProvider.typeNameMatches(input.getAdapterId().getString())) {
+									&& !internalTypeNameProvider.typeNameMatches(input.getAdapterId().getString())) {
 								return false;
 							}
 							if ((internalFilterProvider != null) && !internalFilterProvider.evaluate(input.getValue())) {
