@@ -6,6 +6,8 @@ import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Get;
 import org.shaded.restlet.resource.Post;
 import org.shaded.restlet.resource.ServerResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -19,6 +21,8 @@ public abstract class DefaultOperation<T> extends
 		ServerResource implements
 		Operation
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(DefaultOperation.class);
+
 	public boolean prepare(
 			OperationParams params ) {
 		return true;
@@ -56,7 +60,15 @@ public abstract class DefaultOperation<T> extends
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				ConfigOptions.getDefaultPropertyFile());
-		return computeResults(params);
+		try {
+			return computeResults(params);
+		}
+		catch (Exception e) {
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e);
+			throw e;
+		}
 	}
 
 }
