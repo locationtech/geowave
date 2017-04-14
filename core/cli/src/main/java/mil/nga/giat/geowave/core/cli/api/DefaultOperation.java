@@ -1,11 +1,14 @@
 package mil.nga.giat.geowave.core.cli.api;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
@@ -25,18 +28,18 @@ public class DefaultOperation implements
 	private File securityTokenFile = null;
 
 	public boolean prepare(
-			OperationParams params ) {
+			OperationParams params )
+			throws ParameterException {
 		try {
 			checkForGeoWaveDirectory(params);
 			checkForToken();
-			return true;
 		}
 		catch (Exception e) {
-			sLog.error(
+			throw new ParameterException(
 					"Error occurred during preparing phase: " + e.getLocalizedMessage(),
 					e);
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -55,7 +58,11 @@ public class DefaultOperation implements
 
 	/**
 	 * Ensure that a geowave home directory exists at ~/.geowave. This is where
-	 * encryption token file will be stored
+	 * encryption token file will be stored. This method will attempt to load
+	 * the config options from the given config file. If it can't find it, it
+	 * will try to create it. It will then set the contextual variables
+	 * 'properties' and 'properties-file', which can be used by commands to
+	 * overwrite/update the properties.
 	 * 
 	 * @param params
 	 * @throws Exception
@@ -66,6 +73,27 @@ public class DefaultOperation implements
 		File geowaveDir = null;
 		geowaveConfigPropsFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		if (geowaveConfigPropsFile == null) {
+			geowaveConfigPropsFile = ConfigOptions.getDefaultPropertyFile();
+		}
+
+		if (!geowaveConfigPropsFile.exists()) {
+			// Attempt to create it.
+			try {
+				if (!geowaveConfigPropsFile.createNewFile()) {
+					throw new Exception(
+							"Could not create property cache file: " + geowaveConfigPropsFile);
+				}
+			}
+			catch (IOException e) {
+				sLog.error(
+						"Could not create property cache file: " + geowaveConfigPropsFile,
+						e);
+				throw e;
+			}
+		}
+
 		if (geowaveConfigPropsFile != null && geowaveConfigPropsFile.exists()) {
 			// get parent directory of config properties file
 			geowaveDir = geowaveConfigPropsFile.getParentFile();
@@ -86,6 +114,7 @@ public class DefaultOperation implements
 							"An error occurred creating a user '.geowave' in home directory: "
 									+ e.getLocalizedMessage(),
 							e);
+					throw e;
 				}
 			}
 		}
@@ -99,10 +128,15 @@ public class DefaultOperation implements
 		return geowaveConfigPropsFile;
 	}
 
-	protected Properties getGeoWaveConfigProperties() {
+	protected Properties getGeoWaveConfigProperties(
+			String filter ) {
 		return ConfigOptions.loadProperties(
 				geowaveConfigPropsFile,
-				null);
+				filter);
+	}
+
+	protected Properties getGeoWaveConfigProperties() {
+		return getGeoWaveConfigProperties(null);
 	}
 
 	/**

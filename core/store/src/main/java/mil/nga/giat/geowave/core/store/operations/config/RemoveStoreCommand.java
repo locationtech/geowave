@@ -14,7 +14,6 @@ public class RemoveStoreCommand extends
 		AbstractRemoveCommand implements
 		Command
 {
-
 	@Override
 	public void execute(
 			OperationParams params ) {
@@ -24,6 +23,5 @@ public class RemoveStoreCommand extends
 		super.execute(
 				params,
 				pattern);
-
 	}
 }

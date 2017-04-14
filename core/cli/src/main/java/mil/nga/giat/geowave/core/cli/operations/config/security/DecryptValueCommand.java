@@ -27,7 +27,7 @@ public class DecryptValueCommand extends
 
 	@Parameter(names = {
 		"-value"
-	}, description = "Value to decrypt", required = true, converter = DecryptionConverter.class)
+	}, description = "Value to decrypt", converter = DecryptionConverter.class)
 	private String value;
 
 	@Override

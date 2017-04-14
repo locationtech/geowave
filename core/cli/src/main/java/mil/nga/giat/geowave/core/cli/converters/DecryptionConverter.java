@@ -3,17 +3,8 @@
  */
 package mil.nga.giat.geowave.core.cli.converters;
 
-import java.lang.reflect.Method;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.internal.Console;
-import com.beust.jcommander.internal.DefaultConsole;
-import com.beust.jcommander.internal.JDK6Console;
-
-import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 /**
  * This class will allow support for user's passing in values to be decrypted
@@ -26,8 +17,8 @@ import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUt
  * <li><b>stdin</b></li>
  * </ul>
  */
-public class DecryptionConverter implements
-		IStringConverter<String>
+public class DecryptionConverter extends
+		GeoWaveBaseConverter<String>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(PasswordConverter.class);
 	public static final String STDIN = "stdin";
@@ -48,12 +39,7 @@ public class DecryptionConverter implements
 			String process(
 					String value ) {
 				if (input == null) {
-					Console console = getConsole();
-					console.print("Enter value to decrypt: ");
-					char[] passwordChars = console.readPassword(false);
-					String password = new String(
-							passwordChars);
-					input = decryptPassword(password);
+					input = promptAndReadPassword("Enter value to decrypt: ");
 				}
 				return input;
 			}
@@ -64,39 +50,6 @@ public class DecryptionConverter implements
 		private KeyType(
 				String prefix ) {
 			this.prefix = prefix;
-		}
-
-		private Console console;
-
-		public Console getConsole() {
-			if (console == null) {
-				try {
-					Method consoleMethod = System.class.getDeclaredMethod("console");
-					Object consoleObj = consoleMethod.invoke(null);
-					console = new JDK6Console(
-							consoleObj);
-				}
-				catch (Throwable t) {
-					console = new DefaultConsole();
-				}
-			}
-			return console;
-		}
-
-		protected String decryptPassword(
-				String password ) {
-			if (password != null) {
-				try {
-					return new SecurityUtils().decryptHexEncodedValue(password);
-				}
-				catch (Exception e) {
-					LOGGER.error(
-							"An error occurred decrypting the provided password value: [" + e.getLocalizedMessage()
-									+ "]",
-							e);
-				}
-			}
-			return password;
 		}
 
 		public boolean matches(
@@ -118,11 +71,22 @@ public class DecryptionConverter implements
 	@Override
 	public String convert(
 			String value ) {
+		LOGGER.trace("ENTER :: convert()");
 		for (KeyType keyType : KeyType.values()) {
 			if (keyType.matches(value)) {
 				return keyType.convert(value);
 			}
 		}
 		return value;
+	}
+
+	@Override
+	public boolean isPassword() {
+		return false;
+	}
+
+	@Override
+	public boolean isRequired() {
+		return true;
 	}
 }

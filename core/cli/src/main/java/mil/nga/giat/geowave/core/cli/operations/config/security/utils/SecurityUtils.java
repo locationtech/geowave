@@ -84,7 +84,7 @@ public class SecurityUtils
 					value,
 					"UTF-8");
 			if (strValue != null && !"".equals(strValue.trim())) {
-				LOGGER.trace("Decrypting base64-encoded value: [" + strValue + "]");
+				LOGGER.trace("Decrypting base64-encoded value");
 				if (BaseEncryption.isProperlyWrapped(strValue.trim())) {
 					return new String(
 							getEncryptionService(
@@ -128,7 +128,7 @@ public class SecurityUtils
 			String value,
 			String resourceLocation )
 			throws Exception {
-		LOGGER.trace("Decrypting hex-encoded value: [" + value + "]");
+		LOGGER.trace("Decrypting hex-encoded value");
 		if (value != null && !"".equals(value.trim())) {
 			if (BaseEncryption.isProperlyWrapped(value.trim())) {
 				try {
@@ -185,7 +185,7 @@ public class SecurityUtils
 			throws Throwable {
 		byte[] bytes = null;
 		if ((value != null) && (!"".equals(value.trim()))) {
-			LOGGER.trace("Encrypting and base64-encoding value: [" + value + "]");
+			LOGGER.trace("Encrypting and base64-encoding value");
 			if (!BaseEncryption.isProperlyWrapped(value)) {
 				bytes = getEncryptionService(
 						resourceLocation).encrypt(
@@ -234,7 +234,7 @@ public class SecurityUtils
 			String value,
 			String resourceLocation )
 			throws Exception {
-		LOGGER.info("Encrypting and hex-encoding value: [" + value + "]");
+		LOGGER.debug("Encrypting and hex-encoding value");
 		if (value != null && !"".equals(value.trim())) {
 			if (!BaseEncryption.isProperlyWrapped(value)) {
 				try {

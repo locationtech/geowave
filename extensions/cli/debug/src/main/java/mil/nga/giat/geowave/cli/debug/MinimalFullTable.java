@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.cli.debug;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -26,7 +25,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
@@ -62,14 +60,10 @@ public class MinimalFullTable extends
 
 		String storeName = parameters.get(0);
 
-		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
 		// Attempt to load store.
 		StoreLoader storeOptions = new StoreLoader(
 				storeName);
-		if (!storeOptions.loadFromConfig(configFile)) {
+		if (!storeOptions.loadFromConfig(getGeoWaveConfigFile())) {
 			throw new ParameterException(
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}

@@ -26,7 +26,6 @@ import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 
 /**
  * Config options allows the user to override the default location for
@@ -37,7 +36,7 @@ public class ConfigOptions
 {
 	public static final String CHARSET = "ISO-8859-1";
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(ConfigSection.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ConfigOptions.class);
 
 	public final static String PROPERTIES_FILE_CONTEXT = "properties-file";
 	public final static String GEOWAVE_CACHE_PATH = ".geowave";

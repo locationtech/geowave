@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -15,14 +16,19 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.converters.RequiredFieldConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.utils.JCommanderParameterUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddStoreCommand implements
+public class AddStoreCommand extends
+		DefaultOperation implements
 		Command
 {
 
@@ -42,7 +48,7 @@ public class AddStoreCommand implements
 	@Parameter(names = {
 		"-t",
 		"--type"
-	}, required = true, description = "The type of store, such as accumulo, memory, etc")
+	}, converter = RequiredFieldConverter.class, description = "The type of store, such as accumulo, memory, etc")
 	private String storeType;
 
 	@ParametersDelegate
@@ -51,6 +57,7 @@ public class AddStoreCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
@@ -58,13 +65,7 @@ public class AddStoreCommand implements
 		}
 		else {
 			// Try to load the 'default' options.
-
-			File configFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-			Properties existingProps = ConfigOptions.loadProperties(
-					configFile,
-					null);
-
+			Properties existingProps = getGeoWaveConfigProperties();
 			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
@@ -93,11 +94,7 @@ public class AddStoreCommand implements
 	public void execute(
 			OperationParams params ) {
 
-		File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties();
 
 		// Ensure that a name is chosen.
 		if (parameters.size() != 1) {
@@ -114,10 +111,42 @@ public class AddStoreCommand implements
 					"That store already exists: " + getPluginName());
 		}
 
+		if (pluginOptions.getFactoryOptions() != null) {
+			pluginOptions.getFactoryOptions().validatePluginOptions();
+		}
+
 		// Save the store options.
 		pluginOptions.save(
 				existingProps,
 				getNamespace());
+
+		if (pluginOptions.getFactoryOptions() != null) {
+			Field[] fields = pluginOptions.getFactoryOptions().getClass().getDeclaredFields();
+			for (Field field : fields) {
+				for (Annotation annotation : field.getAnnotations()) {
+					if (annotation.annotationType() == Parameter.class) {
+						Parameter parameter = (Parameter) annotation;
+						if (JCommanderParameterUtils.isPassword(parameter)) {
+							String storeFieldName = getNamespace() + ".opts." + field.getName();
+							String value = existingProps.getProperty(storeFieldName);
+							String encryptedValue = value;
+							try {
+								encryptedValue = new SecurityUtils().encryptAndHexEncodeValue(value);
+							}
+							catch (Exception e) {
+								LOGGER.error(
+										"An error occurred encrypting specified password value: "
+												+ e.getLocalizedMessage(),
+										e);
+							}
+							existingProps.setProperty(
+									storeFieldName,
+									encryptedValue);
+						}
+					}
+				}
+			}
+		}
 
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
@@ -128,7 +157,7 @@ public class AddStoreCommand implements
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
+				getGeoWaveConfigFile(),
 				existingProps);
 	}
 

@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.operations.remote;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -44,16 +42,12 @@ public abstract class AbstractStatsCommand extends
 			adapterIdName = parameters.get(1);
 		}
 
-		// Attempt to load store.
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
 		// Attempt to load input store if not already provided (test purposes).
 
 		if (inputStoreOptions == null) {
 			StoreLoader inputStoreLoader = new StoreLoader(
 					storeName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
+			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile())) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
@@ -61,7 +55,6 @@ public abstract class AbstractStatsCommand extends
 		}
 
 		try {
-
 			// Various stores needed
 			AdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 

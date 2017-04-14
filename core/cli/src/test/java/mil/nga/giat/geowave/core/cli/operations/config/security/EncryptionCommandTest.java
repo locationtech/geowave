@@ -6,8 +6,7 @@ package mil.nga.giat.geowave.core.cli.operations.config.security;
 import com.beust.jcommander.JCommander;
 
 /**
- * @author mcarrier
- *
+ * Encryption test(s)
  */
 public class EncryptionCommandTest
 {

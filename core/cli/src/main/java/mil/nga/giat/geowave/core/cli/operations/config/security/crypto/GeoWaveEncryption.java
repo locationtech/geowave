@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author mcarrier
+ * Encryption/Decryption implementation based of symmetric cryptography
  *
  */
 public class GeoWaveEncryption extends

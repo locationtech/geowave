@@ -6,20 +6,16 @@ package mil.nga.giat.geowave.core.cli.converters;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.internal.Console;
-import com.beust.jcommander.internal.DefaultConsole;
-import com.beust.jcommander.internal.JDK6Console;
 
 import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 import mil.nga.giat.geowave.core.cli.utils.PropertiesUtils;
-import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 /**
  * This class will allow support for user's passing in passwords through a
@@ -39,10 +35,13 @@ import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUt
  * <li><b>stdin</b></li>
  * </ul>
  */
-public class PasswordConverter extends GeoWaveBaseConverter<String>
+public class PasswordConverter extends
+		GeoWaveBaseConverter<String>
 {
-	public PasswordConverter(String optionName) {
-		super(optionName);
+	public PasswordConverter(
+			String optionName ) {
+		super(
+				optionName);
 	}
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(PasswordConverter.class);
@@ -55,7 +54,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 			@Override
 			String process(
 					String password ) {
-				return decryptPassword(password);
+				return decryptValue(password);
 			}
 		},
 		ENV(
@@ -63,7 +62,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 			@Override
 			String process(
 					String envVariable ) {
-				return decryptPassword(System.getenv(envVariable));
+				return decryptValue(System.getenv(envVariable));
 			}
 		},
 		FILE(
@@ -75,7 +74,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 					String password = FileUtils.readFileContent(new File(
 							value));
 					if (password != null && !"".equals(password.trim())) {
-						return decryptPassword(password);
+						return decryptValue(password);
 					}
 				}
 				catch (Exception ex) {
@@ -104,7 +103,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 									propertyKey = propertyKey.trim();
 								}
 								if (properties != null && properties.containsKey(propertyKey)) {
-									return decryptPassword(properties.getProperty(propertyKey));
+									return decryptValue(properties.getProperty(propertyKey));
 								}
 							}
 							else {
@@ -153,11 +152,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 			String process(
 					String value ) {
 				if (input == null) {
-					Console console = getConsole();
-					console.print("Enter password: ");
-					char[] passwordChars = console.readPassword(false);
-					String password = new String(passwordChars);
-					input = decryptPassword(password);
+					input = promptAndReadPassword("Enter password: ");
 				}
 				return input;
 			}
@@ -167,7 +162,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 			@Override
 			String process(
 					String password ) {
-				return decryptPassword(password);
+				return decryptValue(password);
 			}
 		};
 
@@ -176,39 +171,6 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 		private KeyType(
 				String prefix ) {
 			this.prefix = prefix;
-		}
-
-		private Console console;
-
-		public Console getConsole() {
-			if (console == null) {
-				try {
-					Method consoleMethod = System.class.getDeclaredMethod("console");
-					Object consoleObj = consoleMethod.invoke(null);
-					console = new JDK6Console(
-							consoleObj);
-				}
-				catch (Throwable t) {
-					console = new DefaultConsole();
-				}
-			}
-			return console;
-		}
-
-		protected String decryptPassword(
-				String password ) {
-			if (password != null) {
-				try {
-					return new SecurityUtils().decryptHexEncodedValue(password);
-				}
-				catch (Exception e) {
-					LOGGER.error(
-							"An error occurred decrypting the provided password value: [" + e.getLocalizedMessage()
-									+ "]",
-							e);
-				}
-			}
-			return password;
 		}
 
 		public boolean matches(
@@ -232,7 +194,25 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 			String value ) {
 		for (KeyType keyType : KeyType.values()) {
 			if (keyType.matches(value)) {
-				return keyType.convert(value);
+				String convertedValue = keyType.convert(value);
+				// update the value in the configs properties file
+				if (updatePasswordInConfigs() && getPropertyKey() != null && !"".equals(getPropertyKey().trim())) {
+					Properties configProps = getGeoWaveConfigProperties();
+					if (configProps != null) {
+						// encrypt the value to be stored in the properties
+						convertedValue = encryptValue(convertedValue);
+						configProps.put(
+								getPropertyKey(),
+								convertedValue);
+						ConfigOptions.writeProperties(
+								getGeoWaveConfigFile(),
+								configProps);
+						LOGGER.debug(
+								"Configuration properties successfully updated with property [{}]",
+								getPropertyKey());
+					}
+				}
+				return convertedValue;
 			}
 		}
 		return value;
@@ -241,5 +221,21 @@ public class PasswordConverter extends GeoWaveBaseConverter<String>
 	@Override
 	public boolean isPassword() {
 		return true;
+	}
+
+	@Override
+	public boolean isRequired() {
+		return true;
+	}
+
+	protected Properties getGeoWaveConfigProperties() {
+		File geowaveConfigPropsFile = getGeoWaveConfigFile();
+		return ConfigOptions.loadProperties(
+				geowaveConfigPropsFile,
+				null);
+	}
+
+	protected File getGeoWaveConfigFile() {
+		return ConfigOptions.getDefaultPropertyFile();
 	}
 }

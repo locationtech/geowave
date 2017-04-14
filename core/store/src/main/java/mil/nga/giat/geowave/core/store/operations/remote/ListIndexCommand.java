@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.operations.remote;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -42,18 +40,13 @@ public class ListIndexCommand extends
 
 		String inputStoreName = parameters.get(0);
 
-		// Get the config options from the properties file
-
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
 		// Attempt to load the desired input store
 
 		String result;
 
 		StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
-		if (!inputStoreLoader.loadFromConfig(configFile)) {
+		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile())) {
 			result = "Cannot find store name: " + inputStoreLoader.getStoreName();
 		}
 		else {
