@@ -17,8 +17,9 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "rmindex", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "rmindex", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Remove index configuration from Geowave configuration")
 public class RemoveIndexCommand extends
 		AbstractRemoveCommand implements
@@ -39,6 +40,7 @@ public class RemoveIndexCommand extends
 		return super.computeResults(params);
 	}
 
+	// TODO i dont' know what to do with this
 	@Post("json")
 	public void restDelete() {
 		String pattern = getQueryValue("pattern");

@@ -23,8 +23,9 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "cpindex", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "cpindex", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Copy and modify existing index configuration")
 public class CopyIndexCommand extends
 		DefaultOperation implements
@@ -84,8 +85,7 @@ public class CopyIndexCommand extends
 
 	}
 
-	@Post("json")
-	public void computeResults() {
+	public Void computeResults(OperationParams params) {
 
 		String key = getQueryValue("key");
 		String value = getQueryValue("value");
@@ -99,11 +99,6 @@ public class CopyIndexCommand extends
 			setParameters(
 					key,
 					value);
-			OperationParams params = new ManualOperationParams();
-
-			params.getContext().put(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT,
-					ConfigOptions.getDefaultPropertyFile());
 
 			try {
 				copyIndex(params);
@@ -114,6 +109,8 @@ public class CopyIndexCommand extends
 						e.getMessage());
 			}
 		}
+		
+		return null;
 	}
 
 	/**

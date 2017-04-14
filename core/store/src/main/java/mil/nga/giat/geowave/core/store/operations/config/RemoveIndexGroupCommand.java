@@ -12,8 +12,9 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexGroupPluginOptions;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "rmindexgrp", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "rmindexgrp", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Remove index group from Geowave configuration")
 public class RemoveIndexGroupCommand extends
 		AbstractRemoveCommand implements

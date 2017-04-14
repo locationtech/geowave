@@ -24,8 +24,9 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Copy and modify existing store configuration")
 public class CopyStoreCommand extends
 		ServerResource implements

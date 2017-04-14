@@ -12,8 +12,9 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 
 import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Post;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "rmstore", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "rmstore", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Remove store from Geowave configuration")
 public class RemoveStoreCommand extends
 		AbstractRemoveCommand implements
