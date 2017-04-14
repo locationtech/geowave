@@ -186,9 +186,10 @@ public class IngestMessageHandler implements
 						final double longitude = pt.getLocation().longitude;
 						final double elevation = pt.getLocation().elevation;
 
-						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
+						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY
+								.createPoint(new Coordinate(
+										longitude,
+										latitude)));
 
 						double detailLatitude = Stanag4676EventWritable.NO_DETAIL;
 						double detailLongitude = Stanag4676EventWritable.NO_DETAIL;

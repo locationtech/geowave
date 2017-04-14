@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTyp
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
@@ -326,7 +327,11 @@ public class Stanag4676IngestPlugin extends
 
 					ptBuilder.add(geometry);
 
-					if (event.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && event.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL) {
+					if (!FloatCompareUtils.checkDoublesEqual(
+							event.DetailLatitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+							event.DetailLongitude.get(),
+							Stanag4676EventWritable.NO_DETAIL)) {
 						detail_coord_sequence.add(event.DetailLongitude.get());
 						detail_coord_sequence.add(event.DetailLatitude.get());
 					}
@@ -335,7 +340,11 @@ public class Stanag4676IngestPlugin extends
 					Double detailLongitude = null;
 					Double detailElevation = null;
 					Geometry detailGeometry = null;
-					if (event.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && event.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL) {
+					if (!FloatCompareUtils.checkDoublesEqual(
+							event.DetailLatitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+							event.DetailLongitude.get(),
+							Stanag4676EventWritable.NO_DETAIL)) {
 						detailLatitude = event.DetailLatitude.get();
 						detailLongitude = event.DetailLongitude.get();
 						detailElevation = event.DetailElevation.get();
@@ -561,7 +570,15 @@ public class Stanag4676IngestPlugin extends
 				Double lastEventDetailLatitude = null;
 				Double lastEventDetailLongitude = null;
 
-				if (firstEvent.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && firstEvent.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL && lastEvent.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && lastEvent.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL) {
+				if (!FloatCompareUtils.checkDoublesEqual(
+						firstEvent.DetailLatitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+						firstEvent.DetailLongitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+						lastEvent.DetailLatitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+						lastEvent.DetailLongitude.get(),
+						Stanag4676EventWritable.NO_DETAIL)) {
 					firstEventDetailLatitude = firstEvent.DetailLatitude.get();
 					firstEventDetailLongitude = firstEvent.DetailLongitude.get();
 					lastEventDetailLatitude = lastEvent.DetailLatitude.get();
