@@ -1,10 +1,30 @@
 package mil.nga.giat.geowave.service.rest;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.reflections.Reflections;
+import org.shaded.restlet.security.Verifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.shaded.restlet.security.SecretVerifier;
+import org.shaded.restlet.security.Authenticator;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 import org.shaded.restlet.Application;
 import org.shaded.restlet.Component;
@@ -15,10 +35,20 @@ import org.shaded.restlet.resource.ServerResource;
 import org.shaded.restlet.routing.Router;
 import org.shaded.restlet.Restlet;
 
+import org.shaded.restlet.Restlet;
+import org.shaded.restlet.security.ChallengeAuthenticator;
+import org.shaded.restlet.data.ChallengeScheme;
+import org.shaded.restlet.security.MapVerifier;
+import org.shaded.restlet.Context;
+
 public class RestServer extends
 		ServerResource
 {
 	private ArrayList<Route> availableRoutes;
+
+	private final static String DEFAULT_USERNAME = "admin", DEFAULT_PASSWORD = "password";
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(RestServer.class);
 
 	/**
 	 * Run the Restlet server (localhost:5152)
@@ -72,10 +102,83 @@ public class RestServer extends
 
 		// Setup router
 		Application myApp = new Application() {
+
+			private void initializePasswordsFile(
+					File passwordsFile ) {
+
+				try (PrintWriter writer = new PrintWriter(
+						new OutputStreamWriter(
+								new FileOutputStream(
+										passwordsFile),
+								StandardCharsets.UTF_8))) {
+					LOGGER.info(
+							"Initializing passwords file at {}. Default is {}/{}",
+							new Object[] {
+								passwordsFile,
+								DEFAULT_USERNAME,
+								DEFAULT_PASSWORD
+							});
+					writer.println(DEFAULT_USERNAME + "," + DigestUtils.sha256Hex(DEFAULT_PASSWORD));
+				}
+				catch (IOException e) {
+					throw new RuntimeException(
+							e);
+				}
+			}
+
+			private Authenticator createAuthenticator() {
+				ChallengeAuthenticator authenticator = new ChallengeAuthenticator(
+						getContext(),
+						ChallengeScheme.HTTP_BASIC,
+						"geowave");
+
+				File passwordsFile = new File(
+						ConfigOptions.getDefaultPropertyPath(),
+						"passwords.csv");
+				if (!passwordsFile.exists()) initializePasswordsFile(passwordsFile);
+
+				Map<String, String> passwords = new HashMap<>();
+				try (CSVParser parser = CSVParser.parse(
+						passwordsFile,
+						StandardCharsets.UTF_8,
+						CSVFormat.DEFAULT)) {
+					for (CSVRecord record : parser) {
+						String username = record.get(0);
+						String passwordDigest = record.get(1);
+						passwords.put(
+								username,
+								passwordDigest);
+					}
+				}
+				catch (IOException e) {
+					throw new RuntimeException(
+							e);
+				}
+
+				SecretVerifier verifier = new SecretVerifier() {
+					@Override
+					public int verify(
+							String identifier,
+							char[] secret ) {
+						String s = passwords.get(identifier);
+						return (s != null && s.equals(DigestUtils.sha256Hex(new String(
+								secret)))) ? RESULT_VALID : RESULT_INVALID;
+					}
+				};
+
+				authenticator.setVerifier(verifier);
+
+				return authenticator;
+			}
+
 			@Override
 			public Restlet createInboundRoot() {
 				router.setContext(getContext());
-				return router;
+
+				Authenticator authenticator = createAuthenticator();
+				authenticator.setNext(router);
+
+				return authenticator;
 			};
 		};
 		Component component = new Component();
