@@ -322,7 +322,11 @@ public class Stanag4676IngestPlugin extends
 
 					ptBuilder.add(geometry);
 
-					if (event.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && event.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL) {
+					if (Double.compare(
+							event.DetailLatitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) != 0 && Double.compare(
+							event.DetailLongitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) != 0) {
 						detail_coord_sequence.add(event.DetailLongitude.get());
 						detail_coord_sequence.add(event.DetailLatitude.get());
 					}
@@ -331,7 +335,11 @@ public class Stanag4676IngestPlugin extends
 					Double detailLongitude = null;
 					Double detailElevation = null;
 					Geometry detailGeometry = null;
-					if (event.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && event.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL) {
+					if (Double.compare(
+							event.DetailLatitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) != 0 && Double.compare(
+							event.DetailLongitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) != 0) {
 						detailLatitude = event.DetailLatitude.get();
 						detailLongitude = event.DetailLongitude.get();
 						detailElevation = event.DetailElevation.get();
@@ -557,7 +565,15 @@ public class Stanag4676IngestPlugin extends
 				Double lastEventDetailLatitude = null;
 				Double lastEventDetailLongitude = null;
 
-				if (firstEvent.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && firstEvent.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL && lastEvent.DetailLatitude.get() != Stanag4676EventWritable.NO_DETAIL && lastEvent.DetailLongitude.get() != Stanag4676EventWritable.NO_DETAIL) {
+				if (Double.compare(
+						firstEvent.DetailLatitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) != 0 && Double.compare(
+						firstEvent.DetailLongitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) != 0 && Double.compare(
+						lastEvent.DetailLatitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) != 0 && Double.compare(
+						lastEvent.DetailLongitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) != 0) {
 					firstEventDetailLatitude = firstEvent.DetailLatitude.get();
 					firstEventDetailLongitude = firstEvent.DetailLongitude.get();
 					lastEventDetailLatitude = lastEvent.DetailLatitude.get();
