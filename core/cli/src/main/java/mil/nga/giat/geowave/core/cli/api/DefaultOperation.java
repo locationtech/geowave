@@ -75,11 +75,29 @@ public class DefaultOperation implements
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		if (geowaveConfigPropsFile == null) {
+			// if file does not exist
 			geowaveConfigPropsFile = ConfigOptions.getDefaultPropertyFile();
 		}
 
+		geowaveDir = geowaveConfigPropsFile.getParentFile();
+		if (!geowaveDir.exists()) {
+			try {
+				boolean created = geowaveDir.mkdir();
+				if (!created) {
+					sLog.error("An error occurred creating a user '.geowave' in home directory");
+				}
+			}
+			catch (Exception e) {
+				sLog.error(
+						"An error occurred creating a user '.geowave' in home directory: " + e.getLocalizedMessage(),
+						e);
+				throw new ParameterException(
+						e);
+			}
+		}
+
 		if (!geowaveConfigPropsFile.exists()) {
-			// Attempt to create it.
+			// config file does not exist, attempt to create it.
 			try {
 				if (!geowaveConfigPropsFile.createNewFile()) {
 					throw new Exception(
@@ -90,32 +108,8 @@ public class DefaultOperation implements
 				sLog.error(
 						"Could not create property cache file: " + geowaveConfigPropsFile,
 						e);
-				throw e;
-			}
-		}
-
-		if (geowaveConfigPropsFile != null && geowaveConfigPropsFile.exists()) {
-			// get parent directory of config properties file
-			geowaveDir = geowaveConfigPropsFile.getParentFile();
-		}
-
-		// check if parent directory is set, if not, create it
-		if (geowaveDir == null) {
-			geowaveDir = ConfigOptions.getDefaultPropertyPath();
-			if (geowaveDir != null && !geowaveDir.exists()) {
-				try {
-					boolean created = geowaveDir.mkdir();
-					if (!created) {
-						sLog.error("An error occurred creating a user '.geowave' in home directory");
-					}
-				}
-				catch (Exception e) {
-					sLog.error(
-							"An error occurred creating a user '.geowave' in home directory: "
-									+ e.getLocalizedMessage(),
-							e);
-					throw e;
-				}
+				throw new ParameterException(
+						e);
 			}
 		}
 	}
