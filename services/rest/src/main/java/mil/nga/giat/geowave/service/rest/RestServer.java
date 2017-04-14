@@ -70,8 +70,9 @@ public class RestServer extends
 		for (Route route : availableRoutes) {
 			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
 		}
+		routeStringBuilder.append("<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
 		for (String command : unavailableCommands) {
-			routeStringBuilder.append("<span style='color:red'>" + command + "</span><br>");
+			routeStringBuilder.append("<span style='color:blue'>" + command + "</span><br>");
 		}
 		return "<b>404</b>: Route not found<br><br>" + routeStringBuilder.toString();
 	}

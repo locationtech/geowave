@@ -21,7 +21,7 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 
-@GeowaveOperation(name = "set", parentOperation = ConfigSection.class, restEnabled=GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "set", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Set property name within cache")
 public class SetCommand extends
 		DefaultOperation implements
@@ -49,7 +49,8 @@ public class SetCommand extends
 	 *         set
 	 */
 	@Override
-	protected Object computeResults(OperationParams params) {
+	protected Object computeResults(
+			OperationParams params ) {
 		String key = getQueryValue("key");
 		String value = getQueryValue("value");
 

@@ -24,7 +24,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexGroupPlugi
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 
-@GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class, restEnabled=GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create an index group for usage in GeoWave")
 public class AddIndexGroupCommand extends
 		DefaultOperation implements
@@ -51,7 +51,8 @@ public class AddIndexGroupCommand extends
 	 * @return none
 	 */
 	@Override
-	public Void computeResults(OperationParams params) { // TODO think about return type
+	public Void computeResults(
+			OperationParams params ) { // TODO think about return type
 		String key = getQueryValue("key");
 		String value = getQueryValue("value");
 		if ((key == null || key.equals("")) || value == null) {

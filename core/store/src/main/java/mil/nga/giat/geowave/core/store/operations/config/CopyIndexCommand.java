@@ -85,7 +85,8 @@ public class CopyIndexCommand extends
 
 	}
 
-	public Void computeResults(OperationParams params) {
+	public Void computeResults(
+			OperationParams params ) {
 
 		String key = getQueryValue("key");
 		String value = getQueryValue("value");
@@ -109,7 +110,7 @@ public class CopyIndexCommand extends
 						e.getMessage());
 			}
 		}
-		
+
 		return null;
 	}
 
