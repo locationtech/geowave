@@ -14,7 +14,7 @@ public class VersionUtilsTest
 	public void testVersion() {
 		String version = null; // change this value when it gives a version
 		assertEquals(
-				version,  // change this value when it gives a version
+				version, // change this value when it gives a version
 				VersionUtils.getVersion());
 	}
 
@@ -24,7 +24,8 @@ public class VersionUtilsTest
 		System.setOut(new PrintStream(
 				output));
 		VersionUtils.printVersionInfo();
-		String expectedoutput = "{}\n"; // change this value when it gives a version
+		String expectedoutput = "{}\n"; // change this value when it gives a
+										// version
 		assertEquals(
 				expectedoutput,
 				output.toString());

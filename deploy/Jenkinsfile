@@ -1,0 +1,24 @@
+node {
+   stage 'Wipe workspace'
+   deleteDir()
+
+   // Mark the code checkout 'stage'
+   stage 'Checkout'
+   // Get GeoWave source from GitHub repository
+checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: true], [$class: 'LocalBranch', localBranch: 'master']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ngageoint/geowave.git']]])
+   // Mark the create docker image 'stage'
+   stage 'Create Docker Image'
+   // Build the docker container
+   sh 'docker build -t ngageoint/geowave-centos6-java8-build -f deploy/packaging/docker/geowave-centos6-java8-build.dockerfile deploy/packaging/docker'
+   sh 'docker build -t ngageoint/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
+   sh 'docker build -t ngageoint/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
+
+   // Mark the build artifacts 'stage'....
+   stage 'Build and Publish RPMs'
+   sh 'deploy/packaging/docker/docker-build-rpms.sh'
+
+   // Deploy to geowave-rpms
+   stage 'Deploying to s3://geowave-rpms/'
+   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/dev/ s3://geowave-rpms/dev/'
+   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/release/ s3://geowave-rpms/release/'
+}
