@@ -28,6 +28,7 @@ public class SetCommandTest {
 		String name = "name";
 		String value = "value";
 		setcommand.setParameters(name, value);
+		setcommand.prepare(params);
 		setcommand.execute(params);
 		
 		File f = (File) params.getContext().get(

@@ -39,6 +39,7 @@ public class CopyStoreCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 
 		Properties existingProps = getGeoWaveConfigProperties();
 

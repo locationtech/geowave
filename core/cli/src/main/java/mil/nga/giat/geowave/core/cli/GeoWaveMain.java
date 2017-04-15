@@ -74,6 +74,7 @@ public class GeoWaveMain
 			if (operation instanceof Command) {
 
 				try {
+					((Command) operation).prepare(params);
 					((Command) operation).execute(params);
 				}
 				catch (final Exception p) {
@@ -126,6 +127,7 @@ public class GeoWaveMain
 	private static void doHelp(
 			final CommandLineOperationParams params ) {
 		final HelpCommand command = new HelpCommand();
+		command.prepare(params);
 		command.execute(params);
 	}
 }

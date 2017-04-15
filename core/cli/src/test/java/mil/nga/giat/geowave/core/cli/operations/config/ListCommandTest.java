@@ -32,6 +32,7 @@ public class ListCommandTest {
 				GeowaveTopLevelSection.class,
 				args);
 		ListCommand lstcommand = new ListCommand();
+		lstcommand.prepare(params);
 		lstcommand.execute(params);
 		
 		// can directly write to expectedoutput if knowing properties

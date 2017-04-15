@@ -41,6 +41,7 @@ public class HelpCommandTest {
 				args);
 		
 		HelpCommand helpcommand = new HelpCommand();
+		helpcommand.prepare(params);
 		helpcommand.execute(params);
 		
 		String expectedoutput = "Usage: geowave help [options]\n";
