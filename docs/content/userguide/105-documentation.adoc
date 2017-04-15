@@ -38,22 +38,20 @@ To preview the entire finished web page or see the generated PDF you'll need to 
 .Generate Documentation
 ----
  cd geowave
- mvn -P docs -pl docs install <1> <2>
+ mvn -P html install <1> <2>
 ----
-<1> -pl docs = Process _only_ the docs module. Skips the javadoc generation step.
+<1> To generate the documentation in pdf form use the pdf profile instead of the html profile.
 <2> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
 
 The source documents will be transformed and will be available for inspection in the `geowave/target/site/` directory.
 
-=== Site
-
-To build all the content used for the https://ngageoint.github.io/geowave/[GeoWave website] use the following command. The
-entire site, including both docs and javadocs, will be available for inspection in the `geowave/target/site/` directory.
+=== Javadocs
 
 [source, bash]
-.Generate Website
+.Generate Javadocs
 ----
 cd geowave
-mvn -P docs install
+mvn -q javadoc:aggregate
 ----
 
+The Javadocs will be available for inspection in the `geowave/target/site/apidocs` directory.

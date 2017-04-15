@@ -47,7 +47,9 @@ public class SpatialTemporalQuery extends
 
 	/**
 	 * If more then on polygon is supplied in the geometry, then the range of
-	 * time is partnered with each polygon constraint.
+	 * time is partnered with each polygon constraint. Note: By default we are
+	 * using same compareOp for 1D Time filtering as the compareOp of the
+	 * Spatial query by calling getBaseCompareOp()
 	 * 
 	 * @param startTime
 	 * @param endTime
@@ -65,7 +67,8 @@ public class SpatialTemporalQuery extends
 						endTime,
 						queryGeometry),
 				queryGeometry,
-				compareOp);
+				compareOp,
+				compareOp.getBaseCompareOp());
 	}
 
 	/**

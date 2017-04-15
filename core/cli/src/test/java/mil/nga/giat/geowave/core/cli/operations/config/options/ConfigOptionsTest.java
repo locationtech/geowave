@@ -7,8 +7,9 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-public class ConfigOptionsTest {
-	
+public class ConfigOptionsTest
+{
+
 	@Test
 	public void testGetPropertyPath() {
 		String propertypath = ConfigOptions.getDefaultPropertyPath().getAbsolutePath();
@@ -16,9 +17,11 @@ public class ConfigOptionsTest {
 				"%s%s",
 				System.getProperty("user.home"),
 				"/.geowave");
-		assertEquals(expectedoutput, propertypath);
+		assertEquals(
+				expectedoutput,
+				propertypath);
 	}
-	
+
 	@Test
 	public void testGetPropertyFile() {
 		String propertyfile = ConfigOptions.getDefaultPropertyFile().getAbsolutePath();
@@ -26,26 +29,39 @@ public class ConfigOptionsTest {
 				"%s%s",
 				System.getProperty("user.home"),
 				"/.geowave/unknownversion-config.properties");
-		assertEquals(expectedoutput, propertyfile);
+		assertEquals(
+				expectedoutput,
+				propertyfile);
 	}
-	
+
 	@Test
 	public void testWriteProperty() {
 		String parent = String.format(
 				"%s",
 				System.getProperty("user.home"));
-		File path = new File(parent);
-		File configfile = ConfigOptions.formatConfigFile("0", path);
+		File path = new File(
+				parent);
+		File configfile = ConfigOptions.formatConfigFile(
+				"0",
+				path);
 		Properties prop = new Properties();
 		String key = "key";
 		String value = "value";
-		prop.setProperty(key, value);
-		boolean success = ConfigOptions.writeProperties(configfile, prop);
+		prop.setProperty(
+				key,
+				value);
+		boolean success = ConfigOptions.writeProperties(
+				configfile,
+				prop);
 		if (success) {
-			Properties loadprop = ConfigOptions.loadProperties(configfile, key);
-			assertEquals(value, loadprop.getProperty(key));
+			Properties loadprop = ConfigOptions.loadProperties(
+					configfile,
+					key);
+			assertEquals(
+					value,
+					loadprop.getProperty(key));
 		}
-		
+
 	}
 
 }

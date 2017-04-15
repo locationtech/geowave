@@ -39,3 +39,26 @@ The geowave-env.sh script has a number of predefined variables that we will use 
 ----
 source /mnt/geowave-env.sh
 ----
+
+If you are using Accumulo as your datastore you must setup a geowave user with a password and table creation permissions, 
+as well as pointing accumulo to the geowave jar on hdfs. This can be done with the commands below.
+
+[source, bash]
+----
+cat <<EOF | accumulo shell -u root -p secret -e "createuser geowave"
+geowave
+geowave
+EOF
+accumulo shell -u root -p secret -e "createnamespace geowave"
+accumulo shell -u root -p secret -e "grant NameSpace.CREATE_TABLE -ns geowave -u geowave"
+accumulo shell -u root -p secret -e "config -s general.vfs.context.classpath.geowave=hdfs://${HOSTNAME}:8020/accumulo/lib/geowave-accumulo-${GEOWAVE_VERSION}-apache.jar" <1>
+accumulo shell -u root -p secret -e "config -ns geowave -s table.classpath.context=geowave"
+----
+
+<1> AWS recognizes the HOSTNAME variable, but you will need to replace the GEOWAVE_VERSION variable. Use the 
+“geowave --version” command to get the version of Geowave you are currently using.
+
+[NOTE]
+====
+This step is in the process of being automated and will be set up automatically in the near future.
+====
