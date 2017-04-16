@@ -54,6 +54,12 @@ public class HBaseWriter implements
 				"hbase.online.schema.update.enable",
 				false);
 
+		if (admin.getConfiguration().getInt(
+				"hfile.format.version",
+				0) != 3) {
+			LOGGER.error("Incorrect HFile version (should be 3)");
+		}
+
 		if (LOGGER.getLevel() == Level.DEBUG) {
 			LOGGER.debug("Schema Update Enabled = " + schemaUpdateEnabled);
 

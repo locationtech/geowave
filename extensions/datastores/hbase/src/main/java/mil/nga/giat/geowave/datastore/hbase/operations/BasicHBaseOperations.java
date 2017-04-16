@@ -1,8 +1,13 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
+import static org.apache.hadoop.hbase.security.visibility.VisibilityConstants.LABELS_TABLE_FAMILY;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NavigableMap;
 import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
@@ -14,10 +19,12 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.RegionLocator;
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -38,6 +45,7 @@ public class BasicHBaseOperations implements
 	private final Connection conn;
 	private final String tableNamespace;
 	private final boolean schemaUpdateEnabled;
+	private final HashMap<String, List<String>> coprocessorCache = new HashMap<String, List<String>>();
 
 	public BasicHBaseOperations(
 			final Connection connection,
@@ -246,7 +254,7 @@ public class BasicHBaseOperations implements
 			final String tableName,
 			final String... authorizations )
 			throws IOException {
-		if (authorizations != null) {
+		if (authorizations != null && authorizations.length > 0) {
 			scanner.setAuthorizations(new Authorizations(
 					authorizations));
 		}
@@ -289,11 +297,24 @@ public class BasicHBaseOperations implements
 		return conn.getTable(getTableName(getQualifiedTableName(tableName)));
 	}
 
-	public void verifyCoprocessor(
+	public boolean verifyCoprocessor(
 			final String tableNameStr,
 			final String coprocessorName,
 			final String coprocessorJar ) {
 		try {
+			// Check the cache first
+			List<String> checkList = coprocessorCache.get(tableNameStr);
+			if (checkList != null) {
+				if (checkList.contains(coprocessorName)) {
+					return true;
+				}
+			}
+			else {
+				coprocessorCache.put(
+						tableNameStr,
+						new ArrayList<String>());
+			}
+
 			final Admin admin = conn.getAdmin();
 			final TableName tableName = getTableName(getQualifiedTableName(tableNameStr));
 			final HTableDescriptor td = admin.getTableDescriptor(tableName);
@@ -356,13 +377,41 @@ public class BasicHBaseOperations implements
 			// }
 
 			LOGGER.debug("Successfully added coprocessor");
-		}
-		catch (
 
-		final IOException e) {
+			coprocessorCache.get(
+					tableNameStr).add(
+					coprocessorName);
+		}
+		catch (final IOException e) {
 			LOGGER.error(
 					"Error verifying/adding coprocessor.",
 					e);
+
+			return false;
 		}
+
+		return true;
 	}
+
+	public List<String> extractAuths(
+			ResultScanner resultScanner ) {
+		List<String> auths = new ArrayList<String>();
+
+		Iterator<Result> it = resultScanner.iterator();
+
+		while (it.hasNext()) {
+			Result result = it.next();
+
+			NavigableMap<byte[], byte[]> familyMap = result.getFamilyMap(LABELS_TABLE_FAMILY);
+			for (byte[] q : familyMap.keySet()) {
+				auths.add(Bytes.toString(
+						q,
+						0,
+						q.length));
+			}
+		}
+
+		return auths;
+	}
+
 }

@@ -86,7 +86,7 @@ abstract public class DynamoDBQuery extends
 		return getResults(
 				maxResolutionSubsamplingPerDimension,
 				limit,
-				true);
+				false);
 	}
 
 	protected Iterator<Map<String, AttributeValue>> getResults(

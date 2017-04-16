@@ -23,6 +23,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.security.visibility.CellVisibility;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.log4j.Logger;
@@ -50,6 +51,7 @@ import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.DecodePackage;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -403,6 +405,11 @@ public class HBaseDataStore extends
 						adapterIdsToQuery,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
+				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				sanitizedQueryOptions.getAuthorizations());
 
@@ -428,6 +435,11 @@ public class HBaseDataStore extends
 				rowPrefix,
 				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
+				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
 		prefixQuery.setOptions(options);
@@ -662,28 +674,41 @@ public class HBaseDataStore extends
 			HBaseRow hbaseRow = (HBaseRow) geoWaveRow;
 
 			byte[] rowId = hbaseRow.getRowId();
-			RowMutations mutation = new RowMutations(
-					rowId);
 
 			byte[] adapterId = hbaseRow.getAdapterId();
 
 			try {
-				final Put row = new Put(
+				RowMutations mutation = new RowMutations(
 						rowId);
+
+				// Since cell vis is per-mutation, we have to do one per field
+				// TODO: pre-check for mixed vis and use a single mutation if
+				// possible
 				for (final FieldInfo fieldInfo : hbaseRow.getFieldInfoList()) {
-					row.addColumn(
+
+					final Put put = new Put(
+							rowId);
+
+					put.addColumn(
 							adapterId,
 							fieldInfo.getDataValue().getId().getBytes(),
 							fieldInfo.getWrittenValue());
+
+					if ((fieldInfo.getVisibility() != null) && (fieldInfo.getVisibility().length > 0)) {
+						put.setCellVisibility(new CellVisibility(
+								StringUtils.stringFromBinary(fieldInfo.getVisibility())));
+					}
+
+					mutation.add(put);
 				}
-				mutation.add(row);
+				
+				mutations.add(mutation);
 			}
-			catch (final IOException e) {
+			catch (final Exception e) {
 				LOGGER.warn(
 						"Could not add row to mutation.",
 						e);
 			}
-			mutations.add(mutation);
 		}
 
 		try {

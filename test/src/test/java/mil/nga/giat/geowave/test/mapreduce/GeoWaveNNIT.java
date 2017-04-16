@@ -46,14 +46,15 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.MAP_REDUCE
 })
-public class GeoWaveNNIT
+public class GeoWaveNNIT extends
+		AbstractGeoWaveIT
 {
-
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
@@ -63,6 +64,10 @@ public class GeoWaveNNIT
 
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveNNIT.class);
 	private static long startMillis;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
+	}
 
 	@BeforeClass
 	public static void startTimer() {

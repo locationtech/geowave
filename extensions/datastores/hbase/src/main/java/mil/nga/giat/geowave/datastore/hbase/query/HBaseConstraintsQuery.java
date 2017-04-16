@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -59,6 +60,7 @@ public class HBaseConstraintsQuery extends
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String[] authorizations ) {
 		this(
@@ -72,6 +74,7 @@ public class HBaseConstraintsQuery extends
 				aggregation,
 				indexMetaData,
 				duplicateCounts,
+				visibilityCounts,
 				fieldIds,
 				authorizations);
 	}
@@ -87,6 +90,7 @@ public class HBaseConstraintsQuery extends
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String[] authorizations ) {
 
@@ -96,6 +100,7 @@ public class HBaseConstraintsQuery extends
 				index,
 				scanCallback,
 				fieldIds,
+				visibilityCounts,
 				authorizations);
 
 		base = new ConstraintsQuery(
@@ -295,6 +300,15 @@ public class HBaseConstraintsQuery extends
 					requestBuilder.setAdapter(ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter)));
 				}
 			}
+
+			if (authorizations != null && authorizations.length > 0) {
+				requestBuilder.setVisLabels(ByteString.copyFrom(StringUtils.stringsToBinary(authorizations)));
+			}
+
+			if (useWholeRowIterator()) {
+				requestBuilder.setWholeRowFilter(true);
+			}
+
 			final AggregationProtos.AggregationRequest request = requestBuilder.build();
 
 			final Table table = operations.getTable(tableName);
