@@ -14,6 +14,8 @@ import org.apache.hadoop.io.Writable;
 public class Stanag4676EventWritable implements
 		Writable
 {
+	public static final double NO_DETAIL = Double.MIN_VALUE;
+
 	// 0 = point event
 	// 1 = motion event
 	// 2 = track object classification event
@@ -21,6 +23,7 @@ public class Stanag4676EventWritable implements
 	// 4 = mission summary event
 	public IntWritable EventType;
 	public BytesWritable Geometry;
+	public BytesWritable DetailGeometry;
 	public BytesWritable Image;
 	public Text MissionUUID;
 	public Text MissionName;
@@ -39,6 +42,9 @@ public class Stanag4676EventWritable implements
 	public DoubleWritable Latitude;
 	public DoubleWritable Longitude;
 	public DoubleWritable Elevation;
+	public DoubleWritable DetailLatitude;
+	public DoubleWritable DetailLongitude;
+	public DoubleWritable DetailElevation;
 	public IntWritable PixelRow;
 	public IntWritable PixelColumn;
 	public Text MotionEvent;
@@ -54,6 +60,8 @@ public class Stanag4676EventWritable implements
 				sw.EventType.get());
 		sw2.Geometry = new BytesWritable(
 				sw.Geometry.copyBytes());
+		sw2.DetailGeometry = new BytesWritable(
+				sw.DetailGeometry.copyBytes());
 		sw2.Image = new BytesWritable(
 				sw.Image.copyBytes());
 		sw2.MissionUUID = new Text(
@@ -90,6 +98,12 @@ public class Stanag4676EventWritable implements
 				sw.Longitude.get());
 		sw2.Elevation = new DoubleWritable(
 				sw.Elevation.get());
+		sw2.DetailLatitude = new DoubleWritable(
+				sw.DetailLatitude.get());
+		sw2.DetailLongitude = new DoubleWritable(
+				sw.DetailLongitude.get());
+		sw2.DetailElevation = new DoubleWritable(
+				sw.DetailElevation.get());
 		sw2.PixelRow = new IntWritable(
 				sw.PixelRow.get());
 		sw2.PixelColumn = new IntWritable(
@@ -112,6 +126,7 @@ public class Stanag4676EventWritable implements
 	public Stanag4676EventWritable() {
 		EventType = new IntWritable();
 		Geometry = new BytesWritable();
+		DetailGeometry = new BytesWritable();
 		Image = new BytesWritable();
 		MissionUUID = new Text();
 		MissionName = new Text();
@@ -130,6 +145,9 @@ public class Stanag4676EventWritable implements
 		Latitude = new DoubleWritable();
 		Longitude = new DoubleWritable();
 		Elevation = new DoubleWritable();
+		DetailLatitude = new DoubleWritable();
+		DetailLongitude = new DoubleWritable();
+		DetailElevation = new DoubleWritable();
 		PixelRow = new IntWritable();
 		PixelColumn = new IntWritable();
 		MotionEvent = new Text();
@@ -141,6 +159,7 @@ public class Stanag4676EventWritable implements
 
 	public void setTrackPointData(
 			final byte[] geometry,
+			final byte[] detailGeometry,
 			final byte[] image,
 			final String missionUUID,
 			final String trackNumber,
@@ -157,6 +176,9 @@ public class Stanag4676EventWritable implements
 			final double latitude,
 			final double longitude,
 			final double elevation,
+			final double detailLatitude,
+			final double detailLongitude,
+			final double detailElevation,
 			final int pixelRow,
 			final int pixelColumn,
 			final int frameNumber ) {
@@ -164,6 +186,10 @@ public class Stanag4676EventWritable implements
 				0);
 		Geometry = new BytesWritable(
 				geometry);
+		if (detailGeometry != null) {
+			DetailGeometry = new BytesWritable(
+					detailGeometry);
+		}
 		if (image != null) {
 			Image = new BytesWritable(
 					image);
@@ -198,6 +224,12 @@ public class Stanag4676EventWritable implements
 				longitude);
 		Elevation = new DoubleWritable(
 				elevation);
+		DetailLatitude = new DoubleWritable(
+				detailLatitude);
+		DetailLongitude = new DoubleWritable(
+				detailLongitude);
+		DetailElevation = new DoubleWritable(
+				detailElevation);
 		PixelRow = new IntWritable(
 				pixelRow);
 		PixelColumn = new IntWritable(
@@ -346,6 +378,7 @@ public class Stanag4676EventWritable implements
 			throws IOException {
 		EventType.readFields(in);
 		Geometry.readFields(in);
+		DetailGeometry.readFields(in);
 		Image.readFields(in);
 		MissionUUID.readFields(in);
 		MissionName.readFields(in);
@@ -364,6 +397,9 @@ public class Stanag4676EventWritable implements
 		Latitude.readFields(in);
 		Longitude.readFields(in);
 		Elevation.readFields(in);
+		DetailLatitude.readFields(in);
+		DetailLongitude.readFields(in);
+		DetailElevation.readFields(in);
 		PixelRow.readFields(in);
 		PixelColumn.readFields(in);
 		FrameNumber.readFields(in);
@@ -379,6 +415,7 @@ public class Stanag4676EventWritable implements
 			throws IOException {
 		EventType.write(out);
 		Geometry.write(out);
+		DetailGeometry.write(out);
 		Image.write(out);
 		MissionUUID.write(out);
 		MissionName.write(out);
@@ -397,6 +434,9 @@ public class Stanag4676EventWritable implements
 		Latitude.write(out);
 		Longitude.write(out);
 		Elevation.write(out);
+		DetailLatitude.write(out);
+		DetailLongitude.write(out);
+		DetailElevation.write(out);
 		PixelRow.write(out);
 		PixelColumn.write(out);
 		FrameNumber.write(out);
