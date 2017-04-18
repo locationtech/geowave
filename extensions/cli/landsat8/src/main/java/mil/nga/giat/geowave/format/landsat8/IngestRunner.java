@@ -125,8 +125,9 @@ public class IngestRunner extends
 			bandWriter.write(band);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(
+					"Unable to write next band",
+					e);
 		}
 		super.nextBand(
 				band,

@@ -9,11 +9,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -97,17 +97,15 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 			ensureOpen();
 
 			if (writer == null) {
-				throw new IOException(
-						"Null writer - empty list returned");
-				// return Collections.emptyList();
+				LOGGER.error("Null writer - empty list returned");
+				return Collections.emptyList();
 			}
 			entryInfo = getEntryInfo(
 					entry,
 					fieldVisibilityWriter);
 			if (entryInfo == null) {
-				throw new IOException(
-						"Null EntryInfo - empty list returned");
-				// return Collections.emptyList();
+				LOGGER.error("Null EntryInfo - empty list returned");
+				return Collections.emptyList();
 			}
 			callback.entryIngested(
 					entryInfo,

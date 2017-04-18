@@ -136,8 +136,9 @@ public class VectorIngestRunner extends
 			bandWriter.write(band);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(
+					"Unable to write next band",
+					e);
 		}
 		super.nextBand(
 				band,
@@ -182,8 +183,9 @@ public class VectorIngestRunner extends
 				sceneWriter.write(bldr.buildFeature(fid));
 			}
 			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error(
+						"Unable to write scene",
+						e);
 			}
 		}
 	}

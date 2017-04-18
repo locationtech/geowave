@@ -11,9 +11,6 @@ import java.util.NavigableMap;
 import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
@@ -48,15 +45,6 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.client.Delete;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
 
 @SuppressWarnings("rawtypes")
 public class HBaseUtils
@@ -147,7 +135,6 @@ public class HBaseUtils
 					writableAdapter.getAdapterId().getString());
 		}
 		catch (final IOException e) {
-			System.out.println("KAM: Writing to table failed.");
 			LOGGER.warn(
 					"Writing to table failed.",
 					e);

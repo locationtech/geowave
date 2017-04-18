@@ -530,8 +530,9 @@ public class RasterIngestRunner extends
 					writer.write(mergedCoverage);
 				}
 				catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.error(
+							"Unable to write merged coverage",
+							e);
 				}
 				lastSceneBands.clear();
 				if (!ingestOptions.isRetainImages()) {

@@ -101,7 +101,6 @@ public class HBaseWriter implements
 					rowMutation.getMutations());
 		}
 		catch (final IOException e) {
-			System.out.println("KAM: Unable to write mutation.");
 			LOGGER.error(
 					"Unable to write mutation.",
 					e);
