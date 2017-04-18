@@ -41,7 +41,7 @@ public class GeoServerRemoveDatastoreCommand extends
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
 					new GeoServerConfig(
-							getGeoWaveConfigFile()));
+							getGeoWaveConfigFile(params)));
 		}
 
 		// Successfully prepared

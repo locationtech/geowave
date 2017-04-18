@@ -57,7 +57,7 @@ public class VectorMRExportCommand extends
 		}
 
 		// Config file
-		File configFile = getGeoWaveConfigFile();
+		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load store.
 		if (storeOptions == null) {

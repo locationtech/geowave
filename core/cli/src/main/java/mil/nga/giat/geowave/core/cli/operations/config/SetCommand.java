@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.cli.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -31,12 +30,7 @@ public class SetCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		//Properties existingProps = getGeoWaveConfigProperties();
-		File f = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties p = ConfigOptions.loadProperties(
-				f,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		String key = null;
 		String value = null;
@@ -58,12 +52,12 @@ public class SetCommand extends
 					"Requires: <name> <value>");
 		}
 
-		p.setProperty(
+		existingProps.setProperty(
 				key,
 				value);
 		ConfigOptions.writeProperties(
-				f,
-				p);
+				getGeoWaveConfigFile(params),
+				existingProps);
 	}
 
 	public List<String> getParameters() {

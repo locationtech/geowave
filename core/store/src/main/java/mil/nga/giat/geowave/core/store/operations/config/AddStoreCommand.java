@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -18,7 +18,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.converters.RequiredFieldConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
@@ -48,7 +47,7 @@ public class AddStoreCommand extends
 	@Parameter(names = {
 		"-t",
 		"--type"
-	}, converter = RequiredFieldConverter.class, description = "The type of store, such as accumulo, memory, etc")
+	}, required = true, description = "The type of store, such as accumulo, memory, etc")
 	private String storeType;
 
 	@ParametersDelegate
@@ -59,13 +58,14 @@ public class AddStoreCommand extends
 			OperationParams params ) {
 		super.prepare(params);
 
+		Properties existingProps = getGeoWaveConfigProperties(params);
+
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
 			pluginOptions.selectPlugin(storeType);
 		}
 		else {
 			// Try to load the 'default' options.
-			Properties existingProps = getGeoWaveConfigProperties();
 			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
@@ -94,7 +94,7 @@ public class AddStoreCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		Properties existingProps = getGeoWaveConfigProperties();
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Ensure that a name is chosen.
 		if (parameters.size() != 1) {
@@ -112,7 +112,8 @@ public class AddStoreCommand extends
 		}
 
 		if (pluginOptions.getFactoryOptions() != null) {
-			pluginOptions.getFactoryOptions().validatePluginOptions();
+			pluginOptions.getFactoryOptions().validatePluginOptions(
+					existingProps);
 		}
 
 		// Save the store options.
@@ -128,20 +129,22 @@ public class AddStoreCommand extends
 						Parameter parameter = (Parameter) annotation;
 						if (JCommanderParameterUtils.isPassword(parameter)) {
 							String storeFieldName = getNamespace() + ".opts." + field.getName();
-							String value = existingProps.getProperty(storeFieldName);
-							String encryptedValue = value;
-							try {
-								encryptedValue = new SecurityUtils().encryptAndHexEncodeValue(value);
+							if (existingProps.containsKey(storeFieldName)) {
+								String value = existingProps.getProperty(storeFieldName);
+								String encryptedValue = value;
+								try {
+									encryptedValue = new SecurityUtils().encryptAndHexEncodeValue(value);
+								}
+								catch (Exception e) {
+									LOGGER.error(
+											"An error occurred encrypting specified password value: "
+													+ e.getLocalizedMessage(),
+											e);
+								}
+								existingProps.setProperty(
+										storeFieldName,
+										encryptedValue);
 							}
-							catch (Exception e) {
-								LOGGER.error(
-										"An error occurred encrypting specified password value: "
-												+ e.getLocalizedMessage(),
-										e);
-							}
-							existingProps.setProperty(
-									storeFieldName,
-									encryptedValue);
 						}
 					}
 				}

@@ -37,7 +37,7 @@ public abstract class AbstractRemoveCommand extends
 			OperationParams params,
 			String pattern ) {
 
-		Properties existingProps = getGeoWaveConfigProperties();
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Find properties to remove
 		Set<String> keysToRemove = new HashSet<String>();
@@ -54,7 +54,7 @@ public abstract class AbstractRemoveCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(),
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 

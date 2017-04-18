@@ -50,7 +50,7 @@ public class RemoveAdapterCommand extends
 		if (inputStoreOptions == null) {
 			StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile())) {
+			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}

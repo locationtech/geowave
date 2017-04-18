@@ -31,7 +31,7 @@ public class AddIndexGroupCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		Properties existingProps = getGeoWaveConfigProperties();
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -75,7 +75,7 @@ public class AddIndexGroupCommand extends
 
 		// Write to disk.
 		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(),
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 

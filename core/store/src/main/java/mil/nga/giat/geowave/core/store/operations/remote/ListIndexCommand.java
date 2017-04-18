@@ -46,7 +46,7 @@ public class ListIndexCommand extends
 
 		StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
-		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile())) {
+		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
 			result = "Cannot find store name: " + inputStoreLoader.getStoreName();
 		}
 		else {

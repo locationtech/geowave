@@ -47,7 +47,7 @@ public abstract class BaseEncryption
 	 * values (salt - below - and token file - specified at resourceLocation)
 	 */
 	private byte[] salt = null;
-	protected static File tokenFile = null;
+	protected File tokenFile = null;
 
 	public static final String PREFIX = "ENC{";
 	public static final String SUFFIX = "}";
@@ -88,12 +88,21 @@ public abstract class BaseEncryption
 	/**
 	 * Check if encryption token exists. If not, create one initially
 	 */
-	public static void checkForToken()
+	public void checkForToken()
 			throws Throwable {
-		tokenFile = new File(
-				mil.nga.giat.geowave.core.cli.utils.FileUtils.formatFilePath("~" + File.separator
-						+ ConfigOptions.GEOWAVE_CACHE_PATH),
-				resourceName);
+		if (ConfigOptions.getConfigFile() != null) {
+			File configFile = new File(
+					ConfigOptions.getConfigFile());
+			tokenFile = new File(
+					configFile.getParentFile(),
+					resourceName);
+		}
+		else {
+			File configFile = ConfigOptions.getDefaultPropertyFile();
+			tokenFile = new File(
+					configFile.getParentFile(),
+					resourceName);
+		}
 		if (tokenFile == null || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
 		}
@@ -109,7 +118,7 @@ public abstract class BaseEncryption
 	 * @param tokenFile
 	 * @return
 	 */
-	public static boolean generateNewEncryptionToken(
+	public boolean generateNewEncryptionToken(
 			File tokenFile )
 			throws Exception {
 		boolean success = false;
@@ -256,14 +265,11 @@ public abstract class BaseEncryption
 	 */
 	private void generateRootKeyFromToken()
 			throws Throwable {
-		/*
-		 * File tokenFile = new File( getResourceLocation());
-		 */
+
 		if (!tokenFile.exists()) {
 			throw new Throwable(
 					"Token file not found at specified path [" + getResourceLocation() + "]");
 		}
-
 		try {
 			String strPassword = FileUtils.readFileContent(tokenFile);
 			char[] password = strPassword != null ? strPassword.trim().toCharArray() : null;

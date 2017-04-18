@@ -1,17 +1,20 @@
 package mil.nga.giat.geowave.core.store;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.utils.JCommanderParameterUtils;
+import mil.nga.giat.geowave.core.cli.utils.PropertiesUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
@@ -43,14 +46,34 @@ abstract public class StoreFactoryOptions
 				this);
 	}
 
+	public void validatePluginOptions()
+			throws ParameterException {
+		validatePluginOptions(new Properties());
+	}
+
 	/**
 	 * Method to perform global validation for all plugin options
 	 * 
 	 * @throws Exception
 	 */
-	public void validatePluginOptions()
+	public void validatePluginOptions(
+			Properties properties )
 			throws ParameterException {
 		LOGGER.trace("ENTER :: validatePluginOptions()");
+		PropertiesUtils propsUtils = new PropertiesUtils(
+				properties);
+		boolean defaultEchoEnabled = propsUtils.getBoolean(
+				Constants.CONSOLE_DEFAULT_ECHO_ENABLED_KEY,
+				false);
+		boolean passwordEchoEnabled = propsUtils.getBoolean(
+				Constants.CONSOLE_PASSWORD_ECHO_ENABLED_KEY,
+				defaultEchoEnabled);
+		LOGGER.debug(
+				"Default console echo is {}, Password console echo is {}",
+				new Object[] {
+					defaultEchoEnabled ? "enabled" : "disabled",
+					passwordEchoEnabled ? "enabled" : "disabled"
+				});
 		for (Field field : this.getClass().getDeclaredFields()) {
 			for (Annotation annotation : field.getAnnotations()) {
 				if (annotation.annotationType() == Parameter.class) {
@@ -66,8 +89,10 @@ abstract public class StoreFactoryOptions
 												+ Arrays.toString(parameter.names()) + ": " + parameter.description());
 								JCommander.getConsole().print(
 										"Enter value for [" + field.getName() + "]: ");
+								boolean echoEnabled = JCommanderParameterUtils.isPassword(parameter) ? passwordEchoEnabled
+										: defaultEchoEnabled;
 								char[] password = JCommander.getConsole().readPassword(
-										true);
+										echoEnabled);
 								String strPassword = new String(
 										password);
 								if (!"".equals(strPassword.trim())) {
@@ -96,4 +121,5 @@ abstract public class StoreFactoryOptions
 			}
 		}
 	}
+
 }

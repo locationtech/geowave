@@ -59,7 +59,7 @@ public class NewTokenCommand extends
 										ex);
 					}
 					if (tokenBackedUp) {
-						Properties configProps = getGeoWaveConfigProperties();
+						Properties configProps = getGeoWaveConfigProperties(params);
 						if (configProps != null) {
 							boolean updated = false;
 							Set<Object> keySet = configProps.keySet();
@@ -88,7 +88,7 @@ public class NewTokenCommand extends
 							}
 							if (updated) {
 								ConfigOptions.writeProperties(
-										getGeoWaveConfigFile(),
+										getGeoWaveConfigFile(params),
 										configProps);
 								System.out.println("GeoServer Config Saved");
 							}

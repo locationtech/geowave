@@ -49,19 +49,19 @@ public class ConfigOptions
 		"-cf",
 		"--config-file"
 	}, description = "Override configuration file (default is <home>/.geowave/config.properties)")
-	private String configFile;
+	private static String configFile;
 
 	public ConfigOptions() {
 
 	}
 
-	public String getConfigFile() {
+	public static String getConfigFile() {
 		return configFile;
 	}
 
-	public void setConfigFile(
-			final String configFile ) {
-		this.configFile = configFile;
+	public static void setConfigFile(
+			final String configFilePath ) {
+		configFile = configFilePath;
 	}
 
 	/**
@@ -97,7 +97,6 @@ public class ConfigOptions
 		// from users with OS-level access anyway
 		final File defaultPath = getDefaultPropertyPath();
 		final String version = VersionUtils.getVersion();
-
 		if (version != null) {
 			return formatConfigFile(
 					version,

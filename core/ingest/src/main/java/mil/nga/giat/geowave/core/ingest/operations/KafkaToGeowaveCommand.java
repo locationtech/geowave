@@ -86,7 +86,7 @@ public class KafkaToGeowaveCommand extends
 		String indexList = parameters.get(1);
 
 		// Config file
-		File configFile = getGeoWaveConfigFile();
+		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

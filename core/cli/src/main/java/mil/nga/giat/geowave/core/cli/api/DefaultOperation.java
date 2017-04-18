@@ -23,8 +23,8 @@ public class DefaultOperation implements
 {
 	private final static Logger sLog = LoggerFactory.getLogger(DefaultOperation.class);
 
-	private File geowaveDir = null;
-	private File geowaveConfigPropsFile = null;
+	private File geowaveDirectory = null;
+	private File geowaveConfigFile = null;
 	private File securityTokenFile = null;
 
 	public boolean prepare(
@@ -46,14 +46,16 @@ public class DefaultOperation implements
 	 * Check if encryption token exists. If not, create one initially
 	 */
 	protected void checkForToken() {
-		File tokenFile = new File(
+		File parentDir = (getGeoWaveDirectory() != null) ? getGeoWaveDirectory() : new File(
 				mil.nga.giat.geowave.core.cli.utils.FileUtils.formatFilePath("~" + File.separator
-						+ ConfigOptions.GEOWAVE_CACHE_PATH),
+						+ ConfigOptions.GEOWAVE_CACHE_PATH));
+		File tokenFile = new File(
+				parentDir,
 				BaseEncryption.resourceName);
 		if (tokenFile == null || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
-			setSecurityTokenFile(tokenFile);
 		}
+		setSecurityTokenFile(tokenFile);
 	}
 
 	/**
@@ -70,67 +72,72 @@ public class DefaultOperation implements
 	private void checkForGeoWaveDirectory(
 			OperationParams params )
 			throws Exception {
-		File geowaveDir = null;
-		geowaveConfigPropsFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		// check if the config file path has been detected, validated, and
+		// cached in an environment variable, so we aren't unneccessarily going
+		// through the validation process every time
 
-		if (geowaveConfigPropsFile == null) {
-			// if file does not exist
-			geowaveConfigPropsFile = ConfigOptions.getDefaultPropertyFile();
+		if (System.getProperty("GeoWaveConfigFilePath") != null) {
+			setGeoWaveConfigFile(new File(
+					System.getProperty("GeoWaveConfigFilePath")));
+			setGeowaveDirectory(getGeoWaveConfigFile(
+					params).getParentFile());
 		}
+		else {
+			if (ConfigOptions.getConfigFile() != null) {
+				setGeoWaveConfigFile(new File(
+						ConfigOptions.getConfigFile()));
+			}
+			else {
+				setGeoWaveConfigFile((File) params.getContext().get(
+						ConfigOptions.PROPERTIES_FILE_CONTEXT));
+			}
 
-		geowaveDir = geowaveConfigPropsFile.getParentFile();
-		if (!geowaveDir.exists()) {
-			try {
-				boolean created = geowaveDir.mkdir();
-				if (!created) {
-					sLog.error("An error occurred creating a user '.geowave' in home directory");
+			if (getGeoWaveConfigFile(params) == null) {
+				// if file does not exist
+				setGeoWaveConfigFile(ConfigOptions.getDefaultPropertyFile());
+			}
+
+			setGeowaveDirectory(getGeoWaveConfigFile(
+					params).getParentFile());
+			if (!getGeoWaveDirectory().exists()) {
+				try {
+					boolean created = getGeoWaveDirectory().mkdir();
+					if (!created) {
+						sLog.error("An error occurred creating a user '.geowave' in home directory");
+					}
+				}
+				catch (Exception e) {
+					sLog.error(
+							"An error occurred creating a user '.geowave' in home directory: "
+									+ e.getLocalizedMessage(),
+							e);
+					throw new ParameterException(
+							e);
 				}
 			}
-			catch (Exception e) {
-				sLog.error(
-						"An error occurred creating a user '.geowave' in home directory: " + e.getLocalizedMessage(),
-						e);
-				throw new ParameterException(
-						e);
-			}
-		}
 
-		if (!geowaveConfigPropsFile.exists()) {
-			// config file does not exist, attempt to create it.
-			try {
-				if (!geowaveConfigPropsFile.createNewFile()) {
-					throw new Exception(
-							"Could not create property cache file: " + geowaveConfigPropsFile);
+			if (!getGeoWaveConfigFile(
+					params).exists()) {
+				// config file does not exist, attempt to create it.
+				try {
+					if (!getGeoWaveConfigFile(
+							params).createNewFile()) {
+						throw new Exception(
+								"Could not create property cache file: " + getGeoWaveConfigFile(params));
+					}
+				}
+				catch (IOException e) {
+					sLog.error(
+							"Could not create property cache file: " + getGeoWaveConfigFile(params),
+							e);
+					throw new ParameterException(
+							e);
 				}
 			}
-			catch (IOException e) {
-				sLog.error(
-						"Could not create property cache file: " + geowaveConfigPropsFile,
-						e);
-				throw new ParameterException(
-						e);
-			}
+			System.setProperty(
+					"GeoWaveConfigFilePath",
+					getGeoWaveConfigFile().getCanonicalPath());
 		}
-	}
-
-	protected File getGeoWaveDirectory() {
-		return geowaveDir;
-	}
-
-	protected File getGeoWaveConfigFile() {
-		return geowaveConfigPropsFile;
-	}
-
-	protected Properties getGeoWaveConfigProperties(
-			String filter ) {
-		return ConfigOptions.loadProperties(
-				geowaveConfigPropsFile,
-				filter);
-	}
-
-	protected Properties getGeoWaveConfigProperties() {
-		return getGeoWaveConfigProperties(null);
 	}
 
 	/**
@@ -174,5 +181,67 @@ public class DefaultOperation implements
 	public void setSecurityTokenFile(
 			File securityTokenFile ) {
 		this.securityTokenFile = securityTokenFile;
+	}
+
+	/**
+	 * @return the geowaveDirectory
+	 */
+	public File getGeoWaveDirectory() {
+		return geowaveDirectory;
+	}
+
+	/**
+	 * @param geowaveDirectory
+	 *            the geowaveDirectory to set
+	 */
+	private void setGeowaveDirectory(
+			File geowaveDirectory ) {
+		this.geowaveDirectory = geowaveDirectory;
+	}
+
+	/**
+	 * @return the geowaveConfigFile
+	 */
+	public File getGeoWaveConfigFile(
+			OperationParams params ) {
+		if (getGeoWaveConfigFile() == null) {
+			setGeoWaveConfigFile((File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT));
+		}
+		return getGeoWaveConfigFile();
+	}
+
+	public File getGeoWaveConfigFile() {
+		return geowaveConfigFile;
+	}
+
+	/**
+	 * @param geowaveConfigFile
+	 *            the geowaveConfigFile to set
+	 */
+	private void setGeoWaveConfigFile(
+			File geowaveConfigFile ) {
+		this.geowaveConfigFile = geowaveConfigFile;
+	}
+
+	public Properties getGeoWaveConfigProperties(
+			OperationParams params,
+			String filter ) {
+		return ConfigOptions.loadProperties(
+				getGeoWaveConfigFile(params),
+				null);
+	}
+
+	public Properties getGeoWaveConfigProperties(
+			OperationParams params ) {
+		return getGeoWaveConfigProperties(
+				params,
+				null);
+	}
+
+	public Properties getGeoWaveConfigProperties() {
+		return ConfigOptions.loadProperties(
+				getGeoWaveConfigFile(),
+				null);
 	}
 }

@@ -96,7 +96,7 @@ public class MapReduceToGeowaveCommand extends
 		}
 
 		// Config file
-		File configFile = getGeoWaveConfigFile();
+		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

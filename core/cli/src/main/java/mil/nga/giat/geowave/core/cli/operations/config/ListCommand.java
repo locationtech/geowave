@@ -32,10 +32,12 @@ public class ListCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		File f = getGeoWaveConfigFile();
+		File f = getGeoWaveConfigFile(params);
 
 		// Reload options with filter if specified.
-		Properties p = getGeoWaveConfigProperties(filter);
+		Properties p = getGeoWaveConfigProperties(
+				params,
+				filter);
 
 		JCommander.getConsole().println(
 				"PROPERTIES (" + f.getName() + ")");

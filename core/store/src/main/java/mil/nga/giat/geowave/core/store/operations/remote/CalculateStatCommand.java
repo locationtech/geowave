@@ -83,7 +83,10 @@ public class CalculateStatCommand extends
 					indexStore)) {
 
 				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
-				@SuppressWarnings({ "rawtypes", "unchecked" })
+				@SuppressWarnings({
+					"rawtypes",
+					"unchecked"
+				})
 				DataStoreStatisticsProvider provider = new DataStoreStatisticsProvider(
 						adapter,
 						index,
@@ -97,7 +100,10 @@ public class CalculateStatCommand extends
 					}
 				};
 
-				try (@SuppressWarnings({ "rawtypes", "unchecked" })
+				try (@SuppressWarnings({
+					"rawtypes",
+					"unchecked"
+				})
 				StatsCompositionTool<?> statsTool = new StatsCompositionTool(
 						provider,
 						storeOptions.createDataStatisticsStore())) {

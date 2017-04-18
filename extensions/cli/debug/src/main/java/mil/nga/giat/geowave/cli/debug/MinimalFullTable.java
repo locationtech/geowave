@@ -63,7 +63,7 @@ public class MinimalFullTable extends
 		// Attempt to load store.
 		StoreLoader storeOptions = new StoreLoader(
 				storeName);
-		if (!storeOptions.loadFromConfig(getGeoWaveConfigFile())) {
+		if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params))) {
 			throw new ParameterException(
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}

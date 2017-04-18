@@ -56,7 +56,7 @@ public class AddIndexCommand extends
 			pluginOptions.selectPlugin(type);
 		}
 		else {
-			Properties existingProps = getGeoWaveConfigProperties();
+			Properties existingProps = getGeoWaveConfigProperties(params);
 
 			String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
@@ -92,7 +92,7 @@ public class AddIndexCommand extends
 					"Must specify index name");
 		}
 
-		Properties existingProps = getGeoWaveConfigProperties();
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Make sure we're not already in the index.
 		IndexPluginOptions existPlugin = new IndexPluginOptions();
@@ -117,7 +117,7 @@ public class AddIndexCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(),
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 

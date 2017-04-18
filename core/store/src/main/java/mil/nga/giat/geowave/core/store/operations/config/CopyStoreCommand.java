@@ -41,7 +41,7 @@ public class CopyStoreCommand extends
 			OperationParams params ) {
 		super.prepare(params);
 
-		Properties existingProps = getGeoWaveConfigProperties();
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Load the old store, so that we can override the values
 		String oldStore = null;
@@ -63,7 +63,7 @@ public class CopyStoreCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		Properties existingProps = getGeoWaveConfigProperties();
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -97,7 +97,7 @@ public class CopyStoreCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(),
+				getGeoWaveConfigFile(params),
 				existingProps);
 
 	}

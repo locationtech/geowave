@@ -51,7 +51,7 @@ public class ConfigGeoServerCommand extends
 			OperationParams params )
 			throws Exception {
 
-		Properties existingProps = getGeoWaveConfigProperties();
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// all switches are optional
 		if (getUrl() != null) {
@@ -80,7 +80,7 @@ public class ConfigGeoServerCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(),
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 

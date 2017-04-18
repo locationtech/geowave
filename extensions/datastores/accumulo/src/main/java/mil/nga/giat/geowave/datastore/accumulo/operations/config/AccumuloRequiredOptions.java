@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.datastore.accumulo.operations.config;
 
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
@@ -43,14 +42,12 @@ public class AccumuloRequiredOptions extends
 	}, description = "A valid Accumulo user ID", converter = RequiredFieldConverter.class)
 	private String user;
 
-	// GEOWAVE-811 - adding additional password options for added protection,
-	// and to align better with native accumulo options
 	@Parameter(names = {
 		"-p",
 		"--" + PASSWORD_CONFIG_KEY
-	}, description = "password (can be specified as 'pass:<password>', 'file:<local file containing the password>', "
+	}, description = "The password for the user. Password can be specified as 'pass:<password>', 'file:<local file containing the password>', "
 			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', "
-			+ "or stdin)", descriptionKey = "accumulo.pass.label", converter = PasswordConverter.class)
+			+ "or stdin", descriptionKey = "accumulo.pass.label", converter = PasswordConverter.class)
 	private String password;
 
 	@ParametersDelegate
