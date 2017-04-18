@@ -72,71 +72,57 @@ public class DefaultOperation implements
 	private void checkForGeoWaveDirectory(
 			OperationParams params )
 			throws Exception {
-		// check if the config file path has been detected, validated, and
-		// cached in an environment variable, so we aren't unneccessarily going
-		// through the validation process every time
 
-		if (System.getProperty("GeoWaveConfigFilePath") != null) {
+		if (ConfigOptions.getConfigFile() != null) {
 			setGeoWaveConfigFile(new File(
-					System.getProperty("GeoWaveConfigFilePath")));
-			setGeowaveDirectory(getGeoWaveConfigFile(
-					params).getParentFile());
+					ConfigOptions.getConfigFile()));
 		}
 		else {
-			if (ConfigOptions.getConfigFile() != null) {
-				setGeoWaveConfigFile(new File(
-						ConfigOptions.getConfigFile()));
-			}
-			else {
-				setGeoWaveConfigFile((File) params.getContext().get(
-						ConfigOptions.PROPERTIES_FILE_CONTEXT));
-			}
+			setGeoWaveConfigFile((File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT));
+		}
 
-			if (getGeoWaveConfigFile(params) == null) {
-				// if file does not exist
-				setGeoWaveConfigFile(ConfigOptions.getDefaultPropertyFile());
-			}
+		if (getGeoWaveConfigFile(params) == null) {
+			// if file does not exist
+			setGeoWaveConfigFile(ConfigOptions.getDefaultPropertyFile());
+		}
 
-			setGeowaveDirectory(getGeoWaveConfigFile(
-					params).getParentFile());
-			if (!getGeoWaveDirectory().exists()) {
-				try {
-					boolean created = getGeoWaveDirectory().mkdir();
-					if (!created) {
-						sLog.error("An error occurred creating a user '.geowave' in home directory");
-					}
-				}
-				catch (Exception e) {
-					sLog.error(
-							"An error occurred creating a user '.geowave' in home directory: "
-									+ e.getLocalizedMessage(),
-							e);
-					throw new ParameterException(
-							e);
+		setGeowaveDirectory(getGeoWaveConfigFile(
+				params).getParentFile());
+		if (!getGeoWaveDirectory().exists()) {
+			try {
+				boolean created = getGeoWaveDirectory().mkdir();
+				if (!created) {
+					sLog.error("An error occurred creating a user '.geowave' in home directory");
 				}
 			}
+			catch (Exception e) {
+				sLog.error(
+						"An error occurred creating a user '.geowave' in home directory: "
+								+ e.getLocalizedMessage(),
+						e);
+				throw new ParameterException(
+						e);
+			}
+		}
 
-			if (!getGeoWaveConfigFile(
-					params).exists()) {
-				// config file does not exist, attempt to create it.
-				try {
-					if (!getGeoWaveConfigFile(
-							params).createNewFile()) {
-						throw new Exception(
-								"Could not create property cache file: " + getGeoWaveConfigFile(params));
-					}
-				}
-				catch (IOException e) {
-					sLog.error(
-							"Could not create property cache file: " + getGeoWaveConfigFile(params),
-							e);
-					throw new ParameterException(
-							e);
+		if (!getGeoWaveConfigFile(
+				params).exists()) {
+			// config file does not exist, attempt to create it.
+			try {
+				if (!getGeoWaveConfigFile(
+						params).createNewFile()) {
+					throw new Exception(
+							"Could not create property cache file: " + getGeoWaveConfigFile(params));
 				}
 			}
-			System.setProperty(
-					"GeoWaveConfigFilePath",
-					getGeoWaveConfigFile().getCanonicalPath());
+			catch (IOException e) {
+				sLog.error(
+						"Could not create property cache file: " + getGeoWaveConfigFile(params),
+						e);
+				throw new ParameterException(
+						e);
+			}
 		}
 	}
 
