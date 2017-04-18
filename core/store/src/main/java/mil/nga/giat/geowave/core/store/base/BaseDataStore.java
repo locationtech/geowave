@@ -22,7 +22,6 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.CloseableIterator.Empty;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -34,9 +33,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.IngestCallbackList;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -296,9 +293,7 @@ public abstract class BaseDataStore
 			}
 
 		}
-		catch (final IOException e1)
-
-		{
+		catch (final IOException e1) {
 			LOGGER.error(
 					"Failed to resolve adapter or index for query",
 					e1);
@@ -378,200 +373,182 @@ public abstract class BaseDataStore
 		return new CloseableIterator.Empty();
 	}
 
-	public static boolean testBulkDelete = false;
-
 	public boolean delete(
 			final QueryOptions queryOptions,
 			final Query query ) {
 		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
-			try {
-				indexStore.removeAll();
-				adapterStore.removeAll();
-				statisticsStore.removeAll();
-				secondaryIndexDataStore.removeAll();
-				indexMappingStore.removeAll();
-
-				baseOperations.deleteAll();
-				return true;
-			}
-			catch (final Exception e) {
-				LOGGER.error(
-						"Unable to delete all tables",
-						e);
-
-			}
-			return false;
+			return deleteEverything();
 		}
-		if (testBulkDelete) {
-			boolean retVal = false;
-			try (CloseableIterator<Object> it = internalQuery(
-					queryOptions,
-					query,
-					true)) {
-				retVal = it.hasNext();
-				while (it.hasNext()) {
-					it.next();
+
+		final AtomicBoolean aOk = new AtomicBoolean(
+				true);
+
+		// keep a list of adapters that have been queried, to only low an
+		// adapter to be queried
+		// once
+		final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
+
+		try {
+			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+					.getIndicesForAdapters(
+							adapterStore,
+							indexMappingStore,
+							indexStore)) {
+				final PrimaryIndex index = indexAdapterPair.getLeft();
+				if (index == null) {
+					continue;
 				}
-			}
-			catch (IOException e) {
-				LOGGER.warn(
-						"Unable to close results iterator",
-						e);
-			}
-			return retVal;
-		}
-		else {
-			final AtomicBoolean aOk = new AtomicBoolean(
-					true);
+				final String indexTableName = index.getId().getString();
+				final String altIdxTableName = indexTableName + ALT_INDEX_TABLE;
 
-			// keep a list of adapters that have been queried, to only low an
-			// adapter to be queried
-			// once
-			final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
+				final Closeable idxDeleter = createIndexDeleter(
+						indexTableName,
+						queryOptions.getAuthorizations());
 
-			try {
-				for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
-						.getIndicesForAdapters(
-								adapterStore,
-								indexMappingStore,
-								indexStore)) {
-					final PrimaryIndex index = indexAdapterPair.getLeft();
-					if (index == null) {
+				final Closeable altIdxDelete = baseOptions.isUseAltIndex()
+						&& baseOperations.tableExists(altIdxTableName) ? createIndexDeleter(
+						altIdxTableName,
+						queryOptions.getAuthorizations()) : null;
+
+				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
+
+					final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
+							statisticsStore,
+							secondaryIndexDataStore,
+							queriedAdapters.add(adapter.getAdapterId()));
+
+					callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
+
+					if (query instanceof EverythingQuery) {
+						deleteEntries(
+								adapter,
+								index,
+								queryOptions.getAuthorizations());
 						continue;
 					}
-					final String indexTableName = index.getId().getString();
-					final String altIdxTableName = indexTableName + ALT_INDEX_TABLE;
 
-					final Closeable idxDeleter = createIndexDeleter(
-							indexTableName,
-							queryOptions.getAuthorizations());
-
-					final Closeable altIdxDelete = baseOptions.isUseAltIndex()
-							&& baseOperations.tableExists(altIdxTableName) ? createIndexDeleter(
-							altIdxTableName,
-							queryOptions.getAuthorizations()) : null;
-
-					for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
-
-						final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
-								statisticsStore,
-								secondaryIndexDataStore,
-								queriedAdapters.add(adapter.getAdapterId()));
-
-						callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
-
-						if (query instanceof EverythingQuery) {
-							deleteEntries(
-									adapter,
-									index,
-									queryOptions.getAuthorizations());
-							continue;
-						}
-
-						final ScanCallback<Object> callback = new ScanCallback<Object>() {
-							@Override
-							public void entryScanned(
-									final DataStoreEntryInfo entryInfo,
-									final Object entry ) {
-								callbackCache.getDeleteCallback(
-										(WritableDataAdapter<Object>) adapter,
-										index).entryDeleted(
-										entryInfo,
-										entry);
-								try {
+					final ScanCallback<Object> callback = new ScanCallback<Object>() {
+						@Override
+						public void entryScanned(
+								final DataStoreEntryInfo entryInfo,
+								final Object entry ) {
+							callbackCache.getDeleteCallback(
+									(WritableDataAdapter<Object>) adapter,
+									index).entryDeleted(
+									entryInfo,
+									entry);
+							try {
+								addToBatch(
+										idxDeleter,
+										entryInfo.getRowIds());
+								if (altIdxDelete != null) {
 									addToBatch(
-											idxDeleter,
-											entryInfo.getRowIds());
-									if (altIdxDelete != null) {
-										addToBatch(
-												altIdxDelete,
-												Collections.singletonList(adapter.getDataId(entry)));
-									}
-								}
-								catch (final Exception e) {
-									LOGGER.error(
-											"Failed deletion",
-											e);
-									aOk.set(false);
+											altIdxDelete,
+											Collections.singletonList(adapter.getDataId(entry)));
 								}
 							}
-						};
+							catch (final Exception e) {
+								LOGGER.error(
+										"Failed deletion",
+										e);
+								aOk.set(false);
+							}
+						}
+					};
 
-						CloseableIterator<?> dataIt = null;
-						queryOptions.setScanCallback(callback);
-						final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
-						if (query instanceof RowIdQuery) {
-							queryOptions.setLimit(-1);
-							dataIt = queryRowIds(
-									adapter,
-									index,
-									((RowIdQuery) query).getRowIds(),
-									null,
-									queryOptions,
-									adapterStore,
-									true);
-						}
-						else if (query instanceof DataIdQuery) {
-							final DataIdQuery idQuery = (DataIdQuery) query;
-							dataIt = getEntries(
-									index,
-									idQuery.getDataIds(),
-									adapter,
-									null,
-									callback,
-									queryOptions.getAuthorizations(),
-									null,
-									true);
-						}
-						else if (query instanceof PrefixIdQuery) {
-							dataIt = queryRowPrefix(
-									index,
-									((PrefixIdQuery) query).getRowPrefix(),
-									queryOptions,
-									adapterStore,
-									adapterIds,
-									true);
-						}
-						else {
-							dataIt = queryConstraints(
-									adapterIds,
-									index,
-									query,
-									null,
-									queryOptions,
-									adapterStore,
-									true);
-						}
+					CloseableIterator<?> dataIt = null;
+					queryOptions.setScanCallback(callback);
+					final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
+					if (query instanceof RowIdQuery) {
+						queryOptions.setLimit(-1);
+						dataIt = queryRowIds(
+								adapter,
+								index,
+								((RowIdQuery) query).getRowIds(),
+								null,
+								queryOptions,
+								adapterStore,
+								true);
+					}
+					else if (query instanceof DataIdQuery) {
+						final DataIdQuery idQuery = (DataIdQuery) query;
+						dataIt = getEntries(
+								index,
+								idQuery.getDataIds(),
+								adapter,
+								null,
+								callback,
+								queryOptions.getAuthorizations(),
+								null,
+								true);
+					}
+					else if (query instanceof PrefixIdQuery) {
+						dataIt = queryRowPrefix(
+								index,
+								((PrefixIdQuery) query).getRowPrefix(),
+								queryOptions,
+								adapterStore,
+								adapterIds,
+								true);
+					}
+					else {
+						dataIt = queryConstraints(
+								adapterIds,
+								index,
+								query,
+								null,
+								queryOptions,
+								adapterStore,
+								true);
+					}
 
-						while (dataIt.hasNext()) {
-							dataIt.next();
-						}
-						try {
-							dataIt.close();
-						}
-						catch (final Exception ex) {
-							LOGGER.warn(
-									"Cannot close iterator",
-									ex);
-						}
-						callbackCache.close();
+					while (dataIt.hasNext()) {
+						dataIt.next();
 					}
-					if (altIdxDelete != null) {
-						altIdxDelete.close();
+					try {
+						dataIt.close();
 					}
-					idxDeleter.close();
+					catch (final Exception ex) {
+						LOGGER.warn(
+								"Cannot close iterator",
+								ex);
+					}
+					callbackCache.close();
 				}
+				if (altIdxDelete != null) {
+					altIdxDelete.close();
+				}
+				idxDeleter.close();
+			}
 
-				return aOk.get();
-			}
-			catch (final Exception e) {
-				LOGGER.error(
-						"Failed delete operation " + query.toString(),
-						e);
-				return false;
-			}
+			return aOk.get();
 		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Failed delete operation " + query.toString(),
+					e);
+			return false;
+		}
+	}
 
+	protected boolean deleteEverything() {
+		try {
+			indexStore.removeAll();
+			adapterStore.removeAll();
+			statisticsStore.removeAll();
+			secondaryIndexDataStore.removeAll();
+			indexMappingStore.removeAll();
+
+			baseOperations.deleteAll();
+			return true;
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to delete all tables",
+					e);
+
+		}
+		return false;
 	}
 
 	private <T> void deleteEntries(

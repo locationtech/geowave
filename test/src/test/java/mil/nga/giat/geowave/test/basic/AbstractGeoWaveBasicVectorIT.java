@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
@@ -20,6 +19,8 @@ import org.opengis.filter.Filter;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
@@ -47,6 +48,7 @@ import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
@@ -216,6 +218,129 @@ abstract public class AbstractGeoWaveBasicVectorIT
 		Assert.assertTrue(
 				"Unable to delete entry by data ID and adapter ID",
 				success);
+	}
+
+	protected void testBulkDeleteSpatial(
+			final URL savedFilterResource,
+			final PrimaryIndex index )
+			throws Exception {
+		LOGGER.warn("bulk deleting from " + index.getId() + " index");
+
+		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
+		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
+		CloseableIterator<?> actualResults;
+
+		actualResults = geowaveStore.query(
+				new QueryOptions(
+						index),
+				query);
+
+		int features = 0;
+		while (actualResults.hasNext()) {
+			final Object obj = actualResults.next();
+			if (obj instanceof SimpleFeature) {
+				features++;
+			}
+		}
+		actualResults.close();
+
+		LOGGER.warn(features + " features to delete...");
+
+		boolean deleteResults = geowaveStore.delete(
+				new QueryOptions(
+						index),
+				query);
+
+		LOGGER.warn("Bulk delete results: " + (deleteResults ? "Success" : "Failure"));
+
+		actualResults = geowaveStore.query(
+				new QueryOptions(
+						index),
+				query);
+
+		int initialFeatures = features;
+		features = 0;
+		while (actualResults.hasNext()) {
+			final Object obj = actualResults.next();
+			if (obj instanceof SimpleFeature) {
+				features++;
+			}
+		}
+		actualResults.close();
+
+		LOGGER.warn((initialFeatures - features) + " features bulk deleted.");
+		LOGGER.warn(features + " duplicate features not deleted.");
+
+		Assert.assertTrue(
+				"Unable to delete all features in bulk delete",
+				features == 0);
+	}
+
+	protected void testBulkDeleteCQL(
+			final String cqlStr,
+			final PrimaryIndex index )
+			throws Exception {
+		LOGGER.warn("bulk deleting from " + index.getId() + " index using CQL: '" + cqlStr + "'");
+
+		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
+		AdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
+
+		final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
+		GeotoolsFeatureDataAdapter adapter = (GeotoolsFeatureDataAdapter) it.next();
+		it.close();
+
+		Query query = CQLQuery.createOptimalQuery(
+				cqlStr,
+				adapter,
+				null,
+				null);
+
+		CloseableIterator<?> actualResults;
+
+		actualResults = geowaveStore.query(
+				new QueryOptions(
+						index),
+				query);
+
+		int features = 0;
+		while (actualResults.hasNext()) {
+			final Object obj = actualResults.next();
+			if (obj instanceof SimpleFeature) {
+				features++;
+			}
+		}
+		actualResults.close();
+
+		LOGGER.warn(features + " features to delete...");
+
+		boolean deleteResults = geowaveStore.delete(
+				new QueryOptions(
+						index),
+				query);
+
+		LOGGER.warn("Bulk delete results: " + (deleteResults ? "Success" : "Failure"));
+
+		actualResults = geowaveStore.query(
+				new QueryOptions(
+						index),
+				query);
+
+		int initialFeatures = features;
+		features = 0;
+		while (actualResults.hasNext()) {
+			final Object obj = actualResults.next();
+			if (obj instanceof SimpleFeature) {
+				features++;
+			}
+		}
+		actualResults.close();
+
+		LOGGER.warn((initialFeatures - features) + " features bulk deleted.");
+		LOGGER.warn(features + " duplicate features not deleted.");
+
+		Assert.assertTrue(
+				"Unable to delete all features in bulk delete",
+				features == 0);
 	}
 
 	private static boolean hasAtLeastOne(

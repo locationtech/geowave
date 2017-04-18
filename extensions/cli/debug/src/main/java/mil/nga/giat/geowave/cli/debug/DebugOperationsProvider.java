@@ -11,6 +11,7 @@ public class DebugOperationsProvider implements
 		BBOXQuery.class,
 		ClientSideCQLQuery.class,
 		CQLQuery.class,
+		CQLDelete.class,
 		FullTableScan.class,
 		MinimalFullTable.class
 	};
