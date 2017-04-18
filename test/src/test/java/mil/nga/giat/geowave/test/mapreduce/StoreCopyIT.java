@@ -40,7 +40,7 @@ public class StoreCopyIT extends
 
 	@NamespaceOverride("storecopy")
 	protected DataStorePluginOptions outputDataStorePluginOptions;
-	
+
 	protected DataStorePluginOptions inputDataStorePluginOptions;
 	protected boolean testOutput = false;
 
@@ -113,7 +113,7 @@ public class StoreCopyIT extends
 
 			command.setInputStoreOptions(inputDataStorePluginOptions);
 			command.setOutputStoreOptions(outputDataStorePluginOptions);
-			
+
 			command.getOptions().setHdfsHostPort(
 					env.getHdfs());
 			command.getOptions().setJobTrackerOrResourceManHostPort(
@@ -156,7 +156,7 @@ public class StoreCopyIT extends
 			TestUtils.deleteAll(outputDataStorePluginOptions);
 			Assert.fail("Error occurred while querying the output store: '" + e.getLocalizedMessage() + "'");
 		}
-		
+
 		LOGGER.warn("Copy complete.");
 	}
 
