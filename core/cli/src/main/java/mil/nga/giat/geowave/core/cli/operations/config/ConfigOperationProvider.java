@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.core.cli.operations.config;
 
-import mil.nga.giat.geowave.core.cli.operations.config.security.SecuritySection;
+import mil.nga.giat.geowave.core.cli.operations.config.security.NewTokenCommand;
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class ConfigOperationProvider implements
@@ -11,7 +11,7 @@ public class ConfigOperationProvider implements
 		ConfigSection.class,
 		ListCommand.class,
 		SetCommand.class,
-		SecuritySection.class
+		NewTokenCommand.class
 	};
 
 	@Override

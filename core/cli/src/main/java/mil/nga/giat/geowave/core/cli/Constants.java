@@ -8,6 +8,11 @@ package mil.nga.giat.geowave.core.cli;
  */
 public interface Constants
 {
+	/**
+	 * Name of the GeoWave Descriptions Bundle for storing descriptions that
+	 * override the CLI descriptions
+	 */
+	public static final String GEOWAVE_DESCRIPTIONS_BUNDLE_NAME = "GeoWaveLabels";
 
 	/**
 	 * Properties file key denoting if a console echo is enabled by default

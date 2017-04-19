@@ -480,7 +480,7 @@ public class QueryOptions implements
 
 		}
 		final List<DataAdapter> list = new ArrayList<DataAdapter>();
-		if (adapterStore!=null && adapterStore.getAdapters()!=null) {
+		if (adapterStore != null && adapterStore.getAdapters() != null) {
 			try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
 				while (it.hasNext()) {
 					list.add(it.next());

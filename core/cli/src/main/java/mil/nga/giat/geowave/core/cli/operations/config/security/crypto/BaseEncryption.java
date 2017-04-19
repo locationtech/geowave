@@ -20,12 +20,14 @@ import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 
 /**
- *
+ * Abstract base encryption class for setting up and defining common
+ * encryption/decryption methods
  */
 public abstract class BaseEncryption
 {
@@ -35,46 +37,78 @@ public abstract class BaseEncryption
 	private String resourceLocation;
 	private Key key = null;
 
-	/**
+	/*
 	 * PROTECT this value. The salt value is the second-half of the protection
-	 * mechanism for key used when encrypting or decrypting the content.<br/>
-	 * We cannot generate a new random cryptography key each time, as that would
-	 * mean two different keys.<br/>
-	 * At the same time, encrypted values would be very vulnerable to
-	 * unintentional exposure if (a wrong) someone got access to the token key
-	 * file, so this salt allows us to protect the encryption with "2 locks" -
-	 * both are needed to decrypt a value that was encrypted with the SAME two
-	 * values (salt - below - and token file - specified at resourceLocation)
+	 * mechanism for key used when encrypting or decrypting the content.<br/> We
+	 * cannot generate a new random cryptography key each time, as that would
+	 * mean two different keys.<br/> At the same time, encrypted values would be
+	 * very vulnerable to unintentional exposure if (a wrong) someone got access
+	 * to the token key file, so this salt allows us to protect the encryption
+	 * with "2 locks" - both are needed to decrypt a value that was encrypted
+	 * with the SAME two values (salt - below - and token file - specified at
+	 * resourceLocation)
 	 */
 	private byte[] salt = null;
 	protected File tokenFile = null;
 
-	public static final String PREFIX = "ENC{";
-	public static final String SUFFIX = "}";
+	private static final String PREFIX = "ENC{";
+	private static final String SUFFIX = "}";
 	public static final String WRAPPER = PREFIX + SUFFIX;
 	private static final Pattern ENCCodePattern = Pattern.compile(PREFIX.replace(
 			"{",
 			"\\{") + "([^}]+)" + SUFFIX.replace(
 			"{",
 			"\\{"));
-	private byte[] PrefixBytes;
-	private byte[] SuffixBytes;
-	private int PrefixBytesLength;
-	private int SuffixBytesLength;
+	private byte[] prefixBytes;
+	private byte[] suffixBytes;
+	private int prefixBytesLength;
+	private int suffixBytesLength;
 
 	private final String KEY_ENCRYPTION_ALGORITHM = "AES";
 
+	/**
+	 * Base constructor for encryption, allowing a resource location for the
+	 * cryptography token key to be specified, rather than using the
+	 * default-generated path
+	 * 
+	 * @param resourceLocation
+	 *            Path to cryptography token key file
+	 */
+	public BaseEncryption(
+			final String resourceLocation ) {
+		try {
+			setResourceLocation(resourceLocation);
+			init();
+		}
+		catch (Throwable t) {
+			LOGGER.error(
+					t.getLocalizedMessage(),
+					t);
+		}
+	}
+
+	/**
+	 * Base constructor for encryption
+	 */
 	public BaseEncryption() {
+		init();
+	}
+
+	/**
+	 * Method to initialize all required fields, check for the existence of the
+	 * cryptography token key, and generate the key for encryption/decryption
+	 */
+	private void init() {
 		try {
 			checkForToken();
 			setResourceLocation(tokenFile.getCanonicalPath());
 
 			salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
 
-			PrefixBytes = PREFIX.getBytes("UTF-8");
-			SuffixBytes = SUFFIX.getBytes("UTF-8");
-			PrefixBytesLength = PrefixBytes.length;
-			SuffixBytesLength = SuffixBytes.length;
+			prefixBytes = PREFIX.getBytes("UTF-8");
+			suffixBytes = SUFFIX.getBytes("UTF-8");
+			prefixBytesLength = prefixBytes.length;
+			suffixBytesLength = suffixBytes.length;
 
 			generateRootKeyFromToken();
 		}
@@ -90,18 +124,24 @@ public abstract class BaseEncryption
 	 */
 	public void checkForToken()
 			throws Throwable {
-		if (ConfigOptions.getConfigFile() != null) {
-			File configFile = new File(
-					ConfigOptions.getConfigFile());
+		if (getResourceLocation() != null) {
 			tokenFile = new File(
-					configFile.getParentFile(),
-					resourceName);
+					getResourceLocation());
 		}
 		else {
-			File configFile = ConfigOptions.getDefaultPropertyFile();
-			tokenFile = new File(
-					configFile.getParentFile(),
-					resourceName);
+			if (ConfigOptions.getConfigFile() != null) {
+				File configFile = new File(
+						ConfigOptions.getConfigFile());
+				tokenFile = new File(
+						configFile.getParentFile(),
+						getFormattedTokenFileName());
+			}
+			else {
+				File configFile = ConfigOptions.getDefaultPropertyFile();
+				tokenFile = new File(
+						configFile.getParentFile(),
+						getFormattedTokenFileName());
+			}
 		}
 		if (tokenFile == null || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
@@ -110,6 +150,25 @@ public abstract class BaseEncryption
 			throw new Throwable(
 					"An error occurred generating a new encryption token.");
 		}
+	}
+
+	/**
+	 * Generates a token file resource name that includes the current version
+	 * 
+	 * @return formatted token key file name
+	 */
+	public static String getFormattedTokenFileName() {
+		final String tokenFileName = resourceName.substring(
+				0,
+				resourceName.lastIndexOf("."));
+		final String tokenFileExtension = resourceName.substring(resourceName.lastIndexOf("."));
+		String formattedTokenFileName = String.format(
+				"%s%s%s%s",
+				VersionUtils.getVersion(),
+				"-",
+				tokenFileName,
+				tokenFileExtension);
+		return formattedTokenFileName;
 	}
 
 	/**
@@ -187,15 +246,15 @@ public abstract class BaseEncryption
 	private boolean bytesSurroundedByWrapper(
 			byte[] data ) {
 		try {
-			for (int i = 0; i < PrefixBytesLength; i++) {
-				if (data[i] != PrefixBytes[i]) {
+			for (int i = 0; i < prefixBytesLength; i++) {
+				if (data[i] != prefixBytes[i]) {
 					return false;
 				}
 			}
 			int dataLength = data.length;
-			int allButPostfixLength = dataLength - SuffixBytesLength;
-			for (int i = 0; i < SuffixBytesLength; i++) {
-				if (data[allButPostfixLength + i] != SuffixBytes[i]) {
+			int allButPostfixLength = dataLength - suffixBytesLength;
+			for (int i = 0; i < suffixBytesLength; i++) {
+				if (data[allButPostfixLength + i] != suffixBytes[i]) {
 					return false;
 				}
 			}
@@ -217,11 +276,11 @@ public abstract class BaseEncryption
 	 */
 	private byte[] extractWrappedContents(
 			byte[] wrappedContents ) {
-		int justTheContentsLength = wrappedContents.length - PrefixBytesLength - SuffixBytesLength;
+		int justTheContentsLength = wrappedContents.length - prefixBytesLength - suffixBytesLength;
 		byte[] justTheContents = new byte[justTheContentsLength];
 		System.arraycopy(
 				wrappedContents,
-				PrefixBytesLength,
+				prefixBytesLength,
 				justTheContents,
 				0,
 				justTheContentsLength);
@@ -261,7 +320,7 @@ public abstract class BaseEncryption
 	}
 
 	/**
-	 * 
+	 * Method to generate a new secret key from the specified token key file
 	 */
 	private void generateRootKeyFromToken()
 			throws Throwable {
@@ -291,6 +350,7 @@ public abstract class BaseEncryption
 	}
 
 	/**
+	 * Method to generate a new random token key value
 	 * 
 	 * @return
 	 * @throws Exception
@@ -306,11 +366,21 @@ public abstract class BaseEncryption
 		return retval;
 	}
 
+	/**
+	 * Set the key to use
+	 * 
+	 * @param key
+	 */
 	protected void setKey(
 			Key key ) {
 		this.key = key;
 	}
 
+	/**
+	 * Get the key to use
+	 * 
+	 * @return
+	 */
 	protected Key getKey() {
 		return this.key;
 	}
@@ -331,25 +401,25 @@ public abstract class BaseEncryption
 			throws Exception {
 		byte[] encryptedBytes = encryptBytes(data);
 		int encryptedBytesLength = encryptedBytes.length;
-		byte[] wrappedBytes = new byte[PrefixBytesLength + encryptedBytesLength + SuffixBytesLength];
+		byte[] wrappedBytes = new byte[prefixBytesLength + encryptedBytesLength + suffixBytesLength];
 		System.arraycopy(
-				PrefixBytes,
+				prefixBytes,
 				0,
 				wrappedBytes,
 				0,
-				PrefixBytesLength);
+				prefixBytesLength);
 		System.arraycopy(
 				encryptedBytes,
 				0,
 				wrappedBytes,
-				PrefixBytesLength,
+				prefixBytesLength,
 				encryptedBytesLength);
 		System.arraycopy(
-				SuffixBytes,
+				suffixBytes,
 				0,
 				wrappedBytes,
-				PrefixBytesLength + encryptedBytesLength,
-				SuffixBytesLength);
+				prefixBytesLength + encryptedBytesLength,
+				suffixBytesLength);
 		return wrappedBytes;
 	}
 

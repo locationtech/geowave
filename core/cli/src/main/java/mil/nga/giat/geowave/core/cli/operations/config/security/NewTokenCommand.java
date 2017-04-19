@@ -14,12 +14,13 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
-@GeowaveOperation(name = "new_token", parentOperation = SecuritySection.class)
-@Parameters(commandDescription = "Generate a new security token within home directory")
+@GeowaveOperation(name = "newcryptokey", parentOperation = ConfigSection.class)
+@Parameters(commandDescription = "Generate a new security cryptography key for use with configuration properties")
 public class NewTokenCommand extends
 		DefaultOperation implements
 		Command
@@ -74,11 +75,9 @@ public class NewTokenCommand extends
 										String decryptedValue = new SecurityUtils().decryptHexEncodedValue(
 												configValue,
 												backupFile.getCanonicalPath());
-
 										String encryptedValue = new SecurityUtils().encryptAndHexEncodeValue(
 												decryptedValue,
 												tokenFile.getCanonicalPath());
-
 										configProps.put(
 												configKey,
 												encryptedValue);

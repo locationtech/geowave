@@ -46,12 +46,14 @@ public class DefaultOperation implements
 	 * Check if encryption token exists. If not, create one initially
 	 */
 	protected void checkForToken() {
+
 		File parentDir = (getGeoWaveDirectory() != null) ? getGeoWaveDirectory() : new File(
 				mil.nga.giat.geowave.core.cli.utils.FileUtils.formatFilePath("~" + File.separator
 						+ ConfigOptions.GEOWAVE_CACHE_PATH));
 		File tokenFile = new File(
 				parentDir,
-				BaseEncryption.resourceName);
+				BaseEncryption.getFormattedTokenFileName());
+
 		if (tokenFile == null || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
 		}
@@ -98,8 +100,7 @@ public class DefaultOperation implements
 			}
 			catch (Exception e) {
 				sLog.error(
-						"An error occurred creating a user '.geowave' in home directory: "
-								+ e.getLocalizedMessage(),
+						"An error occurred creating a user '.geowave' in home directory: " + e.getLocalizedMessage(),
 						e);
 				throw new ParameterException(
 						e);

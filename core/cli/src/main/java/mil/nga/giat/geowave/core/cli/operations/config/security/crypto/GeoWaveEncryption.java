@@ -31,11 +31,32 @@ public class GeoWaveEncryption extends
 
 	private static SecureRandom random;
 
+	/**
+	 * Base constructor for encryption, allowing a resource location for the
+	 * cryptography token key to be specified, rather than using the
+	 * default-generated path
+	 * 
+	 * @param resourceLocation
+	 *            Path to cryptography token key file
+	 */
+	public GeoWaveEncryption(
+			final String resourceLocation ) {
+		super(
+				resourceLocation);
+		init();
+	}
+
+	/**
+	 * Base constructor for encryption
+	 */
 	public GeoWaveEncryption() {
 		super();
 		init();
 	}
 
+	/**
+	 * Method to initialize the encryption implementation
+	 */
 	private void init() {
 		try {
 			setRandom(SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM));
@@ -49,6 +70,8 @@ public class GeoWaveEncryption extends
 	}
 
 	/**
+	 * Set a new secure random
+	 * 
 	 * @param random
 	 *            the random to set
 	 */
@@ -57,6 +80,11 @@ public class GeoWaveEncryption extends
 		GeoWaveEncryption.random = random;
 	}
 
+	/**
+	 * Generate a new parameter spec for use when encrypting data
+	 * 
+	 * @return
+	 */
 	private byte[] generateIvParameterSpec() {
 		byte[] iv = new byte[IV_LENGTH];
 		random.nextBytes(iv);
@@ -81,9 +109,15 @@ public class GeoWaveEncryption extends
 	 * Common method for generating a cipher
 	 * 
 	 * @param mode
+	 *            the operation mode of this cipher (this is one of the
+	 *            following: ENCRYPT_MODE, DECRYPT_MODE, WRAP_MODE or
+	 *            UNWRAP_MODE)
 	 * @param key
+	 *            key to use for encrypting/decrypting data against
 	 * @param iv
-	 * @return
+	 *            the algorithm parameters
+	 * @return new cipher generated against the specified mode, key, and
+	 *         parameters
 	 * @throws Exception
 	 */
 	private static Cipher getCipher(

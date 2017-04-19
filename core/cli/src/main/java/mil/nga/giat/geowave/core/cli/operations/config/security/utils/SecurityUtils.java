@@ -27,11 +27,15 @@ public class SecurityUtils
 	private String resourceLocation;
 	private static final String WRAPPER = BaseEncryption.WRAPPER;
 
+	/**
+	 * Base constructor for security utilities
+	 */
 	public SecurityUtils() {
 		resourceLocation = new GeoWaveEncryption().getResourceLocation();
 	}
 
 	/**
+	 * Return the resource token key file to use for encrypting/decrypting
 	 * 
 	 * @return
 	 */
@@ -40,6 +44,7 @@ public class SecurityUtils
 	}
 
 	/**
+	 * Set the resource token key file to use for encrypting/decrypting
 	 * 
 	 * @param resourceLocation
 	 */
@@ -49,6 +54,7 @@ public class SecurityUtils
 	}
 
 	/**
+	 * Decrypt a binary value
 	 * 
 	 * @param value
 	 * @return
@@ -106,6 +112,13 @@ public class SecurityUtils
 		}
 	}
 
+	/**
+	 * Decrypt a hex-encoded value
+	 * 
+	 * @param value
+	 * @return
+	 * @throws Exception
+	 */
 	public String decryptHexEncodedValue(
 			String value )
 			throws Exception {
@@ -155,6 +168,7 @@ public class SecurityUtils
 	}
 
 	/**
+	 * Encrypt a string
 	 * 
 	 * @param value
 	 * @return
@@ -276,28 +290,19 @@ public class SecurityUtils
 			String resourceLocation )
 			throws Throwable {
 		if (encService == null) {
-			encService = new GeoWaveEncryption();
-			try {
-				if (resourceLocation != null && !"".equals(resourceLocation.trim())) {
-					LOGGER.trace("Setting resource location for encryption service: [" + resourceLocation + "]");
-					encService.setResourceLocation(resourceLocation);
-				}
+			if (resourceLocation != null && !"".equals(resourceLocation.trim())) {
+				LOGGER.trace("Setting resource location for encryption service: [" + resourceLocation + "]");
+				encService = new GeoWaveEncryption(
+						resourceLocation);
 			}
-			catch (IllegalArgumentException e) {
-				e.printStackTrace();
-				LOGGER.error(
-						"Encountered IllegalArgumentException getting encryption service: " + e.getLocalizedMessage(),
-						e);
-			}
-			catch (Exception e) {
-				LOGGER.error(
-						"Encountered Exception getting encryption service: " + e.getLocalizedMessage(),
-						e);
+			else {
+				encService = new GeoWaveEncryption();
 			}
 		}
 		else {
 			if (!resourceLocation.equals(encService.getResourceLocation())) {
-				encService.setResourceLocation(resourceLocation);
+				encService = new GeoWaveEncryption(
+						resourceLocation);
 			}
 		}
 		return encService;
@@ -363,6 +368,12 @@ public class SecurityUtils
 		return convertHashToString(md5Bytes);
 	}
 
+	/**
+	 * Generate a new token key value for use with encrypting or decrypting data
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public static String generateNewToken()
 			throws Exception {
 		return BaseEncryption.generateRandomSecretKey();

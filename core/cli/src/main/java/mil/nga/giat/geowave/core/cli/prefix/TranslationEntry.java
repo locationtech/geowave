@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.beust.jcommander.Parameterized;
 
+import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.utils.JCommanderParameterUtils;
 
 /**
@@ -59,12 +60,19 @@ public class TranslationEntry
 		return prefixedNames;
 	}
 
+	/**
+	 * Return the description for a field's parameter definition. If the
+	 * parameter has a description key specified, the description will be looked
+	 * up in the resource bundle. If no description is defined, the default
+	 * CLI-specified description will be returned.
+	 * 
+	 * @return
+	 */
 	public String getDescription() {
 		String description = null;
 		// check to see if a description key is specified. If so, perform a
-		// lookup in the GeoWave labels
-		// properties for a description to use in place of the command line
-		// instance
+		// lookup in the GeoWave labels properties for a description to use
+		// in place of the command line instance
 		if (getParam().getParameter() != null && getParam().getParameter().descriptionKey() != null) {
 			String descriptionKey = getParam().getParameter().descriptionKey();
 			if (descriptionKey != null && !"".equals(descriptionKey.trim())) {
@@ -95,14 +103,17 @@ public class TranslationEntry
 	}
 
 	/**
+	 * If a parameter has a defined description key, this method will lookup the
+	 * description for the specified key
 	 * 
 	 * @param descriptionKey
+	 *            Key to lookup for description
 	 * @return
 	 */
 	private String getDescriptionFromResourceBundle(
 			final String descriptionKey ) {
 		String description = "";
-		final String bundleName = "GeoWaveLabels";
+		final String bundleName = Constants.GEOWAVE_DESCRIPTIONS_BUNDLE_NAME;
 		Locale locale = Locale.getDefault();
 		final String defaultResourcePath = bundleName + ".properties";
 		final String localeResourcePath = bundleName + "_" + locale.toString() + ".properties";
@@ -128,6 +139,11 @@ public class TranslationEntry
 		return description;
 	}
 
+	/**
+	 * Specifies if this field is for a password
+	 * 
+	 * @return
+	 */
 	public boolean isPassword() {
 		boolean isPassword = false;
 		// check if a converter was specified. If so, if the converter is a
@@ -138,6 +154,11 @@ public class TranslationEntry
 		return isPassword;
 	}
 
+	/**
+	 * Specifies if this field is hidden
+	 * 
+	 * @return
+	 */
 	public boolean isHidden() {
 		if (getParam().getParameter() != null) {
 			return getParam().getParameter().hidden();
@@ -148,11 +169,16 @@ public class TranslationEntry
 		return false;
 	}
 
+	/**
+	 * Specifies if this field is required
+	 * 
+	 * @return
+	 */
 	public boolean isRequired() {
 		boolean isRequired = false;
 		isRequired = isRequired || JCommanderParameterUtils.isRequired(getParam().getParameter());
 		isRequired = isRequired || JCommanderParameterUtils.isRequired(getParam().getWrappedParameter().getParameter());
-		return false;
+		return isRequired;
 	}
 
 	/**
