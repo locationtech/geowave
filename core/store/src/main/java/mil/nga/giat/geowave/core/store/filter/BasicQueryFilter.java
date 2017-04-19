@@ -48,7 +48,7 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				//checking if data range contains query range
+				// checking if data range contains query range
 				return !((dataMin < queryMin) || (dataMax > queryMax));
 			}
 		},
@@ -59,12 +59,21 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				//per definition, it shouldn't allow only boundary points to 
-				//overlap (stricter than intersect, see DE-9IM definitions)
-				return !((dataMax <= queryMin) || (dataMin >= queryMax)) 
-						&& !EQUALS.compare(dataMin, dataMax, queryMin, queryMax)
-						&& !CONTAINS.compare(dataMin, dataMax, queryMin, queryMax)
-						&& !WITHIN.compare(dataMin, dataMax, queryMin, queryMax);
+				// per definition, it shouldn't allow only boundary points to
+				// overlap (stricter than intersect, see DE-9IM definitions)
+				return !((dataMax <= queryMin) || (dataMin >= queryMax)) && !EQUALS.compare(
+						dataMin,
+						dataMax,
+						queryMin,
+						queryMax) && !CONTAINS.compare(
+						dataMin,
+						dataMax,
+						queryMin,
+						queryMax) && !WITHIN.compare(
+						dataMin,
+						dataMax,
+						queryMin,
+						queryMax);
 			}
 		},
 		INTERSECTS {
@@ -74,9 +83,15 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				// similar to overlap but a bit relaxed (allows boundary points to touch)
-				//this is equivalent to !((dataMax < queryMin) || (dataMin > queryMax));
-				return !DISJOINT.compare(dataMin, dataMax, queryMin, queryMax);
+				// similar to overlap but a bit relaxed (allows boundary points
+				// to touch)
+				// this is equivalent to !((dataMax < queryMin) || (dataMin >
+				// queryMax));
+				return !DISJOINT.compare(
+						dataMin,
+						dataMax,
+						queryMin,
+						queryMax);
 			}
 		},
 		TOUCHES {
@@ -86,8 +101,11 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				return (FloatCompareUtils.checkDoublesEqual(dataMin, queryMax)) 
-						|| (FloatCompareUtils.checkDoublesEqual(dataMax, queryMin));
+				return (FloatCompareUtils.checkDoublesEqual(
+						dataMin,
+						queryMax)) || (FloatCompareUtils.checkDoublesEqual(
+						dataMax,
+						queryMin));
 			}
 		},
 		WITHIN {
@@ -97,9 +115,14 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				//checking if query range is within the data range
-				//this is equivalent to (queryMin >= dataMin) && (queryMax <= dataMax);
-				return CONTAINS.compare(queryMin, queryMax, dataMin, dataMax);
+				// checking if query range is within the data range
+				// this is equivalent to (queryMin >= dataMin) && (queryMax <=
+				// dataMax);
+				return CONTAINS.compare(
+						queryMin,
+						queryMax,
+						dataMin,
+						dataMax);
 			}
 		},
 		DISJOINT {
@@ -119,8 +142,9 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				//accordingly to the def. intersection point must be interior to both source geometries.
-				//this is not possible in 1D data so always returns false
+				// accordingly to the def. intersection point must be interior
+				// to both source geometries.
+				// this is not possible in 1D data so always returns false
 				return false;
 			}
 		},
@@ -131,8 +155,11 @@ public class BasicQueryFilter implements
 					double dataMax,
 					double queryMin,
 					double queryMax ) {
-				return (FloatCompareUtils.checkDoublesEqual(dataMin, queryMin)) 
-						&& (FloatCompareUtils.checkDoublesEqual(dataMax, queryMax));
+				return (FloatCompareUtils.checkDoublesEqual(
+						dataMin,
+						queryMin)) && (FloatCompareUtils.checkDoublesEqual(
+						dataMax,
+						queryMax));
 			}
 		}
 	};

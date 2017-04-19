@@ -65,6 +65,8 @@ cp ${WORKSPACE}/${ARGS[buildroot]}/SOURCES/geowave-c++-${GEOWAVE_VERSION}-${VEND
 
 echo '###### Copy rpm to repo and reindex'
 
+mkdir -p ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/{SRPMS,TARBALL,${ARGS[arch]}}/
+mkdir -p ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}-jars/JAR/
 cp -R ${WORKSPACE}/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/*.rpm ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/${ARGS[arch]}/
 cp -fR ${WORKSPACE}/${ARGS[buildroot]}/SRPMS/*.rpm ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/SRPMS/
 cp -fR ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/*.tar.gz ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/TARBALL/

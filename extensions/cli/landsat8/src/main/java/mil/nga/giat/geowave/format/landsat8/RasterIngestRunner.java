@@ -48,6 +48,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrat
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.gdal.GDALGeoTiffReader;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
+import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -212,9 +213,10 @@ public class RasterIngestRunner extends
 			boolean cropped = false;
 			final Filter filter = landsatOptions.getCqlFilter();
 			if (filter != null) {
-				Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
+				ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 						filter,
 						GeoWaveGTRasterFormat.DEFAULT_CRS);
+				Geometry geometry = geometryAndCompareOp.getGeometry();
 				if (geometry != null) {
 					// go ahead and intersect this with the scene geometry
 					final Geometry sceneShape = (Geometry) band.getAttribute(SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);

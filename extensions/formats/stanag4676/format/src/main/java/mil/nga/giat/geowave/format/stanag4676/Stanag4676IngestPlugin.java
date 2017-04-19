@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTyp
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
@@ -57,6 +58,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 
 public class Stanag4676IngestPlugin extends
@@ -267,6 +269,7 @@ public class Stanag4676IngestPlugin extends
 			double distanceKm = 0.0;
 			EarthVector prevEv = null;
 			final ArrayList<Double> coord_sequence = new ArrayList<Double>();
+			final ArrayList<Double> detail_coord_sequence = new ArrayList<Double>();
 			double minSpeed = Double.MAX_VALUE;
 			double maxSpeed = -Double.MAX_VALUE;
 
@@ -318,9 +321,38 @@ public class Stanag4676IngestPlugin extends
 
 					prevEv = currentEv;
 
-					ptBuilder.add(GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+					Geometry geometry = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 							event.Longitude.get(),
-							event.Latitude.get())));
+							event.Latitude.get()));
+
+					ptBuilder.add(geometry);
+
+					if (!FloatCompareUtils.checkDoublesEqual(
+							event.DetailLatitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+							event.DetailLongitude.get(),
+							Stanag4676EventWritable.NO_DETAIL)) {
+						detail_coord_sequence.add(event.DetailLongitude.get());
+						detail_coord_sequence.add(event.DetailLatitude.get());
+					}
+
+					Double detailLatitude = null;
+					Double detailLongitude = null;
+					Double detailElevation = null;
+					Geometry detailGeometry = null;
+					if (!FloatCompareUtils.checkDoublesEqual(
+							event.DetailLatitude.get(),
+							Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+							event.DetailLongitude.get(),
+							Stanag4676EventWritable.NO_DETAIL)) {
+						detailLatitude = event.DetailLatitude.get();
+						detailLongitude = event.DetailLongitude.get();
+						detailElevation = event.DetailElevation.get();
+						detailGeometry = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+								detailLongitude,
+								detailLatitude));
+					}
+					ptBuilder.add(detailGeometry);
 					ptBuilder.add(mission);
 					ptBuilder.add(trackNumber);
 					ptBuilder.add(trackUuid);
@@ -347,6 +379,9 @@ public class Stanag4676IngestPlugin extends
 							event.Longitude.get()));
 					ptBuilder.add(new Double(
 							event.Elevation.get()));
+					ptBuilder.add(detailLatitude);
+					ptBuilder.add(detailLongitude);
+					ptBuilder.add(detailElevation);
 					ptBuilder.add(Integer.valueOf(event.FrameNumber.get()));
 					ptBuilder.add(Integer.valueOf(event.PixelRow.get()));
 					ptBuilder.add(Integer.valueOf(event.PixelColumn.get()));
@@ -495,7 +530,16 @@ public class Stanag4676IngestPlugin extends
 				final CoordinateSequence2D coordinateSequence = new CoordinateSequence2D(
 						ArrayUtils.toPrimitive(xy));
 				final LineString lineString = GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinateSequence);
+
+				final Double[] dxy = detail_coord_sequence.toArray(new Double[] {});
+				final CoordinateSequence2D detailCoordinateSequence = new CoordinateSequence2D(
+						ArrayUtils.toPrimitive(dxy));
+				LineString detailLineString = null;
+				if (detailCoordinateSequence.size() > 0) {
+					detailLineString = GeometryUtils.GEOMETRY_FACTORY.createLineString(detailCoordinateSequence);
+				}
 				trackBuilder.add(lineString);
+				trackBuilder.add(detailLineString);
 				trackBuilder.add(mission);
 				trackBuilder.add(trackNumber);
 				trackBuilder.add(trackUuid);
@@ -520,6 +564,32 @@ public class Stanag4676IngestPlugin extends
 						lastEvent.Latitude.get()));
 				trackBuilder.add(new Double(
 						lastEvent.Longitude.get()));
+
+				Double firstEventDetailLatitude = null;
+				Double firstEventDetailLongitude = null;
+				Double lastEventDetailLatitude = null;
+				Double lastEventDetailLongitude = null;
+
+				if (!FloatCompareUtils.checkDoublesEqual(
+						firstEvent.DetailLatitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+						firstEvent.DetailLongitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+						lastEvent.DetailLatitude.get(),
+						Stanag4676EventWritable.NO_DETAIL) && !FloatCompareUtils.checkDoublesEqual(
+						lastEvent.DetailLongitude.get(),
+						Stanag4676EventWritable.NO_DETAIL)) {
+					firstEventDetailLatitude = firstEvent.DetailLatitude.get();
+					firstEventDetailLongitude = firstEvent.DetailLongitude.get();
+					lastEventDetailLatitude = lastEvent.DetailLatitude.get();
+					lastEventDetailLongitude = lastEvent.DetailLongitude.get();
+				}
+
+				trackBuilder.add(firstEventDetailLatitude);
+				trackBuilder.add(firstEventDetailLongitude);
+				trackBuilder.add(lastEventDetailLatitude);
+				trackBuilder.add(lastEventDetailLongitude);
+
 				trackBuilder.add(numTrackPoints);
 				trackBuilder.add(numMotionPoints);
 				trackBuilder.add(trackStatus);

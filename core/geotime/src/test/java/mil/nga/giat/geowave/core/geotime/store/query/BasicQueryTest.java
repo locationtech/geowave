@@ -27,7 +27,6 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 import org.junit.Test;
 
-
 public class BasicQueryTest
 {
 	SimpleDateFormat df = new SimpleDateFormat(
@@ -35,7 +34,7 @@ public class BasicQueryTest
 
 	private CommonIndexedPersistenceEncoding createData(
 			final Date start,
-			final Date end) {
+			final Date end ) {
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
 		commonData.addValue(new PersistentValue<CommonIndexValue>(
@@ -62,49 +61,53 @@ public class BasicQueryTest
 			final BasicQueryCompareOperation op,
 			final boolean[] expectedResults )
 			throws ParseException {
-		//query time range
+		// query time range
 		ConstraintData constrainData = new ConstraintData(
 				new NumericRange(
-						df.parse("2017-02-22T12:00:00GMT-00:00").getTime(),
-						df.parse("2017-02-22T13:00:00GMT-00:00").getTime()), 
+						df.parse(
+								"2017-02-22T12:00:00GMT-00:00").getTime(),
+						df.parse(
+								"2017-02-22T13:00:00GMT-00:00").getTime()),
 				true);
 		Constraints constaints = new Constraints(
 				new ConstraintSet(
 						TimeDefinition.class,
 						constrainData));
-		final BasicQuery query = new BasicQuery(constaints, op);
+		final BasicQuery query = new BasicQuery(
+				constaints,
+				op);
 
 		final CommonIndexedPersistenceEncoding[] data = new CommonIndexedPersistenceEncoding[] {
-				
-			//same exact time range as the query
+
+			// same exact time range as the query
 			createData(
 					df.parse("2017-02-22T12:00:00GMT-00:00"),
 					df.parse("2017-02-22T13:00:00GMT-00:00")),
-			
-			//partial overlap
+
+			// partial overlap
 			createData(
 					df.parse("2017-02-22T11:00:00GMT-00:00"),
 					df.parse("2017-02-22T12:30:00GMT-00:00")),
-			
-			//time range completely within the query
+
+			// time range completely within the query
 			createData(
 					df.parse("2017-02-22T12:30:00GMT-00:00"),
 					df.parse("2017-02-22T12:50:00GMT-00:00")),
-			
-			//time range touching each other
+
+			// time range touching each other
 			createData(
 					df.parse("2017-02-22T11:00:00GMT-00:00"),
 					df.parse("2017-02-22T12:00:00GMT-00:00")),
-			
-			//no intersection between ranges
+
+			// no intersection between ranges
 			createData(
 					df.parse("2017-02-22T11:00:00GMT-00:00"),
 					df.parse("2017-02-22T11:59:00GMT-00:00")),
-			
-			//time range contains complete query range
+
+			// time range contains complete query range
 			createData(
 					df.parse("2017-02-22T11:00:00GMT-00:00"),
-					df.parse("2017-02-22T14:00:00GMT-00:00"))			
+					df.parse("2017-02-22T14:00:00GMT-00:00"))
 		};
 		final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider()
 				.createPrimaryIndex()
@@ -151,7 +154,7 @@ public class BasicQueryTest
 					false
 				});
 	}
-	
+
 	@Test
 	public void testIntersects()
 			throws ParseException {
@@ -166,7 +169,7 @@ public class BasicQueryTest
 					true
 				});
 	}
-	
+
 	@Test
 	public void testEquals()
 			throws ParseException {
@@ -181,7 +184,7 @@ public class BasicQueryTest
 					false
 				});
 	}
-	
+
 	@Test
 	public void testDisjoint()
 			throws ParseException {
@@ -196,7 +199,7 @@ public class BasicQueryTest
 					false
 				});
 	}
-	
+
 	@Test
 	public void testWithin()
 			throws ParseException {
@@ -211,7 +214,7 @@ public class BasicQueryTest
 					true
 				});
 	}
-	
+
 	@Test
 	public void testCrosses()
 			throws ParseException {
@@ -226,7 +229,7 @@ public class BasicQueryTest
 					false
 				});
 	}
-	
+
 	@Test
 	public void testTouches()
 			throws ParseException {

@@ -171,11 +171,6 @@ public class IngestMessageHandler implements
 					}
 
 					for (final TrackPoint pt : evt.getPoints().values()) {
-						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY
-								.createPoint(new Coordinate(
-										pt.getLocation().longitude,
-										pt.getLocation().latitude)));
-
 						final String trackItemUUID = pt.getUuid();
 						final long timeStamp = pt.getEventTime();
 						final long endTimeStamp = -1L;
@@ -190,6 +185,25 @@ public class IngestMessageHandler implements
 						final double latitude = pt.getLocation().latitude;
 						final double longitude = pt.getLocation().longitude;
 						final double elevation = pt.getLocation().elevation;
+
+						final byte[] geometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY
+								.createPoint(new Coordinate(
+										longitude,
+										latitude)));
+
+						double detailLatitude = Stanag4676EventWritable.NO_DETAIL;
+						double detailLongitude = Stanag4676EventWritable.NO_DETAIL;
+						double detailElevation = Stanag4676EventWritable.NO_DETAIL;
+						byte[] detailGeometry = null;
+						if (pt.getDetail() != null && pt.getDetail().getLocation() != null) {
+							detailLatitude = pt.getDetail().getLocation().latitude;
+							detailLongitude = pt.getDetail().getLocation().longitude;
+							detailElevation = pt.getDetail().getLocation().elevation;
+							detailGeometry = wkbWriter.write(GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+									detailLongitude,
+									detailLatitude)));
+						}
+
 						final ImageChipInfo chipInfo = timesWithImageChips.get(timeStamp);
 						int pixelRow = -1;
 						int pixelColumn = -1;
@@ -204,6 +218,7 @@ public class IngestMessageHandler implements
 						Stanag4676EventWritable sw = new Stanag4676EventWritable();
 						sw.setTrackPointData(
 								geometry,
+								detailGeometry,
 								imageBytes,
 								missionUUID,
 								trackNumber,
@@ -220,6 +235,9 @@ public class IngestMessageHandler implements
 								latitude,
 								longitude,
 								elevation,
+								detailLatitude,
+								detailLongitude,
+								detailElevation,
 								pixelRow,
 								pixelColumn,
 								frameNumber);
