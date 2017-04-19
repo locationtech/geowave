@@ -367,6 +367,7 @@ public class IngestFromKafkaDriver
 							adapter.getAdapterId(),
 							indexWriter);
 				}
+
 				indexWriter.write(geowaveData.getValue());
 
 			}

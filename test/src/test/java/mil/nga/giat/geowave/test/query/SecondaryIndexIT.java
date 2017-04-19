@@ -31,12 +31,15 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.io.Text;
+import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
@@ -60,6 +63,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -70,7 +74,6 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericGreaterThanConstraint;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalQueryConstraint;
 import mil.nga.giat.geowave.core.store.index.text.TextQueryConstraint;
-import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -91,10 +94,14 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class SecondaryIndexIT
 {
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.ACCUMULO
+		// HBase's VisibilityController isn't compatible with
+		// this test. We'll leave HBase out until the *real*
+		// secondary index implementation is complete.
+		//GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
+	
 	private FeatureDataAdapter dataAdapter;
 	private PrimaryIndex index;
 	private DataStore dataStore;
@@ -106,6 +113,32 @@ public class SecondaryIndexIT
 	private DistributableQuery query;
 	private Point expectedPoint;
 	private String expectedDataId;
+	
+	private final static Logger LOGGER = Logger.getLogger(SecondaryIndexIT.class);
+	private static long startMillis;
+
+	@BeforeClass
+	public static void startTimer() {
+		startMillis = System.currentTimeMillis();
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*    RUNNING SecondaryIndexIT           *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	@AfterClass
+	public static void reportTest() {
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*    FINISHED SecondaryIndexIT          *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
 
 	@Test
 	public void testSecondaryIndicesManually()
@@ -114,7 +147,6 @@ public class SecondaryIndexIT
 			TableNotFoundException,
 			ParseException,
 			IOException {
-
 		Assert.assertTrue(allPrimaryIndexIds.size() == 3);
 
 		if (dataStoreOptions.getType().equals(
@@ -157,13 +189,11 @@ public class SecondaryIndexIT
 			textPartialHBase(connection);
 			temporalPartialHBase(connection);
 		}
-
 	}
 
 	@Test
 	public void testSecondaryIndicesViaDirectQuery()
 			throws IOException {
-
 		Assert.assertTrue(secondaryDataStore != null);
 
 		if (dataStoreOptions.getType().equals(
@@ -234,6 +264,7 @@ public class SecondaryIndexIT
 					DEFAULT_AUTHORIZATIONS)) {
 
 				while (results.hasNext()) {
+					results.next();
 					numResults++;
 				}
 			}
@@ -296,6 +327,7 @@ public class SecondaryIndexIT
 			MismatchedIndexToAdapterMapping,
 			IOException,
 			ParseException {
+		TestUtils.deleteAll(dataStoreOptions);
 
 		// mark attributes for secondary indexing
 		final List<SimpleFeatureUserDataConfiguration> configs = new ArrayList<>();

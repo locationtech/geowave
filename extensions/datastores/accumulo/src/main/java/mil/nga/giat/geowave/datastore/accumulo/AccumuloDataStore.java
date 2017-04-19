@@ -4,9 +4,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -17,9 +19,12 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.KeyValue;
+import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
@@ -28,6 +33,7 @@ import org.apache.log4j.Logger;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
@@ -42,11 +48,17 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.base.Deleter;
+import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.DecodePackage;
+import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -55,6 +67,7 @@ import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.util.DataAdapterAndIndexCache;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.AccumuloSplitsProvider;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.GeoWaveAccumuloRecordReader;
@@ -180,6 +193,7 @@ public class AccumuloDataStore extends
 			final IngestCallback callback,
 			final Closeable closable ) {
 		return new AccumuloIndexWriter(
+				this,
 				adapter,
 				index,
 				accumuloOperations,
@@ -321,6 +335,7 @@ public class AccumuloDataStore extends
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore ) {
 		final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
+				this,
 				adapterIdsToQuery,
 				index,
 				sanitizedQuery,
@@ -360,6 +375,7 @@ public class AccumuloDataStore extends
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> adapterIdsToQuery ) {
 		final AccumuloRowPrefixQuery<Object> prefixQuery = new AccumuloRowPrefixQuery<Object>(
+				this,
 				index,
 				rowPrefix,
 				(ScanCallback<Object, Object>) sanitizedQueryOptions.getScanCallback(),
@@ -385,6 +401,7 @@ public class AccumuloDataStore extends
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore ) {
 		final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
+				this,
 				adapter,
 				index,
 				rowIds,
@@ -451,6 +468,7 @@ public class AccumuloDataStore extends
 							scanner),
 					new AccumuloEntryIteratorWrapper(
 							visibilityCount.isAnyEntryDifferingFieldVisiblity(),
+							this,
 							adapterStore,
 							index,
 							scanner.iterator(),
@@ -631,6 +649,187 @@ public class AccumuloDataStore extends
 				queryOptions,
 				isOutputWritable,
 				adapterStore,
+				this,
 				accumuloOperations);
+	}
+
+	@Override
+	protected Iterable<GeoWaveRow> getRowsFromIngest(
+			byte[] adapterId,
+			DataStoreEntryInfo ingestInfo,
+			List<FieldInfo<?>> fieldInfoList,
+			boolean unused ) {
+		ArrayList<GeoWaveRow> rows = new ArrayList<>();
+
+		for (ByteArrayId rowId : ingestInfo.getRowIds()) {
+			AccumuloRow accumuloRow = new AccumuloRow(
+					rowId.getBytes(),
+					fieldInfoList);
+			rows.add(accumuloRow);
+		}
+
+		return rows;
+	}
+
+	@Override
+	protected void verifyVisibility(
+			VisibilityWriter customFieldVisibilityWriter,
+			DataStoreEntryInfo ingestInfo ) {
+		try {
+			if (customFieldVisibilityWriter != DataStoreUtils.UNCONSTRAINED_VISIBILITY) {
+				for (final FieldInfo field : ingestInfo.getFieldInfo()) {
+					if ((field.getVisibility() != null) && (field.getVisibility().length > 0)) {
+						accumuloOperations.insureAuthorization(
+								null,
+								StringUtils.stringFromBinary(field.getVisibility()));
+
+					}
+				}
+			}
+
+		}
+		catch (AccumuloException e1) {
+			LOGGER.error(e1);
+		}
+		catch (AccumuloSecurityException e2) {
+			LOGGER.error(e2);
+		}
+	}
+
+	@Override
+	public void write(
+			Writer writer,
+			Iterable<GeoWaveRow> rows,
+			final String unused ) {
+		final List<Mutation> mutations = new ArrayList<Mutation>();
+
+		for (GeoWaveRow geoWaveRow : rows) {
+			AccumuloRow accumuloRow = (AccumuloRow) geoWaveRow;
+
+			byte[] rowId = accumuloRow.getRowId();
+			byte[] adapterId = accumuloRow.getAdapterId();
+
+			final Mutation mutation = new Mutation(
+					new Text(
+							rowId));
+			for (final FieldInfo<?> fieldInfo : accumuloRow.getFieldInfoList()) {
+				if ((fieldInfo.getVisibility() != null) && (fieldInfo.getVisibility().length > 0)) {
+					mutation.put(
+							new Text(
+									adapterId),
+							new Text(
+									fieldInfo.getDataValue().getId().getBytes()),
+							new ColumnVisibility(
+									fieldInfo.getVisibility()),
+							new Value(
+									fieldInfo.getWrittenValue()));
+				}
+				else {
+					mutation.put(
+							new Text(
+									adapterId),
+							new Text(
+									fieldInfo.getDataValue().getId().getBytes()),
+							new Value(
+									fieldInfo.getWrittenValue()));
+				}
+			}
+
+			mutations.add(mutation);
+		}
+
+		writer.write(mutations);
+	}
+
+	@Override
+	public Object decodeRow(
+			Object rowInput,
+			boolean wholeRowEncoding,
+			QueryFilter clientFilter,
+			DataAdapter dataAdapter,
+			final AdapterStore adapterStore,
+			PrimaryIndex index,
+			ScanCallback scanCallback,
+			byte[] fieldSubsetBitmask,
+			boolean decodeRow ) {
+		if ((dataAdapter == null) && (adapterStore == null)) {
+			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
+			return null;
+		}
+
+		if (!(rowInput instanceof KeyValue)) {
+			return null;
+		}
+
+		Key key = ((KeyValue) rowInput).getKey();
+		Value value = ((KeyValue) rowInput).getValue();
+
+		Map<Key, Value> rowMapping;
+		if (wholeRowEncoding) {
+			try {
+				rowMapping = WholeRowIterator.decodeRow(
+						key,
+						value);
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Could not decode row from iterator. Ensure whole row iterators are being used.",
+						e);
+				return null;
+			}
+		}
+		else {
+			rowMapping = new HashMap<Key, Value>();
+			rowMapping.put(
+					key,
+					value);
+		}
+
+		DecodePackage decodePackage = new DecodePackage(
+				index,
+				decodeRow);
+
+		ByteArrayId adapterId = null;
+		if (dataAdapter == null) {
+			Entry<Key, Value> firstEntry = (Entry<Key, Value>) rowMapping.entrySet().toArray()[0];
+			adapterId = new ByteArrayId(
+					firstEntry.getKey().getColumnFamilyData().getBackingArray());
+		}
+
+		if (!decodePackage.setOrRetrieveAdapter(
+				dataAdapter,
+				adapterId,
+				adapterStore)) {
+			LOGGER.error("Could not retrieve adapter from adapter store.");
+			return null;
+		}
+
+		for (final Entry<Key, Value> entry : rowMapping.entrySet()) {
+			if (!decodePackage.isAdapterVerified()) {
+				adapterId = new ByteArrayId(
+						entry.getKey().getColumnFamilyData().getBackingArray());
+
+				if (!decodePackage.verifyAdapter(adapterId)) {
+					LOGGER.error("Adapter verify failed: adapter does not match data.");
+					return null;
+				}
+			}
+
+			readFieldInfo(
+					decodePackage,
+					entry.getKey().getColumnQualifierData().getBackingArray(),
+					entry.getKey().getColumnVisibilityData().getBackingArray(),
+					entry.getValue().get());
+		}
+
+		AccumuloRow tempRow = new AccumuloRow(
+				key.getRow().copyBytes(),
+				decodePackage.getFieldInfo());
+
+		return getDecodedRow(
+				tempRow,
+				decodePackage,
+				clientFilter,
+				scanCallback);
 	}
 }

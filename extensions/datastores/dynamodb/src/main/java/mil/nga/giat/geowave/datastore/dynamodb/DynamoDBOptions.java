@@ -61,9 +61,9 @@ public class DynamoDBOptions extends
 	protected Regions region = null;
 
 	@Parameter(names = "--initialWriteCapacity")
-	protected long writeCapacity = 10;
+	protected long writeCapacity = 5;
 	@Parameter(names = "--initialReadCapacity")
-	protected long readCapacity = 10;
+	protected long readCapacity = 5;
 
 	/**
 	 * List of client configuration that the user can tweak

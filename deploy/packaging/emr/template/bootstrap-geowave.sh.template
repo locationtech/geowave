@@ -40,4 +40,6 @@ if is_master ; then
 	install_geowave	
 fi
 
+$DATASTORE_CONFIGURE_GEOWAVE_TOKEN
+
 $QUICKSTART_BOOTSTRAP_TOKEN

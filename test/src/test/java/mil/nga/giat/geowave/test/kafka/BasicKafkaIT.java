@@ -38,12 +38,14 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.KAFKA
 })
-public class BasicKafkaIT
+public class BasicKafkaIT extends
+		AbstractGeoWaveIT
 {
 	private final static Logger LOGGER = Logger.getLogger(BasicKafkaIT.class);
 	private static final Map<ByteArrayId, Integer> EXPECTED_COUNT_PER_ADAPTER_ID = new HashMap<ByteArrayId, Integer>();
@@ -52,11 +54,11 @@ public class BasicKafkaIT
 		EXPECTED_COUNT_PER_ADAPTER_ID.put(
 				new ByteArrayId(
 						"gpxpoint"),
-				137291);
+				11911);
 		EXPECTED_COUNT_PER_ADAPTER_ID.put(
 				new ByteArrayId(
 						"gpxtrack"),
-				257);
+				5);
 	}
 
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE
@@ -65,10 +67,14 @@ public class BasicKafkaIT
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
+	}
 
 	private static long startMillis;
 

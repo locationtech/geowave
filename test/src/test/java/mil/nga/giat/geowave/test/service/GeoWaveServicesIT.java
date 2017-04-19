@@ -38,6 +38,7 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -45,7 +46,8 @@ import net.sf.json.JSONObject;
 @Environments({
 	Environment.SERVICES
 })
-public class GeoWaveServicesIT
+public class GeoWaveServicesIT extends
+		AbstractGeoWaveIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveServicesIT.class);
 
@@ -55,6 +57,8 @@ public class GeoWaveServicesIT
 	protected static final String GENERAL_GPX_INPUT_GPX_DIR = TEST_CASE_GENERAL_GPX_BASE + "input_gpx/";
 	private static final String ASHLAND_GPX_FILE = GENERAL_GPX_INPUT_GPX_DIR + "ashland.gpx";
 	private static final String ASHLAND_INGEST_TYPE = "gpx";
+
+	private static long startMillis;
 
 	private static InfoServiceClient infoServiceClient;
 	private static GeoserverServiceClient geoserverServiceClient;
@@ -67,7 +71,9 @@ public class GeoWaveServicesIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
-	private static long startMillis;
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
 
 	@BeforeClass
 	public static void extractTestFiles()

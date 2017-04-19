@@ -3,7 +3,7 @@ package mil.nga.giat.geowave.datastore.accumulo.util;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.PartialKey;
 
-import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 
 public class IteratorUtils
 {
@@ -21,16 +21,16 @@ public class IteratorUtils
 		public boolean equals(
 				Key other,
 				final PartialKey part ) {
-			final GeowaveRowId myRowId = new GeowaveRowId(
+			final GeoWaveRowImpl myRowId = new GeoWaveRowImpl(
 					getRowData().getBackingArray());
 
-			GeowaveRowId otherRowId = new GeowaveRowId(
+			GeoWaveRowImpl otherRowId = new GeoWaveRowImpl(
 					other.getRowData().getBackingArray());
 
-			otherRowId = new GeowaveRowId(
-					otherRowId.getInsertionId(),
+			otherRowId = new GeoWaveRowImpl(
 					myRowId.getDataId(),
 					otherRowId.getAdapterId(),
+					otherRowId.getIndex(),
 					otherRowId.getNumberOfDuplicates());
 
 			final byte[] cf = other.getColumnFamilyData().toArray();
