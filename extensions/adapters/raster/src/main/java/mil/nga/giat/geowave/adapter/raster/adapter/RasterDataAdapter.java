@@ -56,7 +56,6 @@ import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.operation.projection.MapProjection;
 import org.geotools.referencing.operation.transform.AffineTransform2D;
-import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.resources.coverage.CoverageUtilities;
 import org.geotools.resources.i18n.Vocabulary;
 import org.geotools.resources.i18n.VocabularyKeys;
@@ -655,21 +654,23 @@ public class RasterDataAdapter implements
 							maxDP);
 					final double[] minsPerDimension = rangePerDimension.getMinValuesPerDimension();
 					final double[] maxesPerDimension = rangePerDimension.getMaxValuesPerDimension();
-					final ReferencedEnvelope mapExtent = new ReferencedEnvelope(
-							minsPerDimension[longitudeIndex],
-							maxesPerDimension[longitudeIndex],
-							minsPerDimension[latitudeIndex],
-							maxesPerDimension[latitudeIndex],
-							GeoWaveGTRasterFormat.DEFAULT_CRS);
-					final AffineTransform worldToScreenTransform = RendererUtilities.worldToScreenTransform(
-							mapExtent,
-							new Rectangle(
-									tileSize,
-									tileSize));
+					final double mapExtentWidth = maxesPerDimension[longitudeIndex] - minsPerDimension[longitudeIndex];
+					final double mapExtentHeight = maxesPerDimension[latitudeIndex] - minsPerDimension[latitudeIndex];
+					final double mapExtentMinX = minsPerDimension[longitudeIndex];
+					final double mapExtentMinY = minsPerDimension[latitudeIndex];
+					final double scaleX = ((double) tileSize) / mapExtentWidth;
+					final double scaleY = ((double) tileSize) / mapExtentHeight;
+					final double invScaleX = mapExtentWidth / tileSize;
+					final double invScaleY = mapExtentHeight / tileSize;
+					final double transX = -mapExtentMinX * scaleX;
+					final double transY = (mapExtentMinY * scaleY) + tileSize;
+
+					final AffineTransform worldToScreenTransform = new AffineTransform(scaleX, 0, 0, -scaleY, transX, transY);
+					final AffineTransform _gridToCRS = new AffineTransform(invScaleX, 0, 0, -invScaleY, -transX * invScaleX, transY * invScaleY);
+					final AffineTransform2D gridToCRS = new AffineTransform2D(_gridToCRS);
+
 					GridGeometry2D insertionIdGeometry;
 					try {
-						final AffineTransform2D gridToCRS = new AffineTransform2D(
-								worldToScreenTransform.createInverse());
 						insertionIdGeometry = new GridGeometry2D(
 								new GridEnvelope2D(
 										new Rectangle(
@@ -847,7 +848,7 @@ public class RasterDataAdapter implements
 								footprintWithinTileScreenGeom,
 								getProperties(originalData));
 					}
-					catch (IllegalArgumentException | NoninvertibleTransformException e) {
+					catch (IllegalArgumentException  e) {
 						LOGGER.warn(
 								"Unable to calculate transformation for grid coordinates on write",
 								e);
@@ -1110,15 +1111,22 @@ public class RasterDataAdapter implements
 					0, // no offset
 					null);
 		}
-		final AffineTransform worldToScreenTransform = RendererUtilities.worldToScreenTransform(
-				mapExtent,
-				new Rectangle(
-						tileSize,
-						tileSize));
-		try {
-			final AffineTransform2D gridToCRS = new AffineTransform2D(
-					worldToScreenTransform.createInverse());
+		final com.vividsolutions.jts.geom.Envelope mapExtentEnvelope = new com.vividsolutions.jts.geom.Envelope(mapExtent);
+		final double mapExtentWidth = mapExtent.getWidth();
+		final double mapExtentHeight = mapExtent.getHeight();
+		final double mapExtentMinX = mapExtentEnvelope.getMinX();
+		final double mapExtentMinY = mapExtentEnvelope.getMinY();
+		final double scaleX = ((double) tileSize) / mapExtentWidth;
+		final double scaleY = ((double) tileSize) / mapExtentHeight;
+		final double invScaleX = mapExtentWidth / tileSize;
+		final double invScaleY = mapExtentHeight / tileSize;
+		final double transX = -mapExtentMinX * scaleX;
+		final double transY = (mapExtentMinY * scaleY) + tileSize;
 
+		final AffineTransform _gridToCRS = new AffineTransform(invScaleX, 0, 0, -invScaleY, -transX * invScaleX, transY * invScaleY);
+		final AffineTransform2D gridToCRS = new AffineTransform2D(_gridToCRS);
+
+		try {
 			final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
 			final Map properties = new HashMap();
 			if (metadata != null) {
@@ -1144,7 +1152,7 @@ public class RasterDataAdapter implements
 					null,
 					properties);
 		}
-		catch (IllegalArgumentException | NoninvertibleTransformException e) {
+		catch (IllegalArgumentException e) {
 			LOGGER.warn(
 					"Unable to calculate transformation for grid coordinates on read",
 					e);
