@@ -33,7 +33,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 
 	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
 	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
-	private static final String CQL_DELETE_STR = "STATE like 'TX'";
+	private static final String CQL_DELETE_STR = "STATE = 'TX'";
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
@@ -168,7 +168,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 		}
 
 		try {
-			testBulkDeleteCQL(
+			testDeleteCQL(
 					CQL_DELETE_STR,
 					TestUtils.DEFAULT_SPATIAL_INDEX);
 		}
@@ -180,7 +180,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 		}
 
 		try {
-			testBulkDeleteSpatial(
+			testDeleteSpatial(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
 					TestUtils.DEFAULT_SPATIAL_INDEX);
