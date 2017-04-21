@@ -55,14 +55,12 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.MAP_REDUCE
 })
-public class DBScanIT extends
-		AbstractGeoWaveIT
+public class DBScanIT
 {
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
@@ -73,10 +71,6 @@ public class DBScanIT extends
 
 	private final static Logger LOGGER = Logger.getLogger(DBScanIT.class);
 	private static long startMillis;
-
-	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStorePluginOptions;
-	}
 
 	@BeforeClass
 	public static void startTimer() {

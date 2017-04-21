@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.Arr
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
 
@@ -153,9 +153,9 @@ public class NumericIndexStrategyFilterIterator implements
 			final Key k ) {
 		k.getRow(row);
 		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(new ByteArrayId(
-				new GeoWaveRowImpl(
+				new GeowaveRowId(
 						row.getBytes(),
-						row.getLength()).getIndex()));
+						row.getLength()).getInsertionId()));
 		return rangeCache.inBounds(coordinates);
 	}
 }

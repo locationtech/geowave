@@ -11,7 +11,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Statement;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.datastore.cassandra.CassandraDataStore;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 
@@ -53,8 +53,8 @@ public class RowRead
 
 	public CassandraRow result() {
 		if (row != null) {
-			final Statement[] statements = new Statement[CassandraDataStore.PARTITIONS];
-			for (int p = 0; p < CassandraDataStore.PARTITIONS; p++) {
+			final Statement[] statements = new Statement[CassandraIndexWriter.PARTITIONS];
+			for (int p = 0; p < CassandraIndexWriter.PARTITIONS; p++) {
 				final BoundStatement boundRead = new BoundStatement(
 						preparedRead);
 				boundRead.set(

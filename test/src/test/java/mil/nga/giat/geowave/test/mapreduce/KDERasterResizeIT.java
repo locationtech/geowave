@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,10 +13,8 @@ import javax.media.jai.Interpolation;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.geotools.geometry.GeneralEnvelope;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,13 +99,6 @@ public class KDERasterResizeIT
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-	}
-
-	@After
-	public void clean()
-			throws IOException {
-		TestUtils.deleteAll(inputDataStorePluginOptions);
-		TestUtils.deleteAll(outputDataStorePluginOptions);
 	}
 
 	@Test

@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.datastore.cassandra.CassandraDataStore;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraIndexWriter;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations.ByteArrayIdToByteBuffer;
@@ -53,7 +53,7 @@ public class BatchedRangeRead
 
 	public CloseableIterator<CassandraRow> results() {
 		final List<BoundStatement> statements = new ArrayList<>();
-		for (int p = 0; p < CassandraDataStore.PARTITIONS; p++) {
+		for (int p = 0; p < CassandraIndexWriter.PARTITIONS; p++) {
 			for (final ByteArrayRange range : ranges) {
 				final BoundStatement boundRead = new BoundStatement(
 						preparedRead);

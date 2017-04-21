@@ -5,7 +5,6 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -24,7 +23,6 @@ public class DynamoDBRowPrefixQuery<T> extends
 	final ByteArrayId rowPrefix;
 
 	public DynamoDBRowPrefixQuery(
-			final BaseDataStore dataStore,
 			final DynamoDBOperations dynamodbOperations,
 			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
@@ -33,7 +31,6 @@ public class DynamoDBRowPrefixQuery<T> extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
-				dataStore,
 				dynamodbOperations,
 				index,
 				authorizations,

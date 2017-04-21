@@ -23,7 +23,8 @@ import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedDataSet;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
@@ -183,7 +184,7 @@ public class QueryFilterIterator extends
 			final Text currentRow,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final FlattenedUnreadData unreadData ) {
-		final GeoWaveRowImpl rowId = new GeoWaveRowImpl(
+		final GeowaveRowId rowId = new GeowaveRowId(
 				currentRow.getBytes(),
 				currentRow.getLength());
 		return new AccumuloCommonIndexedPersistenceEncoding(
@@ -192,7 +193,7 @@ public class QueryFilterIterator extends
 				new ByteArrayId(
 						rowId.getDataId()),
 				new ByteArrayId(
-						rowId.getIndex()),
+						rowId.getInsertionId()),
 				rowId.getNumberOfDuplicates(),
 				commonData,
 				unreadData);

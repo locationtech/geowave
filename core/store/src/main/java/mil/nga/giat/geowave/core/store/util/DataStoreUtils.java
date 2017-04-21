@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,6 +33,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.base.EntryRowID;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
@@ -45,8 +45,8 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
 import mil.nga.giat.geowave.core.store.flatten.BitmaskedFieldInfoComparator;
@@ -63,8 +63,8 @@ public class DataStoreUtils
 {
 	private final static Logger LOGGER = Logger.getLogger(DataStoreUtils.class);
 
-	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID
-	public final static int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
+	// we append a 0 byte, 8 bytes of timestamp
+	public final static int UNIQUE_ADDED_BYTES = 1 + 8;
 	public final static byte UNIQUE_ID_DELIMITER = 0;
 	@SuppressWarnings({
 		"rawtypes",
@@ -72,8 +72,6 @@ public class DataStoreUtils
 	})
 	public static final UniformVisibilityWriter UNCONSTRAINED_VISIBILITY = new UniformVisibilityWriter(
 			new UnconstrainedVisibilityHandler());
-
-	public static final byte[] EMTPY_VISIBILITY = new byte[] {};
 
 	public static List<ByteArrayId> getUniqueDimensionFields(
 			final CommonIndexModel model ) {
@@ -105,8 +103,8 @@ public class DataStoreUtils
 	}
 
 	public static boolean rowIdsMatch(
-			final GeoWaveRow rowId1,
-			final GeoWaveRow rowId2 ) {
+			final NativeGeoWaveRow rowId1,
+			final NativeGeoWaveRow rowId2 ) {
 		if (!Arrays.equals(
 				rowId1.getIndex(),
 				rowId2.getIndex())) {
@@ -358,10 +356,10 @@ public class DataStoreUtils
 			// metadata in our de-duplication
 			// step
 			rowIds.add(new ByteArrayId(
-					new GeoWaveRowImpl(
+					new EntryRowID(
+							indexId,
 							dataId,
 							adapterId,
-							indexId,
 							enableDeduplication ? numberOfDuplicates : -1).getRowId()));
 		}
 	}
@@ -604,24 +602,51 @@ public class DataStoreUtils
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T, R extends GeoWaveRow> T decodeRow(
+	public static <T, R extends NativeGeoWaveRow> T decodeRow(
 			final R row,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
 			final ScanCallback<T, R> scanCallback ) {
-		return (T) decodeRowInternal(
+		final byte[] dataId = row.getDataId();
+		final byte[] adapterId = row.getAdapterId();
+		final GeowaveRowId rowId = new GeowaveRowId(
+				row.getIndex(),
+				dataId,
+				adapterId,
+				1);
+		return (T) decodeRowObj(
 				row,
-				null,
+				rowId,
 				adapterStore,
 				clientFilter,
 				index,
 				scanCallback);
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T, R extends GeoWaveRow> T decodeRowInternal(
+	private static <T, R extends NativeGeoWaveRow> Object decodeRowObj(
 			final R row,
+			final GeowaveRowId rowId,
+			final AdapterStore adapterStore,
+			final QueryFilter clientFilter,
+			final PrimaryIndex index,
+			final ScanCallback<T, R> scanCallback ) {
+		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
+				row,
+				rowId,
+				null,
+				adapterStore,
+				clientFilter,
+				index,
+				scanCallback);
+		return pair != null ? pair.getLeft() : null;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T, R extends NativeGeoWaveRow> Pair<T, DataStoreEntryInfo> decodeRow(
+			final R row,
+			final GeowaveRowId rowId,
 			DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
@@ -629,9 +654,8 @@ public class DataStoreUtils
 			final ScanCallback<T, R> scanCallback ) {
 		if (dataAdapter == null) {
 			if (adapterStore != null) {
-				ByteArrayId adapterId = new ByteArrayId(
-						row.getAdapterId());
-				dataAdapter = (DataAdapter<T>) adapterStore.getAdapter(adapterId);
+				dataAdapter = (DataAdapter<T>) adapterStore.getAdapter(new ByteArrayId(
+						rowId.getAdapterId()));
 			}
 			if (dataAdapter == null) {
 				LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
@@ -652,6 +676,11 @@ public class DataStoreUtils
 		final CommonIndexModel indexModel = index.getIndexModel();
 		final byte[] flattenedValue = row.getValue();
 		final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
+		int i = 0;
+		// find repeated field IDs in the common index model and skip their
+		// position
+		final Set<ByteArrayId> fieldIds = new HashSet<ByteArrayId>();
+		// below is completely a temporary hack
 
 		// this in particular is a terrible hack to find raster data
 		if (dataAdapter.getFieldIdForPosition(
@@ -673,64 +702,67 @@ public class DataStoreUtils
 					new byte[] {}));
 		}
 		else {
-			// Get the list of valid field positions from the row's field mask
-			List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(row.getFieldMask());
-
-			// Collect the valid fields
-			int fieldIndex = 0;
+			final Set<Integer> skipSet = new HashSet<Integer>();
+			for (final NumericDimensionField<? extends CommonIndexValue> f : indexModel.getDimensions()) {
+				if (!fieldIds.add(f.getFieldId())) {
+					// if the field ID is repeated, make sure we don't repeat
+					// the
+					// field position when reading the values
+					skipSet.add(i);
+				}
+				i++;
+			}
+			i = 0;
 			while (input.hasRemaining()) {
 				final int fieldLength = input.getInt();
 
 				final byte[] fieldValueBytes = new byte[fieldLength];
 				input.get(fieldValueBytes);
-
-				if (fieldPositions.contains(fieldIndex)) {
-					flattenedFieldInfoList.add(new FlattenedFieldInfo(
-							fieldIndex,
-							fieldValueBytes));
+				if (skipSet.contains(i)) {
+					i++;
 				}
-
-				fieldIndex++;
+				flattenedFieldInfoList.add(new FlattenedFieldInfo(
+						i++,
+						fieldValueBytes));
 			}
-
-			// below this likely needs some work
+			// above is a temporary hack, even below this likely needs some work
 			final Set<ByteArrayId> visitedFieldIds = new HashSet<>();
-			for (final FlattenedFieldInfo flatInfo : flattenedFieldInfoList) {
+			for (final FlattenedFieldInfo fieldInfo : flattenedFieldInfoList) {
 				final ByteArrayId fieldId = dataAdapter.getFieldIdForPosition(
 						indexModel,
-						flatInfo.getFieldPosition());
+						fieldInfo.getFieldPosition());
 				if (!visitedFieldIds.contains(fieldId)) {
 					visitedFieldIds.add(fieldId);
 					final FieldReader<? extends CommonIndexValue> indexFieldReader = indexModel.getReader(fieldId);
 					if (indexFieldReader != null) {
-						final CommonIndexValue indexValue = indexFieldReader.readField(flatInfo.getValue());
+						final CommonIndexValue indexValue = indexFieldReader.readField(fieldInfo.getValue());
 						final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
 								fieldId,
 								indexValue);
 						indexData.addValue(val);
 						fieldInfoList.add(DataStoreUtils.getFieldInfo(
 								val,
-								flatInfo.getValue(),
+								fieldInfo.getValue(),
 								new byte[] {}));
 					}
 					else {
 						final FieldReader<?> extFieldReader = dataAdapter.getReader(fieldId);
 						if (extFieldReader != null) {
-							final Object value = extFieldReader.readField(flatInfo.getValue());
+							final Object value = extFieldReader.readField(fieldInfo.getValue());
 							final PersistentValue<Object> val = new PersistentValue<Object>(
 									fieldId,
 									value);
 							extendedData.addValue(val);
 							fieldInfoList.add(DataStoreUtils.getFieldInfo(
 									val,
-									flatInfo.getValue(),
+									fieldInfo.getValue(),
 									new byte[] {}));
 						}
 						else {
 							LOGGER.error("field reader not found for data entry, the value may be ignored");
 							unknownData.addValue(new PersistentValue<byte[]>(
 									fieldId,
-									flatInfo.getValue()));
+									fieldInfo.getValue()));
 						}
 					}
 				}
@@ -739,10 +771,10 @@ public class DataStoreUtils
 		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
 				dataAdapter.getAdapterId(),
 				new ByteArrayId(
-						row.getDataId()),
+						rowId.getDataId()),
 				new ByteArrayId(
-						row.getIndex()),
-				row.getNumberOfDuplicates(),
+						rowId.getInsertionId()),
+				rowId.getNumberOfDuplicates(),
 				indexData,
 				unknownData,
 				extendedData);
@@ -755,11 +787,11 @@ public class DataStoreUtils
 							encodedRow,
 							index),
 					new DataStoreEntryInfo(
-							row.getDataId(),
+							rowId.getDataId(),
 							Arrays.asList(new ByteArrayId(
-									row.getIndex())),
+									rowId.getInsertionId())),
 							Arrays.asList(new ByteArrayId(
-									row.getIndex())),
+									rowId.getInsertionId())),
 							fieldInfoList));
 			if (scanCallback != null) {
 				scanCallback.entryScanned(
@@ -767,39 +799,9 @@ public class DataStoreUtils
 						row,
 						pair.getLeft());
 			}
-			return pair.getLeft();
+			return pair;
 		}
 		return null;
-	}
-
-	// TODO: this doesn't account for varying visibilities, so this is
-	// potentially only temporary
-	public static ByteBuffer serializeFields(
-			DataStoreEntryInfo ingestInfo ) {
-		final List<byte[]> fieldInfoBytesList = new ArrayList<>();
-		int totalLength = 0;
-		// TODO potentially another hack, but if there is only one field, don't
-		// need to write the length
-		if (ingestInfo.getFieldInfo().size() == 1) {
-			byte[] value = ingestInfo.getFieldInfo().get(
-					0).getWrittenValue();
-			fieldInfoBytesList.add(value);
-			totalLength += value.length;
-		}
-		else {
-			for (final FieldInfo<?> fieldInfo : ingestInfo.getFieldInfo()) {
-				final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
-				fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
-				fieldInfoBytes.put(fieldInfo.getWrittenValue());
-				fieldInfoBytesList.add(fieldInfoBytes.array());
-				totalLength += fieldInfoBytes.array().length;
-			}
-		}
-		final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
-		for (final byte[] bytes : fieldInfoBytesList) {
-			allFields.put(bytes);
-		}
-		return allFields;
 	}
 
 	public static ByteArrayId ensureUniqueId(
@@ -844,10 +846,8 @@ public class DataStoreUtils
 		buf.put(new byte[] {
 			UNIQUE_ID_DELIMITER
 		});
-		UUID uuid = UUID.randomUUID();
 		buf.putLong(timestamp);
-		buf.putLong(uuid.getLeastSignificantBits());
-		buf.putLong(uuid.getMostSignificantBits());
+
 		if (hasMetadata) {
 			buf.put(metadata);
 		}

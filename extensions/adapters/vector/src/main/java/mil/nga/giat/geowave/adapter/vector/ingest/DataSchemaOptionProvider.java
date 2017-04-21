@@ -32,12 +32,11 @@ public class DataSchemaOptionProvider implements
 			}
 		}
 	}
-
+	
 	/**
 	 * 
 	 */
-	public void setSupplementalFields(
-			boolean supplementalFields ) {
+	public void setSupplementalFields (boolean supplementalFields) {
 		includeSupplementalFields = supplementalFields;
 	}
 

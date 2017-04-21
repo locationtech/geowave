@@ -5,7 +5,6 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -22,7 +21,6 @@ public class AccumuloRowPrefixQuery<T> extends
 	final ByteArrayId rowPrefix;
 
 	public AccumuloRowPrefixQuery(
-			final BaseDataStore dataStore,
 			final PrimaryIndex index,
 			final ByteArrayId rowPrefix,
 			final ScanCallback<T, Object> scanCallback,
@@ -30,7 +28,6 @@ public class AccumuloRowPrefixQuery<T> extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
-				dataStore,
 				index,
 				authorizations,
 				scanCallback,

@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -46,14 +45,12 @@ public class GeoWaveAccumuloRecordReader<T> extends
 			final QueryOptions queryOptions,
 			final boolean isOutputWritable,
 			final AdapterStore adapterStore,
-			final BaseDataStore dataStore,
 			final AccumuloOperations accumuloOperations ) {
 		super(
 				query,
 				queryOptions,
 				isOutputWritable,
-				adapterStore,
-				dataStore);
+				adapterStore);
 		this.accumuloOperations = accumuloOperations;
 	}
 
@@ -64,7 +61,6 @@ public class GeoWaveAccumuloRecordReader<T> extends
 			List<QueryFilter> queryFilters,
 			QueryOptions rangeQueryOptions ) {
 		return new InputFormatAccumuloRangeQuery(
-				dataStore,
 				adapterStore,
 				i,
 				AccumuloSplitsProvider.unwrapRange(range),

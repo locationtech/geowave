@@ -10,8 +10,7 @@ import org.apache.hadoop.hbase.client.Result;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
@@ -70,12 +69,12 @@ public class HBaseInputFormatIteratorWrapper<T> implements
 			final Result row,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
-		final GeoWaveRowImpl tempRow = new GeoWaveRowImpl(
+		final GeowaveRowId rowId = new GeowaveRowId(
 				row.getRow());
 
 		final Object value = HBaseUtils.decodeRow(
 				row,
-				tempRow,
+				rowId,
 				serializationTool.getAdapterStore(),
 				clientFilter,
 				index,
@@ -85,7 +84,7 @@ public class HBaseInputFormatIteratorWrapper<T> implements
 			return null;
 		}
 		final ByteArrayId adapterId = new ByteArrayId(
-				tempRow.getAdapterId());
+				rowId.getAdapterId());
 		final T result = (T) (isOutputWritable ? serializationTool.getHadoopWritableSerializerForAdapter(
 				adapterId).toWritable(
 				value) : value);
@@ -96,13 +95,13 @@ public class HBaseInputFormatIteratorWrapper<T> implements
 						// ID with the index ID concatenated with the insertion
 						// ID to gaurantee uniqueness and effectively disable
 						// aggregating by only the data ID
-						tempRow.isDeduplicationEnabled() ? tempRow.getDataId() : ArrayUtils.addAll(
+						rowId.isDeduplicationEnabled() ? rowId.getDataId() : ArrayUtils.addAll(
 								ArrayUtils.addAll(
 										index.getId().getBytes(),
-										tempRow.getIndex()),
-								tempRow.getDataId())));
+										rowId.getInsertionId()),
+								rowId.getDataId())));
 		key.setInsertionId(new ByteArrayId(
-				tempRow.getIndex()));
+				rowId.getInsertionId()));
 		return new GeoWaveInputFormatEntry(
 				key,
 				result);

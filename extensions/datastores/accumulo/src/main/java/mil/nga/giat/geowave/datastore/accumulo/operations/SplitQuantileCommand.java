@@ -14,7 +14,6 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.split.AbstractAccumuloSplitsOperation;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
@@ -43,7 +42,6 @@ public class SplitQuantileCommand extends
 					final long number ) {
 				try {
 					AccumuloUtils.setSplitsByQuantile(
-							(AccumuloDataStore) inputStoreOptions.createDataStore(),
 							connector,
 							namespace,
 							index,

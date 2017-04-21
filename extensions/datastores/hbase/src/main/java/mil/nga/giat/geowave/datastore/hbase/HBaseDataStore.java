@@ -11,19 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.NavigableMap;
 
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableNotFoundException;
 import org.apache.hadoop.hbase.client.Delete;
-import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
-import org.apache.hadoop.hbase.security.visibility.CellVisibility;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.log4j.Logger;
@@ -45,24 +40,16 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.base.Deleter;
-import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.data.DecodePackage;
-import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.index.secondary.HBaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.mapreduce.GeoWaveHBaseRecordReader;
@@ -183,7 +170,6 @@ public class HBaseDataStore extends
 			final IngestCallback callback,
 			final Closeable closable ) {
 		return new HBaseIndexWriter(
-				this,
 				adapter,
 				index,
 				operations,
@@ -292,7 +278,6 @@ public class HBaseDataStore extends
 				new MultiScannerClosableWrapper(
 						resultScanners),
 				new HBaseEntryIteratorWrapper(
-						this,
 						tempAdapterStore,
 						index,
 						iterator,
@@ -388,7 +373,6 @@ public class HBaseDataStore extends
 			final AdapterStore tempAdapterStore ) {
 
 		final HBaseConstraintsQuery hbaseQuery = new HBaseConstraintsQuery(
-				this,
 				adapterIdsToQuery,
 				index,
 				sanitizedQuery,
@@ -401,11 +385,6 @@ public class HBaseDataStore extends
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
 				DuplicateEntryCount.getDuplicateCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
 						adapterIdsToQuery,
 						statisticsStore,
@@ -430,16 +409,10 @@ public class HBaseDataStore extends
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> adapterIdsToQuery ) {
 		final HBaseRowPrefixQuery<Object> prefixQuery = new HBaseRowPrefixQuery<Object>(
-				this,
 				index,
 				rowPrefix,
 				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				sanitizedQueryOptions.getLimit(),
-				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
 		prefixQuery.setOptions(options);
@@ -459,7 +432,6 @@ public class HBaseDataStore extends
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore ) {
 		final HBaseRowIdsQuery<Object> q = new HBaseRowIdsQuery<Object>(
-				this,
 				adapter,
 				index,
 				rowIds,
@@ -569,7 +541,6 @@ public class HBaseDataStore extends
 				queryOptions,
 				isOutputWritable,
 				adapterStore,
-				this,
 				operations);
 	}
 
@@ -639,176 +610,4 @@ public class HBaseDataStore extends
 
 	}
 
-	@Override
-	protected Iterable<GeoWaveRow> getRowsFromIngest(
-			byte[] adapterId,
-			DataStoreEntryInfo ingestInfo,
-			List<FieldInfo<?>> fieldInfoList,
-			boolean ensureUniqueId ) {
-		ArrayList<GeoWaveRow> rows = new ArrayList<>();
-
-		for (ByteArrayId rowId : ingestInfo.getRowIds()) {
-			if (ensureUniqueId) {
-				rowId = DataStoreUtils.ensureUniqueId(
-						rowId.getBytes(),
-						true);
-			}
-
-			HBaseRow hbaseRow = new HBaseRow(
-					rowId.getBytes(),
-					fieldInfoList);
-			rows.add(hbaseRow);
-		}
-
-		return rows;
-	}
-
-	@Override
-	public void write(
-			Writer writer,
-			Iterable<GeoWaveRow> rows,
-			final String columnFamily ) {
-		final List<RowMutations> mutations = new ArrayList<RowMutations>();
-
-		for (GeoWaveRow geoWaveRow : rows) {
-			HBaseRow hbaseRow = (HBaseRow) geoWaveRow;
-
-			byte[] rowId = hbaseRow.getRowId();
-
-			byte[] adapterId = hbaseRow.getAdapterId();
-
-			try {
-				RowMutations mutation = new RowMutations(
-						rowId);
-
-				// Since cell vis is per-mutation, we have to do one per field
-				// TODO: pre-check for mixed vis and use a single mutation if
-				// possible
-				for (final FieldInfo fieldInfo : hbaseRow.getFieldInfoList()) {
-
-					final Put put = new Put(
-							rowId);
-
-					put.addColumn(
-							adapterId,
-							fieldInfo.getDataValue().getId().getBytes(),
-							fieldInfo.getWrittenValue());
-
-					if ((fieldInfo.getVisibility() != null) && (fieldInfo.getVisibility().length > 0)) {
-						put.setCellVisibility(new CellVisibility(
-								StringUtils.stringFromBinary(fieldInfo.getVisibility())));
-					}
-
-					mutation.add(put);
-				}
-				
-				mutations.add(mutation);
-			}
-			catch (final Exception e) {
-				LOGGER.warn(
-						"Could not add row to mutation.",
-						e);
-			}
-		}
-
-		try {
-			((HBaseWriter) writer).write(
-					mutations,
-					columnFamily);
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"Error writing to HBase table",
-					e);
-		}
-	}
-
-	@Override
-	public Object decodeRow(
-			Object inputRow,
-			boolean wholeRowEncoding,
-			QueryFilter clientFilter,
-			DataAdapter dataAdapter,
-			AdapterStore adapterStore,
-			PrimaryIndex index,
-			ScanCallback scanCallback,
-			byte[] fieldSubsetBitmask,
-			boolean decodeRow ) {
-		if ((dataAdapter == null) && (adapterStore == null)) {
-			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
-			return null;
-		}
-
-		if (!(inputRow instanceof Result)) {
-			return null;
-		}
-
-		Result row = (Result) inputRow;
-
-		// Create the general-purpose row
-		HBaseRow hbaseRow = new HBaseRow(
-				row.getRow());
-
-		// Grab the first entry's adapter ID if necessary
-		ByteArrayId adapterId = null;
-		if (dataAdapter == null) {
-			adapterId = new ByteArrayId(
-					hbaseRow.getAdapterId());
-		}
-
-		DecodePackage decodePackage = new DecodePackage(
-				index,
-				decodeRow);
-
-		if (!decodePackage.setOrRetrieveAdapter(
-				dataAdapter,
-				adapterId,
-				adapterStore)) {
-			LOGGER.error("Could not retrieve adapter from adapter store.");
-			return null;
-		}
-
-		final NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> map = row.getMap();
-
-		for (final Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> cfEntry : map.entrySet()) {
-			// Verify the adapter matches the data
-			if (!decodePackage.isAdapterVerified()) {
-				adapterId = new ByteArrayId(
-						cfEntry.getKey());
-
-				if (!decodePackage.verifyAdapter(adapterId)) {
-					LOGGER.error("Adapter verify failed: adapter does not match data.");
-					return null;
-				}
-			}
-
-			for (final Entry<byte[], NavigableMap<Long, byte[]>> cqEntry : cfEntry.getValue().entrySet()) {
-				byte[] byteValue = cqEntry.getValue().lastEntry().getValue();
-				byte[] fieldMask = cqEntry.getKey();
-
-				if (fieldSubsetBitmask != null) {
-					final byte[] newBitmask = BitmaskUtils.generateANDBitmask(
-							fieldMask,
-							fieldSubsetBitmask);
-					byteValue = BitmaskUtils.constructNewValue(
-							byteValue,
-							fieldMask,
-							newBitmask);
-					fieldMask = newBitmask;
-				}
-
-				readFieldInfo(
-						decodePackage,
-						fieldMask,
-						DataStoreUtils.EMTPY_VISIBILITY,
-						byteValue);
-			}
-		}
-
-		return getDecodedRow(
-				hbaseRow,
-				decodePackage,
-				clientFilter,
-				scanCallback);
-	}
 }

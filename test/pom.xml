@@ -17,11 +17,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-dynamodb</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-service-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -49,6 +44,11 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-dynamodb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -382,48 +382,12 @@
 		</plugins>
 	</build>
 <<<<<<< HEAD
-<<<<<<< HEAD
-	<profiles>
-=======
-
 	<profiles>
 		<profile>
-			<id>accumulo-it</id>
+			<id>cassandra</id>
 			<properties>
-				<skipITs>false</skipITs>
-				<testStoreType>ACCUMULO</testStoreType>
-			</properties>
-		</profile>
-		<profile>
-			<id>hbase-it</id>
-			<properties>
-				<skipITs>false</skipITs>
-				<testStoreType>HBASE</testStoreType>
-			</properties>
-		</profile>
-		<profile>
-			<id>cassandra-it</id>
-			<properties>
-				<skipITs>false</skipITs>
 				<guava.version>19.0</guava.version>
-				<testStoreType>CASSANDRA</testStoreType>
 			</properties>
-		</profile>
-		<profile>
-			<id>dynamodb-it</id>
-			<properties>
-				<skipITs>false</skipITs>
-				<testStoreType>DYNAMODB</testStoreType>
-			</properties>
-		</profile>
->>>>>>> 0bc8c1a72fdd4b1f9d0bdee7dedbd13200b001b0
-		<profile>
-			<id>bigtable-it</id>
-			<properties>
-				<skipITs>false</skipITs>
-				<testStoreType>BIGTABLE</testStoreType>
-			</properties>
-<<<<<<< HEAD
 			<build>
 				<plugins>
 					<plugin>
@@ -465,8 +429,6 @@
 				<testStoreType>BIGTABLE</testStoreType>
 			</properties>
 >>>>>>> 286d34e401dad6d1be1d2547dca3fbc195a5ccb0
-=======
->>>>>>> 0bc8c1a72fdd4b1f9d0bdee7dedbd13200b001b0
 		</profile>
 	</profiles>
 </project>
