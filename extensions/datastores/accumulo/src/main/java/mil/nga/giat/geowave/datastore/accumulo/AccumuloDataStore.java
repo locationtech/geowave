@@ -115,8 +115,16 @@ public class AccumuloDataStore extends
 
 	private final AccumuloSplitsProvider splitsProvider = new AccumuloSplitsProvider();
 
-	private final HashMap<ByteArrayId, Integer> dupCountMap = new HashMap<>();
-	private final HashMap<ByteArrayId, ByteArrayId> idMap = new HashMap<>();
+	class DupTracker
+	{
+		HashMap<ByteArrayId, ByteArrayId> idMap;
+		HashMap<ByteArrayId, Integer> dupCountMap;
+
+		public DupTracker() {
+			idMap = new HashMap<>();
+			dupCountMap = new HashMap<>();
+		}
+	}
 
 	public AccumuloDataStore(
 			final AccumuloOperations accumuloOperations ) {
@@ -812,13 +820,16 @@ public class AccumuloDataStore extends
 
 		callbackCache.setPersistStats(accumuloOptions.isPersistDataStatistics());
 
+		final DupTracker dupTracker = new DupTracker();
+
 		// Get BatchDeleters for the query
 		CloseableIterator<Object> deleteIt = getBatchDeleters(
 				callbackCache,
 				tempAdapterStore,
 				indexAdapterPairs,
 				sanitizedQueryOptions,
-				sanitizedQuery);
+				sanitizedQuery,
+				dupTracker);
 
 		// Iterate through deleters
 		while (deleteIt.hasNext()) {
@@ -836,17 +847,17 @@ public class AccumuloDataStore extends
 		}
 
 		// Have to delete dups by data ID if any
-		if (!dupCountMap.isEmpty()) {
+		if (!dupTracker.dupCountMap.isEmpty()) {
 			LOGGER.warn("Need to delete duplicates by data ID");
 			int dupDataCount = 0;
 			int dupFailCount = 0;
 			boolean deleteByIdSuccess = true;
 
-			for (ByteArrayId dataId : dupCountMap.keySet()) {
+			for (ByteArrayId dataId : dupTracker.dupCountMap.keySet()) {
 				if (!super.delete(
 						new QueryOptions(),
 						new DataIdQuery(
-								idMap.get(dataId),
+								dupTracker.idMap.get(dataId),
 								dataId))) {
 					deleteByIdSuccess = false;
 					dupFailCount++;
@@ -938,7 +949,8 @@ public class AccumuloDataStore extends
 			final MemoryAdapterStore tempAdapterStore,
 			final List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> indexAdapterPairs,
 			final QueryOptions sanitizedQueryOptions,
-			final Query sanitizedQuery ) {
+			final Query sanitizedQuery,
+			final DupTracker dupTracker ) {
 		final boolean DELETE = true; // for readability
 		final List<CloseableIterator<Object>> results = new ArrayList<CloseableIterator<Object>>();
 
@@ -953,6 +965,7 @@ public class AccumuloDataStore extends
 							final DataStoreEntryInfo entryInfo,
 							final Object entry ) {
 						updateDupCounts(
+								dupTracker,
 								adapter.getAdapterId(),
 								entryInfo);
 
@@ -1020,6 +1033,7 @@ public class AccumuloDataStore extends
 	}
 
 	protected void updateDupCounts(
+			final DupTracker dupTracker,
 			final ByteArrayId adapterId,
 			DataStoreEntryInfo entryInfo ) {
 		ByteArrayId dataId = new ByteArrayId(
@@ -1031,24 +1045,24 @@ public class AccumuloDataStore extends
 			int rowDups = rowData.getNumberOfDuplicates();
 
 			if (rowDups > 0) {
-				if (idMap.get(dataId) == null) {
-					idMap.put(
+				if (dupTracker.idMap.get(dataId) == null) {
+					dupTracker.idMap.put(
 							dataId,
 							adapterId);
 				}
 
-				Integer mapDups = dupCountMap.get(dataId);
+				Integer mapDups = dupTracker.dupCountMap.get(dataId);
 
 				if (mapDups == null) {
-					dupCountMap.put(
+					dupTracker.dupCountMap.put(
 							dataId,
 							rowDups);
 				}
 				else if (mapDups == 1) {
-					dupCountMap.remove(dataId);
+					dupTracker.dupCountMap.remove(dataId);
 				}
 				else {
-					dupCountMap.put(
+					dupTracker.dupCountMap.put(
 							dataId,
 							mapDups - 1);
 				}
