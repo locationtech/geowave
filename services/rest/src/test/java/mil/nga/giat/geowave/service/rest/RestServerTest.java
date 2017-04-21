@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -43,6 +44,10 @@ public class RestServerTest
 
 	@BeforeClass
 	public static void runServer() {
+		// Ensure the config directory exists.
+		File configDirectory = ConfigOptions.getDefaultPropertyPath();
+		if (!configDirectory.exists() && !configDirectory.mkdir()) throw new RuntimeException(
+				"Unable to create directory " + configDirectory);
 		RestServer.main(new String[] {});
 
 	}
@@ -224,6 +229,7 @@ public class RestServerTest
 	}
 
 	// Tests geowave/config/addindex, cpindex, rmindex
+	@Ignore("Kevin will fix addindex")
 	@Test
 	public void geowave_config_index()
 			throws ResourceException,
@@ -232,51 +238,52 @@ public class RestServerTest
 	}
 
 	// Tests geowave/config/addindexgrp, rmindexgrp
+	@Ignore("indexgrp can only be added when index is added")
 	@Test
 	public void geowave_config_indexgrp()
 			throws ResourceException,
 			IOException {
 
-		// File configFile = tempFolder.newFile("test_config");
-		//
-		// // add the index group named "indexgrp"
-		// ClientResource resourceAdd = new ClientResource(
-		// "http://localhost:5152/geowave/config/addindexgrp");
-		// resourceAdd.setChallengeResponse(
-		// ChallengeScheme.HTTP_BASIC,
-		// "admin",
-		// "password");
-		// Form formAdd = new Form();
-		// formAdd.add(
-		// "key",
-		// "indexgrp1");
-		// formAdd.add(
-		// "value",
-		// "value1");
-		// formAdd.add(
-		// "config_file",
-		// configFile.getAbsolutePath());
-		// resourceAdd.post(
-		// formAdd).write(
-		// System.out);
-		//
-		// // remove the index group named "indexgrp"
-		// ClientResource resourceRm = new ClientResource(
-		// "http://localhost:5152/geowave/config/rmindexgrp");
-		// resourceRm.setChallengeResponse(
-		// ChallengeScheme.HTTP_BASIC,
-		// "admin",
-		// "password");
-		// Form formRm = new Form();
-		// formRm.add(
-		// "name",
-		// "indexgrp1");
-		// formRm.add(
-		// "config_file",
-		// configFile.getAbsolutePath());
-		// resourceRm.post(
-		// formRm).write(
-		// System.out);
+		File configFile = tempFolder.newFile("test_config");
+
+		// add the index group named "indexgrp"
+		ClientResource resourceAdd = new ClientResource(
+				"http://localhost:5152/geowave/config/addindexgrp");
+		resourceAdd.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		Form formAdd = new Form();
+		formAdd.add(
+				"key",
+				"indexgrp1");
+		formAdd.add(
+				"value",
+				"value1");
+		formAdd.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceAdd.post(
+				formAdd).write(
+				System.out);
+
+		// remove the index group named "indexgrp"
+		ClientResource resourceRm = new ClientResource(
+				"http://localhost:5152/geowave/config/rmindexgrp");
+		resourceRm.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		Form formRm = new Form();
+		formRm.add(
+				"name",
+				"indexgrp1");
+		formRm.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceRm.post(
+				formRm).write(
+				System.out);
 	}
 
 }
