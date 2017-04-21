@@ -59,6 +59,7 @@ do
 	mkdir -p $TARGET_ROOT/$datastore
 	cp $TEMPLATE_ROOT/bootstrap-geowave.sh $TARGET_ROOT/$datastore/bootstrap-geowave.sh
 	sed -e '/$DATASTORE_BOOTSTRAP_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_BOOTSTRAP_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/$datastore/bootstrap-geowave.sh
+	sed -e '/$DATASTORE_CONFIGURE_GEOWAVE_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_CONFIGURE_GEOWAVE_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/$datastore/bootstrap-geowave.sh
 	sed -i -e s/'$DATASTORE_TOKEN'/$datastore/g $TARGET_ROOT/$datastore/bootstrap-geowave.sh
 	
 	cp $TARGET_ROOT/$datastore/bootstrap-geowave.sh $TARGET_ROOT/quickstart/$datastore/bootstrap-geowave.sh

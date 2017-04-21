@@ -10,4 +10,5 @@ then
     git submodule update;
     mvn -q clean install -DskipTests;
     cd ../..;
+	rm -rf mcp;
 fi
