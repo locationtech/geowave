@@ -338,9 +338,15 @@ public class GeoWaveFeatureCollection extends
 			return new GeometryFactory().toGeometry(envelope);
 		}
 
-		return reader.clipIndexedBBOXConstraints(ExtractGeometryFilterVisitor.getConstraints(
+		ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeoWaveGTDataStore.DEFAULT_CRS));
+				GeoWaveGTDataStore.DEFAULT_CRS);
+		if (geoAndCompareOp == null) {
+			return reader.clipIndexedBBOXConstraints(null);
+		}
+		else {
+			return reader.clipIndexedBBOXConstraints(geoAndCompareOp.getGeometry());
+		}
 	}
 
 	private Query validateQuery(

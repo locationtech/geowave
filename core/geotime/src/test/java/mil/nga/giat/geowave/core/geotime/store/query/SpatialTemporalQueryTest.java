@@ -222,7 +222,7 @@ public class SpatialTemporalQueryTest
 					false
 				});
 	}
-	
+
 	@Test
 	public void testIntersects()
 			throws ParseException {

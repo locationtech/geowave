@@ -13,7 +13,8 @@ import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
-public class SetCommandTest {
+public class SetCommandTest
+{
 
 	@Test
 	public void testExecute() {
@@ -29,7 +30,7 @@ public class SetCommandTest {
 		CommandLineOperationParams params = parser.parse(
 				GeowaveTopLevelSection.class,
 				args);
-		
+
 		SetCommand setcommand = new SetCommand();
 		String name = "name";
 		String value = "value";
@@ -38,13 +39,15 @@ public class SetCommandTest {
 				value);
 		setcommand.prepare(params);
 		setcommand.execute(params);
-		
+
 		File f = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 		Properties p = ConfigOptions.loadProperties(
 				f,
 				null);
-		assertEquals(value, p.getProperty(name));
+		assertEquals(
+				value,
+				p.getProperty(name));
 	}
 
 }

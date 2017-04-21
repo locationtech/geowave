@@ -605,10 +605,10 @@ public class BasicQuery implements
 			final Constraints constraints ) {
 		this.constraints = constraints;
 	}
-	
+
 	public BasicQuery(
 			final Constraints constraints,
-			final BasicQueryCompareOperation compareOp) {
+			final BasicQueryCompareOperation compareOp ) {
 		this.constraints = constraints;
 		this.compareOp = compareOp;
 	}
