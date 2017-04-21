@@ -115,7 +115,7 @@ public class AccumuloDataStore extends
 
 	private final AccumuloSplitsProvider splitsProvider = new AccumuloSplitsProvider();
 
-	class DupTracker
+	private static class DupTracker
 	{
 		HashMap<ByteArrayId, ByteArrayId> idMap;
 		HashMap<ByteArrayId, Integer> dupCountMap;

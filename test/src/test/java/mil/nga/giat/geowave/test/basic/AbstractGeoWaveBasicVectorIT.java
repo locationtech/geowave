@@ -227,25 +227,43 @@ abstract public class AbstractGeoWaveBasicVectorIT
 		LOGGER.warn("bulk deleting from " + index.getId() + " index");
 
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
-		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
-		CloseableIterator<?> actualResults;
 
-		actualResults = geowaveStore.query(
+		// Query everything
+		CloseableIterator<?> queryResults = geowaveStore.query(
+				new QueryOptions(
+						index),
+				null);
+
+		int allFeatures = 0;
+		while (queryResults.hasNext()) {
+			final Object obj = queryResults.next();
+			if (obj instanceof SimpleFeature) {
+				allFeatures++;
+			}
+		}
+		queryResults.close();
+
+		LOGGER.warn("Total count in table before delete: " + allFeatures);
+
+		// Run the query for this delete to get the expected count
+		final DistributableQuery query = TestUtils.resourceToQuery(savedFilterResource);
+		queryResults = geowaveStore.query(
 				new QueryOptions(
 						index),
 				query);
 
-		int features = 0;
-		while (actualResults.hasNext()) {
-			final Object obj = actualResults.next();
+		int expectedFeaturesToDelete = 0;
+		while (queryResults.hasNext()) {
+			final Object obj = queryResults.next();
 			if (obj instanceof SimpleFeature) {
-				features++;
+				expectedFeaturesToDelete++;
 			}
 		}
-		actualResults.close();
+		queryResults.close();
 
-		LOGGER.warn(features + " features to delete...");
+		LOGGER.warn(expectedFeaturesToDelete + " features to delete...");
 
+		// Do the delete
 		boolean deleteResults = geowaveStore.delete(
 				new QueryOptions(
 						index),
@@ -253,27 +271,48 @@ abstract public class AbstractGeoWaveBasicVectorIT
 
 		LOGGER.warn("Bulk delete results: " + (deleteResults ? "Success" : "Failure"));
 
-		actualResults = geowaveStore.query(
+		// Query again - should be zero remaining
+		queryResults = geowaveStore.query(
 				new QueryOptions(
 						index),
 				query);
 
-		int initialFeatures = features;
-		features = 0;
-		while (actualResults.hasNext()) {
-			final Object obj = actualResults.next();
+		int initialQueryFeatures = expectedFeaturesToDelete;
+		int remainingFeatures = 0;
+		while (queryResults.hasNext()) {
+			final Object obj = queryResults.next();
 			if (obj instanceof SimpleFeature) {
-				features++;
+				remainingFeatures++;
 			}
 		}
-		actualResults.close();
+		queryResults.close();
 
-		LOGGER.warn((initialFeatures - features) + " features bulk deleted.");
-		LOGGER.warn(features + " duplicate features not deleted.");
+		int deletedFeatures = initialQueryFeatures - remainingFeatures;
+
+		LOGGER.warn(deletedFeatures + " features bulk deleted.");
+		LOGGER.warn(remainingFeatures + " features not deleted.");
+
+		// Now for the final check, query everything again
+		queryResults = geowaveStore.query(
+				new QueryOptions(
+						index),
+				null);
+
+		int finalFeatures = 0;
+		while (queryResults.hasNext()) {
+			final Object obj = queryResults.next();
+			if (obj instanceof SimpleFeature) {
+				finalFeatures++;
+			}
+		}
+		queryResults.close();
+
+		LOGGER.warn("Total count in table after delete: " + finalFeatures);
+		LOGGER.warn("<before> - <after> = " + (allFeatures - finalFeatures));
 
 		Assert.assertTrue(
 				"Unable to delete all features in bulk delete",
-				features == 0);
+				(allFeatures - finalFeatures) == deletedFeatures);
 	}
 
 	protected void testBulkDeleteCQL(
