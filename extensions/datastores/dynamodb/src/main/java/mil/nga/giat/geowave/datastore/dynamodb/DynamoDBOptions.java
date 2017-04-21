@@ -41,7 +41,7 @@ class ProtocolConvertor implements
 	public Protocol convert(
 			String protocolName ) {
 		String protocolLowerCase = protocolName.toLowerCase();
-		if (protocolLowerCase != "http" || protocolLowerCase != "https")
+		if (!protocolLowerCase.equals("http") && !protocolLowerCase.equals("https"))
 			throw new ParameterException(
 					"Value " + protocolName + "can not be converted to Protocol. "
 							+ "Available values are: http and https.");
