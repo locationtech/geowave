@@ -46,15 +46,14 @@ import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
+import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
@@ -65,7 +64,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloRow;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
@@ -136,19 +135,42 @@ public class AccumuloUtils
 				+ unqualifiedTableName;
 	}
 
-	protected static Object decodeRow(
+	@SuppressWarnings("unchecked")
+	public static <T> T decodeRow(
 			final Key key,
 			final Value value,
 			final boolean wholeRowEncoding,
-			final GeoWaveRow geowaveRow,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
-		return decodeRowInternal(
+			final PrimaryIndex index,
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
+		final GeowaveRowId rowId = new GeowaveRowId(
+				key.getRow().copyBytes());
+		return (T) decodeRowObj(
 				key,
 				value,
 				wholeRowEncoding,
-				geowaveRow,
+				rowId,
+				null,
+				adapterStore,
+				clientFilter,
+				index,
+				scanCallback);
+	}
+
+	public static Object decodeRow(
+			final Key key,
+			final Value value,
+			final boolean wholeRowEncoding,
+			final GeowaveRowId rowId,
+			final AdapterStore adapterStore,
+			final QueryFilter clientFilter,
+			final PrimaryIndex index ) {
+		return decodeRowObj(
+				key,
+				value,
+				wholeRowEncoding,
+				rowId,
 				null,
 				adapterStore,
 				clientFilter,
@@ -156,17 +178,41 @@ public class AccumuloUtils
 				null);
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> T decodeRowInternal(
-			final Key k,
-			final Value v,
+	private static <T> Object decodeRowObj(
+			final Key key,
+			final Value value,
 			final boolean wholeRowEncoding,
-			final GeoWaveRow geowaveRow,
+			final GeowaveRowId rowId,
 			final DataAdapter<T> dataAdapter,
 			final AdapterStore adapterStore,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index,
-			final ScanCallback<T, GeoWaveRow> scanCallback ) {
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
+		final Pair<T, DataStoreEntryInfo> pair = decodeRow(
+				key,
+				value,
+				wholeRowEncoding,
+				rowId,
+				dataAdapter,
+				adapterStore,
+				clientFilter,
+				index,
+				scanCallback);
+		return pair != null ? pair.getLeft() : null;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Pair<T, DataStoreEntryInfo> decodeRow(
+			final Key k,
+			final Value v,
+			final boolean wholeRowEncoding,
+			final GeowaveRowId rowId,
+			final DataAdapter<T> dataAdapter,
+			final AdapterStore adapterStore,
+			final QueryFilter clientFilter,
+			final PrimaryIndex index,
+			final ScanCallback<T, NativeGeoWaveRow> scanCallback ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
 			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
@@ -249,10 +295,10 @@ public class AccumuloUtils
 		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
 				adapterId,
 				new ByteArrayId(
-						geowaveRow.getDataId()),
+						rowId.getDataId()),
 				new ByteArrayId(
-						geowaveRow.getIndex()),
-				geowaveRow.getNumberOfDuplicates(),
+						rowId.getInsertionId()),
+				rowId.getNumberOfDuplicates(),
 				indexData,
 				unknownData,
 				extendedData);
@@ -269,21 +315,20 @@ public class AccumuloUtils
 								encodedRow,
 								index),
 						new DataStoreEntryInfo(
-								geowaveRow.getDataId(),
+								rowId.getDataId(),
 								Arrays.asList(new ByteArrayId(
-										geowaveRow.getIndex())),
+										rowId.getInsertionId())),
 								Arrays.asList(new ByteArrayId(
 										k.getRowData().getBackingArray())),
 								fieldInfoList));
 				if (scanCallback != null) {
 					scanCallback.entryScanned(
 							pair.getRight(),
-							new AccumuloRow(
-									geowaveRow.getRowId(),
-									fieldInfoList),
+							// TODO: wrap rowMapping as a NativeGeoWaveRow
+							null,
 							pair.getLeft());
 				}
-				return pair.getLeft();
+				return pair;
 			}
 		}
 		return null;
@@ -331,7 +376,7 @@ public class AccumuloUtils
 		return null;
 	}
 
-	public static <T> List<Mutation> buildMutations(
+	private static <T> List<Mutation> buildMutations(
 			final byte[] adapterId,
 			final DataStoreEntryInfo ingestInfo,
 			final PrimaryIndex index,
@@ -532,7 +577,6 @@ public class AccumuloUtils
 	 * @throws TableNotFoundException
 	 */
 	public static void setSplitsByQuantile(
-			final BaseDataStore dataStore,
 			final Connector connector,
 			final String namespace,
 			final PrimaryIndex index,
@@ -542,7 +586,6 @@ public class AccumuloUtils
 			IOException,
 			TableNotFoundException {
 		final long count = getEntries(
-				dataStore,
 				connector,
 				namespace,
 				index);
@@ -789,6 +832,63 @@ public class AccumuloUtils
 	}
 
 	/**
+	 * Get number of entries for a data adapter in an index.
+	 *
+	 * @param namespace
+	 * @param index
+	 * @param adapter
+	 * @return
+	 * @throws AccumuloException
+	 * @throws AccumuloSecurityException
+	 * @throws IOException
+	 */
+	public static long getEntries(
+			final Connector connector,
+			final String namespace,
+			final PrimaryIndex index,
+			final DataAdapter<?> adapter )
+			throws AccumuloException,
+			AccumuloSecurityException,
+			IOException {
+		long counter = 0L;
+		final AccumuloOperations operations = new BasicAccumuloOperations(
+				connector,
+				namespace);
+		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
+				operations);
+		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
+				operations);
+		if (indexStore.indexExists(index.getId()) && adapterStore.adapterExists(adapter.getAdapterId())) {
+			final List<ByteArrayId> adapterIds = new ArrayList<>();
+			adapterIds.add(adapter.getAdapterId());
+			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
+					adapterIds,
+					index,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					new String[0]);
+			final CloseableIterator<?> iterator = accumuloQuery.query(
+					operations,
+					new AccumuloAdapterStore(
+							operations),
+					null,
+					null);
+			while (iterator.hasNext()) {
+				counter++;
+				iterator.next();
+			}
+			iterator.close();
+		}
+		return counter;
+	}
+
+	/**
 	 * * Get number of entries per index.
 	 *
 	 * @param namespace
@@ -799,7 +899,6 @@ public class AccumuloUtils
 	 * @throws IOException
 	 */
 	public static long getEntries(
-			final BaseDataStore dataStore,
 			final Connector connector,
 			final String namespace,
 			final PrimaryIndex index )
@@ -814,7 +913,6 @@ public class AccumuloUtils
 				operations);
 		if (indexStore.indexExists(index.getId())) {
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
-					dataStore,
 					null,
 					index,
 					null,
@@ -962,10 +1060,10 @@ public class AccumuloUtils
 					row.getKey(),
 					row.getValue(),
 					true,
-					// need to pass this, otherwise null value for rowId gets
-					// dereferenced later
-					new GeoWaveRowImpl(
-							row.getKey().getRow().copyBytes()),
+					new AccumuloRowId(
+							row.getKey()), // need to pass this, otherwise null
+											// value for rowId gets dereferenced
+											// later
 					adapterStore,
 					clientFilter,
 					index);

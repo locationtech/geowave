@@ -3,22 +3,17 @@ package mil.nga.giat.geowave.datastore.cassandra;
 import java.nio.ByteBuffer;
 import java.util.function.BiConsumer;
 
-import org.apache.log4j.Logger;
-
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.schemabuilder.Create;
 
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
 
-public class CassandraRow extends
-		GeoWaveRowImpl
+public class CassandraRow implements
+		NativeGeoWaveRow
 {
-	private final static Logger LOGGER = Logger.getLogger(
-			CassandraRow.class);
-
 	private static enum ColumnType {
 		PARTITION_KEY(
 				(
@@ -38,7 +33,6 @@ public class CassandraRow extends
 						final String f ) -> c.addColumn(
 								f,
 								DataType.blob()));
-		
 		private BiConsumer<Create, String> createFunction;
 
 		private ColumnType(
@@ -65,11 +59,7 @@ public class CassandraRow extends
 				ColumnType.OTHER_COLUMN),
 		GW_VALUE_KEY(
 				"value",
-				ColumnType.OTHER_COLUMN),
-		GW_NUM_DUPLICATES_KEY(
-				"num_duplicates",
 				ColumnType.OTHER_COLUMN);
-		
 		private final String fieldName;
 		private ColumnType columnType;
 
@@ -105,6 +95,11 @@ public class CassandraRow extends
 	}
 
 	private final byte[] partitionId;
+	private final byte[] dataId;
+	private final byte[] adapterId;
+	private final byte[] idx;
+	private final byte[] fieldMask;
+	private final byte[] value;
 
 	public CassandraRow(
 			final byte[] partitionId,
@@ -112,41 +107,47 @@ public class CassandraRow extends
 			final byte[] adapterId,
 			final byte[] idx,
 			final byte[] fieldMask,
-			final byte[] value,
-			final int numDuplicates ) {
-		super(
-				dataId,
-				adapterId,
-				idx,
-				fieldMask,
-				value,
-				numDuplicates);
-
+			final byte[] value ) {
 		this.partitionId = partitionId;
+		this.dataId = dataId;
+		this.adapterId = adapterId;
+		this.idx = idx;
+		this.fieldMask = fieldMask;
+		this.value = value;
 	}
 
 	public CassandraRow(
 			final Row row ) {
-		super(
-				row.getBytes(
-						CassandraField.GW_DATA_ID_KEY.getFieldName()).array(),
-				row.getBytes(
-						CassandraField.GW_ADAPTER_ID_KEY.getFieldName()).array(),
-				row.getBytes(
-						CassandraField.GW_IDX_KEY.getFieldName()).array(),
-				row.getBytes(
-						CassandraField.GW_FIELD_MASK_KEY.getFieldName()).array(),
-				row.getBytes(
-						CassandraField.GW_VALUE_KEY.getFieldName()).array(),
-				(int)(row.getBytes(
-						CassandraField.GW_NUM_DUPLICATES_KEY.getFieldName()).get(0)));
-		
 		partitionId = row.getBytes(
 				CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
+		dataId = row.getBytes(
+				CassandraField.GW_DATA_ID_KEY.getFieldName()).array();
+		adapterId = row.getBytes(
+				CassandraField.GW_ADAPTER_ID_KEY.getFieldName()).array();
+		idx = row.getBytes(
+				CassandraField.GW_IDX_KEY.getFieldName()).array();
+		fieldMask = row.getBytes(
+				CassandraField.GW_FIELD_MASK_KEY.getFieldName()).array();
+		value = row.getBytes(
+				CassandraField.GW_VALUE_KEY.getFieldName()).array();
+	}
+
+	public byte[] getFieldMask() {
+		return fieldMask;
 	}
 
 	public byte[] getPartitionId() {
 		return partitionId;
+	}
+
+	@Override
+	public byte[] getDataId() {
+		return dataId;
+	}
+
+	@Override
+	public byte[] getAdapterId() {
+		return adapterId;
 	}
 
 	public BoundStatement bindInsertion(
@@ -161,7 +162,7 @@ public class CassandraRow extends
 		retVal.set(
 				CassandraField.GW_IDX_KEY.getBindMarkerName(),
 				ByteBuffer.wrap(
-						index),
+						idx),
 				ByteBuffer.class);
 		retVal.set(
 				CassandraField.GW_DATA_ID_KEY.getBindMarkerName(),
@@ -183,10 +184,16 @@ public class CassandraRow extends
 				ByteBuffer.wrap(
 						value),
 				ByteBuffer.class);
-		retVal.set(
-				CassandraField.GW_NUM_DUPLICATES_KEY.getBindMarkerName(),
-				ByteBuffer.wrap(new byte[] { (byte)numberOfDuplicates }),
-				ByteBuffer.class);
 		return retVal;
+	}
+
+	@Override
+	public byte[] getValue() {
+		return value;
+	}
+
+	@Override
+	public byte[] getIndex() {
+		return idx;
 	}
 }

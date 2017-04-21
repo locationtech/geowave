@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -38,14 +37,12 @@ public class GeoWaveHBaseRecordReader<T> extends
 			final QueryOptions queryOptions,
 			final boolean isOutputWritable,
 			final AdapterStore adapterStore,
-			final BaseDataStore dataStore,
 			final BasicHBaseOperations operations ) {
 		super(
 				query,
 				queryOptions,
 				isOutputWritable,
-				adapterStore,
-				dataStore);
+				adapterStore);
 		this.operations = operations;
 	}
 
@@ -56,7 +53,6 @@ public class GeoWaveHBaseRecordReader<T> extends
 			final List<QueryFilter> queryFilters,
 			final QueryOptions rangeQueryOptions ) {
 		return new InputFormatHBaseRangeQuery(
-				dataStore,
 				adapterStore,
 				i,
 				HBaseSplitsProvider.unwrapRange(range),

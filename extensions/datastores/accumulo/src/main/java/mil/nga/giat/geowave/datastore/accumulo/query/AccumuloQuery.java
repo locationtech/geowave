@@ -17,8 +17,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
-import mil.nga.giat.geowave.core.store.base.DataStoreQuery;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
@@ -29,18 +27,21 @@ import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
  * data store. The query is defined by the set of parameters passed into the
  * constructor.
  */
-abstract public class AccumuloQuery extends
-		DataStoreQuery
+abstract public class AccumuloQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloQuery.class);
+	protected final List<ByteArrayId> adapterIds;
+	protected final PrimaryIndex index;
+	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
+	protected final DifferingFieldVisibilityEntryCount visibilityCounts;
+
+	private final String[] authorizations;
 
 	public AccumuloQuery(
-			final BaseDataStore dataStore,
 			final PrimaryIndex index,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		this(
-				dataStore,
 				null,
 				index,
 				null,
@@ -49,19 +50,26 @@ abstract public class AccumuloQuery extends
 	}
 
 	public AccumuloQuery(
-			final BaseDataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
-		super(
-				dataStore,
-				adapterIds,
-				index,
-				fieldIdsAdapterPair,
-				visibilityCounts,
-				authorizations);
+		this.adapterIds = adapterIds;
+		this.index = index;
+		this.fieldIdsAdapterPair = fieldIdsAdapterPair;
+		this.visibilityCounts = visibilityCounts;
+		this.authorizations = authorizations;
+	}
+
+	abstract protected List<ByteArrayRange> getRanges();
+
+	protected boolean isAggregation() {
+		return false;
+	}
+
+	protected boolean useWholeRowIterator() {
+		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
 	protected ScannerBase getScanner(
@@ -158,5 +166,9 @@ abstract public class AccumuloQuery extends
 				scanner.addScanIterator(iteratorSetting);
 			}
 		}
+	}
+
+	public String[] getAdditionalAuthorizations() {
+		return authorizations;
 	}
 }

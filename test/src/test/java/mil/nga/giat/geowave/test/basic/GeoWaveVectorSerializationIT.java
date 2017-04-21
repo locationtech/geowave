@@ -39,9 +39,9 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeoWaveVectorSerializationIT extends
-		AbstractGeoWaveIT
+public class GeoWaveVectorSerializationIT
 {
+
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveVectorSerializationIT.class);
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
@@ -50,10 +50,6 @@ public class GeoWaveVectorSerializationIT extends
 	})
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;
-
-	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStore;
-	}
 
 	@BeforeClass
 	public static void reportTestStart() {

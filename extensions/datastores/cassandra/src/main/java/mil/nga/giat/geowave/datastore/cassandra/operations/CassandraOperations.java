@@ -378,8 +378,6 @@ public class CassandraOperations implements
 			final String tableName,
 			final byte[] adapterId,
 			final String... additionalAuthorizations ) {
-		// TODO does this actually work? It seems to violate Cassandra rules of
-		// always including at least Hash keys on where clause
 		session.execute(QueryBuilder.delete().from(
 				gwNamespace,
 				tableName).where(

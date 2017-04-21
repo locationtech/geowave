@@ -38,7 +38,6 @@ public class GeoWaveBasicSpatialVectorIT extends
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

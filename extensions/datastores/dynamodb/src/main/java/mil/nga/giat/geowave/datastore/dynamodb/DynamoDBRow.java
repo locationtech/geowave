@@ -1,14 +1,14 @@
 package mil.nga.giat.geowave.datastore.dynamodb;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.google.common.base.Function;
 
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
 
-public class DynamoDBRow extends
-		GeoWaveRowImpl
+public class DynamoDBRow implements
+		NativeGeoWaveRow
 {
 	public static final String GW_PARTITION_ID_KEY = "P";
 	public static final String GW_RANGE_KEY = "R";
@@ -16,62 +16,59 @@ public class DynamoDBRow extends
 	public static final String GW_VALUE_KEY = "V";
 
 	private final Map<String, AttributeValue> objMap;
-	private String partitionId;
-
-	public DynamoDBRow(
-			final String partitionId,
-			final byte[] dataId,
-			final byte[] adapterId,
-			final byte[] index,
-			final byte[] fieldMask,
-			final byte[] value,
-			final int numberOfDuplicates ) {
-		super(
-				dataId,
-				adapterId,
-				index,
-				fieldMask,
-				value,
-				numberOfDuplicates);
-		this.partitionId = partitionId;
-		this.objMap = null; // not needed for ingest
-	}
+	private byte[] dataId;
+	private byte[] idx;
+	private byte[] adapterId;
 
 	public DynamoDBRow(
 			final Map<String, AttributeValue> objMap ) {
-		super(
-				objMap.get(
-						GW_RANGE_KEY).getB().array());
-
 		this.objMap = objMap;
+	}
 
-		this.partitionId = objMap.get(
-				GW_PARTITION_ID_KEY).getN();
+	@Override
+	public byte[] getDataId() {
+		initIds();
+		return dataId;
+	}
 
-		this.fieldMask = objMap.get(
-				GW_FIELD_MASK_KEY).getB().array();
+	@Override
+	public byte[] getAdapterId() {
+		initIds();
+		return adapterId;
+	}
 
-		this.value = objMap.get(
+	@Override
+	public byte[] getValue() {
+		return objMap.get(
 				GW_VALUE_KEY).getB().array();
 	}
 
-	public Map<String, AttributeValue> getAttributeMapping() {
-		return objMap;
+	public byte[] getFieldMask() {
+		return objMap.get(
+				GW_FIELD_MASK_KEY).getB().array();
 	}
 
-	public String getPartitionId() {
-		return partitionId;
+	@Override
+	public byte[] getIndex() {
+		initIds();
+		return idx;
 	}
 
-	public static class GuavaRowTranslationHelper implements
-			Function<Map<String, AttributeValue>, DynamoDBRow>
-	{
-		@Override
-		public DynamoDBRow apply(
-				final Map<String, AttributeValue> input ) {
-			return new DynamoDBRow(
-					input);
+	public synchronized void initIds() {
+		if (dataId == null) {
+			final ByteBuffer rangeKey = objMap.get(
+					GW_RANGE_KEY).getB();
+			final int size = rangeKey.remaining();
+			rangeKey.position(size - 8);
+			final int adapterIdLength = rangeKey.getInt();
+			final int dataIdLength = rangeKey.getInt();
+			idx = new byte[size - adapterIdLength - dataIdLength - 8];
+			adapterId = new byte[adapterIdLength];
+			dataId = new byte[adapterIdLength];
+			rangeKey.rewind();
+			rangeKey.get(idx);
+			rangeKey.get(adapterId);
+			rangeKey.get(dataId);
 		}
-
 	}
 }

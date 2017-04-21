@@ -28,9 +28,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -51,7 +49,6 @@ public class HBaseConstraintsQuery extends
 	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
 
 	public HBaseConstraintsQuery(
-			final BaseDataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
@@ -60,11 +57,9 @@ public class HBaseConstraintsQuery extends
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String[] authorizations ) {
 		this(
-				dataStore,
 				adapterIds,
 				index,
 				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
@@ -74,13 +69,11 @@ public class HBaseConstraintsQuery extends
 				aggregation,
 				indexMetaData,
 				duplicateCounts,
-				visibilityCounts,
 				fieldIds,
 				authorizations);
 	}
 
 	public HBaseConstraintsQuery(
-			final BaseDataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
@@ -90,17 +83,14 @@ public class HBaseConstraintsQuery extends
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
 			final String[] authorizations ) {
 
 		super(
-				dataStore,
 				adapterIds,
 				index,
 				scanCallback,
 				fieldIds,
-				visibilityCounts,
 				authorizations);
 
 		base = new ConstraintsQuery(
@@ -300,15 +290,6 @@ public class HBaseConstraintsQuery extends
 					requestBuilder.setAdapter(ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter)));
 				}
 			}
-
-			if (authorizations != null && authorizations.length > 0) {
-				requestBuilder.setVisLabels(ByteString.copyFrom(StringUtils.stringsToBinary(authorizations)));
-			}
-
-			if (useWholeRowIterator()) {
-				requestBuilder.setWholeRowFilter(true);
-			}
-
 			final AggregationProtos.AggregationRequest request = requestBuilder.build();
 
 			final Table table = operations.getTable(tableName);

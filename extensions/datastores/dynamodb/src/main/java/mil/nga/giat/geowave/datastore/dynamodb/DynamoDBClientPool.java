@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.amazonaws.regions.Regions;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
 
 public class DynamoDBClientPool
@@ -27,7 +27,15 @@ public class DynamoDBClientPool
 			final DynamoDBOptions options ) {
 		AmazonDynamoDBAsyncClient client = clientCache.get(options);
 		if (client == null) {
-			client = new AmazonDynamoDBAsyncClient().withEndpoint(options.getEndpoint());
+			ClientConfiguration clientConfig = options.getClientConfig();
+			if (options.getRegion() == null) {
+				client = new AmazonDynamoDBAsyncClient(
+						clientConfig).withEndpoint(options.getEndpoint());
+			}
+			else {
+				client = new AmazonDynamoDBAsyncClient(
+						clientConfig).withRegion(options.getRegion());
+			}
 			clientCache.put(
 					options,
 					client);

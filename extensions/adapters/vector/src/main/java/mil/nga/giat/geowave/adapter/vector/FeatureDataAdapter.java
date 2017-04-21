@@ -21,7 +21,6 @@ import org.opengis.referencing.operation.MathTransform;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Maps;
 
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
@@ -665,7 +664,7 @@ public class FeatureDataAdapter extends
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
-	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = Maps.synchronizedBiMap(HashBiMap.create());
+	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = HashBiMap.create();
 	private transient BiMap<Integer, ByteArrayId> positionToFieldMap = null;
 	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new HashMap<>();
 
@@ -717,7 +716,7 @@ public class FeatureDataAdapter extends
 						currFieldId,
 						i);
 			}
-			positionToFieldMap = Maps.synchronizedBiMap(fieldToPositionMap.inverse());
+			positionToFieldMap = fieldToPositionMap.inverse();
 		}
 		catch (final Exception e) {
 			LOGGER.error(

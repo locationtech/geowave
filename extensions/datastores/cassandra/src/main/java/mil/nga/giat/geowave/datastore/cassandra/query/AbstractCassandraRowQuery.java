@@ -1,10 +1,11 @@
 package mil.nga.giat.geowave.datastore.cassandra.query;
 
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -24,14 +25,12 @@ abstract public class AbstractCassandraRowQuery<T> extends
 	protected final ScanCallback<T, CassandraRow> scanCallback;
 
 	public AbstractCassandraRowQuery(
-			final BaseDataStore dataStore,
 			final CassandraOperations operations,
 			final PrimaryIndex index,
 			final String[] authorizations,
 			final ScanCallback<T, CassandraRow> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
-				dataStore,
 				operations,
 				index,
 				visibilityCounts,
@@ -47,7 +46,6 @@ abstract public class AbstractCassandraRowQuery<T> extends
 				getScannerLimit());
 		return new CloseableIterator.Wrapper<T>(
 				new NativeEntryIteratorWrapper<>(
-						dataStore,
 						adapterStore,
 						index,
 						results,

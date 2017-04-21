@@ -106,13 +106,8 @@ public class HBaseSecondaryIndexDataStore extends
 				secondaryIndexRowId);
 		final Put p = new Put(
 				secondaryIndexRowId);
-		
-		// TODO: VisibilityController can't handle an empty field visibility.
-		// Secondary Index IT needs to test this differently		
-		if (attributeVisibility != null && attributeVisibility.length > 0) {
-			p.setCellVisibility(new CellVisibility(
-					StringUtils.stringFromBinary(attributeVisibility)));
-		}
+		p.setCellVisibility(new CellVisibility(
+				StringUtils.stringFromBinary(attributeVisibility)));
 		p.addColumn(
 				SecondaryIndexUtils.constructColumnFamily(
 						adapterId,
@@ -139,14 +134,8 @@ public class HBaseSecondaryIndexDataStore extends
 				secondaryIndexRowId);
 		final Put p = new Put(
 				secondaryIndexRowId);
-		
-		// TODO: VisibilityController can't handle an empty field visibility.
-		// Secondary Index IT needs to test this differently		
-		if (fieldVisibility != null && fieldVisibility.length > 0) {
-			p.setCellVisibility(new CellVisibility(
-					StringUtils.stringFromBinary(fieldVisibility)));
-		}
-		
+		p.setCellVisibility(new CellVisibility(
+				StringUtils.stringFromBinary(fieldVisibility)));
 		p.addColumn(
 				SecondaryIndexUtils.constructColumnFamily(
 						adapterId,

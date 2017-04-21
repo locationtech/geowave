@@ -17,7 +17,6 @@ import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.DataStoreIndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
@@ -33,10 +32,8 @@ public class AccumuloIndexWriter<T> extends
 	private final static Logger LOGGER = Logger.getLogger(AccumuloIndexWriter.class);
 	protected final AccumuloOperations accumuloOperations;
 	protected final AccumuloOptions accumuloOptions;
-	protected final AccumuloDataStore dataStore;
 
 	public AccumuloIndexWriter(
-			final AccumuloDataStore dataStore,
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final AccumuloOperations accumuloOperations,
@@ -50,7 +47,6 @@ public class AccumuloIndexWriter<T> extends
 				accumuloOptions,
 				callback,
 				closable);
-		this.dataStore = dataStore;
 		this.accumuloOperations = accumuloOperations;
 		this.accumuloOptions = accumuloOptions;
 	}
@@ -77,11 +73,12 @@ public class AccumuloIndexWriter<T> extends
 	protected DataStoreEntryInfo getEntryInfo(
 			final T entry,
 			final VisibilityWriter<T> visibilityWriter ) {
-		return dataStore.write(
+		return AccumuloUtils.write(
 				(WritableDataAdapter<T>) adapter,
 				index,
 				entry,
 				writer,
+				accumuloOperations,
 				visibilityWriter);
 	}
 }

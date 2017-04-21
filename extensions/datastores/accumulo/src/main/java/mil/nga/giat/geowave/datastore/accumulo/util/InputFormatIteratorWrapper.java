@@ -6,17 +6,14 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.KeyValue;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang.ArrayUtils;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
@@ -34,7 +31,6 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 public class InputFormatIteratorWrapper<T> implements
 		Iterator<Entry<GeoWaveInputKey, T>>
 {
-	private final BaseDataStore dataStore;
 	private final PrimaryIndex index;
 	private final Iterator<Entry<Key, Value>> scannerIt;
 	private final QueryFilter clientFilter;
@@ -45,14 +41,12 @@ public class InputFormatIteratorWrapper<T> implements
 
 	public InputFormatIteratorWrapper(
 			final boolean wholeRowEncoding,
-			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<Entry<Key, Value>> scannerIt,
 			final boolean isOutputWritable,
 			final QueryFilter clientFilter ) {
 		this.wholeRowEncoding = wholeRowEncoding;
-		this.dataStore = dataStore;
 		this.serializationTool = new HadoopWritableSerializationTool(
 				adapterStore);
 		this.index = index;
@@ -82,30 +76,21 @@ public class InputFormatIteratorWrapper<T> implements
 			final Entry<Key, Value> row,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
-		final GeoWaveRowImpl tempRow = new GeoWaveRowImpl(
-				row.getKey().getRow().copyBytes());
-
-		KeyValue inputRow = new KeyValue(
+		final AccumuloRowId rowId = new AccumuloRowId(
+				row.getKey());
+		final Object value = AccumuloUtils.decodeRow(
 				row.getKey(),
-				row.getValue());
-
-		final Object value = dataStore.decodeRow(
-				inputRow,
+				row.getValue(),
 				wholeRowEncoding,
-				clientFilter,
-				null,
+				rowId,
 				serializationTool.getAdapterStore(),
-				index,
-				null,
-				null,
-				true);
-
+				clientFilter,
+				index);
 		if (value == null) {
 			return null;
 		}
-
 		final ByteArrayId adapterId = new ByteArrayId(
-				tempRow.getAdapterId());
+				rowId.getAdapterId());
 		final T result = (T) (isOutputWritable ? serializationTool.getHadoopWritableSerializerForAdapter(
 				adapterId).toWritable(
 				value) : value);
@@ -116,14 +101,13 @@ public class InputFormatIteratorWrapper<T> implements
 						// ID with the index ID concatenated with the insertion
 						// ID to gaurantee uniqueness and effectively disable
 						// aggregating by only the data ID
-						tempRow.isDeduplicationEnabled() ? tempRow.getDataId() : ArrayUtils.addAll(
+						rowId.isDeduplicationEnabled() ? rowId.getDataId() : ArrayUtils.addAll(
 								ArrayUtils.addAll(
 										index.getId().getBytes(),
-										tempRow.getIndex()),
-								tempRow.getDataId())));
+										rowId.getInsertionId()),
+								rowId.getDataId())));
 		key.setInsertionId(new ByteArrayId(
-				tempRow.getIndex()));
-
+				rowId.getInsertionId()));
 		return new GeoWaveInputFormatEntry(
 				key,
 				result);

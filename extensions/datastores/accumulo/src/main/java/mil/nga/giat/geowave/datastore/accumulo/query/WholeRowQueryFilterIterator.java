@@ -14,8 +14,10 @@ import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
+import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloRowId;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadDataList;
 
 /**
@@ -43,10 +45,10 @@ public class WholeRowQueryFilterIterator extends
 			for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
 				final Key key = keys.get(i);
 				final Value value = values.get(i);
-				unreadData.add(queryFilterIterator.aggregateFieldData(
+				queryFilterIterator.aggregateFieldData(
 						key,
 						value,
-						commonData));
+						commonData);
 			}
 			return queryFilterIterator.applyRowFilter(
 					currentRow,

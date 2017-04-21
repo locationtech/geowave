@@ -24,7 +24,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -72,19 +71,16 @@ public abstract class GeoWaveRecordReader<T> extends
 	protected QueryOptions queryOptions;
 	protected boolean isOutputWritable;
 	protected AdapterStore adapterStore;
-	protected BaseDataStore dataStore;
 
 	public GeoWaveRecordReader(
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
 			final boolean isOutputWritable,
-			final AdapterStore adapterStore,
-			final BaseDataStore dataStore ) {
+			final AdapterStore adapterStore ) {
 		this.query = query;
 		this.queryOptions = queryOptions;
 		this.isOutputWritable = isOutputWritable;
 		this.adapterStore = adapterStore;
-		this.dataStore = dataStore;
 	}
 
 	/**

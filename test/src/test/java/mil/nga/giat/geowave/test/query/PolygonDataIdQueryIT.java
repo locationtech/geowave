@@ -32,11 +32,9 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
-public class PolygonDataIdQueryIT extends
-		AbstractGeoWaveIT
+public class PolygonDataIdQueryIT
 {
 	private static final Logger LOGGER = Logger.getLogger(PolygonDataIdQueryIT.class);
 	private static SimpleFeatureType simpleFeatureType;
@@ -49,10 +47,6 @@ public class PolygonDataIdQueryIT extends
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
-
-	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStore;
-	}
 
 	private static long startMillis;
 

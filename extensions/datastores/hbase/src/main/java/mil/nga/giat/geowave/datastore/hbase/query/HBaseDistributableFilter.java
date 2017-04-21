@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.datastore.hbase.query;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.hadoop.hbase.Cell;
@@ -22,8 +21,8 @@ import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedDataSet;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
@@ -46,10 +45,10 @@ public class HBaseDistributableFilter extends
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseDistributableFilter.class);
 
-	private boolean wholeRowFilter = false;
 	private final List<DistributableQueryFilter> filterList;
 	protected CommonIndexModel model;
 	private List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
+	private PersistentDataset<Object> adapterExtendedValues;
 
 	// CACHED decoded data:
 	private PersistentDataset<CommonIndexValue> commonData;
@@ -66,18 +65,14 @@ public class HBaseDistributableFilter extends
 			throws DeserializationException {
 		final ByteBuffer buf = ByteBuffer.wrap(pbBytes);
 
-		boolean wholeRow = buf.get() == (byte) 1 ? true : false;
-
 		final int modelLength = buf.getInt();
-
 		final byte[] modelBytes = new byte[modelLength];
 		buf.get(modelBytes);
 
-		final byte[] filterBytes = new byte[pbBytes.length - modelLength - 5];
+		final byte[] filterBytes = new byte[pbBytes.length - modelLength - 4];
 		buf.get(filterBytes);
 
 		final HBaseDistributableFilter newInstance = new HBaseDistributableFilter();
-		newInstance.setWholeRowFilter(wholeRow);
 		newInstance.init(
 				filterBytes,
 				modelBytes);
@@ -91,12 +86,12 @@ public class HBaseDistributableFilter extends
 		final byte[] modelBinary = PersistenceUtils.toBinary(model);
 		final byte[] filterListBinary = PersistenceUtils.toBinary(filterList);
 
-		final ByteBuffer buf = ByteBuffer.allocate(modelBinary.length + filterListBinary.length + 5);
+		final ByteBuffer buf = ByteBuffer.allocate(filterListBinary.length + modelBinary.length + 4);
 
-		buf.put(wholeRowFilter ? (byte) 1 : (byte) 0);
 		buf.putInt(modelBinary.length);
 		buf.put(modelBinary);
 		buf.put(filterListBinary);
+
 		return buf.array();
 	}
 
@@ -138,8 +133,7 @@ public class HBaseDistributableFilter extends
 
 	public boolean init(
 			final List<DistributableQueryFilter> filterList,
-			final CommonIndexModel model,
-			final String[] visList ) {
+			final CommonIndexModel model ) {
 		this.filterList.clear();
 		this.filterList.addAll(filterList);
 
@@ -150,101 +144,37 @@ public class HBaseDistributableFilter extends
 		return true;
 	}
 
-	public void setWholeRowFilter(
-			boolean wholeRowFilter ) {
-		this.wholeRowFilter = wholeRowFilter;
-	}
-
-	/**
-	 * If true (wholeRowFilter == true), then the filter will use the
-	 * filterRowCells method instead of filterKeyValue
-	 */
-	@Override
-	public boolean hasFilterRow() {
-		return wholeRowFilter;
-	}
-
-	/**
-	 * Handle the entire row at one time
-	 */
-	@Override
-	public void filterRowCells(
-			List<Cell> rowCells )
-			throws IOException {
-		if (!rowCells.isEmpty()) {
-			Iterator<Cell> it = rowCells.iterator();
-
-			GeoWaveRow rowId = null;
-			commonData = new PersistentDataset<CommonIndexValue>();
-
-			while (it.hasNext()) {
-				Cell cell = it.next();
-
-				// Grab rowkey from first cell
-				if (rowId == null) {
-					rowId = new GeoWaveRowImpl(
-							cell.getRowArray(),
-							cell.getRowOffset(),
-							cell.getRowLength());
-				}
-
-				unreadData = aggregateFieldData(
-						cell,
-						commonData);
-			}
-
-			ReturnCode code = applyFilter(rowId);
-
-			if (code == ReturnCode.SKIP) {
-				rowCells.clear();
-			}
-		}
-	}
-
-	/**
-	 * filterKeyValue is executed second
-	 */
 	@Override
 	public ReturnCode filterKeyValue(
 			final Cell cell )
 			throws IOException {
-		if (wholeRowFilter) {
-			// let filterRowCells do the work
-			return ReturnCode.INCLUDE_AND_NEXT_COL;
-		}
-
 		commonData = new PersistentDataset<CommonIndexValue>();
 
 		unreadData = aggregateFieldData(
 				cell,
 				commonData);
 
-		return applyFilter(cell);
+		return applyRowFilter(
+				cell,
+				commonData,
+				unreadData);
 	}
 
-	protected ReturnCode applyFilter(
-			final Cell cell ) {
-		final GeoWaveRow rowId = new GeoWaveRowImpl(
-				cell.getRowArray(),
-				cell.getRowOffset(),
-				cell.getRowLength());
-
-		return applyFilter(rowId);
-	}
-
-	protected ReturnCode applyFilter(
-			final GeoWaveRow rowId ) {
-
+	protected ReturnCode applyRowFilter(
+			final Cell cell,
+			final PersistentDataset<CommonIndexValue> commonData,
+			final FlattenedUnreadData unreadData ) {
+		ReturnCode returnCode = ReturnCode.SKIP;
 		persistenceEncoding = null;
 
 		try {
 			persistenceEncoding = getPersistenceEncoding(
-					rowId,
+					cell,
 					commonData,
 					unreadData);
 
-			if (filterInternal(persistenceEncoding)) {
-				return ReturnCode.INCLUDE_AND_NEXT_COL;
+			if (applyRowFilter(persistenceEncoding)) {
+				returnCode = ReturnCode.INCLUDE;
 			}
 		}
 		catch (final Exception e) {
@@ -253,13 +183,15 @@ public class HBaseDistributableFilter extends
 					e);
 		}
 
-		return ReturnCode.SKIP;
+		return returnCode;
 	}
 
 	protected static CommonIndexedPersistenceEncoding getPersistenceEncoding(
-			final GeoWaveRow rowId,
+			final Cell cell,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final FlattenedUnreadData unreadData ) {
+		final GeowaveRowId rowId = new GeowaveRowId(
+				CellUtil.cloneRow(cell));
 
 		return new HBaseCommonIndexedPersistenceEncoding(
 				new ByteArrayId(
@@ -267,7 +199,7 @@ public class HBaseDistributableFilter extends
 				new ByteArrayId(
 						rowId.getDataId()),
 				new ByteArrayId(
-						rowId.getIndex()),
+						rowId.getInsertionId()),
 				rowId.getNumberOfDuplicates(),
 				commonData,
 				unreadData);
@@ -315,7 +247,7 @@ public class HBaseDistributableFilter extends
 						model));
 	}
 
-	protected boolean filterInternal(
+	protected boolean applyRowFilter(
 			final CommonIndexedPersistenceEncoding encoding ) {
 		if (filterList == null) {
 			LOGGER.error("FILTER IS NULL");
@@ -364,6 +296,8 @@ public class HBaseDistributableFilter extends
 				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
 				if (reader != null) {
 					final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
+					// TODO: handle visibility
+					// fieldValue.setVisibility(key.getColumnVisibility().getBytes());
 					commonData.addValue(new PersistentValue<CommonIndexValue>(
 							commonIndexFieldId,
 							fieldValue));
