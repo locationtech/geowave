@@ -10,7 +10,10 @@ public interface Command extends
 	/**
 	 * Execute the command, and return whether we want to continue execution
 	 * 
-	 * @return
+	 * @param params
+	 *            Arguments to be used to allow sections and commands to modify
+	 *            how arguments are parsed during execute stage.
+	 * @throws Exception
 	 */
 	void execute(
 			OperationParams params )

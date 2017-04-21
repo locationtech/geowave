@@ -71,6 +71,9 @@ import org.opengis.referencing.operation.TransformException;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+/**
+ *
+ */
 public class FilterToECQLExtension implements
 		FilterVisitor
 {

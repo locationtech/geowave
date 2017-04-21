@@ -24,7 +24,6 @@ import com.beust.jcommander.JCommander;
 public class PrefixedJCommander extends
 		JCommander
 {
-
 	private static Logger LOGGER = LoggerFactory.getLogger(PrefixedJCommander.class);
 
 	// Allows us to override the commanders list that's being stored
@@ -49,11 +48,6 @@ public class PrefixedJCommander extends
 
 	/**
 	 * Creates a new instance of this commander
-	 * 
-	 * @param name
-	 *            - the operation name of this commander
-	 * @param registry
-	 *            - where to lookup children
 	 */
 	@SuppressWarnings("unchecked")
 	public PrefixedJCommander() {
@@ -152,6 +146,10 @@ public class PrefixedJCommander extends
 		}
 	}
 
+	/**
+	 * Parse and validate the command line parameters. If validate flag is set,
+	 * parse with validation, otherwise parse without
+	 */
 	@Override
 	public void parse(
 			String... args ) {
@@ -184,6 +182,11 @@ public class PrefixedJCommander extends
 		this.defaultProvider = defaultProvider;
 	}
 
+	/**
+	 * Specify if unknown options should be accepted. If false, inputs will
+	 * throw an error if unkown options are provided. If true, they will be
+	 * accepted, though unknown options will be ignored.
+	 */
 	@Override
 	public void setAcceptUnknownOptions(
 			boolean allowUnknown ) {
@@ -191,15 +194,34 @@ public class PrefixedJCommander extends
 		this.allowUnknown = allowUnknown;
 	}
 
+	/**
+	 * Set the validate flag
+	 * 
+	 * @param validate
+	 *            validate flag
+	 */
 	public void setValidate(
 			boolean validate ) {
 		this.validate = validate;
 	}
 
+	/**
+	 * Get list of objects to add to the translator before feeding into the
+	 * internal JCommander object.
+	 * 
+	 * @return list of objects to add to the translator before feeding into the
+	 *         internal JCommander object.
+	 */
 	public List<Object> getPrefixedObjects() {
 		return prefixedObjects;
 	}
 
+	/**
+	 * Add new object to list of prefixed objects
+	 * 
+	 * @param object
+	 *            object to add
+	 */
 	public void addPrefixedObject(
 			Object object ) {
 		if (this.prefixedObjects == null) {
@@ -208,21 +230,46 @@ public class PrefixedJCommander extends
 		this.prefixedObjects.add(object);
 	}
 
+	/**
+	 * Get the translation map
+	 * 
+	 * @return translation map
+	 */
 	public JCommanderTranslationMap getTranslationMap() {
 		return translationMap;
 	}
 
+	/**
+	 * Get the JCommander initializer
+	 * 
+	 * @return JCommander initializer
+	 */
 	public PrefixedJCommanderInitializer getInitializer() {
 		return initializer;
 	}
 
+	/**
+	 * Set the JCommander initializer
+	 * 
+	 * @param initializer
+	 *            JCommander initializer to set
+	 */
 	public void setInitializer(
 			PrefixedJCommanderInitializer initializer ) {
 		this.initializer = initializer;
 	}
 
+	/**
+	 * Interface for a prefixed JCommander initializer
+	 */
 	public interface PrefixedJCommanderInitializer
 	{
+		/**
+		 * Initialize a commander
+		 * 
+		 * @param commander
+		 *            commander to initialize
+		 */
 		void initialize(
 				PrefixedJCommander commander );
 	}

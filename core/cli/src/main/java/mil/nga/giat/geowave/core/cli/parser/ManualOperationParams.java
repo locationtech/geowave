@@ -6,6 +6,9 @@ import java.util.Map;
 import mil.nga.giat.geowave.core.cli.api.Operation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
+/**
+ * Manual implementation for operation arguments
+ */
 public class ManualOperationParams implements
 		OperationParams
 {

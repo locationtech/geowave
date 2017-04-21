@@ -14,12 +14,14 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
+/**
+ * Config section for commands that affect local configuration only
+ */
 @GeowaveOperation(name = "config", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Commands that affect local configuration only")
 public class ConfigSection implements
 		Operation
 {
-
 	private final static Logger LOGGER = LoggerFactory.getLogger(ConfigSection.class);
 
 	/**
@@ -62,5 +64,4 @@ public class ConfigSection implements
 		// Continue executing.
 		return true;
 	}
-
 }

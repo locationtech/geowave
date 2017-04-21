@@ -10,8 +10,6 @@ import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 
 /**
  * A class based on FilterableConstraints that uses a text value for query
- * 
- * @author geowave
  *
  */
 

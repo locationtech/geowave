@@ -16,17 +16,13 @@ import mil.nga.giat.geowave.core.cli.annotations.PrefixParameter;
 /**
  * This class will take a collection of objects with JCommander annotations and
  * create a transformed set of objects with altered option prefixes, based on
- * the
- * 
- * @PrefixParameter annotation. It also expands the capabilities of
- * @ParametersDelegate, allowing you to specify a collection of objects, or a
- *                      map, where the String key is prepended as a prefix to
- *                      the commands under that object. TODO: This might work
- *                      better with a Visitor pattern
+ * the annotation. It also expands the capabilities of allowing you to specify a
+ * collection of objects, or a map, where the String key is prepended as a
+ * prefix to the commands under that object. TODO: This might work better with a
+ * Visitor pattern
  */
 public class JCommanderPrefixTranslator
 {
-
 	private final Queue<ParseContext> queue = new LinkedList<ParseContext>();
 
 	// These will be used to access the "field" or "method" attribute within
@@ -37,6 +33,9 @@ public class JCommanderPrefixTranslator
 	private final Field paraField;
 	private final Field paraMethod;
 
+	/**
+	 * Base constructor
+	 */
 	public JCommanderPrefixTranslator() {
 		try {
 			// HP Fortify "Access Specifier Manipulation"
@@ -50,13 +49,18 @@ public class JCommanderPrefixTranslator
 		}
 		catch (NoSuchFieldException e) {
 			// This is a programmer error, and will only happen if another
-			// version
-			// of JCommander is being used.
+			// version of JCommander is being used.
 			throw new RuntimeException(
 					e);
 		}
 	}
 
+	/**
+	 * Add a new object to the queue of objects to translate
+	 * 
+	 * @param object
+	 *            object to add
+	 */
 	public void addObject(
 			Object object ) {
 		ParseContext pc = new ParseContext(
@@ -65,13 +69,17 @@ public class JCommanderPrefixTranslator
 		queue.add(pc);
 	}
 
+	/**
+	 * Translate all of the objects in the queue
+	 * 
+	 * @return Translation map of all JCommander objects in queue
+	 */
 	public JCommanderTranslationMap translate() {
 
 		// This map will hold the final translations
 		JCommanderTranslationMap transMap = new JCommanderTranslationMap();
 
 		try {
-
 			while (queue.size() > 0) {
 				ParseContext pc = queue.remove();
 				Object item = pc.getObject();
@@ -155,14 +163,13 @@ public class JCommanderPrefixTranslator
 					else {
 
 						// TODO: In the future, if we wanted to do
-						// @PluginParameter, this is probably
-						// where we'd parse it, from annotatedElement. Then we'd
-						// add it to
+						// @PluginParameter, this is probably where we'd parse
+						// it, from annotatedElement. Then we'd add it to
 						// transMap below.
 
 						// Rename the field so there are no conflicts. Name
-						// really doesn't matter,
-						// but it's used for translation in transMap.
+						// really doesn't matter, but it's used for translation
+						// in transMap.
 						String newFieldName = JavassistUtils.getNextUniqueFieldName();
 
 						// Now add an entry to the translation map.

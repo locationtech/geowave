@@ -5,8 +5,6 @@ import java.util.List;
 /**
  * Used for Json based authorization data sets.
  * 
- * @author rwgdrummer
- * 
  */
 public class AuthorizationEntry
 {

@@ -32,6 +32,9 @@ public class JavassistUtils
 
 	private static Logger LOGGER = LoggerFactory.getLogger(JavassistUtils.class);
 
+	/**
+	 * Package prefix to apply to new created class names
+	 */
 	public static final String PREFIX_PACKAGE = "mil.nga.giat.geowave.core.cli.parsed";
 
 	private static final String uniqueId;
@@ -43,6 +46,9 @@ public class JavassistUtils
 				'_');
 	}
 
+	/**
+	 * Default constructor
+	 */
 	private JavassistUtils() {}
 
 	/**
@@ -51,8 +57,14 @@ public class JavassistUtils
 	 * attribute. The annotations attribute can then be set on a method, class,
 	 * or field.
 	 * 
+	 * @param constPool
+	 *            // TODO - define me
 	 * @param attr
-	 * @return
+	 *            // TODO - define me
+	 * @param validElementType
+	 *            // TODO - define me
+	 * @return New created annotations attribute from all annotations and values
+	 *         within the specified attribute
 	 */
 	public static AnnotationsAttribute cloneAnnotationsAttribute(
 			ConstPool constPool,
@@ -75,10 +87,11 @@ public class JavassistUtils
 						constPool);
 
 				// If this must target a certain type of field, then ensure we
-				// only
-				// copy over annotations that can target that type of field.
+				// only copy over annotations that can target that type of
+				// field.
 				// For instances, a METHOD annotation can't be applied to a
-				// FIELD or TYPE.
+				// FIELD
+				// or TYPE.
 				Class<?> annoClass;
 				try {
 					annoClass = cl.loadClass(annotation.getTypeName());
@@ -123,9 +136,13 @@ public class JavassistUtils
 	 * CtMethod.
 	 * 
 	 * @param clz
+	 *            Class to lookup method in
 	 * @param m
-	 * @return
+	 *            method to lookup
+	 * @return If method exists in class, method is returned,
 	 * @throws NotFoundException
+	 *             Exception is thrown if method does not exist in specified
+	 *             class
 	 */
 	public static CtMethod findMethod(
 			CtClass clz,
@@ -151,7 +168,9 @@ public class JavassistUtils
 	 * onto another
 	 * 
 	 * @param oldClass
+	 *            Class to clone
 	 * @param newClass
+	 *            Class being cloned into
 	 */
 	public static void copyClassAnnotations(
 			CtClass oldClass,
@@ -177,7 +196,9 @@ public class JavassistUtils
 	 * target fields as well as methods, so this should capture them all.
 	 * 
 	 * @param method
+	 *            Method to copy the field targetable annotations from
 	 * @param field
+	 *            Field to copy the field targetable annotations into
 	 */
 	public static void copyMethodAnnotationsToField(
 			CtMethod method,
@@ -200,7 +221,7 @@ public class JavassistUtils
 	/**
 	 * Allows us to generate unique class names for generated classes
 	 * 
-	 * @return
+	 * @return Generated unique class name from
 	 */
 	public static String getNextUniqueClassName() {
 		return String.format(
@@ -213,7 +234,7 @@ public class JavassistUtils
 	/**
 	 * Allows us to generate unique field names for generated classes
 	 * 
-	 * @return
+	 * @return Generated next unique field name
 	 */
 	public static String getNextUniqueFieldName() {
 		return String.format(
@@ -225,7 +246,7 @@ public class JavassistUtils
 	 * This will generate a class which is empty. Useful for applying
 	 * annotations to it
 	 * 
-	 * @return
+	 * @return Empty class
 	 */
 	public static CtClass generateEmptyClass() {
 		// Create the class, so we can start adding the new facade fields to it.

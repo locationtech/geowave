@@ -8,16 +8,19 @@ import java.util.Map;
  */
 public interface OperationParams
 {
-
 	/**
 	 * Operations that were parsed & instantiated for execution
 	 * 
-	 * @return
+	 * @return Map containing operations that were parsed & instantiated for
+	 *         execution
 	 */
 	Map<String, Operation> getOperationMap();
 
 	/**
-	 * Key value pairs for contextual information during command parsing
+	 * Key-value pairs for contextual information during command parsing
+	 * 
+	 * @return Map containing key-value pairs for contextual information during
+	 *         command parsing
 	 */
 	Map<String, Object> getContext();
 }

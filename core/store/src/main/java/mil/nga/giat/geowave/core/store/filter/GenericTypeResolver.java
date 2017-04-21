@@ -37,9 +37,6 @@ import java.util.WeakHashMap;
  * Mainly intended for usage within the framework, resolving method parameter
  * types even when they are declared generically.
  * 
- * @author Juergen Hoeller
- * @author Rob Harrop
- * @author Roy Clarkson
  * @since 1.0
  * @see GenericCollectionTypeResolver
  */

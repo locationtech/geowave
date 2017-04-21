@@ -35,12 +35,19 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
  */
 public class ConfigOptions
 {
+	/** Character set to load properties files with */
 	public static final String CHARSET = "ISO-8859-1";
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ConfigSection.class);
 
+	/** Name of context object for the properties */
 	public final static String PROPERTIES_FILE_CONTEXT = "properties-file";
+	/** Default GeoWave home directory path */
 	public final static String GEOWAVE_CACHE_PATH = ".geowave";
+	/**
+	 * Default configuration properties file name. File name will be formatted
+	 * to include the current GeoWave version
+	 */
 	public final static String GEOWAVE_CACHE_FILE = "config.properties";
 
 	/**
@@ -52,14 +59,26 @@ public class ConfigOptions
 	}, description = "Override configuration file (default is <home>/.geowave/config.properties)")
 	private String configFile;
 
-	public ConfigOptions() {
+	/**
+	 * Base constructor
+	 */
+	public ConfigOptions() {}
 
-	}
-
+	/**
+	 * Return configuration file
+	 * 
+	 * @return configuration file
+	 */
 	public String getConfigFile() {
 		return configFile;
 	}
 
+	/**
+	 * Set a new configuration file
+	 * 
+	 * @param configFile
+	 *            configuration file to use
+	 */
 	public void setConfigFile(
 			final String configFile ) {
 		this.configFile = configFile;
@@ -69,7 +88,8 @@ public class ConfigOptions
 	 * The default property file is in the user's home directory, in the
 	 * .geowave folder.
 	 * 
-	 * @return
+	 * @return File object associated with the default property configuration
+	 *         path
 	 */
 	public static File getDefaultPropertyPath() {
 		// File location
@@ -134,7 +154,9 @@ public class ConfigOptions
 	 * Configures a File based on a given path name and version
 	 * 
 	 * @param version
+	 *            Current GeoWave version
 	 * @param defaultPath
+	 *            Path to config file to be configured
 	 * @return Configured File
 	 */
 	public static File formatConfigFile(
@@ -158,6 +180,10 @@ public class ConfigOptions
 	 * Write the given properties to the file, and log an error if an exception
 	 * occurs.
 	 * 
+	 * @param configFile
+	 *            File object to write properties to
+	 * @param properties
+	 *            Properties to write
 	 * @return true if success, false if failure
 	 */
 	public static boolean writeProperties(
@@ -206,7 +232,14 @@ public class ConfigOptions
 	 * This helper function will load the properties file, or return null if it
 	 * can't. It's designed to be used by other commands.
 	 * 
-	 * @param delimiter
+	 * @param configFile
+	 *            Configuration file to load
+	 * @param pattern
+	 *            Pattern to use to filter load only specific configuration
+	 *            properties, with a key matching a specific naming convention
+	 *            pattern. If not specified, all properties will be loaded
+	 * @return A properties object containing loaded properties from specified
+	 *         configuration file
 	 */
 	public static Properties loadProperties(
 			final File configFile,
@@ -277,6 +310,8 @@ public class ConfigOptions
 	 * Load the properties file into the input params.
 	 * 
 	 * @param inputParams
+	 *            Arguments to be used to allow sections and commands to modify
+	 *            how arguments are parsed during prepare/execute stage.
 	 */
 	public void prepare(
 			OperationParams inputParams ) {

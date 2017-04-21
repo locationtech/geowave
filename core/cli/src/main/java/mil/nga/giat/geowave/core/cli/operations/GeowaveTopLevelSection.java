@@ -13,6 +13,9 @@ import mil.nga.giat.geowave.core.cli.api.Operation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
+/**
+ * This is the top level section for GeoWave commands
+ */
 @GeowaveOperation(name = "geowave")
 @Parameters(commandDescription = "This is the top level section.")
 public class GeowaveTopLevelSection implements

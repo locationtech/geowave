@@ -21,12 +21,14 @@ import mil.nga.giat.geowave.core.cli.prefix.JCommanderTranslationMap;
 import mil.nga.giat.geowave.core.cli.spi.OperationEntry;
 import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
+/**
+ * Get descriptions of arguments for any GeoWave command
+ */
 @GeowaveOperation(name = "help", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "Get descriptions of arguments for " + "any GeoWave command")
+@Parameters(commandDescription = "Get descriptions of arguments for any GeoWave command")
 public class HelpCommand implements
 		Command
 {
-
 	@Override
 	public boolean prepare(
 			OperationParams inputParams ) {
@@ -57,9 +59,8 @@ public class HelpCommand implements
 		}
 
 		// This is done because if we don't, then JCommander will consider the
-		// given
-		// parameters as the Default parameters. It's also done so that we can
-		// parse prefix annotations and special delegate processing.
+		// given parameters as the Default parameters. It's also done so that
+		// we can parse prefix annotations and special delegate processing.
 		JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
 		if (lastOperation == null) {
 			lastOperation = registry.getOperation(
@@ -137,7 +138,7 @@ public class HelpCommand implements
 	 * This will sort operations based on their name. Just looks prettier on
 	 * output.
 	 * 
-	 * @return
+	 * @return comparator for operation entries to sort by operation name
 	 */
 	private Comparator<OperationEntry> getOperationComparator() {
 		return new Comparator<OperationEntry>() {

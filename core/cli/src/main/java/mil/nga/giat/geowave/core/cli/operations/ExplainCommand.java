@@ -17,13 +17,15 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 
+/**
+ * See what arguments are missing and what values will be used for GeoWave
+ * commands
+ */
 @GeowaveOperation(name = "explain", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "See what arguments are missing and "
-		+ "what values will be used for GeoWave commands")
+@Parameters(commandDescription = "See what arguments are missing and what values will be used for GeoWave commands")
 public class ExplainCommand implements
 		Command
 {
-
 	private static Logger LOGGER = LoggerFactory.getLogger(ExplainCommand.class);
 
 	@Override
@@ -83,6 +85,8 @@ public class ExplainCommand implements
 	 * JCommander.
 	 * 
 	 * @param commander
+	 *            JCommander object to explain
+	 * @return StringBuilder object explaining JCommander object specified
 	 */
 	public static StringBuilder explainCommander(
 			JCommander commander ) {
@@ -173,7 +177,9 @@ public class ExplainCommand implements
 	 * Output details about the main parameter, if there is one.
 	 * 
 	 * @param commander
-	 * @return
+	 *            JCommander object to explain
+	 * @return StringBuilder object explaining main parameter for JCommander
+	 *         object specified
 	 */
 	@SuppressWarnings("unchecked")
 	public static StringBuilder explainMainParameter(
@@ -206,8 +212,6 @@ public class ExplainCommand implements
 			}
 			builder.append("\n");
 		}
-
 		return builder;
 	}
-
 }

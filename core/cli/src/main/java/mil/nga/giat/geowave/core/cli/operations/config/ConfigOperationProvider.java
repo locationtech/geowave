@@ -2,6 +2,10 @@ package mil.nga.giat.geowave.core.cli.operations.config;
 
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 
+/**
+ * Service provider interface (SPI) for configuration-related commands
+ *
+ */
 public class ConfigOperationProvider implements
 		CLIOperationProviderSpi
 {

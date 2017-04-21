@@ -10,11 +10,16 @@ import mil.nga.giat.geowave.core.cli.prefix.JCommanderPropertiesTransformer;
  */
 public abstract class DefaultPluginOptions
 {
+	/**
+	 * Base constructor
+	 */
+	public DefaultPluginOptions() {}
 
 	/**
 	 * This is implemented by the PluginOptions interface by child classes
 	 * 
 	 * @param qualifier
+	 *            Plugin qualifier/identifier to apply
 	 */
 	public abstract void selectPlugin(
 			String qualifier );
@@ -22,7 +27,7 @@ public abstract class DefaultPluginOptions
 	/**
 	 * This is implemented by the PluginOptions interface by child classes
 	 * 
-	 * @param qualifier
+	 * @return Type of plugin being applied/loaded
 	 */
 	public abstract String getType();
 
@@ -30,7 +35,10 @@ public abstract class DefaultPluginOptions
 	 * Transform to a map, making all option values live in the "opts"
 	 * namespace.
 	 * 
-	 * @return
+	 * @param properties
+	 *            Properties object to save
+	 * @param namespace
+	 *            Namespace to apply to saved properties
 	 */
 	public void save(
 			Properties properties,
@@ -53,7 +61,12 @@ public abstract class DefaultPluginOptions
 	/**
 	 * Transform from a map, reading values that live in the "opts" namespace.
 	 * 
-	 * @param options
+	 * @param properties
+	 *            Properties to load
+	 * @param namespace
+	 *            Namespace to apply to loaded properties
+	 * @return boolean specifying if properties load was successful - true if
+	 *         success, false if an error occurred
 	 */
 	public boolean load(
 			Properties properties,
@@ -79,5 +92,4 @@ public abstract class DefaultPluginOptions
 
 		return true;
 	}
-
 }

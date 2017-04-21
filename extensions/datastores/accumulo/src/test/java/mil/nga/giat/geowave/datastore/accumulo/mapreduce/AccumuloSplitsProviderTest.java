@@ -245,8 +245,6 @@ public class AccumuloSplitsProviderTest
 	/**
 	 * Used to simulate what happens if an HBase operations for instance gets
 	 * passed in
-	 * 
-	 * @author akash_000
 	 *
 	 */
 	private static class MockOperations implements

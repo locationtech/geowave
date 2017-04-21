@@ -16,13 +16,15 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
+/**
+ * Command to list property name within cache
+ */
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
 		DefaultOperation implements
 		Command
 {
-
 	@Parameter(names = {
 		"-f",
 		"--filter"

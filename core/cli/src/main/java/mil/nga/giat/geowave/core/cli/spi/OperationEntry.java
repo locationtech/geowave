@@ -29,6 +29,12 @@ public final class OperationEntry
 	private final boolean command;
 	private final boolean topLevel;
 
+	/**
+	 * Constructor from operation class
+	 * 
+	 * @param operationClass
+	 *            operation class
+	 */
 	public OperationEntry(
 			Class<?> operationClass ) {
 		this.operationClass = operationClass;
@@ -47,22 +53,48 @@ public final class OperationEntry
 		this.children = new HashMap<String, OperationEntry>();
 	}
 
+	/**
+	 * Get the parent operation class
+	 * 
+	 * @return the parent operation class
+	 */
 	public Class<?> getParentOperationClass() {
 		return parentOperationClass;
 	}
 
+	/**
+	 * Get the operation name
+	 * 
+	 * @return the operation name
+	 */
 	public String getOperationName() {
 		return operationName;
 	}
 
+	/**
+	 * Get the operation class
+	 * 
+	 * @return the operation class
+	 */
 	public Class<?> getOperationClass() {
 		return operationClass;
 	}
 
+	/**
+	 * Get the child operations under this operation
+	 * 
+	 * @return the child operations under this operation
+	 */
 	public Collection<OperationEntry> getChildren() {
 		return Collections.unmodifiableCollection(children.values());
 	}
 
+	/**
+	 * Add a child operation
+	 * 
+	 * @param child
+	 *            child operation to add
+	 */
 	public void addChild(
 			OperationEntry child ) {
 		if (children.containsKey(child.getOperationName().toLowerCase(
@@ -77,19 +109,42 @@ public final class OperationEntry
 				child);
 	}
 
+	/**
+	 * Get a specific child operation from a name to lookup
+	 * 
+	 * @param name
+	 *            name of child operation to retrieve
+	 * @return child operation associated with specified name
+	 */
 	public OperationEntry getChild(
 			String name ) {
 		return children.get(name);
 	}
 
+	/**
+	 * Specifies if operation is a command
+	 * 
+	 * @return true if operation is a command, false otherwise
+	 */
 	public boolean isCommand() {
 		return command;
 	}
 
+	/**
+	 * Specifies if operation is a top-level command operation
+	 * 
+	 * @return true if operation is a top-level command operation, false
+	 *         otherwise
+	 */
 	public boolean isTopLevel() {
 		return topLevel;
 	}
 
+	/**
+	 * Method to create a new instance of this operation class
+	 * 
+	 * @return new instance of this operation class
+	 */
 	public Operation createInstance() {
 		try {
 			return (Operation) this.operationClass.newInstance();

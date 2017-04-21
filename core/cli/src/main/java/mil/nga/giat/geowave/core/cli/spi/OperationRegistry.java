@@ -17,7 +17,6 @@ import mil.nga.giat.geowave.core.cli.api.Operation;
  */
 public class OperationRegistry
 {
-
 	private Map<Class<?>, OperationEntry> operationMapByClass = null;
 
 	/**
@@ -37,10 +36,21 @@ public class OperationRegistry
 		init();
 	}
 
+	/**
+	 * Get instance of the Operation Registry Holder
+	 * 
+	 * @return instance of the Operation Registry Holder
+	 */
 	public static OperationRegistry getInstance() {
 		return OperationRegistryHolder.instance;
 	}
 
+	/**
+	 * Constructor from a list of service entries
+	 * 
+	 * @param entries
+	 *            list of service entries
+	 */
 	public OperationRegistry(
 			List<OperationEntry> entries ) {
 		operationMapByClass = new HashMap<Class<?>, OperationEntry>();
@@ -51,6 +61,9 @@ public class OperationRegistry
 		}
 	}
 
+	/**
+	 * Initialize each of the service entries map of classes
+	 */
 	private synchronized void init() {
 		if (operationMapByClass == null) {
 			operationMapByClass = new HashMap<Class<?>, OperationEntry>();
@@ -96,7 +109,7 @@ public class OperationRegistry
 	 * Allow the iteration and exploration of all operations by a caller.
 	 * Because we like callers.
 	 * 
-	 * @return
+	 * @return collection of all service entries
 	 */
 	public Collection<OperationEntry> getAllOperations() {
 		return Collections.unmodifiableCollection(operationMapByClass.values());
@@ -106,7 +119,9 @@ public class OperationRegistry
 	 * Get the exported service entry by class name
 	 * 
 	 * @param operationClass
-	 * @return
+	 *            Class to return the service entry for
+	 * @return If it exists, return the class associated with the service entry
+	 *         specified. If it does not exist, return null.
 	 */
 	public OperationEntry getOperation(
 			Class<?> operationClass ) {

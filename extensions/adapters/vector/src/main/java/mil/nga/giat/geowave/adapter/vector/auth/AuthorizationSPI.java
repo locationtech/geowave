@@ -5,8 +5,6 @@ package mil.nga.giat.geowave.adapter.vector.auth;
  * 
  * Created by {@link AuthorizationFactorySPI#create(java.net.URL)}
  * 
- * @author rwgdrummer
- * 
  */
 public interface AuthorizationSPI
 {

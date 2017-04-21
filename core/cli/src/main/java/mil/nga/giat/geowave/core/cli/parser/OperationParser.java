@@ -13,16 +13,29 @@ import mil.nga.giat.geowave.core.cli.prefix.PrefixedJCommander.PrefixedJCommande
 import mil.nga.giat.geowave.core.cli.spi.OperationEntry;
 import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
+/**
+ * This class parses out operations and input arguments passed in through
+ * command line
+ */
 public class OperationParser
 {
 	private final OperationRegistry registry;
 	private final Set<Object> additionalObjects = new HashSet<Object>();
 
+	/**
+	 * Constructor from an operation service entry registry
+	 * 
+	 * @param registry
+	 *            operation service entry registry
+	 */
 	public OperationParser(
 			OperationRegistry registry ) {
 		this.registry = registry;
 	}
 
+	/**
+	 * Base constructor
+	 */
 	public OperationParser() {
 		this(
 				OperationRegistry.getInstance());
@@ -34,8 +47,11 @@ public class OperationParser
 	 * executed.
 	 * 
 	 * @param operation
+	 *            Operation passed in through command line to parse
 	 * @param args
-	 * @return
+	 *            Operational input arguments to apply
+	 * @return CommandLineOperationParams parsed out and populated/initialized
+	 *         with input arguments
 	 */
 	public CommandLineOperationParams parse(
 			Operation operation,
@@ -58,8 +74,11 @@ public class OperationParser
 	 * on the top level operation entry given.
 	 * 
 	 * @param topLevel
+	 *            Operation passed in through command line to parse
 	 * @param args
-	 * @return
+	 *            Operational input arguments to apply
+	 * @return CommandLineOperationParams parsed out and populated/initialized
+	 *         with input arguments
 	 */
 	public CommandLineOperationParams parse(
 			Class<? extends Operation> topLevel,
@@ -77,6 +96,10 @@ public class OperationParser
 	 * Parse, starting from the given entry.
 	 * 
 	 * @param params
+	 *            Operational parameter context and arguments to prepare/execute
+	 *            with
+	 * @param topLevelEntry
+	 *            Top-level/parent operation that this operation is part of
 	 */
 	private void parseInternal(
 			CommandLineOperationParams params,
@@ -142,6 +165,9 @@ public class OperationParser
 	 * used, but hey, why not.
 	 * 
 	 * @param args
+	 *            Command line arguments to parge into the objects given
+	 * @return CommandLineOperationParams object containing parsed command line
+	 *         arguments
 	 */
 	public CommandLineOperationParams parse(
 			String[] args ) {
@@ -169,15 +195,31 @@ public class OperationParser
 		return params;
 	}
 
+	/**
+	 * Get additional objects for an operation
+	 * 
+	 * @return additional objects
+	 */
 	public Set<Object> getAdditionalObjects() {
 		return additionalObjects;
 	}
 
+	/**
+	 * Method to add an additional object for an operation
+	 * 
+	 * @param obj
+	 *            object to add
+	 */
 	public void addAdditionalObject(
 			Object obj ) {
 		additionalObjects.add(obj);
 	}
 
+	/**
+	 * Get operation registry
+	 * 
+	 * @return operation registry
+	 */
 	public OperationRegistry getRegistry() {
 		return registry;
 	}
@@ -190,11 +232,18 @@ public class OperationParser
 	public class OperationContext implements
 			PrefixedJCommanderInitializer
 	{
-
 		private final OperationEntry operationEntry;
 		private final CommandLineOperationParams params;
 		private Operation operation;
 
+		/**
+		 * Constructor for an operation context
+		 * 
+		 * @param entry
+		 *            operation entry
+		 * @param params
+		 *            command line operation parameters
+		 */
 		public OperationContext(
 				OperationEntry entry,
 				CommandLineOperationParams params ) {
@@ -239,10 +288,20 @@ public class OperationParser
 			}
 		}
 
+		/**
+		 * Get the current operation
+		 * 
+		 * @return the current operation
+		 */
 		public Operation getOperation() {
 			return operation;
 		}
 
+		/**
+		 * Get the current operation entry
+		 * 
+		 * @return the current operation entry
+		 */
 		public OperationEntry getOperationEntry() {
 			return operationEntry;
 		}

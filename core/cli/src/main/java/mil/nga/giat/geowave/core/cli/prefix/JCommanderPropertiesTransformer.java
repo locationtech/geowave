@@ -20,7 +20,6 @@ import com.beust.jcommander.JCommander;
  */
 public class JCommanderPropertiesTransformer
 {
-
 	private static Logger LOGGER = LoggerFactory.getLogger(JCommanderPropertiesTransformer.class);
 
 	// The namespace is prepended to entries translated via
@@ -30,6 +29,12 @@ public class JCommanderPropertiesTransformer
 	private final String propertyFormat;
 	private List<Object> objects = new ArrayList<Object>();
 
+	/**
+	 * Constructor with namespace
+	 * 
+	 * @param namespace
+	 *            Namespace to apply to properties transformer
+	 */
 	public JCommanderPropertiesTransformer(
 			String namespace ) {
 		if (namespace == null) {
@@ -43,6 +48,9 @@ public class JCommanderPropertiesTransformer
 		}
 	}
 
+	/**
+	 * Base constructor
+	 */
 	public JCommanderPropertiesTransformer() {
 		this(
 				null);
@@ -52,6 +60,7 @@ public class JCommanderPropertiesTransformer
 	 * Add an object to be translated
 	 * 
 	 * @param object
+	 *            object to add to be translated
 	 */
 	public void addObject(
 			Object object ) {
@@ -62,7 +71,7 @@ public class JCommanderPropertiesTransformer
 	 * Entries are needed to translate to/from the objects using the JCommander
 	 * prefixes.
 	 * 
-	 * @return
+	 * @return collection of entries to be translated
 	 */
 	private Collection<TranslationEntry> generateEntries() {
 		JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
@@ -77,6 +86,7 @@ public class JCommanderPropertiesTransformer
 	 * Take the options and translate them to a map.
 	 * 
 	 * @param properties
+	 *            map to be populated with properties objects
 	 */
 	public void transformToMap(
 			Map<String, String> properties ) {
@@ -93,6 +103,7 @@ public class JCommanderPropertiesTransformer
 	 * Take the options and translate them from a map.
 	 * 
 	 * @param properties
+	 *            map to be translated into a properties object
 	 */
 	public void transformFromMap(
 			Map<String, String> properties ) {
@@ -112,6 +123,7 @@ public class JCommanderPropertiesTransformer
 	 * properties list.
 	 * 
 	 * @param toProperties
+	 *            properties object to populate from the translation map
 	 */
 	public void transformToProperties(
 			Properties toProperties ) {
@@ -166,6 +178,7 @@ public class JCommanderPropertiesTransformer
 	 * Take the given properties list, and convert it to the given objects.
 	 * 
 	 * @param fromProperties
+	 *            properties to apply to the translation entries
 	 */
 	public void transformFromProperties(
 			Properties fromProperties ) {

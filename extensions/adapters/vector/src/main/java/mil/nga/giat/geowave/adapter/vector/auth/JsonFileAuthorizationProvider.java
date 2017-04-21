@@ -17,8 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
  * lookup the user credentials in a Json file. The location of the file is
  * provided through the URL (protocol is file).
  * 
- * @author rwgdrummer
- * 
  */
 public class JsonFileAuthorizationProvider implements
 		AuthorizationSPI

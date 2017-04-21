@@ -18,6 +18,14 @@ public class TranslationEntry
 	private final String[] prefixedNames;
 	private final AnnotatedElement member;
 
+	/**
+	 * Constructor for a new translation entry
+	 * 
+	 * @param param
+	 * @param object
+	 * @param prefix
+	 * @param member
+	 */
 	protected TranslationEntry(
 			Parameterized param,
 			Object object,
@@ -30,30 +38,65 @@ public class TranslationEntry
 		this.prefixedNames = addPrefixToNames();
 	}
 
+	/**
+	 * Return the parameter for this translation entry
+	 * 
+	 * @return parameter
+	 */
 	public Parameterized getParam() {
 		return param;
 	}
 
+	/**
+	 * Return the class object for this translation entry
+	 * 
+	 * @return object
+	 */
 	public Object getObject() {
 		return object;
 	}
 
+	/**
+	 * Return the prefix for this translation entry
+	 * 
+	 * @return prefix
+	 */
 	public String getPrefix() {
 		return prefix;
 	}
 
+	/**
+	 * Specifies if this entry this a class method
+	 * 
+	 * @return True if this entry is a class method
+	 */
 	public boolean isMethod() {
 		return member instanceof Method;
 	}
 
+	/**
+	 * Return the member object for this translation entry
+	 * 
+	 * @return member
+	 */
 	public AnnotatedElement getMember() {
 		return member;
 	}
 
+	/**
+	 * Return the array of prefixed names for this translation entry
+	 * 
+	 * @return array of prefixed names
+	 */
 	public String[] getPrefixedNames() {
 		return prefixedNames;
 	}
 
+	/**
+	 * Return the description for this translation entry.
+	 * 
+	 * @return description
+	 */
 	public String getDescription() {
 		String description = null;
 		if (getParam().getParameter() != null && getParam().getParameter().description() != null) {
@@ -65,6 +108,11 @@ public class TranslationEntry
 		return description == null ? "<no description>" : description;
 	}
 
+	/**
+	 * Specifies if this entry this a password field (i.e. password=true)
+	 * 
+	 * @return True if this entry is a password field
+	 */
 	public boolean isPassword() {
 		if (getParam().getParameter() != null) {
 			return getParam().getParameter().password();
@@ -75,6 +123,11 @@ public class TranslationEntry
 		return false;
 	}
 
+	/**
+	 * Specifies if this entry is a hidden field (i.e. hidden=true)
+	 * 
+	 * @return True if this entry is a hidden field
+	 */
 	public boolean isHidden() {
 		if (getParam().getParameter() != null) {
 			return getParam().getParameter().hidden();
@@ -85,6 +138,11 @@ public class TranslationEntry
 		return false;
 	}
 
+	/**
+	 * Specifies if this entry is a required field (i.e. required=true)
+	 * 
+	 * @return True if this entry is a required field
+	 */
 	public boolean isRequired() {
 		if (getParam().getParameter() != null) {
 			return getParam().getParameter().required();
@@ -99,7 +157,7 @@ public class TranslationEntry
 	 * Whether the given object has a value specified. If the current value is
 	 * non null, then return true.
 	 * 
-	 * @return
+	 * @return True if the object has a non-null value specified
 	 */
 	public boolean hasValue() {
 		Object value = getParam().get(
@@ -109,9 +167,9 @@ public class TranslationEntry
 
 	/**
 	 * Property name is used to write to properties files, but also to report
-	 * option names to Geoserver.
+	 * option names to GeoServer.
 	 * 
-	 * @return
+	 * @return Property name to apply to properties files or GeoServer
 	 */
 	public String getAsPropertyName() {
 		return trimNonAlphabetic(getLongestParam(getPrefixedNames()));
@@ -121,7 +179,7 @@ public class TranslationEntry
 	 * This function will take the configured prefix (a member variable) and add
 	 * it to all the names list.
 	 * 
-	 * @return
+	 * @return array of strings with prefix applied
 	 */
 	private String[] addPrefixToNames() {
 		String[] names = null;
@@ -157,7 +215,8 @@ public class TranslationEntry
 	 * For all the entries in names(), look for the largest one
 	 * 
 	 * @param names
-	 * @return
+	 *            Array to get the largest entry from
+	 * @return largest Largest entry in the array of names
 	 */
 	private String getLongestParam(
 			String[] names ) {
@@ -175,7 +234,8 @@ public class TranslationEntry
 	 * example, '--version' will become 'version'.
 	 * 
 	 * @param str
-	 * @return
+	 *            Input string to remove non-alphabetic characters from
+	 * @return Formatted string with non-alphabetic characters removed
 	 */
 	private String trimNonAlphabetic(
 			String str ) {

@@ -37,8 +37,6 @@ import mil.nga.giat.geowave.datastore.hbase.encoding.HBaseCommonIndexedPersisten
  * This class wraps our Distributable filters in an HBase filter so that a
  * coprocessor can use them.
  *
- * @author kent
- *
  */
 public class HBaseDistributableFilter extends
 		FilterBase

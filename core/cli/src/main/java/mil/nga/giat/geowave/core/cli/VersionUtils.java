@@ -12,6 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 
+/**
+ * 
+ *
+ */
 public class VersionUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(VersionUtils.class);
@@ -19,6 +23,11 @@ public class VersionUtils
 	private static final String BUILD_PROPERTIES_FILE_NAME = "build.properties";
 	private static final String VERSION_PROPERTY_KEY = "project.version";
 
+	/**
+	 * Get the build properties to load into properties
+	 * 
+	 * @return properties object containing build properties
+	 */
 	public static Properties getBuildProperties() {
 
 		final Properties props = new Properties();
@@ -41,11 +50,19 @@ public class VersionUtils
 		return props;
 	}
 
+	/**
+	 * Get the current GeoWave version
+	 * 
+	 * @return current GeoWave version
+	 */
 	public static String getVersion() {
 		return getBuildProperties().getProperty(
 				VERSION_PROPERTY_KEY);
 	}
 
+	/**
+	 * Method to print the version info
+	 */
 	public static void printVersionInfo() {
 
 		final List<String> buildAndPropertyList = Arrays.asList(getBuildProperties().toString().split(

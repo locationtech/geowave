@@ -11,8 +11,6 @@ import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 /**
  * A class based on FilterableConstraints that uses numeric values and includes
  * a lower and upper range
- * 
- * @author geowave
  *
  */
 

@@ -7,11 +7,9 @@ import com.vividsolutions.jts.geom.Geometry;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 
 /**
- * @author Ashish Shah
- *
- *         This class is used to store results extracted from
- *         ExtractGeometryFilterVisitor class. It simply stores query geometry
- *         and its associated predicate.
+ * This class is used to store results extracted from
+ * ExtractGeometryFilterVisitor class. It simply stores query geometry and its
+ * associated predicate.
  */
 public final class ExtractGeometryFilterVisitorResult
 {

@@ -12,8 +12,6 @@ import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 /**
  * A class based on FilterableConstraints that uses temporal values and includes
  * a start date and end date
- * 
- * @author geowave
  *
  */
 

@@ -17,13 +17,15 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
+/**
+ * Command to set property name within cache
+ */
 @GeowaveOperation(name = "set", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Set property name within cache")
 public class SetCommand extends
 		DefaultOperation implements
 		Command
 {
-
 	@Parameter(description = "<name> <value>")
 	private List<String> parameters = new ArrayList<String>();
 
@@ -65,10 +67,23 @@ public class SetCommand extends
 				p);
 	}
 
+	/**
+	 * Get the parameters for this command
+	 * 
+	 * @return parameters
+	 */
 	public List<String> getParameters() {
 		return parameters;
 	}
 
+	/**
+	 * Set new parameters for this command
+	 * 
+	 * @param key
+	 *            parameter key
+	 * @param value
+	 *            parameter value
+	 */
 	public void setParameters(
 			String key,
 			String value ) {

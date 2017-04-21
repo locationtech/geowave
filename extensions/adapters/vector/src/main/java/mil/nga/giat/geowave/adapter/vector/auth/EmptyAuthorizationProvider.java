@@ -3,8 +3,6 @@ package mil.nga.giat.geowave.adapter.vector.auth;
 /**
  * No authorization provided.
  * 
- * @author rwgdrummer
- * 
  */
 
 public class EmptyAuthorizationProvider implements

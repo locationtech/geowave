@@ -19,12 +19,22 @@ import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
  * This is the primary entry point for command line tools. When run it will
  * expect an operation is specified, and will use the appropriate command-line
  * driver for the chosen operation.
- *
  */
 public class GeoWaveMain
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveMain.class);
 
+	/**
+	 * Base constructor
+	 */
+	public GeoWaveMain() {}
+
+	/**
+	 * Main method for GeoWave, primary entry point for command line tools
+	 * 
+	 * @param args
+	 *            command line arguments passed in
+	 */
 	public static void main(
 			final String[] args ) {
 
