@@ -30,16 +30,17 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.FilteredIndexQuery;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseMergingEntryIterator;
+import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
 
 public abstract class HBaseFilteredIndexQuery extends
 		HBaseQuery implements
@@ -52,15 +53,19 @@ public abstract class HBaseFilteredIndexQuery extends
 	private boolean hasSkippingFilter = false;
 
 	public HBaseFilteredIndexQuery(
+			final BaseDataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final ScanCallback<?, ?> scanCallback,
 			final Pair<List<String>, DataAdapter<?>> fieldIds,
+			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
+				dataStore,
 				adapterIds,
 				index,
 				fieldIds,
+				visibilityCounts,
 				authorizations);
 		this.scanCallback = scanCallback;
 	}
@@ -193,9 +198,14 @@ public abstract class HBaseFilteredIndexQuery extends
 				final List<DistributableQueryFilter> distFilters = getDistributableFilters();
 				if ((distFilters != null) && !distFilters.isEmpty()) {
 					final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
+					if (useWholeRowIterator()) {
+						hbdFilter.setWholeRowFilter(true);
+					}
+
 					hbdFilter.init(
 							distFilters,
-							index.getIndexModel());
+							index.getIndexModel(),
+							authorizations);
 
 					filterList.addFilter(hbdFilter);
 				}
@@ -468,25 +478,27 @@ public abstract class HBaseFilteredIndexQuery extends
 
 		if (mergingAdapters.isEmpty()) {
 			return new HBaseEntryIteratorWrapper(
+					dataStore,
 					adapterStore,
 					index,
 					resultsIterator,
 					queryFilter,
 					scanCallback,
-					fieldIds,
+					fieldIdsAdapterPair,
 					maxResolutionSubsamplingPerDimension,
 					decodePersistenceEncoding,
 					hasSkippingFilter);
 		}
 		else {
 			return new HBaseMergingEntryIterator(
+					dataStore,
 					adapterStore,
 					index,
 					resultsIterator,
 					queryFilter,
 					scanCallback,
 					mergingAdapters,
-					fieldIds,
+					fieldIdsAdapterPair,
 					maxResolutionSubsamplingPerDimension,
 					hasSkippingFilter);
 		}

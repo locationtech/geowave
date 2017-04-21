@@ -11,8 +11,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.entities.NativeGeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -33,27 +34,7 @@ public class HBaseEntryIteratorWrapper<T> extends
 	private boolean hasSkippingFilter = false;
 
 	public HBaseEntryIteratorWrapper(
-			final AdapterStore adapterStore,
-			final PrimaryIndex index,
-			final Iterator<Result> scannerIt,
-			final QueryFilter clientFilter,
-			final Pair<List<String>, DataAdapter<?>> fieldIds,
-			final double[] maxResolutionSubsamplingPerDimension,
-			final boolean decodePersistenceEncoding,
-			final boolean hasSkippingFilter ) {
-		this(
-				adapterStore,
-				index,
-				scannerIt,
-				clientFilter,
-				null,
-				fieldIds,
-				maxResolutionSubsamplingPerDimension,
-				decodePersistenceEncoding,
-				hasSkippingFilter);
-	}
-
-	public HBaseEntryIteratorWrapper(
+			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<Result> scannerIt,
@@ -65,11 +46,12 @@ public class HBaseEntryIteratorWrapper<T> extends
 			final boolean hasSkippingFilter ) {
 		super(
 				true,
+				dataStore,
 				adapterStore,
 				index,
 				scannerIt,
 				clientFilter,
-				(ScanCallback<T, ? extends NativeGeoWaveRow>) scanCallback);
+				(ScanCallback<T, ? extends GeoWaveRow>) scanCallback);
 		this.decodePersistenceEncoding = decodePersistenceEncoding;
 		this.hasSkippingFilter = hasSkippingFilter;
 
@@ -106,10 +88,12 @@ public class HBaseEntryIteratorWrapper<T> extends
 		}
 
 		if (passesResolutionSkippingFilter(result)) {
-			return HBaseUtils.decodeRow(
+			return (T) dataStore.decodeRow(
 					result,
-					adapterStore,
+					wholeRowEncoding,
 					clientFilter,
+					null, // get data adapter from input row
+					adapterStore,
 					index,
 					scanCallback,
 					fieldSubsetBitmask,

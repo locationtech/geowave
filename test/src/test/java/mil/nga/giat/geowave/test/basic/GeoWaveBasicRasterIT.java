@@ -40,19 +40,25 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeoWaveBasicRasterIT
+public class GeoWaveBasicRasterIT extends
+		AbstractGeoWaveIT
 {
 	private static final double DOUBLE_TOLERANCE = 1E-10d;
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicRasterIT.class);
 	private static long startMillis;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
 
 	@BeforeClass
 	public static void startTimer() {
@@ -80,7 +86,9 @@ public class GeoWaveBasicRasterIT
 	public void testNoDataMergeStrategy()
 			throws IOException {
 		final String coverageName = "testNoDataMergeStrategy";
-		final int tileSize = 128; // 256; fails on bigtable
+		final int tileSize = 64; // 256 fails on bigtable exceeding maximum
+									// size, 128 fails on DynamoDB exceeding
+									// maximum size
 		final double westLon = 0;
 		final double eastLon = 45;
 		final double southLat = 0;
@@ -92,6 +100,7 @@ public class GeoWaveBasicRasterIT
 				eastLon,
 				southLat,
 				northLat);
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	@Test
@@ -163,6 +172,7 @@ public class GeoWaveBasicRasterIT
 				sumAndAveragingNumBands,
 				sumAndAveragingNumRasters,
 				new SumAndAveragingExpectedValue());
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	private void ingestAndQueryNoDataMergeStrategy(

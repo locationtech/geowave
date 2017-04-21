@@ -43,7 +43,6 @@ import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -54,7 +53,8 @@ import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngest
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
 
-abstract public class AbstractGeoWaveBasicVectorIT
+abstract public class AbstractGeoWaveBasicVectorIT extends
+		AbstractGeoWaveIT
 {
 	private final static Logger LOGGER = Logger.getLogger(AbstractGeoWaveBasicVectorIT.class);
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
@@ -88,8 +88,6 @@ abstract public class AbstractGeoWaveBasicVectorIT
 				null,
 				queryDescription);
 	}
-
-	abstract protected DataStorePluginOptions getDataStorePluginOptions();
 
 	protected void testQuery(
 			final URL savedFilterResource,
@@ -237,8 +235,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			final PrimaryIndex index,
 			final boolean multithreaded ) {
 		// In the multithreaded case, only test min/max and count. Stats will be
-		// ingested
-		// in a different order and will not match.
+		// ingested/ in a different order and will not match.
 		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
 				Filter.INCLUDE);
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();

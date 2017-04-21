@@ -10,7 +10,9 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
@@ -24,11 +26,15 @@ abstract public class AbstractHBaseRowQuery<T> extends
 	protected final ScanCallback<T, ?> scanCallback;
 
 	public AbstractHBaseRowQuery(
+			final BaseDataStore dataStore,
 			final PrimaryIndex index,
 			final String[] authorizations,
-			final ScanCallback<T, ?> scanCallback ) {
+			final ScanCallback<T, ?> scanCallback,
+			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
+				dataStore,
 				index,
+				visibilityCounts,
 				authorizations);
 		this.scanCallback = scanCallback;
 	}
@@ -57,11 +63,13 @@ abstract public class AbstractHBaseRowQuery<T> extends
 					new ScannerClosableWrapper(
 							results),
 					new HBaseEntryIteratorWrapper(
+							dataStore,
 							adapterStore,
 							index,
 							results.iterator(),
-							null,
-							fieldIds,
+							null, // no client filter
+							null, // no scan callback
+							fieldIdsAdapterPair,
 							maxResolutionSubsamplingPerDimension,
 							true,
 							false));

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -27,11 +28,13 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 	protected final ScanCallback<T, ?> scanCallback;
 
 	public AbstractAccumuloRowQuery(
+			final BaseDataStore dataStore,
 			final PrimaryIndex index,
 			final String[] authorizations,
 			final ScanCallback<T, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
+				dataStore,
 				index,
 				visibilityCounts,
 				authorizations);
@@ -56,6 +59,7 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 						scanner),
 				new AccumuloEntryIteratorWrapper(
 						useWholeRowIterator(),
+						dataStore,
 						adapterStore,
 						index,
 						scanner.iterator(),

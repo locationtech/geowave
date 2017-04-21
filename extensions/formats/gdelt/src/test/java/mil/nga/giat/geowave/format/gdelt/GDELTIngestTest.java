@@ -29,11 +29,12 @@ public class GDELTIngestTest
 	public void setup() {
 		optionsProvider = new DataSchemaOptionProvider();
 		optionsProvider.setSupplementalFields(true);
-		
+
 		ingester = new GDELTIngestPlugin();
 		ingester.init(null);
-		
-		ingesterExt = new GDELTIngestPlugin(optionsProvider);
+
+		ingesterExt = new GDELTIngestPlugin(
+				optionsProvider);
 		ingesterExt.init(null);
 
 		filePath = "20130401.export.CSV.zip";
@@ -68,7 +69,7 @@ public class GDELTIngestTest
 			}
 		}
 		features.close();
-		
+
 		final CloseableIterator<GeoWaveData<SimpleFeature>> featuresExt = ingesterExt.toGeoWaveData(
 				toIngest,
 				indexIds,
@@ -90,7 +91,7 @@ public class GDELTIngestTest
 		if (!readExpectedCount) {
 			System.out.println("Expected " + expectedCount + " features, ingested " + featureCount);
 		}
-		
+
 		final boolean readExpectedCountExt = (featureCountExt == expectedCount);
 		if (!readExpectedCount) {
 			System.out.println("Expected " + expectedCount + " features, ingested " + featureCountExt);
@@ -112,7 +113,7 @@ public class GDELTIngestTest
 		}
 		return true;
 	}
-	
+
 	private boolean isValidGDELTFeatureExt(
 			final GeoWaveData<SimpleFeature> featureExt ) {
 		if ((featureExt.getValue().getAttribute(
@@ -121,7 +122,7 @@ public class GDELTIngestTest
 				GDELTUtils.GDELT_LATITUDE_ATTRIBUTE) == null) || (featureExt.getValue().getAttribute(
 				GDELTUtils.GDELT_LONGITUDE_ATTRIBUTE) == null) || (featureExt.getValue().getAttribute(
 				GDELTUtils.GDELT_TIMESTAMP_ATTRIBUTE) == null) || (featureExt.getValue().getAttribute(
-				GDELTUtils.AVG_TONE_ATTRIBUTE ) == null)) {
+				GDELTUtils.AVG_TONE_ATTRIBUTE) == null)) {
 			return false;
 		}
 		return true;

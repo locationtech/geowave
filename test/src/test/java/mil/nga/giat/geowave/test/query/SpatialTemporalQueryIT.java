@@ -58,9 +58,11 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
-public class SpatialTemporalQueryIT
+public class SpatialTemporalQueryIT extends
+		AbstractGeoWaveIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd'T'hh:mm:ss'Z'");
@@ -93,6 +95,10 @@ public class SpatialTemporalQueryIT
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
 
 	private final static Logger LOGGER = Logger.getLogger(SpatialTemporalQueryIT.class);
 	private static long startMillis;
