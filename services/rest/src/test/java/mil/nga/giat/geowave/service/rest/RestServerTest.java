@@ -149,7 +149,8 @@ public class RestServerTest
 	@Test
 	public void geowave_config_store()
 			throws ResourceException,
-			IOException {
+			IOException,
+			ParseException {
 
 		File configFile = tempFolder.newFile("test_config");
 
@@ -226,6 +227,26 @@ public class RestServerTest
 		resourceRm.post(
 				formRm).write(
 				System.out);
+
+		// use list to test if removed successfully
+		ClientResource resourceList = new ClientResource(
+				"http://localhost:5152/geowave/config/list");
+		resourceList.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		resourceList.addQueryParameter(
+				"config_file",
+				configFile.getAbsolutePath());
+		String text = resourceList.get(
+				MediaType.APPLICATION_JSON).getText();
+
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(text);
+		String name = (String) obj.get("store1");
+		assertTrue(
+				"store1 is removed",
+				name == null);
 	}
 
 	// Tests geowave/config/addindex, cpindex, rmindex
