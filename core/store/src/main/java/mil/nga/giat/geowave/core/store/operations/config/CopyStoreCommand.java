@@ -149,6 +149,7 @@ public class CopyStoreCommand extends
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
+
 		prepare(params);
 		computeResults(params);
 	}

@@ -51,6 +51,7 @@ public class RemoveStoreCommand extends
 		File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 		// String name = getQueryValue("name");
+
 		if (name == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
