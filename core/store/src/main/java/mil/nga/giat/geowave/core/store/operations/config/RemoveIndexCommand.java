@@ -10,15 +10,19 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+
+import org.shaded.restlet.data.Form;
 import org.shaded.restlet.data.Status;
+import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.resource.Delete;
 import org.shaded.restlet.resource.Post;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "rmindex", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "rmindex", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Remove index configuration from Geowave configuration")
 public class RemoveIndexCommand extends
 		AbstractRemoveCommand implements
@@ -32,30 +36,23 @@ public class RemoveIndexCommand extends
 
 	}
 
-	private void computeResults(
+	@Override
+	protected Void computeResults(
 			OperationParams params ) {
 
-		// Search for properties relevant to the given name
-		String pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
-		super.computeResults(
-				params,
-				pattern);
-
+		pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
+		return super.computeResults(params);
 	}
 
-	@Post("json")
-	public void restDelete() {
-		String pattern = getQueryValue("pattern");
+	@Override
+	public void readFormArgs(
+			Form form ) {
+		String pattern = form.getFirstValue("pattern");
 		if (pattern == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
 		this.setEntryName(pattern);
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
-		computeResults(params);
 	}
 
 }

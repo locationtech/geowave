@@ -78,4 +78,11 @@ public class ListIndexCommand extends
 				result);
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

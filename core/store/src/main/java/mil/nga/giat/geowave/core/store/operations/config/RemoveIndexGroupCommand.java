@@ -17,22 +17,22 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexGroupPluginOptions;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "rmindexgrp", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "rmindexgrp", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Remove index group from Geowave configuration")
 public class RemoveIndexGroupCommand extends
 		AbstractRemoveCommand implements
 		Command
 {
 
-	public void computeResults(
+	@Override
+	public Void computeResults(
 			OperationParams params ) {
 
 		// Search for properties relevant to the given name
-		String pattern = IndexGroupPluginOptions.getIndexGroupNamespace(getEntryName());
-		super.computeResults(
-				params,
-				pattern);
+		pattern = IndexGroupPluginOptions.getIndexGroupNamespace(getEntryName());
+		return super.computeResults(params);
 
 	}
 
@@ -42,27 +42,15 @@ public class RemoveIndexGroupCommand extends
 		computeResults(params);
 	}
 
-	@Post("form:json")
-	public void restPost(
-			Representation entity ) {
-		Form form = new Form(
-				entity);
+	@Override
+	public void readFormArgs(
+			Form form ) {
 		String name = form.getFirstValue("name");
-		// String name = getQueryValue("name");
-
-		String configFileParameter = form.getFirstValue("config_file");
-		File configFile = (configFileParameter != null) ? new File(
-				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
 		if (name == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
 		setEntryName(name);
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				configFile);
-		computeResults(params);
 	}
 }

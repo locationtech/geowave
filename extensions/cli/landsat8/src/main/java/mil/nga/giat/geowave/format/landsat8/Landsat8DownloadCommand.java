@@ -33,4 +33,11 @@ public class Landsat8DownloadCommand extends
 		runner.runInternal(params);
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

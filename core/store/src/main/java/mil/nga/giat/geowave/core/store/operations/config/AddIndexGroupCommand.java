@@ -26,10 +26,10 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexGroupPlugi
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 
-@GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create an index group for usage in GeoWave")
 public class AddIndexGroupCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 	private static int SUCCESS = 0;
@@ -52,42 +52,31 @@ public class AddIndexGroupCommand extends
 	 * 
 	 * @return none
 	 */
-	@Post("form:json")
-	public void computeResults(
-			Representation entity ) { // TODO think about return type
+	@Override
+	public Void computeResults(
+			OperationParams params ) {
 
-		Form form = new Form(
-				entity);
+		try {
+			addIndexGroup(params);
+		}
+		catch (WritePropertiesException | ParameterException e) {
+			this.setStatus(
+					Status.SERVER_ERROR_INTERNAL,
+					e.getMessage());
+		}
+
+		return null;
+	}
+
+	@Override
+	public void readFormArgs(
+			Form form ) {
 		String key = form.getFirstValue("key");
 		String value = form.getFirstValue("value");
 
-		String configFileParameter = form.getFirstValue("config_file");
-		File configFile = (configFileParameter != null) ? new File(
-				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
-
-		if ((key == null || key.equals("")) || value == null) {
-			this.setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"Requires: <name> <value>");
-		}
-		else {
-			setParameters(
-					key,
-					value);
-			OperationParams params = new ManualOperationParams();
-			params.getContext().put(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT,
-					configFile);
-
-			try {
-				addIndexGroup(params);
-			}
-			catch (WritePropertiesException | ParameterException e) {
-				this.setStatus(
-						Status.SERVER_ERROR_INTERNAL,
-						e.getMessage());
-			}
-		}
+		setParameters(
+				key,
+				value);
 	}
 
 	/**

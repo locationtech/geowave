@@ -13,16 +13,19 @@ import com.beust.jcommander.ParameterException;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
  * Common code for removing an entry from the properties file.
  */
 public abstract class AbstractRemoveCommand extends
-		DefaultOperation
+		DefaultOperation<Void>
 {
 
 	@Parameter(description = "<name>", required = true, arity = 1)
 	private List<String> parameters = new ArrayList<String>();
+
+	protected String pattern = null;
 
 	public String getEntryName() {
 		if (parameters.size() < 1) {
@@ -34,9 +37,8 @@ public abstract class AbstractRemoveCommand extends
 				0).trim();
 	}
 
-	protected void computeResults(
-			OperationParams params,
-			String pattern ) {
+	protected Void computeResults(
+			OperationParams params ) {
 
 		File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
@@ -63,6 +65,8 @@ public abstract class AbstractRemoveCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
+
+		return null;
 	}
 
 	public void setEntryName(

@@ -124,4 +124,11 @@ public class RecalculateStatsCommand extends
 			this.parameters.add(adapterName);
 		}
 	}
+
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

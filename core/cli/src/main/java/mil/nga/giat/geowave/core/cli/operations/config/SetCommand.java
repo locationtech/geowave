@@ -23,10 +23,10 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 
-@GeowaveOperation(name = "set", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "set", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Set property name within cache")
 public class SetCommand extends
-		DefaultOperation implements
+		DefaultOperation<Object> implements
 		Command
 {
 
@@ -50,34 +50,9 @@ public class SetCommand extends
 	 * @return string containing json with details of success or failure of the
 	 *         set
 	 */
-	@Post("form:json")
+	@Override
 	public Object computeResults(
-			Representation entity ) {
-		Form form = new Form(
-				entity);
-		String key = form.getFirstValue("key");
-		String value = form.getFirstValue("value");
-		String configFileParameter = form.getFirstValue("config_file");
-		File configFile = (configFileParameter != null) ? new File(
-				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
-		// String key = getQueryValue("key");
-		// String value = getQueryValue("value");
-
-		if ((key == null || key.equals("")) || value == null) {
-			this.setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"Requires: <name> <value>");
-			return null;
-		}
-
-		setParameters(
-				key,
-				value);
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				configFile);
-
+			OperationParams params ) {
 		try {
 			return setKeyValue(params);
 		}
@@ -87,6 +62,17 @@ public class SetCommand extends
 					e.getMessage());
 			return null;
 		}
+	}
+
+	@Override
+	public void readFormArgs(
+			Form form ) {
+		String key = form.getFirstValue("key");
+		String value = form.getFirstValue("value");
+
+		setParameters(
+				key,
+				value);
 	}
 
 	/**

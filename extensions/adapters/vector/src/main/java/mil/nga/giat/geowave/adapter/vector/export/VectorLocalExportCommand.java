@@ -228,4 +228,11 @@ public class VectorLocalExportCommand extends
 	public VectorLocalExportOptions getOptions() {
 		return options;
 	}
+
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

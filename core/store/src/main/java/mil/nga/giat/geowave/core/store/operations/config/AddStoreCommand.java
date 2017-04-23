@@ -32,10 +32,10 @@ import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddStoreCommand extends
-		ServerResource implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -108,7 +108,8 @@ public class AddStoreCommand extends
 		computeResults(params);
 	}
 
-	public void computeResults(
+	@Override
+	public Void computeResults(
 			OperationParams params ) {
 
 		File propFile = (File) params.getContext().get(
@@ -137,6 +138,9 @@ public class AddStoreCommand extends
 				existingProps,
 				getNamespace());
 
+		final StoreFactoryOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace("namespace");
+
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
 			existingProps.setProperty(
@@ -148,22 +152,15 @@ public class AddStoreCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
+
+		return null;
 	}
 
-
-	@Post("form:json")
-	public void restPost(
-			Representation entity ) {
-
-		Form form = new Form(
-				entity);
+	public void readFormArgs(
+			Form form ) {
 		String name = form.getFirstValue("name");
 		String type = form.getFirstValue("storetype");
 		String isdefault = form.getFirstValue("default");
-
-		String configFileParameter = form.getFirstValue("config_file");
-		File configFile = (configFileParameter != null) ? new File(
-				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
 		if (name == null || type == null) {
 			this.setStatus(
@@ -186,17 +183,6 @@ public class AddStoreCommand extends
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
-
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				configFile);
-
-		prepare(params);
-
-		final StoreFactoryOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
-		opts.setGeowaveNamespace("namespace");
-		computeResults(params);
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

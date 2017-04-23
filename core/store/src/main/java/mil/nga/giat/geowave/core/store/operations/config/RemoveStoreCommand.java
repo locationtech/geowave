@@ -16,22 +16,22 @@ import org.shaded.restlet.data.Form;
 import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Post;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "rmstore", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "rmstore", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Remove store from Geowave configuration")
 public class RemoveStoreCommand extends
 		AbstractRemoveCommand implements
 		Command
 {
 
-	public void computeResults(
+	@Override
+	public Void computeResults(
 			OperationParams params ) {
 
 		// Search for properties relevant to the given name
-		String pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
-		super.computeResults(
-				params,
-				pattern);
+		pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
+		return super.computeResults(params);
 
 	}
 
@@ -41,26 +41,15 @@ public class RemoveStoreCommand extends
 		computeResults(params);
 	}
 
-	@Post("form:json")
-	public void restPost(
-			Representation entity ) {
-		Form form = new Form(
-				entity);
+	@Override
+	public void readFormArgs(
+			Form form ) {
 		String name = form.getFirstValue("name");
-		String configFileParameter = form.getFirstValue("config_file");
-		File configFile = (configFileParameter != null) ? new File(
-				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
-		// String name = getQueryValue("name");
 
 		if (name == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
 		setEntryName(name);
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				configFile);
-		computeResults(params);
 	}
 }

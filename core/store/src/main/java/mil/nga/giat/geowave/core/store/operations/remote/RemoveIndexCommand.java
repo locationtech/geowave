@@ -36,4 +36,11 @@ public class RemoveIndexCommand extends
 				"This operation is not yet supported");
 	}
 
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

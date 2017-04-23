@@ -26,11 +26,12 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
 
-@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Copy and modify existing store configuration")
 public class CopyStoreCommand extends
-		ServerResource implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -81,7 +82,8 @@ public class CopyStoreCommand extends
 		computeResults(params);
 	}
 
-	public void computeResults(
+	@Override
+	public Void computeResults(
 			OperationParams params ) {
 
 		if (parameters.size() < 2) {
@@ -119,19 +121,16 @@ public class CopyStoreCommand extends
 				configFile,
 				existingProps);
 
+		return null;
+
 	}
 
-	@Post("form:json")
-	public void restPost(
-			Representation entity ) {
-		Form form = new Form(
-				entity);
+	@Override
+	public void readFormArgs(
+			Form form ) {
 		String name = form.getFirstValue("name");
 		String newname = form.getFirstValue("newname");
 		String isdefault = form.getFirstValue("default");
-		String configFileParameter = form.getFirstValue("config_file");
-		File configFile = (configFileParameter != null) ? new File(
-				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
 		if (name == null || newname == null) {
 			this.setStatus(
@@ -139,19 +138,13 @@ public class CopyStoreCommand extends
 					"Requires: <name> <newname>");
 			return;
 		}
-		parameters.add(name);
-		parameters.add(newname);
+
+		setParameters(
+				name,
+				newname);
 		if (isdefault != null && isdefault.equals("true")) {
 			makeDefault = true;
 		}
-
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				configFile);
-
-		prepare(params);
-		computeResults(params);
 	}
 
 	public List<String> getParameters() {

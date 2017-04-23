@@ -126,4 +126,11 @@ public class ResizeCommand extends
 			DataStorePluginOptions outputStoreOptions ) {
 		this.outputStoreOptions = outputStoreOptions;
 	}
+
+	@Override
+	protected Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
