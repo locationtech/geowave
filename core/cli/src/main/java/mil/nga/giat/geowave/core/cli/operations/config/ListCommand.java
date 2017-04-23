@@ -59,11 +59,15 @@ public class ListCommand extends
 	@Get("json")
 	public Properties restGet() {
 		filter = getQueryValue("filter");
+		
+		String configFileParameter = getQueryValue("config_file");
+		File configFile = (configFileParameter != null) ? new File(
+				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
 		OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
+				configFile);
 		return getList(
 				params).getValue();
 	}

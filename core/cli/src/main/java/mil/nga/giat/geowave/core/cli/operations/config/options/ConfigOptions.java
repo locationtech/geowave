@@ -247,7 +247,6 @@ public class ConfigOptions
 				is = new FileInputStream(
 						configFile);
 			}
-
 			properties.load(is);
 		}
 		catch (final IOException e) {
