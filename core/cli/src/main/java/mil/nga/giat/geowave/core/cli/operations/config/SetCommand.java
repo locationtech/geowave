@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.shaded.restlet.representation.Representation;
+import org.shaded.restlet.data.Form;
 import org.shaded.restlet.resource.Get;
 import org.shaded.restlet.resource.Post;
 import org.shaded.restlet.data.Status;
@@ -24,7 +26,7 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 @GeowaveOperation(name = "set", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Set property name within cache")
 public class SetCommand extends
-		DefaultOperation implements
+		DefaultOperation<Object> implements
 		Command
 {
 
@@ -49,22 +51,8 @@ public class SetCommand extends
 	 *         set
 	 */
 	@Override
-	protected Object computeResults(
+	public Object computeResults(
 			OperationParams params ) {
-		String key = getQueryValue("key");
-		String value = getQueryValue("value");
-
-		if ((key == null || key.equals("")) || value == null) {
-			this.setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"Requires: <name> <value>");
-			return null;
-		}
-
-		setParameters(
-				key,
-				value);
-
 		try {
 			return setKeyValue(params);
 		}
@@ -74,6 +62,17 @@ public class SetCommand extends
 					e.getMessage());
 			return null;
 		}
+	}
+
+	@Override
+	public void readFormArgs(
+			Form form ) {
+		String key = form.getFirstValue("key");
+		String value = form.getFirstValue("value");
+
+		setParameters(
+				key,
+				value);
 	}
 
 	/**
@@ -146,5 +145,4 @@ public class SetCommand extends
 		}
 
 	}
-
 }

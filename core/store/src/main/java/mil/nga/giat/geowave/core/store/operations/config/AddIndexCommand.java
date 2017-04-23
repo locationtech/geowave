@@ -15,6 +15,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -22,7 +23,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 
 @GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.NONE)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
-public class AddIndexCommand implements
+public class AddIndexCommand extends
+		DefaultOperation<Void> implements
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
@@ -172,5 +174,12 @@ public class AddIndexCommand implements
 	public void setPluginOptions(
 			IndexPluginOptions pluginOptions ) {
 		this.pluginOptions = pluginOptions;
+	}
+
+	@Override
+	protected Void computeResults(
+			OperationParams params ) {
+		throw new UnsupportedOperationException(
+				"TODO(Kevin): Implement");
 	}
 }

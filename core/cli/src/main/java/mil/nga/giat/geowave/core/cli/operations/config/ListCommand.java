@@ -26,7 +26,7 @@ import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEna
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class, restEnabled = GET)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
-		DefaultOperation<Pair<String, Properties>> implements
+		DefaultOperation<Properties> implements
 		Command
 {
 
@@ -40,7 +40,7 @@ public class ListCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		Pair<String, Properties> list = computeResults(params);
+		Pair<String, Properties> list = getList(params);
 		String name = list.getKey();
 		Properties p = list.getValue();
 
@@ -58,19 +58,22 @@ public class ListCommand extends
 		}
 	}
 
-	// @Get("json")
-	// public Properties restGet() {
-	// filter = getQueryValue("filter");
-	//
-	// OperationParams params = new ManualOperationParams();
-	// params.getContext().put(
-	// ConfigOptions.PROPERTIES_FILE_CONTEXT,
-	// ConfigOptions.getDefaultPropertyFile());
-	// return getList(
-	// params).getValue();
-	// }
+	@Override
+	@Get("json")
+	public Properties restGet() {
+		filter = getQueryValue("filter");
+		return super.restGet();
+	}
 
-	protected Pair<String, Properties> computeResults(
+	@Override
+	protected Properties computeResults(
+			OperationParams params ) {
+
+		return getList(
+				params).getValue();
+	}
+
+	private Pair<String, Properties> getList(
 			OperationParams params ) {
 
 		File f = (File) params.getContext().get(

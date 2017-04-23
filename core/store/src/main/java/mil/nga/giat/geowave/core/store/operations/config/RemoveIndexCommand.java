@@ -10,7 +10,10 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+
+import org.shaded.restlet.data.Form;
 import org.shaded.restlet.data.Status;
+import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.resource.Delete;
 import org.shaded.restlet.resource.Post;
 import java.io.File;
@@ -33,6 +36,7 @@ public class RemoveIndexCommand extends
 
 	}
 
+	@Override
 	protected Void computeResults(
 			OperationParams params ) {
 
@@ -40,20 +44,15 @@ public class RemoveIndexCommand extends
 		return super.computeResults(params);
 	}
 
-	// TODO i dont' know what to do with this
-	@Post("json")
-	public void restDelete() {
-		String pattern = getQueryValue("pattern");
+	@Override
+	public void readFormArgs(
+			Form form ) {
+		String pattern = form.getFirstValue("pattern");
 		if (pattern == null) {
 			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			return;
 		}
 		this.setEntryName(pattern);
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
-		computeResults(params);
 	}
 
 }

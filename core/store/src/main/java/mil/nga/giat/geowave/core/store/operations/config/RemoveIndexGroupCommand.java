@@ -1,5 +1,10 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
+import org.shaded.restlet.representation.Representation;
+
+import java.io.File;
+
+import org.shaded.restlet.data.Form;
 import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Post;
 
@@ -21,12 +26,13 @@ public class RemoveIndexGroupCommand extends
 		Command
 {
 
-	protected Void computeResults(
+	@Override
+	public Void computeResults(
 			OperationParams params ) {
 
+		// Search for properties relevant to the given name
 		pattern = IndexGroupPluginOptions.getIndexGroupNamespace(getEntryName());
-		super.computeResults(params);
-		return null;
+		return super.computeResults(params);
 
 	}
 
@@ -36,18 +42,15 @@ public class RemoveIndexGroupCommand extends
 		computeResults(params);
 	}
 
-	// @Post("json")
-	// public void restPost() {
-	// String name = getQueryValue("name");
-	// if (name == null) {
-	// this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-	// return;
-	// }
-	// setEntryName(name);
-	// OperationParams params = new ManualOperationParams();
-	// params.getContext().put(
-	// ConfigOptions.PROPERTIES_FILE_CONTEXT,
-	// ConfigOptions.getDefaultPropertyFile());
-	// computeResults(params);
-	// }
+	@Override
+	public void readFormArgs(
+			Form form ) {
+		String name = form.getFirstValue("name");
+
+		if (name == null) {
+			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return;
+		}
+		setEntryName(name);
+	}
 }

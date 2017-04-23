@@ -8,7 +8,9 @@ import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.shaded.restlet.resource.Get;
 import org.shaded.restlet.resource.Post;
+import org.shaded.restlet.data.Form;
 import org.shaded.restlet.data.Status;
+import org.shaded.restlet.representation.Representation;
 
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import com.beust.jcommander.Parameter;
@@ -28,7 +30,7 @@ import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEna
 @GeowaveOperation(name = "cpindex", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Copy and modify existing index configuration")
 public class CopyIndexCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 	private static int SUCCESS = 0;
@@ -79,39 +81,35 @@ public class CopyIndexCommand extends
 	@Override
 	public void execute(
 			OperationParams params ) {
-
-		// String result = computeResults(params);
 		copyIndex(params);
 
 	}
 
+	@Override
 	public Void computeResults(
 			OperationParams params ) {
 
-		String key = getQueryValue("key");
-		String value = getQueryValue("value");
-
-		if ((key == null || key.equals("")) || value == null) {
-			this.setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"Requires: <name> <value>");
+		try {
+			copyIndex(params);
 		}
-		else {
-			setParameters(
-					key,
-					value);
-
-			try {
-				copyIndex(params);
-			}
-			catch (WritePropertiesException | ParameterException e) {
-				this.setStatus(
-						Status.SERVER_ERROR_INTERNAL,
-						e.getMessage());
-			}
+		catch (WritePropertiesException | ParameterException e) {
+			this.setStatus(
+					Status.SERVER_ERROR_INTERNAL,
+					e.getMessage());
 		}
 
 		return null;
+	}
+
+	@Override
+	public void readFormArgs(
+			Form form ) {
+		String key = form.getFirstValue("key");
+		String value = form.getFirstValue("value");
+
+		setParameters(
+				key,
+				value);
 	}
 
 	/**

@@ -19,7 +19,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
  * Common code for removing an entry from the properties file.
  */
 public abstract class AbstractRemoveCommand extends
-		DefaultOperation
+		DefaultOperation<Void>
 {
 
 	@Parameter(description = "<name>", required = true, arity = 1)

@@ -1,10 +1,13 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.shaded.restlet.representation.Representation;
+import org.shaded.restlet.data.Form;
 import org.shaded.restlet.data.Status;
 import org.shaded.restlet.resource.Post;
 import org.shaded.restlet.resource.ServerResource;
@@ -20,11 +23,11 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-//import mil.nga.giat.geowave.core.cli.api.ServerResource;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -32,7 +35,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddStoreCommand extends
-		ServerResource implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -105,7 +108,8 @@ public class AddStoreCommand extends
 		computeResults(params);
 	}
 
-	public void computeResults(
+	@Override
+	public Void computeResults(
 			OperationParams params ) {
 
 		File propFile = (File) params.getContext().get(
@@ -134,6 +138,9 @@ public class AddStoreCommand extends
 				existingProps,
 				getNamespace());
 
+		final StoreFactoryOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace("namespace");
+
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
 			existingProps.setProperty(
@@ -145,35 +152,37 @@ public class AddStoreCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
+
+		return null;
 	}
 
-	@Post("json")
-	public void restPost() {
+	public void readFormArgs(
+			Form form ) {
+		String name = form.getFirstValue("name");
+		String type = form.getFirstValue("storetype");
+		String isdefault = form.getFirstValue("default");
 
-		String name = getQueryValue("name");
-		if (name == null) {
-			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		if (name == null || type == null) {
+			this.setStatus(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					"Requires: name and store type");
 			return;
 		}
 		parameters.add(name);
-		storeType = name;
-		if (getQueryValue("default") != null) {
+		storeType = type;
+		if (isdefault != null && isdefault.equals("true")) {
 			makeDefault = true;
 		}
 
-		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-				name,
-				new MemoryStoreFactoryFamily());
-
-		OperationParams params = new ManualOperationParams();
-		params.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
-
-		prepare(params);
-		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
-		opts.setGeowaveNamespace("namespace");
-		computeResults(params);
+		if (storeType.equals("memory")) {
+			GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+					storeType,
+					new MemoryStoreFactoryFamily());
+		}
+		else {
+			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return;
+		}
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

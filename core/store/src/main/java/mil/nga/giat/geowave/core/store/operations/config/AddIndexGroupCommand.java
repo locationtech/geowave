@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.shaded.restlet.data.Form;
+import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.resource.Get;
 import org.shaded.restlet.resource.Post;
 import org.shaded.restlet.data.Status;
@@ -27,7 +29,7 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 @GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create an index group for usage in GeoWave")
 public class AddIndexGroupCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 	private static int SUCCESS = 0;
@@ -52,29 +54,29 @@ public class AddIndexGroupCommand extends
 	 */
 	@Override
 	public Void computeResults(
-			OperationParams params ) { // TODO think about return type
-		String key = getQueryValue("key");
-		String value = getQueryValue("value");
-		if ((key == null || key.equals("")) || value == null) {
-			this.setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"Requires: <name> <value>");
-		}
-		else {
-			setParameters(
-					key,
-					value);
+			OperationParams params ) {
 
-			try {
-				addIndexGroup(params);
-			}
-			catch (WritePropertiesException | ParameterException e) {
-				this.setStatus(
-						Status.SERVER_ERROR_INTERNAL,
-						e.getMessage());
-			}
+		try {
+			addIndexGroup(params);
 		}
+		catch (WritePropertiesException | ParameterException e) {
+			this.setStatus(
+					Status.SERVER_ERROR_INTERNAL,
+					e.getMessage());
+		}
+
 		return null;
+	}
+
+	@Override
+	public void readFormArgs(
+			Form form ) {
+		String key = form.getFirstValue("key");
+		String value = form.getFirstValue("value");
+
+		setParameters(
+				key,
+				value);
 	}
 
 	/**

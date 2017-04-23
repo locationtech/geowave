@@ -1,8 +1,11 @@
 package mil.nga.giat.geowave.core.cli.api;
 
+import java.io.File;
 import java.util.Properties;
 
+import org.shaded.restlet.data.Form;
 import org.shaded.restlet.data.Status;
+import org.shaded.restlet.representation.Representation;
 import org.shaded.restlet.resource.Get;
 import org.shaded.restlet.resource.Post;
 import org.shaded.restlet.resource.ServerResource;
@@ -35,7 +38,7 @@ public abstract class DefaultOperation<T> extends
 	public T restGet() {
 		if (getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
-			return handleRequest();
+			return handleRequest(null);
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
@@ -43,11 +46,16 @@ public abstract class DefaultOperation<T> extends
 		}
 	}
 
-	@Post("json")
-	public T restPost() {
+	@Post("form:json")
+	public T restPost(
+			Representation request ) {
 		if (getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST) {
-			return handleRequest();
+
+			Form form = new Form(
+					request);
+			readFormArgs(form);
+			return handleRequest(form);
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
@@ -55,12 +63,21 @@ public abstract class DefaultOperation<T> extends
 		}
 	}
 
-	private T handleRequest() {
+	protected void readFormArgs(
+			Form form ) {}
+
+	private T handleRequest(
+			Form form ) {
+		String configFileParameter = (form == null) ? getQueryValue("config_file") : form.getFirstValue("config_file");
+		File configFile = (configFileParameter != null) ? new File(
+				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
+
 		OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				ConfigOptions.getDefaultPropertyFile());
+				configFile);
 		try {
+			prepare(params);
 			return computeResults(params);
 		}
 		catch (Exception e) {
