@@ -1,11 +1,13 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.File;
 import java.util.Properties;
 
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.converters.OptionalPasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
@@ -14,78 +16,71 @@ import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "geoserver", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for GeoServer")
-public class ConfigGeoServerCommand implements
+public class ConfigGeoServerCommand extends
+		DefaultOperation implements
 		Command
 {
 	@Parameter(names = {
 		"-u",
 		"--url"
-	}, required = false, description = "GeoServer URL (for example http://localhost:8080/geoserver), or simply host:port and appropriate assumptions are made")
+	}, description = "GeoServer URL (for example http://localhost:8080/geoserver or https://localhost:8443/geoserver), or simply host:port and appropriate assumptions are made")
 	private String url;
 
 	@Parameter(names = {
 		"-n",
 		"--name"
-	}, required = false, description = "GeoServer User")
+	}, description = "GeoServer User")
 	private String name;
 
+	// GEOWAVE-811 - adding additional password options for added protection
 	@Parameter(names = {
 		"-p",
 		"--pass"
-	}, required = false, description = "GeoServer Password")
+	}, description = "GeoServer Password - can be specified as 'pass:<password>', 'file:<local file containing the password>', "
+			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin", converter = OptionalPasswordConverter.class)
 	private String pass;
 
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
-	}, required = false, description = "GeoServer Default Workspace")
+	}, description = "GeoServer Default Workspace")
 	private String workspace;
-
-	@Override
-	public boolean prepare(
-			OperationParams params ) {
-		// Successfully prepared (none needed).
-		return true;
-	}
 
 	@Override
 	public void execute(
 			OperationParams params )
 			throws Exception {
-		File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// all switches are optional
 		if (getUrl() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_URL,
+					GEOSERVER_URL,
 					getUrl());
 		}
 
 		if (getName() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_USER,
+					GEOSERVER_USER,
 					getName());
 		}
 
 		if (getPass() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_PASS,
+					GEOSERVER_PASS,
 					getPass());
 		}
 
 		if (getWorkspace() != null) {
 			existingProps.setProperty(
-					GeoServerConfig.GEOSERVER_WORKSPACE,
+					GEOSERVER_WORKSPACE,
 					getWorkspace());
 		}
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 

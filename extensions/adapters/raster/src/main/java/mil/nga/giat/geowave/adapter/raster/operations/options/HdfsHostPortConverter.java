@@ -1,13 +1,19 @@
 package mil.nga.giat.geowave.adapter.raster.operations.options;
 
-import com.beust.jcommander.IStringConverter;
+import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
 
 /**
  * This class will ensure that the hdfs parameter is in the correct format.
  */
-public class HdfsHostPortConverter implements
-		IStringConverter<String>
+public class HdfsHostPortConverter extends
+		GeoWaveBaseConverter<String>
 {
+	public HdfsHostPortConverter(
+			String optionName ) {
+		super(
+				optionName);
+	}
+
 	@Override
 	public String convert(
 			String hdfsHostPort ) {
@@ -17,4 +23,8 @@ public class HdfsHostPortConverter implements
 		return hdfsHostPort;
 	}
 
+	@Override
+	public boolean isRequired() {
+		return true;
+	}
 }

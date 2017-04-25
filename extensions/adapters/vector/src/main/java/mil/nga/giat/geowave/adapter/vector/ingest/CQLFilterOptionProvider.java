@@ -6,10 +6,10 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterVisitor;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
+import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
@@ -88,9 +88,20 @@ public class CQLFilterOptionProvider implements
 	 * This class will ensure that as the CQLFilterString is read in and
 	 * converted to a filter.
 	 */
-	public static class ConvertCQLStrToFilterConverter implements
-			IStringConverter<FilterParameter>
+	public static class ConvertCQLStrToFilterConverter extends
+			GeoWaveBaseConverter<FilterParameter>
 	{
+		public ConvertCQLStrToFilterConverter() {
+			super(
+					"");
+		}
+
+		public ConvertCQLStrToFilterConverter(
+				String optionName ) {
+			super(
+					optionName);
+		}
+
 		@Override
 		public FilterParameter convert(
 				String value ) {
@@ -154,5 +165,4 @@ public class CQLFilterOptionProvider implements
 			return cqlFilterString;
 		}
 	}
-
 }

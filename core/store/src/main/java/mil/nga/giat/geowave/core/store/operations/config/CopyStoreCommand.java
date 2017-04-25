@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -12,6 +11,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -19,7 +19,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 
 @GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Copy and modify existing store configuration")
-public class CopyStoreCommand implements
+public class CopyStoreCommand extends
+		DefaultOperation implements
 		Command
 {
 
@@ -35,18 +36,12 @@ public class CopyStoreCommand implements
 	@ParametersDelegate
 	private DataStorePluginOptions newPluginOptions = new DataStorePluginOptions();
 
-	private File configFile;
-	private Properties existingProps;
-
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 
-		configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		existingProps = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Load the old store, so that we can override the values
 		String oldStore = null;
@@ -67,6 +62,8 @@ public class CopyStoreCommand implements
 	@Override
 	public void execute(
 			OperationParams params ) {
+
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -100,7 +97,7 @@ public class CopyStoreCommand implements
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				configFile,
+				getGeoWaveConfigFile(params),
 				existingProps);
 
 	}

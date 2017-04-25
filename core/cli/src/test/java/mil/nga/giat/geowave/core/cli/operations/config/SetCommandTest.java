@@ -15,7 +15,6 @@ import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
 public class SetCommandTest
 {
-
 	@Test
 	public void testExecute() {
 		String[] args = {
@@ -37,6 +36,7 @@ public class SetCommandTest
 		setcommand.setParameters(
 				name,
 				value);
+		setcommand.prepare(params);
 		setcommand.execute(params);
 
 		File f = (File) params.getContext().get(

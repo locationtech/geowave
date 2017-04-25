@@ -46,15 +46,11 @@ public class ClearCommand extends
 
 		String inputStoreName = parameters.get(0);
 
-		// Attempt to load store.
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
 			StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
+			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}

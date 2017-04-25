@@ -2,8 +2,13 @@ package mil.nga.giat.geowave.core.cli.prefix;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import com.beust.jcommander.Parameterized;
+
+import mil.nga.giat.geowave.core.cli.Constants;
+import mil.nga.giat.geowave.core.cli.utils.JCommanderParameterUtils;
 
 /**
  * This helper class is just a tuple that allows us to keep track of the
@@ -12,6 +17,7 @@ import com.beust.jcommander.Parameterized;
  */
 public class TranslationEntry
 {
+
 	private final Parameterized param;
 	private final Object object;
 	private final String prefix;
@@ -54,27 +60,105 @@ public class TranslationEntry
 		return prefixedNames;
 	}
 
+	/**
+	 * Return the description for a field's parameter definition. If the
+	 * parameter has a description key specified, the description will be looked
+	 * up in the resource bundle. If no description is defined, the default
+	 * CLI-specified description will be returned.
+	 * 
+	 * @return
+	 */
 	public String getDescription() {
 		String description = null;
-		if (getParam().getParameter() != null && getParam().getParameter().description() != null) {
-			description = getParam().getParameter().description();
+		// check to see if a description key is specified. If so, perform a
+		// lookup in the GeoWave labels properties for a description to use
+		// in place of the command line instance
+		if (getParam().getParameter() != null && getParam().getParameter().descriptionKey() != null) {
+			String descriptionKey = getParam().getParameter().descriptionKey();
+			if (descriptionKey != null && !"".equals(descriptionKey.trim())) {
+				descriptionKey = descriptionKey.trim();
+				description = getDescriptionFromResourceBundle(descriptionKey);
+			}
 		}
-		else if (getParam().isDynamicParameter()) {
-			description = getParam().getWrappedParameter().getDynamicParameter().description();
+		else if (getParam().isDynamicParameter() && getParam().getWrappedParameter() != null
+				&& getParam().getWrappedParameter().getDynamicParameter() != null) {
+			String descriptionKey = getParam().getWrappedParameter().getDynamicParameter().descriptionKey();
+			if (descriptionKey != null && !"".equals(descriptionKey.trim())) {
+				descriptionKey = descriptionKey.trim();
+				description = getDescriptionFromResourceBundle(descriptionKey);
+			}
+		}
+
+		// if no description is set from GeoWave labels properties, use the one
+		// set from the field parameter annotation definition
+		if (description == null || "".equals(description.trim())) {
+			if (getParam().getParameter() != null && getParam().getParameter().description() != null) {
+				description = getParam().getParameter().description();
+			}
+			else if (getParam().isDynamicParameter()) {
+				description = getParam().getWrappedParameter().getDynamicParameter().description();
+			}
 		}
 		return description == null ? "<no description>" : description;
 	}
 
-	public boolean isPassword() {
-		if (getParam().getParameter() != null) {
-			return getParam().getParameter().password();
+	/**
+	 * If a parameter has a defined description key, this method will lookup the
+	 * description for the specified key
+	 * 
+	 * @param descriptionKey
+	 *            Key to lookup for description
+	 * @return
+	 */
+	private String getDescriptionFromResourceBundle(
+			final String descriptionKey ) {
+		String description = "";
+		final String bundleName = Constants.GEOWAVE_DESCRIPTIONS_BUNDLE_NAME;
+		Locale locale = Locale.getDefault();
+		final String defaultResourcePath = bundleName + ".properties";
+		final String localeResourcePath = bundleName + "_" + locale.toString() + ".properties";
+		if (this.getClass().getResource(
+				"/" + defaultResourcePath) != null || this.getClass().getResource(
+				"/" + localeResourcePath) != null) {
+
+			// associate the default locale to the base properties, rather than
+			// the standard resource bundle requiring a separate base
+			// properties (GeoWaveLabels.properties) and a
+			// default-locale-specific properties
+			// (GeoWaveLabels_en_US.properties)
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(
+					bundleName,
+					locale,
+					ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
+			if (resourceBundle != null) {
+				if (resourceBundle.containsKey(descriptionKey)) {
+					description = resourceBundle.getString(descriptionKey);
+				}
+			}
 		}
-		else if (getParam().getWrappedParameter() != null) {
-			return getParam().getWrappedParameter().password();
-		}
-		return false;
+		return description;
 	}
 
+	/**
+	 * Specifies if this field is for a password
+	 * 
+	 * @return
+	 */
+	public boolean isPassword() {
+		boolean isPassword = false;
+		// check if a converter was specified. If so, if the converter is a
+		// GeoWaveBaseConverter instance, check the isPassword value of the
+		// converter
+		isPassword = isPassword || JCommanderParameterUtils.isPassword(getParam().getParameter());
+		isPassword = isPassword || JCommanderParameterUtils.isPassword(getParam().getWrappedParameter().getParameter());
+		return isPassword;
+	}
+
+	/**
+	 * Specifies if this field is hidden
+	 * 
+	 * @return
+	 */
 	public boolean isHidden() {
 		if (getParam().getParameter() != null) {
 			return getParam().getParameter().hidden();
@@ -85,14 +169,16 @@ public class TranslationEntry
 		return false;
 	}
 
+	/**
+	 * Specifies if this field is required
+	 * 
+	 * @return
+	 */
 	public boolean isRequired() {
-		if (getParam().getParameter() != null) {
-			return getParam().getParameter().required();
-		}
-		else if (getParam().getWrappedParameter() != null) {
-			return getParam().getWrappedParameter().required();
-		}
-		return false;
+		boolean isRequired = false;
+		isRequired = isRequired || JCommanderParameterUtils.isRequired(getParam().getParameter());
+		isRequired = isRequired || JCommanderParameterUtils.isRequired(getParam().getWrappedParameter().getParameter());
+		return isRequired;
 	}
 
 	/**

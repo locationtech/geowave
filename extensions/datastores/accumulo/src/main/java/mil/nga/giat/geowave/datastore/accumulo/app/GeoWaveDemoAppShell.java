@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 import jline.WindowsTerminal;
 import jline.console.ConsoleReader;
 
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+
 public class GeoWaveDemoAppShell
 {
 
@@ -27,7 +29,12 @@ public class GeoWaveDemoAppShell
 
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
 				: "geowave";
-		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "password";
+		// final String password = (System.getProperty("password") != null) ?
+		// System.getProperty("password") : "password";
+		// GeoWave:811 - providing ability to support encrypted passwords
+		final String password = new SecurityUtils()
+				.decryptHexEncodedValue(((System.getProperty("password") != null) ? System.getProperty("password")
+						: "password"));
 
 		final String[] shellArgs = new String[] {
 			"-u",

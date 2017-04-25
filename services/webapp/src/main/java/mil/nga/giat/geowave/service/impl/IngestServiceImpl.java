@@ -220,6 +220,7 @@ public class IngestServiceImpl implements
 						baseDir.getAbsolutePath(),
 						null,
 						null);
+				localIngester.prepare(new ManualOperationParams());
 				localIngester.execute(new ManualOperationParams());
 				return Response.ok().build();
 
@@ -238,6 +239,7 @@ public class IngestServiceImpl implements
 						null);
 				hdfsIngester.getMapReduceOptions().setJobTrackerHostPort(
 						jobTracker);
+				hdfsIngester.prepare(new ManualOperationParams());
 				hdfsIngester.execute(new ManualOperationParams());
 				return Response.ok().build();
 		}
