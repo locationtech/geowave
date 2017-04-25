@@ -1,3 +1,4 @@
+mil.nga.giat.geowave.adapter.auth
 mil.nga.giat.geowave.adapter.raster
 mil.nga.giat.geowave.adapter.raster.adapter
 mil.nga.giat.geowave.adapter.raster.adapter.merge
@@ -10,7 +11,6 @@ mil.nga.giat.geowave.adapter.raster.resize
 mil.nga.giat.geowave.adapter.raster.stats
 mil.nga.giat.geowave.adapter.raster.util
 mil.nga.giat.geowave.adapter.vector
-mil.nga.giat.geowave.adapter.vector.auth
 mil.nga.giat.geowave.adapter.vector.avro
 mil.nga.giat.geowave.adapter.vector.export
 mil.nga.giat.geowave.adapter.vector.field
