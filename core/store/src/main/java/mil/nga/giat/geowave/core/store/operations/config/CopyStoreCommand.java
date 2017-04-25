@@ -17,6 +17,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -36,6 +37,10 @@ public class CopyStoreCommand extends
 {
 
 	@Parameter(description = "<name> <new name>")
+	@RestParameters(names = {
+		"name",
+		"newname"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -123,28 +128,6 @@ public class CopyStoreCommand extends
 
 		return null;
 
-	}
-
-	@Override
-	public void readFormArgs(
-			Form form ) {
-		String name = form.getFirstValue("name");
-		String newname = form.getFirstValue("newname");
-		String isdefault = form.getFirstValue("default");
-
-		if (name == null || newname == null) {
-			this.setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"Requires: <name> <newname>");
-			return;
-		}
-
-		setParameters(
-				name,
-				newname);
-		if (isdefault != null && isdefault.equals("true")) {
-			makeDefault = true;
-		}
 	}
 
 	public List<String> getParameters() {

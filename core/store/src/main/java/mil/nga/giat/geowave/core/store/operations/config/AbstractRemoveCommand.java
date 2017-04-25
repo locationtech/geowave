@@ -10,6 +10,7 @@ import java.util.Set;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -23,6 +24,9 @@ public abstract class AbstractRemoveCommand extends
 {
 
 	@Parameter(description = "<name>", required = true, arity = 1)
+	@RestParameters(names = {
+		"name"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	protected String pattern = null;

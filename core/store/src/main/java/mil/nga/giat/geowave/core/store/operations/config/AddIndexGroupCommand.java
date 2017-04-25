@@ -17,6 +17,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -38,6 +39,10 @@ public class AddIndexGroupCommand extends
 	private static int GROUP_EXISTS = -3;
 
 	@Parameter(description = "<name> <comma separated list of indexes>")
+	@RestParameters(names = {
+		"key",
+		"value"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Override
@@ -66,17 +71,6 @@ public class AddIndexGroupCommand extends
 		}
 
 		return null;
-	}
-
-	@Override
-	public void readFormArgs(
-			Form form ) {
-		String key = form.getFirstValue("key");
-		String value = form.getFirstValue("value");
-
-		setParameters(
-				key,
-				value);
 	}
 
 	/**

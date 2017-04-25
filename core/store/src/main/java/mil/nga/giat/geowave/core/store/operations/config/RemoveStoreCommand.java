@@ -40,16 +40,4 @@ public class RemoveStoreCommand extends
 			OperationParams params ) {
 		computeResults(params);
 	}
-
-	@Override
-	public void readFormArgs(
-			Form form ) {
-		String name = form.getFirstValue("name");
-
-		if (name == null) {
-			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return;
-		}
-		setEntryName(name);
-	}
 }

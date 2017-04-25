@@ -17,6 +17,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -35,6 +36,10 @@ public class SetCommand extends
 	private static int WRITE_FAILURE = -2;
 
 	@Parameter(description = "<name> <value>")
+	@RestParameters(names = {
+		"key",
+		"value"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Override
@@ -62,17 +67,6 @@ public class SetCommand extends
 					e.getMessage());
 			return null;
 		}
-	}
-
-	@Override
-	public void readFormArgs(
-			Form form ) {
-		String key = form.getFirstValue("key");
-		String value = form.getFirstValue("value");
-
-		setParameters(
-				key,
-				value);
 	}
 
 	/**

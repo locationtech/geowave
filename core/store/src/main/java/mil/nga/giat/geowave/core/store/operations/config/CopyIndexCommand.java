@@ -19,6 +19,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
@@ -38,6 +39,10 @@ public class CopyIndexCommand extends
 	private static int INDEX_EXISTS = -2;
 
 	@Parameter(description = "<name> <new name>")
+	@RestParameters(names = {
+		"key",
+		"value"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -99,17 +104,6 @@ public class CopyIndexCommand extends
 		}
 
 		return null;
-	}
-
-	@Override
-	public void readFormArgs(
-			Form form ) {
-		String key = form.getFirstValue("key");
-		String value = form.getFirstValue("value");
-
-		setParameters(
-				key,
-				value);
 	}
 
 	/**

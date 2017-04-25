@@ -1,7 +1,9 @@
 package mil.nga.giat.geowave.service.rest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -73,7 +75,7 @@ public class RestServerTest
 				"name",
 				"store1");
 		formAdd.add(
-				"storetype",
+				"storeType",
 				"memory");
 		formAdd.add(
 				"default",
@@ -166,7 +168,7 @@ public class RestServerTest
 				"name",
 				"store1");
 		formAdd.add(
-				"storetype",
+				"storeType",
 				"memory");
 		formAdd.add(
 				"default",
@@ -307,4 +309,39 @@ public class RestServerTest
 				System.out);
 	}
 
+	// Ensures that calling an endpoint with a missing parameter is handled
+	// correctly.
+	@Test
+	public void callWithMissingParameter()
+			throws IOException,
+			ParseException {
+		File configFile = tempFolder.newFile("test_config");
+		ClientResource resourceAdd = new ClientResource(
+				"http://localhost:5152/geowave/config/addstore");
+		resourceAdd.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		Form formAdd = new Form();
+		formAdd.add(
+				"config_file",
+				configFile.getAbsolutePath());
+
+		try {
+			resourceAdd.post(formAdd);
+		}
+		catch (ResourceException e) {
+			assertEquals(
+					e.getStatus(),
+					Status.CLIENT_ERROR_BAD_REQUEST);
+			JSONParser parser = new JSONParser();
+			JSONObject obj = (JSONObject) parser.parse(resourceAdd.getResponseEntity().getText());
+			assertEquals(
+					obj.get("description"),
+					"Missing argument: name");
+			return;
+		}
+
+		fail("No exception was thrown");
+	}
 }

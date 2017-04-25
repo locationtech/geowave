@@ -20,6 +20,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -44,6 +45,9 @@ public class AddStoreCommand extends
 	public static final String PROPERTIES_CONTEXT = "properties";
 
 	@Parameter(description = "<name>")
+	@RestParameters(names = {
+		"name"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -67,6 +71,9 @@ public class AddStoreCommand extends
 
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
+			if (storeType.equals("memory")) GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+					storeType,
+					new MemoryStoreFactoryFamily());
 			pluginOptions.selectPlugin(storeType);
 		}
 		else {
@@ -154,35 +161,6 @@ public class AddStoreCommand extends
 				existingProps);
 
 		return null;
-	}
-
-	public void readFormArgs(
-			Form form ) {
-		String name = form.getFirstValue("name");
-		String type = form.getFirstValue("storetype");
-		String isdefault = form.getFirstValue("default");
-
-		if (name == null || type == null) {
-			this.setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"Requires: name and store type");
-			return;
-		}
-		parameters.add(name);
-		storeType = type;
-		if (isdefault != null && isdefault.equals("true")) {
-			makeDefault = true;
-		}
-
-		if (storeType.equals("memory")) {
-			GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-					storeType,
-					new MemoryStoreFactoryFamily());
-		}
-		else {
-			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return;
-		}
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

@@ -43,16 +43,4 @@ public class RemoveIndexCommand extends
 		pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
 		return super.computeResults(params);
 	}
-
-	@Override
-	public void readFormArgs(
-			Form form ) {
-		String pattern = form.getFirstValue("pattern");
-		if (pattern == null) {
-			this.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return;
-		}
-		this.setEntryName(pattern);
-	}
-
 }

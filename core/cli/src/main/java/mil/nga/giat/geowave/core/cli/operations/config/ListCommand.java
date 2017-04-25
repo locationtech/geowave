@@ -59,13 +59,6 @@ public class ListCommand extends
 	}
 
 	@Override
-	@Get("json")
-	public Properties restGet() {
-		filter = getQueryValue("filter");
-		return super.restGet();
-	}
-
-	@Override
 	protected Properties computeResults(
 			OperationParams params ) {
 
