@@ -59,7 +59,6 @@ public class AccumuloConstraintsDelete extends
 				duplicateCounts,
 				visibilityCounts,
 				authorizations);
-		// TODO Auto-generated constructor stub
 	}
 
 	public AccumuloConstraintsDelete(
@@ -88,7 +87,6 @@ public class AccumuloConstraintsDelete extends
 				duplicateCounts,
 				visibilityCounts,
 				authorizations);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -120,7 +118,12 @@ public class AccumuloConstraintsDelete extends
 				},
 				it);
 	}
-
+	
+	@Override
+	protected boolean useWholeRowIterator() {
+		return false;
+	}
+	
 	@Override
 	protected ScannerBase createScanner(
 			AccumuloOperations accumuloOperations,

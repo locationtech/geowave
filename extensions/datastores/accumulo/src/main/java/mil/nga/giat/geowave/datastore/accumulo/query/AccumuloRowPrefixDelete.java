@@ -38,7 +38,11 @@ public class AccumuloRowPrefixDelete<T> extends
 				limit,
 				visibilityCounts,
 				authorizations);
-		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected boolean useWholeRowIterator() {
+		return false;
 	}
 
 	@Override

@@ -39,9 +39,13 @@ public class AccumuloRowIdsDelete<T> extends
 				scanCallback,
 				dedupFilter,
 				authorizations);
-		// TODO Auto-generated constructor stub
 	}
-
+	
+	@Override
+	protected boolean useWholeRowIterator() {
+		return false;
+	}
+	
 	@Override
 	protected CloseableIterator<Object> initCloseableIterator(
 			ScannerBase scanner,
