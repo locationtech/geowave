@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A set of convenience methods for serializing and deserializing persistable
@@ -15,7 +16,7 @@ import org.apache.log4j.Logger;
  */
 public class PersistenceUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(PersistenceUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(PersistenceUtils.class);
 
 	public static byte[] toBinary(
 			final Collection<? extends Persistable> persistables ) {

@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -20,7 +21,7 @@ abstract public class AbstractHBaseRowQuery<T> extends
 		HBaseQuery
 {
 
-	private static final Logger LOGGER = Logger.getLogger(AbstractHBaseRowQuery.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHBaseRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractHBaseRowQuery(

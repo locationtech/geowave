@@ -14,7 +14,8 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 
 import com.beust.jcommander.JCommander;
@@ -42,7 +43,7 @@ public class VectorMRExportJobRunner extends
 		Configured implements
 		Tool
 {
-	private static final Logger LOGGER = Logger.getLogger(VectorMRExportCommand.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(VectorMRExportCommand.class);
 
 	public static final String BATCH_SIZE_KEY = "BATCH_SIZE";
 	private final DataStorePluginOptions storeOptions;

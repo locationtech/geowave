@@ -11,13 +11,14 @@ import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 public class SimpleFeatureSerializationProvider
 {
 
-	private static final Logger LOGGER = Logger.getLogger(SimpleFeatureSerializationProvider.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureSerializationProvider.class);
 
 	public static class WholeFeatureReader implements
 			FieldReader<byte[][]>

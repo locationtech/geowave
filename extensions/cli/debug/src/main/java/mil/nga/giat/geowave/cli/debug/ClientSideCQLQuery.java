@@ -9,7 +9,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
@@ -23,7 +24,7 @@ import com.beust.jcommander.Parameters;
 public class ClientSideCQLQuery extends
 		AbstractGeoWaveQuery
 {
-	private static Logger LOGGER = Logger.getLogger(ClientSideCQLQuery.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ClientSideCQLQuery.class);
 
 	@Parameter(names = "--cql", required = true, description = "CQL Filter executed client side")
 	private String cql;

@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
@@ -31,7 +32,7 @@ public class StatsCompositionTool<T> implements
 		Closeable,
 		Flushable
 {
-	private final static Logger LOGGER = Logger.getLogger(StatsCompositionTool.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StatsCompositionTool.class);
 	public static final int FLUSH_STATS_THRESHOLD = 16384;
 
 	int updateCount = 0;

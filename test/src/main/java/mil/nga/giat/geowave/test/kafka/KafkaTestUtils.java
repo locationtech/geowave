@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kafka.server.KafkaConfig;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
@@ -20,7 +21,7 @@ import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 
 public class KafkaTestUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(KafkaTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KafkaTestEnvironment.class);
 	private final static String MAX_MESSAGE_BYTES = "5000000";
 
 	protected static final File DEFAULT_LOG_DIR = new File(

@@ -31,7 +31,8 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.xml.sax.SAXException;
@@ -50,7 +51,7 @@ public class GpxIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<GpxTrack>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(GpxIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GpxIngestPlugin.class);
 
 	private final static String TAG_SEPARATOR = " ||| ";
 

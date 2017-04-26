@@ -3,7 +3,8 @@ package mil.nga.giat.geowave.datastore.accumulo.query;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -23,7 +24,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 abstract public class AbstractAccumuloRowQuery<T> extends
 		AccumuloQuery
 {
-	private static final Logger LOGGER = Logger.getLogger(AbstractAccumuloRowQuery.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAccumuloRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractAccumuloRowQuery(

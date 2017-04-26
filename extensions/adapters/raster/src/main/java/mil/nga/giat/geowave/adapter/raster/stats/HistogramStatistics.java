@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +14,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.processing.AbstractOperation;
 import org.geotools.coverage.processing.BaseStatisticsOperationJAI;
@@ -41,7 +41,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 public class HistogramStatistics extends
 		AbstractDataStatistics<GridCoverage>
 {
-	private static final Logger LOGGER = Logger.getLogger(HistogramStatistics.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HistogramStatistics.class);
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"HISTOGRAM_STATS");
 

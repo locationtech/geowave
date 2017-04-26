@@ -11,7 +11,9 @@ import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.opengis.coverage.grid.GridCoverage;
 
 public class NoDataMergeStrategy implements
@@ -20,7 +22,7 @@ public class NoDataMergeStrategy implements
 	public NoDataMergeStrategy() {}
 
 	private static final long serialVersionUID = 38473874l;
-	private static final Logger LOGGER = Logger.getLogger(NoDataMergeStrategy.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(NoDataMergeStrategy.class);
 
 	@Override
 	public void merge(

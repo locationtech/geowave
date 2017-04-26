@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
@@ -25,7 +26,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 public class MemoryDataStatisticsStore implements
 		DataStatisticsStore
 {
-	private final static Logger LOGGER = Logger.getLogger(MemoryDataStatisticsStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MemoryDataStatisticsStore.class);
 	private final Map<Key, DataStatistics<?>> statsMap = new HashMap<Key, DataStatistics<?>>();
 
 	/**

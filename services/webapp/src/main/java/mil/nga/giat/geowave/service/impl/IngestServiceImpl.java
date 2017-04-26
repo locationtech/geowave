@@ -22,7 +22,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
@@ -42,7 +44,7 @@ import mil.nga.giat.geowave.service.ServiceUtils;
 public class IngestServiceImpl implements
 		IngestService
 {
-	private final static Logger LOGGER = Logger.getLogger(IngestServiceImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(IngestServiceImpl.class);
 	private final Properties serviceProperties;
 	private final String hdfs;
 	private final String hdfsBase;
@@ -57,7 +59,9 @@ public class IngestServiceImpl implements
 			props = ServiceUtils.loadProperties(is);
 		}
 		catch (IOException e) {
-			LOGGER.error(e);
+			LOGGER.error(
+					e.getLocalizedMessage(),
+					e);
 		}
 
 		hdfs = ServiceUtils.getProperty(

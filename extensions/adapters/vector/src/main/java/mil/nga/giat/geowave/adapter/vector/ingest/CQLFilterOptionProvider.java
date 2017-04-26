@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
@@ -20,7 +21,7 @@ public class CQLFilterOptionProvider implements
 		Filter,
 		Persistable
 {
-	private final static Logger LOGGER = Logger.getLogger(CQLFilterOptionProvider.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CQLFilterOptionProvider.class);
 
 	@Parameter(names = "--cql", description = "A CQL filter, only data matching this filter will be ingested", converter = ConvertCQLStrToFilterConverter.class)
 	private FilterParameter convertedFilter = new FilterParameter(

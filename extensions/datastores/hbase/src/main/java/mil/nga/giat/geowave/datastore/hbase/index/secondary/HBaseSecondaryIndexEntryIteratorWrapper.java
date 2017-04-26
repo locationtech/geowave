@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -18,7 +19,7 @@ import mil.nga.giat.geowave.datastore.hbase.util.HBaseSecondaryIndexUtils;
 public class HBaseSecondaryIndexEntryIteratorWrapper<T> extends
 		SecondaryIndexEntryIteratorWrapper<T, Object>
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseSecondaryIndexEntryIteratorWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseSecondaryIndexEntryIteratorWrapper.class);
 	private final ResultScanner scanner;
 	private final byte[] columnFamily;
 	private final PrimaryIndex index;

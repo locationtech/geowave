@@ -8,7 +8,8 @@ import java.util.List;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -30,7 +31,7 @@ import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 public class InputFormatHBaseRangeQuery extends
 		HBaseConstraintsQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(InputFormatHBaseRangeQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(InputFormatHBaseRangeQuery.class);
 	private final ByteArrayRange range;
 	private final boolean isOutputWritable;
 

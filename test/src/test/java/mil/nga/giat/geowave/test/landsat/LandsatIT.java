@@ -33,7 +33,8 @@ import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.operation.projection.MapProjection;
@@ -108,7 +109,7 @@ public class LandsatIT
 	private static final double NORTH = 34.25;
 	private static final double SOUTH = 33.5;
 
-	private final static Logger LOGGER = Logger.getLogger(LandsatIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(LandsatIT.class);
 	private static long startMillis;
 
 	@BeforeClass

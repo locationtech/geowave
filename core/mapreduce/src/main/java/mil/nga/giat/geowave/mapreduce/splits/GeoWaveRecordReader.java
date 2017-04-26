@@ -15,7 +15,8 @@ import java.util.Set;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
@@ -59,7 +60,7 @@ public abstract class GeoWaveRecordReader<T> extends
 		}
 	}
 
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveRecordReader.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveRecordReader.class);
 	protected long numKeysRead;
 	protected CloseableIterator<?> iterator;
 	protected Map<RangeLocationPair, ProgressPerRange> progressPerRange;

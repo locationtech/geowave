@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -65,7 +66,7 @@ public class GeoWaveKMeansIT
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveKMeansIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveKMeansIT.class);
 	private static long startMillis;
 
 	@BeforeClass

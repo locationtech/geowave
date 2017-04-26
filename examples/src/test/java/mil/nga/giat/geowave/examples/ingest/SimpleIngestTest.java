@@ -23,7 +23,8 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.opengis.feature.simple.SimpleFeature;
@@ -34,7 +35,7 @@ import com.vividsolutions.jts.geom.Point;
 
 public class SimpleIngestTest
 {
-	private final static Logger LOGGER = Logger.getLogger(SimpleIngestTest.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SimpleIngestTest.class);
 
 	final AccumuloOptions accumuloOptions = new AccumuloOptions();
 	final GeometryFactory factory = new GeometryFactory();

@@ -11,7 +11,8 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
@@ -27,7 +28,7 @@ public class FeatureHyperLogLogStatistics extends
 		AbstractDataStatistics<SimpleFeature> implements
 		FeatureStatistic
 {
-	private final static Logger LOGGER = Logger.getLogger(FeatureHyperLogLogStatistics.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureHyperLogLogStatistics.class);
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"ATT_HYPERLLP");
 

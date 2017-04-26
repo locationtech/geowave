@@ -25,7 +25,8 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class generically supports most of the operations necessary to implement
@@ -44,7 +45,7 @@ import org.apache.log4j.Logger;
 abstract public class AbstractDataAdapter<T> implements
 		WritableDataAdapter<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractDataAdapter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDataAdapter.class);
 	protected Map<Class<?>, IndexFieldHandler<T, ? extends CommonIndexValue, Object>> typeMatchingFieldHandlers;
 	protected Map<ByteArrayId, IndexFieldHandler<T, ? extends CommonIndexValue, Object>> dimensionMatchingFieldHandlers;
 	protected List<NativeFieldHandler<T, Object>> nativeFieldHandlers;

@@ -9,7 +9,8 @@ import kafka.producer.ProducerConfig;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 
 import org.apache.avro.specific.SpecificRecordBase;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class to hold intermediate stage data that must be used throughout the life
@@ -18,7 +19,7 @@ import org.apache.log4j.Logger;
 public class StageKafkaData<T extends SpecificRecordBase>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(StageKafkaData.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StageKafkaData.class);
 	private final Map<String, Producer<String, T>> cachedProducers = new HashMap<String, Producer<String, T>>();
 	private final Properties properties;
 

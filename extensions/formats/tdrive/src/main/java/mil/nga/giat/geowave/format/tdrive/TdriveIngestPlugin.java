@@ -29,7 +29,8 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.mortbay.log.Log;
 import org.opengis.feature.simple.SimpleFeature;
@@ -43,7 +44,7 @@ public class TdriveIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<TdrivePoint>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(TdriveIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(TdriveIngestPlugin.class);
 
 	private final SimpleFeatureBuilder tdrivepointBuilder;
 	private final SimpleFeatureType tdrivepointType;

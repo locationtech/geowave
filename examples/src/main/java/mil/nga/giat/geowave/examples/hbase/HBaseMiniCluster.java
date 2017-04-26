@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
@@ -14,7 +14,7 @@ import com.github.sakserv.propertyparser.PropertyParser;
 
 public class HBaseMiniCluster
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseMiniCluster.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HBaseMiniCluster.class);
 	private static final String HBASE_PROPS_FILE = "hbase.properties";
 
 	protected String zookeeper;
@@ -64,7 +64,8 @@ public class HBaseMiniCluster
 	}
 
 	public HBaseMiniCluster() {
-		LOGGER.setLevel(Level.DEBUG);
+		org.apache.log4j.Logger.getRootLogger().setLevel(
+				org.apache.log4j.Level.DEBUG);
 		LOGGER.debug("HBASE TEST SETUP!");
 
 		PropertyParser propertyParser = null;

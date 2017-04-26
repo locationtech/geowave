@@ -19,7 +19,8 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
@@ -30,7 +31,7 @@ abstract public class AbstractGeoWaveQuery extends
 		DefaultOperation implements
 		Command
 {
-	private static Logger LOGGER = Logger.getLogger(AbstractGeoWaveQuery.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveQuery.class);
 
 	@Parameter(description = "<storename>")
 	private List<String> parameters = new ArrayList<String>();

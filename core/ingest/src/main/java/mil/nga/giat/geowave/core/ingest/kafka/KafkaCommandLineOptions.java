@@ -2,12 +2,12 @@ package mil.nga.giat.geowave.core.ingest.kafka;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 
 public class KafkaCommandLineOptions
 {
-	private final static Logger LOGGER = Logger.getLogger(KafkaCommandLineOptions.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KafkaCommandLineOptions.class);
 
 	@Parameter(names = "--kafkaprops", required = true, description = "Properties file containing Kafka properties")
 	private String kafkaPropertyFile;
@@ -85,7 +85,7 @@ public class KafkaCommandLineOptions
 		final File propFile = new File(
 				kafkaPropertiesPath);
 		if (!propFile.exists()) {
-			LOGGER.fatal("File does not exist: " + kafkaPropertiesPath);
+			LOGGER.error("File does not exist: " + kafkaPropertiesPath);
 			return false;
 		}
 
@@ -99,7 +99,7 @@ public class KafkaCommandLineOptions
 
 		}
 		catch (final IOException e) {
-			LOGGER.fatal(
+			LOGGER.error(
 					"Unable to load Kafka properties file: ",
 					e);
 			return false;

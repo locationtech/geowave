@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -16,11 +15,14 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SimpleIngestProducerConsumer extends
 		SimpleIngest
 {
 
-	private static Logger log = Logger.getLogger(SimpleIngestProducerConsumer.class);
+	private static Logger log = LoggerFactory.getLogger(SimpleIngestProducerConsumer.class);
 	private final FeatureCollection features = new FeatureCollection();
 
 	public static void main(

@@ -17,7 +17,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -31,7 +32,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 		LocalFileIngestPlugin<T>,
 		IngestFromHdfsPlugin<WholeFile, T>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractLocalIngestWithMapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractLocalIngestWithMapper.class);
 
 	@Override
 	public boolean isUseReducerPreferred() {

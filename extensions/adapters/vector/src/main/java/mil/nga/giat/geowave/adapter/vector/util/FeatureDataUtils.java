@@ -13,7 +13,8 @@ import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.factory.GeoTools;
 import org.geotools.feature.SchemaException;
@@ -35,7 +36,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public class FeatureDataUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(FeatureDataUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureDataUtils.class);
 	private static final Object MUTEX = new Object();
 	private static boolean classLoaderInitialized = false;
 

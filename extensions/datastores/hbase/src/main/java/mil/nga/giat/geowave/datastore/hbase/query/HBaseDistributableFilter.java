@@ -9,7 +9,8 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -43,7 +44,7 @@ import mil.nga.giat.geowave.datastore.hbase.encoding.HBaseCommonIndexedPersisten
 public class HBaseDistributableFilter extends
 		FilterBase
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseDistributableFilter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseDistributableFilter.class);
 
 	private final List<DistributableQueryFilter> filterList;
 	protected CommonIndexModel model;

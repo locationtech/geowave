@@ -3,11 +3,12 @@ package mil.nga.giat.geowave.analytic.mapreduce.kde;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GaussianFilter
 {
-	private final static Logger LOGGER = Logger.getLogger(GaussianFilter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GaussianFilter.class);
 	private static final double SQRT_2_PI = Math.sqrt(2 * Math.PI);
 
 	/**

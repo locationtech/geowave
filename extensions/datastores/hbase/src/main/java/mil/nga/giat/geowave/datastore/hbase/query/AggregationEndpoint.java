@@ -18,7 +18,8 @@ import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.protobuf.ResponseConverter;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
@@ -38,7 +39,7 @@ public class AggregationEndpoint extends
 		Coprocessor,
 		CoprocessorService
 {
-	private static final Logger LOGGER = Logger.getLogger(AggregationEndpoint.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AggregationEndpoint.class);
 
 	private RegionCoprocessorEnvironment env;
 

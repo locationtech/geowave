@@ -11,16 +11,14 @@ import java.util.NavigableMap;
 import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -49,19 +47,10 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.hadoop.hbase.client.Delete;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
-
 @SuppressWarnings("rawtypes")
 public class HBaseUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseUtils.class);
 
 	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID when
 	// needed for uniqueness

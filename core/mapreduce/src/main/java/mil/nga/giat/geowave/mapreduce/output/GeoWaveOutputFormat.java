@@ -16,7 +16,8 @@ import org.apache.hadoop.mapreduce.OutputFormat;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -43,7 +44,7 @@ public class GeoWaveOutputFormat extends
 		OutputFormat<GeoWaveOutputKey<Object>, Object>
 {
 	private static final Class<?> CLASS = GeoWaveOutputFormat.class;
-	protected static final Logger LOGGER = Logger.getLogger(CLASS);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CLASS);
 
 	@Override
 	public RecordWriter<GeoWaveOutputKey<Object>, Object> getRecordWriter(

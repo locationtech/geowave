@@ -37,7 +37,8 @@ import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -54,7 +55,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 public class BasicAccumuloOperations implements
 		AccumuloOperations
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicAccumuloOperations.class);
 	private static final int DEFAULT_NUM_THREADS = 16;
 	private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
 	private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB

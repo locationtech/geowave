@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -30,7 +31,7 @@ import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 public class CompoundHierarchicalIndexStrategyWrapper implements
 		HierarchicalNumericIndexStrategy
 {
-	private final static Logger LOGGER = Logger.getLogger(CompoundHierarchicalIndexStrategyWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CompoundHierarchicalIndexStrategyWrapper.class);
 	private List<CompoundIndexStrategy> parentStrategies;
 	private HierarchicalNumericIndexStrategy firstHierarchicalStrategy;
 

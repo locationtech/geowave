@@ -17,7 +17,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.After;
@@ -50,7 +51,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeoWaveIngestGeoserverIT
 {
 
-	private static final Logger LOGGER = Logger.getLogger(GeoWaveIngestGeoserverIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveIngestGeoserverIT.class);
 
 	private static final String WORKSPACE = "testomatic";
 	private static final String WMS_VERSION = "1.3";

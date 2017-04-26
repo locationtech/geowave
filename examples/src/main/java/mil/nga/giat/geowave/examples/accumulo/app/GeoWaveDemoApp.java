@@ -9,8 +9,8 @@ import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
 import org.apache.accumulo.monitor.Monitor;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 
@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFa
 
 public class GeoWaveDemoApp
 {
-	private static final Logger LOGGER = Logger.getLogger(GeoWaveDemoApp.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveDemoApp.class);
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 
 	protected static boolean isYarn() {
@@ -30,8 +30,8 @@ public class GeoWaveDemoApp
 	public static void main(
 			final String[] args )
 			throws Exception {
-		Logger.getRootLogger().setLevel(
-				Level.WARN);
+		org.apache.log4j.Logger.getRootLogger().setLevel(
+				org.apache.log4j.Level.WARN);
 
 		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System
 				.getProperty("interactive")) : true;

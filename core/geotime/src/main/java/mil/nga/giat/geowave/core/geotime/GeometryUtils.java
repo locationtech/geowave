@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
@@ -32,7 +33,7 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 public class GeometryUtils
 {
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
-	private final static Logger LOGGER = Logger.getLogger(GeometryUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
 
 	public static Constraints basicConstraintsFromGeometry(

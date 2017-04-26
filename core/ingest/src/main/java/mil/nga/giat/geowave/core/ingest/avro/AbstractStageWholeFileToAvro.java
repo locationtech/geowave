@@ -6,7 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
 import org.apache.avro.Schema;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class can be sub-classed as a general-purpose recipe for parallelizing
@@ -15,7 +16,7 @@ import org.apache.log4j.Logger;
 abstract public class AbstractStageWholeFileToAvro<O> implements
 		AvroFormatPlugin<WholeFile, O>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractStageWholeFileToAvro.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractStageWholeFileToAvro.class);
 
 	@Override
 	public Schema getAvroSchema() {

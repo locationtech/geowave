@@ -4,7 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class contains a set of Temporal utility methods that are generally
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class TimeUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(TimeUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(TimeUtils.class);
 
 	/**
 	 * Convert a calendar object to a long in the form of milliseconds since the

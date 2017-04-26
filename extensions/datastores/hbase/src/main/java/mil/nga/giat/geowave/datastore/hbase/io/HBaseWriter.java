@@ -19,8 +19,8 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.BufferedMutator.ExceptionListener;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Functionality similar to <code> BatchWriterWrapper </code>
@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 public class HBaseWriter implements
 		Writer<RowMutations>
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseWriter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseWriter.class);
 	private final TableName tableName;
 	private final Admin admin;
 	private static final long SLEEP_INTERVAL_FOR_CF_VERIFY = 100L;
@@ -54,7 +54,7 @@ public class HBaseWriter implements
 				"hbase.online.schema.update.enable",
 				false);
 
-		if (LOGGER.getLevel() == Level.DEBUG) {
+		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Schema Update Enabled = " + schemaUpdateEnabled);
 
 			final String check = admin.getConfiguration().get(

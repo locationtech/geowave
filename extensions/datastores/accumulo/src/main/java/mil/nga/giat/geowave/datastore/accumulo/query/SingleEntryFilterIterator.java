@@ -14,7 +14,8 @@ import org.apache.accumulo.core.iterators.Filter;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.BaseEncoding;
 
@@ -24,7 +25,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 public class SingleEntryFilterIterator extends
 		Filter
 {
-	private final static Logger LOGGER = Logger.getLogger(SingleEntryFilterIterator.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SingleEntryFilterIterator.class);
 	public static final String ENTRY_FILTER_ITERATOR_NAME = "GEOWAVE_ENTRY_FILTER_ITERATOR";
 	public static final int ENTRY_FILTER_ITERATOR_PRIORITY = 25;
 	public static final String WHOLE_ROW_ITERATOR_NAME = "GEOWAVE_WHOLE_ROW_ITERATOR";

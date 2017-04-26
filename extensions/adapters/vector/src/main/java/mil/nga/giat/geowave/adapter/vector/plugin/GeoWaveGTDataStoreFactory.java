@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.factory.FactoryIteratorProvider;
@@ -48,7 +49,7 @@ public class GeoWaveGTDataStoreFactory implements
 	}
 
 	public final static String DISPLAY_NAME_PREFIX = "GeoWave Datastore - ";
-	private static final Logger LOGGER = Logger.getLogger(GeoWaveGTDataStoreFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStoreFactory.class);
 	private final List<DataStoreCacheEntry> dataStoreCache = new ArrayList<DataStoreCacheEntry>();
 	private final StoreFactoryFamilySpi geowaveStoreFactoryFamily;
 	private static Boolean isAvailable = null;

@@ -25,7 +25,8 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -92,7 +93,7 @@ public class AccumuloDataStore extends
 {
 	public final static String TYPE = "accumulo";
 
-	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloDataStore.class);
 
 	private final AccumuloOperations accumuloOperations;
 	private final AccumuloOptions accumuloOptions;

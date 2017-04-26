@@ -11,7 +11,8 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -28,7 +29,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 public abstract class SplitsProvider
 {
-	private final static Logger LOGGER = Logger.getLogger(SplitsProvider.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SplitsProvider.class);
 
 	private static final BigInteger TWO = BigInteger.valueOf(2);
 

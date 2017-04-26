@@ -10,7 +10,8 @@ import java.util.Iterator;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.WritableComparator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -26,7 +27,7 @@ import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
 public class GeoWaveOutputKey<T> extends
 		GeoWaveKey
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveOutputKey.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOutputKey.class);
 	/**
 	 *
 	 */

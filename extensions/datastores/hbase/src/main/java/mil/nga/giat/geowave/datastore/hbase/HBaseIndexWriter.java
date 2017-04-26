@@ -13,10 +13,10 @@ import java.util.Map.Entry;
 
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -37,7 +37,7 @@ public class HBaseIndexWriter<T> extends
 		DataStoreIndexWriter<T, RowMutations>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseIndexWriter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseIndexWriter.class);
 	private final BasicHBaseOperations operations;
 	protected final HBaseOptions options;
 

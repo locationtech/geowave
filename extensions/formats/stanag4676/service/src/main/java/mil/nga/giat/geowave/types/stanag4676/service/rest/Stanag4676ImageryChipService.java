@@ -43,7 +43,8 @@ import mil.nga.giat.geowave.format.stanag4676.image.ImageChipUtils;
 import mil.nga.giat.geowave.service.ServiceUtils;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jcodec.codecs.vpx.NopRateControl;
 import org.jcodec.codecs.vpx.RateControl;
 import org.jcodec.codecs.vpx.VP8Encoder;
@@ -62,7 +63,7 @@ import com.google.common.io.Files;
 @Path("stanag4676")
 public class Stanag4676ImageryChipService
 {
-	private static Logger LOGGER = Logger.getLogger(Stanag4676ImageryChipService.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Stanag4676ImageryChipService.class);
 	@Context
 	ServletContext context;
 	private static DataStore dataStore;
@@ -514,32 +515,37 @@ public class Stanag4676ImageryChipService
 			props = ServiceUtils.loadProperties(is);
 		}
 		catch (IOException e) {
-			LOGGER.error(e);
+			LOGGER.error(
+					e.getLocalizedMessage(),
+					e);
 		}
-		LOGGER.info("Found " + props.size() + " props");
-		final Map<String, String> strMap = new HashMap<String, String>();
+		LOGGER.info(
+				"Found {} props",
+				(props != null ? props.size() : 0));
+		if (props != null) {
+			final Map<String, String> strMap = new HashMap<String, String>();
 
-		final Set<Object> keySet = props.keySet();
-		final Iterator<Object> it = keySet.iterator();
-		while (it.hasNext()) {
-			final String key = it.next().toString();
-			final String value = ServiceUtils.getProperty(
-					props,
-					key);
-			strMap.put(
-					key,
-					value);
-			// HP Fortify "Log Forging" false positive
-			// What Fortify considers "user input" comes only
-			// from users with OS-level access anyway
-			LOGGER.info("    Key/Value: " + key + "/" + value);
+			final Set<Object> keySet = props.keySet();
+			final Iterator<Object> it = keySet.iterator();
+			while (it.hasNext()) {
+				final String key = it.next().toString();
+				final String value = ServiceUtils.getProperty(
+						props,
+						key);
+				strMap.put(
+						key,
+						value);
+				// HP Fortify "Log Forging" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
+				LOGGER.info("    Key/Value: " + key + "/" + value);
+			}
+			// Can be removed when factory is fixed
+			GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
+
+			dataStore = GeoWaveStoreFinder.createDataStore(strMap);
+
 		}
-
-		// Can be removed when factory is fixed
-		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
-
-		dataStore = GeoWaveStoreFinder.createDataStore(strMap);
-
 		if (dataStore == null) {
 			LOGGER.error("Unable to create datastore for 4676 service");
 		}

@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.data.Mutation;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.base.Writer;
 
@@ -15,7 +16,7 @@ import mil.nga.giat.geowave.core.store.base.Writer;
 public class BatchWriterWrapper implements
 		Writer<Mutation>
 {
-	private final static Logger LOGGER = Logger.getLogger(BatchWriterWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BatchWriterWrapper.class);
 	private org.apache.accumulo.core.client.BatchWriter batchWriter;
 
 	public BatchWriterWrapper(

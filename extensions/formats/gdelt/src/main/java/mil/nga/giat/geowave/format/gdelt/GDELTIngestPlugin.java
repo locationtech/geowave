@@ -33,7 +33,8 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -49,7 +50,7 @@ public class GDELTIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<WholeFile>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(GDELTIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GDELTIngestPlugin.class);
 
 	private SimpleFeatureBuilder gdeltEventBuilder;
 	private SimpleFeatureType gdeltEventType;

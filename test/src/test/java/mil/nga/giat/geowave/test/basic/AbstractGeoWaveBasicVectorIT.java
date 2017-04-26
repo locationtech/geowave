@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.math.util.MathUtils;
-import org.apache.log4j.Logger;
-import org.junit.AfterClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
@@ -58,7 +58,7 @@ import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
 
 abstract public class AbstractGeoWaveBasicVectorIT
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractGeoWaveBasicVectorIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveBasicVectorIT.class);
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "basic-testdata.zip";
 	protected static final String TEST_FILTER_PACKAGE = TestUtils.TEST_CASE_BASE + "filter/";
 	protected static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";

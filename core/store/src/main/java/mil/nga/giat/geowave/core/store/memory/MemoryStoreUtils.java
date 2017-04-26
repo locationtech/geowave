@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -27,7 +28,7 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class MemoryStoreUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(MemoryStoreUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MemoryStoreUtils.class);
 
 	protected static boolean isAuthorized(
 			final byte[] visibility,

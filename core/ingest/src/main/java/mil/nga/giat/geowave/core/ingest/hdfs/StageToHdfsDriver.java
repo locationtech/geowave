@@ -8,7 +8,8 @@ import org.apache.avro.file.DataFileWriter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
@@ -21,7 +22,7 @@ import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 public class StageToHdfsDriver extends
 		AbstractLocalFileDriver<AvroFormatPlugin<?, ?>, StageRunData>
 {
-	private final static Logger LOGGER = Logger.getLogger(StageToHdfsDriver.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StageToHdfsDriver.class);
 	private final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins;
 	private final String hdfsHostPort;
 	private final String basePath;
@@ -94,7 +95,7 @@ public class StageToHdfsDriver extends
 					return true;
 				}
 				catch (final IOException e) {
-					LOGGER.fatal(
+					LOGGER.error(
 							"Unexpected I/O exception when reading input files",
 							e);
 					return false;
@@ -102,7 +103,7 @@ public class StageToHdfsDriver extends
 			}
 		}
 		catch (final IOException e) {
-			LOGGER.fatal(
+			LOGGER.error(
 					"Unable to create remote HDFS directory",
 					e);
 			return false;
