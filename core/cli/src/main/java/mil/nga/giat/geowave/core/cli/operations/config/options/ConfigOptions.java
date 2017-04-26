@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -24,8 +26,11 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 
+import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.utils.JCommanderParameterUtils;
 
 /**
  * Config options allows the user to override the default location for
@@ -49,17 +54,17 @@ public class ConfigOptions
 		"-cf",
 		"--config-file"
 	}, description = "Override configuration file (default is <home>/.geowave/config.properties)")
-	private static String configFile;
+	private String configFile;
 
 	public ConfigOptions() {
 
 	}
 
-	public static String getConfigFile() {
+	public String getConfigFile() {
 		return configFile;
 	}
 
-	public static void setConfigFile(
+	public void setConfigFile(
 			final String configFilePath ) {
 		configFile = configFilePath;
 	}
@@ -152,15 +157,11 @@ public class ConfigOptions
 				configFile);
 	}
 
-	/**
-	 * Write the given properties to the file, and log an error if an exception
-	 * occurs.
-	 * 
-	 * @return true if success, false if failure
-	 */
 	public static boolean writeProperties(
 			final File configFile,
-			final Properties properties ) {
+			final Properties properties,
+			Class<?> clazz,
+			String namespacePrefix ) {
 		try {
 			Properties tmp = new Properties() {
 				private static final long serialVersionUID = 1L;
@@ -177,6 +178,51 @@ public class ConfigOptions
 							super.keySet()));
 				}
 			};
+
+			// check if encryption is enabled - it is by default and would need
+			// to be explicitly disabled
+			if (Boolean.parseBoolean(properties.getProperty(
+					Constants.ENCRYPTION_ENABLED_KEY,
+					"true"))) {
+				// check if any values exist that need to be encrypted before
+				// written to properties
+				if (clazz != null) {
+					Field[] fields = clazz.getDeclaredFields();
+					for (Field field : fields) {
+						for (Annotation annotation : field.getAnnotations()) {
+							if (annotation.annotationType() == Parameter.class) {
+								Parameter parameter = (Parameter) annotation;
+
+								if (JCommanderParameterUtils.isPassword(parameter)) {
+									String storeFieldName = (namespacePrefix != null && !"".equals(namespacePrefix
+											.trim())) ? namespacePrefix + "." + field.getName() : field.getName();
+									if (properties.containsKey(storeFieldName)) {
+										String value = properties.getProperty(storeFieldName);
+										String encryptedValue = value;
+										try {
+											File tokenFile = SecurityUtils
+													.getFormattedTokenKeyFileForConfig(configFile);
+											encryptedValue = SecurityUtils.encryptAndHexEncodeValue(
+													value,
+													tokenFile.getAbsolutePath());
+										}
+										catch (Exception e) {
+											LOGGER.error(
+													"An error occurred encrypting specified password value: "
+															+ e.getLocalizedMessage(),
+													e);
+										}
+										properties.setProperty(
+												storeFieldName,
+												encryptedValue);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
 			tmp.putAll(properties);
 			try (FileOutputStream str = new FileOutputStream(
 					configFile)) {
@@ -198,6 +244,22 @@ public class ConfigOptions
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Write the given properties to the file, and log an error if an exception
+	 * occurs.
+	 * 
+	 * @return true if success, false if failure
+	 */
+	public static boolean writeProperties(
+			final File configFile,
+			final Properties properties ) {
+		return writeProperties(
+				configFile,
+				properties,
+				null,
+				null);
 	}
 
 	/**

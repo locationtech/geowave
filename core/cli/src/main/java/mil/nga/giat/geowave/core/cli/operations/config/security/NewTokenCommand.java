@@ -72,10 +72,10 @@ public class NewTokenCommand extends
 									String configValue = configProps.getProperty(configKey);
 									if (configValue != null && !"".equals(configValue.trim())
 											&& BaseEncryption.isProperlyWrapped(configValue)) {
-										String decryptedValue = new SecurityUtils().decryptHexEncodedValue(
+										String decryptedValue = SecurityUtils.decryptHexEncodedValue(
 												configValue,
 												backupFile.getCanonicalPath());
-										String encryptedValue = new SecurityUtils().encryptAndHexEncodeValue(
+										String encryptedValue = SecurityUtils.encryptAndHexEncodeValue(
 												decryptedValue,
 												tokenFile.getCanonicalPath());
 										configProps.put(

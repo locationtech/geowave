@@ -17,7 +17,6 @@ import com.beust.jcommander.internal.JDK6Console;
 
 import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import mil.nga.giat.geowave.core.cli.utils.PropertiesUtils;
 
 /**
@@ -49,9 +48,9 @@ public abstract class GeoWaveBaseConverter<T> extends
 
 	private void init() {
 		File propertyFile = null;
-		if (ConfigOptions.getConfigFile() != null) {
+		if (new ConfigOptions().getConfigFile() != null) {
 			propertyFile = new File(
-					ConfigOptions.getConfigFile());
+					new ConfigOptions().getConfigFile());
 		}
 		else {
 			propertyFile = ConfigOptions.getDefaultPropertyFile();
@@ -106,9 +105,8 @@ public abstract class GeoWaveBaseConverter<T> extends
 				promptMessage);
 		char[] passwordChars = getConsole().readPassword(
 				defaultEchoEnabled);
-		String password = new String(
+		return new String(
 				passwordChars);
-		return decryptValue(password);
 	}
 
 	/**
@@ -137,39 +135,8 @@ public abstract class GeoWaveBaseConverter<T> extends
 				promptMessage);
 		char[] passwordChars = getConsole().readPassword(
 				passwordEchoEnabled);
-		String password = new String(
+		return new String(
 				passwordChars);
-		return decryptValue(password);
-	}
-
-	protected static String encryptValue(
-			String value ) {
-		if (value != null) {
-			try {
-				return new SecurityUtils().encryptAndHexEncodeValue(value);
-			}
-			catch (Exception e) {
-				LOGGER.error(
-						"An error occurred decrypting the provided value: [" + e.getLocalizedMessage() + "]",
-						e);
-			}
-		}
-		return value;
-	}
-
-	protected static String decryptValue(
-			String value ) {
-		if (value != null) {
-			try {
-				return new SecurityUtils().decryptHexEncodedValue(value);
-			}
-			catch (Exception e) {
-				LOGGER.error(
-						"An error occurred decrypting the provided value: [" + e.getLocalizedMessage() + "]",
-						e);
-			}
-		}
-		return value;
 	}
 
 	/**

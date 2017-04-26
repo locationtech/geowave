@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,10 +49,7 @@ public class DefaultOperation implements
 		File parentDir = (getGeoWaveDirectory() != null) ? getGeoWaveDirectory() : new File(
 				mil.nga.giat.geowave.core.cli.utils.FileUtils.formatFilePath("~" + File.separator
 						+ ConfigOptions.GEOWAVE_CACHE_PATH));
-		File tokenFile = new File(
-				parentDir,
-				BaseEncryption.getFormattedTokenFileName());
-
+		File tokenFile = SecurityUtils.getFormattedTokenKeyFileForParentDir(parentDir);
 		if (tokenFile == null || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
 		}
@@ -75,14 +71,8 @@ public class DefaultOperation implements
 			OperationParams params )
 			throws Exception {
 
-		if (ConfigOptions.getConfigFile() != null) {
-			setGeoWaveConfigFile(new File(
-					ConfigOptions.getConfigFile()));
-		}
-		else {
-			setGeoWaveConfigFile((File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT));
-		}
+		setGeoWaveConfigFile((File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT));
 
 		if (getGeoWaveConfigFile(params) == null) {
 			// if file does not exist
@@ -135,23 +125,15 @@ public class DefaultOperation implements
 	 */
 	protected boolean generateNewEncryptionToken(
 			File tokenFile ) {
-		boolean success = false;
 		try {
-			sLog.info(
-					"Writing new encryption token to file at path {}",
-					tokenFile.getCanonicalPath());
-			FileUtils.writeStringToFile(
-					tokenFile,
-					SecurityUtils.generateNewToken());
-			sLog.info("Completed writing new encryption token to file");
-			success = true;
+			return BaseEncryption.generateNewEncryptionToken(tokenFile);
 		}
 		catch (Exception ex) {
 			sLog.error(
 					"An error occurred writing new encryption token to file: " + ex.getLocalizedMessage(),
 					ex);
 		}
-		return success;
+		return false;
 	}
 
 	/**

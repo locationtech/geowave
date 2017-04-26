@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
@@ -17,15 +18,22 @@ import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
  */
 public class JCommanderParameterUtils
 {
-
 	private static Logger LOGGER = LoggerFactory.getLogger(JCommanderParameterUtils.class);
 
 	public static boolean isPassword(
 			Parameter parameter ) {
 		boolean isPassword = false;
 		if (parameter != null) {
-			if (parameter.converter() != null && parameter.converter().getSuperclass().equals(
-					GeoWaveBaseConverter.class)) {
+			Class<?> superClass = null;
+			Class<? extends IStringConverter<?>> converterClass = parameter.converter();
+			if (converterClass != null) {
+				superClass = converterClass.getSuperclass();
+				while (superClass != null && superClass != GeoWaveBaseConverter.class) {
+					superClass = superClass.getSuperclass();
+				}
+			}
+
+			if (superClass != null && superClass.equals(GeoWaveBaseConverter.class)) {
 				GeoWaveBaseConverter<?> converter = getParameterBaseConverter(parameter);
 				if (converter != null) {
 					isPassword = isPassword || converter.isPassword();

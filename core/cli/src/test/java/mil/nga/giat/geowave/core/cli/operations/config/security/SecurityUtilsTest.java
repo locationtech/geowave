@@ -8,6 +8,8 @@ import java.io.File;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 /**
@@ -20,15 +22,21 @@ public class SecurityUtilsTest
 			throws Exception {
 		String rawInput = "geowave";
 
-		File tokenFile = new File(
-				new SecurityUtils().getResourceLocation());
+		final String resourceLocation = String.format(
+				"%s%s%s",
+				System.getProperty("user.home"),
+				File.separator,
+				ConfigOptions.GEOWAVE_CACHE_PATH);
+
+		final File tokenFile = SecurityUtils.getFormattedTokenKeyFileForParentDir(new File(
+				resourceLocation));
 		if (tokenFile != null && tokenFile.exists()) {
-			String encryptedValue = new SecurityUtils().encryptAndHexEncodeValue(
+			String encryptedValue = SecurityUtils.encryptAndHexEncodeValue(
 					rawInput,
 					tokenFile.getCanonicalPath());
 			System.out.println("encryptedValue: " + encryptedValue);
 
-			String decryptedValue = new SecurityUtils().decryptHexEncodedValue(
+			String decryptedValue = SecurityUtils.decryptHexEncodedValue(
 					encryptedValue,
 					tokenFile.getCanonicalPath());
 			System.out.println("decryptedValue: " + decryptedValue);

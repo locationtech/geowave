@@ -59,10 +59,10 @@ public abstract class BaseEncryption
 			"\\{") + "([^}]+)" + SUFFIX.replace(
 			"{",
 			"\\{"));
-	private byte[] prefixBytes;
-	private byte[] suffixBytes;
-	private int prefixBytesLength;
-	private int suffixBytesLength;
+	// private byte[] prefixBytes;
+	// private byte[] suffixBytes;
+	// private int prefixBytesLength;
+	// private int suffixBytesLength;
 
 	private final String KEY_ENCRYPTION_ALGORITHM = "AES";
 
@@ -105,10 +105,10 @@ public abstract class BaseEncryption
 
 			salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
 
-			prefixBytes = PREFIX.getBytes("UTF-8");
-			suffixBytes = SUFFIX.getBytes("UTF-8");
-			prefixBytesLength = prefixBytes.length;
-			suffixBytesLength = suffixBytes.length;
+			// prefixBytes = PREFIX.getBytes("UTF-8");
+			// suffixBytes = SUFFIX.getBytes("UTF-8");
+			// prefixBytesLength = prefixBytes.length;
+			// suffixBytesLength = suffixBytes.length;
 
 			generateRootKeyFromToken();
 		}
@@ -122,33 +122,23 @@ public abstract class BaseEncryption
 	/**
 	 * Check if encryption token exists. If not, create one initially
 	 */
-	public void checkForToken()
+	private void checkForToken()
 			throws Throwable {
 		if (getResourceLocation() != null) {
 			tokenFile = new File(
 					getResourceLocation());
 		}
 		else {
-			if (ConfigOptions.getConfigFile() != null) {
-				File configFile = new File(
-						ConfigOptions.getConfigFile());
-				tokenFile = new File(
-						configFile.getParentFile(),
-						getFormattedTokenFileName());
+			if (new ConfigOptions().getConfigFile() != null) {
+				tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(new File(
+						new ConfigOptions().getConfigFile()));
 			}
 			else {
-				File configFile = ConfigOptions.getDefaultPropertyFile();
-				tokenFile = new File(
-						configFile.getParentFile(),
-						getFormattedTokenFileName());
+				tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(ConfigOptions.getDefaultPropertyFile());
 			}
 		}
 		if (tokenFile == null || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
-		}
-		if (tokenFile == null || !tokenFile.exists()) {
-			throw new Throwable(
-					"An error occurred generating a new encryption token.");
 		}
 	}
 
@@ -177,7 +167,7 @@ public abstract class BaseEncryption
 	 * @param tokenFile
 	 * @return
 	 */
-	public boolean generateNewEncryptionToken(
+	public static boolean generateNewEncryptionToken(
 			File tokenFile )
 			throws Exception {
 		boolean success = false;
@@ -187,7 +177,7 @@ public abstract class BaseEncryption
 					tokenFile.getCanonicalPath());
 			org.apache.commons.io.FileUtils.writeStringToFile(
 					tokenFile,
-					SecurityUtils.generateNewToken());
+					generateRandomSecretKey());
 			LOGGER.info("Completed writing new encryption token to file");
 			success = true;
 		}
@@ -243,27 +233,14 @@ public abstract class BaseEncryption
 	 *            Data to check if it is wrapped with the "ENC{}" wrapper
 	 * @return boolean specifying if the data is wrapped with the wrapper
 	 */
-	private boolean bytesSurroundedByWrapper(
-			byte[] data ) {
-		try {
-			for (int i = 0; i < prefixBytesLength; i++) {
-				if (data[i] != prefixBytes[i]) {
-					return false;
-				}
-			}
-			int dataLength = data.length;
-			int allButPostfixLength = dataLength - suffixBytesLength;
-			for (int i = 0; i < suffixBytesLength; i++) {
-				if (data[allButPostfixLength + i] != suffixBytes[i]) {
-					return false;
-				}
-			}
-		}
-		catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
+	/*
+	 * private boolean bytesSurroundedByWrapper( byte[] data ) { try { for (int
+	 * i = 0; i < prefixBytesLength; i++) { if (data[i] != prefixBytes[i]) {
+	 * return false; } } int dataLength = data.length; int allButPostfixLength =
+	 * dataLength - suffixBytesLength; for (int i = 0; i < suffixBytesLength;
+	 * i++) { if (data[allButPostfixLength + i] != suffixBytes[i]) { return
+	 * false; } } } catch (Exception e) { return false; } return true; }
+	 */
 
 	/**
 	 * Extracts the inner-content from the encrypted wrapped contents. This
@@ -274,18 +251,14 @@ public abstract class BaseEncryption
 	 *            "ENC{}"-wrapped content
 	 * @return binary content within the "ENC{}" wrapper.
 	 */
-	private byte[] extractWrappedContents(
-			byte[] wrappedContents ) {
-		int justTheContentsLength = wrappedContents.length - prefixBytesLength - suffixBytesLength;
-		byte[] justTheContents = new byte[justTheContentsLength];
-		System.arraycopy(
-				wrappedContents,
-				prefixBytesLength,
-				justTheContents,
-				0,
-				justTheContentsLength);
-		return justTheContents;
-	}
+	/*
+	 * private byte[] extractWrappedContents( byte[] wrappedContents ) { int
+	 * justTheContentsLength = wrappedContents.length - prefixBytesLength -
+	 * suffixBytesLength; byte[] justTheContents = new
+	 * byte[justTheContentsLength]; System.arraycopy( wrappedContents,
+	 * prefixBytesLength, justTheContents, 0, justTheContentsLength); return
+	 * justTheContents; }
+	 */
 
 	/**
 	 * Converts a binary value to a encoded string
@@ -355,7 +328,7 @@ public abstract class BaseEncryption
 	 * @return
 	 * @throws Exception
 	 */
-	public static String generateRandomSecretKey()
+	private static String generateRandomSecretKey()
 			throws Exception {
 		String retval = "";
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
@@ -396,32 +369,16 @@ public abstract class BaseEncryption
 	 * @return Encrypted binary using the specified token resource
 	 * @throws Exception
 	 */
-	public byte[] encrypt(
-			byte[] data )
-			throws Exception {
-		byte[] encryptedBytes = encryptBytes(data);
-		int encryptedBytesLength = encryptedBytes.length;
-		byte[] wrappedBytes = new byte[prefixBytesLength + encryptedBytesLength + suffixBytesLength];
-		System.arraycopy(
-				prefixBytes,
-				0,
-				wrappedBytes,
-				0,
-				prefixBytesLength);
-		System.arraycopy(
-				encryptedBytes,
-				0,
-				wrappedBytes,
-				prefixBytesLength,
-				encryptedBytesLength);
-		System.arraycopy(
-				suffixBytes,
-				0,
-				wrappedBytes,
-				prefixBytesLength + encryptedBytesLength,
-				suffixBytesLength);
-		return wrappedBytes;
-	}
+	/*
+	 * private byte[] encrypt( byte[] data ) throws Exception { byte[]
+	 * encryptedBytes = encryptBytes(data); int encryptedBytesLength =
+	 * encryptedBytes.length; byte[] wrappedBytes = new byte[prefixBytesLength +
+	 * encryptedBytesLength + suffixBytesLength]; System.arraycopy( prefixBytes,
+	 * 0, wrappedBytes, 0, prefixBytesLength); System.arraycopy( encryptedBytes,
+	 * 0, wrappedBytes, prefixBytesLength, encryptedBytesLength);
+	 * System.arraycopy( suffixBytes, 0, wrappedBytes, prefixBytesLength +
+	 * encryptedBytesLength, suffixBytesLength); return wrappedBytes; }
+	 */
 
 	/**
 	 * Method to encrypt and hex-encode a string value using the specified token
@@ -454,16 +411,11 @@ public abstract class BaseEncryption
 	 * @return Decrypted binary using the specified token resource
 	 * @throws Exception
 	 */
-	public byte[] decrypt(
-			byte[] data )
-			throws Exception {
-		if (bytesSurroundedByWrapper(data)) {
-			return decryptBytes(extractWrappedContents(data));
-		}
-		else {
-			return data;
-		}
-	}
+	/*
+	 * private byte[] decrypt( byte[] data ) throws Exception { if
+	 * (bytesSurroundedByWrapper(data)) { return
+	 * decryptBytes(extractWrappedContents(data)); } else { return data; } }
+	 */
 
 	/**
 	 * Method to decrypt binary value using the specified token resource. Also
@@ -479,17 +431,11 @@ public abstract class BaseEncryption
 	 * @return Decrypted binary using the specified token resource
 	 * @throws Exception
 	 */
-	public byte[] decrypt(
-			byte[] data,
-			boolean passthroughWrapperlessData )
-			throws Exception {
-		if (passthroughWrapperlessData) {
-			return decrypt(data);
-		}
-		else {
-			return decryptBytes(data);
-		}
-	}
+	/*
+	 * public byte[] decrypt( byte[] data, boolean passthroughWrapperlessData )
+	 * throws Exception { if (passthroughWrapperlessData) { return
+	 * decrypt(data); } else { return decryptBytes(data); } }
+	 */
 
 	/**
 	 * Returns a decrypted value from the encrypted hex-encoded value specified

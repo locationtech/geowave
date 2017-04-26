@@ -3,7 +3,7 @@
  */
 package mil.nga.giat.geowave.cli.geoserver;
 
-import mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 
 /**
@@ -16,6 +16,6 @@ public class GeoServerPasswordConverter extends
 			String optionName ) {
 		super(
 				optionName);
-		setPropertyKey(GeoServerConstants.GEOSERVER_PASS);
+		setPropertyKey(GEOSERVER_PASS);
 	}
 }

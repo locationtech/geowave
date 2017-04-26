@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,6 +38,7 @@ import javax.ws.rs.core.Response.Status;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.utils.URLUtils;
 import mil.nga.giat.geowave.service.GeoserverService;
 import mil.nga.giat.geowave.service.ServiceUtils;
 
@@ -64,8 +68,9 @@ public class GeoserverServiceImpl implements
 			@Context
 			final ServletConfig servletConfig ) {
 		Properties props = null;
+		String confPropFilename = servletConfig.getInitParameter("config.properties");
 		try (InputStream is = servletConfig.getServletContext().getResourceAsStream(
-				servletConfig.getInitParameter("config.properties"))) {
+				confPropFilename)) {
 			props = ServiceUtils.loadProperties(is);
 		}
 		catch (IOException e) {
@@ -75,8 +80,14 @@ public class GeoserverServiceImpl implements
 		geoserverUrl = ServiceUtils.getProperty(
 				props,
 				"geoserver.url");
-		if (geoserverUrl != null && !geoserverUrl.contains("//")) {
-			geoserverUrl = "http://" + geoserverUrl + "/geoserver";
+
+		try {
+			geoserverUrl = URLUtils.getUrl(geoserverUrl);
+		}
+		catch (MalformedURLException | URISyntaxException e) {
+			log.error(
+					"An error occurred validating url [" + e.getLocalizedMessage() + "]",
+					e);
 		}
 
 		geoserverUser = ServiceUtils.getProperty(
@@ -88,7 +99,11 @@ public class GeoserverServiceImpl implements
 				"geoserver.password");
 
 		try {
-			geoserverPass = new SecurityUtils().decryptHexEncodedValue(geoserverPass);
+			File resourceFile = SecurityUtils.getFormattedTokenKeyFileForConfig(new File(
+					confPropFilename));
+			geoserverPass = SecurityUtils.decryptHexEncodedValue(
+					geoserverPass,
+					resourceFile.getAbsolutePath());
 		}
 		catch (Exception e) {
 			log.error(

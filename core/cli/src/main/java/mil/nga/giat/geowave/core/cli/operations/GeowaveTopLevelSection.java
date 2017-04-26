@@ -32,6 +32,10 @@ public class GeowaveTopLevelSection extends
 	@Override
 	public boolean prepare(
 			final OperationParams inputParams ) {
+		// This will load the properties file parameter into the
+		// operation params.
+		options.prepare(inputParams);
+
 		super.prepare(inputParams);
 
 		// Up the log level
@@ -46,10 +50,6 @@ public class GeowaveTopLevelSection extends
 			// Do not continue
 			return false;
 		}
-
-		// This will load the properties file parameter into the
-		// operation params.
-		options.prepare(inputParams);
 
 		// Successfully prepared
 		return true;

@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.lang.reflect.Field;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -20,8 +18,6 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
-import mil.nga.giat.geowave.core.cli.utils.JCommanderParameterUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
@@ -121,36 +117,6 @@ public class AddStoreCommand extends
 				existingProps,
 				getNamespace());
 
-		if (pluginOptions.getFactoryOptions() != null) {
-			Field[] fields = pluginOptions.getFactoryOptions().getClass().getDeclaredFields();
-			for (Field field : fields) {
-				for (Annotation annotation : field.getAnnotations()) {
-					if (annotation.annotationType() == Parameter.class) {
-						Parameter parameter = (Parameter) annotation;
-						if (JCommanderParameterUtils.isPassword(parameter)) {
-							String storeFieldName = getNamespace() + ".opts." + field.getName();
-							if (existingProps.containsKey(storeFieldName)) {
-								String value = existingProps.getProperty(storeFieldName);
-								String encryptedValue = value;
-								try {
-									encryptedValue = new SecurityUtils().encryptAndHexEncodeValue(value);
-								}
-								catch (Exception e) {
-									LOGGER.error(
-											"An error occurred encrypting specified password value: "
-													+ e.getLocalizedMessage(),
-											e);
-								}
-								existingProps.setProperty(
-										storeFieldName,
-										encryptedValue);
-							}
-						}
-					}
-				}
-			}
-		}
-
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
 			existingProps.setProperty(
@@ -161,7 +127,9 @@ public class AddStoreCommand extends
 		// Write properties file
 		ConfigOptions.writeProperties(
 				getGeoWaveConfigFile(),
-				existingProps);
+				existingProps,
+				pluginOptions.getFactoryOptions().getClass(),
+				getNamespace() + "." + DataStorePluginOptions.OPTS);
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

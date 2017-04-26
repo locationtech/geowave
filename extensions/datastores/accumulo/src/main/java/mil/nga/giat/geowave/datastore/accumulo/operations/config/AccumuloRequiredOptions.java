@@ -27,19 +27,19 @@ public class AccumuloRequiredOptions extends
 	@Parameter(names = {
 		"-z",
 		"--" + ZOOKEEPER_CONFIG_KEY
-	}, description = "A comma-separated list of zookeeper servers that an Accumulo instance is using", converter = RequiredFieldConverter.class)
+	}, description = "A comma-separated list of zookeeper servers that an Accumulo instance is using", required = true)
 	private String zookeeper;
 
 	@Parameter(names = {
 		"-i",
 		"--" + INSTANCE_CONFIG_KEY
-	}, description = "The Accumulo instance ID", converter = RequiredFieldConverter.class)
+	}, description = "The Accumulo instance ID", required = true)
 	private String instance;
 
 	@Parameter(names = {
 		"-u",
 		"--" + USER_CONFIG_KEY
-	}, description = "A valid Accumulo user ID", converter = RequiredFieldConverter.class)
+	}, description = "A valid Accumulo user ID", required = true)
 	private String user;
 
 	@Parameter(names = {

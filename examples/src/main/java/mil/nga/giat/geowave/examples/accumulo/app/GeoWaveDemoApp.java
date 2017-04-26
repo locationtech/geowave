@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import com.google.common.io.Files;
 
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
-import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 public class GeoWaveDemoApp
 {
@@ -37,10 +36,7 @@ public class GeoWaveDemoApp
 		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System
 				.getProperty("interactive")) : true;
 
-		// GeoWave:811 - providing ability to support encrypted passwords
-		final String password = new SecurityUtils()
-				.decryptHexEncodedValue(((System.getProperty("password") != null) ? System.getProperty("password")
-						: "password"));
+		final String password = System.getProperty("password");
 
 		final File tempDir = Files.createTempDir();
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")

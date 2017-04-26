@@ -8,8 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
 
@@ -44,7 +44,8 @@ public class PasswordConverter extends
 				optionName);
 	}
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(PasswordConverter.class);
+	// private final static Logger LOGGER =
+	// LoggerFactory.getLogger(PasswordConverter.class);
 	public static final String STDIN = "stdin";
 	private static final String SEPARATOR = ":";
 
@@ -54,7 +55,7 @@ public class PasswordConverter extends
 			@Override
 			String process(
 					String password ) {
-				return decryptValue(password);
+				return password;
 			}
 		},
 		ENV(
@@ -62,7 +63,7 @@ public class PasswordConverter extends
 			@Override
 			String process(
 					String envVariable ) {
-				return decryptValue(System.getenv(envVariable));
+				return System.getenv(envVariable);
 			}
 		},
 		FILE(
@@ -74,7 +75,7 @@ public class PasswordConverter extends
 					String password = FileUtils.readFileContent(new File(
 							value));
 					if (password != null && !"".equals(password.trim())) {
-						return decryptValue(password);
+						return password;
 					}
 				}
 				catch (Exception ex) {
@@ -103,7 +104,7 @@ public class PasswordConverter extends
 									propertyKey = propertyKey.trim();
 								}
 								if (properties != null && properties.containsKey(propertyKey)) {
-									return decryptValue(properties.getProperty(propertyKey));
+									return properties.getProperty(propertyKey);
 								}
 							}
 							else {
@@ -162,7 +163,7 @@ public class PasswordConverter extends
 			@Override
 			String process(
 					String password ) {
-				return decryptValue(password);
+				return password;
 			}
 		};
 
@@ -194,25 +195,7 @@ public class PasswordConverter extends
 			String value ) {
 		for (KeyType keyType : KeyType.values()) {
 			if (keyType.matches(value)) {
-				String convertedValue = keyType.convert(value);
-				// update the value in the configs properties file
-				if (updatePasswordInConfigs() && getPropertyKey() != null && !"".equals(getPropertyKey().trim())) {
-					Properties configProps = getGeoWaveConfigProperties();
-					if (configProps != null) {
-						// encrypt the value to be stored in the properties
-						convertedValue = encryptValue(convertedValue);
-						configProps.put(
-								getPropertyKey(),
-								convertedValue);
-						ConfigOptions.writeProperties(
-								getGeoWaveConfigFile(),
-								configProps);
-						LOGGER.debug(
-								"Configuration properties successfully updated with property [{}]",
-								getPropertyKey());
-					}
-				}
-				return convertedValue;
+				return keyType.convert(value);
 			}
 		}
 		return value;

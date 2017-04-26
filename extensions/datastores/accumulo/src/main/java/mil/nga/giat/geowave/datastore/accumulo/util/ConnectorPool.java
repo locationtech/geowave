@@ -10,8 +10,6 @@ import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.log4j.Logger;
 
-import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
-
 public class ConnectorPool
 {
 	private static ConnectorPool singletonInstance;
@@ -34,21 +32,11 @@ public class ConnectorPool
 			throws AccumuloException,
 			AccumuloSecurityException {
 
-		String decryptedPassword = password;
-		try {
-			decryptedPassword = new SecurityUtils().decryptHexEncodedValue(password);
-		}
-		catch (Exception e) {
-			LOGGER.error(
-					"An error occurred decrypting password: " + e.getLocalizedMessage(),
-					e);
-			decryptedPassword = password;
-		}
 		final ConnectorConfig config = new ConnectorConfig(
 				zookeeperUrl,
 				instanceName,
 				userName,
-				decryptedPassword);
+				password);
 		Connector connector = connectorCache.get(config);
 		if (connector == null) {
 			final Instance inst = new ZooKeeperInstance(
@@ -56,7 +44,7 @@ public class ConnectorPool
 					zookeeperUrl);
 			connector = inst.getConnector(
 					userName,
-					decryptedPassword);
+					password);
 			connectorCache.put(
 					config,
 					connector);

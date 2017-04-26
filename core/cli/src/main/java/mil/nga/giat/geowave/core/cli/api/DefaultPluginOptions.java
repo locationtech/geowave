@@ -11,6 +11,9 @@ import mil.nga.giat.geowave.core.cli.prefix.JCommanderPropertiesTransformer;
 public abstract class DefaultPluginOptions
 {
 
+	public static final String OPTS = "opts";
+	public static final String TYPE = "type";
+
 	/**
 	 * This is implemented by the PluginOptions interface by child classes
 	 * 
@@ -37,13 +40,13 @@ public abstract class DefaultPluginOptions
 			String namespace ) {
 		JCommanderPropertiesTransformer jcpt = new JCommanderPropertiesTransformer(
 				String.format(
-						"%s.opts",
+						"%s." + OPTS,
 						namespace));
 		jcpt.addObject(this);
 		jcpt.transformToProperties(properties);
 		// Add the entry for the type property.
 		String typeProperty = String.format(
-				"%s.type",
+				"%s." + TYPE,
 				namespace);
 		properties.setProperty(
 				typeProperty,
@@ -60,7 +63,7 @@ public abstract class DefaultPluginOptions
 			String namespace ) {
 		// Get the qualifier.
 		String typeProperty = String.format(
-				"%s.type",
+				"%s." + TYPE,
 				namespace);
 		String typeValue = properties.getProperty(typeProperty);
 		if (typeValue == null) {
@@ -72,12 +75,11 @@ public abstract class DefaultPluginOptions
 		}
 		JCommanderPropertiesTransformer jcpt = new JCommanderPropertiesTransformer(
 				String.format(
-						"%s.opts",
+						"%s." + OPTS,
 						namespace));
 		jcpt.addObject(this);
 		jcpt.transformFromProperties(properties);
 
 		return true;
 	}
-
 }

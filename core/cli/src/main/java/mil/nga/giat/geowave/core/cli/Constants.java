@@ -23,4 +23,9 @@ public interface Constants
 	 * Properties file key denoting if a console echo is enabled for passwords
 	 */
 	public static final String CONSOLE_PASSWORD_ECHO_ENABLED_KEY = "geowave.console.password.echo.enabled";
+
+	/**
+	 * Properties file key denoting if encryption is enabled for passwords
+	 */
+	public static final String ENCRYPTION_ENABLED_KEY = "geowave.encryption.enabled";
 }

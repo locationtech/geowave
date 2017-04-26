@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -8,6 +10,7 @@ import org.apache.log4j.Logger;
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.utils.URLUtils;
 
 public class GeoServerConfig
 {
@@ -78,8 +81,11 @@ public class GeoServerConfig
 		}
 		else {
 			try {
+				final File resourceTokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(propFile);
 				// if password in config props is encrypted, need to decrypt it
-				pass = new SecurityUtils().decryptHexEncodedValue(pass);
+				pass = SecurityUtils.decryptHexEncodedValue(
+						pass,
+						resourceTokenFile.getCanonicalPath());
 			}
 			catch (Exception e) {
 				LOGGER.error(
@@ -102,7 +108,7 @@ public class GeoServerConfig
 					propFile,
 					gsConfigProperties);
 
-			System.out.println("GeoServer Config Saved");
+			LOGGER.info("GeoServer Config Saved");
 		}
 	}
 
@@ -117,11 +123,15 @@ public class GeoServerConfig
 	}
 
 	public String getUrl() {
-		if (url.contains("//")) {
-			// assume exact URL
+		try {
+			return URLUtils.getUrl(url);
+		}
+		catch (MalformedURLException | URISyntaxException e) {
+			LOGGER.error(
+					"Error discovered in validating specified url: " + e.getLocalizedMessage(),
+					e);
 			return url;
 		}
-		return "http://" + url + "/geoserver";
 	}
 
 	public void setUrl(

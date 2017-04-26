@@ -1,6 +1,11 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
@@ -10,6 +15,7 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.converters.OptionalPasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.utils.URLUtils;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -20,6 +26,8 @@ public class ConfigGeoServerCommand extends
 		DefaultOperation implements
 		Command
 {
+	private final static Logger sLog = LoggerFactory.getLogger(ConfigGeoServerCommand.class);
+
 	@Parameter(names = {
 		"-u",
 		"--url"
@@ -81,11 +89,21 @@ public class ConfigGeoServerCommand extends
 		// Write properties file
 		ConfigOptions.writeProperties(
 				getGeoWaveConfigFile(params),
-				existingProps);
+				existingProps,
+				this.getClass(),
+				GEOSERVER_NAMESPACE_PREFIX);
 	}
 
 	public String getUrl() {
-		return url;
+		try {
+			return URLUtils.getUrl(url);
+		}
+		catch (MalformedURLException | URISyntaxException e) {
+			sLog.error(
+					"An error occurred validating specified url [" + url + "]: " + e.getLocalizedMessage(),
+					e);
+			return url;
+		}
 	}
 
 	public void setUrl(

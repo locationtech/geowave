@@ -45,7 +45,6 @@ import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
-import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
 /**
  * This class holds all parameters necessary for establishing Accumulo
@@ -107,17 +106,9 @@ public class BasicAccumuloOperations implements
 		this(
 				null,
 				tableNamespace);
-		// GeoWave:811 - providing ability to support encrypted passwords
-		try {
-			this.password = new SecurityUtils().decryptHexEncodedValue(password);
-		}
-		catch (Exception e) {
-			LOGGER.error(
-					"An error occurred decrypting specified value: " + e.getLocalizedMessage(),
-					e);
-			// if error occurs, default to value passed in
-			this.password = password;
-		}
+
+		this.password = password;
+
 		connector = ConnectorPool.getInstance().getConnector(
 				zookeeperUrl,
 				instanceName,
