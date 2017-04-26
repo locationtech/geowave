@@ -74,6 +74,7 @@ public class InputFormatDynamoDBRangeQuery extends
 
 	@Override
 	protected List<ByteArrayRange> getRanges() {
+		System.out.println("InputFormatDynamoDBRangeQuery: Range being requested: " + range);
 		return Collections.singletonList(range);
 	}
 
@@ -93,4 +94,5 @@ public class InputFormatDynamoDBRangeQuery extends
 								filters));
 	}
 
+	
 }

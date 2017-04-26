@@ -374,6 +374,8 @@ public class BasicAccumuloOperations implements
 	@Override
 	public void deleteAll()
 			throws Exception {
+		System.out.println("AccumuloDataStore c: " + AccumuloDataStore.c);
+		AccumuloDataStore.c = 0;
 		SortedSet<String> tableNames = connector.tableOperations().list();
 
 		if ((tableNamespace != null) && !tableNamespace.isEmpty()) {
@@ -408,6 +410,8 @@ public class BasicAccumuloOperations implements
 			final String tableName,
 			final String columnFamily,
 			final String... additionalAuthorizations ) {
+		System.out.println("AccumuloDataStore c: " + AccumuloDataStore.c);
+		AccumuloDataStore.c = 0;
 		BatchDeleter deleter = null;
 		try {
 			deleter = createBatchDeleter(

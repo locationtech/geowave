@@ -81,12 +81,12 @@ public class MapReduceTestEnvironment implements
 				}
 			}
 			else {
-				FileUtils.deleteDirectory(new File(
-						hdfsBaseDirectory.replace(
-								"file:",
-								"").replace(
-								"/C:",
-								"")));
+//				FileUtils.deleteDirectory(new File(
+//						hdfsBaseDirectory.replace(
+//								"file:",
+//								"").replace(
+//								"/C:",
+//								"")));
 			}
 		}
 		catch (final IOException e) {

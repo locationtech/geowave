@@ -335,6 +335,8 @@ public class DynamoDBDataStore extends
 		return Integer.toString(counter);
 	}
 
+	public static int c = 0;
+	
 	@Override
 	public void write(
 			Writer writer,
@@ -343,6 +345,7 @@ public class DynamoDBDataStore extends
 		final List<WriteRequest> mutations = new ArrayList<WriteRequest>();
 
 		for (GeoWaveRow row : rows) {
+			c++;
 			final Map<String, AttributeValue> map = new HashMap<String, AttributeValue>();
 
 			String partitionId = ((DynamoDBRow) row).getPartitionId();

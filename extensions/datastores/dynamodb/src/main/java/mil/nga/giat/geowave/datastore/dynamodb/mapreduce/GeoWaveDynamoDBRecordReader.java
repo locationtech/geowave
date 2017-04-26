@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -41,10 +42,10 @@ public class GeoWaveDynamoDBRecordReader<T> extends
 
 	@Override
 	protected CloseableIterator queryRange(
-			PrimaryIndex i,
-			GeoWaveRowRange range,
-			List queryFilters,
-			QueryOptions rangeQueryOptions ) {
+			final PrimaryIndex i,
+			final GeoWaveRowRange range,
+			final List<QueryFilter> queryFilters,
+			final QueryOptions rangeQueryOptions ) {
 		// this will take the inputsplit
 		return new InputFormatDynamoDBRangeQuery(
 				dataStore,

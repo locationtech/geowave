@@ -125,6 +125,8 @@ public class DynamoDBOperations implements
 	@Override
 	public void deleteAll()
 			throws Exception {
+		System.out.println("DynamoDBDataStore c: " + DynamoDBDataStore.c);
+		DynamoDBDataStore.c = 0;
 		final ListTablesResult tables = client.listTables();
 		for (final String tableName : tables.getTableNames()) {
 			if ((gwNamespace == null) || tableName.startsWith(gwNamespace)) {

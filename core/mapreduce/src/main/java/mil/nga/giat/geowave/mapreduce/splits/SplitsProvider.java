@@ -120,6 +120,7 @@ public abstract class SplitsProvider
 		for (final IntermediateSplitInfo split : splits) {
 			retVal.add(split.toFinalSplit());
 		}
+		System.out.println("SplitsProvider splits: " + retVal.size());
 		return retVal;
 	}
 
