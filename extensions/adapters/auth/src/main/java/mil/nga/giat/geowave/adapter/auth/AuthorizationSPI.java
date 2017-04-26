@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.adapter.vector.auth;
+package mil.nga.giat.geowave.adapter.auth;
 
 /**
  * A provider that looks up authorizations given a user name.
