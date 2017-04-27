@@ -52,9 +52,11 @@ public class CQLQuery extends
 							adapter,
 							null,
 							null))) {
-				final CountResult result = ((CountResult) (it.next()));
-				if (result != null) {
-					count += result.getCount();
+				if (it.hasNext()) {
+					final CountResult result = ((CountResult) (it.next()));
+					if (result != null) {
+						count += result.getCount();
+					}
 				}
 			}
 			catch (final IOException e) {

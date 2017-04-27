@@ -55,6 +55,8 @@
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
+		<jackson.version>1.9.13</jackson.version>
+		<spring-security.version>4.0.4.RELEASE</spring-security.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -383,6 +385,23 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-vfs2</artifactId>
 				<version>${vfs2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-core-asl</artifactId>
+				<version>${jackson.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring-security.version}</version>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

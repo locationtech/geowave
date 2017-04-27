@@ -72,6 +72,22 @@ abstract public class AccumuloQuery
 		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
+	protected ScannerBase createScanner(
+			final AccumuloOperations accumuloOperations,
+			String tableName,
+			boolean batchScanner,
+			String... authorizations )
+			throws TableNotFoundException {
+		if (batchScanner) {
+			return accumuloOperations.createBatchScanner(
+					tableName,
+					authorizations);
+		}
+		return accumuloOperations.createScanner(
+				tableName,
+				authorizations);
+	}
+
 	protected ScannerBase getScanner(
 			final AccumuloOperations accumuloOperations,
 			final double[] maxResolutionSubsamplingPerDimension,
@@ -80,10 +96,12 @@ abstract public class AccumuloQuery
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		ScannerBase scanner;
 		try {
-			if (!isAggregation() && (ranges != null) && (ranges.size() == 1)) {
-				scanner = accumuloOperations.createScanner(
-						tableName,
-						getAdditionalAuthorizations());
+			scanner = createScanner(
+					accumuloOperations,
+					tableName,
+					isAggregation() || (ranges == null) || (ranges.size() != 1),
+					getAdditionalAuthorizations());
+			if (scanner instanceof Scanner) {
 				final ByteArrayRange r = ranges.get(0);
 				if (r.isSingleValue()) {
 					((Scanner) scanner).setRange(Range.exact(new Text(
@@ -99,10 +117,7 @@ abstract public class AccumuloQuery
 							limit));
 				}
 			}
-			else {
-				scanner = accumuloOperations.createBatchScanner(
-						tableName,
-						getAdditionalAuthorizations());
+			else if (scanner instanceof BatchScanner) {
 				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
 			}
 			if (maxResolutionSubsamplingPerDimension != null) {

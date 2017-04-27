@@ -205,7 +205,8 @@ public class HBaseDataStore extends
 			final DataAdapter<?> adapter,
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations ) {
+			final String[] authorizations,
+			boolean delete ) {
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
@@ -369,7 +370,8 @@ public class HBaseDataStore extends
 			final Query sanitizedQuery,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
 
 		final HBaseConstraintsQuery hbaseQuery = new HBaseConstraintsQuery(
 				adapterIdsToQuery,
@@ -406,7 +408,8 @@ public class HBaseDataStore extends
 			final ByteArrayId rowPrefix,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			final List<ByteArrayId> adapterIdsToQuery ) {
+			final List<ByteArrayId> adapterIdsToQuery,
+			boolean delete ) {
 		final HBaseRowPrefixQuery<Object> prefixQuery = new HBaseRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
@@ -429,7 +432,8 @@ public class HBaseDataStore extends
 			final List<ByteArrayId> rowIds,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
 		final HBaseRowIdsQuery<Object> q = new HBaseRowIdsQuery<Object>(
 				adapter,
 				index,

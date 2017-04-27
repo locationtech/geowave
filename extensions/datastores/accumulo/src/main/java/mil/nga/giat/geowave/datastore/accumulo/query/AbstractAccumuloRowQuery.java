@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
+import java.util.Iterator;
+
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
@@ -10,6 +12,8 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.filter.FilterList;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
@@ -51,16 +55,23 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 			return null;
 		}
 		addScanIteratorSettings(scanner);
-		return new CloseableIteratorWrapper<T>(
-				new ScannerClosableWrapper(
-						scanner),
-				new AccumuloEntryIteratorWrapper(
-						useWholeRowIterator(),
+		return initCloseableIterator(
+				scanner,
+				initIterator(
 						adapterStore,
-						index,
-						scanner.iterator(),
-						null,
-						this.scanCallback));
+						scanner));
+	}
+
+	protected Iterator initIterator(
+			final AdapterStore adapterStore,
+			final ScannerBase scanner ) {
+		return new AccumuloEntryIteratorWrapper(
+				useWholeRowIterator(),
+				adapterStore,
+				index,
+				scanner.iterator(),
+				null,
+				scanCallback);
 	}
 
 	protected void addScanIteratorSettings(
@@ -77,4 +88,13 @@ abstract public class AbstractAccumuloRowQuery<T> extends
 	}
 
 	abstract protected Integer getScannerLimit();
+
+	protected CloseableIterator<T> initCloseableIterator(
+			ScannerBase scanner,
+			Iterator it ) {
+		return new CloseableIteratorWrapper(
+				new ScannerClosableWrapper(
+						scanner),
+				it);
+	}
 }
