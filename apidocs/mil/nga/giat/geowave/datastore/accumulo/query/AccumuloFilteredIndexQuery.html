@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -204,18 +204,23 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#getClientFilters--">getClientFilters</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#initCloseableIterator-org.apache.accumulo.core.client.ScannerBase-java.util.Iterator-">initCloseableIterator</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&nbsp;it)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#initIterator-mil.nga.giat.geowave.core.store.adapter.AdapterStore-org.apache.accumulo.core.client.ScannerBase-">initIterator</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
             org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#query-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-mil.nga.giat.geowave.core.store.adapter.AdapterStore-double:A-java.lang.Integer-">query</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
      double[]&nbsp;maxResolutionSubsamplingPerDimension,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#setClientFilters-java.util.List-">setClientFilters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;clientFilters)</code>&nbsp;</td>
 </tr>
@@ -225,7 +230,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#addFieldSubsettingToIterator-org.apache.accumulo.core.client.ScannerBase-">addFieldSubsettingToIterator</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getRanges--">getRanges</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getScanner-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-double:A-java.lang.Integer-">getScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#isAggregation--">isAggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#useWholeRowIterator--">useWholeRowIterator</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#addFieldSubsettingToIterator-org.apache.accumulo.core.client.ScannerBase-">addFieldSubsettingToIterator</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#createScanner-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-java.lang.String-boolean-java.lang.String...-">createScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getRanges--">getRanges</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getScanner-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-double:A-java.lang.Integer-">getScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#isAggregation--">isAggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#useWholeRowIterator--">useWholeRowIterator</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -337,6 +342,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/F
                                        <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                                        double[]&nbsp;maxResolutionSubsamplingPerDimension,
                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</pre>
+</li>
+</ul>
+<a name="initCloseableIterator-org.apache.accumulo.core.client.ScannerBase-java.util.Iterator-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>initCloseableIterator</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;initCloseableIterator(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&nbsp;it)</pre>
 </li>
 </ul>
 <a name="initIterator-mil.nga.giat.geowave.core.store.adapter.AdapterStore-org.apache.accumulo.core.client.ScannerBase-">

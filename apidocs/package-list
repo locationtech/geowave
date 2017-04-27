@@ -12,6 +12,8 @@ mil.nga.giat.geowave.adapter.raster.stats
 mil.nga.giat.geowave.adapter.raster.util
 mil.nga.giat.geowave.adapter.vector
 mil.nga.giat.geowave.adapter.vector.avro
+mil.nga.giat.geowave.adapter.vector.cli
+mil.nga.giat.geowave.adapter.vector.delete
 mil.nga.giat.geowave.adapter.vector.export
 mil.nga.giat.geowave.adapter.vector.field
 mil.nga.giat.geowave.adapter.vector.index

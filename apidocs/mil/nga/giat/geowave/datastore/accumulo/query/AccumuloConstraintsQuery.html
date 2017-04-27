@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsDelete.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -123,7 +123,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloRowIdsQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloRowIdsQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/InputFormatAccumuloRangeQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">InputFormatAccumuloRangeQuery</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsDelete.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloConstraintsDelete</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloRowIdsQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloRowIdsQuery</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/InputFormatAccumuloRangeQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">InputFormatAccumuloRangeQuery</a></dd>
 </dl>
 <hr>
 <br>
@@ -257,14 +257,14 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloFilteredIndexQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#getClientFilters--">getClientFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#query-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-mil.nga.giat.geowave.core.store.adapter.AdapterStore-double:A-java.lang.Integer-">query</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#setClientFilters-java.util.List-">setClientFilters</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#getClientFilters--">getClientFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#initCloseableIterator-org.apache.accumulo.core.client.ScannerBase-java.util.Iterator-">initCloseableIterator</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#query-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-mil.nga.giat.geowave.core.store.adapter.AdapterStore-double:A-java.lang.Integer-">query</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html#setClientFilters-java.util.List-">setClientFilters</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.datastore.accumulo.query.AccumuloQuery">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.query.<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query">AccumuloQuery</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#addFieldSubsettingToIterator-org.apache.accumulo.core.client.ScannerBase-">addFieldSubsettingToIterator</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getScanner-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-double:A-java.lang.Integer-">getScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#useWholeRowIterator--">useWholeRowIterator</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#addFieldSubsettingToIterator-org.apache.accumulo.core.client.ScannerBase-">addFieldSubsettingToIterator</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#createScanner-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-java.lang.String-boolean-java.lang.String...-">createScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#getScanner-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-double:A-java.lang.Integer-">getScanner</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloQuery.html#useWholeRowIterator--">useWholeRowIterator</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -459,7 +459,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/qu
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AbstractAccumuloRowQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloConstraintsDelete.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/AccumuloFilteredIndexQuery.html" title="class in mil.nga.giat.geowave.datastore.accumulo.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
