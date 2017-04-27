@@ -56,6 +56,7 @@ mil.nga.giat.geowave.analytic.sample.function
 mil.nga.giat.geowave.analytic.store
 mil.nga.giat.geowave.cli.debug
 mil.nga.giat.geowave.cli.geoserver
+mil.nga.giat.geowave.cli.geoserver.constants
 mil.nga.giat.geowave.cli.osm.accumulo.osmschema
 mil.nga.giat.geowave.cli.osm.mapreduce.Convert
 mil.nga.giat.geowave.cli.osm.mapreduce.Convert.OsmProvider
@@ -71,12 +72,17 @@ mil.nga.giat.geowave.cli.osm.types.generated
 mil.nga.giat.geowave.core.cli
 mil.nga.giat.geowave.core.cli.annotations
 mil.nga.giat.geowave.core.cli.api
+mil.nga.giat.geowave.core.cli.converters
 mil.nga.giat.geowave.core.cli.operations
 mil.nga.giat.geowave.core.cli.operations.config
 mil.nga.giat.geowave.core.cli.operations.config.options
+mil.nga.giat.geowave.core.cli.operations.config.security
+mil.nga.giat.geowave.core.cli.operations.config.security.crypto
+mil.nga.giat.geowave.core.cli.operations.config.security.utils
 mil.nga.giat.geowave.core.cli.parser
 mil.nga.giat.geowave.core.cli.prefix
 mil.nga.giat.geowave.core.cli.spi
+mil.nga.giat.geowave.core.cli.utils
 mil.nga.giat.geowave.core.geotime
 mil.nga.giat.geowave.core.geotime.index.dimension
 mil.nga.giat.geowave.core.geotime.ingest

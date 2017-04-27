@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -100,7 +100,17 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li>com.beust.jcommander.converters.BaseConverter&lt;T&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html" title="class in mil.nga.giat.geowave.core.cli.converters">mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.raster.operations.options.HdfsHostPortConverter</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -114,8 +124,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">HdfsHostPortConverter</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements com.beust.jcommander.IStringConverter&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</pre>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html" title="class in mil.nga.giat.geowave.core.cli.converters">GeoWaveBaseConverter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</pre>
 <div class="block">This class will ensure that the hdfs parameter is in the correct format.</div>
 </li>
 </ul>
@@ -135,7 +144,7 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="http://docs.oracle.
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/HdfsHostPortConverter.html#HdfsHostPortConverter--">HdfsHostPortConverter</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/HdfsHostPortConverter.html#HdfsHostPortConverter-java.lang.String-">HdfsHostPortConverter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;optionName)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -156,7 +165,27 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="http://docs.oracle.
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/HdfsHostPortConverter.html#convert-java.lang.String-">convert</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort)</code>&nbsp;</td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/operations/options/HdfsHostPortConverter.html#isRequired--">isRequired</a></span>()</code>
+<div class="block">Specify if a field is required</div>
+</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.cli.converters.<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html" title="class in mil.nga.giat.geowave.core.cli.converters">GeoWaveBaseConverter</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#getConsole--">getConsole</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#getPropertyKey--">getPropertyKey</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#isPassword--">isPassword</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#promptAndReadPassword-java.lang.String-">promptAndReadPassword</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#promptAndReadValue-java.lang.String-">promptAndReadValue</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#setPropertyKey-java.lang.String-">setPropertyKey</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#updatePasswordInConfigs--">updatePasswordInConfigs</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.beust.jcommander.converters.BaseConverter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.beust.jcommander.converters.BaseConverter</h3>
+<code>getErrorString, getOptionName</code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -178,13 +207,13 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="http://docs.oracle.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="HdfsHostPortConverter--">
+<a name="HdfsHostPortConverter-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>HdfsHostPortConverter</h4>
-<pre>public&nbsp;HdfsHostPortConverter()</pre>
+<pre>public&nbsp;HdfsHostPortConverter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;optionName)</pre>
 </li>
 </ul>
 </li>
@@ -198,13 +227,25 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="http://docs.oracle.
 <a name="convert-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>convert</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;convert(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort)</pre>
+</li>
+</ul>
+<a name="isRequired--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isRequired</h4>
+<pre>public&nbsp;boolean&nbsp;isRequired()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#isRequired--">GeoWaveBaseConverter</a></code></span></div>
+<div class="block">Specify if a field is required</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>convert</code>&nbsp;in interface&nbsp;<code>com.beust.jcommander.IStringConverter&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#isRequired--">isRequired</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html" title="class in mil.nga.giat.geowave.core.cli.converters">GeoWaveBaseConverter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
 </dl>
 </li>
 </ul>

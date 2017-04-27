@@ -100,7 +100,17 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li>com.beust.jcommander.converters.BaseConverter&lt;T&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html" title="class in mil.nga.giat.geowave.core.cli.converters">mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.FilterParameter.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">CQLFilterOptionProvider.FilterParameter</a>&gt;</li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -118,8 +128,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public static class <span class="typeNameLabel">CQLFilterOptionProvider.ConvertCQLStrToFilterConverter</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements com.beust.jcommander.IStringConverter&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.FilterParameter.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">CQLFilterOptionProvider.FilterParameter</a>&gt;</pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html" title="class in mil.nga.giat.geowave.core.cli.converters">GeoWaveBaseConverter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.FilterParameter.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">CQLFilterOptionProvider.FilterParameter</a>&gt;</pre>
 <div class="block">This class will ensure that as the CQLFilterString is read in and
  converted to a filter.</div>
 </li>
@@ -142,6 +151,9 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="../../../../../../.
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.ConvertCQLStrToFilterConverter.html#ConvertCQLStrToFilterConverter--">ConvertCQLStrToFilterConverter</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.ConvertCQLStrToFilterConverter.html#ConvertCQLStrToFilterConverter-java.lang.String-">ConvertCQLStrToFilterConverter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;optionName)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -162,6 +174,20 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="../../../../../../.
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.ConvertCQLStrToFilterConverter.html#convert-java.lang.String-">convert</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.cli.converters.<a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html" title="class in mil.nga.giat.geowave.core.cli.converters">GeoWaveBaseConverter</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#getConsole--">getConsole</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#getPropertyKey--">getPropertyKey</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#isPassword--">isPassword</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#isRequired--">isRequired</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#promptAndReadPassword-java.lang.String-">promptAndReadPassword</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#promptAndReadValue-java.lang.String-">promptAndReadValue</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#setPropertyKey-java.lang.String-">setPropertyKey</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/cli/converters/GeoWaveBaseConverter.html#updatePasswordInConfigs--">updatePasswordInConfigs</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.beust.jcommander.converters.BaseConverter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.beust.jcommander.converters.BaseConverter</h3>
+<code>getErrorString, getOptionName</code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -186,10 +212,19 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="../../../../../../.
 <a name="ConvertCQLStrToFilterConverter--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ConvertCQLStrToFilterConverter</h4>
 <pre>public&nbsp;ConvertCQLStrToFilterConverter()</pre>
+</li>
+</ul>
+<a name="ConvertCQLStrToFilterConverter-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ConvertCQLStrToFilterConverter</h4>
+<pre>public&nbsp;ConvertCQLStrToFilterConverter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;optionName)</pre>
 </li>
 </ul>
 </li>
@@ -207,10 +242,6 @@ implements com.beust.jcommander.IStringConverter&lt;<a href="../../../../../../.
 <li class="blockList">
 <h4>convert</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.FilterParameter.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">CQLFilterOptionProvider.FilterParameter</a>&nbsp;convert(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>convert</code>&nbsp;in interface&nbsp;<code>com.beust.jcommander.IStringConverter&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/CQLFilterOptionProvider.FilterParameter.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">CQLFilterOptionProvider.FilterParameter</a>&gt;</code></dd>
-</dl>
 </li>
 </ul>
 </li>

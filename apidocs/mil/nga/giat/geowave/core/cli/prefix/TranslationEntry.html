@@ -163,7 +163,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#getDescription--">getDescription</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#getDescription--">getDescription</a></span>()</code>
+<div class="block">Return the description for a field's parameter definition.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/AnnotatedElement.html?is-external=true" title="class or interface in java.lang.reflect">AnnotatedElement</a></code></td>
@@ -193,7 +195,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#isHidden--">isHidden</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#isHidden--">isHidden</a></span>()</code>
+<div class="block">Specifies if this field is hidden</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -201,11 +205,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#isPassword--">isPassword</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#isPassword--">isPassword</a></span>()</code>
+<div class="block">Specifies if this field is for a password</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#isRequired--">isRequired</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/prefix/TranslationEntry.html#isRequired--">isRequired</a></span>()</code>
+<div class="block">Specifies if this field is required</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -310,6 +318,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getDescription</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDescription()</pre>
+<div class="block">Return the description for a field's parameter definition. If the
+ parameter has a description key specified, the description will be looked
+ up in the resource bundle. If no description is defined, the default
+ CLI-specified description will be returned.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
 </li>
 </ul>
 <a name="isPassword--">
@@ -319,6 +334,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isPassword</h4>
 <pre>public&nbsp;boolean&nbsp;isPassword()</pre>
+<div class="block">Specifies if this field is for a password</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
 </li>
 </ul>
 <a name="isHidden--">
@@ -328,6 +347,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isHidden</h4>
 <pre>public&nbsp;boolean&nbsp;isHidden()</pre>
+<div class="block">Specifies if this field is hidden</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
 </li>
 </ul>
 <a name="isRequired--">
@@ -337,6 +360,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isRequired</h4>
 <pre>public&nbsp;boolean&nbsp;isRequired()</pre>
+<div class="block">Specifies if this field is required</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
 </li>
 </ul>
 <a name="hasValue--">
