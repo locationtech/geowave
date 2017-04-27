@@ -11,9 +11,7 @@
 	<description>Command Line Interface for GeoWave Tools</description>
 	
 	<properties>
-		<beanutils.version>1.9.2</beanutils.version>
 		<commons-codec.version>1.7</commons-codec.version>
-		<org.commons.io.version>2.4</org.commons.io.version>
 	</properties>
 	
 	<dependencies>	
@@ -29,7 +27,6 @@
 		<dependency>
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
-		    <version>${org.commons.io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.beust</groupId>
@@ -54,12 +51,6 @@
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
 			<classifier>jdk15</classifier>
-			<version>2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>net.jcip</groupId>
-			<artifactId>jcip-annotations</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

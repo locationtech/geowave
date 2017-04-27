@@ -10,12 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.GeoWaveEncryption;
-import net.jcip.annotations.ThreadSafe;
 
 /**
  * Security utility class for simpler interfacing with
  */
-@ThreadSafe
 public class SecurityUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SecurityUtils.class);

@@ -89,7 +89,6 @@ public class NewTokenCommand extends
 								ConfigOptions.writeProperties(
 										getGeoWaveConfigFile(params),
 										configProps);
-								System.out.println("GeoServer Config Saved");
 							}
 						}
 						backupFile.deleteOnExit();

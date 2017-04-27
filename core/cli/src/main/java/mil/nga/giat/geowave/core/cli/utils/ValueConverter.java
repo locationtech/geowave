@@ -4,11 +4,11 @@
 package mil.nga.giat.geowave.core.cli.utils;
 
 import org.apache.commons.beanutils.ConvertUtils;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * Used for general purpose value conversion via appache commons ConvertUtils

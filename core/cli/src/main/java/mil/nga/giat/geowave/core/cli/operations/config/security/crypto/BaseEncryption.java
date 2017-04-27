@@ -59,10 +59,6 @@ public abstract class BaseEncryption
 			"\\{") + "([^}]+)" + SUFFIX.replace(
 			"{",
 			"\\{"));
-	// private byte[] prefixBytes;
-	// private byte[] suffixBytes;
-	// private int prefixBytesLength;
-	// private int suffixBytesLength;
 
 	private final String KEY_ENCRYPTION_ALGORITHM = "AES";
 
@@ -104,11 +100,6 @@ public abstract class BaseEncryption
 			setResourceLocation(tokenFile.getCanonicalPath());
 
 			salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
-
-			// prefixBytes = PREFIX.getBytes("UTF-8");
-			// suffixBytes = SUFFIX.getBytes("UTF-8");
-			// prefixBytesLength = prefixBytes.length;
-			// suffixBytesLength = suffixBytes.length;
 
 			generateRootKeyFromToken();
 		}
@@ -225,40 +216,6 @@ public abstract class BaseEncryption
 		return ENCCodePattern.matcher(
 				data).matches();
 	}
-
-	/**
-	 * Returns if the specified data is wrapped with the "ENC{}" wrapper
-	 * 
-	 * @param data
-	 *            Data to check if it is wrapped with the "ENC{}" wrapper
-	 * @return boolean specifying if the data is wrapped with the wrapper
-	 */
-	/*
-	 * private boolean bytesSurroundedByWrapper( byte[] data ) { try { for (int
-	 * i = 0; i < prefixBytesLength; i++) { if (data[i] != prefixBytes[i]) {
-	 * return false; } } int dataLength = data.length; int allButPostfixLength =
-	 * dataLength - suffixBytesLength; for (int i = 0; i < suffixBytesLength;
-	 * i++) { if (data[allButPostfixLength + i] != suffixBytes[i]) { return
-	 * false; } } } catch (Exception e) { return false; } return true; }
-	 */
-
-	/**
-	 * Extracts the inner-content from the encrypted wrapped contents. This
-	 * extracts all content from within the "ENC{}", returning everything within
-	 * the braces.
-	 * 
-	 * @param wrappedContents
-	 *            "ENC{}"-wrapped content
-	 * @return binary content within the "ENC{}" wrapper.
-	 */
-	/*
-	 * private byte[] extractWrappedContents( byte[] wrappedContents ) { int
-	 * justTheContentsLength = wrappedContents.length - prefixBytesLength -
-	 * suffixBytesLength; byte[] justTheContents = new
-	 * byte[justTheContentsLength]; System.arraycopy( wrappedContents,
-	 * prefixBytesLength, justTheContents, 0, justTheContentsLength); return
-	 * justTheContents; }
-	 */
 
 	/**
 	 * Converts a binary value to a encoded string
