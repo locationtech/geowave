@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -10,20 +9,21 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "addlayer", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer layer from the given GeoWave store")
-public class GeoServerAddLayerCommand implements
+public class GeoServerAddLayerCommand extends
+		DefaultOperation implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -43,19 +43,19 @@ public class GeoServerAddLayerCommand implements
 	@Parameter(names = {
 		"-a",
 		"--add"
-	}, required = false, converter = AddOptionConverter.class, description = "For multiple layers, add (all | raster | vector)")
+	}, converter = AddOptionConverter.class, description = "For multiple layers, add (all | raster | vector)")
 	private AddOption addOption = null;
 
 	@Parameter(names = {
 		"-id",
 		"--adapterId"
-	}, required = false, description = "select just <adapter id> from the store")
+	}, description = "select just <adapter id> from the store")
 	private String adapterId = null;
 
 	@Parameter(names = {
 		"-sld",
 		"--setStyle"
-	}, required = false, description = "<default style sld>")
+	}, description = "<default style sld>")
 	private String style = null;
 
 	@Parameter(description = "<GeoWave store name>")
@@ -65,17 +65,12 @@ public class GeoServerAddLayerCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 		if (geoserverClient == null) {
-			// Get the local config for GeoServer
-			File propFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-			GeoServerConfig config = new GeoServerConfig(
-					propFile);
-
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					config);
+					new GeoServerConfig(
+							getGeoWaveConfigFile(params)));
 		}
 
 		// Successfully prepared
@@ -120,9 +115,15 @@ public class GeoServerAddLayerCommand implements
 		}
 	}
 
-	public static class AddOptionConverter implements
-			IStringConverter<AddOption>
+	public static class AddOptionConverter extends
+			GeoWaveBaseConverter<AddOption>
 	{
+		public AddOptionConverter(
+				String optionName ) {
+			super(
+					optionName);
+		}
+
 		@Override
 		public AddOption convert(
 				final String value ) {

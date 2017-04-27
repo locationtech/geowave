@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -32,11 +31,7 @@ public class AddIndexGroupCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -80,7 +75,7 @@ public class AddIndexGroupCommand extends
 
 		// Write to disk.
 		ConfigOptions.writeProperties(
-				propFile,
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 

@@ -12,8 +12,8 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.MapReduceCommandLineOptions;
@@ -27,7 +27,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptio
 
 @GeowaveOperation(name = "mrToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Ingest supported files that already exist in HDFS")
-public class MapReduceToGeowaveCommand implements
+public class MapReduceToGeowaveCommand extends
+		DefaultOperation implements
 		Command
 {
 
@@ -55,6 +56,7 @@ public class MapReduceToGeowaveCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 
 		// TODO: localInputOptions has 'extensions' which doesn't mean
 		// anything for MapReduce to GeoWave.
@@ -94,8 +96,7 @@ public class MapReduceToGeowaveCommand implements
 		}
 
 		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

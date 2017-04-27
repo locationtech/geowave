@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,13 +37,7 @@ public abstract class AbstractRemoveCommand extends
 			OperationParams params,
 			String pattern ) {
 
-		File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-		// Load all properties
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Find properties to remove
 		Set<String> keysToRemove = new HashSet<String>();
@@ -61,7 +54,7 @@ public abstract class AbstractRemoveCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 
