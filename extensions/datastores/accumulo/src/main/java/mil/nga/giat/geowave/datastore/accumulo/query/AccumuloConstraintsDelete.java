@@ -118,12 +118,12 @@ public class AccumuloConstraintsDelete extends
 				},
 				it);
 	}
-	
+
 	@Override
 	protected boolean useWholeRowIterator() {
 		return false;
 	}
-	
+
 	@Override
 	protected ScannerBase createScanner(
 			AccumuloOperations accumuloOperations,

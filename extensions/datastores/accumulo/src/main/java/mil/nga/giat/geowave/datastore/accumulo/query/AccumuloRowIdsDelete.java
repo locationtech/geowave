@@ -40,12 +40,12 @@ public class AccumuloRowIdsDelete<T> extends
 				dedupFilter,
 				authorizations);
 	}
-	
+
 	@Override
 	protected boolean useWholeRowIterator() {
 		return false;
 	}
-	
+
 	@Override
 	protected CloseableIterator<Object> initCloseableIterator(
 			ScannerBase scanner,
