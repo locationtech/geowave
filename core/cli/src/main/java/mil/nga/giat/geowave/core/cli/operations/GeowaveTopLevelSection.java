@@ -9,14 +9,14 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Operation;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 @GeowaveOperation(name = "geowave")
 @Parameters(commandDescription = "This is the top level section.")
-public class GeowaveTopLevelSection implements
-		Operation
+public class GeowaveTopLevelSection extends
+		DefaultOperation
 {
 	@Parameter(names = "--debug", description = "Verbose output")
 	private Boolean verboseFlag;
@@ -32,6 +32,11 @@ public class GeowaveTopLevelSection implements
 	@Override
 	public boolean prepare(
 			final OperationParams inputParams ) {
+		// This will load the properties file parameter into the
+		// operation params.
+		options.prepare(inputParams);
+
+		super.prepare(inputParams);
 
 		// Up the log level
 		if (Boolean.TRUE.equals(verboseFlag)) {
@@ -45,10 +50,6 @@ public class GeowaveTopLevelSection implements
 			// Do not continue
 			return false;
 		}
-
-		// This will load the properties file parameter into the
-		// operation params.
-		options.prepare(inputParams);
 
 		// Successfully prepared
 		return true;

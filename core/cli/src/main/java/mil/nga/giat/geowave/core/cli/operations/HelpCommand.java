@@ -13,6 +13,7 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.Operation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
@@ -23,13 +24,16 @@ import mil.nga.giat.geowave.core.cli.spi.OperationRegistry;
 
 @GeowaveOperation(name = "help", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Get descriptions of arguments for " + "any GeoWave command")
-public class HelpCommand implements
+public class HelpCommand extends
+		DefaultOperation implements
 		Command
 {
 
 	@Override
 	public boolean prepare(
 			OperationParams inputParams ) {
+		super.prepare(inputParams);
+
 		CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
 		params.setValidate(false);
 		params.setAllowUnknown(true);

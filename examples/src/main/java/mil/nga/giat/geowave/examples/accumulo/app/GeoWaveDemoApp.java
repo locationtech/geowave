@@ -36,7 +36,7 @@ public class GeoWaveDemoApp
 		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System
 				.getProperty("interactive")) : true;
 
-		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "password";
+		final String password = System.getProperty("password");
 
 		final File tempDir = Files.createTempDir();
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")

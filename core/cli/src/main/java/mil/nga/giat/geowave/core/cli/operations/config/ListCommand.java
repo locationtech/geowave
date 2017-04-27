@@ -14,7 +14,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
@@ -33,21 +32,12 @@ public class ListCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		File f = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File f = getGeoWaveConfigFile(params);
 
 		// Reload options with filter if specified.
-		Properties p = null;
-		if (filter != null) {
-			p = ConfigOptions.loadProperties(
-					f,
-					filter);
-		}
-		else {
-			p = ConfigOptions.loadProperties(
-					f,
-					null);
-		}
+		Properties p = getGeoWaveConfigProperties(
+				params,
+				filter);
 
 		JCommander.getConsole().println(
 				"PROPERTIES (" + f.getName() + ")");
@@ -62,5 +52,4 @@ public class ListCommand extends
 					key + ": " + value);
 		}
 	}
-
 }

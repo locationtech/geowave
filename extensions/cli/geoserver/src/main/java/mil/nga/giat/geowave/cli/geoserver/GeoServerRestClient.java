@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -8,9 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -30,15 +34,18 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.beust.jcommander.ParameterException;
 
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
+import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -85,15 +92,137 @@ public class GeoServerRestClient
 
 	private WebTarget getWebTarget() {
 		if (webTarget == null) {
-			final Client client = ClientBuilder.newClient().register(
-					HttpAuthenticationFeature.basic(
+			String url = config.getUrl();
+			if (url != null) {
+				url = url.trim();
+				Client client = null;
+				if (url.toLowerCase().startsWith(
+						"http://")) {
+					client = ClientBuilder.newClient();
+				}
+				else if (url.toLowerCase().startsWith(
+						"https://")) {
+					SslConfigurator sslConfig = SslConfigurator.newInstance();
+					if (config.getGsConfigProperties() != null) {
+						loadSSLConfigurations(
+								sslConfig,
+								config.getGsConfigProperties());
+					}
+					SSLContext sslContext = sslConfig.createSSLContext();
+
+					HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+					client = ClientBuilder.newBuilder().sslContext(
+							sslContext).build();
+				}
+				if (client != null) {
+					client.register(HttpAuthenticationFeature.basic(
 							config.getUser(),
 							config.getPass()));
-
-			webTarget = client.target(config.getUrl());
+					webTarget = client.target(config.getUrl());
+				}
+			}
 		}
 
 		return webTarget;
+	}
+
+	/**
+	 * If connecting to GeoServer over HTTPS (HTTP+SSL), we need to specify the
+	 * SSL properties. The SSL properties are set from a properties file. Since
+	 * the properties will be different, based on one GeoServer deployment
+	 * compared to another, this gives the ability to specify any of the fields.
+	 * If the key is in provided properties file, it will be loaded into the
+	 * GeoServer SSL configuration.
+	 * 
+	 * @param sslConfig
+	 *            SSL Configuration object for use when instantiating an HTTPS
+	 *            connection to GeoServer
+	 * @param gsConfigProperties
+	 *            Properties object with applicable GeoServer connection
+	 *            properties
+	 */
+	private void loadSSLConfigurations(
+			SslConfigurator sslConfig,
+			Properties gsConfigProperties ) {
+		if (gsConfigProperties != null && sslConfig != null) {
+			// default to TLS for geoserver ssl security protocol
+			sslConfig.securityProtocol(gsConfigProperties.getProperty(
+					GEOSERVER_SSL_SECURITY_PROTOCOL,
+					"TLS"));
+
+			// check truststore property settings
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_FILE)) {
+				// resolve file path - either relative or absolute - then get
+				// the canonical path
+				File trustStoreFile = new File(
+						FileUtils.formatFilePath(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_FILE)));
+				if (trustStoreFile != null) {
+					try {
+						sslConfig.trustStoreFile(trustStoreFile.getCanonicalPath());
+					}
+					catch (IOException e) {
+						LOGGER.error(
+								"An error occurred loading the truststore at the specified path ["
+										+ gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_FILE) + "]:"
+										+ e.getLocalizedMessage(),
+								e);
+					}
+				}
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_PASS)) {
+				sslConfig.trustStorePassword(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_PASS));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_TYPE)) {
+				sslConfig.trustStoreType(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_TYPE));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_PROVIDER)) {
+				sslConfig.trustStoreProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_PROVIDER));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTMGR_ALG)) {
+				sslConfig.trustManagerFactoryAlgorithm(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTMGR_ALG));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTMGR_PROVIDER)) {
+				sslConfig.trustManagerFactoryProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTMGR_PROVIDER));
+			}
+
+			// check keystore property settings
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_FILE)) {
+				// resolve file path - either relative or absolute - then get
+				// the canonical path
+				File keyStoreFile = new File(
+						FileUtils.formatFilePath(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_FILE)));
+				if (keyStoreFile != null) {
+					try {
+						sslConfig.keyStoreFile(keyStoreFile.getCanonicalPath());
+					}
+					catch (IOException e) {
+						LOGGER.error(
+								"An error occurred loading the keystore at the specified path ["
+										+ gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_FILE) + "]:"
+										+ e.getLocalizedMessage(),
+								e);
+					}
+				}
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_PASS)) {
+				sslConfig.keyStorePassword(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_PASS));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEY_PASS)) {
+				sslConfig.keyPassword(gsConfigProperties.getProperty(GEOSERVER_SSL_KEY_PASS));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_PROVIDER)) {
+				sslConfig.keyStoreProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_PROVIDER));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_TYPE)) {
+				sslConfig.keyStoreType(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_TYPE));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYMGR_ALG)) {
+				sslConfig.keyManagerFactoryAlgorithm(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYMGR_ALG));
+			}
+			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYMGR_PROVIDER)) {
+				sslConfig.keyManagerFactoryProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYMGR_PROVIDER));
+			}
+		}
 	}
 
 	/**
@@ -302,7 +431,7 @@ public class GeoServerRestClient
 			}
 		}
 		else {
-			LOGGER.error("Error retieving GeoServer workspace list");
+			LOGGER.error("Error retrieving GeoServer workspace list");
 		}
 
 		return false;
@@ -930,7 +1059,7 @@ public class GeoServerRestClient
 
 		// Add in geoserver coverage store info
 		storeConfigMap.put(
-				GeoServerConfig.GEOSERVER_WORKSPACE,
+				GEOSERVER_WORKSPACE,
 				workspaceName);
 
 		storeConfigMap.put(
@@ -938,7 +1067,7 @@ public class GeoServerRestClient
 				inputStoreOptions.getGeowaveNamespace());
 
 		storeConfigMap.put(
-				GeoServerConfig.GEOSERVER_CS,
+				GEOSERVER_CS,
 				cvgStoreName);
 
 		final String cvgStoreXml = createCoverageXml(
@@ -1218,8 +1347,8 @@ public class GeoServerRestClient
 			final Boolean scaleTo8Bit ) {
 		String coverageXml = null;
 
-		final String workspace = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_WORKSPACE);
-		final String cvgstoreName = geowaveStoreConfig.get(GeoServerConfig.GEOSERVER_CS);
+		final String workspace = geowaveStoreConfig.get(GEOSERVER_WORKSPACE);
+		final String cvgstoreName = geowaveStoreConfig.get(GEOSERVER_CS);
 
 		StreamResult result = null;
 		try {

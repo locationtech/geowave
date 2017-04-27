@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 import jline.WindowsTerminal;
 import jline.console.ConsoleReader;
 
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+
 public class GeoWaveDemoAppShell
 {
 

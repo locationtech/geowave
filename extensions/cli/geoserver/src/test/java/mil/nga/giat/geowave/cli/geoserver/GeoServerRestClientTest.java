@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.cli.geoserver;
 
 import mil.nga.giat.geowave.cli.geoserver.GeoServerConfig;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerRestClient;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
