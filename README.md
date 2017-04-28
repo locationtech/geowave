@@ -39,7 +39,6 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
  
 ## Community
 
-* [GeoWave](https://wiki.eclipse.org/Google_Summer_of_Code_2015_Ideas) is on the project list for the [Google Summer of Code](https://www.google-melange.com/gsoc/homepage/google/gsoc2015).
 * GeoWave is currently in the process of moving to a permanent home under [LocationTech and the Eclipse Foundation](https://locationtech.org/proposals/geowave).
 * Community support is available on [chat](https://gitter.im/ngageoint/geowave) and on [our mailing list](mailto:geowave-dev@locationtech.org).
 
@@ -58,9 +57,9 @@ See [Screenshots](http://ngageoint.github.io/geowave/userguide.html#example-scre
 
 We work to maintain a N and N-1 tested and supported version pace for the following core libraries.
 
-| Geoserver | Geotools | Accumulo | Hadoop | PDAL | Mapnik | Java |
-|:---------:|:--------:|:--------:|:------:|:----:|:------:|:----:|
-| 2.8.x, 2.10.x | 16.x | 1.6.x, 1.7.x | 2.x | 0.9.9 |  master (pull request pending) | Java7, Java8 |
+| Geoserver | Geotools | Accumulo | HBase | Hadoop | PDAL | Mapnik | Java |
+|:---------:|:--------:|:--------:|:-----:|:------:|:----:|:------:|:----:|
+| 2.8.x, 2.10.x | 16.x | 1.6.x, 1.7.x | 1.2.x | 2.x | 0.9.9 |  master (pull request pending) | Java7, Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
 * [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html) should both be installed on Geoserver for GeoWave versions 0.9.2.1 and below (licensing prohibits us redistributing)
@@ -77,7 +76,7 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 
 ## Origin
 
-GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [RadiantBlue Technologies](http://www.radiantblue.com/) and [Booz Allen Hamilton](http://www.boozallen.com/).  The government has ["unlimited rights"](https://github.com/ngageoint/geowave/blob/master/NOTICE) and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.  
+GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [RadiantBlue Technologies](http://www.radiantblue.com/) (Now DigitalGlobe) and [Booz Allen Hamilton](http://www.boozallen.com/).  The government has ["unlimited rights"](https://github.com/ngageoint/geowave/blob/master/NOTICE) and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.  
 
 
 ## Contributing
@@ -86,6 +85,6 @@ All pull request contributions to this project will be released under the Apache
 Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see 17 USC § 101); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
 ## Everything else
-Check out our talk at the [2015 Accumulo Summit](http://accumulosummit.com/program/talks/geowave-geospatial-and-geotemporal-data-storage-and-retrieval-in-accumulo/).
+Check out our talk at the [Accumulo Summit](http://accumulosummit.com/program/talks/geowave-geospatial-and-geotemporal-data-storage-and-retrieval-in-accumulo/).
 
 Did I mention our [documentation!](http://ngageoint.github.io/geowave/)
