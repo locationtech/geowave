@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -189,47 +189,41 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#getBitsOfPrecision--">getBitsOfPrecision</a></span>()</code>
-<div class="block">Get the total number of bits of precision for this space filling curve</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#getCoordinates-byte:A-">getCoordinates</a></span>(byte[]&nbsp;id)</code>
 <div class="block">Gets n-dimensional coordinates from a single dimension</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#getEstimatedIdCount-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getEstimatedIdCount</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data)</code>
 <div class="block">Determines the estimated number of rows a multi-dimensional range will
  span within this space filling curve</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#getId-double:A-">getId</a></span>(double[]&nbsp;values)</code>
 <div class="block">Maps a n-dimensional value to a single dimension, i.e.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#getInsertionIdRangePerDimension--">getInsertionIdRangePerDimension</a></span>()</code>
 <div class="block">Get the range/size of a single insertion ID for each dimension</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#getRanges-byte:A-">getRanges</a></span>(byte[]&nbsp;id)</code>
 <div class="block">Gets n-dimensional ranges from a single dimension, i.e.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#normalizeRange-double-double-int-">normalizeRange</a></span>(double&nbsp;minValue,
               double&nbsp;maxValue,
@@ -238,7 +232,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
  dimension given a range</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
@@ -439,23 +433,6 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an object containing the ranges on the SFC that overlap the
          parameters supplied in the query object</dd>
-</dl>
-</li>
-</ul>
-<a name="getBitsOfPrecision--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getBitsOfPrecision</h4>
-<pre>public&nbsp;int&nbsp;getBitsOfPrecision()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getBitsOfPrecision--">SpaceFillingCurve</a></code></span></div>
-<div class="block">Get the total number of bits of precision for this space filling curve</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getBitsOfPrecision--">getBitsOfPrecision</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the total bits of precision</dd>
 </dl>
 </li>
 </ul>

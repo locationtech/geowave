@@ -111,11 +111,19 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.index.sfc.data">mil.nga.giat.geowave.core.index.sfc.data</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.index.sfc.binned">mil.nga.giat.geowave.core.index.sfc.binned</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.index.sfc.data">mil.nga.giat.geowave.core.index.sfc.data</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.index.sfc.tiered">mil.nga.giat.geowave.core.index.sfc.tiered</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.index.sfc.xz">mil.nga.giat.geowave.core.index.sfc.xz</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -420,6 +428,32 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.index.sfc.binned">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/binned/package-summary.html">mil.nga.giat.geowave.core.index.sfc.binned</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/binned/package-summary.html">mil.nga.giat.geowave.core.index.sfc.binned</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Coordinate.html" title="class in mil.nga.giat.geowave.core.index">Coordinate</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">BinnedSFCUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getCoordinatesForId-byte:A-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">getCoordinatesForId</a></span>(byte[]&nbsp;rowId,
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BinnedSFCUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getRangeForId-byte:A-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">getRangeForId</a></span>(byte[]&nbsp;rowId,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.index.sfc.data">
 <!--   -->
 </a>
@@ -516,18 +550,6 @@
 <div class="block">Used to create a Single Tier Index Strategy.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Coordinate.html" title="class in mil.nga.giat.geowave.core.index">Coordinate</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">TieredSFCIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#getCoordinatesForId-byte:A-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">getCoordinatesForId</a></span>(byte[]&nbsp;rowId,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TieredSFCIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#getRangeForId-byte:A-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">getRangeForId</a></span>(byte[]&nbsp;rowId,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
-</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
@@ -554,6 +576,61 @@
                       com.google.common.collect.ImmutableBiMap&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&gt;&nbsp;orderedSfcIndexToTierId,
                       long&nbsp;maxEstimatedDuplicateIdsPerDimension)</code>
 <div class="block">Constructor used to create a Tiered Index Strategy.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.index.sfc.xz">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/package-summary.html">mil.nga.giat.geowave.core.index.sfc.xz</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/package-summary.html">mil.nga.giat.geowave.core.index.sfc.xz</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">XZHierarchicalIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/XZHierarchicalIndexStrategy.html#getOrderedDimensionDefinitions--">getOrderedDimensionDefinitions</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/package-summary.html">mil.nga.giat.geowave.core.index.sfc.xz</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/XZHierarchicalIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.sfc.xz">XZHierarchicalIndexStrategy</a></code></td>
+<td class="colLast"><span class="typeNameLabel">XZHierarchicalIndexFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/XZHierarchicalIndexFactory.html#createFullIncrementalTieredStrategy-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-int:A-mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType-">createFullIncrementalTieredStrategy</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
+                                   int[]&nbsp;maxBitsPerDimension,
+                                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCFactory.SFCType.html" title="enum in mil.nga.giat.geowave.core.index.sfc">SFCFactory.SFCType</a>&nbsp;sfcType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/XZHierarchicalIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.sfc.xz">XZHierarchicalIndexStrategy</a></code></td>
+<td class="colLast"><span class="typeNameLabel">XZHierarchicalIndexFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/XZHierarchicalIndexFactory.html#createFullIncrementalTieredStrategy-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-int:A-mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType-java.lang.Long-">createFullIncrementalTieredStrategy</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
+                                   int[]&nbsp;maxBitsPerDimension,
+                                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SFCFactory.SFCType.html" title="enum in mil.nga.giat.geowave.core.index.sfc">SFCFactory.SFCType</a>&nbsp;sfcType,
+                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;maxEstimatedDuplicatedIds)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/package-summary.html">mil.nga.giat.geowave.core.index.sfc.xz</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/XZHierarchicalIndexStrategy.html#XZHierarchicalIndexStrategy-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy-int:A-">XZHierarchicalIndexStrategy</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
+                           <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html" title="class in mil.nga.giat.geowave.core.index.sfc.tiered">TieredSFCIndexStrategy</a>&nbsp;rasterStrategy,
+                           int[]&nbsp;maxBitsPerDimension)</code>
+<div class="block">Constructor used to create a XZ Hierarchical Index Strategy.</div>
 </td>
 </tr>
 </tbody>

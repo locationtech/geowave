@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html" title="class in mil.nga.giat.geowave.core.index.sfc.hilbert">HilbertSFC</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html" title="class in mil.nga.giat.geowave.core.index.sfc.zorder">ZOrderSFC</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/hilbert/HilbertSFC.html" title="class in mil.nga.giat.geowave.core.index.sfc.hilbert">HilbertSFC</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/xz/XZOrderSFC.html" title="class in mil.nga.giat.geowave.core.index.sfc.xz">XZOrderSFC</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/zorder/ZOrderSFC.html" title="class in mil.nga.giat.geowave.core.index.sfc.zorder">ZOrderSFC</a></dd>
 </dl>
 <hr>
 <br>
@@ -149,43 +149,37 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistabl
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getBitsOfPrecision--">getBitsOfPrecision</a></span>()</code>
-<div class="block">Get the total number of bits of precision for this space filling curve</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getCoordinates-byte:A-">getCoordinates</a></span>(byte[]&nbsp;id)</code>
 <div class="block">Gets n-dimensional coordinates from a single dimension</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getEstimatedIdCount-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getEstimatedIdCount</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data)</code>
 <div class="block">Determines the estimated number of rows a multi-dimensional range will
  span within this space filling curve</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getId-double:A-">getId</a></span>(double[]&nbsp;values)</code>
 <div class="block">Maps a n-dimensional value to a single dimension, i.e.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getInsertionIdRangePerDimension--">getInsertionIdRangePerDimension</a></span>()</code>
 <div class="block">Get the range/size of a single insertion ID for each dimension</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#getRanges-byte:A-">getRanges</a></span>(byte[]&nbsp;id)</code>
 <div class="block">Gets n-dimensional ranges from a single dimension, i.e.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html#normalizeRange-double-double-int-">normalizeRange</a></span>(double&nbsp;minValue,
               double&nbsp;maxValue,
@@ -361,7 +355,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistabl
 <a name="getInsertionIdRangePerDimension--">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getInsertionIdRangePerDimension</h4>
 <pre>double[]&nbsp;getInsertionIdRangePerDimension()</pre>
@@ -369,20 +363,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistabl
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the range of a single insertion ID for each dimension</dd>
-</dl>
-</li>
-</ul>
-<a name="getBitsOfPrecision--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getBitsOfPrecision</h4>
-<pre>int&nbsp;getBitsOfPrecision()</pre>
-<div class="block">Get the total number of bits of precision for this space filling curve</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the total bits of precision</dd>
 </dl>
 </li>
 </ul>

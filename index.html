@@ -168,9 +168,9 @@
             <div class="col-lg-4">
                 <h2>What is GeoWave?</h2>
                 <p class="padding-bottom">
-                    GeoWave is a library for storage, index, and search of multi-dimensional data on top of a sorted
-                    key-value datastore. GeoWave includes specific tailored implementations that have advanced support for
-                    OGC spatial types (up to 3 dimensions), and both bounded and unbounded temporal values.
+                    GeoWave is a software library that connects the scalability of distributed computing frameworks and 
+					key-value stores with modern geospatial software to store, retrieve and analyze massive geospatial 
+					datasets.
                 </p>
 				<p>
 					<img src="images/geowave-icon-logo-small.png">
@@ -180,27 +180,26 @@
                 <h2>Intent</h2>
                 <ul style="text-align: left">
                     <li>
+                        Scalable Design
+                        <p>
+                            By utilizing distributed computing clusters and server-side fine grain filtering, GeoWave is fully 
+							capable of performing interactive time and/or location specific queries on datasets containing 
+							billions of features with 100 percent accuracy.
+                        </p>
+                    </li>
+                    <li>
                         Pluggable Backend
                         <p>
-                            GeoWave is intended to be a multidimensional indexing layer that can be added on top of any
-                            sorted key-value store.
+                            GeoWave indexes multidimensional data in a way that ensures values close together in 
+							multidimensional space are stored physically close together in the distributed datastore of your 
+							choice.
                         </p>
                     </li>
                     <li>
-                        Modular Design
+                        Modular Framework
                         <p>
-                            It is expected that the out of the box functionality should satisfy 90% of use cases – at least
-                            that is the intent – but the modular architecture allows for easy feature extension as well as
-                            integration into other platforms.
-                        </p>
-                    </li>
-                    <li>
-                        Self-Describing Data
-                        <p>
-                            GeoWave also targets keeping data configuration, format, and other information needed to
-                            manipulate data in the database itself. This allows software to programmatically interrogate
-                            all the data stored in a single or set of GeoWave instances without needing bits of
-                            configuration from clients, application servers, or other external stores.
+                            GeoWave allows for easy feature extension and platform integration – bridging the gap between 
+							distributed technologies and minimizing the learning curve for developers.
                         </p>
                     </li>
                 </ul>
@@ -208,9 +207,9 @@
             <div class="col-lg-4">
                 <h2>Features</h2>
                 <ul style="text-align: left">
-                    <li>Adds multi-dimensional indexing to Accumulo</li>
-                    <li>Adds support for geographic objects and geospatial operators to Accumulo</li>
-                    <li>A GeoServer plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services</li>
+                    <li>Adds multi-dimensional indexing to Accumulo, HBase, BigTable and others</li>
+                    <li>Adds support for geographic objects and geospatial operators to distributed key-value stores</li>
+                    <li>A GeoServer plugin to allow geospatial data in a GeoWave datastore to be shared and visualized via OGC standard services</li>
                     <li>Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data</li>
                 </ul>
             </div>
