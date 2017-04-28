@@ -14,7 +14,7 @@ Example build args:
 
 [source, bash]
 ----
-export BUILD_ARGS="-Daccumulo.version=1.7.2 -Daccumulo.api=1.7 -Dhbase.version=1.2.3 -Dhadoop.version=2.7.3 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0" <1>
+export BUILD_ARGS="-Daccumulo.version=1.7.2 -Daccumulo.api=1.7 -Dhbase.version=1.3.0 -Dhadoop.version=2.7.3 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0" <1>
 ----
 <1> Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section
 
