@@ -29,6 +29,8 @@ import mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy.TierIndexMetaData;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 public class XZHierarchicalIndexStrategy implements
 		HierarchicalNumericIndexStrategy
@@ -533,6 +535,33 @@ public class XZHierarchicalIndexStrategy implements
 			}
 		}
 
+		/**
+		 * Convert XZHierarchical Index Metadata statistics to a JSON object
+		 */
+
+		@Override
+		public JSONObject toJSONObject()
+				throws JSONException {
+			JSONObject jo = new JSONObject();
+			jo.put(
+					"type",
+					"XZHierarchicalIndexStrategy");
+
+			jo.put(
+					"pointCurveMultiDimensionalId",
+					pointCurveMultiDimensionalId);
+			jo.put(
+					"xzCurveMultiDimensionalId",
+					xzCurveMultiDimensionalId);
+			jo.put(
+					"pointCurveCount",
+					pointCurveCount);
+			jo.put(
+					"xzCurveCount",
+					xzCurveCount);
+
+			return jo;
+		}
 	}
 
 }
