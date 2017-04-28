@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
