@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math.util.MathUtils;
@@ -115,6 +116,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 				query)) {
 			final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources);
 			int totalResults = 0;
+			final List<Long> actualCentroids = new ArrayList<Long>();
 			while (actualResults.hasNext()) {
 				final Object obj = actualResults.next();
 				if (obj instanceof SimpleFeature) {
@@ -123,12 +125,19 @@ abstract public class AbstractGeoWaveBasicVectorIT
 					Assert.assertTrue(
 							"Actual result '" + result.toString() + "' not found in expected result set",
 							expectedResults.hashedCentroids.contains(actualHashCentroid));
+					actualCentroids.add(actualHashCentroid);
 					totalResults++;
 				}
 				else {
 					TestUtils.deleteAll(getDataStorePluginOptions());
 					Assert.fail("Actual result '" + obj.toString() + "' is not of type Simple Feature.");
 				}
+			}
+			for (long l : actualCentroids) {
+				expectedResults.hashedCentroids.remove(l);
+			}
+			for (long l : expectedResults.hashedCentroids) {
+				LOGGER.error("Missing expected hashed centroid: " + l);
 			}
 			if (expectedResults.count != totalResults) {
 				TestUtils.deleteAll(getDataStorePluginOptions());
