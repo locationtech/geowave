@@ -28,7 +28,7 @@ public class CQLQuery extends
 	@Parameter(names = "--cql", required = true, description = "CQL Filter executed client side")
 	private String cqlStr;
 
-	@Parameter(names = "--useAggregation, -agg", required = false, description = "Compute count on the server side")
+	@Parameter(names = "--useAggregation, -agg", description = "Compute count on the server side")
 	private Boolean useAggregation = Boolean.FALSE;
 
 	@Override
@@ -53,9 +53,11 @@ public class CQLQuery extends
 							adapter,
 							null,
 							null))) {
-				final CountResult result = ((CountResult) (it.next()));
-				if (result != null) {
-					count += result.getCount();
+				if (it.hasNext()) {
+					final CountResult result = ((CountResult) (it.next()));
+					if (result != null) {
+						count += result.getCount();
+					}
 				}
 			}
 			catch (final IOException e) {

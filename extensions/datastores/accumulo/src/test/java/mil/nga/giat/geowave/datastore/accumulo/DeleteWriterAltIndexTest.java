@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.io.IOException;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.junit.Before;
 
 public class DeleteWriterAltIndexTest extends
@@ -10,7 +12,10 @@ public class DeleteWriterAltIndexTest extends
 
 	@Before
 	public void setUp()
-			throws IOException {
+			throws IOException,
+			InterruptedException,
+			AccumuloException,
+			AccumuloSecurityException {
 
 		options.setUseAltIndex(true);
 		super.setUp();

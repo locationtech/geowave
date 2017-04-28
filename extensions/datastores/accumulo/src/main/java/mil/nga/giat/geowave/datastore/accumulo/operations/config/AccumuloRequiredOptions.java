@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.datastore.accumulo.operations.config;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
+import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
+import mil.nga.giat.geowave.core.cli.converters.RequiredFieldConverter;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
@@ -43,7 +45,9 @@ public class AccumuloRequiredOptions extends
 	@Parameter(names = {
 		"-p",
 		"--" + PASSWORD_CONFIG_KEY
-	}, description = "The password for the user", required = true)
+	}, description = "The password for the user. Password can be specified as 'pass:<password>', 'file:<local file containing the password>', "
+			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', "
+			+ "or stdin", descriptionKey = "accumulo.pass.label", converter = PasswordConverter.class)
 	private String password;
 
 	@ParametersDelegate

@@ -178,7 +178,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		}
 
 		try {
-			testDelete(
+			testDeleteDataId(
 					new File(
 							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
 					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX);

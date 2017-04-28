@@ -14,7 +14,6 @@ public class RemoveIndexGroupCommand extends
 		AbstractRemoveCommand implements
 		Command
 {
-
 	@Override
 	public void execute(
 			OperationParams params ) {
@@ -24,6 +23,5 @@ public class RemoveIndexGroupCommand extends
 		super.execute(
 				params,
 				pattern);
-
 	}
 }

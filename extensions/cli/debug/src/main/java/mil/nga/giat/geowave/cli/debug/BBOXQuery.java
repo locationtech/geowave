@@ -56,7 +56,7 @@ public class BBOXQuery extends
 	@Parameter(names = {
 		"--useAggregation",
 		"-agg"
-	}, required = false, description = "Compute count on the server side")
+	}, description = "Compute count on the server side")
 	private Boolean useAggregation = Boolean.FALSE;
 
 	private Geometry geom;

@@ -11,7 +11,7 @@
 GEOWAVE_REPO_RPM=$GEOWAVE_REPO_RPM_TOKEN # TODO: Should have a prod->latest rpm
 GEOWAVE_VERSION=$GEOWAVE_VERSION_TOKEN
 GEOSERVER_PORT='8000'
-GEOSERVER_MEMORY="-Xmx512m -XX:MaxPermSize=128m"
+GEOSERVER_MEMORY="-Xmx1g"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

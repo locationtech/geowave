@@ -352,11 +352,6 @@ public class HilbertSFC implements
 	}
 
 	@Override
-	public int getBitsOfPrecision() {
-		return totalPrecision;
-	}
-
-	@Override
 	public MultiDimensionalNumericData getRanges(
 			final byte[] id ) {
 		return getIdOperations.convertFromHilbert(

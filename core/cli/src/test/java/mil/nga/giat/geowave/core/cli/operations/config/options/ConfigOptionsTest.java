@@ -9,31 +9,6 @@ import org.junit.Test;
 
 public class ConfigOptionsTest
 {
-
-	@Test
-	public void testGetPropertyPath() {
-		String propertypath = ConfigOptions.getDefaultPropertyPath().getAbsolutePath();
-		String expectedoutput = String.format(
-				"%s%s",
-				System.getProperty("user.home"),
-				"/.geowave");
-		assertEquals(
-				expectedoutput,
-				propertypath);
-	}
-
-	@Test
-	public void testGetPropertyFile() {
-		String propertyfile = ConfigOptions.getDefaultPropertyFile().getAbsolutePath();
-		String expectedoutput = String.format(
-				"%s%s",
-				System.getProperty("user.home"),
-				"/.geowave/unknownversion-config.properties");
-		assertEquals(
-				expectedoutput,
-				propertyfile);
-	}
-
 	@Test
 	public void testWriteProperty() {
 		String parent = String.format(

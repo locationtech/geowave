@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.index.sfc;
 
 import mil.nga.giat.geowave.core.index.sfc.hilbert.HilbertSFC;
+import mil.nga.giat.geowave.core.index.sfc.xz.XZOrderSFC;
 import mil.nga.giat.geowave.core.index.sfc.zorder.ZOrderSFC;
 
 /***
@@ -34,6 +35,10 @@ public class SFCFactory
 			case ZORDER:
 				return new ZOrderSFC(
 						dimensionDefs);
+
+			case XZORDER:
+				return new XZOrderSFC(
+						dimensionDefs);
 		}
 
 		return null;
@@ -45,7 +50,8 @@ public class SFCFactory
 	 */
 	public static enum SFCType {
 		HILBERT,
-		ZORDER
+		ZORDER,
+		XZORDER
 	}
 
 }

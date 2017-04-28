@@ -34,6 +34,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 
 	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
 	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
+	private static final String CQL_DELETE_STR = "STATE = 'TX'";
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
@@ -166,8 +167,21 @@ public class GeoWaveBasicSpatialVectorIT extends
 						+ e.getLocalizedMessage() + "'");
 			}
 		}
+
 		try {
-			testDelete(
+			testDeleteCQL(
+					CQL_DELETE_STR,
+					TestUtils.DEFAULT_SPATIAL_INDEX);
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '"
+					+ e.getLocalizedMessage() + "'");
+		}
+
+		try {
+			testDeleteSpatial(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
 					TestUtils.DEFAULT_SPATIAL_INDEX);

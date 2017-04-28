@@ -35,34 +35,4 @@ public class ExplainCommandTest
 				true,
 				params.isAllowUnknown());
 	}
-
-	@Test
-	public void testExecute() {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(
-				output));
-
-		String[] args = {
-			"explain"
-		};
-		OperationRegistry registry = OperationRegistry.getInstance();
-		OperationParser parser = new OperationParser(
-				registry);
-		CommandLineOperationParams params = parser.parse(
-				GeowaveTopLevelSection.class,
-				args);
-		ExplainCommand expcommand = new ExplainCommand();
-		expcommand.execute(params);
-
-		String expectedoutput = "Command: geowave [options] <subcommand> ...\n\n"
-				+ "                VALUE  NEEDED  PARAMETER NAMES                         \n"
-				+ "----------------------------------------------\n"
-				+ "{                    }         -cf, --config-file,                     \n"
-				+ "{                    }         --debug,                                \n"
-				+ "{                    }         --version,\n";
-		assertEquals(
-				expectedoutput,
-				output.toString());
-	}
-
 }
