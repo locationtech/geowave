@@ -8,7 +8,8 @@ import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -22,7 +23,7 @@ public class AccumuloRowPrefixDelete<T> extends
 		AccumuloRowPrefixQuery<T>
 {
 
-	private static final Logger LOGGER = Logger.getLogger(AccumuloRowPrefixDelete.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloRowPrefixDelete.class);
 
 	public AccumuloRowPrefixDelete(
 			PrimaryIndex index,
