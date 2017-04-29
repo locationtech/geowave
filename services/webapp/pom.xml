@@ -4,7 +4,7 @@
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4-SNAPSHOT</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-service-webapp</artifactId>
 	<name>GeoWave REST Services WebApp</name>
