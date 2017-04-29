@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mil.nga.giat</groupId>
     <artifactId>geowave-parent</artifactId>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.5-SNAPSHOT</version>
     <name>GeoWave Parent POM</name>
     <packaging>pom</packaging>
     <description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -821,15 +821,15 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- for incrementing version numbers and tagging repositories To Use: 
-             0. Ensure all files checked into master (clean environment). Make sure you 
-             have access to both mvn and git on your command line, and you are in a terminal 
-             that has push access (credentials are setup and correct). Make sure you have 
-             the branch active in git you want to tag. If something goes wrong pushing, 
-             you will most likely have outstanding commits in your local repo you will 
-             have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
-             -Dfindbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
-             modified 3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
+            <!-- for incrementing version numbers and tagging repositories To Use:
+             0. Ensure all files checked into master (clean environment). Make sure you
+             have access to both mvn and git on your command line, and you are in a terminal
+             that has push access (credentials are setup and correct). Make sure you have
+             the branch active in git you want to tag. If something goes wrong pushing,
+             you will most likely have outstanding commits in your local repo you will
+             have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests
+             -Dfindbugs.skip" 2. Inspect and ensure the correct pom.xml files will be
+             modified 3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip"
              4. mvn release:clean -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
