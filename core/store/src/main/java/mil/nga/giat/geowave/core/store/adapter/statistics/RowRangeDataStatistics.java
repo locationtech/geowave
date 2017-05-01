@@ -16,7 +16,7 @@ public class RowRangeDataStatistics<T> extends
 		AbstractDataStatistics<T>
 {
 	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
-			"ROW_RANGE_");
+			"ROW_RANGE");
 
 	private byte[] min = new byte[] {
 		(byte) 0xff

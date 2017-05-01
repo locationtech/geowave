@@ -2,6 +2,8 @@ package mil.nga.giat.geowave.adapter.raster.operations.options;
 
 import com.beust.jcommander.Parameter;
 
+import mil.nga.giat.geowave.mapreduce.operations.HdfsHostPortConverter;
+
 public class RasterTileResizeCommandLineOptions
 {
 	@Parameter(names = "--inputCoverageName", description = "The name of the input raster coverage", required = true)

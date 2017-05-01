@@ -10,6 +10,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableExistsException;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
@@ -131,19 +132,28 @@ public class BasicHBaseOperations implements
 					desc.addFamily(new HColumnDescriptor(
 							columnFamily));
 				}
-				if ((splits != null) && !splits.isEmpty()) {
-					final byte[][] splitKeys = new byte[splits.size()][];
-					int i = 0;
-					for (final ByteArrayId split : splits) {
-						splitKeys[i++] = split.getBytes();
+
+				try {
+					if ((splits != null) && !splits.isEmpty()) {
+						final byte[][] splitKeys = new byte[splits.size()][];
+						int i = 0;
+						for (final ByteArrayId split : splits) {
+							splitKeys[i++] = split.getBytes();
+						}
+						conn.getAdmin().createTable(
+								desc,
+								splitKeys);
 					}
-					conn.getAdmin().createTable(
-							desc,
-							splitKeys);
+					else {
+						conn.getAdmin().createTable(
+								desc);
+					}
 				}
-				else {
-					conn.getAdmin().createTable(
-							desc);
+				catch (Exception e) {
+					// We can ignore TableExists on create
+					if (!(e instanceof TableExistsException)) {
+						throw (e);
+					}
 				}
 			}
 		}

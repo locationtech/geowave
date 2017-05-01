@@ -32,7 +32,8 @@ public class IndependentAdapterIndexWriter<T> implements
 	@Override
 	public List<ByteArrayId> write(
 			final T entry,
-			final VisibilityWriter<T> feldVisibilityWriter ) {
+			final VisibilityWriter<T> feldVisibilityWriter )
+			throws IOException {
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);
@@ -54,7 +55,8 @@ public class IndependentAdapterIndexWriter<T> implements
 
 	@Override
 	public List<ByteArrayId> write(
-			T entry ) {
+			T entry )
+			throws IOException {
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);

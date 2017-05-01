@@ -526,7 +526,14 @@ public class RasterIngestRunner extends
 						return;
 					}
 				}
-				writer.write(mergedCoverage);
+				try {
+					writer.write(mergedCoverage);
+				}
+				catch (IOException e) {
+					LOGGER.error(
+							"Unable to write merged coverage",
+							e);
+				}
 				lastSceneBands.clear();
 				if (!ingestOptions.isRetainImages()) {
 					for (final BandData b : sceneData.values()) {

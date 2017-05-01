@@ -432,11 +432,11 @@ public class QueryOptions implements
 			}
 			else if (indices.isNotEmpty()) {
 				for (final ByteArrayId id : indices.getIndexIds()) {
-					final PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(id);
+					final PrimaryIndex pIndex = (PrimaryIndex) indexStore.getIndex(id);
 					// this could happen if persistent was turned off
-					if (index != null) {
+					if (pIndex != null) {
 						result.add(Pair.of(
-								index,
+								pIndex,
 								adapter));
 					}
 				}
