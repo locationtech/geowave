@@ -23,8 +23,8 @@ import org.geotools.data.Parameter;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationFactorySPI;
-import mil.nga.giat.geowave.adapter.vector.auth.EmptyAuthorizationFactory;
+import mil.nga.giat.geowave.adapter.auth.AuthorizationFactorySPI;
+import mil.nga.giat.geowave.adapter.auth.EmptyAuthorizationFactory;
 import mil.nga.giat.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy;
 import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;

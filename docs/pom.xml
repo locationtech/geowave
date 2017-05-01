@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4-SNAPSHOT</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>geowave-doc</artifactId>
@@ -108,16 +107,13 @@
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<fileset id="generate-index-file" dir="${project.basedir}/content/devguide"
-									includes="*.adoc" />
+								<fileset id="generate-index-file" dir="${project.basedir}/content/devguide" includes="*.adoc" />
 								<!-- Abusing this a bit to do some simple templating, I have a file 
 									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
-								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files"
-									refid="generate-index-file">
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file">
 									<map from="${project.basedir}/content/devguide/" to="include::" />
 								</pathconvert>
-								<echo
-									file="${project.build.directory}/content/devguide/devguide.adoc">${asciidoc-files}[]</echo>
+								<echo file="${project.build.directory}/content/devguide/devguide.adoc">${asciidoc-files}[]</echo>
 							</target>
 						</configuration>
 						<goals>
@@ -129,16 +125,13 @@
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<fileset id="generate-index-file" dir="${project.basedir}/content/userguide"
-									includes="*.adoc" />
+								<fileset id="generate-index-file" dir="${project.basedir}/content/userguide" includes="*.adoc" />
 								<!-- Abusing this a bit to do some simple templating, I have a file 
 									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
-								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files"
-									refid="generate-index-file">
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file">
 									<map from="${project.basedir}/content/userguide/" to="include::" />
 								</pathconvert>
-								<echo
-									file="${project.build.directory}/content/userguide/userguide.adoc">${asciidoc-files}[]</echo>
+								<echo file="${project.build.directory}/content/userguide/userguide.adoc">${asciidoc-files}[]</echo>
 							</target>
 						</configuration>
 						<goals>
@@ -150,16 +143,13 @@
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<fileset id="generate-index-file-quickstart" dir="${project.basedir}/content/quickstart"
-									includes="*.adoc" />
+								<fileset id="generate-index-file-quickstart" dir="${project.basedir}/content/quickstart" includes="*.adoc" />
 								<!-- Abusing this a bit to do some simple templating, I have a file 
 									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
-								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files"
-									refid="generate-index-file-quickstart">
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-quickstart">
 									<map from="${project.basedir}/content/quickstart/" to="include::" />
 								</pathconvert>
-								<echo
-									file="${project.build.directory}/content/quickstart/quickstart.adoc">${asciidoc-files}[]</echo>
+								<echo file="${project.build.directory}/content/quickstart/quickstart.adoc">${asciidoc-files}[]</echo>
 							</target>
 						</configuration>
 						<goals>
@@ -171,16 +161,13 @@
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<fileset id="generate-index-file-commands" dir="${project.basedir}/content/commands"
-									includes="*.adoc" />
+								<fileset id="generate-index-file-commands" dir="${project.basedir}/content/commands" includes="*.adoc" />
 								<!-- Abusing this a bit to do some simple templating, I have a file 
 									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
-								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files"
-									refid="generate-index-file-commands">
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-commands">
 									<map from="${project.basedir}/content/commands/" to="include::" />
 								</pathconvert>
-								<echo
-									file="${project.build.directory}/content/commands/commands.adoc">${asciidoc-files}[]</echo>
+								<echo file="${project.build.directory}/content/commands/commands.adoc">${asciidoc-files}[]</echo>
 							</target>
 						</configuration>
 						<goals>

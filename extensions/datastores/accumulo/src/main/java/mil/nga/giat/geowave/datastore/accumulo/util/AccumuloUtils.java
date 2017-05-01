@@ -103,6 +103,10 @@ public class AccumuloUtils
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
+		if (byteArrayRange.isSingleValue()) {
+			return Range.exact(new Text(
+					byteArrayRange.getStart().getBytes()));
+		}
 		final Text start = new Text(
 				byteArrayRange.getStart().getBytes());
 		final Text end = new Text(

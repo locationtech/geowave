@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.4-SNAPSHOT</version>
+	<version>0.9.5-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -40,7 +40,7 @@
 		<skipITs>true</skipITs>
 		<bigtable.version>0.9.4</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
-		<hbase.version>1.2.3</hbase.version>
+		<hbase.version>1.3.0</hbase.version>
 		<hadoop.version>2.7.3</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<commons.cli.version>1.2</commons.cli.version>
@@ -54,6 +54,8 @@
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
+		<jackson.version>1.9.13</jackson.version>
+		<spring-security.version>4.0.4.RELEASE</spring-security.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -149,6 +151,12 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.4</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.json-lib</groupId>
+				<artifactId>json-lib</artifactId>
+				<classifier>jdk15</classifier>
+				<version>2.4</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
@@ -376,6 +384,23 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-vfs2</artifactId>
 				<version>${vfs2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-core-asl</artifactId>
+				<version>${jackson.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring-security.version}</version>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -780,19 +805,16 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- for incrementing version numbers and tagging repositories 
-			To Use:
-			0. Ensure all files checked into master (clean environment).  Make sure
-			   you have access to both mvn and git on your command line, and you are
-			   in a terminal that has push access (credentials are setup and correct).
-			   Make sure you have the branch active in git you want to tag.
-			   If something goes wrong pushing, you will most likely have outstanding
-			   commits in your local repo you will have to revert/remove.
-			1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests -Dfindbugs.skip"
-			2. Inspect and ensure the correct pom.xml files will be modified
-			3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip"
-			4. mvn release:clean
-			-->
+			<!-- for incrementing version numbers and tagging repositories To Use: 
+				0. Ensure all files checked into master (clean environment). Make sure you 
+				have access to both mvn and git on your command line, and you are in a terminal 
+				that has push access (credentials are setup and correct). Make sure you have 
+				the branch active in git you want to tag. If something goes wrong pushing, 
+				you will most likely have outstanding commits in your local repo you will 
+				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
+				-Dfindbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
+				modified 3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
+				4. mvn release:clean -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>

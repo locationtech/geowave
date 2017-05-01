@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,13 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.log4j.Logger;
+
+import com.google.common.collect.Iterators;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -43,6 +47,8 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.CastIterator;
+import mil.nga.giat.geowave.core.store.base.DataStoreCallbackManager;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
@@ -53,9 +59,16 @@ import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
+import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
+import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.RowIdQuery;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
+import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 import mil.nga.giat.geowave.core.store.util.DataAdapterAndIndexCache;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.mapreduce.AccumuloSplitsProvider;
@@ -65,8 +78,11 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
+import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
+import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
@@ -98,6 +114,17 @@ public class AccumuloDataStore extends
 	private final AccumuloOptions accumuloOptions;
 
 	private final AccumuloSplitsProvider splitsProvider = new AccumuloSplitsProvider();
+
+	private static class DupTracker
+	{
+		HashMap<ByteArrayId, ByteArrayId> idMap;
+		HashMap<ByteArrayId, Integer> dupCountMap;
+
+		public DupTracker() {
+			idMap = new HashMap<>();
+			dupCountMap = new HashMap<>();
+		}
+	}
 
 	public AccumuloDataStore(
 			final AccumuloOperations accumuloOperations ) {
@@ -321,32 +348,61 @@ public class AccumuloDataStore extends
 			final Query sanitizedQuery,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
-		final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
-				adapterIdsToQuery,
-				index,
-				sanitizedQuery,
-				filter,
-				sanitizedQueryOptions.getScanCallback(),
-				sanitizedQueryOptions.getAggregation(),
-				sanitizedQueryOptions.getFieldIdsAdapterPair(),
-				IndexMetaDataSet.getIndexMetadata(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				DuplicateEntryCount.getDuplicateCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				sanitizedQueryOptions.getAuthorizations());
-
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
+		final AccumuloConstraintsQuery accumuloQuery;
+		if (delete) {
+			accumuloQuery = new AccumuloConstraintsDelete(
+					adapterIdsToQuery,
+					index,
+					sanitizedQuery,
+					filter,
+					sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getAggregation(),
+					sanitizedQueryOptions.getFieldIdsAdapterPair(),
+					IndexMetaDataSet.getIndexMetadata(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DuplicateEntryCount.getDuplicateCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		}
+		else {
+			accumuloQuery = new AccumuloConstraintsQuery(
+					adapterIdsToQuery,
+					index,
+					sanitizedQuery,
+					filter,
+					sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getAggregation(),
+					sanitizedQueryOptions.getFieldIdsAdapterPair(),
+					IndexMetaDataSet.getIndexMetadata(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DuplicateEntryCount.getDuplicateCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		}
 		return accumuloQuery.query(
 				accumuloOperations,
 				tempAdapterStore,
@@ -360,18 +416,35 @@ public class AccumuloDataStore extends
 			final ByteArrayId rowPrefix,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			final List<ByteArrayId> adapterIdsToQuery ) {
-		final AccumuloRowPrefixQuery<Object> prefixQuery = new AccumuloRowPrefixQuery<Object>(
-				index,
-				rowPrefix,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
-				sanitizedQueryOptions.getLimit(),
-				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				sanitizedQueryOptions.getAuthorizations());
+			final List<ByteArrayId> adapterIdsToQuery,
+			boolean delete ) {
+		final AccumuloRowPrefixQuery<Object> prefixQuery;
+		if (delete) {
+			prefixQuery = new AccumuloRowPrefixDelete<Object>(
+					index,
+					rowPrefix,
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getLimit(),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		}
+		else {
+			prefixQuery = new AccumuloRowPrefixQuery<Object>(
+					index,
+					rowPrefix,
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getLimit(),
+					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getAuthorizations());
+		}
 		return prefixQuery.query(
 				accumuloOperations,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
@@ -385,15 +458,27 @@ public class AccumuloDataStore extends
 			final List<ByteArrayId> rowIds,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
-		final AccumuloRowIdsQuery<Object> q = new AccumuloRowIdsQuery<Object>(
-				adapter,
-				index,
-				rowIds,
-				(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
-				filter,
-				sanitizedQueryOptions.getAuthorizations());
-
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
+		final AccumuloRowIdsQuery<Object> q;
+		if (delete) {
+			q = new AccumuloRowIdsDelete<Object>(
+					adapter,
+					index,
+					rowIds,
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					filter,
+					sanitizedQueryOptions.getAuthorizations());
+		}
+		else {
+			q = new AccumuloRowIdsQuery<Object>(
+					adapter,
+					index,
+					rowIds,
+					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					filter,
+					sanitizedQueryOptions.getAuthorizations());
+		}
 		return q.query(
 				accumuloOperations,
 				tempAdapterStore,
@@ -451,7 +536,8 @@ public class AccumuloDataStore extends
 			final DataAdapter<?> adapter,
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final String[] authorizations ) {
+			final String[] authorizations,
+			boolean delete ) {
 
 		try {
 
@@ -683,5 +769,305 @@ public class AccumuloDataStore extends
 				isOutputWritable,
 				adapterStore,
 				accumuloOperations);
+	}
+
+	@Override
+	public boolean delete(
+			final QueryOptions queryOptions,
+			final Query query ) {
+		// Normal mass wipeout
+		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
+			return deleteEverything();
+		}
+
+		// Delete by data ID works best the old way
+		if (query instanceof DataIdQuery) {
+			return super.delete(
+					queryOptions,
+					query);
+		}
+
+		// Clean up inputs
+		final QueryOptions sanitizedQueryOptions = (queryOptions == null) ? new QueryOptions() : queryOptions;
+		final Query sanitizedQuery = (query == null) ? new EverythingQuery() : query;
+
+		// Get the index-adapter pairs
+		MemoryAdapterStore tempAdapterStore;
+		List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> indexAdapterPairs;
+
+		try {
+			tempAdapterStore = new MemoryAdapterStore(
+					sanitizedQueryOptions.getAdaptersArray(adapterStore));
+
+			indexAdapterPairs = sanitizedQueryOptions.getAdaptersWithMinimalSetOfIndices(
+					tempAdapterStore,
+					indexMappingStore,
+					indexStore);
+		}
+		catch (final IOException e1) {
+			LOGGER.error(
+					"Failed to resolve adapter or index for query",
+					e1);
+
+			return false;
+		}
+
+		// Setup the stats for update
+		final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
+				statisticsStore,
+				secondaryIndexDataStore,
+				true);
+
+		callbackCache.setPersistStats(accumuloOptions.isPersistDataStatistics());
+
+		final DupTracker dupTracker = new DupTracker();
+
+		// Get BatchDeleters for the query
+		CloseableIterator<Object> deleteIt = getBatchDeleters(
+				callbackCache,
+				tempAdapterStore,
+				indexAdapterPairs,
+				sanitizedQueryOptions,
+				sanitizedQuery,
+				dupTracker);
+
+		// Iterate through deleters
+		while (deleteIt.hasNext()) {
+			deleteIt.next();
+		}
+
+		try {
+			deleteIt.close();
+			callbackCache.close();
+		}
+		catch (IOException e) {
+			LOGGER.error(
+					"Failed to close delete iterator",
+					e);
+		}
+
+		// Have to delete dups by data ID if any
+		if (!dupTracker.dupCountMap.isEmpty()) {
+			LOGGER.warn("Need to delete duplicates by data ID");
+			int dupDataCount = 0;
+			int dupFailCount = 0;
+			boolean deleteByIdSuccess = true;
+
+			for (ByteArrayId dataId : dupTracker.dupCountMap.keySet()) {
+				if (!super.delete(
+						new QueryOptions(),
+						new DataIdQuery(
+								dupTracker.idMap.get(dataId),
+								dataId))) {
+					deleteByIdSuccess = false;
+					dupFailCount++;
+				}
+				else {
+					dupDataCount++;
+				}
+			}
+
+			if (deleteByIdSuccess) {
+				LOGGER.warn("Deleted " + dupDataCount + " duplicates by data ID");
+			}
+			else {
+				LOGGER.warn("Failed to delete " + dupFailCount + " duplicates by data ID");
+			}
+		}
+
+		boolean countAggregation = (sanitizedQuery instanceof DataIdQuery ? false : true);
+
+		// Count after the delete. Should always be zero
+		int undeleted = getCount(
+				indexAdapterPairs,
+				sanitizedQueryOptions,
+				sanitizedQuery,
+				countAggregation);
+
+		// Expected outcome
+		if (undeleted == 0) {
+			return true;
+		}
+
+		LOGGER.warn("Accumulo bulk delete failed to remove " + undeleted + " rows");
+
+		// Fallback: delete duplicates via callback using base delete method
+		return super.delete(
+				queryOptions,
+				query);
+	}
+
+	protected int getCount(
+			List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> indexAdapterPairs,
+			final QueryOptions sanitizedQueryOptions,
+			final Query sanitizedQuery,
+			final boolean countAggregation ) {
+		int count = 0;
+
+		for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : indexAdapterPairs) {
+			for (DataAdapter dataAdapter : indexAdapterPair.getRight()) {
+				QueryOptions countOptions = new QueryOptions(
+						sanitizedQueryOptions);
+				if (countAggregation) {
+					countOptions.setAggregation(
+							new CountAggregation(),
+							dataAdapter);
+				}
+
+				try (final CloseableIterator<Object> it = query(
+						countOptions,
+						sanitizedQuery)) {
+					while (it.hasNext()) {
+						if (countAggregation) {
+							final CountResult result = ((CountResult) (it.next()));
+							if (result != null) {
+								count += result.getCount();
+							}
+						}
+						else {
+							it.next();
+							count++;
+						}
+					}
+
+					it.close();
+				}
+				catch (final Exception e) {
+					LOGGER.warn(
+							"Error running count aggregation",
+							e);
+					return count;
+				}
+			}
+		}
+
+		return count;
+	}
+
+	protected <T> CloseableIterator<T> getBatchDeleters(
+			final DataStoreCallbackManager callbackCache,
+			final MemoryAdapterStore tempAdapterStore,
+			final List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> indexAdapterPairs,
+			final QueryOptions sanitizedQueryOptions,
+			final Query sanitizedQuery,
+			final DupTracker dupTracker ) {
+		final boolean DELETE = true; // for readability
+		final List<CloseableIterator<Object>> results = new ArrayList<CloseableIterator<Object>>();
+
+		for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : indexAdapterPairs) {
+			final List<ByteArrayId> adapterIdsToQuery = new ArrayList<>();
+			for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
+
+				// Add scan callback for bookkeeping
+				final ScanCallback<Object> callback = new ScanCallback<Object>() {
+					@Override
+					public void entryScanned(
+							final DataStoreEntryInfo entryInfo,
+							final Object entry ) {
+						updateDupCounts(
+								dupTracker,
+								adapter.getAdapterId(),
+								entryInfo);
+
+						callbackCache.getDeleteCallback(
+								(WritableDataAdapter<Object>) adapter,
+								indexAdapterPair.getLeft()).entryDeleted(
+								entryInfo,
+								entry);
+					}
+				};
+
+				sanitizedQueryOptions.setScanCallback(callback);
+
+				if (sanitizedQuery instanceof RowIdQuery) {
+					sanitizedQueryOptions.setLimit(-1);
+					results.add(queryRowIds(
+							adapter,
+							indexAdapterPair.getLeft(),
+							((RowIdQuery) sanitizedQuery).getRowIds(),
+							null,
+							sanitizedQueryOptions,
+							tempAdapterStore,
+							DELETE));
+					continue;
+				}
+				else if (sanitizedQuery instanceof PrefixIdQuery) {
+					final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) sanitizedQuery;
+					results.add(queryRowPrefix(
+							indexAdapterPair.getLeft(),
+							prefixIdQuery.getRowPrefix(),
+							sanitizedQueryOptions,
+							tempAdapterStore,
+							adapterIdsToQuery,
+							DELETE));
+					continue;
+				}
+				adapterIdsToQuery.add(adapter.getAdapterId());
+			}
+			// supports querying multiple adapters in a single index
+			// in one query instance (one scanner) for efficiency
+			if (adapterIdsToQuery.size() > 0) {
+				results.add(queryConstraints(
+						adapterIdsToQuery,
+						indexAdapterPair.getLeft(),
+						sanitizedQuery,
+						null,
+						sanitizedQueryOptions,
+						tempAdapterStore,
+						DELETE));
+			}
+		}
+
+		return new CloseableIteratorWrapper<T>(
+				new Closeable() {
+					@Override
+					public void close()
+							throws IOException {
+						for (final CloseableIterator<Object> result : results) {
+							result.close();
+						}
+					}
+				},
+				Iterators.concat(new CastIterator<T>(
+						results.iterator())));
+	}
+
+	protected void updateDupCounts(
+			final DupTracker dupTracker,
+			final ByteArrayId adapterId,
+			DataStoreEntryInfo entryInfo ) {
+		ByteArrayId dataId = new ByteArrayId(
+				entryInfo.getDataId());
+
+		for (ByteArrayId rowId : entryInfo.getRowIds()) {
+			GeowaveRowId rowData = new GeowaveRowId(
+					rowId.getBytes());
+			int rowDups = rowData.getNumberOfDuplicates();
+
+			if (rowDups > 0) {
+				if (dupTracker.idMap.get(dataId) == null) {
+					dupTracker.idMap.put(
+							dataId,
+							adapterId);
+				}
+
+				Integer mapDups = dupTracker.dupCountMap.get(dataId);
+
+				if (mapDups == null) {
+					dupTracker.dupCountMap.put(
+							dataId,
+							rowDups);
+				}
+				else if (mapDups == 1) {
+					dupTracker.dupCountMap.remove(dataId);
+				}
+				else {
+					dupTracker.dupCountMap.put(
+							dataId,
+							mapDups - 1);
+				}
+			}
+		}
+
 	}
 }

@@ -37,6 +37,7 @@ public class SetCommandTest
 		setcommand.setParameters(
 				name,
 				value);
+		setcommand.prepare(params);
 		setcommand.execute(params);
 
 		File f = (File) params.getContext().get(

@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4-SNAPSHOT</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-deploy</artifactId>
 	<name>GeoWave Deployment Configurations</name>
@@ -38,6 +38,7 @@
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>build.properties</include>
+					<include>GeoWaveLabels.properties</include>
 				</includes>
 			</resource>
 		</resources>
@@ -93,6 +94,11 @@
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-datastore-hbase</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-bigtable</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
@@ -250,6 +256,11 @@
 					<artifactId>geowave-datastore-hbase</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-bigtable</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 			</dependencies>
 			<build>
 				<plugins>
@@ -299,6 +310,7 @@
 											<exclude>*:servlet-api:*</exclude>
 											<exclude>*:*:jsr305</exclude>
 											<exclude>org.springframework.security:*</exclude>
+											<exclude>org.springframework:*</exclude>
 											<exclude>org.geoserver:*</exclude>
 											<exclude>xpp3:xpp3_min</exclude>
 											<exclude>xpp3:xpp3</exclude>

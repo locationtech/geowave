@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -15,6 +14,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -22,7 +22,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 
 @GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
-public class AddIndexCommand implements
+public class AddIndexCommand extends
+		DefaultOperation implements
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
@@ -48,19 +49,14 @@ public class AddIndexCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 
 		// Load SPI options for the given type into pluginOptions.
 		if (type != null) {
 			pluginOptions.selectPlugin(type);
 		}
 		else {
-			// Try to load the 'default' options.
-
-			File configFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-			Properties existingProps = ConfigOptions.loadProperties(
-					configFile,
-					null);
+			Properties existingProps = getGeoWaveConfigProperties(params);
 
 			String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
@@ -96,11 +92,7 @@ public class AddIndexCommand implements
 					"Must specify index name");
 		}
 
-		File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Make sure we're not already in the index.
 		IndexPluginOptions existPlugin = new IndexPluginOptions();
@@ -125,7 +117,7 @@ public class AddIndexCommand implements
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 
