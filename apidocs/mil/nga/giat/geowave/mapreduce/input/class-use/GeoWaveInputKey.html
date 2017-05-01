@@ -127,14 +127,18 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.dedupe">mil.nga.giat.geowave.mapreduce.dedupe</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.copy">mil.nga.giat.geowave.mapreduce.copy</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.input">mil.nga.giat.geowave.mapreduce.input</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.dedupe">mil.nga.giat.geowave.mapreduce.dedupe</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.input">mil.nga.giat.geowave.mapreduce.input</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.splits">mil.nga.giat.geowave.mapreduce.splits</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -698,6 +702,53 @@
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/NativeReduceContext.html#NativeReduceContext-org.apache.hadoop.mapreduce.ReduceContext-mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool-">NativeReduceContext</a></span>(org.apache.hadoop.mapreduce.ReduceContext&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/NativeReduceContext.html" title="type parameter in NativeReduceContext">KEYIN</a>,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/NativeReduceContext.html" title="type parameter in NativeReduceContext">VALUEIN</a>,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.apache.hadoop.io.ObjectWritable&gt;&nbsp;writableContext,
                    <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html" title="class in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializationTool</a>&nbsp;serializationTool)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.mapreduce.copy">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a> in <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/copy/package-summary.html">mil.nga.giat.geowave.mapreduce.copy</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/copy/package-summary.html">mil.nga.giat.geowave.mapreduce.copy</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">StoreCopyMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/copy/StoreCopyMapper.html#mapNativeValue-mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey-java.lang.Object-org.apache.hadoop.mapreduce.MapContext-">mapNativeValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+              org.apache.hadoop.mapreduce.MapContext&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">StoreCopyReducer.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/copy/StoreCopyReducer.html#reduceNativeValues-mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey-java.lang.Iterable-org.apache.hadoop.mapreduce.Reducer.Context-">reduceNativeValues</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values,
+                  org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/copy/package-summary.html">mil.nga.giat.geowave.mapreduce.copy</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">StoreCopyMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/copy/StoreCopyMapper.html#mapNativeValue-mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey-java.lang.Object-org.apache.hadoop.mapreduce.MapContext-">mapNativeValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+              org.apache.hadoop.mapreduce.MapContext&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">StoreCopyMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/copy/StoreCopyMapper.html#mapNativeValue-mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey-java.lang.Object-org.apache.hadoop.mapreduce.MapContext-">mapNativeValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+              org.apache.hadoop.mapreduce.MapContext&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;context)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

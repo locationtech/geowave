@@ -179,7 +179,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry)</pre>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry)
+                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Write the entry using the index writer's configure field visibility
  writer.</div>
 <dl>
@@ -187,6 +188,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <dd><code>writableAdapter</code> - </dd>
 <dd><code>entry</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -199,7 +202,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <li class="blockList">
 <h4>write</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry,
-                        <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</pre>
+                        <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)
+                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="getIndices--">

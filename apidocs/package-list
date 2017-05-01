@@ -196,8 +196,10 @@ mil.nga.giat.geowave.format.stanag4676.parser.util
 mil.nga.giat.geowave.format.tdrive
 mil.nga.giat.geowave.format.twitter
 mil.nga.giat.geowave.mapreduce
+mil.nga.giat.geowave.mapreduce.copy
 mil.nga.giat.geowave.mapreduce.dedupe
 mil.nga.giat.geowave.mapreduce.input
+mil.nga.giat.geowave.mapreduce.operations
 mil.nga.giat.geowave.mapreduce.output
 mil.nga.giat.geowave.mapreduce.splits
 mil.nga.giat.geowave.service
