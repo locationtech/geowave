@@ -87,7 +87,8 @@ public class HBaseIndexWriter<T> extends
 		}
 	}
 
-	protected synchronized void ensureOpen() {
+	protected synchronized void ensureOpen()
+			throws IOException {
 		if (writer == null) {
 			try {
 				writer = operations.createWriter(
@@ -97,11 +98,17 @@ public class HBaseIndexWriter<T> extends
 						},
 						options.isCreateTable(),
 						index.getIndexStrategy().getNaturalSplits());
+
+				if (writer == null) {
+					throw new IOException(
+							"Create writer failed without an exception");
+				}
 			}
 			catch (final IOException e) {
 				LOGGER.error(
 						"Unable to open writer",
 						e);
+				throw (e);
 			}
 		}
 	}

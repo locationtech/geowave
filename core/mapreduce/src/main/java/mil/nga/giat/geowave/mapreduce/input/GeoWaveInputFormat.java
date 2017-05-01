@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -64,6 +65,13 @@ public class GeoWaveInputFormat<T> extends
 	public static IndexStore getJobContextIndexStore(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getJobContextIndexStore(
+				CLASS,
+				context);
+	}
+
+	public static AdapterIndexMappingStore getJobContextAdapterIndexMappingStore(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getJobContextAdapterIndexMappingStore(
 				CLASS,
 				context);
 	}
@@ -295,6 +303,7 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions queryOptions = getQueryOptions(context);
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
+
 			return ((MapReduceDataStore) dataStore).getSplits(
 					getQuery(context),
 					rangeQueryOptions,
@@ -304,6 +313,7 @@ public class GeoWaveInputFormat<T> extends
 					getMinimumSplitCount(context),
 					getMaximumSplitCount(context));
 		}
+
 		LOGGER.error("Data Store does not support map reduce");
 		throw new IOException(
 				"Data Store does not support map reduce");

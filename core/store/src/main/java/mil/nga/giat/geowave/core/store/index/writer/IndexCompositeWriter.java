@@ -31,7 +31,8 @@ public class IndexCompositeWriter<T> implements
 
 	@Override
 	public List<ByteArrayId> write(
-			T entry ) {
+			T entry )
+			throws IOException {
 		List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
 		for (IndexWriter<T> indexWriter : writers) {
 			ids.addAll(indexWriter.write(entry));
@@ -42,7 +43,8 @@ public class IndexCompositeWriter<T> implements
 	@Override
 	public List<ByteArrayId> write(
 			T entry,
-			VisibilityWriter<T> fieldVisibilityWriter ) {
+			VisibilityWriter<T> fieldVisibilityWriter )
+			throws IOException {
 		List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
 		for (IndexWriter<T> indexWriter : writers) {
 			ids.addAll(indexWriter.write(

@@ -5,15 +5,13 @@ import java.nio.ByteBuffer;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
+import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
-import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Dynamic histogram provide very high accuracy for CDF and quantiles over the a
