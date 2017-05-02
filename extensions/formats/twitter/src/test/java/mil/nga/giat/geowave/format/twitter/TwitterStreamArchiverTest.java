@@ -31,8 +31,10 @@ public class TwitterStreamArchiverTest
 	
 	@Test
 	public void testStreamArchiver() {
+		TwitterStreamArchiver tsa = new TwitterStreamArchiver();
+		
 		try {
-			TwitterStreamArchiver.run(
+			tsa.run(
 					consumerKey,
 					consumerSecret,
 					accessToken,
