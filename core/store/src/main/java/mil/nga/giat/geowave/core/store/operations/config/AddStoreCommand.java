@@ -71,9 +71,6 @@ public class AddStoreCommand extends
 
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
-			if (storeType.equals("memory")) GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-					storeType,
-					new MemoryStoreFactoryFamily());
 			pluginOptions.selectPlugin(storeType);
 		}
 		else {
