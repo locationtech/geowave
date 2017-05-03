@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.format.twitter;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.junit.Before;
@@ -12,21 +13,14 @@ import mil.nga.giat.geowave.format.twitter.stream.TwitterStreamArchiver;
 public class TwitterStreamArchiverTest
 {
 	private static final String TWITTER_CONFIG = "src/test/resources/twitter-config.properties";
-	private String consumerKey;
-	private String consumerSecret;
-	private String accessToken;
-	private String accessSecret;
+	private Properties twitterProps;
 	
 	@Before
 	public void setup() {
-		Properties twitterProps = ConfigOptions.loadProperties(
+		twitterProps = ConfigOptions.loadProperties(
 				new File(TWITTER_CONFIG),
 				null);
 		
-		consumerKey = twitterProps.getProperty("twitter.consumer.key");
-		consumerSecret = twitterProps.getProperty("twitter.consumer.secret");
-		accessToken = twitterProps.getProperty("twitter.access.token");
-		accessSecret = twitterProps.getProperty("twitter.access.secret");
 	}
 	
 	@Test
@@ -34,15 +28,14 @@ public class TwitterStreamArchiverTest
 		TwitterStreamArchiver tsa = new TwitterStreamArchiver();
 		
 		try {
-			tsa.run(
-					consumerKey,
-					consumerSecret,
-					accessToken,
-					accessSecret);
+			tsa.init(twitterProps);
+			tsa.run();
 		}
 		catch (InterruptedException e) {
-			System.out.println(
-					e);
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
