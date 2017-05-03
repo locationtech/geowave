@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
@@ -46,7 +47,8 @@ public class TwitterIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<WholeFile>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(TwitterIngestPlugin.class);
+	private final static Logger LOGGER = Logger.getLogger(
+			TwitterIngestPlugin.class);
 
 	private SimpleFeatureBuilder twitterSftBuilder;
 	private SimpleFeatureType twitterSft;
@@ -59,13 +61,15 @@ public class TwitterIngestPlugin extends
 				twitterSft);
 
 		sftNameKey = new ByteArrayId(
-				StringUtils.stringToBinary(TwitterUtils.TWITTER_SFT_NAME));
+				StringUtils.stringToBinary(
+						TwitterUtils.TWITTER_SFT_NAME));
 	}
 
 	@Override
 	protected SimpleFeatureType[] getTypes() {
 		return new SimpleFeatureType[] {
-			SimpleFeatureUserDataConfigurationSet.configureType(twitterSft)
+			SimpleFeatureUserDataConfigurationSet.configureType(
+					twitterSft)
 		};
 	}
 
@@ -85,7 +89,8 @@ public class TwitterIngestPlugin extends
 	@Override
 	public boolean supportsFile(
 			final File file ) {
-		return TwitterUtils.validate(file);
+		return TwitterUtils.validate(
+				file);
 	}
 
 	@Override
@@ -97,9 +102,13 @@ public class TwitterIngestPlugin extends
 	public WholeFile[] toAvroObjects(
 			final File input ) {
 		final WholeFile avroFile = new WholeFile();
-		avroFile.setOriginalFilePath(input.getAbsolutePath());
+		avroFile.setOriginalFilePath(
+				input.getAbsolutePath());
 		try {
-			avroFile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
+			avroFile.setOriginalFile(
+					ByteBuffer.wrap(
+							Files.readAllBytes(
+									input.toPath())));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
@@ -145,13 +154,24 @@ public class TwitterIngestPlugin extends
 		final InputStream in = new ByteArrayInputStream(
 				hfile.getOriginalFile().array());
 
-		try {
-			final GZIPInputStream zip = new GZIPInputStream(
-					in);
+		InputStreamReader isr;
 
-			final InputStreamReader isr = new InputStreamReader(
-					zip,
-					StringUtils.UTF8_CHAR_SET);
+		try {
+			if (hfile.getOriginalFilePath().endsWith(
+					"gz")) {
+				final GZIPInputStream zip = new GZIPInputStream(
+						in);
+
+				isr = new InputStreamReader(
+						zip,
+						StringUtils.UTF8_CHAR_SET);
+			}
+			else {
+				isr = new InputStreamReader(
+						in,
+						StringUtils.UTF8_CHAR_SET);
+			}
+
 			final BufferedReader br = new BufferedReader(
 					isr);
 
@@ -195,19 +215,33 @@ public class TwitterIngestPlugin extends
 					try {
 						sr = new StringReader(
 								line);
-						jsonReader = Json.createReader(sr);
+						jsonReader = Json.createReader(
+								sr);
 						JsonObject tweet = jsonReader.readObject();
-
 						try {
-							lon = tweet.getJsonObject(
-									"coordinates").getJsonArray(
-									"coordinates").getJsonNumber(
-									0).doubleValue();
-							lat = tweet.getJsonObject(
-									"coordinates").getJsonArray(
-									"coordinates").getJsonNumber(
-									1).doubleValue();
-							LOGGER.debug("line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
+							if (!tweet.isNull(
+									"geo")) {
+								JsonArray point = tweet.getJsonObject("geo").getJsonArray("coordinates");
+								lon = point.getJsonNumber(0).doubleValue();
+								lat = point.getJsonNumber(1).doubleValue();
+								
+								LOGGER.debug(
+										"line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
+							}
+							else if (!tweet.isNull(
+									"place")) {
+								JsonObject place = tweet.getJsonObject(
+										"place");
+								JsonArray bbox = place.getJsonObject(
+										"bounding_box").getJsonArray("coordinates");
+	
+								// TODO: this is a poly or bbox, so we at least need the centroid
+								lon = bbox.getJsonArray(0).getJsonArray(0).getJsonNumber(0).doubleValue();
+								lat = bbox.getJsonArray(0).getJsonArray(0).getJsonNumber(1).doubleValue();
+	
+								LOGGER.debug(
+										"line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
+							}
 						}
 						catch (final Exception e) {
 							LOGGER.debug(
@@ -222,9 +256,10 @@ public class TwitterIngestPlugin extends
 								lat);
 
 						try {
-
-							dtgString = tweet.getString("created_at");
-							dtg = TwitterUtils.parseDate(dtgString);
+							dtgString = tweet.getString(
+									"created_at");
+							dtg = TwitterUtils.parseDate(
+									dtgString);
 						}
 						catch (final Exception e) {
 							LOGGER.warn(
@@ -234,24 +269,37 @@ public class TwitterIngestPlugin extends
 							continue;
 						}
 
-						JsonObject user = tweet.getJsonObject("user");
+						JsonObject user = tweet.getJsonObject(
+								"user");
 
-						tweetId = tweet.getString("id_str");
-						userid = user.getString("id_str");
-						userName = user.getString("name");
+						tweetId = tweet.getString(
+								"id_str");
+						userid = user.getString(
+								"id_str");
+						userName = user.getString(
+								"name");
 
-						tweetText = tweet.getString("text");
+						tweetText = tweet.getString(
+								"text");
 
 						// nullable
-						if (!tweet.isNull("in_reply_to_user_id_str"))
-							inReplyUser = tweet.getString("in_reply_to_user_id_str");
+						if (!tweet.isNull(
+								"in_reply_to_user_id_str"))
+							inReplyUser = tweet.getString(
+									"in_reply_to_user_id_str");
 
-						if (!tweet.isNull("in_reply_to_status_id_str"))
-							inReplyStatus = tweet.getString("in_reply_to_status_id_str");
+						if (!tweet.isNull(
+								"in_reply_to_status_id_str"))
+							inReplyStatus = tweet.getString(
+									"in_reply_to_status_id_str");
 
-						retweetCount = tweet.getInt("retweet_count");
+						retweetCount = tweet.getInt(
+								"retweet_count");
 
-						if (!tweet.isNull("lang")) lang = tweet.getString("lang");
+						if (!tweet.isNull(
+								"lang"))
+							lang = tweet.getString(
+									"lang");
 
 						twitterSftBuilder.set(
 								TwitterUtils.TWITTER_USERID_ATTRIBUTE,
@@ -279,15 +327,17 @@ public class TwitterIngestPlugin extends
 								dtg);
 						twitterSftBuilder.set(
 								TwitterUtils.TWITTER_GEOMETRY_ATTRIBUTE,
-								geometryFactory.createPoint(coord));
+								geometryFactory.createPoint(
+										coord));
 
-						SimpleFeature tweetSft = twitterSftBuilder.buildFeature(tweetId);
-						// LOGGER.warn(tweetSft.toString());
+						SimpleFeature tweetSft = twitterSftBuilder.buildFeature(
+								tweetId);
 
-						featureData.add(new GeoWaveData<SimpleFeature>(
-								sftNameKey,
-								primaryIndexIds,
-								tweetSft));
+						featureData.add(
+								new GeoWaveData<SimpleFeature>(
+										sftNameKey,
+										primaryIndexIds,
+										tweetSft));
 					}
 					catch (final Exception e) {
 
@@ -309,9 +359,12 @@ public class TwitterIngestPlugin extends
 						e);
 			}
 			finally {
-				IOUtils.closeQuietly(br);
-				IOUtils.closeQuietly(isr);
-				IOUtils.closeQuietly(in);
+				IOUtils.closeQuietly(
+						br);
+				IOUtils.closeQuietly(
+						isr);
+				IOUtils.closeQuietly(
+						in);
 			}
 		}
 		catch (final IOException e) {

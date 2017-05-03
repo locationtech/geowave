@@ -15,12 +15,13 @@ import twitter4j.JSONObject;
 import twitter4j.StatusListener;
 import twitter4j.TwitterException;
 
-public class TwitterArchiveClient extends Twitter4jStatusClient
+public class TwitterArchiveClient extends
+		Twitter4jStatusClient
 {
 	private final static Logger LOGGER = Logger.getLogger(TwitterArchiveClient.class);
 
 	private TwitterLocationListener listener = null;
-	
+
 	public TwitterArchiveClient(
 			final Client client,
 			final BlockingQueue<String> blockingQueue,
@@ -31,28 +32,33 @@ public class TwitterArchiveClient extends Twitter4jStatusClient
 				blockingQueue,
 				listeners,
 				executorService);
-		
+
 		if (listeners != null) {
 			for (StatusListener statusListener : listeners) {
 				if (statusListener instanceof TwitterLocationListener) {
-					this.listener = (TwitterLocationListener)statusListener;
+					this.listener = (TwitterLocationListener) statusListener;
 					break;
 				}
 			}
 		}
-		
+
 		if (this.listener == null) {
 			LOGGER.error("No location listener set for twitter archiver");
 		}
 	}
 
 	@Override
-	  protected void parseMessage(String msg) throws JSONException, TwitterException, IOException {
+	protected void parseMessage(
+			String msg )
+			throws JSONException,
+			TwitterException,
+			IOException {
 		if (listener != null) {
-			JSONObject json = new JSONObject(msg);
+			JSONObject json = new JSONObject(
+					msg);
 			listener.setCurrentJson(json);
 		}
-	    
-	    super.parseMessage(msg);
-	  }
+
+		super.parseMessage(msg);
+	}
 }

@@ -101,6 +101,6 @@ public class TwitterUtils
 			final File file ) {
 		return file.getName().toLowerCase(
 				Locale.ENGLISH).matches(
-				"\\d{8}-\\d{6}\\.txt\\.gz");
+				"tweets-\\d{8}\\.json");
 	}
 }

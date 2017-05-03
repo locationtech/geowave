@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.format.twitter.stream;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -8,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
@@ -20,6 +22,7 @@ import com.twitter.hbc.httpclient.BasicClient;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import twitter4j.StatusListener;
 
 public class TwitterStreamArchiver
@@ -35,59 +38,71 @@ public class TwitterStreamArchiver
 	private boolean init = false;
 
 	public TwitterStreamArchiver() {
-		
+
 	}
-	
-	public void init(Properties twitterProps) throws IOException {
+
+	public void init(
+			Properties twitterProps )
+			throws IOException {
 		if (twitterProps == null) {
-			throw new IOException("Twitter configuration properties required!");
+			throw new IOException(
+					"Twitter configuration properties required!");
 		}
-		
+
 		consumerKey = twitterProps.getProperty("twitter.consumer.key");
 		if (consumerKey == null) {
-			throw new IOException("Twitter Consumer Key required!");
+			throw new IOException(
+					"Twitter Consumer Key required!");
 		}
-		
+
 		consumerSecret = twitterProps.getProperty("twitter.consumer.secret");
 		if (consumerSecret == null) {
-			throw new IOException("Twitter Consumer Secret required!");
+			throw new IOException(
+					"Twitter Consumer Secret required!");
 		}
 
 		accessToken = twitterProps.getProperty("twitter.access.token");
 		if (accessToken == null) {
-			throw new IOException("Twitter Access Token required!");
+			throw new IOException(
+					"Twitter Access Token required!");
 		}
 
 		accessSecret = twitterProps.getProperty("twitter.access.secret");
 		if (accessSecret == null) {
-			throw new IOException("Twitter Access Secret required!");
+			throw new IOException(
+					"Twitter Access Secret required!");
 		}
-		
+
 		archivePath = twitterProps.getProperty("twitter.archivepath");
 		if (archivePath == null) {
-			throw new IOException("Twitter Archive Path required!");
+			throw new IOException(
+					"Twitter Archive Path required!");
 		}
-		
+
 		String pollingFrequencyStr = twitterProps.getProperty("twitter.pollingfrequencyMillis");
 		if (pollingFrequencyStr != null) {
 			pollingFrequency = Long.parseLong(pollingFrequencyStr);
 		}
-		
+
 		init = true;
 	}
 
 	public void run()
-			throws InterruptedException, IOException {
+			throws InterruptedException,
+			IOException {
 		if (!init) {
-			throw new IOException("TwitterStreamArchiver not initialized!");
+			throw new IOException(
+					"TwitterStreamArchiver not initialized!");
 		}
-		
+
 		BlockingQueue<String> queue = new LinkedBlockingQueue<String>(
 				10000);
-		
-		TwitterArchiveWriter archiveWriter = new TwitterArchiveFileWriter(archivePath);
 
-		StatusListener statusListener = new TwitterLocationListener(archiveWriter);
+		TwitterArchiveWriter archiveWriter = new TwitterArchiveFileWriter(
+				archivePath);
+
+		StatusListener statusListener = new TwitterLocationListener(
+				archiveWriter);
 
 		// This should be configurable?
 		// We can have up to 25 watch boxes
@@ -99,12 +114,10 @@ public class TwitterStreamArchiver
 						180.0,
 						90.0));
 		ArrayList<Location> locations = new ArrayList<>();
-		locations.add(
-				wholeWorld);
+		locations.add(wholeWorld);
 
 		// Use the filter endpoint
-		StatusesFilterEndpoint endpoint = (new StatusesFilterEndpoint()).locations(
-				locations);
+		StatusesFilterEndpoint endpoint = (new StatusesFilterEndpoint()).locations(locations);
 
 		Authentication auth = new OAuth1(
 				consumerKey,
@@ -113,31 +126,24 @@ public class TwitterStreamArchiver
 				accessSecret);
 
 		// Create a new BasicClient. By default gzip is enabled.
-		BasicClient client = new ClientBuilder()
-				.hosts(
-						Constants.STREAM_HOST)
-				.endpoint(
-						endpoint)
-				.authentication(
-						auth)
-				.processor(
-						new StringDelimitedProcessor(
-								queue))
-				.build();
+		BasicClient client = new ClientBuilder().hosts(
+				Constants.STREAM_HOST).endpoint(
+				endpoint).authentication(
+				auth).processor(
+				new StringDelimitedProcessor(
+						queue)).build();
 
 		// Create an executor service which will spawn threads to do the actual
 		// work of parsing the incoming messages and
 		// calling the listeners on each message
 		int numProcessingThreads = 4;
-		ExecutorService service = Executors.newFixedThreadPool(
-				numProcessingThreads);
+		ExecutorService service = Executors.newFixedThreadPool(numProcessingThreads);
 
 		// Wrap our BasicClient with the twitter4j client
 		TwitterArchiveClient archiveClient = new TwitterArchiveClient(
 				client,
 				queue,
-				Lists.newArrayList(
-						statusListener),
+				Lists.newArrayList(statusListener),
 				service);
 
 		// Establish a connection
@@ -149,10 +155,45 @@ public class TwitterStreamArchiver
 				archiveClient.process();
 			}
 
-			Thread.sleep(
-					pollingFrequency);
+			Thread.sleep(pollingFrequency);
 		}
 
 		client.stop();
+	}
+
+	public static void main(
+			String[] args ) {
+		String twitterPropsFileName;
+
+		if (args.length < 1) {
+			twitterPropsFileName = FileUtils.getUserDirectoryPath() + "/twitter-config.properties";
+		}
+		else {
+			twitterPropsFileName = args[0];
+		}
+
+		File twitterPropsFile = new File(
+				twitterPropsFileName);
+		if (!twitterPropsFile.exists()) {
+			LOGGER.error("Unable to locate twitter configuration properties: " + twitterPropsFileName);
+			System.exit(-1);
+		}
+
+		Properties twitterProps = ConfigOptions.loadProperties(
+				twitterPropsFile,
+				null);
+
+		TwitterStreamArchiver tsa = new TwitterStreamArchiver();
+
+		try {
+			tsa.init(twitterProps);
+			tsa.run();
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

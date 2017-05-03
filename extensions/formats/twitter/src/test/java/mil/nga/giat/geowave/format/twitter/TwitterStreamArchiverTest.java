@@ -18,21 +18,23 @@ public class TwitterStreamArchiverTest
 
 	private static final String TWITTER_CONFIG = "src/test/resources/twitter-config.properties";
 	private Properties twitterProps;
-	
+
 	@Before
 	public void setup() {
-		LOGGER.getRootLogger().setLevel(Level.INFO);
-		
+		LOGGER.getRootLogger().setLevel(
+				Level.INFO);
+
 		twitterProps = ConfigOptions.loadProperties(
-				new File(TWITTER_CONFIG),
+				new File(
+						TWITTER_CONFIG),
 				null);
-		
+
 	}
-	
+
 	@Test
 	public void testStreamArchiver() {
 		TwitterStreamArchiver tsa = new TwitterStreamArchiver();
-		
+
 		try {
 			tsa.init(twitterProps);
 			tsa.run();

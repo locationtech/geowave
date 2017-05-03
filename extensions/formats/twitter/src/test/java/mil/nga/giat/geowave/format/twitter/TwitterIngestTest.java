@@ -26,8 +26,8 @@ public class TwitterIngestTest
 		ingester = new TwitterIngestPlugin();
 		ingester.init(null);
 
-		filePath = "20131108-010101.txt.gz";
-		expectedCount = 255;
+		filePath = "tweets-20170503.json";
+		expectedCount = 305;
 	}
 
 	@Test
