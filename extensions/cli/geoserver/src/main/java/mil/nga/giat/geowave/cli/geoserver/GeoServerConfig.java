@@ -41,6 +41,7 @@ public class GeoServerConfig
 	 */
 	public GeoServerConfig(
 			File propFile ) {
+		System.out.println("propFile: " + propFile);
 		this.propFile = propFile;
 
 		if (propFile != null && propFile.exists()) {
@@ -117,9 +118,7 @@ public class GeoServerConfig
 	 */
 	public GeoServerConfig() {
 		this(
-				new File(
-						System.getProperty("user.home") + File.separator + ConfigOptions.GEOWAVE_CACHE_PATH
-								+ File.separator + ConfigOptions.GEOWAVE_CACHE_FILE));
+				ConfigOptions.getDefaultPropertyFile());
 	}
 
 	public String getUrl() {

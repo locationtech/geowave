@@ -44,8 +44,6 @@ public class PasswordConverter extends
 				optionName);
 	}
 
-	// private final static Logger LOGGER =
-	// LoggerFactory.getLogger(PasswordConverter.class);
 	public static final String STDIN = "stdin";
 	private static final String SEPARATOR = ":";
 

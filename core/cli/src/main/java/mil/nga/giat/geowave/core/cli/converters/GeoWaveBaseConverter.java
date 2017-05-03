@@ -176,17 +176,6 @@ public abstract class GeoWaveBaseConverter<T> extends
 	}
 
 	/**
-	 * Specify if converter should update the config properties with the
-	 * specified value. If converter is for a password, value is true, otherwise
-	 * false.
-	 * 
-	 * @return
-	 */
-	public boolean updatePasswordInConfigs() {
-		return isPassword();
-	}
-
-	/**
 	 * @return the properties
 	 */
 	private static Properties getProperties() {
