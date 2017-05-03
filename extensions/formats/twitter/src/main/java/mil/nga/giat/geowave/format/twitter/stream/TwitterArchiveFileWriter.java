@@ -16,7 +16,12 @@ public class TwitterArchiveFileWriter implements TwitterArchiveWriter
 	
 	public TwitterArchiveFileWriter(String archivePath) {
 		cal = Calendar.getInstance();
-		this.archivePath = archivePath;
+		if (archivePath == null || archivePath.equals("temp")) {
+			this.archivePath = FileUtils.getTempDirectoryPath();
+		}
+		else {
+			this.archivePath = archivePath;
+		}
 	}
 	
 	@Override
