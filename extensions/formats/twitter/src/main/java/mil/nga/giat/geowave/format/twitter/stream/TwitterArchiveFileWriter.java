@@ -2,68 +2,63 @@ package mil.nga.giat.geowave.format.twitter.stream;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
+import twitter4j.JSONObject;
 import twitter4j.Status;
 
 public class TwitterArchiveFileWriter implements TwitterArchiveWriter
 {
+	private final static Logger LOGGER = Logger.getLogger(TwitterArchiveFileWriter.class);
+
 	private Calendar cal;
+	private NumberFormat nf;
 	private String archivePath;
 	
 	public TwitterArchiveFileWriter(String archivePath) {
 		cal = Calendar.getInstance();
-		if (archivePath == null || archivePath.equals("temp")) {
+		if (archivePath == null || archivePath.contains("temp") || archivePath.contains("tmp")) {
 			this.archivePath = FileUtils.getTempDirectoryPath();
 		}
 		else {
 			this.archivePath = archivePath;
 		}
+		
+		nf = NumberFormat.getIntegerInstance();
+		nf.setMinimumIntegerDigits(2);
+		nf.setGroupingUsed(false);
 	}
 	
 	@Override
 	public void writeTweet(
-			Status status ) throws IOException {
-	    String statusAsString = 
-	        "StatusJSONImpl{" +
-	                "createdAt=" + status.getCreatedAt() +
-	                ", id=" + status.getId() +
-	                ", text='" + status.getText() + '\'' +
-	                ", source='" + status.getSource() + '\'' +
-	                ", isTruncated=" + status.isTruncated() +
-	                ", inReplyToStatusId=" + status.getInReplyToStatusId() +
-	                ", inReplyToUserId=" + status.getInReplyToUserId() +
-	                ", isFavorited=" + status.isFavorited() +
-	                ", isRetweeted=" + status.isRetweeted() +
-	                ", favoriteCount=" + status.getFavoriteCount() +
-	                ", inReplyToScreenName='" + status.getInReplyToScreenName() + '\'' +
-	                ", geoLocation=" + status.getGeoLocation() +
-	                ", place=" + status.getPlace() +
-	                ", retweetCount=" + status.getRetweetCount() +
-	                ", isPossiblySensitive=" + status.isPossiblySensitive() +
-	                ", lang='" + status.getLang() + '\'' +
-	                ", contributorsIDs=" + Arrays.toString(status.getContributors()) +
-	                ", retweetedStatus=" + status.getRetweetedStatus() +
-	                ", userMentionEntities=" + Arrays.toString(status.getUserMentionEntities()) +
-	                ", urlEntities=" + Arrays.toString(status.getURLEntities()) +
-	                ", hashtagEntities=" + Arrays.toString(status.getHashtagEntities()) +
-	                ", mediaEntities=" + Arrays.toString(status.getMediaEntities()) +
-	                ", symbolEntities=" + Arrays.toString(status.getSymbolEntities()) +
-	                ", currentUserRetweetId=" + status.getCurrentUserRetweetId() +
-	                ", user=" + status.getUser() +
-	                "}";
+			final Status status,
+			final JSONObject json) throws IOException {
 	    
-	    int year = cal.get(Calendar.YEAR);
-	    int month = cal.get(Calendar.MONTH);
-	    int day = cal.get(Calendar.DAY_OF_MONTH);
+	    File tweetFile = new File(
+	    		archivePath, 
+	    		getArchiveFileNameForDate(status.getCreatedAt()));
 	    
-	    String tweetFileName = "tweets-" + year + month + day;
-	    File tweetFile = new File(archivePath, tweetFileName);
+	    String tweetLine = json.toString() + "\n";
+	    LOGGER.info(tweetLine);
 		
-	    FileUtils.writeStringToFile(tweetFile, statusAsString, true);
+	    FileUtils.writeStringToFile(
+	    		tweetFile, 
+	    		tweetLine, 
+	    		true);
 	}
 
+	private String getArchiveFileNameForDate(Date date) {
+		cal.setTime(date);
+	    int year = cal.get(Calendar.YEAR);
+	    int month = cal.get(Calendar.MONTH) + 1;
+	    int day = cal.get(Calendar.DAY_OF_MONTH);
+	    
+	    return ("tweets-" + nf.format(year) + nf.format(month) + nf.format(day) + ".json");
+	}
 }
