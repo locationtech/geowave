@@ -40,8 +40,8 @@ public class CopyIndexCommand extends
 
 	@Parameter(description = "<name> <new name>")
 	@RestParameters(names = {
-		"key",
-		"value"
+		"name",
+		"newname"
 	})
 	private List<String> parameters = new ArrayList<String>();
 
