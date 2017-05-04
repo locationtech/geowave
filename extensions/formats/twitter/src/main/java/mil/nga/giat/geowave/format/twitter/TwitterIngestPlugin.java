@@ -1,33 +1,12 @@
 package mil.nga.giat.geowave.format.twitter;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
-import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
-import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.ingest.GeoWaveData;
-import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
-import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
-import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
-import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import org.apache.avro.Schema;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -41,14 +20,38 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import org.apache.avro.Schema;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
+import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
+import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
+import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+
 /*
  */
 public class TwitterIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<WholeFile>
 {
-
-	private final static Logger LOGGER = Logger.getLogger(
-			TwitterIngestPlugin.class);
+	private final static Logger LOGGER = Logger.getLogger(TwitterIngestPlugin.class);
 
 	private SimpleFeatureBuilder twitterSftBuilder;
 	private SimpleFeatureType twitterSft;
@@ -61,15 +64,13 @@ public class TwitterIngestPlugin extends
 				twitterSft);
 
 		sftNameKey = new ByteArrayId(
-				StringUtils.stringToBinary(
-						TwitterUtils.TWITTER_SFT_NAME));
+				StringUtils.stringToBinary(TwitterUtils.TWITTER_SFT_NAME));
 	}
 
 	@Override
 	protected SimpleFeatureType[] getTypes() {
 		return new SimpleFeatureType[] {
-			SimpleFeatureUserDataConfigurationSet.configureType(
-					twitterSft)
+			SimpleFeatureUserDataConfigurationSet.configureType(twitterSft)
 		};
 	}
 
@@ -90,8 +91,7 @@ public class TwitterIngestPlugin extends
 	@Override
 	public boolean supportsFile(
 			final File file ) {
-		return TwitterUtils.validate(
-				file);
+		return TwitterUtils.validate(file);
 	}
 
 	@Override
@@ -103,13 +103,9 @@ public class TwitterIngestPlugin extends
 	public WholeFile[] toAvroObjects(
 			final File input ) {
 		final WholeFile avroFile = new WholeFile();
-		avroFile.setOriginalFilePath(
-				input.getAbsolutePath());
+		avroFile.setOriginalFilePath(input.getAbsolutePath());
 		try {
-			avroFile.setOriginalFile(
-					ByteBuffer.wrap(
-							Files.readAllBytes(
-									input.toPath())));
+			avroFile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
@@ -216,32 +212,38 @@ public class TwitterIngestPlugin extends
 					try {
 						sr = new StringReader(
 								line);
-						jsonReader = Json.createReader(
-								sr);
+						jsonReader = Json.createReader(sr);
 						JsonObject tweet = jsonReader.readObject();
 						try {
-							if (!tweet.isNull(
-									"geo")) {
-								JsonArray point = tweet.getJsonObject("geo").getJsonArray("coordinates");
-								lon = point.getJsonNumber(0).doubleValue();
-								lat = point.getJsonNumber(1).doubleValue();
-								
-								LOGGER.debug(
-										"line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
+							if (!tweet.isNull("geo")) {
+								JsonArray point = tweet.getJsonObject(
+										"geo").getJsonArray(
+										"coordinates");
+								lon = point.getJsonNumber(
+										0).doubleValue();
+								lat = point.getJsonNumber(
+										1).doubleValue();
+
+								LOGGER.debug("line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
 							}
-							else if (!tweet.isNull(
-									"place")) {
-								JsonObject place = tweet.getJsonObject(
-										"place");
+							else if (!tweet.isNull("place")) {
+								JsonObject place = tweet.getJsonObject("place");
 								JsonArray bbox = place.getJsonObject(
-										"bounding_box").getJsonArray("coordinates");
-	
-								// TODO: this is a poly or bbox, so we at least need the centroid
-								lon = bbox.getJsonArray(0).getJsonArray(0).getJsonNumber(0).doubleValue();
-								lat = bbox.getJsonArray(0).getJsonArray(0).getJsonNumber(1).doubleValue();
-	
-								LOGGER.debug(
-										"line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
+										"bounding_box").getJsonArray(
+										"coordinates");
+
+								// TODO: this is a poly or bbox, so we at least
+								// need the centroid
+								lon = bbox.getJsonArray(
+										0).getJsonArray(
+										0).getJsonNumber(
+										0).doubleValue();
+								lat = bbox.getJsonArray(
+										0).getJsonArray(
+										0).getJsonNumber(
+										1).doubleValue();
+
+								LOGGER.debug("line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
 							}
 						}
 						catch (final Exception e) {
@@ -257,10 +259,8 @@ public class TwitterIngestPlugin extends
 								lat);
 
 						try {
-							dtgString = tweet.getString(
-									"created_at");
-							dtg = TwitterUtils.parseDate(
-									dtgString);
+							dtgString = tweet.getString("created_at");
+							dtg = TwitterUtils.parseDate(dtgString);
 						}
 						catch (final Exception e) {
 							LOGGER.warn(
@@ -270,37 +270,24 @@ public class TwitterIngestPlugin extends
 							continue;
 						}
 
-						JsonObject user = tweet.getJsonObject(
-								"user");
+						JsonObject user = tweet.getJsonObject("user");
 
-						tweetId = tweet.getString(
-								"id_str");
-						userid = user.getString(
-								"id_str");
-						userName = user.getString(
-								"name");
+						tweetId = tweet.getString("id_str");
+						userid = user.getString("id_str");
+						userName = user.getString("name");
 
-						tweetText = tweet.getString(
-								"text");
+						tweetText = tweet.getString("text");
 
 						// nullable
-						if (!tweet.isNull(
-								"in_reply_to_user_id_str"))
-							inReplyUser = tweet.getString(
-									"in_reply_to_user_id_str");
+						if (!tweet.isNull("in_reply_to_user_id_str"))
+							inReplyUser = tweet.getString("in_reply_to_user_id_str");
 
-						if (!tweet.isNull(
-								"in_reply_to_status_id_str"))
-							inReplyStatus = tweet.getString(
-									"in_reply_to_status_id_str");
+						if (!tweet.isNull("in_reply_to_status_id_str"))
+							inReplyStatus = tweet.getString("in_reply_to_status_id_str");
 
-						retweetCount = tweet.getInt(
-								"retweet_count");
+						retweetCount = tweet.getInt("retweet_count");
 
-						if (!tweet.isNull(
-								"lang"))
-							lang = tweet.getString(
-									"lang");
+						if (!tweet.isNull("lang")) lang = tweet.getString("lang");
 
 						twitterSftBuilder.set(
 								TwitterUtils.TWITTER_USERID_ATTRIBUTE,
@@ -328,17 +315,14 @@ public class TwitterIngestPlugin extends
 								dtg);
 						twitterSftBuilder.set(
 								TwitterUtils.TWITTER_GEOMETRY_ATTRIBUTE,
-								geometryFactory.createPoint(
-										coord));
+								geometryFactory.createPoint(coord));
 
-						SimpleFeature tweetSft = twitterSftBuilder.buildFeature(
-								tweetId);
+						SimpleFeature tweetSft = twitterSftBuilder.buildFeature(tweetId);
 
-						featureData.add(
-								new GeoWaveData<SimpleFeature>(
-										sftNameKey,
-										primaryIndexIds,
-										tweetSft));
+						featureData.add(new GeoWaveData<SimpleFeature>(
+								sftNameKey,
+								primaryIndexIds,
+								tweetSft));
 					}
 					catch (final Exception e) {
 
@@ -360,12 +344,9 @@ public class TwitterIngestPlugin extends
 						e);
 			}
 			finally {
-				IOUtils.closeQuietly(
-						br);
-				IOUtils.closeQuietly(
-						isr);
-				IOUtils.closeQuietly(
-						in);
+				IOUtils.closeQuietly(br);
+				IOUtils.closeQuietly(isr);
+				IOUtils.closeQuietly(in);
 			}
 		}
 		catch (final IOException e) {

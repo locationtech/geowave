@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.format.twitter.stream;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -63,6 +62,6 @@ public class TwitterArchiveFileWriter implements
 		int month = cal.get(Calendar.MONTH) + 1;
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 
-		return ("geo-tweets-" + nf.format(year) + nf.format(month) + nf.format(day) + ".json");
+		return ("tweets-" + nf.format(year) + nf.format(month) + nf.format(day) + ".json");
 	}
 }

@@ -40,10 +40,10 @@ public class TwitterStreamArchiverTest
 			tsa.run();
 		}
 		catch (InterruptedException e) {
-			e.printStackTrace();
+			LOGGER.error(e);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e);
 		}
 	}
 }

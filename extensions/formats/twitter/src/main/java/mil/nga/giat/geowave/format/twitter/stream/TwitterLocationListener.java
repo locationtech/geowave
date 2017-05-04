@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.format.twitter.stream;
 
 import java.io.IOException;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import twitter4j.GeoLocation;
@@ -62,13 +63,15 @@ public class TwitterLocationListener implements
 				archiveMe = true;
 				LOGGER.debug("  and a geometry type of " + place.getBoundingBoxType());
 
-				GeoLocation[][] bbox = place.getBoundingBoxCoordinates();
-				if (bbox != null && bbox.length > 0) {
-					GeoLocation[] poly = bbox[0];
-					if (poly != null) {
-						for (int i = 0; i < poly.length; i++) {
-							GeoLocation vert = poly[i];
-							LOGGER.debug(vert.toString());
+				if (LOGGER.getLevel() == Level.DEBUG) {
+					GeoLocation[][] bbox = place.getBoundingBoxCoordinates();
+					if (bbox != null && bbox.length > 0) {
+						GeoLocation[] poly = bbox[0];
+						if (poly != null) {
+							for (int i = 0; i < poly.length; i++) {
+								GeoLocation vert = poly[i];
+								LOGGER.debug(vert.toString());
+							}
 						}
 					}
 				}
@@ -88,7 +91,7 @@ public class TwitterLocationListener implements
 						currentJson);
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error(e);
 			}
 		}
 	}

@@ -29,7 +29,8 @@ public class TwitterStreamArchiver
 {
 	private final static Logger LOGGER = Logger.getLogger(TwitterStreamArchiver.class);
 
-	private long pollingFrequency = 5000L; // millis: default = 5 sec
+	private long frequency = 5000L; // millis: default = 5 sec
+	private int numProcessingThreads = 4;
 	private String consumerKey;
 	private String consumerSecret;
 	private String accessToken;
@@ -73,15 +74,20 @@ public class TwitterStreamArchiver
 					"Twitter Access Secret required!");
 		}
 
-		archivePath = twitterProps.getProperty("twitter.archivepath");
+		archivePath = twitterProps.getProperty("twitter.archive.path");
 		if (archivePath == null) {
 			throw new IOException(
 					"Twitter Archive Path required!");
 		}
 
-		String pollingFrequencyStr = twitterProps.getProperty("twitter.pollingfrequencyMillis");
+		String pollingFrequencyStr = twitterProps.getProperty("twitter.archive.frequencyMillis");
 		if (pollingFrequencyStr != null) {
-			pollingFrequency = Long.parseLong(pollingFrequencyStr);
+			frequency = Long.parseLong(pollingFrequencyStr);
+		}
+
+		String processingThreadsStr = twitterProps.getProperty("twitter.archive.threads");
+		if (processingThreadsStr != null) {
+			numProcessingThreads = Integer.parseInt(processingThreadsStr);
 		}
 
 		init = true;
@@ -136,7 +142,6 @@ public class TwitterStreamArchiver
 		// Create an executor service which will spawn threads to do the actual
 		// work of parsing the incoming messages and
 		// calling the listeners on each message
-		int numProcessingThreads = 4;
 		ExecutorService service = Executors.newFixedThreadPool(numProcessingThreads);
 
 		// Wrap our BasicClient with the twitter4j client
@@ -155,7 +160,7 @@ public class TwitterStreamArchiver
 				archiveClient.process();
 			}
 
-			Thread.sleep(pollingFrequency);
+			Thread.sleep(frequency);
 		}
 
 		client.stop();
@@ -190,10 +195,10 @@ public class TwitterStreamArchiver
 			tsa.run();
 		}
 		catch (InterruptedException e) {
-			e.printStackTrace();
+			LOGGER.error(e);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e);
 		}
 	}
 }

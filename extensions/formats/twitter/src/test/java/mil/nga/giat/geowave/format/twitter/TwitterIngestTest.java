@@ -4,6 +4,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
@@ -17,6 +19,8 @@ import static org.junit.Assert.assertTrue;
 
 public class TwitterIngestTest
 {
+	private final static Logger LOGGER = Logger.getLogger(TwitterIngestTest.class);
+
 	private TwitterIngestPlugin ingester;
 	private String filePath;
 	private int expectedCount;
@@ -61,7 +65,7 @@ public class TwitterIngestTest
 
 		final boolean readExpectedCount = (featureCount == expectedCount);
 		if (!readExpectedCount) {
-			System.out.println("Expected " + expectedCount + " features, ingested " + featureCount);
+			LOGGER.error("Expected " + expectedCount + " features, ingested " + featureCount);
 		}
 		assertTrue(readExpectedCount);
 	}

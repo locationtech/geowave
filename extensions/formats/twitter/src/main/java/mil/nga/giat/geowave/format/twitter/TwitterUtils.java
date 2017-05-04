@@ -101,8 +101,7 @@ public class TwitterUtils
 			final File file ) {
 		String matchName = file.getName().toLowerCase(
 				Locale.ENGLISH);
-		
-		return (matchName.matches("tweets-\\d{8}\\.json") ||
-				matchName.matches("tweets-\\d{8}\\.json.gz"));
+
+		return (matchName.matches("tweets-\\d{8}\\.json") || matchName.matches("tweets-\\d{8}\\.json.gz"));
 	}
 }
