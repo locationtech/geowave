@@ -3,14 +3,15 @@
  */
 package mil.nga.giat.geowave.core.cli.operations.config.security.crypto;
 
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.crypto.CipherParameters;
+import org.bouncycastle.crypto.CryptoException;
+import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.modes.CBCBlockCipher;
+import org.bouncycastle.crypto.paddings.PKCS7Padding;
+import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
+import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,17 +20,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class GeoWaveEncryption extends
-		BaseEncryption
-{
-
+		BaseEncryption {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveEncryption.class);
-
-	private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
-	private static final String SECURE_RANDOM_ALGORITHM = "SHA1PRNG";
-	private static final int BITS_PER_BYTE = 8;
-	private static final int IV_LENGTH = 128 / BITS_PER_BYTE;
-
-	private static SecureRandom random;
 
 	/**
 	 * Base constructor for encryption, allowing a resource location for the
@@ -43,7 +35,6 @@ public class GeoWaveEncryption extends
 			final String resourceLocation ) {
 		super(
 				resourceLocation);
-		init();
 	}
 
 	/**
@@ -51,44 +42,6 @@ public class GeoWaveEncryption extends
 	 */
 	public GeoWaveEncryption() {
 		super();
-		init();
-	}
-
-	/**
-	 * Method to initialize the encryption implementation
-	 */
-	private void init() {
-		try {
-			setRandom(SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM));
-		}
-		catch (NoSuchAlgorithmException e) {
-			LOGGER.warn(
-					"Misconfigured algorithm for SecureRandom",
-					e);
-			setRandom(new SecureRandom());
-		}
-	}
-
-	/**
-	 * Set a new secure random
-	 * 
-	 * @param random
-	 *            the random to set
-	 */
-	public static void setRandom(
-			SecureRandom random ) {
-		GeoWaveEncryption.random = random;
-	}
-
-	/**
-	 * Generate a new parameter spec for use when encrypting data
-	 * 
-	 * @return
-	 */
-	private byte[] generateIvParameterSpec() {
-		byte[] iv = new byte[IV_LENGTH];
-		random.nextBytes(iv);
-		return iv;
 	}
 
 	@Override
@@ -105,37 +58,19 @@ public class GeoWaveEncryption extends
 		return decryptValue(Base64.decodeBase64(valueToDecrypt));
 	}
 
-	/**
-	 * Common method for generating a cipher
-	 * 
-	 * @param mode
-	 *            the operation mode of this cipher (this is one of the
-	 *            following: ENCRYPT_MODE, DECRYPT_MODE, WRAP_MODE or
-	 *            UNWRAP_MODE)
-	 * @param key
-	 *            key to use for encrypting/decrypting data against
-	 * @param iv
-	 *            the algorithm parameters
-	 * @return new cipher generated against the specified mode, key, and
-	 *         parameters
-	 * @throws Exception
-	 */
-	private static Cipher getCipher(
-			int mode,
-			Key key,
-			byte[] iv )
-			throws Exception {
-		if (key == null) {
-			throw new Exception(
-					"No key specified");
-		}
-		Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
-		IvParameterSpec ivSpec = new IvParameterSpec(
-				iv);
+	private PaddedBufferedBlockCipher getCipher(
+			boolean encrypt ) {
+		PaddedBufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
+				new CBCBlockCipher(
+						new AESEngine()),
+				new PKCS7Padding());
+		CipherParameters ivAndKey = new ParametersWithIV(
+				new KeyParameter(
+						getKey().getEncoded()),
+				salt);
 		cipher.init(
-				mode,
-				key,
-				ivSpec);
+				encrypt,
+				ivAndKey);
 		return cipher;
 	}
 
@@ -152,25 +87,26 @@ public class GeoWaveEncryption extends
 			byte[] encodedValue )
 			throws Exception {
 		LOGGER.trace("ENTER :: encyrpt");
-		Cipher c = getCipher(
-				Cipher.ENCRYPT_MODE,
-				getKey(),
-				generateIvParameterSpec());
-		byte[] encValue = c.doFinal(encodedValue);
-		byte[] finalValue = new byte[c.getIV().length + encValue.length];
-		System.arraycopy(
-				c.getIV(),
+
+		PaddedBufferedBlockCipher cipher = getCipher(true);
+		byte output[] = new byte[cipher.getOutputSize(encodedValue.length)];
+		int length = cipher.processBytes(
+				encodedValue,
 				0,
-				finalValue,
-				0,
-				c.getIV().length);
-		System.arraycopy(
-				encValue,
-				0,
-				finalValue,
-				c.getIV().length,
-				encValue.length);
-		return finalValue;
+				encodedValue.length,
+				output,
+				0);
+		try {
+			cipher.doFinal(
+					output,
+					length);
+		}
+		catch (CryptoException e) {
+			LOGGER.error(
+					"An error occurred performing encryption: " + e.getLocalizedMessage(),
+					e);
+		}
+		return output;
 	}
 
 	/**
@@ -184,25 +120,32 @@ public class GeoWaveEncryption extends
 	private byte[] decryptValue(
 			byte[] decodedValue )
 			throws Exception {
-		byte[] iv = new byte[IV_LENGTH];
-		byte[] msg = new byte[decodedValue.length - iv.length];
 
-		System.arraycopy(
+		StringBuffer result = new StringBuffer();
+
+		PaddedBufferedBlockCipher cipher = getCipher(false);
+		byte output[] = new byte[cipher.getOutputSize(decodedValue.length)];
+		int length = cipher.processBytes(
 				decodedValue,
 				0,
-				iv,
-				0,
-				iv.length);
-		System.arraycopy(
-				decodedValue,
-				iv.length,
-				msg,
-				0,
-				msg.length);
-		Cipher c = getCipher(
-				Cipher.DECRYPT_MODE,
-				getKey(),
-				iv);
-		return c.doFinal(msg);
+				decodedValue.length,
+				output,
+				0);
+		cipher.doFinal(
+				output,
+				length);
+		if (output != null && output.length != 0) {
+			String retval = new String(
+					output,
+					"UTF-8");
+			for (int i = 0; i < retval.length(); i++) {
+				char c = retval.charAt(i);
+				if (c != 0) {
+					result.append(c);
+				}
+			}
+		}
+		return result.toString().getBytes(
+				"UTF-8");
 	}
 }
