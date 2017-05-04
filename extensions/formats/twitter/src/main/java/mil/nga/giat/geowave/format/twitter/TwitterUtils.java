@@ -99,8 +99,10 @@ public class TwitterUtils
 
 	public static boolean validate(
 			final File file ) {
-		return file.getName().toLowerCase(
-				Locale.ENGLISH).matches(
-				"tweets-\\d{8}\\.json");
+		String matchName = file.getName().toLowerCase(
+				Locale.ENGLISH);
+		
+		return (matchName.matches("tweets-\\d{8}\\.json") ||
+				matchName.matches("tweets-\\d{8}\\.json.gz"));
 	}
 }

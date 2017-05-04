@@ -76,6 +76,7 @@ public class TwitterIngestPlugin extends
 	@Override
 	public String[] getFileExtensionFilters() {
 		return new String[] {
+			"json",
 			"gz"
 		};
 	}
