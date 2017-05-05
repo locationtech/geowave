@@ -26,7 +26,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 
-@GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
+@GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Ingest supported files in local file system directly, without using HDFS")
 public class LocalToGeowaveCommand extends
 		DefaultOperation<Void> implements

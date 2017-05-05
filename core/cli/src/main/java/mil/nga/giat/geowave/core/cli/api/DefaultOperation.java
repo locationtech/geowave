@@ -108,7 +108,7 @@ public abstract class DefaultOperation<T> extends
 				else if (parameter.required()) throw new MissingArgumentException(
 						field.getName());
 			}
-			else if (field.getType() == Boolean.class) {
+			else if (field.getType() == Boolean.class || field.getType() == boolean.class) {
 				String value = (form == null) ? getQueryValue(field.getName()) : form.getFirstValue(field.getName());
 				if (value != null) {
 					field.setAccessible(true);
@@ -116,6 +116,23 @@ public abstract class DefaultOperation<T> extends
 						field.set(
 								this,
 								Boolean.valueOf(value));
+					}
+					catch (IllegalAccessException e) {
+						throw new RuntimeException(
+								e);
+					}
+				}
+				else if (parameter.required()) throw new MissingArgumentException(
+						field.getName());
+			}
+			else if (field.getType() == Integer.class || field.getType() == int.class) {
+				String value = (form == null) ? getQueryValue(field.getName()) : form.getFirstValue(field.getName());
+				if (value != null) {
+					field.setAccessible(true);
+					try {
+						field.set(
+								this,
+								Integer.valueOf(value));
 					}
 					catch (IllegalAccessException e) {
 						throw new RuntimeException(
