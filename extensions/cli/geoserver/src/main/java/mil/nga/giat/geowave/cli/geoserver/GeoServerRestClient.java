@@ -45,6 +45,8 @@ import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
+import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -92,7 +94,7 @@ public class GeoServerRestClient
 
 	private WebTarget getWebTarget() {
 		if (webTarget == null) {
-			String url = config.getUrl();
+			String url = getConfig().getUrl();
 			if (url != null) {
 				url = url.trim();
 				Client client = null;
@@ -103,10 +105,10 @@ public class GeoServerRestClient
 				else if (url.toLowerCase().startsWith(
 						"https://")) {
 					SslConfigurator sslConfig = SslConfigurator.newInstance();
-					if (config.getGsConfigProperties() != null) {
+					if (getConfig().getGsConfigProperties() != null) {
 						loadSSLConfigurations(
 								sslConfig,
-								config.getGsConfigProperties());
+								getConfig().getGsConfigProperties());
 					}
 					SSLContext sslContext = sslConfig.createSSLContext();
 
@@ -116,9 +118,9 @@ public class GeoServerRestClient
 				}
 				if (client != null) {
 					client.register(HttpAuthenticationFeature.basic(
-							config.getUser(),
-							config.getPass()));
-					webTarget = client.target(config.getUrl());
+							getConfig().getUser(),
+							getConfig().getPass()));
+					webTarget = client.target(url);
 				}
 			}
 		}
@@ -146,7 +148,8 @@ public class GeoServerRestClient
 			Properties gsConfigProperties ) {
 		if (gsConfigProperties != null && sslConfig != null) {
 			// default to TLS for geoserver ssl security protocol
-			sslConfig.securityProtocol(gsConfigProperties.getProperty(
+			sslConfig.securityProtocol(getPropertyValue(
+					gsConfigProperties,
 					GEOSERVER_SSL_SECURITY_PROTOCOL,
 					"TLS"));
 
@@ -155,34 +158,46 @@ public class GeoServerRestClient
 				// resolve file path - either relative or absolute - then get
 				// the canonical path
 				File trustStoreFile = new File(
-						FileUtils.formatFilePath(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_FILE)));
+						getPropertyValue(
+								gsConfigProperties,
+								GEOSERVER_SSL_TRUSTSTORE_FILE));
 				if (trustStoreFile != null) {
 					try {
 						sslConfig.trustStoreFile(trustStoreFile.getCanonicalPath());
 					}
 					catch (IOException e) {
 						LOGGER.error(
-								"An error occurred loading the truststore at the specified path ["
-										+ gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_FILE) + "]:"
-										+ e.getLocalizedMessage(),
+								"An error occurred loading the truststore at the specified path [" + getPropertyValue(
+										gsConfigProperties,
+										GEOSERVER_SSL_TRUSTSTORE_FILE) + "]:" + e.getLocalizedMessage(),
 								e);
 					}
 				}
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_PASS)) {
-				sslConfig.trustStorePassword(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_PASS));
+				sslConfig.trustStorePassword(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_TRUSTSTORE_PASS));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_TYPE)) {
-				sslConfig.trustStoreType(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_TYPE));
+				sslConfig.trustStoreType(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_TRUSTSTORE_TYPE));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_PROVIDER)) {
-				sslConfig.trustStoreProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTSTORE_PROVIDER));
+				sslConfig.trustStoreProvider(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_TRUSTSTORE_PROVIDER));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTMGR_ALG)) {
-				sslConfig.trustManagerFactoryAlgorithm(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTMGR_ALG));
+				sslConfig.trustManagerFactoryAlgorithm(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_TRUSTMGR_ALG));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTMGR_PROVIDER)) {
-				sslConfig.trustManagerFactoryProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_TRUSTMGR_PROVIDER));
+				sslConfig.trustManagerFactoryProvider(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_TRUSTMGR_PROVIDER));
 			}
 
 			// check keystore property settings
@@ -190,39 +205,93 @@ public class GeoServerRestClient
 				// resolve file path - either relative or absolute - then get
 				// the canonical path
 				File keyStoreFile = new File(
-						FileUtils.formatFilePath(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_FILE)));
+						FileUtils.formatFilePath(getPropertyValue(
+								gsConfigProperties,
+								GEOSERVER_SSL_KEYSTORE_FILE)));
 				if (keyStoreFile != null) {
 					try {
 						sslConfig.keyStoreFile(keyStoreFile.getCanonicalPath());
 					}
 					catch (IOException e) {
 						LOGGER.error(
-								"An error occurred loading the keystore at the specified path ["
-										+ gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_FILE) + "]:"
-										+ e.getLocalizedMessage(),
+								"An error occurred loading the keystore at the specified path [" + getPropertyValue(
+										gsConfigProperties,
+										GEOSERVER_SSL_KEYSTORE_FILE) + "]:" + e.getLocalizedMessage(),
 								e);
 					}
 				}
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_PASS)) {
-				sslConfig.keyStorePassword(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_PASS));
+				sslConfig.keyStorePassword(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_KEYSTORE_PASS));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEY_PASS)) {
-				sslConfig.keyPassword(gsConfigProperties.getProperty(GEOSERVER_SSL_KEY_PASS));
+				sslConfig.keyPassword(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_KEY_PASS));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_PROVIDER)) {
-				sslConfig.keyStoreProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_PROVIDER));
+				sslConfig.keyStoreProvider(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_KEYSTORE_PROVIDER));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_TYPE)) {
-				sslConfig.keyStoreType(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYSTORE_TYPE));
+				sslConfig.keyStoreType(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_KEYSTORE_TYPE));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYMGR_ALG)) {
-				sslConfig.keyManagerFactoryAlgorithm(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYMGR_ALG));
+				sslConfig.keyManagerFactoryAlgorithm(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_KEYMGR_ALG));
 			}
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYMGR_PROVIDER)) {
-				sslConfig.keyManagerFactoryProvider(gsConfigProperties.getProperty(GEOSERVER_SSL_KEYMGR_PROVIDER));
+				sslConfig.keyManagerFactoryProvider(getPropertyValue(
+						gsConfigProperties,
+						GEOSERVER_SSL_KEYMGR_PROVIDER));
 			}
 		}
+	}
+
+	private String getPropertyValue(
+			final Properties configProps,
+			final String configKey ) {
+		return getPropertyValue(
+				configProps,
+				configKey,
+				null);
+	}
+
+	private String getPropertyValue(
+			final Properties configProps,
+			final String configKey,
+			final String defaultValue ) {
+		String configValue = defaultValue;
+		if (configProps != null) {
+			configValue = configProps.getProperty(
+					configKey,
+					defaultValue);
+			if (BaseEncryption.isProperlyWrapped(configValue)) {
+				try {
+					final File resourceTokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(getConfig()
+							.getPropFile());
+					// if password in config props is encrypted, need to decrypt
+					// it
+					configValue = SecurityUtils.decryptHexEncodedValue(
+							configValue,
+							resourceTokenFile.getCanonicalPath());
+					return configValue;
+				}
+				catch (Exception e) {
+					LOGGER.error(
+							"An error occurred decrypting password: " + e.getLocalizedMessage(),
+							e);
+					return configValue;
+				}
+			}
+		}
+		return configValue;
 	}
 
 	/**
