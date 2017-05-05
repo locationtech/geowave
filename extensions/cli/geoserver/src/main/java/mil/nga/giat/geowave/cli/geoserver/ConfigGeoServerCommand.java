@@ -26,8 +26,6 @@ public class ConfigGeoServerCommand extends
 		DefaultOperation implements
 		Command
 {
-	private final static Logger sLog = LoggerFactory.getLogger(ConfigGeoServerCommand.class);
-
 	@Parameter(names = {
 		"-u",
 		"--url"
@@ -62,10 +60,10 @@ public class ConfigGeoServerCommand extends
 		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// all switches are optional
-		if (getUrl() != null) {
+		if (url != null) {
 			existingProps.setProperty(
 					GEOSERVER_URL,
-					getUrl());
+					url);
 		}
 
 		if (getName() != null) {
@@ -92,23 +90,6 @@ public class ConfigGeoServerCommand extends
 				existingProps,
 				this.getClass(),
 				GEOSERVER_NAMESPACE_PREFIX);
-	}
-
-	public String getUrl() {
-		try {
-			return URLUtils.getUrl(url);
-		}
-		catch (MalformedURLException | URISyntaxException e) {
-			sLog.error(
-					"An error occurred validating specified url [" + url + "]: " + e.getLocalizedMessage(),
-					e);
-			return url;
-		}
-	}
-
-	public void setUrl(
-			String url ) {
-		this.url = url;
 	}
 
 	public String getName() {
