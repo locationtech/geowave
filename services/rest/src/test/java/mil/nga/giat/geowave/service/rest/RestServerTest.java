@@ -252,11 +252,107 @@ public class RestServerTest
 	}
 
 	// Tests geowave/config/addindex, cpindex, rmindex
-	@Ignore("Kevin will fix addindex")
 	@Test
 	public void geowave_config_index()
 			throws ResourceException,
-			IOException {
+			IOException,
+			ParseException {
+
+		File configFile = tempFolder.newFile("test_config");
+
+		// create a new index named "index1", with type "spatial"
+		ClientResource resourceAdd = new ClientResource(
+				"http://localhost:5152/geowave/config/addindex");
+		resourceAdd.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		Form formAdd = new Form();
+		formAdd.add(
+				"name",
+				"index1");
+		formAdd.add(
+				"type",
+				"spatial");
+		formAdd.add(
+				"default",
+				"true");
+		formAdd.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceAdd.post(
+				formAdd).write(
+				System.out);
+
+		// create a new index named "index2"
+		ClientResource resourceCp = new ClientResource(
+				"http://localhost:5152/geowave/config/cpindex");
+		resourceCp.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		Form formCp = new Form();
+		formCp.add(
+				"name",
+				"index1");
+		formCp.add(
+				"newname",
+				"index2");
+		formCp.add(
+				"default",
+				"true");
+		formCp.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceCp.post(
+				formCp).write(
+				System.out);
+
+		// remove the indexes named "index1" and "index2"
+		ClientResource resourceRm = new ClientResource(
+				"http://localhost:5152/geowave/config/rmindex");
+		resourceRm.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		Form formRm = new Form();
+		formRm.add(
+				"name",
+				"index1");
+		formRm.add(
+				"config_file",
+				configFile.getAbsolutePath());
+		resourceRm.post(
+				formRm).write(
+				System.out);
+
+		formRm.remove(0);
+		formRm.add(
+				"name",
+				"index2");
+		resourceRm.post(
+				formRm).write(
+				System.out);
+
+		// use list to test if removed successfully
+		ClientResource resourceList = new ClientResource(
+				"http://localhost:5152/geowave/config/list");
+		resourceList.setChallengeResponse(
+				ChallengeScheme.HTTP_BASIC,
+				"admin",
+				"password");
+		resourceList.addQueryParameter(
+				"config_file",
+				configFile.getAbsolutePath());
+		String text = resourceList.get(
+				MediaType.APPLICATION_JSON).getText();
+
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(text);
+		String name = (String) obj.get("index1");
+		assertTrue(
+				"index1 is removed",
+				name == null);
 
 	}
 
