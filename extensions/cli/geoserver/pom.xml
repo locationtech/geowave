@@ -4,9 +4,10 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-extension-parent</artifactId>
 		<relativePath>../../</relativePath>
-		<version>0.9.4</version>
+		<version> 0.9.4.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-cli-geoserver</artifactId>
+  <version>0.9.4.1-SNAPSHOT</version>
 	<name>Geowave GeoServer Commandline Tools</name>
 	<description>Geowave Commandline Tools For Managing GeoServer Layers and Data Stores</description>
 	<dependencies>

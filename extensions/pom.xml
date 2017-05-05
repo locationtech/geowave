@@ -4,9 +4,10 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4</version>
+		<version>0.9.4.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-extension-parent</artifactId>
+  <version> 0.9.4.1-SNAPSHOT</version>
 	<name>GeoWave Extensions</name>
 	<description>The set of extended capabilities supported for GeoWave</description>	
 	<packaging>pom</packaging>

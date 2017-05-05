@@ -4,9 +4,10 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version>0.9.4</version>
+		<version> 0.9.4.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-datastore-hbase</artifactId>
+  <version>0.9.4.1-SNAPSHOT</version>
 	<name>GeoWave Hbase</name>
 	<description>Geowave Data Store on Apache Hbase</description>
 

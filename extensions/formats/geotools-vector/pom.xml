@@ -5,9 +5,10 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-extension-parent</artifactId>
 		<relativePath>../../</relativePath>
-		<version>0.9.4</version>
+		<version> 0.9.4.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-format-vector</artifactId>
+  <version>0.9.4.1-SNAPSHOT</version>
 	<name>GeoWave Vector Format</name>
 	<description>GeoWave ingest support for all vector formats that are supported within geotools</description>
 	<dependencies>
