@@ -213,4 +213,9 @@ public class DefaultOperation implements
 				getGeoWaveConfigFile(),
 				null);
 	}
+
+	@Override
+	public String usage() {
+		return null;
+	}
 }

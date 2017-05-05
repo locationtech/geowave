@@ -117,9 +117,7 @@ public class GeoServerConfig
 	 */
 	public GeoServerConfig() {
 		this(
-				new File(
-						System.getProperty("user.home") + File.separator + ConfigOptions.GEOWAVE_CACHE_PATH
-								+ File.separator + ConfigOptions.GEOWAVE_CACHE_FILE));
+				ConfigOptions.getDefaultPropertyFile());
 	}
 
 	public String getUrl() {

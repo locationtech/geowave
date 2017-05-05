@@ -41,8 +41,8 @@ public class PasswordConverter extends
 				optionName);
 	}
 
-	// private final static Logger LOGGER =
-	// LoggerFactory.getLogger(PasswordConverter.class);
+	public static final String DEFAULT_PASSWORD_DESCRIPTION = "Can be specified as 'pass:<password>', 'file:<local file containing the password>', "
+			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin";
 	public static final String STDIN = "stdin";
 	private static final String SEPARATOR = ":";
 

@@ -60,81 +60,90 @@ public class HelpCommand extends
 			lastOperation = entry.getValue();
 		}
 
-		// This is done because if we don't, then JCommander will consider the
-		// given
-		// parameters as the Default parameters. It's also done so that we can
-		// parse prefix annotations and special delegate processing.
-		JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
 		if (lastOperation == null) {
 			lastOperation = registry.getOperation(
 					GeowaveTopLevelSection.class).createInstance();
 		}
-		translator.addObject(lastOperation);
-		JCommanderTranslationMap map = translator.translate();
-		map.createFacadeObjects();
+		if (lastOperation != null) {
+			String usage = lastOperation.usage();
+			if (usage != null) {
+				System.out.println(usage);
+			}
+			else {
+				// This is done because if we don't, then JCommander will
+				// consider the given parameters as the Default parameters.
+				// It's also done so that we can parse prefix annotations
+				// and special delegate processing.
+				JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
 
-		// Copy default parameters over for help display.
-		map.transformToFacade();
+				translator.addObject(lastOperation);
+				JCommanderTranslationMap map = translator.translate();
+				map.createFacadeObjects();
 
-		// Execute a prepare
+				// Copy default parameters over for help display.
+				map.transformToFacade();
 
-		// Add processed objects
-		JCommander jc = new JCommander();
-		for (Object obj : map.getObjects()) {
-			jc.addObject(obj);
-		}
+				// Execute a prepare
 
-		String programName = StringUtils.join(
-				nameArray,
-				" ");
-		jc.setProgramName(programName);
-		jc.usage(builder);
-
-		// Trim excess newlines.
-		String operations = builder.toString().trim();
-		builder = new StringBuilder();
-		builder.append(operations);
-		builder.append("\n\n");
-
-		// Add sub-commands
-		OperationEntry lastEntry = registry.getOperation(lastOperation.getClass());
-		// Cast to list so we can sort it based on operation name.
-		List<OperationEntry> children = new ArrayList<OperationEntry>(
-				lastEntry.getChildren());
-		Collections.sort(
-				children,
-				getOperationComparator());
-		if (children.size() > 0) {
-			builder.append("  Commands:\n");
-			for (OperationEntry childEntry : children) {
-
-				// Get description annotation
-				Parameters p = childEntry.getOperationClass().getAnnotation(
-						Parameters.class);
-
-				// If not hidden, then output it.
-				if (p == null || !p.hidden()) {
-					builder.append(String.format(
-							"    %s%n",
-							childEntry.getOperationName()));
-					if (p != null) {
-						String description = p.commandDescription();
-						builder.append(String.format(
-								"      %s%n",
-								description));
-					}
-					else {
-						builder.append("      <no description>\n");
-					}
-					builder.append("\n");
+				// Add processed objects
+				JCommander jc = new JCommander();
+				for (Object obj : map.getObjects()) {
+					jc.addObject(obj);
 				}
+
+				String programName = StringUtils.join(
+						nameArray,
+						" ");
+				jc.setProgramName(programName);
+				jc.usage(builder);
+
+				// Trim excess newlines.
+				String operations = builder.toString().trim();
+				builder = new StringBuilder();
+				builder.append(operations);
+				builder.append("\n\n");
+
+				// Add sub-commands
+				OperationEntry lastEntry = registry.getOperation(lastOperation.getClass());
+				// Cast to list so we can sort it based on operation name.
+				List<OperationEntry> children = new ArrayList<OperationEntry>(
+						lastEntry.getChildren());
+				Collections.sort(
+						children,
+						getOperationComparator());
+				if (children.size() > 0) {
+					builder.append("  Commands:\n");
+					for (OperationEntry childEntry : children) {
+
+						// Get description annotation
+						Parameters p = childEntry.getOperationClass().getAnnotation(
+								Parameters.class);
+
+						// If not hidden, then output it.
+						if (p == null || !p.hidden()) {
+							builder.append(String.format(
+									"    %s%n",
+									childEntry.getOperationName()));
+							if (p != null) {
+								String description = p.commandDescription();
+								builder.append(String.format(
+										"      %s%n",
+										description));
+							}
+							else {
+								builder.append("      <no description>\n");
+							}
+							builder.append("\n");
+						}
+					}
+				}
+
+				// Trim excess newlines.
+				String output = builder.toString().trim();
+
+				System.out.println(output);
 			}
 		}
-
-		// Trim excess newlines.
-		String output = builder.toString().trim();
-
-		System.out.println(output);
 	}
 
 	/**
