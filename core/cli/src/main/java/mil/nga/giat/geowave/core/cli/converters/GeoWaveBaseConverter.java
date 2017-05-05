@@ -208,19 +208,3 @@ public abstract class GeoWaveBaseConverter<T> extends
 		properties = props;
 	}
 }
-
-class ConsoleMasker extends
-		Thread
-{
-	private boolean running = true;
-
-	public void run() {
-		while (running) {
-			System.out.print("*");
-		}
-	}
-
-	public synchronized void halt() {
-		running = false;
-	}
-}

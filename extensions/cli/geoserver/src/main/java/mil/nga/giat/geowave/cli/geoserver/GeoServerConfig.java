@@ -125,20 +125,21 @@ public class GeoServerConfig
 	}
 
 	public String getUrl() {
+		String internalUrl;
+		if (!url.contains("//")) {
+			internalUrl = url + "/geoserver";
+		}
+		else {
+			internalUrl = url;
+		}
 		try {
-			String formatted = URLUtils.getUrl(url);
-			URL URL = new URL(
-					formatted);
-			if ((URL != null) && (URL.getPath() == null || "".equals(URL.getPath().trim()))) {
-				formatted += GeoServerConfig.DEFAULT_PATH;
-			}
-			return formatted;
+			return URLUtils.getUrl(internalUrl);
 		}
 		catch (MalformedURLException | URISyntaxException e) {
 			LOGGER.error(
 					"An error occurred validating specified url [" + url + "]: " + e.getLocalizedMessage(),
 					e);
-			return url;
+			return internalUrl;
 		}
 	}
 
