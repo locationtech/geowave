@@ -41,7 +41,6 @@ public class GeoServerConfig
 	 */
 	public GeoServerConfig(
 			File propFile ) {
-		System.out.println("propFile: " + propFile);
 		this.propFile = propFile;
 
 		if (propFile != null && propFile.exists()) {
