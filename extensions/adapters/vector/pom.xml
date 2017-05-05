@@ -4,10 +4,10 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version> 0.9.4.1</version>
+		<version> 0.9.4.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-adapter-vector</artifactId>
-  <version>0.9.4.1</version>
+  <version>0.9.4.2-SNAPSHOT</version>
 	<name>Geowave Vector Adapter</name>
 	<description>Geowave Data Adapter for Vector Data</description>
 	<dependencies>
@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-adapter-auth</artifactId>
-			<version> 0.9.4.1</version>
+			<version> 0.9.4.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>

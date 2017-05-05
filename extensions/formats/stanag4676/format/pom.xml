@@ -4,10 +4,10 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../../</relativePath>
-		<version> 0.9.4.1</version>
+		<version> 0.9.4.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-format-4676</artifactId>
-  <version>0.9.4.1</version>
+  <version>0.9.4.2-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
