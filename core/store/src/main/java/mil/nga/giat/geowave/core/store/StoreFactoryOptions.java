@@ -31,6 +31,9 @@ abstract public class StoreFactoryOptions
 	private String geowaveNamespace;
 
 	public String getGeowaveNamespace() {
+		if ("null".equalsIgnoreCase(geowaveNamespace)) {
+			return null;
+		}
 		return geowaveNamespace;
 	}
 

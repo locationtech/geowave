@@ -123,14 +123,21 @@ public class GeoServerConfig
 	}
 
 	public String getUrl() {
+		String internalUrl;
+		if (!url.contains("//")) {
+			internalUrl = url + "/geoserver";
+		}
+		else {
+			internalUrl = url;
+		}
 		try {
-			return URLUtils.getUrl(url);
+			return URLUtils.getUrl(internalUrl);
 		}
 		catch (MalformedURLException | URISyntaxException e) {
 			LOGGER.error(
 					"Error discovered in validating specified url: " + e.getLocalizedMessage(),
 					e);
-			return url;
+			return internalUrl;
 		}
 	}
 
