@@ -4,15 +4,16 @@
 package mil.nga.giat.geowave.core.cli.converters;
 
 import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.converters.BaseConverter;
-
-import jline.console.ConsoleReader;
+import com.beust.jcommander.internal.Console;
+import com.beust.jcommander.internal.DefaultConsole;
+import com.beust.jcommander.internal.JDK6Console;
 
 import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -29,6 +30,7 @@ public abstract class GeoWaveBaseConverter<T> extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBaseConverter.class);
 
 	private String propertyKey;
+	private static Console console;
 	private static Properties properties;
 
 	public GeoWaveBaseConverter() {
@@ -60,13 +62,33 @@ public abstract class GeoWaveBaseConverter<T> extends
 		}
 	}
 
+	protected static Console getConsole() {
+		LOGGER.trace("ENTER :: getConsole()");
+		if (console == null) {
+			try {
+				Method consoleMethod = System.class.getDeclaredMethod("console");
+				Object consoleObj = consoleMethod.invoke(null);
+				console = new JDK6Console(
+						consoleObj);
+			}
+			catch (Throwable t) {
+				LOGGER.error(
+						"An error occurred getting declared method console. Defaulting to default console. Error message: "
+								+ t.getLocalizedMessage(),
+						t);
+				console = new DefaultConsole();
+			}
+		}
+		return console;
+	}
+
 	/**
 	 * Prompt a user for a standard value and return the input
 	 * 
 	 * @param promptMessage
 	 * @return
 	 */
-	public static String promptAndReadValue(
+	protected static String promptAndReadValue(
 			String promptMessage ) {
 		LOGGER.trace("ENTER :: promptAndReadValue()");
 		PropertiesUtils propsUtils = new PropertiesUtils(
@@ -79,25 +101,12 @@ public abstract class GeoWaveBaseConverter<T> extends
 				new Object[] {
 					defaultEchoEnabled ? "enabled" : "disabled"
 				});
-
-		String value = null;
-		try {
-			ConsoleReader reader = new ConsoleReader();
-			if (defaultEchoEnabled) {
-				value = reader.readLine(promptMessage);
-			}
-			else {
-				value = reader.readLine(
-						promptMessage,
-						'*');
-			}
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"An error occurred reading value from console: " + e.getLocalizedMessage(),
-					e);
-		}
-		return value;
+		getConsole().print(
+				promptMessage);
+		char[] passwordChars = getConsole().readPassword(
+				defaultEchoEnabled);
+		return new String(
+				passwordChars);
 	}
 
 	/**
@@ -106,44 +115,28 @@ public abstract class GeoWaveBaseConverter<T> extends
 	 * @param promptMessage
 	 * @return
 	 */
-	public static String promptAndReadPassword(
+	protected static String promptAndReadPassword(
 			String promptMessage ) {
 		LOGGER.trace("ENTER :: promptAndReadPassword()");
 		PropertiesUtils propsUtils = new PropertiesUtils(
 				getProperties());
-		boolean defaultEchoEnabled = false, passwordEchoEnabled = false;
-		if (propsUtils != null) {
-			defaultEchoEnabled = propsUtils.getBoolean(
-					Constants.CONSOLE_DEFAULT_ECHO_ENABLED_KEY,
-					false);
-			passwordEchoEnabled = propsUtils.getBoolean(
-					Constants.CONSOLE_PASSWORD_ECHO_ENABLED_KEY,
-					defaultEchoEnabled);
-		}
+		boolean defaultEchoEnabled = propsUtils.getBoolean(
+				Constants.CONSOLE_DEFAULT_ECHO_ENABLED_KEY,
+				false);
+		boolean passwordEchoEnabled = propsUtils.getBoolean(
+				Constants.CONSOLE_PASSWORD_ECHO_ENABLED_KEY,
+				defaultEchoEnabled);
 		LOGGER.debug(
 				"Password console echo is {}",
 				new Object[] {
 					passwordEchoEnabled ? "enabled" : "disabled"
 				});
-
-		String password = null;
-		try {
-			ConsoleReader reader = new ConsoleReader();
-			if (passwordEchoEnabled) {
-				password = reader.readLine(promptMessage);
-			}
-			else {
-				password = reader.readLine(
-						promptMessage,
-						'*');
-			}
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"An error occurred reading password from console: " + e.getLocalizedMessage(),
-					e);
-		}
-		return password;
+		getConsole().print(
+				promptMessage);
+		char[] passwordChars = getConsole().readPassword(
+				passwordEchoEnabled);
+		return new String(
+				passwordChars);
 	}
 
 	/**
