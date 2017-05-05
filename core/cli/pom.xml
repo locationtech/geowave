@@ -58,5 +58,10 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.wolf480pl</groupId>
+			<artifactId>jline-log4j2-appender</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -1,24 +1,36 @@
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_NAMESPACE_PREFIX;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_PASS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_URL;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_USER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
-import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
+
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
 import mil.nga.giat.geowave.core.cli.converters.OptionalPasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.cli.utils.URLUtils;
-
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
+import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
+import mil.nga.giat.geowave.core.cli.prefix.JCommanderTranslationMap;
+import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 
 @GeowaveOperation(name = "geoserver", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for GeoServer")
@@ -26,8 +38,6 @@ public class ConfigGeoServerCommand extends
 		DefaultOperation implements
 		Command
 {
-	private final static Logger sLog = LoggerFactory.getLogger(ConfigGeoServerCommand.class);
-
 	@Parameter(names = {
 		"-u",
 		"--url"
@@ -44,8 +54,7 @@ public class ConfigGeoServerCommand extends
 	@Parameter(names = {
 		"-p",
 		"--pass"
-	}, description = "GeoServer Password - can be specified as 'pass:<password>', 'file:<local file containing the password>', "
-			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin", converter = OptionalPasswordConverter.class)
+	}, description = "GeoServer Password - " + OptionalPasswordConverter.DEFAULT_PASSWORD_DESCRIPTION, converter = OptionalPasswordConverter.class)
 	private String pass;
 
 	@Parameter(names = {
@@ -53,6 +62,42 @@ public class ConfigGeoServerCommand extends
 		"--workspace"
 	}, description = "GeoServer Default Workspace")
 	private String workspace;
+
+	@ParametersDelegate
+	private GeoServerSSLConfigurationOptions sslConfigOptions = new GeoServerSSLConfigurationOptions();
+
+	@Override
+	public boolean prepare(
+			OperationParams params ) {
+		boolean retval = true;
+		retval |= super.prepare(params);
+
+		String username = getName();
+		String password = getPass();
+
+		boolean usernameSpecified = username != null && !"".equals(username.trim());
+		boolean passwordSpecified = password != null && !"".equals(password.trim());
+		if (usernameSpecified || passwordSpecified) {
+			if (usernameSpecified && !passwordSpecified) {
+				setPass(GeoWaveBaseConverter.promptAndReadPassword("Please enter a password for username [" + username
+						+ "]: "));
+				if (getPass() == null || "".equals(getPass().trim())) {
+					throw new ParameterException(
+							"Password cannot be null or empty if username is specified");
+				}
+			}
+			else if (passwordSpecified && !usernameSpecified) {
+				setName(GeoWaveBaseConverter
+						.promptAndReadValue("Please enter a username associated with specified password: "));
+				if (getName() == null || "".equals(getName().trim())) {
+					throw new ParameterException(
+							"Username cannot be null or empty if password is specified");
+				}
+			}
+		}
+
+		return retval;
+	}
 
 	@Override
 	public void execute(
@@ -86,6 +131,9 @@ public class ConfigGeoServerCommand extends
 					getWorkspace());
 		}
 
+		// save properties from ssl configurations
+		sslConfigOptions.saveProperties(existingProps);
+
 		// Write properties file
 		ConfigOptions.writeProperties(
 				getGeoWaveConfigFile(params),
@@ -95,15 +143,7 @@ public class ConfigGeoServerCommand extends
 	}
 
 	public String getUrl() {
-		try {
-			return URLUtils.getUrl(url);
-		}
-		catch (MalformedURLException | URISyntaxException e) {
-			sLog.error(
-					"An error occurred validating specified url [" + url + "]: " + e.getLocalizedMessage(),
-					e);
-			return url;
-		}
+		return url;
 	}
 
 	public void setUrl(
@@ -136,5 +176,81 @@ public class ConfigGeoServerCommand extends
 	public void setWorkspace(
 			String workspace ) {
 		this.workspace = workspace;
+	}
+
+	public GeoServerSSLConfigurationOptions getGeoServerSSLConfigurationOptions() {
+		return sslConfigOptions;
+	}
+
+	public void setGeoServerSSLConfigurationOptions(
+			final GeoServerSSLConfigurationOptions sslConfigOptions ) {
+		this.sslConfigOptions = sslConfigOptions;
+	}
+
+	@Override
+	public String usage() {
+		StringBuilder builder = new StringBuilder();
+
+		List<String> nameArray = new ArrayList<String>();
+		JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+		translator.addObject(this);
+		JCommanderTranslationMap map = translator.translate();
+		map.createFacadeObjects();
+
+		// Copy default parameters over for help display.
+		map.transformToFacade();
+
+		JCommander jc = new JCommander();
+
+		Map<String, TranslationEntry> translations = map.getEntries();
+		for (Object obj : map.getObjects()) {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				TranslationEntry tEntry = translations.get(field.getName());
+				if (tEntry != null && tEntry.getObject() instanceof ConfigGeoServerCommand) {
+					jc.addObject(obj);
+					break;
+				}
+			}
+		}
+
+		String programName = StringUtils.join(
+				nameArray,
+				" ");
+		jc.setProgramName(programName);
+		jc.usage(builder);
+
+		// Trim excess newlines.
+		String operations = builder.toString().trim();
+
+		builder = new StringBuilder();
+		builder.append(operations);
+		builder.append("\n\n");
+		builder.append("  ");
+
+		jc = new JCommander();
+
+		for (Object obj : map.getObjects()) {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				TranslationEntry tEntry = translations.get(field.getName());
+				if (tEntry != null && !(tEntry.getObject() instanceof ConfigGeoServerCommand)) {
+					Parameters parameters = tEntry.getObject().getClass().getAnnotation(
+							Parameters.class);
+					if (parameters != null) {
+						builder.append(parameters.commandDescription());
+					}
+					else {
+						builder.append("Additional Parameters");
+					}
+					jc.addObject(obj);
+					break;
+				}
+			}
+		}
+
+		jc.setProgramName(programName);
+		jc.usage(builder);
+		builder.append("\n\n");
+
+		return builder.toString().trim();
 	}
 }

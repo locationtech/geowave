@@ -272,11 +272,12 @@ public class GeoServerRestClient
 			configValue = configProps.getProperty(
 					configKey,
 					defaultValue);
-			if(BaseEncryption.isProperlyWrapped(configValue)) {
+			if (BaseEncryption.isProperlyWrapped(configValue)) {
 				try {
 					final File resourceTokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(getConfig()
 							.getPropFile());
-					// if password in config props is encrypted, need to decrypt it
+					// if password in config props is encrypted, need to decrypt
+					// it
 					configValue = SecurityUtils.decryptHexEncodedValue(
 							configValue,
 							resourceTokenFile.getCanonicalPath());

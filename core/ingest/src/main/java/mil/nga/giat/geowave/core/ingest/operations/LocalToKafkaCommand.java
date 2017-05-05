@@ -11,6 +11,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.kafka.StageToKafkaDriver;
@@ -20,7 +21,8 @@ import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOpt
 
 @GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to a Kafka topic")
-public class LocalToKafkaCommand implements
+public class LocalToKafkaCommand extends
+		DefaultOperation implements
 		Command
 {
 

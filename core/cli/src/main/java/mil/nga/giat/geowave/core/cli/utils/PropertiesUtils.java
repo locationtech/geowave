@@ -111,7 +111,7 @@ public class PropertiesUtils implements
 					@Override
 					public Object get(
 							String name ) {
-						return properties.get(name);
+						return properties != null ? properties.get(name) : null;
 					}
 				});
 	}
