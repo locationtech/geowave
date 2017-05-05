@@ -107,10 +107,10 @@ public class ConfigGeoServerCommand extends
 		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// all switches are optional
-		if (getUrl() != null) {
+		if (url != null) {
 			existingProps.setProperty(
 					GEOSERVER_URL,
-					getUrl());
+					url);
 		}
 
 		if (getName() != null) {
@@ -140,15 +140,6 @@ public class ConfigGeoServerCommand extends
 				existingProps,
 				this.getClass(),
 				GEOSERVER_NAMESPACE_PREFIX);
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(
-			String url ) {
-		this.url = url;
 	}
 
 	public String getName() {

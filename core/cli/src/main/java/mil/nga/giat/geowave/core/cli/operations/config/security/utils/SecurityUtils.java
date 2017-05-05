@@ -84,7 +84,6 @@ public class SecurityUtils
 							value);
 				}
 				catch (Throwable t) {
-					t.printStackTrace();
 					LOGGER.error(
 							"Encountered exception during content encryption: " + t.getLocalizedMessage(),
 							t);
@@ -100,7 +99,7 @@ public class SecurityUtils
 			LOGGER.debug("WARNING: No value specified to encrypt.");
 			return value;
 		}
-		return "";
+		return value;
 	}
 
 	/**

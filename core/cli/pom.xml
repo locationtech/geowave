@@ -59,9 +59,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.wolf480pl</groupId>
-			<artifactId>jline-log4j2-appender</artifactId>
-			<version>1.0.0</version>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.54</version>
 		</dependency>
 	</dependencies>
 </project>
