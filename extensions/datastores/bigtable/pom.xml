@@ -4,10 +4,10 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version> 0.9.4.1-SNAPSHOT</version>
+		<version> 0.9.4.1</version>
 	</parent>
 	<artifactId>geowave-datastore-bigtable</artifactId>
-  <version>0.9.4.1-SNAPSHOT</version>
+  <version>0.9.4.1</version>
 	<name>GeoWave BigTable</name>
 	<description>Geowave Data Store on Apache BigTable</description>
 

@@ -4,10 +4,10 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-extension-parent</artifactId>
 		<relativePath>../../</relativePath>
-		<version> 0.9.4.1-SNAPSHOT</version>
+		<version> 0.9.4.1</version>
 	</parent>
 	<artifactId>geowave-cli-osm</artifactId>
-  <version>0.9.4.1-SNAPSHOT</version>
+  <version>0.9.4.1</version>
 	<name>Geowave OSM Commandline Tools</name>
 	<description>OSM Data processing system for GeoWave</description>
 	<dependencies>

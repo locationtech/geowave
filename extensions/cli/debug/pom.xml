@@ -5,10 +5,10 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-extension-parent</artifactId>
 		<relativePath>../../</relativePath>
-		<version> 0.9.4.1-SNAPSHOT</version>
+		<version> 0.9.4.1</version>
 	</parent>
 	<artifactId>geowave-cli-debug</artifactId>
-  <version>0.9.4.1-SNAPSHOT</version>
+  <version>0.9.4.1</version>
 	<name>GeoWave Debug Commandline Tools</name>
 	<description>A set of ad-hoc debug tools available through the command line that can be applied to GeoWave data</description>
 	<dependencies>

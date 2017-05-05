@@ -4,10 +4,10 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version> 0.9.4.1-SNAPSHOT</version>
+		<version> 0.9.4.1</version>
 	</parent>
 	<artifactId>geowave-adapter-raster</artifactId>
-  <version>0.9.4.1-SNAPSHOT</version>
+  <version>0.9.4.1</version>
 	<name>Geowave Raster Adapter</name>
 	<description>Geowave Data Adapter for Raster Data</description>
 	<dependencies>
@@ -58,7 +58,7 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-adapter-auth</artifactId>
-			<version> 0.9.4.1-SNAPSHOT</version>
+			<version> 0.9.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>

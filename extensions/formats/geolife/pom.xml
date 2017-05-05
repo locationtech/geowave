@@ -5,10 +5,10 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-extension-parent</artifactId>
 		<relativePath>../../</relativePath>
-		<version> 0.9.4.1-SNAPSHOT</version>
+		<version> 0.9.4.1</version>
 	</parent>
 	<artifactId>geowave-format-geolife</artifactId>
-  <version>0.9.4.1-SNAPSHOT</version>
+  <version>0.9.4.1</version>
 	<name>GeoWave GeoLife Format Support</name>
 	<description>GeoWave ingest support for Microsoft Research's GeoLife dataset</description>
 	<dependencies>
