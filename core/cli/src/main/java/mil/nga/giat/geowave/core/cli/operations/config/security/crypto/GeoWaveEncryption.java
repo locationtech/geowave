@@ -20,7 +20,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class GeoWaveEncryption extends
-		BaseEncryption {
+		BaseEncryption
+{
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveEncryption.class);
 
 	/**

@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.cli.geoserver;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,7 @@ public class GeoServerConfig
 	private final static Logger LOGGER = Logger.getLogger(GeoServerConfig.class);
 
 	public static final String DEFAULT_URL = "localhost:8080";
+	public static final String DEFAULT_PATH = "/geoserver";
 	public static final String DEFAULT_USER = "admin";
 	public static final String DEFAULT_PASS = "geoserver";
 	public static final String DEFAULT_WORKSPACE = "geowave";
@@ -124,11 +126,17 @@ public class GeoServerConfig
 
 	public String getUrl() {
 		try {
-			return URLUtils.getUrl(url);
+			String formatted = URLUtils.getUrl(url);
+			URL URL = new URL(
+					formatted);
+			if ((URL != null) && (URL.getPath() == null || "".equals(URL.getPath().trim()))) {
+				formatted += GeoServerConfig.DEFAULT_PATH;
+			}
+			return formatted;
 		}
 		catch (MalformedURLException | URISyntaxException e) {
 			LOGGER.error(
-					"Error discovered in validating specified url: " + e.getLocalizedMessage(),
+					"An error occurred validating specified url [" + url + "]: " + e.getLocalizedMessage(),
 					e);
 			return url;
 		}
