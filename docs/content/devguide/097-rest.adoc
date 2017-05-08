@@ -1,0 +1,67 @@
+[[rest]]
+<<<
+== REST Server
+
+=== REST Interface
+
+GeoWave exposes an REST interface to enable some of its commands to be called over HTTP. The total list of operations that can be accessed using this interface is available at the server homepage at `http://localhost:5152`. To start the server, run the following command from within the `geowave/services/rest` directory:
+
+[source, bash]
+----
+mvn install
+mvn exec:java -Dexec.mainClass="mil.nga.giat.geowave.service.rest.RestServer"
+----
+
+=== Authentication
+The REST server provides a simple HTTP authentication mechanism to control access to the service. Upon starting for the first time, the server will create a passwords.csv file in the geowave config directory (i.e. `.geowave/passwords.csv`), with default credentials `admin` and `password`:
+
+[source, bash]
+----
+admin,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8 #SHA-256 of "password"
+----
+
+To add another user, modify this file and add the user and password hash of the new user (a future command may be implemented to do this more easily), and restart the server.
+
+=== Support for New Commands
+To enable access to the REST server for a new command, perform the following steps:
+
+. Ensure that the `geowave-service-rest` project has a dependency on the new command. All classes which the REST server can access are visible from the homepage at `http://localhost:5152`, and should appear in [blue]#blue# if they are not yet implemented. 
+. Ensure that the class implementing the operation extends `DefaultOperation`. This is necessary because `DefaultOperation` extends `ServerResource`, which the REST server requires for all endpoints.
+. Ensure that the `@GeoWaveOperation` annotation has `restEnabled=RestEnabledType.GET` or `restEnabled=RestEnabledType.POST`, depending on whether the operation is a mutating or non-mutating change (see http://blog.teamtreehouse.com/the-definitive-guide-to-get-vs-post[this article] for more info).
+. In order for parameters to be correctly processed, the http://jcommander.org/#_main_parameter[main parameter], if present, must be annotated with a `@RestParameters` annotation. These names correspond to the fields on the query string (for GET requests) or in the form (for POST requests). All other operations use the same name as the `@Parameter` field. For example,
+
+[source, java]
+----
+// CopyStoreCommand
+
+@Parameter(description = "<name> <new name>")
+@RestParameters(names = {
+	"name",
+	"newname"
+})
+private List<String> parameters = new ArrayList<String>();
+
+@Parameter(names = {
+	"-d",
+	"--default"
+}, description = "Make this the default store in all operations")
+private Boolean makeDefault;
+----
+
+Sample request:
+
+[source]
+----
+name=storetest
+newname=storetesting
+makeDefault=true
+----
+
+[start=5]
+. Common code that is invoked from the http request should be implemented in the operation's `computeResults` method (inheriting from `DefaultOperation#computeResults`). This is the method that will be called with the operation is invoked via REST, and should return an object that will be serialized to JSON for the response, with all of it's public fields and `getX()` methods in the resulting JSON document (see `FileUpload.UploadedFile` in the services-rest project for an example). If the operation produces no response (for example, in the case of `CopyStoreCommand`), it should return `null`, which can be enforced by specifying a return type of https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html[Void]. The execute method should call `computeResults`, and then display the results (if any) to the console.
+
+TIP: A good starting point for existing commands is to take the code in `execute` and move it over to `computeResults`, making sure that anything that gets printed to the console is instead returned from `computeResults`, then modify `execute` to call `computeResults`.
+
+[start=6]
+. To test the command, lookup the path of the new operation on the homepage, and issue a GET or POST (depending on what the operation accepts) using either curl or a graphical tool like http://mmattozzi.github.io/cocoa-rest-client/[CocoaRestClient] or https://addons.mozilla.org/en-US/firefox/addon/httprequester/[HttpRequestor] (for Firefox). Any exceptions that occur will be logged and printed to output, returning a "500 Internal Server Error" to the client.
+
