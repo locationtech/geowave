@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -167,6 +167,12 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/SetCommand.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/SetCommand.html#prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">prepare</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>
+<div class="block">NOTE: ONLY USE THIS METHOD TO SET @PARAMETERSDELEGATE options.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/operations/config/SetCommand.html#setParameters-java.lang.String-java.lang.String-">setParameters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>&nbsp;</td>
@@ -177,7 +183,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.cli.api.<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html" title="class in mil.nga.giat.geowave.core.cli.api">DefaultOperation</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#checkForToken--">checkForToken</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#generateNewEncryptionToken-java.io.File-">generateNewEncryptionToken</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigFile--">getGeoWaveConfigFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigFile-mil.nga.giat.geowave.core.cli.api.OperationParams-">getGeoWaveConfigFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigProperties--">getGeoWaveConfigProperties</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigProperties-mil.nga.giat.geowave.core.cli.api.OperationParams-">getGeoWaveConfigProperties</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigProperties-mil.nga.giat.geowave.core.cli.api.OperationParams-java.lang.String-">getGeoWaveConfigProperties</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveDirectory--">getGeoWaveDirectory</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getSecurityTokenFile--">getSecurityTokenFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">prepare</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#setSecurityTokenFile-java.io.File-">setSecurityTokenFile</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#checkForToken--">checkForToken</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#generateNewEncryptionToken-java.io.File-">generateNewEncryptionToken</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigFile--">getGeoWaveConfigFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigFile-mil.nga.giat.geowave.core.cli.api.OperationParams-">getGeoWaveConfigFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigProperties--">getGeoWaveConfigProperties</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigProperties-mil.nga.giat.geowave.core.cli.api.OperationParams-">getGeoWaveConfigProperties</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveConfigProperties-mil.nga.giat.geowave.core.cli.api.OperationParams-java.lang.String-">getGeoWaveConfigProperties</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getGeoWaveDirectory--">getGeoWaveDirectory</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#getSecurityTokenFile--">getSecurityTokenFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#setSecurityTokenFile-java.io.File-">setSecurityTokenFile</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#usage--">usage</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -191,7 +197,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.cli.api.<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Operation.html" title="interface in mil.nga.giat.geowave.core.cli.api">Operation</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Operation.html#prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">prepare</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Operation.html#usage--">usage</a></code></li>
 </ul>
 </li>
 </ul>
@@ -224,6 +230,25 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>prepare</h4>
+<pre>public&nbsp;boolean&nbsp;prepare(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Operation.html#prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">Operation</a></code></span></div>
+<div class="block">NOTE: ONLY USE THIS METHOD TO SET @PARAMETERSDELEGATE options. If you
+ throw exceptions or do validation, then it will make help/explain
+ commands not work correctly.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Operation.html#prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">prepare</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Operation.html" title="interface in mil.nga.giat.geowave.core.cli.api">Operation</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html#prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">prepare</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html" title="class in mil.nga.giat.geowave.core.cli.api">DefaultOperation</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="execute-mil.nga.giat.geowave.core.cli.api.OperationParams-">
 <!--   -->
 </a>

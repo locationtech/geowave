@@ -3,6 +3,7 @@ mil.nga.giat.geowave.adapter.raster
 mil.nga.giat.geowave.adapter.raster.adapter
 mil.nga.giat.geowave.adapter.raster.adapter.merge
 mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata
+mil.nga.giat.geowave.adapter.raster.adapter.warp
 mil.nga.giat.geowave.adapter.raster.operations
 mil.nga.giat.geowave.adapter.raster.operations.options
 mil.nga.giat.geowave.adapter.raster.plugin
