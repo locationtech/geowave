@@ -96,7 +96,7 @@ public class DynamoDBSplitsProvider extends
 				constraintRanges = DataStoreUtils.constraintsToByteArrayRanges(
 						indexConstraints,
 						indexStrategy,
-						1); //TODO: aperi - set this to 1 to simplify this from maxSplits, make it easier to debug
+						maxSplits); 
 			}
 			else {
 				constraintRanges = DataStoreUtils.constraintsToByteArrayRanges(
@@ -114,7 +114,7 @@ public class DynamoDBSplitsProvider extends
 				LOGGER.trace("Protected range: " + fullrange);
 			}
 		}
-
+		
 		final Map<PrimaryIndex, List<RangeLocationPair>> splitInfo = new HashMap<PrimaryIndex, List<RangeLocationPair>>();
 		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
 		for (final ByteArrayRange range : ranges) {

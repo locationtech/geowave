@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Set;
 
@@ -30,8 +29,6 @@ import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
@@ -202,14 +199,6 @@ public class BasicHBaseOperations implements
 	@Override
 	public void deleteAll()
 			throws IOException {
-		System.out.println("HbaseDataStore c: " + HBaseDataStore.c);
-		HBaseDataStore.c = 0;
-//		for(Entry<ByteArrayId, Integer> entry : HBaseDataStore.map.entrySet()) {
-//			if(entry.getValue() > 1) {
-//				System.out.println("HBase duplicate: " + entry.getKey().getString());
-//				HBaseDataStore.map.put(entry.getKey(), entry.getValue() - 1);
-//			}
-//		}
 		final TableName[] tableNamesArr = conn.getAdmin().listTableNames();
 		for (final TableName tableName : tableNamesArr) {
 			if ((tableNamespace == null) || tableName.getNameAsString().startsWith(

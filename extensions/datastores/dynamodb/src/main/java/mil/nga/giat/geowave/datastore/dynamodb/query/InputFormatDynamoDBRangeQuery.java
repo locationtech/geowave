@@ -13,6 +13,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -59,7 +60,7 @@ public class InputFormatDynamoDBRangeQuery extends
 				index,
 				null,
 				queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(),
-				null,
+				new DedupeFilter(),
 				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(),
 				null,
 				null,
@@ -73,8 +74,7 @@ public class InputFormatDynamoDBRangeQuery extends
 	}
 
 	@Override
-	protected List<ByteArrayRange> getRanges() {
-		System.out.println("InputFormatDynamoDBRangeQuery: Range being requested: " + range);
+	protected List<ByteArrayRange> getRanges() {		
 		return Collections.singletonList(range);
 	}
 

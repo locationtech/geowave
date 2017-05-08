@@ -21,7 +21,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -131,23 +130,6 @@ public abstract class GeoWaveRecordReader<T> extends
 				sum = sum.add(BigDecimal.valueOf(r.getCardinality()));
 			}
 		}
-		
-		System.out.println("GeoWaveRecordReader range size: " + iteratorsPerRange.size());
-		System.out.println("GeoWaveRecordReader sum: " + sum);
-		boolean test = false;
-		for(Entry<RangeLocationPair, CloseableIterator<?>> entry : iteratorsPerRange.entrySet()) {
-			System.out.println("GeoWaveRecordReader range start: " 
-					+ StringUtils.stringFromBinary(entry.getKey().getRange().getStartKey()) 
-					+ ", end: " 
-					+ StringUtils.stringFromBinary(entry.getKey().getRange().getEndKey()) );
-			if (test) {
-				for(CloseableIterator<?>iter = entry.getValue(); iter.hasNext(); ) {
-					Object out = iter.next();
-					System.out.println("GeoWaveRecordReader range record: " + ((GeoWaveInputKey)out).getDataId() + ", insertion id: " + ((GeoWaveInputKey)out).getInsertionId());
-				}
-			}
-		}
-		
 
 		// finally we can compute percent progress
 		progressPerRange = new LinkedHashMap<RangeLocationPair, ProgressPerRange>();

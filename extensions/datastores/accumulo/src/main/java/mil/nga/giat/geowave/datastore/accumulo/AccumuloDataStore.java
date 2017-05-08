@@ -696,8 +696,6 @@ public class AccumuloDataStore extends
 		}
 	}
 
-	public static int c = 0;
-	public static HashMap<ByteArrayId, Integer> map = new HashMap<ByteArrayId, Integer>();
 	@Override
 	public void write(
 			Writer writer,
@@ -706,14 +704,6 @@ public class AccumuloDataStore extends
 		final List<Mutation> mutations = new ArrayList<Mutation>();
 
 		for (GeoWaveRow geoWaveRow : rows) {
-			c++;
-			ByteArrayId rowIdTemp = new ByteArrayId(geoWaveRow.getRowId());
-			if(map.containsKey(rowIdTemp)) {
-				map.put(rowIdTemp, map.get(rowIdTemp) + 1);
-			}
-			else {
-				map.put(rowIdTemp, 1);
-			}
 			AccumuloRow accumuloRow = (AccumuloRow) geoWaveRow;
 
 			byte[] rowId = accumuloRow.getRowId();
