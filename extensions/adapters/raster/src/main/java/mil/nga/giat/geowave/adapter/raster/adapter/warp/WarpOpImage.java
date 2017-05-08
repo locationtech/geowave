@@ -19,9 +19,21 @@ import javax.media.jai.iterator.RandomIter;
 
 import com.sun.media.jai.util.ImageUtil;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.geosolutions.jaiext.iterators.RandomIterFactory;
 import it.geosolutions.jaiext.range.Range;
 
+/**
+ * 
+ * This is code entirely intended to get around an issue on line 265 of
+ * WarpOpImage in jai-ext. The following code does not work if the source is
+ * significant lower resolution than the destination and seems unnecessary in
+ * general:
+ * 
+ * roiTile = roi.intersect(new ROIShape(srcRectExpanded));
+ *
+ */
+@SuppressFBWarnings
 abstract public class WarpOpImage extends
 		it.geosolutions.jaiext.warp.WarpOpImage
 {

@@ -18,11 +18,23 @@ import javax.media.jai.registry.RenderedRegistryMode;
 import com.sun.media.jai.opimage.MosaicRIF;
 import com.sun.media.jai.opimage.RIFUtil;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.geosolutions.jaiext.interpolators.InterpolationNearest;
 import it.geosolutions.jaiext.range.Range;
 import it.geosolutions.jaiext.range.RangeFactory;
 import mil.nga.giat.geowave.adapter.raster.adapter.SourceThresholdFixMosaicDescriptor;
 
+/**
+ * 
+ * This is code entirely intended to get around an issue on line 265 of
+ * WarpOpImage in jai-ext. The following code does not work if the source is
+ * significant lower resolution than the destination and seems unnecessary in
+ * general:
+ * 
+ * roiTile = roi.intersect(new ROIShape(srcRectExpanded));
+ *
+ */
+@SuppressFBWarnings
 public class WarpRIF extends
 		it.geosolutions.jaiext.warp.WarpRIF
 {

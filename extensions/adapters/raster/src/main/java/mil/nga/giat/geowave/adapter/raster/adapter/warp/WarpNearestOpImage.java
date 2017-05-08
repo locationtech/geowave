@@ -18,7 +18,16 @@ import javax.media.jai.RasterAccessor;
 import javax.media.jai.Warp;
 import javax.media.jai.iterator.RandomIter;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
+ * This is code entirely intended to get around an issue on line 265 of
+ * WarpOpImage in jai-ext. The following code does not work if the source is
+ * significant lower resolution than the destination and seems unnecessary in
+ * general:
+ * 
+ * roiTile = roi.intersect(new ROIShape(srcRectExpanded));
+ * 
  * An <code>OpImage</code> implementing the general "Warp" operation as
  * described in <code>javax.media.jai.operator.WarpDescriptor</code>. It
  * supports the nearest-neighbor interpolation.
@@ -39,6 +48,7 @@ import javax.media.jai.iterator.RandomIter;
  * 
  */
 @SuppressWarnings("unchecked")
+@SuppressFBWarnings
 final class WarpNearestOpImage extends
 		WarpOpImage
 {
