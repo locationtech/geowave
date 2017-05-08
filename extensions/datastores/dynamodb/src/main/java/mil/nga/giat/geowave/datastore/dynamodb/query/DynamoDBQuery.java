@@ -34,6 +34,8 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBDataStore;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
+import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
+import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedScan;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 
@@ -149,16 +151,26 @@ abstract public class DynamoDBQuery extends
 					queries.parallelStream().map(
 							this::executeQueryRequest).iterator());
 		}
+		
+		if(async){
+			final ScanRequest request = new ScanRequest(
+					tableName);
+			return new AsyncPaginatedScan(
+					request,
+					dynamodbOperations.getClient());
+		}
+		else{
+			// query everything
+			final ScanRequest request = new ScanRequest(
+					tableName);
+			final ScanResult scanResult = dynamodbOperations.getClient().scan(
+					request);
+			return new LazyPaginatedScan(
+					scanResult,
+					request,
+					dynamodbOperations.getClient());
+		}
 
-		// query everything
-		final ScanRequest request = new ScanRequest(
-				tableName);
-		final ScanResult scanResult = dynamodbOperations.getClient().scan(
-				request);
-		return new LazyPaginatedScan(
-				scanResult,
-				request,
-				dynamodbOperations.getClient());
 	}
 
 	private List<QueryRequest> getAdapterOnlyQueryRequests(
