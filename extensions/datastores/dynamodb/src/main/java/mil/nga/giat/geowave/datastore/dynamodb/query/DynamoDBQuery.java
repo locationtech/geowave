@@ -89,6 +89,18 @@ abstract public class DynamoDBQuery extends
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
 			final AdapterStore adapterStore ) {
+		return getResults(
+				maxResolutionSubsamplingPerDimension,
+				limit,
+				adapterStore,
+				false);
+	}
+
+	protected Iterator<Map<String, AttributeValue>> getResults(
+			final double[] maxResolutionSubsamplingPerDimension,
+			final Integer limit,
+			final AdapterStore adapterStore,
+			final boolean async) {
 		final List<ByteArrayRange> ranges = getRanges();
 		final String tableName = dynamodbOperations.getQualifiedTableName(
 				StringUtils.stringFromBinary(
@@ -140,16 +152,21 @@ abstract public class DynamoDBQuery extends
 										adapterIds,
 										adapterStore))));
 			}
-			return Iterators.concat(
-					requests.parallelStream().map(
-							this::executeQueryRequest).iterator());
+            if(async){
+                return Iterators.concat(
+                        requests.parallelStream().map(
+                                this::executeAsyncQueryRequest).iterator()); 
+            }
+            else{
+                return Iterators.concat(
+                        requests.parallelStream().map(
+                                this::executeQueryRequest).iterator()); 
+            }
+
 		}
 		else if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			final List<QueryRequest> queries = getAdapterOnlyQueryRequests(
 					tableName);
-			return Iterators.concat(
-					queries.parallelStream().map(
-							this::executeQueryRequest).iterator());
 		}
 		
 		if(async){
@@ -276,4 +293,15 @@ abstract public class DynamoDBQuery extends
 				queryRequest,
 				dynamodbOperations.getClient());
 	}
+
+	/**
+	 * Asynchronous version of the query request. Does not block
+	 */
+	public Iterator<Map<String, AttributeValue>> executeAsyncQueryRequest(
+			final QueryRequest queryRequest ) {
+		return new AsyncPaginatedQuery(
+				queryRequest,
+				dynamodbOperations.getClient());
+	}
+
 }

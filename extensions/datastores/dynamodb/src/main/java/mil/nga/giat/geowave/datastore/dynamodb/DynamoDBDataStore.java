@@ -334,7 +334,7 @@ public class DynamoDBDataStore extends
 
 		return Integer.toString(counter);
 	}
-	
+
 	@Override
 	public void write(
 			Writer writer,

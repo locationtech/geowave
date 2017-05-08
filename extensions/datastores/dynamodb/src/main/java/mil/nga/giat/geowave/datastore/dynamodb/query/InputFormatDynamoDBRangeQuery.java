@@ -74,7 +74,7 @@ public class InputFormatDynamoDBRangeQuery extends
 	}
 
 	@Override
-	protected List<ByteArrayRange> getRanges() {		
+	protected List<ByteArrayRange> getRanges() {
 		return Collections.singletonList(range);
 	}
 
@@ -94,5 +94,4 @@ public class InputFormatDynamoDBRangeQuery extends
 								filters));
 	}
 
-	
 }
