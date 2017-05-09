@@ -111,7 +111,7 @@ public class PropertiesUtils implements
 					@Override
 					public Object get(
 							String name ) {
-						return properties.get(name);
+						return properties != null ? properties.get(name) : null;
 					}
 				});
 	}
@@ -154,14 +154,17 @@ public class PropertiesUtils implements
 			String name,
 			boolean req )
 			throws IllegalArgumentException {
-		Object val = getter.get(name);
-		// Treat empty strings as null
-		if (val != null && val instanceof String && ((String) val).isEmpty()) {
-			val = null;
-		}
-		if (val == null && req) {
-			throw new IllegalArgumentException(
-					"Missing required property: " + name);
+		Object val = null;
+		if (getter != null) {
+			val = getter.get(name);
+			// Treat empty strings as null
+			if (val != null && val instanceof String && ((String) val).isEmpty()) {
+				val = null;
+			}
+			if (val == null && req) {
+				throw new IllegalArgumentException(
+						"Missing required property: " + name);
+			}
 		}
 		return val;
 	}

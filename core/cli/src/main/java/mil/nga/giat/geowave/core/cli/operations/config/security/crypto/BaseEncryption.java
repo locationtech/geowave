@@ -48,7 +48,7 @@ public abstract class BaseEncryption
 	 * with the SAME two values (salt - below - and token file - specified at
 	 * resourceLocation)
 	 */
-	private byte[] salt = null;
+	protected byte[] salt = null;
 	protected File tokenFile = null;
 
 	private static final String PREFIX = "ENC{";
@@ -287,13 +287,11 @@ public abstract class BaseEncryption
 	 */
 	private static String generateRandomSecretKey()
 			throws Exception {
-		String retval = "";
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 		keyGenerator.init(256);
 		SecretKey secretKey = keyGenerator.generateKey();
 		byte[] encoded = secretKey.getEncoded();
-		retval = DatatypeConverter.printBase64Binary(encoded);
-		return retval;
+		return DatatypeConverter.printBase64Binary(encoded);
 	}
 
 	/**
@@ -319,25 +317,6 @@ public abstract class BaseEncryption
 	 * ENCRYPTION METHODS
 	 */
 	/**
-	 * Method to encrypt binary value using the specified token resource
-	 * 
-	 * @param data
-	 *            Binary value to encrypt
-	 * @return Encrypted binary using the specified token resource
-	 * @throws Exception
-	 */
-	/*
-	 * private byte[] encrypt( byte[] data ) throws Exception { byte[]
-	 * encryptedBytes = encryptBytes(data); int encryptedBytesLength =
-	 * encryptedBytes.length; byte[] wrappedBytes = new byte[prefixBytesLength +
-	 * encryptedBytesLength + suffixBytesLength]; System.arraycopy( prefixBytes,
-	 * 0, wrappedBytes, 0, prefixBytesLength); System.arraycopy( encryptedBytes,
-	 * 0, wrappedBytes, prefixBytesLength, encryptedBytesLength);
-	 * System.arraycopy( suffixBytes, 0, wrappedBytes, prefixBytesLength +
-	 * encryptedBytesLength, suffixBytesLength); return wrappedBytes; }
-	 */
-
-	/**
 	 * Method to encrypt and hex-encode a string value using the specified token
 	 * resource
 	 * 
@@ -360,40 +339,6 @@ public abstract class BaseEncryption
 	/*
 	 * DECRYPTION METHODS
 	 */
-	/**
-	 * Method to decrypt binary value using the specified token resource
-	 * 
-	 * @param data
-	 *            Binary value to decrypt
-	 * @return Decrypted binary using the specified token resource
-	 * @throws Exception
-	 */
-	/*
-	 * private byte[] decrypt( byte[] data ) throws Exception { if
-	 * (bytesSurroundedByWrapper(data)) { return
-	 * decryptBytes(extractWrappedContents(data)); } else { return data; } }
-	 */
-
-	/**
-	 * Method to decrypt binary value using the specified token resource. Also
-	 * allows the option to add a validation for making sure the value being
-	 * decrypted is wrapped with "ENC{}"
-	 * 
-	 * @param data
-	 *            Binary value to decrypt
-	 * @param passthroughWrapperlessData
-	 *            boolean specifying if service should ensure that the value
-	 *            being decrypted is wrapped with "ENC{}" before decrypting, or
-	 *            if false allow anything to be decrypted
-	 * @return Decrypted binary using the specified token resource
-	 * @throws Exception
-	 */
-	/*
-	 * public byte[] decrypt( byte[] data, boolean passthroughWrapperlessData )
-	 * throws Exception { if (passthroughWrapperlessData) { return
-	 * decrypt(data); } else { return decryptBytes(data); } }
-	 */
-
 	/**
 	 * Returns a decrypted value from the encrypted hex-encoded value specified
 	 * 

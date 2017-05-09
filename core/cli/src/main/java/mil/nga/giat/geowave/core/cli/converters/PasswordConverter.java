@@ -8,9 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.utils.FileUtils;
@@ -44,8 +41,8 @@ public class PasswordConverter extends
 				optionName);
 	}
 
-	// private final static Logger LOGGER =
-	// LoggerFactory.getLogger(PasswordConverter.class);
+	public static final String DEFAULT_PASSWORD_DESCRIPTION = "Can be specified as 'pass:<password>', 'file:<local file containing the password>', "
+			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin";
 	public static final String STDIN = "stdin";
 	private static final String SEPARATOR = ":";
 
