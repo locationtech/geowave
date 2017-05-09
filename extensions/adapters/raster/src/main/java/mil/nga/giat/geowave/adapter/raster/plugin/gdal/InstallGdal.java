@@ -2,10 +2,8 @@ package mil.nga.giat.geowave.adapter.raster.plugin.gdal;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 
@@ -22,6 +20,8 @@ public class InstallGdal
 
 	public static final File DEFAULT_TEMP_DIR = new File(
 			"./target/temp");
+	private static final String GDAL_ENV = "baseGdalDownload";
+	private static final String DEFAULT_BASE = "http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal";
 
 	public static void main(
 			final String[] args )
@@ -54,16 +54,20 @@ public class InstallGdal
 			throws IOException {
 		URL url;
 		String file;
+		String gdalEnv = System.getProperty(GDAL_ENV);
+		if (gdalEnv == null || gdalEnv.trim().isEmpty()){
+			gdalEnv = DEFAULT_BASE;
+		}
 		if (isWindows()) {
 			file = "gdal-1.9.2-MSVC2010-x64.zip";
 			url = new URL(
-					"http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/windows/MSVC2010/"
+					gdalEnv + "/windows/MSVC2010/"
 							+ file);
 		}
 		else {
 			file = "gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz";
 			url = new URL(
-					"http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/"
+					gdalEnv + "/linux/"
 							+ file);
 		}
 		final File downloadFile = new File(
