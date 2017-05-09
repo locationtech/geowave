@@ -960,9 +960,9 @@
 		<profile>
 			<id>hortonworks</id>
 			<properties>
-				<accumulo.version>1.7.0.2.4.2.0-258</accumulo.version>
-				<hbase.version>1.1.2.2.4.2.0-258</hbase.version>
-				<hadoop.version>2.7.1.2.4.2.0-258</hadoop.version>
+				<accumulo.version>1.7.0.2.6.0.3-8</accumulo.version>
+				<hbase.version>1.1.2.2.6.0.3-8</hbase.version>
+				<hadoop.version>2.7.3.2.6.0.3-8</hadoop.version>
 			</properties>
 			<repositories>
 				<repository>
