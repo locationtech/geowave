@@ -683,6 +683,7 @@ public class RestServerTest
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(text);
 		String name = (String) obj.get("name");
+		System.out.println(">>>>>>>>>>>>>>>>>>>>> " + name);
 
 		// ingest data into store with index
 		ClientResource resourceIngest = new ClientResource(
