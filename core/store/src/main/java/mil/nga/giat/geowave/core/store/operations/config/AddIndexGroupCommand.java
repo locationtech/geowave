@@ -40,8 +40,8 @@ public class AddIndexGroupCommand extends
 
 	@Parameter(description = "<name> <comma separated list of indexes>")
 	@RestParameters(names = {
-		"key",
-		"value"
+		"name",
+		"names"
 	})
 	private List<String> parameters = new ArrayList<String>();
 

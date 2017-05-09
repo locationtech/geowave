@@ -100,6 +100,12 @@
 		  <artifactId>org.restlet.ext.json</artifactId>
 		  <version>1.1.5</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.liferay</groupId>
+			<artifactId>org.apache.commons.fileupload</artifactId>
+			<version>1.2.2.LIFERAY-PATCHED-1</version>
+		</dependency> 
         
 	</dependencies>
 </project>
