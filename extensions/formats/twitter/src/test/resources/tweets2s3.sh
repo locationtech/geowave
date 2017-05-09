@@ -1,17 +1,35 @@
 #!/bin/bash
-pushd /mnt/tweets
+archivePath=/mnt/tweets
+echo Processing tweet files in $archivePath
+pushd $archivePath
 
-# Get the first tweet file
-firstFile=$(ls *.json | sort -n | head -1)
-echo Zipping $firstFile
+# Get today's date
+today=$(date +%Y%m%d)
+echo Today is $today
 
-# Zip it up
-gzip $firstFile
-zippedFile=$firstFile.gz
-echo Zipped $zippedFile
+currentTweets=tweets-$today.json
+echo Making sure we omit the current tweet file: $currentTweets
 
-# Do the copy to S3
-aws s3 cp $zippedFile s3://geowave-twitter-archive/geo-per-day/$zippedFile
+# Find any old tweet files
+for f in tweets-*.json
+do
+	echo Processing $f...
+	if [ "$f" != "$currentTweets" ]; then
+		# Zip it up
+		gzip $f
+		zippedFile=$f.gz
+		echo Zipped $zippedFile
 
-# Move the zipped file to the done folder
-mv $zippedFile uploaded
+		# Do the copy to S3
+		echo Copying $zippedFile to S3...
+		aws s3 cp $zippedFile s3://geowave-twitter-archive/geo-per-day/$zippedFile
+
+		# Move the zipped file to the done folder
+		echo Moving $zippedFile to uploaded folder...
+		mv $zippedFile uploaded
+	else
+		echo Omitting current tweet file: $f
+	fi
+done
+
+echo Done!
