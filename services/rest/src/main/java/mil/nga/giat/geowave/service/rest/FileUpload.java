@@ -106,11 +106,6 @@ public class FileUpload extends
 			// 3/ Request is parsed by the handler which generates a
 			// list of FileItems
 			String tempDir = System.getProperty("java.io.tmpdir");
-			// Linux returns temp dir as '/tmp' but need to add '/' after to
-			// separate file name
-			if (tempDir.charAt(tempDir.length() - 1) != '/' && tempDir.charAt(tempDir.length() - 1) != '\\') {
-				tempDir = tempDir + '/';
-			}
 			File dir = new File(
 					tempDir);
 			File filename = File.createTempFile(
@@ -118,7 +113,7 @@ public class FileUpload extends
 					".tmp",
 					dir);
 			result = new UploadedFile(
-					tempDir + filename.getName());
+					filename.getAbsolutePath());
 			List<FileItem> fileList = upload.parseRepresentation(entity);
 			if (fileList.size() != 1) {
 				throw new ResourceException(
