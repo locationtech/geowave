@@ -40,20 +40,14 @@ public class ConfigGeoServerCommand extends
 {
 	@Parameter(names = {
 		"-u",
-		"--url"
-	}, description = "GeoServer URL (for example http://localhost:8080/geoserver or https://localhost:8443/geoserver), or simply host:port and appropriate assumptions are made")
-	private String url;
-
-	@Parameter(names = {
-		"-n",
-		"--name"
+		"--username"
 	}, description = "GeoServer User")
-	private String name;
+	private String username;
 
 	// GEOWAVE-811 - adding additional password options for added protection
 	@Parameter(names = {
 		"-p",
-		"--pass"
+		"--password"
 	}, description = "GeoServer Password - " + OptionalPasswordConverter.DEFAULT_PASSWORD_DESCRIPTION, converter = OptionalPasswordConverter.class)
 	private String pass;
 
@@ -62,6 +56,10 @@ public class ConfigGeoServerCommand extends
 		"--workspace"
 	}, description = "GeoServer Default Workspace")
 	private String workspace;
+
+	@Parameter(description = "GeoServer URL (for example http://localhost:8080/geoserver or https://localhost:8443/geoserver), or simply host:port and appropriate assumptions are made")
+	private List<String> parameters = new ArrayList<String>();
+	private String url = null;
 
 	@ParametersDelegate
 	private GeoServerSSLConfigurationOptions sslConfigOptions = new GeoServerSSLConfigurationOptions();
@@ -104,6 +102,11 @@ public class ConfigGeoServerCommand extends
 			OperationParams params )
 			throws Exception {
 
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <GeoServer URL>");
+		}
+		url = parameters.get(0);
 		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// all switches are optional
@@ -143,12 +146,12 @@ public class ConfigGeoServerCommand extends
 	}
 
 	public String getName() {
-		return name;
+		return username;
 	}
 
 	public void setName(
 			String name ) {
-		this.name = name;
+		this.username = name;
 	}
 
 	public String getPass() {

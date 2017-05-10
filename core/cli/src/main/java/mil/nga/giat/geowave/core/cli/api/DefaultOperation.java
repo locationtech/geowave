@@ -2,16 +2,28 @@ package mil.nga.giat.geowave.core.cli.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+import java.util.ServiceLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
 
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.cli.spi.DefaultConfigProviderSpi;
 
 /**
  * The default operation prevents implementors from having to implement the
@@ -77,6 +89,7 @@ public class DefaultOperation implements
 		if (getGeoWaveConfigFile(params) == null) {
 			// if file does not exist
 			setGeoWaveConfigFile(ConfigOptions.getDefaultPropertyFile());
+			setDefaultConfigProperties(params);
 		}
 
 		setGeowaveDirectory(getGeoWaveConfigFile(
@@ -114,6 +127,7 @@ public class DefaultOperation implements
 				throw new ParameterException(
 						e);
 			}
+			setDefaultConfigProperties(params);
 		}
 	}
 
@@ -176,6 +190,7 @@ public class DefaultOperation implements
 		if (getGeoWaveConfigFile() == null) {
 			setGeoWaveConfigFile((File) params.getContext().get(
 					ConfigOptions.PROPERTIES_FILE_CONTEXT));
+
 		}
 		return getGeoWaveConfigFile();
 	}
@@ -212,6 +227,24 @@ public class DefaultOperation implements
 		return ConfigOptions.loadProperties(
 				getGeoWaveConfigFile(),
 				null);
+	}
+
+	/**
+	 * Uses SPI to find all projects that have defaults to add to the
+	 * config-properties file
+	 */
+	private void setDefaultConfigProperties(
+			OperationParams params ) {
+		Properties defaultProperties = new Properties();
+		final Iterator<DefaultConfigProviderSpi> defaultPropertiesProviders = ServiceLoader.load(
+				DefaultConfigProviderSpi.class).iterator();
+		while (defaultPropertiesProviders.hasNext()) {
+			final DefaultConfigProviderSpi defaultPropertiesProvider = defaultPropertiesProviders.next();
+			defaultProperties.putAll(defaultPropertiesProvider.getDefaultConfig());
+		}
+		ConfigOptions.writeProperties(
+				getGeoWaveConfigFile(),
+				defaultProperties);
 	}
 
 	@Override

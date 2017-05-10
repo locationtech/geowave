@@ -12,7 +12,7 @@ import mil.nga.giat.geowave.core.cli.api.Operation;
 
 /**
  * This implementation uses the SPI to load all Operations across the program,
- * including those exported by plugsin. It parses the entries and places them
+ * including those exported by plugins. It parses the entries and places them
  * into a cache.
  */
 public class OperationRegistry
