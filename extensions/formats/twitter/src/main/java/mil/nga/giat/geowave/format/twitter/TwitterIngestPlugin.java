@@ -154,7 +154,7 @@ public class TwitterIngestPlugin extends
 		InputStreamReader isr;
 
 		try {
-			if (hfile.getOriginalFilePath().endsWith(
+			if (hfile.getOriginalFilePath().toString().endsWith(
 					"gz")) {
 				final GZIPInputStream zip = new GZIPInputStream(
 						in);
@@ -219,9 +219,9 @@ public class TwitterIngestPlugin extends
 								JsonArray point = tweet.getJsonObject(
 										"geo").getJsonArray(
 										"coordinates");
-								lon = point.getJsonNumber(
-										0).doubleValue();
 								lat = point.getJsonNumber(
+										0).doubleValue();
+								lon = point.getJsonNumber(
 										1).doubleValue();
 
 								LOGGER.debug("line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
