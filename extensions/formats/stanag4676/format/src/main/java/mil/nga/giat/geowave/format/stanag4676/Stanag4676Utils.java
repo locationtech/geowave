@@ -31,6 +31,9 @@ public class Stanag4676Utils
 				Point.class).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Point.class).buildDescriptor(
+				"DetailGeometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
 				"Mission"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
@@ -67,6 +70,15 @@ public class Stanag4676Utils
 				Double.class).buildDescriptor(
 				"Elevation"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).buildDescriptor(
+				"DetailLatitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).buildDescriptor(
+				"DetailLongitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).buildDescriptor(
+				"DetailElevation"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				Integer.class).buildDescriptor(
 				"FrameNumber"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
@@ -75,6 +87,8 @@ public class Stanag4676Utils
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				Integer.class).buildDescriptor(
 				"PixelColumn"));
+
+		simpleFeatureTypeBuilder.setDefaultGeometry("geometry");
 
 		TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
 		timeConfig.setTimeName("TimeStamp");
@@ -157,6 +171,9 @@ public class Stanag4676Utils
 				LineString.class).buildDescriptor(
 				"geometry"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				LineString.class).buildDescriptor(
+				"DetailGeometry"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
 				"Mission"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
@@ -199,6 +216,18 @@ public class Stanag4676Utils
 				Double.class).buildDescriptor(
 				"EndLongitude"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).buildDescriptor(
+				"DetailStartLatitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).buildDescriptor(
+				"DetailStartLongitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).buildDescriptor(
+				"DetailEndLatitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
+				Double.class).buildDescriptor(
+				"DetailEndLongitude"));
+		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				Integer.class).buildDescriptor(
 				"PointCount"));
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
@@ -237,6 +266,8 @@ public class Stanag4676Utils
 		simpleFeatureTypeBuilder.add(attributeTypeBuilder.binding(
 				String.class).buildDescriptor(
 				"ObjectClassTime"));
+
+		simpleFeatureTypeBuilder.setDefaultGeometry("geometry");
 
 		final TimeDescriptorConfiguration timeConfig = new TimeDescriptorConfiguration();
 		timeConfig.setStartRangeName("StartTime");
