@@ -30,6 +30,7 @@ public class TwitterStreamArchiver
 	private final static Logger LOGGER = Logger.getLogger(TwitterStreamArchiver.class);
 
 	private long frequency = 5000L; // millis: default = 5 sec
+	private int fileSplits = 3;
 	private int numProcessingThreads = 4;
 	private String consumerKey;
 	private String consumerSecret;
@@ -79,6 +80,12 @@ public class TwitterStreamArchiver
 			throw new IOException(
 					"Twitter Archive Path required!");
 		}
+		
+		String fileSplitStr = twitterProps.getProperty("twitter.archive.fileSplits");
+		if (fileSplitStr != null) {
+			fileSplits = Integer.parseInt(fileSplitStr);
+		}
+
 
 		String pollingFrequencyStr = twitterProps.getProperty("twitter.archive.frequencyMillis");
 		if (pollingFrequencyStr != null) {
@@ -105,7 +112,8 @@ public class TwitterStreamArchiver
 				10000);
 
 		TwitterArchiveWriter archiveWriter = new TwitterArchiveFileWriter(
-				archivePath);
+				archivePath,
+				fileSplits);
 
 		StatusListener statusListener = new TwitterLocationListener(
 				archiveWriter);

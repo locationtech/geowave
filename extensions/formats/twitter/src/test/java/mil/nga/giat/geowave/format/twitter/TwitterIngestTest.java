@@ -30,7 +30,7 @@ public class TwitterIngestTest
 		ingester = new TwitterIngestPlugin();
 		ingester.init(null);
 
-		filePath = "tweets-20170503.json.gz";
+		filePath = "tweets-20170503p0.json.gz";
 		expectedCount = 305;
 	}
 
