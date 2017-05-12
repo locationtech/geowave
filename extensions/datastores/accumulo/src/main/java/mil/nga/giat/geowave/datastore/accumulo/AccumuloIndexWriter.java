@@ -6,7 +6,8 @@ import java.util.List;
 
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Mutation;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -29,7 +30,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 public class AccumuloIndexWriter<T> extends
 		DataStoreIndexWriter<T, Mutation>
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloIndexWriter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloIndexWriter.class);
 	protected final AccumuloOperations accumuloOperations;
 	protected final AccumuloOptions accumuloOptions;
 

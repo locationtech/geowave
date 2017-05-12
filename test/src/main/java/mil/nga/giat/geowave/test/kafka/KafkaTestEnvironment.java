@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.test.kafka;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServerStartable;
@@ -20,7 +21,7 @@ public class KafkaTestEnvironment implements
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(KafkaTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KafkaTestEnvironment.class);
 
 	private KafkaServerStartable kafkaServer;
 

@@ -22,7 +22,9 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -41,7 +43,7 @@ import org.opengis.filter.Filter;
 public class GeoToolsVectorDataStoreIngestPlugin implements
 		LocalFileIngestPlugin<SimpleFeature>
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoToolsVectorDataStoreIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoToolsVectorDataStoreIngestPlugin.class);
 	private final static String PROPERTIES_EXTENSION = ".properties";
 
 	private final RetypingVectorDataPlugin retypingPlugin;

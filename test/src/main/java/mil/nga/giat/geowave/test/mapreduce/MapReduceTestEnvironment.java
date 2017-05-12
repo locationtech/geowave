@@ -7,7 +7,8 @@ import java.util.Locale;
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -15,7 +16,7 @@ import mil.nga.giat.geowave.test.TestUtils;
 public class MapReduceTestEnvironment implements
 		TestEnvironment
 {
-	private final static Logger LOGGER = Logger.getLogger(MapReduceTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MapReduceTestEnvironment.class);
 
 	private static MapReduceTestEnvironment singletonInstance = null;
 

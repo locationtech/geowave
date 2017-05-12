@@ -8,7 +8,8 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
@@ -22,7 +23,7 @@ import com.google.common.collect.Iterables;
 public abstract class GeoWaveWritableInputReducer<KEYOUT, VALUEOUT> extends
 		Reducer<GeoWaveInputKey, ObjectWritable, KEYOUT, VALUEOUT>
 {
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveWritableInputReducer.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveWritableInputReducer.class);
 	protected HadoopWritableSerializationTool serializationTool;
 
 	@Override

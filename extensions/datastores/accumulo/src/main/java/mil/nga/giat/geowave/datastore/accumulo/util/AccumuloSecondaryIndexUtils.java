@@ -8,7 +8,8 @@ import java.util.Map.Entry;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -23,7 +24,7 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 public class AccumuloSecondaryIndexUtils
 {
 
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSecondaryIndexUtils.class);
 
 	/**
 	 * Decodes an Accumulo key-value pair from the result of a secondary index

@@ -12,7 +12,8 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generic Avro serializer/deserializer, can convert Avro Java object to a byte
@@ -23,7 +24,7 @@ import org.apache.log4j.Logger;
  */
 public class GenericAvroSerializer<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(GenericAvroSerializer.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GenericAvroSerializer.class);
 
 	private static final EncoderFactory ef = EncoderFactory.get();
 	private static final DecoderFactory df = DecoderFactory.get();

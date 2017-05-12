@@ -8,12 +8,10 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
-import org.apache.log4j.Logger;
 
 public class ConnectorPool
 {
 	private static ConnectorPool singletonInstance;
-	private final static Logger LOGGER = Logger.getLogger(ConnectorPool.class);
 
 	public static synchronized ConnectorPool getInstance() {
 		if (singletonInstance == null) {

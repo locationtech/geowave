@@ -12,7 +12,8 @@ import java.util.TreeSet;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.client.RegionLocator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -36,7 +37,7 @@ import mil.nga.giat.geowave.mapreduce.splits.SplitsProvider;
 public class HBaseSplitsProvider extends
 		SplitsProvider
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseSplitsProvider.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseSplitsProvider.class);
 
 	public static GeoWaveRowRange wrapRange(
 			final ByteArrayRange range ) {

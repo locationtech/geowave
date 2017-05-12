@@ -6,7 +6,8 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
@@ -19,7 +20,7 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 {
 
 	private static final long serialVersionUID = -7425830022998223202L;
-	private final static Logger LOGGER = Logger.getLogger(AbstractSecondaryIndexConfiguration.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractSecondaryIndexConfiguration.class);
 	private final Class<T> clazz;
 	private final Set<String> attributes;
 	private final SecondaryIndexType secondaryIndexType;

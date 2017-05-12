@@ -9,7 +9,8 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
@@ -22,7 +23,7 @@ import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
  */
 public class TransformerWriter
 {
-	private final static Logger LOGGER = Logger.getLogger(TransformerWriter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(TransformerWriter.class);
 	private final ScannerBase scanner;
 	private final String tableName;
 	private final AccumuloOperations accumuloOperations;

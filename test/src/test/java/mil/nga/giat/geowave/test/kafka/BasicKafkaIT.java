@@ -8,7 +8,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,7 +47,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 })
 public class BasicKafkaIT
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicKafkaIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicKafkaIT.class);
 	private static final Map<ByteArrayId, Integer> EXPECTED_COUNT_PER_ADAPTER_ID = new HashMap<ByteArrayId, Integer>();
 
 	static {

@@ -14,7 +14,9 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.geotools.data.DataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -31,7 +33,7 @@ import org.opengis.filter.Filter;
 public class SimpleFeatureGeoWaveWrapper implements
 		CloseableIterator<GeoWaveData<SimpleFeature>>
 {
-	private final static Logger LOGGER = Logger.getLogger(SimpleFeatureGeoWaveWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureGeoWaveWrapper.class);
 
 	private class InternalIterator implements
 			CloseableIterator<GeoWaveData<SimpleFeature>>

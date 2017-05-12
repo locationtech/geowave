@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.FeatureListenerManager;
 import org.geotools.data.Query;
 import org.geotools.data.Transaction;
@@ -59,7 +60,7 @@ public class GeoWaveGTDataStore extends
 		ContentDataStore
 {
 	/** Package logger */
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveGTDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStore.class);
 	public static final CoordinateReferenceSystem DEFAULT_CRS;
 
 	static {

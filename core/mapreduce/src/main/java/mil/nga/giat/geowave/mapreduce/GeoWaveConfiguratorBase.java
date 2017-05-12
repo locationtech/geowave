@@ -10,7 +10,8 @@ import java.util.Map.Entry;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -31,7 +32,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
  */
 public class GeoWaveConfiguratorBase
 {
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveConfiguratorBase.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveConfiguratorBase.class);
 	private static final String KEY_SEPARATOR = "-";
 
 	public static enum GeoWaveConfg {

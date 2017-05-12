@@ -11,7 +11,8 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 
 import com.beust.jcommander.Parameter;
@@ -22,7 +23,7 @@ import com.beust.jcommander.Parameters;
 public class CQLQuery extends
 		AbstractGeoWaveQuery
 {
-	private static Logger LOGGER = Logger.getLogger(CQLQuery.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(CQLQuery.class);
 
 	@Parameter(names = "--cql", required = true, description = "CQL Filter executed client side")
 	private String cqlStr;

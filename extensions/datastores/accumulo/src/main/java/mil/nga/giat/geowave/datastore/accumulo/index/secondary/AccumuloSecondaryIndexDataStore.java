@@ -15,7 +15,8 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -42,7 +43,7 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions
 public class AccumuloSecondaryIndexDataStore extends
 		BaseSecondaryIndexDataStore<Mutation>
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSecondaryIndexDataStore.class);
 	private final AccumuloOperations accumuloOperations;
 	private final AccumuloOptions accumuloOptions;
 	private DataStore dataStore = null;

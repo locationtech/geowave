@@ -21,7 +21,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -75,7 +76,7 @@ public class HBaseDataStore extends
 {
 	public final static String TYPE = "hbase";
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseDataStore.class);
 
 	private final BasicHBaseOperations operations;
 	private final HBaseOptions options;

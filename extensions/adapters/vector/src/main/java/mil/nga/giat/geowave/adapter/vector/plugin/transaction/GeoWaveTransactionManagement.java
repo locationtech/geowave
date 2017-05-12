@@ -17,7 +17,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.Transaction;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -43,7 +44,7 @@ public class GeoWaveTransactionManagement extends
 		GeoWaveTransaction
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveTransactionManagement.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveTransactionManagement.class);
 
 	/** Map of modified features; by feature id */
 	private final Map<String, ModifiedFeature> modifiedFeatures = new ConcurrentHashMap<String, ModifiedFeature>();

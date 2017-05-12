@@ -8,7 +8,8 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.coverage.grid.GridCoverage;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
@@ -37,7 +38,7 @@ public class RasterTileResizeJobRunner extends
 		Configured implements
 		Tool
 {
-	private static final Logger LOGGER = Logger.getLogger(RasterTileResizeJobRunner.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RasterTileResizeJobRunner.class);
 
 	public static final String NEW_ADAPTER_ID_KEY = "NEW_ADAPTER_ID";
 	public static final String OLD_ADAPTER_ID_KEY = "OLD_ADAPTER_ID";

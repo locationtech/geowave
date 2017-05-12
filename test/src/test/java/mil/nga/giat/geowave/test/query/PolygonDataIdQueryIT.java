@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.test.query;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -36,7 +37,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 @RunWith(GeoWaveITRunner.class)
 public class PolygonDataIdQueryIT
 {
-	private static final Logger LOGGER = Logger.getLogger(PolygonDataIdQueryIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PolygonDataIdQueryIT.class);
 	private static SimpleFeatureType simpleFeatureType;
 	private static FeatureDataAdapter dataAdapter;
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";

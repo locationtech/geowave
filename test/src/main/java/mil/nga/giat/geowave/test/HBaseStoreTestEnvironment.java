@@ -3,7 +3,8 @@ package mil.nga.giat.geowave.test;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
@@ -30,7 +31,7 @@ public class HBaseStoreTestEnvironment extends
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseStoreTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseStoreTestEnvironment.class);
 	public static final String HBASE_PROPS_FILE = "hbase.properties";
 	protected String zookeeper;
 	private HbaseLocalCluster hbaseLocalCluster;

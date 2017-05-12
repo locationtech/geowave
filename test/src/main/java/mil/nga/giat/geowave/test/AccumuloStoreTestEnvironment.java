@@ -16,7 +16,8 @@ import org.apache.accumulo.server.init.Initialize;
 import org.apache.accumulo.tserver.TabletServer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -40,7 +41,7 @@ public class AccumuloStoreTestEnvironment extends
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(AccumuloStoreTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloStoreTestEnvironment.class);
 	protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 	protected static final String HADOOP_DLL = "hadoop.dll";

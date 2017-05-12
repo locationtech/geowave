@@ -16,7 +16,8 @@ import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
@@ -25,7 +26,7 @@ import org.opengis.filter.Filter;
 public class CQLQueryFilter implements
 		DistributableQueryFilter
 {
-	private final static Logger LOGGER = Logger.getLogger(CQLQueryFilter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CQLQueryFilter.class);
 	private GeotoolsFeatureDataAdapter adapter;
 	private Filter filter;
 

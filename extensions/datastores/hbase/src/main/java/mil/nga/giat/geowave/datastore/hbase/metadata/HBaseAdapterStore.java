@@ -6,13 +6,10 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 
-import org.apache.log4j.Logger;
-
 public class HBaseAdapterStore extends
 		AbstractHBasePersistence<DataAdapter<?>> implements
 		AdapterStore
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseAdapterStore.class);
 	protected static final String ADAPTER_CF = "ADAPTER";
 
 	public HBaseAdapterStore(

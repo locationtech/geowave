@@ -17,7 +17,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -29,7 +30,7 @@ import mil.nga.giat.geowave.examples.ingest.bulk.SimpleFeatureToAccumuloKeyValue
 public class BulkIngestInputGenerationIT
 {
 
-	private static final Logger LOGGER = Logger.getLogger(BulkIngestInputGenerationIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BulkIngestInputGenerationIT.class);
 	private static final String TEST_DATA_LOCATION = "src/test/resources/mil/nga/giat/geowave/test/geonames/barbados";
 	private static final long NUM_GEONAMES_RECORDS = 834; // (see BB.txt)
 	private static final String OUTPUT_PATH = "target/tmp_bulkIngestTest";

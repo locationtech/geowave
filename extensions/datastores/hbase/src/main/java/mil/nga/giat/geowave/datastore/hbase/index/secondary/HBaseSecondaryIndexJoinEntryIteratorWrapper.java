@@ -8,7 +8,8 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
@@ -20,7 +21,7 @@ import mil.nga.giat.geowave.core.store.util.SecondaryIndexEntryIteratorWrapper;
 public class HBaseSecondaryIndexJoinEntryIteratorWrapper<T> extends
 		SecondaryIndexEntryIteratorWrapper<T, Pair<ByteArrayId, ByteArrayId>>
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseSecondaryIndexJoinEntryIteratorWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseSecondaryIndexJoinEntryIteratorWrapper.class);
 	private final ResultScanner scanner;
 	private final byte[] columnFamily;
 

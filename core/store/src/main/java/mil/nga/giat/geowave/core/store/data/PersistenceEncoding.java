@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.core.store.data;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class models all of the necessary information for persisting data in the
@@ -19,7 +20,7 @@ public class PersistenceEncoding<T>
 	private final ByteArrayId dataId;
 	protected final PersistentDataset<T> commonData;
 	private final PersistentDataset<byte[]> unknownData;
-	protected final static Logger LOGGER = Logger.getLogger(PersistenceEncoding.class);
+	protected final static Logger LOGGER = LoggerFactory.getLogger(PersistenceEncoding.class);
 	protected final static double DOUBLE_TOLERANCE = 1E-12d;
 
 	public PersistenceEncoding(

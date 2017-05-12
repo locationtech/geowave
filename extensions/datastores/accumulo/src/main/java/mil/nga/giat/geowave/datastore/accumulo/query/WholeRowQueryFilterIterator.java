@@ -11,7 +11,8 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
@@ -31,7 +32,7 @@ import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloUnreadDataList;
 public class WholeRowQueryFilterIterator extends
 		WholeRowIterator
 {
-	private final static Logger LOGGER = Logger.getLogger(WholeRowQueryFilterIterator.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(WholeRowQueryFilterIterator.class);
 	protected QueryFilterIterator queryFilterIterator;
 
 	@Override

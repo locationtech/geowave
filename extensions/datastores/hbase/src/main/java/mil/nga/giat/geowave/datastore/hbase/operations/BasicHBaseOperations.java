@@ -21,7 +21,8 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -40,7 +41,7 @@ import mil.nga.giat.geowave.datastore.hbase.util.RewritingMergingEntryIterator;
 public class BasicHBaseOperations implements
 		DataStoreOperations
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicHBaseOperations.class);
 	protected static final String DEFAULT_TABLE_NAMESPACE = "";
 	public static final Object ADMIN_MUTEX = new Object();
 	private static final long SLEEP_INTERVAL = 10000L;

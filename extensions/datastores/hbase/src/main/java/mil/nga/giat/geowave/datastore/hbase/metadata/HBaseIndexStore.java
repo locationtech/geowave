@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.datastore.hbase.metadata;
 
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -12,8 +10,6 @@ public class HBaseIndexStore extends
 		AbstractHBasePersistence<Index<?, ?>> implements
 		IndexStore
 {
-
-	private final static Logger LOGGER = Logger.getLogger(HBaseIndexStore.class);
 	protected static final String INDEX_CF = "INDEX";
 
 	public HBaseIndexStore(

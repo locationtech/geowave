@@ -16,7 +16,8 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -96,7 +97,7 @@ public class SpatialTemporalQueryIT
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
-	private final static Logger LOGGER = Logger.getLogger(SpatialTemporalQueryIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalQueryIT.class);
 	private static long startMillis;
 
 	@BeforeClass

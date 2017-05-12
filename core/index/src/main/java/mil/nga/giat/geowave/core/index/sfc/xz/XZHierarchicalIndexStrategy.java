@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -35,7 +36,7 @@ import net.sf.json.JSONObject;
 public class XZHierarchicalIndexStrategy implements
 		HierarchicalNumericIndexStrategy
 {
-	private final static Logger LOGGER = Logger.getLogger(XZHierarchicalIndexStrategy.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(XZHierarchicalIndexStrategy.class);
 
 	protected static final int DEFAULT_MAX_RANGES = -1;
 

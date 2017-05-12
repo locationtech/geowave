@@ -61,11 +61,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-		</dependency>
-		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-cli-landsat8</artifactId>
 			<version>${project.version}</version>
@@ -94,6 +89,11 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -133,7 +133,7 @@
 									<type>war</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/geowave-services</outputDirectory>
-									<includes>**/*.class,**/*.config,**/*.xml</includes>
+									<includes>**/*.class,**/*.config,**/*.xml,WEB-INF/lib/**/slf4j*.jar</includes>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.geoserver.web</groupId>

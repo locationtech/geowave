@@ -16,7 +16,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -48,7 +49,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 	protected final ScanCallback<?> scanCallback;
 	protected List<QueryFilter> clientFilters;
-	private final static Logger LOGGER = Logger.getLogger(HBaseFilteredIndexQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseFilteredIndexQuery.class);
 	private boolean hasSkippingFilter = false;
 
 	public HBaseFilteredIndexQuery(
@@ -92,7 +93,6 @@ public abstract class HBaseFilteredIndexQuery extends
 		return true;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public CloseableIterator<Object> query(
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore,

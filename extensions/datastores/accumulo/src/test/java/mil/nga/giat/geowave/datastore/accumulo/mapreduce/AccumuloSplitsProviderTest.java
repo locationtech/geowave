@@ -35,7 +35,8 @@ import org.apache.accumulo.core.data.thrift.TRange;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -100,7 +101,7 @@ import org.apache.accumulo.core.data.impl.KeyExtent;
 //@formatter:on
 public class AccumuloSplitsProviderTest
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSplitsProviderTest.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSplitsProviderTest.class);
 
 	final AccumuloOptions accumuloOptions = new AccumuloOptions();
 	final GeometryFactory factory = new GeometryFactory();

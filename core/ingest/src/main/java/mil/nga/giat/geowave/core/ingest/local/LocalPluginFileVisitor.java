@@ -15,7 +15,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is used by any local file driver to recurse a directory of files.
@@ -32,7 +33,7 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 		FileVisitor<Path>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(LocalPluginFileVisitor.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(LocalPluginFileVisitor.class);
 
 	private class PluginVisitor
 	{

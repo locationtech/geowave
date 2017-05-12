@@ -13,7 +13,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -58,7 +59,7 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 public class MemoryDataStore implements
 		DataStore
 {
-	private final static Logger LOGGER = Logger.getLogger(MemoryDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MemoryDataStore.class);
 	private final Map<ByteArrayId, TreeSet<MemoryEntryRow>> storeData = Collections
 			.synchronizedMap(new HashMap<ByteArrayId, TreeSet<MemoryEntryRow>>());
 	private final AdapterStore adapterStore;

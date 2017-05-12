@@ -17,7 +17,8 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -45,7 +46,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 		AbstractGeowavePersistence<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractAccumuloPersistence.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractAccumuloPersistence.class);
 	protected final AccumuloOperations accumuloOperations;
 	protected Text row = new Text();
 

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -33,7 +35,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 public class SimpleIngest
 {
 
-	static Logger log = Logger.getLogger(SimpleIngest.class);
+	static Logger log = LoggerFactory.getLogger(SimpleIngest.class);
 	public static final String FEATURE_NAME = "GridPoint";
 
 	public static List<SimpleFeature> getGriddedFeatures(

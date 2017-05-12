@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexUtils;
@@ -20,7 +21,7 @@ import mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper;
 public class HBaseEntryIteratorWrapper<T> extends
 		EntryIteratorWrapper<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseEntryIteratorWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseEntryIteratorWrapper.class);
 	private boolean decodePersistenceEncoding = true;
 
 	private byte[] fieldSubsetBitmask;

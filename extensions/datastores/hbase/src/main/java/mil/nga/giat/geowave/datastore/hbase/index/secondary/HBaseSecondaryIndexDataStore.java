@@ -12,7 +12,8 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.security.visibility.CellVisibility;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -40,8 +41,9 @@ import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 public class HBaseSecondaryIndexDataStore extends
 		BaseSecondaryIndexDataStore<RowMutations>
 {
-	private final static Logger LOGGER = Logger.getLogger(HBaseSecondaryIndexDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseSecondaryIndexDataStore.class);
 	private final BasicHBaseOperations hbaseOperations;
+	@SuppressWarnings("unused")
 	private final HBaseOptions hbaseOptions;
 	private DataStore dataStore = null;
 

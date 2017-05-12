@@ -12,7 +12,8 @@ import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class to hold intermediate stage data that must be used throughout the life
@@ -20,7 +21,7 @@ import org.apache.log4j.Logger;
  */
 public class StageRunData
 {
-	private final static Logger LOGGER = Logger.getLogger(StageRunData.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StageRunData.class);
 	private final Map<String, DataFileWriter> cachedWriters = new HashMap<String, DataFileWriter>();
 	private final Path hdfsBaseDirectory;
 	private final FileSystem fs;
@@ -65,7 +66,7 @@ public class StageRunData
 
 			}
 			catch (final IOException e) {
-				LOGGER.fatal(
+				LOGGER.error(
 						"Unable to create output stream",
 						e);
 				// cache a null value so we don't continually try to recreate

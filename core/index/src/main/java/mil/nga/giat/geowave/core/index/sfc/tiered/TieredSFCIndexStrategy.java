@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -47,7 +49,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 public class TieredSFCIndexStrategy implements
 		HierarchicalNumericIndexStrategy
 {
-	private final static Logger LOGGER = Logger.getLogger(TieredSFCIndexStrategy.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(TieredSFCIndexStrategy.class);
 	private final static int DEFAULT_MAX_ESTIMATED_DUPLICATE_IDS_PER_DIMENSION = 2;
 	protected static final int DEFAULT_MAX_RANGES = -1;
 	private SpaceFillingCurve[] orderedSfcs;

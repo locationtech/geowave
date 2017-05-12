@@ -14,7 +14,8 @@ import java.util.List;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.LiteralExpressionImpl;
 import org.geotools.filter.spatial.IntersectsImpl;
 import org.geotools.filter.text.commons.ExpressionToText;
@@ -75,7 +76,7 @@ public class FilterToECQLExtension implements
 		FilterVisitor
 {
 
-	private static Logger LOGGER = Logger.getLogger(FilterToECQLExtension.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(FilterToECQLExtension.class);
 
 	ExpressionToText expressionVisitor = new ExpressionToText();
 

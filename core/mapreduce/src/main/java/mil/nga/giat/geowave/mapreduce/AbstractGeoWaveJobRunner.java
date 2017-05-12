@@ -5,7 +5,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -22,7 +23,7 @@ public abstract class AbstractGeoWaveJobRunner extends
 		Tool
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(AbstractGeoWaveJobRunner.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveJobRunner.class);
 
 	protected DataStorePluginOptions dataStoreOptions;
 	protected DistributableQuery query = null;
@@ -38,7 +39,6 @@ public abstract class AbstractGeoWaveJobRunner extends
 	/**
 	 * Main method to execute the MapReduce analytic.
 	 */
-	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
 		final Job job = Job.getInstance(super.getConf());

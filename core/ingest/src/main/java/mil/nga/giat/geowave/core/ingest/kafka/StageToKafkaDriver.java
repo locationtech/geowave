@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.avro.specific.SpecificRecordBase;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
@@ -20,7 +21,7 @@ import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 		AbstractLocalFileDriver<AvroFormatPlugin<?, ?>, StageKafkaData<?>>
 {
-	private final static Logger LOGGER = Logger.getLogger(StageToKafkaDriver.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StageToKafkaDriver.class);
 
 	private final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins;
 	private final KafkaProducerCommandLineOptions kafkaOptions;

@@ -28,7 +28,8 @@ import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -55,7 +56,7 @@ public class GPXConsumer implements
 		CloseableIterator<GeoWaveData<SimpleFeature>>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(GpxIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GpxIngestPlugin.class);
 
 	private final SimpleFeatureBuilder pointBuilder;
 	private final SimpleFeatureBuilder waypointBuilder;

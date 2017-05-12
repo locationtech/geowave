@@ -13,7 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
@@ -43,7 +44,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptio
  */
 public class IngestFromKafkaDriver
 {
-	private final static Logger LOGGER = Logger.getLogger(IngestFromKafkaDriver.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(IngestFromKafkaDriver.class);
 
 	private final DataStorePluginOptions storeOptions;
 	private final List<IndexPluginOptions> indexOptions;

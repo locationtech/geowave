@@ -6,7 +6,8 @@ import java.util.Iterator;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -32,7 +33,7 @@ public class JsonDefinitionColumnVisibilityManagement<T> implements
 		ColumnVisibilityManagementSpi<T>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(JsonDefinitionColumnVisibilityManagement.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(JsonDefinitionColumnVisibilityManagement.class);
 
 	private static class JsonDefinitionFieldLevelVisibilityHandler<T, CommonIndexValue> extends
 			FieldLevelVisibilityHandler<T, CommonIndexValue>

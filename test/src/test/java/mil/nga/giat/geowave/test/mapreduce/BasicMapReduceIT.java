@@ -28,7 +28,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataStoreFinder;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -114,7 +115,7 @@ public class BasicMapReduceIT
 		LOGGER.warn("-----------------------------------------");
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicMapReduceIT.class);
 	private static final String TEST_EXPORT_DIRECTORY = "basicMapReduceIT-export";
 
 	public static enum ResultCounterType {

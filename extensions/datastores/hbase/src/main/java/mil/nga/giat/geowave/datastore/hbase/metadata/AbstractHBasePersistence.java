@@ -13,7 +13,8 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -30,7 +31,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 		AbstractGeowavePersistence<T>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(AbstractHBasePersistence.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractHBasePersistence.class);
 	protected static final String[] METADATA_CFS = new String[] {
 		HBaseAdapterIndexMappingStore.ADAPTER_INDEX_CF,
 		HBaseAdapterStore.ADAPTER_CF,

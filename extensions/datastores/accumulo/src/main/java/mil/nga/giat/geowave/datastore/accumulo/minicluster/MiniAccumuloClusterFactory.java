@@ -22,12 +22,13 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MiniAccumuloClusterFactory
 {
 
-	private static final Logger LOGGER = Logger.getLogger(MiniAccumuloClusterFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MiniAccumuloClusterFactory.class);
 
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 

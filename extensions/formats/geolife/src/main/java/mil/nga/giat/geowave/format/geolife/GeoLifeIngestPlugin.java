@@ -33,7 +33,8 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
@@ -50,7 +51,7 @@ public class GeoLifeIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<WholeFile>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(GeoLifeIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoLifeIngestPlugin.class);
 
 	private final SimpleFeatureBuilder geolifePointBuilder;
 	private final SimpleFeatureType geolifePointType;

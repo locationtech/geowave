@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.test;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -22,7 +23,7 @@ public class BigtableStoreTestEnvironment extends
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(BigtableStoreTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BigtableStoreTestEnvironment.class);
 
 	protected BigtableEmulator emulator;
 
