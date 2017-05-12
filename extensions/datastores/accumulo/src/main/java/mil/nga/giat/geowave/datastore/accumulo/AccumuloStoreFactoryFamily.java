@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -46,6 +47,11 @@ public class AccumuloStoreFactoryFamily extends
 	@Override
 	public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory() {
 		return new AccumuloAdapterIndexMappingStoreFactory();
+	}
+
+	@Override
+	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory() {
+		return new AccumuloOperationsFactory();
 	}
 
 }

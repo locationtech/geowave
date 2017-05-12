@@ -147,4 +147,35 @@ public class IngestRunner extends
 				analysisInfo);
 	}
 
+	@Override
+	protected void runInternal(
+			OperationParams params )
+			throws Exception {
+		try {
+			super.runInternal(params);
+		}
+		finally {
+			if (sceneWriter != null) {
+				try {
+					sceneWriter.close();
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to close writer for scene vectors",
+							e);
+				}
+			}
+			if (bandWriter != null) {
+				try {
+					bandWriter.close();
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to close writer for band vectors",
+							e);
+				}
+			}
+		}
+	}
+
 }

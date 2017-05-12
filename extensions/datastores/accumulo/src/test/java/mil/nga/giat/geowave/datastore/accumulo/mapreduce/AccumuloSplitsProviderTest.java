@@ -264,6 +264,15 @@ public class AccumuloSplitsProviderTest
 		public String getTableNameSpace() {
 			return null;
 		}
+
+		@Override
+		public boolean mergeData(
+				PrimaryIndex index,
+				AdapterStore adapterStore,
+				AdapterIndexMappingStore adapterIndexMappingStore ) {
+			// TODO Auto-generated method stub
+			return false;
+		}
 	}
 
 	@Test

@@ -55,20 +55,18 @@ public class InstallGdal
 		URL url;
 		String file;
 		String gdalEnv = System.getProperty(GDAL_ENV);
-		if (gdalEnv == null || gdalEnv.trim().isEmpty()){
+		if (gdalEnv == null || gdalEnv.trim().isEmpty()) {
 			gdalEnv = DEFAULT_BASE;
 		}
 		if (isWindows()) {
 			file = "gdal-1.9.2-MSVC2010-x64.zip";
 			url = new URL(
-					gdalEnv + "/windows/MSVC2010/"
-							+ file);
+					gdalEnv + "/windows/MSVC2010/" + file);
 		}
 		else {
 			file = "gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz";
 			url = new URL(
-					gdalEnv + "/linux/"
-							+ file);
+					gdalEnv + "/linux/" + file);
 		}
 		final File downloadFile = new File(
 				gdalDir,

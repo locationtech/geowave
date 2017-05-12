@@ -97,7 +97,6 @@ public class MergingEntryIterator<T> extends
 				if (HBaseUtils.rowIdsMatch(
 						rowId,
 						nextRowId)) {
-
 					resultsToMerge.add(peekedValue);
 					peekedValue = null;
 				}
@@ -123,7 +122,7 @@ public class MergingEntryIterator<T> extends
 		return nextResult;
 	}
 
-	private Result mergeResults(
+	protected Result mergeResults(
 			final RowMergingDataAdapter mergingAdapter,
 			final ArrayList<Result> resultsToMerge ) {
 
