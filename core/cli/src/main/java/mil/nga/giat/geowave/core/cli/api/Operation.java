@@ -18,4 +18,15 @@ public interface Operation
 	 */
 	boolean prepare(
 			OperationParams params );
+
+	/**
+	 * Method to allow commands the option to override the default usage from
+	 * jcommander where all the fields are printed out in alphabetical order.
+	 * Some classes may want to put the basic/required fields first, with
+	 * optional fields at the bottom, or however other custom usage's would be
+	 * necessary. <br/>
+	 * <br/>
+	 * If method returns null, the default usage from jcommander is used
+	 */
+	String usage();
 }

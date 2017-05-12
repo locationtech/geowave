@@ -11,6 +11,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsDriver;
@@ -19,7 +20,8 @@ import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOpt
 
 @GeowaveOperation(name = "localToHdfs", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to HDFS")
-public class LocalToHdfsCommand implements
+public class LocalToHdfsCommand extends
+		DefaultOperation implements
 		Command
 {
 

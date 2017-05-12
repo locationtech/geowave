@@ -42,11 +42,6 @@ public class NoDataByFilter implements
 	public boolean isNoData(
 			final SampleIndex index,
 			final double value ) {
-		if ((shape != null) && !shape.intersects(new GeometryFactory().createPoint(new Coordinate(
-				index.getX(),
-				index.getY())))) {
-			return true;
-		}
 		if ((noDataPerBand != null) && (noDataPerBand.length > index.getBand())) {
 			for (final double noDataVal : noDataPerBand[index.getBand()]) {
 				// use object equality to capture NaN, and positive and negative
@@ -57,6 +52,11 @@ public class NoDataByFilter implements
 					return true;
 				}
 			}
+		}
+		if ((shape != null) && !shape.intersects(new GeometryFactory().createPoint(new Coordinate(
+				index.getX(),
+				index.getY())))) {
+			return true;
 		}
 		return false;
 	}

@@ -8,6 +8,7 @@ import com.beust.jcommander.ParametersDelegate;
 import mil.nga.giat.geowave.core.cli.api.DefaultPluginOptions;
 import mil.nga.giat.geowave.core.cli.api.PluginOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
@@ -137,6 +138,11 @@ public class DataStorePluginOptions extends
 
 	public AdapterIndexMappingStore createAdapterIndexMappingStore() {
 		return getFactoryFamily().getAdapterIndexMappingStoreFactory().createStore(
+				getFactoryOptions());
+	}
+
+	public DataStoreOperations createDataStoreOperations() {
+		return getFactoryFamily().getDataStoreOperationsFactory().createStore(
 				getFactoryOptions());
 	}
 

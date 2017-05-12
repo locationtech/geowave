@@ -86,6 +86,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.warp.WarpRIF;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramConfig;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
@@ -139,6 +140,7 @@ public class RasterDataAdapter implements
 {
 	static {
 		SourceThresholdFixMosaicDescriptor.register(false);
+		WarpRIF.register(false);
 		MapProjection.SKIP_SANITY_CHECKS = true;
 	}
 

@@ -10,11 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -79,7 +79,8 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 
 	@Override
 	public List<ByteArrayId> write(
-			final T entry ) {
+			final T entry )
+			throws IOException {
 		return write(
 				entry,
 				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
@@ -88,29 +89,35 @@ public abstract class DataStoreIndexWriter<T, MutationType> implements
 	@Override
 	public List<ByteArrayId> write(
 			final T entry,
-			final VisibilityWriter<T> fieldVisibilityWriter ) {
+			final VisibilityWriter<T> fieldVisibilityWriter )
+			throws IOException {
 
 		DataStoreEntryInfo entryInfo;
 		synchronized (this) {
 
 			ensureOpen();
+
 			if (writer == null) {
+				LOGGER.error("Null writer - empty list returned");
 				return Collections.emptyList();
 			}
 			entryInfo = getEntryInfo(
 					entry,
 					fieldVisibilityWriter);
 			if (entryInfo == null) {
+				LOGGER.error("Null EntryInfo - empty list returned");
 				return Collections.emptyList();
 			}
 			callback.entryIngested(
 					entryInfo,
 					entry);
 		}
+
 		return entryInfo.getRowIds();
 	}
 
-	protected abstract void ensureOpen();
+	protected abstract void ensureOpen()
+			throws IOException;
 
 	protected abstract DataStoreEntryInfo getEntryInfo(
 			final T entry,

@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.analytic.mapreduce.kde;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.adapter.raster.operations.options.HdfsHostPortConverter;
+import mil.nga.giat.geowave.mapreduce.operations.HdfsHostPortConverter;
 
 public class KDECommandLineOptions
 {

@@ -88,7 +88,7 @@ public abstract class GeoWaveBaseConverter<T> extends
 	 * @param promptMessage
 	 * @return
 	 */
-	protected static String promptAndReadValue(
+	public static String promptAndReadValue(
 			String promptMessage ) {
 		LOGGER.trace("ENTER :: promptAndReadValue()");
 		PropertiesUtils propsUtils = new PropertiesUtils(
@@ -115,7 +115,7 @@ public abstract class GeoWaveBaseConverter<T> extends
 	 * @param promptMessage
 	 * @return
 	 */
-	protected static String promptAndReadPassword(
+	public static String promptAndReadPassword(
 			String promptMessage ) {
 		LOGGER.trace("ENTER :: promptAndReadPassword()");
 		PropertiesUtils propsUtils = new PropertiesUtils(
@@ -173,17 +173,6 @@ public abstract class GeoWaveBaseConverter<T> extends
 	 */
 	public boolean isRequired() {
 		return false;
-	}
-
-	/**
-	 * Specify if converter should update the config properties with the
-	 * specified value. If converter is for a password, value is true, otherwise
-	 * false.
-	 * 
-	 * @return
-	 */
-	public boolean updatePasswordInConfigs() {
-		return isPassword();
 	}
 
 	/**

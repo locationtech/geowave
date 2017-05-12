@@ -80,7 +80,7 @@ public abstract class AbstractGeowavePersistence<T extends Persistable>
 		// the secondaryId is optional so check for null
 		if (secondaryId != null) {
 			return new ByteArrayId(
-					operations.getTableNameSpace() + "_" + primaryId.getString() + "_" + secondaryId.getString());
+					primaryId.getString() + "_" + secondaryId.getString());
 		}
 		return primaryId;
 	}

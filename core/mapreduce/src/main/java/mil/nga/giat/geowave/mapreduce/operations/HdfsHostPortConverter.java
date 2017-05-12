@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.adapter.raster.operations.options;
+package mil.nga.giat.geowave.mapreduce.operations;
 
 import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
 

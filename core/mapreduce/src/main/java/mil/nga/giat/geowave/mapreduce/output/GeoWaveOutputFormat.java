@@ -24,6 +24,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -154,16 +155,23 @@ public class GeoWaveOutputFormat extends
 				adapter);
 	}
 
-	protected static IndexStore getJobContextIndexStore(
+	public static IndexStore getJobContextIndexStore(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getJobContextIndexStore(
 				CLASS,
 				context);
 	}
 
-	protected static AdapterStore getJobContextAdapterStore(
+	public static AdapterStore getJobContextAdapterStore(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getJobContextAdapterStore(
+				CLASS,
+				context);
+	}
+
+	public static AdapterIndexMappingStore getJobContextAdapterIndexMappingStore(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getJobContextAdapterIndexMappingStore(
 				CLASS,
 				context);
 	}
@@ -270,22 +278,42 @@ public class GeoWaveOutputFormat extends
 				final GeoWaveOutputKey ingestKey,
 				final Object data )
 				throws IOException {
+			boolean success = false;
+			String errorMessage = null;
+
+			if (ingestKey.getIndexIds().isEmpty()) {
+				throw new IOException(
+						"Empty index ID input list");
+			}
+
 			final WritableDataAdapter<?> adapter = ingestKey.getAdapter(adapterStore);
 			if (adapter != null) {
 				final IndexWriter indexWriter = getIndexWriter(
 						adapter,
 						ingestKey.getIndexIds());
 				if (indexWriter != null) {
-					indexWriter.write(data);
+					List writeList = indexWriter.write(data);
+
+					if (!writeList.isEmpty()) {
+						success = true;
+					}
+					else {
+						errorMessage = "Empty write list";
+					}
 				}
 				else {
-					LOGGER.warn("Cannot write to index '"
-							+ StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'");
+					errorMessage = "Cannot write to index '"
+							+ StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes()) + "'";
 				}
 			}
 			else {
-				LOGGER.warn("Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes())
-						+ "' does not exist");
+				errorMessage = "Adapter '" + StringUtils.stringFromBinary(ingestKey.getAdapterId().getBytes())
+						+ "' does not exist";
+			}
+
+			if (!success) {
+				throw new IOException(
+						errorMessage);
 			}
 		}
 
@@ -304,7 +332,6 @@ public class GeoWaveOutputFormat extends
 					else {
 						LOGGER.warn("Index '" + StringUtils.stringFromBinary(indexId.getBytes()) + "' does not exist");
 					}
-
 				}
 
 				writer = dataStore.createWriter(

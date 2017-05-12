@@ -121,7 +121,14 @@ public class IngestRunner extends
 	protected void nextBand(
 			final SimpleFeature band,
 			final AnalysisInfo analysisInfo ) {
-		bandWriter.write(band);
+		try {
+			bandWriter.write(band);
+		}
+		catch (IOException e) {
+			LOGGER.error(
+					"Unable to write next band",
+					e);
+		}
 		super.nextBand(
 				band,
 				analysisInfo);
@@ -138,6 +145,37 @@ public class IngestRunner extends
 		super.nextScene(
 				firstBandOfScene,
 				analysisInfo);
+	}
+
+	@Override
+	protected void runInternal(
+			OperationParams params )
+			throws Exception {
+		try {
+			super.runInternal(params);
+		}
+		finally {
+			if (sceneWriter != null) {
+				try {
+					sceneWriter.close();
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to close writer for scene vectors",
+							e);
+				}
+			}
+			if (bandWriter != null) {
+				try {
+					bandWriter.close();
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to close writer for band vectors",
+							e);
+				}
+			}
+		}
 	}
 
 }

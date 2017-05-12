@@ -211,6 +211,7 @@ public class ConfigOptions
 													"An error occurred encrypting specified password value: "
 															+ e.getLocalizedMessage(),
 													e);
+											encryptedValue = value;
 										}
 										properties.setProperty(
 												storeFieldName,
