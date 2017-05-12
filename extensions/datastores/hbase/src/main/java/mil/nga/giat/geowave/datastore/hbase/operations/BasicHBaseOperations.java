@@ -2,7 +2,9 @@ package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
@@ -19,19 +21,27 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
+import mil.nga.giat.geowave.datastore.hbase.util.RewritingMergingEntryIterator;
 
 public class BasicHBaseOperations implements
 		DataStoreOperations
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicHBaseOperations.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicHBaseOperations.class);
 	protected static final String DEFAULT_TABLE_NAMESPACE = "";
 	public static final Object ADMIN_MUTEX = new Object();
 	private static final long SLEEP_INTERVAL = 10000L;
@@ -149,7 +159,7 @@ public class BasicHBaseOperations implements
 								desc);
 					}
 				}
-				catch (Exception e) {
+				catch (final Exception e) {
 					// We can ignore TableExists on create
 					if (!(e instanceof TableExistsException)) {
 						throw (e);
@@ -379,5 +389,70 @@ public class BasicHBaseOperations implements
 					"Error verifying/adding coprocessor.",
 					e);
 		}
+	}
+
+	@Override
+	public boolean mergeData(
+			final PrimaryIndex index,
+			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
+		// loop through all adapters and find row merging adapters
+		final Map<ByteArrayId, RowMergingDataAdapter> map = new HashMap<>();
+		final List<String> columnFamilies = new ArrayList<>();
+		try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+			while (it.hasNext()) {
+				final DataAdapter a = it.next();
+				if (a instanceof RowMergingDataAdapter) {
+					if (adapterIndexMappingStore.getIndicesForAdapter(
+							a.getAdapterId()).contains(
+							index.getId())) {
+						map.put(
+								a.getAdapterId(),
+								(RowMergingDataAdapter) a);
+						columnFamilies.add(a.getAdapterId().getString());
+					}
+				}
+			}
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Cannot lookup data adapters",
+					e);
+			return false;
+		}
+		if (columnFamilies.isEmpty()) {
+			LOGGER.warn("There is no mergeable data found in datastore");
+			return false;
+		}
+		final String table = index.getId().getString();
+		try (HBaseWriter writer = createWriter(
+				table,
+				columnFamilies.toArray(new String[] {}),
+				false)) {
+			final Scan scanner = new Scan();
+			for (final String cf : columnFamilies) {
+				scanner.addFamily(new ByteArrayId(
+						cf).getBytes());
+			}
+			final ResultScanner rs = getScannedResults(
+					scanner,
+					table);
+			final RewritingMergingEntryIterator iterator = new RewritingMergingEntryIterator<>(
+					adapterStore,
+					index,
+					rs.iterator(),
+					map,
+					writer);
+			while (iterator.hasNext()) {
+				iterator.next();
+			}
+			return true;
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Cannot create writer for table '" + index.getId().getString() + "'",
+					e);
+		}
+		return false;
 	}
 }

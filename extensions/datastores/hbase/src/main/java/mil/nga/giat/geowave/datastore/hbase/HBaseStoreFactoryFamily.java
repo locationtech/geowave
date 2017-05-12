@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.hbase;
 
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -48,4 +49,8 @@ public class HBaseStoreFactoryFamily extends
 		return new HBaseAdapterIndexMappingStoreFactory();
 	}
 
+	@Override
+	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory() {
+		return new HBaseOperationsFactory();
+	}
 }

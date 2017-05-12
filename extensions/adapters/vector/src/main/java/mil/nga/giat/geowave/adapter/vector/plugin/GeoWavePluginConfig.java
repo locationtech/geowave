@@ -16,7 +16,8 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataAccessFactory.Param;
 import org.geotools.data.Parameter;
 
@@ -48,7 +49,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
  */
 public class GeoWavePluginConfig
 {
-	private final static Logger LOGGER = Logger.getLogger(
+	private final static Logger LOGGER = LoggerFactory.getLogger(
 			GeoWavePluginConfig.class);
 
 	public static final String GEOWAVE_NAMESPACE_KEY = StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION;
@@ -178,12 +179,7 @@ public class GeoWavePluginConfig
 
 		Serializable param = params.get(
 				GEOWAVE_NAMESPACE_KEY);
-		if (param == null) {
-			throw new GeoWavePluginException(
-					"GeoWave Plugin: Missing namespace param");
-		}
-		final String namespace = param.toString();
-		name = storeFactoryFamily.getType() + "_" + namespace;
+		name = storeFactoryFamily.getType() + (param == null ? "" : ("_" + param));
 		final Map<String, String> paramStrs = new HashMap<String, String>();
 		// first converts serializable objects to String to avoid any issue if
 		// there's a difference how geotools is converting objects to how

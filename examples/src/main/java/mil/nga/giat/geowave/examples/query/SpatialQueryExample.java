@@ -9,7 +9,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.log4j.Logger;
+
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -36,10 +36,12 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is intended to provide a few examples on running Geowave queries
@@ -50,7 +52,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
  */
 public class SpatialQueryExample
 {
-	private static Logger log = Logger.getLogger(SpatialQueryExample.class);
+	private static Logger log = LoggerFactory.getLogger(SpatialQueryExample.class);
 
 	// We'll use GeoWave's VectorDataStore, which allows to run CQL rich queries
 	private static DataStore dataStore;

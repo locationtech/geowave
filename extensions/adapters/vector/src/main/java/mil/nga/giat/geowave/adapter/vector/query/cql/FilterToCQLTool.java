@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.FilterFactoryImpl;
 import org.geotools.filter.IllegalFilterException;
 import org.geotools.filter.LiteralExpressionImpl;
@@ -20,7 +21,7 @@ import org.opengis.referencing.operation.TransformException;
 
 public class FilterToCQLTool
 {
-	private static Logger LOGGER = Logger.getLogger(FilterToCQLTool.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(FilterToCQLTool.class);
 
 	/**
 	 * Corrects any function issues.

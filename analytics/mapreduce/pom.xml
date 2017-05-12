@@ -31,12 +31,6 @@
 			<scope>test</scope>
 			<classifier>${hadoop.env.classifier}</classifier>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

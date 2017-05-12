@@ -27,7 +27,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -108,7 +109,7 @@ public class AccumuloDataStore extends
 {
 	public final static String TYPE = "accumulo";
 
-	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloDataStore.class);
 
 	private final AccumuloOperations accumuloOperations;
 	private final AccumuloOptions accumuloOptions;

@@ -26,7 +26,8 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.coverage.grid.GridCoverage;
 
 /**
@@ -37,7 +38,7 @@ import org.opengis.coverage.grid.GridCoverage;
 public class RootMergeStrategy<T extends Persistable> implements
 		Mergeable
 {
-	private final static Logger LOGGER = Logger.getLogger(RootMergeStrategy.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(RootMergeStrategy.class);
 	// the purpose for these maps instead of a list of samplemodel and adapter
 	// ID pairs is to allow for multiple adapters to share the same sample model
 	protected Map<Integer, SampleModel> sampleModels = new HashMap<Integer, SampleModel>();

@@ -34,7 +34,8 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.math.DoubleMath;
 
@@ -51,7 +52,7 @@ public class BasicQuery implements
 		DistributableQuery
 {
 	private final static double DOUBLE_TOLERANCE = 1E-12d;
-	private final static Logger LOGGER = Logger.getLogger(BasicQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicQuery.class);
 	protected boolean exact = true;
 
 	/**

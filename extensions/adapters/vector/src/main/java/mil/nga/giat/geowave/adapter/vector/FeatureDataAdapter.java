@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -107,7 +108,7 @@ public class FeatureDataAdapter extends
 		HadoopDataAdapter<SimpleFeature, FeatureWritable>,
 		SecondaryIndexDataAdapter<SimpleFeature>
 {
-	private final static Logger LOGGER = Logger.getLogger(FeatureDataAdapter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureDataAdapter.class);
 
 	// the original coordinate system will always be represented internally by
 	// the persisted type

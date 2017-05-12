@@ -5,7 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -14,7 +15,7 @@ import mil.nga.giat.geowave.core.cli.utils.URLUtils;
 
 public class GeoServerConfig
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoServerConfig.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerConfig.class);
 
 	public static final String DEFAULT_URL = "localhost:8080";
 	public static final String DEFAULT_USER = "admin";

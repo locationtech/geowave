@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.test;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
@@ -22,7 +23,7 @@ public class ZookeeperTestEnvironment implements
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(ZookeeperTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ZookeeperTestEnvironment.class);
 	protected String zookeeper;
 
 	private ZookeeperLocalCluster zookeeperLocalCluster;

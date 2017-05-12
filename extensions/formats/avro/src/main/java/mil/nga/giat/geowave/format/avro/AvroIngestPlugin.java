@@ -9,7 +9,8 @@ import java.util.List;
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.specific.SpecificDatumReader;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -45,7 +46,7 @@ public class AvroIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(AvroIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AvroIngestPlugin.class);
 
 	public AvroIngestPlugin() {}
 

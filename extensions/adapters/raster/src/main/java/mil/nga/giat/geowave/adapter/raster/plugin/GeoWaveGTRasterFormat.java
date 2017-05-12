@@ -7,7 +7,8 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.imageio.GeoToolsWriteParams;
@@ -27,7 +28,7 @@ public class GeoWaveGTRasterFormat extends
 		AbstractGridFormat implements
 		Format
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveGTRasterFormat.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTRasterFormat.class);
 	public static final ParameterDescriptor<Color> OUTPUT_TRANSPARENT_COLOR = new DefaultParameterDescriptor<Color>(
 			"OutputTransparentColor",
 			Color.class,

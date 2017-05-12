@@ -10,7 +10,8 @@ import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -32,7 +33,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.InputFormatIteratorWrapper;
 public class InputFormatAccumuloRangeQuery extends
 		AccumuloConstraintsQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(InputFormatAccumuloRangeQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(InputFormatAccumuloRangeQuery.class);
 	private final Range accumuloRange;
 	private final boolean isOutputWritable;
 

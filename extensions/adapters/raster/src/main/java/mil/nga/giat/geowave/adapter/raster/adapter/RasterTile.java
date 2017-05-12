@@ -15,12 +15,13 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RasterTile<T extends Persistable> implements
 		Mergeable
 {
-	private final static Logger LOGGER = Logger.getLogger(RasterTile.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(RasterTile.class);
 	private DataBuffer dataBuffer;
 	private T metadata;
 

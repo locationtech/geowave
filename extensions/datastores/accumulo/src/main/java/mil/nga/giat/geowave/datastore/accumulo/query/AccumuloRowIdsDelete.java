@@ -9,7 +9,8 @@ import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -23,7 +24,7 @@ public class AccumuloRowIdsDelete<T> extends
 		AccumuloRowIdsQuery<T>
 {
 
-	private static final Logger LOGGER = Logger.getLogger(AccumuloRowIdsDelete.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloRowIdsDelete.class);
 
 	public AccumuloRowIdsDelete(
 			DataAdapter adapter,

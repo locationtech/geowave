@@ -14,7 +14,8 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -37,7 +38,7 @@ import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPer
 public class QueryFilterIterator extends
 		Filter
 {
-	private final static Logger LOGGER = Logger.getLogger(QueryFilterIterator.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(QueryFilterIterator.class);
 	protected static final String QUERY_ITERATOR_NAME = "GEOWAVE_QUERY_FILTER";
 	protected static final int QUERY_ITERATOR_PRIORITY = 25;
 	protected static final String FILTER = "filter";

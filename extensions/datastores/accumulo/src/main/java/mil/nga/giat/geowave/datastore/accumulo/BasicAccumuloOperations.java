@@ -20,7 +20,6 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.BatchWriterConfig;
-import org.apache.accumulo.core.client.ClientSideIteratorScanner;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.IteratorSetting;
@@ -37,11 +36,15 @@ import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
@@ -54,7 +57,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ConnectorPool;
 public class BasicAccumuloOperations implements
 		AccumuloOperations
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicAccumuloOperations.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicAccumuloOperations.class);
 	private static final int DEFAULT_NUM_THREADS = 16;
 	private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
 	private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB
@@ -891,5 +894,31 @@ public class BasicAccumuloOperations implements
 		connector.tableOperations().addSplits(
 				qName,
 				partitionKeys);
+	}
+
+	@Override
+	public boolean mergeData(
+			final PrimaryIndex index,
+			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
+
+		final String tableName = getQualifiedTableName(index.getId().getString());
+		try {
+			LOGGER.info("Compacting table '" + tableName + "'");
+			connector.tableOperations().compact(
+					tableName,
+					null,
+					null,
+					true,
+					true);
+			LOGGER.info("Successfully compacted table '" + tableName + "'");
+		}
+		catch (AccumuloSecurityException | TableNotFoundException | AccumuloException e) {
+			LOGGER.error(
+					"Unable to merge data by compacting table '" + tableName + "'",
+					e);
+			return false;
+		}
+		return true;
 	}
 }

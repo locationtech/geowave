@@ -16,7 +16,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -33,7 +34,7 @@ import net.sf.json.JSONObject;
 public class InfoServiceImpl implements
 		InfoService
 {
-	private final static Logger LOGGER = Logger.getLogger(InfoServiceImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(InfoServiceImpl.class);
 	private final static int defaultIndentation = 2;
 	private final Properties serviceProperties;
 
@@ -46,7 +47,9 @@ public class InfoServiceImpl implements
 			props = ServiceUtils.loadProperties(is);
 		}
 		catch (IOException e) {
-			LOGGER.error(e);
+			LOGGER.error(
+					e.getLocalizedMessage(),
+					e);
 		}
 
 		serviceProperties = props;

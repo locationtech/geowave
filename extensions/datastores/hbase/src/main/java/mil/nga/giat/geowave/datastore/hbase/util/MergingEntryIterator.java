@@ -15,7 +15,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -31,7 +32,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class MergingEntryIterator<T> extends
 		HBaseEntryIteratorWrapper<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(MergingEntryIterator.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MergingEntryIterator.class);
 
 	private final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters;
 	private final Map<ByteArrayId, RowTransform> transforms;
@@ -97,7 +98,6 @@ public class MergingEntryIterator<T> extends
 				if (HBaseUtils.rowIdsMatch(
 						rowId,
 						nextRowId)) {
-
 					resultsToMerge.add(peekedValue);
 					peekedValue = null;
 				}
@@ -123,7 +123,7 @@ public class MergingEntryIterator<T> extends
 		return nextResult;
 	}
 
-	private Result mergeResults(
+	protected Result mergeResults(
 			final RowMergingDataAdapter mergingAdapter,
 			final ArrayList<Result> resultsToMerge ) {
 

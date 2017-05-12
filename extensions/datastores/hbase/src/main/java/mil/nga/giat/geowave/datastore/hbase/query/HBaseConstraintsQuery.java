@@ -10,7 +10,8 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 import com.google.protobuf.ByteString;
@@ -46,7 +47,7 @@ public class HBaseConstraintsQuery extends
 {
 	protected final ConstraintsQuery base;
 
-	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseConstraintsQuery.class);
 
 	public HBaseConstraintsQuery(
 			final List<ByteArrayId> adapterIds,

@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -25,7 +26,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 public class XZOrderSFC implements
 		SpaceFillingCurve
 {
-	private final static Logger LOGGER = Logger.getLogger(XZOrderSFC.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(XZOrderSFC.class);
 	private static double LOG_POINT_FIVE = Math.log(0.5);
 
 	// the initial level of 2^dim tree

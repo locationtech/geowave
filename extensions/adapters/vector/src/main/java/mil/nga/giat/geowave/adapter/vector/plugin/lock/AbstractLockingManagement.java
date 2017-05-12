@@ -8,7 +8,8 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.FeatureLock;
 import org.geotools.data.Transaction;
 
@@ -25,7 +26,7 @@ public abstract class AbstractLockingManagement implements
 		LockingManagement
 {
 
-	private final static Logger LOGGER = Logger.getLogger(AbstractLockingManagement.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractLockingManagement.class);
 
 	public static final String LOCKING_MANAGEMENT_CLASS = "GEOWAVE_LM";
 	public static final Object LOCKING_MANAGEMENT_CLASS_LCK = new Object();

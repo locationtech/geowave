@@ -8,7 +8,8 @@ import java.util.Map.Entry;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 
@@ -22,7 +23,7 @@ public class MemoryLockManager extends
 		AbstractLockingManagement
 {
 
-	private final static Logger LOGGER = Logger.getLogger(MemoryLockManager.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MemoryLockManager.class);
 	private static final Map<String, Map<String, AuthorizedLock>> LOCKS = new HashMap<String, Map<String, AuthorizedLock>>();
 	private final Map<String, AuthorizedLock> locks;
 

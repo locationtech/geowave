@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
@@ -28,7 +29,7 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 public abstract class DataStoreIndexWriter<T, MutationType> implements
 		IndexWriter<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(DataStoreIndexWriter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DataStoreIndexWriter.class);
 	protected final PrimaryIndex index;
 	protected final DataStoreOperations operations;
 	protected final DataStoreOptions options;

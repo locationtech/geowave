@@ -11,7 +11,8 @@ import java.util.Map.Entry;
 import javax.media.jai.Interpolation;
 
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.geometry.GeneralEnvelope;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -71,7 +72,7 @@ public class KDERasterResizeIT
 
 	protected DataStorePluginOptions inputDataStorePluginOptions;
 
-	private final static Logger LOGGER = Logger.getLogger(KDERasterResizeIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KDERasterResizeIT.class);
 	private static long startMillis;
 
 	@BeforeClass

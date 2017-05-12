@@ -6,7 +6,8 @@ import java.util.List;
 
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -31,7 +32,7 @@ public abstract class AccumuloFilteredIndexQuery extends
 		FilteredIndexQuery
 {
 	protected List<QueryFilter> clientFilters;
-	private final static Logger LOGGER = Logger.getLogger(AccumuloFilteredIndexQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloFilteredIndexQuery.class);
 	protected final ScanCallback<?> scanCallback;
 
 	public AccumuloFilteredIndexQuery(

@@ -18,14 +18,15 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class ChooseBestMatchIndexQueryStrategy implements
 		IndexQueryStrategySPI
 {
 	public static final String NAME = "Best Match";
-	private final static Logger LOGGER = Logger.getLogger(ChooseBestMatchIndexQueryStrategy.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ChooseBestMatchIndexQueryStrategy.class);
 
 	@Override
 	public String toString() {

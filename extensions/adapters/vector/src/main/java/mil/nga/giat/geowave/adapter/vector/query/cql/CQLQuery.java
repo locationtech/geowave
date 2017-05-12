@@ -6,7 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -54,7 +55,7 @@ import mil.nga.giat.geowave.core.store.query.Query;
 public class CQLQuery implements
 		DistributableQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(CQLQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CQLQuery.class);
 	private Query baseQuery;
 	private CQLQueryFilter filter;
 	private Filter cqlFilter;

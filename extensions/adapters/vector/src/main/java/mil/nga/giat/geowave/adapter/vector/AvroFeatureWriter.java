@@ -7,7 +7,8 @@ import java.util.Map;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -20,7 +21,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 public class AvroFeatureWriter implements
 		FieldWriter<SimpleFeature, Object>
 {
-	private static final Logger LOGGER = Logger.getLogger(AvroFeatureWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AvroFeatureWriter.class);
 
 	private final EncoderFactory ef = EncoderFactory.get();
 

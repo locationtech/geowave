@@ -5,12 +5,14 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
@@ -36,7 +38,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
 
 public class SimpleHBaseIngestTest
 {
-	private final static Logger LOGGER = Logger.getLogger(SimpleHBaseIngestTest.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SimpleHBaseIngestTest.class);
 
 	private final static HBaseOptions hbaseOptions = new HBaseOptions();
 	private static HBaseIndexStore indexStore;

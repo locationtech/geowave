@@ -14,7 +14,8 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -38,7 +39,7 @@ public class MinimalFullTable extends
 		DefaultOperation implements
 		Command
 {
-	private static Logger LOGGER = Logger.getLogger(MinimalFullTable.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
 
 	@Parameter(description = "<storename>")
 	private List<String> parameters = new ArrayList<String>();

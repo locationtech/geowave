@@ -3,14 +3,15 @@ package mil.nga.giat.geowave.format.geotools.vector.retyping.date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 
 public class DateFieldOptionProvider
 {
-	private final static Logger LOGGER = Logger.getLogger(DateFieldOptionProvider.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DateFieldOptionProvider.class);
 
 	@Parameter(names = "--data", description = "A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\\,' to include a comma in the format. For example: \"time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss\" configures fields 'time' and 'time2' as dates with different formats", converter = StringToDateFieldConverter.class)
 	private Map<String, String> fieldToFormatMap = null;

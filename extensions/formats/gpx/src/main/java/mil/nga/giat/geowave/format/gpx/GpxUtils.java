@@ -30,7 +30,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -46,7 +48,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GpxUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(GpxUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GpxUtils.class);
 	private static final String SCHEMA_RESOURCE_PACKAGE = "mil/nga/giat/geowave/types/gpx/";
 	private static final String SCHEMA_GPX_1_0_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_0.xsd";
 	private static final String SCHEMA_GPX_1_1_LOCATION = SCHEMA_RESOURCE_PACKAGE + "gpx-1_1.xsd";

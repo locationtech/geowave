@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
@@ -16,7 +17,7 @@ import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 public class MapReduceTestUtils
 {
 
-	private final static Logger LOGGER = Logger.getLogger(MapReduceTestUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MapReduceTestUtils.class);
 
 	public static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
 	public static final int MIN_INPUT_SPLITS = 3;

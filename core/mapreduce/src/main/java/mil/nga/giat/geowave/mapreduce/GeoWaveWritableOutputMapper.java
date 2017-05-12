@@ -8,7 +8,8 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.MapContext;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This abstract class can be extended by GeoWave analytics. It handles the
@@ -19,7 +20,7 @@ import org.apache.log4j.Logger;
 public abstract class GeoWaveWritableOutputMapper<KEYIN, VALUEIN> extends
 		Mapper<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable>
 {
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveWritableOutputMapper.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveWritableOutputMapper.class);
 	protected HadoopWritableSerializationTool serializationTool;
 
 	@Override

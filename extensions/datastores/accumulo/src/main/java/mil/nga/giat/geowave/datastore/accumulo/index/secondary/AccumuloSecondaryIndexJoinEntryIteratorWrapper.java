@@ -7,7 +7,8 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -20,7 +21,7 @@ import mil.nga.giat.geowave.core.store.util.SecondaryIndexEntryIteratorWrapper;
 public class AccumuloSecondaryIndexJoinEntryIteratorWrapper<T> extends
 		SecondaryIndexEntryIteratorWrapper<T, Pair<ByteArrayId, ByteArrayId>>
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexJoinEntryIteratorWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSecondaryIndexJoinEntryIteratorWrapper.class);
 	private final Scanner scanner;
 
 	public AccumuloSecondaryIndexJoinEntryIteratorWrapper(

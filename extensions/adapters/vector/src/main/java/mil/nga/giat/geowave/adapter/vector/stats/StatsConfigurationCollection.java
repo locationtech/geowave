@@ -6,7 +6,8 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -22,7 +23,7 @@ public class StatsConfigurationCollection implements
 
 	private static final long serialVersionUID = -4983543525776889248L;
 
-	private final static Logger LOGGER = Logger.getLogger(StatsConfigurationCollection.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StatsConfigurationCollection.class);
 
 	private List<StatsConfig<SimpleFeature>> configurationsForAttribute;
 

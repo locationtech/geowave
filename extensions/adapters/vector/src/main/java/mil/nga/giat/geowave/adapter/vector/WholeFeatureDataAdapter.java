@@ -5,7 +5,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -50,7 +51,7 @@ public class WholeFeatureDataAdapter extends
 		GeotoolsFeatureDataAdapter,
 		StatisticsProvider<SimpleFeature>
 {
-	private final static Logger LOGGER = Logger.getLogger(WholeFeatureDataAdapter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(WholeFeatureDataAdapter.class);
 	protected SimpleFeatureType featureType;
 	private ByteArrayId adapterId;
 	private SimpleFeatureBuilder b;

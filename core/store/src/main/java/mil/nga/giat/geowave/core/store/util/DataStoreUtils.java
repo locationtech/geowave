@@ -12,7 +12,8 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -52,7 +53,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  */
 public class DataStoreUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(DataStoreUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DataStoreUtils.class);
 
 	@SuppressWarnings({
 		"rawtypes",

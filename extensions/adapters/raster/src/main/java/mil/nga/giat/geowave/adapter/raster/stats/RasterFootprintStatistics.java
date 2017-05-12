@@ -2,7 +2,8 @@ package mil.nga.giat.geowave.adapter.raster.stats;
 
 import java.nio.ByteBuffer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.coverage.grid.GridCoverage;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -20,7 +21,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 public class RasterFootprintStatistics extends
 		AbstractDataStatistics<GridCoverage>
 {
-	private static final Logger LOGGER = Logger.getLogger(RasterFootprintStatistics.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RasterFootprintStatistics.class);
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FOOTPRINT");
 	private Geometry footprint;

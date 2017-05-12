@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 
 import com.beust.jcommander.IStringConverter;
@@ -37,7 +37,7 @@ public class CQLDelete extends
 		DefaultOperation implements
 		Command
 {
-	private static Logger LOGGER = Logger.getLogger(CQLDelete.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(CQLDelete.class);
 
 	@Parameter(description = "<storename>")
 	private List<String> parameters = new ArrayList<String>();
@@ -59,7 +59,7 @@ public class CQLDelete extends
 			OperationParams params )
 			throws ParseException {
 		if (debug) {
-			LOGGER.setLevel(Level.DEBUG);
+			org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.DEBUG);
 		}
 
 		final Stopwatch stopWatch = new Stopwatch();
@@ -101,7 +101,7 @@ public class CQLDelete extends
 			}
 
 			if (debug && (adapter != null)) {
-				LOGGER.debug(adapter);
+				LOGGER.debug(adapter.toString());
 			}
 
 			stopWatch.start();

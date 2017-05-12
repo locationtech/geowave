@@ -9,7 +9,8 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -61,7 +62,7 @@ public class GeoWaveNNIT
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveNNIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveNNIT.class);
 	private static long startMillis;
 
 	@BeforeClass

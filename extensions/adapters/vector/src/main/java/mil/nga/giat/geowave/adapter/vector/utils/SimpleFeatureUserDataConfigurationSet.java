@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -28,7 +29,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 public class SimpleFeatureUserDataConfigurationSet
 {
 
-	private static Logger LOGGER = Logger.getLogger(SimpleFeatureUserDataConfigurationSet.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureUserDataConfigurationSet.class);
 	public static final String SIMPLE_FEATURE_CONFIG_FILE_PROP = "SIMPLE_FEATURE_CONFIG_FILE";
 
 	/**

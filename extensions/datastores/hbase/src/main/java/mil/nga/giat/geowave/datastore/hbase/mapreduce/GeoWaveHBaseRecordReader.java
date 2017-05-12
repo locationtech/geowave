@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -29,7 +30,7 @@ public class GeoWaveHBaseRecordReader<T> extends
 		GeoWaveRecordReader<T>
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveHBaseRecordReader.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveHBaseRecordReader.class);
 	protected BasicHBaseOperations operations;
 
 	public GeoWaveHBaseRecordReader(
