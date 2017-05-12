@@ -20,4 +20,6 @@ public interface StoreFactoryFamilySpi extends
 	public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory();
 
 	public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore();
+
+	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory();
 }

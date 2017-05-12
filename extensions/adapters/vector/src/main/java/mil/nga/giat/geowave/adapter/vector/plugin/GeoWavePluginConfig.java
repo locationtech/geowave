@@ -178,12 +178,7 @@ public class GeoWavePluginConfig
 
 		Serializable param = params.get(
 				GEOWAVE_NAMESPACE_KEY);
-		if (param == null) {
-			throw new GeoWavePluginException(
-					"GeoWave Plugin: Missing namespace param");
-		}
-		final String namespace = param.toString();
-		name = storeFactoryFamily.getType() + "_" + namespace;
+		name = storeFactoryFamily.getType() + (param == null ? "" : ("_" + param));
 		final Map<String, String> paramStrs = new HashMap<String, String>();
 		// first converts serializable objects to String to avoid any issue if
 		// there's a difference how geotools is converting objects to how

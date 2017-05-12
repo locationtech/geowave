@@ -77,6 +77,7 @@ public class RasterIngestRunner extends
 
 	protected String[] bandsIngested;
 	protected DataStore store = null;
+	protected DataStorePluginOptions dataStorePluginOptions = null;
 	protected PrimaryIndex[] indices = null;
 
 	public RasterIngestRunner(
@@ -112,8 +113,8 @@ public class RasterIngestRunner extends
 			throw new ParameterException(
 					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
-		final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
-		store = storeOptions.createDataStore();
+		dataStorePluginOptions = inputStoreLoader.getDataStorePlugin();
+		store = dataStorePluginOptions.createDataStore();
 
 		// Load the Indices
 		final IndexLoader indexLoader = new IndexLoader(
@@ -213,9 +214,10 @@ public class RasterIngestRunner extends
 			boolean cropped = false;
 			final Filter filter = landsatOptions.getCqlFilter();
 			if (filter != null) {
-				ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
-						filter,
-						GeoWaveGTRasterFormat.DEFAULT_CRS);
+				final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
+						.getConstraints(
+								filter,
+								GeoWaveGTRasterFormat.DEFAULT_CRS);
 				Geometry geometry = geometryAndCompareOp.getGeometry();
 				if (geometry != null) {
 					// go ahead and intersect this with the scene geometry
@@ -375,6 +377,22 @@ public class RasterIngestRunner extends
 			final AnalysisInfo analysisInfo ) {
 		processPreviousScene();
 		super.lastSceneComplete(analysisInfo);
+		if (!ingestOptions.isSkipMerge()) {
+			System.out.println("Merging overlapping tiles...");
+			for (final PrimaryIndex index : indices) {
+				if (dataStorePluginOptions.createDataStoreOperations().mergeData(
+						index,
+						dataStorePluginOptions.createAdapterStore(),
+						dataStorePluginOptions.createAdapterIndexMappingStore())) {
+					System.out.println("Successfully merged overlapping tiles within index '"
+							+ index.getId().getString() + "'");
+				}
+				else {
+					System.err.println("Unable to merge overlapping landsat8 tiles in index '"
+							+ index.getId().getString() + "'");
+				}
+			}
+		}
 	}
 
 	@Override
@@ -529,7 +547,7 @@ public class RasterIngestRunner extends
 				try {
 					writer.write(mergedCoverage);
 				}
-				catch (IOException e) {
+				catch (final IOException e) {
 					LOGGER.error(
 							"Unable to write merged coverage",
 							e);

@@ -111,7 +111,7 @@ public class VectorIngestRunner extends
 				}
 				catch (final IOException e) {
 					LOGGER.error(
-							"Unable to close Accumulo writer for scene vectors",
+							"Unable to close writer for scene vectors",
 							e);
 				}
 			}
@@ -121,7 +121,7 @@ public class VectorIngestRunner extends
 				}
 				catch (final IOException e) {
 					LOGGER.error(
-							"Unable to close Accumulo writer for band vectors",
+							"Unable to close writer for band vectors",
 							e);
 				}
 			}

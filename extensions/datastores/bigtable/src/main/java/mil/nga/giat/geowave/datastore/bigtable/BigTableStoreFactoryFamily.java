@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.bigtable;
 
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -46,5 +47,10 @@ public class BigTableStoreFactoryFamily extends
 	@Override
 	public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory() {
 		return new BigTableAdapterIndexMappingStoreFactory();
+	}
+
+	@Override
+	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory() {
+		return new BigTableOperationsFactory();
 	}
 }
