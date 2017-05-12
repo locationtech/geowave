@@ -80,12 +80,11 @@ public class TwitterStreamArchiver
 			throw new IOException(
 					"Twitter Archive Path required!");
 		}
-		
+
 		String fileSplitStr = twitterProps.getProperty("twitter.archive.fileSplits");
 		if (fileSplitStr != null) {
 			fileSplits = Integer.parseInt(fileSplitStr);
 		}
-
 
 		String pollingFrequencyStr = twitterProps.getProperty("twitter.archive.frequencyMillis");
 		if (pollingFrequencyStr != null) {
