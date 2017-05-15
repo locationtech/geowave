@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.auth;
 
 import java.io.File;
@@ -16,9 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Use the user details to to determine a user's name. Given the user's name,
  * lookup the user credentials in a Json file. The location of the file is
  * provided through the URL (protocol is file).
- * 
- * @author rwgdrummer
- * 
+ *  
  */
 public class JsonFileAuthorizationProvider implements
 		AuthorizationSPI
