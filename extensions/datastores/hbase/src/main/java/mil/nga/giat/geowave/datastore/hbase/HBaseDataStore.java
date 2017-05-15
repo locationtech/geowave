@@ -60,6 +60,7 @@ import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.query.HBaseConstraintsDelete;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseConstraintsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowIdsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowPrefixQuery;
@@ -374,25 +375,51 @@ public class HBaseDataStore extends
 			final AdapterStore tempAdapterStore,
 			boolean delete ) {
 
-		final HBaseConstraintsQuery hbaseQuery = new HBaseConstraintsQuery(
-				adapterIdsToQuery,
-				index,
-				sanitizedQuery,
-				filter,
-				sanitizedQueryOptions.getScanCallback(),
-				sanitizedQueryOptions.getAggregation(),
-				IndexMetaDataSet.getIndexMetadata(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				DuplicateEntryCount.getDuplicateCounts(
-						index,
-						adapterIdsToQuery,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				sanitizedQueryOptions.getFieldIdsAdapterPair(),
-				sanitizedQueryOptions.getAuthorizations());
+		final HBaseConstraintsQuery hbaseQuery;
+
+		if (!delete) {
+			hbaseQuery = new HBaseConstraintsQuery(
+					adapterIdsToQuery,
+					index,
+					sanitizedQuery,
+					filter,
+					sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getAggregation(),
+					IndexMetaDataSet.getIndexMetadata(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DuplicateEntryCount.getDuplicateCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getFieldIdsAdapterPair(),
+					sanitizedQueryOptions.getAuthorizations());
+
+		}
+		else {
+			hbaseQuery = new HBaseConstraintsDelete(
+					adapterIdsToQuery,
+					index,
+					sanitizedQuery,
+					filter,
+					sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getAggregation(),
+					IndexMetaDataSet.getIndexMetadata(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					DuplicateEntryCount.getDuplicateCounts(
+							index,
+							adapterIdsToQuery,
+							statisticsStore,
+							sanitizedQueryOptions.getAuthorizations()),
+					sanitizedQueryOptions.getFieldIdsAdapterPair(),
+					sanitizedQueryOptions.getAuthorizations());
+		}
 
 		hbaseQuery.setOptions(options);
 
