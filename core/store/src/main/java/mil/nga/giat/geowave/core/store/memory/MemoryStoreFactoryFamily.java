@@ -47,6 +47,6 @@ public class MemoryStoreFactoryFamily extends
 
 	@Override
 	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory() {
-		return null;
+		return new MemoryOperationsFactory();
 	}
 }
