@@ -24,14 +24,12 @@ public class MemoryOperationsFactory extends
 	@Override
 	public DataStoreOperations createStore(
 			final StoreFactoryOptions configOptions ) {
-		return createStore(
-				configOptions.getGeowaveNamespace());
+		return createStore(configOptions.getGeowaveNamespace());
 	}
 
 	protected static DataStoreOperations createStore(
 			final String namespace ) {
-		DataStoreOperations operations = OPERATIONS_CACHE.get(
-				namespace);
+		DataStoreOperations operations = OPERATIONS_CACHE.get(namespace);
 		if (operations == null) {
 			operations = new MemoryStoreOperations();
 			OPERATIONS_CACHE.put(

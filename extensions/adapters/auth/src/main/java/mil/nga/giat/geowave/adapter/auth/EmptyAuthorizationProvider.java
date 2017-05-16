@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.adapter.auth;
 
 /**
  * No authorization provided.
- *  
+ * 
  */
 
 public class EmptyAuthorizationProvider implements

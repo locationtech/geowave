@@ -32,8 +32,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * This class is a derivative from hte Spring Framework library.
- * Helper class for resolving generic types against type variables.
+ * This class is a derivative from hte Spring Framework library. Helper class
+ * for resolving generic types against type variables.
  * 
  * <p>
  * Mainly intended for usage within the framework, resolving method parameter

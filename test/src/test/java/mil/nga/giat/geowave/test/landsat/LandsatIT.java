@@ -55,6 +55,7 @@ import org.junit.runner.RunWith;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import it.geosolutions.jaiext.JAIExt;
 
 @RunWith(GeoWaveITRunner.class)
 public class LandsatIT
@@ -91,6 +92,7 @@ public class LandsatIT
 				final OperationParams params )
 				throws Exception {
 			store = dataStoreOptions.createDataStore();
+			dataStorePluginOptions = dataStoreOptions;
 			indices = new PrimaryIndex[] {
 				new SpatialIndexBuilder().createIndex()
 			};
@@ -147,6 +149,7 @@ public class LandsatIT
 	@Test
 	public void testMosaic()
 			throws Exception {
+		JAIExt.initJAIEXT();
 		MapProjection.SKIP_SANITY_CHECKS = true;
 		TestUtils.deleteAll(dataStoreOptions);
 		// just use the QA band as QA is the smallest, get the best cloud cover,

@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Use the user details to to determine a user's name. Given the user's name,
  * lookup the user credentials in a Json file. The location of the file is
  * provided through the URL (protocol is file).
- *  
+ * 
  */
 public class JsonFileAuthorizationProvider implements
 		AuthorizationSPI

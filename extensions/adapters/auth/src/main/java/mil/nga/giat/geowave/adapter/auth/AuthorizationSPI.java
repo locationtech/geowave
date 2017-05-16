@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.adapter.auth;
 
 /**
  * A provider that looks up authorizations given a user name.
- *  
+ * 
  */
 public interface AuthorizationSPI
 {

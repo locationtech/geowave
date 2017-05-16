@@ -35,8 +35,7 @@ public class MemoryStoreOperations implements
 
 	@Override
 	public void deleteAll()
-			throws Exception {
-	}
+			throws Exception {}
 
 	@Override
 	public String getTableNameSpace() {
