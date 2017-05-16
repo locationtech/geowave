@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.mapreduce;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -247,8 +257,6 @@ public class AccumuloSplitsProviderTest
 	 * Used to simulate what happens if an HBase operations for instance gets
 	 * passed in
 	 * 
-	 * @author akash_000
-	 *
 	 */
 	private static class MockOperations implements
 			DataStoreOperations
