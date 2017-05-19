@@ -1,3 +1,5 @@
+#!groovy 
+
 node {
    stage 'Wipe workspace'
    deleteDir()
