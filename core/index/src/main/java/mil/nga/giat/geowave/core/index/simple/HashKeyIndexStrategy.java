@@ -244,4 +244,9 @@ public class HashKeyIndexStrategy implements
 			new MultiDimensionalCoordinateRanges()
 		};
 	}
+
+	@Override
+	public HashKeyIndexStrategy getPersistable() {
+		return new HashKeyIndexStrategy();
+	}
 }

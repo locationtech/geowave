@@ -13,7 +13,6 @@ package mil.nga.giat.geowave.core.cli.prefix;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -21,13 +20,11 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameterized;
 import com.beust.jcommander.ParametersDelegate;
-import com.beust.jcommander.WrappedParameter;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import mil.nga.giat.geowave.core.cli.annotations.PrefixParameter;
 
 public class TranslationEntryTest

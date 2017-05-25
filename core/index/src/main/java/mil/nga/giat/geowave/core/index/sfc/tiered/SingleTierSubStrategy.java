@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -276,5 +277,10 @@ public class SingleTierSubStrategy implements
 					baseDefinitions.length,
 					tier)
 		};
+	}
+
+	@Override
+	public SingleTierSubStrategy getPersistable() {
+		return new SingleTierSubStrategy();
 	}
 }

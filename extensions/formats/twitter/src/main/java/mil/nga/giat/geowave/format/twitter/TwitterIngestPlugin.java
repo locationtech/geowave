@@ -29,8 +29,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -355,6 +354,11 @@ public class TwitterIngestPlugin extends
 			super(
 					parentPlugin);
 		}
+
+		@Override
+		public IngestTwitterFromHdfs getPersistable() {
+			return new IngestTwitterFromHdfs();
+		}
 	}
 
 	@Override
@@ -363,5 +367,10 @@ public class TwitterIngestPlugin extends
 			GeometryWrapper.class,
 			Time.class
 		};
+	}
+
+	@Override
+	public TwitterIngestPlugin getPersistable() {
+		return new TwitterIngestPlugin();
 	}
 }

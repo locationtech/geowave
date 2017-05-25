@@ -158,4 +158,9 @@ public class BasicIndexModel implements
 		}
 		return id;
 	}
+
+	@Override
+	public BasicIndexModel getPersistable() {
+		return new BasicIndexModel();
+	}
 }

@@ -81,4 +81,8 @@ public class CoordinateRangeQuery implements
 		return null;
 	}
 
+	@Override
+	public CoordinateRangeQuery getPersistable() {
+		return new CoordinateRangeQuery();
+	}
 }

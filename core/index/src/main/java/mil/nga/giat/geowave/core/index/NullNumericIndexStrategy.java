@@ -144,4 +144,8 @@ public class NullNumericIndexStrategy implements
 		};
 	}
 
+	@Override
+	public NullNumericIndexStrategy getPersistable() {
+		return new NullNumericIndexStrategy();
+	}
 }

@@ -120,4 +120,9 @@ public class NumericValue implements
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		value = buf.getDouble();
 	}
+
+	@Override
+	public NumericValue getPersistable() {
+		return new NumericValue();
+	}
 }

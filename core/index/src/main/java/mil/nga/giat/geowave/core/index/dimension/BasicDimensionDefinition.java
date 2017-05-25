@@ -182,4 +182,9 @@ public class BasicDimensionDefinition implements
 				min,
 				max);
 	}
+
+	@Override
+	public BasicDimensionDefinition getPersistable() {
+		return new BasicDimensionDefinition();
+	}
 }

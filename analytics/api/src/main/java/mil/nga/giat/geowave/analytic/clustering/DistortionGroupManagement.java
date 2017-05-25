@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -125,6 +126,11 @@ public class DistortionGroupManagement
 		public void fromBinary(
 				final byte[] bytes ) {
 			batchId = StringUtils.stringFromBinary(bytes);
+		}
+
+		@Override
+		public BatchIdFilter getPersistable() {
+			return new BatchIdFilter();
 		}
 	}
 
@@ -494,6 +500,9 @@ public class DistortionGroupManagement
 			return null;
 		}
 
+		@Override
+		public DistortionDataAdapter getPersistable() {
+			return new DistortionDataAdapter();
+		}
 	}
-
 }

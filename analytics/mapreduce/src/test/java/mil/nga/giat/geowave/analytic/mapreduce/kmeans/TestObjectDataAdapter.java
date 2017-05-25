@@ -15,6 +15,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -78,6 +79,11 @@ public class TestObjectDataAdapter extends
 		public void fromBinary(
 				final byte[] bytes ) {
 
+		}
+
+		@Override
+		public Persistable getPersistable() {
+			return null;
 		}
 	};
 
@@ -282,4 +288,8 @@ public class TestObjectDataAdapter extends
 		return null;
 	}
 
+	@Override
+	public TestObjectDataAdapter getPersistable() {
+		return new TestObjectDataAdapter();
+	}
 }

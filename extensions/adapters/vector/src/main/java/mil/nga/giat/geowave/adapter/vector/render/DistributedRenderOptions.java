@@ -35,7 +35,6 @@ import org.geoserver.wms.WMS;
 import org.geoserver.wms.WMSMapContent;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.Layer;
 import org.geotools.referencing.CRS;
 import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.styling.SLDParser;
@@ -732,4 +731,8 @@ public class DistributedRenderOptions implements
 		}
 	}
 
+	@Override
+	public DistributedRenderOptions getPersistable() {
+		return new DistributedRenderOptions();
+	}
 }

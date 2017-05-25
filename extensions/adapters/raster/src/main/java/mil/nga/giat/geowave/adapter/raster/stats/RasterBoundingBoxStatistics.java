@@ -86,4 +86,9 @@ public class RasterBoundingBoxStatistics extends
 				minDP,
 				maxDP);
 	}
+
+	@Override
+	public RasterBoundingBoxStatistics getPersistable() {
+		return new RasterBoundingBoxStatistics();
+	}
 }

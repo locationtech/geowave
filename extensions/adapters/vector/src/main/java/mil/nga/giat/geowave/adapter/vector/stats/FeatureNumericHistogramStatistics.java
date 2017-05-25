@@ -370,4 +370,9 @@ public class FeatureNumericHistogramStatistics extends
 					fieldName);
 		}
 	}
+
+	@Override
+	public FeatureNumericHistogramStatistics getPersistable() {
+		return new FeatureNumericHistogramStatistics();
+	}
 }

@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.Collection;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -133,6 +134,11 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 		@Override
 		public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
 			return parentPlugin.getSupportedIndexableTypes();
+		}
+
+		@Override
+		public InternalIngestWithMapper<T> getPersistable() {
+			return new InternalIngestWithMapper<T>();
 		}
 	}
 

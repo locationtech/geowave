@@ -164,4 +164,9 @@ public class SFCDimensionDefinition implements
 		}
 		return true;
 	}
+
+	@Override
+	public SFCDimensionDefinition getPersistable() {
+		return new SFCDimensionDefinition();
+	}
 }

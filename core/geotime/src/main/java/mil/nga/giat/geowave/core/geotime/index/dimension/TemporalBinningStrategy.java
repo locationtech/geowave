@@ -517,4 +517,9 @@ public class TemporalBinningStrategy implements
 				minMillis,
 				maxMillis);
 	}
+
+	@Override
+	public TemporalBinningStrategy getPersistable() {
+		return new TemporalBinningStrategy();
+	}
 }

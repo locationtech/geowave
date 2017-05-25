@@ -93,4 +93,8 @@ public class PersistableRenderedImage implements
 		}
 	}
 
+	@Override
+	public PersistableRenderedImage getPersistable() {
+		return new PersistableRenderedImage();
+	}
 }

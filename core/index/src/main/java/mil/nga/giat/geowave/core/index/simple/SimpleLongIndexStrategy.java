@@ -48,4 +48,8 @@ public class SimpleLongIndexStrategy extends
 		return 0;
 	}
 
+	@Override
+	public SimpleLongIndexStrategy getPersistable() {
+		return new SimpleLongIndexStrategy();
+	}
 }

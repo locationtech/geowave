@@ -767,4 +767,9 @@ public class BasicQuery implements
 			final boolean exact ) {
 		this.exact = exact;
 	}
+
+	@Override
+	public BasicQuery getPersistable() {
+		return new BasicQuery();
+	}
 }

@@ -210,7 +210,6 @@ public class MockComponents
 
 		@Override
 		public ByteArrayId[] getSupportedStatisticsTypes() {
-			// TODO Auto-generated method stub
 			return new ByteArrayId[] {
 				CountDataStatistics.STATS_TYPE,
 				new IntegerRangeDataStatistics(
@@ -283,6 +282,11 @@ public class MockComponents
 			return null;
 		}
 
+		@Override
+		public MockAbstractDataAdapter getPersistable() {
+			return new MockAbstractDataAdapter();
+		}
+
 	} // class MockAbstractDataAdapter
 
 	public static class IntegerRangeDataStatistics extends
@@ -307,6 +311,11 @@ public class MockComponents
 			return new NumericRange(
 					entry.doubleValue(),
 					entry.doubleValue());
+		}
+
+		@Override
+		public IntegerRangeDataStatistics getPersistable() {
+			return new IntegerRangeDataStatistics();
 		}
 
 	}
@@ -478,6 +487,10 @@ public class MockComponents
 		public void fromBinary(
 				final byte[] bytes ) {}
 
+		@Override
+		public TestPersistentIndexFieldHandler getPersistable() {
+			return new TestPersistentIndexFieldHandler();
+		}
 	}
 
 	// *************************************************************************
@@ -597,8 +610,12 @@ public class MockComponents
 
 		@Override
 		public NumericData getFullRange() {
-			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public TestDimensionField getPersistable() {
+			return new TestDimensionField();
 		}
 	}
 
@@ -621,7 +638,6 @@ public class MockComponents
 		public List<ByteArrayRange> getQueryRanges(
 				final MultiDimensionalNumericData indexedRange,
 				final IndexMetaData... hints ) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -630,7 +646,6 @@ public class MockComponents
 				final MultiDimensionalNumericData indexedRange,
 				final int maxEstimatedRangeDecomposition,
 				final IndexMetaData... hints ) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -656,20 +671,17 @@ public class MockComponents
 		@Override
 		public MultiDimensionalNumericData getRangeForId(
 				final ByteArrayId insertionId ) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public MultiDimensionalCoordinates getCoordinatesPerDimension(
 				final ByteArrayId insertionId ) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public NumericDimensionDefinition[] getOrderedDimensionDefinitions() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -687,13 +699,11 @@ public class MockComponents
 
 		@Override
 		public Set<ByteArrayId> getNaturalSplits() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public int getByteOffsetFromDimensionalIndex() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
@@ -706,8 +716,12 @@ public class MockComponents
 		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
 				MultiDimensionalNumericData dataRange,
 				IndexMetaData... hints ) {
-			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public MockIndexStrategy getPersistable() {
+			return new MockIndexStrategy();
 		}
 	}
 
@@ -767,6 +781,11 @@ public class MockComponents
 		@Override
 		public String getId() {
 			return id;
+		}
+
+		@Override
+		public TestIndexModel getPersistable() {
+			return new TestIndexModel();
 		}
 
 	}

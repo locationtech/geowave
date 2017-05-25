@@ -362,4 +362,9 @@ public class HistogramStatistics extends
 			}
 		}
 	}
+
+	@Override
+	public HistogramStatistics getPersistable() {
+		return new HistogramStatistics();
+	}
 }

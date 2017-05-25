@@ -101,4 +101,9 @@ public class RasterFootprintStatistics extends
 					((RasterFootprintStatistics) statistics).footprint);
 		}
 	}
+
+	@Override
+	public RasterFootprintStatistics getPersistable() {
+		return new RasterFootprintStatistics();
+	}
 }

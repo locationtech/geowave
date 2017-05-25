@@ -102,4 +102,8 @@ public class MaxDuplicatesStatistics<T> extends
 		}
 	}
 
+	@Override
+	public MaxDuplicatesStatistics<T> getPersistable() {
+		return new MaxDuplicatesStatistics<T>();
+	}
 }

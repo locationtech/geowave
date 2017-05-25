@@ -10,8 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.cli.prefix;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,19 +17,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import mil.nga.giat.geowave.core.cli.annotations.PrefixParameter;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslatorTest.ArgumentChildren;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslatorTest.ArgumentChildrenOther;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslatorTest.Arguments;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslatorTest.ArgumentsCollection;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslatorTest.NullDelegate;
-import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslatorTest.PrefixedArguments;
-import mil.nga.giat.geowave.core.cli.prefix.PrefixedJCommander.PrefixedJCommanderInitializer;
 
 public class PrefixedJCommanderTest
 {

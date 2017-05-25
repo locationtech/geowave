@@ -12,10 +12,6 @@ package mil.nga.giat.geowave.core.store;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-
 public interface DataStoreOperations
 {
 

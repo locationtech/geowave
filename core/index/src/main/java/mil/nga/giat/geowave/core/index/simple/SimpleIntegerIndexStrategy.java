@@ -47,4 +47,9 @@ public class SimpleIntegerIndexStrategy extends
 	public int getByteOffsetFromDimensionalIndex() {
 		return 0;
 	}
+
+	@Override
+	public SimpleIntegerIndexStrategy getPersistable() {
+		return new SimpleIntegerIndexStrategy();
+	}
 }

@@ -213,4 +213,9 @@ public class TimeField implements
 		}
 		return true;
 	}
+
+	@Override
+	public TimeField getPersistable() {
+		return new TimeField();
+	}
 }

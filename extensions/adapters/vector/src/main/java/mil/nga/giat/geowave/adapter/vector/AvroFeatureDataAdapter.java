@@ -13,7 +13,6 @@ package mil.nga.giat.geowave.adapter.vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -93,5 +92,10 @@ public class AvroFeatureDataAdapter extends
 	@Override
 	protected RowBuilder<SimpleFeature, Object> newBuilder() {
 		return new AvroAttributeRowBuilder();
+	}
+
+	@Override
+	public AvroFeatureDataAdapter getPersistable() {
+		return new AvroFeatureDataAdapter();
 	}
 }

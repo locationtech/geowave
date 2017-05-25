@@ -196,4 +196,9 @@ public class FeatureBoundingBoxStatistics extends
 		}
 		return jo;
 	}
+
+	@Override
+	public FeatureBoundingBoxStatistics getPersistable() {
+		return new FeatureBoundingBoxStatistics();
+	}
 }

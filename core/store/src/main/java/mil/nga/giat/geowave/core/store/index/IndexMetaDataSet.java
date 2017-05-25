@@ -176,4 +176,8 @@ public class IndexMetaDataSet<T> extends
 		return jo;
 	}
 
+	@Override
+	public IndexMetaDataSet<T> getPersistable() {
+		return new IndexMetaDataSet<T>();
+	}
 }

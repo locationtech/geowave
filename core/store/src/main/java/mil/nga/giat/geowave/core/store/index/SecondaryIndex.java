@@ -229,4 +229,8 @@ public class SecondaryIndex<T> implements
 		}
 	}
 
+	@Override
+	public SecondaryIndex<T> getPersistable() {
+		return new SecondaryIndex<T>();
+	}
 }

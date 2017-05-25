@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.index;
 
-import java.lang.reflect.Constructor;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,14 +56,28 @@ public class PersistenceUtils
 		}
 		// preface the payload with the class name and a length of the class
 		// name
-		final byte[] className = StringUtils.stringToBinary(persistable.getClass().getName());
-		final byte[] persistableBinary = persistable.toBinary();
-		final int classNameLength = className.length;
-		final ByteBuffer buf = ByteBuffer.allocate(4 + classNameLength + persistableBinary.length);
-		buf.putInt(classNameLength);
-		buf.put(className);
-		buf.put(persistableBinary);
-		return buf.array();
+		byte[] classIdentifier = null;
+		try {
+			classIdentifier = ClassCompatabilityFactory.getClassIdentifierFromClassName(persistable
+					.getClass()
+					.getName());
+		}
+		catch (Exception e) {
+			LOGGER.error(
+					"Error getting class identifier for class [" + persistable.getClass().getName() + "]: "
+							+ e.getLocalizedMessage(),
+					e);
+		}
+		if (classIdentifier != null) {
+			final byte[] persistableBinary = persistable.toBinary();
+			final int classIdentifierLength = classIdentifier.length;
+			final ByteBuffer buf = ByteBuffer.allocate(4 + classIdentifierLength + persistableBinary.length);
+			buf.putInt(classIdentifierLength);
+			buf.put(classIdentifier);
+			buf.put(persistableBinary);
+			return buf.array();
+		}
+		return new byte[0];
 	}
 
 	public static List<Persistable> fromBinary(
@@ -91,12 +104,12 @@ public class PersistenceUtils
 			final byte[] bytes,
 			final Class<T> expectedType ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int classNameLength = buf.getInt();
-		final byte[] classNameBinary = new byte[classNameLength];
-		final byte[] persistableBinary = new byte[bytes.length - classNameLength - 4];
-		buf.get(classNameBinary);
+		final int classIdentifierLength = buf.getInt();
+		final byte[] classIdentifierBinary = new byte[classIdentifierLength];
+		final byte[] persistableBinary = new byte[bytes.length - classIdentifierLength - 4];
+		buf.get(classIdentifierBinary);
 
-		final String className = StringUtils.stringFromBinary(classNameBinary);
+		final String className = ClassCompatabilityFactory.getClassNameFromClassIdentifier(classIdentifierBinary);
 
 		final T retVal = classFactory(
 				className,
@@ -108,50 +121,15 @@ public class PersistenceUtils
 		return retVal;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T classFactory(
 			final String className,
 			final Class<T> expectedType ) {
-		Class<?> factoryType = null;
-
-		try {
-			factoryType = Class.forName(className);
+		T persistable = PersistableFactory.getPersistable(
+				className,
+				expectedType);
+		if (persistable != null) {
+			return (T) persistable;
 		}
-		catch (final ClassNotFoundException e) {
-			LOGGER.warn(
-					"error creating class: could not find class ",
-					e);
-		}
-
-		if (factoryType != null) {
-			Object factoryClassInst = null;
-
-			try {
-				// use the no arg constructor and make sure its accessible
-
-				// HP Fortify "Access Specifier Manipulation"
-				// This method is being modified by trusted code,
-				// in a way that is not influenced by user input
-				final Constructor<?> noArgConstructor = factoryType.getDeclaredConstructor();
-				noArgConstructor.setAccessible(true);
-				factoryClassInst = noArgConstructor.newInstance();
-			}
-			catch (final Exception e) {
-				LOGGER.warn(
-						"error creating class: could not create class ",
-						e);
-			}
-
-			if (factoryClassInst != null) {
-				if (!expectedType.isAssignableFrom(factoryClassInst.getClass())) {
-					LOGGER.warn("error creating class, does not implement expected type");
-				}
-				else {
-					return ((T) factoryClassInst);
-				}
-			}
-		}
-
 		return null;
 	}
 }
