@@ -181,4 +181,9 @@ public class FeatureFixedBinNumericStatistics extends
 					maxValue);
 		}
 	}
+
+	@Override
+	public FeatureFixedBinNumericStatistics getPersistable() {
+		return new FeatureFixedBinNumericStatistics();
+	}
 }

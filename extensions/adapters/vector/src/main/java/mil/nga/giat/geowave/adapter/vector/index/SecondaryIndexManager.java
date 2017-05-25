@@ -228,4 +228,8 @@ public class SecondaryIndexManager implements
 		return statsManager;
 	}
 
+	@Override
+	public SecondaryIndexManager getPersistable() {
+		return new SecondaryIndexManager();
+	}
 }

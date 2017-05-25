@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -174,4 +173,8 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 		return jo;
 	}
 
+	@Override
+	public DifferingFieldVisibilityEntryCount<T> getPersistable() {
+		return new DifferingFieldVisibilityEntryCount<T>();
+	}
 }

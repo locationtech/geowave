@@ -392,4 +392,9 @@ public class WholeFeatureDataAdapter extends
 		return new ByteArrayId(
 				"");
 	}
+
+	@Override
+	public WholeFeatureDataAdapter getPersistable() {
+		return new WholeFeatureDataAdapter();
+	}
 }

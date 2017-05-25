@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.adapter.vector.render;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -83,4 +82,8 @@ public class PersistableRenderedImage implements
 		}
 	}
 
+	@Override
+	public PersistableRenderedImage getPersistable() {
+		return new PersistableRenderedImage();
+	}
 }

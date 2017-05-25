@@ -43,4 +43,8 @@ public class AdapterIdQueryFilter implements
 		}
 	}
 
+	@Override
+	public AdapterIdQueryFilter getPersistable() {
+		return new AdapterIdQueryFilter();
+	}
 }

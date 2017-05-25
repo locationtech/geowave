@@ -230,4 +230,8 @@ public class FeatureHyperLogLogStatistics extends
 		}
 	}
 
+	@Override
+	public FeatureHyperLogLogStatistics getPersistable() {
+		return new FeatureHyperLogLogStatistics();
+	}
 }

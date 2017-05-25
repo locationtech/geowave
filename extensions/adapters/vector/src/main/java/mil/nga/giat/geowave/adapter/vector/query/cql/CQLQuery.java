@@ -23,8 +23,6 @@ import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
@@ -37,7 +35,6 @@ import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
@@ -410,5 +407,10 @@ public class CQLQuery implements
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public CQLQuery getPersistable() {
+		return new CQLQuery();
 	}
 }

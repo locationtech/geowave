@@ -84,4 +84,8 @@ public class TextExactMatchFilter implements
 		caseSensitive = (bb.getInt() == 1) ? true : false;
 	}
 
+	@Override
+	public TextExactMatchFilter getPersistable() {
+		return new TextExactMatchFilter();
+	}
 }

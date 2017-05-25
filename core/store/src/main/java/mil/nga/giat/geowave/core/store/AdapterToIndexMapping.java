@@ -121,4 +121,8 @@ public class AdapterToIndexMapping implements
 		this.indexIds = ByteArrayId.fromBytes(indexIdBytes);
 	}
 
+	@Override
+	public AdapterToIndexMapping getPersistable() {
+		return new AdapterToIndexMapping();
+	}
 }

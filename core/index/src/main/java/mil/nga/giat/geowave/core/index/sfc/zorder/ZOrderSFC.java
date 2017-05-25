@@ -240,4 +240,9 @@ public class ZOrderSFC implements
 			(long) (dimensionDefs[d].normalize(maxValue) * binsPerDimension)
 		};
 	}
+
+	@Override
+	public ZOrderSFC getPersistable() {
+		return new ZOrderSFC();
+	}
 }

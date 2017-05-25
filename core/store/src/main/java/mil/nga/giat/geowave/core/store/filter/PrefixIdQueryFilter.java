@@ -1,9 +1,6 @@
 package mil.nga.giat.geowave.core.store.filter;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -45,4 +42,8 @@ public class PrefixIdQueryFilter implements
 				bytes);
 	}
 
+	@Override
+	public PrefixIdQueryFilter getPersistable() {
+		return new PrefixIdQueryFilter();
+	}
 }

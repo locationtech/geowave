@@ -133,4 +133,9 @@ public class RasterTile<T extends Persistable> implements
 		// This will get wrapped as a MergeableRasterTile by the combiner to
 		// support merging
 	}
+
+	@Override
+	public RasterTile<T> getPersistable() {
+		return new RasterTile<T>();
+	}
 }

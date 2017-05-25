@@ -53,4 +53,8 @@ public class TypeNameOptionProvider implements
 		}
 	}
 
+	@Override
+	public TypeNameOptionProvider getPersistable() {
+		return new TypeNameOptionProvider();
+	}
 }

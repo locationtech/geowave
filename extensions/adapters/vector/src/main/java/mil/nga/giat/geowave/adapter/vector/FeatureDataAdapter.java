@@ -962,4 +962,9 @@ public class FeatureDataAdapter extends
 				dimensionFieldIds);
 		return dimensionFieldIds;
 	}
+
+	@Override
+	public FeatureDataAdapter getPersistable() {
+		return new FeatureDataAdapter();
+	}
 }

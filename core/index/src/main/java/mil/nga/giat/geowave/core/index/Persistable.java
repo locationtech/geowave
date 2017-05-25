@@ -8,6 +8,8 @@ package mil.nga.giat.geowave.core.index;
  */
 public interface Persistable
 {
+	public Persistable getPersistable();
+
 	/**
 	 * Convert fields and data within an object to binary form for transmission
 	 * or storage.

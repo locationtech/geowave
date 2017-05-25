@@ -90,4 +90,8 @@ public class TemporalIndexStrategy implements
 		return Collections.emptyList();
 	}
 
+	@Override
+	public TemporalIndexStrategy getPersistable() {
+		return new TemporalIndexStrategy();
+	}
 }

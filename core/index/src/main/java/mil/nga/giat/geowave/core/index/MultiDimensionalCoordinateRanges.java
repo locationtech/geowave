@@ -93,4 +93,9 @@ public class MultiDimensionalCoordinateRanges implements
 			}
 		}
 	}
+
+	@Override
+	public MultiDimensionalCoordinateRanges getPersistable() {
+		return new MultiDimensionalCoordinateRanges();
+	}
 }

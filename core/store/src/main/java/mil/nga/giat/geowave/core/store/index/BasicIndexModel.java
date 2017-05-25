@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
@@ -147,5 +148,10 @@ public class BasicIndexModel implements
 			id = StringUtils.intToString(hashCode());
 		}
 		return id;
+	}
+
+	@Override
+	public BasicIndexModel getPersistable() {
+		return new BasicIndexModel();
 	}
 }

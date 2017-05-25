@@ -766,4 +766,9 @@ public class QueryOptions implements
 		}
 		return combineByIndex(result);
 	}
+
+	@Override
+	public QueryOptions getPersistable() {
+		return new QueryOptions();
+	}
 }

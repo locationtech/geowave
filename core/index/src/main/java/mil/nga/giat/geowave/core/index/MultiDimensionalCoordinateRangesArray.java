@@ -96,5 +96,14 @@ public class MultiDimensionalCoordinateRangesArray implements
 			}
 		}
 
+		@Override
+		public ArrayOfArrays getPersistable() {
+			return new ArrayOfArrays();
+		}
+	}
+
+	@Override
+	public MultiDimensionalCoordinateRangesArray getPersistable() {
+		return new MultiDimensionalCoordinateRangesArray();
 	}
 }

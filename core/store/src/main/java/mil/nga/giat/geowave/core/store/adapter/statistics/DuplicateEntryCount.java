@@ -160,4 +160,8 @@ public class DuplicateEntryCount<T> extends
 		return jo;
 	}
 
+	@Override
+	public DuplicateEntryCount<T> getPersistable() {
+		return new DuplicateEntryCount<T>();
+	}
 }

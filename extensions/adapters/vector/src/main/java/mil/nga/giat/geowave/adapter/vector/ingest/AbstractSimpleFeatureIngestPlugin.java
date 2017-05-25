@@ -16,7 +16,6 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.adapter.vector.AvroFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.WholeFeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;

@@ -13,6 +13,7 @@ import java.util.List;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -689,6 +690,16 @@ public class AccumuloOptionsTest
 					final byte[] bytes ) {
 
 			}
+
+			@Override
+			public Persistable getPersistable() {
+				try {
+					return (Persistable) this.clone();
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
 		};
 		private static final NativeFieldHandler<TestGeometry, Object> ID_FIELD_HANDLER = new NativeFieldHandler<TestGeometry, Object>() {
 
@@ -834,6 +845,11 @@ public class AccumuloOptionsTest
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public TestGeometryAdapter getPersistable() {
+			return new TestGeometryAdapter();
 		}
 	}
 

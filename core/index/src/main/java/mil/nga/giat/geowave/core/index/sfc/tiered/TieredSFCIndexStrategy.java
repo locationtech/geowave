@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -699,5 +700,14 @@ public class TieredSFCIndexStrategy implements
 			return jo;
 		}
 
+		@Override
+		public TierIndexMetaData getPersistable() {
+			return new TierIndexMetaData();
+		}
+	}
+
+	@Override
+	public TieredSFCIndexStrategy getPersistable() {
+		return new TieredSFCIndexStrategy();
 	}
 }

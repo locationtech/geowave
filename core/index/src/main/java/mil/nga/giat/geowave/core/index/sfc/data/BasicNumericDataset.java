@@ -159,4 +159,8 @@ public class BasicNumericDataset implements
 		}
 	}
 
+	@Override
+	public BasicNumericDataset getPersistable() {
+		return new BasicNumericDataset();
+	}
 }

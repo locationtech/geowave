@@ -41,4 +41,8 @@ public class DataSchemaOptionProvider implements
 		includeSupplementalFields = supplementalFields;
 	}
 
+	@Override
+	public DataSchemaOptionProvider getPersistable() {
+		return new DataSchemaOptionProvider();
+	}
 }

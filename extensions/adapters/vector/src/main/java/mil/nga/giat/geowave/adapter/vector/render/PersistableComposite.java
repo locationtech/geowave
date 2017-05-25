@@ -63,4 +63,8 @@ public class PersistableComposite implements
 		alpha = buf.getFloat();
 	}
 
+	@Override
+	public PersistableComposite getPersistable() {
+		return new PersistableComposite();
+	}
 }

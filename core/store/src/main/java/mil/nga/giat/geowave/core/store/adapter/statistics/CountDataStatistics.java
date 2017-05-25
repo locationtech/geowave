@@ -137,4 +137,9 @@ public class CountDataStatistics<T> extends
 				count);
 		return jo;
 	}
+
+	@Override
+	public CountDataStatistics<T> getPersistable() {
+		return new CountDataStatistics<T>();
+	}
 }

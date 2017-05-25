@@ -15,7 +15,6 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
@@ -429,7 +428,6 @@ public class BasicQueryTest
 
 		@Override
 		public int getByteOffsetFromDimensionalIndex() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
@@ -442,10 +440,13 @@ public class BasicQueryTest
 		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
 				MultiDimensionalNumericData dataRange,
 				IndexMetaData... hints ) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
+		@Override
+		public ExampleNumericIndexStrategy getPersistable() {
+			return new ExampleNumericIndexStrategy();
+		}
 	}
 
 	public static class ConstrainedIndexValue extends
@@ -583,6 +584,10 @@ public class BasicQueryTest
 			return this;
 		}
 
+		@Override
+		public ExampleDimensionOne getPersistable() {
+			return new ExampleDimensionOne();
+		}
 	}
 
 	public static class ExampleDimensionTwo extends

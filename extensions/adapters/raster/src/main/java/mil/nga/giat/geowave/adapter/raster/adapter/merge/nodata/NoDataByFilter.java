@@ -132,4 +132,9 @@ public class NoDataByFilter implements
 	public Set<SampleIndex> getNoDataIndices() {
 		return null;
 	}
+
+	@Override
+	public NoDataByFilter getPersistable() {
+		return new NoDataByFilter();
+	}
 }

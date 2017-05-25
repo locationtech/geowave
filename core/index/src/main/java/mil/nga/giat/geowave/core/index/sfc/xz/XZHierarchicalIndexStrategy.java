@@ -562,6 +562,16 @@ public class XZHierarchicalIndexStrategy implements
 
 			return jo;
 		}
+
+		@Override
+		public XZHierarchicalIndexMetaData getPersistable() {
+			return new XZHierarchicalIndexMetaData();
+		}
+	}
+
+	@Override
+	public XZHierarchicalIndexStrategy getPersistable() {
+		return new XZHierarchicalIndexStrategy();
 	}
 
 }

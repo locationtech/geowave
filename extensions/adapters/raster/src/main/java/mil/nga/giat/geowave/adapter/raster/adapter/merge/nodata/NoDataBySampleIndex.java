@@ -59,4 +59,8 @@ public class NoDataBySampleIndex implements
 		return noDataIndexSet;
 	}
 
+	@Override
+	public NoDataBySampleIndex getPersistable() {
+		return new NoDataBySampleIndex();
+	}
 }

@@ -86,6 +86,10 @@ public interface Time extends
 
 		}
 
+		@Override
+		public TimeRange getPersistable() {
+			return new TimeRange();
+		}
 	}
 
 	/**
@@ -146,6 +150,11 @@ public interface Time extends
 			assert (field[0] instanceof TimeField);
 			return (long) Math.floor(rangeData[0].getMin()) <= this.time
 					&& (long) Math.ceil(rangeData[0].getMax()) >= this.time;
+		}
+
+		@Override
+		public Timestamp getPersistable() {
+			return new Timestamp();
 		}
 	}
 

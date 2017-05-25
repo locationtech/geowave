@@ -256,6 +256,11 @@ public class DistributedRenderResult implements
 				orderedStyles = newOrderedStyles;
 			}
 		}
+
+		@Override
+		public CompositeGroupResult getPersistable() {
+			return new CompositeGroupResult();
+		}
 	}
 
 	// geotools has a concept of composites, which we need to keep separate so
@@ -403,5 +408,10 @@ public class DistributedRenderResult implements
 		graphics.dispose();
 		return new PersistableRenderedImage(
 				image1.image);
+	}
+
+	@Override
+	public DistributedRenderResult getPersistable() {
+		return new DistributedRenderResult();
 	}
 }

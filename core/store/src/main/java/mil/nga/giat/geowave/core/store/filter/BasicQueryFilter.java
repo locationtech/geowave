@@ -314,4 +314,9 @@ public class BasicQueryFilter implements
 				constraints,
 				dimensionFields);
 	}
+
+	@Override
+	public BasicQueryFilter getPersistable() {
+		return new BasicQueryFilter();
+	}
 }

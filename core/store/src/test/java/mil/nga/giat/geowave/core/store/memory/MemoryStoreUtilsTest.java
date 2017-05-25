@@ -24,8 +24,6 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryEntryRow;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreUtils;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.core.store.memory.MemoryDataStore;
 
 import org.junit.Test;
 
@@ -202,6 +200,11 @@ public class MemoryStoreUtilsTest
 				final CommonIndexModel model,
 				final int position ) {
 			return null;
+		}
+
+		@Override
+		public TestStringAdapter getPersistable() {
+			return new TestStringAdapter();
 		}
 	}
 }

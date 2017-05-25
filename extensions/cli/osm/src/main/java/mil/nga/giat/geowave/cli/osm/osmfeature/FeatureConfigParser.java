@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonFactory;
+//import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,8 +22,9 @@ import mil.nga.giat.geowave.cli.osm.osmfeature.types.features.FeatureType;
 
 public class FeatureConfigParser
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureConfigParser.class);
-	private final JsonFactory factory = new JsonFactory();
+	// private final static Logger LOGGER =
+	// LoggerFactory.getLogger(FeatureConfigParser.class);
+	// private final JsonFactory factory = new JsonFactory();
 
 	public void parseConfig(
 			InputStream configStream )

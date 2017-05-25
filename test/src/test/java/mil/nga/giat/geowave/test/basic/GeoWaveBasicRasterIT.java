@@ -17,7 +17,7 @@ import org.opengis.coverage.grid.GridCoverage;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
@@ -737,6 +737,11 @@ public class GeoWaveBasicRasterIT
 			return thisSample + nextSample;
 		}
 
+		@Override
+		public SummingMergeStrategy getPersistable() {
+			return new SummingMergeStrategy();
+		}
+
 	}
 
 	/**
@@ -823,6 +828,10 @@ public class GeoWaveBasicRasterIT
 		public void fromBinary(
 				final byte[] bytes ) {}
 
+		@Override
+		public SumAndAveragingMergeStrategy getPersistable() {
+			return new SumAndAveragingMergeStrategy();
+		}
 	}
 
 	public static class MergeCounter implements
@@ -853,6 +862,11 @@ public class GeoWaveBasicRasterIT
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			mergeCounter = buf.getInt();
+		}
+
+		@Override
+		public MergeCounter getPersistable() {
+			return new MergeCounter();
 		}
 	}
 }

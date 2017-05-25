@@ -38,4 +38,8 @@ public class SimpleShortIndexStrategy extends
 		return 0;
 	}
 
+	@Override
+	public SimpleShortIndexStrategy getPersistable() {
+		return new SimpleShortIndexStrategy();
+	}
 }

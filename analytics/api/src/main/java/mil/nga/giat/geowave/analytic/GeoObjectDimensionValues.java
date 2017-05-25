@@ -145,4 +145,8 @@ public class GeoObjectDimensionValues implements
 
 	}
 
+	@Override
+	public GeoObjectDimensionValues getPersistable() {
+		return new GeoObjectDimensionValues();
+	}
 }

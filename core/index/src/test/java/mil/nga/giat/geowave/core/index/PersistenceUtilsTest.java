@@ -36,6 +36,10 @@ public class PersistenceUtilsTest
 
 		}
 
+		@Override
+		public APersistable getPersistable() {
+			return new APersistable();
+		}
 	}
 
 	@Test

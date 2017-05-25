@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
@@ -160,5 +158,10 @@ public class FieldVisibilityCount<T> extends
 						count + entry.getValue());
 			}
 		}
+	}
+
+	@Override
+	public FieldVisibilityCount<T> getPersistable() {
+		return new FieldVisibilityCount<T>();
 	}
 }

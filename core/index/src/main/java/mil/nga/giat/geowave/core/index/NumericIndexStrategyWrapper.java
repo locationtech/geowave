@@ -133,4 +133,9 @@ public class NumericIndexStrategyWrapper implements
 				dataRange,
 				hints);
 	}
+
+	@Override
+	public NumericIndexStrategyWrapper getPersistable() {
+		return new NumericIndexStrategyWrapper();
+	}
 }

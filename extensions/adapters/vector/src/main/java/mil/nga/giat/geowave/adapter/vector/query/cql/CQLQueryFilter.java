@@ -176,4 +176,9 @@ public class CQLQueryFilter implements
 			adapter = null;
 		}
 	}
+
+	@Override
+	public CQLQueryFilter getPersistable() {
+		return new CQLQueryFilter();
+	}
 }

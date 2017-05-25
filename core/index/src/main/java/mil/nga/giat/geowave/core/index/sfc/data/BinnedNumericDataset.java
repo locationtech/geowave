@@ -200,4 +200,9 @@ public class BinnedNumericDataset implements
 				indexRangesBinary,
 				MultiDimensionalNumericData.class);
 	}
+
+	@Override
+	public BinnedNumericDataset getPersistable() {
+		return new BinnedNumericDataset();
+	}
 }

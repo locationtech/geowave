@@ -91,4 +91,8 @@ public class CoordinateRangeQueryFilter implements
 
 	}
 
+	@Override
+	public CoordinateRangeQueryFilter getPersistable() {
+		return new CoordinateRangeQueryFilter();
+	}
 }

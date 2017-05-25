@@ -93,4 +93,9 @@ public class RasterTileRowTransform<T extends Persistable> implements
 	public int getBaseTransformPriority() {
 		return RASTER_TILE_PRIORITY;
 	}
+
+	@Override
+	public RasterTileRowTransform<T> getPersistable() {
+		return new RasterTileRowTransform<T>();
+	}
 }
