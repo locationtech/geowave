@@ -260,7 +260,7 @@ abstract public class DynamoDBQuery extends
 				r.getStart().getBytes());
 		final byte[] end = ByteArrayUtils.combineArrays(
 				adapterID.getBytes(),
-				r.getEnd().getBytes());
+				r.getEndAsNextPrefix().getBytes());
 		query.addKeyConditionsEntry(
 				DynamoDBRow.GW_RANGE_KEY,
 				new Condition().withComparisonOperator(
