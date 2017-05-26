@@ -935,7 +935,8 @@ public class AccumuloSplitsProviderTest
 			public Persistable getPersistable() {
 				try {
 					return (Persistable) this.clone();
-				} catch (CloneNotSupportedException e) {
+				}
+				catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
 				return null;

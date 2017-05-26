@@ -38,7 +38,6 @@ public abstract class AbstractGeoWaveJobRunner extends
 	/**
 	 * Main method to execute the MapReduce analytic.
 	 */
-	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
 		final Job job = Job.getInstance(super.getConf());

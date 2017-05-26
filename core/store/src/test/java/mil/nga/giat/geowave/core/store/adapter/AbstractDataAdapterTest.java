@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.core.store.adapter;
 
 import java.util.ArrayList;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestNativeFieldHandler;
