@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
+import org.apache.commons.math.util.MathUtils;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -51,6 +52,7 @@ public class GeoWaveBasicRasterIT
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicRasterIT.class);
+	private static final double DELTA = MathUtils.EPSILON;
 	private static long startMillis;
 
 	@BeforeClass
@@ -206,10 +208,12 @@ public class GeoWaveBasicRasterIT
 
 			Assert.assertEquals(
 					tileSize,
-					raster.getWidth());
+					raster.getWidth(),
+					DELTA);
 			Assert.assertEquals(
 					tileSize,
-					raster.getHeight());
+					raster.getHeight(),
+					DELTA);
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 
@@ -224,7 +228,8 @@ public class GeoWaveBasicRasterIT
 								raster.getSampleDouble(
 										x,
 										y,
-										b));
+										b),
+								DELTA);
 
 					}
 					if ((y % 2) == 0) {
@@ -238,7 +243,8 @@ public class GeoWaveBasicRasterIT
 								raster.getSampleDouble(
 										x,
 										y,
-										0));
+										0),
+								DELTA);
 					}
 					else {
 						Assert.assertEquals(
@@ -247,7 +253,8 @@ public class GeoWaveBasicRasterIT
 								raster.getSampleDouble(
 										x,
 										y,
-										0));
+										0),
+								DELTA);
 					}
 					if ((x > ((tileSize * 3) / 4)) && (y > ((tileSize * 3) / 4))) {
 						Assert.assertEquals(
@@ -256,7 +263,8 @@ public class GeoWaveBasicRasterIT
 								raster.getSampleDouble(
 										x,
 										y,
-										7));
+										7),
+								DELTA);
 					}
 					else {
 						Assert.assertEquals(
@@ -269,7 +277,8 @@ public class GeoWaveBasicRasterIT
 								raster.getSampleDouble(
 										x,
 										y,
-										7));
+										7),
+								DELTA);
 
 					}
 				}
