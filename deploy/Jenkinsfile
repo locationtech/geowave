@@ -1,6 +1,6 @@
 #!groovy 
 
-node {
+node ('slave_node') {
    stage 'Wipe workspace'
    deleteDir()
 
@@ -24,4 +24,5 @@ checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleCon
    
    // Deploy to geowave-rpms
    stage 'Deploying to s3://geowave-rpms/'
+   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/ s3://geowave-rpms/'
 }
