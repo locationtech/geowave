@@ -1,24 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional
- * information regarding copyright ownership.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License,
- * Version 2.0 which accompanies this distribution and is available at
- * http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
 package mil.nga.giat.geowave.analytic.mapreduce.kde;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 public class GaussianFilter
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(GaussianFilter.class);
+	private final static Logger LOGGER = Logger.getLogger(GaussianFilter.class);
 	private static final double SQRT_2_PI = Math.sqrt(2 * Math.PI);
 
 	/**
@@ -106,21 +95,11 @@ public class GaussianFilter
 	}
 
 	public static void incrementPtFast(
-			final double lat,
-			final double lon,
-			final CellCounter results,
-			final int numXPosts,
-			final int numYPosts ) {
-		final int numDimensions = 2;
+			final double[] valsPerDimension,
+			final int[] binsPerDimension,
+			final CellCounter results ) {
+		final int numDimensions = valsPerDimension.length;
 		final double[] binLocationPerDimension = new double[numDimensions];
-		final int[] binsPerDimension = new int[] {
-			numXPosts,
-			numYPosts
-		};
-		final double[] valsPerDimension = new double[] {
-			lon,
-			lat
-		};
 		for (int d = 0; d < numDimensions; d++) {
 			final ValueRange valueRange = valueRangePerDimension[d];
 			final double span = (valueRange.getMax() - valueRange.getMin());
@@ -155,6 +134,26 @@ public class GaussianFilter
 						positionAndContribution.contribution);
 			}
 		}
+	}
+
+	public static void incrementPtFast(
+			final double lat,
+			final double lon,
+			final CellCounter results,
+			final int numXPosts,
+			final int numYPosts ) {
+		final int[] binsPerDimension = new int[] {
+			numXPosts,
+			numYPosts
+		};
+		final double[] valsPerDimension = new double[] {
+			lon,
+			lat
+		};
+		incrementPtFast(
+				valsPerDimension,
+				binsPerDimension,
+				results);
 	}
 
 	public static void incrementBBox(
@@ -418,7 +417,7 @@ public class GaussianFilter
 		return positions;
 	}
 
-	private static long getPosition(
+	public static long getPosition(
 			final int[] positionPerDimension,
 			final int[] binsPerDimension ) {
 		long retVal = 0;

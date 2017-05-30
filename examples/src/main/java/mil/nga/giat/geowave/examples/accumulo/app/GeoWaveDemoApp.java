@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.examples.accumulo.app;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.accumulo.core.conf.Property;
@@ -46,7 +47,9 @@ public class GeoWaveDemoApp
 		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System
 				.getProperty("interactive")) : true;
 
-		final String password = System.getProperty("password");
+		final String password = System.getProperty(
+				"password",
+				"Ge0wave");
 
 		final File tempDir = Files.createTempDir();
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")

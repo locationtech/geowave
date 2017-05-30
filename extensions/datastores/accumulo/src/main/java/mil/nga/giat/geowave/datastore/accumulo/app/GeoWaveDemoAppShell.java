@@ -39,7 +39,7 @@ public class GeoWaveDemoAppShell
 
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
 				: "geowave";
-		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "password";
+		final String password = (System.getProperty("password") != null) ? System.getProperty("password") : "Ge0wave";
 
 		final String[] shellArgs = new String[] {
 			"-u",

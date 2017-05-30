@@ -308,6 +308,7 @@ public class GeoWaveOutputFormat extends
 						success = true;
 					}
 					else {
+						success = true;
 						errorMessage = "Empty write list";
 					}
 				}

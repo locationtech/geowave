@@ -425,7 +425,7 @@ public class TieredSFCIndexStrategy implements
 		// this range does not fit into a single row ID at the lowest
 		// tier, decompose it
 		for (final ByteArrayRange range : rangeDecomp.getRanges()) {
-			final byte[] currentRowId = Arrays.copyOf(
+			byte[] currentRowId = Arrays.copyOf(
 					range.getStart().getBytes(),
 					range.getStart().getBytes().length);
 			retVal.add(new ByteArrayId(
@@ -435,6 +435,7 @@ public class TieredSFCIndexStrategy implements
 			while (!Arrays.equals(
 					currentRowId,
 					range.getEnd().getBytes())) {
+				currentRowId = currentRowId.clone();
 				// increment until we reach the end row ID
 				boolean overflow = !ByteArrayUtils.increment(currentRowId);
 				if (!overflow) {

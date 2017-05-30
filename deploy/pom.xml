@@ -30,6 +30,21 @@
 			<artifactId>geowave-adapter-raster</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+                <dependency>
+                        <groupId>mil.nga.giat</groupId>
+                        <artifactId>geowave-example</artifactId>
+                        <version>${project.version}</version>
+                </dependency>
+                                <dependency>
+                        <groupId>mil.nga.giat</groupId>
+                        <artifactId>geowave-cli-debug</artifactId>
+                        <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                        <groupId>mil.nga.giat</groupId>
+                        <artifactId>geowave-format-nyctlc</artifactId>
+                        <version>${project.version}</version>
+                </dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -303,7 +318,6 @@
 											<exclude>*:httpclient:*</exclude>
 											<exclude>*:httpcore:*</exclude>
 											<exclude>*:commons-logging:*</exclude>
-											<exclude>*:commons-io:*</exclude>
 											<exclude>*:jts:*</exclude>
 											<exclude>*:stax*:*</exclude>
 											<exclude>*:activation:*</exclude>
