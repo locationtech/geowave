@@ -10,12 +10,12 @@ public class ClassCompatabilityFactory
 	public static byte[] getClassIdentifierFromClassName(
 			final String className )
 			throws Exception {
-		int classNameIdentifier = 0;
+		short classNameIdentifier = 0;
 		if (getClassIdentifiersMap().containsKey(
 				className)) {
 			classNameIdentifier = getClassIdentifiersMap().get(
 					className);
-			String classNameIdentifierRaw = Integer.toString(classNameIdentifier);
+			String classNameIdentifierRaw = Short.toString(classNameIdentifier);
 			if (classNameIdentifierRaw != null) {
 				classNameIdentifierRaw = classNameIdentifierRaw.trim();
 			}
@@ -24,7 +24,6 @@ public class ClassCompatabilityFactory
 		else {
 			return StringUtils.stringToBinary(className);
 		}
-
 	}
 
 	public static String getClassNameFromClassIdentifier(
@@ -34,7 +33,7 @@ public class ClassCompatabilityFactory
 			String classIdentifierRaw = StringUtils.stringFromBinary(classNameBinary);
 			try {
 				// verify value is a numeric
-				Integer classNameIdentifier = Integer.valueOf(classIdentifierRaw);
+				Short classNameIdentifier = Short.valueOf(classIdentifierRaw);
 				className = getClassNamesMap().getOrDefault(
 						classNameIdentifier,
 						null);
@@ -49,11 +48,11 @@ public class ClassCompatabilityFactory
 	/**
 	 * @return the classNameHashes
 	 */
-	private static Map<Integer, String> getClassNamesMap() {
+	private static Map<Short, String> getClassNamesMap() {
 		return ClassNameIdentifierRegistry.classNames;
 	}
 
-	private static Map<String, Integer> getClassIdentifiersMap() {
+	private static Map<String, Short> getClassIdentifiersMap() {
 		return ClassNameIdentifierRegistry.classNameIdentifiers;
 	}
 }
