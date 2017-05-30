@@ -96,19 +96,28 @@ public class StripWeakCentroidsRunner<T> implements
 					return 0;
 				}
 
-				Collections.sort(
-						centroids,
-						new Comparator<AnalyticItemWrapper<T>>() {
+				try {
+					Collections.sort(
+							centroids,
+							new Comparator<AnalyticItemWrapper<T>>() {
 
-							@Override
-							public int compare(
-									final AnalyticItemWrapper<T> arg0,
-									final AnalyticItemWrapper<T> arg1 ) {
-								// be careful of overflow
-								// also, descending
-								return (arg1.getAssociationCount() - arg0.getAssociationCount()) < 0 ? -1 : 1;
-							}
-						});
+								@Override
+								public int compare(
+										final AnalyticItemWrapper<T> arg0,
+										final AnalyticItemWrapper<T> arg1 ) {
+
+									// be careful of overflow
+									// also, descending
+									return (arg1.getAssociationCount() - arg0.getAssociationCount()) < 0 ? -1 : 1;
+								}
+							});
+
+				}
+				catch (Exception e) {
+					LOGGER.error(e.getMessage());
+					return 0;
+				}
+
 				int position = breakStrategy.getBreakPoint(centroids);
 
 				// make sure we do not delete too many

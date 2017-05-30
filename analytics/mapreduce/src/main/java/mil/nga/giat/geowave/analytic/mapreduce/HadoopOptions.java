@@ -36,7 +36,9 @@ public class HadoopOptions
 				"localhost:53000");
 		hdfsHostPort = (!hostport.contains("://")) ? "hdfs://" + hostport : hostport;
 		basePath = new Path(
-				runTimeProperties.getPropertyAsString(MRConfig.HDFS_BASE_DIR),
+				runTimeProperties.getPropertyAsString(
+						MRConfig.HDFS_BASE_DIR,
+						"/tmp"),
 				"/");
 		jobTrackerHostPort = runTimeProperties.getPropertyAsString(
 				MRConfig.JOBTRACKER_HOST_PORT,

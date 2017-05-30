@@ -9,22 +9,22 @@ public class KMeansParallelOptions
 {
 	@SampleParameter(SampleParameters.Sample.MAX_SAMPLE_SIZE)
 	@Parameter(names = {
-		"-sxs",
-		"--sampleMaxSampleSize"
+		"-maxk",
+		"--maxSampleSize"
 	}, required = true, description = "Max Sample Size")
 	private String sampleMaxSampleSize;
 
 	@SampleParameter(SampleParameters.Sample.MIN_SAMPLE_SIZE)
 	@Parameter(names = {
-		"-sms",
-		"--sampleMinSampleSize"
+		"-mink",
+		"--minSampleSize"
 	}, required = true, description = "Minimum Sample Size")
 	private String sampleMinSampleSize;
 
 	@SampleParameter(SampleParameters.Sample.SAMPLE_ITERATIONS)
 	@Parameter(names = {
-		"-ssi",
-		"--sampleSampleIterations"
+		"-mini",
+		"--minSampleIterations"
 	}, required = true, description = "Minimum number of sample iterations")
 	private String sampleSampleIterations;
 

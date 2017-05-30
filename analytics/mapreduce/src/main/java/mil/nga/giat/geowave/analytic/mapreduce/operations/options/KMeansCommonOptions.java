@@ -8,20 +8,18 @@ import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.param.annotations.CentroidParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ClusteringParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.CommonParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.ExtractParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.GlobalParameter;
 import mil.nga.giat.geowave.analytic.param.annotations.HullParameter;
-import mil.nga.giat.geowave.analytic.param.annotations.SampleParameter;
 
 public class KMeansCommonOptions
 {
 	@CentroidParameter(CentroidParameters.Centroid.EXTRACTOR_CLASS)
 	@Parameter(names = {
-		"-cce",
+		"-cex",
 		"--centroidExtractorClass"
 	}, description = "Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor")
 	private String centroidExtractorClass;
@@ -56,7 +54,7 @@ public class KMeansCommonOptions
 
 	@ClusteringParameter(ClusteringParameters.Clustering.MAX_ITERATIONS)
 	@Parameter(names = {
-		"-cmi",
+		"-maxi",
 		"--clusteringMaxIterations"
 	}, required = true, description = "Maximum number of iterations when finding optimal clusters")
 	private String clusteringMaxIterations;
@@ -72,7 +70,7 @@ public class KMeansCommonOptions
 	@Parameter(names = {
 		"-zl",
 		"--clusteringZoomLevels"
-	}, required = true, description = "Number of Zoom Levels to Process")
+	}, description = "Number of Zoom Levels to Process")
 	private String clusteringZoomLevels;
 
 	@CommonParameter(CommonParameters.Common.DIMENSION_EXTRACT_CLASS)

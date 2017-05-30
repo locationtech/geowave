@@ -32,14 +32,14 @@ public class CommonOptions
 	@Parameter(names = {
 		"-hdfsbase",
 		"--mapReduceHdfsBaseDir"
-	}, required = true, description = "Fully qualified path to the base directory in hdfs")
+	}, description = "Fully qualified path to the base directory in hdfs")
 	private String mapReduceHdfsBaseDir;
 
 	@MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
 	@Parameter(names = {
 		"-hdfs",
 		"--mapReduceHdfsHostPort"
-	}, required = true, description = "HDFS hostname and port in the format hostname:port")
+	}, description = "HDFS hostname and port in the format hostname:port")
 	private String mapReduceHdfsHostPort;
 
 	@MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)
@@ -71,14 +71,14 @@ public class CommonOptions
 	@Parameter(names = {
 		"-emx",
 		"--extractMaxInputSplit"
-	}, required = true, description = "Maximum hdfs input split size")
+	}, description = "Maximum hdfs input split size")
 	private String extractMaxInputSplit;
 
 	@ExtractParameter(ExtractParameters.Extract.MIN_INPUT_SPLIT)
 	@Parameter(names = {
 		"-emn",
 		"--extractMinInputSplit"
-	}, required = true, description = "Minimum hdfs input split size")
+	}, description = "Minimum hdfs input split size")
 	private String extractMinInputSplit;
 
 	@ExtractParameter(ExtractParameters.Extract.QUERY)
