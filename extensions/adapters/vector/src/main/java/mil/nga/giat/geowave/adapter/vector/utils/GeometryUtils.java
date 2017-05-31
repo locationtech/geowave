@@ -22,6 +22,14 @@ import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -467,6 +475,27 @@ public class GeometryUtils
 			final GeometryFactory factory,
 			final CoordinateReferenceSystem crs ) {
 		return factory.createPolygon(toPolygonCoordinates(crs.getCoordinateSystem()));
+	}
+
+	public static Envelope getGeoBounds(
+			final DataStorePluginOptions dataStorePlugin,
+			final ByteArrayId adapterId ) {
+		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
+		final CloseableIterator<DataStatistics<?>> statsIt = statisticsStore.getDataStatistics(adapterId);
+
+		while (statsIt.hasNext()) {
+			final DataStatistics stats = statsIt.next();
+			if (stats instanceof FeatureBoundingBoxStatistics) {
+				final FeatureBoundingBoxStatistics bbStats = (FeatureBoundingBoxStatistics) stats;
+				return new Envelope(
+						bbStats.getMinX(),
+						bbStats.getMaxX(),
+						bbStats.getMinY(),
+						bbStats.getMaxY());
+			}
+		}
+
+		return null;
 	}
 
 	private static Coordinate[] toPolygonCoordinates(

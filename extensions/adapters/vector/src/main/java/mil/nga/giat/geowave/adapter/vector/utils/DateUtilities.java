@@ -13,6 +13,14 @@ package mil.nga.giat.geowave.adapter.vector.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+
 public class DateUtilities
 {
 
@@ -46,5 +54,22 @@ public class DateUtilities
 
 		return df.parse(input);
 
+	}
+
+	public static TemporalRange getTemporalRange(
+			final DataStorePluginOptions dataStorePlugin,
+			final ByteArrayId adapterId ) {
+		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
+		final CloseableIterator<DataStatistics<?>> statsIt = statisticsStore.getDataStatistics(adapterId);
+
+		while (statsIt.hasNext()) {
+			final DataStatistics stats = statsIt.next();
+			if (stats instanceof FeatureTimeRangeStatistics) {
+				final FeatureTimeRangeStatistics trStats = (FeatureTimeRangeStatistics) stats;
+				return trStats.asTemporalRange();
+			}
+		}
+
+		return null;
 	}
 }

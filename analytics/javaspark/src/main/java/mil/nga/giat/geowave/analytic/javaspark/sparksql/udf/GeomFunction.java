@@ -1,0 +1,28 @@
+package mil.nga.giat.geowave.analytic.javaspark.sparksql.udf;
+
+import org.apache.spark.sql.api.java.UDF2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+import mil.nga.giat.geowave.analytic.javaspark.sparksql.util.GeomReader;
+
+public abstract class GeomFunction implements
+		UDF2<String, String, Boolean>
+{
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeomFunction.class);
+	protected GeomReader geomReader = new GeomReader();
+
+	protected Geometry parseGeom(
+			String geomStr ) {
+		try {
+			return geomReader.read(geomStr);
+		}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
+
+		return null;
+	}
+}
