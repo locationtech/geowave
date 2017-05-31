@@ -37,6 +37,12 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-javaspark</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
