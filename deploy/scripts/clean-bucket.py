@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import boto3
+import boto3, re
 
 """
 Developer: Ahmed Kamel
@@ -38,33 +38,47 @@ class CleanS3Bucket():
                 self.objs_in_dev_srpms.append(obj)
             if obj.key.startswith('dev-jars/'):
                 self.objs_in_dev_jar.append(obj)
+    
+    @staticmethod
+    def find_date(fname):
+        reg = re.search('(?P<date>\d{12})',fname.key)
+        if reg:
+            return int(reg.group('date'))
+        else:
+            raise NameError("Found a file in bucket with improper name: {}".format(fname.key))
 
     def clean_bucket(self):
-        max_number_of_objs = 50
-
+        max_number_of_objs = 100
+        
         #Sort the lists in order from oldest to newest
-        ordered_objs_in_dev_noarch = sorted(self.objs_in_dev_noarch, key = lambda k: k.last_modified, reverse=True)
-        ordered_objs_in_dev_tarball = sorted(self.objs_in_dev_tarball, key = lambda k: k.last_modified, reverse=True)
-        ordered_objs_in_dev_srpms = sorted(self.objs_in_dev_srpms, key = lambda k: k.last_modified, reverse=True)
-        ordered_objs_in_dev_jar = sorted(self.objs_in_dev_jar, key = lambda k: k.last_modified, reverse=True)
+        ordered_objs_in_dev_noarch = sorted(self.objs_in_dev_noarch, key = self.find_date, reverse=True)
+        ordered_objs_in_dev_tarball = sorted(self.objs_in_dev_tarball, key = self.find_date, reverse=True)
+        ordered_objs_in_dev_srpms = sorted(self.objs_in_dev_srpms, key = self.find_date, reverse=True)
+        ordered_objs_in_dev_jar = sorted(self.objs_in_dev_jar, key = self.find_date, reverse=True)
+
+        latest_build_time = self.find_date(ordered_objs_in_dev_noarch[0])
         
         print("Deleting the followings items from the geowave-rpms bucket:")
         if len(ordered_objs_in_dev_noarch) > max_number_of_objs:  
             for obj in ordered_objs_in_dev_noarch[max_number_of_objs:]:
-                print(obj.key)
-                #obj.delete()
+                if latest_build_time != self.find_date(obj):
+                    print(obj.key)
+                    obj.delete()
         if len(ordered_objs_in_dev_tarball) > max_number_of_objs:  
             for obj in ordered_objs_in_dev_tarball[max_number_of_objs:]:
-                print(obj.key)
-                #obj.delete()
+                if latest_build_time != self.find_date(obj):
+                    print(obj.key)
+                    obj.delete()
         if len(ordered_objs_in_dev_srpms) > max_number_of_objs:  
             for obj in ordered_objs_in_dev_srpms[max_number_of_objs:]:
-                print(obj.key)
-                #obj.delete
+                if latest_build_time != self.find_date(obj):
+                    print(obj.key)
+                    obj.delete
         if len(ordered_objs_in_dev_jar) > max_number_of_objs:  
             for obj in ordered_objs_in_dev_jar[max_number_of_objs:]:
-                print(obj.key)
-                #obj.delete
+                if latest_build_time != self.find_date(obj):
+                    print(obj.key)
+                    obj.delete
 
 if __name__ == "__main__":
     bucket_name = 'geowave-rpms'
