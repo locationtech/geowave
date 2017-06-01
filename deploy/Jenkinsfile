@@ -19,10 +19,10 @@ node ('slave_node') {
    stage 'Build and Publish RPMs'
    sh 'deploy/packaging/docker/docker-build-rpms.sh'
 
-   stage 'Clean directory'
-   sh 'deploy/scripts/clean-dir'
+   stage 'Clean bucket'
+   sh 'deploy/scripts/clean-bucket.py'
    
    // Deploy to geowave-rpms
    stage 'Deploying to s3://geowave-rpms/'
-   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+   //sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/ s3://geowave-rpms/'
 }
