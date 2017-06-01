@@ -49,12 +49,12 @@
 		<hbase.scope>compile</hbase.scope>
 		<hadoop.scope>compile</hadoop.scope>
 		<zookeeper.version>3.4.6</zookeeper.version>
-		<jersey.version>2.14</jersey.version>
+		<jersey.version>2.25</jersey.version>
 		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
-		<jackson.version>1.9.13</jackson.version>
+		<jackson.version>2.6.5</jackson.version>
 		<spring-security.version>4.0.4.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
@@ -390,12 +390,7 @@
 			<dependency>
 				<groupId>org.codehaus.jackson</groupId>
 				<artifactId>jackson-mapper-asl</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-core-asl</artifactId>
-				<version>${jackson.version}</version>
+				<version>1.9.13</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>

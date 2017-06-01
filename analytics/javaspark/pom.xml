@@ -18,14 +18,20 @@
 		<dependency> <!-- Spark dependency -->
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_2.11</artifactId>
-			<version>2.0.0</version>
-			<scope>provided</scope>
+			<version>2.1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
