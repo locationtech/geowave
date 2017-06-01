@@ -73,17 +73,28 @@ public class GeoWaveRDD
 
 	public static void main(
 			final String[] args ) {
+		if (args.length < 1) {
+			System.err.println("Missing required arg 'storename'");
+			System.exit(-1);
+		}
+
 		String storeName = args[0];
-		String cqlStr = args[1];
 
-		SparkConf sparkConf = new SparkConf();
-
-		sparkConf.setAppName(
-				"GeoWaveRDD");
-		sparkConf.setMaster(
-				"local");
-		JavaSparkContext context = new JavaSparkContext(
-				sparkConf);
+		double west = -180.0;
+		double south = -90.0;
+		double east = 180.0;
+		double north = 90.0;
+				
+		if (args.length > 1) {
+			if  (args.length < 5) {
+				System.err.println("USAGE: storename west, south, east, north");
+			}
+			
+			west = Double.parseDouble(args[1]);
+			south = Double.parseDouble(args[2]);
+			east = Double.parseDouble(args[3]);
+			north = Double.parseDouble(args[4]);
+		}
 
 		try {
 			DataStorePluginOptions inputStoreOptions = null;
@@ -98,13 +109,22 @@ public class GeoWaveRDD
 				}
 				inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 			}
+			
+			SparkConf sparkConf = new SparkConf();
+
+			sparkConf.setAppName(
+					"GeoWaveRDD");
+			sparkConf.setMaster(
+					"local");
+			JavaSparkContext context = new JavaSparkContext(
+					sparkConf);
 
 			Geometry bbox = new GeometryFactory().toGeometry(
 					new Envelope(
-							-180.0,
-							180.0,
-							-90.0,
-							90.0));
+							west,
+							south,
+							east,
+							north));
 
 			SpatialQuery query = new SpatialQuery(
 					bbox);
