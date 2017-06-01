@@ -190,6 +190,49 @@ public class ClassNameIdentifierRegistry
 			registerClassIdentifier(
 					"mil.nga.giat.geowave.core.index.sfc.data.NumericRange",
 					(short) 144);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy", 
+					(short) 145);
+			
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.format.gpx.GpxIngestPlugin$IngestGpxTrackFromHdfs",
+					(short) 146);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition",
+					(short) 147);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.query.QueryOptions",
+					(short) 148);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter",
+					(short) 149);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy",
+					(short) 150);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy",
+					(short) 151);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataByFilter",
+					(short) 152);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.stats.OverviewStatistics",
+					(short) 153);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.Resolution",
+					(short) 154);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.stats.RasterBoundingBoxStatistics",
+					(short) 155);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT$SumAndAveragingMergeStrategy",
+					(short) 156);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT$MergeCounter",
+					(short) 157);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.raster.stats.HistogramConfig",
+					(short) 158);
 
 			/*
 			 * Registering legacy (mil.nga.giat) test class names for objects
@@ -366,7 +409,46 @@ public class ClassNameIdentifierRegistry
 			registerClassIdentifier(
 					"org.locationtech.geowave.core.index.sfc.data.NumericRange",
 					(short) 344);
-
+			registerClassIdentifier(
+					"org.locationtech.geowave.format.gpx.GpxIngestPlugin$IngestGpxTrackFromHdfs",
+					(short) 345);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition",
+					(short) 346);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.query.QueryOptions",
+					(short) 347);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter",
+					(short) 348);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.adapter.merge.RootMergeStrategy",
+					(short) 349);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy",
+					(short) 350);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataByFilter",
+					(short) 351);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.stats.OverviewStatistics",
+					(short) 352);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.Resolution",
+					(short) 353);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistics",
+					(short) 354);
+			registerClassIdentifier(
+					"org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT$SumAndAveragingMergeStrategy",
+					(short) 355);
+			registerClassIdentifier(
+					"org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT$MergeCounter",
+					(short) 356);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.raster.stats.HistogramConfig",
+					(short) 357);
+			
 			/*
 			 * Registering future (org.locationtech) test class names for
 			 * objects that get generated
