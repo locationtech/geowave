@@ -193,4 +193,8 @@ public class SpatialQuery extends
 		}
 	}
 
+	@Override
+	public SpatialQuery getPersistable() {
+		return new SpatialQuery();
+	}
 }

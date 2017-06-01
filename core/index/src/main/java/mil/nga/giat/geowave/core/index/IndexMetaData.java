@@ -6,7 +6,6 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 public interface IndexMetaData extends
-		Persistable,
 		Mergeable
 {
 	/**

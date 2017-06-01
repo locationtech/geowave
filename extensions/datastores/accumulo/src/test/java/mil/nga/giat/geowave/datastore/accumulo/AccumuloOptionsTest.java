@@ -501,7 +501,6 @@ public class AccumuloOptionsTest
 			it.next();
 			count++;
 		}
-
 		assertEquals(
 				2,
 				count);
@@ -693,12 +692,6 @@ public class AccumuloOptionsTest
 
 			@Override
 			public Persistable getPersistable() {
-				try {
-					return (Persistable) this.clone();
-				}
-				catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
 				return null;
 			}
 		};
@@ -861,6 +854,11 @@ public class AccumuloOptionsTest
 		public ByteArrayId getAdapterId() {
 			return new ByteArrayId(
 					"test1");
+		}
+
+		@Override
+		public AnotherAdapter getPersistable() {
+			return new AnotherAdapter();
 		}
 	}
 }

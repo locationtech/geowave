@@ -17,189 +17,9 @@ import org.slf4j.LoggerFactory;
 public class ClassNameIdentifierRegistry
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClassNameIdentifierRegistry.class);
-	
+
 	public static Map<Short, String> classNames;
 	public static Map<String, Short> classNameIdentifiers;
-
-	static {
-		if (classNameIdentifiers == null) {
-			classNameIdentifiers = Collections.synchronizedMap(new HashMap<String, Short>());
-		}
-		if (classNames == null) {
-			classNames = Collections.synchronizedMap(new HashMap<Short, String>());
-		}
-
-		try {
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.CompoundIndexStrategy$CompoundIndexMetaDataWrapper",
-					(short) 15016);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy$TierIndexMetaData",
-					(short) 23217);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.CompoundIndexStrategy",
-					(short) 28428);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy",
-					(short) 19317);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.hilbert.HilbertSFC",
-					(short) 4782);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition",
-					(short) 8264);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition",
-					(short) 17135);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy",
-					(short) 2012);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.simple.HashKeyIndexStrategy",
-					(short) 26073);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.adapter.MockComponents$MockAbstractDataAdapter",
-					(short) 28767);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics",
-					(short) 6627);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.adapter.MockComponents$TestPersistentIndexFieldHandler",
-					(short) 1539);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.adapter.MockComponents$IntegerRangeDataStatistics",
-					(short) 10945);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics",
-					(short) 11241);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.index.temporal.DateRangeFilter",
-					(short) 14928);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.filter.DedupeFilter",
-					(short) 24578);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.filter.BasicQueryFilter",
-					(short) 12932);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics",
-					(short) 17261);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.index.IndexMetaDataSet",
-					(short) 28672);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount",
-					(short) 8782);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount",
-					(short) 30577);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager",
-					(short) 9142);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics",
-					(short) 27363);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics",
-					(short) 26038);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics",
-					(short) 2425);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics",
-					(short) 13306);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.analytic.store.PersistableStore",
-					(short) 11024);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter",
-					(short) 27935);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy$XZHierarchicalIndexMetaData",
-					(short) 9427);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.index.PrimaryIndex",
-					(short) 30511);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField",
-					(short) 31107);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition",
-					(short) 28785);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField",
-					(short) 414);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition",
-					(short) 28718);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.index.BasicIndexModel",
-					(short) 18862);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery",
-					(short) 6688);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.AdapterToIndexMapping",
-					(short) 31615);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.index.CustomIdIndex",
-					(short) 16290);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy",
-					(short) 32367);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$GeoBoundingBoxStatistics",
-					(short) 14770);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter",
-					(short) 32053);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.filter.DistributableFilterList",
-					(short) 7259);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset",
-					(short) 2953);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.sfc.data.NumericRange",
-					(short) 24113);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.store.query.BasicQueryTest$ExampleDimensionOne",
-					(short) 20777);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.core.index.PersistenceUtilsTest$APersistable",
-					(short) 29248);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.analytic.mapreduce.kmeans.TestObjectDataAdapter",
-					(short) 19378);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.analytic.mapreduce.kmeans.TestObjectDataAdapter$1",
-					(short) 21876);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.AccumuloOptionsTest$TestGeometryAdapter",
-					(short) 26520);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.AccumuloOptionsTest$TestGeometryAdapter$1",
-					(short) 17503);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.AccumuloOptionsTest$AnotherAdapter",
-					(short) 10825);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRangeQueryTest$TestGeometryAdapter",
-					(short) 23933);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRangeQueryTest$TestGeometryAdapter$1",
-					(short) 23081);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$TestGeometryAdapter",
-					(short) 18553);
-			registerClassIdentifier(
-					"mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$TestGeometryAdapter$1",
-					(short) 12152);
-		}
-		catch (Exception ex) {
-			LOGGER.error("Error registering class identifier: "+ex.getLocalizedMessage(), ex);
-		}
-	}
 
 	private static void registerClassIdentifier(
 			final String className,
@@ -224,5 +44,371 @@ public class ClassNameIdentifierRegistry
 	public static short getNewClassNameIdentifier() {
 		return (short) ThreadLocalRandom.current().nextInt(
 				Short.MAX_VALUE + 1);
+	}
+
+	static {
+		if (classNameIdentifiers == null) {
+			classNameIdentifiers = Collections.synchronizedMap(new HashMap<String, Short>());
+		}
+		if (classNames == null) {
+			classNames = Collections.synchronizedMap(new HashMap<Short, String>());
+		}
+
+		try {
+			/*
+			 * Register legacy (mil.nga.giat) class names
+			 */
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.CompoundIndexStrategy$CompoundIndexMetaDataWrapper",
+					(short) 101);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy$TierIndexMetaData",
+					(short) 102);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.CompoundIndexStrategy",
+					(short) 103);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy",
+					(short) 104);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.hilbert.HilbertSFC",
+					(short) 105);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition",
+					(short) 106);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition",
+					(short) 107);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy",
+					(short) 108);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.simple.HashKeyIndexStrategy",
+					(short) 109);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.adapter.MockComponents$MockAbstractDataAdapter",
+					(short) 110);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics",
+					(short) 111);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.adapter.MockComponents$TestPersistentIndexFieldHandler",
+					(short) 112);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.adapter.MockComponents$IntegerRangeDataStatistics",
+					(short) 113);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics",
+					(short) 114);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.index.temporal.DateRangeFilter",
+					(short) 115);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.filter.DedupeFilter",
+					(short) 116);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.filter.BasicQueryFilter",
+					(short) 117);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics",
+					(short) 118);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.index.IndexMetaDataSet",
+					(short) 119);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount",
+					(short) 120);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount",
+					(short) 121);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager",
+					(short) 122);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics",
+					(short) 123);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics",
+					(short) 124);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics",
+					(short) 125);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics",
+					(short) 126);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.analytic.store.PersistableStore",
+					(short) 127);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter",
+					(short) 128);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy$XZHierarchicalIndexMetaData",
+					(short) 129);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.index.PrimaryIndex",
+					(short) 130);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField",
+					(short) 131);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition",
+					(short) 132);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField",
+					(short) 133);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition",
+					(short) 134);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.index.BasicIndexModel",
+					(short) 135);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery",
+					(short) 136);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.AdapterToIndexMapping",
+					(short) 137);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.index.CustomIdIndex",
+					(short) 138);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy",
+					(short) 139);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$GeoBoundingBoxStatistics",
+					(short) 140);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter",
+					(short) 141);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.filter.DistributableFilterList",
+					(short) 142);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset",
+					(short) 143);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.sfc.data.NumericRange",
+					(short) 144);
+
+			/*
+			 * Registering legacy (mil.nga.giat) test class names for objects
+			 * that get generated
+			 * 
+			 * keep numbering for tests in the 200's
+			 */
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.store.query.BasicQueryTest$ExampleDimensionOne",
+					(short) 201);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.core.index.PersistenceUtilsTest$APersistable",
+					(short) 202);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.analytic.mapreduce.kmeans.TestObjectDataAdapter",
+					(short) 203);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.analytic.mapreduce.kmeans.TestObjectDataAdapter$1",
+					(short) 204);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.AccumuloOptionsTest$TestGeometryAdapter",
+					(short) 205);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.AccumuloOptionsTest$TestGeometryAdapter$1",
+					(short) 206);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.AccumuloOptionsTest$AnotherAdapter",
+					(short) 207);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRangeQueryTest$TestGeometryAdapter",
+					(short) 208);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRangeQueryTest$TestGeometryAdapter$1",
+					(short) 209);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$TestGeometryAdapter",
+					(short) 210);
+			registerClassIdentifier(
+					"mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$TestGeometryAdapter$1",
+					(short) 211);
+
+			/*
+			 * Register future (org.locationtech) class names
+			 */
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.CompoundIndexStrategy$CompoundIndexMetaDataWrapper",
+					(short) 301);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy$TierIndexMetaData",
+					(short) 302);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.CompoundIndexStrategy",
+					(short) 303);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy",
+					(short) 304);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.hilbert.HilbertSFC",
+					(short) 305);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition",
+					(short) 306);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition",
+					(short) 307);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy",
+					(short) 308);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.simple.HashKeyIndexStrategy",
+					(short) 309);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.adapter.MockComponents$MockAbstractDataAdapter",
+					(short) 310);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics",
+					(short) 311);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.adapter.MockComponents$TestPersistentIndexFieldHandler",
+					(short) 312);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.adapter.MockComponents$IntegerRangeDataStatistics",
+					(short) 313);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.adapter.statistics.RowRangeDataStatistics",
+					(short) 314);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.index.temporal.DateRangeFilter",
+					(short) 315);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.filter.DedupeFilter",
+					(short) 316);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.filter.BasicQueryFilter",
+					(short) 317);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics",
+					(short) 318);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.index.IndexMetaDataSet",
+					(short) 319);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount",
+					(short) 320);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount",
+					(short) 321);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.vector.index.SecondaryIndexManager",
+					(short) 322);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics",
+					(short) 323);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics",
+					(short) 324);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics",
+					(short) 325);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics",
+					(short) 326);
+			registerClassIdentifier(
+					"org.locationtech.geowave.analytic.store.PersistableStore",
+					(short) 327);
+			registerClassIdentifier(
+					"org.locationtech.geowave.adapter.vector.FeatureDataAdapter",
+					(short) 328);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy$XZHierarchicalIndexMetaData",
+					(short) 329);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.index.PrimaryIndex",
+					(short) 330);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.geotime.store.dimension.LongitudeField",
+					(short) 331);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition",
+					(short) 332);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.geotime.store.dimension.LatitudeField",
+					(short) 333);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition",
+					(short) 334);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.index.BasicIndexModel",
+					(short) 335);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.geotime.store.query.SpatialQuery",
+					(short) 336);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.AdapterToIndexMapping",
+					(short) 337);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.index.CustomIdIndex",
+					(short) 338);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy",
+					(short) 339);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$GeoBoundingBoxStatistics",
+					(short) 340);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter",
+					(short) 341);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.filter.DistributableFilterList",
+					(short) 342);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset",
+					(short) 343);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.sfc.data.NumericRange",
+					(short) 344);
+
+			/*
+			 * Registering future (org.locationtech) test class names for
+			 * objects that get generated
+			 */
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.store.query.BasicQueryTest$ExampleDimensionOne",
+					(short) 375);
+			registerClassIdentifier(
+					"org.locationtech.geowave.core.index.PersistenceUtilsTest$APersistable",
+					(short) 376);
+			registerClassIdentifier(
+					"org.locationtech.geowave.analytic.mapreduce.kmeans.TestObjectDataAdapter",
+					(short) 377);
+			registerClassIdentifier(
+					"org.locationtech.geowave.analytic.mapreduce.kmeans.TestObjectDataAdapter$1",
+					(short) 378);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.AccumuloOptionsTest$TestGeometryAdapter",
+					(short) 379);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.AccumuloOptionsTest$TestGeometryAdapter$1",
+					(short) 380);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.AccumuloOptionsTest$AnotherAdapter",
+					(short) 381);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.query.AccumuloRangeQueryTest$TestGeometryAdapter",
+					(short) 382);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.query.AccumuloRangeQueryTest$TestGeometryAdapter$1",
+					(short) 383);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$TestGeometryAdapter",
+					(short) 384);
+			registerClassIdentifier(
+					"org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest$TestGeometryAdapter$1",
+					(short) 385);
+		}
+		catch (Exception ex) {
+			LOGGER.error(
+					"Error registering class identifier: " + ex.getLocalizedMessage(),
+					ex);
+		}
 	}
 }

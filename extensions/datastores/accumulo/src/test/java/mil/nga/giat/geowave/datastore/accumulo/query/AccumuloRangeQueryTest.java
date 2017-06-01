@@ -362,12 +362,6 @@ public class AccumuloRangeQueryTest
 
 			@Override
 			public Persistable getPersistable() {
-				try {
-					return (Persistable) this.clone();
-				}
-				catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
 				return null;
 			}
 		};

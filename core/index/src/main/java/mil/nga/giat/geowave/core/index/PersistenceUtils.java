@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * A set of convenience methods for serializing and deserializing persistable
  * objects
@@ -15,7 +12,6 @@ import org.slf4j.LoggerFactory;
  */
 public class PersistenceUtils
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(PersistenceUtils.class);
 
 	public static byte[] toBinary(
 			final Collection<? extends Persistable> persistables ) {
@@ -55,6 +51,7 @@ public class PersistenceUtils
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		if (classIdentifier != null) {
 			final byte[] persistableBinary = persistable.toBinary();
 			final ByteBuffer buf = ByteBuffer.allocate(4 + classIdentifier.length + persistableBinary.length);
@@ -91,12 +88,18 @@ public class PersistenceUtils
 			final Class<T> expectedType ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int classNameLength = buf.getInt();
+
 		final byte[] classNameBinary = new byte[classNameLength];
 		final byte[] persistableBinary = new byte[bytes.length - classNameLength - 4];
 		buf.get(classNameBinary);
+
 		final String className = ClassCompatabilityFactory.getClassNameFromClassIdentifier(classNameBinary);
-		final T retVal = classFactory(
+		final String compatibleClassName = ClassCompatabilityFactory.lookupCompatibleClassName(
 				className,
+				expectedType.getName());
+
+		final T retVal = classFactory(
+				compatibleClassName,
 				expectedType);
 		if (retVal != null) {
 			buf.get(persistableBinary);
@@ -112,12 +115,7 @@ public class PersistenceUtils
 				className,
 				expectedType);
 		if (persistable != null) {
-			if (!expectedType.isAssignableFrom(persistable.getClass())) {
-				LOGGER.warn("error creating class, does not implement expected type");
-			}
-			else {
-				return (T) persistable;
-			}
+			return (T) persistable;
 		}
 		return null;
 	}

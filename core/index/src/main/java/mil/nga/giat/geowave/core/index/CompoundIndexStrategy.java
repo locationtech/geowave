@@ -574,8 +574,7 @@ public class CompoundIndexStrategy implements
 	 *
 	 */
 	private static class CompoundIndexMetaDataWrapper implements
-			IndexMetaData,
-			Persistable
+			IndexMetaData
 	{
 
 		private IndexMetaData metaData;
