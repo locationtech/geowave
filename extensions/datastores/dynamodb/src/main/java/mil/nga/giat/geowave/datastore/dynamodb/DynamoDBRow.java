@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.datastore.dynamodb;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -39,9 +40,35 @@ public class DynamoDBRow extends
 
 	public DynamoDBRow(
 			final Map<String, AttributeValue> objMap ) {
-		super(
-				objMap.get(
-						GW_RANGE_KEY).getB().array());
+		final byte[] rowId = objMap.get(
+				GW_RANGE_KEY).getB().array();
+		final int length = rowId.length;
+		final int offset = 0;
+
+		final ByteBuffer metadataBuf = ByteBuffer.wrap(
+				rowId,
+				length + offset - 12,
+				12);
+		final int adapterIdLength = metadataBuf.getInt();
+		final int dataIdLength = metadataBuf.getInt();
+		final int numberOfDuplicates = metadataBuf.getInt();
+
+		final ByteBuffer buf = ByteBuffer.wrap(
+				rowId,
+				offset,
+				length - 12);
+		final byte[] index = new byte[length - 12 - adapterIdLength - dataIdLength];
+		final byte[] adapterId = new byte[adapterIdLength];
+		final byte[] dataId = new byte[dataIdLength];
+		// get adapterId first
+		buf.get(adapterId);
+		buf.get(index);
+		buf.get(dataId);
+
+		this.dataId = dataId;
+		this.adapterId = adapterId;
+		this.index = index;
+		this.numberOfDuplicates = numberOfDuplicates;
 
 		this.objMap = objMap;
 
@@ -53,6 +80,20 @@ public class DynamoDBRow extends
 
 		this.value = objMap.get(
 				GW_VALUE_KEY).getB().array();
+	}
+
+	@Override
+	public byte[] getRowId() {
+		final ByteBuffer buf = ByteBuffer.allocate(12 + dataId.length + adapterId.length + index.length);
+		buf.put(adapterId);
+		buf.put(index);
+		buf.put(dataId);
+		buf.putInt(adapterId.length);
+		buf.putInt(dataId.length);
+		buf.putInt(numberOfDuplicates);
+		buf.rewind();
+
+		return buf.array();
 	}
 
 	public Map<String, AttributeValue> getAttributeMapping() {

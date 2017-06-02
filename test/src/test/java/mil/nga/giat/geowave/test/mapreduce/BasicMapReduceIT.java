@@ -127,9 +127,8 @@ public class BasicMapReduceIT extends
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
-		// aperi: Disabled until we fix adapter Id issue for dynamodb
-		,
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;

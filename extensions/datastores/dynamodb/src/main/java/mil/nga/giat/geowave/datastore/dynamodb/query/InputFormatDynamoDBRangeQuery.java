@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.dynamodb.query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +13,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -27,7 +29,6 @@ public class InputFormatDynamoDBRangeQuery extends
 	private final boolean isOutputWritable;
 
 	private static List<ByteArrayId> getAdapterIds(
-			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final QueryOptions queryOptions ) {
 		try {
@@ -54,13 +55,12 @@ public class InputFormatDynamoDBRangeQuery extends
 				dataStore,
 				dynamoDBOperations,
 				getAdapterIds(
-						index,
 						adapterStore,
 						queryOptions),
 				index,
 				null,
-				queryFilters,
-				null,
+				queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(),
+				new DedupeFilter(),
 				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(),
 				null,
 				null,
@@ -71,6 +71,11 @@ public class InputFormatDynamoDBRangeQuery extends
 
 		this.range = range;
 		this.isOutputWritable = isOutputWritable;
+	}
+
+	@Override
+	protected List<ByteArrayRange> getRanges() {
+		return Collections.singletonList(range);
 	}
 
 	@Override

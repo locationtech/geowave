@@ -99,7 +99,8 @@ public abstract class DynamoDBFilteredIndexQuery extends
 
 		final Iterator<Map<String, AttributeValue>> results = getResults(
 				maxResolutionSubsamplingPerDimension,
-				limit);
+				limit,
+				adapterStore);
 
 		if (results == null) {
 			LOGGER.error("Could not get scanner instance, getScanner returned null");

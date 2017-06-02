@@ -95,13 +95,13 @@ public class SecondaryIndexIT
 {
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO
-		// HBase's VisibilityController isn't compatible with
-		// this test. We'll leave HBase out until the *real*
-		// secondary index implementation is complete.
-		//GeoWaveStoreType.HBASE
+	// HBase's VisibilityController isn't compatible with
+	// this test. We'll leave HBase out until the *real*
+	// secondary index implementation is complete.
+	// GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
-	
+
 	private FeatureDataAdapter dataAdapter;
 	private PrimaryIndex index;
 	private DataStore dataStore;
@@ -113,7 +113,7 @@ public class SecondaryIndexIT
 	private DistributableQuery query;
 	private Point expectedPoint;
 	private String expectedDataId;
-	
+
 	private final static Logger LOGGER = Logger.getLogger(SecondaryIndexIT.class);
 	private static long startMillis;
 
@@ -138,7 +138,6 @@ public class SecondaryIndexIT
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
-
 
 	@Test
 	public void testSecondaryIndicesManually()

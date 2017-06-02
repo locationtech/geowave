@@ -156,7 +156,7 @@ public class AsyncPaginatedScan extends
 						public void onSuccess(
 								ScanRequest request,
 								ScanResult result ) {
-							
+
 							synchronized (monitorLock) {
 								--asyncRequestsInProgress;
 								decTotalAsyncRequestsInProgress();
