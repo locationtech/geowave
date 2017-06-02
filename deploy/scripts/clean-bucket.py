@@ -1,5 +1,5 @@
-#!/usr/bin/python
-import boto3, re
+#!/usr/local/bin/python
+import boto3, re, os
 
 """
 Developer: Ahmed Kamel
@@ -9,12 +9,20 @@ Description:
 This script is used to access the geowave-rpms s3 container and clean up the dev dir
 """
 
-class CleanS3Bucket():
+class CleanUp():
     def __init__(self, bucket_name = None):
+        self.latest_build_time = None
+        #lists for cleaning up s3 bucket
+        self.max_number_of_objs = 500
         self.objs_in_dev_noarch = []
         self.objs_in_dev_tarball = []
         self.objs_in_dev_srpms = []
         self.objs_in_dev_jar = []
+        
+        # Variables for cleaning local workspace
+        self.dev_path = os.path.join(os.sep, 'var','www','html','repos','snapshots','geowave','dev')
+        self.dev_jar_path = os.path.join(os.sep, 'var','www','html','repos','snapshots','geowave','dev-jars')
+
 
     def query_s3_bucket(self):
         """
@@ -41,48 +49,73 @@ class CleanS3Bucket():
     
     @staticmethod
     def find_date(fname):
-        reg = re.search('(?P<date>\d{12})',fname.key)
+        if isinstance(fname, str):
+            reg = re.search('(?P<date>\d{12})',fname)
+        else:
+            reg = re.search('(?P<date>\d{12})',fname.key)
+            #ideally I would use is instance here as well but that does not play nice with boto3 objects
         if reg:
             return int(reg.group('date'))
         else:
-            raise NameError("Found a file in bucket with improper name: {}".format(fname.key))
+            raise NameError("Found a file in bucket with improper name: {}".format(fname))
 
     def clean_bucket(self):
-        max_number_of_objs = 100
+        """
+        This function is used to clean up the s3 bucket by deleting no longer needed artifacts.
+        """
+        #Call query buckets to know what to delete
+        self.query_s3_bucket()
         
-        #Sort the lists in order from oldest to newest
+        #Sort the list to find the newest build
         ordered_objs_in_dev_noarch = sorted(self.objs_in_dev_noarch, key = self.find_date, reverse=True)
-        ordered_objs_in_dev_tarball = sorted(self.objs_in_dev_tarball, key = self.find_date, reverse=True)
-        ordered_objs_in_dev_srpms = sorted(self.objs_in_dev_srpms, key = self.find_date, reverse=True)
-        ordered_objs_in_dev_jar = sorted(self.objs_in_dev_jar, key = self.find_date, reverse=True)
+        self.latest_build_time = self.find_date(ordered_objs_in_dev_noarch[0])
 
-        latest_build_time = self.find_date(ordered_objs_in_dev_noarch[0])
-        
         print("Deleting the followings items from the geowave-rpms bucket:")
-        if len(ordered_objs_in_dev_noarch) > max_number_of_objs:  
-            for obj in ordered_objs_in_dev_noarch[max_number_of_objs:]:
-                if latest_build_time != self.find_date(obj):
-                    print(obj.key)
-                    obj.delete()
-        if len(ordered_objs_in_dev_tarball) > max_number_of_objs:  
-            for obj in ordered_objs_in_dev_tarball[max_number_of_objs:]:
-                if latest_build_time != self.find_date(obj):
-                    print(obj.key)
-                    obj.delete()
-        if len(ordered_objs_in_dev_srpms) > max_number_of_objs:  
-            for obj in ordered_objs_in_dev_srpms[max_number_of_objs:]:
-                if latest_build_time != self.find_date(obj):
-                    print(obj.key)
-                    obj.delete()
-        if len(ordered_objs_in_dev_jar) > max_number_of_objs:  
-            for obj in ordered_objs_in_dev_jar[max_number_of_objs:]:
-                if latest_build_time != self.find_date(obj):
-                    print(obj.key)
-                    obj.delete()
+        for obj in self.objs_in_dev_noarch:
+            if self.latest_build_time > self.find_date(obj):
+                print("Deleting file: {}".format(obj.key))
+                obj.delete()
+        for obj in self.objs_in_dev_tarball:
+            if self.latest_build_time > self.find_date(obj):
+                print("Deleting file: {}".format(obj.key))
+                obj.delete()
+        for obj in self.objs_in_dev_srpms:
+            if self.latest_build_time > self.find_date(obj):
+                print("Deleting file: {}".format(obj.key))
+                obj.delete()
+        for obj in self.objs_in_dev_jar:
+            if self.latest_build_time > self.find_date(obj):
+                print("Deleting file: {}".format(obj.key))
+                obj.delete()
+    
+    def delete_files(self, path):
+        """
+        Helper function for clean_dirs that does the actual deleting.
+        """
+        print("Deleting the followings items from the local dir {}".format(path))
+        for f in os.listdir(path):
+            if f.startswith('geowave'):
+                if self.latest_build_time > self.find_date(f):
+                    file_path = os.path.join(path,f)
+                    print("Deleting file: {}".format(file_path))
+                    os.remove(file_path)
+
+    def clean_dirs(self):
+        """
+        This function is used to clean up the local space of previous build artifacts.
+        Requires that the clean_bucket function to have already been ran to set self.latest_build_time.
+        This dependency is to maintain a level of syncronization between local workspace and s3 bucket.
+        """
+        paths = [self.dev_path, self.dev_jar_path]
+        for path in paths:
+            subdirs_list = [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
+            for subdir in subdirs_list: 
+                self.delete_files(os.path.join(path,subdir))
+
 
 if __name__ == "__main__":
     bucket_name = 'geowave-rpms'
-    cleaner = CleanS3Bucket(bucket_name)
-    cleaner.query_s3_bucket()
+    cleaner = CleanUp(bucket_name)
     cleaner.clean_bucket()
+    cleaner.clean_dirs()
 
