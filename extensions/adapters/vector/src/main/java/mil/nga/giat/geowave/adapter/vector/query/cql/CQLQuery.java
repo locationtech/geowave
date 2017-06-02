@@ -176,7 +176,8 @@ public class CQLQuery implements
 			final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
 					.getConstraints(
 							cqlFilter,
-							adapter.getFeatureType().getCoordinateReferenceSystem());
+							adapter.getFeatureType().getCoordinateReferenceSystem(),
+							adapter.getFeatureType().getGeometryDescriptor().getLocalName());
 			final TemporalConstraintsSet timeConstraintSet = new ExtractTimeFilterVisitor(
 					adapter.getTimeDescriptors()).getConstraints(cqlFilter);
 

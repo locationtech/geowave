@@ -227,7 +227,8 @@ public class RasterIngestRunner extends
 				final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
 						.getConstraints(
 								filter,
-								GeoWaveGTRasterFormat.DEFAULT_CRS);
+								GeoWaveGTRasterFormat.DEFAULT_CRS,
+								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
 				Geometry geometry = geometryAndCompareOp.getGeometry();
 				if (geometry != null) {
 					// go ahead and intersect this with the scene geometry

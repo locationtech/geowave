@@ -351,7 +351,8 @@ public class GeoWaveFeatureCollection extends
 
 		ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeoWaveGTDataStore.DEFAULT_CRS);
+				GeoWaveGTDataStore.DEFAULT_CRS,
+				null);
 		if (geoAndCompareOp == null) {
 			return reader.clipIndexedBBOXConstraints(null);
 		}

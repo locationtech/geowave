@@ -15,6 +15,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -55,6 +58,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
@@ -173,9 +177,9 @@ public class KDEJobRunner extends
 		job.setSpeculativeExecution(false);
 		final AdapterStore adapterStore = inputDataStoreOptions.createAdapterStore();
 		final IndexStore indexStore = inputDataStoreOptions.createIndexStore();
-		final QueryOptions queryOptions = new QueryOptions(
-				adapterStore.getAdapter(new ByteArrayId(
-						kdeCommandLineOptions.getFeatureType())));
+		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+				kdeCommandLineOptions.getFeatureType()));
+		final QueryOptions queryOptions = new QueryOptions(adapter);
 
 		if (kdeCommandLineOptions.getIndexId() != null) {
 			final Index index = indexStore.getIndex(new ByteArrayId(
@@ -201,10 +205,17 @@ public class KDEJobRunner extends
 				inputDataStoreOptions);
 
 		if (kdeCommandLineOptions.getCqlFilter() != null) {
+			String geometryAttribute = null;
+			if (adapter instanceof FeatureDataAdapter){
+				geometryAttribute = ((FeatureDataAdapter)adapter).getFeatureType().getGeometryDescriptor().getLocalName();
+			}
 			final Filter filter = ECQL.toFilter(kdeCommandLineOptions.getCqlFilter());
-			final Geometry bbox = (Geometry) filter.accept(
-					ExtractGeometryFilterVisitor.GEOMETRY_VISITOR,
+			final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter.accept(
+					new ExtractGeometryFilterVisitor(
+							GeoWaveGTDataStore.DEFAULT_CRS,
+							geometryAttribute),
 					null);
+			final Geometry bbox = geoAndCompareOpData.getGeometry();
 			if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
 				GeoWaveInputFormat.setQuery(
 						job.getConfiguration(),

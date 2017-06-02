@@ -33,7 +33,9 @@ import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.Compare
 
 public class ExtractGeometryFilterVisitorTest
 {
-	final ExtractGeometryFilterVisitor visitorWithDescriptor = (ExtractGeometryFilterVisitor) ExtractGeometryFilterVisitor.GEOMETRY_VISITOR;
+	final ExtractGeometryFilterVisitor visitorWithDescriptor = new ExtractGeometryFilterVisitor(
+			GeoWaveGTDataStore.DEFAULT_CRS,
+			"geom");
 
 	@Test
 	public void testDWithin()
