@@ -73,12 +73,12 @@ class CleanS3Bucket():
             for obj in ordered_objs_in_dev_srpms[max_number_of_objs:]:
                 if latest_build_time != self.find_date(obj):
                     print(obj.key)
-                    obj.delete
+                    obj.delete()
         if len(ordered_objs_in_dev_jar) > max_number_of_objs:  
             for obj in ordered_objs_in_dev_jar[max_number_of_objs:]:
                 if latest_build_time != self.find_date(obj):
                     print(obj.key)
-                    obj.delete
+                    obj.delete()
 
 if __name__ == "__main__":
     bucket_name = 'geowave-rpms'
