@@ -18,8 +18,7 @@ node {
 
    stage 'Clean bucket and local space'
    // This is just a test will be removed
-   sh 'touch /var/www/html/repos/snapshots/test'
-   sh 'deploy/scripts/clean-up.py'
+   sh 'sudo deploy/scripts/clean-up.py'
    
   // Mark the build artifacts 'stage'....
    stage 'Build and Publish RPMs'
