@@ -573,11 +573,11 @@ public class GeoWaveRasterReader extends
 		// envelope with the bounds of the data set. If not, give warning
 		//
 		// /////////////////////////////////////////////////////////////////////
-		if (!state.getRequestEnvelopeTransformed().intersects(
+		if (!state.getRequestEnvelopeXformed().intersects(
 				originalEnvelope,
 				true)) {
 			LOGGER.warn("The requested envelope does not intersect the envelope of this mosaic");
-			LOGGER.warn(state.getRequestEnvelopeTransformed().toString());
+			LOGGER.warn(state.getRequestEnvelopeXformed().toString());
 			LOGGER.warn(originalEnvelope.toString());
 
 			return null;
@@ -607,7 +607,7 @@ public class GeoWaveRasterReader extends
 							state.getCoverageName(),
 							OverviewPolicy.getDefaultPolicy(),
 							readP,
-							state.getRequestEnvelopeTransformed(),
+							state.getRequestEnvelopeXformed(),
 							pixelDimension);
 
 				}
@@ -665,7 +665,7 @@ public class GeoWaveRasterReader extends
 
 		try (final CloseableIterator<GridCoverage> gridCoverageIt = queryForTiles(
 				pixelDimension,
-				state.getRequestEnvelopeTransformed(),
+				state.getRequestEnvelopeXformed(),
 				resolutionLevels[imageChoice.intValue()][0],
 				resolutionLevels[imageChoice.intValue()][1],
 				adapter)) {
@@ -683,11 +683,11 @@ public class GeoWaveRasterReader extends
 					backgroundColor,
 					outputTransparentColor,
 					pixelDimension,
-					state.getRequestEnvelopeTransformed(),
+					state.getRequestEnvelopeXformed(),
 					resolutionLevels[imageChoice.intValue()][0],
 					resolutionLevels[imageChoice.intValue()][1],
 					adapter.getNoDataValuesPerBand(),
-					state.isXAxisSwitch(),
+					state.isAxisSwapped(),
 					coverageFactory,
 					state.getCoverageName(),
 					interpolation,
@@ -850,7 +850,7 @@ public class GeoWaveRasterReader extends
 			final GridCoverage2D coverage,
 			final Rectangle pixelDimension,
 			final GeoWaveRasterReaderState state ) {
-		if (state.getRequestEnvelopeTransformed() == state.getRequestedEnvelope()) {
+		if (state.getRequestEnvelopeXformed() == state.getRequestedEnvelope()) {
 			return coverage; // nothing to do
 		}
 
@@ -881,7 +881,7 @@ public class GeoWaveRasterReader extends
 		if (CRS.equalsIgnoreMetadata(
 				state.getRequestedEnvelope().getCoordinateReferenceSystem(),
 				crs)) {
-			state.setRequestEnvelopeTransformed(state.getRequestedEnvelope());
+			state.setRequestEnvelopeXformed(state.getRequestedEnvelope());
 
 			return; // and finish
 		}
@@ -895,14 +895,14 @@ public class GeoWaveRasterReader extends
 					crs).getMathTransform();
 
 			if (transform.isIdentity()) { // Identity Transform ?
-				state.setRequestEnvelopeTransformed(state.getRequestedEnvelope());
+				state.setRequestEnvelopeXformed(state.getRequestedEnvelope());
 				return; // and finish
 			}
 
-			state.setRequestEnvelopeTransformed(CRS.transform(
+			state.setRequestEnvelopeXformed(CRS.transform(
 					transform,
 					state.getRequestedEnvelope()));
-			state.getRequestEnvelopeTransformed().setCoordinateReferenceSystem(
+			state.getRequestEnvelopeXformed().setCoordinateReferenceSystem(
 					crs);
 
 			// if (config.getIgnoreAxisOrder() == false) { // check for axis
@@ -915,19 +915,19 @@ public class GeoWaveRasterReader extends
 
 			// x Axis problem ???
 			if ((indexX == indexRequestedY) && (indexY == indexRequestedX)) {
-				state.setXAxisSwitch(true);
+				state.setAxisSwap(true);
 				final Rectangle2D tmp = new Rectangle2D.Double(
-						state.getRequestEnvelopeTransformed().getMinimum(
+						state.getRequestEnvelopeXformed().getMinimum(
 								1),
-						state.getRequestEnvelopeTransformed().getMinimum(
+						state.getRequestEnvelopeXformed().getMinimum(
 								0),
-						state.getRequestEnvelopeTransformed().getSpan(
+						state.getRequestEnvelopeXformed().getSpan(
 								1),
-						state.getRequestEnvelopeTransformed().getSpan(
+						state.getRequestEnvelopeXformed().getSpan(
 								0));
-				state.setRequestEnvelopeTransformed(new GeneralEnvelope(
+				state.setRequestEnvelopeXformed(new GeneralEnvelope(
 						tmp));
-				state.getRequestEnvelopeTransformed().setCoordinateReferenceSystem(
+				state.getRequestEnvelopeXformed().setCoordinateReferenceSystem(
 						crs);
 			}
 			else if ((indexX == indexRequestedX) && (indexY == indexRequestedY)) {
