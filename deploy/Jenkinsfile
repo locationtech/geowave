@@ -1,6 +1,6 @@
 #!groovy 
 
-node ('slave_node') {
+node {
    stage 'Wipe workspace'
    deleteDir()
 
