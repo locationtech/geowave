@@ -1,9 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.index;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A set of convenience methods for serializing and deserializing persistable
@@ -12,6 +25,7 @@ import java.util.List;
  */
 public class PersistenceUtils
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(PersistenceUtils.class);
 
 	public static byte[] toBinary(
 			final Collection<? extends Persistable> persistables ) {
@@ -49,13 +63,16 @@ public class PersistenceUtils
 					.getName());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(
+					"Error getting class identifier for class [" + persistable.getClass().getName() + "]: "
+							+ e.getLocalizedMessage(),
+					e);
 		}
-
 		if (classIdentifier != null) {
 			final byte[] persistableBinary = persistable.toBinary();
-			final ByteBuffer buf = ByteBuffer.allocate(4 + classIdentifier.length + persistableBinary.length);
-			buf.putInt(classIdentifier.length);
+			final int classIdentifierLength = classIdentifier.length;
+			final ByteBuffer buf = ByteBuffer.allocate(4 + classIdentifierLength + persistableBinary.length);
+			buf.putInt(classIdentifierLength);
 			buf.put(classIdentifier);
 			buf.put(persistableBinary);
 			return buf.array();
@@ -87,25 +104,21 @@ public class PersistenceUtils
 			final byte[] bytes,
 			final Class<T> expectedType ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int classNameLength = buf.getInt();
+		final int classIdentifierLength = buf.getInt();
+		final byte[] classIdentifierBinary = new byte[classIdentifierLength];
+		final byte[] persistableBinary = new byte[bytes.length - classIdentifierLength - 4];
+		buf.get(classIdentifierBinary);
 
-		final byte[] classNameBinary = new byte[classNameLength];
-		final byte[] persistableBinary = new byte[bytes.length - classNameLength - 4];
-		buf.get(classNameBinary);
-
-		final String className = ClassCompatabilityFactory.getClassNameFromClassIdentifier(classNameBinary);
-		final String compatibleClassName = ClassCompatabilityFactory.lookupCompatibleClassName(
-				className,
-				expectedType.getName());
+		final String className = ClassCompatabilityFactory.getClassNameFromClassIdentifier(classIdentifierBinary);
 
 		final T retVal = classFactory(
-				compatibleClassName,
+				className,
 				expectedType);
 		if (retVal != null) {
 			buf.get(persistableBinary);
 			retVal.fromBinary(persistableBinary);
 		}
-		return (T) retVal;
+		return retVal;
 	}
 
 	public static <T> T classFactory(

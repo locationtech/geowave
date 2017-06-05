@@ -17,27 +17,45 @@ public class PersistableFactory
 	public static <T> T getPersistable(
 			final String className,
 			Class<T> expectedType ) {
+
 		Object factoryClassInst = getFactoryMap().getOrDefault(
 				className,
 				null);
 		if (factoryClassInst == null) {
+			Class<?> factoryType = null;
+
 			try {
-				Class<?> factoryType = Class.forName(className);
-				if (factoryType != null) {
-					Constructor<?> noArgConstructor = factoryType.getDeclaredConstructor();
-					noArgConstructor.setAccessible(true);
-					factoryClassInst = noArgConstructor.newInstance();
-				}
+				factoryType = Class.forName(className);
 			}
-			catch (final Exception e) {
+			catch (final ClassNotFoundException e) {
 				LOGGER.warn(
 						"error creating class: could not find class ",
 						e);
 			}
-			getFactoryMap().put(
-					className,
-					factoryClassInst);
+
+			if (factoryType != null) {
+				try {
+					// use the no arg constructor and make sure its accessible
+
+					// HP Fortify "Access Specifier Manipulation"
+					// This method is being modified by trusted code,
+					// in a way that is not influenced by user input
+					final Constructor<?> noArgConstructor = factoryType.getDeclaredConstructor();
+					noArgConstructor.setAccessible(true);
+					factoryClassInst = noArgConstructor.newInstance();
+
+					getFactoryMap().put(
+							className,
+							factoryClassInst);
+				}
+				catch (final Exception e) {
+					LOGGER.warn(
+							"error creating class: could not create class ",
+							e);
+				}
+			}
 		}
+
 		if (factoryClassInst != null) {
 			if (!expectedType.isAssignableFrom(factoryClassInst.getClass())) {
 				LOGGER.warn("error creating class, does not implement expected type");
@@ -53,6 +71,7 @@ public class PersistableFactory
 			}
 		}
 		return null;
+
 	}
 
 	/**

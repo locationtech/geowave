@@ -51,4 +51,8 @@ public class NullIndex extends
 				StringUtils.stringFromBinary(bytes));
 	}
 
+	@Override
+	public NullIndex getPersistable() {
+		return new NullIndex();
+	}
 }

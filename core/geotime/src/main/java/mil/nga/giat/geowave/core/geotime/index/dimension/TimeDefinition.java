@@ -53,4 +53,9 @@ public class TimeDefinition extends
 				0,
 				System.currentTimeMillis() + 1);
 	}
+
+	@Override
+	public TimeDefinition getPersistable() {
+		return new TimeDefinition();
+	}
 }

@@ -110,4 +110,9 @@ public class UnboundedDimensionDefinition extends
 		min = binningStrategy.getBinMin();
 		max = binningStrategy.getBinMax();
 	}
+
+	@Override
+	public UnboundedDimensionDefinition getPersistable() {
+		return new UnboundedDimensionDefinition();
+	}
 }

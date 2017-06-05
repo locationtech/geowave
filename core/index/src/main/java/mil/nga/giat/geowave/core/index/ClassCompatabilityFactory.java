@@ -34,7 +34,7 @@ public class ClassCompatabilityFactory
 		}
 		catch (Exception ex) {
 			LOGGER.error(
-					ex.getLocalizedMessage(),
+					"ClassNotFoundException Error: " + ex.getLocalizedMessage(),
 					ex);
 		}
 		if (originalClass != null && expectedClass != null && expectedClass.isAssignableFrom(originalClass)) {
@@ -70,7 +70,9 @@ public class ClassCompatabilityFactory
 	public static byte[] getClassIdentifierFromClassName(
 			final String className )
 			throws Exception {
+
 		short classNameIdentifier = 0;
+
 		if (getClassIdentifiersMap().containsKey(
 				className)) {
 			classNameIdentifier = getClassIdentifiersMap().get(
@@ -103,21 +105,19 @@ public class ClassCompatabilityFactory
 	 */
 	public static String getClassNameFromClassIdentifier(
 			final byte[] classNameBinary ) {
-		String className = null;
-		if (classNameBinary != null && classNameBinary.length != 0) {
-			String classIdentifierRaw = StringUtils.stringFromBinary(classNameBinary);
-			try {
-				// verify value is a short
-				Short classNameIdentifier = Short.valueOf(classIdentifierRaw);
-				className = getClassNamesMap().getOrDefault(
-						classNameIdentifier,
-						null);
-			}
-			catch (NumberFormatException nfEx) {
-				className = classIdentifierRaw;
-			}
+		String classIdentifierRaw = StringUtils.stringFromBinary(classNameBinary);
+
+		try {
+			// verify value is a short
+			Short classNameIdentifier = Short.valueOf(classIdentifierRaw);
+			return getClassNamesMap().getOrDefault(
+					classNameIdentifier,
+					null);
 		}
-		return className;
+		catch (NumberFormatException nfEx) {
+			// exception will be thrown if not a number
+			return classIdentifierRaw;
+		}
 	}
 
 	/**
