@@ -7,7 +7,8 @@ node ('slave_node') {
    // Mark the code checkout 'stage'
    stage 'Checkout'
    // Get GeoWave source from GitHub repository
-   checkout scm
+   checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: true], [$class: 'LocalBranch', localBranch: 'master']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ngageoint/geowave.git']]])
+
 
    // Mark the create docker image 'stage'
    stage 'Create Docker Image'
@@ -17,7 +18,7 @@ node ('slave_node') {
    sh 'docker build -t ngageoint/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
 
    //stage 'Clean bucket and local space'
-   //sh 'sudo deploy/scripts/clean-bucket.py'
+   sh 'sudo deploy/scripts/clean-up.py'
    
   // Mark the build artifacts 'stage'....
    stage 'Build and Publish RPMs'
