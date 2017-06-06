@@ -5,6 +5,8 @@ node {
    deleteDir()
    
    sh 'echo $USER'
+   sh 'groups'
+   
    // Mark the code checkout 'stage'
    stage 'Checkout'
    // Get GeoWave source from GitHub repository
