@@ -4,7 +4,7 @@ node {
    stage 'Wipe workspace'
    deleteDir()
    
-   echo $USER
+   sh 'echo $USER'
    // Mark the code checkout 'stage'
    stage 'Checkout'
    // Get GeoWave source from GitHub repository
