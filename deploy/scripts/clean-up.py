@@ -92,12 +92,11 @@ class CleanUp():
         """
         Helper function for clean_dirs that does the actual deleting.
         """
-        print("Deleting the followings items from the local dir {}".format(path))
         for f in os.listdir(path):
             if f.startswith('geowave'):
                 if self.latest_build_time > self.find_date(f):
                     file_path = os.path.join(path,f)
-                    print("Deleting file: {}".format(file_path))
+                    print("Deleting from s3://geowave-rpms: {}".format(file_path))
                     os.remove(file_path)
 
     def clean_dirs(self):
