@@ -70,22 +70,21 @@ class CleanUp():
         ordered_objs_in_dev_noarch = sorted(self.objs_in_dev_noarch, key = self.find_date, reverse=True)
         self.latest_build_time = self.find_date(ordered_objs_in_dev_noarch[0])
 
-        print("Deleting the followings items from the geowave-rpms bucket:")
         for obj in self.objs_in_dev_noarch:
             if self.latest_build_time > self.find_date(obj):
-                print("Deleting file: {}".format(obj.key))
+                print("Deleting from s3://geowave-rpms: {}".format(obj.key))
                 obj.delete()
         for obj in self.objs_in_dev_tarball:
             if self.latest_build_time > self.find_date(obj):
-                print("Deleting file: {}".format(obj.key))
+                print("Deleting from s3://geowave-rpms: {}".format(obj.key))
                 obj.delete()
         for obj in self.objs_in_dev_srpms:
             if self.latest_build_time > self.find_date(obj):
-                print("Deleting file: {}".format(obj.key))
+                print("Deleting from s3://geowave-rpms: {}".format(obj.key))
                 obj.delete()
         for obj in self.objs_in_dev_jar:
             if self.latest_build_time > self.find_date(obj):
-                print("Deleting file: {}".format(obj.key))
+                print("Deleting from s3://geowave-rpms: {}".format(obj.key))
                 obj.delete()
     
     def delete_files(self, path):
@@ -96,7 +95,7 @@ class CleanUp():
             if f.startswith('geowave'):
                 if self.latest_build_time > self.find_date(f):
                     file_path = os.path.join(path,f)
-                    print("Deleting from s3://geowave-rpms: {}".format(file_path))
+                    print("Deleting file: {}".format(file_path))
                     os.remove(file_path)
 
     def clean_dirs(self):
