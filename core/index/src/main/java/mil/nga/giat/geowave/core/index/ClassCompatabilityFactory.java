@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.index;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,6 +13,8 @@ public class ClassCompatabilityFactory
 
 	private static final String legacyPackage = "mil.nga.giat.geowave";
 	private static final String futurePackage = "org.locationtech.geowave";
+
+	private static Map<String, byte[]> unregisteredClassNames;
 
 	/**
 	 * Given a class name and the desired/expected type, return a compatible
@@ -70,9 +74,11 @@ public class ClassCompatabilityFactory
 	public static byte[] getClassIdentifierFromClassName(
 			final String className )
 			throws Exception {
+		if (className == null || "".equals(className.trim())) {
+			return new byte[0];
+		}
 
 		short classNameIdentifier = 0;
-
 		if (getClassIdentifiersMap().containsKey(
 				className)) {
 			classNameIdentifier = getClassIdentifiersMap().get(
@@ -84,14 +90,37 @@ public class ClassCompatabilityFactory
 			return StringUtils.stringToBinary(classNameIdentifierRaw);
 		}
 		else {
-			LOGGER
-					.warn(
-							"Class [{}] was not registered within {} registry. For more efficient performance, please register.",
-							new Object[] {
-								className,
-								ClassNameIdentifierRegistry.class.getName()
-							});
-			return StringUtils.stringToBinary(className);
+			// check if unregistered class name was cached
+			byte[] unregisteredClassNameBinary = getUnregisteredClassNames().getOrDefault(
+					className,
+					null);
+			if (unregisteredClassNameBinary == null) {
+				// if a class was not registered, rather than continually
+				// re-generating the binary, we'll store within a map for faster
+				LOGGER
+						.warn(
+								"Class [{}] was not registered within {} registry. For more efficient performance, please register.",
+								new Object[] {
+									className,
+									ClassNameIdentifierRegistry.class.getName()
+								});
+				unregisteredClassNameBinary = StringUtils.stringToBinary(className);
+				registerClassIdentifier(
+						className,
+						unregisteredClassNameBinary);
+			}
+			return unregisteredClassNameBinary;
+		}
+	}
+
+	private static void registerClassIdentifier(
+			String className,
+			byte[] unregisteredClassNameBinary ) {
+		if (className != null && !"".equals(className.trim()) && !getUnregisteredClassNames().containsKey(
+				className)) {
+			getUnregisteredClassNames().put(
+					className,
+					unregisteredClassNameBinary);
 		}
 	}
 
@@ -105,8 +134,11 @@ public class ClassCompatabilityFactory
 	 */
 	public static String getClassNameFromClassIdentifier(
 			final byte[] classNameBinary ) {
-		String classIdentifierRaw = StringUtils.stringFromBinary(classNameBinary);
+		if (classNameBinary == null || classNameBinary.length == 0) {
+			return null;
+		}
 
+		String classIdentifierRaw = StringUtils.stringFromBinary(classNameBinary);
 		try {
 			// verify value is a short
 			Short classNameIdentifier = Short.valueOf(classIdentifierRaw);
@@ -124,10 +156,17 @@ public class ClassCompatabilityFactory
 	 * @return the classNameHashes
 	 */
 	private static Map<Short, String> getClassNamesMap() {
-		return ClassNameIdentifierRegistry.classNames;
+		return ClassNameIdentifierRegistry.getClassNames();
 	}
 
 	private static Map<String, Short> getClassIdentifiersMap() {
-		return ClassNameIdentifierRegistry.classNameIdentifiers;
+		return ClassNameIdentifierRegistry.getClassNameIdentifiers();
+	}
+
+	public static Map<String, byte[]> getUnregisteredClassNames() {
+		if (unregisteredClassNames == null) {
+			unregisteredClassNames = Collections.synchronizedMap(new HashMap<String, byte[]>());
+		}
+		return unregisteredClassNames;
 	}
 }
