@@ -107,9 +107,13 @@ class CleanUp():
         """
         paths = [self.dev_path, self.dev_jar_path]
         for path in paths:
-            subdirs_list = [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
-            for subdir in subdirs_list: 
-                self.delete_files(os.path.join(path,subdir))
+            try:
+                subdirs_list = [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
+                for subdir in subdirs_list: 
+                    self.delete_files(os.path.join(path,subdir))
+            except OSError:
+                #If the file does not exist, its fine move on
+                continue
 
 
 if __name__ == "__main__":
