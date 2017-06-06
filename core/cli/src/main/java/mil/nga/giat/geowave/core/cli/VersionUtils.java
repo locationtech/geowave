@@ -52,8 +52,9 @@ public class VersionUtils
 	}
 
 	public static String getVersion() {
-		return getBuildProperties().getProperty(
-				VERSION_PROPERTY_KEY);
+		return // getBuildProperties().getProperty(
+				// VERSION_PROPERTY_KEY);
+		"0.9.5-SNAPSHOT";
 	}
 
 	public static void printVersionInfo() {

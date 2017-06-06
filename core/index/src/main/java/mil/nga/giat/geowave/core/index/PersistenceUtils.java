@@ -96,8 +96,19 @@ public class PersistenceUtils
 		final byte[] persistableBinary = new byte[bytes.length - classNameLength - 4];
 		buf.get(classNameBinary);
 
-		final String className = StringUtils.stringFromBinary(classNameBinary);
-
+		String className = StringUtils.stringFromBinary(classNameBinary);
+		if (className.endsWith("PickupLongitudeDefinition")) {
+			className = "mil.nga.giat.geowave.format.nyctlc.ingest.NYCTLCDimensionalityTypeProvider$PickupLongitudeDefinition";
+		}
+		else if (className.endsWith("PickupLatitudeDefinition")) {
+			className = "mil.nga.giat.geowave.format.nyctlc.ingest.NYCTLCDimensionalityTypeProvider$PickupLatitudeDefinition";
+		}
+		else if (className.endsWith("DropoffLongitudeDefinition")) {
+			className = "mil.nga.giat.geowave.format.nyctlc.ingest.NYCTLCDimensionalityTypeProvider$DropoffLongitudeDefinition";
+		}
+		else if (className.endsWith("DropoffLatitudeDefinition")) {
+			className = "mil.nga.giat.geowave.format.nyctlc.ingest.NYCTLCDimensionalityTypeProvider$DropoffLatitudeDefinition";
+		}
 		final T retVal = classFactory(
 				className,
 				expectedType);

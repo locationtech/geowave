@@ -607,6 +607,8 @@ public class TieredSFCIndexStrategy implements
 			super();
 			tierCounts = new int[orderedTierIdToSfcIndex.size()];
 			this.orderedTierIdToSfcIndex = orderedTierIdToSfcIndex;
+			tierCounts[orderedTierIdToSfcIndex.get(
+					15).intValue()]++;
 		}
 
 		@Override

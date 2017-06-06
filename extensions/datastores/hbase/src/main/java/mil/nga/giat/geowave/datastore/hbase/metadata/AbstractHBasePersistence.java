@@ -82,20 +82,20 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 			final Iterator<T> iter = getNativeIteratorWrapper(it);
 
 			if (!iter.hasNext()) {
-				LOGGER.warn("Object '" + getCombinedId(
-						primaryId,
-						secondaryId).getString() + "' not found");
+//				LOGGER.warn("Object '" + getCombinedId(
+//						primaryId,
+//						secondaryId).getString() + "' not found");
 				return null;
 			}
 
 			return iter.next();
 		}
 		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to find object '" + getCombinedId(
-							primaryId,
-							secondaryId).getString() + "'",
-					e);
+//			LOGGER.error(
+//					"Unable to find object '" + getCombinedId(
+//							primaryId,
+//							secondaryId).getString() + "'",
+//					e);
 		}
 		return null;
 	}
