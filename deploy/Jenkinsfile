@@ -17,8 +17,7 @@ node {
    sh 'docker build -t ngageoint/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
 
    stage 'Clean bucket and local space'
-   // This is just a test will be removed
-   sh 'sudo deploy/scripts/clean-up.py'
+   sh 'deploy/scripts/clean-up.py'
    
   // Mark the build artifacts 'stage'....
    stage 'Build and Publish RPMs'
