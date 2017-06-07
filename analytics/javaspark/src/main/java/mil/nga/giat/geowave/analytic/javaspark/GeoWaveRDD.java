@@ -1,7 +1,6 @@
 package mil.nga.giat.geowave.analytic.javaspark;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.spark.SparkConf;
@@ -21,6 +20,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
@@ -30,20 +30,72 @@ import scala.reflect.ClassTag;
 
 public class GeoWaveRDD
 {
-	private static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveRDD.class);
-	
+	private static Logger LOGGER = LoggerFactory.getLogger(GeoWaveRDD.class);
+
 	public static JavaPairRDD<GeoWaveInputKey, SimpleFeature> rddForSimpleFeatures(
 			SparkContext sc,
-			Map<String, String> storeOptions,
+			DataStorePluginOptions storeOptions )
+			throws IOException {
+		return rddForSimpleFeatures(
+				sc,
+				storeOptions,
+				new BasicQuery(
+						new BasicQuery.Constraints()),
+				new QueryOptions(),
+				-1,
+				-1);
+	}
+
+	public static JavaPairRDD<GeoWaveInputKey, SimpleFeature> rddForSimpleFeatures(
+			SparkContext sc,
+			DataStorePluginOptions storeOptions,
+			DistributableQuery query )
+			throws IOException {
+		return rddForSimpleFeatures(
+				sc,
+				storeOptions,
+				query,
+				new QueryOptions(),
+				-1,
+				-1);
+	}
+
+	public static JavaPairRDD<GeoWaveInputKey, SimpleFeature> rddForSimpleFeatures(
+			SparkContext sc,
+			DataStorePluginOptions storeOptions,
 			DistributableQuery query,
 			QueryOptions queryOptions )
 			throws IOException {
+		return rddForSimpleFeatures(
+				sc,
+				storeOptions,
+				query,
+				queryOptions,
+				-1,
+				-1);
+	}
+
+	public static JavaPairRDD<GeoWaveInputKey, SimpleFeature> rddForSimpleFeatures(
+			SparkContext sc,
+			DataStorePluginOptions storeOptions,
+			DistributableQuery query,
+			QueryOptions queryOptions,
+			int minSplits,
+			int maxSplits )
+			throws IOException {
+		if (query == null) {
+			query = new BasicQuery(
+					new BasicQuery.Constraints());
+		}
+
+		if (queryOptions == null) {
+			queryOptions = new QueryOptions();
+		}
 
 		Configuration conf = new Configuration(
 				sc.hadoopConfiguration());
 
-		GeoWaveInputFormat.setStoreOptionsMap(
+		GeoWaveInputFormat.setStoreOptions(
 				conf,
 				storeOptions);
 
@@ -55,6 +107,15 @@ public class GeoWaveRDD
 				conf,
 				queryOptions);
 
+		if (minSplits > -1) {
+			GeoWaveInputFormat.setMinimumSplitCount(
+					conf,
+					minSplits);
+			GeoWaveInputFormat.setMaximumSplitCount(
+					conf,
+					maxSplits);
+		}
+
 		RDD<Tuple2<GeoWaveInputKey, SimpleFeature>> rdd = sc.newAPIHadoopRDD(
 				conf,
 				GeoWaveInputFormat.class,
@@ -63,10 +124,8 @@ public class GeoWaveRDD
 
 		JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = JavaPairRDD.fromRDD(
 				rdd,
-				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(
-						GeoWaveInputKey.class),
-				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(
-						SimpleFeature.class));
+				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(GeoWaveInputKey.class),
+				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(SimpleFeature.class));
 
 		return javaRdd;
 	}
@@ -80,20 +139,67 @@ public class GeoWaveRDD
 
 		String storeName = args[0];
 
-		double west = -180.0;
-		double south = -90.0;
-		double east = 180.0;
-		double north = 90.0;
-				
+		int minSplits = -1;
+		int maxSplits = -1;
+		DistributableQuery query = null;
+
 		if (args.length > 1) {
-			if  (args.length < 5) {
-				System.err.println("USAGE: storename west, south, east, north");
+			if (args[1].equals("--splits")) {
+				if (args.length < 4) {
+					System.err.println("USAGE: storename --splits min max");
+					System.exit(-1);
+				}
+
+				minSplits = Integer.parseInt(args[2]);
+				maxSplits = Integer.parseInt(args[3]);
+
+				if (args.length > 4) {
+					if (args[4].equals("--bbox")) {
+						if (args.length < 9) {
+							System.err.println("USAGE: storename --splits min max --bbox west south east north");
+							System.exit(-1);
+						}
+
+						double west = Double.parseDouble(args[5]);
+						double south = Double.parseDouble(args[6]);
+						double east = Double.parseDouble(args[7]);
+						double north = Double.parseDouble(args[8]);
+
+						Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
+								west,
+								south,
+								east,
+								north));
+
+						query = new SpatialQuery(
+								bbox);
+					}
+				}
 			}
-			
-			west = Double.parseDouble(args[1]);
-			south = Double.parseDouble(args[2]);
-			east = Double.parseDouble(args[3]);
-			north = Double.parseDouble(args[4]);
+			else if (args[1].equals("--bbox")) {
+				if (args.length < 6) {
+					System.err.println("USAGE: storename --bbox west south east north");
+					System.exit(-1);
+				}
+
+				double west = Double.parseDouble(args[2]);
+				double south = Double.parseDouble(args[3]);
+				double east = Double.parseDouble(args[4]);
+				double north = Double.parseDouble(args[5]);
+
+				Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
+						west,
+						south,
+						east,
+						north));
+
+				query = new SpatialQuery(
+						bbox);
+			}
+			else {
+				System.err.println("USAGE: storename --splits min max --bbox west south east north");
+				System.exit(-1);
+			}
 		}
 
 		try {
@@ -102,46 +208,33 @@ public class GeoWaveRDD
 			if (inputStoreOptions == null) {
 				final StoreLoader inputStoreLoader = new StoreLoader(
 						storeName);
-				if (!inputStoreLoader.loadFromConfig(
-						ConfigOptions.getDefaultPropertyFile())) {
+				if (!inputStoreLoader.loadFromConfig(ConfigOptions.getDefaultPropertyFile())) {
 					throw new IOException(
 							"Cannot find store name: " + inputStoreLoader.getStoreName());
 				}
 				inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 			}
-			
+
 			SparkConf sparkConf = new SparkConf();
 
-			sparkConf.setAppName(
-					"GeoWaveRDD");
-			sparkConf.setMaster(
-					"local");
+			sparkConf.setAppName("GeoWaveRDD");
+			sparkConf.setMaster("local");
 			JavaSparkContext context = new JavaSparkContext(
 					sparkConf);
 
-			Geometry bbox = new GeometryFactory().toGeometry(
-					new Envelope(
-							west,
-							south,
-							east,
-							north));
-
-			SpatialQuery query = new SpatialQuery(
-					bbox);
-
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
 					context.sc(),
-					inputStoreOptions.getOptionsAsMap(),
+					inputStoreOptions,
 					query,
-					new QueryOptions());
+					null,
+					minSplits,
+					maxSplits);
 
-			System.out.println(
-					"DataStore " + storeName + " loaded into RDD with " + javaRdd.count() + " features.");
+			System.out.println("DataStore " + storeName + " loaded into RDD with " + javaRdd.count() + " features.");
 
 		}
 		catch (IOException e) {
-			System.err.println(
-					e.getMessage());
+			System.err.println(e.getMessage());
 		}
 	}
 }

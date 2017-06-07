@@ -116,9 +116,8 @@ public class GeoWaveJavaSparkIT extends
 
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
 					context.sc(),
-					dataStore.getOptionsAsMap(),
-					query,
-					new QueryOptions());
+					dataStore,
+					query);
 
 			dur = (System.currentTimeMillis() - mark);
 						
@@ -148,9 +147,8 @@ public class GeoWaveJavaSparkIT extends
 
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
 					context.sc(),
-					dataStore.getOptionsAsMap(),
-					query,
-					new QueryOptions());
+					dataStore,
+					query);
 
 			dur = (System.currentTimeMillis() - mark);
 			
