@@ -132,17 +132,19 @@ public class CQLQueryExample
 
 		System.out.println("Executing query, expecting to match two points...");
 
-		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				new QueryOptions(
-						ADAPTER,
-						index),
-				CQLQuery.createOptimalQuery(
-						//"BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and locationName like 'W%'",
-						//"BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and BBOX(location,-88.6167,30.6833,-76.6,38.9200)",
-						"INTERSECTS(geometry,POLYGON((-10 -10, 10 -10, 10 10, -10 10, -10 -10))) and BBOX(location,-88.6167,30.6833,-76.6,38.9200)",
-						//"locationName like 'W%'",
-						ADAPTER,
-						index))) {
+		try (final CloseableIterator<SimpleFeature> iterator = dataStore
+				.query(
+						new QueryOptions(
+								ADAPTER,
+								index),
+						CQLQuery
+								.createOptimalQuery(
+										// "BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and locationName like 'W%'",
+										// "BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and BBOX(location,-88.6167,30.6833,-76.6,38.9200)",
+										"INTERSECTS(geometry,POLYGON((-10 -10, 10 -10, 10 10, -10 10, -10 -10))) and BBOX(location,-88.6167,30.6833,-76.6,38.9200)",
+										// "locationName like 'W%'",
+										ADAPTER,
+										index))) {
 
 			while (iterator.hasNext()) {
 				System.out.println("Query match: " + iterator.next().getID());

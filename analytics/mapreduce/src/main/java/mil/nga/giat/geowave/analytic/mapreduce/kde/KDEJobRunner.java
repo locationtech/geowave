@@ -82,6 +82,7 @@ public class KDEJobRunner extends
 	private static final String TMP_COVERAGE_SUFFIX = "_tMp_CoVeRaGe";
 	protected static int TILE_SIZE = 1;
 	public static final String MAX_LEVEL_KEY = "MAX_LEVEL";
+	public static final String GEOM_KEY = "GEOMETRY_NAME";
 	public static final String MIN_LEVEL_KEY = "MIN_LEVEL";
 	public static final String COVERAGE_NAME_KEY = "COVERAGE_NAME";
 	protected KDECommandLineOptions kdeCommandLineOptions;
@@ -152,6 +153,11 @@ public class KDEJobRunner extends
 					GaussianCellMapper.CQL_FILTER_KEY,
 					kdeCommandLineOptions.getCqlFilter());
 		}
+		if (kdeCommandLineOptions.getGeomName() != null) {
+			conf.set(
+					KDEJobRunner.GEOM_KEY,
+					kdeCommandLineOptions.getGeomName());
+		}
 		preJob1Setup(conf);
 		final Job job = new Job(
 				conf);
@@ -179,7 +185,8 @@ public class KDEJobRunner extends
 		final IndexStore indexStore = inputDataStoreOptions.createIndexStore();
 		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
 				kdeCommandLineOptions.getFeatureType()));
-		final QueryOptions queryOptions = new QueryOptions(adapter);
+		final QueryOptions queryOptions = new QueryOptions(
+				adapter);
 
 		if (kdeCommandLineOptions.getIndexId() != null) {
 			final Index index = indexStore.getIndex(new ByteArrayId(
@@ -206,15 +213,19 @@ public class KDEJobRunner extends
 
 		if (kdeCommandLineOptions.getCqlFilter() != null) {
 			String geometryAttribute = null;
-			if (adapter instanceof FeatureDataAdapter){
-				geometryAttribute = ((FeatureDataAdapter)adapter).getFeatureType().getGeometryDescriptor().getLocalName();
+			if (adapter instanceof FeatureDataAdapter) {
+				geometryAttribute = ((FeatureDataAdapter) adapter)
+						.getFeatureType()
+						.getGeometryDescriptor()
+						.getLocalName();
 			}
 			final Filter filter = ECQL.toFilter(kdeCommandLineOptions.getCqlFilter());
-			final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter.accept(
-					new ExtractGeometryFilterVisitor(
-							GeoWaveGTDataStore.DEFAULT_CRS,
-							geometryAttribute),
-					null);
+			final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
+					.accept(
+							new ExtractGeometryFilterVisitor(
+									GeoWaveGTDataStore.DEFAULT_CRS,
+									geometryAttribute),
+							null);
 			final Geometry bbox = geoAndCompareOpData.getGeometry();
 			if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
 				GeoWaveInputFormat.setQuery(

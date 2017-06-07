@@ -958,6 +958,13 @@ public class FeatureDataAdapter extends
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "FeatureDataAdapter [persistedFeatureType=" + persistedFeatureType + ", indexedGeometry="
+				+ persistedFeatureType.getGeometryDescriptor().getLocalName() + ", timeDescriptors=" + timeDescriptors
+				+ "]";
+	}
+
 	private List<ByteArrayId> getDimensionFieldIds(
 			final CommonIndexModel model ) {
 		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());

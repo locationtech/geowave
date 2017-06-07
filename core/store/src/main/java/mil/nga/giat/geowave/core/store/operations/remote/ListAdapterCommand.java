@@ -69,6 +69,8 @@ public class ListAdapterCommand extends
 			DataAdapter<?> adapter = it.next();
 			buffer.append(
 					adapter.getAdapterId().getString()).append(
+					": ").append(
+					adapter.toString()).append(
 					' ');
 		}
 		it.close();

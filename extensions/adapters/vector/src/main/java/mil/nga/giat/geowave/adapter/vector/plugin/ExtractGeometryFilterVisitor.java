@@ -100,7 +100,7 @@ public class ExtractGeometryFilterVisitor extends
 	 */
 	public ExtractGeometryFilterVisitor(
 			final CoordinateReferenceSystem crs,
-			final String attributeOfInterest) {
+			final String attributeOfInterest ) {
 		this.crs = crs;
 		this.attributeOfInterest = attributeOfInterest;
 	}
@@ -114,7 +114,7 @@ public class ExtractGeometryFilterVisitor extends
 	public static ExtractGeometryFilterVisitorResult getConstraints(
 			final Filter filter,
 			CoordinateReferenceSystem crs,
-			String attributeOfInterest) {
+			String attributeOfInterest ) {
 		final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 				.accept(
 						new ExtractGeometryFilterVisitor(
@@ -209,7 +209,7 @@ public class ExtractGeometryFilterVisitor extends
 				filter.getMaxX(),
 				filter.getMinY(),
 				filter.getMaxY());
-		if (this.attributeOfInterest.equals(filter.getExpression1().toString())){
+		if (this.attributeOfInterest.equals(filter.getExpression1().toString())) {
 			if (bbox != null) {
 				return bbox.union(new GeometryFactory().toGeometry(bounds));
 			}
@@ -218,7 +218,8 @@ public class ExtractGeometryFilterVisitor extends
 						bbox(bounds),
 						CompareOperation.INTERSECTS);
 			}
-		}else{
+		}
+		else {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);

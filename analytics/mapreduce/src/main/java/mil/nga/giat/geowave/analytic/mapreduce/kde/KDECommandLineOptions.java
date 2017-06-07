@@ -49,10 +49,17 @@ public class KDECommandLineOptions
 	@Parameter(names = "--cqlFilter", description = "An optional CQL filter applied to the input data")
 	private String cqlFilter;
 
+	@Parameter(names = "--geom", description = "An optional parameter for the geometry attribute name (can be helpful if more than one geometry)")
+	private String geomName;
+
 	public KDECommandLineOptions() {}
 
 	public String getIndexId() {
 		return indexId;
+	}
+
+	public String getGeomName() {
+		return geomName;
 	}
 
 	public String getFeatureType() {

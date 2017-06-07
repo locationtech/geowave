@@ -107,6 +107,11 @@ public class TimeDescriptors
 	}
 
 	@Override
+	public String toString() {
+		return "TimeDescriptors [startRange=" + startRange + ", endRange=" + endRange + ", time=" + time + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
