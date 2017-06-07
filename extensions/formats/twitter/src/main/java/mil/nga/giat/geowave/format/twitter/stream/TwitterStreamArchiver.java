@@ -37,6 +37,7 @@ public class TwitterStreamArchiver
 	private String accessToken;
 	private String accessSecret;
 	private String archivePath;
+	private boolean writeZipped = false;
 	private boolean init = false;
 
 	public TwitterStreamArchiver() {
@@ -96,6 +97,11 @@ public class TwitterStreamArchiver
 			numProcessingThreads = Integer.parseInt(processingThreadsStr);
 		}
 
+		String writeZippedStr = twitterProps.getProperty("twitter.archive.writeZipped");
+		if (writeZippedStr != null) {
+			writeZipped = Boolean.parseBoolean(writeZippedStr);
+		}
+
 		init = true;
 	}
 
@@ -112,7 +118,8 @@ public class TwitterStreamArchiver
 
 		TwitterArchiveWriter archiveWriter = new TwitterArchiveFileWriter(
 				archivePath,
-				fileSplits);
+				fileSplits,
+				writeZipped);
 
 		StatusListener statusListener = new TwitterLocationListener(
 				archiveWriter);
