@@ -1,6 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
@@ -20,7 +31,7 @@ public class CQLFilterOptionProvider implements
 		Filter,
 		Persistable
 {
-	private final static Logger LOGGER = Logger.getLogger(CQLFilterOptionProvider.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CQLFilterOptionProvider.class);
 
 	@Parameter(names = "--cql", description = "A CQL filter, only data matching this filter will be ingested", converter = ConvertCQLStrToFilterConverter.class)
 	private FilterParameter convertedFilter = new FilterParameter(

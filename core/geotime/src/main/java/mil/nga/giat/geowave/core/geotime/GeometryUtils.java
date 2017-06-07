@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime;
 
 import java.util.HashMap;
@@ -5,7 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
@@ -32,7 +43,7 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 public class GeometryUtils
 {
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
-	private final static Logger LOGGER = Logger.getLogger(GeometryUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
 
 	public static Constraints basicConstraintsFromGeometry(

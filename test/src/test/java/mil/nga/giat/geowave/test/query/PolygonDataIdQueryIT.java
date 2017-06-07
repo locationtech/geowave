@@ -1,8 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.query;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -36,7 +47,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 @RunWith(GeoWaveITRunner.class)
 public class PolygonDataIdQueryIT
 {
-	private static final Logger LOGGER = Logger.getLogger(PolygonDataIdQueryIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PolygonDataIdQueryIT.class);
 	private static SimpleFeatureType simpleFeatureType;
 	private static FeatureDataAdapter dataAdapter;
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";

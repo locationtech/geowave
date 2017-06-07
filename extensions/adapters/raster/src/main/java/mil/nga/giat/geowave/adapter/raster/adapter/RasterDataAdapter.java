@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.adapter;
 
 import java.awt.Color;
@@ -40,7 +50,8 @@ import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
 
 import org.apache.commons.math.util.MathUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -145,7 +156,7 @@ public class RasterDataAdapter implements
 
 	public final static String TILE_METADATA_PROPERTY_KEY = "TILE_METADATA";
 
-	private final static Logger LOGGER = Logger.getLogger(RasterDataAdapter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(RasterDataAdapter.class);
 	private final static ByteArrayId DATA_FIELD_ID = new ByteArrayId(
 			"image");
 	public final static int DEFAULT_TILE_SIZE = 256;

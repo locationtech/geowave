@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.index;
 
 import java.io.IOException;
@@ -18,14 +28,15 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class ChooseBestMatchIndexQueryStrategy implements
 		IndexQueryStrategySPI
 {
 	public static final String NAME = "Best Match";
-	private final static Logger LOGGER = Logger.getLogger(ChooseBestMatchIndexQueryStrategy.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ChooseBestMatchIndexQueryStrategy.class);
 
 	@Override
 	public String toString() {

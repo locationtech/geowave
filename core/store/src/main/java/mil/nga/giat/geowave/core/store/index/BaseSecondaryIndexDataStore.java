@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index;
 
 import java.io.Closeable;
@@ -12,14 +22,15 @@ import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseSecondaryIndexDataStore<MutationType> implements
 		SecondaryIndexDataStore,
 		Closeable
 {
 
-	private final static Logger LOGGER = Logger.getLogger(BaseSecondaryIndexDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BaseSecondaryIndexDataStore.class);
 	protected final Map<String, Writer<MutationType>> writerCache = new HashMap<>();
 	protected final static byte[] EMPTY_VALUE = new byte[0];
 

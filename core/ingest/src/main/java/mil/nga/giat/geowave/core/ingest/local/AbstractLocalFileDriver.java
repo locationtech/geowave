@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
@@ -7,7 +17,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
@@ -27,7 +38,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
  */
 abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractLocalFileDriver.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractLocalFileDriver.class);
 	protected LocalInputCommandLineOptions localInput;
 
 	public AbstractLocalFileDriver(
@@ -61,13 +72,13 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 			final R runData )
 			throws IOException {
 		if (inputPath == null) {
-			LOGGER.fatal("Unable to ingest data, base directory or file input not specified");
+			LOGGER.error("Unable to ingest data, base directory or file input not specified");
 			return;
 		}
 		final File f = new File(
 				inputPath);
 		if (!f.exists()) {
-			LOGGER.fatal("Input file '" + f.getAbsolutePath() + "' does not exist");
+			LOGGER.error("Input file '" + f.getAbsolutePath() + "' does not exist");
 			throw new IllegalArgumentException(
 					inputPath + " does not exist");
 		}

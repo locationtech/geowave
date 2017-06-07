@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * This is a derivative of GeoMesa's XZ3SFC.scala
+ * Copyright 2013-2106 Commonwealth Computer Research, Inc.
+ * 
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.index.sfc.xz;
 
 import java.math.BigInteger;
@@ -8,7 +21,8 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -25,7 +39,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 public class XZOrderSFC implements
 		SpaceFillingCurve
 {
-	private final static Logger LOGGER = Logger.getLogger(XZOrderSFC.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(XZOrderSFC.class);
 	private static double LOG_POINT_FIVE = Math.log(0.5);
 
 	// the initial level of 2^dim tree

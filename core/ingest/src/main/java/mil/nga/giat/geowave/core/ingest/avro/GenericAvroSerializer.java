@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.avro;
 
 import java.io.ByteArrayOutputStream;
@@ -12,7 +22,8 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generic Avro serializer/deserializer, can convert Avro Java object to a byte
@@ -23,7 +34,7 @@ import org.apache.log4j.Logger;
  */
 public class GenericAvroSerializer<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(GenericAvroSerializer.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GenericAvroSerializer.class);
 
 	private static final EncoderFactory ef = EncoderFactory.get();
 	private static final DecoderFactory df = DecoderFactory.get();

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.app;
 
 import java.io.IOException;
@@ -10,8 +20,8 @@ else[accumulo.api=1.6]*/
 import org.apache.accumulo.shell.Shell;
 /*end[accumulo.api=1.6]*/
 // @formatter:on
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jline.WindowsTerminal;
 import jline.console.ConsoleReader;
@@ -24,8 +34,8 @@ public class GeoWaveDemoAppShell
 	public static void main(
 			final String[] args )
 			throws Exception {
-		Logger.getRootLogger().setLevel(
-				Level.WARN);
+		org.apache.log4j.Logger.getRootLogger().setLevel(
+				org.apache.log4j.Level.WARN);
 
 		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
 				: "geowave";

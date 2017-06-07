@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.cli.spi;
 
 import java.util.Collection;
@@ -12,7 +22,7 @@ import mil.nga.giat.geowave.core.cli.api.Operation;
 
 /**
  * This implementation uses the SPI to load all Operations across the program,
- * including those exported by plugsin. It parses the entries and places them
+ * including those exported by plugins. It parses the entries and places them
  * into a cache.
  */
 public class OperationRegistry

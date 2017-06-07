@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.mapreduce.input;
 
 import java.io.IOException;
@@ -10,7 +20,8 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -34,7 +45,7 @@ public class GeoWaveInputFormat<T> extends
 		InputFormat<GeoWaveInputKey, T>
 {
 	private static final Class<?> CLASS = GeoWaveInputFormat.class;
-	protected static final Logger LOGGER = Logger.getLogger(CLASS);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CLASS);
 
 	public static void setStoreOptionsMap(
 			final Configuration config,

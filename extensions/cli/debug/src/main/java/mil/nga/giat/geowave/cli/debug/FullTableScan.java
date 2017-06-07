@@ -1,8 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
@@ -18,7 +29,7 @@ import com.beust.jcommander.Parameters;
 public class FullTableScan extends
 		AbstractGeoWaveQuery
 {
-	private static Logger LOGGER = Logger.getLogger(FullTableScan.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(FullTableScan.class);
 
 	@Override
 	protected long runQuery(

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.metadata;
 
 import java.io.IOException;
@@ -17,7 +27,8 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -45,7 +56,7 @@ import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 		AbstractGeowavePersistence<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractAccumuloPersistence.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractAccumuloPersistence.class);
 	protected final AccumuloOperations accumuloOperations;
 	protected Text row = new Text();
 

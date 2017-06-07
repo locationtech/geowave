@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter;
 
 import java.nio.ByteBuffer;
@@ -25,7 +35,8 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class generically supports most of the operations necessary to implement
@@ -44,7 +55,7 @@ import org.apache.log4j.Logger;
 abstract public class AbstractDataAdapter<T> implements
 		WritableDataAdapter<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractDataAdapter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDataAdapter.class);
 	protected Map<Class<?>, IndexFieldHandler<T, ? extends CommonIndexValue, Object>> typeMatchingFieldHandlers;
 	protected Map<ByteArrayId, IndexFieldHandler<T, ? extends CommonIndexValue, Object>> dimensionMatchingFieldHandlers;
 	protected List<NativeFieldHandler<T, Object>> nativeFieldHandlers;

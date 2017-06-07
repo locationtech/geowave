@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.metadata;
 
 import java.nio.charset.Charset;
@@ -5,7 +15,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Persistable;
@@ -25,7 +36,7 @@ import mil.nga.giat.geowave.core.store.DataStoreOperations;
  */
 public abstract class AbstractGeowavePersistence<T extends Persistable>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractGeowavePersistence.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractGeowavePersistence.class);
 
 	// TODO: should we concern ourselves with multiple distributed processes
 	// updating and looking up objects simultaneously that would require some
@@ -79,7 +90,7 @@ public abstract class AbstractGeowavePersistence<T extends Persistable>
 		// the secondaryId is optional so check for null
 		if (secondaryId != null) {
 			return new ByteArrayId(
-					operations.getTableNameSpace() + "_" + primaryId.getString() + "_" + secondaryId.getString());
+					primaryId.getString() + "_" + secondaryId.getString());
 		}
 		return primaryId;
 	}

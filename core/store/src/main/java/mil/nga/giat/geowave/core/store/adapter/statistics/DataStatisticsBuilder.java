@@ -1,10 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
@@ -22,7 +30,6 @@ public class DataStatisticsBuilder<T> implements
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
 	private final ByteArrayId statisticsId;
 	private final EntryVisibilityHandler<T> visibilityHandler;
-	private static final Logger LOGGER = Logger.getLogger(DataStatistics.class);
 
 	public DataStatisticsBuilder(
 			final StatisticsProvider<T> statisticsProvider,

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
@@ -12,7 +22,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
@@ -27,7 +38,7 @@ import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
  */
 public class IngestFromHdfsDriver
 {
-	private final static Logger LOGGER = Logger.getLogger(IngestFromHdfsDriver.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(IngestFromHdfsDriver.class);
 	private final static int NUM_CONCURRENT_JOBS = 5;
 	private final static int DAYS_TO_AWAIT_COMPLETION = 999;
 	protected final DataStorePluginOptions storeOptions;
@@ -95,7 +106,9 @@ public class IngestFromHdfsDriver
 					conf);
 			try (FileSystem fs = FileSystem.get(conf)) {
 				if (!fs.exists(hdfsBaseDirectory)) {
-					LOGGER.fatal("HDFS base directory " + hdfsBaseDirectory + " does not exist");
+					LOGGER.error(
+							"HDFS base directory {} does not exist",
+							hdfsBaseDirectory);
 					return false;
 				}
 				for (Entry<String, IngestFromHdfsPlugin<?, ?>> pluginProvider : ingestPlugins.entrySet()) {

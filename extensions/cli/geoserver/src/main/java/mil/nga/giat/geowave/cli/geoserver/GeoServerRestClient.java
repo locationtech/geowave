@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.File;
@@ -32,9 +42,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.glassfish.jersey.SslConfigurator;
+
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -58,7 +69,7 @@ import net.sf.json.JSONObject;
 
 public class GeoServerRestClient
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoServerRestClient.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
 	static private class DataAdapterInfo
@@ -73,7 +84,8 @@ public class GeoServerRestClient
 	public GeoServerRestClient(
 			final GeoServerConfig config ) {
 		this.config = config;
-		LOGGER.setLevel(Level.DEBUG);
+		org.apache.log4j.Logger.getRootLogger().setLevel(
+				org.apache.log4j.Level.DEBUG);
 	}
 
 	public GeoServerRestClient(
@@ -81,7 +93,8 @@ public class GeoServerRestClient
 			WebTarget webTarget ) {
 		this.config = config;
 		this.webTarget = webTarget;
-		LOGGER.setLevel(Level.DEBUG);
+		org.apache.log4j.Logger.getRootLogger().setLevel(
+				org.apache.log4j.Level.DEBUG);
 	}
 
 	/**
@@ -323,7 +336,7 @@ public class GeoServerRestClient
 					adapterInfoList,
 					descr);
 
-			LOGGER.debug(jsonObj);
+			LOGGER.debug(jsonObj.toString());
 
 			return Response.ok(
 					jsonObj.toString(defaultIndentation)).build();
@@ -1507,7 +1520,9 @@ public class GeoServerRestClient
 					result.getWriter().close();
 				}
 				catch (final IOException e) {
-					LOGGER.error(e);
+					LOGGER.error(
+							e.getLocalizedMessage(),
+							e);
 				}
 			}
 		}

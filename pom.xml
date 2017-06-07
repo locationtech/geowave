@@ -56,6 +56,8 @@
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
 		<spring-security.version>4.0.4.RELEASE</spring-security.version>
+		<slf4j.version>1.7.21</slf4j.version>
+		<junit.version>4.11</junit.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -130,12 +132,12 @@
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.6.1</version>
+				<version>${slf4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.6.1</version>
+				<version>${slf4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -394,7 +396,6 @@
 				<groupId>org.codehaus.jackson</groupId>
 				<artifactId>jackson-core-asl</artifactId>
 				<version>${jackson.version}</version>
-				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
@@ -404,6 +405,19 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<!-- Dependencies used across ALL projects -->
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 	<build>
 		<extensions>
 			<extension>
@@ -960,9 +974,9 @@
 		<profile>
 			<id>hortonworks</id>
 			<properties>
-				<accumulo.version>1.7.0.2.4.2.0-258</accumulo.version>
-				<hbase.version>1.1.2.2.4.2.0-258</hbase.version>
-				<hadoop.version>2.7.1.2.4.2.0-258</hadoop.version>
+				<accumulo.version>1.7.0.2.6.0.3-8</accumulo.version>
+				<hbase.version>1.1.2.2.6.0.3-8</hbase.version>
+				<hadoop.version>2.7.3.2.6.0.3-8</hadoop.version>
 			</properties>
 			<repositories>
 				<repository>

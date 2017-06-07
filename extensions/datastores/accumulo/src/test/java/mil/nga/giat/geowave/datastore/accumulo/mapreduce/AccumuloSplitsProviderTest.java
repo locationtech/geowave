@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.mapreduce;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,7 +45,8 @@ import org.apache.accumulo.core.data.thrift.TRange;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,7 +112,7 @@ import org.apache.accumulo.core.data.impl.KeyExtent;
 //@formatter:on
 public class AccumuloSplitsProviderTest
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSplitsProviderTest.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSplitsProviderTest.class);
 
 	final AccumuloOptions accumuloOptions = new AccumuloOptions();
 	final GeometryFactory factory = new GeometryFactory();
@@ -247,8 +258,6 @@ public class AccumuloSplitsProviderTest
 	 * Used to simulate what happens if an HBase operations for instance gets
 	 * passed in
 	 * 
-	 * @author akash_000
-	 *
 	 */
 	private static class MockOperations implements
 			DataStoreOperations
@@ -264,6 +273,15 @@ public class AccumuloSplitsProviderTest
 
 		public String getTableNameSpace() {
 			return null;
+		}
+
+		@Override
+		public boolean mergeData(
+				PrimaryIndex index,
+				AdapterStore adapterStore,
+				AdapterIndexMappingStore adapterIndexMappingStore ) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 

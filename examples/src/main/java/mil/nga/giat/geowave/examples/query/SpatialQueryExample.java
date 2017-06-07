@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.examples.query;
 
 import java.io.IOException;
@@ -9,7 +19,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.log4j.Logger;
+
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -40,6 +50,9 @@ import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is intended to provide a few examples on running Geowave queries
  * of different types: 1- Querying by polygon a set of points. 2- Filtering on
@@ -49,7 +62,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
  */
 public class SpatialQueryExample
 {
-	private static Logger log = Logger.getLogger(SpatialQueryExample.class);
+	private static Logger log = LoggerFactory.getLogger(SpatialQueryExample.class);
 
 	// We'll use GeoWave's VectorDataStore, which allows to run CQL rich queries
 	private static DataStore dataStore;

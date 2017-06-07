@@ -1,10 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -20,7 +31,7 @@ abstract public class AbstractHBaseRowQuery<T> extends
 		HBaseQuery
 {
 
-	private static final Logger LOGGER = Logger.getLogger(AbstractHBaseRowQuery.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHBaseRowQuery.class);
 	protected final ScanCallback<T> scanCallback;
 
 	public AbstractHBaseRowQuery(

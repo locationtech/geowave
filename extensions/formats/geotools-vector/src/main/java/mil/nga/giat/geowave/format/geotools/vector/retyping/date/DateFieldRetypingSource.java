@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.format.geotools.vector.retyping.date;
 
 import java.text.ParseException;
@@ -9,8 +19,9 @@ import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.format.geotools.vector.AbstractFieldRetypingSource;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -20,7 +31,7 @@ import org.opengis.feature.type.Name;
 public class DateFieldRetypingSource extends
 		AbstractFieldRetypingSource
 {
-	private final static Logger LOGGER = Logger.getLogger(DateFieldRetypingSource.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DateFieldRetypingSource.class);
 
 	private final SimpleFeatureType typeIn;
 	private final Map<String, String> fieldNameToTimestampFormat;
@@ -120,16 +131,14 @@ public class DateFieldRetypingSource extends
 	private void debugType(
 			final String typeLabel,
 			final SimpleFeatureType type ) {
-		if (LOGGER.isEnabledFor(Level.DEBUG)) {
+		if (LOGGER.isDebugEnabled()) {
 			final StringBuilder logBuilder = new StringBuilder();
 			logBuilder.append("Type: " + typeLabel);
 			for (AttributeDescriptor propDef : type.getAttributeDescriptors()) {
 				logBuilder.append("\nField: " + propDef.getLocalName() + ", Type: "
 						+ propDef.getType().getBinding().getSimpleName());
 			}
-			LOGGER.log(
-					Level.DEBUG,
-					logBuilder.toString());
+			LOGGER.debug(logBuilder.toString());
 		}
 	}
 }

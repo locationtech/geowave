@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.delete;
 
 import java.io.File;
@@ -6,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 
 import com.beust.jcommander.IStringConverter;
@@ -37,7 +47,7 @@ public class CQLDelete extends
 		DefaultOperation implements
 		Command
 {
-	private static Logger LOGGER = Logger.getLogger(CQLDelete.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(CQLDelete.class);
 
 	@Parameter(description = "<storename>")
 	private List<String> parameters = new ArrayList<String>();
@@ -59,7 +69,8 @@ public class CQLDelete extends
 			OperationParams params )
 			throws ParseException {
 		if (debug) {
-			LOGGER.setLevel(Level.DEBUG);
+			org.apache.log4j.Logger.getRootLogger().setLevel(
+					org.apache.log4j.Level.DEBUG);
 		}
 
 		final Stopwatch stopWatch = new Stopwatch();
@@ -101,7 +112,7 @@ public class CQLDelete extends
 			}
 
 			if (debug && (adapter != null)) {
-				LOGGER.debug(adapter);
+				LOGGER.debug(adapter.toString());
 			}
 
 			stopWatch.start();

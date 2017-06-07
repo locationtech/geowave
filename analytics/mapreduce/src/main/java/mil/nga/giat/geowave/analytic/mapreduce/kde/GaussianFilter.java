@@ -1,13 +1,24 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.analytic.mapreduce.kde;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GaussianFilter
 {
-	private final static Logger LOGGER = Logger.getLogger(GaussianFilter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GaussianFilter.class);
 	private static final double SQRT_2_PI = Math.sqrt(2 * Math.PI);
 
 	/**

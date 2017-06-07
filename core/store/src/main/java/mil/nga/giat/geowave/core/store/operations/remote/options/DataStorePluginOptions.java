@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.remote.options;
 
 import java.util.Map;
@@ -8,6 +18,7 @@ import com.beust.jcommander.ParametersDelegate;
 import mil.nga.giat.geowave.core.cli.api.DefaultPluginOptions;
 import mil.nga.giat.geowave.core.cli.api.PluginOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
@@ -137,6 +148,11 @@ public class DataStorePluginOptions extends
 
 	public AdapterIndexMappingStore createAdapterIndexMappingStore() {
 		return getFactoryFamily().getAdapterIndexMappingStoreFactory().createStore(
+				getFactoryOptions());
+	}
+
+	public DataStoreOperations createDataStoreOperations() {
+		return getFactoryFamily().getDataStoreOperationsFactory().createStore(
 				getFactoryOptions());
 	}
 

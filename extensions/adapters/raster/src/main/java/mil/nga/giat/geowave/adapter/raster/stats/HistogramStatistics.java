@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.stats;
 
 import java.io.ByteArrayInputStream;
@@ -14,7 +24,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.processing.AbstractOperation;
 import org.geotools.coverage.processing.BaseStatisticsOperationJAI;
@@ -40,7 +51,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 public class HistogramStatistics extends
 		AbstractDataStatistics<GridCoverage>
 {
-	private static final Logger LOGGER = Logger.getLogger(HistogramStatistics.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HistogramStatistics.class);
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"HISTOGRAM_STATS");
 

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.Closeable;
@@ -8,7 +18,8 @@ import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -22,7 +33,7 @@ public class AccumuloRowPrefixDelete<T> extends
 		AccumuloRowPrefixQuery<T>
 {
 
-	private static final Logger LOGGER = Logger.getLogger(AccumuloRowPrefixDelete.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloRowPrefixDelete.class);
 
 	public AccumuloRowPrefixDelete(
 			PrimaryIndex index,

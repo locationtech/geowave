@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.metadata;
 
 import java.util.EnumSet;
@@ -14,7 +24,8 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.conf.ColumnSet;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -41,7 +52,7 @@ public class AccumuloDataStatisticsStore extends
 		AbstractAccumuloPersistence<DataStatistics<?>> implements
 		DataStatisticsStore
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloDataStatisticsStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloDataStatisticsStore.class);
 	// this is fairly arbitrary at the moment because it is the only custom
 	// iterator added
 	private static final int STATS_COMBINER_PRIORITY = 10;

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.File;
@@ -5,7 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -14,7 +25,7 @@ import mil.nga.giat.geowave.core.cli.utils.URLUtils;
 
 public class GeoServerConfig
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoServerConfig.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerConfig.class);
 
 	public static final String DEFAULT_URL = "localhost:8080";
 	public static final String DEFAULT_USER = "admin";

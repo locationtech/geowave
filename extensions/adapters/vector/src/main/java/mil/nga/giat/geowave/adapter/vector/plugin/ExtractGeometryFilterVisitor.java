@@ -1,10 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.visitor.NullFilterVisitor;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.filter.And;
@@ -74,7 +85,7 @@ public class ExtractGeometryFilterVisitor extends
 	public static final NullFilterVisitor GEOMETRY_VISITOR = new ExtractGeometryFilterVisitor(
 			GeoWaveGTDataStore.DEFAULT_CRS);
 
-	private static Logger LOGGER = Logger.getLogger(ExtractGeometryFilterVisitor.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ExtractGeometryFilterVisitor.class);
 
 	private final CoordinateReferenceSystem crs;
 

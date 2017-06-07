@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata;
 
 import java.nio.ByteBuffer;
@@ -5,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
@@ -16,7 +27,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class NoDataByFilter implements
 		NoDataMetadata
 {
-	private final static Logger LOGGER = Logger.getLogger(NoDataByFilter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(NoDataByFilter.class);
 	private Geometry shape;
 	private double[][] noDataPerBand;
 
@@ -41,11 +52,6 @@ public class NoDataByFilter implements
 	public boolean isNoData(
 			final SampleIndex index,
 			final double value ) {
-		if ((shape != null) && !shape.intersects(new GeometryFactory().createPoint(new Coordinate(
-				index.getX(),
-				index.getY())))) {
-			return true;
-		}
 		if ((noDataPerBand != null) && (noDataPerBand.length > index.getBand())) {
 			for (final double noDataVal : noDataPerBand[index.getBand()]) {
 				// use object equality to capture NaN, and positive and negative
@@ -56,6 +62,11 @@ public class NoDataByFilter implements
 					return true;
 				}
 			}
+		}
+		if ((shape != null) && !shape.intersects(new GeometryFactory().createPoint(new Coordinate(
+				index.getX(),
+				index.getY())))) {
+			return true;
 		}
 		return false;
 	}

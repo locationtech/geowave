@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
@@ -18,7 +28,8 @@ import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.protobuf.ResponseConverter;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
@@ -38,7 +49,7 @@ public class AggregationEndpoint extends
 		Coprocessor,
 		CoprocessorService
 {
-	private static final Logger LOGGER = Logger.getLogger(AggregationEndpoint.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AggregationEndpoint.class);
 
 	private RegionCoprocessorEnvironment env;
 

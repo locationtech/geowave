@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.format.geotools.raster;
 
 import java.io.File;
@@ -11,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
@@ -43,7 +54,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class GeoToolsRasterDataStoreIngestPlugin implements
 		LocalFileIngestPlugin<GridCoverage>
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoToolsRasterDataStoreIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoToolsRasterDataStoreIngestPlugin.class);
 	private final RasterOptionProvider optionProvider;
 
 	public GeoToolsRasterDataStoreIngestPlugin() {

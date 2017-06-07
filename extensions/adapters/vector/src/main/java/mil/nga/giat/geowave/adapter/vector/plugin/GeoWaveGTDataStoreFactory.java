@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.awt.RenderingHints.Key;
@@ -12,7 +22,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.factory.FactoryIteratorProvider;
@@ -48,7 +59,7 @@ public class GeoWaveGTDataStoreFactory implements
 	}
 
 	public final static String DISPLAY_NAME_PREFIX = "GeoWave Datastore - ";
-	private static final Logger LOGGER = Logger.getLogger(GeoWaveGTDataStoreFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStoreFactory.class);
 	private final List<DataStoreCacheEntry> dataStoreCache = new ArrayList<DataStoreCacheEntry>();
 	private final StoreFactoryFamilySpi geowaveStoreFactoryFamily;
 	private static Boolean isAvailable = null;

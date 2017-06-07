@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.service;
 
 import static org.junit.Assert.assertTrue;
@@ -17,7 +27,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.After;
@@ -50,7 +61,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeoWaveIngestGeoserverIT
 {
 
-	private static final Logger LOGGER = Logger.getLogger(GeoWaveIngestGeoserverIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveIngestGeoserverIT.class);
 
 	private static final String WORKSPACE = "testomatic";
 	private static final String WMS_VERSION = "1.3";

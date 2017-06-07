@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin.lock;
 
 import java.io.IOException;
@@ -8,7 +18,8 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.FeatureLock;
 import org.geotools.data.Transaction;
 
@@ -25,7 +36,7 @@ public abstract class AbstractLockingManagement implements
 		LockingManagement
 {
 
-	private final static Logger LOGGER = Logger.getLogger(AbstractLockingManagement.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractLockingManagement.class);
 
 	public static final String LOCKING_MANAGEMENT_CLASS = "GEOWAVE_LM";
 	public static final Object LOCKING_MANAGEMENT_CLASS_LCK = new Object();

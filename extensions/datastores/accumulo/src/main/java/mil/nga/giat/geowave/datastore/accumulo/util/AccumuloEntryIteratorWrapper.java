@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.util;
 
 import java.util.Iterator;
@@ -5,7 +15,8 @@ import java.util.Map.Entry;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
@@ -25,7 +36,7 @@ import mil.nga.giat.geowave.core.store.util.EntryIteratorWrapper;
 public class AccumuloEntryIteratorWrapper<T> extends
 		EntryIteratorWrapper<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloEntryIteratorWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloEntryIteratorWrapper.class);
 
 	public AccumuloEntryIteratorWrapper(
 			final boolean wholeRowEncoding,

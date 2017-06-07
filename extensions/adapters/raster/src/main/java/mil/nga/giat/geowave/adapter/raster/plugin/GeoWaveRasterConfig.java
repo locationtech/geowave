@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.plugin;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -15,7 +24,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import mil.nga.giat.geowave.adapter.auth.AuthorizationFactorySPI;
 import mil.nga.giat.geowave.adapter.auth.EmptyAuthorizationFactory;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,8 +45,7 @@ import mil.nga.giat.geowave.core.store.index.IndexStore;
 
 public class GeoWaveRasterConfig
 {
-
-	static private final Logger LOGGER = Logger.getLogger(GeoWaveRasterConfig.class);
+	static private final Logger LOGGER = LoggerFactory.getLogger(GeoWaveRasterConfig.class);
 	static private final Map<String, GeoWaveRasterConfig> CONFIG_CACHE = new Hashtable<String, GeoWaveRasterConfig>();
 
 	protected static enum ConfigParameter {
