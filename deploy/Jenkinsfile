@@ -1,6 +1,6 @@
 #!groovy 
 
-node {
+node (jenkins-slave) {
    stage 'Wipe workspace'
    deleteDir()
    
