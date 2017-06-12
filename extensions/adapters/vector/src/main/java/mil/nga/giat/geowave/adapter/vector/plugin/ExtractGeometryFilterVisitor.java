@@ -82,12 +82,12 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 public class ExtractGeometryFilterVisitor extends
 		NullFilterVisitor
 {
-	public static final NullFilterVisitor GEOMETRY_VISITOR = new ExtractGeometryFilterVisitor(
-			GeoWaveGTDataStore.DEFAULT_CRS);
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ExtractGeometryFilterVisitor.class);
 
 	private final CoordinateReferenceSystem crs;
+
+	private final String attributeOfInterest;
 
 	/**
 	 * This FilterVisitor is stateless - use
@@ -96,8 +96,10 @@ public class ExtractGeometryFilterVisitor extends
 	 * implementation.
 	 */
 	public ExtractGeometryFilterVisitor(
-			final CoordinateReferenceSystem crs ) {
+			final CoordinateReferenceSystem crs,
+			final String attributeOfInterest ) {
 		this.crs = crs;
+		this.attributeOfInterest = attributeOfInterest;
 	}
 
 	/**
@@ -108,11 +110,13 @@ public class ExtractGeometryFilterVisitor extends
 	 */
 	public static ExtractGeometryFilterVisitorResult getConstraints(
 			final Filter filter,
-			CoordinateReferenceSystem crs ) {
+			CoordinateReferenceSystem crs,
+			String attributeOfInterest ) {
 		final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 				.accept(
 						new ExtractGeometryFilterVisitor(
-								crs),
+								crs,
+								attributeOfInterest),
 						null);
 		Geometry geo = geoAndCompareOpData.getGeometry();
 		// empty or infinite geometry simply return null as we can't create
@@ -202,14 +206,22 @@ public class ExtractGeometryFilterVisitor extends
 				filter.getMaxX(),
 				filter.getMinY(),
 				filter.getMaxY());
-		if (bbox != null) {
-			return bbox.union(new GeometryFactory().toGeometry(bounds));
+		if (this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			if (bbox != null) {
+				return bbox.union(new GeometryFactory().toGeometry(bounds));
+			}
+			else {
+				return new ExtractGeometryFilterVisitorResult(
+						bbox(bounds),
+						CompareOperation.INTERSECTS);
+			}
 		}
 		else {
 			return new ExtractGeometryFilterVisitorResult(
-					bbox(bounds),
-					CompareOperation.INTERSECTS);
+					infinity(),
+					null);
 		}
+
 	}
 
 	/**
@@ -360,12 +372,15 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Contains filter,
 			Object data ) {
-		data = filter.getExpression1().accept(
-				this,
-				data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 		data = filter.getExpression2().accept(
 				this,
 				data);
+
 		// since predicate is defined relative to the query geometry we are
 		// using WITHIN
 		// which is converse of CONTAINS operator
@@ -380,9 +395,11 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Crosses filter,
 			Object data ) {
-		data = filter.getExpression1().accept(
-				this,
-				data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 		data = filter.getExpression2().accept(
 				this,
 				data);
@@ -407,6 +424,11 @@ public class ExtractGeometryFilterVisitor extends
 			final DWithin filter,
 			final Object data ) {
 		final Geometry bbox = bbox(data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 
 		// we have to take the reference geometry bbox and
 		// expand it by the distance.
@@ -464,9 +486,11 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Equals filter,
 			Object data ) {
-		data = filter.getExpression1().accept(
-				this,
-				data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 		data = filter.getExpression2().accept(
 				this,
 				data);
@@ -479,9 +503,11 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Intersects filter,
 			Object data ) {
-		data = filter.getExpression1().accept(
-				this,
-				data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 		data = filter.getExpression2().accept(
 				this,
 				data);
@@ -494,9 +520,11 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Overlaps filter,
 			Object data ) {
-		data = filter.getExpression1().accept(
-				this,
-				data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 		data = filter.getExpression2().accept(
 				this,
 				data);
@@ -510,9 +538,11 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Touches filter,
 			Object data ) {
-		data = filter.getExpression1().accept(
-				this,
-				data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 		data = filter.getExpression2().accept(
 				this,
 				data);
@@ -526,9 +556,11 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Within filter,
 			Object data ) {
-		data = filter.getExpression1().accept(
-				this,
-				data);
+		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			return new ExtractGeometryFilterVisitorResult(
+					infinity(),
+					null);
+		}
 		data = filter.getExpression2().accept(
 				this,
 				data);
