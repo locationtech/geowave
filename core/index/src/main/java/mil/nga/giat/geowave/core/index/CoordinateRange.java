@@ -13,6 +13,8 @@ package mil.nga.giat.geowave.core.index;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+
 public class CoordinateRange implements
 		Persistable
 {
@@ -105,10 +107,4 @@ public class CoordinateRange implements
 			binId = null;
 		}
 	}
-
-	@Override
-	public CoordinateRange getPersistable() {
-		return new CoordinateRange();
-	}
-
 }

@@ -23,8 +23,8 @@ import java.util.List;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -656,7 +656,7 @@ public class AccumuloOptionsTest
 		}
 	}
 
-	private static class TestGeometryAdapter extends
+	protected static class TestGeometryAdapter extends
 			AbstractDataAdapter<TestGeometry>
 	{
 		private static final ByteArrayId GEOM = new ByteArrayId(
@@ -699,11 +699,6 @@ public class AccumuloOptionsTest
 			public void fromBinary(
 					final byte[] bytes ) {
 
-			}
-
-			@Override
-			public Persistable getPersistable() {
-				return null;
 			}
 		};
 		private static final NativeFieldHandler<TestGeometry, Object> ID_FIELD_HANDLER = new NativeFieldHandler<TestGeometry, Object>() {
@@ -851,11 +846,6 @@ public class AccumuloOptionsTest
 			}
 			return null;
 		}
-
-		@Override
-		public TestGeometryAdapter getPersistable() {
-			return new TestGeometryAdapter();
-		}
 	}
 
 	public static class AnotherAdapter extends
@@ -865,11 +855,6 @@ public class AccumuloOptionsTest
 		public ByteArrayId getAdapterId() {
 			return new ByteArrayId(
 					"test1");
-		}
-
-		@Override
-		public AnotherAdapter getPersistable() {
-			return new AnotherAdapter();
 		}
 	}
 }

@@ -138,7 +138,7 @@ public class MemoryStoreUtilsTest
 
 	}
 
-	protected static class TestStringAdapter extends
+	public static class TestStringAdapter extends
 			AbstractDataAdapter<String> implements
 			StatisticsProvider<String>
 	{
@@ -210,11 +210,6 @@ public class MemoryStoreUtilsTest
 				final CommonIndexModel model,
 				final int position ) {
 			return null;
-		}
-
-		@Override
-		public TestStringAdapter getPersistable() {
-			return new TestStringAdapter();
 		}
 	}
 }

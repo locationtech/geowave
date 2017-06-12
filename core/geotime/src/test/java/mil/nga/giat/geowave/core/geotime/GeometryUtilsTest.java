@@ -285,10 +285,5 @@ public class GeometryUtilsTest
 				IndexMetaData... hints ) {
 			return null;
 		}
-
-		@Override
-		public ExampleNumericIndexStrategy getPersistable() {
-			return new ExampleNumericIndexStrategy();
-		}
 	}
 }

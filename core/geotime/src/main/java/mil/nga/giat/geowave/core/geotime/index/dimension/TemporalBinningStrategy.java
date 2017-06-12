@@ -104,7 +104,7 @@ public class TemporalBinningStrategy implements
 	private Unit unit;
 	private String timezone;
 
-	protected TemporalBinningStrategy() {}
+	public TemporalBinningStrategy() {}
 
 	public TemporalBinningStrategy(
 			final Unit unit ) {
@@ -516,10 +516,5 @@ public class TemporalBinningStrategy implements
 		return new NumericRange(
 				minMillis,
 				maxMillis);
-	}
-
-	@Override
-	public TemporalBinningStrategy getPersistable() {
-		return new TemporalBinningStrategy();
 	}
 }

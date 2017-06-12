@@ -142,7 +142,7 @@ public class SpatialQuery extends
 		this.nonSpatialCompareOp = nonSpatialCompareOp;
 	}
 
-	protected SpatialQuery() {
+	public SpatialQuery() {
 		super();
 	}
 
@@ -202,10 +202,5 @@ public class SpatialQuery extends
 					"Unable to read query geometry as well-known binary",
 					e);
 		}
-	}
-
-	@Override
-	public SpatialQuery getPersistable() {
-		return new SpatialQuery();
 	}
 }

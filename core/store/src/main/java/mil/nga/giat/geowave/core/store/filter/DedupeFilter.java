@@ -85,9 +85,4 @@ public class DedupeFilter implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {}
-
-	@Override
-	public DedupeFilter getPersistable() {
-		return new DedupeFilter();
-	}
 }

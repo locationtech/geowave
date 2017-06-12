@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import ar.com.hjg.pngj.FilterType;
 import it.geosolutions.imageio.plugins.png.PNGWriter;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 /**
  * This class wraps a rendered image as a GeoWave Persistable object. It
@@ -36,7 +36,7 @@ public class PersistableRenderedImage implements
 	private final static float DEFAULT_PNG_QUALITY = 0.8f;
 	public BufferedImage image;
 
-	protected PersistableRenderedImage() {}
+	public PersistableRenderedImage() {}
 
 	public PersistableRenderedImage(
 			final BufferedImage image ) {
@@ -91,10 +91,5 @@ public class PersistableRenderedImage implements
 					"Unable to deserialize image",
 					e);
 		}
-	}
-
-	@Override
-	public PersistableRenderedImage getPersistable() {
-		return new PersistableRenderedImage();
 	}
 }

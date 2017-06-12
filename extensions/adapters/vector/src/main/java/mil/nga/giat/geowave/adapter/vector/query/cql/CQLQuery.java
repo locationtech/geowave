@@ -45,7 +45,7 @@ import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
@@ -67,7 +67,7 @@ public class CQLQuery implements
 	private CQLQueryFilter filter;
 	private Filter cqlFilter;
 
-	protected CQLQuery() {}
+	public CQLQuery() {}
 
 	public static Query createOptimalQuery(
 			final String cql,
@@ -355,9 +355,7 @@ public class CQLQuery implements
 			final byte[] baseQueryBytes = new byte[baseQueryBytesLength];
 
 			try {
-				baseQuery = PersistenceUtils.fromBinary(
-						baseQueryBytes,
-						DistributableQuery.class);
+				baseQuery = (Query) PersistenceUtils.fromBinary(baseQueryBytes);
 			}
 			catch (final Exception e) {
 				throw new IllegalArgumentException(
@@ -419,10 +417,5 @@ public class CQLQuery implements
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public CQLQuery getPersistable() {
-		return new CQLQuery();
 	}
 }

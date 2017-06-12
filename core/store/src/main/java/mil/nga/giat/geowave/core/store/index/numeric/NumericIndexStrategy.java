@@ -100,9 +100,4 @@ public class NumericIndexStrategy implements
 	public List<IndexMetaData> createMetaData() {
 		return Collections.emptyList();
 	}
-
-	@Override
-	public NumericIndexStrategy getPersistable() {
-		return new NumericIndexStrategy();
-	}
 }

@@ -14,6 +14,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+
 public class MultiDimensionalCoordinateRanges implements
 		Persistable
 {
@@ -102,10 +104,5 @@ public class MultiDimensionalCoordinateRanges implements
 				coordinateRangesPerDimension[d][i].fromBinary(serializedRange);
 			}
 		}
-	}
-
-	@Override
-	public MultiDimensionalCoordinateRanges getPersistable() {
-		return new MultiDimensionalCoordinateRanges();
 	}
 }

@@ -93,9 +93,4 @@ public class AvroFeatureDataAdapter extends
 	protected RowBuilder<SimpleFeature, Object> newBuilder() {
 		return new AvroAttributeRowBuilder();
 	}
-
-	@Override
-	public AvroFeatureDataAdapter getPersistable() {
-		return new AvroFeatureDataAdapter();
-	}
 }

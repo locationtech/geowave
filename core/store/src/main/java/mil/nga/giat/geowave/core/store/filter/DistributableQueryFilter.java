@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.filter;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 /**
  * This interface represents a QueryFilter that is Persistable

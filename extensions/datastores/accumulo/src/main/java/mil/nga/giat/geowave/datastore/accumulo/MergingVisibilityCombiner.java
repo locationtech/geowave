@@ -22,8 +22,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
 public class MergingVisibilityCombiner extends
 		TransformingIterator
@@ -96,9 +96,7 @@ public class MergingVisibilityCombiner extends
 	protected Mergeable getMergeable(
 			final Key key,
 			final byte[] binary ) {
-		return PersistenceUtils.fromBinary(
-				binary,
-				Mergeable.class);
+		return (Mergeable) PersistenceUtils.fromBinary(binary);
 	}
 
 	protected byte[] getBinary(

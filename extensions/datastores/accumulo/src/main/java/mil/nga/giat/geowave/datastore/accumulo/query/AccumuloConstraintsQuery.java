@@ -30,7 +30,7 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -151,7 +151,9 @@ public class AccumuloConstraintsQuery extends
 			final Aggregation aggr = base.aggregation.getRight();
 			iteratorSettings.addOption(
 					AggregationIterator.AGGREGATION_OPTION_NAME,
-					aggr.getClass().getName());
+					// we just want an empty aggregation, which is why we only
+					// use class ID
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toClassId(aggr)));
 			if (aggr.getParameters() != null) { // sets the parameters
 				iteratorSettings.addOption(
 						AggregationIterator.PARAMETER_OPTION_NAME,
@@ -279,14 +281,14 @@ public class AccumuloConstraintsQuery extends
 						final Entry<Key, Value> input = it.next();
 						if (input.getValue() != null) {
 							if (mergedAggregationResult == null) {
-								mergedAggregationResult = PersistenceUtils.fromBinary(
-										input.getValue().get(),
-										Mergeable.class);
+								mergedAggregationResult = (Mergeable) PersistenceUtils.fromBinary(input
+										.getValue()
+										.get());
 							}
 							else {
-								mergedAggregationResult.merge(PersistenceUtils.fromBinary(
-										input.getValue().get(),
-										Mergeable.class));
+								mergedAggregationResult.merge((Mergeable) PersistenceUtils.fromBinary(input
+										.getValue()
+										.get()));
 							}
 						}
 					}

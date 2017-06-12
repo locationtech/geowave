@@ -112,10 +112,10 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
@@ -189,7 +189,7 @@ public class RasterDataAdapter implements
 	private boolean equalizeHistogram;
 	private Interpolation interpolation;
 
-	protected RasterDataAdapter() {}
+	public RasterDataAdapter() {}
 
 	public RasterDataAdapter(
 			final String coverageName,
@@ -1534,9 +1534,7 @@ public class RasterDataAdapter implements
 		else {
 			final byte[] histogramConfigBinary = new byte[histogramConfigLength];
 			buf.get(histogramConfigBinary);
-			histogramConfig = PersistenceUtils.fromBinary(
-					histogramConfigBinary,
-					HistogramConfig.class);
+			histogramConfig = (HistogramConfig) PersistenceUtils.fromBinary(histogramConfigBinary);
 		}
 		final int noDataBinaryLength = buf.getInt();
 		if (noDataBinaryLength == 0) {
@@ -1605,9 +1603,7 @@ public class RasterDataAdapter implements
 		}
 		else {
 			buf.get(mergeStrategyBinary);
-			mergeStrategy = PersistenceUtils.fromBinary(
-					mergeStrategyBinary,
-					RootMergeStrategy.class);
+			mergeStrategy = (RootMergeStrategy<?>) PersistenceUtils.fromBinary(mergeStrategyBinary);
 		}
 		buildPyramid = (buf.get() != 0);
 		equalizeHistogram = (buf.get() != 0);
@@ -2002,12 +1998,9 @@ public class RasterDataAdapter implements
 		if (RasterTileRowTransform.MERGE_STRATEGY_KEY.equals(optionKey)) {
 			final byte[] currentStrategyBytes = ByteArrayUtils.byteArrayFromString(currentValue);
 			final byte[] nextStrategyBytes = ByteArrayUtils.byteArrayFromString(nextValue);
-			final RootMergeStrategy currentStrategy = PersistenceUtils.fromBinary(
-					currentStrategyBytes,
-					RootMergeStrategy.class);
-			final RootMergeStrategy nextStrategy = PersistenceUtils.fromBinary(
-					nextStrategyBytes,
-					RootMergeStrategy.class);
+			final RootMergeStrategy currentStrategy = (RootMergeStrategy) PersistenceUtils
+					.fromBinary(currentStrategyBytes);
+			final RootMergeStrategy nextStrategy = (RootMergeStrategy) PersistenceUtils.fromBinary(nextStrategyBytes);
 			currentStrategy.merge(nextStrategy);
 			return ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(currentStrategy));
 		}
@@ -2061,10 +2054,5 @@ public class RasterDataAdapter implements
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public RasterDataAdapter getPersistable() {
-		return new RasterDataAdapter();
 	}
 }

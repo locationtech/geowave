@@ -39,7 +39,7 @@ public class FeatureBoundingBoxStatistics extends
 	private SimpleFeatureType reprojectedType;
 	private MathTransform transform;
 
-	protected FeatureBoundingBoxStatistics() {
+	public FeatureBoundingBoxStatistics() {
 		super();
 	}
 
@@ -195,10 +195,5 @@ public class FeatureBoundingBoxStatistics extends
 					"No Values");
 		}
 		return jo;
-	}
-
-	@Override
-	public FeatureBoundingBoxStatistics getPersistable() {
-		return new FeatureBoundingBoxStatistics();
 	}
 }

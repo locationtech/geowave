@@ -31,7 +31,7 @@ public class NoDataByFilter implements
 	private Geometry shape;
 	private double[][] noDataPerBand;
 
-	protected NoDataByFilter() {}
+	public NoDataByFilter() {}
 
 	public NoDataByFilter(
 			final Geometry shape,
@@ -142,10 +142,5 @@ public class NoDataByFilter implements
 	@Override
 	public Set<SampleIndex> getNoDataIndices() {
 		return null;
-	}
-
-	@Override
-	public NoDataByFilter getPersistable() {
-		return new NoDataByFilter();
 	}
 }

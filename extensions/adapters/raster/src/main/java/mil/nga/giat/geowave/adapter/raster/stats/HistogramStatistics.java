@@ -44,7 +44,7 @@ import mil.nga.giat.geowave.adapter.raster.Resolution;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 
@@ -58,7 +58,7 @@ public class HistogramStatistics extends
 	private final Map<Resolution, javax.media.jai.Histogram> histograms = new HashMap<Resolution, javax.media.jai.Histogram>();
 	private HistogramConfig histogramConfig;
 
-	protected HistogramStatistics() {
+	public HistogramStatistics() {
 		super();
 	}
 
@@ -130,9 +130,7 @@ public class HistogramStatistics extends
 		final ByteBuffer buf = super.binaryBuffer(bytes);
 		final byte[] configBinary = new byte[buf.getInt()];
 		buf.get(configBinary);
-		histogramConfig = PersistenceUtils.fromBinary(
-				configBinary,
-				HistogramConfig.class);
+		histogramConfig = (HistogramConfig) PersistenceUtils.fromBinary(configBinary);
 		final int numEntries = buf.getInt();
 		for (int i = 0; i < numEntries; i++) {
 			final int keyLength = buf.getInt();
@@ -140,9 +138,7 @@ public class HistogramStatistics extends
 			if (keyLength > 0) {
 				final byte[] keyBytes = new byte[keyLength];
 				buf.get(keyBytes);
-				key = PersistenceUtils.fromBinary(
-						keyBytes,
-						Resolution.class);
+				key = (Resolution) PersistenceUtils.fromBinary(keyBytes);
 			}
 			final int valueLength = buf.getInt();
 			javax.media.jai.Histogram histogram = null;
@@ -361,10 +357,5 @@ public class HistogramStatistics extends
 				}
 			}
 		}
-	}
-
-	@Override
-	public HistogramStatistics getPersistable() {
-		return new HistogramStatistics();
 	}
 }

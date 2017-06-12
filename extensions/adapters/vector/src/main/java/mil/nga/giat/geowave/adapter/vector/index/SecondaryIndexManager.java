@@ -17,8 +17,8 @@ import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
@@ -47,8 +47,7 @@ public class SecondaryIndexManager implements
 	private transient SimpleFeatureType sft;
 	private transient StatsManager statsManager;
 
-	@Deprecated
-	protected SecondaryIndexManager() {}
+	public SecondaryIndexManager() {}
 
 	/**
 	 * Create a SecondaryIndexManager for the given DataAdapter and
@@ -224,7 +223,7 @@ public class SecondaryIndexManager implements
 	@Override
 	public void fromBinary(
 			byte[] bytes ) {
-		final List<Persistable> persistables = PersistenceUtils.fromBinary(bytes);
+		final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(bytes);
 		for (final Persistable persistable : persistables) {
 			supportedSecondaryIndices.add((SecondaryIndex<SimpleFeature>) persistable);
 		}
@@ -236,10 +235,5 @@ public class SecondaryIndexManager implements
 	 */
 	public StatsManager getStatsManager() {
 		return statsManager;
-	}
-
-	@Override
-	public SecondaryIndexManager getPersistable() {
-		return new SecondaryIndexManager();
 	}
 }

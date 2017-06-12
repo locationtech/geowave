@@ -36,7 +36,7 @@ public class RasterFootprintStatistics extends
 			"FOOTPRINT");
 	private Geometry footprint;
 
-	protected RasterFootprintStatistics() {
+	public RasterFootprintStatistics() {
 		super();
 	}
 
@@ -100,10 +100,5 @@ public class RasterFootprintStatistics extends
 					footprint,
 					((RasterFootprintStatistics) statistics).footprint);
 		}
-	}
-
-	@Override
-	public RasterFootprintStatistics getPersistable() {
-		return new RasterFootprintStatistics();
 	}
 }

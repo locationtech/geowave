@@ -36,7 +36,7 @@ public class RowRangeHistogramStatistics<T> extends
 	private static final NumericHistogramFactory HistFactory = new MinimalBinDistanceHistogramFactory();
 	NumericHistogram histogram = HistFactory.create(1024);
 
-	protected RowRangeHistogramStatistics() {
+	public RowRangeHistogramStatistics() {
 		super();
 	}
 
@@ -266,10 +266,5 @@ public class RowRangeHistogramStatistics<T> extends
 				countsArray);
 
 		return jo;
-	}
-
-	@Override
-	public RowRangeHistogramStatistics<T> getPersistable() {
-		return new RowRangeHistogramStatistics<T>();
 	}
 }

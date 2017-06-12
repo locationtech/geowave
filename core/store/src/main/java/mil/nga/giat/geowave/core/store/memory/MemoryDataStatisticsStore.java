@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -81,9 +81,7 @@ public class MemoryDataStatisticsStore implements
 					statistics);
 		}
 		else {
-			existingStats = PersistenceUtils.fromBinary(
-					PersistenceUtils.toBinary(existingStats),
-					DataStatistics.class);
+			existingStats = (DataStatistics<?>) PersistenceUtils.fromBinary(PersistenceUtils.toBinary(existingStats));
 			existingStats.merge(statistics);
 			statsMap.put(
 					key,

@@ -156,9 +156,4 @@ public class NoDataMergeStrategy implements
 				null,
 				tileGridCoverage.getRenderedImage().getData());
 	}
-
-	@Override
-	public NoDataMergeStrategy getPersistable() {
-		return new NoDataMergeStrategy();
-	}
 }

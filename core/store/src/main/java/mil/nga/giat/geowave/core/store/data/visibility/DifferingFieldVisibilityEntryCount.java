@@ -36,7 +36,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	private long entriesWithDifferingFieldVisibilities = 0;
 
-	protected DifferingFieldVisibilityEntryCount() {
+	public DifferingFieldVisibilityEntryCount() {
 		super();
 	}
 
@@ -181,10 +181,5 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 				"count",
 				entriesWithDifferingFieldVisibilities);
 		return jo;
-	}
-
-	@Override
-	public DifferingFieldVisibilityEntryCount<T> getPersistable() {
-		return new DifferingFieldVisibilityEntryCount<T>();
 	}
 }

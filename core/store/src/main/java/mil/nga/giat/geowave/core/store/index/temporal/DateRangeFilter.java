@@ -28,7 +28,7 @@ public class DateRangeFilter implements
 	protected boolean inclusiveLow;
 	protected boolean inclusiveHigh;
 
-	protected DateRangeFilter() {
+	public DateRangeFilter() {
 		super();
 	}
 
@@ -111,10 +111,5 @@ public class DateRangeFilter implements
 				bb.getLong());
 		inclusiveLow = (bb.getInt() == 1) ? true : false;
 		inclusiveHigh = (bb.getInt() == 1) ? true : false;
-	}
-
-	@Override
-	public DateRangeFilter getPersistable() {
-		return new DateRangeFilter();
 	}
 }

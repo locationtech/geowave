@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -37,8 +37,8 @@ public class TimeAdapter implements
 	public Time readField(
 			final byte[] bytes ) {
 		Time retVal;
-		// this is less generic than using reflection but essential for
-		// performance
+		// this is less generic than using the persistable interface but is a
+		// little better for performance
 		if (bytes.length > 8) {
 			// it must be a time range
 			retVal = new TimeRange();

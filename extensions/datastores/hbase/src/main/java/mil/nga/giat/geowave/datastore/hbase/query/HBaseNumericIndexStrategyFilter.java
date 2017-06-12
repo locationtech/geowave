@@ -20,9 +20,9 @@ import org.apache.hadoop.hbase.filter.FilterBase;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
@@ -55,9 +55,7 @@ public class HBaseNumericIndexStrategyFilter extends
 			final int indexStrategyLength = buf.getInt();
 			final byte[] indexStrategyBytes = new byte[indexStrategyLength];
 			buf.get(indexStrategyBytes);
-			indexStrategy = PersistenceUtils.fromBinary(
-					indexStrategyBytes,
-					NumericIndexStrategy.class);
+			indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBytes);
 			final byte[] coordRangeBytes = new byte[pbBytes.length - indexStrategyLength - 4];
 			buf.get(coordRangeBytes);
 			final ArrayOfArrays arrays = new ArrayOfArrays();

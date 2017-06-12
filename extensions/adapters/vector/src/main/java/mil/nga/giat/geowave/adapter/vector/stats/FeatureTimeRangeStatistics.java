@@ -26,7 +26,7 @@ public class FeatureTimeRangeStatistics extends
 		FeatureStatistic
 {
 
-	protected FeatureTimeRangeStatistics() {
+	public FeatureTimeRangeStatistics() {
 		super();
 	}
 
@@ -117,10 +117,5 @@ public class FeatureTimeRangeStatistics extends
 		}
 		buffer.append("]");
 		return buffer.toString();
-	}
-
-	@Override
-	public FeatureTimeRangeStatistics getPersistable() {
-		return new FeatureTimeRangeStatistics();
 	}
 }

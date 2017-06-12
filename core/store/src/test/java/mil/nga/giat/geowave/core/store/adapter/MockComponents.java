@@ -281,12 +281,6 @@ public class MockComponents
 			}
 			return null;
 		}
-
-		@Override
-		public MockAbstractDataAdapter getPersistable() {
-			return new MockAbstractDataAdapter();
-		}
-
 	} // class MockAbstractDataAdapter
 
 	public static class IntegerRangeDataStatistics extends
@@ -312,12 +306,6 @@ public class MockComponents
 					entry.doubleValue(),
 					entry.doubleValue());
 		}
-
-		@Override
-		public IntegerRangeDataStatistics getPersistable() {
-			return new IntegerRangeDataStatistics();
-		}
-
 	}
 
 	// *************************************************************************
@@ -486,11 +474,6 @@ public class MockComponents
 		@Override
 		public void fromBinary(
 				final byte[] bytes ) {}
-
-		@Override
-		public TestPersistentIndexFieldHandler getPersistable() {
-			return new TestPersistentIndexFieldHandler();
-		}
 	}
 
 	// *************************************************************************
@@ -612,11 +595,6 @@ public class MockComponents
 		public NumericData getFullRange() {
 			return null;
 		}
-
-		@Override
-		public TestDimensionField getPersistable() {
-			return new TestDimensionField();
-		}
 	}
 
 	public static class MockIndexStrategy implements
@@ -718,11 +696,6 @@ public class MockComponents
 				IndexMetaData... hints ) {
 			return null;
 		}
-
-		@Override
-		public MockIndexStrategy getPersistable() {
-			return new MockIndexStrategy();
-		}
 	}
 
 	// *************************************************************************
@@ -782,12 +755,6 @@ public class MockComponents
 		public String getId() {
 			return id;
 		}
-
-		@Override
-		public TestIndexModel getPersistable() {
-			return new TestIndexModel();
-		}
-
 	}
 
 	public static class IntegerAdapter implements

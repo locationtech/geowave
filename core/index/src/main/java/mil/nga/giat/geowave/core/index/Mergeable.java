@@ -10,6 +10,8 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.index;
 
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+
 public interface Mergeable extends
 		Persistable
 {

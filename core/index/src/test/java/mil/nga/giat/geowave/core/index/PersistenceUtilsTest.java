@@ -17,6 +17,9 @@ import java.util.Collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+
 public class PersistenceUtilsTest
 {
 
@@ -45,22 +48,17 @@ public class PersistenceUtilsTest
 					}));
 
 		}
-
-		@Override
-		public APersistable getPersistable() {
-			return new APersistable();
-		}
 	}
 
 	@Test
 	public void test() {
 		APersistable persistable = new APersistable();
-		Assert.assertTrue(PersistenceUtils.fromBinary(
+		Assert.assertTrue(PersistenceUtils.fromBinaryAsList(
 				PersistenceUtils.toBinary(new ArrayList<Persistable>())).isEmpty());
-		Assert.assertTrue(PersistenceUtils.fromBinary(
+		Assert.assertTrue(PersistenceUtils.fromBinaryAsList(
 				PersistenceUtils.toBinary(Collections.<Persistable> singleton(persistable))).size() == 1);
 
-		Assert.assertTrue(PersistenceUtils.fromBinary(
+		Assert.assertTrue(PersistenceUtils.fromBinaryAsList(
 				PersistenceUtils.toBinary(Arrays.<Persistable> asList(new Persistable[] {
 					persistable,
 					persistable

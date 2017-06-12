@@ -78,9 +78,4 @@ public class CustomIdIndex extends
 	public int hashCode() {
 		return super.hashCode();
 	}
-
-	@Override
-	public CustomIdIndex getPersistable() {
-		return new CustomIdIndex();
-	}
 }

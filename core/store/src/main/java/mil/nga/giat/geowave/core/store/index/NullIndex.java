@@ -28,7 +28,7 @@ public class NullIndex extends
 		PrimaryIndex
 {
 
-	protected NullIndex() {
+	public NullIndex() {
 		super();
 	}
 
@@ -59,10 +59,5 @@ public class NullIndex extends
 				new NumericDimensionField[] {});
 		indexStrategy = new NullNumericIndexStrategy(
 				StringUtils.stringFromBinary(bytes));
-	}
-
-	@Override
-	public NullIndex getPersistable() {
-		return new NullIndex();
 	}
 }

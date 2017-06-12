@@ -13,7 +13,7 @@ package mil.nga.giat.geowave.adapter.raster;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class Resolution implements
 		Comparable<Resolution>,
@@ -101,10 +101,5 @@ public class Resolution implements
 		for (int i = 0; i < length; i++) {
 			resolutionPerDimension[i] = buf.getDouble();
 		}
-	}
-
-	@Override
-	public Resolution getPersistable() {
-		return new Resolution();
 	}
 }

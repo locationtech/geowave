@@ -161,9 +161,4 @@ public class ImageChipDataAdapter implements
 		}
 		return null;
 	}
-
-	@Override
-	public ImageChipDataAdapter getPersistable() {
-		return new ImageChipDataAdapter();
-	}
 }

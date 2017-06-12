@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -38,8 +38,8 @@ import com.google.protobuf.Service;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos;
@@ -90,26 +90,16 @@ public class AggregationEndpoint extends
 		ByteString value = ByteString.EMPTY;
 
 		// Get the aggregation type
-		final String aggregationType = request.getAggregation().getName();
-		Aggregation aggregation = null;
+		final Aggregation aggregation = (Aggregation) PersistenceUtils.fromClassId(request
+				.getAggregation()
+				.getClassId()
+				.toByteArray());
 
-		try {
-			aggregation = (Aggregation) Class.forName(
-					aggregationType).newInstance();
-
-			// Handle aggregation params
-			if (request.getAggregation().hasParams()) {
-				final byte[] parameterBytes = request.getAggregation().getParams().toByteArray();
-				final Persistable aggregationParams = PersistenceUtils.fromBinary(
-						parameterBytes,
-						Persistable.class);
-				aggregation.setParameters(aggregationParams);
-			}
-		}
-		catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			LOGGER.error(
-					"Could not create instance of Aggregation Type (" + aggregationType + ")",
-					e);
+		// Handle aggregation params
+		if (request.getAggregation().hasParams()) {
+			final byte[] parameterBytes = request.getAggregation().getParams().toByteArray();
+			final Persistable aggregationParams = PersistenceUtils.fromBinary(parameterBytes);
+			aggregation.setParameters(aggregationParams);
 		}
 		HBaseDistributableFilter hdFilter = null;
 		if (aggregation != null) {

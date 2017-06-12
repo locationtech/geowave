@@ -45,7 +45,7 @@ public class FeatureHyperLogLogStatistics extends
 	private HyperLogLogPlus loglog;
 	private int precision;
 
-	protected FeatureHyperLogLogStatistics() {
+	public FeatureHyperLogLogStatistics() {
 		super();
 	}
 
@@ -239,10 +239,5 @@ public class FeatureHyperLogLogStatistics extends
 					fieldName,
 					precision);
 		}
-	}
-
-	@Override
-	public FeatureHyperLogLogStatistics getPersistable() {
-		return new FeatureHyperLogLogStatistics();
 	}
 }

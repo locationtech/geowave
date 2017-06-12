@@ -12,8 +12,8 @@ package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class TypeNameOptionProvider implements
 		Persistable
@@ -61,10 +61,5 @@ public class TypeNameOptionProvider implements
 		else {
 			typename = null;
 		}
-	}
-
-	@Override
-	public TypeNameOptionProvider getPersistable() {
-		return new TypeNameOptionProvider();
 	}
 }

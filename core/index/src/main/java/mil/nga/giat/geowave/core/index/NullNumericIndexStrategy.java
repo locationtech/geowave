@@ -143,9 +143,4 @@ public class NullNumericIndexStrategy implements
 			new MultiDimensionalCoordinateRanges()
 		};
 	}
-
-	@Override
-	public NullNumericIndexStrategy getPersistable() {
-		return new NullNumericIndexStrategy();
-	}
 }

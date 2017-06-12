@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -31,8 +31,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
@@ -255,7 +255,7 @@ public class HBaseConstraintsQuery extends
 
 			final AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType
 					.newBuilder();
-			aggregationBuilder.setName(aggregation.getClass().getName());
+			aggregationBuilder.setClassId(ByteString.copyFrom(PersistenceUtils.toClassId(aggregation)));
 
 			if (aggregation.getParameters() != null) {
 				final byte[] paramBytes = PersistenceUtils.toBinary(aggregation.getParameters());
@@ -342,9 +342,7 @@ public class HBaseConstraintsQuery extends
 				final ByteString value = entry.getValue();
 				if ((value != null) && !value.isEmpty()) {
 					final byte[] bvalue = value.toByteArray();
-					final Mergeable mvalue = PersistenceUtils.fromBinary(
-							bvalue,
-							Mergeable.class);
+					final Mergeable mvalue = (Mergeable) PersistenceUtils.fromBinary(bvalue);
 
 					LOGGER.debug("Value from region " + regionCount + " is " + mvalue);
 

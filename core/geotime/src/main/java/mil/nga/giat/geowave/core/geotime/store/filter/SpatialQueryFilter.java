@@ -26,8 +26,8 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter;
-import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.util.GenericTypeResolver;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
@@ -174,7 +174,7 @@ public class SpatialQueryFilter extends
 
 	private Set<ByteArrayId> geometryFieldIds;
 
-	protected SpatialQueryFilter() {
+	public SpatialQueryFilter() {
 		super();
 	}
 
@@ -451,10 +451,5 @@ public class SpatialQueryFilter extends
 			}
 			return true;
 		}
-	}
-
-	@Override
-	public SpatialQueryFilter getPersistable() {
-		return new SpatialQueryFilter();
 	}
 }

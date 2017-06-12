@@ -80,9 +80,4 @@ public class CoordinateRangeQuery implements
 		// TODO should we consider implementing this?
 		return null;
 	}
-
-	@Override
-	public CoordinateRangeQuery getPersistable() {
-		return new CoordinateRangeQuery();
-	}
 }

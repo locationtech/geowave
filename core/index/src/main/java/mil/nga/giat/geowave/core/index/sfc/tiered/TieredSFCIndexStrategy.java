@@ -40,10 +40,10 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.RangeDecomposition;
 import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
 import mil.nga.giat.geowave.core.index.sfc.binned.BinnedSFCUtils;
@@ -67,7 +67,7 @@ public class TieredSFCIndexStrategy implements
 	private long maxEstimatedDuplicateIdsPerDimension;
 	private final Map<Integer, BigInteger> maxEstimatedDuplicatesPerDimensionalExtent = new HashMap<>();
 
-	protected TieredSFCIndexStrategy() {}
+	public TieredSFCIndexStrategy() {}
 
 	/**
 	 * Constructor used to create a Tiered Index Strategy.
@@ -507,16 +507,12 @@ public class TieredSFCIndexStrategy implements
 		for (int i = 0; i < numSfcs; i++) {
 			final byte[] sfc = new byte[buf.getInt()];
 			buf.get(sfc);
-			orderedSfcs[i] = PersistenceUtils.fromBinary(
-					sfc,
-					SpaceFillingCurve.class);
+			orderedSfcs[i] = (SpaceFillingCurve) PersistenceUtils.fromBinary(sfc);
 		}
 		for (int i = 0; i < numDimensions; i++) {
 			final byte[] dim = new byte[buf.getInt()];
 			buf.get(dim);
-			baseDefinitions[i] = PersistenceUtils.fromBinary(
-					dim,
-					NumericDimensionDefinition.class);
+			baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
 		}
 		final Builder<Integer, Byte> bimapBuilder = ImmutableBiMap.builder();
 		for (int i = 0; i < mappingSize; i++) {
@@ -709,15 +705,5 @@ public class TieredSFCIndexStrategy implements
 
 			return jo;
 		}
-
-		@Override
-		public TierIndexMetaData getPersistable() {
-			return new TierIndexMetaData();
-		}
-	}
-
-	@Override
-	public TieredSFCIndexStrategy getPersistable() {
-		return new TieredSFCIndexStrategy();
 	}
 }

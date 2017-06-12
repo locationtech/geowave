@@ -44,8 +44,8 @@ import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -744,9 +744,7 @@ public class FeatureDataAdapter extends
 					e);
 		}
 
-		secondaryIndexManager = PersistenceUtils.fromBinary(
-				secondaryIndexBytes,
-				SecondaryIndexManager.class);
+		secondaryIndexManager = (SecondaryIndexManager) PersistenceUtils.fromBinary(secondaryIndexBytes);
 
 		return null;
 	}
@@ -973,10 +971,5 @@ public class FeatureDataAdapter extends
 				model.getId(),
 				dimensionFieldIds);
 		return dimensionFieldIds;
-	}
-
-	@Override
-	public FeatureDataAdapter getPersistable() {
-		return new FeatureDataAdapter();
 	}
 }

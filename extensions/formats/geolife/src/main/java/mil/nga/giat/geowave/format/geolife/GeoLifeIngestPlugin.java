@@ -323,11 +323,6 @@ public class GeoLifeIngestPlugin extends
 			super(
 					parentPlugin);
 		}
-
-		@Override
-		public IngestGeoLifeFromHdfs getPersistable() {
-			return new IngestGeoLifeFromHdfs();
-		}
 	}
 
 	@Override
@@ -336,10 +331,5 @@ public class GeoLifeIngestPlugin extends
 			GeometryWrapper.class,
 			Time.class
 		};
-	}
-
-	@Override
-	public GeoLifeIngestPlugin getPersistable() {
-		return new GeoLifeIngestPlugin();
 	}
 }

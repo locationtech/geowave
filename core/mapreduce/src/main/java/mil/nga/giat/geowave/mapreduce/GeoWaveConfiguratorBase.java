@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -253,9 +253,7 @@ public class GeoWaveConfiguratorBase
 				adapterId.getString()));
 		if (input != null) {
 			final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(input);
-			return PersistenceUtils.fromBinary(
-					dataAdapterBytes,
-					AdapterToIndexMapping.class);
+			return (AdapterToIndexMapping) PersistenceUtils.fromBinary(dataAdapterBytes);
 		}
 		return null;
 	}
@@ -294,9 +292,7 @@ public class GeoWaveConfiguratorBase
 				adapterId.getString()));
 		if (input != null) {
 			final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(input);
-			return PersistenceUtils.fromBinary(
-					dataAdapterBytes,
-					DataAdapter.class);
+			return (DataAdapter<?>) PersistenceUtils.fromBinary(dataAdapterBytes);
 		}
 		return null;
 	}
@@ -337,9 +333,7 @@ public class GeoWaveConfiguratorBase
 					input.size());
 			for (final String dataAdapterStr : input.values()) {
 				final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(dataAdapterStr);
-				adapters.add(PersistenceUtils.fromBinary(
-						dataAdapterBytes,
-						DataAdapter.class));
+				adapters.add((DataAdapter<?>) PersistenceUtils.fromBinary(dataAdapterBytes));
 			}
 			return adapters.toArray(new DataAdapter[adapters.size()]);
 		}
@@ -356,9 +350,7 @@ public class GeoWaveConfiguratorBase
 				indexId.getString()));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
-			return PersistenceUtils.fromBinary(
-					indexBytes,
-					PrimaryIndex.class);
+			return (PrimaryIndex) PersistenceUtils.fromBinary(indexBytes);
 		}
 		return null;
 	}
@@ -415,9 +407,7 @@ public class GeoWaveConfiguratorBase
 					input.size());
 			for (final String indexStr : input.values()) {
 				final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(indexStr);
-				indices.add(PersistenceUtils.fromBinary(
-						indexBytes,
-						PrimaryIndex.class));
+				indices.add((PrimaryIndex) PersistenceUtils.fromBinary(indexBytes));
 			}
 			return indices.toArray(new PrimaryIndex[indices.size()]);
 		}

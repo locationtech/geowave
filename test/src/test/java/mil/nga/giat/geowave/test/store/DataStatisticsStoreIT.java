@@ -30,8 +30,8 @@ import org.junit.runner.RunWith;
 
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -366,9 +366,8 @@ public class DataStatisticsStoreIT
 		final Cell cell = r.listCells().get(
 				0);
 		@SuppressWarnings("unchecked")
-		final CountDataStatistics<String> stat = (CountDataStatistics<String>) PersistenceUtils.fromBinary(
-				CellUtil.cloneValue(cell),
-				Persistable.class);
+		final CountDataStatistics<String> stat = (CountDataStatistics<String>) PersistenceUtils.fromBinary(CellUtil
+				.cloneValue(cell));
 
 		Assert.assertEquals(
 				9,

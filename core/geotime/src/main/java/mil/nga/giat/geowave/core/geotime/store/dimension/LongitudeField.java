@@ -49,9 +49,4 @@ public class LongitudeField extends
 			final GeometryWrapper geometry ) {
 		return GeometryUtils.longitudeRangeFromGeometry(geometry.getGeometry());
 	}
-
-	@Override
-	public LongitudeField getPersistable() {
-		return new LongitudeField();
-	}
 }

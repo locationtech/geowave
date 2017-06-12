@@ -25,9 +25,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -615,9 +615,7 @@ public class QueryOptions implements
 		if (adapterBytesLength > 0) {
 			final byte[] adapterBytes = new byte[adapterBytesLength];
 			buf.get(adapterBytes);
-			dataAdapter = PersistenceUtils.fromBinary(
-					adapterBytes,
-					AbstractDataAdapter.class);
+			dataAdapter = (AbstractDataAdapter<?>) PersistenceUtils.fromBinary(adapterBytes);
 		}
 		final int fieldIdsLength = buf.getInt();
 		List<String> fieldIds = null;
@@ -775,10 +773,5 @@ public class QueryOptions implements
 			}
 		}
 		return combineByIndex(result);
-	}
-
-	@Override
-	public QueryOptions getPersistable() {
-		return new QueryOptions();
 	}
 }

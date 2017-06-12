@@ -15,7 +15,7 @@ import java.awt.image.DataBuffer;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class MergeableRasterTile<T extends Persistable> extends
 		RasterTile<T>

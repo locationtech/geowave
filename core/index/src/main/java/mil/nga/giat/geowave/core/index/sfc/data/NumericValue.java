@@ -26,7 +26,7 @@ public class NumericValue implements
 	private static final long serialVersionUID = 1L;
 	private double value;
 
-	protected NumericValue() {}
+	public NumericValue() {}
 
 	/**
 	 * Constructor used to create a new NumericValue object
@@ -119,10 +119,5 @@ public class NumericValue implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		value = buf.getDouble();
-	}
-
-	@Override
-	public NumericValue getPersistable() {
-		return new NumericValue();
 	}
 }

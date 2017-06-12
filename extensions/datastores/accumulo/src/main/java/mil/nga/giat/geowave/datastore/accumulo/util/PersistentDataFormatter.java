@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.base.EntryRowID;
 
 import org.apache.accumulo.core.data.Key;
@@ -249,9 +249,7 @@ public class PersistentDataFormatter implements
 			StringBuilder sb,
 			Value value ) {
 		try {
-			Persistable persistable = PersistenceUtils.fromBinary(
-					value.get(),
-					Persistable.class);
+			Persistable persistable = PersistenceUtils.fromBinary(value.get());
 			sb.append(persistable.toString());
 		}
 		catch (Exception ex) {

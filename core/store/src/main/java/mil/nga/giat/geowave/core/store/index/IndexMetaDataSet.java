@@ -17,7 +17,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.IndexStrategy;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -35,7 +35,7 @@ public class IndexMetaDataSet<T> extends
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"INDEX_METADATA");
 
-	protected IndexMetaDataSet() {}
+	public IndexMetaDataSet() {}
 
 	private IndexMetaDataSet(
 			final ByteArrayId adapterId,
@@ -92,7 +92,7 @@ public class IndexMetaDataSet<T> extends
 		final byte[] metaBytes = new byte[buffer.remaining()];
 		buffer.get(metaBytes);
 
-		metaData = (List) PersistenceUtils.fromBinary(metaBytes);
+		metaData = (List) PersistenceUtils.fromBinaryAsList(metaBytes);
 	}
 
 	public IndexMetaData[] toArray() {
@@ -104,9 +104,9 @@ public class IndexMetaDataSet<T> extends
 			final Mergeable merge ) {
 		if ((merge != null) && (merge instanceof IndexMetaDataSet)) {
 			for (int i = 0; i < metaData.size(); i++) {
-				metaData.get(
-						i).merge(
-						((IndexMetaDataSet<T>) merge).metaData.get(i));
+				IndexMetaData imd = metaData.get(i);
+				IndexMetaData imd2 = ((IndexMetaDataSet<T>) merge).metaData.get(i);
+				imd.merge(imd2);
 			}
 		}
 	}
@@ -174,10 +174,5 @@ public class IndexMetaDataSet<T> extends
 				mdArray);
 
 		return jo;
-	}
-
-	@Override
-	public IndexMetaDataSet<T> getPersistable() {
-		return new IndexMetaDataSet<T>();
 	}
 }

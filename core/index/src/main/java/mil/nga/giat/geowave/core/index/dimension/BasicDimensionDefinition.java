@@ -28,7 +28,7 @@ public class BasicDimensionDefinition implements
 	protected double min;
 	protected double max;
 
-	protected BasicDimensionDefinition() {}
+	public BasicDimensionDefinition() {}
 
 	/**
 	 * Constructor which defines and enforces the bounds of a numeric dimension
@@ -181,10 +181,5 @@ public class BasicDimensionDefinition implements
 		return new NumericRange(
 				min,
 				max);
-	}
-
-	@Override
-	public BasicDimensionDefinition getPersistable() {
-		return new BasicDimensionDefinition();
 	}
 }

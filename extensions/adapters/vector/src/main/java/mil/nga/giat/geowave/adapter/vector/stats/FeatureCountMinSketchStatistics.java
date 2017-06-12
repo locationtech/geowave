@@ -44,7 +44,7 @@ public class FeatureCountMinSketchStatistics extends
 			"ATT_SKETCH");
 	private CountMinSketch sketch = null;
 
-	protected FeatureCountMinSketchStatistics() {
+	public FeatureCountMinSketchStatistics() {
 		super();
 		sketch = new CountMinSketch(
 				0.001,
@@ -250,10 +250,5 @@ public class FeatureCountMinSketchStatistics extends
 					errorFactor,
 					probabilityOfCorrectness);
 		}
-	}
-
-	@Override
-	public FeatureCountMinSketchStatistics getPersistable() {
-		return new FeatureCountMinSketchStatistics();
 	}
 }

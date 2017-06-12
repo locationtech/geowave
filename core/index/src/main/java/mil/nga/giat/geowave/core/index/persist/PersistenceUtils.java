@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -8,7 +8,7 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.index;
+package mil.nga.giat.geowave.core.index.persist;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A set of convenience methods for serializing and deserializing persistable
  * objects
- * 
+ *
  */
 public class PersistenceUtils
 {
@@ -49,38 +49,49 @@ public class PersistenceUtils
 		return buf.array();
 	}
 
+	public static byte[] toClassId(
+			final Persistable persistable ) {
+		if (persistable == null) {
+			return new byte[0];
+		}
+		final Short classId = PersistableFactory.getInstance().getClassIdMapping().get(
+				persistable.getClass());
+		if (classId != null) {
+			final ByteBuffer buf = ByteBuffer.allocate(2);
+			buf.putShort(classId);
+			return buf.array();
+		}
+		return new byte[0];
+	}
+
+	public static Persistable fromClassId(
+			final byte[] bytes ) {
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		final short classId = buf.getShort();
+
+		final Persistable retVal = PersistableFactory.getInstance().newInstance(
+				classId);
+		return retVal;
+	}
+
 	public static byte[] toBinary(
 			final Persistable persistable ) {
 		if (persistable == null) {
 			return new byte[0];
 		}
-		// preface the payload with the class name and a length of the class
-		// name
-		byte[] classIdentifier = null;
-		try {
-			classIdentifier = ClassCompatabilityFactory.getClassIdentifierFromClassName(persistable
-					.getClass()
-					.getName());
-		}
-		catch (Exception e) {
-			LOGGER.error(
-					"Error getting class identifier for class [" + persistable.getClass().getName() + "]: "
-							+ e.getLocalizedMessage(),
-					e);
-		}
-		if (classIdentifier != null) {
+		final Short classId = PersistableFactory.getInstance().getClassIdMapping().get(
+				persistable.getClass());
+		if (classId != null) {
 			final byte[] persistableBinary = persistable.toBinary();
-			final int classIdentifierLength = classIdentifier.length;
-			final ByteBuffer buf = ByteBuffer.allocate(4 + classIdentifierLength + persistableBinary.length);
-			buf.putInt(classIdentifierLength);
-			buf.put(classIdentifier);
+			final ByteBuffer buf = ByteBuffer.allocate(2 + persistableBinary.length);
+			buf.putShort(classId);
 			buf.put(persistableBinary);
 			return buf.array();
 		}
 		return new byte[0];
 	}
 
-	public static List<Persistable> fromBinary(
+	public static List<Persistable> fromBinaryAsList(
 			final byte[] bytes ) {
 		final List<Persistable> persistables = new ArrayList<Persistable>();
 		if ((bytes == null) || (bytes.length < 4)) {
@@ -93,43 +104,25 @@ public class PersistenceUtils
 		for (int i = 0; i < size; i++) {
 			final byte[] persistableBinary = new byte[buf.getInt()];
 			buf.get(persistableBinary);
-			persistables.add(fromBinary(
-					persistableBinary,
-					Persistable.class));
+			persistables.add(fromBinary(persistableBinary));
 		}
 		return persistables;
 	}
 
-	public static <T extends Persistable> T fromBinary(
-			final byte[] bytes,
-			final Class<T> expectedType ) {
+	public static Persistable fromBinary(
+			final byte[] bytes ) {
+		if ((bytes == null) || (bytes.length < 2)) {
+			return null;
+		}
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int classIdentifierLength = buf.getInt();
-		final byte[] classIdentifierBinary = new byte[classIdentifierLength];
-		final byte[] persistableBinary = new byte[bytes.length - classIdentifierLength - 4];
-		buf.get(classIdentifierBinary);
+		final short classId = buf.getShort();
 
-		final String className = ClassCompatabilityFactory.getClassNameFromClassIdentifier(classIdentifierBinary);
+		final Persistable retVal = PersistableFactory.getInstance().newInstance(
+				classId);
 
-		final T retVal = classFactory(
-				className,
-				expectedType);
-		if (retVal != null) {
-			buf.get(persistableBinary);
-			retVal.fromBinary(persistableBinary);
-		}
+		final byte[] persistableBinary = new byte[bytes.length - 2];
+		buf.get(persistableBinary);
+		retVal.fromBinary(persistableBinary);
 		return retVal;
-	}
-
-	public static <T> T classFactory(
-			final String className,
-			final Class<T> expectedType ) {
-		T persistable = PersistableFactory.getPersistable(
-				className,
-				expectedType);
-		if (persistable != null) {
-			return (T) persistable;
-		}
-		return null;
 	}
 }

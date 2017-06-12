@@ -24,7 +24,7 @@ public class DataIdQueryFilter implements
 	private ByteArrayId adapterId;
 	private List<ByteArrayId> dataIds;
 
-	protected DataIdQueryFilter() {}
+	public DataIdQueryFilter() {}
 
 	public DataIdQueryFilter(
 			final ByteArrayId adapterId,
@@ -79,10 +79,5 @@ public class DataIdQueryFilter implements
 		buf.get(adapterIdBytes);
 		this.adapterId = new ByteArrayId(
 				adapterIdBytes);
-	}
-
-	@Override
-	public DataIdQueryFilter getPersistable() {
-		return new DataIdQueryFilter();
 	}
 }

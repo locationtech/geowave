@@ -21,7 +21,7 @@ public class PrefixIdQueryFilter implements
 {
 	private ByteArrayId rowPrefix;
 
-	protected PrefixIdQueryFilter() {}
+	public PrefixIdQueryFilter() {}
 
 	public PrefixIdQueryFilter(
 			final ByteArrayId rowPrefix ) {
@@ -50,10 +50,5 @@ public class PrefixIdQueryFilter implements
 			final byte[] bytes ) {
 		rowPrefix = new ByteArrayId(
 				bytes);
-	}
-
-	@Override
-	public PrefixIdQueryFilter getPersistable() {
-		return new PrefixIdQueryFilter();
 	}
 }

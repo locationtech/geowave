@@ -610,7 +610,7 @@ public class BasicQuery implements
 	private Map<ByteArrayId, FilterableConstraints> additionalConstraints = Collections.emptyMap();
 	BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.INTERSECTS;
 
-	protected BasicQuery() {}
+	public BasicQuery() {}
 
 	public BasicQuery(
 			final Constraints constraints ) {
@@ -766,10 +766,5 @@ public class BasicQuery implements
 	public void setExact(
 			final boolean exact ) {
 		this.exact = exact;
-	}
-
-	@Override
-	public BasicQuery getPersistable() {
-		return new BasicQuery();
 	}
 }

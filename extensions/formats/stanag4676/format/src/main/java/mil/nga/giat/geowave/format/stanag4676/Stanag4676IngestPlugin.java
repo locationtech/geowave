@@ -135,7 +135,7 @@ public class Stanag4676IngestPlugin extends
 		return new IngestWithReducerImpl().getDataAdapters(globalVisibility);
 	}
 
-	private static class IngestWithReducerImpl implements
+	public static class IngestWithReducerImpl implements
 			IngestWithReducer<WholeFile, Text, Stanag4676EventWritable, Object>,
 			IngestWithMapper<WholeFile, Object>
 	{
@@ -665,12 +665,6 @@ public class Stanag4676IngestPlugin extends
 			return new CloseableIterator.Wrapper<GeoWaveData<Object>>(
 					new ArrayList<GeoWaveData<Object>>().iterator());
 		}
-
-		@Override
-		public IngestWithReducerImpl getPersistable() {
-			return new IngestWithReducerImpl();
-		}
-
 	}
 
 	@Override

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.index.sfc.data;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 /**
  * Interface used to define numeric data associated with a space filling curve.

@@ -58,9 +58,4 @@ public class TimeArrayField extends
 				new FixedSizeObjectArrayWriter(
 						elementField.getWriter()));
 	}
-
-	@Override
-	public TimeArrayField getPersistable() {
-		return new TimeArrayField();
-	}
 }

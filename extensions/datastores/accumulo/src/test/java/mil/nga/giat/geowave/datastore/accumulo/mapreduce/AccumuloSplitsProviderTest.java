@@ -60,7 +60,7 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -901,7 +901,7 @@ public class AccumuloSplitsProviderTest
 		}
 	}
 
-	protected static class TestGeometryAdapter extends
+	public static class TestGeometryAdapter extends
 			AbstractDataAdapter<TestGeometry> implements
 			StatisticsProvider<TestGeometry>
 	{
@@ -947,11 +947,6 @@ public class AccumuloSplitsProviderTest
 			public void fromBinary(
 					final byte[] bytes ) {
 
-			}
-
-			@Override
-			public Persistable getPersistable() {
-				return null;
 			}
 		};
 
@@ -1131,11 +1126,6 @@ public class AccumuloSplitsProviderTest
 			}
 			return null;
 		}
-
-		@Override
-		public TestGeometryAdapter getPersistable() {
-			return new TestGeometryAdapter();
-		}
 	}
 
 	private final static ByteArrayId[] SUPPORTED_STATS_IDS = new ByteArrayId[] {
@@ -1143,12 +1133,12 @@ public class AccumuloSplitsProviderTest
 		CountDataStatistics.STATS_TYPE
 	};
 
-	private static class GeoBoundingBoxStatistics extends
+	public static class GeoBoundingBoxStatistics extends
 			BoundingBoxDataStatistics<TestGeometry>
 	{
 
 		@SuppressWarnings("unused")
-		protected GeoBoundingBoxStatistics() {
+		public GeoBoundingBoxStatistics() {
 			super();
 		}
 
@@ -1167,11 +1157,6 @@ public class AccumuloSplitsProviderTest
 				return geometry.getEnvelopeInternal();
 			}
 			return null;
-		}
-
-		@Override
-		public GeoBoundingBoxStatistics getPersistable() {
-			return new GeoBoundingBoxStatistics();
 		}
 	}
 

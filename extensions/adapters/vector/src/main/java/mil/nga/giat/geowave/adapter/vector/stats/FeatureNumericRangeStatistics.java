@@ -26,7 +26,7 @@ public class FeatureNumericRangeStatistics extends
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FEATURE_NUMERIC_RANGE");
 
-	protected FeatureNumericRangeStatistics() {
+	public FeatureNumericRangeStatistics() {
 		super();
 	}
 
@@ -141,10 +141,5 @@ public class FeatureNumericRangeStatistics extends
 					dataAdapterId,
 					fieldName);
 		}
-	}
-
-	@Override
-	public FeatureNumericRangeStatistics getPersistable() {
-		return new FeatureNumericRangeStatistics();
 	}
 }

@@ -206,9 +206,4 @@ public class Landsat8TemporalBinningStrategy implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {}
-
-	@Override
-	public Landsat8TemporalBinningStrategy getPersistable() {
-		return new Landsat8TemporalBinningStrategy();
-	}
 }

@@ -22,7 +22,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 public class RasterBoundingBoxStatistics extends
 		BoundingBoxDataStatistics<GridCoverage>
 {
-	protected RasterBoundingBoxStatistics() {
+	public RasterBoundingBoxStatistics() {
 		super();
 	}
 
@@ -85,10 +85,5 @@ public class RasterBoundingBoxStatistics extends
 		return new GeneralEnvelope(
 				minDP,
 				maxDP);
-	}
-
-	@Override
-	public RasterBoundingBoxStatistics getPersistable() {
-		return new RasterBoundingBoxStatistics();
 	}
 }

@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
 
 public class DataSchemaOptionProvider implements
@@ -49,10 +49,5 @@ public class DataSchemaOptionProvider implements
 	public void setSupplementalFields(
 			boolean supplementalFields ) {
 		includeSupplementalFields = supplementalFields;
-	}
-
-	@Override
-	public DataSchemaOptionProvider getPersistable() {
-		return new DataSchemaOptionProvider();
 	}
 }

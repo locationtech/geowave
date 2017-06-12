@@ -76,9 +76,4 @@ public class CountResult implements
 			}
 		}
 	}
-
-	@Override
-	public CountResult getPersistable() {
-		return new CountResult();
-	}
 }

@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
@@ -41,7 +41,7 @@ public class BasicIndexModel implements
 	private Map<ByteArrayId, NumericDimensionField<?>> fieldIdToPeristenceMap;
 	private transient String id;
 
-	protected BasicIndexModel() {}
+	public BasicIndexModel() {}
 
 	public BasicIndexModel(
 			final NumericDimensionField<?>[] dimensions ) {
@@ -144,9 +144,7 @@ public class BasicIndexModel implements
 		for (int i = 0; i < numDimensions; i++) {
 			final byte[] dim = new byte[buf.getInt()];
 			buf.get(dim);
-			dimensions[i] = PersistenceUtils.fromBinary(
-					dim,
-					NumericDimensionField.class);
+			dimensions[i] = (NumericDimensionField<?>) PersistenceUtils.fromBinary(dim);
 		}
 		init(dimensions);
 	}
@@ -157,10 +155,5 @@ public class BasicIndexModel implements
 			id = StringUtils.intToString(hashCode());
 		}
 		return id;
-	}
-
-	@Override
-	public BasicIndexModel getPersistable() {
-		return new BasicIndexModel();
 	}
 }

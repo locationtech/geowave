@@ -19,7 +19,7 @@ import org.apache.accumulo.core.iterators.conf.ColumnSet;
 import org.apache.hadoop.io.Text;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
 

@@ -35,7 +35,7 @@ public class DistributedRenderResult implements
 		// original draw order
 		private List<Pair<PersistableRenderedImage, PersistableComposite>> orderedStyles;
 
-		protected CompositeGroupResult() {}
+		public CompositeGroupResult() {}
 
 		public CompositeGroupResult(
 				final PersistableComposite composite,
@@ -266,11 +266,6 @@ public class DistributedRenderResult implements
 				orderedStyles = newOrderedStyles;
 			}
 		}
-
-		@Override
-		public CompositeGroupResult getPersistable() {
-			return new CompositeGroupResult();
-		}
 	}
 
 	// geotools has a concept of composites, which we need to keep separate so
@@ -280,7 +275,7 @@ public class DistributedRenderResult implements
 	// the parent image essentially gets labels rendered to it
 	private PersistableRenderedImage parentImage;
 
-	protected DistributedRenderResult() {}
+	public DistributedRenderResult() {}
 
 	public DistributedRenderResult(
 			final PersistableRenderedImage parentImage,
@@ -418,10 +413,5 @@ public class DistributedRenderResult implements
 		graphics.dispose();
 		return new PersistableRenderedImage(
 				image1.image);
-	}
-
-	@Override
-	public DistributedRenderResult getPersistable() {
-		return new DistributedRenderResult();
 	}
 }

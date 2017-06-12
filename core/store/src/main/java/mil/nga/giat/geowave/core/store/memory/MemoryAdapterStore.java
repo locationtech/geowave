@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -107,9 +107,7 @@ public class MemoryAdapterStore implements
 			final byte[] data = (byte[]) in.readObject();
 			adapterMap.put(
 					id,
-					PersistenceUtils.fromBinary(
-							data,
-							DataAdapter.class));
+					(DataAdapter<?>) PersistenceUtils.fromBinary(data));
 		}
 	}
 }

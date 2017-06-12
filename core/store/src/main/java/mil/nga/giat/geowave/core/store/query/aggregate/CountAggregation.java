@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.query.aggregate;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
 public class CountAggregation implements
@@ -67,4 +67,13 @@ public class CountAggregation implements
 	public void clearResult() {
 		count = 0;
 	}
+
+	@Override
+	public byte[] toBinary() {
+		return new byte[] {};
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {}
 }

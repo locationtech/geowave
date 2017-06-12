@@ -14,7 +14,7 @@ import java.awt.image.SampleModel;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 import org.opengis.coverage.grid.GridCoverage;
 

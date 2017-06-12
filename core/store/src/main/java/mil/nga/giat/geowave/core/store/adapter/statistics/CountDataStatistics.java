@@ -32,7 +32,7 @@ public class CountDataStatistics<T> extends
 
 	private long count = Long.MIN_VALUE;
 
-	protected CountDataStatistics() {
+	public CountDataStatistics() {
 		super();
 	}
 
@@ -146,10 +146,5 @@ public class CountDataStatistics<T> extends
 				"count",
 				count);
 		return jo;
-	}
-
-	@Override
-	public CountDataStatistics<T> getPersistable() {
-		return new CountDataStatistics<T>();
 	}
 }

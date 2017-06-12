@@ -27,7 +27,7 @@ public class NumericRange implements
 	private double min;
 	private double max;
 
-	protected NumericRange() {}
+	public NumericRange() {}
 
 	/**
 	 * Constructor used to create a IndexRange object
@@ -127,10 +127,5 @@ public class NumericRange implements
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		min = buf.getDouble();
 		max = buf.getDouble();
-	}
-
-	@Override
-	public NumericRange getPersistable() {
-		return new NumericRange();
 	}
 }

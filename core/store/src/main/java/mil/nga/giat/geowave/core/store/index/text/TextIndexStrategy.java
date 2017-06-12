@@ -94,9 +94,4 @@ public class TextIndexStrategy implements
 	public List<IndexMetaData> createMetaData() {
 		return Collections.emptyList();
 	}
-
-	@Override
-	public TextIndexStrategy getPersistable() {
-		return new TextIndexStrategy();
-	}
 }

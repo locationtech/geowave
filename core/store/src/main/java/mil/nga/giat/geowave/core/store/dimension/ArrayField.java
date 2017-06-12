@@ -11,9 +11,9 @@
 package mil.nga.giat.geowave.core.store.dimension;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
@@ -41,9 +41,7 @@ abstract public class ArrayField<T extends CommonIndexValue> implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		elementField = PersistenceUtils.fromBinary(
-				bytes,
-				NumericDimensionField.class);
+		elementField = (NumericDimensionField<T>) PersistenceUtils.fromBinary(bytes);
 	}
 
 	@Override

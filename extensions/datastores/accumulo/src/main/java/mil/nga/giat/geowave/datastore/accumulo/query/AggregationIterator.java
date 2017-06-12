@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -66,7 +66,7 @@ public class AggregationIterator extends
 	private DataAdapter adapter;
 	private boolean aggregationReturned = false;
 	private Text startRowOfAggregation = null;
-	private Text currentRow = new Text();
+	private final Text currentRow = new Text();
 	private SortedKeyValueIterator<Key, Value> parent = new SortedKeyValueIterator<Key, Value>() {
 
 		@Override
@@ -216,24 +216,19 @@ public class AggregationIterator extends
 	public void setOptions(
 			final Map<String, String> options ) {
 		try {
-			final String className = options.get(AGGREGATION_OPTION_NAME);
-			aggregationFunction = PersistenceUtils.classFactory(
-					className,
-					Aggregation.class);
+			final String aggregrationBytes = options.get(AGGREGATION_OPTION_NAME);
+			aggregationFunction = (Aggregation) PersistenceUtils.fromClassId(ByteArrayUtils
+					.byteArrayFromString(aggregrationBytes));
 			final String parameterStr = options.get(PARAMETER_OPTION_NAME);
 			if ((parameterStr != null) && !parameterStr.isEmpty()) {
 				final byte[] parameterBytes = ByteArrayUtils.byteArrayFromString(parameterStr);
-				final Persistable aggregationParams = PersistenceUtils.fromBinary(
-						parameterBytes,
-						Persistable.class);
+				final Persistable aggregationParams = PersistenceUtils.fromBinary(parameterBytes);
 				aggregationFunction.setParameters(aggregationParams);
 			}
 			if (options.containsKey(ADAPTER_OPTION_NAME)) {
 				final String adapterStr = options.get(ADAPTER_OPTION_NAME);
 				final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
-				adapter = PersistenceUtils.fromBinary(
-						adapterBytes,
-						DataAdapter.class);
+				adapter = (DataAdapter) PersistenceUtils.fromBinary(adapterBytes);
 			}
 
 			// now go from index strategy, constraints, and max decomp to a set
@@ -241,13 +236,12 @@ public class AggregationIterator extends
 
 			final String indexStrategyStr = options.get(INDEX_STRATEGY_OPTION_NAME);
 			final byte[] indexStrategyBytes = ByteArrayUtils.byteArrayFromString(indexStrategyStr);
-			final NumericIndexStrategy strategy = PersistenceUtils.fromBinary(
-					indexStrategyBytes,
-					NumericIndexStrategy.class);
+			final NumericIndexStrategy strategy = (NumericIndexStrategy) PersistenceUtils
+					.fromBinary(indexStrategyBytes);
 
 			final String contraintsStr = options.get(CONSTRAINTS_OPTION_NAME);
 			final byte[] constraintsBytes = ByteArrayUtils.byteArrayFromString(contraintsStr);
-			final List constraints = PersistenceUtils.fromBinary(constraintsBytes);
+			final List constraints = PersistenceUtils.fromBinaryAsList(constraintsBytes);
 			final String maxDecomp = options.get(MAX_DECOMPOSITION_OPTION_NAME);
 			Integer maxDecompInt = ConstraintsQuery.MAX_RANGE_DECOMPOSITION;
 			if (maxDecomp != null) {

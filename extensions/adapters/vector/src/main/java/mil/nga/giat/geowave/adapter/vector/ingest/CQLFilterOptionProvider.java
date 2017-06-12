@@ -21,8 +21,8 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 /**
  * Supports converting the filter string to Filter object.
@@ -37,6 +37,10 @@ public class CQLFilterOptionProvider implements
 	private FilterParameter convertedFilter = new FilterParameter(
 			null,
 			null);
+
+	public CQLFilterOptionProvider() {
+		super();
+	}
 
 	public String getCqlFilterString() {
 		return convertedFilter.getCqlFilterString();
@@ -175,10 +179,5 @@ public class CQLFilterOptionProvider implements
 		public String toString() {
 			return cqlFilterString;
 		}
-	}
-
-	@Override
-	public CQLFilterOptionProvider getPersistable() {
-		return new CQLFilterOptionProvider();
 	}
 }

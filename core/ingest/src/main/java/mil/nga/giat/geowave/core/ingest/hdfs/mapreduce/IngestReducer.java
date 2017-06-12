@@ -19,7 +19,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -66,9 +66,7 @@ public class IngestReducer extends
 			final String ingestWithReducerStr = context.getConfiguration().get(
 					AbstractMapReduceIngest.INGEST_PLUGIN_KEY);
 			final byte[] ingestWithReducerBytes = ByteArrayUtils.byteArrayFromString(ingestWithReducerStr);
-			ingestWithReducer = PersistenceUtils.fromBinary(
-					ingestWithReducerBytes,
-					IngestWithReducer.class);
+			ingestWithReducer = (IngestWithReducer) PersistenceUtils.fromBinary(ingestWithReducerBytes);
 			globalVisibility = context.getConfiguration().get(
 					AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY);
 			primaryIndexIds = AbstractMapReduceIngest.getPrimaryIndexIds(context.getConfiguration());

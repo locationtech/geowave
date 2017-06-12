@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
@@ -103,9 +103,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 	@SuppressWarnings("unchecked")
 	protected T entryToValue(
 			final Cell entry ) {
-		final T result = (T) PersistenceUtils.fromBinary(
-				CellUtil.cloneValue(entry),
-				Persistable.class);
+		final T result = (T) PersistenceUtils.fromBinary(CellUtil.cloneValue(entry));
 		if (result != null) {
 			addObjectToCache(
 					getPrimaryId(result),

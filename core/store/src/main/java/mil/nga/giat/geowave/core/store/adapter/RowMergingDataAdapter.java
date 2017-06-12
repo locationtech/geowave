@@ -15,7 +15,7 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public interface RowMergingDataAdapter<T, M extends Mergeable> extends
 		WritableDataAdapter<T>

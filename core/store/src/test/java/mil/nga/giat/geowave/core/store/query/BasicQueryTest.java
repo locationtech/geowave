@@ -452,11 +452,6 @@ public class BasicQueryTest
 				IndexMetaData... hints ) {
 			return null;
 		}
-
-		@Override
-		public ExampleNumericIndexStrategy getPersistable() {
-			return new ExampleNumericIndexStrategy();
-		}
 	}
 
 	public static class ConstrainedIndexValue extends
@@ -592,11 +587,6 @@ public class BasicQueryTest
 		@Override
 		public NumericDimensionDefinition getBaseDefinition() {
 			return this;
-		}
-
-		@Override
-		public ExampleDimensionOne getPersistable() {
-			return new ExampleDimensionOne();
 		}
 	}
 

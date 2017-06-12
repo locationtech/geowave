@@ -33,7 +33,7 @@ public class FieldVisibilityCount<T> extends
 			"FIELD_VISIBILITY_COUNT");
 	private final Map<ByteArrayId, Long> countsPerVisibility;
 
-	protected FieldVisibilityCount() {
+	public FieldVisibilityCount() {
 		super();
 		countsPerVisibility = new HashMap<ByteArrayId, Long>();
 	}
@@ -168,10 +168,5 @@ public class FieldVisibilityCount<T> extends
 						count + entry.getValue());
 			}
 		}
-	}
-
-	@Override
-	public FieldVisibilityCount<T> getPersistable() {
-		return new FieldVisibilityCount<T>();
 	}
 }

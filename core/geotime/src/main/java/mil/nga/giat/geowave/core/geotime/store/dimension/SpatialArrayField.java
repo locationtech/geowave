@@ -58,9 +58,4 @@ public class SpatialArrayField extends
 				new VariableSizeObjectArrayWriter(
 						elementField.getWriter()));
 	}
-
-	@Override
-	public SpatialArrayField getPersistable() {
-		return new SpatialArrayField();
-	}
 }

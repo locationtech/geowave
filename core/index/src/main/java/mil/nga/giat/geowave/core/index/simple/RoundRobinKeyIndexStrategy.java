@@ -228,9 +228,4 @@ public class RoundRobinKeyIndexStrategy implements
 			new MultiDimensionalCoordinateRanges()
 		};
 	}
-
-	@Override
-	public RoundRobinKeyIndexStrategy getPersistable() {
-		return new RoundRobinKeyIndexStrategy();
-	}
 }

@@ -76,9 +76,4 @@ public class LatitudeDefinition extends
 			}
 		}
 	}
-
-	@Override
-	public LatitudeDefinition getPersistable() {
-		return new LatitudeDefinition();
-	}
 }

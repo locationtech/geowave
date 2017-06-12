@@ -50,7 +50,7 @@ public class FeatureNumericHistogramStatistics extends
 			14) - 1;
 	private double minValue = -(maxValue);
 
-	protected FeatureNumericHistogramStatistics() {
+	public FeatureNumericHistogramStatistics() {
 		super();
 	}
 
@@ -369,10 +369,5 @@ public class FeatureNumericHistogramStatistics extends
 					dataAdapterId,
 					fieldName);
 		}
-	}
-
-	@Override
-	public FeatureNumericHistogramStatistics getPersistable() {
-		return new FeatureNumericHistogramStatistics();
 	}
 }

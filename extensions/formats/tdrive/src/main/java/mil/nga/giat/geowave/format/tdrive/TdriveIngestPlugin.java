@@ -241,11 +241,6 @@ public class TdriveIngestPlugin extends
 			super(
 					parentPlugin);
 		}
-
-		@Override
-		public IngestTdrivePointFromHdfs getPersistable() {
-			return new IngestTdrivePointFromHdfs();
-		}
 	}
 
 	@Override
@@ -260,10 +255,5 @@ public class TdriveIngestPlugin extends
 			GeometryWrapper.class,
 			Time.class
 		};
-	}
-
-	@Override
-	public TdriveIngestPlugin getPersistable() {
-		return new TdriveIngestPlugin();
 	}
 }

@@ -24,7 +24,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 public class TimeDefinition extends
 		UnboundedDimensionDefinition
 {
-	protected TimeDefinition() {
+	public TimeDefinition() {
 		super();
 	}
 
@@ -62,10 +62,5 @@ public class TimeDefinition extends
 		return new NumericRange(
 				0,
 				System.currentTimeMillis() + 1);
-	}
-
-	@Override
-	public TimeDefinition getPersistable() {
-		return new TimeDefinition();
 	}
 }

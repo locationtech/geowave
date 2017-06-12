@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,10 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.avro.AbstractStageWholeFileToAvro;
 import mil.nga.giat.geowave.core.ingest.avro.WholeFile;
@@ -27,11 +31,6 @@ import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Iterators;
 
 /**
  * This class can be sub-classed as a general-purpose recipe for parallelizing
@@ -41,7 +40,8 @@ import com.google.common.collect.Iterators;
 abstract public class AbstractLocalIngestWithMapper<T> extends
 		AbstractStageWholeFileToAvro implements
 		LocalFileIngestPlugin<T>,
-		IngestFromHdfsPlugin<WholeFile, T>
+		IngestFromHdfsPlugin<WholeFile, T>,
+		Persistable
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractLocalIngestWithMapper.class);
 
@@ -87,7 +87,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 		return null;
 	}
 
-	private static class InternalIngestWithMapper<T> implements
+	protected static class InternalIngestWithMapper<T> implements
 			IngestWithMapper<WholeFile, T>
 	{
 		private AbstractLocalIngestWithMapper parentPlugin;
@@ -120,25 +120,18 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 
 		@Override
 		public byte[] toBinary() {
-			return StringUtils.stringToBinary(parentPlugin.getClass().getName());
+			return PersistenceUtils.toClassId(parentPlugin);
 		}
 
 		@Override
 		public void fromBinary(
 				final byte[] bytes ) {
-			parentPlugin = PersistenceUtils.classFactory(
-					StringUtils.stringFromBinary(bytes),
-					AbstractLocalIngestWithMapper.class);
+			parentPlugin = (AbstractLocalIngestWithMapper) PersistenceUtils.fromClassId(bytes);
 		}
 
 		@Override
 		public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
 			return parentPlugin.getSupportedIndexableTypes();
-		}
-
-		@Override
-		public InternalIngestWithMapper<T> getPersistable() {
-			return new InternalIngestWithMapper<T>();
 		}
 	}
 
