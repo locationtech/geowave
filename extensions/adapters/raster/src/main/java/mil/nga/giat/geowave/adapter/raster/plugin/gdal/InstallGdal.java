@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
@@ -31,14 +32,19 @@ public class InstallGdal
 	public static final File DEFAULT_TEMP_DIR = new File(
 			"./target/temp");
 	private static final String GDAL_ENV = "baseGdalDownload";
-	private static final String DEFAULT_BASE = "http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal";
+	// this has some of the content from
+	// http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal
+
+	// rehosted, with all supplemental files to retain the credit (just to
+	// lessen the burden of additional network traffic imposed on this external
+	// server)
+	private static final String DEFAULT_BASE = "https://s3.amazonaws.com/geowave/third-party-downloads/gdal";
 
 	public static void main(
 			final String[] args )
 			throws IOException {
-
 		File gdalDir = null;
-		if (args != null && args.length > 0 && args[0] != null && !args[0].trim().isEmpty()) {
+		if ((args != null) && (args.length > 0) && (args[0] != null) && !args[0].trim().isEmpty()) {
 			gdalDir = new File(
 					args[0]);
 		}
@@ -48,8 +54,17 @@ public class InstallGdal
 					"gdal");
 		}
 
-		if (gdalDir.exists()) {
-			return;
+		if (gdalDir.exists() && gdalDir.isDirectory()) {
+			File[] files = gdalDir.listFiles();
+			if (files != null && files.length > 1) {
+				return;
+			}
+			else {
+				LOGGER
+						.error("Directory "
+								+ gdalDir.getAbsolutePath()
+								+ " exists but does not contain GDAL, consider deleting directory or choosing a different one.");
+			}
 		}
 
 		if (!gdalDir.mkdirs()) {
@@ -60,12 +75,12 @@ public class InstallGdal
 	}
 
 	private static void install(
-			File gdalDir )
+			final File gdalDir )
 			throws IOException {
 		URL url;
 		String file;
 		String gdalEnv = System.getProperty(GDAL_ENV);
-		if (gdalEnv == null || gdalEnv.trim().isEmpty()) {
+		if ((gdalEnv == null) || gdalEnv.trim().isEmpty()) {
 			gdalEnv = DEFAULT_BASE;
 		}
 		if (isWindows()) {
@@ -81,6 +96,12 @@ public class InstallGdal
 		final File downloadFile = new File(
 				gdalDir,
 				file);
+		if (downloadFile.exists() && (downloadFile.length() < 1)) {
+			// its corrupt, delete it
+			if (!downloadFile.delete()) {
+				LOGGER.warn("File '" + downloadFile.getAbsolutePath() + "' is corrupt and cannot be deleted");
+			}
+		}
 		if (!downloadFile.exists()) {
 			try (FileOutputStream fos = new FileOutputStream(
 					downloadFile)) {
@@ -143,7 +164,7 @@ public class InstallGdal
 	}
 
 	private static boolean isWindows() {
-		String name = System.getProperty(
+		final String name = System.getProperty(
 				"os.name").toLowerCase();
 		return name.startsWith("windows");
 	}
