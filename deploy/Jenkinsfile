@@ -25,5 +25,5 @@ node {
    
    // Deploy to geowave-rpms
    stage 'Deploying to s3://geowave-rpms/'
-   sh 'aws s3 sync /var/www/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+   sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
 }

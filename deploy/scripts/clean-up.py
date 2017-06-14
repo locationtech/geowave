@@ -20,8 +20,8 @@ class CleanUp():
         self.objs_in_dev_jar = []
         
         # Variables for cleaning local workspace
-        self.dev_path = os.path.join(os.sep, 'var','www','html','repos','snapshots','geowave','dev')
-        self.dev_jar_path = os.path.join(os.sep, 'var','www','html','repos','snapshots','geowave','dev-jars')
+        self.dev_path = os.path.join(os.sep, 'var','www','geowave-efs','html','repos','snapshots','geowave','dev')
+        self.dev_jar_path = os.path.join(os.sep, 'var','www','geowave-efs','html','repos','snapshots','geowave','dev-jars')
 
 
     def query_s3_bucket(self):
