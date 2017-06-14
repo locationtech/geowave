@@ -7,7 +7,7 @@ node {
    // Mark the code checkout 'stage'
    stage 'Checkout'
    // Get GeoWave source from GitHub repository
-   checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: true], [$class: 'LocalBranch', localBranch: 'master']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/ayk33/geowave.git']]])
+   checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: true], [$class: 'LocalBranch', localBranch: 'master']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/locationtech/geowave.git']]])
 
    // Mark the create docker image 'stage'
    stage 'Create Docker Image'
