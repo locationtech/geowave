@@ -10,8 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.javaspark;
 
-import java.io.File;
-
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -30,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.analytic.javaspark.GeoWaveRDD;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -46,12 +43,9 @@ public class GeoWaveJavaSparkKMeansIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(
 			GeoWaveJavaSparkKMeansIT.class);
 
-	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
-	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
-
 	@GeoWaveTestStore(value = {
-//		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.ACCUMULO,
+//		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
 
@@ -110,26 +104,27 @@ public class GeoWaveJavaSparkKMeansIT extends
 
 		long dur = (System.currentTimeMillis() - mark);
 		LOGGER.warn(
-				"Ingest (points) duration = " + dur + " ms.");
+				"Ingest duration = " + dur + " ms.");
 
 		try {
 			mark = System.currentTimeMillis();
 
-			final DistributableQuery query = TestUtils.resourceToQuery(
-					new File(
-							TEST_BOX_FILTER_FILE).toURI().toURL());
-
 			// Load RDD from datastore
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaPairRdd = GeoWaveRDD.rddForSimpleFeatures(
 					context.sc(),
-					dataStore,
-					query);
+					dataStore);
+
+			dur = (System.currentTimeMillis() - mark);
+			LOGGER.warn(
+					"Load RDD duration = " + dur + " ms.");
+			LOGGER.warn(
+					"RDD contains = " + javaPairRdd.count() + " centroids.");
+			
+			mark = System.currentTimeMillis();
 
 			// Retrieve the centroids
-			JavaRDD<Vector> centroidVectors = GeoWaveRDD.rddPointToVector(
-					GeoWaveRDD.rddCentroids(
-							javaPairRdd));
-			
+			JavaRDD<Vector> centroidVectors = GeoWaveRDD.rddFeatureVectors(
+							javaPairRdd);			
 			centroidVectors.cache();
 
 			// Run KMeans
@@ -139,37 +134,23 @@ public class GeoWaveJavaSparkKMeansIT extends
 					centroidVectors.rdd(),
 					numClusters,
 					numIterations);
+			
+			dur = (System.currentTimeMillis() - mark);
+			LOGGER.warn(
+					"KMeans clustering duration = " + dur + " ms.");
 
-			System.out.println(
+			LOGGER.warn(
 					"Cluster centers:");
 			for (Vector center : clusters.clusterCenters()) {
-				System.out.println(
+				LOGGER.warn(
 						" " + center);
 			}
 			double cost = clusters.computeCost(
 					centroidVectors.rdd());
-			System.out.println(
+			LOGGER.warn(
 					"Cost: " + cost);
 
-			// Evaluate clustering by computing Within Set Sum of Squared Errors
-			double WSSSE = clusters.computeCost(
-					centroidVectors.rdd());
-			System.out.println(
-					"Within Set Sum of Squared Errors = " + WSSSE);
-
-			// Save and load model
-			clusters.save(
-					context.sc(),
-					"target/org/apache/spark/JavaKMeansExample/KMeansModel");
-			KMeansModel sameModel = KMeansModel.load(
-					context.sc(),
-					"target/org/apache/spark/JavaKMeansExample/KMeansModel");
-			// $example off$
-
 			context.stop();
-
-			dur = (System.currentTimeMillis() - mark);
-
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -182,6 +163,8 @@ public class GeoWaveJavaSparkKMeansIT extends
 
 		TestUtils.deleteAll(
 				dataStore);
+		
+		context.close();
 	}
 
 	@Override
