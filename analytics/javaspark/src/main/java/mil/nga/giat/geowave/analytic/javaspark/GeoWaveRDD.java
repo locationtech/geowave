@@ -232,6 +232,7 @@ public class GeoWaveRDD
 
 			System.out.println("DataStore " + storeName + " loaded into RDD with " + javaRdd.count() + " features.");
 
+			context.close();
 		}
 		catch (IOException e) {
 			System.err.println(e.getMessage());
