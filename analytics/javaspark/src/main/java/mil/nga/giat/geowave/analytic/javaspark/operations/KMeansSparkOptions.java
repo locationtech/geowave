@@ -10,10 +10,10 @@ public class KMeansSparkOptions
 	@Parameter(names = "-m", description = "The spark master designation (default: local)")
 	private String master;
 
-	@Parameter(names = "-k", description = "The number of clusters to generate (default: 8)")
+	@Parameter(names = "-k", description = "The number of clusters to generate")
 	private Integer numClusters = 8;
 
-	@Parameter(names = "-i", description = "The number of iterations to run (default: 20")
+	@Parameter(names = "-i", description = "The number of iterations to run")
 	private Integer numIterations = 20;
 
 	public KMeansSparkOptions() {}
