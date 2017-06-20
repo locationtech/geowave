@@ -18,8 +18,7 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class KMeansRunner
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			KMeansRunner.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansRunner.class);
 
 	private final JavaSparkContext jsc;
 	private DataStorePluginOptions inputDataStore = null;
@@ -54,10 +53,8 @@ public class KMeansRunner
 
 		SparkConf sparkConf = new SparkConf();
 
-		sparkConf.setAppName(
-				appName);
-		sparkConf.setMaster(
-				master);
+		sparkConf.setAppName(appName);
+		sparkConf.setMaster(master);
 
 		jsc = new JavaSparkContext(
 				sparkConf);
@@ -67,8 +64,7 @@ public class KMeansRunner
 			throws IOException {
 		// Validate inputs
 		if (inputDataStore == null) {
-			LOGGER.error(
-					"You must supply an input datastore!");
+			LOGGER.error("You must supply an input datastore!");
 			throw new IOException(
 					"You must supply an input datastore!");
 		}
@@ -79,8 +75,7 @@ public class KMeansRunner
 				inputDataStore);
 
 		// Retrieve the input centroids
-		JavaRDD<Vector> centroidVectors = GeoWaveRDD.rddFeatureVectors(
-				javaPairRdd);
+		JavaRDD<Vector> centroidVectors = GeoWaveRDD.rddFeatureVectors(javaPairRdd);
 		centroidVectors.cache();
 
 		// Run KMeans

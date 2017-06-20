@@ -52,8 +52,7 @@ public class KmeansSparkCommand extends
 					"Requires arguments: <inputstorename>");
 		}
 
-		String inputStoreName = parameters.get(
-				0);
+		String inputStoreName = parameters.get(0);
 
 		// Config file
 		File configFile = (File) params.getContext().get(
@@ -63,8 +62,7 @@ public class KmeansSparkCommand extends
 		if (inputStoreOptions == null) {
 			StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configFile)) {
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
@@ -82,17 +80,14 @@ public class KmeansSparkCommand extends
 		// Convert properties from DBScanOptions and CommonOptions
 		PropertyManagementConverter converter = new PropertyManagementConverter(
 				properties);
-		converter.readProperties(
-				kMeansSparkOptions);
+		converter.readProperties(kMeansSparkOptions);
 
 		KMeansRunner runner = new KMeansRunner(
 				kMeansSparkOptions.getAppName(),
 				kMeansSparkOptions.getMaster());
 
-		runner.setNumClusters(
-				kMeansSparkOptions.getNumClusters());
-		runner.setNumIterations(
-				kMeansSparkOptions.getNumIterations());
+		runner.setNumClusters(kMeansSparkOptions.getNumClusters());
+		runner.setNumIterations(kMeansSparkOptions.getNumIterations());
 
 		try {
 			runner.run();
@@ -103,13 +98,12 @@ public class KmeansSparkCommand extends
 		}
 
 		KMeansModel clusterModel = runner.getOutputModel();
-		
+
 		// TODO: output centroids and hulls to output datastore
-		
+
 		System.out.println("KMeans cluster centroids:");
 		for (Vector center : clusterModel.clusterCenters()) {
-			System.out.println(
-					"> " + center);
+			System.out.println("> " + center);
 		}
 	}
 
@@ -120,8 +114,7 @@ public class KmeansSparkCommand extends
 	public void setParameters(
 			String storeName ) {
 		this.parameters = new ArrayList<String>();
-		this.parameters.add(
-				storeName);
+		this.parameters.add(storeName);
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {
