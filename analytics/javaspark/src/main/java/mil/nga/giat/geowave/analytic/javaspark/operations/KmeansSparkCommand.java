@@ -39,7 +39,7 @@ public class KmeansSparkCommand extends
 	@ParametersDelegate
 	private KMeansSparkOptions kMeansSparkOptions = new KMeansSparkOptions();
 
-	DataStorePluginOptions inputStoreOptions = null;
+	DataStorePluginOptions inputDataStore = null;
 
 	@Override
 	public void execute(
@@ -59,19 +59,19 @@ public class KmeansSparkCommand extends
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load store.
-		if (inputStoreOptions == null) {
+		if (inputDataStore == null) {
 			StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+			inputDataStore = inputStoreLoader.getDataStorePlugin();
 		}
 
 		// Save a reference to the store in the property management.
 		PersistableStore persistedStore = new PersistableStore(
-				inputStoreOptions);
+				inputDataStore);
 		final PropertyManagement properties = new PropertyManagement();
 		properties.store(
 				StoreParameters.StoreParam.INPUT_STORE,
@@ -86,6 +86,7 @@ public class KmeansSparkCommand extends
 				kMeansSparkOptions.getAppName(),
 				kMeansSparkOptions.getMaster());
 
+		runner.setInputDataStore(inputDataStore);
 		runner.setNumClusters(kMeansSparkOptions.getNumClusters());
 		runner.setNumIterations(kMeansSparkOptions.getNumIterations());
 
@@ -118,12 +119,12 @@ public class KmeansSparkCommand extends
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
+		return inputDataStore;
 	}
 
 	public void setInputStoreOptions(
 			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
+		this.inputDataStore = inputStoreOptions;
 	}
 
 	public KMeansSparkOptions getKMeansSparkOptions() {
