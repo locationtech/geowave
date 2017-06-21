@@ -26,6 +26,7 @@ public class KMeansRunner
 
 	private int numClusters = 8;
 	private int numIterations = 20;
+	private double epsilon = -1.0;
 
 	public KMeansRunner() {
 		this(
@@ -77,12 +78,20 @@ public class KMeansRunner
 		// Retrieve the input centroids
 		JavaRDD<Vector> centroidVectors = GeoWaveRDD.rddFeatureVectors(javaPairRdd);
 		centroidVectors.cache();
+		
+		// Init the algorithm
+		KMeans kmeans = new KMeans();
+		kmeans.setInitializationMode("kmeans||");
+		kmeans.setK(numClusters);
+		kmeans.setMaxIterations(numIterations);
+		
+		if (epsilon > -1.0) {
+			kmeans.setEpsilon(epsilon);
+		}
 
 		// Run KMeans
-		outputModel = KMeans.train(
-				centroidVectors.rdd(),
-				numClusters,
-				numIterations);
+		outputModel = kmeans.run(
+				centroidVectors.rdd());
 	}
 
 	public DataStorePluginOptions getInputDataStore() {
@@ -102,6 +111,11 @@ public class KMeansRunner
 	public void setNumIterations(
 			int numIterations ) {
 		this.numIterations = numIterations;
+	}
+
+	public void setEpsilon(
+			Double epsilon ) {
+		this.epsilon = epsilon;
 	}
 
 	public KMeansModel getOutputModel() {

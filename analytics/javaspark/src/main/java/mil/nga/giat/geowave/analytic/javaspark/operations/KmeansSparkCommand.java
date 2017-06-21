@@ -89,7 +89,11 @@ public class KmeansSparkCommand extends
 		runner.setInputDataStore(inputDataStore);
 		runner.setNumClusters(kMeansSparkOptions.getNumClusters());
 		runner.setNumIterations(kMeansSparkOptions.getNumIterations());
-
+		
+		if (kMeansSparkOptions.getEpsilon() != null) {
+			runner.setEpsilon(kMeansSparkOptions.getEpsilon());
+		}
+		
 		try {
 			runner.run();
 		}

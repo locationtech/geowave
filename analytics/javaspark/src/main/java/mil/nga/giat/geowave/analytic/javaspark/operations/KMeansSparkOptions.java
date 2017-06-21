@@ -4,17 +4,35 @@ import com.beust.jcommander.Parameter;
 
 public class KMeansSparkOptions
 {
-	@Parameter(names = "-n", description = "The spark application name")
+	@Parameter(names = {
+		"-n",
+		"--name"
+	}, description = "The spark application name")
 	private String appName;
 
-	@Parameter(names = "-m", description = "The spark master designation (default: local)")
+	@Parameter(names = {
+		"-m",
+		"--master"
+	}, description = "The spark master designation (default: local)")
 	private String master;
 
-	@Parameter(names = "-k", description = "The number of clusters to generate")
+	@Parameter(names = {
+		"-k",
+		"--numClusters"
+	}, description = "The number of clusters to generate")
 	private Integer numClusters = 8;
 
-	@Parameter(names = "-i", description = "The number of iterations to run")
+	@Parameter(names = {
+		"-i",
+		"--numIterations"
+	}, description = "The number of iterations to run")
 	private Integer numIterations = 20;
+
+	@Parameter(names = {
+		"-e",
+		"--epsilon"
+	}, description = "The convergence tolerance")
+	private Double epsilon;
 
 	public KMeansSparkOptions() {}
 
@@ -52,6 +70,15 @@ public class KMeansSparkOptions
 	public void setNumIterations(
 			Integer numIterations ) {
 		this.numIterations = numIterations;
+	}
+
+	public Double getEpsilon() {
+		return epsilon;
+	}
+
+	public void setEpsilon(
+			Double epsilon ) {
+		this.epsilon = epsilon;
 	}
 
 }

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.javaspark;
 
+import java.io.IOException;
+
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -27,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.analytic.javaspark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -81,90 +84,37 @@ public class GeoWaveJavaSparkKMeansIT extends
 		LOGGER.warn(
 				"-----------------------------------------");
 	}
+	
 
 	@Test
-	public void testKMeans() {
-		// Set up Spark
-		SparkConf sparkConf = new SparkConf();
-
-		sparkConf.setAppName(
-				"JavaSparkKMeansIT");
-		sparkConf.setMaster(
-				"local");
-		JavaSparkContext context = new JavaSparkContext(
-				sparkConf);
-
-		// ingest both lines and points
-		long mark = System.currentTimeMillis();
+	public void testKMeansRunner() {
+		// Load data
 		TestUtils.testLocalIngest(
 				dataStore,
 				DimensionalityType.SPATIAL,
 				HAIL_SHAPEFILE_FILE,
 				1);
 
-		long dur = (System.currentTimeMillis() - mark);
-		LOGGER.warn(
-				"Ingest duration = " + dur + " ms.");
-
-		try {
-			mark = System.currentTimeMillis();
-
-			// Load RDD from datastore
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaPairRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
-					dataStore);
-
-			dur = (System.currentTimeMillis() - mark);
-			LOGGER.warn(
-					"Load RDD duration = " + dur + " ms.");
-			LOGGER.warn(
-					"RDD contains = " + javaPairRdd.count() + " centroids.");
-			
-			mark = System.currentTimeMillis();
-
-			// Retrieve the centroids
-			JavaRDD<Vector> centroidVectors = GeoWaveRDD.rddFeatureVectors(
-							javaPairRdd);			
-			centroidVectors.cache();
-
-			// Run KMeans
-			int numClusters = 8;
-			int numIterations = 20;
-			KMeansModel clusters = KMeans.train(
-					centroidVectors.rdd(),
-					numClusters,
-					numIterations);
-			
-			dur = (System.currentTimeMillis() - mark);
-			LOGGER.warn(
-					"KMeans clustering duration = " + dur + " ms.");
-
-			LOGGER.warn(
-					"Cluster centers:");
-			for (Vector center : clusters.clusterCenters()) {
-				LOGGER.warn(
-						" " + center);
-			}
-			double cost = clusters.computeCost(
-					centroidVectors.rdd());
-			LOGGER.warn(
-					"Cost: " + cost);
-
-			context.stop();
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			Assert.fail(
-					"Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage()
-							+ "'");
-		}
-
-		TestUtils.deleteAll(
-				dataStore);
+		// Create the runner
+		KMeansRunner runner = new KMeansRunner();
+		runner.setInputDataStore(dataStore);
 		
-		context.close();
+		// Run kmeans
+		try {
+			runner.run();
+		}
+		catch (IOException e) {
+			throw new RuntimeException(
+					"Failed to execute: " + e.getMessage());
+		}
+
+		// Show the output
+		KMeansModel clusterModel = runner.getOutputModel();
+
+		System.out.println("KMeans cluster centroids:");
+		for (Vector center : clusterModel.clusterCenters()) {
+			System.out.println("> " + center);
+		}
 	}
 
 	@Override
