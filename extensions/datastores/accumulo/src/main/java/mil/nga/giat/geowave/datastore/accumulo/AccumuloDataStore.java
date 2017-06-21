@@ -12,6 +12,9 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,20 +23,33 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchDeleter;
+import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.client.ZooKeeperInstance;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
@@ -43,6 +59,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -50,6 +67,7 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -89,6 +107,7 @@ import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsDelete;
@@ -1080,5 +1099,217 @@ public class AccumuloDataStore extends
 			}
 		}
 
+	}
+
+	@Override
+	public String getVersion(
+			StoreFactoryOptions options ) {
+		String version = null;
+
+		AccumuloRequiredOptions accumuloOptions = (AccumuloRequiredOptions) options;
+		if (accumuloOptions == null) {
+			return null;
+		}
+
+		try {
+			Connector conn = new ZooKeeperInstance(
+					accumuloOptions.getInstance(),
+					accumuloOptions.getZookeeper()).getConnector(
+					accumuloOptions.getUser(),
+					new PasswordToken(
+							accumuloOptions.getPassword()));
+
+			Configuration configuration = new Configuration();
+
+			Map<String, String> systemConfiguration = conn.instanceOperations().getSystemConfiguration();
+			String jarPattern = systemConfiguration.get("general.vfs.context.classpath.geowave");
+
+			// try to resolve the hadoop file system config setting
+			String accumuloDir = configuration.get(
+					"fs.defaultFS",
+					configuration.get("fs.default.name"));
+
+			if (accumuloDir != null && !"".equals(accumuloDir.trim())) {
+				Path jarPatternPath = new Path(
+						jarPattern);
+				if (jarPatternPath != null) {
+					// since jar pattern is likely a regex pattern, resolve to
+					// the parent to avoid uri complications
+					jarPatternPath = jarPatternPath.getParent();
+				}
+
+				if (!validateURI(new URI(
+						accumuloDir))) {
+					accumuloDir = String.format(
+							"%s://%s:%s/%s",
+							jarPatternPath.toUri().getScheme(),
+							jarPatternPath.toUri().getHost(),
+							jarPatternPath.toUri().getPort(),
+							jarPatternPath.toUri().getPath());
+				}
+				Path accumuloDirPath = new Path(
+						accumuloDir);
+				LOGGER.debug(
+						"Looking at files for GeoWave Accumulo version at root path [ {} ]",
+						accumuloDirPath);
+
+				String buildPattern = accumuloDirPath + "/(.*?)build.properties";
+				LOGGER.debug(
+						"Looking for build properties files using regex [{}]",
+						buildPattern);
+				LOGGER.debug(
+						"Looking for jar files using regex [{}]",
+						jarPattern);
+
+				FileSystem fs = FileSystem.get(
+						new URI(
+								accumuloDir),
+						configuration);
+				if (fs != null) {
+					// check if build.properties exists as unpacked file in hdfs
+					if (fs.exists(accumuloDirPath)) {
+						boolean blnBuildFileExists = false;
+						FSDataInputStream fsInputStream = null;
+						List<FileStatus> files = performRecursiveFileSearch(
+								fs,
+								accumuloDirPath,
+								buildPattern);
+						for (FileStatus file : files) {
+							if (file != null && file.getPath() != null) {
+								fsInputStream = fs.open(file.getPath());
+								if (fsInputStream != null) {
+									version = getBuildVersion(fsInputStream);
+									if (version != null) {
+										LOGGER.debug(
+												"Found version from properties file on file system at path [{}]",
+												file.getPath());
+										blnBuildFileExists = true;
+										break;
+									}
+								}
+							}
+						}
+						// if not, try to extract it from jar file using pattern
+						// specified
+						if (!blnBuildFileExists) {
+							files = performRecursiveFileSearch(
+									fs,
+									accumuloDirPath,
+									jarPattern);
+							for (FileStatus file : files) {
+								if (file != null && file.getPath() != null) {
+									fsInputStream = fs.open(file.getPath());
+									if (fsInputStream != null) {
+										ZipInputStream zipInputStream = new ZipInputStream(
+												fsInputStream);
+										if (zipInputStream != null) {
+											ZipEntry zipEntry = null;
+											while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+												if (zipEntry.getName().equals(
+														VersionUtils.BUILD_PROPERTIES_FILE_NAME)) {
+													version = getBuildVersion(zipInputStream);
+													if (version != null) {
+														LOGGER
+																.debug(
+																		"Found version from properties file in jar file on file system at path [{}]",
+																		file.getPath());
+														break;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (IOException | IllegalArgumentException | URISyntaxException | AccumuloException
+				| AccumuloSecurityException e) {
+			e.printStackTrace();
+		}
+
+		return version;
+	}
+
+	/**
+	 * Performs a recursive file-system search and returns all files matching a
+	 * specified file name pattern
+	 * 
+	 * @param fs
+	 *            File system to get files from
+	 * @param path
+	 *            Root path to search
+	 * @param fileNamePattern
+	 *            If specified, only files matching this regex will be returned.
+	 *            If not specified, all files will be returned.
+	 * @return Collection of files which match file name pattern regex
+	 */
+	private static List<FileStatus> performRecursiveFileSearch(
+			FileSystem fs,
+			Path path,
+			String fileNamePattern ) {
+		List<FileStatus> fileStatusList = new ArrayList<FileStatus>();
+		if (fs != null && path != null) {
+			try {
+				RemoteIterator<LocatedFileStatus> files = fs.listFiles(
+						path,
+						true);
+				if (files != null) {
+					while (files.hasNext()) {
+						LocatedFileStatus nextFile = files.next();
+						if (nextFile != null) {
+							if (fileNamePattern != null && !"".equals(fileNamePattern.trim())) {
+								if (nextFile.getPath().toString().matches(
+										fileNamePattern)) {
+									fileStatusList.add(nextFile);
+								}
+							}
+							else {
+								fileStatusList.add(nextFile);
+							}
+						}
+					}
+				}
+			}
+			catch (IOException ioEx) {
+				LOGGER.error(
+						"Error performing recursive search at path [" + path + "]: " + ioEx.getLocalizedMessage(),
+						ioEx);
+			}
+		}
+		return fileStatusList;
+	}
+
+	/**
+	 * Given an inputstream to a properties file, will attempt to load it and
+	 * lookup
+	 * 
+	 * @param inputStream
+	 * @return
+	 */
+	private static String getBuildVersion(
+			InputStream inputStream ) {
+		try {
+			Properties props = new Properties();
+			props.load(inputStream);
+			return props.getProperty(VersionUtils.VERSION_PROPERTY_KEY);
+		}
+		catch (Exception ex) {
+			LOGGER.error(
+					"Error parsing properties file from inputstream: " + ex.getLocalizedMessage(),
+					ex);
+		}
+		return null;
+	}
+
+	private static boolean validateURI(
+			URI uri ) {
+		if (uri == null || uri.getScheme() == null || uri.getHost() == null || uri.getPort() < 0) {
+			return false;
+		}
+		return true;
 	}
 }

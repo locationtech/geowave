@@ -33,6 +33,7 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -597,6 +598,15 @@ public abstract class BaseDataStore
 		}
 	}
 
+	/**
+	 * Method to lookup the version of a remote datastore
+	 * 
+	 * @param options
+	 * @return
+	 */
+	public abstract String getVersion(
+			StoreFactoryOptions options );
+
 	protected abstract boolean deleteAll(
 			final String tableName,
 			final String columnFamily,
@@ -671,5 +681,4 @@ public abstract class BaseDataStore
 	protected abstract void initOnIndexWriterCreate(
 			final DataAdapter adapter,
 			final PrimaryIndex index );
-
 }
