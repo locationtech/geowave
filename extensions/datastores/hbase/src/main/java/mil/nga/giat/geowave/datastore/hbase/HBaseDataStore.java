@@ -6,12 +6,25 @@ package mil.nga.giat.geowave.datastore.hbase;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableNotFoundException;
 import org.apache.hadoop.hbase.client.Delete;
@@ -26,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -33,6 +47,7 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -60,10 +75,12 @@ import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseConstraintsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowIdsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowPrefixQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.SingleEntryFilter;
+import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.MultiScannerClosableWrapper;
@@ -623,7 +640,194 @@ public class HBaseDataStore extends
 		public void flush() {
 			// HBase writer does not require/support flush
 		}
-
 	}
 
+	@Override
+	public String getVersion(
+			StoreFactoryOptions options ) {
+		String version = null;
+
+		HBaseRequiredOptions hbaseOptions = (HBaseRequiredOptions) options;
+		if (hbaseOptions == null) {
+			return null;
+		}
+		try {
+			Configuration hConf = ConnectionPool.getInstance().getConnection(
+					hbaseOptions.getZookeeper()).getConfiguration();
+			if (hConf == null) {
+				LOGGER.error(
+						"Error: Could not retrieve connection configurations from zookeeper instances at [{}]",
+						hbaseOptions.getZookeeper());
+				return null;
+			}
+			final String HBASE_DYNAMIC_JARS_DIR_CONFIG_KEY = "hbase.dynamic.jars.dir";
+			final String HBASE_ROOT_DIR_CONFIG_KEY = "hbase.rootdir";
+
+			String hbaseDir = hConf.get(HBASE_DYNAMIC_JARS_DIR_CONFIG_KEY);
+			if (hbaseDir == null || "".equals(hbaseDir)) {
+				LOGGER
+						.debug(
+								"No value set for hbase dynamic jars directory configuration variable [{}], defaulting to hbase root directory [{}]",
+								new Object[] {
+									HBASE_DYNAMIC_JARS_DIR_CONFIG_KEY,
+									HBASE_ROOT_DIR_CONFIG_KEY
+								});
+				hbaseDir = hConf.get(HBASE_ROOT_DIR_CONFIG_KEY);
+			}
+
+			LOGGER.debug(
+					"Looking at files for GeoWave HBase version at root path [ {} ]",
+					hbaseDir);
+
+			String jarPattern = hbaseDir + "/[^.].*.jar";
+			String buildPattern = hbaseDir + "/(.*?)build.properties";
+
+			if (hbaseDir != null && !"".equals(hbaseDir.trim())) {
+				Path hbaseDirPath = new Path(
+						hbaseDir);
+				FileSystem fs = FileSystem.get(
+						new URI(
+								hbaseDir),
+						hConf);
+				if (fs != null) {
+					// check if build.properties exists as unpacked file in hdfs
+					if (fs.exists(hbaseDirPath)) {
+						boolean blnBuildFileExists = false;
+						FSDataInputStream fsInputStream = null;
+						List<FileStatus> files = performRecursiveFileSearch(
+								fs,
+								hbaseDirPath,
+								buildPattern);
+						if (files != null) {
+							for (FileStatus file : files) {
+								if (file != null && file.getPath() != null) {
+									fsInputStream = fs.open(file.getPath());
+									if (fsInputStream != null) {
+										version = getBuildVersion(fsInputStream);
+										if (version != null) {
+											blnBuildFileExists = true;
+											break;
+										}
+									}
+								}
+							}
+						}
+						// if not, try to extract it from jar file
+						if (!blnBuildFileExists) {
+							files = performRecursiveFileSearch(
+									fs,
+									hbaseDirPath,
+									jarPattern);
+							for (FileStatus file : files) {
+								if (file != null && file.getPath() != null) {
+									fsInputStream = fs.open(file.getPath());
+									if (fsInputStream != null) {
+										ZipInputStream zipInputStream = new ZipInputStream(
+												fsInputStream);
+										if (zipInputStream != null) {
+											ZipEntry zipEntry = null;
+											while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+												if (zipEntry.getName().equals(
+														VersionUtils.BUILD_PROPERTIES_FILE_NAME)) {
+													version = getBuildVersion(zipInputStream);
+													if (version != null) {
+														break;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					else {
+						LOGGER.error(
+								"Path not found on file system at path [{}]",
+								hbaseDirPath);
+					}
+				}
+				else {
+					LOGGER.error(
+							"Could not establish connection with file system at path {}",
+							hbaseDir);
+				}
+			}
+		}
+		catch (IOException | IllegalArgumentException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return version;
+	}
+
+	/**
+	 * Performs a recursive file-system search and returns all files matching a
+	 * specified file name pattern
+	 * 
+	 * @param fs
+	 *            File system to get files from
+	 * @param path
+	 *            Root path to search
+	 * @param fileNamePattern
+	 *            If specified, only files matching this regex will be returned.
+	 *            If not specified, all files will be returned.
+	 * @return Collection of files which match file name pattern regex
+	 */
+	private static List<FileStatus> performRecursiveFileSearch(
+			FileSystem fs,
+			Path path,
+			String fileNamePattern ) {
+		List<FileStatus> fileStatusList = new ArrayList<FileStatus>();
+		if (fs != null && path != null) {
+			try {
+				RemoteIterator<LocatedFileStatus> files = fs.listFiles(
+						path,
+						true);
+				if (files != null) {
+					while (files.hasNext()) {
+						LocatedFileStatus nextFile = files.next();
+						if (nextFile != null) {
+							if (fileNamePattern != null && !"".equals(fileNamePattern.trim())) {
+								if (nextFile.getPath().toString().matches(
+										fileNamePattern)) {
+									fileStatusList.add(nextFile);
+								}
+							}
+							else {
+								fileStatusList.add(nextFile);
+							}
+						}
+					}
+				}
+			}
+			catch (IOException ioEx) {
+				LOGGER.error(
+						"Error performing recursive search at path [" + path + "]: " + ioEx.getLocalizedMessage(),
+						ioEx);
+			}
+		}
+		return fileStatusList;
+	}
+
+	/**
+	 * Given an inputstream to a properties file, will attempt to load it and
+	 * lookup
+	 * 
+	 * @param inputStream
+	 * @return
+	 */
+	private static String getBuildVersion(
+			InputStream inputStream ) {
+		try {
+			Properties props = new Properties();
+			props.load(inputStream);
+			return props.getProperty(VersionUtils.VERSION_PROPERTY_KEY);
+		}
+		catch (Exception ex) {
+			LOGGER.error(
+					"Error parsing properties file from inputstream: " + ex.getLocalizedMessage(),
+					ex);
+		}
+		return null;
+	}
 }

@@ -26,8 +26,8 @@ public class VersionUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(VersionUtils.class);
 
-	private static final String BUILD_PROPERTIES_FILE_NAME = "build.properties";
-	private static final String VERSION_PROPERTY_KEY = "project.version";
+	public static final String BUILD_PROPERTIES_FILE_NAME = "build.properties";
+	public static final String VERSION_PROPERTY_KEY = "project.version";
 
 	public static Properties getBuildProperties() {
 
