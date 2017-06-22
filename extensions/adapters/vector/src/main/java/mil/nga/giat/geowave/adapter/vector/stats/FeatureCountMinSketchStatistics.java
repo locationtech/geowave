@@ -251,4 +251,9 @@ public class FeatureCountMinSketchStatistics extends
 					probabilityOfCorrectness);
 		}
 	}
+
+	@Override
+	public FeatureCountMinSketchStatistics getPersistable() {
+		return new FeatureCountMinSketchStatistics();
+	}
 }

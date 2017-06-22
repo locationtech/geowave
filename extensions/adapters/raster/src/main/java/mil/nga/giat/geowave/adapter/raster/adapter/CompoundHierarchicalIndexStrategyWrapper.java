@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
-import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -270,5 +269,10 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 				0).getCoordinateRangesPerDimension(
 				dataRange,
 				hints);
+	}
+
+	@Override
+	public CompoundHierarchicalIndexStrategyWrapper getPersistable() {
+		return new CompoundHierarchicalIndexStrategyWrapper();
 	}
 }

@@ -406,6 +406,11 @@ public class GDELTIngestPlugin extends
 			super(
 					parentPlugin);
 		}
+
+		@Override
+		public IngestGDELTFromHdfs getPersistable() {
+			return new IngestGDELTFromHdfs();
+		}
 	}
 
 	@Override
@@ -414,5 +419,10 @@ public class GDELTIngestPlugin extends
 			GeometryWrapper.class,
 			Time.class
 		};
+	}
+
+	@Override
+	public GDELTIngestPlugin getPersistable() {
+		return new GDELTIngestPlugin();
 	}
 }

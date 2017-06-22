@@ -128,4 +128,9 @@ public class NumericRange implements
 		min = buf.getDouble();
 		max = buf.getDouble();
 	}
+
+	@Override
+	public NumericRange getPersistable() {
+		return new NumericRange();
+	}
 }

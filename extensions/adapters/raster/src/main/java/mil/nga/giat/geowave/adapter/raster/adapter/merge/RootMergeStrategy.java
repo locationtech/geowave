@@ -434,4 +434,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 		}
 		return null;
 	}
+
+	@Override
+	public RootMergeStrategy<T> getPersistable() {
+		return new RootMergeStrategy<T>();
+	}
 }

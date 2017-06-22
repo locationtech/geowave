@@ -101,4 +101,9 @@ public class PrimaryIndex implements
 				indexModelBinary,
 				CommonIndexModel.class);
 	}
+
+	@Override
+	public PrimaryIndex getPersistable() {
+		return new PrimaryIndex();
+	}
 }

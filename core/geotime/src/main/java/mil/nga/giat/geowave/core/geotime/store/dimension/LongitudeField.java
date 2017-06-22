@@ -50,4 +50,8 @@ public class LongitudeField extends
 		return GeometryUtils.longitudeRangeFromGeometry(geometry.getGeometry());
 	}
 
+	@Override
+	public LongitudeField getPersistable() {
+		return new LongitudeField();
+	}
 }

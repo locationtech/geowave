@@ -43,7 +43,6 @@ import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
 public class SpatialQueryFilter extends
 		BasicQueryFilter
 {
-
 	private static final Interner<GeometryImage> geometryImageInterner = Interners.newWeakInterner();
 	public static final PreparedGeometryFactory FACTORY = new PreparedGeometryFactory();
 	private GeometryImage preparedGeometryImage;
@@ -452,6 +451,10 @@ public class SpatialQueryFilter extends
 			}
 			return true;
 		}
+	}
 
+	@Override
+	public SpatialQueryFilter getPersistable() {
+		return new SpatialQueryFilter();
 	}
 }

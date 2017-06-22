@@ -395,4 +395,9 @@ public class HilbertSFC implements
 	public double[] getInsertionIdRangePerDimension() {
 		return getIdOperations.getInsertionIdRangePerDimension(dimensionDefinitions);
 	}
+
+	@Override
+	public HilbertSFC getPersistable() {
+		return new HilbertSFC();
+	}
 }

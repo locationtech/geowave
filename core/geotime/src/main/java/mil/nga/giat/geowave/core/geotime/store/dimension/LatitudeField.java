@@ -66,4 +66,8 @@ public class LatitudeField extends
 		return GeometryUtils.latitudeRangeFromGeometry(geometry.getGeometry());
 	}
 
+	@Override
+	public LatitudeField getPersistable() {
+		return new LatitudeField();
+	}
 }

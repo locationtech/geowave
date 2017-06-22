@@ -204,6 +204,11 @@ public class AvroIngestPlugin extends
 			super(
 					parentPlugin);
 		}
+
+		@Override
+		public IngestAvroFeaturesFromHdfs getPersistable() {
+			return new IngestAvroFeaturesFromHdfs();
+		}
 	}
 
 	@Override
@@ -220,4 +225,8 @@ public class AvroIngestPlugin extends
 		};
 	}
 
+	@Override
+	public AvroIngestPlugin getPersistable() {
+		return new AvroIngestPlugin();
+	}
 }

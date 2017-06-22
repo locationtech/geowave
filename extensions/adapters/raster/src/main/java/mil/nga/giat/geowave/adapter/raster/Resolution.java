@@ -102,4 +102,9 @@ public class Resolution implements
 			resolutionPerDimension[i] = buf.getDouble();
 		}
 	}
+
+	@Override
+	public Resolution getPersistable() {
+		return new Resolution();
+	}
 }

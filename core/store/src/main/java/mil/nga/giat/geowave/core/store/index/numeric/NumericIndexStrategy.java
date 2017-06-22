@@ -101,4 +101,8 @@ public class NumericIndexStrategy implements
 		return Collections.emptyList();
 	}
 
+	@Override
+	public NumericIndexStrategy getPersistable() {
+		return new NumericIndexStrategy();
+	}
 }

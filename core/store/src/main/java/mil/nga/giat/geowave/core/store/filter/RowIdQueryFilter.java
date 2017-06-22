@@ -70,4 +70,8 @@ public class RowIdQueryFilter implements
 
 	}
 
+	@Override
+	public RowIdQueryFilter getPersistable() {
+		return new RowIdQueryFilter();
+	}
 }

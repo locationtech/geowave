@@ -136,4 +136,8 @@ public class OverviewStatistics extends
 		}
 	}
 
+	@Override
+	public OverviewStatistics getPersistable() {
+		return new OverviewStatistics();
+	}
 }

@@ -2062,4 +2062,9 @@ public class RasterDataAdapter implements
 		}
 		return null;
 	}
+
+	@Override
+	public RasterDataAdapter getPersistable() {
+		return new RasterDataAdapter();
+	}
 }

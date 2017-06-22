@@ -584,8 +584,7 @@ public class CompoundIndexStrategy implements
 	 *
 	 */
 	private static class CompoundIndexMetaDataWrapper implements
-			IndexMetaData,
-			Persistable
+			IndexMetaData
 	{
 
 		private IndexMetaData metaData;
@@ -674,14 +673,16 @@ public class CompoundIndexStrategy implements
 			jo.put(
 					"type",
 					"CompoundIndexMetaDataWrapper");
-
 			jo.put(
 					"index",
 					index);
-
 			return jo;
 		}
 
+		@Override
+		public CompoundIndexMetaDataWrapper getPersistable() {
+			return new CompoundIndexMetaDataWrapper();
+		}
 	}
 
 	@Override
@@ -718,4 +719,8 @@ public class CompoundIndexStrategy implements
 		return retVal;
 	}
 
+	@Override
+	public CompoundIndexStrategy getPersistable() {
+		return new CompoundIndexStrategy();
+	}
 }

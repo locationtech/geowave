@@ -80,4 +80,9 @@ public class DistributableFilterList extends
 					DistributableQueryFilter.class));
 		}
 	}
+
+	@Override
+	public DistributableFilterList getPersistable() {
+		return new DistributableFilterList();
+	}
 }

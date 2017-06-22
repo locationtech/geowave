@@ -40,4 +40,9 @@ public class FeatureSerializationOptionProvider implements
 			}
 		}
 	}
+
+	@Override
+	public FeatureSerializationOptionProvider getPersistable() {
+		return new FeatureSerializationOptionProvider();
+	}
 }

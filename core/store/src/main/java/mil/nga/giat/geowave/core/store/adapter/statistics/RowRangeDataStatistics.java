@@ -223,4 +223,8 @@ public class RowRangeDataStatistics<T> extends
 		return jo;
 	}
 
+	@Override
+	public RowRangeDataStatistics<T> getPersistable() {
+		return new RowRangeDataStatistics<T>();
+	}
 }

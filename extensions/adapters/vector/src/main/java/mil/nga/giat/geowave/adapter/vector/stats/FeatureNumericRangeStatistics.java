@@ -142,4 +142,9 @@ public class FeatureNumericRangeStatistics extends
 					fieldName);
 		}
 	}
+
+	@Override
+	public FeatureNumericRangeStatistics getPersistable() {
+		return new FeatureNumericRangeStatistics();
+	}
 }

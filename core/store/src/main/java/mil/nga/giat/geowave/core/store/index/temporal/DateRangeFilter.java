@@ -113,4 +113,8 @@ public class DateRangeFilter implements
 		inclusiveHigh = (bb.getInt() == 1) ? true : false;
 	}
 
+	@Override
+	public DateRangeFilter getPersistable() {
+		return new DateRangeFilter();
+	}
 }

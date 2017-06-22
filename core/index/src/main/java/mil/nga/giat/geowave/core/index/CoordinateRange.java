@@ -106,4 +106,9 @@ public class CoordinateRange implements
 		}
 	}
 
+	@Override
+	public CoordinateRange getPersistable() {
+		return new CoordinateRange();
+	}
+
 }

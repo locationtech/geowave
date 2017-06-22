@@ -81,4 +81,8 @@ public class DataIdQueryFilter implements
 				adapterIdBytes);
 	}
 
+	@Override
+	public DataIdQueryFilter getPersistable() {
+		return new DataIdQueryFilter();
+	}
 }

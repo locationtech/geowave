@@ -108,4 +108,9 @@ public class HistogramConfig implements
 			numBins[b] = buf.getInt();
 		}
 	}
+
+	@Override
+	public HistogramConfig getPersistable() {
+		return new HistogramConfig();
+	}
 }

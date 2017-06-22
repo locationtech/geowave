@@ -109,4 +109,9 @@ public class LongitudeDefinition extends
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {}
+
+	@Override
+	public LongitudeDefinition getPersistable() {
+		return new LongitudeDefinition();
+	}
 }

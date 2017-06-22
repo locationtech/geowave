@@ -34,7 +34,6 @@ import com.google.common.collect.ImmutableBiMap.Builder;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.CoordinateRange;
 import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
@@ -711,5 +710,14 @@ public class TieredSFCIndexStrategy implements
 			return jo;
 		}
 
+		@Override
+		public TierIndexMetaData getPersistable() {
+			return new TierIndexMetaData();
+		}
+	}
+
+	@Override
+	public TieredSFCIndexStrategy getPersistable() {
+		return new TieredSFCIndexStrategy();
 	}
 }

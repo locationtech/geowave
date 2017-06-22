@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
@@ -368,6 +369,11 @@ public class AccumuloRangeQueryTest
 					final byte[] bytes ) {
 
 			}
+
+			@Override
+			public Persistable getPersistable() {
+				return null;
+			}
 		};
 		private static final NativeFieldHandler<TestGeometry, Object> ID_FIELD_HANDLER = new NativeFieldHandler<AccumuloRangeQueryTest.TestGeometry, Object>() {
 
@@ -537,9 +543,12 @@ public class AccumuloRangeQueryTest
 						TestGeometry entry ) {
 					return null;
 				}
-
 			};
 		}
 
+		@Override
+		public TestGeometryAdapter getPersistable() {
+			return new TestGeometryAdapter();
+		}
 	}
 }

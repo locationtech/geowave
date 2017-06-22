@@ -176,4 +176,9 @@ public class CQLFilterOptionProvider implements
 			return cqlFilterString;
 		}
 	}
+
+	@Override
+	public CQLFilterOptionProvider getPersistable() {
+		return new CQLFilterOptionProvider();
+	}
 }

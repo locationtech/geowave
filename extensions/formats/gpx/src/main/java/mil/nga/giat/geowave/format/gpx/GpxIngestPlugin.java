@@ -290,6 +290,11 @@ public class GpxIngestPlugin extends
 			super(
 					parentPlugin);
 		}
+
+		@Override
+		public IngestGpxTrackFromHdfs getPersistable() {
+			return new IngestGpxTrackFromHdfs();
+		}
 	}
 
 	@Override
@@ -306,4 +311,8 @@ public class GpxIngestPlugin extends
 		};
 	}
 
+	@Override
+	public GpxIngestPlugin getPersistable() {
+		return new GpxIngestPlugin();
+	}
 }

@@ -110,4 +110,8 @@ public class NumberRangeFilter implements
 
 	}
 
+	@Override
+	public NumberRangeFilter getPersistable() {
+		return new NumberRangeFilter();
+	}
 }

@@ -609,4 +609,9 @@ public class XZOrderSFC implements
 		return null;
 	}
 
+	@Override
+	public XZOrderSFC getPersistable() {
+		return new XZOrderSFC();
+	}
+
 }
