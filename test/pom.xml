@@ -208,7 +208,7 @@
 				<version>1.2.1</version>
 				<executions>
 					<execution>
-						<id>install-gdal</id>
+						<id>install-gdal-IT</id>
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>java</goal>

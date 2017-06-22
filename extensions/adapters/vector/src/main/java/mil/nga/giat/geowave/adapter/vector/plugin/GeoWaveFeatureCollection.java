@@ -348,10 +348,16 @@ public class GeoWaveFeatureCollection extends
 		if (envelope != null) {
 			return new GeometryFactory().toGeometry(envelope);
 		}
-
+		String geomAtrributeName = reader
+				.getComponents()
+				.getAdapter()
+				.getFeatureType()
+				.getGeometryDescriptor()
+				.getLocalName();
 		ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeoWaveGTDataStore.DEFAULT_CRS);
+				GeoWaveGTDataStore.DEFAULT_CRS,
+				geomAtrributeName);
 		if (geoAndCompareOp == null) {
 			return reader.clipIndexedBBOXConstraints(null);
 		}
