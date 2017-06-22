@@ -32,9 +32,9 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 /**
  * Command for trying to retrieve the version of GeoWave for a remote datastore
  */
-@GeowaveOperation(name = "listversion", parentOperation = RemoteSection.class)
-@Parameters(commandDescription = "List the version of GeoWave running on the instance of a remote datastore")
-public class ListVersionCommand extends
+@GeowaveOperation(name = "version", parentOperation = RemoteSection.class)
+@Parameters(commandDescription = "Get the version of GeoWave running on the instance of a remote datastore")
+public class VersionCommand extends
 		DefaultOperation implements
 		Command
 {
