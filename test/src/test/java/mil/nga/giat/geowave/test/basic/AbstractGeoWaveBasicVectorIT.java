@@ -359,6 +359,9 @@ abstract public class AbstractGeoWaveBasicVectorIT
 		LOGGER.warn(deletedFeatures + " features bulk deleted.");
 		LOGGER.warn(remainingFeatures + " features not deleted.");
 
+		Assert.assertTrue(
+				remainingFeatures + " features not deleted by bulk delete",
+				(remainingFeatures == 0));
 		// Now for the final check, query everything again
 		queryResults = geowaveStore.query(
 				new QueryOptions(

@@ -1,7 +1,8 @@
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,6 @@ import com.google.protobuf.ByteString;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
-import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -30,25 +30,21 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
-import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
-import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
-import mil.nga.giat.geowave.datastore.hbase.operations.HBaseBulkDeleteEndpoint;
-import mil.nga.giat.geowave.datastore.hbase.operations.protobuf.HBaseBulkDeleteProtos;
-import mil.nga.giat.geowave.datastore.hbase.operations.protobuf.HBaseBulkDeleteProtos.BulkDeleteResponse;
-import mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.HBaseBulkDeleteProtos;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.HBaseBulkDeleteProtos.BulkDeleteResponse;
 
 public class HBaseConstraintsDelete extends
 		HBaseConstraintsQuery
 {
 
 	private final static Logger LOGGER = Logger.getLogger(HBaseConstraintsQuery.class);
+	private static final int DELETE_BATCH_SIZE = 1000000;
+	private static final HBaseBulkDeleteProtos.BulkDeleteRequest.BulkDeleteType DELETE_TYPE = HBaseBulkDeleteProtos.BulkDeleteRequest.BulkDeleteType.ROW;
 
 	public HBaseConstraintsDelete(
 			final List<ByteArrayId> adapterIds,
@@ -108,7 +104,7 @@ public class HBaseConstraintsDelete extends
 			final AdapterStore adapterStore,
 			final Integer limit ) {
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
-		Mergeable total = null;
+		Long total = 0L;
 
 		try {
 			// Use the row count coprocessor
@@ -122,9 +118,8 @@ public class HBaseConstraintsDelete extends
 			final HBaseBulkDeleteProtos.BulkDeleteRequest.Builder requestBuilder = HBaseBulkDeleteProtos.BulkDeleteRequest
 					.newBuilder();
 
-			final HBaseBulkDeleteProtos.BulkDeleteRequest.BulkDeleteType type = HBaseBulkDeleteProtos.BulkDeleteRequest.BulkDeleteType.ROW;
-
-			requestBuilder.setDeleteType(type);
+			requestBuilder.setDeleteType(DELETE_TYPE);
+			requestBuilder.setRowBatchSize(DELETE_BATCH_SIZE);
 
 			if ((base.distributableFilters != null) && !base.distributableFilters.isEmpty()) {
 				final byte[] filterBytes = PersistenceUtils.toBinary(base.distributableFilters);
@@ -153,15 +148,23 @@ public class HBaseConstraintsDelete extends
 			if (multiFilter != null) {
 				requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}
-			if (base.aggregation.getLeft() != null) {
-				final ByteArrayId adapterId = base.aggregation.getLeft().getAdapterId();
-				if (isCommonIndexAggregation()) {
-					requestBuilder.setAdapterId(ByteString.copyFrom(adapterId.getBytes()));
+			if ((adapterIds != null) && !adapterIds.isEmpty()) {
+				int totalBytes = 4;
+				final List<byte[]> bytes = new ArrayList<byte[]>(
+						adapterIds.size());
+				for (final ByteArrayId adapterId : adapterIds) {
+					final byte[] bArray = adapterId.getBytes();
+					totalBytes += (bArray.length + 4);
+
+					bytes.add(bArray);
 				}
-				else {
-					final DataAdapter dataAdapter = adapterStore.getAdapter(adapterId);
-					requestBuilder.setAdapter(ByteString.copyFrom(PersistenceUtils.toBinary(dataAdapter)));
+				final ByteBuffer buf = ByteBuffer.allocate(totalBytes);
+				buf.putInt(adapterIds.size());
+				for (final byte[] b : bytes) {
+					buf.putInt(b.length);
+					buf.put(b);
 				}
+				requestBuilder.setAdapterIds(ByteString.copyFrom(buf.array()));
 			}
 			final HBaseBulkDeleteProtos.BulkDeleteRequest request = requestBuilder.build();
 
@@ -178,13 +181,13 @@ public class HBaseConstraintsDelete extends
 				endRow = aggRange.getEnd().getBytes();
 			}
 
-			final Map<byte[], ByteString> results = table.coprocessorService(
+			final Map<byte[], Long> results = table.coprocessorService(
 					HBaseBulkDeleteProtos.BulkDeleteService.class,
 					startRow,
 					endRow,
-					new Batch.Call<HBaseBulkDeleteProtos.BulkDeleteService, ByteString>() {
+					new Batch.Call<HBaseBulkDeleteProtos.BulkDeleteService, Long>() {
 						@Override
-						public ByteString call(
+						public Long call(
 								final HBaseBulkDeleteProtos.BulkDeleteService counter )
 								throws IOException {
 							final BlockingRpcCallback<HBaseBulkDeleteProtos.BulkDeleteResponse> rpcCallback = new BlockingRpcCallback<HBaseBulkDeleteProtos.BulkDeleteResponse>();
@@ -197,24 +200,13 @@ public class HBaseConstraintsDelete extends
 						}
 					});
 			int regionCount = 0;
-			for (final Map.Entry<byte[], ByteString> entry : results.entrySet()) {
+			for (final Map.Entry<byte[], Long> entry : results.entrySet()) {
 				regionCount++;
 
-				final ByteString value = entry.getValue();
-				if ((value != null) && !value.isEmpty()) {
-					final byte[] bvalue = value.toByteArray();
-					final Mergeable mvalue = PersistenceUtils.fromBinary(
-							bvalue,
-							Mergeable.class);
-
-					LOGGER.debug("Value from region " + regionCount + " is " + mvalue);
-
-					if (total == null) {
-						total = mvalue;
-					}
-					else {
-						total.merge(mvalue);
-					}
+				final Long value = entry.getValue();
+				if (value != null) {
+					LOGGER.debug("Value from region " + regionCount + " is " + value);
+					total += value;
 				}
 				else {
 					LOGGER.debug("Empty response for region " + regionCount);
@@ -235,5 +227,24 @@ public class HBaseConstraintsDelete extends
 
 		return new Wrapper(
 				total != null ? Iterators.singletonIterator(total) : Iterators.emptyIterator());
+	}
+
+	@Override
+	public CloseableIterator<Object> query(
+			final BasicHBaseOperations operations,
+			final AdapterStore adapterStore,
+			final double[] maxResolutionSubsamplingPerDimension,
+			final Integer limit ) {// Aggregate without coprocessor
+		if ((options == null) || !options.isEnableCoprocessors()) {
+			return super.query(
+					operations,
+					adapterStore,
+					maxResolutionSubsamplingPerDimension,
+					limit);
+		}
+		return aggregateWithCoprocessor(
+				operations,
+				adapterStore,
+				limit);
 	}
 }

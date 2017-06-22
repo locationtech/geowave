@@ -1,4 +1,4 @@
-option java_package = "mil.nga.giat.geowave.datastore.hbase.operations.protobuf";
+option java_package = "mil.nga.giat.geowave.datastore.hbase.query.protobuf";
 option java_outer_classname = "HBaseBulkDeleteProtos";
 option java_generic_services = true;
 option java_generate_equals_and_hash = true;
@@ -9,13 +9,12 @@ message BulkDeleteRequest {
   optional bytes rangeFilter = 2;
   optional bytes filter = 3;
   optional bytes model = 4;
-  optional bytes adapter = 5;
-  optional bytes adapterId = 6;
-  optional bytes numericIndexStrategyFilter = 7;
-  optional bool blockCaching = 8;
-  optional int32 cacheSize = 9;
-  required uint32 rowBatchSize = 10;
-  optional uint64 timestamp = 11;
+  optional bytes adapterIds = 5;
+  optional bytes numericIndexStrategyFilter = 6;
+  optional bool blockCaching = 7;
+  optional int32 cacheSize = 8;
+  required uint32 rowBatchSize = 9;
+  optional uint64 timestamp = 10;
 
    enum BulkDeleteType {
     ROW = 0;
@@ -26,7 +25,8 @@ message BulkDeleteRequest {
 }
 
 message BulkDeleteResponse {
-  required bytes rowsDeleted = 1;
+  required uint64 rowsDeleted = 1;
+  optional uint64 versionsDeleted = 2;
 }
 
 service BulkDeleteService {
