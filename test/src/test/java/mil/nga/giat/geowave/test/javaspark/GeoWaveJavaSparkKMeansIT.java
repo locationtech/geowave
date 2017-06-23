@@ -12,45 +12,54 @@ package mil.nga.giat.geowave.test.javaspark;
 
 import java.io.IOException;
 
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
+import org.geotools.feature.AttributeTypeBuilder;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.analytic.javaspark.GeoWaveRDD;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeoWaveJavaSparkKMeansIT extends
-		AbstractGeoWaveBasicVectorIT
+public class GeoWaveJavaSparkKMeansIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(
 			GeoWaveJavaSparkKMeansIT.class);
 
+	protected static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
+	protected static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
+
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-//		GeoWaveStoreType.HBASE
+		// GeoWaveStoreType.HBASE
 	})
-	protected DataStorePluginOptions dataStore;
+	protected DataStorePluginOptions inputDataStore;
 
 	private static long startMillis;
 
@@ -84,21 +93,23 @@ public class GeoWaveJavaSparkKMeansIT extends
 		LOGGER.warn(
 				"-----------------------------------------");
 	}
-	
 
 	@Test
-	public void testKMeansRunner() {
+	public void testKMeansRunner() {		
+		TestUtils.deleteAll(inputDataStore);
+
 		// Load data
 		TestUtils.testLocalIngest(
-				dataStore,
+				inputDataStore,
 				DimensionalityType.SPATIAL,
 				HAIL_SHAPEFILE_FILE,
 				1);
 
 		// Create the runner
 		KMeansRunner runner = new KMeansRunner();
-		runner.setInputDataStore(dataStore);
-		
+		runner.setInputDataStore(
+				inputDataStore);
+
 		// Run kmeans
 		try {
 			runner.run();
@@ -108,17 +119,134 @@ public class GeoWaveJavaSparkKMeansIT extends
 					"Failed to execute: " + e.getMessage());
 		}
 
-		// Show the output
+		// Create the output
 		KMeansModel clusterModel = runner.getOutputModel();
 
-		System.out.println("KMeans cluster centroids:");
-		for (Vector center : clusterModel.clusterCenters()) {
-			System.out.println("> " + center);
-		}
+		DataStore featureStore = writeFeatures(
+				clusterModel.clusterCenters());
+		
+		TestUtils.deleteAll(inputDataStore);
 	}
 
-	@Override
-	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStore;
+	private DataStore writeFeatures(
+			Vector[] centers ) {
+		LOGGER.warn(
+				"KMeans cluster centroids:");
+
+		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
+		builder.setName(
+				"KMeansCentroidBuilder");
+
+		builder.add(
+				ab
+						.binding(
+								Geometry.class)
+						.nillable(
+								false)
+						.buildDescriptor(
+								Geometry.class.getName().toString()));
+		
+		builder.add(
+				ab
+						.binding(
+								String.class)
+						.nillable(
+								false)
+						.buildDescriptor(
+								"KMeansData"));
+
+		final SimpleFeatureType serTestType = builder.buildFeatureType();
+		final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(
+				serTestType);
+
+		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
+				serTestType);
+
+		DataStore featureStore = inputDataStore.createDataStore();
+
+		try {
+			IndexWriter writer = featureStore.createWriter(
+					featureAdapter,
+					TestUtils.DEFAULT_SPATIAL_INDEX);
+
+			int i = 0;
+			for (Vector center : centers) {
+				LOGGER.warn(
+						"> " + center);
+
+				double lon = center.apply(
+						0);
+				double lat = center.apply(
+						1);
+
+				serBuilder.set(
+						Geometry.class.getName(),
+						GeometryUtils.GEOMETRY_FACTORY.createPoint(
+								new Coordinate(
+										lon,
+										lat)));
+
+				serBuilder.set(
+						"KMeansData",
+						"KMeansCentroid");			
+
+				final SimpleFeature sf = serBuilder.buildFeature(
+						"Centroid-" + i++);
+
+				writer.write(
+						sf);
+			}
+		}
+		catch (Exception e) {
+			LOGGER.error("Error writing centroids!");
+			e.printStackTrace();
+		}
+
+		// Query back from the new adapter
+		queryFeatures(
+				featureStore);
+
+		return featureStore;
+	}
+
+	private void queryFeatures(
+			DataStore featureStore ) {
+		try (final CloseableIterator<?> iter = featureStore.query(
+				new QueryOptions(),
+				new EverythingQuery())) {
+
+			int count = 0;
+			while (iter.hasNext()) {
+				final Object maybeFeat = iter.next();
+				Assert.assertTrue(
+						"Iterator should return simple feature in this test",
+						maybeFeat instanceof SimpleFeature);
+
+				final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
+
+				Geometry geom = (Geometry) isFeat.getAttribute(
+						0);
+
+				if (isFeat.getAttribute(1) instanceof String) {
+					String stringAttr = (String)isFeat.getAttribute(1);
+					if (stringAttr.equals("KMeansCentroid")) {
+						count++;
+						LOGGER.warn(count + ": " + isFeat.getID() + " - " +
+								geom.toString());
+					}
+				}
+			}
+
+			LOGGER.warn(
+					"Counted " + count + " kmeans centroids in datastore");
+
+			Assert.assertTrue(
+					"Iterator should return 8 centroids in this test",
+					count == 8);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
