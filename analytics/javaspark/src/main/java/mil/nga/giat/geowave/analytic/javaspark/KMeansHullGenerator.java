@@ -16,8 +16,7 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
 public class KMeansHullGenerator
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			KMeansHullGenerator.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansHullGenerator.class);
 
 	public static Geometry[] generateHulls(
 			JavaRDD<Vector> inputCentroids,
@@ -31,30 +30,23 @@ public class KMeansHullGenerator
 		// Run each input through the model to get its centroid and create the
 		// hull
 		for (Vector point : inputList) {
-			int centroidIndex = clusterModel.predict(
-					point);
+			int centroidIndex = clusterModel.predict(point);
 
 			if (hulls[centroidIndex] == null) {
-				hulls[centroidIndex] = GeometryUtils.GEOMETRY_FACTORY.buildGeometry(
-						Collections.EMPTY_LIST);
+				hulls[centroidIndex] = GeometryUtils.GEOMETRY_FACTORY.buildGeometry(Collections.EMPTY_LIST);
 			}
 
 			Coordinate coord = new Coordinate(
-					point.apply(
-							0),
-					point.apply(
-							1));
+					point.apply(0),
+					point.apply(1));
 
-			Geometry union = hulls[centroidIndex].union(
-					GeometryUtils.GEOMETRY_FACTORY.createPoint(
-							coord));
+			Geometry union = hulls[centroidIndex].union(GeometryUtils.GEOMETRY_FACTORY.createPoint(coord));
 
 			hulls[centroidIndex] = union.convexHull();
 		}
 
-		LOGGER.warn(
-				"KMeansHullGenerator took " + (System.currentTimeMillis() - start) / 1000L + " seconds for "
-						+ inputList.size() + " points");
+		LOGGER.warn("KMeansHullGenerator took " + (System.currentTimeMillis() - start) / 1000L + " seconds for "
+				+ inputList.size() + " points");
 
 		return hulls;
 	}

@@ -144,26 +144,27 @@ public class KmeansSparkCommand extends
 
 	private void writeClusterCentroids(
 			KMeansModel clusterModel ) {
-		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-		builder.setName("kmeans-centroids");
+		final SimpleFeatureTypeBuilder typebuilder = new SimpleFeatureTypeBuilder();
+		typebuilder.setName("kmeans-centroids");
 
-		builder.add(ab.binding(
+		final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
+
+		typebuilder.add(attrBuilder.binding(
 				Geometry.class).nillable(
 				false).buildDescriptor(
 				Geometry.class.getName().toString()));
 
-		builder.add(ab.binding(
+		typebuilder.add(attrBuilder.binding(
 				String.class).nillable(
 				false).buildDescriptor(
 				"KMeansData"));
 
-		final SimpleFeatureType serTestType = builder.buildFeatureType();
-		final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(
-				serTestType);
+		final SimpleFeatureType sfType = typebuilder.buildFeatureType();
+		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
+				sfType);
 
 		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-				serTestType);
+				sfType);
 
 		DataStore featureStore = outputDataStore.createDataStore();
 
@@ -179,17 +180,17 @@ public class KmeansSparkCommand extends
 				double lon = center.apply(0);
 				double lat = center.apply(1);
 
-				serBuilder.set(
+				sfBuilder.set(
 						Geometry.class.getName(),
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 								lon,
 								lat)));
 
-				serBuilder.set(
+				sfBuilder.set(
 						"KMeansData",
 						"KMeansCentroid");
 
-				final SimpleFeature sf = serBuilder.buildFeature("Centroid-" + i++);
+				final SimpleFeature sf = sfBuilder.buildFeature("Centroid-" + i++);
 
 				writer.write(sf);
 			}
@@ -206,26 +207,27 @@ public class KmeansSparkCommand extends
 				inputCentroids,
 				clusterModel);
 
-		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-		builder.setName("kmeans-hulls");
+		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+		typeBuilder.setName("kmeans-hulls");
 
-		builder.add(ab.binding(
+		final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
+
+		typeBuilder.add(attrBuilder.binding(
 				Geometry.class).nillable(
 				false).buildDescriptor(
 				Geometry.class.getName().toString()));
 
-		builder.add(ab.binding(
+		typeBuilder.add(attrBuilder.binding(
 				String.class).nillable(
 				false).buildDescriptor(
 				"KMeansData"));
 
-		final SimpleFeatureType serTestType = builder.buildFeatureType();
-		final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(
-				serTestType);
+		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
+		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
+				sfType);
 
 		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-				serTestType);
+				sfType);
 
 		DataStore featureStore = outputDataStore.createDataStore();
 
@@ -239,15 +241,15 @@ public class KmeansSparkCommand extends
 			int i = 0;
 			for (Geometry hull : hulls) {
 
-				serBuilder.set(
+				sfBuilder.set(
 						Geometry.class.getName(),
 						hull);
 
-				serBuilder.set(
+				sfBuilder.set(
 						"KMeansData",
 						"KMeansHull");
 
-				final SimpleFeature sf = serBuilder.buildFeature("Hull-" + i++);
+				final SimpleFeature sf = sfBuilder.buildFeature("Hull-" + i++);
 
 				writer.write(sf);
 			}
