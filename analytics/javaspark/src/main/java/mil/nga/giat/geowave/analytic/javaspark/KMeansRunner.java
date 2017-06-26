@@ -22,6 +22,7 @@ public class KMeansRunner
 
 	private final JavaSparkContext jsc;
 	private DataStorePluginOptions inputDataStore = null;
+	private JavaRDD<Vector> centroidVectors;
 	private KMeansModel outputModel;
 
 	private int numClusters = 8;
@@ -76,22 +77,25 @@ public class KMeansRunner
 				inputDataStore);
 
 		// Retrieve the input centroids
-		JavaRDD<Vector> centroidVectors = GeoWaveRDD.rddFeatureVectors(javaPairRdd);
+		centroidVectors = GeoWaveRDD.rddFeatureVectors(javaPairRdd);
 		centroidVectors.cache();
-		
+
 		// Init the algorithm
 		KMeans kmeans = new KMeans();
 		kmeans.setInitializationMode("kmeans||");
 		kmeans.setK(numClusters);
 		kmeans.setMaxIterations(numIterations);
-		
+
 		if (epsilon > -1.0) {
 			kmeans.setEpsilon(epsilon);
 		}
 
 		// Run KMeans
-		outputModel = kmeans.run(
-				centroidVectors.rdd());
+		outputModel = kmeans.run(centroidVectors.rdd());
+	}
+
+	public JavaRDD<Vector> getInputCentroids() {
+		return centroidVectors;
 	}
 
 	public DataStorePluginOptions getInputDataStore() {

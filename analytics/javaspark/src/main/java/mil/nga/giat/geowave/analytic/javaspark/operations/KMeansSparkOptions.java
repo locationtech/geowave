@@ -34,6 +34,12 @@ public class KMeansSparkOptions
 	}, description = "The convergence tolerance")
 	private Double epsilon;
 
+	@Parameter(names = {
+		"-h",
+		"--hulls"
+	}, description = "Generate convex hulls?")
+	private Boolean generateHulls = false;
+
 	public KMeansSparkOptions() {}
 
 	public String getAppName() {
@@ -79,6 +85,15 @@ public class KMeansSparkOptions
 	public void setEpsilon(
 			Double epsilon ) {
 		this.epsilon = epsilon;
+	}
+
+	public Boolean isGenerateHulls() {
+		return generateHulls;
+	}
+
+	public void setGenerateHulls(
+			Boolean generateHulls ) {
+		this.generateHulls = generateHulls;
 	}
 
 }

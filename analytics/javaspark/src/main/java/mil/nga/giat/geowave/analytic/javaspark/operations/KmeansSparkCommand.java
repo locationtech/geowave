@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.geotools.feature.AttributeTypeBuilder;
@@ -22,6 +23,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
+import mil.nga.giat.geowave.analytic.javaspark.KMeansHullGenerator;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.AnalyticSection;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.PropertyManagementConverter;
@@ -66,10 +68,8 @@ public class KmeansSparkCommand extends
 					"Requires arguments: <input storename> <output storename>");
 		}
 
-		String inputStoreName = parameters.get(
-				0);
-		String outputStoreName = parameters.get(
-				1);
+		String inputStoreName = parameters.get(0);
+		String outputStoreName = parameters.get(1);
 
 		// Config file
 		File configFile = (File) params.getContext().get(
@@ -79,8 +79,7 @@ public class KmeansSparkCommand extends
 		if (inputDataStore == null) {
 			StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configFile)) {
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find input store: " + inputStoreLoader.getStoreName());
 			}
@@ -90,8 +89,7 @@ public class KmeansSparkCommand extends
 		if (outputDataStore == null) {
 			StoreLoader outputStoreLoader = new StoreLoader(
 					outputStoreName);
-			if (!outputStoreLoader.loadFromConfig(
-					configFile)) {
+			if (!outputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find output store: " + outputStoreLoader.getStoreName());
 			}
@@ -109,23 +107,18 @@ public class KmeansSparkCommand extends
 		// Convert properties from DBScanOptions and CommonOptions
 		PropertyManagementConverter converter = new PropertyManagementConverter(
 				properties);
-		converter.readProperties(
-				kMeansSparkOptions);
+		converter.readProperties(kMeansSparkOptions);
 
 		KMeansRunner runner = new KMeansRunner(
 				kMeansSparkOptions.getAppName(),
 				kMeansSparkOptions.getMaster());
 
-		runner.setInputDataStore(
-				inputDataStore);
-		runner.setNumClusters(
-				kMeansSparkOptions.getNumClusters());
-		runner.setNumIterations(
-				kMeansSparkOptions.getNumIterations());
+		runner.setInputDataStore(inputDataStore);
+		runner.setNumClusters(kMeansSparkOptions.getNumClusters());
+		runner.setNumIterations(kMeansSparkOptions.getNumIterations());
 
 		if (kMeansSparkOptions.getEpsilon() != null) {
-			runner.setEpsilon(
-					kMeansSparkOptions.getEpsilon());
+			runner.setEpsilon(kMeansSparkOptions.getEpsilon());
 		}
 
 		try {
@@ -138,42 +131,32 @@ public class KmeansSparkCommand extends
 
 		KMeansModel clusterModel = runner.getOutputModel();
 
-		// output cluster centroids and hulls to output datastore
-		writeClusters(
-				clusterModel);
+		// output cluster centroids (and hulls) to output datastore
+		writeClusterCentroids(clusterModel);
 
-		System.out.println(
-				"KMeans cluster centroids:");
-		for (Vector center : clusterModel.clusterCenters()) {
-			System.out.println(
-					"> " + center);
+		if (kMeansSparkOptions.isGenerateHulls()) {
+			JavaRDD<Vector> inputCentroids = runner.getInputCentroids();
+			generateHulls(
+					inputCentroids,
+					clusterModel);
 		}
 	}
 
-	private void writeClusters(
+	private void writeClusterCentroids(
 			KMeansModel clusterModel ) {
 		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-		builder.setName(
-				"KMeansCentroidBuilder");
+		builder.setName("kmeans-centroids");
 
-		builder.add(
-				ab
-						.binding(
-								Geometry.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								Geometry.class.getName().toString()));
+		builder.add(ab.binding(
+				Geometry.class).nillable(
+				false).buildDescriptor(
+				Geometry.class.getName().toString()));
 
-		builder.add(
-				ab
-						.binding(
-								String.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								"KMeansData"));
+		builder.add(ab.binding(
+				String.class).nillable(
+				false).buildDescriptor(
+				"KMeansData"));
 
 		final SimpleFeatureType serTestType = builder.buildFeatureType();
 		final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(
@@ -193,27 +176,80 @@ public class KmeansSparkCommand extends
 
 			int i = 0;
 			for (Vector center : clusterModel.clusterCenters()) {
-				double lon = center.apply(
-						0);
-				double lat = center.apply(
-						1);
+				double lon = center.apply(0);
+				double lat = center.apply(1);
 
 				serBuilder.set(
 						Geometry.class.getName(),
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(
-								new Coordinate(
-										lon,
-										lat)));
+						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+								lon,
+								lat)));
 
 				serBuilder.set(
 						"KMeansData",
 						"KMeansCentroid");
 
-				final SimpleFeature sf = serBuilder.buildFeature(
-						"Centroid-" + i++);
+				final SimpleFeature sf = serBuilder.buildFeature("Centroid-" + i++);
 
-				writer.write(
-						sf);
+				writer.write(sf);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void generateHulls(
+			JavaRDD<Vector> inputCentroids,
+			KMeansModel clusterModel ) {
+		Geometry[] hulls = KMeansHullGenerator.generateHulls(
+				inputCentroids,
+				clusterModel);
+
+		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
+		builder.setName("kmeans-hulls");
+
+		builder.add(ab.binding(
+				Geometry.class).nillable(
+				false).buildDescriptor(
+				Geometry.class.getName().toString()));
+
+		builder.add(ab.binding(
+				String.class).nillable(
+				false).buildDescriptor(
+				"KMeansData"));
+
+		final SimpleFeatureType serTestType = builder.buildFeatureType();
+		final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(
+				serTestType);
+
+		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
+				serTestType);
+
+		DataStore featureStore = outputDataStore.createDataStore();
+
+		PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+
+		try {
+			IndexWriter writer = featureStore.createWriter(
+					featureAdapter,
+					featureIndex);
+
+			int i = 0;
+			for (Geometry hull : hulls) {
+
+				serBuilder.set(
+						Geometry.class.getName(),
+						hull);
+
+				serBuilder.set(
+						"KMeansData",
+						"KMeansHull");
+
+				final SimpleFeature sf = serBuilder.buildFeature("Hull-" + i++);
+
+				writer.write(sf);
 			}
 		}
 		catch (Exception e) {
@@ -228,8 +264,7 @@ public class KmeansSparkCommand extends
 	public void setParameters(
 			String storeName ) {
 		this.parameters = new ArrayList<String>();
-		this.parameters.add(
-				storeName);
+		this.parameters.add(storeName);
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {

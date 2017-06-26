@@ -31,14 +31,14 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.analytic.javaspark.KMeansHullGenerator;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.AdapterIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -121,6 +121,26 @@ public class GeoWaveJavaSparkKMeansIT
 
 		// Create the output
 		KMeansModel clusterModel = runner.getOutputModel();
+		
+		// Test the convex hull generator
+		Geometry[] hulls = KMeansHullGenerator.generateHulls(
+				runner.getInputCentroids(),
+				clusterModel);
+		
+		Assert.assertTrue(
+				"centroids from the model should match the hull count",
+				clusterModel.clusterCenters().length == hulls.length);
+
+		System.out.println(
+				"KMeans cluster hulls:");
+		for (Geometry hull : hulls) {
+			System.out.println(
+					"> Hull size (verts): " + hull.getNumPoints());
+			
+			System.out.println(
+					"> Hull centroid: " + hull.getCentroid().toString());
+
+		}		
 
 		DataStore featureStore = writeFeatures(
 				clusterModel.clusterCenters());
@@ -133,13 +153,14 @@ public class GeoWaveJavaSparkKMeansIT
 		LOGGER.warn(
 				"KMeans cluster centroids:");
 
-		final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-		final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-		builder.setName(
-				"KMeansCentroidBuilder");
+		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+		typeBuilder.setName(
+				"kmeans-centroids");
+		
+		final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
 
-		builder.add(
-				ab
+		typeBuilder.add(
+				attrBuilder
 						.binding(
 								Geometry.class)
 						.nillable(
@@ -147,8 +168,8 @@ public class GeoWaveJavaSparkKMeansIT
 						.buildDescriptor(
 								Geometry.class.getName().toString()));
 		
-		builder.add(
-				ab
+		typeBuilder.add(
+				attrBuilder
 						.binding(
 								String.class)
 						.nillable(
@@ -156,12 +177,12 @@ public class GeoWaveJavaSparkKMeansIT
 						.buildDescriptor(
 								"KMeansData"));
 
-		final SimpleFeatureType serTestType = builder.buildFeatureType();
-		final SimpleFeatureBuilder serBuilder = new SimpleFeatureBuilder(
-				serTestType);
+		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
+		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
+				sfType);
 
 		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-				serTestType);
+				sfType);
 
 		DataStore featureStore = inputDataStore.createDataStore();
 
@@ -180,18 +201,18 @@ public class GeoWaveJavaSparkKMeansIT
 				double lat = center.apply(
 						1);
 
-				serBuilder.set(
+				sfBuilder.set(
 						Geometry.class.getName(),
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(
 								new Coordinate(
 										lon,
 										lat)));
 
-				serBuilder.set(
+				sfBuilder.set(
 						"KMeansData",
 						"KMeansCentroid");			
 
-				final SimpleFeature sf = serBuilder.buildFeature(
+				final SimpleFeature sf = sfBuilder.buildFeature(
 						"Centroid-" + i++);
 
 				writer.write(
@@ -205,16 +226,18 @@ public class GeoWaveJavaSparkKMeansIT
 
 		// Query back from the new adapter
 		queryFeatures(
-				featureStore);
+				featureStore,
+				featureAdapter);
 
 		return featureStore;
 	}
 
 	private void queryFeatures(
-			DataStore featureStore ) {
+			DataStore featureStore,
+			FeatureDataAdapter featureAdapter) {
 		try (final CloseableIterator<?> iter = featureStore.query(
 				new QueryOptions(),
-				new EverythingQuery())) {
+				new AdapterIdQuery(featureAdapter.getAdapterId()))) {
 
 			int count = 0;
 			while (iter.hasNext()) {
@@ -228,14 +251,9 @@ public class GeoWaveJavaSparkKMeansIT
 				Geometry geom = (Geometry) isFeat.getAttribute(
 						0);
 
-				if (isFeat.getAttribute(1) instanceof String) {
-					String stringAttr = (String)isFeat.getAttribute(1);
-					if (stringAttr.equals("KMeansCentroid")) {
-						count++;
-						LOGGER.warn(count + ": " + isFeat.getID() + " - " +
-								geom.toString());
-					}
-				}
+				count++;
+				LOGGER.warn(count + ": " + isFeat.getID() + " - " +
+						geom.toString());
 			}
 
 			LOGGER.warn(
