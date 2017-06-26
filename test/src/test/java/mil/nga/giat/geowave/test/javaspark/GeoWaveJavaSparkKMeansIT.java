@@ -49,15 +49,14 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveJavaSparkKMeansIT
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveJavaSparkKMeansIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkKMeansIT.class);
 
 	protected static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
 	protected static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.HBASE
+	// GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions inputDataStore;
 
@@ -66,36 +65,27 @@ public class GeoWaveJavaSparkKMeansIT
 	@BeforeClass
 	public static void reportTestStart() {
 		startMillis = System.currentTimeMillis();
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"*  RUNNING GeoWaveJavaSparkKMeansIT     *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*  RUNNING GeoWaveJavaSparkKMeansIT     *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@AfterClass
 	public static void reportTestFinish() {
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"* FINISHED GeoWaveJavaSparkKMeansIT     *");
-		LOGGER.warn(
-				"*         " + ((System.currentTimeMillis() - startMillis) / 1000) + "s elapsed.                 *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED GeoWaveJavaSparkKMeansIT     *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test
-	public void testKMeansRunner() {		
+	public void testKMeansRunner() {
 		TestUtils.deleteAll(inputDataStore);
 
 		// Load data
@@ -107,8 +97,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 		// Create the runner
 		KMeansRunner runner = new KMeansRunner();
-		runner.setInputDataStore(
-				inputDataStore);
+		runner.setInputDataStore(inputDataStore);
 
 		// Run kmeans
 		try {
@@ -121,61 +110,47 @@ public class GeoWaveJavaSparkKMeansIT
 
 		// Create the output
 		KMeansModel clusterModel = runner.getOutputModel();
-		
+
 		// Test the convex hull generator
 		Geometry[] hulls = KMeansHullGenerator.generateHulls(
 				runner.getInputCentroids(),
 				clusterModel);
-		
+
 		Assert.assertTrue(
 				"centroids from the model should match the hull count",
 				clusterModel.clusterCenters().length == hulls.length);
 
-		System.out.println(
-				"KMeans cluster hulls:");
+		System.out.println("KMeans cluster hulls:");
 		for (Geometry hull : hulls) {
-			System.out.println(
-					"> Hull size (verts): " + hull.getNumPoints());
-			
-			System.out.println(
-					"> Hull centroid: " + hull.getCentroid().toString());
+			System.out.println("> Hull size (verts): " + hull.getNumPoints());
 
-		}		
+			System.out.println("> Hull centroid: " + hull.getCentroid().toString());
 
-		DataStore featureStore = writeFeatures(
-				clusterModel.clusterCenters());
-		
+		}
+
+		DataStore featureStore = writeFeatures(clusterModel.clusterCenters());
+
 		TestUtils.deleteAll(inputDataStore);
 	}
 
 	private DataStore writeFeatures(
 			Vector[] centers ) {
-		LOGGER.warn(
-				"KMeans cluster centroids:");
+		LOGGER.warn("KMeans cluster centroids:");
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-		typeBuilder.setName(
-				"kmeans-centroids");
-		
+		typeBuilder.setName("kmeans-centroids");
+
 		final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
 
-		typeBuilder.add(
-				attrBuilder
-						.binding(
-								Geometry.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								Geometry.class.getName().toString()));
-		
-		typeBuilder.add(
-				attrBuilder
-						.binding(
-								String.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								"KMeansData"));
+		typeBuilder.add(attrBuilder.binding(
+				Geometry.class).nillable(
+				false).buildDescriptor(
+				Geometry.class.getName().toString()));
+
+		typeBuilder.add(attrBuilder.binding(
+				String.class).nillable(
+				false).buildDescriptor(
+				"KMeansData"));
 
 		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
 		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
@@ -193,30 +168,24 @@ public class GeoWaveJavaSparkKMeansIT
 
 			int i = 0;
 			for (Vector center : centers) {
-				LOGGER.warn(
-						"> " + center);
+				LOGGER.warn("> " + center);
 
-				double lon = center.apply(
-						0);
-				double lat = center.apply(
-						1);
+				double lon = center.apply(0);
+				double lat = center.apply(1);
 
 				sfBuilder.set(
 						Geometry.class.getName(),
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(
-								new Coordinate(
-										lon,
-										lat)));
+						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+								lon,
+								lat)));
 
 				sfBuilder.set(
 						"KMeansData",
-						"KMeansCentroid");			
+						"KMeansCentroid");
 
-				final SimpleFeature sf = sfBuilder.buildFeature(
-						"Centroid-" + i++);
+				final SimpleFeature sf = sfBuilder.buildFeature("Centroid-" + i++);
 
-				writer.write(
-						sf);
+				writer.write(sf);
 			}
 		}
 		catch (Exception e) {
@@ -234,10 +203,11 @@ public class GeoWaveJavaSparkKMeansIT
 
 	private void queryFeatures(
 			DataStore featureStore,
-			FeatureDataAdapter featureAdapter) {
+			FeatureDataAdapter featureAdapter ) {
 		try (final CloseableIterator<?> iter = featureStore.query(
 				new QueryOptions(),
-				new AdapterIdQuery(featureAdapter.getAdapterId()))) {
+				new AdapterIdQuery(
+						featureAdapter.getAdapterId()))) {
 
 			int count = 0;
 			while (iter.hasNext()) {
@@ -248,16 +218,13 @@ public class GeoWaveJavaSparkKMeansIT
 
 				final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
 
-				Geometry geom = (Geometry) isFeat.getAttribute(
-						0);
+				Geometry geom = (Geometry) isFeat.getAttribute(0);
 
 				count++;
-				LOGGER.warn(count + ": " + isFeat.getID() + " - " +
-						geom.toString());
+				LOGGER.warn(count + ": " + isFeat.getID() + " - " + geom.toString());
 			}
 
-			LOGGER.warn(
-					"Counted " + count + " kmeans centroids in datastore");
+			LOGGER.warn("Counted " + count + " kmeans centroids in datastore");
 
 			Assert.assertTrue(
 					"Iterator should return 8 centroids in this test",

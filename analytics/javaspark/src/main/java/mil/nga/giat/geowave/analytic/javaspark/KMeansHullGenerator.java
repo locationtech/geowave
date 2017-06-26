@@ -6,18 +6,24 @@ import java.util.List;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
 public class KMeansHullGenerator
 {
-	private static GeometryFactory geomFactory = new GeometryFactory();
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			KMeansHullGenerator.class);
 
 	public static Geometry[] generateHulls(
 			JavaRDD<Vector> inputCentroids,
 			KMeansModel clusterModel ) {
+		long start = System.currentTimeMillis();
+
 		final Geometry[] hulls = new Geometry[clusterModel.clusterCenters().length];
 
 		List<Vector> inputList = inputCentroids.collect();
@@ -25,20 +31,30 @@ public class KMeansHullGenerator
 		// Run each input through the model to get its centroid and create the
 		// hull
 		for (Vector point : inputList) {
-			int centroidIndex = clusterModel.predict(point);
+			int centroidIndex = clusterModel.predict(
+					point);
 
 			if (hulls[centroidIndex] == null) {
-				hulls[centroidIndex] = geomFactory.buildGeometry(Collections.EMPTY_LIST);
+				hulls[centroidIndex] = GeometryUtils.GEOMETRY_FACTORY.buildGeometry(
+						Collections.EMPTY_LIST);
 			}
 
 			Coordinate coord = new Coordinate(
-					point.apply(0),
-					point.apply(1));
+					point.apply(
+							0),
+					point.apply(
+							1));
 
-			Geometry union = hulls[centroidIndex].union(geomFactory.createPoint(coord));
+			Geometry union = hulls[centroidIndex].union(
+					GeometryUtils.GEOMETRY_FACTORY.createPoint(
+							coord));
 
 			hulls[centroidIndex] = union.convexHull();
 		}
+
+		LOGGER.warn(
+				"KMeansHullGenerator took " + (System.currentTimeMillis() - start) / 1000L + " seconds for "
+						+ inputList.size() + " points");
 
 		return hulls;
 	}

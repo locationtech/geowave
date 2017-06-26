@@ -86,10 +86,8 @@ public class GeoWaveJavaSparkIT extends
 		// Set up Spark
 		SparkConf sparkConf = new SparkConf();
 
-		sparkConf.setAppName(
-				"GeoWaveRDD");
-		sparkConf.setMaster(
-				"local");
+		sparkConf.setAppName("GeoWaveRDD");
+		sparkConf.setMaster("local");
 		JavaSparkContext context = new JavaSparkContext(
 				sparkConf);
 
@@ -107,10 +105,11 @@ public class GeoWaveJavaSparkIT extends
 		try {
 			final ExpectedResults expectedResults = TestUtils.getExpectedResults(new URL[] {
 				new File(
-						HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()});
-				
+						HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
+			});
+
 			mark = System.currentTimeMillis();
-			
+
 			final DistributableQuery query = TestUtils.resourceToQuery(new File(
 					TEST_BOX_FILTER_FILE).toURI().toURL());
 
@@ -120,11 +119,10 @@ public class GeoWaveJavaSparkIT extends
 					query);
 
 			dur = (System.currentTimeMillis() - mark);
-						
-			long count = javaRdd.count();			
-			LOGGER.warn(
-					"DataStore loaded into RDD with " + count + " features in " + + dur + " ms.");
-			
+
+			long count = javaRdd.count();
+			LOGGER.warn("DataStore loaded into RDD with " + count + " features in " + +dur + " ms.");
+
 			Assert.assertEquals(
 					expectedResults.count,
 					count);
@@ -138,10 +136,11 @@ public class GeoWaveJavaSparkIT extends
 		try {
 			final ExpectedResults expectedResults = TestUtils.getExpectedResults(new URL[] {
 				new File(
-						HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()});
+						HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
+			});
 
 			mark = System.currentTimeMillis();
-			
+
 			final DistributableQuery query = TestUtils.resourceToQuery(new File(
 					TEST_POLYGON_FILTER_FILE).toURI().toURL());
 
@@ -151,11 +150,10 @@ public class GeoWaveJavaSparkIT extends
 					query);
 
 			dur = (System.currentTimeMillis() - mark);
-			
-			long count = javaRdd.count();			
-			LOGGER.warn(
-					"DataStore loaded into RDD with " + count + " features in " + + dur + " ms.");
-			
+
+			long count = javaRdd.count();
+			LOGGER.warn("DataStore loaded into RDD with " + count + " features in " + +dur + " ms.");
+
 			Assert.assertEquals(
 					expectedResults.count,
 					count);
