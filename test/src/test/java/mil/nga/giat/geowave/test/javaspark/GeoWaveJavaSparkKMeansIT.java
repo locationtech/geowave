@@ -17,6 +17,8 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.feature.type.BasicFeatureTypes;
+import org.geotools.referencing.CRS;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -34,11 +36,13 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansHullGenerator;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.query.AdapterIdQuery;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -128,86 +132,95 @@ public class GeoWaveJavaSparkKMeansIT
 
 		}
 
-		DataStore featureStore = writeFeatures(clusterModel.clusterCenters());
+		writeFeatures(clusterModel.clusterCenters());
 
 		TestUtils.deleteAll(inputDataStore);
 	}
 
-	private DataStore writeFeatures(
+	private void writeFeatures(
 			Vector[] centers ) {
 		LOGGER.warn("KMeans cluster centroids:");
 
-		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-		typeBuilder.setName("kmeans-centroids");
-
-		final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
-
-		typeBuilder.add(attrBuilder.binding(
-				Geometry.class).nillable(
-				false).buildDescriptor(
-				Geometry.class.getName().toString()));
-
-		typeBuilder.add(attrBuilder.binding(
-				String.class).nillable(
-				false).buildDescriptor(
-				"KMeansData"));
-
-		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
-		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
-				sfType);
-
-		final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-				sfType);
-
-		DataStore featureStore = inputDataStore.createDataStore();
-
 		try {
-			IndexWriter writer = featureStore.createWriter(
+			final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+			typeBuilder.setName("kmeans-centroids");
+			typeBuilder.setNamespaceURI(BasicFeatureTypes.DEFAULT_NAMESPACE);
+			typeBuilder.setCRS(CRS.decode(
+					"EPSG:4326",
+					true));
+
+			final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
+
+			typeBuilder.add(
+
+			attrBuilder.binding(
+					Geometry.class).nillable(
+					false).buildDescriptor(
+					Geometry.class.getName().toString()));
+
+			typeBuilder.add(attrBuilder.binding(
+					String.class).nillable(
+					false).buildDescriptor(
+					"KMeansData"));
+
+			final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
+			final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
+					sfType);
+
+			final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
+					sfType);
+
+			DataStore featureStore = inputDataStore.createDataStore();
+			PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+
+			try (IndexWriter writer = featureStore.createWriter(
 					featureAdapter,
-					TestUtils.DEFAULT_SPATIAL_INDEX);
+					featureIndex)) {
 
-			int i = 0;
-			for (Vector center : centers) {
-				LOGGER.warn("> " + center);
+				int i = 0;
+				for (Vector center : centers) {
+					LOGGER.warn("> " + center);
 
-				double lon = center.apply(0);
-				double lat = center.apply(1);
+					double lon = center.apply(0);
+					double lat = center.apply(1);
 
-				sfBuilder.set(
-						Geometry.class.getName(),
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								lon,
-								lat)));
+					sfBuilder.set(
+							Geometry.class.getName(),
+							GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+									lon,
+									lat)));
 
-				sfBuilder.set(
-						"KMeansData",
-						"KMeansCentroid");
+					sfBuilder.set(
+							"KMeansData",
+							"KMeansCentroid");
 
-				final SimpleFeature sf = sfBuilder.buildFeature("Centroid-" + i++);
+					final SimpleFeature sf = sfBuilder.buildFeature("Centroid-" + i++);
 
-				writer.write(sf);
+					writer.write(sf);
+				}
 			}
+
+			// Query back from the new adapter
+			queryFeatures(
+					featureStore,
+					featureAdapter,
+					featureIndex);
 		}
 		catch (Exception e) {
 			LOGGER.error("Error writing centroids!");
 			e.printStackTrace();
 		}
-
-		// Query back from the new adapter
-		queryFeatures(
-				featureStore,
-				featureAdapter);
-
-		return featureStore;
 	}
 
 	private void queryFeatures(
 			DataStore featureStore,
-			FeatureDataAdapter featureAdapter ) {
+			FeatureDataAdapter featureAdapter,
+			PrimaryIndex featureIndex ) {
 		try (final CloseableIterator<?> iter = featureStore.query(
-				new QueryOptions(),
-				new AdapterIdQuery(
-						featureAdapter.getAdapterId()))) {
+				new QueryOptions(
+						featureAdapter.getAdapterId(),
+						featureIndex.getId()),
+				new EverythingQuery())) {
 
 			int count = 0;
 			while (iter.hasNext()) {

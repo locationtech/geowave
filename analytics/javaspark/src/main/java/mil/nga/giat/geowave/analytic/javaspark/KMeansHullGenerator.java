@@ -21,8 +21,6 @@ public class KMeansHullGenerator
 	public static Geometry[] generateHulls(
 			JavaRDD<Vector> inputCentroids,
 			KMeansModel clusterModel ) {
-		long start = System.currentTimeMillis();
-
 		final Geometry[] hulls = new Geometry[clusterModel.clusterCenters().length];
 
 		List<Vector> inputList = inputCentroids.collect();
@@ -44,9 +42,6 @@ public class KMeansHullGenerator
 
 			hulls[centroidIndex] = union.convexHull();
 		}
-
-		LOGGER.warn("KMeansHullGenerator took " + (System.currentTimeMillis() - start) / 1000L + " seconds for "
-				+ inputList.size() + " points");
 
 		return hulls;
 	}
