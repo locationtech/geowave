@@ -241,7 +241,7 @@ public class KmeansSparkCommand extends
 		stopwatch.reset();
 		stopwatch.start();
 
-		Geometry[] hulls = KMeansHullGenerator.generateHulls(
+		JavaRDD<Geometry> hullsRDD = KMeansHullGenerator.generateHullsRDD(
 				inputCentroids,
 				clusterModel);
 
@@ -290,8 +290,7 @@ public class KmeansSparkCommand extends
 				featureIndex)) {
 
 			int i = 0;
-			for (Geometry hull : hulls) {
-
+			for (Geometry hull : hullsRDD.collect()) {
 				sfBuilder.set(
 						Geometry.class.getName(),
 						hull);

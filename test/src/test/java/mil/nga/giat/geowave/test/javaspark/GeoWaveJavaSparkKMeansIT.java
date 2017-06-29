@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.test.javaspark;
 
 import java.io.IOException;
 
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.geotools.feature.AttributeTypeBuilder;
@@ -116,16 +117,19 @@ public class GeoWaveJavaSparkKMeansIT
 		KMeansModel clusterModel = runner.getOutputModel();
 
 		// Test the convex hull generator
-		Geometry[] hulls = KMeansHullGenerator.generateHulls(
+//		Geometry[] hulls = KMeansHullGenerator.generateHullsLocal(
+//				runner.getInputCentroids(),
+//				clusterModel);
+		JavaRDD<Geometry> hullsRDD = KMeansHullGenerator.generateHullsRDD(
 				runner.getInputCentroids(),
 				clusterModel);
 
 		Assert.assertTrue(
 				"centroids from the model should match the hull count",
-				clusterModel.clusterCenters().length == hulls.length);
+				clusterModel.clusterCenters().length == hullsRDD.count());
 
 		System.out.println("KMeans cluster hulls:");
-		for (Geometry hull : hulls) {
+		for (Geometry hull : hullsRDD.collect()) {
 			System.out.println("> Hull size (verts): " + hull.getNumPoints());
 
 			System.out.println("> Hull centroid: " + hull.getCentroid().toString());
