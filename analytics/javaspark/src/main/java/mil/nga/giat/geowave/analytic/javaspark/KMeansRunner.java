@@ -19,8 +19,12 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 public class KMeansRunner
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansRunner.class);
+	
+	private String appName = "KMeansRunner";
+	private String master = "local";
+	private String host = "localhost";
 
-	private final JavaSparkContext jsc;
+	private JavaSparkContext jsc;
 	private DataStorePluginOptions inputDataStore = null;
 	private JavaRDD<Vector> centroidVectors;
 	private KMeansModel outputModel;
@@ -30,40 +34,24 @@ public class KMeansRunner
 	private double epsilon = -1.0;
 
 	public KMeansRunner() {
-		this(
-				null,
-				null);
 	}
 
-	public KMeansRunner(
-			String master ) {
-		this(
-				null,
-				master);
-	}
-
-	public KMeansRunner(
-			String appName,
-			String master ) {
-		if (appName == null) {
-			appName = "KMeansRunner";
-		}
-
-		if (master == null) {
-			master = "local";
-		}
-
+	private void initContext() {
 		SparkConf sparkConf = new SparkConf();
 
 		sparkConf.setAppName(appName);
 		sparkConf.setMaster(master);
-
+		
+		// TODO: other context config settings
+		
 		jsc = new JavaSparkContext(
 				sparkConf);
 	}
 
 	public void run()
 			throws IOException {
+		initContext();
+		
 		// Validate inputs
 		if (inputDataStore == null) {
 			LOGGER.error("You must supply an input datastore!");
@@ -124,5 +112,20 @@ public class KMeansRunner
 
 	public KMeansModel getOutputModel() {
 		return outputModel;
+	}
+
+	public void setAppName(
+			String appName ) {
+		this.appName = appName;
+	}
+
+	public void setMaster(
+			String master ) {
+		this.master = master;
+	}
+
+	public void setHost(
+			String host ) {
+		this.host = host;
 	}
 }
