@@ -19,8 +19,7 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
 public class KMeansHullGenerator
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			KMeansHullGenerator.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansHullGenerator.class);
 
 	public static JavaPairRDD<Integer, Geometry> generateHullsRDD(
 			final JavaRDD<Vector> inputPoints,
@@ -42,11 +41,15 @@ public class KMeansHullGenerator
 								@Override
 								public Coordinate apply(
 										final Vector input ) {
+									if (input != null) {
 									return new Coordinate(
 											input.apply(
 													0),
 											input.apply(
 													1));
+									}
+									
+									return new Coordinate();
 								}
 							});
 
@@ -72,23 +75,17 @@ public class KMeansHullGenerator
 		// Run each input through the model to get its centroid and create the
 		// hull
 		for (final Vector point : inputList) {
-			final int centroidIndex = clusterModel.predict(
-					point);
+			final int centroidIndex = clusterModel.predict(point);
 
 			if (hulls[centroidIndex] == null) {
-				hulls[centroidIndex] = GeometryUtils.GEOMETRY_FACTORY.buildGeometry(
-						Collections.EMPTY_LIST);
+				hulls[centroidIndex] = GeometryUtils.GEOMETRY_FACTORY.buildGeometry(Collections.EMPTY_LIST);
 			}
 
 			final Coordinate coord = new Coordinate(
-					point.apply(
-							0),
-					point.apply(
-							1));
+					point.apply(0),
+					point.apply(1));
 
-			final Geometry union = hulls[centroidIndex].union(
-					GeometryUtils.GEOMETRY_FACTORY.createPoint(
-							coord));
+			final Geometry union = hulls[centroidIndex].union(GeometryUtils.GEOMETRY_FACTORY.createPoint(coord));
 
 			hulls[centroidIndex] = union.convexHull();
 		}

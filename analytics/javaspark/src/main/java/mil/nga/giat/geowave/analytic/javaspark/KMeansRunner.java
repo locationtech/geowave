@@ -19,7 +19,7 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 public class KMeansRunner
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansRunner.class);
-	
+
 	private String appName = "KMeansRunner";
 	private String master = "local";
 	private String host = "localhost";
@@ -33,21 +33,20 @@ public class KMeansRunner
 	private int numIterations = 20;
 	private double epsilon = -1.0;
 
-	public KMeansRunner() {
-	}
+	public KMeansRunner() {}
 
 	private void initContext() {
 		SparkConf sparkConf = new SparkConf();
 
 		sparkConf.setAppName(appName);
 		sparkConf.setMaster(master);
-		
+
 		// TODO: other context config settings
-		
+
 		jsc = new JavaSparkContext(
 				sparkConf);
 	}
-	
+
 	public void closeContext() {
 		if (jsc != null) {
 			jsc.close();
@@ -58,7 +57,7 @@ public class KMeansRunner
 	public void run()
 			throws IOException {
 		initContext();
-		
+
 		// Validate inputs
 		if (inputDataStore == null) {
 			LOGGER.error("You must supply an input datastore!");
