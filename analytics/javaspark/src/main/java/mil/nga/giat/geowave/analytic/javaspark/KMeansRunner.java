@@ -24,7 +24,7 @@ public class KMeansRunner
 	private String master = "local";
 	private String host = "localhost";
 
-	private JavaSparkContext jsc;
+	private JavaSparkContext jsc = null;
 	private DataStorePluginOptions inputDataStore = null;
 	private JavaRDD<Vector> centroidVectors;
 	private KMeansModel outputModel;
@@ -46,6 +46,13 @@ public class KMeansRunner
 		
 		jsc = new JavaSparkContext(
 				sparkConf);
+	}
+	
+	public void closeContext() {
+		if (jsc != null) {
+			jsc.close();
+			jsc = null;
+		}
 	}
 
 	public void run()

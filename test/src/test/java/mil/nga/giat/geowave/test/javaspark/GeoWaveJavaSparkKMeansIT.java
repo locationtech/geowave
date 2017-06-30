@@ -69,7 +69,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions inputDataStore;
 
@@ -179,6 +179,8 @@ public class GeoWaveJavaSparkKMeansIT
 
 		TestUtils.deleteAll(
 				inputDataStore);
+		
+		runner.closeContext();
 	}
 
 	private void queryFeatures(

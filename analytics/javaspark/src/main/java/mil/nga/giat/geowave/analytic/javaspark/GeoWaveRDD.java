@@ -45,9 +45,8 @@ public class GeoWaveRDD
 		return rddForSimpleFeatures(
 				sc,
 				storeOptions,
-				new BasicQuery(
-						new BasicQuery.Constraints()),
-				new QueryOptions(),
+				null,
+				null,
 				-1,
 				-1);
 	}
@@ -89,15 +88,6 @@ public class GeoWaveRDD
 			int minSplits,
 			int maxSplits )
 			throws IOException {
-		if (query == null) {
-			query = new BasicQuery(
-					new BasicQuery.Constraints());
-		}
-
-		if (queryOptions == null) {
-			queryOptions = new QueryOptions();
-		}
-
 		Configuration conf = new Configuration(
 				sc.hadoopConfiguration());
 
@@ -105,13 +95,17 @@ public class GeoWaveRDD
 				conf,
 				storeOptions);
 
-		GeoWaveInputFormat.setQuery(
-				conf,
-				query);
+		if (query != null) {
+			GeoWaveInputFormat.setQuery(
+					conf,
+					query);
+		}
 
-		GeoWaveInputFormat.setQueryOptions(
-				conf,
-				queryOptions);
+		if (queryOptions != null) {
+			GeoWaveInputFormat.setQueryOptions(
+					conf,
+					queryOptions);
+		}
 
 		if (minSplits > -1) {
 			GeoWaveInputFormat.setMinimumSplitCount(
