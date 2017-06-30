@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.test.javaspark;
 import java.io.IOException;
 
 import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.geotools.feature.AttributeTypeBuilder;
@@ -36,11 +37,16 @@ import com.vividsolutions.jts.geom.Geometry;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansHullGenerator;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
+import mil.nga.giat.geowave.analytic.javaspark.KMeansUtils;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
@@ -129,10 +135,6 @@ public class GeoWaveJavaSparkKMeansIT
 		// Create the output
 		final KMeansModel clusterModel = runner.getOutputModel();
 
-		// Test the convex hull generator
-		// Geometry[] hulls = KMeansHullGenerator.generateHullsLocal(
-		// runner.getInputCentroids(),
-		// clusterModel);
 		final JavaPairRDD<Integer, Geometry> hullsRDD = KMeansHullGenerator.generateHullsRDD(
 				runner.getInputCentroids(),
 				clusterModel);
@@ -143,7 +145,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 		System.out.println(
 				"KMeans cluster hulls:");
-		for (final Tuple2<Integer,Geometry> hull : hullsRDD.collect()) {
+		for (final Tuple2<Integer, Geometry> hull : hullsRDD.collect()) {
 			System.out.println(
 					"> Hull size (verts): " + hull._2.getNumPoints());
 
@@ -152,117 +154,45 @@ public class GeoWaveJavaSparkKMeansIT
 
 		}
 
-		writeFeatures(
-				clusterModel.clusterCenters());
+		// Write out the centroid features
+		DataAdapter centroidAdapter = KMeansUtils.writeClusterCentroids(
+				clusterModel,
+				inputDataStore,
+				"kmeans-centroids-test");
+
+		// Query back from the new adapter
+		queryFeatures(
+				centroidAdapter,
+				clusterModel.clusterCenters().length);
+
+		// Generate and write out the hull features
+		DataAdapter hullAdapter = KMeansUtils.writeClusterHulls(
+				runner.getInputCentroids(),
+				clusterModel,
+				inputDataStore,
+				"kmeans-hulls-test");
+
+		// Query back from the new adapter
+		queryFeatures(
+				hullAdapter,
+				clusterModel.clusterCenters().length);
 
 		TestUtils.deleteAll(
 				inputDataStore);
 	}
 
-	private void writeFeatures(
-			final Vector[] centers ) {
-		LOGGER.warn(
-				"KMeans cluster centroids:");
-
-		try {
-			final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-			typeBuilder.setName(
-					"kmeans-centroids");
-			typeBuilder.setNamespaceURI(
-					BasicFeatureTypes.DEFAULT_NAMESPACE);
-			typeBuilder.setCRS(
-					CRS.decode(
-							"EPSG:4326",
-							true));
-
-			final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
-
-			typeBuilder.add(
-
-					attrBuilder
-							.binding(
-									Geometry.class)
-							.nillable(
-									false)
-							.buildDescriptor(
-									Geometry.class.getName().toString()));
-
-			typeBuilder.add(
-					attrBuilder
-							.binding(
-									String.class)
-							.nillable(
-									false)
-							.buildDescriptor(
-									"KMeansData"));
-
-			final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
-			final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
-					sfType);
-
-			final FeatureDataAdapter featureAdapter = new FeatureDataAdapter(
-					sfType);
-
-			final DataStore featureStore = inputDataStore.createDataStore();
-			final PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-
-			try (IndexWriter writer = featureStore.createWriter(
-					featureAdapter,
-					featureIndex)) {
-
-				int i = 0;
-				for (final Vector center : centers) {
-					LOGGER.warn(
-							"> " + center);
-
-					final double lon = center.apply(
-							0);
-					final double lat = center.apply(
-							1);
-
-					sfBuilder.set(
-							Geometry.class.getName(),
-							GeometryUtils.GEOMETRY_FACTORY.createPoint(
-									new Coordinate(
-											lon,
-											lat)));
-
-					sfBuilder.set(
-							"KMeansData",
-							"KMeansCentroid");
-
-					final SimpleFeature sf = sfBuilder.buildFeature(
-							"Centroid-" + i++);
-
-					writer.write(
-							sf);
-				}
-			}
-
-			// Query back from the new adapter
-			queryFeatures(
-					featureStore,
-					featureAdapter,
-					featureIndex);
-		}
-		catch (final Exception e) {
-			LOGGER.error(
-					"Error writing centroids!");
-			e.printStackTrace();
-		}
-	}
-
 	private void queryFeatures(
-			final DataStore featureStore,
-			final FeatureDataAdapter featureAdapter,
-			final PrimaryIndex featureIndex ) {
+			final DataAdapter dataAdapter,
+			final int expectedCount) {
+		final DataStore featureStore = inputDataStore.createDataStore();
+		int count = 0;
+
 		try (final CloseableIterator<?> iter = featureStore.query(
 				new QueryOptions(
-						featureAdapter.getAdapterId(),
-						featureIndex.getId()),
+						dataAdapter.getAdapterId(),
+						TestUtils.DEFAULT_SPATIAL_INDEX.getId()),
 				new EverythingQuery())) {
 
-			int count = 0;
 			while (iter.hasNext()) {
 				final Object maybeFeat = iter.next();
 				Assert.assertTrue(
@@ -280,14 +210,16 @@ public class GeoWaveJavaSparkKMeansIT
 			}
 
 			LOGGER.warn(
-					"Counted " + count + " kmeans centroids in datastore");
-
-			Assert.assertTrue(
-					"Iterator should return 8 centroids in this test",
-					count == 8);
+					"Counted " + count + " features in datastore for " + StringUtils.stringFromBinary(
+							dataAdapter.getAdapterId().getBytes()));
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
 		}
+
+		Assert.assertTrue(
+				"Iterator should return " + expectedCount + " features in this test",
+				count == expectedCount);
+
 	}
 }

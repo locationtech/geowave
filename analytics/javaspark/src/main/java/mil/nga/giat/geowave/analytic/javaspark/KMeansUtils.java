@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -35,7 +36,7 @@ public class KMeansUtils
 	private final static Logger LOGGER = LoggerFactory.getLogger(
 			KMeansUtils.class);
 
-	public static void writeClusterCentroids(
+	public static DataAdapter writeClusterCentroids(
 			final KMeansModel clusterModel,
 			final DataStorePluginOptions outputDataStore,
 			final String centroidAdapterName ) {
@@ -125,9 +126,11 @@ public class KMeansUtils
 					e.getMessage(),
 					e);
 		}
+		
+		return featureAdapter;
 	}
 
-	public static void writeClusterHulls(
+	public static DataAdapter writeClusterHulls(
 			final JavaRDD<Vector> inputCentroids,
 			final KMeansModel clusterModel,
 			final DataStorePluginOptions outputDataStore,
@@ -214,5 +217,7 @@ public class KMeansUtils
 					e.getMessage(),
 					e);
 		}
+		
+		return featureAdapter;
 	}
 }
