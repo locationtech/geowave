@@ -8,13 +8,13 @@ public class KMeansSparkOptions
 		"-n",
 		"--name"
 	}, description = "The spark application name")
-	private String appName;
+	private String appName = "KMeans Spark";
 
 	@Parameter(names = {
 		"-m",
 		"--master"
-	}, description = "The spark master designation (default: local)")
-	private String master;
+	}, description = "The spark master designation")
+	private String master = "local";
 
 	@Parameter(names = {
 		"-k",
@@ -32,13 +32,25 @@ public class KMeansSparkOptions
 		"-e",
 		"--epsilon"
 	}, description = "The convergence tolerance")
-	private Double epsilon;
+	private Double epsilon = null;
 
 	@Parameter(names = {
 		"-h",
 		"--hulls"
 	}, description = "Generate convex hulls?")
 	private Boolean generateHulls = false;
+
+	@Parameter(names = {
+		"-b",
+		"--bbox"
+	}, description = "Bounding box for spatial query (LL-Lat LL-Lon UR-Lat UR-Lon)")
+	private String bbox = null;
+
+	@Parameter(names = {
+		"-a",
+		"--adapterId"
+	}, description = "Adapter ID to query")
+	private String adapterId = null;
 
 	public KMeansSparkOptions() {}
 
@@ -94,6 +106,24 @@ public class KMeansSparkOptions
 	public void setGenerateHulls(
 			Boolean generateHulls ) {
 		this.generateHulls = generateHulls;
+	}
+
+	public String getBoundingBox() {
+		return bbox;
+	}
+
+	public void setBoundingBox(
+			String bbox ) {
+		this.bbox = bbox;
+	}
+
+	public String getAdapterId() {
+		return adapterId;
+	}
+
+	public void setAdapterId(
+			String adapterId ) {
+		this.adapterId = adapterId;
 	}
 
 }

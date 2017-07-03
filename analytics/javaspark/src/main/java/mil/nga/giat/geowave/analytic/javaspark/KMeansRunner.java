@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.analytic.javaspark;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -13,7 +14,17 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class KMeansRunner
@@ -32,6 +43,8 @@ public class KMeansRunner
 	private int numClusters = 8;
 	private int numIterations = 20;
 	private double epsilon = -1.0;
+	private Envelope bbox = null;
+	private String adapterId = null;
 
 	public KMeansRunner() {}
 
@@ -65,10 +78,38 @@ public class KMeansRunner
 					"You must supply an input datastore!");
 		}
 
+		QueryOptions queryOptions = null;
+		if (adapterId != null) {
+			// Retrieve the adapters
+			CloseableIterator<DataAdapter<?>> adapterIt = inputDataStore.createAdapterStore().getAdapters();
+			DataAdapter adapterForQuery = null;
+
+			while (adapterIt.hasNext()) {
+				DataAdapter adapter = adapterIt.next();
+				String adapterName = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
+
+				if (adapterName.equals(adapterId)) {
+					adapterForQuery = adapter;
+					queryOptions = new QueryOptions(
+							adapterForQuery);
+					break;
+				}
+			}
+		}
+
+		DistributableQuery query = null;
+		if (bbox != null) {
+			Geometry geom = new GeometryFactory().toGeometry(bbox);
+			query = new SpatialQuery(
+					geom);
+		}
+
 		// Load RDD from datastore
 		JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaPairRdd = GeoWaveRDD.rddForSimpleFeatures(
 				jsc.sc(),
-				inputDataStore);
+				inputDataStore,
+				query,
+				queryOptions);
 
 		// Retrieve the input centroids
 		centroidVectors = GeoWaveRDD.rddFeatureVectors(javaPairRdd);
@@ -133,5 +174,39 @@ public class KMeansRunner
 	public void setHost(
 			String host ) {
 		this.host = host;
+	}
+
+	public void setBoundingBox(
+			String bboxStr ) {
+		try {
+			// Expecting bbox in "LL-Lat LL-Lon UR-Lat UR-Lon" format
+			StringTokenizer tok = new StringTokenizer(
+					bboxStr,
+					" ");
+			String southStr = tok.nextToken();
+			String westStr = tok.nextToken();
+			String northStr = tok.nextToken();
+			String eastStr = tok.nextToken();
+
+			double west = Double.parseDouble(westStr);
+			double east = Double.parseDouble(eastStr);
+			double south = Double.parseDouble(southStr);
+			double north = Double.parseDouble(northStr);
+
+			this.bbox = new Envelope(
+					west,
+					east,
+					south,
+					north);
+		}
+		catch (Exception e) {
+			LOGGER.error("Failed to parse bounding box from " + bboxStr);
+			this.bbox = null;
+		}
+	}
+
+	public void setAdapterId(
+			String adapterId ) {
+		this.adapterId = adapterId;
 	}
 }

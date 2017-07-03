@@ -115,6 +115,14 @@ public class KmeansSparkCommand extends
 			runner.setEpsilon(kMeansSparkOptions.getEpsilon());
 		}
 
+		if (kMeansSparkOptions.getAdapterId() != null) {
+			runner.setAdapterId(kMeansSparkOptions.getAdapterId());
+		}
+
+		if (kMeansSparkOptions.getBoundingBox() != null) {
+			runner.setBoundingBox(kMeansSparkOptions.getBoundingBox());
+		}
+
 		stopwatch.reset();
 		stopwatch.start();
 
