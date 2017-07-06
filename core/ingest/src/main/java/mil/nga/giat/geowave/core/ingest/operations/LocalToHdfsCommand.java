@@ -28,10 +28,10 @@ import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 
-@GeowaveOperation(name = "localToHdfs", parentOperation = IngestSection.class)
+@GeowaveOperation(name = "localToHdfs", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Stage supported files in local file system to HDFS")
 public class LocalToHdfsCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -58,41 +58,15 @@ public class LocalToHdfsCommand extends
 
 	/**
 	 * Prep the driver & run the operation.
+	 * 
+	 * @throws Exception
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			OperationParams params )
+			throws Exception {
 
-		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
-			throw new ParameterException(
-					"Requires arguments: <file or directory> <hdfs host:port> <path to base directory to write to>");
-		}
-
-		String inputPath = parameters.get(0);
-		String hdfsHostPort = parameters.get(1);
-		String basePath = parameters.get(2);
-
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
-
-		// Ingest Plugins
-		Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
-
-		// Driver
-		StageToHdfsDriver driver = new StageToHdfsDriver(
-				ingestPlugins,
-				hdfsHostPort,
-				basePath,
-				localInputOptions);
-
-		// Execute
-		if (!driver.runOperation(inputPath)) {
-			throw new RuntimeException(
-					"Ingest failed to execute");
-		}
+		computeResults(params);
 	}
 
 	public List<String> getParameters() {
@@ -125,5 +99,42 @@ public class LocalToHdfsCommand extends
 	public void setLocalInputOptions(
 			LocalInputCommandLineOptions localInputOptions ) {
 		this.localInputOptions = localInputOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 3) {
+			throw new ParameterException(
+					"Requires arguments: <file or directory> <hdfs host:port> <path to base directory to write to>");
+		}
+
+		String inputPath = parameters.get(0);
+		String hdfsHostPort = parameters.get(1);
+		String basePath = parameters.get(2);
+
+		// Ensures that the url starts with hdfs://
+		if (!hdfsHostPort.contains("://")) {
+			hdfsHostPort = "hdfs://" + hdfsHostPort;
+		}
+
+		// Ingest Plugins
+		Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
+
+		// Driver
+		StageToHdfsDriver driver = new StageToHdfsDriver(
+				ingestPlugins,
+				hdfsHostPort,
+				basePath,
+				localInputOptions);
+
+		// Execute
+		if (!driver.runOperation(inputPath)) {
+			throw new RuntimeException(
+					"Ingest failed to execute");
+		}
+		return null;
 	}
 }

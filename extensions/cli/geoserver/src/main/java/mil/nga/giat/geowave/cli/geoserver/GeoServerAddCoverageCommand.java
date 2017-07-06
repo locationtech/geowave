@@ -21,11 +21,12 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addcv", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "addcv", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Add a GeoServer coverage")
 public class GeoServerAddCoverageCommand extends
 		DefaultOperation implements
@@ -69,6 +70,13 @@ public class GeoServerAddCoverageCommand extends
 	public void execute(
 			OperationParams params )
 			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			OperationParams params ) {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <coverage name>");
@@ -86,12 +94,8 @@ public class GeoServerAddCoverageCommand extends
 				cvgName);
 
 		if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("Add coverage '" + cvgName + "' to '" + workspace + "/" + cvgstore
-					+ "' on GeoServer: OK");
+			return "Add coverage '" + cvgName + "' to '" + workspace + "/" + cvgstore + "' on GeoServer: OK";
 		}
-		else {
-			System.err.println("Error adding GeoServer coverage " + cvgName + "; code = "
-					+ addLayerResponse.getStatus());
-		}
+		return "Error adding GeoServer coverage " + cvgName + "; code = " + addLayerResponse.getStatus();
 	}
 }

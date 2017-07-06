@@ -122,4 +122,11 @@ public class MinimalFullTable extends
 					"full scan for store type " + storeType + " not implemented.");
 		}
 	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

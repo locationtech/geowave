@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +24,16 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Set GeoServer Layer Style")
 public class GeoServerSetLayerStyleCommand extends
-		DefaultOperation implements
+		DefaultOperation<String> implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -49,12 +51,17 @@ public class GeoServerSetLayerStyleCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -70,6 +77,12 @@ public class GeoServerSetLayerStyleCommand extends
 					"Requires argument: <layer name>");
 		}
 
+	}
+
+	@Override
+	public String computeResults(
+			OperationParams params )
+			throws Exception {
 		layerName = parameters.get(0);
 
 		Response setLayerStyleResponse = geoserverClient.setLayerStyle(
@@ -77,15 +90,11 @@ public class GeoServerSetLayerStyleCommand extends
 				styleName);
 
 		if (setLayerStyleResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("Set style for GeoServer layer '" + layerName + ": OK");
-
 			final String style = IOUtils.toString((InputStream) setLayerStyleResponse.getEntity());
-			System.out.println(style);
+			return "Set style for GeoServer layer '" + layerName + ": OK" + style;
 
 		}
-		else {
-			System.err.println("Error setting style for GeoServer layer '" + layerName + "'; code = "
-					+ setLayerStyleResponse.getStatus() + " ; " + setLayerStyleResponse.getStatusInfo().toString());
-		}
+		return "Error setting style for GeoServer layer '" + layerName + "'; code = "
+				+ setLayerStyleResponse.getStatus() + " ; " + setLayerStyleResponse.getStatusInfo().toString();
 	}
 }

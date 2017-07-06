@@ -23,15 +23,15 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "ingest", parentOperation = Landsat8Section.class)
+@GeowaveOperation(name = "ingest", parentOperation = Landsat8Section.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave's raster store and in parallel ingesting the scene metadata into GeoWave's vector store.  These two stores can actually be the same or they can be different.")
 public class Landsat8IngestCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
 	@Parameter(description = "<storename> <comma delimited index/group list>")
-	protected final List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
 	protected Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
@@ -51,8 +51,14 @@ public class Landsat8IngestCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		JAIExt.initJAIEXT();
+		computeResults(params);
+	}
 
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
+		JAIExt.initJAIEXT();
 		final IngestRunner runner = new IngestRunner(
 				analyzeOptions,
 				downloadOptions,
@@ -60,6 +66,7 @@ public class Landsat8IngestCommand extends
 				vectorOverrideOptions,
 				parameters);
 		runner.runInternal(params);
+		return null;
 	}
 
 }

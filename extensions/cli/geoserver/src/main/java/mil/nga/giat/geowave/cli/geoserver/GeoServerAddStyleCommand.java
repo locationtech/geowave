@@ -12,6 +12,8 @@ package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +25,12 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Add a GeoServer style")
 public class GeoServerAddStyleCommand extends
 		DefaultOperation implements
@@ -64,6 +67,15 @@ public class GeoServerAddStyleCommand extends
 	public void execute(
 			OperationParams params )
 			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			OperationParams params )
+			throws FileNotFoundException,
+			IOException {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <style name>");
@@ -86,12 +98,10 @@ public class GeoServerAddStyleCommand extends
 
 			if (addStyleResponse.getStatus() == Status.OK.getStatusCode()
 					|| addStyleResponse.getStatus() == Status.CREATED.getStatusCode()) {
-				System.out.println("Add style for '" + gwStyle + "' on GeoServer: OK");
+				return "Add style for '" + gwStyle + "' on GeoServer: OK";
 			}
-			else {
-				System.err.println("Error adding style for '" + gwStyle + "' on GeoServer; code = "
-						+ addStyleResponse.getStatus());
-			}
+			return "Error adding style for '" + gwStyle + "' on GeoServer; code = " + addStyleResponse.getStatus();
 		}
+
 	}
 }

@@ -18,10 +18,10 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "download", parentOperation = Landsat8Section.class)
+@GeowaveOperation(name = "download", parentOperation = Landsat8Section.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Download Landsat 8 imagery to a local directory")
 public class Landsat8DownloadCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -37,10 +37,18 @@ public class Landsat8DownloadCommand extends
 	public void execute(
 			OperationParams params )
 			throws Exception {
+		computeResults(params);
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		final DownloadRunner runner = new DownloadRunner(
 				analyzeOptions,
 				downloadOptions);
 		runner.runInternal(params);
+		return null;
 	}
 
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +21,18 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONObject;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "getfl", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "getfl", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Get GeoServer feature layer info")
 public class GeoServerGetFeatureLayerCommand extends
-		DefaultOperation implements
+		DefaultOperation<String> implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -41,12 +44,17 @@ public class GeoServerGetFeatureLayerCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -62,19 +70,22 @@ public class GeoServerGetFeatureLayerCommand extends
 					"Requires argument: <layer name>");
 		}
 
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			OperationParams params )
+			throws Exception {
 		layerName = parameters.get(0);
 
 		Response getLayerResponse = geoserverClient.getFeatureLayer(layerName);
 
 		if (getLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer layer info for '" + layerName + "':");
-
 			JSONObject jsonResponse = JSONObject.fromObject(getLayerResponse.getEntity());
-			System.out.println(jsonResponse.toString(2));
+			return "\nGeoServer layer info for '" + layerName + "': " + jsonResponse.toString(2);
 		}
-		else {
-			System.err.println("Error getting GeoServer layer info for '" + layerName + "'; code = "
-					+ getLayerResponse.getStatus());
-		}
+		return "Error getting GeoServer layer info for '" + layerName + "'; code = " + getLayerResponse.getStatus();
 	}
 }

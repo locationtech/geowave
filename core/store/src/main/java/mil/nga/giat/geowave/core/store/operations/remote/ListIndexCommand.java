@@ -10,9 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.remote;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -23,26 +27,34 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "listindex", parentOperation = RemoteSection.class)
+@GeowaveOperation(name = "listindex", parentOperation = RemoteSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Display all indices in this remote store")
 public class ListIndexCommand extends
-		DefaultOperation implements
+		DefaultOperation<String> implements
 		Command
 {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@Override
 	public void execute(
-			OperationParams params )
-			throws IOException {
+			OperationParams params ) {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
 
+	@Override
+	public String computeResults(
+			OperationParams params ) {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
@@ -50,13 +62,18 @@ public class ListIndexCommand extends
 
 		String inputStoreName = parameters.get(0);
 
+		// Get the config options from the properties file
+
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		// Attempt to load the desired input store
 
 		String result;
 
 		StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
-		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
 			result = "Cannot find store name: " + inputStoreLoader.getStoreName();
 		}
 		else {
@@ -73,12 +90,17 @@ public class ListIndexCommand extends
 						index.getId().getString()).append(
 						' ');
 			}
-			it.close();
+			try {
+				it.close();
+			}
+			catch (IOException e) {
+				LOGGER.error(
+						"Unable to close Iterator",
+						e);
+			}
 			result = "Available indexes: " + buffer.toString();
 		}
-
-		JCommander.getConsole().println(
-				result);
+		return result;
 	}
 
 }

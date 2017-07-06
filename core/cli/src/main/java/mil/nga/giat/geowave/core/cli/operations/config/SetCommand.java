@@ -25,53 +25,81 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
-@GeowaveOperation(name = "set", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "set", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Set property name within cache")
 public class SetCommand extends
-		DefaultOperation implements
+		DefaultOperation<Object> implements
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SetCommand.class);
-
+	
 	@Parameter(description = "<name> <value>")
+	@RestParameters(names = {
+		"key",
+		"value"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
-		"--password"
-	}, description = "boolean (true|false) - specify if the value being set is a password and should be encrypted in the configurations")
-	private String password = null;
+			"--password"
+		}, description = "boolean (true|false) - specify if the value being set is a password and should be encrypted in the configurations")
+		private String password = null;
 
-	private boolean isPassword;
-
-	@Override
-	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
-		if (password != null && !"".equals(password.trim())) {
-			isPassword = Boolean.parseBoolean(password.trim());
-		}
-		return true;
-	}
-
+		private boolean isPassword;
+		
 	@Override
 	public void execute(
 			OperationParams params ) {
+		if (password != null && !"".equals(password.trim())) {
+			isPassword = Boolean.parseBoolean(password.trim());
+		}
+		setKeyValue(params);
+	}
 
-		Properties existingProps = getGeoWaveConfigProperties(params);
+	/**
+	 * Add rest endpoint for the set command. Looks for GET params with keys
+	 * 'key' and 'value' to set.
+	 * 
+	 * @return string containing json with details of success or failure of the
+	 *         set
+	 */
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		try {
+			return setKeyValue(params);
+		}
+		catch (WritePropertiesException | ParameterException e) {
+			// TODO GEOWAVE-rest-project server error status message
+			// this.setStatus(
+			// Status.SERVER_ERROR_INTERNAL,
+			// e.getMessage());
+			return null;
+		}
+	}
 
-		PasswordConverter converter = new PasswordConverter(
+	/**
+	 * Set the key value pair in the config. Store the previous value of the key
+	 * in prevValue
+	 */
+	private Object setKeyValue(
+			OperationParams params ) {
+
+		File f = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		Properties p = ConfigOptions.loadProperties(
+				f,
 				null);
 
 		String key = null;
 		String value = null;
-
 		if (parameters.size() == 1 && parameters.get(
 				0).indexOf(
 				"=") != -1) {
@@ -79,20 +107,21 @@ public class SetCommand extends
 					parameters.get(0),
 					"=");
 			key = parts[0];
-			value = converter.convert(parts[1]);
+			value = parts[1];
 		}
 		else if (parameters.size() == 2) {
 			key = parameters.get(0);
-			value = converter.convert(parameters.get(1));
+			value = parameters.get(1);
 		}
 		else {
 			throw new ParameterException(
 					"Requires: <name> <value>");
 		}
 
+
 		if (isPassword) {
 			// check if encryption is enabled in configuration
-			if (Boolean.parseBoolean(existingProps.getProperty(
+			if (Boolean.parseBoolean(p.getProperty(
 					Constants.ENCRYPTION_ENABLED_KEY,
 					Constants.ENCRYPTION_ENABLED_DEFAULT))) {
 				try {
@@ -116,12 +145,19 @@ public class SetCommand extends
 						Constants.ENCRYPTION_ENABLED_KEY);
 			}
 		}
-		existingProps.setProperty(
+		
+		Object previousValue = p.setProperty(
 				key,
 				value);
-		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(params),
-				existingProps);
+		if (!ConfigOptions.writeProperties(
+				f,
+				p)) {
+			throw new WritePropertiesException(
+					"Write failure");
+		}
+		else {
+			return previousValue;
+		}
 	}
 
 	public List<String> getParameters() {
@@ -134,5 +170,17 @@ public class SetCommand extends
 		this.parameters = new ArrayList<String>();
 		this.parameters.add(key);
 		this.parameters.add(value);
+	}
+
+	private static class WritePropertiesException extends
+			RuntimeException
+	{
+
+		private WritePropertiesException(
+				String string ) {
+			super(
+					string);
+		}
+
 	}
 }

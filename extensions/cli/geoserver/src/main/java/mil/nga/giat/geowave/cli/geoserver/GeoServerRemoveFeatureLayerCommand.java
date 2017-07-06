@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +21,18 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONObject;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "rmfl", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "rmfl", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Remove GeoServer feature Layer")
 public class GeoServerRemoveFeatureLayerCommand extends
-		DefaultOperation implements
+		DefaultOperation<String> implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -41,12 +44,17 @@ public class GeoServerRemoveFeatureLayerCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -62,18 +70,22 @@ public class GeoServerRemoveFeatureLayerCommand extends
 					"Requires argument: <layer name>");
 		}
 
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			OperationParams params )
+			throws Exception {
 		layerName = parameters.get(0);
 
 		Response deleteLayerResponse = geoserverClient.deleteFeatureLayer(layerName);
 
 		if (deleteLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer delete layer response " + layerName + ":");
 			JSONObject listObj = JSONObject.fromObject(deleteLayerResponse.getEntity());
-			System.out.println(listObj.toString(2));
+			return "\nGeoServer delete layer response " + layerName + ": " + listObj.toString(2);
 		}
-		else {
-			System.err.println("Error deleting GeoServer layer " + layerName + "; code = "
-					+ deleteLayerResponse.getStatus());
-		}
+		return "Error deleting GeoServer layer " + layerName + "; code = " + deleteLayerResponse.getStatus();
 	}
 }

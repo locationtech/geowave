@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -143,6 +144,13 @@ public class BBOXQuery extends
 			System.out.println("BBOX query results iteration took " + stopWatch.toString());
 		}
 		return count;
+	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

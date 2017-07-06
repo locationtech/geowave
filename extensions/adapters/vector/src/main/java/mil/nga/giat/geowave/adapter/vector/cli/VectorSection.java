@@ -14,6 +14,7 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 
 @GeowaveOperation(name = "vector", parentOperation = GeowaveTopLevelSection.class)
@@ -21,5 +22,13 @@ import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 public class VectorSection extends
 		DefaultOperation
 {
+
+	@Override
+	public Object computeResults(
+			OperationParams params )
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

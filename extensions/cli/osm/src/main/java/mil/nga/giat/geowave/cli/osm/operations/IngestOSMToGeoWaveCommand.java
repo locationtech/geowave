@@ -10,11 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.osm.operations;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.hadoop.util.ToolRunner;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -28,13 +30,14 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "ingest", parentOperation = OSMSection.class)
+@GeowaveOperation(name = "ingest", parentOperation = OSMSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Ingest and convert OSM data from HDFS to GeoWave")
 public class IngestOSMToGeoWaveCommand extends
-		DefaultOperation implements
+		DefaultOperation<List<String>> implements
 		Command
 {
 
@@ -57,56 +60,13 @@ public class IngestOSMToGeoWaveCommand extends
 					"Requires arguments: <hdfs host:port> <path to base directory to read from> <store name>");
 		}
 
-		String hdfsHostPort = parameters.get(0);
-		String basePath = parameters.get(1);
-		String inputStoreName = parameters.get(2);
-
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
+		for (String string : computeResults(params)) {
+			JCommander.getConsole().println(
+					string);
 		}
-
-		if (!basePath.startsWith("/")) {
-			throw new ParameterException(
-					"HDFS Base path must start with forward slash /");
-		}
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		}
-
-		// Copy over options from main parameter to ingest options
-		ingestOptions.setHdfsBasePath(basePath);
-		ingestOptions.setNameNode(hdfsHostPort);
-
-		if (inputStoreOptions.getGeowaveNamespace() == null) {
-			inputStoreOptions.getFactoryOptions().setGeowaveNamespace(
-					"osmnamespace");
-		}
-
-		if (ingestOptions.getVisibilityOptions().getVisibility() == null) {
-			ingestOptions.getVisibilityOptions().setVisibility(
-					"public");
-		}
-
-		// This is needed by a method in OSMIngsetCommandArgs.
-		ingestOptions.setOsmNamespace(inputStoreOptions.getGeowaveNamespace());
-
-		// Ingest the data.
-		ingestData();
-
-		// Convert the data
-		convertData();
 	}
 
-	private void ingestData()
+	private List<String> ingestData()
 			throws Exception {
 
 		OSMRunner runner = new OSMRunner(
@@ -121,11 +81,13 @@ public class IngestOSMToGeoWaveCommand extends
 					"OSMRunner failed: " + res);
 		}
 
-		System.out.println("finished ingest");
-		System.out.println("**************************************************");
+		List<String> output = new ArrayList<>();
+		output.add("finished ingest");
+		output.add("**************************************************");
+		return output;
 	}
 
-	private void convertData()
+	private List<String> convertData()
 			throws Exception {
 
 		FeatureDefinitionSet.initialize(new OSMIngestCommandArgs().getMappingContents());
@@ -142,10 +104,12 @@ public class IngestOSMToGeoWaveCommand extends
 					"OSMConversionRunner failed: " + res);
 		}
 
-		System.out.println("finished conversion");
-		System.out.println("**************************************************");
-		System.out.println("**************************************************");
-		System.out.println("**************************************************");
+		List<String> output = new ArrayList<>();
+		output.add("finished conversion");
+		output.add("**************************************************");
+		output.add("**************************************************");
+		output.add("**************************************************");
+		return output;
 	}
 
 	public List<String> getParameters() {
@@ -178,5 +142,66 @@ public class IngestOSMToGeoWaveCommand extends
 	public void setInputStoreOptions(
 			DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	@Override
+	public List<String> computeResults(
+			OperationParams params )
+			throws Exception {
+		String hdfsHostPort = parameters.get(0);
+		String basePath = parameters.get(1);
+		String inputStoreName = parameters.get(2);
+
+		// Ensures that the url starts with hdfs://
+		if (!hdfsHostPort.contains("://")) {
+			hdfsHostPort = "hdfs://" + hdfsHostPort;
+		}
+
+		if (!basePath.startsWith("/")) {
+			throw new ParameterException(
+					"HDFS Base path must start with forward slash /");
+		}
+
+		// Config file
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Attempt to load input store.
+		if (inputStoreOptions == null) {
+			StoreLoader inputStoreLoader = new StoreLoader(
+					inputStoreName);
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
+			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		}
+
+		// Copy over options from main parameter to ingest options
+		ingestOptions.setHdfsBasePath(basePath);
+		ingestOptions.setNameNode(hdfsHostPort);
+
+		if (inputStoreOptions.getGeowaveNamespace() == null) {
+			inputStoreOptions.getFactoryOptions().setGeowaveNamespace(
+					"osmnamespace");
+		}
+
+		if (ingestOptions.getVisibilityOptions().getVisibility() == null) {
+			ingestOptions.getVisibilityOptions().setVisibility(
+					"public");
+		}
+
+		// This is needed by a method in OSMIngsetCommandArgs.
+		ingestOptions.setOsmNamespace(inputStoreOptions.getGeowaveNamespace());
+
+		List<String> outputs = new ArrayList<>();
+
+		// Ingest the data.
+		outputs.addAll(ingestData());
+
+		// Convert the data
+		outputs.addAll(convertData());
+
+		return outputs;
 	}
 }

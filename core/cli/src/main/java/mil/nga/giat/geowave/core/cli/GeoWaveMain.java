@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
++6 * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
  * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
