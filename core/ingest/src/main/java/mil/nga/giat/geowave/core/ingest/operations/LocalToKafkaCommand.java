@@ -29,10 +29,10 @@ import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 
-@GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class)
+@GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Stage supported files in local file system to a Kafka topic")
 public class LocalToKafkaCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -62,33 +62,14 @@ public class LocalToKafkaCommand extends
 
 	/**
 	 * Prep the driver & run the operation.
+	 * 
+	 * @throws Exception
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
-
-		// Ensure we have all the required arguments
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires arguments: <file or directory>");
-		}
-
-		String inputPath = parameters.get(0);
-
-		// Ingest Plugins
-		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
-
-		// Driver
-		StageToKafkaDriver driver = new StageToKafkaDriver(
-				kafkaOptions,
-				ingestPlugins,
-				localInputOptions);
-
-		// Execute
-		if (!driver.runOperation(inputPath)) {
-			throw new RuntimeException(
-					"Ingest failed to execute");
-		}
+			OperationParams params )
+			throws Exception {
+		computeResults(params);
 	}
 
 	public List<String> getParameters() {
@@ -126,5 +107,34 @@ public class LocalToKafkaCommand extends
 	public void setPluginFormats(
 			IngestFormatPluginOptions pluginFormats ) {
 		this.pluginFormats = pluginFormats;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires arguments: <file or directory>");
+		}
+
+		String inputPath = parameters.get(0);
+
+		// Ingest Plugins
+		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
+
+		// Driver
+		StageToKafkaDriver driver = new StageToKafkaDriver(
+				kafkaOptions,
+				ingestPlugins,
+				localInputOptions);
+
+		// Execute
+		if (!driver.runOperation(inputPath)) {
+			throw new RuntimeException(
+					"Ingest failed to execute");
+		}
+		return null;
 	}
 }

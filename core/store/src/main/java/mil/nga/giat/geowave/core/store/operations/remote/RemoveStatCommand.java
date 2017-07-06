@@ -27,7 +27,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions;
 
-@GeowaveOperation(name = "rmstat", parentOperation = RemoteSection.class)
+@GeowaveOperation(name = "rmstat", parentOperation = RemoteSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Remove a statistic from the remote store. You will be prompted with are you sure")
 public class RemoveStatCommand extends
 		AbstractStatsCommand implements
@@ -42,17 +42,7 @@ public class RemoveStatCommand extends
 	@Override
 	public void execute(
 			OperationParams params ) {
-		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
-			throw new ParameterException(
-					"Requires arguments: <store name> <adapterId> <statId>");
-		}
-
-		statId = parameters.get(2);
-
-		super.run(
-				params,
-				parameters);
+		computeResults(params);
 	}
 
 	@Override
@@ -76,6 +66,23 @@ public class RemoveStatCommand extends
 		}
 
 		return true;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params ) {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 3) {
+			throw new ParameterException(
+					"Requires arguments: <store name> <adapterId> <statId>");
+		}
+
+		statId = parameters.get(2);
+
+		super.run(
+				params,
+				parameters);
+		return null;
 	}
 
 }

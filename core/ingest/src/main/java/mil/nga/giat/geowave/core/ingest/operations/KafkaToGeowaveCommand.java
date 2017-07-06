@@ -24,6 +24,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.kafka.IngestFromKafkaDriver;
 import mil.nga.giat.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions;
@@ -35,10 +36,10 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "kafkaToGW", parentOperation = IngestSection.class)
+@GeowaveOperation(name = "kafkaToGW", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Subscribe to a Kafka topic and ingest into GeoWave")
 public class KafkaToGeowaveCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -68,7 +69,6 @@ public class KafkaToGeowaveCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 
 		// TODO: localInputOptions has 'extensions' which doesn't mean
 		// anything for Kafka to Geowave
@@ -81,10 +81,13 @@ public class KafkaToGeowaveCommand extends
 
 	/**
 	 * Prep the driver & run the operation.
+	 * 
+	 * @throws Exception
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			OperationParams params )
+			throws Exception {
 
 		// Ensure we have all the required arguments
 		if (parameters.size() != 2) {
@@ -92,50 +95,7 @@ public class KafkaToGeowaveCommand extends
 					"Requires arguments: <store name> <comma delimited index/group list>");
 		}
 
-		String inputStoreName = parameters.get(0);
-		String indexList = parameters.get(1);
-
-		// Config file
-		File configFile = getGeoWaveConfigFile(params);
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		}
-
-		// Load the Indexes
-		if (inputIndexOptions == null) {
-			IndexLoader indexLoader = new IndexLoader(
-					indexList);
-			if (!indexLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find index(s) by name: " + indexList);
-			}
-			inputIndexOptions = indexLoader.getLoadedIndexes();
-		}
-
-		// Ingest Plugins
-		Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
-
-		// Driver
-		driver = new IngestFromKafkaDriver(
-				inputStoreOptions,
-				inputIndexOptions,
-				ingestPlugins,
-				kafkaOptions,
-				ingestOptions);
-
-		// Execute
-		if (!driver.runOperation()) {
-			throw new RuntimeException(
-					"Ingest failed to execute");
-		}
+		computeResults(params);
 	}
 
 	public IngestFromKafkaDriver getDriver() {
@@ -206,5 +166,57 @@ public class KafkaToGeowaveCommand extends
 	public void setInputIndexOptions(
 			List<IndexPluginOptions> inputIndexOptions ) {
 		this.inputIndexOptions = inputIndexOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
+		String inputStoreName = parameters.get(0);
+		String indexList = parameters.get(1);
+
+		// Config file
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Attempt to load input store.
+		if (inputStoreOptions == null) {
+			StoreLoader inputStoreLoader = new StoreLoader(
+					inputStoreName);
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
+			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		}
+
+		// Load the Indexes
+		if (inputIndexOptions == null) {
+			IndexLoader indexLoader = new IndexLoader(
+					indexList);
+			if (!indexLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find index(s) by name: " + indexList);
+			}
+			inputIndexOptions = indexLoader.getLoadedIndexes();
+		}
+
+		// Ingest Plugins
+		Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
+
+		// Driver
+		driver = new IngestFromKafkaDriver(
+				inputStoreOptions,
+				inputIndexOptions,
+				ingestPlugins,
+				kafkaOptions,
+				ingestOptions);
+
+		// Execute
+		if (!driver.runOperation()) {
+			throw new RuntimeException(
+					"Ingest failed to execute");
+		}
+		return null;
 	}
 }

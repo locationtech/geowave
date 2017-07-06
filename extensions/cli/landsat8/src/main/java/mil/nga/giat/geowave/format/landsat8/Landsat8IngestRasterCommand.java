@@ -23,10 +23,10 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "ingestraster", parentOperation = Landsat8Section.class)
+@GeowaveOperation(name = "ingestraster", parentOperation = Landsat8Section.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave")
 public class Landsat8IngestRasterCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -48,6 +48,13 @@ public class Landsat8IngestRasterCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
+		computeResults(params);
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		JAIExt.initJAIEXT();
 		final RasterIngestRunner runner = new RasterIngestRunner(
 				analyzeOptions,
@@ -55,6 +62,7 @@ public class Landsat8IngestRasterCommand extends
 				ingestOptions,
 				parameters);
 		runner.runInternal(params);
+		return null;
 	}
 
 }

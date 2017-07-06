@@ -24,6 +24,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
@@ -37,10 +38,10 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "localToMrGW", parentOperation = IngestSection.class)
+@GeowaveOperation(name = "localToMrGW", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Copy supported files from local file system to HDFS and ingest from HDFS")
 public class LocalToMapReduceToGeowaveCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -68,7 +69,6 @@ public class LocalToMapReduceToGeowaveCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 
 		// Based on the selected formats, select the format plugins
 		pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -78,10 +78,13 @@ public class LocalToMapReduceToGeowaveCommand extends
 
 	/**
 	 * Prep the driver & run the operation.
+	 * 
+	 * @throws Exception
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			OperationParams params )
+			throws Exception {
 
 		// Ensure we have all the required arguments
 		if (parameters.size() != 5) {
@@ -89,86 +92,7 @@ public class LocalToMapReduceToGeowaveCommand extends
 					"Requires arguments: <file or directory> <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>");
 		}
 
-		if (mapReduceOptions.getJobTrackerOrResourceManagerHostPort() == null) {
-			throw new ParameterException(
-					"Requires job tracker or resource manager option (try geowave help <command>...)");
-		}
-
-		String inputPath = parameters.get(0);
-		String hdfsHostPort = parameters.get(1);
-		String basePath = parameters.get(2);
-		String inputStoreName = parameters.get(3);
-		String indexList = parameters.get(4);
-
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
-
-		// Config file
-		File configFile = getGeoWaveConfigFile(params);
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		}
-
-		// Load the Indexes
-		if (inputIndexOptions == null) {
-			IndexLoader indexLoader = new IndexLoader(
-					indexList);
-			if (!indexLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find index(s) by name: " + indexList);
-			}
-			inputIndexOptions = indexLoader.getLoadedIndexes();
-		}
-
-		// Ingest Plugins
-		Map<String, AvroFormatPlugin<?, ?>> avroIngestPlugins = pluginFormats.createAvroPlugins();
-
-		// Ingest Plugins
-		Map<String, IngestFromHdfsPlugin<?, ?>> hdfsIngestPlugins = pluginFormats.createHdfsIngestPlugins();
-
-		{
-
-			// Driver
-			StageToHdfsDriver driver = new StageToHdfsDriver(
-					avroIngestPlugins,
-					hdfsHostPort,
-					basePath,
-					localInputOptions);
-
-			// Execute
-			if (!driver.runOperation(inputPath)) {
-				throw new RuntimeException(
-						"Ingest failed to execute");
-			}
-		}
-
-		{
-			// Driver
-			IngestFromHdfsDriver driver = new IngestFromHdfsDriver(
-					inputStoreOptions,
-					inputIndexOptions,
-					ingestOptions,
-					mapReduceOptions,
-					hdfsIngestPlugins,
-					hdfsHostPort,
-					basePath);
-
-			// Execute
-			if (!driver.runOperation()) {
-				throw new RuntimeException(
-						"Ingest failed to execute");
-			}
-		}
+		computeResults(params);
 	}
 
 	public List<String> getParameters() {
@@ -241,5 +165,93 @@ public class LocalToMapReduceToGeowaveCommand extends
 	public void setPluginFormats(
 			IngestFormatPluginOptions pluginFormats ) {
 		this.pluginFormats = pluginFormats;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
+		if (mapReduceOptions.getJobTrackerOrResourceManagerHostPort() == null) {
+			throw new ParameterException(
+					"Requires job tracker or resource manager option (try geowave help <command>...)");
+		}
+
+		String inputPath = parameters.get(0);
+		String hdfsHostPort = parameters.get(1);
+		String basePath = parameters.get(2);
+		String inputStoreName = parameters.get(3);
+		String indexList = parameters.get(4);
+
+		// Ensures that the url starts with hdfs://
+		if (!hdfsHostPort.contains("://")) {
+			hdfsHostPort = "hdfs://" + hdfsHostPort;
+		}
+
+		// Config file
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Attempt to load input store.
+		if (inputStoreOptions == null) {
+			StoreLoader inputStoreLoader = new StoreLoader(
+					inputStoreName);
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
+			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		}
+
+		// Load the Indexes
+		if (inputIndexOptions == null) {
+			IndexLoader indexLoader = new IndexLoader(
+					indexList);
+			if (!indexLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find index(s) by name: " + indexList);
+			}
+			inputIndexOptions = indexLoader.getLoadedIndexes();
+		}
+
+		// Ingest Plugins
+		Map<String, AvroFormatPlugin<?, ?>> avroIngestPlugins = pluginFormats.createAvroPlugins();
+
+		// Ingest Plugins
+		Map<String, IngestFromHdfsPlugin<?, ?>> hdfsIngestPlugins = pluginFormats.createHdfsIngestPlugins();
+
+		{
+
+			// Driver
+			StageToHdfsDriver driver = new StageToHdfsDriver(
+					avroIngestPlugins,
+					hdfsHostPort,
+					basePath,
+					localInputOptions);
+
+			// Execute
+			if (!driver.runOperation(inputPath)) {
+				throw new RuntimeException(
+						"Ingest failed to execute");
+			}
+		}
+
+		{
+			// Driver
+			IngestFromHdfsDriver driver = new IngestFromHdfsDriver(
+					inputStoreOptions,
+					inputIndexOptions,
+					ingestOptions,
+					mapReduceOptions,
+					hdfsIngestPlugins,
+					hdfsHostPort,
+					basePath);
+
+			// Execute
+			if (!driver.runOperation()) {
+				throw new RuntimeException(
+						"Ingest failed to execute");
+			}
+		}
+		return null;
 	};
 }

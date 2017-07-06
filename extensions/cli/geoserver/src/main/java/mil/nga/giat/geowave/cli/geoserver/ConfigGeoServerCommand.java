@@ -16,6 +16,7 @@ import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GE
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_USER;
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +43,10 @@ import mil.nga.giat.geowave.core.cli.prefix.JCommanderPrefixTranslator;
 import mil.nga.giat.geowave.core.cli.prefix.JCommanderTranslationMap;
 import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 
-@GeowaveOperation(name = "geoserver", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "geoserver", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a local configuration for GeoServer")
 public class ConfigGeoServerCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 	@Parameter(names = {
@@ -256,5 +257,47 @@ public class ConfigGeoServerCommand extends
 		builder.append("\n\n");
 
 		return builder.toString().trim();
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
+		File propFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		Properties existingProps = ConfigOptions.loadProperties(
+				propFile,
+				null);
+
+		// all switches are optional
+		if (url != null) {
+			existingProps.setProperty(
+					GEOSERVER_URL,
+					url);
+		}
+
+		if (getName() != null) {
+			existingProps.setProperty(
+					GEOSERVER_USER,
+					getName());
+		}
+
+		if (getPass() != null) {
+			existingProps.setProperty(
+					GEOSERVER_PASS,
+					getPass());
+		}
+
+		if (getWorkspace() != null) {
+			existingProps.setProperty(
+					GEOSERVER_WORKSPACE,
+					getWorkspace());
+		}
+
+		// Write properties file
+		ConfigOptions.writeProperties(
+				propFile,
+				existingProps);
+		return null;
 	}
 }

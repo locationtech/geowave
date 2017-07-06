@@ -35,10 +35,10 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "nn", parentOperation = AnalyticSection.class)
+@GeowaveOperation(name = "nn", parentOperation = AnalyticSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Nearest Neighbors")
 public class NearestNeighborCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -58,6 +58,50 @@ public class NearestNeighborCommand extends
 			OperationParams params )
 			throws Exception {
 
+		computeResults(params);
+	}
+
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			String storeName ) {
+		this.parameters = new ArrayList<String>();
+		this.parameters.add(storeName);
+	}
+
+	public CommonOptions getCommonOptions() {
+		return commonOptions;
+	}
+
+	public void setCommonOptions(
+			CommonOptions commonOptions ) {
+		this.commonOptions = commonOptions;
+	}
+
+	public NearestNeighborOptions getNnOptions() {
+		return nnOptions;
+	}
+
+	public void setNnOptions(
+			NearestNeighborOptions nnOptions ) {
+		this.nnOptions = nnOptions;
+	}
+
+	public DataStorePluginOptions getInputStoreOptions() {
+		return inputStoreOptions;
+	}
+
+	public void setInputStoreOptions(
+			DataStorePluginOptions inputStoreOptions ) {
+		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 1 && inputStoreOptions == null) {
 			throw new ParameterException(
@@ -103,42 +147,6 @@ public class NearestNeighborCommand extends
 			throw new RuntimeException(
 					"Failed to execute: " + status);
 		}
-	}
-
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-	}
-
-	public CommonOptions getCommonOptions() {
-		return commonOptions;
-	}
-
-	public void setCommonOptions(
-			CommonOptions commonOptions ) {
-		this.commonOptions = commonOptions;
-	}
-
-	public NearestNeighborOptions getNnOptions() {
-		return nnOptions;
-	}
-
-	public void setNnOptions(
-			NearestNeighborOptions nnOptions ) {
-		this.nnOptions = nnOptions;
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
+		return null;
 	}
 }

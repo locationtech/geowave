@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +18,17 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "getsa", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "getsa", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Get GeoWave store adapters")
 public class GeoServerGetStoreAdapterCommand extends
-		DefaultOperation implements
+		DefaultOperation<List<String>> implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -37,12 +40,17 @@ public class GeoServerGetStoreAdapterCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -58,14 +66,22 @@ public class GeoServerGetStoreAdapterCommand extends
 					"Requires argument: <store name>");
 		}
 
+		JCommander.getConsole().println(
+				"Store " + storeName + " has these adapters:");
+		for (String adapterId : computeResults(params)) {
+			JCommander.getConsole().println(
+					adapterId);
+		}
+	}
+
+	@Override
+	public List<String> computeResults(
+			OperationParams params )
+			throws Exception {
 		storeName = parameters.get(0);
 		ArrayList<String> adapterList = geoserverClient.getStoreAdapters(
 				storeName,
 				null);
-
-		System.out.println("Store " + storeName + " has these adapters:");
-		for (String adapterId : adapterList) {
-			System.out.println(adapterId);
-		}
+		return adapterList;
 	}
 }

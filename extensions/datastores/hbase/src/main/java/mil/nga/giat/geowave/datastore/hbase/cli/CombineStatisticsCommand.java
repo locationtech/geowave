@@ -103,4 +103,11 @@ public class CombineStatisticsCommand extends
 			DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -37,7 +37,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLin
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-@GeowaveOperation(name = "recalcstats", parentOperation = RemoteSection.class)
+@GeowaveOperation(name = "recalcstats", parentOperation = RemoteSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Calculate the statistics of an existing GeoWave dataset")
 public class RecalculateStatsCommand extends
 		AbstractStatsCommand implements
@@ -51,17 +51,8 @@ public class RecalculateStatsCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
-			throws Exception {
-		// Ensure we have all the required arguments
-		if (parameters.size() < 1) {
-			throw new ParameterException(
-					"Requires arguments: <store name> [<adapterId>]");
-		}
-
-		super.run(
-				params,
-				parameters);
+			OperationParams params ) {
+		computeResults(params);
 	}
 
 	protected boolean performStatsCommand(
@@ -133,5 +124,20 @@ public class RecalculateStatsCommand extends
 		if (adapterName != null) {
 			this.parameters.add(adapterName);
 		}
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params ) {
+		// Ensure we have all the required arguments
+		if (parameters.size() < 1) {
+			throw new ParameterException(
+					"Requires arguments: <store name> [<adapterId>]");
+		}
+
+		super.run(
+				params,
+				parameters);
+		return null;
 	}
 }
