@@ -114,41 +114,55 @@ public class GeoWaveJavaSparkKMeansIT
 
 		ByteArrayId adapterId = new ByteArrayId(
 				"hail");
-		
-		Envelope bbox = GeometryUtils.getGeoBounds(
-				inputDataStore,
-				adapterId);
 
-		double xRange = bbox.getMaxX() - bbox.getMinX();
-		double yRange = bbox.getMaxY() - bbox.getMinY();
-		double valueRange = Math.min(
-				xRange,
-				yRange);
-
-		TemporalRange timeRange = DateUtilities.getTemporalRange(
-				inputDataStore,
-				adapterId);
-
+		// See if we need to handle time
 		ScaledTemporalRange scaledRange = new ScaledTemporalRange();
-		scaledRange.setValueRange(
-				0.0,
-				valueRange);
-		scaledRange.setTimeRange(
-				timeRange.getStartTime(),
-				timeRange.getEndTime());
-
+		boolean useTime = false;
 		String timeField = FeatureDataUtils.getFirstTimeField(
 				inputDataStore,
 				adapterId);
+
+		if (timeField != null) {
+			useTime = true;
+
+			TemporalRange timeRange = DateUtilities.getTemporalRange(
+					inputDataStore,
+					adapterId);
+
+			if (timeRange != null) {
+				scaledRange.setTimeRange(
+						timeRange.getStartTime(),
+						timeRange.getEndTime());
+			}
+			
+//			scaledRange.setTimeScale(10.0);
+
+			Envelope bbox = GeometryUtils.getGeoBounds(
+					inputDataStore,
+					adapterId);
+
+			if (bbox != null) {
+				double xRange = bbox.getMaxX() - bbox.getMinX();
+				double yRange = bbox.getMaxY() - bbox.getMinY();
+				double valueRange = Math.min(
+						xRange,
+						yRange);
+				scaledRange.setValueRange(
+						0.0,
+						valueRange);
+			}
+		}
 
 		// Create the runner
 		final KMeansRunner runner = new KMeansRunner();
 		runner.setInputDataStore(
 				inputDataStore);
 
-		runner.setTimeParams(
-				timeField,
-				scaledRange);
+		if (useTime) {
+			runner.setTimeParams(
+					timeField,
+					scaledRange);
+		}
 
 		// Run kmeans
 		try {

@@ -19,6 +19,7 @@ public class ScaledTemporalRange implements
 	private double minVal = 0.0;
 	private double maxVal = 180.0;
 
+	private long timeRange = DEFAULT_TIME_RANGE;
 	private double timeScale;
 
 	private static Calendar cal = Calendar.getInstance(
@@ -38,6 +39,15 @@ public class ScaledTemporalRange implements
 		updateTimeScale();
 	}
 
+	public void setTimeRange(
+			long millis ) {
+		this.timeRange = millis;
+		this.startTime = null;
+		this.endTime = null;
+
+		updateTimeScale();
+	}
+
 	public void setValueRange(
 			double minVal,
 			double maxVal ) {
@@ -45,6 +55,11 @@ public class ScaledTemporalRange implements
 		this.maxVal = maxVal;
 
 		updateTimeScale();
+	}
+
+	public void setTimeScale(
+			double timeScale ) {
+		this.timeScale = timeScale;
 	}
 
 	private void updateTimeScale() {
@@ -57,7 +72,7 @@ public class ScaledTemporalRange implements
 
 	public long getTimeRangeMillis() {
 		if (startTime == null || endTime == null) {
-			return DEFAULT_TIME_RANGE;
+			return timeRange;
 		}
 
 		return endTime.getTime() - startTime.getTime();
@@ -65,18 +80,26 @@ public class ScaledTemporalRange implements
 
 	public double timeToValue(
 			Date time ) {
-		long deltaTime = time.getTime() - startTime.getTime();
+		long deltaTime = time.getTime() - getTimeMin();
+
 		return minVal + ((double) deltaTime * timeScale);
 	}
 
 	public Date valueToTime(
 			double timeVal ) {
-		long timeMillis = (long) (timeVal / timeScale);
-
+		long timeMillis = (long) (timeVal / timeScale) + getTimeMin();
 		cal.setTimeInMillis(
-				startTime.getTime() + timeMillis);
+				timeMillis);
 
 		return cal.getTime();
+	}
+
+	private long getTimeMin() {
+		if (startTime != null) {
+			return startTime.getTime();
+		}
+
+		return 0L;
 	}
 
 	public Date getStartTime() {
