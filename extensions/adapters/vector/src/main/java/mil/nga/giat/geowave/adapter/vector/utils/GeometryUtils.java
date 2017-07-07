@@ -22,6 +22,14 @@ import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -46,7 +54,8 @@ import com.vividsolutions.jts.geom.Polygon;
 public class GeometryUtils
 {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(
+			GeometryUtils.class);
 
 	/**
 	 * Build a buffer around a geometry
@@ -78,7 +87,7 @@ public class GeometryUtils
 		}
 		final double meterDistance = unit.getConverterTo(
 				SI.METER).convert(
-				distance);
+						distance);
 		final double degrees = distanceToDegrees(
 				crs,
 				geometry,
@@ -88,7 +97,8 @@ public class GeometryUtils
 		return Pair.of(
 				adjustGeo(
 						crs,
-						geometry.buffer(degrees)),
+						geometry.buffer(
+								degrees)),
 				degrees);
 
 	}
@@ -110,10 +120,12 @@ public class GeometryUtils
 				crs,
 				geometry);
 		if (polygons.size() == 1) {
-			return polygons.get(0);
+			return polygons.get(
+					0);
 		}
 		return geometry.getFactory().createMultiPolygon(
-				polygons.toArray(new Polygon[polygons.size()]));
+				polygons.toArray(
+						new Polygon[polygons.size()]));
 	}
 
 	/**
@@ -134,20 +146,24 @@ public class GeometryUtils
 		if (geometry instanceof MultiPolygon) {
 			final MultiPolygon multi = (MultiPolygon) geometry;
 			for (int i = 0; i < multi.getNumGeometries(); i++) {
-				final Geometry geo = multi.getGeometryN(i);
-				replacements.addAll(fixRangeOfCoordinates(
-						crs,
-						geo));
+				final Geometry geo = multi.getGeometryN(
+						i);
+				replacements.addAll(
+						fixRangeOfCoordinates(
+								crs,
+								geo));
 			}
 			return replacements;
 		} // collection is more general than multi-polygon
 		else if (geometry instanceof GeometryCollection) {
 			final GeometryCollection multi = (GeometryCollection) geometry;
 			for (int i = 0; i < multi.getNumGeometries(); i++) {
-				final Geometry geo = multi.getGeometryN(i);
-				replacements.addAll(fixRangeOfCoordinates(
-						crs,
-						geo));
+				final Geometry geo = multi.getGeometryN(
+						i);
+				replacements.addAll(
+						fixRangeOfCoordinates(
+								crs,
+								geo));
 			}
 			return replacements;
 		}
@@ -156,9 +172,10 @@ public class GeometryUtils
 		final Coordinate modifier = findModifier(
 				crs,
 				geoCoords);
-		replacements.addAll(constructGeometriesOverMapRegions(
-				modifier,
-				geometry));
+		replacements.addAll(
+				constructGeometriesOverMapRegions(
+						modifier,
+						geometry));
 		return replacements;
 	}
 
@@ -187,16 +204,21 @@ public class GeometryUtils
 				GeoWaveGTDataStore.DEFAULT_CRS);
 
 		// First do the polygon unchanged world
-		final Geometry worldIntersections = world.intersection(geometry);
+		final Geometry worldIntersections = world.intersection(
+				geometry);
 		for (int i = 0; i < worldIntersections.getNumGeometries(); i++) {
-			final Polygon polyToAdd = (Polygon) worldIntersections.getGeometryN(i);
-			if (!polygons.contains(polyToAdd)) {
-				polygons.add(polyToAdd);
+			final Polygon polyToAdd = (Polygon) worldIntersections.getGeometryN(
+					i);
+			if (!polygons.contains(
+					polyToAdd)) {
+				polygons.add(
+						polyToAdd);
 			}
 		}
 		// now use the modifier...but just the x axis for longitude
 		// optimization...do not modify if 0
-		if (Math.abs(modifier.x) > 0.0000000001) {
+		if (Math.abs(
+				modifier.x) > 0.0000000001) {
 			final Coordinate[] newCoords = new Coordinate[geoCoords.length];
 			int c = 0;
 			for (final Coordinate geoCoord : geoCoords) {
@@ -208,11 +230,15 @@ public class GeometryUtils
 			final Polygon transposedPoly = geometry.getFactory().createPolygon(
 					newCoords);
 
-			final Geometry adjustedPolyWorldIntersections = world.intersection(transposedPoly);
+			final Geometry adjustedPolyWorldIntersections = world.intersection(
+					transposedPoly);
 			for (int i = 0; i < adjustedPolyWorldIntersections.getNumGeometries(); i++) {
-				final Polygon polyToAdd = (Polygon) adjustedPolyWorldIntersections.getGeometryN(i);
-				if (!polygons.contains(polyToAdd)) {
-					polygons.add(polyToAdd);
+				final Polygon polyToAdd = (Polygon) adjustedPolyWorldIntersections.getGeometryN(
+						i);
+				if (!polygons.contains(
+						polyToAdd)) {
+					polygons.add(
+							polyToAdd);
 				}
 			}
 		}
@@ -278,10 +304,15 @@ public class GeometryUtils
 			final Coordinate coord,
 			final Coordinate modifier ) {
 		for (int i = 0; i < 3; i++) {
-			if (Math.abs(modifier.getOrdinate(i)) < Math.abs(coord.getOrdinate(i))) {
+			if (Math.abs(
+					modifier.getOrdinate(
+							i)) < Math.abs(
+									coord.getOrdinate(
+											i))) {
 				modifier.setOrdinate(
 						i,
-						coord.getOrdinate(i));
+						coord.getOrdinate(
+								i));
 			}
 		}
 	}
@@ -329,7 +360,8 @@ public class GeometryUtils
 			final int axis ) {
 		final CoordinateSystem coordinateSystem = crs.getCoordinateSystem();
 		if (coordinateSystem.getDimension() > axis) {
-			final CoordinateSystemAxis coordinateAxis = coordinateSystem.getAxis(axis);
+			final CoordinateSystemAxis coordinateAxis = coordinateSystem.getAxis(
+					axis);
 			if (val < coordinateAxis.getMinimumValue())
 				return coordinateAxis.getMinimumValue();
 			else if (val > coordinateAxis.getMaximumValue()) return coordinateAxis.getMaximumValue();
@@ -359,10 +391,13 @@ public class GeometryUtils
 					axis).getMinimumValue();
 			final double bound = coordinateSystem.getAxis(
 					axis).getMaximumValue() - lowerBound;
-			final double sign = sign(val);
+			final double sign = sign(
+					val);
 			// re-scale to 0 to n, then determine how many times to 'loop
 			// around'
-			final double mult = Math.floor(Math.abs((val + (sign * (-1.0 * lowerBound))) / bound));
+			final double mult = Math.floor(
+					Math.abs(
+							(val + (sign * (-1.0 * lowerBound))) / bound));
 			return val + (mult * bound * sign * (-1.0));
 		}
 		return val;
@@ -379,14 +414,16 @@ public class GeometryUtils
 			final double meters )
 			throws TransformException {
 		final GeometryFactory factory = geometry.getFactory();
-		return (geometry instanceof Point) ? geometry.distance(farthestPoint(
-				crs,
-				(Point) geometry,
-				meters)) : distanceToDegrees(
-				crs,
-				geometry.getEnvelopeInternal(),
-				factory == null ? new GeometryFactory() : factory,
-				meters);
+		return (geometry instanceof Point) ? geometry.distance(
+				farthestPoint(
+						crs,
+						(Point) geometry,
+						meters))
+				: distanceToDegrees(
+						crs,
+						geometry.getEnvelopeInternal(),
+						factory == null ? new GeometryFactory() : factory,
+						meters);
 	}
 
 	private static double distanceToDegrees(
@@ -395,31 +432,36 @@ public class GeometryUtils
 			final GeometryFactory factory,
 			final double meters )
 			throws TransformException {
-		return Collections.max(Arrays.asList(
-				distanceToDegrees(
-						crs,
-						factory.createPoint(new Coordinate(
-								env.getMaxX(),
-								env.getMaxY())),
-						meters),
-				distanceToDegrees(
-						crs,
-						factory.createPoint(new Coordinate(
-								env.getMaxX(),
-								env.getMinY())),
-						meters),
-				distanceToDegrees(
-						crs,
-						factory.createPoint(new Coordinate(
-								env.getMinX(),
-								env.getMinY())),
-						meters),
-				distanceToDegrees(
-						crs,
-						factory.createPoint(new Coordinate(
-								env.getMinX(),
-								env.getMaxY())),
-						meters)));
+		return Collections.max(
+				Arrays.asList(
+						distanceToDegrees(
+								crs,
+								factory.createPoint(
+										new Coordinate(
+												env.getMaxX(),
+												env.getMaxY())),
+								meters),
+						distanceToDegrees(
+								crs,
+								factory.createPoint(
+										new Coordinate(
+												env.getMaxX(),
+												env.getMinY())),
+								meters),
+						distanceToDegrees(
+								crs,
+								factory.createPoint(
+										new Coordinate(
+												env.getMinX(),
+												env.getMinY())),
+								meters),
+						distanceToDegrees(
+								crs,
+								factory.createPoint(
+										new Coordinate(
+												env.getMinX(),
+												env.getMaxY())),
+								meters)));
 	}
 
 	/** farther point in longitudinal axis given a latitude */
@@ -466,7 +508,31 @@ public class GeometryUtils
 	public static Geometry world(
 			final GeometryFactory factory,
 			final CoordinateReferenceSystem crs ) {
-		return factory.createPolygon(toPolygonCoordinates(crs.getCoordinateSystem()));
+		return factory.createPolygon(
+				toPolygonCoordinates(
+						crs.getCoordinateSystem()));
+	}
+
+	public static Envelope getGeoBounds(
+			final DataStorePluginOptions dataStorePlugin,
+			final ByteArrayId adapterId ) {
+		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
+		final CloseableIterator<DataStatistics<?>> statsIt = statisticsStore.getDataStatistics(
+				adapterId);
+
+		while (statsIt.hasNext()) {
+			final DataStatistics stats = statsIt.next();
+			if (stats instanceof FeatureBoundingBoxStatistics) {
+				final FeatureBoundingBoxStatistics bbStats = (FeatureBoundingBoxStatistics) stats;
+				return new Envelope(
+						bbStats.getMinX(),
+						bbStats.getMaxX(),
+						bbStats.getMinY(),
+						bbStats.getMaxY());
+			}
+		}
+
+		return null;
 	}
 
 	private static Coordinate[] toPolygonCoordinates(
@@ -476,20 +542,24 @@ public class GeometryUtils
 				coordinateSystem.getDimension()) + 1];
 		final BitSet greyCode = new BitSet(
 				coordinateSystem.getDimension());
-		final BitSet mask = getGreyCodeMask(coordinateSystem.getDimension());
+		final BitSet mask = getGreyCodeMask(
+				coordinateSystem.getDimension());
 		for (int i = 0; i < coordinates.length; i++) {
 			coordinates[i] = new Coordinate(
 					getValue(
 							greyCode,
-							coordinateSystem.getAxis(0),
+							coordinateSystem.getAxis(
+									0),
 							0),
 					getValue(
 							greyCode,
-							coordinateSystem.getAxis(1),
+							coordinateSystem.getAxis(
+									1),
 							1),
 					coordinateSystem.getDimension() > 2 ? getValue(
 							greyCode,
-							coordinateSystem.getAxis(2),
+							coordinateSystem.getAxis(
+									2),
 							2) : Double.NaN);
 
 			grayCode(
@@ -504,7 +574,8 @@ public class GeometryUtils
 		final BitSet mask = new BitSet(
 				dims);
 		for (int i = 0; i < dims; i++) {
-			mask.set(i);
+			mask.set(
+					i);
 		}
 		return mask;
 	}
@@ -512,17 +583,22 @@ public class GeometryUtils
 	private static void grayCode(
 			final BitSet code,
 			final BitSet mask ) {
-		BitSetMath.grayCodeInverse(code);
-		BitSetMath.increment(code);
-		code.and(mask);
-		BitSetMath.grayCode(code);
+		BitSetMath.grayCodeInverse(
+				code);
+		BitSetMath.increment(
+				code);
+		code.and(
+				mask);
+		BitSetMath.grayCode(
+				code);
 	}
 
 	private static double getValue(
 			final BitSet set,
 			final CoordinateSystemAxis axis,
 			final int dimension ) {
-		return (set.get(dimension)) ? axis.getMaximumValue() : axis.getMinimumValue();
+		return (set.get(
+				dimension)) ? axis.getMaximumValue() : axis.getMinimumValue();
 	}
 
 }

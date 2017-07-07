@@ -144,7 +144,8 @@ public class KmeansSparkCommand extends
 		KMeansUtils.writeClusterCentroids(
 				clusterModel,
 				outputDataStore,
-				"kmeans-centroids");
+				"kmeans-centroids",
+				null);
 
 		if (kMeansSparkOptions.isGenerateHulls()) {
 			stopwatch.reset();
