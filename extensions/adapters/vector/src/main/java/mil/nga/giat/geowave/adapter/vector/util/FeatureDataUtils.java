@@ -17,21 +17,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-import mil.nga.giat.geowave.core.geotime.TimeUtils;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.factory.GeoTools;
 import org.geotools.feature.SchemaException;
@@ -48,8 +36,21 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
+
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.core.geotime.TimeUtils;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 
 public class FeatureDataUtils
 {
@@ -243,13 +244,12 @@ public class FeatureDataUtils
 	public static String getFirstTimeField(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {
-		String timeField = null;
-
 		AdapterStore adapterStore = dataStore.createAdapterStore();
 
 		DataAdapter adapter = adapterStore.getAdapter(
 				adapterId);
-		if (adapter instanceof GeotoolsFeatureDataAdapter) {
+
+		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
 			GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
 			SimpleFeatureType featureType = gtAdapter.getFeatureType();
 
@@ -257,12 +257,25 @@ public class FeatureDataUtils
 				final Class<?> bindingClass = attrDesc.getType().getBinding();
 				if (TimeUtils.isTemporal(
 						bindingClass)) {
-					timeField = attrDesc.getLocalName();
-					break;
+					return attrDesc.getLocalName();
 				}
 			}
 		}
 
-		return timeField;
+		return null;
+	}
+
+	public static ByteArrayId getFirstFeatureAdapter(
+			DataStorePluginOptions dataStore ) {
+		CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
+
+		while (adapterIt.hasNext()) {
+			DataAdapter adapter = adapterIt.next();
+			if (adapter instanceof FeatureDataAdapter) {
+				return adapter.getAdapterId();
+			}
+		}
+
+		return null;
 	}
 }

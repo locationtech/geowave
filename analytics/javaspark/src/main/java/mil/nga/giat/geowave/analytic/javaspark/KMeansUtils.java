@@ -19,12 +19,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -248,5 +253,57 @@ public class KMeansUtils
 		}
 
 		return featureAdapter;
+	}
+
+	public static ScaledTemporalRange setRunnerTimeParams(
+			final KMeansRunner runner,
+			final DataStorePluginOptions inputDataStore,
+			ByteArrayId adapterId) {
+		if (adapterId == null) { // locate the first feature adapter
+			adapterId = FeatureDataUtils.getFirstFeatureAdapter(
+					inputDataStore);
+		}
+
+		if (adapterId != null) {
+			ScaledTemporalRange scaledRange = new ScaledTemporalRange();
+			String timeField = FeatureDataUtils.getFirstTimeField(
+					inputDataStore,
+					adapterId);
+
+			if (timeField != null) {
+				TemporalRange timeRange = DateUtilities.getTemporalRange(
+						inputDataStore,
+						adapterId);
+
+				if (timeRange != null) {
+					scaledRange.setTimeRange(
+							timeRange.getStartTime(),
+							timeRange.getEndTime());
+				}
+
+				Envelope bbox = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.getGeoBounds(
+						inputDataStore,
+						adapterId);
+
+				if (bbox != null) {
+					double xRange = bbox.getMaxX() - bbox.getMinX();
+					double yRange = bbox.getMaxY() - bbox.getMinY();
+					double valueRange = Math.min(
+							xRange,
+							yRange);
+					scaledRange.setValueRange(
+							0.0,
+							valueRange);
+				}
+
+				runner.setTimeParams(
+						timeField,
+						scaledRange);
+				
+				return scaledRange;
+			}
+		}
+		
+		return null;
 	}
 }

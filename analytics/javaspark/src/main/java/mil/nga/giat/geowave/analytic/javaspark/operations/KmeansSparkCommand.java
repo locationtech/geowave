@@ -29,6 +29,8 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
@@ -38,7 +40,8 @@ public class KmeansSparkCommand extends
 		DefaultOperation implements
 		Command
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(KmeansSparkCommand.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			KmeansSparkCommand.class);
 
 	@Parameter(description = "<input storename> <output storename>")
 	private List<String> parameters = new ArrayList<String>();
@@ -62,8 +65,10 @@ public class KmeansSparkCommand extends
 					"Requires arguments: <input storename> <output storename>");
 		}
 
-		final String inputStoreName = parameters.get(0);
-		final String outputStoreName = parameters.get(1);
+		final String inputStoreName = parameters.get(
+				0);
+		final String outputStoreName = parameters.get(
+				1);
 
 		// Config file
 		final File configFile = (File) params.getContext().get(
@@ -73,7 +78,8 @@ public class KmeansSparkCommand extends
 		if (inputDataStore == null) {
 			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
+			if (!inputStoreLoader.loadFromConfig(
+					configFile)) {
 				throw new ParameterException(
 						"Cannot find input store: " + inputStoreLoader.getStoreName());
 			}
@@ -83,7 +89,8 @@ public class KmeansSparkCommand extends
 		if (outputDataStore == null) {
 			final StoreLoader outputStoreLoader = new StoreLoader(
 					outputStoreName);
-			if (!outputStoreLoader.loadFromConfig(configFile)) {
+			if (!outputStoreLoader.loadFromConfig(
+					configFile)) {
 				throw new ParameterException(
 						"Cannot find output store: " + outputStoreLoader.getStoreName());
 			}
@@ -101,26 +108,57 @@ public class KmeansSparkCommand extends
 		// Convert properties from DBScanOptions and CommonOptions
 		final PropertyManagementConverter converter = new PropertyManagementConverter(
 				properties);
-		converter.readProperties(kMeansSparkOptions);
+		converter.readProperties(
+				kMeansSparkOptions);
 
 		final KMeansRunner runner = new KMeansRunner();
-		runner.setAppName(kMeansSparkOptions.getAppName());
-		runner.setMaster(kMeansSparkOptions.getMaster());
+		runner.setAppName(
+				kMeansSparkOptions.getAppName());
+		runner.setMaster(
+				kMeansSparkOptions.getMaster());
 
-		runner.setInputDataStore(inputDataStore);
-		runner.setNumClusters(kMeansSparkOptions.getNumClusters());
-		runner.setNumIterations(kMeansSparkOptions.getNumIterations());
+		runner.setInputDataStore(
+				inputDataStore);
+		runner.setNumClusters(
+				kMeansSparkOptions.getNumClusters());
+		runner.setNumIterations(
+				kMeansSparkOptions.getNumIterations());
+
+		ScaledTemporalRange scaledRange = null;
+
+		if (kMeansSparkOptions.isUseTime()) {
+			ByteArrayId adapterId = null;
+			if (kMeansSparkOptions.getAdapterId() != null) {
+				adapterId = new ByteArrayId(
+						kMeansSparkOptions.getAdapterId());
+			}
+
+			scaledRange = KMeansUtils.setRunnerTimeParams(
+					runner,
+					inputDataStore,
+					adapterId);
+
+			if (scaledRange == null) {
+				LOGGER.error(
+						"Failed to set time params for kmeans");
+				throw new ParameterException(
+						"--useTime option: Failed to set time params");
+			}
+		}
 
 		if (kMeansSparkOptions.getEpsilon() != null) {
-			runner.setEpsilon(kMeansSparkOptions.getEpsilon());
+			runner.setEpsilon(
+					kMeansSparkOptions.getEpsilon());
 		}
 
 		if (kMeansSparkOptions.getAdapterId() != null) {
-			runner.setAdapterId(kMeansSparkOptions.getAdapterId());
+			runner.setAdapterId(
+					kMeansSparkOptions.getAdapterId());
 		}
 
 		if (kMeansSparkOptions.getBoundingBox() != null) {
-			runner.setBoundingBox(kMeansSparkOptions.getBoundingBox());
+			runner.setBoundingBox(
+					kMeansSparkOptions.getBoundingBox());
 		}
 
 		stopwatch.reset();
@@ -136,7 +174,8 @@ public class KmeansSparkCommand extends
 		}
 
 		stopwatch.stop();
-		LOGGER.warn("KMeans runner took " + stopwatch.getTimeString());
+		LOGGER.warn(
+				"KMeans runner took " + stopwatch.getTimeString());
 
 		final KMeansModel clusterModel = runner.getOutputModel();
 
@@ -145,7 +184,7 @@ public class KmeansSparkCommand extends
 				clusterModel,
 				outputDataStore,
 				"kmeans-centroids",
-				null);
+				scaledRange);
 
 		if (kMeansSparkOptions.isGenerateHulls()) {
 			stopwatch.reset();
@@ -159,7 +198,8 @@ public class KmeansSparkCommand extends
 					"kmeans-hulls");
 
 			stopwatch.stop();
-			LOGGER.warn("KMeans hull generation took " + stopwatch.getTimeString());
+			LOGGER.warn(
+					"KMeans hull generation took " + stopwatch.getTimeString());
 		}
 	}
 
@@ -170,7 +210,8 @@ public class KmeansSparkCommand extends
 	public void setParameters(
 			final String storeName ) {
 		parameters = new ArrayList<String>();
-		parameters.add(storeName);
+		parameters.add(
+				storeName);
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {

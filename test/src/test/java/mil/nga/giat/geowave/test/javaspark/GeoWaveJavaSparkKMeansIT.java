@@ -25,18 +25,13 @@ import org.opengis.feature.type.AttributeDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
-import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
-import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansHullGenerator;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
 import mil.nga.giat.geowave.analytic.javaspark.KMeansUtils;
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -115,53 +110,25 @@ public class GeoWaveJavaSparkKMeansIT
 		ByteArrayId adapterId = new ByteArrayId(
 				"hail");
 
-		// See if we need to handle time
-		ScaledTemporalRange scaledRange = new ScaledTemporalRange();
-		boolean useTime = false;
-		String timeField = FeatureDataUtils.getFirstTimeField(
-				inputDataStore,
-				adapterId);
-
-		if (timeField != null) {
-			useTime = true;
-
-			TemporalRange timeRange = DateUtilities.getTemporalRange(
-					inputDataStore,
-					adapterId);
-
-			if (timeRange != null) {
-				scaledRange.setTimeRange(
-						timeRange.getStartTime(),
-						timeRange.getEndTime());
-			}
-			
-//			scaledRange.setTimeScale(10.0);
-
-			Envelope bbox = GeometryUtils.getGeoBounds(
-					inputDataStore,
-					adapterId);
-
-			if (bbox != null) {
-				double xRange = bbox.getMaxX() - bbox.getMinX();
-				double yRange = bbox.getMaxY() - bbox.getMinY();
-				double valueRange = Math.min(
-						xRange,
-						yRange);
-				scaledRange.setValueRange(
-						0.0,
-						valueRange);
-			}
-		}
-
 		// Create the runner
 		final KMeansRunner runner = new KMeansRunner();
 		runner.setInputDataStore(
 				inputDataStore);
 
-		if (useTime) {
-			runner.setTimeParams(
-					timeField,
-					scaledRange);
+		// Attempt to set the time params
+		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(
+				runner,
+				inputDataStore,
+				adapterId);
+
+		if (scaledRange == null) {
+			Assert.fail(
+					"Failed to set time params");
+
+			TestUtils.deleteAll(
+					inputDataStore);
+
+			runner.closeContext();
 		}
 
 		// Run kmeans

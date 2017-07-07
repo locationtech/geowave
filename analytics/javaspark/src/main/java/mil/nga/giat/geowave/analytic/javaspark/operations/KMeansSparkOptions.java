@@ -35,6 +35,12 @@ public class KMeansSparkOptions
 	private Double epsilon = null;
 
 	@Parameter(names = {
+		"-t",
+		"--useTime"
+	}, description = "Use time field from input data")
+	private Boolean useTime = false;
+
+	@Parameter(names = {
 		"-h",
 		"--hulls"
 	}, description = "Generate convex hulls?")
@@ -99,6 +105,15 @@ public class KMeansSparkOptions
 		this.epsilon = epsilon;
 	}
 
+	public Boolean isUseTime() {
+		return useTime;
+	}
+
+	public void setUseTime(
+			Boolean useTime ) {
+		this.useTime = useTime;
+	}
+
 	public Boolean isGenerateHulls() {
 		return generateHulls;
 	}
@@ -125,5 +140,4 @@ public class KMeansSparkOptions
 			String adapterId ) {
 		this.adapterId = adapterId;
 	}
-
 }
