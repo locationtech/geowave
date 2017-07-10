@@ -50,8 +50,7 @@ import scala.Tuple2;
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveJavaSparkKMeansIT
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveJavaSparkKMeansIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkKMeansIT.class);
 
 	protected static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
 	protected static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
@@ -67,38 +66,28 @@ public class GeoWaveJavaSparkKMeansIT
 	@BeforeClass
 	public static void reportTestStart() {
 		startMillis = System.currentTimeMillis();
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"*  RUNNING GeoWaveJavaSparkKMeansIT     *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*  RUNNING GeoWaveJavaSparkKMeansIT     *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@AfterClass
 	public static void reportTestFinish() {
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"* FINISHED GeoWaveJavaSparkKMeansIT     *");
-		LOGGER.warn(
-				"*         " + ((System.currentTimeMillis() - startMillis) / 1000) + "s elapsed.                 *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED GeoWaveJavaSparkKMeansIT     *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test
 	public void testKMeansRunner() {
-		TestUtils.deleteAll(
-				inputDataStore);
+		TestUtils.deleteAll(inputDataStore);
 
 		// Load data
 		TestUtils.testLocalIngest(
@@ -112,8 +101,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 		// Create the runner
 		final KMeansRunner runner = new KMeansRunner();
-		runner.setInputDataStore(
-				inputDataStore);
+		runner.setInputDataStore(inputDataStore);
 
 		// Attempt to set the time params
 		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(
@@ -122,11 +110,9 @@ public class GeoWaveJavaSparkKMeansIT
 				adapterId);
 
 		if (scaledRange == null) {
-			Assert.fail(
-					"Failed to set time params");
+			Assert.fail("Failed to set time params");
 
-			TestUtils.deleteAll(
-					inputDataStore);
+			TestUtils.deleteAll(inputDataStore);
 
 			runner.closeContext();
 		}
@@ -164,14 +150,11 @@ public class GeoWaveJavaSparkKMeansIT
 				"centroids from the model should match the hull count",
 				clusterModel.clusterCenters().length == hullsRDD.count());
 
-		System.out.println(
-				"KMeans cluster hulls:");
+		System.out.println("KMeans cluster hulls:");
 		for (final Tuple2<Integer, Geometry> hull : hullsRDD.collect()) {
-			System.out.println(
-					"> Hull size (verts): " + hull._2.getNumPoints());
+			System.out.println("> Hull size (verts): " + hull._2.getNumPoints());
 
-			System.out.println(
-					"> Hull centroid: " + hull._2.getCentroid().toString());
+			System.out.println("> Hull centroid: " + hull._2.getCentroid().toString());
 
 		}
 
@@ -187,8 +170,7 @@ public class GeoWaveJavaSparkKMeansIT
 				hullAdapter,
 				clusterModel.clusterCenters().length);
 
-		TestUtils.deleteAll(
-				inputDataStore);
+		TestUtils.deleteAll(inputDataStore);
 
 		runner.closeContext();
 	}
@@ -213,30 +195,24 @@ public class GeoWaveJavaSparkKMeansIT
 
 				final SimpleFeature isFeat = (SimpleFeature) maybeFeat;
 
-				final Geometry geom = (Geometry) isFeat.getAttribute(
-						0);
+				final Geometry geom = (Geometry) isFeat.getAttribute(0);
 
 				count++;
-				LOGGER.warn(
-						count + ": " + isFeat.getID() + " - " + geom.toString());
+				LOGGER.warn(count + ": " + isFeat.getID() + " - " + geom.toString());
 
 				for (AttributeDescriptor attrDesc : isFeat.getFeatureType().getAttributeDescriptors()) {
 					final Class<?> bindingClass = attrDesc.getType().getBinding();
-					if (TimeUtils.isTemporal(
-							bindingClass)) {
+					if (TimeUtils.isTemporal(bindingClass)) {
 						String timeField = attrDesc.getLocalName();
-						Date time = (Date) isFeat.getAttribute(
-								timeField);
-						LOGGER.warn(
-								"  time = " + time);
+						Date time = (Date) isFeat.getAttribute(timeField);
+						LOGGER.warn("  time = " + time);
 					}
 				}
 
 			}
 
-			LOGGER.warn(
-					"Counted " + count + " features in datastore for " + StringUtils.stringFromBinary(
-							dataAdapter.getAdapterId().getBytes()));
+			LOGGER.warn("Counted " + count + " features in datastore for "
+					+ StringUtils.stringFromBinary(dataAdapter.getAdapterId().getBytes()));
 		}
 		catch (final Exception e) {
 			e.printStackTrace();

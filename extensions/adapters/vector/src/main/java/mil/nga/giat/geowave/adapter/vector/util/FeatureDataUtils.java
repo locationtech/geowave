@@ -54,8 +54,7 @@ import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 
 public class FeatureDataUtils
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			FeatureDataUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureDataUtils.class);
 	private static final Object MUTEX = new Object();
 	private static boolean classLoaderInitialized = false;
 
@@ -66,8 +65,7 @@ public class FeatureDataUtils
 				return;
 			}
 			ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
-			LOGGER.info(
-					"Generating patched classloader");
+			LOGGER.info("Generating patched classloader");
 			if (classLoader instanceof VFSClassLoader) {
 				final VFSClassLoader cl = (VFSClassLoader) classLoader;
 				final FileObject[] fileObjs = cl.getFileObjects();
@@ -76,8 +74,8 @@ public class FeatureDataUtils
 					fileUrls[i] = new URL(
 							fileObjs[i].toString());
 				}
-				final ClassLoader urlCL = java.security.AccessController.doPrivileged(
-						new java.security.PrivilegedAction<URLClassLoader>() {
+				final ClassLoader urlCL = java.security.AccessController
+						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
 							@Override
 							public URLClassLoader run() {
 								final URLClassLoader ucl = new URLClassLoader(
@@ -86,10 +84,8 @@ public class FeatureDataUtils
 								return ucl;
 							}
 						});
-				GeoTools.addClassLoader(
-						urlCL);
-				SPIServiceRegistry.registerClassLoader(
-						urlCL);
+				GeoTools.addClassLoader(urlCL);
+				SPIServiceRegistry.registerClassLoader(urlCL);
 
 			}
 			classLoaderInitialized = true;
@@ -108,13 +104,11 @@ public class FeatureDataUtils
 		final CoordinateReferenceSystem crs = entry.getFeatureType().getCoordinateReferenceSystem();
 		SimpleFeature defaultCRSEntry = entry;
 
-		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(
-				crs)) {
+		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(crs)) {
 			MathTransform featureTransform = null;
 			if ((persistedType.getCoordinateReferenceSystem() != null)
 					&& persistedType.getCoordinateReferenceSystem().equals(
-							crs)
-					&& (transform != null)) {
+							crs) && (transform != null)) {
 				// we can use the transform we have already calculated for this
 				// feature
 				featureTransform = transform;
@@ -129,9 +123,10 @@ public class FeatureDataUtils
 							true);
 				}
 				catch (final FactoryException e) {
-					LOGGER.warn(
-							"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
-							e);
+					LOGGER
+							.warn(
+									"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
+									e);
 				}
 			}
 			if (featureTransform != null) {
@@ -143,15 +138,15 @@ public class FeatureDataUtils
 							entry,
 							reprojectedType);
 					// this will transform the geometry
-					defaultCRSEntry.setDefaultGeometry(
-							JTS.transform(
-									(Geometry) entry.getDefaultGeometry(),
-									featureTransform));
+					defaultCRSEntry.setDefaultGeometry(JTS.transform(
+							(Geometry) entry.getDefaultGeometry(),
+							featureTransform));
 				}
 				catch (MismatchedDimensionException | TransformException e) {
-					LOGGER.warn(
-							"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
-							e);
+					LOGGER
+							.warn(
+									"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
+									e);
 				}
 			}
 		}
@@ -178,25 +173,19 @@ public class FeatureDataUtils
 		SimpleFeatureType featureType = nameSpace != null && nameSpace.length() > 0 ? DataUtilities.createType(
 				nameSpace,
 				typeName,
-				typeDescriptor)
-				: DataUtilities.createType(
-						typeName,
-						typeDescriptor);
+				typeDescriptor) : DataUtilities.createType(
+				typeName,
+				typeDescriptor);
 
-		final String lCaseAxis = axis.toLowerCase(
-				Locale.ENGLISH);
+		final String lCaseAxis = axis.toLowerCase(Locale.ENGLISH);
 		final CoordinateReferenceSystem crs = featureType.getCoordinateReferenceSystem();
-		final String typeAxis = getAxis(
-				crs);
+		final String typeAxis = getAxis(crs);
 		// Default for EPSG:4326 is lat/long, If the provided type was
 		// long/lat, then re-establish the order
 		if (crs != null && crs.getIdentifiers().toString().contains(
-				"EPSG:4326")
-				&& !lCaseAxis.equalsIgnoreCase(
-						typeAxis)) {
+				"EPSG:4326") && !lCaseAxis.equalsIgnoreCase(typeAxis)) {
 			SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
-			builder.init(
-					featureType);
+			builder.init(featureType);
 
 			try {
 				// truely no way to force lat first
@@ -206,8 +195,7 @@ public class FeatureDataUtils
 						featureType,
 						CRS.decode(
 								"EPSG:4326",
-								lCaseAxis.equals(
-										"east")));
+								lCaseAxis.equals("east")));
 			}
 			catch (FactoryException e) {
 				throw new SchemaException(
@@ -246,8 +234,7 @@ public class FeatureDataUtils
 			final ByteArrayId adapterId ) {
 		AdapterStore adapterStore = dataStore.createAdapterStore();
 
-		DataAdapter adapter = adapterStore.getAdapter(
-				adapterId);
+		DataAdapter adapter = adapterStore.getAdapter(adapterId);
 
 		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
 			GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
@@ -255,8 +242,7 @@ public class FeatureDataUtils
 
 			for (AttributeDescriptor attrDesc : featureType.getAttributeDescriptors()) {
 				final Class<?> bindingClass = attrDesc.getType().getBinding();
-				if (TimeUtils.isTemporal(
-						bindingClass)) {
+				if (TimeUtils.isTemporal(bindingClass)) {
 					return attrDesc.getLocalName();
 				}
 			}

@@ -22,9 +22,7 @@ public class ScaledTemporalRange implements
 	private long timeRange = DEFAULT_TIME_RANGE;
 	private double timeScale;
 
-	private static Calendar cal = Calendar.getInstance(
-			TimeZone.getTimeZone(
-					"GMT"));
+	private Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
 	public ScaledTemporalRange() {
 		updateTimeScale();
@@ -88,8 +86,7 @@ public class ScaledTemporalRange implements
 	public Date valueToTime(
 			double timeVal ) {
 		long timeMillis = (long) (timeVal / timeScale) + getTimeMin();
-		cal.setTimeInMillis(
-				timeMillis);
+		cal.setTimeInMillis(timeMillis);
 
 		return cal.getTime();
 	}

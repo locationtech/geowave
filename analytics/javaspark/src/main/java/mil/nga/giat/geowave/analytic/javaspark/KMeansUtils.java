@@ -40,8 +40,7 @@ import scala.Tuple2;
 
 public class KMeansUtils
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			KMeansUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansUtils.class);
 
 	public static DataAdapter writeClusterCentroids(
 			final KMeansModel clusterModel,
@@ -49,16 +48,13 @@ public class KMeansUtils
 			final String centroidAdapterName,
 			final ScaledTemporalRange scaledRange ) {
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-		typeBuilder.setName(
-				centroidAdapterName);
-		typeBuilder.setNamespaceURI(
-				BasicFeatureTypes.DEFAULT_NAMESPACE);
+		typeBuilder.setName(centroidAdapterName);
+		typeBuilder.setNamespaceURI(BasicFeatureTypes.DEFAULT_NAMESPACE);
 
 		try {
-			typeBuilder.setCRS(
-					CRS.decode(
-							"EPSG:4326",
-							true));
+			typeBuilder.setCRS(CRS.decode(
+					"EPSG:4326",
+					true));
 		}
 		catch (final FactoryException fex) {
 			LOGGER.error(
@@ -68,34 +64,22 @@ public class KMeansUtils
 
 		final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
 
-		typeBuilder.add(
-				attrBuilder
-						.binding(
-								Geometry.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								Geometry.class.getName().toString()));
+		typeBuilder.add(attrBuilder.binding(
+				Geometry.class).nillable(
+				false).buildDescriptor(
+				Geometry.class.getName().toString()));
 
 		if (scaledRange != null) {
-			typeBuilder.add(
-					attrBuilder
-							.binding(
-									Date.class)
-							.nillable(
-									false)
-							.buildDescriptor(
-									"Time"));
+			typeBuilder.add(attrBuilder.binding(
+					Date.class).nillable(
+					false).buildDescriptor(
+					"Time"));
 		}
 
-		typeBuilder.add(
-				attrBuilder
-						.binding(
-								String.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								"KMeansData"));
+		typeBuilder.add(attrBuilder.binding(
+				String.class).nillable(
+				false).buildDescriptor(
+				"KMeansData"));
 
 		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
 		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
@@ -112,42 +96,34 @@ public class KMeansUtils
 				featureIndex)) {
 			int i = 0;
 			for (final Vector center : clusterModel.clusterCenters()) {
-				final double lon = center.apply(
-						0);
-				final double lat = center.apply(
-						1);
+				final double lon = center.apply(0);
+				final double lat = center.apply(1);
 
 				sfBuilder.set(
 						Geometry.class.getName(),
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(
-								new Coordinate(
-										lon,
-										lat)));
+						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+								lon,
+								lat)));
 
 				if (scaledRange != null && center.size() > 2) {
-					final double timeVal = center.apply(
-							2);
+					final double timeVal = center.apply(2);
 
-					Date time = scaledRange.valueToTime(
-							timeVal);
+					Date time = scaledRange.valueToTime(timeVal);
 
 					sfBuilder.set(
 							"Time",
 							time);
 
-					LOGGER.warn(
-							"Write time: " + time);
+					LOGGER.warn("Write time: " + time);
 				}
 
 				sfBuilder.set(
 						"KMeansData",
 						"KMeansCentroid");
 
-				final SimpleFeature sf = sfBuilder.buildFeature(
-						"Centroid-" + i++);
+				final SimpleFeature sf = sfBuilder.buildFeature("Centroid-" + i++);
 
-				writer.write(
-						sf);
+				writer.write(sf);
 			}
 		}
 		catch (final MismatchedIndexToAdapterMapping e) {
@@ -174,15 +150,12 @@ public class KMeansUtils
 				clusterModel);
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-		typeBuilder.setName(
-				hullAdapterName);
-		typeBuilder.setNamespaceURI(
-				BasicFeatureTypes.DEFAULT_NAMESPACE);
+		typeBuilder.setName(hullAdapterName);
+		typeBuilder.setNamespaceURI(BasicFeatureTypes.DEFAULT_NAMESPACE);
 		try {
-			typeBuilder.setCRS(
-					CRS.decode(
-							"EPSG:4326",
-							true));
+			typeBuilder.setCRS(CRS.decode(
+					"EPSG:4326",
+					true));
 		}
 		catch (final FactoryException e) {
 			LOGGER.error(
@@ -192,23 +165,15 @@ public class KMeansUtils
 
 		final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
 
-		typeBuilder.add(
-				attrBuilder
-						.binding(
-								Geometry.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								Geometry.class.getName().toString()));
+		typeBuilder.add(attrBuilder.binding(
+				Geometry.class).nillable(
+				false).buildDescriptor(
+				Geometry.class.getName().toString()));
 
-		typeBuilder.add(
-				attrBuilder
-						.binding(
-								String.class)
-						.nillable(
-								false)
-						.buildDescriptor(
-								"KMeansData"));
+		typeBuilder.add(attrBuilder.binding(
+				String.class).nillable(
+				false).buildDescriptor(
+				"KMeansData"));
 
 		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
 		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
@@ -234,11 +199,9 @@ public class KMeansUtils
 						"KMeansData",
 						"KMeansHull");
 
-				final SimpleFeature sf = sfBuilder.buildFeature(
-						"Hull-" + i++);
+				final SimpleFeature sf = sfBuilder.buildFeature("Hull-" + i++);
 
-				writer.write(
-						sf);
+				writer.write(sf);
 			}
 		}
 		catch (final MismatchedIndexToAdapterMapping e) {
@@ -258,10 +221,9 @@ public class KMeansUtils
 	public static ScaledTemporalRange setRunnerTimeParams(
 			final KMeansRunner runner,
 			final DataStorePluginOptions inputDataStore,
-			ByteArrayId adapterId) {
+			ByteArrayId adapterId ) {
 		if (adapterId == null) { // locate the first feature adapter
-			adapterId = FeatureDataUtils.getFirstFeatureAdapter(
-					inputDataStore);
+			adapterId = FeatureDataUtils.getFirstFeatureAdapter(inputDataStore);
 		}
 
 		if (adapterId != null) {
@@ -299,11 +261,11 @@ public class KMeansUtils
 				runner.setTimeParams(
 						timeField,
 						scaledRange);
-				
+
 				return scaledRange;
 			}
 		}
-		
+
 		return null;
 	}
 }

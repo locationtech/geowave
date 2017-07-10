@@ -55,7 +55,7 @@ public class TemporalRange
 			Date endTime ) {
 		this.endTime = endTime;
 	}
-	
+
 	public boolean isWithin(
 			final Date time ) {
 		return (startTime.before(time) || startTime.equals(time)) && (endTime.equals(time) || endTime.after(time));

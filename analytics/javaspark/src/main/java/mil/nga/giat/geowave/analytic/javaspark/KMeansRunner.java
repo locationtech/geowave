@@ -30,8 +30,7 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class KMeansRunner
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			KMeansRunner.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansRunner.class);
 
 	private String appName = "KMeansRunner";
 	private String master = "local";
@@ -55,10 +54,8 @@ public class KMeansRunner
 	private void initContext() {
 		SparkConf sparkConf = new SparkConf();
 
-		sparkConf.setAppName(
-				appName);
-		sparkConf.setMaster(
-				master);
+		sparkConf.setAppName(appName);
+		sparkConf.setMaster(master);
 
 		// TODO: other context config settings
 
@@ -79,8 +76,7 @@ public class KMeansRunner
 
 		// Validate inputs
 		if (inputDataStore == null) {
-			LOGGER.error(
-					"You must supply an input datastore!");
+			LOGGER.error("You must supply an input datastore!");
 			throw new IOException(
 					"You must supply an input datastore!");
 		}
@@ -93,11 +89,9 @@ public class KMeansRunner
 
 			while (adapterIt.hasNext()) {
 				DataAdapter adapter = adapterIt.next();
-				String adapterName = StringUtils.stringFromBinary(
-						adapter.getAdapterId().getBytes());
+				String adapterName = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
 
-				if (adapterName.equals(
-						adapterId)) {
+				if (adapterName.equals(adapterId)) {
 					adapterForQuery = adapter;
 					queryOptions = new QueryOptions(
 							adapterForQuery);
@@ -108,8 +102,7 @@ public class KMeansRunner
 
 		DistributableQuery query = null;
 		if (bbox != null) {
-			Geometry geom = new GeometryFactory().toGeometry(
-					bbox);
+			Geometry geom = new GeometryFactory().toGeometry(bbox);
 			query = new SpatialQuery(
 					geom);
 		}
@@ -130,21 +123,16 @@ public class KMeansRunner
 
 		// Init the algorithm
 		KMeans kmeans = new KMeans();
-		kmeans.setInitializationMode(
-				"kmeans||");
-		kmeans.setK(
-				numClusters);
-		kmeans.setMaxIterations(
-				numIterations);
+		kmeans.setInitializationMode("kmeans||");
+		kmeans.setK(numClusters);
+		kmeans.setMaxIterations(numIterations);
 
 		if (epsilon > -1.0) {
-			kmeans.setEpsilon(
-					epsilon);
+			kmeans.setEpsilon(epsilon);
 		}
 
 		// Run KMeans
-		outputModel = kmeans.run(
-				centroidVectors.rdd());
+		outputModel = kmeans.run(centroidVectors.rdd());
 	}
 
 	public JavaRDD<Vector> getInputCentroids() {
@@ -206,14 +194,10 @@ public class KMeansRunner
 			String northStr = tok.nextToken();
 			String eastStr = tok.nextToken();
 
-			double west = Double.parseDouble(
-					westStr);
-			double east = Double.parseDouble(
-					eastStr);
-			double south = Double.parseDouble(
-					southStr);
-			double north = Double.parseDouble(
-					northStr);
+			double west = Double.parseDouble(westStr);
+			double east = Double.parseDouble(eastStr);
+			double south = Double.parseDouble(southStr);
+			double north = Double.parseDouble(northStr);
 
 			this.bbox = new Envelope(
 					west,
@@ -222,8 +206,7 @@ public class KMeansRunner
 					north);
 		}
 		catch (Exception e) {
-			LOGGER.error(
-					"Failed to parse bounding box from " + bboxStr);
+			LOGGER.error("Failed to parse bounding box from " + bboxStr);
 			this.bbox = null;
 		}
 	}

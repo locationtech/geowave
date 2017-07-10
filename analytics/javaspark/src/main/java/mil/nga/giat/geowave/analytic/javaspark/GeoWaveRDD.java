@@ -35,8 +35,7 @@ import scala.reflect.ClassTag;
 
 public class GeoWaveRDD
 {
-	private static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveRDD.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(GeoWaveRDD.class);
 
 	public static JavaPairRDD<GeoWaveInputKey, SimpleFeature> rddForSimpleFeatures(
 			SparkContext sc,
@@ -124,10 +123,8 @@ public class GeoWaveRDD
 
 		JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = JavaPairRDD.fromRDD(
 				rdd,
-				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(
-						GeoWaveInputKey.class),
-				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(
-						SimpleFeature.class));
+				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(GeoWaveInputKey.class),
+				(ClassTag) scala.reflect.ClassTag$.MODULE$.apply(SimpleFeature.class));
 
 		return javaRdd;
 	}
@@ -193,10 +190,8 @@ public class GeoWaveRDD
 	public static void main(
 			final String[] args ) {
 		if (args.length < 1) {
-			System.err.println(
-					"Missing required arg 'storename'");
-			System.exit(
-					-1);
+			System.err.println("Missing required arg 'storename'");
+			System.exit(-1);
 		}
 
 		String storeName = args[0];
@@ -206,84 +201,61 @@ public class GeoWaveRDD
 		DistributableQuery query = null;
 
 		if (args.length > 1) {
-			if (args[1].equals(
-					"--splits")) {
+			if (args[1].equals("--splits")) {
 				if (args.length < 4) {
-					System.err.println(
-							"USAGE: storename --splits min max");
-					System.exit(
-							-1);
+					System.err.println("USAGE: storename --splits min max");
+					System.exit(-1);
 				}
 
-				minSplits = Integer.parseInt(
-						args[2]);
-				maxSplits = Integer.parseInt(
-						args[3]);
+				minSplits = Integer.parseInt(args[2]);
+				maxSplits = Integer.parseInt(args[3]);
 
 				if (args.length > 4) {
-					if (args[4].equals(
-							"--bbox")) {
+					if (args[4].equals("--bbox")) {
 						if (args.length < 9) {
-							System.err.println(
-									"USAGE: storename --splits min max --bbox west south east north");
-							System.exit(
-									-1);
+							System.err.println("USAGE: storename --splits min max --bbox west south east north");
+							System.exit(-1);
 						}
 
-						double west = Double.parseDouble(
-								args[5]);
-						double south = Double.parseDouble(
-								args[6]);
-						double east = Double.parseDouble(
-								args[7]);
-						double north = Double.parseDouble(
-								args[8]);
+						double west = Double.parseDouble(args[5]);
+						double south = Double.parseDouble(args[6]);
+						double east = Double.parseDouble(args[7]);
+						double north = Double.parseDouble(args[8]);
 
-						Geometry bbox = new GeometryFactory().toGeometry(
-								new Envelope(
-										west,
-										south,
-										east,
-										north));
+						Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
+								west,
+								south,
+								east,
+								north));
 
 						query = new SpatialQuery(
 								bbox);
 					}
 				}
 			}
-			else if (args[1].equals(
-					"--bbox")) {
+			else if (args[1].equals("--bbox")) {
 				if (args.length < 6) {
-					System.err.println(
-							"USAGE: storename --bbox west south east north");
-					System.exit(
-							-1);
+					System.err.println("USAGE: storename --bbox west south east north");
+					System.exit(-1);
 				}
 
-				double west = Double.parseDouble(
-						args[2]);
-				double south = Double.parseDouble(
-						args[3]);
-				double east = Double.parseDouble(
-						args[4]);
-				double north = Double.parseDouble(
-						args[5]);
+				double west = Double.parseDouble(args[2]);
+				double south = Double.parseDouble(args[3]);
+				double east = Double.parseDouble(args[4]);
+				double north = Double.parseDouble(args[5]);
 
-				Geometry bbox = new GeometryFactory().toGeometry(
-						new Envelope(
-								west,
-								south,
-								east,
-								north));
+				Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
+						west,
+						south,
+						east,
+						north));
 
 				query = new SpatialQuery(
 						bbox);
 			}
 			else {
-				System.err.println(
-						"USAGE: storename --splits min max --bbox west south east north");
-				System.exit(
-						-1);
+				System.err.println("USAGE: storename --splits min max --bbox west south east north");
+				System.exit(-1);
 			}
 		}
 
@@ -293,8 +265,7 @@ public class GeoWaveRDD
 			if (inputStoreOptions == null) {
 				final StoreLoader inputStoreLoader = new StoreLoader(
 						storeName);
-				if (!inputStoreLoader.loadFromConfig(
-						ConfigOptions.getDefaultPropertyFile())) {
+				if (!inputStoreLoader.loadFromConfig(ConfigOptions.getDefaultPropertyFile())) {
 					throw new IOException(
 							"Cannot find store name: " + inputStoreLoader.getStoreName());
 				}
@@ -303,10 +274,8 @@ public class GeoWaveRDD
 
 			SparkConf sparkConf = new SparkConf();
 
-			sparkConf.setAppName(
-					"GeoWaveRDD");
-			sparkConf.setMaster(
-					"local");
+			sparkConf.setAppName("GeoWaveRDD");
+			sparkConf.setMaster("local");
 			JavaSparkContext context = new JavaSparkContext(
 					sparkConf);
 
@@ -318,14 +287,12 @@ public class GeoWaveRDD
 					minSplits,
 					maxSplits);
 
-			System.out.println(
-					"DataStore " + storeName + " loaded into RDD with " + javaRdd.count() + " features.");
+			System.out.println("DataStore " + storeName + " loaded into RDD with " + javaRdd.count() + " features.");
 
 			context.close();
 		}
 		catch (IOException e) {
-			System.err.println(
-					e.getMessage());
+			System.err.println(e.getMessage());
 		}
 	}
 }

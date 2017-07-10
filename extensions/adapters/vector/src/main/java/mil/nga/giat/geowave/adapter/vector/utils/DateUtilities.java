@@ -55,13 +55,12 @@ public class DateUtilities
 		return df.parse(input);
 
 	}
-	
+
 	public static TemporalRange getTemporalRange(
 			final DataStorePluginOptions dataStorePlugin,
 			final ByteArrayId adapterId ) {
 		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
-		final CloseableIterator<DataStatistics<?>> statsIt = statisticsStore.getDataStatistics(
-				adapterId);
+		final CloseableIterator<DataStatistics<?>> statsIt = statisticsStore.getDataStatistics(adapterId);
 
 		while (statsIt.hasNext()) {
 			final DataStatistics stats = statsIt.next();
