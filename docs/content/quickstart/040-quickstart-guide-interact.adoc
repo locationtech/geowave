@@ -12,3 +12,11 @@ image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
 
 If you are unfamiliar how to do this click on the “Enable Web Connection” link for detailed instructions on how to enable the 
 web connection for Linux or Windows.
+
+[NOTE]
+====
+You can also enable the web connection by adding a rule to your security group of Type: "All TCP" and source "Anywhere"
+====
+
+image::interacting-cluster-10.png[scaledwidth="100%",alt="select emr"]
+

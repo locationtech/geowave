@@ -1,14 +1,15 @@
 [[quickstart-guide-decimate]]
 <<<
 
-*gdeltevent* - shows all of the gdelt events in a bounding box around western europe as individual points.
+*gdeltevent* - shows all of the gdelt events in a bounding box around Western Europe as individual points
 
 image::interacting-cluster-6.png[scaledwidth="100%",alt="select emr"]
 
 You may have noticed that it took a fair amount of time to render the ~1.5 million points. To speed this process up we 
 can set the default style the Subsample Points style that we (or the quickstart version of the bootstrap script) 
 downloaded previously. The style can be found in the geowave directory at geowave/examples/example-slds/SubsamplePoints.sld 
-and can also be downloaded http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld[here].
+and can also be downloaded http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld[here]. If you are using the 
+quickstart script, the style is set automatically for you.
 
 [NOTE]
 ====
@@ -37,6 +38,6 @@ the OpenLayers link
 
 image::interacting-cluster-9.png[scaledwidth="100%",alt="select emr"]
 
-*gdeltevent_kde* - a heat map produced using kernel density estimation in a bounding box around western europe.
+*gdeltevent_kde* - a heat map produced using kernel density estimation in a bounding box around Western Europe
 
 image::interacting-cluster-7.png[scaledwidth="100%",alt="select emr"]
