@@ -30,7 +30,7 @@ we'll allow the various containers to build and/or package the code without the 
 the finished artifacts back out of the container.
 
 ```
-git clone --depth 1 https://github.com/ngageoint/geowave.git
+git clone --depth 1 https://github.com/locationtech/geowave.git
 ```
 
 ## Step #3: Create Docker Images for Building
@@ -39,8 +39,8 @@ We'll eventually publish these images, until then you'll have to build them loca
 
 ```
 pushd geowave/deploy/packaging/docker
-sudo docker build -t ngageoint/geowave-centos6-java8-build -f geowave-centos6-java8-build.dockerfile .   
-sudo docker build -t ngageoint/geowave-centos6-rpm-build -f geowave-centos6-rpm-build.dockerfile .
+sudo docker build -t locationtech/geowave-centos6-java8-build -f geowave-centos6-java8-build.dockerfile .   
+sudo docker build -t locationtech/geowave-centos6-rpm-build -f geowave-centos6-rpm-build.dockerfile .
 popd
 ```
 

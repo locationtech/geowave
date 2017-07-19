@@ -50,7 +50,7 @@ addons:
     - pandoc
   coverity_scan:
     project:
-      name: ngageoint/geowave
+      name: locationtech/geowave
       description: Build submitted via Travis CI
     notification_email: GeoWave@nga.mil
     build_command_prepend: mvn clean

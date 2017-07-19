@@ -12,7 +12,7 @@
 source geowave-env.sh
 
 # Configue the local host
-geowave config geoserver --url "$HOSTNAME:8000"
+geowave config geoserver "$HOSTNAME:8000"
 
 # Add the gdelt datastore 
 geowave gs addds gdelt --datastore "gdelt" # Do we need this??

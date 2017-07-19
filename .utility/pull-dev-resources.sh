@@ -4,7 +4,7 @@ set -v
 version=${DEV_RESOURCES_VERSION:=1.0}
 echo -e "Pull or build dev-resources-${version}.jar..."
 
-if [ "$TRAVIS_REPO_SLUG" == "ngageoint/geowave" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ]; then
 	# Pull dev-resources jar from S3
 	pushd dev-resources
 	if [ ! -d target ]; then
