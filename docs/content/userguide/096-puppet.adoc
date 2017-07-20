@@ -19,7 +19,7 @@ The desired version of GeoWave to install, ex: '0.9.3'. We support concurrent in
 
 hadoop_vendor_version::
 The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2, check the
-http://ngageoint.github.io/geowave/packages.html[available packages^] site for currently supported hadoop distributions.
+http://locationtech.github.io/geowave/packages.html[available packages^] site for currently supported hadoop distributions.
 
 install_accumulo::
 Install the GeoWave Accumulo Iterator on this node and upload it into HDFS. This node must have a working HDFS client.
@@ -104,7 +104,7 @@ node 'c1-app-01' {
 
 === Puppet script management
 
-As mentioned in the overview the scripts are available from within the http://ngageoint.github.io/geowave/packages.html[GeoWave source tar bundle^]
+As mentioned in the overview the scripts are available from within the http://locationtech.github.io/geowave/packages.html[GeoWave source tar bundle^]
 (Search for gz to filter the list) or you could use the RPM package to install and pick up future updates on your puppet server.
 
 ==== Source Archive

@@ -29,7 +29,7 @@ public class Stanag4676Utils
 	public static final String TRACK = "track";
 	public static final String MISSION_SUMMARY = "mission_summary";
 	public static final String MISSION_FRAME = "mission_frame";
-	public static final String NAMESPACE = "http://github.com/ngageoint/geowave";
+	public static final String NAMESPACE = "http://github.com/locationtech/geowave";
 
 	public static SimpleFeatureType createPointDataType() {
 
