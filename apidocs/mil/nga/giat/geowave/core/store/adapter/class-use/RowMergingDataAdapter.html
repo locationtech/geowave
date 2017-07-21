@@ -163,6 +163,25 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/package-summary.html">mil.nga.giat.geowave.datastore.hbase.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/package-summary.html">mil.nga.giat.geowave.datastore.hbase.util</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected org.apache.hadoop.hbase.client.Result</code></td>
+<td class="colLast"><span class="typeNameLabel">RewritingMergingEntryIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/RewritingMergingEntryIterator.html#mergeResults-mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter-java.util.ArrayList-">mergeResults</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&nbsp;mergingAdapter,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;resultsToMerge)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected org.apache.hadoop.hbase.client.Result</code></td>
+<td class="colLast"><span class="typeNameLabel">MergingEntryIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/MergingEntryIterator.html#mergeResults-mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter-java.util.ArrayList-">mergeResults</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&nbsp;mergingAdapter,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;resultsToMerge)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/package-summary.html">mil.nga.giat.geowave.datastore.hbase.util</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -179,6 +198,13 @@
                     org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIds,
                     double[]&nbsp;maxResolutionSubsamplingPerDimension,
                     boolean&nbsp;hasSkippingFilter)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/util/RewritingMergingEntryIterator.html#RewritingMergingEntryIterator-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-java.util.Map-mil.nga.giat.geowave.datastore.hbase.io.HBaseWriter-">RewritingMergingEntryIterator</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;scannerIt,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&gt;&nbsp;mergingAdapters,
+                             <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/io/HBaseWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase.io">HBaseWriter</a>&nbsp;writer)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

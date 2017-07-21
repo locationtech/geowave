@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.geotools.filter.visitor.NullFilterVisitor">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -147,17 +147,6 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static org.geotools.filter.visitor.NullFilterVisitor</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html#GEOMETRY_VISITOR">GEOMETRY_VISITOR</a></span></code>&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.geotools.filter.visitor.NullFilterVisitor">
 <!--   -->
@@ -179,7 +168,8 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html#ExtractGeometryFilterVisitor-org.opengis.referencing.crs.CoordinateReferenceSystem-">ExtractGeometryFilterVisitor</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html#ExtractGeometryFilterVisitor-org.opengis.referencing.crs.CoordinateReferenceSystem-java.lang.String-">ExtractGeometryFilterVisitor</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;attributeOfInterest)</code>
 <div class="block">This FilterVisitor is stateless - use
  ExtractGeometryFilterVisitor.BOUNDS_VISITOR.</div>
 </td>
@@ -201,8 +191,9 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">ExtractGeometryFilterVisitorResult</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html#getConstraints-org.opengis.filter.Filter-org.opengis.referencing.crs.CoordinateReferenceSystem-">getConstraints</a></span>(org.opengis.filter.Filter&nbsp;filter,
-              org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitor.html#getConstraints-org.opengis.filter.Filter-org.opengis.referencing.crs.CoordinateReferenceSystem-java.lang.String-">getConstraints</a></span>(org.opengis.filter.Filter&nbsp;filter,
+              org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;attributeOfInterest)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
@@ -403,36 +394,20 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="GEOMETRY_VISITOR">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>GEOMETRY_VISITOR</h4>
-<pre>public static final&nbsp;org.geotools.filter.visitor.NullFilterVisitor GEOMETRY_VISITOR</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="ExtractGeometryFilterVisitor-org.opengis.referencing.crs.CoordinateReferenceSystem-">
+<a name="ExtractGeometryFilterVisitor-org.opengis.referencing.crs.CoordinateReferenceSystem-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ExtractGeometryFilterVisitor</h4>
-<pre>public&nbsp;ExtractGeometryFilterVisitor(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
+<pre>public&nbsp;ExtractGeometryFilterVisitor(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;attributeOfInterest)</pre>
 <div class="block">This FilterVisitor is stateless - use
  ExtractGeometryFilterVisitor.BOUNDS_VISITOR. You may also subclass in
  order to reuse this functionality in your own FilterVisitor
@@ -447,14 +422,15 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getConstraints-org.opengis.filter.Filter-org.opengis.referencing.crs.CoordinateReferenceSystem-">
+<a name="getConstraints-org.opengis.filter.Filter-org.opengis.referencing.crs.CoordinateReferenceSystem-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getConstraints</h4>
 <pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/ExtractGeometryFilterVisitorResult.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">ExtractGeometryFilterVisitorResult</a>&nbsp;getConstraints(org.opengis.filter.Filter&nbsp;filter,
-                                                                org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
+                                                                org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;attributeOfInterest)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>filter</code> - </dd>
@@ -1083,13 +1059,13 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.geotools.filter.visitor.NullFilterVisitor">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

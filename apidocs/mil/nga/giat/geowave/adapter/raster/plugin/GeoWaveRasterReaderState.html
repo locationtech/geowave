@@ -111,7 +111,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GeoWaveRasterReaderState</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">Holds the state of the reader making it thread safe</div>
+<div class="block">This class allows us to make the GeoWaveRasterReader thread safe by storing
+ its state here</div>
 </li>
 </ul>
 </div>
@@ -157,23 +158,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>org.geotools.geometry.GeneralEnvelope</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#getRequestEnvelopeTransformed--">getRequestEnvelopeTransformed</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#getRequestEnvelopeXformed--">getRequestEnvelopeXformed</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#isXAxisSwitch--">isXAxisSwitch</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#isAxisSwapped--">isAxisSwapped</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#setRequestedEnvelope-org.geotools.geometry.GeneralEnvelope-">setRequestedEnvelope</a></span>(org.geotools.geometry.GeneralEnvelope&nbsp;requestedEnvelope)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#setAxisSwap-boolean-">setAxisSwap</a></span>(boolean&nbsp;axisSwap)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#setRequestEnvelopeTransformed-org.geotools.geometry.GeneralEnvelope-">setRequestEnvelopeTransformed</a></span>(org.geotools.geometry.GeneralEnvelope&nbsp;requestEnvelopeTransformed)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#setRequestedEnvelope-org.geotools.geometry.GeneralEnvelope-">setRequestedEnvelope</a></span>(org.geotools.geometry.GeneralEnvelope&nbsp;requestedEnvelope)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#setXAxisSwitch-boolean-">setXAxisSwitch</a></span>(boolean&nbsp;axisSwitch)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html#setRequestEnvelopeXformed-org.geotools.geometry.GeneralEnvelope-">setRequestEnvelopeXformed</a></span>(org.geotools.geometry.GeneralEnvelope&nbsp;requestEnvelopeXformed)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -221,6 +222,36 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getCoverageName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getCoverageName()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the coverageName</dd>
+</dl>
+</li>
+</ul>
+<a name="isAxisSwapped--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isAxisSwapped</h4>
+<pre>public&nbsp;boolean&nbsp;isAxisSwapped()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the boolean value of axisSwap</dd>
+</dl>
+</li>
+</ul>
+<a name="setAxisSwap-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAxisSwap</h4>
+<pre>public&nbsp;void&nbsp;setAxisSwap(boolean&nbsp;axisSwap)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>axisSwap</code> - the boolean value to set</dd>
+</dl>
 </li>
 </ul>
 <a name="getRequestedEnvelope--">
@@ -230,6 +261,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getRequestedEnvelope</h4>
 <pre>public&nbsp;org.geotools.geometry.GeneralEnvelope&nbsp;getRequestedEnvelope()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the requestedEnvelope</dd>
+</dl>
 </li>
 </ul>
 <a name="setRequestedEnvelope-org.geotools.geometry.GeneralEnvelope-">
@@ -239,42 +274,36 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>setRequestedEnvelope</h4>
 <pre>public&nbsp;void&nbsp;setRequestedEnvelope(org.geotools.geometry.GeneralEnvelope&nbsp;requestedEnvelope)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>requestedEnvelope</code> - the requestedEnvelope to set</dd>
+</dl>
 </li>
 </ul>
-<a name="getRequestEnvelopeTransformed--">
+<a name="getRequestEnvelopeXformed--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getRequestEnvelopeTransformed</h4>
-<pre>public&nbsp;org.geotools.geometry.GeneralEnvelope&nbsp;getRequestEnvelopeTransformed()</pre>
+<h4>getRequestEnvelopeXformed</h4>
+<pre>public&nbsp;org.geotools.geometry.GeneralEnvelope&nbsp;getRequestEnvelopeXformed()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the requestEnvelopeXformed</dd>
+</dl>
 </li>
 </ul>
-<a name="setRequestEnvelopeTransformed-org.geotools.geometry.GeneralEnvelope-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setRequestEnvelopeTransformed</h4>
-<pre>public&nbsp;void&nbsp;setRequestEnvelopeTransformed(org.geotools.geometry.GeneralEnvelope&nbsp;requestEnvelopeTransformed)</pre>
-</li>
-</ul>
-<a name="isXAxisSwitch--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isXAxisSwitch</h4>
-<pre>public&nbsp;boolean&nbsp;isXAxisSwitch()</pre>
-</li>
-</ul>
-<a name="setXAxisSwitch-boolean-">
+<a name="setRequestEnvelopeXformed-org.geotools.geometry.GeneralEnvelope-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setXAxisSwitch</h4>
-<pre>public&nbsp;void&nbsp;setXAxisSwitch(boolean&nbsp;axisSwitch)</pre>
+<h4>setRequestEnvelopeXformed</h4>
+<pre>public&nbsp;void&nbsp;setRequestEnvelopeXformed(org.geotools.geometry.GeneralEnvelope&nbsp;requestEnvelopeXformed)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>requestEnvelopeXformed</code> - the requestEnvelopeXformed to set</dd>
+</dl>
 </li>
 </ul>
 </li>
