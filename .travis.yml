@@ -15,9 +15,7 @@ env:
     - NAME='HBase IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it,cloudera' BUILD_DOCS=false  IT_ONLY=true
     - NAME='HBase IT on Latest HDP Versions'  MAVEN_PROFILES='hbase-it,hortonworks' BUILD_DOCS=false  IT_ONLY=true
   global:
-    - secure: "TosKDl5mnt8UKeyWDg65i6cWENR7EorQbFPSvZ5ZfQfAaDAOeIN2OA/zxtRMELeYM82+n+GGXQOt0qPiYqyRlufYJJSUnWiwvI5gm3a8+f58atcU2R2bF9jd81bsL9jCS+JCQxAmzh8FCO6t7DJ4OdoMyMaIR7XjlSlsIJ97dd8="
-    - secure: "IcwzKevdTSsKK9YERJ/LV81pfDe7Fx7qBxYcy43b0/emsioZJsJV5XSYHfFRIqceMkzp8LFBU8qiZR3cPZPKQoCjaG1QcwDeKQpyczIkMwzWzydhLR5dAzVETbQC9i2hH4sWjVVHW5WU6UUc3gCz5rPyIXFUYVUYxFeMWxHCe8w="
-    - secure: "DdDzYhyJMMf6ZEIMe3FvK6IDWFWqWLbuFg8SCCnrAHpt6mGo8EOsvvbuyvvWqgCGsFZyvk+hJGamNjQEnSiBSP/2kwSUmpGgZ5DquHxFTkmTeh13ifqf231rwaCwBw9yrDXKdyMxHMVeHIXOjqV7Ylru2t2WoFxIEj4vHnqRjGQ="
+    - secure: C3gdJmFavZxvsRVqCLpRUAaisNV3MhWbSYf4Wjs2SBLC/AIEwN0vDWHOuYiUExuXR1kApBVdNffuCX7bt/5siewHgmiVUGyY1xytxDdv+PAKZihlfYZRGattyg3XUbEFwyjr7c74639Y1w45NPUoBMUT4SKHZkfqD+FDU47OHIM=
 
 cache:
   directories:
