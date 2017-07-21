@@ -42,7 +42,9 @@ before_install:
 after_success:
   - .utility/publish-docs.sh
   - cd test; mvn coveralls:report -P ${MAVEN_PROFILES}
-
+notifications:
+    urls:
+      - https://webhooks.gitter.im/e/1dd2fadd07a92dcdc3d8
 addons:
   apt_packages:
     - pandoc
