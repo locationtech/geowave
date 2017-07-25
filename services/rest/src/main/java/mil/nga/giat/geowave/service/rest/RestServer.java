@@ -98,7 +98,7 @@ public class RestServer extends
 		Writer writer = null;
 		try {
 			writer = new FileWriter(
-					"Output.json");
+					"swagger.json");
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -191,7 +191,7 @@ public class RestServer extends
 
 				attachSwaggerSpecificationRestlet(
 						router,
-						"docs");
+						"swagger.json");
 				return router;
 			};
 
@@ -210,7 +210,7 @@ public class RestServer extends
 							String category ) {
 						JacksonRepresentation<ApiDeclaration> result = new JacksonRepresentation<ApiDeclaration>(
 								new FileRepresentation(
-										"./output.json/" + category,
+										"./swagger.json/" + category,
 										MediaType.APPLICATION_JSON),
 								ApiDeclaration.class);
 						return result;
@@ -220,7 +220,7 @@ public class RestServer extends
 					public Representation getResourceListing() {
 						JacksonRepresentation<ApiDeclaration> result = new JacksonRepresentation<ApiDeclaration>(
 								new FileRepresentation(
-										"./output.json",
+										"./swagger.json",
 										MediaType.APPLICATION_JSON),
 								ApiDeclaration.class);
 						return result;
