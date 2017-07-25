@@ -55,5 +55,10 @@
 			<version>${restlet.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.restlet.osgi</groupId>
+			<artifactId>org.restlet.ext.swagger</artifactId>
+			<version>${restlet.version}</version>
+		</dependency>
 	</dependencies>
 </project>
