@@ -2,19 +2,36 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.util.logging.Level;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Component;
+import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.Server;
+import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
+import org.restlet.ext.apispark.internal.conversion.swagger.v1_2.model.ApiDeclaration;
+import org.restlet.ext.apispark.internal.conversion.swagger.v2_0.Swagger2Reader;
+import org.restlet.ext.jackson.JacksonRepresentation;
+import org.restlet.ext.swagger.SwaggerApplication;
+import org.restlet.ext.swagger.SwaggerSpecificationRestlet;
+import org.restlet.representation.FileRepresentation;
+import org.restlet.representation.Representation;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+
 
 public class RestServer extends
 		ServerResource
@@ -58,8 +75,8 @@ public class RestServer extends
 	// Show a simple 404 if the route is unknown to the server
 	@Get("html")
 	public String listResources() {
-		final StringBuilder routeStringBuilder = new StringBuilder(
-				"Available Routes:<br>");
+		final StringBuilder routeStringBuilder = new StringBuilder("Available Routes:<br>");
+
 		for (final Route route : availableRoutes) {
 			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
 		}
@@ -75,12 +92,47 @@ public class RestServer extends
 
 		// Add paths for each command
 		final Router router = new Router();
+
+		Writer writer = null;
+		try {
+			writer = new FileWriter("Output.json");    
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Gson gson = new GsonBuilder().create();
+		JsonObject routes_json = new JsonObject();
 		for (final Route route : availableRoutes) {
+			
+			//if (parser != null)
+			//	parser.parseParameters();
+
 			if (DefaultOperation.class.isAssignableFrom(route.getOperation())) {
 				router.attach(
 						route.getPath(),
 						new GeoWaveOperationFinder(
 								(Class<? extends DefaultOperation<?>>) route.getOperation()));
+
+				
+				Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route.getOperation());
+				SwaggerRestParser parser = null;
+				try {
+					System.out.println("OPERATION: "+route.getPath()+" : "+opClass.getName());
+					
+					parser = new SwaggerRestParser<>(opClass.newInstance());
+					JsonObject op_json = ((SwaggerRestParser)parser).GetJsonObject();
+					
+					JsonObject method_json = new JsonObject();
+					String method = route.getOperation().getAnnotation(GeowaveOperation.class).restEnabled().toString();
+					method_json.add(method.toLowerCase(), op_json);
+					
+					routes_json.add("/"+route.getPath(), method_json);
+				}
+				catch (InstantiationException | IllegalAccessException e) {
+					getLogger().log(
+							Level.WARNING,
+							"Exception while instantiating the geowave operation server resource.",
+							e);
+				}
 			}
 			else {
 				router.attach(
@@ -88,18 +140,90 @@ public class RestServer extends
 						(Class<? extends ServerResource>) route.getOperation());
 			}
 		}
+		
+		String header =  "{\"swagger\": \"2.0\","+
+				  "\"info\": {"+
+				    "\"version\": \"1.0.0\","+
+				    "\"title\": \"GeoWave API\","+
+				    "\"description\": \"REST API for GeoWave CLI commands\","+
+				    "\"termsOfService\": \"http://localhost:5152/\","+
+				    "\"contact\": {"+
+				      "\"name\": \"GeoWave Team\""+
+				    "},"+
+				    "\"license\": {"+
+				      "\"name\": \"MIT\""+
+				    "}"+
+				  "},"+
+				  "\"host\": \"localhost:5152\","+
+				  "\"basePath\": \"/\","+
+				  "\"schemes\": ["+
+				    "\"http\""+
+				  "],"+
+				  "\"consumes\": ["+
+				    "\"application/json\""+
+				  "],"+
+				  "\"produces\": ["+
+				    "\"application/json\""+
+				  "],"+
+				  "\"paths\":";
+		
+	    try {
+			writer.write(header);
+			gson.toJson(routes_json, writer);
+			writer.write("}");
+			writer.close();  
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		
 		// Provide basic 404 error page for unknown route
+		router.attach("geo/mycontacts", ContactsServerResource.class);
 		router.attachDefault(RestServer.class);
 
 		// Setup router
-		final Application myApp = new Application() {
+		final Application myApp = new SwaggerApplication() {
+
 
 			@Override
 			public Restlet createInboundRoot() {
 				router.setContext(getContext());
 
+				
+				attachSwaggerSpecificationRestlet(
+						router,
+						"docs");
 				return router;
 			};
+			
+			@Override
+			public String getName() {
+				return "GeoWave API";
+			}
+			
+			@Override
+			public SwaggerSpecificationRestlet getSwaggerSpecificationRestlet(
+			        Context context) {
+			    return new SwaggerSpecificationRestlet(getContext()) {
+			        @Override
+			        public Representation getApiDeclaration(String category) {
+			            JacksonRepresentation result = new JacksonRepresentation(
+			                    new FileRepresentation("./output.json/" + category,
+			                            MediaType.APPLICATION_JSON),
+			                        ApiDeclaration.class);
+			            return result;
+			        }
+			        @Override
+			        public Representation getResourceListing() {
+			            JacksonRepresentation result = new JacksonRepresentation(
+			                    new FileRepresentation("./output.json",
+			                            MediaType.APPLICATION_JSON),
+			                    ApiDeclaration.class);
+			            return result;
+			        }
+			    };
+			}
+
 		};
 		final Component component = new Component();
 		component.getDefaultHost().attach(
@@ -133,11 +257,8 @@ public class RestServer extends
 		 *
 		 * @param operation
 		 */
-		public Route(
-				final Class<?> operation ) {
-			path = pathFor(
-					operation).substring(
-					1);
+		public Route(final Class<?> operation ) {
+			this.path = pathFor(operation).substring(1);
 			this.operation = operation;
 		}
 
@@ -167,12 +288,13 @@ public class RestServer extends
 		 *            - the operation to find the path for
 		 * @return the formatted path as a string
 		 */
-		public static String pathFor(
-				final Class<?> operation ) {
-			// Top level of heirarchy
+		public static String pathFor(final Class<?> operation ) {
+
+			// Top level of hierarchy
 			if (operation == Object.class) {
 				return "";
 			}
+
 			final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
 			return pathFor(operationInfo.parentOperation()) + "/" + operationInfo.name();
 		}
