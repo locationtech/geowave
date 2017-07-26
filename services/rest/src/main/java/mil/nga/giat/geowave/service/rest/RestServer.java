@@ -37,7 +37,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 public class RestServer extends
 		ServerResource
 {
-	private final ArrayList<Route> availableRoutes;
+	private final ArrayList<RestRoute> availableRoutes;
 	private final ArrayList<String> unavailableCommands;
 
 	/**
@@ -50,7 +50,7 @@ public class RestServer extends
 	}
 
 	public RestServer() {
-		availableRoutes = new ArrayList<Route>();
+		availableRoutes = new ArrayList<RestRoute>();
 		unavailableCommands = new ArrayList<String>();
 
 		for (final Class<?> operation : new Reflections(
@@ -61,7 +61,7 @@ public class RestServer extends
 							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST)) && DefaultOperation.class
 							.isAssignableFrom(operation)) || ServerResource.class.isAssignableFrom(operation)) {
 
-				availableRoutes.add(new Route(
+				availableRoutes.add(new RestRoute(
 						operation));
 			}
 			else {
@@ -79,7 +79,7 @@ public class RestServer extends
 		final StringBuilder routeStringBuilder = new StringBuilder(
 				"Available Routes:<br>");
 
-		for (final Route route : availableRoutes) {
+		for (final RestRoute route : availableRoutes) {
 			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
 		}
 		routeStringBuilder.append("<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
@@ -95,20 +95,8 @@ public class RestServer extends
 		// Add paths for each command
 		final Router router = new Router();
 
-		Writer writer = null;
-		try {
-			writer = new FileWriter(
-					"swagger.json");
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		Gson gson = new GsonBuilder().create();
-		JsonObject routes_json = new JsonObject();
-		for (final Route route : availableRoutes) {
-
-			// if (parser != null)
-			// parser.parseParameters();
+		SwaggerApiParser apiParser = new SwaggerApiParser("1.0.0", "GeoWave API", "REST API for GeoWave CLI commands");
+		for (final RestRoute route : availableRoutes) {
 
 			if (DefaultOperation.class.isAssignableFrom(route.getOperation())) {
 				router.attach(
@@ -118,40 +106,8 @@ public class RestServer extends
 
 				Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
 						.getOperation());
-				SwaggerRestParser parser = null;
-				try {
-					System.out.println("OPERATION: " + route.getPath() + " : " + opClass.getName());
-
-					parser = new SwaggerRestParser<>(
-							opClass.newInstance());
-					JsonObject op_json = ((SwaggerRestParser) parser).GetJsonObject();
-
-					JsonObject method_json = new JsonObject();
-					String method = route.getOperation().getAnnotation(
-							GeowaveOperation.class).restEnabled().toString();
-					
-					
-					JsonArray tags_json = new JsonArray();
-					String [] path_toks = route.getPath().split("/");
-					JsonPrimitive tag = new JsonPrimitive(path_toks[path_toks.length-2]);
-					tags_json.add( tag);
-					
-					op_json.add("tags", tags_json);
-					
-					method_json.add(
-							method.toLowerCase(),
-							op_json);
-
-					routes_json.add(
-							"/" + route.getPath(),
-							method_json);
-				}
-				catch (InstantiationException | IllegalAccessException e) {
-					getLogger().log(
-							Level.WARNING,
-							"Exception while instantiating the geowave operation server resource.",
-							e);
-				}
+				
+				apiParser.AddRoute(route);
 			}
 			else {
 				router.attach(
@@ -159,25 +115,8 @@ public class RestServer extends
 						(Class<? extends ServerResource>) route.getOperation());
 			}
 		}
-
-		String header = "{\"swagger\": \"2.0\"," + "\"info\": {" + "\"version\": \"1.0.0\","
-				+ "\"title\": \"GeoWave API\"," + "\"description\": \"REST API for GeoWave CLI commands\","
-				+ "\"termsOfService\": \"http://localhost:5152/\"," + "\"contact\": {" + "\"name\": \"GeoWave Team\""
-				+ "}," + "\"license\": {" + "\"name\": \"MIT\"" + "}" + "}," + "\"host\": \"localhost:5152\","
-				+ "\"basePath\": \"/\"," + "\"schemes\": [" + "\"http\"" + "]," + "\"consumes\": ["
-				+ "\"application/json\"" + "]," + "\"produces\": [" + "\"application/json\"" + "]," + "\"paths\":";
-
-		try {
-			writer.write(header);
-			gson.toJson(
-					routes_json,
-					writer);
-			writer.write("}");
-			writer.close();
-		}
-		catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		
+		apiParser.SerializeSwaggerJson("swagger.json");
 
 		// Provide basic 404 error page for unknown route
 		router.attachDefault(RestServer.class);
@@ -247,83 +186,6 @@ public class RestServer extends
 		}
 	}
 
-	/**
-	 * Holds necessary information to create a Restlet route
-	 */
-	private static class Route implements
-			Comparable<Route>
-	{
-		private final String path;
-		private final Class<?> operation;
-
-		/**
-		 * Create a new route given an operation
-		 *
-		 * @param operation
-		 */
-		public Route(
-				final Class<?> operation ) {
-			this.path = pathFor(
-					operation).substring(
-					1);
-			this.operation = operation;
-		}
-
-		/**
-		 * Return the operation as it was originally passed
-		 *
-		 * @return
-		 */
-		public Class<?> getOperation() {
-			return operation;
-		}
-
-		/**
-		 * Get the path that represents the route
-		 *
-		 * @return a string representing the path, specified by pathFor
-		 */
-		public String getPath() {
-			return path;
-		}
-
-		/**
-		 * Get the path for a command based on the operation hierarchy Return
-		 * the path as a string in the format "/first/next/next"
-		 *
-		 * @param operation
-		 *            - the operation to find the path for
-		 * @return the formatted path as a string
-		 */
-		public static String pathFor(
-				final Class<?> operation ) {
-
-			// Top level of hierarchy
-			if (operation == Object.class) {
-				return "";
-			}
-
-			final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
-			return pathFor(operationInfo.parentOperation()) + "/" + operationInfo.name();
-		}
-
-		@Override
-		public int compareTo(
-				final Route route ) {
-			return path.compareTo(route.path);
-		}
-
-		@Override
-		public boolean equals(
-				final Object route ) {
-			return (route instanceof Route) && path.equals(((Route) route).path);
-		}
-
-		@Override
-		public int hashCode() {
-			return path.hashCode();
-		}
-	}
 
 	/**
 	 * A simple ServerResource to show if the route's operation does not extend
