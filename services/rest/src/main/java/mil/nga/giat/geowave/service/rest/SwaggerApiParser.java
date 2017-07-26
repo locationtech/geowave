@@ -3,15 +3,7 @@ package mil.nga.giat.geowave.service.rest;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.logging.Level;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;

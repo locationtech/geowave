@@ -2,10 +2,7 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Component;
@@ -18,18 +15,11 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 import org.restlet.ext.apispark.internal.conversion.swagger.v1_2.model.ApiDeclaration;
-import org.restlet.ext.apispark.internal.conversion.swagger.v2_0.Swagger2Reader;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.ext.swagger.SwaggerApplication;
 import org.restlet.ext.swagger.SwaggerSpecificationRestlet;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
