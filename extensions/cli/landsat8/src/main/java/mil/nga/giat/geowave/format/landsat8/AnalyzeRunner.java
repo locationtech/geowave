@@ -88,7 +88,7 @@ public class AnalyzeRunner
 	protected static class AnalysisInfo
 	{
 		private final TreeMap<String, Float> bandIdToMbMap = new TreeMap<String, Float>();
-		private final TreeMap<String, SimpleFeature> entityBandIdToSimpleFeatureMap = new TreeMap<String, SimpleFeature>();
+		protected final TreeMap<String, SimpleFeature> entityBandIdToSimpleFeatureMap = new TreeMap<String, SimpleFeature>();
 		private int sceneCount = 0;
 		private final Set<WRS2Key> wrs2Keys = new HashSet<WRS2Key>();
 		private int minRow = Integer.MAX_VALUE;

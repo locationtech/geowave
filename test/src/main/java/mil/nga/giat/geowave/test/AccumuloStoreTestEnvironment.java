@@ -58,6 +58,21 @@ public class AccumuloStoreTestEnvironment extends
 
 	private AccumuloStoreTestEnvironment() {}
 
+	public static void main(
+			String[] args )
+			throws IOException {
+		ZookeeperTestEnvironment.getInstance().zookeeper = "127.0.0.1:22010";
+		getInstance().setup();
+		System.out.println("hit Enter to shutdown ..");
+		System.err.println(getInstance().accumuloUser);
+		System.err.println(getInstance().accumuloPassword);
+		System.err.println(getInstance().zookeeper);
+		System.err.println(getInstance().accumuloInstance);
+		System.in.read();
+		System.out.println("Shutting down!");
+		getInstance().tearDown();
+	}
+
 	@Override
 	public void setup() {
 

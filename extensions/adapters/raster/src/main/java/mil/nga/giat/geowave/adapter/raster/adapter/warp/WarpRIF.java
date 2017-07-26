@@ -1,3 +1,16 @@
+/* JAI-Ext - OpenSource Java Advanced Image Extensions Library
+*    http://www.geo-solutions.it/
+*    Copyright 2014 GeoSolutions
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* http://www.apache.org/licenses/LICENSE-2.0
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package mil.nga.giat.geowave.adapter.raster.adapter.warp;
 
 import java.awt.RenderingHints;
@@ -12,17 +25,14 @@ import javax.media.jai.OperationRegistry;
 import javax.media.jai.PlanarImage;
 import javax.media.jai.ROI;
 import javax.media.jai.Warp;
-import javax.media.jai.operator.MosaicDescriptor;
 import javax.media.jai.registry.RenderedRegistryMode;
 
-import com.sun.media.jai.opimage.MosaicRIF;
 import com.sun.media.jai.opimage.RIFUtil;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.geosolutions.jaiext.interpolators.InterpolationNearest;
 import it.geosolutions.jaiext.range.Range;
 import it.geosolutions.jaiext.range.RangeFactory;
-import mil.nga.giat.geowave.adapter.raster.adapter.SourceThresholdFixMosaicDescriptor;
 
 /**
  * 
@@ -68,26 +78,34 @@ public class WarpRIF extends
 	public RenderedImage create(
 			ParameterBlock paramBlock,
 			RenderingHints renderHints ) {
-		Interpolation interp = (Interpolation) paramBlock.getObjectParameter(1);
+		Interpolation interp = (Interpolation) paramBlock.getObjectParameter(
+				1);
 		if (interp instanceof InterpolationNearest || interp instanceof javax.media.jai.InterpolationNearest) {
 			// Get ImageLayout from renderHints if any.
-			ImageLayout layout = RIFUtil.getImageLayoutHint(renderHints);
+			ImageLayout layout = RIFUtil.getImageLayoutHint(
+					renderHints);
 
-			RenderedImage source = paramBlock.getRenderedSource(0);
-			Warp warp = (Warp) paramBlock.getObjectParameter(0);
-			double[] backgroundValues = (double[]) paramBlock.getObjectParameter(2);
+			RenderedImage source = paramBlock.getRenderedSource(
+					0);
+			Warp warp = (Warp) paramBlock.getObjectParameter(
+					0);
+			double[] backgroundValues = (double[]) paramBlock.getObjectParameter(
+					2);
 
 			ROI roi = null;
-			Object roi_ = paramBlock.getObjectParameter(3);
+			Object roi_ = paramBlock.getObjectParameter(
+					3);
 			if (roi_ instanceof ROI) {
 				roi = (ROI) roi_;
-				PlanarImage temp = PlanarImage.wrapRenderedImage(source);
+				PlanarImage temp = PlanarImage.wrapRenderedImage(
+						source);
 				temp.setProperty(
 						"ROI",
 						roi);
 				source = temp;
 			}
-			Range noData = (Range) paramBlock.getObjectParameter(4);
+			Range noData = (Range) paramBlock.getObjectParameter(
+					4);
 			noData = RangeFactory.convert(
 					noData,
 					source.getSampleModel().getDataType());
