@@ -6,12 +6,20 @@ import java.util.Collections;
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Component;
+import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.Server;
+import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
+import org.restlet.ext.apispark.internal.conversion.swagger.v1_2.model.ApiDeclaration;
+import org.restlet.ext.jackson.JacksonRepresentation;
+import org.restlet.ext.swagger.SwaggerApplication;
+import org.restlet.ext.swagger.SwaggerSpecificationRestlet;
+import org.restlet.representation.FileRepresentation;
+import org.restlet.representation.Representation;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
@@ -19,7 +27,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 public class RestServer extends
 		ServerResource
 {
-	private final ArrayList<Route> availableRoutes;
+	private final ArrayList<RestRoute> availableRoutes;
 	private final ArrayList<String> unavailableCommands;
 
 	/**
@@ -32,7 +40,7 @@ public class RestServer extends
 	}
 
 	public RestServer() {
-		availableRoutes = new ArrayList<Route>();
+		availableRoutes = new ArrayList<RestRoute>();
 		unavailableCommands = new ArrayList<String>();
 
 		for (final Class<?> operation : new Reflections(
@@ -43,7 +51,7 @@ public class RestServer extends
 							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST)) && DefaultOperation.class
 							.isAssignableFrom(operation)) || ServerResource.class.isAssignableFrom(operation)) {
 
-				availableRoutes.add(new Route(
+				availableRoutes.add(new RestRoute(
 						operation));
 			}
 			else {
@@ -60,7 +68,8 @@ public class RestServer extends
 	public String listResources() {
 		final StringBuilder routeStringBuilder = new StringBuilder(
 				"Available Routes:<br>");
-		for (final Route route : availableRoutes) {
+
+		for (final RestRoute route : availableRoutes) {
 			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
 		}
 		routeStringBuilder.append("<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
@@ -75,12 +84,20 @@ public class RestServer extends
 
 		// Add paths for each command
 		final Router router = new Router();
-		for (final Route route : availableRoutes) {
+
+		SwaggerApiParser apiParser = new SwaggerApiParser("1.0.0", "GeoWave API", "REST API for GeoWave CLI commands");
+		for (final RestRoute route : availableRoutes) {
+
 			if (DefaultOperation.class.isAssignableFrom(route.getOperation())) {
 				router.attach(
 						route.getPath(),
 						new GeoWaveOperationFinder(
 								(Class<? extends DefaultOperation<?>>) route.getOperation()));
+
+				Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
+						.getOperation());
+				
+				apiParser.AddRoute(route);
 			}
 			else {
 				router.attach(
@@ -88,18 +105,58 @@ public class RestServer extends
 						(Class<? extends ServerResource>) route.getOperation());
 			}
 		}
+		
+		apiParser.SerializeSwaggerJson("swagger.json");
+
 		// Provide basic 404 error page for unknown route
 		router.attachDefault(RestServer.class);
 
 		// Setup router
-		final Application myApp = new Application() {
+		final Application myApp = new SwaggerApplication() {
 
 			@Override
 			public Restlet createInboundRoot() {
 				router.setContext(getContext());
 
+				attachSwaggerSpecificationRestlet(
+						router,
+						"swagger.json");
 				return router;
 			};
+
+			@Override
+			public String getName() {
+				return "GeoWave API";
+			}
+
+			@Override
+			public SwaggerSpecificationRestlet getSwaggerSpecificationRestlet(
+					Context context ) {
+				return new SwaggerSpecificationRestlet(
+						getContext()) {
+					@Override
+					public Representation getApiDeclaration(
+							String category ) {
+						JacksonRepresentation<ApiDeclaration> result = new JacksonRepresentation<ApiDeclaration>(
+								new FileRepresentation(
+										"./swagger.json/" + category,
+										MediaType.APPLICATION_JSON),
+								ApiDeclaration.class);
+						return result;
+					}
+
+					@Override
+					public Representation getResourceListing() {
+						JacksonRepresentation<ApiDeclaration> result = new JacksonRepresentation<ApiDeclaration>(
+								new FileRepresentation(
+										"./swagger.json",
+										MediaType.APPLICATION_JSON),
+								ApiDeclaration.class);
+						return result;
+					}
+				};
+			}
+
 		};
 		final Component component = new Component();
 		component.getDefaultHost().attach(
@@ -119,81 +176,6 @@ public class RestServer extends
 		}
 	}
 
-	/**
-	 * Holds necessary information to create a Restlet route
-	 */
-	private static class Route implements
-			Comparable<Route>
-	{
-		private final String path;
-		private final Class<?> operation;
-
-		/**
-		 * Create a new route given an operation
-		 *
-		 * @param operation
-		 */
-		public Route(
-				final Class<?> operation ) {
-			path = pathFor(
-					operation).substring(
-					1);
-			this.operation = operation;
-		}
-
-		/**
-		 * Return the operation as it was originally passed
-		 *
-		 * @return
-		 */
-		public Class<?> getOperation() {
-			return operation;
-		}
-
-		/**
-		 * Get the path that represents the route
-		 *
-		 * @return a string representing the path, specified by pathFor
-		 */
-		public String getPath() {
-			return path;
-		}
-
-		/**
-		 * Get the path for a command based on the operation hierarchy Return
-		 * the path as a string in the format "/first/next/next"
-		 *
-		 * @param operation
-		 *            - the operation to find the path for
-		 * @return the formatted path as a string
-		 */
-		public static String pathFor(
-				final Class<?> operation ) {
-			// Top level of heirarchy
-			if (operation == Object.class) {
-				return "";
-			}
-			final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
-			return pathFor(operationInfo.parentOperation()) + "/" + operationInfo.name();
-		}
-
-		@Override
-		public int compareTo(
-				final Route route ) {
-			return path.compareTo(route.path);
-		}
-
-		@Override
-		public boolean equals(
-				final Object route ) {
-			return (route instanceof Route) && path.equals(((Route) route).path);
-		}
-
-		@Override
-		public int hashCode() {
-			return path.hashCode();
-		}
-	}
 
 	/**
 	 * A simple ServerResource to show if the route's operation does not extend
