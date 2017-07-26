@@ -127,7 +127,9 @@ public class BasicMapReduceIT extends
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

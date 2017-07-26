@@ -1,41 +1,34 @@
-package mil.nga.giat.geowave.datastore.hbase.query;
+package mil.nga.giat.geowave.datastore.dynamodb.query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.datastore.hbase.util.HBaseInputFormatIteratorWrapper;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOperations;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
+import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBInputFormatIteratorWrapper;
 
-/**
- * * Represents a query operation for a range of HBase row IDs. This class is
- * particularly used by the InputFormat as the iterator that it returns will
- * contain Entry<GeoWaveInputKey, Object> entries rather than just the object.
- * This is so the input format has a way of getting the adapter ID and data ID
- * to define the key.
- */
-public class InputFormatHBaseRangeQuery extends
-		HBaseConstraintsQuery
+public class InputFormatDynamoDBRangeQuery extends
+		DynamoDBConstraintsQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(InputFormatHBaseRangeQuery.class);
+	private final static Logger LOGGER = Logger.getLogger(InputFormatDynamoDBRangeQuery.class);
 	private final ByteArrayRange range;
 	private final boolean isOutputWritable;
 
 	private static List<ByteArrayId> getAdapterIds(
-			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final QueryOptions queryOptions ) {
 		try {
@@ -49,9 +42,10 @@ public class InputFormatHBaseRangeQuery extends
 		return Collections.emptyList();
 	}
 
-	public InputFormatHBaseRangeQuery(
+	public InputFormatDynamoDBRangeQuery(
 			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
+			final DynamoDBOperations dynamoDBOperations,
 			final PrimaryIndex index,
 			final ByteArrayRange range,
 			final List<QueryFilter> queryFilters,
@@ -59,15 +53,15 @@ public class InputFormatHBaseRangeQuery extends
 			final QueryOptions queryOptions ) {
 		super(
 				dataStore,
+				dynamoDBOperations,
 				getAdapterIds(
-						index,
 						adapterStore,
 						queryOptions),
 				index,
 				null,
-				queryFilters,
-				(DedupeFilter) null,
-				queryOptions.getScanCallback(),
+				queryFilters != null ? queryFilters : new ArrayList<QueryFilter>(),
+				new DedupeFilter(),
+				(ScanCallback<?, DynamoDBRow>) queryOptions.getScanCallback(),
 				null,
 				null,
 				null,
@@ -80,36 +74,24 @@ public class InputFormatHBaseRangeQuery extends
 	}
 
 	@Override
+	protected List<ByteArrayRange> getRanges() {
+		return Collections.singletonList(range);
+	}
+
+	@Override
 	protected Iterator initIterator(
 			final AdapterStore adapterStore,
-			final Iterator<Result> resultsIterator,
-			final double[] maxResolutionSubsamplingPerDimension,
-			final boolean decodePersistenceEncoding ) {
-		// TODO Since currently we are not supporting server side
-		// iterator/coprocessors, we also cannot run
-		// server side filters and hence they have to run on clients itself. So
-		// need to add server side filters also in list of client filters.
+			final Iterator<DynamoDBRow> results ) {
 		final List<QueryFilter> filters = getAllFiltersList();
-		return new HBaseInputFormatIteratorWrapper(
+		return new DynamoDBInputFormatIteratorWrapper(
+				dataStore,
 				adapterStore,
 				index,
-				resultsIterator,
+				results,
 				isOutputWritable,
 				filters.isEmpty() ? null : filters.size() == 1 ? filters.get(0)
 						: new mil.nga.giat.geowave.core.store.filter.FilterList<QueryFilter>(
 								filters));
 	}
 
-	@Override
-	protected Scan getMultiScanner(
-			final FilterList filterList,
-			final Integer limit,
-			final double[] maxResolutionSubsamplingPerDimension ) {
-		final Scan scanner = createStandardScanner(limit);
-
-		scanner.setStartRow(range.getStart().getBytes());
-		scanner.setStopRow(range.getEnd().getBytes());
-
-		return scanner;
-	}
 }

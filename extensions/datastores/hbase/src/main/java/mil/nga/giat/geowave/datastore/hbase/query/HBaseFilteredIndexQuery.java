@@ -421,7 +421,7 @@ public abstract class HBaseFilteredIndexQuery extends
 							startRow,
 							true,
 							stopRow,
-							true);
+							false);
 
 					rowRanges.add(rowRange);
 				}

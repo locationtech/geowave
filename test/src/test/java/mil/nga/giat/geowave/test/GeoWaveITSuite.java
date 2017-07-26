@@ -50,6 +50,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	DataStatisticsStoreIT.class,
 // SecondaryIndexIT.class
 // GeoWaveKMeansIT.class,
+// GeoWaveKMeansIT.class,
 })
 public class GeoWaveITSuite
 {

@@ -436,6 +436,10 @@ public class HBaseOperations implements
 			coprocessorCache.get(
 					tableNameStr).add(
 					coprocessorName);
+
+			coprocessorCache.get(
+					tableNameStr).add(
+					coprocessorName);
 		}
 		catch (
 
