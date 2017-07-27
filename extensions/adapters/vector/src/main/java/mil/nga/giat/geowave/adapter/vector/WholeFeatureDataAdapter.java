@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector;
 
 import java.io.IOException;
@@ -5,7 +15,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -51,7 +62,7 @@ public class WholeFeatureDataAdapter extends
 		GeotoolsFeatureDataAdapter,
 		StatisticsProvider<SimpleFeature>
 {
-	private final static Logger LOGGER = Logger.getLogger(WholeFeatureDataAdapter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(WholeFeatureDataAdapter.class);
 	protected SimpleFeatureType featureType;
 	private ByteArrayId adapterId;
 	private SimpleFeatureBuilder b;
@@ -189,7 +200,7 @@ public class WholeFeatureDataAdapter extends
 	}
 
 	@Override
-	public SimpleFeatureType getType() {
+	public SimpleFeatureType getFeatureType() {
 		return featureType;
 	}
 
@@ -199,7 +210,7 @@ public class WholeFeatureDataAdapter extends
 	}
 
 	@Override
-	public ByteArrayId[] getSupportedStatisticsIds() {
+	public ByteArrayId[] getSupportedStatisticsTypes() {
 		return statsManager.getSupportedStatisticsIds();
 	}
 

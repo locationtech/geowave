@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.mapreduce;
 
 import java.io.File;
@@ -28,7 +38,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataStoreFinder;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -40,6 +51,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportCommand;
 import mil.nga.giat.geowave.adapter.vector.export.VectorMRExportOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
@@ -89,7 +101,7 @@ public class BasicMapReduceIT extends
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
-		TestUtils.unZipFile(
+		ZipUtils.unZipFile(
 				new File(
 						MapReduceTestEnvironment.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
@@ -115,7 +127,7 @@ public class BasicMapReduceIT extends
 		LOGGER.warn("-----------------------------------------");
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(BasicMapReduceIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicMapReduceIT.class);
 	private static final String TEST_EXPORT_DIRECTORY = "basicMapReduceIT-export";
 
 	public static enum ResultCounterType {

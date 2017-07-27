@@ -1,9 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.basic;
 
 import java.io.File;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -21,7 +32,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeoWaveBasicSpatialVectorIT extends
 		AbstractGeoWaveBasicVectorIT
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicSpatialVectorIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicSpatialVectorIT.class);
 	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";
 	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
 			+ "hail-polygon-filter.shp";
@@ -33,6 +44,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 
 	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
 	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
+	private static final String CQL_DELETE_STR = "STATE = 'TX'";
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
@@ -167,8 +179,21 @@ public class GeoWaveBasicSpatialVectorIT extends
 						+ e.getLocalizedMessage() + "'");
 			}
 		}
+
 		try {
-			testDelete(
+			testDeleteCQL(
+					CQL_DELETE_STR,
+					TestUtils.DEFAULT_SPATIAL_INDEX);
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing deletion of an entry using spatial index: '"
+					+ e.getLocalizedMessage() + "'");
+		}
+
+		try {
+			testDeleteSpatial(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
 					TestUtils.DEFAULT_SPATIAL_INDEX);

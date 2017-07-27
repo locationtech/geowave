@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -15,6 +24,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -22,7 +32,8 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions
 
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddStoreCommand implements
+public class AddStoreCommand extends
+		DefaultOperation implements
 		Command
 {
 
@@ -51,6 +62,9 @@ public class AddStoreCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
+
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
@@ -58,13 +72,6 @@ public class AddStoreCommand implements
 		}
 		else {
 			// Try to load the 'default' options.
-
-			File configFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-			Properties existingProps = ConfigOptions.loadProperties(
-					configFile,
-					null);
-
 			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
@@ -93,11 +100,7 @@ public class AddStoreCommand implements
 	public void execute(
 			OperationParams params ) {
 
-		File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Ensure that a name is chosen.
 		if (parameters.size() != 1) {
@@ -114,6 +117,11 @@ public class AddStoreCommand implements
 					"That store already exists: " + getPluginName());
 		}
 
+		if (pluginOptions.getFactoryOptions() != null) {
+			pluginOptions.getFactoryOptions().validatePluginOptions(
+					existingProps);
+		}
+
 		// Save the store options.
 		pluginOptions.save(
 				existingProps,
@@ -128,8 +136,10 @@ public class AddStoreCommand implements
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
-				existingProps);
+				getGeoWaveConfigFile(),
+				existingProps,
+				pluginOptions.getFactoryOptions().getClass(),
+				getNamespace() + "." + DataStorePluginOptions.OPTS);
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

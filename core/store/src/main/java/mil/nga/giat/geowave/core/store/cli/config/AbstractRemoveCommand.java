@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,13 +47,7 @@ public abstract class AbstractRemoveCommand extends
 			OperationParams params,
 			String pattern ) {
 
-		File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-		// Load all properties
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Find properties to remove
 		Set<String> keysToRemove = new HashSet<String>();
@@ -61,7 +64,7 @@ public abstract class AbstractRemoveCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
+				getGeoWaveConfigFile(params),
 				existingProps);
 	}
 

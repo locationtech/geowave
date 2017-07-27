@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -12,6 +21,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -19,7 +29,8 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 
 @GeowaveOperation(name = "cpindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Copy and modify existing index configuration")
-public class CopyIndexCommand implements
+public class CopyIndexCommand extends
+		DefaultOperation implements
 		Command
 {
 
@@ -35,18 +46,12 @@ public class CopyIndexCommand implements
 	@ParametersDelegate
 	private IndexPluginOptions newPluginOptions = new IndexPluginOptions();
 
-	private File configFile;
-	private Properties existingProps;
-
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 
-		configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		existingProps = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Load the old index, so that we can override the values
 		String oldIndex = null;
@@ -67,6 +72,8 @@ public class CopyIndexCommand implements
 	@Override
 	public void execute(
 			OperationParams params ) {
+
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -100,7 +107,7 @@ public class CopyIndexCommand implements
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				configFile,
+				getGeoWaveConfigFile(params),
 				existingProps);
 
 	}

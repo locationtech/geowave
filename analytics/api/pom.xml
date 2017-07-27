@@ -4,7 +4,7 @@
 		<artifactId>geowave-analytic-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4-SNAPSHOT</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-analytic-api</artifactId>
 	<name>GeoWave Analytics API</name>
@@ -62,12 +62,6 @@
 					<artifactId>gs-main</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.esotericsoftware.kryo</groupId>

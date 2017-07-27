@@ -11,6 +11,7 @@
 %define _rpmfilename        %%{ARCH}/%%{NAME}.%%{RELEASE}.%%{ARCH}.rpm
 
 %define geowave_home           /usr/local/geowave
+%define geowave_tools_script   geowave-tools.sh
 %define geowave_install        /usr/local/%{vendor_app_name}
 %define geowave_accumulo_home  %{geowave_install}/accumulo
 %define geowave_hbase_home     %{geowave_install}/hbase
@@ -42,7 +43,7 @@ Source8:        default.xml
 Source9:        namespace.xml
 Source10:       workspace.xml
 Source11:       geowave-tools-%{version}-%{vendor_version}.jar
-Source12:       geowave-tools.sh
+Source12:       %{geowave_tools_script}
 BuildRequires:  unzip
 BuildRequires:  zip
 BuildRequires:  xmlto
@@ -113,10 +114,10 @@ pushd %{buildroot}%{geowave_tools_home}
 zip -qg %{buildroot}%{geowave_tools_home}/geowave-tools-%{version}-%{vendor_version}.jar build.properties
 popd
 mv %{buildroot}%{geowave_tools_home}/build.properties %{buildroot}%{geowave_tools_home}/geowave-tools-build.properties
+cp  %{SOURCE12} %{buildroot}%{geowave_tools_home}/%{geowave_tools_script}
 #replace vendor-version particular variables in geowave-tools.sh
-sed -i -e s~'$GEOWAVE_TOOLS_HOME'~%{geowave_tools_home}~g %{SOURCE12}
-sed -i -e s/'$GEOWAVE_TOOLS_JAR'/geowave-tools-%{version}-%{vendor_version}.jar/g %{SOURCE12}
-cp  %{SOURCE12} %{buildroot}%{geowave_tools_home}
+sed -i -e s~'$GEOWAVE_TOOLS_HOME'~%{geowave_tools_home}~g %{buildroot}%{geowave_tools_home}/%{geowave_tools_script}
+sed -i -e s/'$GEOWAVE_TOOLS_JAR'/geowave-tools-%{version}-%{vendor_version}.jar/g %{buildroot}%{geowave_tools_home}/%{geowave_tools_script}
 mkdir -p %{buildroot}%{geowave_plugins_home}
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

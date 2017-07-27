@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.ingest;
 
 import java.util.Locale;
@@ -20,7 +30,7 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
-import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
+import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
@@ -84,46 +94,20 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 					options.periodicity)
 		};
 		final String combinedId = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
-		if (options.pointOnly) {
-			return new CustomIdIndex(
-					TieredSFCIndexFactory.createDefinedPrecisionTieredStrategy(
-							dimensions,
-							new int[][] {
-								new int[] {
-									0,
-									options.bias.getSpatialPrecision()
-								},
-								new int[] {
-									0,
-									options.bias.getSpatialPrecision()
-								},
-								new int[] {
-									0,
-									options.bias.getTemporalPrecision()
-								}
-							},
-							SFCType.HILBERT),
-					new BasicIndexModel(
-							fields),
-					new ByteArrayId(
-							options.pointOnly ? combinedId + "_POINTONLY" : combinedId));
-		}
-		else {
-			return new CustomIdIndex(
-					TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
-							dimensions,
-							new int[] {
-								options.bias.getSpatialPrecision(),
-								options.bias.getSpatialPrecision(),
-								options.bias.getTemporalPrecision()
-							},
-							SFCType.HILBERT,
-							options.maxDuplicates),
-					new BasicIndexModel(
-							fields),
-					new ByteArrayId(
-							combinedId));
-		}
+		return new CustomIdIndex(
+				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
+						dimensions,
+						new int[] {
+							options.bias.getSpatialPrecision(),
+							options.bias.getSpatialPrecision(),
+							options.bias.getTemporalPrecision()
+						},
+						SFCType.HILBERT,
+						options.maxDuplicates),
+				new BasicIndexModel(
+						fields),
+				new ByteArrayId(
+						combinedId));
 	}
 
 	@Override
@@ -146,10 +130,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			"--bias"
 		}, required = false, description = "The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.", converter = BiasConverter.class)
 		protected Bias bias = Bias.BALANCED;
-		@Parameter(names = {
-			"--pointTimestampOnly"
-		}, required = false, description = "The index will only be good at handling points and timestamps and will not be optimized for handling lines/polys or time ranges.  The default behavior is to handle any geometry and time ranges well.")
-		protected boolean pointOnly = false;
 		@Parameter(names = {
 			"--maxDuplicates"
 		}, required = false, description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
@@ -248,12 +228,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 		public SpatialTemporalIndexBuilder() {
 			options = new SpatialTemporalOptions();
-		}
-
-		public SpatialTemporalIndexBuilder setPointOnly(
-				final boolean pointOnly ) {
-			options.pointOnly = pointOnly;
-			return this;
 		}
 
 		public SpatialTemporalIndexBuilder setBias(

@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.cli.debug;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -15,7 +24,8 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -26,7 +36,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
@@ -40,8 +49,7 @@ public class MinimalFullTable extends
 		DefaultOperation implements
 		Command
 {
-	private static Logger LOGGER = Logger.getLogger(
-			MinimalFullTable.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
 
 	@Parameter(description = "<storename>")
 	private final List<String> parameters = new ArrayList<String>();
@@ -64,15 +72,10 @@ public class MinimalFullTable extends
 		final String storeName = parameters.get(
 				0);
 
-		// Config file
-		final File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
 		// Attempt to load store.
 		final StoreLoader storeOptions = new StoreLoader(
 				storeName);
-		if (!storeOptions.loadFromConfig(
-				configFile)) {
+		if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params))) {
 			throw new ParameterException(
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.format.landsat8;
 
 import com.beust.jcommander.Parameter;
@@ -30,6 +40,8 @@ public class Landsat8RasterIngestCommandLineOptions
 	private int scale = 1;
 	@Parameter(names = "--crop", description = "Use the spatial constraint provided in CQL to crop the image.  If no spatial constraint is provided, this will not have an effect.")
 	private boolean cropToSpatialConstraint;
+	@Parameter(names = "--skipMerge", description = "By default the ingest will automerge overlapping tiles as a post-processing optimization step for efficient retrieval, but this will skip the merge process")
+	private boolean skipMerge;
 
 	public Landsat8RasterIngestCommandLineOptions() {}
 
@@ -80,42 +92,51 @@ public class Landsat8RasterIngestCommandLineOptions
 	}
 
 	public void setCreateHistogram(
-			boolean createHistogram ) {
+			final boolean createHistogram ) {
 		this.createHistogram = createHistogram;
 	}
 
 	public void setCreatePyramid(
-			boolean createPyramid ) {
+			final boolean createPyramid ) {
 		this.createPyramid = createPyramid;
 	}
 
 	public void setRetainImages(
-			boolean retainImages ) {
+			final boolean retainImages ) {
 		this.retainImages = retainImages;
 	}
 
 	public void setTileSize(
-			int tileSize ) {
+			final int tileSize ) {
 		this.tileSize = tileSize;
 	}
 
 	public void setCoverageName(
-			String coverageName ) {
+			final String coverageName ) {
 		this.coverageName = coverageName;
 	}
 
 	public void setCoverageConverter(
-			String coverageConverter ) {
+			final String coverageConverter ) {
 		this.coverageConverter = coverageConverter;
 	}
 
 	public void setScale(
-			int scale ) {
+			final int scale ) {
 		this.scale = scale;
 	}
 
 	public void setCropToSpatialConstraint(
-			boolean cropToSpatialConstraint ) {
+			final boolean cropToSpatialConstraint ) {
 		this.cropToSpatialConstraint = cropToSpatialConstraint;
+	}
+
+	public boolean isSkipMerge() {
+		return skipMerge;
+	}
+
+	public void setSkipMerge(
+			boolean skipMerge ) {
+		this.skipMerge = skipMerge;
 	}
 }

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.query;
 
 import java.io.IOException;
@@ -386,6 +396,7 @@ public class SecondaryIndexIT
 		final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
 				schema);
 		final List<SimpleFeature> features = new ArrayList<>();
+
 		features.add(buildSimpleFeature(
 				builder,
 				-180d,
@@ -400,6 +411,8 @@ public class SecondaryIndexIT
 				DATE_FORMAT.parse("11-30-2013"),
 				10d,
 				"bbb"));
+
+		// Create a feature and collect verification data from it
 		final SimpleFeature feat = buildSimpleFeature(
 				builder,
 				180d,
@@ -431,6 +444,7 @@ public class SecondaryIndexIT
 		allSecondaryIndices = dataAdapter.getSupportedSecondaryIndices();
 
 		final Map<ByteArrayId, FilterableConstraints> additionalConstraints = new HashMap<>();
+
 		final Number number = 25d;
 		additionalConstraints.put(
 				NUMERIC_JOIN_FIELD_ID,
@@ -447,6 +461,7 @@ public class SecondaryIndexIT
 				new NumericGreaterThanConstraint(
 						NUMERIC_PARTIAL_FIELD_ID,
 						number));
+
 		final String matchValue = "ccc";
 		additionalConstraints.put(
 				TEXT_JOIN_FIELD_ID,
@@ -466,6 +481,7 @@ public class SecondaryIndexIT
 						TEXT_PARTIAL_FIELD_ID,
 						matchValue,
 						true));
+
 		final Date start = DATE_FORMAT.parse("12-24-2015");
 		final Date end = DATE_FORMAT.parse("12-26-2015");
 		additionalConstraints.put(
@@ -486,6 +502,7 @@ public class SecondaryIndexIT
 						TEMPORAL_PARTIAL_FIELD_ID,
 						start,
 						end));
+
 		query = new SpatialQuery(
 				GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
 						-180d,
@@ -495,11 +512,22 @@ public class SecondaryIndexIT
 				additionalConstraints);
 	}
 
+	/**
+	 * 
+	 * @throws IOException
+	 */
+
 	@After
 	public void deleteTestData()
 			throws IOException {
 		TestUtils.deleteAll(dataStoreOptions);
 	}
+
+	/**
+	 * 
+	 * @param connector
+	 * @throws TableNotFoundException
+	 */
 
 	private void numericJoinAccumulo(
 			final Connector connector )
@@ -507,16 +535,19 @@ public class SecondaryIndexIT
 		final Scanner scanner = connector.createScanner(
 				NUMERIC_JOIN_TABLE,
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+
 		scanner.setRange(new Range(
 				new Text(
 						Lexicoders.DOUBLE.toByteArray(0d)),
 				new Text(
 						Lexicoders.DOUBLE.toByteArray(20d))));
+
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
 						dataAdapter.getAdapterId(),
 						NUMERIC_JOIN_FIELD_ID)));
 		int numResults = 0;
+
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
 			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
@@ -637,17 +668,22 @@ public class SecondaryIndexIT
 		final Scanner scanner = connector.createScanner(
 				TEMPORAL_JOIN_TABLE,
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
+		Text startText = new Text(
+				Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+						"11-30-2012").getTime()));
+		Text stopText = new Text(
+				Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
+						"11-30-2014").getTime()));
+
 		scanner.setRange(new Range(
-				new Text(
-						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-								"11-30-2012").getTime())),
-				new Text(
-						Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-								"11-30-2014").getTime()))));
+				startText,
+				stopText));
+		byte[] colFam = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getAdapterId(),
+				TEMPORAL_JOIN_FIELD_ID);
+
 		scanner.fetchColumnFamily(new Text(
-				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						TEMPORAL_JOIN_FIELD_ID)));
+				colFam));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
@@ -1082,6 +1118,20 @@ public class SecondaryIndexIT
 	// Assert.assertTrue(numResults == 1);
 	// }
 
+	/**
+	 * 
+	 * @param builder
+	 *            SimpleFeature builder to be used
+	 * @param lng
+	 *            - coordinate longitude
+	 * @param lat
+	 *            - coordinate latitude
+	 * @param dateField
+	 *            -
+	 * @param doubleField
+	 * @param stringField
+	 * @return
+	 */
 	private SimpleFeature buildSimpleFeature(
 			final SimpleFeatureBuilder builder,
 			final double lng,

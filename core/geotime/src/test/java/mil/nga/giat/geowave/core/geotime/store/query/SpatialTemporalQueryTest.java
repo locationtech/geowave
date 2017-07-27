@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import static org.junit.Assert.assertEquals;
@@ -188,7 +198,7 @@ public class SpatialTemporalQueryTest
 		for (final CommonIndexedPersistenceEncoding dataItem : data) {
 			for (final QueryFilter filter : queryCopy.createFilters(model)) {
 				assertEquals(
-						"result: " + (pos + 1),
+						"result: " + pos,
 						expectedResults[pos++],
 						filter.accept(
 								model,
@@ -216,6 +226,20 @@ public class SpatialTemporalQueryTest
 			throws ParseException {
 		performOp(
 				CompareOperation.OVERLAPS,
+				new boolean[] {
+					false,
+					false,
+					false,
+					false,
+					false
+				});
+	}
+
+	@Test
+	public void testIntersects()
+			throws ParseException {
+		performOp(
+				CompareOperation.INTERSECTS,
 				new boolean[] {
 					true,
 					true,

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
@@ -11,13 +21,8 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 public class MaxDuplicatesStatistics<T> extends
 		AbstractDataStatistics<T>
 {
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"MAX_DUPLICATES");
-	private static final ByteArrayId SEPARATOR = new ByteArrayId(
-			"_");
-	private static final byte[] STATS_ID_AND_SEPARATOR = ArrayUtils.addAll(
-			STATS_ID.getBytes(),
-			SEPARATOR.getBytes());
 	private int maxDuplicates = 0;
 
 	protected MaxDuplicatesStatistics() {
@@ -40,18 +45,20 @@ public class MaxDuplicatesStatistics<T> extends
 
 	public MaxDuplicatesStatistics(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId indexId ) {
+			final ByteArrayId statisticsId ) {
 		super(
 				dataAdapterId,
-				composeId(indexId));
+				composeId(statisticsId));
 	}
 
 	public static ByteArrayId composeId(
-			final ByteArrayId indexId ) {
+			final ByteArrayId statisticsId ) {
 		return new ByteArrayId(
 				ArrayUtils.addAll(
-						STATS_ID_AND_SEPARATOR,
-						indexId.getBytes()));
+						ArrayUtils.addAll(
+								STATS_TYPE.getBytes(),
+								STATS_SEPARATOR.getBytes()),
+						statisticsId.getBytes()));
 	}
 
 	@Override

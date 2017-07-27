@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.basic;
 
 import java.io.File;
@@ -9,7 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -40,7 +51,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeoWaveBasicSpatialTemporalVectorIT extends
 		AbstractGeoWaveBasicVectorIT
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveBasicSpatialTemporalVectorIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicSpatialTemporalVectorIT.class);
 
 	private static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
 			+ "hail-box-temporal-filter.shp";
@@ -70,7 +81,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		 * consider testing some non-default Accumulo options as well
 		 */
 		"disableCustomFilters=true",
-		"disableCoprocessors=true",
+		"disableCoprocessors=true"
 	})
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;
@@ -179,7 +190,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		}
 
 		try {
-			testDelete(
+			testDeleteDataId(
 					new File(
 							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
 					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX);
@@ -261,7 +272,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 					else {
 						endTimeAttribute = timeDesc.getTime().getLocalName();
 					}
-					final String geometryAttribute = gtAdapter.getType().getGeometryDescriptor().getLocalName();
+					final String geometryAttribute = gtAdapter.getFeatureType().getGeometryDescriptor().getLocalName();
 
 					final String cqlPredicate = String.format(
 							"BBOX(\"%s\",%f,%f,%f,%f) AND \"%s\" <= '%s' AND \"%s\" >= '%s'",

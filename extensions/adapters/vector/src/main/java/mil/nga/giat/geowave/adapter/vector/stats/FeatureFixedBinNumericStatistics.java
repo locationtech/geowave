@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.stats;
 
 import java.util.Date;
@@ -31,6 +41,9 @@ public class FeatureFixedBinNumericStatistics extends
 		FeatureStatistic
 {
 
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"FEATURE_FIXED_BIN_NUMERIC_HISTOGRAM");
+
 	protected FeatureFixedBinNumericStatistics() {
 		super();
 	}
@@ -41,7 +54,7 @@ public class FeatureFixedBinNumericStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName));
 	}
 
@@ -52,7 +65,7 @@ public class FeatureFixedBinNumericStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName),
 				bins);
 	}
@@ -66,7 +79,7 @@ public class FeatureFixedBinNumericStatistics extends
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
+						STATS_TYPE.getString(),
 						fieldName),
 				bins,
 				minValue,
@@ -76,7 +89,7 @@ public class FeatureFixedBinNumericStatistics extends
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 
@@ -113,7 +126,7 @@ public class FeatureFixedBinNumericStatistics extends
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getFieldIdentifier() {
 		return getFieldName();
 	}
 

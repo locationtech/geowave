@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.index;
 
 import java.nio.ByteBuffer;
@@ -7,6 +17,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -423,6 +436,26 @@ public class CompoundIndexStrategy implements
 				final InsertionIds insertionIds ) {
 			metaData.insertionIdsRemoved(trimPartitionForSubstrategy(insertionIds));
 		}
+
+		/**
+		 * Convert Tiered Index Metadata statistics to a JSON object
+		 */
+
+		@Override
+		public JSONObject toJSONObject()
+				throws JSONException {
+			JSONObject jo = new JSONObject();
+			jo.put(
+					"type",
+					"CompoundIndexMetaDataWrapper");
+
+			jo.put(
+					"index",
+					index);
+
+			return jo;
+		}
+
 	}
 
 	/**
@@ -524,4 +557,5 @@ public class CompoundIndexStrategy implements
 		}
 		return partitionKeys;
 	}
+
 }

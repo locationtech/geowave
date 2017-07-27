@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.types.stanag4676.service.rest;
 
 import java.awt.image.BufferedImage;
@@ -31,7 +41,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jcodec.codecs.vpx.NopRateControl;
 import org.jcodec.codecs.vpx.RateControl;
 import org.jcodec.codecs.vpx.VP8Encoder;
@@ -63,8 +74,7 @@ import mil.nga.giat.geowave.service.ServiceUtils;
 @Path("stanag4676")
 public class Stanag4676ImageryChipService
 {
-	private static Logger LOGGER = Logger.getLogger(
-			Stanag4676ImageryChipService.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Stanag4676ImageryChipService.class);
 	@Context
 	ServletContext context;
 	private static DataStore dataStore;
@@ -554,13 +564,16 @@ public class Stanag4676ImageryChipService
 			props = ServiceUtils.loadProperties(
 					is);
 		}
-		catch (final IOException e) {
+		catch (IOException e) {
 			LOGGER.error(
+					e.getLocalizedMessage(),
 					e);
 		}
 		LOGGER.info(
-				"Found " + props.size() + " props");
-		final Map<String, String> strMap = new HashMap<String, String>();
+				"Found {} props",
+				(props != null ? props.size() : 0));
+		if (props != null) {
+			final Map<String, String> strMap = new HashMap<String, String>();
 
 		final Set<Object> keySet = props.keySet();
 		final Iterator<Object> it = keySet.iterator();
@@ -579,8 +592,7 @@ public class Stanag4676ImageryChipService
 					"    Key/Value: " + key + "/" + value);
 		}
 
-		// Can be removed when factory is fixed
-		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
+			dataStore = GeoWaveStoreFinder.createDataStore(strMap);
 
 		dataStore = GeoWaveStoreFinder.createDataStore(
 				strMap);

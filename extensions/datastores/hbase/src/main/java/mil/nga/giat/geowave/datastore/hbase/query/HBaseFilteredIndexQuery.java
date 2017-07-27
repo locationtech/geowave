@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.hbase.query;
 
 import java.io.IOException;
@@ -16,7 +26,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -49,7 +60,7 @@ public abstract class HBaseFilteredIndexQuery extends
 
 	protected final ScanCallback<?, ?> scanCallback;
 	protected List<QueryFilter> clientFilters;
-	private final static Logger LOGGER = Logger.getLogger(HBaseFilteredIndexQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseFilteredIndexQuery.class);
 	private boolean hasSkippingFilter = false;
 
 	public HBaseFilteredIndexQuery(
@@ -97,7 +108,6 @@ public abstract class HBaseFilteredIndexQuery extends
 		return true;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public CloseableIterator<Object> query(
 			final HBaseOperations operations,
 			final AdapterStore adapterStore,

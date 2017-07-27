@@ -1,35 +1,48 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.stats;
 
 import java.nio.ByteBuffer;
-
-import org.opengis.feature.simple.SimpleFeature;
-
-import com.clearspring.analytics.stream.frequency.CountMinSketch;
-import com.clearspring.analytics.stream.frequency.FrequencyMergeException;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+import org.opengis.feature.simple.SimpleFeature;
+
+import com.clearspring.analytics.stream.frequency.CountMinSketch;
+import com.clearspring.analytics.stream.frequency.FrequencyMergeException;
 
 /**
- *
+ * 
  * Maintains an estimate of how may of each attribute value occurs in a set of
  * data.
- *
+ * 
  * Default values:
- *
+ * 
  * Error factor of 0.001 with probability 0.98 of retrieving a correct estimate.
  * The Algorithm does not under-state the estimate.
- *
+ * 
  */
 public class FeatureCountMinSketchStatistics extends
 		AbstractDataStatistics<SimpleFeature> implements
 		FeatureStatistic
 {
-	public static final String STATS_TYPE = "ATT_SKETCH";
-	private CountMinSketch sketch = null;;
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"ATT_SKETCH");
+	private CountMinSketch sketch = null;
 
 	protected FeatureCountMinSketchStatistics() {
 		super();
@@ -41,12 +54,12 @@ public class FeatureCountMinSketchStatistics extends
 
 	public FeatureCountMinSketchStatistics(
 			final ByteArrayId dataAdapterId,
-			final String fieldName ) {
+			final String statisticsId ) {
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
-						fieldName));
+						STATS_TYPE.getString(),
+						statisticsId));
 		sketch = new CountMinSketch(
 				0.001,
 				0.98,
@@ -55,14 +68,14 @@ public class FeatureCountMinSketchStatistics extends
 
 	public FeatureCountMinSketchStatistics(
 			final ByteArrayId dataAdapterId,
-			final String fieldName,
+			final String statisticsId,
 			final double errorFactor,
 			final double probabilityOfCorrectness ) {
 		super(
 				dataAdapterId,
 				composeId(
-						STATS_TYPE,
-						fieldName));
+						STATS_TYPE.getString(),
+						statisticsId));
 		sketch = new CountMinSketch(
 				errorFactor,
 				probabilityOfCorrectness,
@@ -72,7 +85,7 @@ public class FeatureCountMinSketchStatistics extends
 	public static final ByteArrayId composeId(
 			final String fieldName ) {
 		return composeId(
-				STATS_TYPE,
+				STATS_TYPE.getString(),
 				fieldName);
 	}
 
@@ -93,7 +106,7 @@ public class FeatureCountMinSketchStatistics extends
 	}
 
 	public long count(
-			final String item ) {
+			String item ) {
 		return sketch.estimateCount(item);
 	}
 
@@ -106,7 +119,7 @@ public class FeatureCountMinSketchStatistics extends
 						sketch,
 						((FeatureCountMinSketchStatistics) mergeable).sketch);
 			}
-			catch (final FrequencyMergeException e) {
+			catch (FrequencyMergeException e) {
 				throw new RuntimeException(
 						"Unable to merge sketches",
 						e);
@@ -117,7 +130,7 @@ public class FeatureCountMinSketchStatistics extends
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] data = CountMinSketch.serialize(sketch);
+		byte[] data = CountMinSketch.serialize(sketch);
 		final ByteBuffer buffer = super.binaryBuffer(4 + data.length);
 		buffer.putInt(data.length);
 		buffer.put(data);
@@ -135,8 +148,8 @@ public class FeatureCountMinSketchStatistics extends
 
 	@Override
 	public void entryIngested(
-			final SimpleFeature entry,
-			final GeoWaveRow... rows ) {
+			final DataStoreEntryInfo entryInfo,
+			final SimpleFeature entry ) {
 		final Object o = entry.getAttribute(getFieldName());
 		if (o == null) {
 			return;
@@ -146,9 +159,8 @@ public class FeatureCountMinSketchStatistics extends
 				1);
 	}
 
-	@Override
 	public String toString() {
-		final StringBuffer buffer = new StringBuffer();
+		StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"sketch[adapter=").append(
 				super.getDataAdapterId().getString());
@@ -162,11 +174,37 @@ public class FeatureCountMinSketchStatistics extends
 		return buffer.toString();
 	}
 
+	/**
+	 * Convert FeatureCountMinSketch statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		jo.put(
+				"field_identifier",
+				getFieldName());
+
+		jo.put(
+				"size",
+				sketch.size());
+
+		return jo;
+	}
+
 	public static class FeatureCountMinSketchConfig implements
 			StatsConfig<SimpleFeature>
 	{
 		/**
-		 *
+		 * 
 		 */
 		private static final long serialVersionUID = 6309383518148391565L;
 		private double errorFactor;
@@ -177,20 +215,20 @@ public class FeatureCountMinSketchStatistics extends
 		}
 
 		public FeatureCountMinSketchConfig(
-				final double errorFactor,
-				final double probabilityOfCorrectness ) {
+				double errorFactor,
+				double probabilityOfCorrectness ) {
 			super();
 			this.errorFactor = errorFactor;
 			this.probabilityOfCorrectness = probabilityOfCorrectness;
 		}
 
 		public void setErrorFactor(
-				final double errorFactor ) {
+				double errorFactor ) {
 			this.errorFactor = errorFactor;
 		}
 
 		public void setProbabilityOfCorrectness(
-				final double probabilityOfCorrectness ) {
+				double probabilityOfCorrectness ) {
 			this.probabilityOfCorrectness = probabilityOfCorrectness;
 		}
 

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.index.sfc.tiered;
 
 import java.nio.ByteBuffer;
@@ -24,6 +34,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
+import mil.nga.giat.geowave.core.index.sfc.binned.BinnedSFCUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
@@ -70,7 +81,7 @@ public class SingleTierSubStrategy implements
 				indexedRange,
 				baseDefinitions);
 		return new QueryRanges(
-				TieredSFCIndexStrategy.getQueryRanges(
+				BinnedSFCUtils.getQueryRanges(
 						binnedQueries,
 						sfc,
 						maxRangeDecomposition,
@@ -90,7 +101,7 @@ public class SingleTierSubStrategy implements
 		}
 		final byte[] rowId = insertionIds.get(
 				0).getBytes();
-		return TieredSFCIndexStrategy.getRangeForId(
+		return BinnedSFCUtils.getRangeForId(
 				rowId,
 				baseDefinitions,
 				sfc);
@@ -107,7 +118,7 @@ public class SingleTierSubStrategy implements
 				new byte[] {
 					tier
 				},
-				TieredSFCIndexStrategy.getCoordinatesForId(
+				BinnedSFCUtils.getCoordinatesForId(
 						rowId,
 						baseDefinitions,
 						sfc));
@@ -274,7 +285,7 @@ public class SingleTierSubStrategy implements
 				dataRange,
 				baseDefinitions);
 		return new MultiDimensionalCoordinateRanges[] {
-			TieredSFCIndexStrategy.getCoordinateRanges(
+			BinnedSFCUtils.getCoordinateRanges(
 					binRangesPerDimension,
 					sfc,
 					baseDefinitions.length,

@@ -12,3 +12,4 @@ dependency-reduced-pom.xml
 bin
 docker-root
 generated
+.metadata

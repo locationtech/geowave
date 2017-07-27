@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.index.sfc.hilbert.tiered;
 
 import static org.junit.Assert.assertEquals;
@@ -253,9 +263,19 @@ public class TieredSFCIndexStrategyTest
 	@Test
 	public void testOneEstimatedDuplicateInsertion()
 			throws Exception {
-		final NumericIndexStrategy strategy = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex()
-				.getIndexStrategy();
+
+		final NumericIndexStrategy strategy = TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
+				new NumericDimensionDefinition[] {
+					new LongitudeDefinition(),
+					new LatitudeDefinition(
+							true)
+				},
+				new int[] {
+					31,
+					31
+				},
+				SFCType.HILBERT);
+
 		for (final int element : DEFINED_BITS_OF_PRECISION) {
 			final NumericData[] dataPerDimension = new NumericData[2];
 			final double precision = 360 / Math.pow(

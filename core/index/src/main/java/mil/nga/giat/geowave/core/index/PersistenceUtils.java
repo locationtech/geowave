@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.index;
 
 import java.lang.reflect.Constructor;
@@ -6,7 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A set of convenience methods for serializing and deserializing persistable
@@ -15,7 +26,7 @@ import org.apache.log4j.Logger;
  */
 public class PersistenceUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(PersistenceUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(PersistenceUtils.class);
 
 	public static byte[] toBinary(
 			final Collection<? extends Persistable> persistables ) {

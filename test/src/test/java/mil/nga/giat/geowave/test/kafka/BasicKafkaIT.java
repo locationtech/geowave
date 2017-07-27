@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.kafka;
 
 import static org.junit.Assert.assertEquals;
@@ -8,7 +18,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,6 +30,7 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
+import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -47,7 +59,7 @@ import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 public class BasicKafkaIT extends
 		AbstractGeoWaveIT
 {
-	private final static Logger LOGGER = Logger.getLogger(BasicKafkaIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicKafkaIT.class);
 	private static final Map<ByteArrayId, Integer> EXPECTED_COUNT_PER_ADAPTER_ID = new HashMap<ByteArrayId, Integer>();
 
 	static {
@@ -81,7 +93,7 @@ public class BasicKafkaIT extends
 	@BeforeClass
 	public static void extractTestFiles()
 			throws URISyntaxException {
-		TestUtils.unZipFile(
+		ZipUtils.unZipFile(
 				new File(
 						BasicKafkaIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
@@ -130,13 +142,13 @@ public class BasicKafkaIT extends
 						.getDataStatistics(
 								adapter.getAdapterId(),
 								FeatureBoundingBoxStatistics.composeId(adapter
-										.getType()
+										.getFeatureType()
 										.getGeometryDescriptor()
 										.getLocalName()));
 				final CountDataStatistics<?> countStat = (CountDataStatistics<SimpleFeature>) statsStore
 						.getDataStatistics(
 								adapter.getAdapterId(),
-								CountDataStatistics.STATS_ID);
+								CountDataStatistics.STATS_TYPE);
 				// then query it
 				final GeometryFactory factory = new GeometryFactory();
 				final Envelope env = new Envelope(

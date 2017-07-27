@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.hdfs;
 
 import java.io.IOException;
@@ -12,7 +22,8 @@ import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class to hold intermediate stage data that must be used throughout the life
@@ -20,7 +31,7 @@ import org.apache.log4j.Logger;
  */
 public class StageRunData
 {
-	private final static Logger LOGGER = Logger.getLogger(StageRunData.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StageRunData.class);
 	private final Map<String, DataFileWriter> cachedWriters = new HashMap<String, DataFileWriter>();
 	private final Path hdfsBaseDirectory;
 	private final FileSystem fs;
@@ -65,7 +76,7 @@ public class StageRunData
 
 			}
 			catch (final IOException e) {
-				LOGGER.fatal(
+				LOGGER.error(
 						"Unable to create output stream",
 						e);
 				// cache a null value so we don't continually try to recreate

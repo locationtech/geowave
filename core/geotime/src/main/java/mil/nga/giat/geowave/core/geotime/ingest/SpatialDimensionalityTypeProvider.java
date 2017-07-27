@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.ingest;
 
 import com.beust.jcommander.Parameter;
@@ -12,7 +22,7 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
-import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
+import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
@@ -84,7 +94,7 @@ public class SpatialDimensionalityTypeProvider implements
 	private static PrimaryIndex internalCreatePrimaryIndex(
 			final SpatialOptions options ) {
 		return new CustomIdIndex(
-				TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
+				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
 						SPATIAL_DIMENSIONS,
 						new int[] {
 							LONGITUDE_BITS,

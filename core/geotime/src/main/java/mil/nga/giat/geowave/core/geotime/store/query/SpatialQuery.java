@@ -1,9 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
@@ -19,6 +30,7 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 
 /**
  * The Spatial Query class represents a query in two dimensions. The constraint
@@ -28,9 +40,10 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery;
 public class SpatialQuery extends
 		BasicQuery
 {
-	private final static Logger LOGGER = Logger.getLogger(SpatialQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialQuery.class);
 	private Geometry queryGeometry;
-	CompareOperation compareOp = CompareOperation.OVERLAPS;
+	CompareOperation compareOp = CompareOperation.INTERSECTS;
+	BasicQueryCompareOperation nonSpatialCompareOp = BasicQueryCompareOperation.INTERSECTS;
 
 	/**
 	 * Convenience constructor used to construct a SpatialQuery object that has
@@ -81,22 +94,52 @@ public class SpatialQuery extends
 	}
 
 	/**
-	 * Convenience constructor used to construct a SpatialQuery object that has
-	 * an X and Y dimension (axis).
+	 * Convenience constructor can be used when you already have linear
+	 * constraints for the query. The queryGeometry and compareOp is used for
+	 * fine grained post filtering.
 	 * 
+	 * @param constraints
+	 *            linear constraints
 	 * @param queryGeometry
 	 *            spatial geometry of the query
-	 * @param overlaps
-	 *            if false, the only fully contained geometries are requested
+	 * @param compareOp
+	 *            predicate associated query geometry
 	 */
 	public SpatialQuery(
 			final Constraints constraints,
 			final Geometry queryGeometry,
 			final CompareOperation compareOp ) {
+		this(
+				constraints,
+				queryGeometry,
+				compareOp,
+				BasicQueryCompareOperation.INTERSECTS);
+	}
+
+	/**
+	 * Convenience constructor can be used when you already have linear
+	 * constraints for the query. The queryGeometry and compareOp is used for
+	 * fine grained post filtering.
+	 * 
+	 * @param constraints
+	 *            linear constraints
+	 * @param queryGeometry
+	 *            spatial geometry of the query
+	 * @param compareOp
+	 *            predicate associated query geometry
+	 * @param nonSpatialCompareOp
+	 *            predicate associated non-spatial fields (i.e Time)
+	 */
+	public SpatialQuery(
+			final Constraints constraints,
+			final Geometry queryGeometry,
+			final CompareOperation compareOp,
+			final BasicQueryCompareOperation nonSpatialCompareOp ) {
 		super(
 				constraints);
 		this.queryGeometry = queryGeometry;
 		this.compareOp = compareOp;
+		this.nonSpatialCompareOp = nonSpatialCompareOp;
 	}
 
 	protected SpatialQuery() {
@@ -121,15 +164,17 @@ public class SpatialQuery extends
 				orderedConstrainedDimensionFields,
 				unconstrainedDimensionDefinitions,
 				queryGeometry,
-				compareOp);
+				compareOp,
+				nonSpatialCompareOp);
 	}
 
 	@Override
 	public byte[] toBinary() {
 		final byte[] superBinary = super.toBinary();
 		final byte[] geometryBinary = new WKBWriter().write(queryGeometry);
-		final ByteBuffer buf = ByteBuffer.allocate(superBinary.length + geometryBinary.length + 8);
+		final ByteBuffer buf = ByteBuffer.allocate(superBinary.length + geometryBinary.length + 3 * 4);
 		buf.putInt(compareOp.ordinal());
+		buf.putInt(nonSpatialCompareOp.ordinal());
 		buf.putInt(superBinary.length);
 		buf.put(superBinary);
 		buf.put(geometryBinary);
@@ -142,11 +187,12 @@ public class SpatialQuery extends
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		compareOp = CompareOperation.values()[buf.getInt()];
+		nonSpatialCompareOp = BasicQueryCompareOperation.values()[buf.getInt()];
 		final int superLength = buf.getInt();
 		final byte[] superBinary = new byte[superLength];
 		buf.get(superBinary);
 		super.fromBinary(superBinary);
-		final byte[] geometryBinary = new byte[bytes.length - superLength - 8];
+		final byte[] geometryBinary = new byte[bytes.length - superLength - 3 * 4];
 		buf.get(geometryBinary);
 		try {
 			queryGeometry = new WKBReader().read(geometryBinary);

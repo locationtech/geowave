@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index;
 
 import java.nio.ByteBuffer;
@@ -13,9 +23,19 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 
 /**
- * This class fully describes everything necessary to index data within GeoWave.
- * The key components are the indexing strategy and the common index model.
+ * This class fully describes everything necessary to index data within GeoWave
+ * using secondary indexing. <br>
+ * The key components are the indexing strategy and the common index model. <br>
+ * <br>
+ * Attributes for SecondaryIndex include:<br>
+ * indexStrategy = array of fieldIndexStrategy (numeric, temporal or text)<br>
+ * fieldId<br>
+ * associatedStatistics <br>
+ * secondaryIndexType - (join, full, partial)<br>
+ * secondaryIndexId - <br>
+ * partialFieldIds - list of fields that are part of the ...<br>
  */
+
 public class SecondaryIndex<T> implements
 		Index<FilterableConstraints, List<PersistentValue<?>>>
 {
@@ -92,6 +112,11 @@ public class SecondaryIndex<T> implements
 	public int hashCode() {
 		return getId().hashCode();
 	}
+
+	/**
+	 * Compare this object to the one passed as parameter to see if same object,
+	 * same class and that id is the same.
+	 */
 
 	@Override
 	public boolean equals(

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index.temporal;
 
 import java.util.Collections;
@@ -9,6 +19,12 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
+
+/**
+ * A class based on FilterableConstraints that uses temporal values and includes
+ * a start date and end date
+ * 
+ */
 
 public class TemporalQueryConstraint implements
 		FilterableConstraints
@@ -79,28 +95,62 @@ public class TemporalQueryConstraint implements
 								TemporalIndexStrategy.toIndexByte(end))));
 	}
 
+	/**
+	 * 
+	 * Returns an FilterableConstraints object that is the intersection of the
+	 * start and end times of this object and object passed in.
+	 * <p>
+	 * This method returns an object with the latest start and earliest end of
+	 * the two objects
+	 *
+	 * @param otherConstraint
+	 *            object whose constraints are 'intersected' with existing
+	 *            constraints
+	 * @return new {@link FilterableConstraints}
+	 */
+
 	@Override
 	public FilterableConstraints intersect(
 			final FilterableConstraints constraints ) {
 		if (constraints instanceof TemporalQueryConstraint) {
 			final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
 			if (fieldId.equals(filterConstraints.fieldId)) {
+				Date newStart = start.compareTo(filterConstraints.start) < 0 ? filterConstraints.start : start;
+				Date newEnd = end.compareTo(filterConstraints.end) > 0 ? filterConstraints.end : end;
 				final boolean lowEquals = start.equals(filterConstraints.start);
 				final boolean upperEquals = end.equals(filterConstraints.end);
 				final boolean replaceMin = start.compareTo(filterConstraints.start) < 0;
 				final boolean replaceMax = end.compareTo(filterConstraints.end) > 0;
+
+				boolean newInclusiveLow = lowEquals ? filterConstraints.inclusiveLow & inclusiveLow
+						: (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow);
+				boolean newInclusiveHigh = upperEquals ? filterConstraints.inclusiveHigh & inclusiveHigh
+						: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
+
 				return new TemporalQueryConstraint(
 						fieldId,
-						start.compareTo(filterConstraints.start) < 0 ? filterConstraints.start : start,
-						end.compareTo(filterConstraints.end) > 0 ? filterConstraints.end : end,
-						lowEquals ? filterConstraints.inclusiveLow & inclusiveLow
-								: (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow),
-						upperEquals ? filterConstraints.inclusiveHigh & inclusiveHigh
-								: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh));
+						newStart,
+						newEnd,
+						newInclusiveLow,
+						newInclusiveHigh);
 			}
 		}
 		return this;
 	}
+
+	/**
+	 * 
+	 * Returns an FilterableConstraints object that is the union of the start
+	 * and end times of this object and object passed in.
+	 * <p>
+	 * This method returns an object with the earliest start and latest end time
+	 * of the two objects
+	 *
+	 * @param otherConstraint
+	 *            object whose constraints are 'unioned' with existing
+	 *            constraints
+	 * @return new {@link FilterableConstraints}
+	 */
 
 	@Override
 	public FilterableConstraints union(
@@ -108,18 +158,24 @@ public class TemporalQueryConstraint implements
 		if (constraints instanceof TemporalQueryConstraint) {
 			final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
 			if (fieldId.equals(filterConstraints.fieldId)) {
+				Date newStart = start.compareTo(filterConstraints.start) > 0 ? filterConstraints.start : start;
+				Date newEnd = end.compareTo(filterConstraints.end) < 0 ? filterConstraints.end : end;
 				final boolean lowEquals = start.equals(filterConstraints.start);
 				final boolean upperEquals = end.equals(filterConstraints.end);
 				final boolean replaceMin = start.compareTo(filterConstraints.start) > 0;
 				final boolean replaceMax = end.compareTo(filterConstraints.end) < 0;
+
+				boolean newInclusiveLow = lowEquals ? filterConstraints.inclusiveLow | inclusiveLow
+						: (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow);
+				boolean newInclusiveHigh = upperEquals ? filterConstraints.inclusiveHigh | inclusiveHigh
+						: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
+
 				return new TemporalQueryConstraint(
 						fieldId,
-						start.compareTo(filterConstraints.start) > 0 ? filterConstraints.start : start,
-						end.compareTo(filterConstraints.end) < 0 ? filterConstraints.end : end,
-						lowEquals ? filterConstraints.inclusiveLow | inclusiveLow
-								: (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow),
-						upperEquals ? filterConstraints.inclusiveHigh | inclusiveHigh
-								: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh));
+						newStart,
+						newEnd,
+						newInclusiveLow,
+						newInclusiveHigh);
 			}
 		}
 		return this;

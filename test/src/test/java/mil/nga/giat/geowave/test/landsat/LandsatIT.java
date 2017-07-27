@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.test.landsat;
 
 import java.awt.Rectangle;
@@ -34,7 +44,8 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.operation.projection.MapProjection;
@@ -45,6 +56,7 @@ import org.junit.runner.RunWith;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import it.geosolutions.jaiext.JAIExt;
 
 @RunWith(GeoWaveITRunner.class)
 public class LandsatIT extends
@@ -82,6 +94,7 @@ public class LandsatIT extends
 				final OperationParams params )
 				throws Exception {
 			store = dataStoreOptions.createDataStore();
+			dataStorePluginOptions = dataStoreOptions;
 			indices = new PrimaryIndex[] {
 				new SpatialIndexBuilder().createIndex()
 			};
@@ -110,7 +123,7 @@ public class LandsatIT extends
 	private static final double NORTH = 34.25;
 	private static final double SOUTH = 33.5;
 
-	private final static Logger LOGGER = Logger.getLogger(LandsatIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(LandsatIT.class);
 	private static long startMillis;
 
 	@BeforeClass
@@ -142,6 +155,7 @@ public class LandsatIT extends
 	@Test
 	public void testMosaic()
 			throws Exception {
+		JAIExt.initJAIEXT();
 		MapProjection.SKIP_SANITY_CHECKS = true;
 		TestUtils.deleteAll(dataStoreOptions);
 		// just use the QA band as QA is the smallest, get the best cloud cover,

@@ -1,12 +1,24 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.examples.ingest;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -29,7 +41,7 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 public class SimpleIngest
 {
 
-	static Logger log = Logger.getLogger(SimpleIngest.class);
+	static Logger log = LoggerFactory.getLogger(SimpleIngest.class);
 	public static final String FEATURE_NAME = "GridPoint";
 
 	public static List<SimpleFeature> getGriddedFeatures(

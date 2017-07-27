@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.index.secondary;
 
 import java.io.Closeable;
@@ -15,7 +25,8 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -42,7 +53,7 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 public class AccumuloSecondaryIndexDataStore extends
 		BaseSecondaryIndexDataStore
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSecondaryIndexDataStore.class);
 	private final AccumuloOperations accumuloOperations;
 	private final AccumuloOptions accumuloOptions;
 	private DataStore dataStore = null;
@@ -200,6 +211,7 @@ public class AccumuloSecondaryIndexDataStore extends
 		final Scanner scanner = getScanner(
 				StringUtils.stringFromBinary(secondaryIndex.getId().getBytes()),
 				authorizations);
+
 		if (scanner != null) {
 			scanner.fetchColumnFamily(new Text(
 					SecondaryIndexUtils.constructColumnFamily(
@@ -209,6 +221,7 @@ public class AccumuloSecondaryIndexDataStore extends
 			for (final Range range : ranges) {
 				scanner.setRange(range);
 			}
+
 			if (!secondaryIndex.getSecondaryIndexType().equals(
 					SecondaryIndexType.JOIN)) {
 				final IteratorSetting iteratorSettings = new IteratorSetting(
@@ -262,6 +275,7 @@ public class AccumuloSecondaryIndexDataStore extends
 				}
 			}
 		}
+
 		return new CloseableIterator.Empty<T>();
 	}
 

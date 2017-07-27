@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.analytic.clustering;
 
 import java.io.IOException;
@@ -657,11 +667,11 @@ public class CentroidManagerGeoWave<T> implements
 				final FeatureDataAdapter adapter,
 				final Class<? extends Geometry> shapeClass ) {
 			this.adapter = createFeatureAdapter(
-					adapter.getType(),
+					adapter.getFeatureType(),
 					shapeClass);
 			int p = 0;
 			this.shapeClass = shapeClass;
-			final List<AttributeDescriptor> descriptors = adapter.getType().getAttributeDescriptors();
+			final List<AttributeDescriptor> descriptors = adapter.getFeatureType().getAttributeDescriptors();
 			defaults = new Object[descriptors.size()];
 			for (final AttributeDescriptor descriptor : descriptors) {
 				defaults[p++] = descriptor.getDefaultValue();
@@ -670,14 +680,14 @@ public class CentroidManagerGeoWave<T> implements
 
 		@Override
 		public SimpleFeatureType getFeatureType() {
-			return adapter.getType();
+			return adapter.getFeatureType();
 		}
 
 		@Override
 		public SimpleFeature toSimpleFeature(
 				final AnalyticItemWrapper<T> item ) {
 			final SimpleFeature newFeature = SimpleFeatureBuilder.build(
-					adapter.getType(),
+					adapter.getFeatureType(),
 					defaults,
 					item.getID());
 			int i = 0;
@@ -719,7 +729,7 @@ public class CentroidManagerGeoWave<T> implements
 					BasicFeatureTypes.DEFAULT_NAMESPACE,
 					ClusteringUtils.CLUSTERING_CRS,
 					ClusterFeatureAttribute.values(),
-					shapeClass).getType();
+					shapeClass).getFeatureType();
 			this.shapeClass = shapeClass;
 			final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
 			defaults = new Object[descriptors.size()];

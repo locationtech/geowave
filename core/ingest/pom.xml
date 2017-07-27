@@ -5,7 +5,7 @@
 		<artifactId>geowave-core-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4-SNAPSHOT</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-ingest</artifactId>
 	<name>GeoWave Ingest Framework</name>
@@ -70,10 +70,6 @@
 				<exclusion>
 					<groupId>org.apache.zookeeper</groupId>
 					<artifactId>zookeeper</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>com.sun.jdmk</groupId>

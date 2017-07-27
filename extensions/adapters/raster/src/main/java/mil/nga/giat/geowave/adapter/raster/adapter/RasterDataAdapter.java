@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.adapter;
 
 import java.awt.Color;
@@ -41,7 +51,8 @@ import javax.media.jai.remote.SerializerFactory;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math.util.MathUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -55,6 +66,7 @@ import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.GeometryClipper;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.operation.projection.MapProjection;
 import org.geotools.referencing.operation.transform.AffineTransform2D;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.resources.coverage.CoverageUtilities;
@@ -85,6 +97,7 @@ import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.warp.WarpRIF;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramConfig;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
@@ -139,11 +152,13 @@ public class RasterDataAdapter implements
 {
 	static {
 		SourceThresholdFixMosaicDescriptor.register(false);
+		WarpRIF.register(false);
+		MapProjection.SKIP_SANITY_CHECKS = true;
 	}
 
 	public final static String TILE_METADATA_PROPERTY_KEY = "TILE_METADATA";
 
-	private final static Logger LOGGER = Logger.getLogger(RasterDataAdapter.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(RasterDataAdapter.class);
 	private final static ByteArrayId DATA_FIELD_ID = new ByteArrayId(
 			"image");
 	public final static int DEFAULT_TILE_SIZE = 256;
@@ -170,7 +185,7 @@ public class RasterDataAdapter implements
 	private String[] namesPerBand;
 	private double[] backgroundValuesPerBand;
 	private boolean buildPyramid;
-	private ByteArrayId[] supportedStatsIds;
+	private ByteArrayId[] supportedStatsTypes;
 	private EntryVisibilityHandler<GridCoverage> visibilityHandler;
 	private RootMergeStrategy<?> mergeStrategy;
 	private boolean equalizeHistogram;
@@ -449,12 +464,12 @@ public class RasterDataAdapter implements
 			supportedStatsLength++;
 		}
 
-		supportedStatsIds = new ByteArrayId[supportedStatsLength];
-		supportedStatsIds[0] = OverviewStatistics.STATS_ID;
-		supportedStatsIds[1] = BoundingBoxDataStatistics.STATS_ID;
+		supportedStatsTypes = new ByteArrayId[supportedStatsLength];
+		supportedStatsTypes[0] = OverviewStatistics.STATS_TYPE;
+		supportedStatsTypes[1] = BoundingBoxDataStatistics.STATS_TYPE;
 
 		if (histogramConfig != null) {
-			supportedStatsIds[2] = HistogramStatistics.STATS_ID;
+			supportedStatsTypes[2] = HistogramStatistics.STATS_TYPE;
 		}
 		visibilityHandler = new DefaultFieldStatisticVisibility<GridCoverage>();
 	}
@@ -500,14 +515,9 @@ public class RasterDataAdapter implements
 			final double[] tileRangePerDimension = new double[bounds.getDimensionCount()];
 			final double[] maxValuesPerDimension = bounds.getMaxValuesPerDimension();
 			final double[] minValuesPerDimension = bounds.getMinValuesPerDimension();
-			double maxSpan = -Double.MAX_VALUE;
 			for (int d = 0; d < tileRangePerDimension.length; d++) {
 				tileRangePerDimension[d] = ((maxValuesPerDimension[d] - minValuesPerDimension[d]) * tileSize)
 						/ gridEnvelope.getSpan(d);
-
-				maxSpan = Math.max(
-						gridEnvelope.getSpan(d),
-						maxSpan);
 			}
 			final TreeMap<Double, SubStrategy> substrategyMap = new TreeMap<Double, SubStrategy>();
 			for (final SubStrategy pyramidLevel : indexStrategy.getSubStrategies()) {
@@ -546,13 +556,7 @@ public class RasterDataAdapter implements
 				NavigableMap<Double, SubStrategy> map = substrategyMap.tailMap(
 						fullRes,
 						false);
-				final double toKey = maxSpan / tileSize;
-				if (map.firstKey() <= toKey) {
-					map = map.headMap(
-							toKey,
-							true);
-					pyramidLevels.addAll(map.values());
-				}
+				pyramidLevels.addAll(map.values());
 			}
 			if (pyramidLevels.isEmpty()) {
 				// this case shouldn't occur theoretically, but just in case,
@@ -1655,29 +1659,29 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public ByteArrayId[] getSupportedStatisticsIds() {
-		return supportedStatsIds;
+	public ByteArrayId[] getSupportedStatisticsTypes() {
+		return supportedStatsTypes;
 	}
 
 	@Override
 	public DataStatistics<GridCoverage> createDataStatistics(
-			final ByteArrayId statisticsId ) {
-		if (OverviewStatistics.STATS_ID.equals(statisticsId)) {
+			final ByteArrayId statisticsType ) {
+		if (OverviewStatistics.STATS_TYPE.equals(statisticsType)) {
 			return new OverviewStatistics(
 					new ByteArrayId(
 							coverageName));
 		}
-		else if (BoundingBoxDataStatistics.STATS_ID.equals(statisticsId)) {
+		else if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsType)) {
 			return new RasterBoundingBoxStatistics(
 					new ByteArrayId(
 							coverageName));
 		}
-		else if (RasterFootprintStatistics.STATS_ID.equals(statisticsId)) {
+		else if (RasterFootprintStatistics.STATS_TYPE.equals(statisticsType)) {
 			return new RasterFootprintStatistics(
 					new ByteArrayId(
 							coverageName));
 		}
-		else if (HistogramStatistics.STATS_ID.equals(statisticsId) && (histogramConfig != null)) {
+		else if (HistogramStatistics.STATS_TYPE.equals(statisticsType) && (histogramConfig != null)) {
 			return new HistogramStatistics(
 					new ByteArrayId(
 							coverageName),
@@ -1686,10 +1690,10 @@ public class RasterDataAdapter implements
 		// HP Fortify "Log Forging" false positive
 		// What Fortify considers "user input" comes only
 		// from users with OS-level access anyway
-		LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + " using count statistic");
+		LOGGER.warn("Unrecognized statistics type " + statisticsType.getString() + " using count statistic");
 		return new CountDataStatistics<GridCoverage>(
 				getAdapterId(),
-				statisticsId);
+				statisticsType);
 	}
 
 	public double[][] getNoDataValuesPerBand() {

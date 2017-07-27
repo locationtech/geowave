@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.awt.Rectangle;
@@ -20,7 +30,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -78,7 +89,7 @@ import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 public class GeoWaveFeatureReader implements
 		FeatureReader<SimpleFeatureType, SimpleFeature>
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureReader.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveFeatureReader.class);
 
 	private final GeoWaveDataStoreComponents components;
 	private final GeoWaveFeatureCollection featureCollection;
@@ -116,7 +127,7 @@ public class GeoWaveFeatureReader implements
 
 	@Override
 	public SimpleFeatureType getFeatureType() {
-		return components.getAdapter().getType();
+		return components.getAdapter().getFeatureType();
 	}
 
 	@Override
@@ -176,7 +187,7 @@ public class GeoWaveFeatureReader implements
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBounds ) {
 		final Constraints timeConstraints = QueryIndexHelper.composeTimeBoundedConstraints(
-				components.getAdapter().getType(),
+				components.getAdapter().getFeatureType(),
 				components.getAdapter().getTimeDescriptors(),
 				statsMap,
 				timeBounds);
@@ -702,7 +713,7 @@ public class GeoWaveFeatureReader implements
 	public Object convertToType(
 			final String attrName,
 			final Object value ) {
-		final SimpleFeatureType featureType = components.getAdapter().getType();
+		final SimpleFeatureType featureType = components.getAdapter().getFeatureType();
 		final AttributeDescriptor descriptor = featureType.getDescriptor(attrName);
 		if (descriptor == null) {
 			return value;

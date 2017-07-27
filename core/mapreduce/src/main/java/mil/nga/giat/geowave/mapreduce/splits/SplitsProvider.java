@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.mapreduce.splits;
 
 import java.io.IOException;
@@ -12,7 +22,8 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -31,7 +42,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 public abstract class SplitsProvider
 {
-	private final static Logger LOGGER = Logger.getLogger(SplitsProvider.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SplitsProvider.class);
 
 	private static final BigInteger TWO = BigInteger.valueOf(2);
 

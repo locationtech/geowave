@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.data.visibility;
 
 import java.nio.ByteBuffer;
@@ -21,13 +31,8 @@ public class FieldVisibilityCount<T> extends
 		AbstractDataStatistics<T> implements
 		DeleteCallback<T, GeoWaveRow>
 {
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FIELD_VISIBILITY_COUNT");
-	private static final ByteArrayId SEPARATOR = new ByteArrayId(
-			"_");
-	private static final byte[] STATS_ID_AND_SEPARATOR = ArrayUtils.addAll(
-			STATS_ID.getBytes(),
-			SEPARATOR.getBytes());
 	private final Map<ByteArrayId, Long> countsPerVisibility;
 
 	protected FieldVisibilityCount() {
@@ -37,29 +42,28 @@ public class FieldVisibilityCount<T> extends
 
 	private FieldVisibilityCount(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId statsId,
+			final ByteArrayId statisticsId,
 			final Map<ByteArrayId, Long> countsPerVisibility ) {
 		super(
 				dataAdapterId,
-				statsId);
+				composeId(statisticsId));
 		this.countsPerVisibility = countsPerVisibility;
 	}
 
 	public FieldVisibilityCount(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId indexId ) {
+			final ByteArrayId statisticsId ) {
 		super(
 				dataAdapterId,
-				composeId(indexId));
+				composeId(statisticsId));
 		countsPerVisibility = new HashMap<ByteArrayId, Long>();
 	}
 
 	public static ByteArrayId composeId(
-			final ByteArrayId indexId ) {
-		return new ByteArrayId(
-				ArrayUtils.addAll(
-						STATS_ID_AND_SEPARATOR,
-						indexId.getBytes()));
+			ByteArrayId statisticsId ) {
+		return composeId(
+				STATS_TYPE.getString(),
+				statisticsId.getString());
 	}
 
 	@Override

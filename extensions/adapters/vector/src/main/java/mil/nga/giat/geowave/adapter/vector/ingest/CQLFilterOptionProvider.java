@@ -1,15 +1,26 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterVisitor;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
+import mil.nga.giat.geowave.core.cli.converters.GeoWaveBaseConverter;
 import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
@@ -20,7 +31,7 @@ public class CQLFilterOptionProvider implements
 		Filter,
 		Persistable
 {
-	private final static Logger LOGGER = Logger.getLogger(CQLFilterOptionProvider.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CQLFilterOptionProvider.class);
 
 	@Parameter(names = "--cql", description = "A CQL filter, only data matching this filter will be ingested", converter = ConvertCQLStrToFilterConverter.class)
 	private FilterParameter convertedFilter = new FilterParameter(
@@ -88,9 +99,20 @@ public class CQLFilterOptionProvider implements
 	 * This class will ensure that as the CQLFilterString is read in and
 	 * converted to a filter.
 	 */
-	public static class ConvertCQLStrToFilterConverter implements
-			IStringConverter<FilterParameter>
+	public static class ConvertCQLStrToFilterConverter extends
+			GeoWaveBaseConverter<FilterParameter>
 	{
+		public ConvertCQLStrToFilterConverter() {
+			super(
+					"");
+		}
+
+		public ConvertCQLStrToFilterConverter(
+				String optionName ) {
+			super(
+					optionName);
+		}
+
 		@Override
 		public FilterParameter convert(
 				String value ) {
@@ -154,5 +176,4 @@ public class CQLFilterOptionProvider implements
 			return cqlFilterString;
 		}
 	}
-
 }

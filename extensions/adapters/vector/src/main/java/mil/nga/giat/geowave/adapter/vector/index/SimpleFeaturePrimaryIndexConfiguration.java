@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.index;
 
 import java.util.Arrays;
@@ -26,6 +36,13 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 		this.configureFromType(type);
 	}
 
+	/**
+	 * Get all the index names associated with the SimpleFeatureType referenced.
+	 * 
+	 * @param type
+	 *            - SFT object which contains Index Names
+	 * @return List of index names
+	 */
 	public static final List<String> getIndexNames(
 			final SimpleFeatureType type ) {
 		Object obj = type.getUserData().get(
@@ -37,13 +54,25 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 		return Collections.emptyList();
 	}
 
+	/**
+	 * {@inheritDoc} This method updates the passed in type by adding a CSV
+	 * string of all the index names for this Simple Feature Primary Index
+	 * Configuration. It is stored in user data as '{@value #INDEX_NAME}'
+	 * 
+	 * @param SFT
+	 *            to be updated.
+	 */
 	@Override
 	public void updateType(
 			final SimpleFeatureType type ) {
 		final StringBuffer names = new StringBuffer();
-		if (indexNames == null) return;
+		if (indexNames == null) {
+			return;
+		}
 		for (String name : indexNames) {
-			if (names.length() > 0) names.append(",");
+			if (names.length() > 0) {
+				names.append(",");
+			}
 			names.append(name);
 
 		}

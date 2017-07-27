@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.format.landsat8;
 
 import java.io.File;
@@ -45,9 +55,10 @@ import it.geosolutions.jaiext.range.RangeFactory;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.plugin.GDALGeoTiffReader;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
+import mil.nga.giat.geowave.adapter.raster.plugin.gdal.GDALGeoTiffReader;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
+import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -76,6 +87,7 @@ public class RasterIngestRunner extends
 
 	protected String[] bandsIngested;
 	protected DataStore store = null;
+	protected DataStorePluginOptions dataStorePluginOptions = null;
 	protected PrimaryIndex[] indices = null;
 
 	public RasterIngestRunner(
@@ -111,8 +123,8 @@ public class RasterIngestRunner extends
 			throw new ParameterException(
 					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
-		final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
-		store = storeOptions.createDataStore();
+		dataStorePluginOptions = inputStoreLoader.getDataStorePlugin();
+		store = dataStorePluginOptions.createDataStore();
 
 		// Load the Indices
 		final IndexLoader indexLoader = new IndexLoader(
@@ -212,9 +224,12 @@ public class RasterIngestRunner extends
 			boolean cropped = false;
 			final Filter filter = landsatOptions.getCqlFilter();
 			if (filter != null) {
-				Geometry geometry = ExtractGeometryFilterVisitor.getConstraints(
-						filter,
-						GeoWaveGTRasterFormat.DEFAULT_CRS);
+				final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
+						.getConstraints(
+								filter,
+								GeoWaveGTRasterFormat.DEFAULT_CRS,
+								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
+				Geometry geometry = geometryAndCompareOp.getGeometry();
 				if (geometry != null) {
 					// go ahead and intersect this with the scene geometry
 					final Geometry sceneShape = (Geometry) band.getAttribute(SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
@@ -373,6 +388,22 @@ public class RasterIngestRunner extends
 			final AnalysisInfo analysisInfo ) {
 		processPreviousScene();
 		super.lastSceneComplete(analysisInfo);
+		if (!ingestOptions.isSkipMerge()) {
+			System.out.println("Merging overlapping tiles...");
+			for (final PrimaryIndex index : indices) {
+				if (dataStorePluginOptions.createDataStoreOperations().mergeData(
+						index,
+						dataStorePluginOptions.createAdapterStore(),
+						dataStorePluginOptions.createAdapterIndexMappingStore())) {
+					System.out.println("Successfully merged overlapping tiles within index '"
+							+ index.getId().getString() + "'");
+				}
+				else {
+					System.err.println("Unable to merge overlapping landsat8 tiles in index '"
+							+ index.getId().getString() + "'");
+				}
+			}
+		}
 	}
 
 	@Override
@@ -524,7 +555,14 @@ public class RasterIngestRunner extends
 						return;
 					}
 				}
-				writer.write(mergedCoverage);
+				try {
+					writer.write(mergedCoverage);
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to write merged coverage",
+							e);
+				}
 				lastSceneBands.clear();
 				if (!ingestOptions.isRetainImages()) {
 					for (final BandData b : sceneData.values()) {

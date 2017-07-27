@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.query;
 
 import java.nio.ByteBuffer;
@@ -23,6 +33,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter;
+import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -33,7 +44,8 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.math.DoubleMath;
 
@@ -50,7 +62,7 @@ public class BasicQuery implements
 		DistributableQuery
 {
 	private final static double DOUBLE_TOLERANCE = 1E-12d;
-	private final static Logger LOGGER = Logger.getLogger(BasicQuery.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BasicQuery.class);
 	protected boolean exact = true;
 
 	/**
@@ -596,12 +608,20 @@ public class BasicQuery implements
 	private Constraints constraints;
 	// field Id to constraint
 	private Map<ByteArrayId, FilterableConstraints> additionalConstraints = Collections.emptyMap();
+	BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.INTERSECTS;
 
 	protected BasicQuery() {}
 
 	public BasicQuery(
 			final Constraints constraints ) {
 		this.constraints = constraints;
+	}
+
+	public BasicQuery(
+			final Constraints constraints,
+			final BasicQueryCompareOperation compareOp ) {
+		this.constraints = constraints;
+		this.compareOp = compareOp;
 	}
 
 	public BasicQuery(
@@ -639,7 +659,8 @@ public class BasicQuery implements
 			final NumericDimensionField<?>[] unconstrainedDimensionFields ) {
 		return new BasicQueryFilter(
 				constraints,
-				orderedConstrainedDimensionFields);
+				orderedConstrainedDimensionFields,
+				compareOp);
 	}
 
 	@Override

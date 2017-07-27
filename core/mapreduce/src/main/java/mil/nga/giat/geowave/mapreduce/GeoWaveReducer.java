@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.mapreduce;
 
 import java.io.IOException;
@@ -9,7 +19,8 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.ReduceContext;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
@@ -23,7 +34,7 @@ import com.google.common.collect.Iterables;
 public abstract class GeoWaveReducer extends
 		Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable>
 {
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveReducer.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveReducer.class);
 	protected HadoopWritableSerializationTool serializationTool;
 
 	@Override

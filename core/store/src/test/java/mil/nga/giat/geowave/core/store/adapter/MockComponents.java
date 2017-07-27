@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter;
 
 import java.util.ArrayList;
@@ -8,7 +18,6 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.CoordinateRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.InsertionIds;
@@ -206,10 +215,10 @@ public class MockComponents
 		}
 
 		@Override
-		public ByteArrayId[] getSupportedStatisticsIds() {
+		public ByteArrayId[] getSupportedStatisticsTypes() {
 			// TODO Auto-generated method stub
 			return new ByteArrayId[] {
-				CountDataStatistics.STATS_ID,
+				CountDataStatistics.STATS_TYPE,
 				new IntegerRangeDataStatistics(
 						getAdapterId(),
 						getAdapterId()).getStatisticsId()
@@ -219,7 +228,7 @@ public class MockComponents
 		@Override
 		public DataStatistics<Integer> createDataStatistics(
 				final ByteArrayId statisticsId ) {
-			if (statisticsId == CountDataStatistics.STATS_ID) {
+			if (statisticsId == CountDataStatistics.STATS_TYPE) {
 				return new CountDataStatistics<Integer>(
 						getAdapterId());
 			}
@@ -738,7 +747,6 @@ public class MockComponents
 			// TODO Auto-generated method stub
 			return 0;
 		}
-
 	}
 
 	// *************************************************************************

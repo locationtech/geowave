@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
@@ -14,6 +24,9 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.MinimalBinDi
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 /**
  * Dynamic histogram provide very high accuracy for CDF and quantiles over the a
@@ -23,8 +36,8 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 public class RowRangeHistogramStatistics<T> extends
 		AbstractDataStatistics<T>
 {
-	public static final ByteArrayId STATS_ID = new ByteArrayId(
-			"RANGE_HISTOGRAM_");
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"ROW_RANGE_HISTOGRAM");
 	private static final NumericHistogramFactory HistFactory = new MinimalBinDistanceHistogramFactory();
 	private Map<ByteArrayId, NumericHistogram> histogramPerPartition = new HashMap<ByteArrayId, NumericHistogram>();
 
@@ -33,11 +46,11 @@ public class RowRangeHistogramStatistics<T> extends
 	}
 
 	public RowRangeHistogramStatistics(
-			final ByteArrayId adapterId,
-			final ByteArrayId indexId ) {
+			final ByteArrayId dataAdapterId,
+			final ByteArrayId statisticsId ) {
 		super(
-				adapterId,
-				composeId(indexId));
+				dataAdapterId,
+				composeId(statisticsId));
 	}
 
 	private static NumericHistogram createHistogram() {
@@ -48,7 +61,7 @@ public class RowRangeHistogramStatistics<T> extends
 			final ByteArrayId indexId ) {
 		return new ByteArrayId(
 				ArrayUtils.addAll(
-						STATS_ID.getBytes(),
+						STATS_TYPE.getBytes(),
 						indexId.getBytes()));
 	}
 
@@ -61,11 +74,13 @@ public class RowRangeHistogramStatistics<T> extends
 
 	public static ByteArrayId decomposeFromId(
 			final ByteArrayId id ) {
-		final int idLength = id.getBytes().length - STATS_ID.getBytes().length;
-		final byte[] idBytes = new byte[idLength];
+		// Need to account for length of type and of the separator
+		int lengthOfNonId = STATS_TYPE.getBytes().length + STATS_ID_SEPARATOR.length();
+		int idLength = id.getBytes().length - lengthOfNonId;
+		byte[] idBytes = new byte[idLength];
 		System.arraycopy(
 				id.getBytes(),
-				STATS_ID.getBytes().length,
+				lengthOfNonId,
 				idBytes,
 				0,
 				idLength);
@@ -304,6 +319,49 @@ public class RowRangeHistogramStatistics<T> extends
 		}
 		buffer.append("}]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert Row Range Numeric statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		jo.put(
+				"range_min",
+				histogram.getMinValue());
+		jo.put(
+				"range_max",
+				histogram.getMaxValue());
+		jo.put(
+				"totalCount",
+				histogram.getTotalCount());
+		JSONArray binsArray = new JSONArray();
+		for (final double v : this.quantile(10)) {
+			binsArray.add(v);
+		}
+		jo.put(
+				"bins",
+				binsArray);
+
+		JSONArray countsArray = new JSONArray();
+		for (final long v : count(10)) {
+			countsArray.add(v);
+		}
+		jo.put(
+				"counts",
+				countsArray);
+
+		return jo;
 	}
 
 }

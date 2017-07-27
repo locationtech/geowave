@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.mapreduce.input;
 
 import java.io.IOException;
@@ -10,11 +20,13 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -33,7 +45,7 @@ public class GeoWaveInputFormat<T> extends
 		InputFormat<GeoWaveInputKey, T>
 {
 	private static final Class<?> CLASS = GeoWaveInputFormat.class;
-	protected static final Logger LOGGER = Logger.getLogger(CLASS);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(CLASS);
 
 	public static void setStoreOptionsMap(
 			final Configuration config,
@@ -64,6 +76,13 @@ public class GeoWaveInputFormat<T> extends
 	public static IndexStore getJobContextIndexStore(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getJobContextIndexStore(
+				CLASS,
+				context);
+	}
+
+	public static AdapterIndexMappingStore getJobContextAdapterIndexMappingStore(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getJobContextAdapterIndexMappingStore(
 				CLASS,
 				context);
 	}
@@ -295,6 +314,7 @@ public class GeoWaveInputFormat<T> extends
 			final QueryOptions queryOptions = getQueryOptions(context);
 			final QueryOptions rangeQueryOptions = new QueryOptions(
 					queryOptions);
+
 			return ((MapReduceDataStore) dataStore).getSplits(
 					getQuery(context),
 					rangeQueryOptions,
@@ -304,6 +324,7 @@ public class GeoWaveInputFormat<T> extends
 					getMinimumSplitCount(context),
 					getMaximumSplitCount(context));
 		}
+
 		LOGGER.error("Data Store does not support map reduce");
 		throw new IOException(
 				"Data Store does not support map reduce");

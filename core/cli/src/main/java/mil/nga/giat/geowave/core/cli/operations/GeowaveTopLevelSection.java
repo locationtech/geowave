@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.cli.operations;
 
 import org.apache.log4j.Level;
@@ -9,14 +19,14 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Operation;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 @GeowaveOperation(name = "geowave")
 @Parameters(commandDescription = "This is the top level section.")
-public class GeowaveTopLevelSection implements
-		Operation
+public class GeowaveTopLevelSection extends
+		DefaultOperation
 {
 	@Parameter(names = "--debug", description = "Verbose output")
 	private Boolean verboseFlag;
@@ -32,6 +42,11 @@ public class GeowaveTopLevelSection implements
 	@Override
 	public boolean prepare(
 			final OperationParams inputParams ) {
+		// This will load the properties file parameter into the
+		// operation params.
+		options.prepare(inputParams);
+
+		super.prepare(inputParams);
 
 		// Up the log level
 		if (Boolean.TRUE.equals(verboseFlag)) {
@@ -45,10 +60,6 @@ public class GeowaveTopLevelSection implements
 			// Do not continue
 			return false;
 		}
-
-		// This will load the properties file parameter into the
-		// operation params.
-		options.prepare(inputParams);
 
 		// Successfully prepared
 		return true;

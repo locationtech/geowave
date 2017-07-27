@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store;
 
 import java.io.Closeable;
@@ -15,13 +25,16 @@ public interface IndexWriter<T> extends
 	 * @param writableAdapter
 	 * @param entry
 	 * @return
+	 * @throws IOException
 	 */
 	public InsertionIds write(
-			final T entry );
+			final T entry )
+			throws IOException;
 
 	public InsertionIds write(
 			final T entry,
-			final VisibilityWriter<T> fieldVisibilityWriter );
+			final VisibilityWriter<T> fieldVisibilityWriter )
+			throws IOException;
 
 	public PrimaryIndex[] getIndices();
 

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.cli.operations.config;
 
 import java.io.File;
@@ -14,7 +24,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
@@ -33,21 +42,12 @@ public class ListCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		File f = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File f = getGeoWaveConfigFile(params);
 
 		// Reload options with filter if specified.
-		Properties p = null;
-		if (filter != null) {
-			p = ConfigOptions.loadProperties(
-					f,
-					filter);
-		}
-		else {
-			p = ConfigOptions.loadProperties(
-					f,
-					null);
-		}
+		Properties p = getGeoWaveConfigProperties(
+				params,
+				filter);
 
 		JCommander.getConsole().println(
 				"PROPERTIES (" + f.getName() + ")");
@@ -62,5 +62,4 @@ public class ListCommand extends
 					key + ": " + value);
 		}
 	}
-
 }

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
@@ -7,7 +17,6 @@ import org.geotools.data.FeatureReader;
 import org.geotools.data.FeatureWriter;
 import org.geotools.data.Query;
 import org.geotools.data.store.ContentEntry;
-import org.geotools.data.store.ContentFeatureCollection;
 import org.geotools.data.store.ContentFeatureStore;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
@@ -120,7 +129,7 @@ public class GeoWaveFeatureSource extends
 			throws IOException {
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
 				components).getDataStatistics();
-		final DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_ID);
+		final DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_TYPE);
 		if ((countStats != null) && query.getFilter().equals(
 				Filter.INCLUDE)) {
 			return (int) ((CountDataStatistics) countStats).getCount();
@@ -138,7 +147,7 @@ public class GeoWaveFeatureSource extends
 	}
 
 	public SimpleFeatureType getFeatureType() {
-		return components.getAdapter().getType();
+		return components.getAdapter().getFeatureType();
 	}
 
 	@Override
@@ -171,7 +180,7 @@ public class GeoWaveFeatureSource extends
 	@Override
 	protected SimpleFeatureType buildFeatureType()
 			throws IOException {
-		return components.getAdapter().getType();
+		return components.getAdapter().getFeatureType();
 	}
 
 	@Override
@@ -196,16 +205,6 @@ public class GeoWaveFeatureSource extends
 	@Override
 	protected boolean canFilter() {
 		return true;
-	}
-
-	@Override
-	protected Query resolvePropertyNames(
-			Query query ) {
-		if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
-			// this is intentional to avoid retyping within ContentFeatureSource
-			query.setPropertyNames(Query.ALL_NAMES);
-		}
-		return super.resolvePropertyNames(query);
 	}
 
 	@Override

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.store.filter;
 
 import java.nio.ByteBuffer;
@@ -69,17 +79,99 @@ public class SpatialQueryFilter extends
 			public boolean compare(
 					final Geometry dataGeometry,
 					final PreparedGeometry constraintGeometry ) {
-				return constraintGeometry.intersects(dataGeometry);
+				return constraintGeometry.overlaps(dataGeometry);
 			}
 
 			@Override
 			public BasicQueryCompareOperation getBaseCompareOp() {
 				return BasicQueryCompareOperation.OVERLAPS;
 			}
+		},
+		INTERSECTS {
+			@Override
+			public boolean compare(
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.intersects(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.INTERSECTS;
+			}
+		},
+		TOUCHES {
+			@Override
+			public boolean compare(
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.touches(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.TOUCHES;
+			}
+		},
+		WITHIN {
+			@Override
+			public boolean compare(
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.within(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.WITHIN;
+			}
+		},
+		DISJOINT {
+			@Override
+			public boolean compare(
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.disjoint(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.DISJOINT;
+			}
+		},
+		CROSSES {
+			@Override
+			public boolean compare(
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
+				return constraintGeometry.crosses(dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.CROSSES;
+			}
+		},
+		EQUALS {
+			@Override
+			public boolean compare(
+					final Geometry dataGeometry,
+					final PreparedGeometry constraintGeometry ) {
+				// This method is same as Geometry.equalsTopo which is
+				// computationally expensive.
+				// See equalsExact for quick structural equality
+				return constraintGeometry.getGeometry().equals(
+						dataGeometry);
+			}
+
+			@Override
+			public BasicQueryCompareOperation getBaseCompareOp() {
+				return BasicQueryCompareOperation.EQUALS;
+			}
 		}
 	};
 
-	private CompareOperation compareOperation = CompareOperation.OVERLAPS;
+	private CompareOperation compareOperation = CompareOperation.INTERSECTS;
 
 	private Set<ByteArrayId> geometryFieldIds;
 
@@ -92,24 +184,27 @@ public class SpatialQueryFilter extends
 			final NumericDimensionField<?>[] orderedConstrainedDimensionDefinitions,
 			final NumericDimensionField<?>[] unconstrainedDimensionDefinitions,
 			final Geometry queryGeometry,
-			final CompareOperation compareOp ) {
+			final CompareOperation compareOp,
+			final BasicQueryCompareOperation nonSpatialCompareOp ) {
 		this(
 				stripGeometry(
 						query,
 						orderedConstrainedDimensionDefinitions,
 						unconstrainedDimensionDefinitions),
 				queryGeometry,
-				compareOp);
+				compareOp,
+				nonSpatialCompareOp);
 	}
 
 	private SpatialQueryFilter(
 			final StrippedGeometry strippedGeometry,
 			final Geometry queryGeometry,
-			final CompareOperation compareOp ) {
+			final CompareOperation compareOp,
+			final BasicQueryCompareOperation nonSpatialCompareOp ) {
 		super(
 				strippedGeometry.strippedQuery,
 				strippedGeometry.strippedDimensionDefinitions,
-				compareOp.getBaseCompareOp());
+				nonSpatialCompareOp);
 		preparedGeometryImage = new GeometryImage(
 				FACTORY.create(queryGeometry));
 		geometryFieldIds = strippedGeometry.geometryFieldIds;

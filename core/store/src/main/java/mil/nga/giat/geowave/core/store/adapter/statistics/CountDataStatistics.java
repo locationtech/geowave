@@ -1,7 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
 import java.util.HashSet;
+
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -12,8 +25,8 @@ public class CountDataStatistics<T> extends
 		AbstractDataStatistics<T> implements
 		DeleteCallback<T, GeoWaveRow>
 {
-	public final static ByteArrayId STATS_ID = new ByteArrayId(
-			"DATA_COUNT");
+	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
+			"COUNT_DATA");
 
 	private long count = Long.MIN_VALUE;
 
@@ -23,17 +36,17 @@ public class CountDataStatistics<T> extends
 
 	public CountDataStatistics(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId statsID ) {
+			final ByteArrayId statisticsID ) {
 		super(
 				dataAdapterId,
-				statsID);
+				statisticsID);
 	}
 
 	public CountDataStatistics(
 			final ByteArrayId dataAdapterId ) {
 		super(
 				dataAdapterId,
-				STATS_ID);
+				STATS_TYPE);
 	}
 
 	public boolean isSet() {
@@ -115,5 +128,24 @@ public class CountDataStatistics<T> extends
 				count);
 		buffer.append("]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert Count statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+		jo.put(
+				"count",
+				count);
+		return jo;
 	}
 }

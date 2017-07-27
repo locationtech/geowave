@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
@@ -11,7 +21,8 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 
 import com.beust.jcommander.Parameter;
@@ -22,12 +33,15 @@ import com.beust.jcommander.Parameters;
 public class CQLQuery extends
 		AbstractGeoWaveQuery
 {
-	private static Logger LOGGER = Logger.getLogger(CQLQuery.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(CQLQuery.class);
 
 	@Parameter(names = "--cql", required = true, description = "CQL Filter executed client side")
 	private String cqlStr;
 
-	@Parameter(names = "--useAggregation, -agg", required = false, description = "Compute count on the server side")
+	@Parameter(names = {
+		"--useAggregation",
+		"-agg"
+	}, description = "Compute count on the server side")
 	private Boolean useAggregation = Boolean.FALSE;
 
 	@Override
@@ -52,9 +66,11 @@ public class CQLQuery extends
 							adapter,
 							null,
 							null))) {
-				final CountResult result = ((CountResult) (it.next()));
-				if (result != null) {
-					count += result.getCount();
+				if (it.hasNext()) {
+					final CountResult result = ((CountResult) (it.next()));
+					if (result != null) {
+						count += result.getCount();
+					}
 				}
 			}
 			catch (final IOException e) {

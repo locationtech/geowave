@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector;
 
 import static org.junit.Assert.assertEquals;
@@ -228,7 +238,7 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final CoordinateReferenceSystem crs = dataAdapter.getType().getCoordinateReferenceSystem();
+		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
 				"EPSG:4326"));
 		@SuppressWarnings("unchecked")
@@ -303,11 +313,11 @@ public class AvroFeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"whennot").getUserData().get(
 						"time"));
 
@@ -347,11 +357,11 @@ public class AvroFeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"pid").getUserData().get(
 						"visibility"));
 
@@ -408,11 +418,11 @@ public class AvroFeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"when").getUserData().get(
 						"time"));
 
@@ -460,16 +470,16 @@ public class AvroFeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"whennot").getUserData().get(
 						"end"));
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"when").getUserData().get(
 						"start"));
 
@@ -540,16 +550,16 @@ public class AvroFeatureDataAdapterTest
 				dataAdapterCopy.getAdapterId(),
 				dataAdapter.getAdapterId());
 		assertEquals(
-				dataAdapterCopy.getType(),
-				dataAdapter.getType());
+				dataAdapterCopy.getFeatureType(),
+				dataAdapter.getFeatureType());
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"end").getUserData().get(
 						"end"));
 		assertEquals(
 				Boolean.TRUE,
-				dataAdapterCopy.getType().getDescriptor(
+				dataAdapterCopy.getFeatureType().getDescriptor(
 						"start").getUserData().get(
 						"start"));
 
@@ -602,7 +612,7 @@ public class AvroFeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getType().getCoordinateReferenceSystem().getCoordinateSystem(),
+				dataAdapterCopy.getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem(),
 				GeoWaveGTDataStore.DEFAULT_CRS.getCoordinateSystem());
 	}
 }

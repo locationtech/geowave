@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.resize;
 
 import java.io.IOException;
@@ -8,7 +18,8 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.opengis.coverage.grid.GridCoverage;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
@@ -37,7 +48,7 @@ public class RasterTileResizeJobRunner extends
 		Configured implements
 		Tool
 {
-	private static final Logger LOGGER = Logger.getLogger(RasterTileResizeJobRunner.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RasterTileResizeJobRunner.class);
 
 	public static final String NEW_ADAPTER_ID_KEY = "NEW_ADAPTER_ID";
 	public static final String OLD_ADAPTER_ID_KEY = "OLD_ADAPTER_ID";

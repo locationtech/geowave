@@ -1,7 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,13 +47,17 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
+import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import mil.nga.giat.geowave.core.cli.utils.URLUtils;
 import mil.nga.giat.geowave.service.GeoserverService;
 import mil.nga.giat.geowave.service.ServiceUtils;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -50,31 +67,40 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 public class GeoserverServiceImpl implements
 		GeoserverService
 {
-	private final static Logger log = Logger.getLogger(GeoserverServiceImpl.class);
+	private final static Logger log = LoggerFactory.getLogger(GeoserverServiceImpl.class);
 	private final static int defaultIndentation = 2;
 
 	private String geoserverUrl;
 	private final String geoserverUser;
-	private final String geoserverPass;
+	private String geoserverPass;
 	private final String defaultWorkspace;
 
 	public GeoserverServiceImpl(
 			@Context
 			final ServletConfig servletConfig ) {
 		Properties props = null;
+		String confPropFilename = servletConfig.getInitParameter("config.properties");
 		try (InputStream is = servletConfig.getServletContext().getResourceAsStream(
-				servletConfig.getInitParameter("config.properties"))) {
+				confPropFilename)) {
 			props = ServiceUtils.loadProperties(is);
 		}
 		catch (IOException e) {
-			log.error(e);
+			log.error(
+					e.getLocalizedMessage(),
+					e);
 		}
 
 		geoserverUrl = ServiceUtils.getProperty(
 				props,
 				"geoserver.url");
-		if (geoserverUrl != null && !geoserverUrl.contains("//")) {
-			geoserverUrl = "http://" + geoserverUrl + "/geoserver";
+
+		try {
+			geoserverUrl = URLUtils.getUrl(geoserverUrl);
+		}
+		catch (MalformedURLException | URISyntaxException e) {
+			log.error(
+					"An error occurred validating url [" + e.getLocalizedMessage() + "]",
+					e);
 		}
 
 		geoserverUser = ServiceUtils.getProperty(
@@ -84,6 +110,19 @@ public class GeoserverServiceImpl implements
 		geoserverPass = ServiceUtils.getProperty(
 				props,
 				"geoserver.password");
+
+		try {
+			File resourceFile = SecurityUtils.getFormattedTokenKeyFileForConfig(new File(
+					confPropFilename));
+			geoserverPass = SecurityUtils.decryptHexEncodedValue(
+					geoserverPass,
+					resourceFile.getAbsolutePath());
+		}
+		catch (Exception e) {
+			log.error(
+					"An error occurred decrypting password: " + e.getLocalizedMessage(),
+					e);
+		}
 
 		defaultWorkspace = ServiceUtils.getProperty(
 				props,

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.cli.api;
 
 import java.util.Properties;
@@ -10,6 +20,9 @@ import mil.nga.giat.geowave.core.cli.prefix.JCommanderPropertiesTransformer;
  */
 public abstract class DefaultPluginOptions
 {
+
+	public static final String OPTS = "opts";
+	public static final String TYPE = "type";
 
 	/**
 	 * This is implemented by the PluginOptions interface by child classes
@@ -37,14 +50,16 @@ public abstract class DefaultPluginOptions
 			String namespace ) {
 		JCommanderPropertiesTransformer jcpt = new JCommanderPropertiesTransformer(
 				String.format(
-						"%s.opts",
-						namespace));
+						"%s.%s",
+						namespace,
+						OPTS));
 		jcpt.addObject(this);
 		jcpt.transformToProperties(properties);
 		// Add the entry for the type property.
 		String typeProperty = String.format(
-				"%s.type",
-				namespace);
+				"%s.%s",
+				namespace,
+				TYPE);
 		properties.setProperty(
 				typeProperty,
 				getType());
@@ -60,8 +75,9 @@ public abstract class DefaultPluginOptions
 			String namespace ) {
 		// Get the qualifier.
 		String typeProperty = String.format(
-				"%s.type",
-				namespace);
+				"%s.%s",
+				namespace,
+				TYPE);
 		String typeValue = properties.getProperty(typeProperty);
 		if (typeValue == null) {
 			return false;
@@ -72,12 +88,12 @@ public abstract class DefaultPluginOptions
 		}
 		JCommanderPropertiesTransformer jcpt = new JCommanderPropertiesTransformer(
 				String.format(
-						"%s.opts",
-						namespace));
+						"%s.%s",
+						namespace,
+						OPTS));
 		jcpt.addObject(this);
 		jcpt.transformFromProperties(properties);
 
 		return true;
 	}
-
 }

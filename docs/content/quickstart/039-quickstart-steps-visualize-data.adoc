@@ -9,7 +9,7 @@ Configue the local host.
 
 [source, bash]
 ----
-geowave config geoserver --url "$HOSTNAME:8000"
+geowave config geoserver "$HOSTNAME:8000"
 ----
 
 Add layers for the point and kde representations of the data.

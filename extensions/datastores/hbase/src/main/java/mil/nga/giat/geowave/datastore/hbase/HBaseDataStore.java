@@ -11,7 +11,8 @@ import java.util.List;
 import org.apache.hadoop.hbase.security.visibility.CellVisibility;
 import org.apache.hadoop.hbase.security.visibility.CellVisibility;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -38,7 +39,9 @@ public class HBaseDataStore extends
 	private final static Logger LOGGER = Logger.getLogger(
 			HBaseDataStore.class);
 
-	private final HBaseOperations operations;
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseDataStore.class);
+
+	private final BasicHBaseOperations operations;
 	private final HBaseOptions options;
 
 	private final HBaseSplitsProvider splitsProvider = new HBaseSplitsProvider();

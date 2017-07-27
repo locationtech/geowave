@@ -1,12 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.plugin;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import javax.media.jai.Interpolation;
 import javax.xml.XMLConstants;
@@ -14,6 +22,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import mil.nga.giat.geowave.adapter.auth.AuthorizationFactorySPI;
+import mil.nga.giat.geowave.adapter.auth.EmptyAuthorizationFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,7 +45,7 @@ import mil.nga.giat.geowave.core.store.index.IndexStore;
 
 public class GeoWaveRasterConfig
 {
-
+	static private final Logger LOGGER = LoggerFactory.getLogger(GeoWaveRasterConfig.class);
 	static private final Map<String, GeoWaveRasterConfig> CONFIG_CACHE = new Hashtable<String, GeoWaveRasterConfig>();
 
 	protected static enum ConfigParameter {
@@ -43,7 +56,11 @@ public class GeoWaveRasterConfig
 		SCALE_TO_8BIT(
 				"scaleTo8Bit"),
 		EQUALIZE_HISTOGRAM(
-				"equalizeHistogramOverride");
+				"equalizeHistogramOverride"),
+		AUTHORIZATION_PROVIDER(
+				"authorizationProvider"),
+		AUTHORIZATION_URL(
+				"authorizationUrl");
 		private String configName;
 
 		private ConfigParameter(
@@ -63,6 +80,8 @@ public class GeoWaveRasterConfig
 	private AdapterStore adapterStore;
 	private DataStatisticsStore dataStatisticsStore;
 	private AdapterIndexMappingStore adapterIndexMappingStore;
+	private AuthorizationFactorySPI authorizationFactory;
+	private URL authorizationURL;
 
 	private Boolean equalizeHistogramOverride = null;
 
@@ -80,6 +99,8 @@ public class GeoWaveRasterConfig
 				geowaveNamespace,
 				null,
 				null,
+				null,
+				null,
 				null);
 	}
 
@@ -88,7 +109,9 @@ public class GeoWaveRasterConfig
 			final String geowaveNamespace,
 			final Boolean equalizeHistogramOverride,
 			final Boolean scaleTo8Bit,
-			final Integer interpolationOverride ) {
+			final Integer interpolationOverride,
+			final String authorizationProvider,
+			final URL authorizationURL ) {
 		final GeoWaveRasterConfig result = new GeoWaveRasterConfig();
 		result.equalizeHistogramOverride = equalizeHistogramOverride;
 		result.interpolationOverride = interpolationOverride;
@@ -97,7 +120,42 @@ public class GeoWaveRasterConfig
 			result.storeConfigObj = dataStoreConfig;
 			result.factoryFamily = GeoWaveStoreFinder.findStoreFamily(result.storeConfigObj);
 		}
+		result.authorizationFactory = getAuthorizationFactory(authorizationProvider);
+		result.authorizationURL = authorizationURL;
 		return result;
+	}
+
+	public static AuthorizationFactorySPI getAuthorizationFactory(
+			final String authProviderName ) {
+		if (authProviderName != null) {
+			final Iterator<AuthorizationFactorySPI> authIt = getAuthorizationFactoryList();
+			while (authIt.hasNext()) {
+				AuthorizationFactorySPI authFactory = authIt.next();
+				if (authProviderName.equals(authFactory.toString())) return authFactory;
+			}
+		}
+		return new EmptyAuthorizationFactory();
+	}
+
+	private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
+		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(AuthorizationFactorySPI.class);
+		return ldr.iterator();
+	}
+
+	public static URL getAuthorizationURL(
+			final String authorizationURL ) {
+		if (authorizationURL != null) {
+			try {
+				return new URL(
+						authorizationURL.toString());
+			}
+			catch (MalformedURLException e) {
+				LOGGER.warn(
+						"Accumulo Plugin: malformed Authorization Service URL " + authorizationURL,
+						e);
+			}
+		}
+		return null;
 	}
 
 	public static GeoWaveRasterConfig readFromConfigParams(
@@ -220,6 +278,19 @@ public class GeoWaveRasterConfig
 		if (params.containsKey(ConfigParameter.INTERPOLATION.getConfigName())) {
 			result.interpolationOverride = Integer.parseInt(params.get(ConfigParameter.INTERPOLATION.getConfigName()));
 		}
+
+		result.authorizationFactory = getAuthorizationFactory(params.get(ConfigParameter.AUTHORIZATION_PROVIDER
+				.getConfigName()));
+
+		result.authorizationURL = getAuthorizationURL(params.get(ConfigParameter.AUTHORIZATION_URL.getConfigName()));
+	}
+
+	protected AuthorizationFactorySPI getAuthorizationFactory() {
+		return authorizationFactory;
+	}
+
+	protected URL getAuthorizationURL() {
+		return authorizationURL;
 	}
 
 	public synchronized DataStore getDataStore() {

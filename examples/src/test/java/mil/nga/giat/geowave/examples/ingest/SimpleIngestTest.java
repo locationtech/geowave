@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.examples.ingest;
 
 import java.util.Set;
@@ -8,7 +18,8 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.opengis.feature.simple.SimpleFeature;
@@ -36,7 +47,7 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 public class SimpleIngestTest
 {
-	private final static Logger LOGGER = Logger.getLogger(SimpleIngestTest.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SimpleIngestTest.class);
 
 	final AccumuloOptions accumuloOptions = new AccumuloOptions();
 	final GeometryFactory factory = new GeometryFactory();

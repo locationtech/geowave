@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
@@ -5,7 +15,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
@@ -49,7 +60,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 public class GeoWaveFeatureCollection extends
 		DataFeatureCollection
 {
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveFeatureCollection.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveFeatureCollection.class);
 	private final GeoWaveFeatureReader reader;
 	private CloseableIterator<SimpleFeature> featureCursor;
 	private final Query query;
@@ -74,8 +85,8 @@ public class GeoWaveFeatureCollection extends
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
 					.getTransaction()
 					.getDataStatistics();
-			if (statsMap.containsKey(CountDataStatistics.STATS_ID)) {
-				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_ID);
+			if (statsMap.containsKey(CountDataStatistics.STATS_TYPE)) {
+				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_TYPE);
 				if ((stats != null) && stats.isSet()) {
 					return (int) stats.getCount();
 				}
@@ -214,7 +225,7 @@ public class GeoWaveFeatureCollection extends
 		if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
 			return getDistributedRenderFeatureType();
 		}
-		return reader.getComponents().getAdapter().getType();
+		return reader.getComponents().getAdapter().getFeatureType();
 	}
 
 	private Filter getFilter(
@@ -337,10 +348,22 @@ public class GeoWaveFeatureCollection extends
 		if (envelope != null) {
 			return new GeometryFactory().toGeometry(envelope);
 		}
-
-		return reader.clipIndexedBBOXConstraints(ExtractGeometryFilterVisitor.getConstraints(
+		String geomAtrributeName = reader
+				.getComponents()
+				.getAdapter()
+				.getFeatureType()
+				.getGeometryDescriptor()
+				.getLocalName();
+		ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeoWaveGTDataStore.DEFAULT_CRS));
+				GeoWaveGTDataStore.DEFAULT_CRS,
+				geomAtrributeName);
+		if (geoAndCompareOp == null) {
+			return reader.clipIndexedBBOXConstraints(null);
+		}
+		else {
+			return reader.clipIndexedBBOXConstraints(geoAndCompareOp.getGeometry());
+		}
 	}
 
 	private Query validateQuery(

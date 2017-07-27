@@ -1,7 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
 import java.text.MessageFormat;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -30,7 +44,8 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 public abstract class FixedBinNumericStatistics<T> extends
 		AbstractDataStatistics<T>
 {
-	public static final String STATS_TYPE = "ATT_BIN";
+	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+			"FIXED_BIN_NUMERIC_HISTOGRAM");
 	// private static final NumericHistogramFactory HistFactory = new
 	// MinimalBinDistanceHistogramFactory();
 	private static final NumericHistogramFactory HistFactory = new FixedBinNumericHistogramFactory();
@@ -139,7 +154,7 @@ public abstract class FixedBinNumericStatistics<T> extends
 				num);
 	}
 
-	public abstract String getIdentifier();
+	public abstract String getFieldIdentifier();
 
 	@Override
 	public String toString() {
@@ -149,7 +164,7 @@ public abstract class FixedBinNumericStatistics<T> extends
 				super.getDataAdapterId().getString());
 		buffer.append(
 				", identifier=").append(
-				getIdentifier());
+				getFieldIdentifier());
 		final MessageFormat mf = new MessageFormat(
 				"{0,number,#.######}");
 		buffer.append(", range={");
@@ -181,6 +196,46 @@ public abstract class FixedBinNumericStatistics<T> extends
 		buffer.deleteCharAt(buffer.length() - 1);
 		buffer.append("}]");
 		return buffer.toString();
+	}
+
+	/**
+	 * Convert Fixed Bin Numeric statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				STATS_TYPE.getString());
+
+		jo.put(
+				"field_identifier",
+				getFieldIdentifier());
+
+		jo.put(
+				"range_min",
+				histogram.getMinValue());
+		jo.put(
+				"range_max",
+				histogram.getMaxValue());
+		JSONArray binsArray = new JSONArray();
+		for (final double v : this.quantile(10)) {
+			binsArray.add(v);
+		}
+		jo.put(
+				"bins",
+				binsArray);
+
+		JSONArray countsArray = new JSONArray();
+		for (final long v : count(10)) {
+			countsArray.add(v);
+		}
+		jo.put(
+				"counts",
+				countsArray);
+
+		return jo;
 	}
 
 }

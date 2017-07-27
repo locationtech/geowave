@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.filter;
 
 import static org.junit.Assert.assertEquals;
@@ -61,7 +71,7 @@ public class DistributedQueryFilterTest
 				new NumericDimensionField[] {
 					new BasicQueryTest.ExampleDimensionOne()
 				},
-				BasicQueryCompareOperation.OVERLAPS));
+				BasicQueryCompareOperation.INTERSECTS));
 		filters.add(new DedupeFilter());
 		list = new DistributableFilterList(
 				true,
@@ -70,7 +80,7 @@ public class DistributedQueryFilterTest
 		assertTrue(list.logicalAnd);
 		assertEquals(
 				((BasicQueryFilter) list.filters.get(0)).compareOp,
-				BasicQueryCompareOperation.OVERLAPS);
+				BasicQueryCompareOperation.INTERSECTS);
 		assertEquals(
 				((BasicQueryFilter) list.filters.get(0)).constraints,
 				new BasicNumericDataset(

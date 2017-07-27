@@ -1,6 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
+
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
@@ -114,4 +127,37 @@ abstract public class NumericRangeDataStatistics<T> extends
 		buffer.append("]");
 		return buffer.toString();
 	}
+
+	/**
+	 * Convert Feature Numeric Range statistics to a JSON object
+	 */
+
+	public JSONObject toJSONObject()
+			throws JSONException {
+		JSONObject jo = new JSONObject();
+		jo.put(
+				"type",
+				"GENERIC_RANGE");
+
+		jo.put(
+				"statisticsID",
+				statisticsId.getString());
+
+		if (!isSet()) {
+			jo.put(
+					"range",
+					"No Values");
+		}
+		else {
+			jo.put(
+					"range_min",
+					getMin());
+			jo.put(
+					"range_max",
+					getMax());
+		}
+
+		return jo;
+	}
+
 }

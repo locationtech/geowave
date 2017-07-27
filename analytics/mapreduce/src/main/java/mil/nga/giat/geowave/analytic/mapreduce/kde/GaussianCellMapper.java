@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.analytic.mapreduce.kde;
 
 import java.io.IOException;
@@ -9,7 +19,8 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.feature.simple.SimpleFeature;
@@ -21,7 +32,7 @@ import com.vividsolutions.jts.geom.Point;
 public class GaussianCellMapper extends
 		Mapper<GeoWaveInputKey, SimpleFeature, LongWritable, DoubleWritable>
 {
-	private final static Logger LOGGER = Logger.getLogger(GaussianCellMapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GaussianCellMapper.class);
 	protected static final String CQL_FILTER_KEY = "CQL_FILTER";
 	protected int minLevel;
 	protected int maxLevel;

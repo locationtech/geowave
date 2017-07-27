@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.index;
 
 import java.nio.ByteBuffer;
@@ -127,6 +137,35 @@ public class ByteArrayUtils
 		bb.putLong(uuid.getMostSignificantBits());
 		bb.putLong(uuid.getLeastSignificantBits());
 		return bb.array();
+	}
+
+	/**
+	 * Converts a long to a byte array
+	 * 
+	 * @param l
+	 *            the long
+	 * @return the byte array representing that long
+	 */
+	public static byte[] longToByteArray(
+			final long l ) {
+		ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+		bb.putLong(l);
+		return bb.array();
+	}
+
+	/**
+	 * Converts a byte array to a long
+	 * 
+	 * @param bytes
+	 *            the byte array the long
+	 * @return the long represented by the byte array
+	 */
+	public static long byteArrayToLong(
+			byte[] bytes ) {
+		ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+		bb.put(bytes);
+		bb.flip();
+		return bb.getLong();
 	}
 
 	/**

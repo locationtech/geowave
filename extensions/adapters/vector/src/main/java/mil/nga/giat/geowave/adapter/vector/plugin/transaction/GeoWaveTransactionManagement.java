@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
@@ -17,7 +27,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.Transaction;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -43,7 +54,7 @@ public class GeoWaveTransactionManagement extends
 		GeoWaveTransaction
 {
 
-	protected static final Logger LOGGER = Logger.getLogger(GeoWaveTransactionManagement.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveTransactionManagement.class);
 
 	/** Map of modified features; by feature id */
 	private final Map<String, ModifiedFeature> modifiedFeatures = new ConcurrentHashMap<String, ModifiedFeature>();
@@ -214,7 +225,7 @@ public class GeoWaveTransactionManagement extends
 		bounds.include(original.getBounds());
 		bounds.include(updated.getBounds());
 		components.getGTstore().getListenerManager().fireFeaturesChanged(
-				components.getAdapter().getType().getTypeName(),
+				components.getAdapter().getFeatureType().getTypeName(),
 				transaction,
 				bounds,
 				false);
@@ -249,7 +260,7 @@ public class GeoWaveTransactionManagement extends
 				fid,
 				feature);
 		components.getGTstore().getListenerManager().fireFeaturesAdded(
-				components.getAdapter().getType().getTypeName(),
+				components.getAdapter().getFeatureType().getTypeName(),
 				transaction,
 				ReferencedEnvelope.reference(feature.getBounds()),
 				false);
@@ -277,7 +288,7 @@ public class GeoWaveTransactionManagement extends
 			}
 		}
 		components.getGTstore().getListenerManager().fireFeaturesRemoved(
-				components.getAdapter().getType().getTypeName(),
+				components.getAdapter().getFeatureType().getTypeName(),
 				transaction,
 				ReferencedEnvelope.reference(feature.getBounds()),
 				false);

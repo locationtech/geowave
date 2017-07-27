@@ -4,7 +4,7 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-core-parent</artifactId>
 		<relativePath>../</relativePath>
-		<version>0.9.4-SNAPSHOT</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-geotime</artifactId>
 	<name>GeoWave Spatial and Temporal Support</name>
@@ -24,14 +24,6 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-core-store</artifactId>
 			<version>${project.version}</version>
-		</dependency>		
-		<!-- <dependency> <groupId>mil.nga.giat</groupId> <artifactId>geowave-core-ingest</artifactId> 
-			<version>${project.version}</version> </dependency> -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

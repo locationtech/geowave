@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.format.landsat8;
 
 import java.io.File;
@@ -111,7 +121,7 @@ public class VectorIngestRunner extends
 				}
 				catch (final IOException e) {
 					LOGGER.error(
-							"Unable to close Accumulo writer for scene vectors",
+							"Unable to close writer for scene vectors",
 							e);
 				}
 			}
@@ -121,7 +131,7 @@ public class VectorIngestRunner extends
 				}
 				catch (final IOException e) {
 					LOGGER.error(
-							"Unable to close Accumulo writer for band vectors",
+							"Unable to close writer for band vectors",
 							e);
 				}
 			}
@@ -132,7 +142,14 @@ public class VectorIngestRunner extends
 	protected void nextBand(
 			final SimpleFeature band,
 			final AnalysisInfo analysisInfo ) {
-		bandWriter.write(band);
+		try {
+			bandWriter.write(band);
+		}
+		catch (IOException e) {
+			LOGGER.error(
+					"Unable to write next band",
+					e);
+		}
 		super.nextBand(
 				band,
 				analysisInfo);
@@ -172,7 +189,14 @@ public class VectorIngestRunner extends
 			}
 		}
 		if (fid != null) {
-			sceneWriter.write(bldr.buildFeature(fid));
+			try {
+				sceneWriter.write(bldr.buildFeature(fid));
+			}
+			catch (IOException e) {
+				LOGGER.error(
+						"Unable to write scene",
+						e);
+			}
 		}
 	}
 }

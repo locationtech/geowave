@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.format.gdelt;
 
 import java.io.BufferedReader;
@@ -33,7 +43,8 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -49,7 +60,7 @@ public class GDELTIngestPlugin extends
 		AbstractSimpleFeatureIngestPlugin<WholeFile>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(GDELTIngestPlugin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GDELTIngestPlugin.class);
 
 	private SimpleFeatureBuilder gdeltEventBuilder;
 	private SimpleFeatureType gdeltEventType;

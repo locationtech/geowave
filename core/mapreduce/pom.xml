@@ -4,7 +4,7 @@
 		<artifactId>geowave-core-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.4-SNAPSHOT</version>
+		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-mapreduce</artifactId>
 	<name>GeoWave MapReduce</name>
@@ -41,12 +41,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 </project>

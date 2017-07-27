@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +20,8 @@ import javax.ws.rs.core.Response.Status;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -20,7 +29,8 @@ import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer style")
-public class GeoServerAddStyleCommand implements
+public class GeoServerAddStyleCommand extends
+		DefaultOperation implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -38,17 +48,12 @@ public class GeoServerAddStyleCommand implements
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
+		super.prepare(params);
 		if (geoserverClient == null) {
-			// Get the local config for GeoServer
-			File propFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-			GeoServerConfig config = new GeoServerConfig(
-					propFile);
-
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					config);
+					new GeoServerConfig(
+							getGeoWaveConfigFile(params)));
 		}
 
 		// Successfully prepared

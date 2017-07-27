@@ -1,5 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.remote;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +32,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
@@ -53,10 +63,10 @@ public class RecalculateStatsCommand extends
 				parameters);
 	}
 
-	protected boolean calculateStatistics(
+	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
 			final DataAdapter<?> adapter,
-			final String[] authorizations )
+			final StatsCommandLineOptions statsOptions )
 			throws IOException {
 
 		try {
@@ -78,6 +88,7 @@ public class RecalculateStatsCommand extends
 						adapter,
 						index,
 						isFirstTime);
+				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 
 				try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
 						provider,

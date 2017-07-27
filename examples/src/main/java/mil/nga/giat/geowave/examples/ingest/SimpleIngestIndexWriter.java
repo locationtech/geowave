@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.examples.ingest;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -14,10 +23,13 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SimpleIngestIndexWriter extends
 		SimpleIngest
 {
-	private static Logger log = Logger.getLogger(SimpleIngestIndexWriter.class);
+	private static Logger log = LoggerFactory.getLogger(SimpleIngestIndexWriter.class);
 
 	public static void main(
 			final String[] args ) {
@@ -37,15 +49,15 @@ public class SimpleIngestIndexWriter extends
 					.error("Invalid arguments, expected: zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
 			System.exit(1);
 		}
-		namespace = args[5];
-		instance = args[2];
+		namespace = args[4];
+		instance = args[1];
 		try {
 			final AccumuloOperations bao = si.getAccumuloOperationsInstance(
+					args[0],
 					args[1],
 					args[2],
 					args[3],
 					args[4],
-					args[5],
 					options);
 			geowaveDataStore = si.getAccumuloGeowaveDataStore(
 					bao,

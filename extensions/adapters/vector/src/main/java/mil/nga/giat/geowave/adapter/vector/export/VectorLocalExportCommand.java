@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.export;
 
 import java.io.File;
@@ -22,12 +32,12 @@ import mil.nga.giat.geowave.adapter.vector.AvroFeatureUtils;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.avro.AttributeValues;
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
+import mil.nga.giat.geowave.adapter.vector.cli.VectorSection;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -69,8 +79,7 @@ public class VectorLocalExportCommand extends
 		String storeName = parameters.get(0);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
@@ -147,7 +156,7 @@ public class VectorLocalExportCommand extends
 				}
 			}
 			for (final GeotoolsFeatureDataAdapter adapter : featureAdapters) {
-				final SimpleFeatureType sft = adapter.getType();
+				final SimpleFeatureType sft = adapter.getFeatureType();
 				JCommander.getConsole().println(
 						"Exporting type '" + sft.getTypeName() + "'");
 				final QueryOptions queryOptions = new QueryOptions();

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.store.memory;
 
 import java.io.IOException;
@@ -7,11 +17,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MemoryStoreUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(MemoryStoreUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MemoryStoreUtils.class);
 
 	protected static boolean isAuthorized(
 			final byte[] visibility,

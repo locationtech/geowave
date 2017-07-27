@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster;
 
 import java.awt.Color;
@@ -37,7 +47,9 @@ import javax.media.jai.RenderedImageAdapter;
 import javax.media.jai.RenderedOp;
 import javax.media.jai.TiledImage;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -103,7 +115,7 @@ public class RasterUtils
 					JAI.KEY_BORDER_EXTENDER,
 					BorderExtender.createInstance(BorderExtender.BORDER_COPY)).build());
 	private static Operations resampleOperations;
-	private final static Logger LOGGER = Logger.getLogger(RasterUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(RasterUtils.class);
 	private static final int MIN_SEGMENTS = 5;
 	private static final int MAX_SEGMENTS = 500;
 

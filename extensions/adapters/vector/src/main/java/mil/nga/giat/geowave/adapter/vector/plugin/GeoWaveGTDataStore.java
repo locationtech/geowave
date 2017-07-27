@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
@@ -7,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.data.FeatureListenerManager;
 import org.geotools.data.Query;
 import org.geotools.data.Transaction;
@@ -24,7 +35,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.auth.AuthorizationSPI;
+import mil.nga.giat.geowave.adapter.auth.AuthorizationSPI;
 import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagement;
@@ -59,7 +70,7 @@ public class GeoWaveGTDataStore extends
 		ContentDataStore
 {
 	/** Package logger */
-	private final static Logger LOGGER = Logger.getLogger(GeoWaveGTDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStore.class);
 	public static final CoordinateReferenceSystem DEFAULT_CRS;
 
 	static {
@@ -148,7 +159,7 @@ public class GeoWaveGTDataStore extends
 
 	protected PrimaryIndex[] getIndicesForAdapter(
 			final GeotoolsFeatureDataAdapter adapter ) {
-		PrimaryIndex[] currentSelections = preferredIndexes.get(adapter.getType().getName().toString());
+		PrimaryIndex[] currentSelections = preferredIndexes.get(adapter.getFeatureType().getName().toString());
 		if (currentSelections != null) {
 			return currentSelections;
 		}
@@ -161,7 +172,7 @@ public class GeoWaveGTDataStore extends
 			currentSelections = getPreferredIndices(adapter);
 		}
 		preferredIndexes.put(
-				adapter.getType().getName().toString(),
+				adapter.getFeatureType().getName().toString(),
 				currentSelections);
 		return currentSelections;
 	}
@@ -208,7 +219,7 @@ public class GeoWaveGTDataStore extends
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
-				names.add(((GeotoolsFeatureDataAdapter) adapter).getType().getName());
+				names.add(((GeotoolsFeatureDataAdapter) adapter).getFeatureType().getName());
 			}
 		}
 		adapters.close();
@@ -332,7 +343,7 @@ public class GeoWaveGTDataStore extends
 
 		List<PrimaryIndex> currentSelectionsList = new ArrayList<PrimaryIndex>(
 				2);
-		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getType());
+		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getFeatureType());
 		final boolean canUseTime = adapter.hasTemporalConstraints();
 
 		/**

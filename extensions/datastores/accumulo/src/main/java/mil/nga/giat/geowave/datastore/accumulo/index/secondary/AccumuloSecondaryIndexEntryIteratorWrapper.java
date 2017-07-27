@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.index.secondary;
 
 import java.io.IOException;
@@ -6,7 +16,8 @@ import java.util.Map.Entry;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -21,7 +32,7 @@ public class AccumuloSecondaryIndexEntryIteratorWrapper<T> extends
 		SecondaryIndexEntryIteratorWrapper<T, T>
 {
 
-	private final static Logger LOGGER = Logger.getLogger(AccumuloSecondaryIndexEntryIteratorWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSecondaryIndexEntryIteratorWrapper.class);
 	private final Scanner scanner;
 	private final PrimaryIndex index;
 

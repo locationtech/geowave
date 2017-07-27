@@ -1,3 +1,13 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+# 
+# See the NOTICE file distributed with this work for additional
+# information regarding copyright ownership.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License,
+# Version 2.0 which accompanies this distribution and is available at
+# http://www.apache.org/licenses/LICENSE-2.0.txt
+#-------------------------------------------------------------------------------
 #!/bin/bash
 #
 # This script will build and package all of the configurations listed in the BUILD_ARGS_MATRIX array.
@@ -23,7 +33,7 @@ WORKSPACE="$(pwd)"
 DOCKER_ROOT=$WORKSPACE/docker-root
 GEOSERVER_VERSION=geoserver-2.10.0-bin.zip
 GEOSERVER_ARTIFACT=$WORKSPACE/deploy/packaging/rpm/centos/6/SOURCES/geoserver.zip
-LOCAL_REPO_DIR=/var/www/html/repos/snapshots
+LOCAL_REPO_DIR=/var/www/geowave-efs/html/repos/snapshots
 LOCK_DIR=/var/lock/subsys
 
 if [ -z $GEOSERVER_DOWNLOAD_BASE ]; then
@@ -45,9 +55,9 @@ if [ -z $BUILD_ARGS_MATRIX  ]; then
 	else
 		# Default build arguments
     	BUILD_ARGS_MATRIX=(
-	"-Daccumulo.version=1.7.2 -Daccumulo.api=1.7 -Dhadoop.version=2.7.3 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0 -Dhbase.version=1.2.3 -Dvendor.version=apache"
-	"-Daccumulo.version=1.7.2-cdh5.5.0 -Daccumulo.api=1.7 -Dhadoop.version=2.6.0-cdh5.9.0 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0 -Dhbase.version=1.2.0-cdh5.9.0 -P cloudera -Dvendor.version=cdh5"
-	"-Daccumulo.version=1.7.0.2.4.2.0-258 -Daccumulo.api=1.7 -Dhadoop.version=2.7.1.2.4.2.0-258 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0 -Dhbase.version=1.1.2.2.4.2.0-258 -P hortonworks -Dvendor.version=hdp2"
+	"-Dvendor.version=apache"
+	"-P cloudera -Dvendor.version=cdh5"
+	"-P hortonworks -Dvendor.version=hdp2"
     	)
 	fi
 fi
@@ -61,7 +71,7 @@ docker run $DOCKER_ARGS --rm \
 	-e MAVEN_OPTS="-Xmx1500m" \
 	-v $DOCKER_ROOT:/root \
 	-v $WORKSPACE:/usr/src/geowave \
-	ngageoint/geowave-centos6-java8-build \
+	locationtech/geowave-centos6-java8-build \
 	/bin/bash -c \
 	"cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"
 	
@@ -72,7 +82,7 @@ docker run $DOCKER_ARGS --rm \
 	-e TIME_TAG="$TIME_TAG" \
     -v $DOCKER_ROOT:/root \
     -v $WORKSPACE:/usr/src/geowave \
-    ngageoint/geowave-centos6-rpm-build \
+    locationtech/geowave-centos6-rpm-build \
     /bin/bash -c \
     "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-rpm.sh"
 
@@ -85,7 +95,7 @@ docker run $DOCKER_ARGS --rm \
     -v $WORKSPACE:/usr/src/geowave \
     -v $LOCAL_REPO_DIR:/usr/src/repo \
     -v $LOCK_DIR:/usr/src/lock \
-    ngageoint/geowave-centos6-publish \
+    locationtech/geowave-centos6-publish \
     /bin/bash -c \
     "cd \$WORKSPACE && deploy/packaging/docker/publish/publish-common-rpm.sh --buildroot deploy/packaging/rpm/centos/6 --arch noarch --repo geowave"
 
@@ -100,7 +110,7 @@ do
 		-e MAVEN_OPTS="-Xmx1500m" \
 		-v $DOCKER_ROOT:/root \
 		-v $WORKSPACE:/usr/src/geowave \
-		ngageoint/geowave-centos6-java8-build \
+		locationtech/geowave-centos6-java8-build \
 		/bin/bash -c \
 		"cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-vendor.sh $SKIP_EXTRA"
 
@@ -113,7 +123,7 @@ do
     	-v $DOCKER_ROOT:/root \
     	-v $WORKSPACE:/usr/src/geowave \
     	-v $LOCAL_REPO_DIR:/usr/src/repo \
-    	ngageoint/geowave-centos6-rpm-build \
+    	locationtech/geowave-centos6-rpm-build \
     	/bin/bash -c \
     	"cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-rpm.sh"
     
@@ -127,7 +137,7 @@ do
     	-v $WORKSPACE:/usr/src/geowave \
     	-v $LOCAL_REPO_DIR:/usr/src/repo \
     	-v $LOCK_DIR:/usr/src/lock \
-    	ngageoint/geowave-centos6-publish \
+    	locationtech/geowave-centos6-publish \
     	/bin/bash -c \
     	"cd \$WORKSPACE && deploy/packaging/docker/publish/publish-vendor-rpm.sh --buildroot deploy/packaging/rpm/centos/6 --arch noarch --repo geowave"	
 done

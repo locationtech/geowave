@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.datastore.accumulo.util;
 
 import java.io.IOException;
@@ -24,7 +34,8 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -62,12 +73,16 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
  */
 public class AccumuloUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(AccumuloUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloUtils.class);
 	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
 	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
+		if (byteArrayRange.isSingleValue()) {
+			return Range.exact(new Text(
+					byteArrayRange.getStart().getBytes()));
+		}
 		final Text start = byteArrayRange.getStart().getBytes() == null ? null : new Text(
 				byteArrayRange.getStart().getBytes());
 		final Text end = byteArrayRange.getEnd().getBytes() == null ? null : new Text(
