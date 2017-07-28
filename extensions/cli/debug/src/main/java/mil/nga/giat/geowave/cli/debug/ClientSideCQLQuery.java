@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -85,6 +86,13 @@ public class ClientSideCQLQuery extends
 					e);
 		}
 		return count;
+	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

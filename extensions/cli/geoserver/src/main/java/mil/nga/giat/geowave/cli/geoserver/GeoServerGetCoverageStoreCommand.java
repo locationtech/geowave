@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +21,18 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONObject;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "getcs", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "getcs", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Get GeoServer CoverageStore info")
 public class GeoServerGetCoverageStoreCommand extends
-		DefaultOperation implements
+		DefaultOperation<String> implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -47,12 +50,17 @@ public class GeoServerGetCoverageStoreCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -61,6 +69,14 @@ public class GeoServerGetCoverageStoreCommand extends
 
 	@Override
 	public void execute(
+			OperationParams params )
+			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
 			OperationParams params )
 			throws Exception {
 		if (parameters.size() != 1) {
@@ -79,15 +95,11 @@ public class GeoServerGetCoverageStoreCommand extends
 				csName);
 
 		if (getCvgStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer coverage store info for '" + csName + "':");
-
 			JSONObject jsonResponse = JSONObject.fromObject(getCvgStoreResponse.getEntity());
 			JSONObject cvgstore = jsonResponse.getJSONObject("coverageStore");
-			System.out.println(cvgstore.toString(2));
+			return "\nGeoServer coverage store info for '" + csName + "': " + cvgstore.toString(2);
 		}
-		else {
-			System.err.println("Error getting GeoServer coverage store info for '" + csName + "'; code = "
-					+ getCvgStoreResponse.getStatus());
-		}
+		return "Error getting GeoServer coverage store info for '" + csName + "'; code = "
+				+ getCvgStoreResponse.getStatus();
 	}
 }

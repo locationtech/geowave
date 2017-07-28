@@ -21,11 +21,12 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addws", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "addws", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Add GeoServer workspace")
 public class GeoServerAddWorkspaceCommand extends
 		DefaultOperation implements
@@ -56,6 +57,14 @@ public class GeoServerAddWorkspaceCommand extends
 	public void execute(
 			OperationParams params )
 			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			OperationParams params )
+			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <workspace name>");
@@ -65,11 +74,8 @@ public class GeoServerAddWorkspaceCommand extends
 
 		Response addWorkspaceResponse = geoserverClient.addWorkspace(wsName);
 		if (addWorkspaceResponse.getStatus() == Status.CREATED.getStatusCode()) {
-			System.out.println("Add workspace '" + wsName + "' to GeoServer: OK");
+			return "Add workspace '" + wsName + "' to GeoServer: OK";
 		}
-		else {
-			System.err.println("Error adding workspace '" + wsName + "' to GeoServer; code = "
-					+ addWorkspaceResponse.getStatus());
-		}
+		return "Error adding workspace '" + wsName + "' to GeoServer; code = " + addWorkspaceResponse.getStatus();
 	}
 }

@@ -111,8 +111,7 @@ public class GeoWaveServicesIT
 
 	@Test
 	public void testServices()
-			throws IOException,
-			SchemaException {
+			throws Exception {
 
 		// initialize the service clients
 		// just use the default user, password

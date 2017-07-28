@@ -35,10 +35,10 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "dbscan", parentOperation = AnalyticSection.class)
+@GeowaveOperation(name = "dbscan", parentOperation = AnalyticSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Density Based Scanner")
 public class DBScanCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -64,6 +64,50 @@ public class DBScanCommand extends
 					"Requires arguments: <storename>");
 		}
 
+		computeResults(params);
+	}
+
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			String storeName ) {
+		this.parameters = new ArrayList<String>();
+		this.parameters.add(storeName);
+	}
+
+	public CommonOptions getCommonOptions() {
+		return commonOptions;
+	}
+
+	public void setCommonOptions(
+			CommonOptions commonOptions ) {
+		this.commonOptions = commonOptions;
+	}
+
+	public DBScanOptions getDbScanOptions() {
+		return dbScanOptions;
+	}
+
+	public void setDbScanOptions(
+			DBScanOptions dbScanOptions ) {
+		this.dbScanOptions = dbScanOptions;
+	}
+
+	public DataStorePluginOptions getInputStoreOptions() {
+		return inputStoreOptions;
+	}
+
+	public void setInputStoreOptions(
+			DataStorePluginOptions inputStoreOptions ) {
+		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		String inputStoreName = parameters.get(0);
 
 		// Config file
@@ -104,43 +148,7 @@ public class DBScanCommand extends
 			throw new RuntimeException(
 					"Failed to execute: " + status);
 		}
-	}
-
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-	}
-
-	public CommonOptions getCommonOptions() {
-		return commonOptions;
-	}
-
-	public void setCommonOptions(
-			CommonOptions commonOptions ) {
-		this.commonOptions = commonOptions;
-	}
-
-	public DBScanOptions getDbScanOptions() {
-		return dbScanOptions;
-	}
-
-	public void setDbScanOptions(
-			DBScanOptions dbScanOptions ) {
-		this.dbScanOptions = dbScanOptions;
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
+		return null;
 	}
 
 }

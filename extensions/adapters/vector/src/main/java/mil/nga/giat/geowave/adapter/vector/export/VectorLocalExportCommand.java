@@ -32,12 +32,12 @@ import mil.nga.giat.geowave.adapter.vector.AvroFeatureUtils;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.avro.AttributeValues;
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
-import mil.nga.giat.geowave.adapter.vector.cli.VectorSection;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -79,7 +79,8 @@ public class VectorLocalExportCommand extends
 		String storeName = parameters.get(0);
 
 		// Config file
-		File configFile = getGeoWaveConfigFile(params);
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
@@ -236,5 +237,12 @@ public class VectorLocalExportCommand extends
 
 	public VectorLocalExportOptions getOptions() {
 		return options;
+	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

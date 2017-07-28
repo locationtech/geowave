@@ -130,4 +130,11 @@ public class StageOSMToHDFSCommand extends
 		file.close();
 		return cs;
 	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

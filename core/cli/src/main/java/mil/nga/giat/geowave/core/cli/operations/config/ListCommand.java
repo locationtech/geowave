@@ -16,6 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -24,11 +27,14 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
-@GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
+
+@GeowaveOperation(name = "list", parentOperation = ConfigSection.class, restEnabled = GET)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
-		DefaultOperation implements
+		DefaultOperation<Properties> implements
 		Command
 {
 
@@ -42,15 +48,12 @@ public class ListCommand extends
 	public void execute(
 			OperationParams params ) {
 
-		File f = getGeoWaveConfigFile(params);
-
-		// Reload options with filter if specified.
-		Properties p = getGeoWaveConfigProperties(
-				params,
-				filter);
+		Pair<String, Properties> list = getList(params);
+		String name = list.getKey();
+		Properties p = list.getValue();
 
 		JCommander.getConsole().println(
-				"PROPERTIES (" + f.getName() + ")");
+				"PROPERTIES (" + name + ")");
 
 		List<String> keys = new ArrayList<String>();
 		keys.addAll(p.stringPropertyNames());
@@ -62,4 +65,37 @@ public class ListCommand extends
 					key + ": " + value);
 		}
 	}
+
+	@Override
+	public Properties computeResults(
+			OperationParams params ) {
+
+		return getList(
+				params).getValue();
+	}
+
+	private Pair<String, Properties> getList(
+			OperationParams params ) {
+
+		File f = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Reload options with filter if specified.
+		Properties p = null;
+		if (filter != null) {
+			p = ConfigOptions.loadProperties(
+					f,
+					filter);
+		}
+		else {
+			p = ConfigOptions.loadProperties(
+					f,
+					null);
+		}
+
+		return new ImmutablePair<>(
+				f.getName(),
+				p);
+	}
+
 }

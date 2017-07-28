@@ -29,10 +29,10 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "kde", parentOperation = AnalyticSection.class)
+@GeowaveOperation(name = "kde", parentOperation = AnalyticSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Kernel Density Estimate")
 public class KdeCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -50,12 +50,7 @@ public class KdeCommand extends
 	public void execute(
 			OperationParams params )
 			throws Exception {
-		KDEJobRunner runner = createRunner(params);
-		int status = runner.runJob();
-		if (status != 0) {
-			throw new RuntimeException(
-					"Failed to execute: " + status);
-		}
+		computeResults(params);
 	}
 
 	public KDEJobRunner createRunner(
@@ -138,5 +133,18 @@ public class KdeCommand extends
 	public void setOutputStoreOptions(
 			DataStorePluginOptions outputStoreOptions ) {
 		this.outputStoreOptions = outputStoreOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
+		KDEJobRunner runner = createRunner(params);
+		int status = runner.runJob();
+		if (status != 0) {
+			throw new RuntimeException(
+					"Failed to execute: " + status);
+		}
+		return null;
 	}
 }

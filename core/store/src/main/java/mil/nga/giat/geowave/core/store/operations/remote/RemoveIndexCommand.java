@@ -22,10 +22,10 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "rmindex", parentOperation = RemoteSection.class)
+@GeowaveOperation(name = "rmindex", parentOperation = RemoteSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(hidden = true, commandDescription = "Remove an index from the remote store and all associated data for the index")
 public class RemoveIndexCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -35,7 +35,12 @@ public class RemoveIndexCommand extends
 	@Override
 	public void execute(
 			OperationParams params ) {
+		computeResults(params);
+	}
 
+	@Override
+	public Void computeResults(
+			OperationParams params ) {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 2) {
 			throw new ParameterException(
@@ -44,6 +49,7 @@ public class RemoveIndexCommand extends
 
 		throw new UnsupportedOperationException(
 				"This operation is not yet supported");
+		// return null;
 	}
 
 }

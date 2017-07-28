@@ -41,7 +41,7 @@ public class IngestServiceClient
 			final File[] inputFiles,
 			final String storeName,
 			final String namespace )
-			throws FileNotFoundException {
+			throws Exception {
 		return localIngest(
 				inputFiles,
 				storeName,
@@ -57,7 +57,7 @@ public class IngestServiceClient
 			final String storeName,
 			final String namespace,
 			final String visibility )
-			throws FileNotFoundException {
+			throws Exception {
 		return localIngest(
 				inputFiles,
 				storeName,
@@ -76,7 +76,7 @@ public class IngestServiceClient
 			final String ingestFormat,
 			final String dimType,
 			final boolean clear )
-			throws FileNotFoundException {
+			throws Exception {
 		final FormDataMultiPart multiPart = new FormDataMultiPart();
 
 		for (final File file : inputFiles) {
@@ -125,7 +125,7 @@ public class IngestServiceClient
 			final File[] inputFiles,
 			final String storeName,
 			final String namespace )
-			throws FileNotFoundException {
+			throws Exception {
 		return hdfsIngest(
 				inputFiles,
 				storeName,
@@ -141,7 +141,7 @@ public class IngestServiceClient
 			final String storeName,
 			final String namespace,
 			final String visibility )
-			throws FileNotFoundException {
+			throws Exception {
 		return hdfsIngest(
 				inputFiles,
 				storeName,
@@ -160,7 +160,7 @@ public class IngestServiceClient
 			final String ingestFormat,
 			final String dimType,
 			final boolean clear )
-			throws FileNotFoundException {
+			throws Exception {
 		final FormDataMultiPart multiPart = new FormDataMultiPart();
 
 		for (final File file : inputFiles) {

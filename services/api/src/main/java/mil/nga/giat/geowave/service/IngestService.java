@@ -29,12 +29,14 @@ public interface IngestService
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response localIngest(
-			final FormDataMultiPart multiPart );
+			final FormDataMultiPart multiPart )
+			throws Exception;
 
 	@POST
 	@Path("/hdfs")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response hdfsIngest(
-			final FormDataMultiPart multiPart );
+			final FormDataMultiPart multiPart )
+			throws Exception;
 }

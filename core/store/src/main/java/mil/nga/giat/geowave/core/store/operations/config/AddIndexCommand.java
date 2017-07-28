@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -23,6 +24,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -30,15 +32,18 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
-@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddIndexCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
 	@Parameter(description = "<name>", required = true)
+	@RestParameters(names = {
+		"name"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -58,17 +63,22 @@ public class AddIndexCommand extends
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
+			final OperationParams params ) {
 
 		// Load SPI options for the given type into pluginOptions.
 		if (type != null) {
 			pluginOptions.selectPlugin(type);
 		}
 		else {
-			Properties existingProps = getGeoWaveConfigProperties(params);
+			// Try to load the 'default' options.
 
-			String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+			final File configFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+			final Properties existingProps = ConfigOptions.loadProperties(
+					configFile,
+					null);
+
+			final String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
 			if (defaultIndex != null) {
@@ -77,10 +87,10 @@ public class AddIndexCommand extends
 							existingProps,
 							IndexPluginOptions.getIndexNamespace(defaultIndex))) {
 						// Set the required type option.
-						this.type = pluginOptions.getType();
+						type = pluginOptions.getType();
 					}
 				}
-				catch (ParameterException pe) {
+				catch (final ParameterException pe) {
 					LOGGER.warn(
 							"Couldn't load default index: " + defaultIndex,
 							pe);
@@ -94,41 +104,8 @@ public class AddIndexCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params ) {
-
-		// Ensure that a name is chosen.
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Must specify index name");
-		}
-
-		Properties existingProps = getGeoWaveConfigProperties(params);
-
-		// Make sure we're not already in the index.
-		IndexPluginOptions existPlugin = new IndexPluginOptions();
-		if (existPlugin.load(
-				existingProps,
-				getNamespace())) {
-			throw new ParameterException(
-					"That index already exists: " + getPluginName());
-		}
-
-		// Save the options.
-		pluginOptions.save(
-				existingProps,
-				getNamespace());
-
-		// Make default?
-		if (Boolean.TRUE.equals(makeDefault)) {
-			existingProps.setProperty(
-					IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE,
-					getPluginName());
-		}
-
-		// Write properties file
-		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(params),
-				existingProps);
+			final OperationParams params ) {
+		computeResults(params);
 	}
 
 	public IndexPluginOptions getPluginOptions() {
@@ -148,9 +125,9 @@ public class AddIndexCommand extends
 	}
 
 	public void setParameters(
-			String indexName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(indexName);
+			final String indexName ) {
+		parameters = new ArrayList<String>();
+		parameters.add(indexName);
 	}
 
 	public Boolean getMakeDefault() {
@@ -158,7 +135,7 @@ public class AddIndexCommand extends
 	}
 
 	public void setMakeDefault(
-			Boolean makeDefault ) {
+			final Boolean makeDefault ) {
 		this.makeDefault = makeDefault;
 	}
 
@@ -167,12 +144,64 @@ public class AddIndexCommand extends
 	}
 
 	public void setType(
-			String type ) {
+			final String type ) {
 		this.type = type;
 	}
 
 	public void setPluginOptions(
-			IndexPluginOptions pluginOptions ) {
+			final IndexPluginOptions pluginOptions ) {
 		this.pluginOptions = pluginOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params ) {
+
+		// Ensure that a name is chosen.
+		if (getParameters().size() < 1) {
+			System.out.println(getParameters());
+			throw new ParameterException(
+					"Must specify index name");
+		}
+
+		if (getType() == null) {
+			throw new ParameterException(
+					"No type could be infered");
+		}
+
+		final File propFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final Properties existingProps = ConfigOptions.loadProperties(
+				propFile,
+				null);
+
+		// Make sure we're not already in the index.
+		final IndexPluginOptions existPlugin = new IndexPluginOptions();
+		if (existPlugin.load(
+				existingProps,
+				getNamespace())) {
+			throw new ParameterException(
+					"That index already exists: " + getPluginName());
+		}
+
+		final String namespace = getNamespace();
+		getPluginOptions().save(
+				existingProps,
+				namespace);
+
+		// Make default?
+		if (Boolean.TRUE.equals(makeDefault)) {
+
+			existingProps.setProperty(
+					IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE,
+					getPluginName());
+		}
+
+		// Write properties file
+		ConfigOptions.writeProperties(
+				propFile,
+				existingProps);
+
+		return null;
 	}
 }

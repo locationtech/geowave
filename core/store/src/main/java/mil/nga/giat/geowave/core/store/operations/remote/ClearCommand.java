@@ -31,10 +31,10 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-@GeowaveOperation(name = "clear", parentOperation = RemoteSection.class)
+@GeowaveOperation(name = "clear", parentOperation = RemoteSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Clear ALL data from a GeoWave store and delete tables")
 public class ClearCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -48,30 +48,7 @@ public class ClearCommand extends
 	@Override
 	public void execute(
 			OperationParams params ) {
-
-		if (parameters.size() < 1) {
-			throw new ParameterException(
-					"Must specify store name");
-		}
-
-		String inputStoreName = parameters.get(0);
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		}
-
-		LOGGER.info("Deleting everything in store: " + inputStoreName);
-
-		inputStoreOptions.createDataStore().delete(
-				new QueryOptions(),
-				new EverythingQuery());
+		computeResults(params);
 	}
 
 	public List<String> getParameters() {
@@ -91,5 +68,38 @@ public class ClearCommand extends
 	public void setInputStoreOptions(
 			DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params ) {
+		if (parameters.size() < 1) {
+			throw new ParameterException(
+					"Must specify store name");
+		}
+
+		String inputStoreName = parameters.get(0);
+
+		// Attempt to load store.
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Attempt to load input store.
+		if (inputStoreOptions == null) {
+			StoreLoader inputStoreLoader = new StoreLoader(
+					inputStoreName);
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
+			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		}
+
+		LOGGER.info("Deleting everything in store: " + inputStoreName);
+
+		inputStoreOptions.createDataStore().delete(
+				new QueryOptions(),
+				new EverythingQuery());
+		return null;
 	}
 }

@@ -207,4 +207,12 @@ public class CQLDelete extends
 		}
 	}
 
+	@Override
+	public Object computeResults(
+			OperationParams params )
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
