@@ -421,6 +421,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#what-you-will-need">What you will need</a></li>
 <li><a href="#creating-the-cluster">Creating the Cluster</a>
 <ul class="sectlevel2">
+<li><a href="#bootstrap-scripts">Bootstrap Scripts</a></li>
 <li><a href="#aws-cli-method">AWS CLI Method</a></li>
 <li><a href="#aws-gui-method">AWS GUI Method</a></li>
 </ul>
@@ -448,6 +449,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#version">Version</a></li>
 <li><a href="#create-ec2-vpc-network-interface-subnet-id">Create EC2 VPC (Network Interface/Subnet Id)</a></li>
 <li><a href="#create-aws-s3-bucket">Create AWS S3 Bucket</a></li>
+<li><a href="#upload-to-aws-s3-bucket">Upload to AWS S3 Bucket</a></li>
 <li><a href="#create-ec2-key-pair">Create EC2 Key Pair</a></li>
 <li><a href="#create-ec2-security-group">Create EC2 Security Group</a></li>
 <li><a href="#aws-cli-setup">AWS CLI Setup</a></li>
@@ -483,11 +485,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><a href="#create-ec2-security-group">EC2 Security Group</a></p>
 </li>
 <li>
-<p><a href="#create-aws-s3-bucket">AWS S3 Bucket</a> (optional)</p>
+<p><a href="#create-aws-s3-bucket">AWS S3 Bucket</a></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Only needed if you would like to use your own bootstrap script or add a step to the cluster</p>
+<p>Not necessary if you are in the us-east-1 region</p>
 </li>
 </ul>
 </div>
@@ -513,19 +515,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>We will be using the GeoWave bootstrap script to provision our cluster. Then we will walk through the cli commands
 to download, ingest, analyze and visualize the data.</p>
 </div>
+<div style="page-break-after: always;"></div>
+<div class="sect2">
+<h3 id="bootstrap-scripts"><a class="anchor" href="#bootstrap-scripts"></a>Bootstrap Scripts</h3>
 <div class="paragraph">
 <p>GeoWave currently supports the use of either Accumulo or HBase, so the version of the bootstrap script you
-use will be dependent upon which system you want to use as your datastore.</p>
+use when setting up your cluster will be dependent upon which system you want to use as your datastore. The bootstrap scripts help to set up geowave and your environment. Click on any of the links below to download the script.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>For Accumulo use: s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh</p>
+<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For HBase use: s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh</p>
+<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh</a></p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>These scripts will provide you with everything necessary to complete this guide, but will also set up Geowave if you would like to use it in other workflows. There are scripts available for each of the releases of Geowave going back to 0.9.3. These can be used by replacing <code>/latest/</code> with the desired release (i.e. <code>/0.9.3/</code>)</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -535,8 +543,7 @@ use will be dependent upon which system you want to use as your datastore.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>We have also provided scripts that will perform all of the steps automatically. This will allow you to verify your
-own steps, or test out other geowave commands and features on an already conditioned data set.</p>
+<p>We have also provided quickstart scripts that will perform all of the steps in this guide automatically. This will allow you to verify your own steps, or test out other geowave commands and features on an already conditioned data set.</p>
 </div>
 <div class="paragraph">
 <p>If you would prefer to have all of the steps run automatically, please use these bootstrap scripts instead of the
@@ -545,10 +552,47 @@ ones listed previously:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>For Accumulo use: s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh</p>
+<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For HBase use: s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh</p>
+<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh</a></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To use one of the scripts listed above, it must be accessible from an s3 bucket. Because buckets are region specific, you may not be able to use our geowave bucket if your cluster is not deployed in the us-east-1 region. In this case, you will need a personal bucket in your region that contains the desired script. Instructions on <a href="#create-aws-s3-bucket">creating</a> and <a href="#upload-to-aws-s3-bucket">uploading</a> to an s3 bucket can be found in the appendices.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you are in the us-east-1 region and would like to use our geowave bucket, the path to use is</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">s3://geowave/latest/scripts/emr/${Datastore}/bootstrap-geowave.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you&#8217;d like to use the quickstart scripts, the path is</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">s3://geowave/latest/scripts/emr/quickstart/${Datastore}/bootstrap-geowave.sh</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>${Datastore} should be either "hbase" or "accumulo" depending on which script you plan to use</p>
 </li>
 </ul>
 </div>
@@ -557,6 +601,7 @@ ones listed previously:</p>
 </table>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 <div class="sect2">
 <h3 id="aws-cli-method"><a class="anchor" href="#aws-cli-method"></a>AWS CLI Method</h3>
 <div class="paragraph">
@@ -574,7 +619,7 @@ variables is given below the command.</p>
 --applications Name=Hadoop Name=HBase \
 --use-default-roles \
 --no-auto-terminate \
---bootstrap-actions Path=s3.amazonaws.com/geowave/latest/scripts/emr/${DATASTORE}/bootstrap-geowave.sh,Name=Bootstrap_GeoWave \
+--bootstrap-actions Path=s3://{Your_Bucket}/{Path_To_Your_Script},Name=Bootstrap_GeoWave \
 --tags ${YOUR_TAGNAME} \
 --region ${YOUR_REGION} \</code></pre>
 </div>
@@ -648,20 +693,30 @@ variables is given below the command.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: emr-5.1.0</p>
-</li>
-<li>
-<p>GeoWave version 0.9.3 suports up to EMR version 5.2.0</p>
+<p>Example: emr-5.7.0</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>${DATASTORE} - The datastore you want to use. GeoWave curently suports Accumulo and HBase.</p>
+<p>${Your_Bucket} - The name of the bucket that you created in s3. This is the home to your script.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: accumulo</p>
+<p>Example: geowave-guide-bucket</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>${Path_To_Your_Script} - The path to the script that you are planning to use</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Example: scripts/hbase/bootstrap-geowave.sh</p>
+</li>
+<li>
+<p>Info on the bootstrap scripts and their locations can be found <a href="007-appendices.html#quickstart-guide-scripts">above</a></p>
 </li>
 </ul>
 </div>
@@ -689,7 +744,22 @@ variables is given below the command.</p>
 </ul>
 </div>
 </li>
+<li>
+<p>Spot Instances</p>
+<div class="ulist">
+<ul>
+<li>
+<p>You can opt to use spot instances to save money by adding <code>BidPrice</code> in your <code>--instance-groups</code> line. Info and current pricing on spot instances can be found <a href="https://aws.amazon.com/ec2/spot/pricing/">here</a>. The new line should look something like</p>
+</li>
 </ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.xlarge,BidPrice=${Bid_Price} InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m4.xlarge,BidPrice=${Bid_Price} \</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a
@@ -769,21 +839,11 @@ analyzing and visualizing data with GeoWave.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Vendor</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Select Amazon.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Release</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Select emr-5.1.0 from the dropdown list (older versions of GeoWave may not support all functions on newer versions of EMR)</p>
+<p>Select emr-5.7.0 from the dropdown list (older versions of GeoWave may not support all functions on newer versions of EMR)</p>
 </li>
 <li>
 <p>Ensure Hadoop is selected</p>
@@ -793,6 +853,16 @@ analyzing and visualizing data with GeoWave.</p>
 </li>
 <li>
 <p>It won’t hurt to have other software selected as well, but they aren’t needed for this guide</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Storage Mode</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Select HDFS</p>
 </li>
 </ul>
 </div>
@@ -837,6 +907,16 @@ analyzing and visualizing data with GeoWave.</p>
 <div class="ulist">
 <ul>
 <li>
+<p>Instance Group Configuration</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Select Uniform Instance Groups</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>Network</p>
 <div class="ulist">
 <ul>
@@ -844,7 +924,7 @@ analyzing and visualizing data with GeoWave.</p>
 <p>Select your VPC</p>
 </li>
 <li>
-<p>If you haven’t setup a VPC please see the Create EC2 VPC section <a href="#create-ec2-vpc-network-interface-subnet-id">here)</a>.</p>
+<p>If you haven’t setup a VPC please see the Create EC2 VPC section <a href="#create-ec2-vpc-network-interface-subnet-id">here</a>.</p>
 </li>
 </ul>
 </div>
@@ -860,11 +940,24 @@ analyzing and visualizing data with GeoWave.</p>
 </div>
 </li>
 <li>
+<p>Root device EBS volume size</p>
+<div class="ulist">
+<ul>
+<li>
+<p>You can ignore this</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>Master</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Select m4.xlarge from the EC2 instance type dropdown list</p>
+<p>Edit the Instance Type to be m4.xlarge</p>
+</li>
+<li>
+<p>Do not touch the EBS Storage</p>
 </li>
 </ul>
 </div>
@@ -874,10 +967,13 @@ analyzing and visualizing data with GeoWave.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Select m4.xlarge from the EC2 instance type dropdown list</p>
+<p>Edit the Instance Type to be m4.xlarge</p>
 </li>
 <li>
 <p>Select 2 for the Instance count</p>
+</li>
+<li>
+<p>Do not touch the EBS Storage or Auto Scaling</p>
 </li>
 </ul>
 </div>
@@ -905,7 +1001,7 @@ analyzing and visualizing data with GeoWave.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>You can request spot instances here to save money.</p>
+<p>You can request spot instances here to save money. Info and current pricing on spot instances can be found <a href="https://aws.amazon.com/ec2/spot/pricing/">here</a>.</p>
 </div>
 </td>
 </tr>
@@ -972,6 +1068,16 @@ analyzing and visualizing data with GeoWave.</p>
 </div>
 </li>
 <li>
+<p>Scale down behavior</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Leave at default: "Terminate at instance hour"</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>Tags</p>
 <div class="ulist">
 <ul>
@@ -1002,9 +1108,12 @@ analyzing and visualizing data with GeoWave.</p>
 </div>
 </li>
 <li>
-<p>Bootstrap Actions: Expand the Bootstrap Actions section</p>
+<p>Bootstrap Actions:</p>
 <div class="ulist">
 <ul>
+<li>
+<p>Expand the Bootstrap Actions section</p>
+</li>
 <li>
 <p>Select Custom action from the Add bootstrap action drop down list</p>
 </li>
@@ -1042,23 +1151,13 @@ analyzing and visualizing data with GeoWave.</p>
 <ul>
 <li>
 <p>Enter the location of your desired bootstrap script</p>
-<div class="ulist">
-<ul>
-<li>
-<p>For Accumulo use: s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh</p>
 </li>
 <li>
-<p>For HBase use: s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh</p>
+<p>Info on the bootstrap scripts and their locations can be found <a href="#bootstrap-scripts">above</a></p>
 </li>
 <li>
-<p>You can use the quickstart versions either script here as well</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>If you have chosen to use your own bucket to host the bootstrap script you can click on the folder icon to bring up a
-list of your available buckets and chose a script from there.</p>
+<p>If you are using your own bucket to host the bootstrap script you can click on the folder icon to bring up a
+list of your available buckets and chose a script from there. Otherwise, type in the path to the script in the geowave bucket.</p>
 </li>
 </ul>
 </div>
@@ -1115,8 +1214,14 @@ list of your available buckets and chose a script from there.</p>
 <li>
 <p>Leave “Default” selected</p>
 </li>
+<li>
+<p>If you do not have permission to create roles, it is acceptable to select "Custom" and change the Auto Scaling role to "Proceed without role"</p>
+</li>
 </ul>
 </div>
+</li>
+<li>
+<p>Ignore the Encryption Options</p>
 </li>
 <li>
 <p>Expand the EC2 Security Groups section</p>
@@ -1180,7 +1285,7 @@ analyzing and visualizing data with GeoWave.</p>
 </div>
 <div class="paragraph">
 <p>Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. You will use the “Master public DNS”
-value as your hostname and the security key you assigned to the cluster to access it.</p>
+value as your hostname and the security key you assigned to the cluster to access it. If you are prompted for a login, the default name is "hadoop"</p>
 </div>
 <div class="paragraph">
 <p>If you are unsure of how to do this, click on the blue SSH link to the right of your Master public DNS to open a popup that will walk you though it.</p>
@@ -1199,7 +1304,7 @@ value as your hostname and the security key you assigned to the cluster to acces
 <td class="content">
 <div class="paragraph">
 <p>The cluster status may show as waiting before the bootstrap script has completed. Please allow 5-7 minutes
-for the cluster to bet setup and bootstrapped. This may take longer if you are using spot instances.</p>
+for the cluster to be setup and bootstrapped. This may take longer if you are using spot instances.</p>
 </div>
 </td>
 </tr>
@@ -1234,6 +1339,9 @@ sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">source /mnt/geowave-env.sh</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>If you are using Accumulo as your datastore, the script will automatically create a geowave user with a password (geowave) and table creation permissions, as well as pointing accumulo to the geowave jar on hdfs.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1271,16 +1379,16 @@ cd $STAGING_DIR</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Add a GeoWave store (Accumulo).</p>
+<p>Add a GeoWave store (Accumulo)</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt \
--t accumulo --zookeeper $HOSTNAME:2181 --instance $ACCUMULO_INSTANCE --user geowave --password geowave</code></pre>
+-t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Add a GeoWave store (HBase).</p>
+<p>Add a GeoWave store (HBase)</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1289,7 +1397,7 @@ cd $STAGING_DIR</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Add a spatial index.</p>
+<p>Add a spatial index</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1297,7 +1405,7 @@ cd $STAGING_DIR</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Ingest the data into geowave.</p>
+<p>Ingest the data into geowave</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1306,7 +1414,7 @@ cd $STAGING_DIR</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The ingest should take ~5 minutes.</p>
+<p>The ingest should take ~5 minutes</p>
 </div>
 </div>
 <div class="sect2">
@@ -1315,16 +1423,16 @@ cd $STAGING_DIR</code></pre>
 <p>Once the ingest has completed, add another store for the kde.</p>
 </div>
 <div class="paragraph">
-<p>Add a GeoWave store (Accumulo).</p>
+<p>Add a GeoWave store (Accumulo)</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
--t accumulo --zookeeper $HOSTNAME:2181 --instance $ACCUMULO_INSTANCE --user geowave --password geowave</code></pre>
+-t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Add a GeoWave store (HBase).</p>
+<p>Add a GeoWave store (HBase)</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1333,7 +1441,7 @@ cd $STAGING_DIR</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Run the KDE analytic.</p>
+<p>Run the KDE analytic</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1341,6 +1449,9 @@ cd $STAGING_DIR</code></pre>
 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde \
 --hdfsHostPort ${HOSTNAME}:${HDFS_PORT} --jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} --tileSize 1 gdelt gdelt-kde</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The KDE can take ~20 minutes to complete due to the size of the dataset. Once it starts, its progress will be displayed in the terminal.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1350,7 +1461,7 @@ cd $STAGING_DIR</code></pre>
 <p>Once the data has been ingested and the KDE has completed you can setup GeoServer to display it.</p>
 </div>
 <div class="paragraph">
-<p>Configue the local host.</p>
+<p>Configure the local host.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1405,6 +1516,25 @@ value as your hostname and the security key you assigned to the cluster to enabl
 <p>If you are unfamiliar how to do this click on the “Enable Web Connection” link for detailed instructions on how to enable the
 web connection for Linux or Windows.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can also enable the web connection by adding a rule to your security group of Type: "All TCP" and source "Anywhere"</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/interacting-cluster-10.png" alt="select emr">
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
@@ -1429,6 +1559,20 @@ web connection for Linux or Windows.</p>
 <div class="content">
 <img src="./images/interacting-cluster-2.png" alt="select emr">
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This page is only available if you are using the Accumulo set-up</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1468,7 +1612,7 @@ web connection for Linux or Windows.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Once the bootstrap-geowave.sh script is finished you will see two layers have been created. To view them click on the
+<p>Once the quickstart bootstrap script is finished, or you&#8217;ve finished the steps above, you will see two layers have been created. To view them click on the
 “Layer Preview” link under the Data menu on the left side of the page.</p>
 </div>
 <div class="imageblock">
@@ -1481,7 +1625,7 @@ web connection for Linux or Windows.</p>
 </div>
 <div style="page-break-after: always;"></div>
 <div class="paragraph">
-<p><strong>gdeltevent</strong> - shows all of the gdelt events in a bounding box around western europe as individual points.</p>
+<p><strong>gdeltevent</strong> - shows all of the gdelt events in a bounding box around Western Europe as individual points</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1492,7 +1636,8 @@ web connection for Linux or Windows.</p>
 <p>You may have noticed that it took a fair amount of time to render the ~1.5 million points. To speed this process up we
 can set the default style the Subsample Points style that we (or the quickstart version of the bootstrap script)
 downloaded previously. The style can be found in the geowave directory at geowave/examples/example-slds/SubsamplePoints.sld
-and can also be downloaded <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld">here</a>.</p>
+and can also be downloaded <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld">here</a>. If you are using the
+quickstart script, the style is set automatically for you.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1554,7 +1699,7 @@ the OpenLayers link</p>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>gdeltevent_kde</strong> - a heat map produced using kernel density estimation in a bounding box around western europe.</p>
+<p><strong>gdeltevent_kde</strong> - a heat map produced using kernel density estimation in a bounding box around Western Europe</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1569,8 +1714,8 @@ the OpenLayers link</p>
 <h2 id="quickstart-bootstrap-script-breakdown"><a class="anchor" href="#quickstart-bootstrap-script-breakdown"></a>Quickstart Bootstrap Script Breakdown</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The quickstart bootstrap scripts listed as an option in this tutorial have a few steps and runs a number of other scripts to setup the
-environment, download the data, ingest the data, run the kde and set up the layers for geoserver. This section gives a
+<p>The quickstart bootstrap scripts listed as an option in this tutorial have a few steps and run a number of other scripts to setup the
+environment, download the data, ingest the data, run the kde, and set up the layers for geoserver. This section gives a
 basic breakdown of each script. All scripts can be found in the geowave s3 bucket in the geowave/latest/scripts/emr/quickstart/
 directory.</p>
 </div>
@@ -1581,23 +1726,20 @@ directory.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>This is the main script and has five major steps:</p>
+<p>This is the main script. Its function is to:</p>
 <div class="ulist">
 <ul>
 <li>
 <p>Download and source the other scripts</p>
 </li>
 <li>
-<p>Delays the rest of the script until EMR is done setting up the desired environment</p>
+<p>Delay the rest of the script until EMR is done setting up the desired environment</p>
 </li>
 <li>
-<p>Configures zookeeper and accumulo</p>
+<p>Configure accumulo (if using the accumulo set-up)</p>
 </li>
 <li>
-<p>Runs the install_geowave and setup-geowave scripts</p>
-</li>
-<li>
-<p>Initializes all volumes</p>
+<p>Run the install_geowave and setup-geowave scripts</p>
 </li>
 </ul>
 </div>
@@ -1616,21 +1758,23 @@ actual code that will be run.</p>
 </ul>
 </div>
 </li>
-</ul>
-</div>
-<div class="paragraph">
-<p>*=- geowave-env.sh
- * Defines variables (port numbers, timeframe, bounding box, versions, etc.) for the other scripts.</p>
-</div>
+<li>
+<p>geowave-env.sh</p>
 <div class="ulist">
 <ul>
+<li>
+<p>Defines variables (port numbers, timeframe, bounding box, versions, etc.) for the other scripts.</p>
+</li>
+</ul>
+</div>
+</li>
 <li>
 <p>ingest-and-kde-gdelt.sh</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Creates an accumulo user and namespace, downloads the gdelt dataset defined in the geowave-env script, ingests that data,
-and runs a kde on the data. It also calls the setup-geoserver-geowave-workspace script. A good script to look though if you
+<p>Downloads the gdelt dataset defined in the geowave-env script, ingests that data,
+and runs a kde on the data. It also calls the setup-geoserver-geowave-workspace script: a good script to look though if you
 want to see the commands used to perform these actions.</p>
 </li>
 </ul>
@@ -1641,7 +1785,7 @@ want to see the commands used to perform these actions.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Uses the geowave cli commands and the styles downloaded by the script to setup your geoserver workspace, stores and
+<p>Uses the geowave cli commands and the styles downloaded by the script to setup your geoserver workspace, stores, and
 layers. This can also be done by the user through the geoserver GUI.</p>
 <div id="appendices" class="paragraph">
 <p>&lt;&lt;&lt;</p>
@@ -1661,7 +1805,7 @@ layers. This can also be done by the user through the geoserver GUI.</p>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.5-SNAPSHOT from commit c6386d90d3fa534b6b12ec775b2a7be4042505c5.</p>
+<p>This documentation was generated for GeoWave version 0.9.5-SNAPSHOT from commit f4a5e6eeda721f878f668dbe654746f76fab8843.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1722,6 +1866,24 @@ change the default Subnet name to make them both easier to identify later on.</p
 </div>
 <div class="paragraph">
 <p>For more detailed information on creating and using S3 buckets please see the Amazon documentation <a href="http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html">here</a>.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="upload-to-aws-s3-bucket"><a class="anchor" href="#upload-to-aws-s3-bucket"></a>Upload to AWS S3 Bucket</h3>
+<div class="paragraph">
+<p>From the “Services” dropdown, select S3. Navigate to the bucket that you plan to use and click on the blue "Upload" button.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/upload-aws-bucket-1.png" alt="Upload bucket">
+</div>
+</div>
+<div class="paragraph">
+<p>You can drag/drop the desired scripts into this bucket, or navigate to your file by clicking "add files."</p>
+</div>
+<div class="paragraph">
+<p>For more detailed information on uploading to S3 buckets please see the Amazon documentation <a href="http://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html">here</a>.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1817,7 +1979,7 @@ button.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-07-24 13:08:02 +00:00
+Last updated 2017-07-28 20:34:14 +00:00
 </div>
 </div>
 </body>

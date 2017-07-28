@@ -33,6 +33,8 @@ mil.nga.giat.geowave.analytic.clustering
 mil.nga.giat.geowave.analytic.clustering.exception
 mil.nga.giat.geowave.analytic.distance
 mil.nga.giat.geowave.analytic.extract
+mil.nga.giat.geowave.analytic.javaspark
+mil.nga.giat.geowave.analytic.javaspark.operations
 mil.nga.giat.geowave.analytic.kmeans
 mil.nga.giat.geowave.analytic.kmeans.serial
 mil.nga.giat.geowave.analytic.kryo
@@ -174,11 +176,9 @@ mil.nga.giat.geowave.datastore.hbase.query
 mil.nga.giat.geowave.datastore.hbase.query.generated
 mil.nga.giat.geowave.datastore.hbase.query.protobuf
 mil.nga.giat.geowave.datastore.hbase.util
-mil.nga.giat.geowave.example.cli
-mil.nga.giat.geowave.examples.accumulo.app
-mil.nga.giat.geowave.examples.hbase
 mil.nga.giat.geowave.examples.ingest
 mil.nga.giat.geowave.examples.ingest.bulk
+mil.nga.giat.geowave.examples.javaspark
 mil.nga.giat.geowave.examples.query
 mil.nga.giat.geowave.format.avro
 mil.nga.giat.geowave.format.gdelt
