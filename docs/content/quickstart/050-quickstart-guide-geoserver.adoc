@@ -16,7 +16,7 @@ Log into Geoserver
 
 image::interacting-cluster-4.png[scaledwidth="100%",alt="select emr"]
 
-Once the bootstrap-geowave.sh script is finished you will see two layers have been created. To view them click on the 
+Once the quickstart bootstrap script is finished, or you've finished the steps above, you will see two layers have been created. To view them click on the 
 “Layer Preview” link under the Data menu on the left side of the page.
 
 image::interacting-cluster-5.png[scaledwidth="100%",alt="select emr"]

@@ -12,3 +12,8 @@ Open a new tab in your web browser and enter the Master public DNS of your clust
 You should see the following page:
 
 image::interacting-cluster-2.png[scaledwidth="100%",alt="select emr"]
+
+[NOTE]
+====
+This page is only available if you are using the Accumulo set-up 
+====
