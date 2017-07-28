@@ -13,7 +13,6 @@ package mil.nga.giat.geowave.core.store.data.visibility;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -35,7 +34,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	private long entriesWithDifferingFieldVisibilities = 0;
 
-	protected DifferingFieldVisibilityEntryCount() {
+	public DifferingFieldVisibilityEntryCount() {
 		super();
 	}
 
@@ -174,5 +173,4 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 				entriesWithDifferingFieldVisibilities);
 		return jo;
 	}
-
 }

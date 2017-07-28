@@ -28,9 +28,9 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -96,6 +96,7 @@ public class VectorIngestRunnerTest
 			OperationParams params ) {
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		StoreLoader inputStoreLoader = new StoreLoader(
 				"memorystore");
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
@@ -108,10 +109,10 @@ public class VectorIngestRunnerTest
 
 	/*
 	 * private PrimaryIndex getIndex(OperationParams params){ File configFile =
-	 * (File) params.getContext().get( ConfigOptions.PROPERTIES_FILE_CONTEXT);
-	 * IndexLoader indexLoader = new IndexLoader("spatialindex"); if
-	 * (!indexLoader.loadFromConfig(configFile)) { throw new ParameterException(
-	 * "Cannot find index(s) by name: " + indexLoader.getIndexName()); }
+	 * getGeoWaveConfigFile(params); IndexLoader indexLoader = new
+	 * IndexLoader("spatialindex"); if (!indexLoader.loadFromConfig(configFile))
+	 * { throw new ParameterException( "Cannot find index(s) by name: " +
+	 * indexLoader.getIndexName()); }
 	 * 
 	 * IndexPluginOptions indexOptions =
 	 * Iterables.getOnlyElement(indexLoader.getLoadedIndexes()); return

@@ -26,18 +26,21 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -140,7 +143,7 @@ public class AccumuloOptionsTest
 	public void testIndexOptions()
 			throws IOException {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		accumuloOptions.setCreateTable(false);
@@ -258,7 +261,7 @@ public class AccumuloOptionsTest
 	public void testLocalityGroups()
 			throws IOException {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
@@ -358,7 +361,7 @@ public class AccumuloOptionsTest
 	public void testAdapterOptions()
 			throws IOException {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 		accumuloOptions.setPersistAdapter(false);
 
@@ -491,7 +494,7 @@ public class AccumuloOptionsTest
 	@Test
 	public void testDeleteAll()
 			throws IOException {
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter0 = new TestGeometryAdapter();
 		final WritableDataAdapter<TestGeometry> adapter1 = new AnotherAdapter();
 
@@ -549,7 +552,6 @@ public class AccumuloOptionsTest
 			it.next();
 			count++;
 		}
-
 		assertEquals(
 				2,
 				count);
@@ -692,7 +694,7 @@ public class AccumuloOptionsTest
 		}
 	}
 
-	private static class TestGeometryAdapter extends
+	protected static class TestGeometryAdapter extends
 			AbstractDataAdapter<TestGeometry>
 	{
 		private static final ByteArrayId GEOM = new ByteArrayId(
@@ -881,6 +883,13 @@ public class AccumuloOptionsTest
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
 		}
 	}
 

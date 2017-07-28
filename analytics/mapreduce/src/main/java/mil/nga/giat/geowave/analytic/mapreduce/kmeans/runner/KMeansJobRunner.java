@@ -91,6 +91,9 @@ public class KMeansJobRunner extends
 				configuration,
 				getScope());
 
+		// HP Fortify "Command Injection" false positive
+		// What Fortify considers "externally-influenced input"
+		// comes only from users with OS-level access anyway
 		return super.run(
 				configuration,
 				runTimeProperties);

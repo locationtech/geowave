@@ -1,0 +1,26 @@
+//:geowave-addds(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs addds - Add a GeoServer datastore
+
+SYNOPSIS
+//:--------
+
+geowave gs addds [options] <GeoWave store name>
+
+DESCRIPTION
+//:-----------
+
+This command will add a GeoServer datastore
+
+OPTIONS
+//:-------
+
+- -ds, --datastore
+ * <datastore name>
+- -ws, --workspace
+ * <workspace name>

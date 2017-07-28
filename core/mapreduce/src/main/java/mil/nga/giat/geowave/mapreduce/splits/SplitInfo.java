@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class SplitInfo
@@ -54,9 +54,7 @@ public class SplitInfo
 		final int indexLength = in.readInt();
 		final byte[] indexBytes = new byte[indexLength];
 		in.readFully(indexBytes);
-		final PrimaryIndex index = PersistenceUtils.fromBinary(
-				indexBytes,
-				PrimaryIndex.class);
+		final PrimaryIndex index = (PrimaryIndex) PersistenceUtils.fromBinary(indexBytes);
 		final int numRanges = in.readInt();
 		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>(
 				numRanges);

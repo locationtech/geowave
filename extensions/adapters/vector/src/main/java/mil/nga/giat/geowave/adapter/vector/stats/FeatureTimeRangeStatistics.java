@@ -26,7 +26,7 @@ public class FeatureTimeRangeStatistics extends
 		FeatureStatistic
 {
 
-	protected FeatureTimeRangeStatistics() {
+	public FeatureTimeRangeStatistics() {
 		super();
 	}
 

@@ -1,0 +1,17 @@
+[[setup-overview]]
+<<<
+== Development Setup
+
+=== Overview
+
+Setting up an environment consists of a few steps:
+
+. <<011-retrieving-code.adoc#retrieving_geowave_code, Retrieving the GeoWave Code>>
+. <<012-building-code.adoc#building, Install GeoWave>>
+. <<016-packaging-code.adoc#packaging-tools, Package GeoWave Tools Framework>>
+. <<080-install-from-source.adoc#create-third-party-plugins, Create Third-Party Plugins From Source>>
+.. <<081-install-from-source-geoserver.adoc#geoserver-plugin, GeoServer Plugin>>
+.. <<082-install-from-source-accumulo.adoc#accumulo-plugin, Accumulo Plugin>>
+.. <<083-install-from-source-hbase.adoc#hbase-plugin, HBase Plugin>>
+. <<018-contributions.adoc#contributions, How to Contribute>>
+

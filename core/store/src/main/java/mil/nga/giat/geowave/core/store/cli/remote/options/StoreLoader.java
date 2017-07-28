@@ -64,9 +64,24 @@ public class StoreLoader
 
 		String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
 
-		Properties props = ConfigOptions.loadProperties(
-				configFile,
-				"^" + namespace);
+		return loadFromConfig(
+				ConfigOptions.loadProperties(
+						configFile,
+						"^" + namespace),
+				namespace,
+				configFile);
+	}
+
+	/**
+	 * Attempt to load the datastore configuration from the config file.
+	 * 
+	 * @param configFile
+	 * @return
+	 */
+	public boolean loadFromConfig(
+			Properties props,
+			String namespace,
+			File configFile ) {
 
 		dataStorePlugin = new DataStorePluginOptions();
 
@@ -80,7 +95,7 @@ public class StoreLoader
 
 		// knowing the datastore plugin options and class type, get all fields
 		// and parameters in order to detect which are password fields
-		if (dataStorePlugin.getFactoryOptions() != null) {
+		if (configFile != null && dataStorePlugin.getFactoryOptions() != null) {
 			File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(configFile);
 			Field[] fields = dataStorePlugin.getFactoryOptions().getClass().getDeclaredFields();
 			for (Field field : fields) {

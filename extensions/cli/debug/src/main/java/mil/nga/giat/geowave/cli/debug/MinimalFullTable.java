@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -69,8 +69,7 @@ public class MinimalFullTable extends
 					"Requires arguments: <storename>");
 		}
 
-		final String storeName = parameters.get(
-				0);
+		final String storeName = parameters.get(0);
 
 		// Attempt to load store.
 		final StoreLoader storeOptions = new StoreLoader(
@@ -82,8 +81,7 @@ public class MinimalFullTable extends
 
 		final String storeType = storeOptions.getDataStorePlugin().getType();
 
-		if (storeType.equals(
-				AccumuloStoreFactoryFamily.TYPE)) {
+		if (storeType.equals(AccumuloStoreFactoryFamily.TYPE)) {
 			try {
 				final AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
 
@@ -96,11 +94,8 @@ public class MinimalFullTable extends
 						(AccumuloOptions) opts.getStoreOptions());
 
 				long results = 0;
-				final BatchScanner scanner = ops.createBatchScanner(
-						indexId);
-				scanner.setRanges(
-						Collections.singleton(
-								new Range()));
+				final BatchScanner scanner = ops.createBatchScanner(indexId);
+				scanner.setRanges(Collections.singleton(new Range()));
 				final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
 				stopWatch.start();
@@ -111,8 +106,7 @@ public class MinimalFullTable extends
 				stopWatch.stop();
 
 				scanner.close();
-				System.out.println(
-						"Got " + results + " results in " + stopWatch.toString());
+				System.out.println("Got " + results + " results in " + stopWatch.toString());
 			}
 			catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
 				LOGGER.error(
@@ -120,8 +114,7 @@ public class MinimalFullTable extends
 						e);
 			}
 		}
-		else if (storeType.equals(
-				HBaseStoreFactoryFamily.TYPE)) {
+		else if (storeType.equals(HBaseStoreFactoryFamily.TYPE)) {
 			throw new UnsupportedOperationException(
 					"full scan for store type " + storeType + " not yet implemented.");
 		}

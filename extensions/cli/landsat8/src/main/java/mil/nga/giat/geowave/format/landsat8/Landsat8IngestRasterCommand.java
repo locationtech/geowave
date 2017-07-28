@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -31,7 +31,7 @@ public class Landsat8IngestRasterCommand extends
 {
 
 	@Parameter(description = "<storename> <comma delimited index/group list>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
 	protected Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();

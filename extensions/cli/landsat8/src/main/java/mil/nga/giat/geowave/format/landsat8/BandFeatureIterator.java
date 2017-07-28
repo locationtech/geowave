@@ -309,6 +309,7 @@ public class BandFeatureIterator implements
 		@Override
 		public boolean apply(
 				final SimpleFeature input ) {
+
 			return cqlFilter.evaluate(input);
 		}
 

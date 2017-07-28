@@ -1,0 +1,108 @@
+//:geowave-dbscan(1)
+//:=================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave analytic dbscan - Density Based Scanner
+
+SYNOPSIS
+//:--------
+
+geowave analytic dbscan [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+The geowave analytic dbscan operator will run a density based scanner analytic on GeoWave data
+
+EXAMPLE
+//:-----------
+
+[source, bash]
+----
+yarn jar geowave-tools.jar analytic dbscan -cmi 5 -cms 10 -emn 2 -emx 6 -pmd 1000 -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.adapters gpxpoint my_store
+----
+
+Run through 5 max iterations (cmi), with max distance between points as 10 meters (cms), min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd), 
+reducer count is 4 (orc), the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the temporary files needed by this job are stored in hdfs:/host:port//user/rwgdrummer (hdfsbase), and the data executed against DBSCAN is 'gpxpoint' (query.adapters).  
+The accumulo connection parameters are loaded from my_store.
+
+EXECUTION
+//:-----------
+
+DBSCAN uses GeoWaveInputFormat to load data from GeoWave into HDFS. You can use the extract query parameter to limit the records used in the analytic.
+
+It iteratively calls Nearest Neighbor to execute a sequence of concave hulls. The hulls are saved into sequence files  written to a temporary HDFS directory, and then read in again for the next DBSCAN iteration. 
+
+After completion, the data is written back from HDFS to Accumulo using a job called the "input load runner".
+
+OPTIONS
+//:-------
+
+- * -cmi, --clusteringMaxIterations
+ * Maximum number of iterations when finding optimal clusters
+- * -cms, --clusteringMinimumSize
+ * Minimum Cluster Size
+- --cdf, --commonDistanceFunctionClass
+ * Distance Function Class implements _mil.nga.giat.geowave.analytics.distance.DistanceFn_
+-  * -emx, --extractMaxInputSplit
+ * Maximum hdfs input split size
+-  * -emn, --extractMinInputSplit
+ * Minimum hdfs input split size
+- -eq, --extractQuery
+ * Query
+- -b, --globalBatchId
+ * Batch ID
+- -hdt, --hullDataTypeId
+ * Data Type ID for a centroid item
+- -hpe, --hullProjectionClass
+ * Class to project on to 2D space. Implements _mil.nga.giat.geowave.analytics.tools.Projection_
+- -ifc, --inputFormatClass
+ * Input Format Class
+- -conf, --mapReduceConfigFile
+ * MapReduce Configuration
+- * -hdfsbase, --mapReduceHdfsBaseDir
+ * Fully qualified path to the base directory in hdfs
+- * -hdfs, --mapReduceHdfsHostPort
+ * HDFS hostname and port in the format hostname:port
+- -jobtracker, --mapReduceJobtrackerHostPort
+ * [REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port
+- -resourceman, --mapReduceYarnResourceManager
+ * [REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port
+- -ons, --outputDataNamespaceUri
+ * Output namespace for objects that will be written to GeoWave
+- -odt, --outputDataTypeId
+ * Output Data ID assigned to objects that will be written to GeoWave
+- -oop, --outputHdfsOutputPath
+ * Output HDFS File Path
+- -oid, --outputIndexId
+ * Output Index ID for objects that will be written to GeoWave
+- -ofc, --outputOutputFormat
+ * Output Format Class
+- -orc, --outputReducerCount
+ * Number of Reducers For Output
+- -pdt, --partitionDistanceThresholds
+ * Comma separated list of distance thresholds, per dimension
+- -pdu, --partitionGeometricDistanceUnit
+ * Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)
+- * -pmd, --partitionMaxDistance
+ * Maximum Partition Distance
+- -pms, --partitionMaxMemberSelection
+ * Maximum number of members selected from a partition
+- -pdr, --partitionPartitionDecreaseRate
+ * Rate of decrease for precision(within (0,1])
+- -pp, --partitionPartitionPrecision
+ * Partition Precision
+- -pc, --partitionPartitionerClass
+ * Index Identifier for Centroids
+- -psp, --partitionSecondaryPartitionerClass
+ * Perform secondary partitioning with the provided class
+- * --query.adapters
+ * The comma-separated list of data adapters to query; by default all adapters are used.
+- --query.auth
+ * The comma-separated list of authorizations used during extract; by default all authorizations are used.
+- --query.index
+ * The specific index to query; by default one is chosen for each adapter.

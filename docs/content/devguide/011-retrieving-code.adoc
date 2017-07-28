@@ -1,0 +1,102 @@
+[[retrieving_code]]
+<<<
+[[retrieving_geowave_code]]
+=== Retrieving the Code
+
+Users have two options for retrieving the geowave code: either by directly <<011-retrieving-code.adoc#downloading-repo, downloading the code repository in zip archive>> or <<011-retrieving-code.adoc#cloning-repo, cloning the repository>>, both are accessed directory through GitHub.
+
+[[downloading-repo]]
+==== Downloading the Code as Zip Archive
+
+This option is for users who do not intend to contribute to the GeoWave project source, and simply want to collaborate as a read-only user, and still build the code and run in an environment. This is by far the simplest and most direct way to access the code.
+
+[options="compact"]
+To download a read-only version of the code repository:
+
+. Open a web browser and navigate to the https://github.com/locationtech/geowave[GeoWave GitHub repository] where the different projects and latest changes can be viewed.
+
+. If interested in a particular branch, select the branch of choice. Otherwise, leave on the default master branch for the latest tested changes.
+
+. Locate the green “Clone or download” button near the top right of the file navigation section.
+
+image::Clone_Download_Repo.png[scaledwidth="100%",width="100%",alt="Clone_Download_Repo.png", title="Clone & Download GeoWave Repository"]
+
+[start=4]
+. Expand the “Clone or download” pane by clicking on the green button labeled "Clone or download".
+
+image::Clone_Download_Expand.png[scaledwidth="50%",width="50%",alt="Clone_Download_Expand.png", title="Clone & Download GeoWave Source Expanded"]
+
+[start=5]
+. Download the code by clicking on the “Download ZIP” button. Depending on browser settings, the code will either download automatically to the user account’s downloads directory or a prompt will ask for the download destination. If the zip file is automatically downloaded to the downloads directory, manually move the zip file to the intended destination directory.
+
+. Navigate on the system to the path where the zip file is located. Once you unzip the downloaded GeoWave repository source, it is ready for use and building locally.
+
+[[cloning-repo]]
+==== Cloning the GeoWave Git Repository
+For users who intend to either wish to propose contributions to the GeoWave project source, or simply want a clean way to keep the code up-to-date with the latest committed changes from the GeoWave team, the GeoWave code source can be cloned through the Git command line interface. Cloning the repository enables a simplistic interface to where a user can easily compare their current codebase against the latest code in the master (or a selected branch) repository.
+
+. Navigate to the system directory where the GeoWave project code is to be located. The code will be downloaded to a parent folder named “geowave”. Ensure that there is not already an existing folder titled “geowave”.
+
+. Clone the git repository by opening a terminal and running the command:
+
+[source, bash]
+----
+$ git clone https://github.com/locationtech/geowave.git
+----
+
+[NOTE]
+====
+If you do not need the complete history, and want to speed up the clone, you can limit the depth of the checkout process by appending “-depth NUM_COMMITS” to the clone command above.
+====
+
+Terminal activity should appear, similar to below, as the repository is cloned. Note that this can typically take a few minutes.
+
+----
+Cloning into 'geowave'...
+remote: Counting objects: 1311924, done.
+remote: Compressing objects: 100% (196/196), done.
+remote: Total 1311924 (delta 68), reused 0 (delta 0), pack-reused 1311657
+Receiving objects: 100% (1311924/1311924), 784.52 MiB | 6.18 MiB/s, done.
+Resolving deltas: 100% (1159959/1159959), done.
+----
+
+[start=3]
+. Confirm that the repository clone was successful by ensuring that the GeoWave directory was created. Running the command “ls –l | grep geowave” should yield a result similar to below.
+
+[source, bash]
+----
+$ ls -l | grep geowave
+drwxr-xr-x  22 {user}  {domain group}      748 Mar 16 10:41 geowave
+----
+
+[start=4]
+. Confirm that the GeoWave contents were properly downloaded and cloned by examining the contents of the 'geowave' directory. Note that the folder entries should look closely identical to the listings on the GitHub site
+
+[source, bash]
+----
+$ ls -lah geowave
+total 144
+drwxr-xr-x  22 {user}  {domain group}   748B Mar 16 10:41 .
+drwx------+  9 {user}  {domain group}   306B Mar 16 10:33 ..
+drwxr-xr-x  12 {user}  {domain group}   408B Mar 16 10:44 .git
+-rw-r--r--   1 {user}  {domain group}   710B Mar 16 10:35 .gitattributes
+-rw-r--r--   1 {user}  {domain group}   147B Mar 16 10:35 .gitignore
+drwxr-xr-x   6 {user}  {domain group}   204B Mar 16 10:36 .metadata
+-rw-r--r--   1 {user}  {domain group}   3.1K Mar 16 10:35 .travis.yml
+drwxr-xr-x   7 {user}  {domain group}   238B Mar 16 10:35 .utility
+-rw-r--r--   1 {user}  {domain group}    11K Mar 16 10:35 LICENSE
+-rw-r--r--   1 {user}  {domain group}   724B Mar 16 10:35 NOTICE
+-rw-r--r--   1 {user}  {domain group}   8.0K Mar 16 10:35 README.md
+drwxr-xr-x   6 {user}  {domain group}   204B Mar 16 10:35 analytics
+drwxr-xr-x   9 {user}  {domain group}   306B Mar 16 10:35 core
+drwxr-xr-x  10 {user}  {domain group}   340B Mar 16 10:37 deploy
+drwxr-xr-x   7 {user}  {domain group}   238B Mar 16 10:42 dev-resources
+drwxr-xr-x   6 {user}  {domain group}   204B Mar 16 10:37 docs
+drwxr-xr-x   9 {user}  {domain group}   306B Mar 16 10:37 examples
+drwxr-xr-x   7 {user}  {domain group}   238B Mar 16 10:35 extensions
+-rw-r--r--   1 {user}  {domain group}    31K Mar 16 10:35 pom.xml
+drwxr-xr-x   6 {user}  {domain group}   204B Mar 16 10:35 services
+drwxr-xr-x  10 {user}  {domain group}   340B Mar 16 10:38 test
+----
+
+The GeoWave source is now ready for use and building locally

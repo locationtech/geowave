@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.core.store.base;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +13,10 @@ import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.QueryRanges;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -32,6 +30,7 @@ import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
@@ -44,7 +43,7 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
  * This class represents basic numeric contraints applied to a datastore query
  *
  */
-class BaseConstraintsQuery extends
+public class BaseConstraintsQuery extends
 		BaseFilteredIndexQuery
 {
 
@@ -59,7 +58,6 @@ class BaseConstraintsQuery extends
 	private final PrimaryIndex index;
 
 	public BaseConstraintsQuery(
-			final BaseDataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
@@ -72,11 +70,10 @@ class BaseConstraintsQuery extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
-				dataStore,
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(index) : null,
+				query != null ? query.createFilters(index) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
@@ -88,7 +85,6 @@ class BaseConstraintsQuery extends
 	}
 
 	public BaseConstraintsQuery(
-			final BaseDataStore dataStore,
 			final List<ByteArrayId> adapterIds,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
@@ -101,9 +97,7 @@ class BaseConstraintsQuery extends
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
-
 		super(
-				dataStore,
 				adapterIds,
 				index,
 				scanCallback,
@@ -171,6 +165,7 @@ class BaseConstraintsQuery extends
 			final Integer limit ) {
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
+				// || adapterStore instanceof MemoryAdapterStore) {
 				// Aggregate client-side
 				final CloseableIterator<Object> it = super.query(
 						datastoreOperations,
@@ -178,32 +173,9 @@ class BaseConstraintsQuery extends
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
 						limit);
-
-				if ((it != null) && it.hasNext()) {
-					final Aggregation aggregationFunction = aggregation.getRight();
-					synchronized (aggregationFunction) {
-						aggregationFunction.clearResult();
-						while (it.hasNext()) {
-							final Object input = it.next();
-							if (input != null) {
-								aggregationFunction.aggregate(input);
-							}
-						}
-						try {
-							it.close();
-						}
-						catch (final IOException e) {
-							LOGGER.warn(
-									"Unable to close datastore reader",
-									e);
-						}
-
-						return new Wrapper(
-								Iterators.singletonIterator(aggregationFunction.getResult()));
-					}
-				}
-
-				return new CloseableIterator.Empty();
+				return BaseDataStoreUtils.aggregate(
+						it,
+						aggregation.getValue());
 			}
 			else {
 				// the aggregation is run server-side use the reader to
@@ -211,10 +183,11 @@ class BaseConstraintsQuery extends
 				try (final Reader reader = getReader(
 						datastoreOperations,
 						options,
+						adapterStore,
 						maxResolutionSubsamplingPerDimension,
 						limit)) {
 					Mergeable mergedAggregationResult = null;
-					if (reader == null || !reader.hasNext()) {
+					if ((reader == null) || !reader.hasNext()) {
 						return new CloseableIterator.Empty();
 					}
 					else {
@@ -223,14 +196,12 @@ class BaseConstraintsQuery extends
 							for (final GeoWaveValue value : row.getFieldValues()) {
 								if ((value.getValue() != null) && (value.getValue().length > 0)) {
 									if (mergedAggregationResult == null) {
-										mergedAggregationResult = PersistenceUtils.fromBinary(
-												value.getValue(),
-												Mergeable.class);
+										mergedAggregationResult = (Mergeable) PersistenceUtils.fromBinary(value
+												.getValue());
 									}
 									else {
-										mergedAggregationResult.merge(PersistenceUtils.fromBinary(
-												value.getValue(),
-												Mergeable.class));
+										mergedAggregationResult.merge((Mergeable) PersistenceUtils.fromBinary(value
+												.getValue()));
 									}
 								}
 							}

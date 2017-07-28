@@ -19,7 +19,7 @@ public class AdapterIdQueryFilter implements
 {
 	private ByteArrayId adapterId;
 
-	protected AdapterIdQueryFilter() {}
+	public AdapterIdQueryFilter() {}
 
 	public AdapterIdQueryFilter(
 			final ByteArrayId adapterId ) {
@@ -52,5 +52,4 @@ public class AdapterIdQueryFilter implements
 					bytes);
 		}
 	}
-
 }

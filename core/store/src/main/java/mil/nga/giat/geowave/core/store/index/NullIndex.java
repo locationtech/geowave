@@ -28,7 +28,7 @@ public class NullIndex extends
 		PrimaryIndex
 {
 
-	protected NullIndex() {
+	public NullIndex() {
 		super();
 	}
 
@@ -60,5 +60,4 @@ public class NullIndex extends
 		indexStrategy = new NullNumericIndexStrategy(
 				StringUtils.stringFromBinary(bytes));
 	}
-
 }

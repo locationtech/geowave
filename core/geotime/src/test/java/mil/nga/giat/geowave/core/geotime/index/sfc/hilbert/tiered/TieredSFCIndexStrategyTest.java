@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.InsertionIds;
@@ -111,9 +112,8 @@ public class TieredSFCIndexStrategyTest
 
 		MultiDimensionalNumericData indexedData = new BasicNumericDataset(
 				dataPerDimension1);
-		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider()
-				.createPrimaryIndex()
-				.getIndexStrategy();
+		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialTemporalOptions()).getIndexStrategy();
 
 		final InsertionIds ids1 = strategy.getInsertionIds(indexedData);
 		assertEquals(

@@ -1,0 +1,79 @@
+[[quickstart-guide-CLI]]
+<<<
+
+=== AWS CLI Method
+
+This is the basic makeup of the command you will call to create your geowave test cluster. All variables, designated as 
+${VARIABLES}, will need to be be replaced with your individual path, group, value, etc. An explanation of each of the 
+variables is given below the command.
+
+[source, bash]
+----
+aws emr create-cluster \
+--name ${CLUSTER_NAME} \
+--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.xlarge InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m4.xlarge \
+--ec2-attributes "KeyName=${YOUR_KEYNAME},SubnetId=${YOUR_SUBNET_ID},EmrManagedMasterSecurityGroup=${YOUR_SECURITY_GROUP},EmrManagedSlaveSecurityGroup=${YOUR_SECURITY_GROUP}" \
+--release-label ${EMR_VERSION} \
+--applications Name=Hadoop Name=HBase \
+--use-default-roles \
+--no-auto-terminate \
+--bootstrap-actions Path=s3://{Your_Bucket}/{Path_To_Your_Script},Name=Bootstrap_GeoWave \
+--tags ${YOUR_TAGNAME} \
+--region ${YOUR_REGION} \
+----
+
+- ${CLUSTER_NAME} - The name you want to show up in the Cluster list in AWS
+ * Example: “geowave-guide-cluster”
+- ${NUM_WORKERS} - The number core/worker nodes you want
+ * You will be working with the relatively small amount of data in this walkthrough so we recommend using two
+- ${YOUR_KEYNAME} - The name of the key value pair you want to use for this cluster
+ * Example: geowave-guide-keypair
+ * If you have not created a keypair for this cluster please follow the steps <<110-appendices.adoc#create-ec2-key-pair, here>>.
+- ${YOUR_SUBNET_ID} - The subnet id linked with your security group(s)
+ * Example: subnet-bc123123
+ * If you are unsure of which subnet to use please see the VPC (network interface/subnet id) section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here>>.
+- ${YOUR_SECURITY_GROUP} - This is the security group(s) you want the cluster to be assigned to.
+ * Example: sg-1a123456
+ * If your AWS EMR account has default security groups setup you can leave the EmrManagedMasterSecurityGroup and EmrManagedSlaveSecurityGroup out of --ec2-attributes
+ * If you are unsure of which groups to use here please see the EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
+- ${EMR_VERSION} - The version of EMR that you want to use for your cluster
+ * Example: emr-5.7.0
+- ${Your_Bucket} - The name of the bucket that you created in s3. This is the home to your script.
+ * Example: geowave-guide-bucket
+- ${Path_To_Your_Script} - The path to the script that you are planning to use
+ * Example: scripts/hbase/bootstrap-geowave.sh
+ * Info on the bootstrap scripts and their locations can be found <<007-appendices.adoc#quickstart-guide-scripts, above>>
+- ${YOUR_TAGNAME} - Tag name for the cluster you are creating
+ * Example: “geowave-guide”
+ * The --tags is completely optional, but may help you search for this cluster if there are many on the aws account you are using
+- ${YOUR_REGION} - Your aws region
+ * Example: “us-east-1”
+- Spot Instances
+ * You can opt to use spot instances to save money by adding `BidPrice` in your `--instance-groups` line. Info and current pricing on spot instances can be found https://aws.amazon.com/ec2/spot/pricing/[here]. The new line should look something like
+[source, bash]
+----
+--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.xlarge,BidPrice=${Bid_Price} InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m4.xlarge,BidPrice=${Bid_Price} \
+----  
+
+If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a 
+message  detailing why the command failed.
+
+For more information on the create-cluster command please see the amazon documentation http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html[here].
+
+[NOTE]
+====
+The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired 
+cluster. There are many things that could still go wrong and cause the cluster to fail. You can open the AWS EMR GUI to 
+follow the progress of your cluster’s creation.
+====
+
+Please view the <<steps-overview, Connecting to the Cluster>> section of this document for description of how to connect to your provisioned cluster.
+
+[NOTE]
+====
+If you used the quickstart version of bootstrap script the script will now setup the environment, then download and process one month of gdelt data.
+
+The entire process takes approximately 25 minutes on a three node cluster.
+
+Please see the <<interacting-with-the-cluster, Interacting with the Cluster>> section of this document to see how the data can be visualized.
+====

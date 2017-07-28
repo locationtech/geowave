@@ -1,0 +1,45 @@
+[[theorydecomposition]]
+
+==== Decomposition
+
+Range decomposition is the core to the concept of SFC-based indexing. This is when we take a range described in multiple dimensions and turn it into a series of 1-dimensional ranges.
+
+image::hilbertdecomp1.png[scaledwidth="70%",width="70%",alt="Hilbert Decomposition 1", title="Hilbert Decomposition 1"]
+
+_Figure: Hilbert Ranges_
+
+In the figure above we show what we mean by this. The bounding box described by the blue selection window, or (2,9) -> (5,13), will “fully” decompose to 3 ranges – 70->75, 92->99, and 116->121.
+
+It should be noted that sometimes more simplistic algorithms will not fully decompose, but would instead represent this as 70->121 or even 64->127 (the smallest “unit cell” this box fits in). As you can see, this would result in scanning many extraneous cells.
+
+At some point, with high precision, high dimensionality curves, the number of possible unit cells can become too large to deal with. In such a case, GeoWave optimizes this by treating the curve as a “lower cardinality” curve than it actually is. So the unit cell size might not be 1, but instead 64, 128, 1024, etc. This allows the user to still achieve high precision when selection windows are small but not spend an inordinate amount of time fully decomposing for large selection windows.
+
+image::hilbertdecomp2.png[scaledwidth="75%",width="75%",alt="Hilbert Decomposition", title="Hilbert Decomposition 2"]
+
+===== Consider a region query asking for all data from:
+
+---------------
+ (1,1) -> (5,4)
+---------------
+
+This query range is shown at left by a blue bounding box.
+
+===== What did we do here?
+
+* We broke down the initial region into 4 subregions (Red boxes).
+* We broke down each subregion (red box) into 4 sub-sub regions (purple boxes).
+* We then broke down each of those purple boxes into green boxes.
+
+[NOTE]
+====
+* Once we had a decomposed quad that is full contained by the bounding box we stopped decomposing.
+* We didn’t bother decomposing regions that didn’t overlap the original search criteria.
+====
+
+image::hilbertdecomp3.png[scaledwidth="75%",width="75%",alt="Hilbert Decomposition", title="Hilbert Decomposition 3"]
+
+Here we see the query range fully decomposed into the underlying "quads". Note that in some instances we were able to stop decomposing when the query window fully contained the quad (segment 3 and segment 8).
+
+image::hilbertdecomp4.png[scaledwidth="75%",width="75%",alt="Hilbert Decomposition", title="Hilbert Decomposition 4"]
+
+Now we have fully transitioned to the 1-dimensional number line from the previous set of quads. We have also rolled together regions that are contiguous.

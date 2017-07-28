@@ -78,6 +78,9 @@ public class MiniAccumuloClusterFactory
 			}
 			boolean success = false;
 			if (hadoopHome != null) {
+				// HP Fortify "Path Traversal" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				final File hadoopDir = new File(
 						hadoopHome);
 				if (hadoopDir.exists()) {

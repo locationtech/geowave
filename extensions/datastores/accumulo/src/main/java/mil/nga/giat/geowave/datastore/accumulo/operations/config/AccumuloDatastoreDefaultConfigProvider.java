@@ -27,7 +27,7 @@ public class AccumuloDatastoreDefaultConfigProvider implements
 				"accumulo");
 		configProperties.setProperty(
 				"store.default-accumulo.opts.password",
-				"geowave");
+				"secret");
 		configProperties.setProperty(
 				"store.default-accumulo.opts.persistAdapter",
 				"true");
@@ -45,7 +45,7 @@ public class AccumuloDatastoreDefaultConfigProvider implements
 				"true");
 		configProperties.setProperty(
 				"store.default-accumulo.opts.user",
-				"geowave");
+				"root");
 		configProperties.setProperty(
 				"store.default-accumulo.opts.zookeeper",
 				"localhost:2181");

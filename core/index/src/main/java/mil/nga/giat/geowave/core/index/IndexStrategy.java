@@ -12,7 +12,13 @@ package mil.nga.giat.geowave.core.index;
 
 import java.util.List;
 
-public interface IndexStrategy extends
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+
+/**
+ * Interface which defines an index strategy.
+ * 
+ */
+public interface IndexStrategy<QueryRangeType extends QueryConstraints, EntryRangeType> extends
 		Persistable
 {
 	public List<IndexMetaData> createMetaData();

@@ -31,10 +31,10 @@ import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
 import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -122,9 +122,7 @@ public class HashKeyIndexStrategyTest
 	@Test
 	public void testBinaryEncoding() {
 		final byte[] bytes = PersistenceUtils.toBinary(compoundIndexStrategy);
-		final CompoundIndexStrategy deserializedStrategy = PersistenceUtils.fromBinary(
-				bytes,
-				CompoundIndexStrategy.class);
+		final CompoundIndexStrategy deserializedStrategy = (CompoundIndexStrategy) PersistenceUtils.fromBinary(bytes);
 		final byte[] bytes2 = PersistenceUtils.toBinary(deserializedStrategy);
 		Assert.assertArrayEquals(
 				bytes,

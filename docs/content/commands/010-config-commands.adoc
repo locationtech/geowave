@@ -1,47 +1,84 @@
 [[config-commands]]
+<<<
 
+[[config-commands]]
 === Config Commands
 
 Commands that affect local configuration only (Required options are designated with an *)
 
+.Commands:
+* <<010-config-commands.adoc#config-addindex, AddIndex>>
+* <<010-config-commands.adoc#config-addindexgrp, AddIndexGrp>>
+* <<010-config-commands.adoc#config-addstore, AddStore>>
+* <<010-config-commands.adoc#config-cpindex, CpIndex>>
+* <<010-config-commands.adoc#config-cpstore, CpStore>>
+* <<010-config-commands.adoc#config-geoserver, GeoServer>>
+* <<010-config-commands.adoc#config-list, List>>
+* <<010-config-commands.adoc#config-newcryptokey, NewCryptoKey>>
+* <<010-config-commands.adoc#config-rmindex, RmIndex>>
+* <<010-config-commands.adoc#config-rmindexgrp, RmIndexGrp>>
+* <<010-config-commands.adoc#config-rmstore, RmStore>>
+* <<010-config-commands.adoc#config-set, Set>>
+
+[[config-addindex]]
 ==== *geowave config addindex*
 
-include::manpages/geowave-addindex.txt[]
+include::manpages/config/geowave-addindex.txt[]
 
+[[config-addindexgrp]]
 ==== *geowave config addindexgrp*
 
-include::manpages/geowave-addindexgrp.txt[]
+include::manpages/config/geowave-addindexgrp.txt[]
 
+[[config-addstore]]
 ==== *geowave config addstore*
 
-include::manpages/geowave-addstore.txt[]
+include::manpages/config/geowave-addstore.txt[]
 
+[[config-cpindex]]
 ==== *geowave config cpindex*
 
-include::manpages/geowave-cpindex.txt[]
+include::manpages/config/geowave-cpindex.txt[]
 
+[[config-cpstore]]
 ==== *geowave config cpstore*
 
-include::manpages/geowave-cpstore.txt[]
+include::manpages/config/geowave-cpstore.txt[]
 
+[[config-geoserver]]
+==== *geowave config geoserver*
+
+include::manpages/config/geowave-geoserver.txt[]
+
+[[config-list]]
 ==== *geowave config list*
 
-include::manpages/geowave-list.txt[]
+include::manpages/config/geowave-list.txt[]
 
+[[config-newcryptokey]]
+==== *geowave config newcryptokey*
+
+include::manpages/config/geowave-newcryptokey.txt[]
+
+[[config-rmindex]]
 ==== *geowave config rmindex*
 
-include::manpages/geowave-rmindex.txt[]
+include::manpages/config/geowave-rmindex.txt[]
 
+[[config-rmindexgrp]]
 ==== *geowave config rmindexgrp*
 
-include::manpages/geowave-rmindexgrp.txt[]
+include::manpages/config/geowave-rmindexgrp.txt[]
 
+[[config-rmstore]]
 ==== *geowave config rmstore*
 
-include::manpages/geowave-rmstore.txt[]
+include::manpages/config/geowave-rmstore.txt[]
 
+[[config-set]]
 ==== *geowave config set*
 
-include::manpages/geowave-set.txt[]
+include::manpages/config/geowave-set.txt[]
 
---- +
+'''
+

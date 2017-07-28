@@ -17,6 +17,7 @@ public class ReaderParams extends
 		BaseReaderParams
 {
 	private final boolean isServersideAggregation;
+	private final boolean isClientsideRowMerging;
 	private final QueryRanges queryRanges;
 	private final DistributableQueryFilter filter;
 	private final List<MultiDimensionalCoordinateRangesArray> coordinateRanges;
@@ -30,6 +31,7 @@ public class ReaderParams extends
 			final Pair<List<String>, DataAdapter<?>> fieldSubsets,
 			final boolean isMixedVisibility,
 			final boolean isServersideAggregation,
+			final boolean isClientsideRowMerging,
 			final QueryRanges queryRanges,
 			final DistributableQueryFilter filter,
 			final Integer limit,
@@ -46,6 +48,7 @@ public class ReaderParams extends
 				limit,
 				additionalAuthorizations);
 		this.isServersideAggregation = isServersideAggregation;
+		this.isClientsideRowMerging = isClientsideRowMerging;
 		this.queryRanges = queryRanges;
 		this.filter = filter;
 		this.coordinateRanges = coordinateRanges;
@@ -58,6 +61,10 @@ public class ReaderParams extends
 
 	public List<MultiDimensionalNumericData> getConstraints() {
 		return constraints;
+	}
+
+	public boolean isClientsideRowMerging() {
+		return isClientsideRowMerging;
 	}
 
 	public boolean isServersideAggregation() {

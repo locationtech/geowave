@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.math.DoubleMath;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -43,11 +48,6 @@ import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.math.DoubleMath;
 
 /**
  * The Basic Query class represent a hyper-cube(s) query across all dimensions
@@ -75,7 +75,7 @@ public class BasicQuery implements
 		protected Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition;
 
 		public ConstraintSet() {
-			constraintsPerTypeOfDimensionDefinition = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+			constraintsPerTypeOfDimensionDefinition = new HashMap<>();
 		}
 
 		public ConstraintSet(
@@ -110,7 +110,7 @@ public class BasicQuery implements
 
 		public ConstraintSet merge(
 				final ConstraintSet constraintSet ) {
-			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> newSet = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> newSet = new HashMap<>();
 
 			for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintSet.constraintsPerTypeOfDimensionDefinition
 					.entrySet()) {
@@ -207,7 +207,7 @@ public class BasicQuery implements
 		public boolean isSupported(
 				final PrimaryIndex index ) {
 			final NumericDimensionField<? extends CommonIndexValue>[] fields = index.getIndexModel().getDimensions();
-			final Set<Class<? extends NumericDimensionDefinition>> fieldTypeSet = new HashSet<Class<? extends NumericDimensionDefinition>>();
+			final Set<Class<? extends NumericDimensionDefinition>> fieldTypeSet = new HashSet<>();
 			// first create a set of the field's base definition types that are
 			// within the index model
 			for (final NumericDimensionField<? extends CommonIndexValue> field : fields) {
@@ -227,15 +227,16 @@ public class BasicQuery implements
 		}
 
 		protected DistributableQueryFilter createFilter(
-				final CommonIndexModel indexModel,
+				final PrimaryIndex index,
 				final BasicQuery basicQuery ) {
+			final CommonIndexModel indexModel = index.getIndexModel();
 			final NumericDimensionField<?>[] dimensionFields = indexModel.getDimensions();
 			NumericDimensionField<?>[] orderedConstrainedDimensionFields = dimensionFields;
 			NumericDimensionField<?>[] unconstrainedDimensionFields;
 			NumericData[] orderedConstraintsPerDimension = new NumericData[dimensionFields.length];
 			// trim dimension fields to be only what is contained in the
 			// constraints
-			final Set<Integer> fieldsToTrim = new HashSet<Integer>();
+			final Set<Integer> fieldsToTrim = new HashSet<>();
 			for (int d = 0; d < dimensionFields.length; d++) {
 				final ConstraintData nd = constraintsPerTypeOfDimensionDefinition.get(dimensionFields[d]
 						.getBaseDefinition()
@@ -276,11 +277,12 @@ public class BasicQuery implements
 					new BasicNumericDataset(
 							orderedConstraintsPerDimension),
 					orderedConstrainedDimensionFields,
-					unconstrainedDimensionFields);
+					unconstrainedDimensionFields,
+					index);
 		}
 
 		public byte[] toBinary() {
-			final List<byte[]> bytes = new ArrayList<byte[]>(
+			final List<byte[]> bytes = new ArrayList<>(
 					constraintsPerTypeOfDimensionDefinition.size());
 			int totalBytes = 4;
 			for (final Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> c : constraintsPerTypeOfDimensionDefinition
@@ -312,7 +314,7 @@ public class BasicQuery implements
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			final int numEntries = buf.getInt();
-			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>(
+			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition = new HashMap<>(
 					numEntries);
 			for (int i = 0; i < numEntries; i++) {
 				final int classNameLength = buf.getInt();
@@ -334,6 +336,10 @@ public class BasicQuery implements
 									isDefault));
 				}
 				catch (final ClassNotFoundException e) {
+					// HP Fortify "Improper Output Neutralization" false
+					// positive
+					// What Fortify considers "user input" comes only
+					// from users with OS-level access anyway
 					LOGGER.warn(
 							"Cannot find dimension definition class: " + classNameStr,
 							e);
@@ -468,7 +474,7 @@ public class BasicQuery implements
 		// these basic queries are tied to NumericDimensionDefinition types, not
 		// ideal, but third-parties can and will nned to implement their own
 		// queries if they implement their own dimension definitions
-		private final List<ConstraintSet> constraintsSets = new LinkedList<ConstraintSet>();
+		private final List<ConstraintSet> constraintsSets = new LinkedList<>();
 
 		public Constraints() {}
 
@@ -497,7 +503,7 @@ public class BasicQuery implements
 				return new Constraints(
 						otherConstraintSets);
 			}
-			final List<ConstraintSet> newSets = new LinkedList<ConstraintSet>();
+			final List<ConstraintSet> newSets = new LinkedList<>();
 
 			for (final ConstraintSet newSet : otherConstraintSets) {
 				add(
@@ -576,7 +582,7 @@ public class BasicQuery implements
 			if (constraintsSets.isEmpty()) {
 				return Collections.emptyList();
 			}
-			final List<MultiDimensionalNumericData> setRanges = new ArrayList<MultiDimensionalNumericData>(
+			final List<MultiDimensionalNumericData> setRanges = new ArrayList<>(
 					constraintsSets.size());
 			for (final ConstraintSet set : constraintsSets) {
 				final MultiDimensionalNumericData mdSet = set.getIndexConstraints(indexStrategy);
@@ -610,35 +616,50 @@ public class BasicQuery implements
 	private Map<ByteArrayId, FilterableConstraints> additionalConstraints = Collections.emptyMap();
 	BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.INTERSECTS;
 
-	protected BasicQuery() {}
+	public BasicQuery() {}
 
 	public BasicQuery(
 			final Constraints constraints ) {
-		this.constraints = constraints;
+		this(
+				constraints,
+				BasicQueryCompareOperation.INTERSECTS);
 	}
 
 	public BasicQuery(
 			final Constraints constraints,
 			final BasicQueryCompareOperation compareOp ) {
-		this.constraints = constraints;
-		this.compareOp = compareOp;
+		this(
+				constraints,
+				compareOp,
+				Collections.emptyMap());
 	}
 
 	public BasicQuery(
 			final Constraints constraints,
 			final Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
+		this(
+				constraints,
+				BasicQueryCompareOperation.INTERSECTS,
+				additionalConstraints);
+	}
+
+	protected BasicQuery(
+			final Constraints constraints,
+			final BasicQueryCompareOperation compareOp,
+			final Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
 		super();
 		this.constraints = constraints;
+		this.compareOp = compareOp;
 		this.additionalConstraints = additionalConstraints;
 	}
 
 	@Override
 	public List<QueryFilter> createFilters(
-			final CommonIndexModel indexModel ) {
-		final List<DistributableQueryFilter> filters = new ArrayList<DistributableQueryFilter>();
+			final PrimaryIndex index ) {
+		final List<DistributableQueryFilter> filters = new ArrayList<>();
 		for (final ConstraintSet constraint : constraints.constraintsSets) {
 			final DistributableQueryFilter filter = constraint.createFilter(
-					indexModel,
+					index,
 					this);
 			if (filter != null) {
 				filters.add(filter);
@@ -656,7 +677,8 @@ public class BasicQuery implements
 	protected DistributableQueryFilter createQueryFilter(
 			final MultiDimensionalNumericData constraints,
 			final NumericDimensionField<?>[] orderedConstrainedDimensionFields,
-			final NumericDimensionField<?>[] unconstrainedDimensionFields ) {
+			final NumericDimensionField<?>[] unconstrainedDimensionFields,
+			final PrimaryIndex index ) {
 		return new BasicQueryFilter(
 				constraints,
 				orderedConstrainedDimensionFields,
@@ -680,13 +702,13 @@ public class BasicQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final NumericIndexStrategy indexStrategy ) {
-		return constraints.getIndexConstraints(indexStrategy);
+			final PrimaryIndex primaryIndex ) {
+		return constraints.getIndexConstraints(primaryIndex.getIndexStrategy());
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final List<byte[]> bytes = new ArrayList<byte[]>(
+		final List<byte[]> bytes = new ArrayList<>(
 				constraints.constraintsSets.size());
 		int totalBytes = 4;
 		for (final ConstraintSet c : constraints.constraintsSets) {
@@ -710,7 +732,7 @@ public class BasicQuery implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int numEntries = buf.getInt();
-		final List<ConstraintSet> sets = new LinkedList<ConstraintSet>();
+		final List<ConstraintSet> sets = new LinkedList<>();
 		for (int i = 0; i < numEntries; i++) {
 			final byte[] d = new byte[buf.getInt()];
 			buf.get(d);

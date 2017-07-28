@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.5-SNAPSHOT</version>
+		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-analytic-parent</artifactId>
 	<name>GeoWave Analytics Parent POM</name>
@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>api</module>
-		<module>mapreduce</module>
 		<module>spark</module>
+		<module>mapreduce</module>
 	</modules>
 </project>

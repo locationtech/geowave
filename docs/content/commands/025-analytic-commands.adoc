@@ -1,0 +1,59 @@
+[[analytic-commands]]
+<<<
+
+[[analytic-commands]]
+=== Analytic Commands
+
+Commands that run mapreduce or spark processing to enhance an existing GeoWave dataset (Required options are designated with an *)
+
+.Commands:
+* <<025-analytic-commands.adoc#analytic-dbscan, DBScan>>
+* <<025-analytic-commands.adoc#analytic-kde, KDE>>
+* <<025-analytic-commands.adoc#analytic-kmeansjump, KMeansJump>>
+* <<025-analytic-commands.adoc#analytic-kmeansparallel, KMeansParallel>>
+* <<025-analytic-commands.adoc#analytic-kmeansspark, KMeansSpark>>
+* <<025-analytic-commands.adoc#analytic-nn, NearestNeighbor>>
+* <<025-analytic-commands.adoc#analytic-sql, SQL>>
+
+[NOTE]
+====
+The commands below can also be run as a yarn or hadoop api commands (i.e. mapreduce)
+
+For instance, if running the analytic using yarn:
+[source]
+----
+yarn jar geowave-tools.jar analytic <algorithm> <options> <store>
+----
+====
+
+[[analytic-dbscan]]
+==== *geowave analytic dbscan*
+
+include::manpages/analytic/geowave-dbscan.txt[]
+
+[[analytic-kde]]
+==== *geowave analytic kde*
+
+include::manpages/analytic/geowave-kde.txt[]
+
+[[analytic-kmeansjump]]
+==== *geowave analytic kmeansjump*
+
+include::manpages/analytic/geowave-kmeansjump.txt[]
+
+[[analytic-kmeansparallel]]
+==== *geowave analytic kmeansparallel*
+
+include::manpages/analytic/geowave-kmeansparallel.txt[]
+
+[[analytic-nn]]
+==== *geowave analytic nn*
+
+include::manpages/analytic/geowave-nn.txt[]
+
+[[analytic-sql]]
+==== *geowave analytic sql*
+
+include::manpages/analytic/geowave-sql.txt[]
+
+'''

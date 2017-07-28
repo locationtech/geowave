@@ -1,0 +1,119 @@
+[[screenshots]]
+<<<
+
+:linkattrs:
+
+== Example screenshots
+
+The screenshots below are of data loaded from various attributed data sets into a GeoWave instance, processed
+(in some cases) by a GeoWave analytic process, and rendered by Geoserver.
+
+.Contents
+*  <<010-screenshots.adoc#screenshots-geolife, GeoLife>>
+** <<010-screenshots.adoc#screenshots-geolife-city, GeoLife at city scale>>
+** <<010-screenshots.adoc#screenshots-geolife-house, GeoLife at house scale>>
+*  <<010-screenshots.adoc#screenshots-osm-gpx, OpenStreetMap GPX Tracks>>
+** <<010-screenshots.adoc#screenshots-osm-gpx-continent, OSM GPX at continent scale>>
+** <<010-screenshots.adoc#screenshots-osm-gpx-world, OSM GPX at world scale>>
+*  <<010-screenshots.adoc#screenshots-tdrive, T-Drive>>
+** <<010-screenshots.adoc#screenshots-tdrive-city, T-drive at city scale>>
+** <<010-screenshots.adoc#screenshots-tdrive-block, T-drive at block scale>>
+** <<010-screenshots.adoc#screenshots-tdrive-house, T-drive at house scale>>
+
+[[screenshots-geolife]]
+=== GeoLife
+
+Microsoft research has made available a trajectory data set that contains the GPS coordinates of 182 users over a three year period (April 2007 to August 2012). There are 17,621 trajectories in this data set.
+
+More information on this data set is available at link:http://research.microsoft.com/jump/131675[Microsoft Research GeoLife page^, window="_blank"].
+
+[[screenshots-geolife-city]]
+==== GeoLife at City Scale
+
+Below are renderings of GeoLife data. They display the raw points as well as the results of a GeoWave kernel density analytic. The data corresponds to Mapbox zoom level 13.
+
+image::geolife-density-13-thumb.jpg[scaledwidth="100%",alt="Geolife density at city scale",link=images/geolife-density-13.jpg]
+image::geolife-points-13-thumb.jpg[scaledwidth="100%",alt="Geolife points at city scale",link=images/geolife-points-13.jpg]
+
+<<<
+
+[[screenshots-geolife-house]]
+==== GeoLife at House Scale
+
+This data set corresponds to a Mapbox zoom level of 15
+
+image::geolife-density-17-thumb.jpg[scaledwidth="100%",alt="GeoLife at house scale",link=images/geolife-density-17.jpg]
+_Graphic background (C)MapBox and (C)OpenStreetMap_
+
+image::geolife-points-17-thumb.jpg[scaledwidth="100%",alt="GeoLife at house scale",link=images/geolife-points-17.jpg]
+_Graphic background (C)MapBox and (C)OpenStreetMap_
+
+<<<
+
+[[screenshots-osm-gpx]]
+=== OpenStreetMap GPX Tracks
+
+The OpenStreetMap Foundation has released a large set of user contributed GPS tracks. These are about eight years of historical tracks. The data set consists of just under three billion (not trillion as some websites claim) points, or just under one million trajectories.
+
+More information on this data set is available at link:http://wiki.openstreetmap.org/wiki/Planet.gpx[GPX Planet page^, window="_blank"].
+
+[[screenshots-osm-gpx-continent]]
+==== OSM GPX at Continent Scale
+
+The data below corresponds to a Mapbox zoom level of 6
+
+image::osmgpx-thumb.jpg[scaledwidth="100%",alt="OSM GPX at continent scale",link=images/osmgpx.jpg]
+
+<<<
+
+[[screenshots-osm-gpx-world]]
+==== OSM GPX at World Scale
+
+This data set corresponds to a Mapbox zoom level of 3
+
+image::osmgpx-world-thumb.jpg[scaledwidth="100%",alt="Geolife points at city scale",link=images/osmgpx-world.jpg]
+
+<<<
+
+[[screenshots-tdrive]]
+=== T-Drive
+
+Microsoft research has made available a trajectory data set that contains the GPS coordinates of 10,357 taxis in Beijing, China and surrounding areas over  a one week period. There are approximately 15 million points in this data set.
+
+More information on this data set is available at: link:http://research.microsoft.com/apps/pubs/?id=152883[Microsoft Research T-drive page^, window="_blank"].
+
+[[screenshots-tdrive-city]]
+==== T-Drive at City Scale
+
+Below are renderings of the t-drive data. They display the raw points along with the results of a GeoWave kernel density analytic. The data corresponds to Mapbox zoom level 12.
+
+image::t-drive-points-12-thumb.jpg[scaledwidth="100%",alt="T-drive points at city scale",link=images/t-drive-points-12.jpg]
+
+image::t-drive-density-12-thumb.jpg[scaledwidth="100%",alt="T-drive density at city scale",link=images/t-drive-density-12.jpg]
+
+<<<
+
+[[screenshots-tdrive-block]]
+==== T-Drive at Block Scale
+
+This data set corresponds to a Mapbox zoom level of 15
+
+image::t-drive-points-2.jpg[scaledwidth="100%",alt="T-drive points at block scale"]
+_Graphic background(C)MapBox and (C)OpenStreetMap_
+
+image::t-drive-density-2.jpg[scaledwidth="100%",alt="T-drive density at block scale"]
+_Graphic background(C)MapBox and (C)OpenStreetMap_
+
+<<<
+
+[[screenshots-tdrive-house]]
+==== T-Drive at House Scale
+
+This data set corresponds to a Mapbox zoom level of 17
+
+image::t-drive-points-3.jpg[T-drive points at building scale]
+_Graphic background(C)MapBox and (C)OpenStreetMap_
+
+image::t-drive-density-3.jpg[T-drive density at building scale]
+_Graphic background(C)MapBox and (C)OpenStreetMap_
+

@@ -1,35 +1,71 @@
 [[remote-commands]]
+<<<
 
+[[remote-commands]]
 === Remote Commands
 
-Operations to manage a remote store
+Operations to manage a remote store (Required options are designated with an *)
 
+.Commands:
+* <<020-remote-commands.adoc#remote-calcstat, Calcstat>>
+* <<020-remote-commands.adoc#remote-clear, Clear>>
+* <<020-remote-commands.adoc#remote-copy, Copy>>
+* <<020-remote-commands.adoc#remote-listadapter, ListAdapter>>
+* <<020-remote-commands.adoc#remote-listindex, ListIndex>>
+* <<020-remote-commands.adoc#remote-liststats, ListStats>>
+* <<020-remote-commands.adoc#remote-mergedata, MergeData>>
+* <<020-remote-commands.adoc#remote-recalcstats, ReCalcStats>>
+* <<020-remote-commands.adoc#remote-rmstat, RmStat>>
+* <<020-remote-commands.adoc#remote-version, Version>>
+
+[[remote-calcstat]]
 ==== *geowave remote calcstat*
 
-include::manpages/geowave-calcstat.txt[]
+include::manpages/remote/geowave-calcstat.txt[]
 
+[[remote-clear]]
 ==== *geowave remote clear*
 
-include::manpages/geowave-clear.txt[]
+include::manpages/remote/geowave-clear.txt[]
 
+[[remote-copy]]
+==== *geowave remote copy*
+
+include::manpages/remote/geowave-copy.txt[]
+
+[[remote-listadapter]]
 ==== *geowave remote listadapter*
 
-include::manpages/geowave-listadapter.txt[]
+include::manpages/remote/geowave-listadapter.txt[]
 
+[[remote-listindex]]
 ==== *geowave remote listindex*
 
-include::manpages/geowave-listindex.txt[]
+include::manpages/remote/geowave-listindex.txt[]
 
+[[remote-liststats]]
 ==== *geowave remote liststats*
 
-include::manpages/geowave-liststats.txt[]
+include::manpages/remote/geowave-liststats.txt[]
 
+[[remote-mergedata]]
+==== *geowave remote mergedata*
+
+include::manpages/remote/geowave-mergedata.txt[]
+
+[[remote-recalcstats]]
 ==== *geowave remote recalcstats*
 
-include::manpages/geowave-recalcstats.txt[]
+include::manpages/remote/geowave-recalcstats.txt[]
 
+[[remote-rmstat]]
 ==== *geowave remote rmstat*
 
-include::manpages/geowave-rmstat.txt[]
+include::manpages/remote/geowave-rmstat.txt[]
 
---- +
+[[remote-version]]
+==== *geowave remote version*
+
+include::manpages/remote/geowave-version.txt[]
+
+'''

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -23,7 +25,12 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.conf.Property;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
+import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -36,6 +43,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
@@ -55,27 +63,28 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.InsertionIdQuery;
+import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometry;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometryAdapter;
 import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory
 
 public class DeleteWriterTest
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteWriterTest.class);
 	private AccumuloOperations operations;
 	private DataStore mockDataStore;
-	private InsertionIds rowId1s;
-	private InsertionIds rowId2s;
+	private InsertionIds rowIds1;
+	private InsertionIds rowIds2;
+	private InsertionIds rowIds3;
 	private WritableDataAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
 	private DataStatisticsStore statsStore;
 	protected AccumuloOptions options = new AccumuloOptions();
 
-	private static final CommonIndexModel MODEL = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex()
-			.getIndexModel();
+	private static final CommonIndexModel MODEL = new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+			new SpatialOptions()).getIndexModel();
 
 	private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
@@ -141,11 +150,12 @@ public class DeleteWriterTest
 					DeleteWriterTest.class);
 
 			startMiniAccumulo(config);
-			operations = new BasicAccumuloOperations(
+			operations = new AccumuloOperations(
 					miniAccumulo.getConnector(
 							"root",
 							new PasswordToken(
-									DEFAULT_MINI_ACCUMULO_PASSWORD)));
+									DEFAULT_MINI_ACCUMULO_PASSWORD)),
+					new AccumuloOptions());
 		}
 		operations.createTable(
 				"test_table",
@@ -262,16 +272,16 @@ public class DeleteWriterTest
 	}
 
 	@Test
-	public void testDeleteByRowId() {
+	public void testDeleteByInsertionId() {
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				3,
 				countStats.getCount());
-		assertTrue(rowId1s.getSize() > 1);
+		assertTrue(rowIds1.getSize() > 1);
 
-		final Pair<ByteArrayId, ByteArrayId> key = rowId1s.getFirstPartitionAndSortKeyPair();
+		final Pair<ByteArrayId, ByteArrayId> key = rowIds1.getFirstPartitionAndSortKeyPair();
 		final CloseableIterator it1 = mockDataStore.query(
 				new QueryOptions(
 						adapter,
@@ -280,7 +290,7 @@ public class DeleteWriterTest
 						key.getLeft(),
 						key.getRight(),
 						new ByteArrayId(
-								"test_pt_1")));
+								"test_line_1")));
 		assertTrue(it1.hasNext());
 		assertTrue(mockDataStore.delete(
 				new QueryOptions(
@@ -315,7 +325,7 @@ public class DeleteWriterTest
 		assertEquals(
 				3,
 				countStats.getCount());
-		SpatialQuery spatialQuery = new SpatialQuery(
+		final SpatialQuery spatialQuery = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
 						-78,
 						-77,
@@ -349,20 +359,26 @@ public class DeleteWriterTest
 				adapter.getAdapterId(),
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
-				18,
-				rowId2s.getSize());
+				3,
+				countStats.getCount());
+		final ByteArrayId rowId3 = rowIds3.getCompositeInsertionIds().get(
+				0);
+		// just take the first half of the row ID as the prefix
+		final byte[] rowId3Prefix = Arrays.copyOf(
+				rowId3.getBytes(),
+				rowId3.getBytes().length / 2);
+
+		final PrefixIdQuery prefixIdQuery = new PrefixIdQuery(
+				null,
+				new ByteArrayId(
+						rowId3Prefix));
 		final CloseableIterator it1 = mockDataStore.query(
-				new QueryOptions(
-						adapter,
-						index),
-				new DataIdQuery(
-						new ByteArrayId(
-								"test_pt_2")));
+				new QueryOptions(),
+				prefixIdQuery);
 		assertTrue(it1.hasNext());
 		assertTrue(adapter.getDataId(
 				(TestGeometry) it1.next()).getString().equals(
 				"test_pt_1"));
-		final Pair<ByteArrayId, ByteArrayId> key = rowId1s.getFirstPartitionAndSortKeyPair();
 		assertTrue(mockDataStore.delete(
 				new QueryOptions(),
 				prefixIdQuery));
@@ -386,13 +402,9 @@ public class DeleteWriterTest
 		assertEquals(
 				3,
 				countStats.getCount());
-		assertTrue(rowIds1.size() > 1);
+		assertTrue(rowIds1.getSize() > 1);
+		final Pair<ByteArrayId, ByteArrayId> key = rowIds1.getFirstPartitionAndSortKeyPair();
 		final CloseableIterator it1 = mockDataStore.query(
-				new QueryOptions(),
-				new RowIdQuery(
-						rowIds1));
-		assertTrue(it1.hasNext());
-		assertTrue(((BaseDataStore) mockDataStore).delete(
 				new QueryOptions(
 						adapter,
 						index),
@@ -400,14 +412,22 @@ public class DeleteWriterTest
 						key.getLeft(),
 						key.getRight(),
 						new ByteArrayId(
-								"test_pt_2"))));
+								"test_line_1")));
+		assertTrue(it1.hasNext());
+		assertTrue(((BaseDataStore) mockDataStore).delete(
+				new QueryOptions(
+						adapter,
+						index),
+				new DataIdQuery(
+						new ByteArrayId(
+								"test_pt_1"))));
 		final CloseableIterator it2 = mockDataStore.query(
 				new QueryOptions(
 						adapter,
 						index),
 				new DataIdQuery(
 						new ByteArrayId(
-								"test_pt_2")));
+								"test_pt_1")));
 		// TODO GEOWAVE-1018 this should be fixed in the latest on master (all
 		// rows associated with a deletion should also be deleted)
 
@@ -415,7 +435,7 @@ public class DeleteWriterTest
 		// !it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				CountDataStatistics.STATS_ID);
+				CountDataStatistics.STATS_TYPE);
 		// TODO: BUG, this should be 0
 		assertEquals(
 				2,

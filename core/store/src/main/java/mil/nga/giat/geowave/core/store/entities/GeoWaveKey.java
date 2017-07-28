@@ -31,6 +31,7 @@ public interface GeoWaveKey
 				key.getDataId().length);
 		buffer.putInt(
 				key.getNumberOfDuplicates());
+		buffer.rewind();
 		return buffer.array();
 	}
 }

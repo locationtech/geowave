@@ -1,0 +1,38 @@
+[[assumptions]]
+<<<
+
+:linkattrs:
+
+== Assumptions
+
+Prior to running GeoWave functionality, this guide assumes that the following components are installed and/or available. Because of the continuous changes occurring to these components, installing and maintaining extensive operational capabilities around these components is outside the scope of this document.
+
+=== Running GeoWave
+
+In order to build and/or perform development using the GeoWave source, the following components are required:
+
+[options="compact"]
+* link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java Development Kit (JDK), window="_blank"] (>= 1.8)
++
+Requires JRE v1.8 or greater
++
+Download the latest JRE from the link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java downloads site, window="_blank"]. The OracleJDK is the most thoroughly tested but there are no known issues with OpenJDK.
+
+* GeoWave build or RPM
++
+At minimum, an existing GeoWave build or RPM is required. For building the GeoWave source, please refer to the development guide.
+
+
+=== External Components
+Depending on the environment components being developed towards (e.g., requirements, datastores, indices, etc), the following are not all required, though constraints are listed below for which versions are supported by GeoWave.
+
+[options="compact"]
+* link:http://geoserver.org/[GeoServer, window="_blank"] instance >= 2.12.1
+* link:https://accumulo.apache.org/[Apache Accumulo, window="_blank"] version 1.5 or greater is required. 1.5.x, 1.6.x, 1.7.x, 1.8.x, have all been tested.
+* link:https://hbase.apache.org/[Apache HBase, window="_blank"] >= 1.2.1
+* link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] versions >= 2.3
+* link:http://cloudera.com/content/cloudera/en/home.html[Cloudera, window="_blank"] CDH5. GeoWave tests with CDH 5.9
+* link:http://hortonworks.com/hdp/[Hortonworks Data Platform, window="_blank"] 2.6+
+
+* link:http://www.oracle.com/technetwork/articles/javaee/jai-142803.html[Java Advanced Imaging, window="_blank"] and link:https://docs.oracle.com/javase/8/docs/technotes/guides/imageio[Java Image I/O, window="_blank"] are also both required to be installed on the GeoServer instance(s), as well as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), - so this may be skipped in some cases.
+

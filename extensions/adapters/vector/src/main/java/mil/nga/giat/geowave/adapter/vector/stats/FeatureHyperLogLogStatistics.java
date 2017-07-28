@@ -17,7 +17,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -28,10 +27,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 /**
@@ -51,7 +46,7 @@ public class FeatureHyperLogLogStatistics extends
 	private HyperLogLogPlus loglog;
 	private int precision;
 
-	protected FeatureHyperLogLogStatistics() {
+	public FeatureHyperLogLogStatistics() {
 		super();
 	}
 
@@ -247,5 +242,4 @@ public class FeatureHyperLogLogStatistics extends
 					precision);
 		}
 	}
-
 }

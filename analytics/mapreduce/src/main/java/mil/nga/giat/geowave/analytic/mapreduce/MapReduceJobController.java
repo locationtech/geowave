@@ -77,6 +77,9 @@ public class MapReduceJobController implements
 		for (int i = 0; i < runners.length; i++) {
 			final MapReduceJobRunner runner = runners[i];
 			LOGGER.info("Running " + runner.getClass().toString());
+			// HP Fortify "Command Injection" false positive
+			// What Fortify considers "externally-influenced input"
+			// comes only from users with OS-level access anyway
 			final int status = runner.run(
 					config,
 					runTimeProperties);

@@ -21,7 +21,7 @@ import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.adapter.raster.Resolution;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
@@ -33,7 +33,7 @@ public class OverviewStatistics extends
 
 	private Resolution[] resolutions = new Resolution[] {};
 
-	protected OverviewStatistics() {
+	public OverviewStatistics() {
 		super();
 	}
 
@@ -77,9 +77,7 @@ public class OverviewStatistics extends
 			for (int i = 0; i < resolutions.length; i++) {
 				final byte[] resBytes = new byte[buf.getInt()];
 				buf.get(resBytes);
-				resolutions[i] = PersistenceUtils.fromBinary(
-						resBytes,
-						Resolution.class);
+				resolutions[i] = (Resolution) PersistenceUtils.fromBinary(resBytes);
 			}
 		}
 	}
@@ -135,5 +133,4 @@ public class OverviewStatistics extends
 			return resolutions;
 		}
 	}
-
 }

@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +27,8 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.adapter.vector.AvroFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.WholeFeatureDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
@@ -141,7 +141,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 
 	@Override
 	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-			final File input,
+			final URL input,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		final I[] hdfsObjects = toAvroObjects(input);

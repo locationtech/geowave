@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.datastore.cassandra.operations.config;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraStoreFactoryFamily;
@@ -30,7 +31,8 @@ public class CassandraRequiredOptions extends
 		this.contactPoint = contactPoint;
 	}
 
-	public CassandraOptions getAdditionalOptions() {
+	@Override
+	public DataStoreOptions getStoreOptions() {
 		return additionalOptions;
 	}
 }

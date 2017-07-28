@@ -31,6 +31,7 @@ import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -149,11 +150,13 @@ public abstract class MultiLevelClusteringJobRunner extends
 		// TODO: set out index type for extracts?
 		propertyManagement.storeIfEmpty(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
 
 		propertyManagement.storeIfEmpty(
 				HullParameters.Hull.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
 
 		// first. extract data
 		int status = jobExtractRunner.run(
@@ -195,6 +198,8 @@ public abstract class MultiLevelClusteringJobRunner extends
 					final Path nextPath = new Path(
 							outputBaseDir + "/" + "level_" + zoomLevel);
 					if (fs.exists(nextPath)) {
+						// HPFortify "Path Manipulation"
+						// False positive - path is internally managed
 						fs.delete(
 								nextPath,
 								true);
@@ -204,11 +209,17 @@ public abstract class MultiLevelClusteringJobRunner extends
 							nextPath));
 					groupAssignmentRunner.setZoomLevel(zoomLevel);
 
+					// HP Fortify "Command Injection" false positive
+					// What Fortify considers "externally-influenced input"
+					// comes only from users with OS-level access anyway
 					status = retainGroupAssigments ? groupAssignmentRunner.run(
 							config,
 							propertyManagement) : 0;
 
 					if (status == 0) {
+						// HP Fortify "Command Injection" false positive
+						// What Fortify considers "externally-influenced input"
+						// comes only from users with OS-level access anyway
 						status = hullRunner.run(
 								config,
 								propertyManagement);

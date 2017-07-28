@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.5-SNAPSHOT</version>
+		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
@@ -16,14 +17,18 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-service-client</artifactId>
+			<artifactId>geowave-format-vector</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-service-webapp</artifactId>
+			<artifactId>geowave-format-gpx</artifactId>
 			<version>${project.version}</version>
-			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-format-gdelt</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -37,12 +42,38 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-spark</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-dynamodb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-hbase</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-cassandra</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-bigtable</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -56,9 +87,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-cli-theia</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-minicluster</artifactId>
-			<version>${hadoop.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>jdk.tools</artifactId>
@@ -89,11 +124,12 @@
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>cassandra-maven-plugin</artifactId>
 			<version>3.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>log4j-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -113,35 +149,6 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.9</version>
 				<executions>
-					<execution>
-						<id>unpack-wars</id>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<phase>pre-integration-test</phase>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>mil.nga.giat</groupId>
-									<artifactId>geowave-service-webapp</artifactId>
-									<version>${project.version}</version>
-									<type>war</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/geowave-services</outputDirectory>
-									<includes>**/*.class,**/*.config,**/*.xml,WEB-INF/lib/**/slf4j*.jar</includes>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.geoserver.web</groupId>
-									<artifactId>gs-web-app</artifactId>
-									<version>${geoserver.version}</version>
-									<type>war</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar</excludes>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
 					<execution>
 						<id>setup-wps</id>
 						<goals>
@@ -217,6 +224,10 @@
 					</arguments>
 				</configuration>
 			</plugin>
+			<!-- <plugin> <groupId>com.google.cloud.bigtable</groupId> <artifactId>bigtable-emulator-maven-plugin</artifactId> 
+				<version>1.0.0</version> <executions> <execution> <goals> <goal>start</goal> 
+				<goal>stop</goal> </goals> <configuration> <propertyName>bigtable.emulator.endpoint</propertyName> 
+				</configuration> </execution> </executions> </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -227,6 +238,7 @@
 							<environmentVariables>
 								<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
 								<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
+								<BIGTABLE_EMULATOR_HOST>${bigtable.emulator.endpoint}</BIGTABLE_EMULATOR_HOST>
 							</environmentVariables>
 							<systemPropertyVariables>
 								<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
@@ -234,11 +246,17 @@
 								<username>${username}</username>
 								<password>${password}</password>
 								<testStoreType>${testStoreType}</testStoreType>
+								<testStoreOptions>${testStoreOptions}</testStoreOptions>
+								<testServerEnabled>${testServerEnabled}</testServerEnabled>
 								<geoserver.version>${geoserver.version}</geoserver.version>
 								<log4j.configuration>file:${project.build.testOutputDirectory}/log4j-test.properties</log4j.configuration>
 								<java.util.logging.config.file>${project.build.testOutputDirectory}/jul-test.properties</java.util.logging.config.file>
+								<bigtable.emulator.endpoint>${bigtable.emulator.endpoing}</bigtable.emulator.endpoint>
+								<bigtable.emulator.internal>${bigtable.emulator.internal}</bigtable.emulator.internal>
+								<bigtable.sdk.url>${bigtable.sdk.url}</bigtable.sdk.url>
+								<bigtable.sdk.file>${bigtable.sdk.file}</bigtable.sdk.file>
 							</systemPropertyVariables>
-							<!-- Sonar currently just supports surefire so "trick" Sonar into
+							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->
 							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
 							<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>
@@ -272,7 +290,8 @@
 						<configuration>
 							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 								<mkdir dir="${project.reporting.outputDirectory}" />
-								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
+								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"
+									classpathref="maven.plugin.classpath" />
 								<jacoco:report>
 									<executiondata>
 										<fileset dir="../" includes="**/coverage-reports/*.exec" />
@@ -280,10 +299,14 @@
 
 									<structure name="GeoWave">
 										<classfiles>
-											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
+											<fileset dir="../"
+												includes="**/target/classes/**,**/target/munged/classes/**"
+												excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
-											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
+											<fileset dir="../"
+												includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
+												excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
@@ -316,9 +339,10 @@
 						<sourceDirectory>../extensions/datastores/hbase/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/bigtable/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/auth/src/main/java</sourceDirectory>
-						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>						
+						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/landsat8/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/cli/theia/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/geoserver/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/osm/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/debug/src/main/java</sourceDirectory>
@@ -334,12 +358,10 @@
 						<sourceDirectory>../extensions/formats/gdelt/src/main/java</sourceDirectory>
 						<sourceDirectory>../analytics/api/target/munged/main</sourceDirectory>
 						<sourceDirectory>../analytics/mapreduce/target/munged/main</sourceDirectory>
-						<sourceDirectory>../analytics/spark/src/main/scala</sourceDirectory>
-						<sourceDirectory>../services/api/src/main/java</sourceDirectory>
-						<sourceDirectory>../services/client/src/main/java</sourceDirectory>
-						<sourceDirectory>../services/webapp/src/main/java</sourceDirectory>
+						<sourceDirectory>../analytics/spark/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/rest/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>
-						<sourceDirectory>../examples/src/main/java</sourceDirectory>
+						<sourceDirectory>../examples/java-api/src/main/java</sourceDirectory>
 						<sourceDirectory>../test/src/main/java</sourceDirectory>
 					</sourceDirectories>
 				</configuration>
@@ -349,17 +371,51 @@
 
 	<profiles>
 		<profile>
-			<id>accumulo-it</id>
+			<id>accumulo-it-server</id>
 			<properties>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
+				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
 			</properties>
 		</profile>
 		<profile>
-			<id>hbase-it</id>
+			<id>accumulo-it-client</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>ACCUMULO</testStoreType>
+				<testStoreOptions>enableServerSideLibrary=false</testStoreOptions>
+			</properties>
+		</profile>
+		<profile>
+			<id>accumulo-it-all</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>ACCUMULO</testStoreType>
+				<testStoreOptions>enableServerSideLibrary=true!enableServerSideLibrary=false</testStoreOptions>
+			</properties>
+		</profile>
+		<profile>
+			<id>hbase-it-server</id>
 			<properties>
 				<skipITs>false</skipITs>
 				<testStoreType>HBASE</testStoreType>
+				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
+			</properties>
+		</profile>
+		<profile>
+			<id>hbase-it-client</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>HBASE</testStoreType>
+				<testStoreOptions>enableServerSideLibrary=false</testStoreOptions>
+			</properties>
+		</profile>
+		<profile>
+			<id>hbase-it-all</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>HBASE</testStoreType>
+				<testStoreOptions>enableServerSideLibrary=true!enableServerSideLibrary=false</testStoreOptions>
 			</properties>
 		</profile>
 		<profile>
@@ -382,6 +438,10 @@
 			<properties>
 				<skipITs>false</skipITs>
 				<testStoreType>BIGTABLE</testStoreType>
+				<bigtable.emulator.endpoint>127.0.0.1:8128</bigtable.emulator.endpoint>
+				<bigtable.emulator.internal>true</bigtable.emulator.internal>
+				<bigtable.sdk.url>https://dl.google.com/dl/cloudsdk/channels/rapid/downloads</bigtable.sdk.url>
+				<bigtable.sdk.file>google-cloud-sdk-190.0.1-linux-x86_64.tar.gz</bigtable.sdk.file>
 			</properties>
 		</profile>
 	</profiles>

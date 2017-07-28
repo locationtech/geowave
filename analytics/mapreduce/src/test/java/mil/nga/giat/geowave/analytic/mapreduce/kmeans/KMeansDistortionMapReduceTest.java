@@ -52,6 +52,7 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -86,8 +87,7 @@ public class KMeansDistortionMapReduceTest
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-
+	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 	final GeometryFactory factory = new GeometryFactory();
 	final String grp1 = "g1";
 
@@ -105,7 +105,7 @@ public class KMeansDistortionMapReduceTest
 						CommonParameters.Common.DISTANCE_FUNCTION_CLASS),
 				FeatureCentroidDistanceFn.class,
 				DistanceFn.class);
-
+		testObjectAdapter.init(index);
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				testObjectAdapter);
@@ -117,7 +117,8 @@ public class KMeansDistortionMapReduceTest
 		final PropertyManagement propManagement = new PropertyManagement();
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				ftype.getTypeName());

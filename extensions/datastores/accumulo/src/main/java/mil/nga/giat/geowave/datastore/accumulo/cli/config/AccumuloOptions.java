@@ -32,9 +32,4 @@ public class AccumuloOptions extends
 			final boolean useLocalityGroups ) {
 		this.useLocalityGroups = useLocalityGroups;
 	}
-
-	@Override
-	public boolean isServerSideLibraryEnabled() {
-		return true;
-	}
 }

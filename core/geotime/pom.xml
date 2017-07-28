@@ -4,7 +4,7 @@
 		<groupId>mil.nga.giat</groupId>
 		<artifactId>geowave-core-parent</artifactId>
 		<relativePath>../</relativePath>
-		<version>0.9.5-SNAPSHOT</version>
+		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-geotime</artifactId>
 	<name>GeoWave Spatial and Temporal Support</name>
@@ -19,11 +19,26 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-core-index</artifactId>
 			<version>${project.version}</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-epsg-wkt</artifactId>
+			<version>${geotools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-core-store</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-referencing</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-api</artifactId>
+			<version>${geotools.version}</version>
 		</dependency>
 	</dependencies>
 </project>

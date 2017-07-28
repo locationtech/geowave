@@ -1,0 +1,29 @@
+[[steps-overview]]
+<<<
+
+[[steps-overview]]
+=== Connecting to the Cluster
+
+Once your cluster is running and bootstrapped, ssh into the cluster. 
+
+Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. You will use the “Master public DNS” 
+value as your hostname and the security key you assigned to the cluster to access it. If you are prompted for a login, the default name is "hadoop"
+
+If you are unsure of how to do this, click on the blue SSH link to the right of your Master public DNS to open a popup that will walk you though it.
+
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+[NOTE]
+====
+The cluster status may show as waiting before the bootstrap script has completed. Please allow 5-7 minutes 
+for the cluster to be setup and bootstrapped. This may take longer if you are using spot instances.  
+====
+
+If you are using Accumulo as your datastore, the script will automatically create a geowave user with a password (geowave) and table creation permissions, as well as pointing accumulo to the geowave jar on hdfs.
+
+=== Demo Links
+
+- link:walkthrough-vector.html[Vector Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]
+- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]
+- link:interact-cluster.html[Interacting with the cluster, window="_blank"]

@@ -10,11 +10,21 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.ingest;
 
-import com.beust.jcommander.Parameter;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
@@ -29,13 +39,12 @@ import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 public class SpatialDimensionalityTypeProvider implements
-		DimensionalityTypeProviderSpi
+		DimensionalityTypeProviderSpi<SpatialOptions>
 {
-	private final SpatialOptions options = new SpatialOptions();
+	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	private static final int LONGITUDE_BITS = 31;
 	private static final int LATITUDE_BITS = 31;
@@ -82,38 +91,117 @@ public class SpatialDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public DimensionalityTypeOptions getOptions() {
-		return options;
+	public SpatialOptions createOptions() {
+		return new SpatialOptions();
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex() {
+	public PrimaryIndex createPrimaryIndex(
+			SpatialOptions options ) {
 		return internalCreatePrimaryIndex(options);
 	}
 
 	private static PrimaryIndex internalCreatePrimaryIndex(
 			final SpatialOptions options ) {
+		NumericDimensionDefinition[] dimensions;
+		boolean isDefaultCRS;
+		String crsCode = null;
+		NumericDimensionField<?>[] fields = null;
+		NumericDimensionField<?>[] fields_temporal = null;
+		CoordinateReferenceSystem crs = null;
+
+		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
+			dimensions = SPATIAL_DIMENSIONS;
+			fields = SPATIAL_FIELDS;
+			isDefaultCRS = true;
+			crsCode = "EPSG:4326";
+		}
+		else {
+			crs = decodeCRS(options.crs);
+			CoordinateSystem cs = crs.getCoordinateSystem();
+			isDefaultCRS = false;
+			crsCode = options.crs;
+			dimensions = new NumericDimensionDefinition[cs.getDimension()];
+			if (options.storeTime) {
+				fields_temporal = new NumericDimensionField[dimensions.length + 1];
+				for (int d = 0; d < dimensions.length; d++) {
+					CoordinateSystemAxis csa = cs.getAxis(d);
+					dimensions[d] = new CustomCRSSpatialDimension(
+							(byte) d,
+							csa.getMinimumValue(),
+							csa.getMaximumValue());
+					fields_temporal[d] = new CustomCRSSpatialField(
+							(CustomCRSSpatialDimension) dimensions[d]);
+				}
+				fields_temporal[dimensions.length] = new TimeField(
+						Unit.YEAR);
+			}
+			else {
+				fields = new NumericDimensionField[dimensions.length];
+				for (int d = 0; d < dimensions.length; d++) {
+					CoordinateSystemAxis csa = cs.getAxis(d);
+					dimensions[d] = new CustomCRSSpatialDimension(
+							(byte) d,
+							csa.getMinimumValue(),
+							csa.getMaximumValue());
+					fields[d] = new CustomCRSSpatialField(
+							(CustomCRSSpatialDimension) dimensions[d]);
+				}
+			}
+
+		}
+
+		BasicIndexModel indexModel = null;
+		if (isDefaultCRS) {
+			indexModel = new BasicIndexModel(
+					options.storeTime ? SPATIAL_TEMPORAL_FIELDS : SPATIAL_FIELDS);
+		}
+		else {
+
+			indexModel = new CustomCrsIndexModel(
+					options.storeTime ? fields_temporal : fields,
+					crsCode);
+		}
+
 		return new CustomIdIndex(
 				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
-						SPATIAL_DIMENSIONS,
+						dimensions,
 						new int[] {
+							// TODO this is only valid for 2D coordinate
+							// systems, again consider the possibility of being
+							// flexible enough to handle n-dimensions
 							LONGITUDE_BITS,
 							LATITUDE_BITS
 						},
 						SFCType.HILBERT),
-				new BasicIndexModel(
-						options.storeTime ? SPATIAL_TEMPORAL_FIELDS : SPATIAL_FIELDS),
+				indexModel,
 				new ByteArrayId(
-						options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID));
+						// TODO append CRS code to ID if its overridden
+						isDefaultCRS ? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)
+								: (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID) + "_"
+										+ crsCode.substring(crsCode.indexOf(":") + 1)));
 	}
 
-	private static class SpatialOptions implements
-			DimensionalityTypeOptions
-	{
-		@Parameter(names = {
-			"--storeTime"
-		}, required = false, description = "The index will store temporal values.  This allows it to slightly more efficiently run spatial-temporal queries although if spatial-temporal queries are a common use case, a separate spatial-temporal index is recommended.")
-		protected boolean storeTime = false;
+	public static CoordinateReferenceSystem decodeCRS(
+			String crsCode ) {
+
+		CoordinateReferenceSystem crs = null;
+		try {
+			crs = CRS.decode(
+					crsCode,
+					true);
+		}
+		catch (final FactoryException e) {
+			LOGGER.error(
+					"Unable to decode '" + crsCode + "' CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize '" + crsCode + "' object",
+					e);
+		}
+
+		return crs;
+
 	}
 
 	@Override

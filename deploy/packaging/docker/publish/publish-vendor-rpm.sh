@@ -16,6 +16,7 @@
 
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
 trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm' EXIT
+trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
 
 # Get the version
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)

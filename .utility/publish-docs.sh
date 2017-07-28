@@ -2,6 +2,7 @@
 
 if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_DOCS" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then  
   echo -e "Generating changelog...\n"
+  export CHANGELOG_GITHUB_TOKEN=$GH_TOKEN
   gem install github_changelog_generator
   github_changelog_generator
   pandoc -f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html

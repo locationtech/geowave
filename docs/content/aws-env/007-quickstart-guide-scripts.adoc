@@ -1,0 +1,28 @@
+[[quickstart-guide-intro]]
+<<<
+
+:linkattrs:
+
+=== Bootstrap Scripts
+
+[[quickstart-guide-intro]]
+GeoWave currently supports the use of either Accumulo or HBase, so the version of the bootstrap script you 
+use when setting up your cluster will be dependent upon which system you want to use as your datastore. The bootstrap scripts help to set up geowave and your environment. Click on any of the links below to download the script.
+
+- For Accumulo use: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh[http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh, window="_blank"]
+- For HBase use: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh[http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh, window="_blank"]
+
+These scripts will provide you with everything necessary to complete this guide, but will also set up Geowave if you would like to use it in other workflows. There are scripts available for each of the releases of Geowave going back to 0.9.3. These can be used by replacing ``/latest/`` with the desired release (i.e. ``/0.9.3/``) 
+
+[NOTE]
+====
+We have also provided quickstart scripts that will perform all of the steps in this guide automatically. This will allow you to verify your own steps, or test out other geowave commands and features on an already conditioned data set.
+
+If you would prefer to have all of the steps run automatically, please use these bootstrap scripts instead of the 
+ones listed previously:
+
+- For Accumulo use: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh[http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh, window="_blank"]
+- For HBase use: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh[http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh, window="_blank"]
+====
+
+To use one of the scripts listed above, it must be accessible from an s3 bucket. Because buckets are region specific, you may not be able to use our geowave bucket if your cluster is not deployed in the us-east-1 region. In this case, you will need a personal bucket in your region that contains the desired script. Instructions on <<110-appendices.adoc#create-aws-s3-bucket, creating>> and <<110-appendices.adoc#upload-to-aws-s3-bucket, uploading>> to an s3 bucket can be found in the appendices.

@@ -14,12 +14,14 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -36,17 +38,16 @@ public class TwitterIngestTest
 		ingester = new TwitterIngestPlugin();
 		ingester.init(null);
 
-		filePath = "20131108-010101.txt.gz";
-		expectedCount = 255;
+		filePath = "01234567-010101.txt.gz";
+		expectedCount = 24;
 	}
 
 	@Test
 	public void testIngest()
 			throws IOException {
 
-		final File toIngest = new File(
-				this.getClass().getClassLoader().getResource(
-						filePath).getPath());
+		final URL toIngest = this.getClass().getClassLoader().getResource(
+				filePath);
 
 		assertTrue(TwitterUtils.validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();

@@ -91,5 +91,4 @@ public class TemporalIndexStrategy implements
 		return new Date(
 				Lexicoders.LONG.fromByteArray(sortKey.getBytes()));
 	}
-
 }

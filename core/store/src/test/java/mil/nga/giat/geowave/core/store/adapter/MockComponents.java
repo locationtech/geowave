@@ -18,6 +18,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.CoordinateRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.InsertionIds;
@@ -45,6 +46,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class MockComponents
 {
@@ -216,7 +218,6 @@ public class MockComponents
 
 		@Override
 		public ByteArrayId[] getSupportedStatisticsTypes() {
-			// TODO Auto-generated method stub
 			return new ByteArrayId[] {
 				CountDataStatistics.STATS_TYPE,
 				new IntegerRangeDataStatistics(
@@ -283,6 +284,13 @@ public class MockComponents
 		}
 
 		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
 		public EntryVisibilityHandler<Integer> getVisibilityHandler(
 				final CommonIndexModel indexModel,
 				final DataAdapter<Integer> adapter,
@@ -318,7 +326,6 @@ public class MockComponents
 					entry.doubleValue(),
 					entry.doubleValue());
 		}
-
 	}
 
 	// *************************************************************************
@@ -487,7 +494,6 @@ public class MockComponents
 		@Override
 		public void fromBinary(
 				final byte[] bytes ) {}
-
 	}
 
 	// *************************************************************************
@@ -607,7 +613,6 @@ public class MockComponents
 
 		@Override
 		public NumericData getFullRange() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 	}
@@ -665,7 +670,6 @@ public class MockComponents
 
 		@Override
 		public NumericDimensionDefinition[] getOrderedDimensionDefinitions() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -709,14 +713,12 @@ public class MockComponents
 		public MultiDimensionalNumericData getRangeForId(
 				final ByteArrayId partitionKey,
 				final ByteArrayId sortKey ) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public Set<ByteArrayId> getInsertionPartitionKeys(
 				final MultiDimensionalNumericData insertionData ) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -744,7 +746,6 @@ public class MockComponents
 
 		@Override
 		public int getPartitionKeyLength() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 	}
@@ -806,7 +807,6 @@ public class MockComponents
 		public String getId() {
 			return id;
 		}
-
 	}
 
 	public static class IntegerAdapter implements

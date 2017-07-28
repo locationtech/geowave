@@ -1,0 +1,138 @@
+[[building-code]]
+<<<
+
+:linkattrs:
+
+[[building-code]]
+=== Building the Source
+
+==== Tools Framework Overview
+
+A plugin framework (using Service Provider Interface (SPI)-based injection) is provided with several input formats and utilities supported out of the box.
+First, we’ll show how to build and use the built-in formats and then describe how to create a new plugin.
+
+[[building-tools-framework]]
+==== Building
+
+GeoWave will shortly be available in Maven central (for tagged releases) but until then, or to get the latest features, building GeoWave from source is the best bet.
+
+
+[[building]]
+===== Building GeoWave
+To build the project source, navigate to the directory into which the GeoWave code was downloaded. Using Maven from the command line, run the following command in a local terminal:
+
+[source, bash]
+----
+$ mvn clean install <1>
+----
+<1> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
+
+[NOTE]
+====
+Integration Tests: Windows
+
+Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the location of the cygpath binary provided by cygwin to make it work.
+====
+
+Upon executing the command above, you should see a terminal output beginning with similar code below. Maven will build all the projects in the repository, so this will take a few minutes to complete.
+
+----
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] GeoWave Parent POM
+[INFO] GeoWave Core Parent POM
+[INFO] GeoWave CLI
+[INFO] GeoWave Index
+[INFO] GeoWave Store
+[INFO] GeoWave MapReduce
+[INFO] GeoWave Ingest Framework
+[INFO] GeoWave Spatial and Temporal Support
+[INFO] GeoWave Extensions
+[INFO] Geowave Vector Adapter
+[INFO] Geowave Raster Adapter
+[INFO] GeoWave Analytics Parent POM
+[INFO] GeoWave Analytics API
+[INFO] GeoWave MapReduce Analytics
+[INFO] GeoWave Spark Analytics
+[INFO] GeoWave Deployment Configurations
+[INFO] GeoWave Documentation
+[INFO] GeoWave Accumulo
+[INFO] GeoWave Hbase
+[INFO] GeoWave Examples
+[INFO] GeoWave BigTable
+[INFO] GeoWave GeoLife Format Support
+[INFO] GeoWave Raster Format
+[INFO] GeoWave Vector Format
+[INFO] GeoWave GPX Format
+[INFO] GeoWave T-Drive Format
+[INFO] GeoWave GDELT Format Support
+[INFO] GeoWave Avro Format
+[INFO] GeoWave Twitter Format Support
+[INFO] geowave-format-4676
+[INFO] GeoWave Services Parent POM
+[INFO] GeoWave Services API
+[INFO] geowave-service-4676
+[INFO] GeoWave Debug Commandline Tools
+[INFO] Geowave GeoServer Commandline Tools
+[INFO] Geowave OSM Commandline Tools
+[INFO] GeoWave LandSat8 Operations
+[INFO] GeoWave Java Client for REST services
+[INFO] GeoWave REST Services WebApp
+[INFO] GeoWave Integration Tests
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building GeoWave Parent POM ${project.version}
+[INFO] ------------------------------------------------------------------------
+----
+
+Once this is completed, the compiled artifacts (jar, war, etc.) are “installed” into your local repository for each respective project. The compiled artifacts are also available in each project target directory.
+
+==== Maven dependencies
+
+Required repositories not in Maven Central have been added to the parent POM, specifically the cloudera and opengeo repositories.
+
+==== Docker Build Process
+
+We have support for building both the GeoWave jar artifacts and RPMs from Docker containers. This capability is useful for a number of different situations:
+
+* Jenkins build workers can run Docker on a variety of host-operating systems and build for others
+* Anyone running Docker will be able to duplicate our build and packaging environments
+* Will allow us to build on existing container clusters instead of single purpose build VMs
+
+If building artifacts using Docker containers interests you, check out the README in link:https://github.com/locationtech/geowave/tree/master/deploy/packaging/docker[`deploy/packaging/docker`, window="_blank"].
+
+
+=== Creating Eclipse Projects
+
+In order to facilitate a more complete development environment, we now need to get the GeoWave source code into an Integrated Development Environment (IDE). This section will walk you through how to import Maven projects into the Eclipse IDE.
+
+[NOTE]
+====
+There are several IDEs available, though this guide will assume use of Eclipse. If you are developing in a different IDE than Eclipse, there are likely guides on the internet to guide you through converting a Maven project into your IDE.
+====
+
+Using the link:http://www.eclipse.org/m2e/[Eclipse Maven M2Eclipse plugin, window="_blank"], we can import maven projects into eclipse, and eclipse will automatically resolve/download dependencies listed in the pom.xml file for each project.
+
+[NOTE]
+====
+If any project pom.xml dependencies are changed/updated, Eclipse will automatically update the project and any downstream changes to related/depependent projects.
+====
+
+. Import the Maven GeoWave projects into the Eclipse workspace.
+
+.. Within Eclipse, select File -> Import.
++
+image::Eclipse-File-Import.png[scaledwidth="35%","width="35%",alt="Eclipse-File-Import.png", title="Eclipse File Import Menu"]
+
+.. From the "Import" window, select the option under "Maven" for "Existing Maven Projects" and select the "Next" button.
++
+image::import-maven-eclipse-projects.png[scaledwidth="30%",width="30%",alt="import-maven-eclipse-projects.png" title="Existing Maven Projects Wizard"]
+
+.. From the "Import Maven Projects" window, select the “Browse” button and navigate to the root directory where the GeoWave source is located on the file system. Once found, select the _geowave_ directory and select the "Open" button.
+.. Within the "Import Maven Projects" window, the “Projects” pane should now be populated with all of the GeoWave projects. Select the "Finish" button to exit.
+.. Upon returning to the workspace in Eclipse, the _Project Explorer_ pane should now be populated with all of the GeoWave projects.
++
+image::EclipseWorkspace.png[scaledwidth="25%",width="25%", alt="EclipseWorkspace.png", title="Eclipse Workspace"]
+

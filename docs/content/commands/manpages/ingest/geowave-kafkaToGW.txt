@@ -1,0 +1,132 @@
+//:geowave-kafkaToGW(1)
+//:====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave ingest kafkaToGW - Subscribe to a Kafka topic and ingest into GeoWave
+
+SYNOPSIS
+//:--------
+
+geowave ingest kafkaToGW [options] <store name> <comma delimited index/group list>
+
+DESCRIPTION
+//:-----------
+
+The geowave ingest kafkaToGW operator will ingest supported files that already exist in HDFS
+
+OPTIONS
+//:-------
+
+- --autoOffsetReset
+ * What to do when there is no initial offset in ZooKeeper or if an offset is out of range:
+ ** smallest : automatically reset the offset to the smallest offset
+ ** largest : automatically reset the offset to the largest offset
+ ** anything else: throw exception to the consumer
+
+- --avro.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --avro.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --avro.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --batchSize
+ * The data will automatically flush after this number of entries
+ * Default: 10000
+- --consumerTimeoutMs
+ * By default, this value is -1 and a consumer blocks indefinitely if no new message is available for consumption. By setting the value to a positive integer,a timeout exception is thrown to the consumer if no message is available for consumption after the specified timeout value.
+- -x, --extension
+ * individual or comma-delimited set of file extensions to accept (optional)
+- --fetchMessageMaxBytes
+ * The number of bytes of messages to attempt to fetch for each topic-partition in each fetch request. These bytes will be read into memory for each partition, so this helps control the memory used by the consumer. The fetch request size must be at least as large as the maximum message size the server allows or else it is possible for the producer to send messages larger than the consumer can fetch.
+- -f, --formats
+ * Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
+- --gdelt.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --gdelt.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --gdelt.extended
+ * A flag to indicate whether extended data format should be used
+ * Default: false
+- --gdelt.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --geolife.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --geolife.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --geolife.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --geotools-raster.coverage
+ * Optional parameter to set the coverage name (default is the file name)
+- --geotools-raster.crs
+ * A CRS override for the provided raster file
+- --geotools-raster.histogram
+ * Build a histogram of samples per band on ingest for performing band equalization
+ * Default: false
+- --geotools-raster.mergeStrategy
+ * Optional parameter to choose a tile merge strategy used for mosaic. 
+ * Default behavior will be `none`.  
+ * Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.
+- --geotools-raster.nodata
+ * Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed
+ * Default: []
+- --geotools-raster.pyramid
+ * Build an image pyramid on ingest for quick reduced resolution query
+ * Default: false
+- --geotools-raster.separateBands
+ * Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where `n` is the band's index.
+ * Default: false
+- --geotools-raster.tileSize
+ * Optional parameter to set the tile size stored (default is 256)
+ * Default: 256
+- --geotools-vector.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --geotools-vector.data
+ * A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats
+- --geotools-vector.type
+ * Optional parameter that specifies specific type name(s) from the source file
+ * Default: []
+- --gpx.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --gpx.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --gpx.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --groupId
+ * A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id multiple processes indicate that they are all part of the same consumer group.
+- * --kafkaprops
+ * Properties file containing Kafka properties
+-    --reconnectOnTimeout
+ * This flag will flush when the consumer timeout occurs (based on kafka property 'consumer.timeout.ms') and immediately reconnect
+ * Default: false
+- --tdrive.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --tdrive.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --tdrive.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --twitter.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --twitter.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --twitter.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- -v, --visibility
+ * The visibility of the data ingested (optional; default is 'public')
+- --zookeeperConnect
+ * Specifies the ZooKeeper connection string in the form hostname:port where host and port are the host and port of a ZooKeeper server. To allow connecting through other ZooKeeper nodes when that ZooKeeper machine is down you can also specify multiple hosts in the form hostname1:port1,hostname2:port2,hostname3:port3.

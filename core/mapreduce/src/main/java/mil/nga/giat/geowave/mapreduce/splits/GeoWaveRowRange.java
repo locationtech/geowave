@@ -15,7 +15,12 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 
 public class GeoWaveRowRange implements
 		Writable
@@ -121,6 +126,28 @@ public class GeoWaveRowRange implements
 
 	public boolean isInfiniteStopSortKey() {
 		return endKey == null;
+	}
+
+	public byte[] getCombinedStartKey() {
+		if ((partitionKey == null) || (partitionKey.length == 0)) {
+			return startKey;
+		}
+
+		return (startKey == null) ? null : ByteArrayUtils.combineArrays(
+				partitionKey,
+				startKey);
+	}
+
+	public byte[] getCombinedEndKey() {
+		if ((partitionKey == null) || (partitionKey.length == 0)) {
+			return endKey;
+		}
+
+		return (endKey == null) ? ByteArrayUtils.combineArrays(
+				ByteArrayId.getNextPrefix(partitionKey),
+				endKey) : ByteArrayUtils.combineArrays(
+				partitionKey,
+				endKey);
 	}
 
 	@Override

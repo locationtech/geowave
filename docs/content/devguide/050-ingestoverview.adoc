@@ -1,0 +1,15 @@
+[[ingest-overview]]
+<<<
+== Ingest
+
+=== Overview
+
+In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format that can be persisted into the data store. Also, the ingest process requires an index which is a definition of all the configured parameters that define how data is translated to _Row IDs_ (how it is indexed) and what common fields need to be maintained within the table to be used by fine-grained and secondary filters.
+
+image::ingestoverview1.png[scaledwidth="75%",width="75%",alt="Ingest Architecture", title="Ingest Architecture"]
+
+The logic within the ingest process immediately ensures that the index and data adapter are persisted within the Index Store and the Adapter Store to support self-described data discovery. In-memory implementations of both of these stores are provided for cases when connections to third-party datastores (e.g., Accumulo, HBase) are undesirable in the ingest process, such as ingesting bulk data in a Map-Reduce job. Then the flow determines the set of _Row IDs_ that the data will need to be inserted into. Duplication is essential under certain circumstances and therefore data may be inserted in multiple locations, e.g., polygons that cross the dateline or date ranges that cross binning boundaries such as December 31-January 1 when binning by year. De-duplication is always performed as a client filter when querying the data. This will be combined with the actual data in a persistable format, after a translation has been performed by the adapter to create a set of mutations.
+
+There is a Writer interface that the data store's AccumuloOperations will instantiate that specifies how the mutations will actually be written. The default implementation will wrap an Accumulo BatchWriter with this interface, but in some cases it could make sense to provide a custom implementation of the writer. This process is the same when using an HBase datastore. When performing a bulk ingest within the mapper or reducer of a job, it would be appropriate to define a writer to add the mutations to the context of the bulk ingest rather than writing live to Accumulo or HBase.
+
+The full list of GeoWave ingest commands can be found in the commands.html#ingest-commands[GeoWave CLI Appendix^].

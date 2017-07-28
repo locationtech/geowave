@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.analytic.mapreduce.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -35,6 +36,7 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "kmeansjump", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans Clustering using Jump Method")
@@ -71,8 +73,16 @@ public class KmeansJumpCommand extends
 		String inputStoreName = parameters.get(0);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File configFile = getGeoWaveConfigFile(params);
+
+		if (commonOptions.getMapReduceHdfsHostPort() == null) {
+
+			Properties configProperties = ConfigOptions.loadProperties(
+					configFile,
+					null);
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+			commonOptions.setMapReduceHdfsHostPort(hdfsFSUrl);
+		}
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

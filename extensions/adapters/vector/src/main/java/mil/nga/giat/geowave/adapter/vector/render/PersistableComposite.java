@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
 import org.geotools.renderer.composite.BlendComposite;
 import org.geotools.renderer.composite.BlendComposite.BlendingMode;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class PersistableComposite implements
 		Persistable
@@ -26,7 +26,7 @@ public class PersistableComposite implements
 	private int blendModeOrAlphaRule = 0;
 	private float alpha = 1f;
 
-	protected PersistableComposite() {}
+	public PersistableComposite() {}
 
 	public PersistableComposite(
 			final Composite composite ) {
@@ -72,5 +72,4 @@ public class PersistableComposite implements
 		blendModeOrAlphaRule = buf.getInt();
 		alpha = buf.getFloat();
 	}
-
 }

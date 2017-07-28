@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package mil.nga.giat.geowave.core.cli.operations.config.security.crypto;
 
@@ -20,7 +20,6 @@ import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import mil.nga.giat.geowave.core.cli.utils.FileUtils;
@@ -66,7 +65,7 @@ public abstract class BaseEncryption
 	 * Base constructor for encryption, allowing a resource location for the
 	 * cryptography token key to be specified, rather than using the
 	 * default-generated path
-	 * 
+	 *
 	 * @param resourceLocation
 	 *            Path to cryptography token key file
 	 */
@@ -76,7 +75,7 @@ public abstract class BaseEncryption
 			setResourceLocation(resourceLocation);
 			init();
 		}
-		catch (Throwable t) {
+		catch (final Throwable t) {
 			LOGGER.error(
 					t.getLocalizedMessage(),
 					t);
@@ -103,7 +102,7 @@ public abstract class BaseEncryption
 
 			generateRootKeyFromToken();
 		}
-		catch (Throwable t) {
+		catch (final Throwable t) {
 			LOGGER.error(
 					t.getLocalizedMessage(),
 					t);
@@ -116,50 +115,43 @@ public abstract class BaseEncryption
 	private void checkForToken()
 			throws Throwable {
 		if (getResourceLocation() != null) {
+			// this is simply caching the location, ideally under all
+			// circumstances resource location exists
 			tokenFile = new File(
 					getResourceLocation());
 		}
 		else {
-			if (new ConfigOptions().getConfigFile() != null) {
-				tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(new File(
-						new ConfigOptions().getConfigFile()));
-			}
-			else {
-				tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(ConfigOptions.getDefaultPropertyFile());
-			}
+			// and this is initializing it for the first time, this just assumes
+			// the default config file path
+			// because of that assumption this can cause inconsistency
+			// under all circumstances this seems like it should never happen
+			tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(ConfigOptions.getDefaultPropertyFile());
 		}
-		if (tokenFile == null || !tokenFile.exists()) {
+		if (!tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
 		}
 	}
 
 	/**
 	 * Generates a token file resource name that includes the current version
-	 * 
+	 *
 	 * @return formatted token key file name
 	 */
-	public static String getFormattedTokenFileName() {
-		final String tokenFileName = resourceName.substring(
-				0,
-				resourceName.lastIndexOf("."));
-		final String tokenFileExtension = resourceName.substring(resourceName.lastIndexOf("."));
-		String formattedTokenFileName = String.format(
-				"%s%s%s%s",
-				VersionUtils.getVersion(),
-				"-",
-				tokenFileName,
-				tokenFileExtension);
-		return formattedTokenFileName;
+	public static String getFormattedTokenFileName(
+			final String configFilename ) {
+		return String.format(
+				"%s.key",
+				configFilename);
 	}
 
 	/**
 	 * Generate a new token value in a specified file
-	 * 
+	 *
 	 * @param tokenFile
 	 * @return
 	 */
 	public static boolean generateNewEncryptionToken(
-			File tokenFile )
+			final File tokenFile )
 			throws Exception {
 		boolean success = false;
 		try {
@@ -172,7 +164,7 @@ public abstract class BaseEncryption
 			LOGGER.info("Completed writing new encryption token to file");
 			success = true;
 		}
-		catch (Exception ex) {
+		catch (final Exception ex) {
 			LOGGER.error(
 					"An error occurred writing new encryption token to file: " + ex.getLocalizedMessage(),
 					ex);
@@ -186,7 +178,7 @@ public abstract class BaseEncryption
 	 */
 	/**
 	 * Returns the path on the file system to the resource for the token
-	 * 
+	 *
 	 * @return Path to resource to get the token
 	 */
 	public String getResourceLocation() {
@@ -195,53 +187,53 @@ public abstract class BaseEncryption
 
 	/**
 	 * Sets the path to the resource for the token
-	 * 
+	 *
 	 * @param resourceLocation
 	 *            Path to resource to get the token
 	 */
 	public void setResourceLocation(
-			String resourceLoc )
+			final String resourceLoc )
 			throws Throwable {
 		resourceLocation = resourceLoc;
 	}
 
 	/**
 	 * Checks to see if the data is properly wrapped with ENC{}
-	 * 
+	 *
 	 * @param data
 	 * @return boolean - true if properly wrapped, false otherwise
 	 */
 	public static boolean isProperlyWrapped(
-			String data ) {
+			final String data ) {
 		return ENCCodePattern.matcher(
 				data).matches();
 	}
 
 	/**
 	 * Converts a binary value to a encoded string
-	 * 
+	 *
 	 * @param data
 	 *            Binary value to encode as an encoded string
 	 * @return Encoded string from the binary value specified
 	 */
 	private String toString(
-			byte[] data ) {
+			final byte[] data ) {
 		return Hex.encodeHexString(data);
 	}
 
 	/**
 	 * Converts a string value to a decoded binary
-	 * 
+	 *
 	 * @param data
 	 *            String value to convert to decoded hex
 	 * @return Decoded binary from the string value specified
 	 */
 	private byte[] fromString(
-			String data ) {
+			final String data ) {
 		try {
 			return Hex.decodeHex(data.toCharArray());
 		}
-		catch (DecoderException e) {
+		catch (final DecoderException e) {
 			LOGGER.error(
 					e.getLocalizedMessage(),
 					e);
@@ -260,10 +252,10 @@ public abstract class BaseEncryption
 					"Token file not found at specified path [" + getResourceLocation() + "]");
 		}
 		try {
-			String strPassword = FileUtils.readFileContent(tokenFile);
-			char[] password = strPassword != null ? strPassword.trim().toCharArray() : null;
-			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-			SecretKey tmp = factory.generateSecret(new PBEKeySpec(
+			final String strPassword = FileUtils.readFileContent(tokenFile);
+			final char[] password = strPassword != null ? strPassword.trim().toCharArray() : null;
+			final SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			final SecretKey tmp = factory.generateSecret(new PBEKeySpec(
 					password,
 					salt,
 					65536,
@@ -272,7 +264,7 @@ public abstract class BaseEncryption
 					tmp.getEncoded(),
 					KEY_ENCRYPTION_ALGORITHM));
 		}
-		catch (Exception ex) {
+		catch (final Exception ex) {
 			LOGGER.error(
 					"An error occurred generating the root key from the specified token: " + ex.getLocalizedMessage(),
 					ex);
@@ -281,36 +273,36 @@ public abstract class BaseEncryption
 
 	/**
 	 * Method to generate a new random token key value
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
 	private static String generateRandomSecretKey()
 			throws Exception {
-		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+		final KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 		keyGenerator.init(256);
-		SecretKey secretKey = keyGenerator.generateKey();
-		byte[] encoded = secretKey.getEncoded();
+		final SecretKey secretKey = keyGenerator.generateKey();
+		final byte[] encoded = secretKey.getEncoded();
 		return DatatypeConverter.printBase64Binary(encoded);
 	}
 
 	/**
 	 * Set the key to use
-	 * 
+	 *
 	 * @param key
 	 */
 	protected void setKey(
-			Key key ) {
+			final Key key ) {
 		this.key = key;
 	}
 
 	/**
 	 * Get the key to use
-	 * 
+	 *
 	 * @return
 	 */
 	protected Key getKey() {
-		return this.key;
+		return key;
 	}
 
 	/*
@@ -319,7 +311,7 @@ public abstract class BaseEncryption
 	/**
 	 * Method to encrypt and hex-encode a string value using the specified token
 	 * resource
-	 * 
+	 *
 	 * @param data
 	 *            String to encrypt
 	 * @return Encrypted and Hex-encoded string value using the specified token
@@ -327,12 +319,12 @@ public abstract class BaseEncryption
 	 * @throws Exception
 	 */
 	public String encryptAndHexEncode(
-			String data )
+			final String data )
 			throws Exception {
 		if (data == null) {
 			return null;
 		}
-		byte[] encryptedBytes = encryptBytes(data.getBytes("UTF-8"));
+		final byte[] encryptedBytes = encryptBytes(data.getBytes("UTF-8"));
 		return PREFIX + toString(encryptedBytes) + SUFFIX;
 	}
 
@@ -341,21 +333,21 @@ public abstract class BaseEncryption
 	 */
 	/**
 	 * Returns a decrypted value from the encrypted hex-encoded value specified
-	 * 
+	 *
 	 * @param data
 	 *            Hex-Encoded string value to decrypt
 	 * @return Decrypted value from the encrypted hex-encoded value specified
 	 * @throws Exception
 	 */
 	public String decryptHexEncoded(
-			String data )
+			final String data )
 			throws Exception {
 		if (data == null) {
 			return null;
 		}
-		Matcher matcher = ENCCodePattern.matcher(data);
+		final Matcher matcher = ENCCodePattern.matcher(data);
 		if (matcher.matches()) {
-			String codedString = matcher.group(1);
+			final String codedString = matcher.group(1);
 			return new String(
 					decryptBytes(fromString(codedString)),
 					"UTF-8");
@@ -370,7 +362,7 @@ public abstract class BaseEncryption
 	 */
 	/**
 	 * Encrypt the data as a byte array
-	 * 
+	 *
 	 * @param valueToEncrypt
 	 *            value to encrypt
 	 */
@@ -380,7 +372,7 @@ public abstract class BaseEncryption
 
 	/**
 	 * Decrypt the encrypted data
-	 * 
+	 *
 	 * @param valueToDecrypt
 	 *            value to encrypt
 	 */

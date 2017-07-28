@@ -10,9 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.metadata;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
@@ -36,7 +33,9 @@ public class DataStatisticsStoreImpl extends
 		DataStatisticsStore
 {
 	// this is fairly arbitrary at the moment because it is the only custom
-	// iterator added
+	// server op added
+	public static final int STATS_COMBINER_PRIORITY = 10;
+	public static final String STATISTICS_COMBINER_NAME = "STATS_COMBINER";
 
 	public DataStatisticsStoreImpl(
 			final DataStoreOperations operations,

@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.format.stanag4676;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -48,7 +48,6 @@ import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.NullIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChip;
@@ -96,13 +95,21 @@ public class Stanag4676IngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		// TODO: consider checking for schema compliance
-		return file.length() > 0;
+		try {
+			return file.openConnection().getContentLength() > 0;
+		}
+		catch (IOException e) {
+			LOGGER.info(
+					"Unable to read URL for '" + file.getPath() + "'",
+					e);
+		}
+		return false;
 	}
 
 	@Override
@@ -122,7 +129,7 @@ public class Stanag4676IngestPlugin extends
 
 	@Override
 	public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
-			final File file,
+			final URL file,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		return ingestWithMapper().toGeoWaveData(
@@ -137,7 +144,7 @@ public class Stanag4676IngestPlugin extends
 		return new IngestWithReducerImpl().getDataAdapters(globalVisibility);
 	}
 
-	private static class IngestWithReducerImpl implements
+	public static class IngestWithReducerImpl implements
 			IngestWithReducer<WholeFile, Text, Stanag4676EventWritable, Object>,
 			IngestWithMapper<WholeFile, Object>
 	{
@@ -667,7 +674,6 @@ public class Stanag4676IngestPlugin extends
 			return new CloseableIterator.Wrapper<GeoWaveData<Object>>(
 					new ArrayList<GeoWaveData<Object>>().iterator());
 		}
-
 	}
 
 	@Override

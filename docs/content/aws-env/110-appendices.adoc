@@ -1,0 +1,125 @@
+[[appendices]]
+
+== Appendices
+
+[[version-appendix]]
+[appendix]
+<<<
+
+=== Version
+
+This documentation was generated for GeoWave version ${project.version} from commit ${buildNumber}.
+
+[[vpc-appendix]]
+[appendix]
+<<<
+=== Create EC2 VPC (Network Interface/Subnet Id)
+
+From the “Services” dropdown, select VPC. Then click on the “Start VPC Wizard” button.
+
+image::create-ec2-vpc-1.png[scaledwidth="100%",alt="VPC wizard"]
+
+The default VPC setup is VPC with a single public subnet. This is what we will use for the example here, however other VPC
+setups will work as well.
+
+image::create-ec2-vpc-2.png[scaledwidth="100%",alt="VPC subnet"]
+
+You can use the default values for everything in this step and create a useable VPC. We recommend that you add a VPC name and
+change the default Subnet name to make them both easier to identify later on.
+
+Click the “Create VPC” button and after a short period of time you will receive a confirmation of your VPC creation.
+
+Click the “Subnets” link on the left side of the page and find your new subnet.
+
+image::create-ec2-vpc-3.png[scaledwidth="100%",alt="VPC created"]
+
+Record the Subnet ID. You will need it if you are using the AWS CLI method to create your cluster.
+
+For a more detailed walkthough of creating an AWS VPC please see the Amazon documentation http://docs.aws.amazon.com/AmazonVPC/latest/GettingStartedGuide/getting-started-create-vpc.html[here].
+
+[[bucket-appendix]]
+[appendix]
+<<<
+
+=== Create AWS S3 Bucket
+
+From the “Services” dropdown, select S3 then click the “Create Bucket” button.
+
+image::create-aws-bucket-1.png[scaledwidth="100%",alt="Create bucket"]
+
+Enter your desired name for the bucket, select your region and click the “Create” button.
+
+For more detailed information on creating and using S3 buckets please see the Amazon documentation http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html[here].
+
+[[keypair-appendix]]
+[appendix]
+<<<
+
+=== Upload to AWS S3 Bucket
+From the “Services” dropdown, select S3. Navigate to the bucket that you plan to use and click on the blue "Upload" button.
+
+image::upload-aws-bucket-1.png[scaledwidth="100%",alt="Upload bucket"]
+
+You can drag/drop the desired scripts into this bucket, or navigate to your file by clicking "add files."
+
+For more detailed information on uploading to S3 buckets please see the Amazon documentation http://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html[here].
+[[keypair-appendix]]
+[appendix]
+<<<
+
+=== Create EC2 Key Pair
+
+From the “Services” dropdown, select EC2. Then select the “Key Pairs” link on the left side of the page and click the
+“Create Key Pair” button.
+
+[NOTE]
+==== 
+Ensure that your selected region (top right side of the page) is the same as the one you will be creating you
+cluster in. Key pairs cannot be used across regions.
+====
+
+Enter a name for the key pair in the popup and click the “Create” button.
+
+image::create-key-pair-1.png[scaledwidth="100%",alt="Create key pair"]
+
+When you create the key pair Amazon will automatically begin to download your private key. Save this somewhere you will
+remember, because you will need it to ssh into your cluster.
+
+For more detailed information on AWS EC2 Key Pairs please see the Amazon documentation http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair[here].
+
+[[security-appendix]]
+[appendix]
+<<<
+
+=== Create EC2 Security Group
+
+From the “Services” dropdown, select EC2. Then select the “Security Groups” link on the left side of the page and click the
+“Create Security Group” button.
+
+image::create-security-group-1.png[scaledwidth="100%",alt="Create security group"]
+
+Enter a name for the security group, a description (if desired) and select the VPC to associate this security group with.
+
+If you haven’t created a VPC please see the <<create-ec2-vpc-network-interface-subnet-id, Create EC2 VPC section>>.
+
+Click the “Create” button to create your security group.
+
+Select your security group from the list. Click on the “Inbound” tab towards the bottom of the page and click the
+“Edit” button.
+
+image::create-security-group-2.png[scaledwidth="100%",alt="Create security group"]
+
+In the popup window, select SSH from the “Type” drop down, Anywhere from the “Source” drop down, then click the “Save” 
+button.
+
+image::create-security-group-3.png[scaledwidth="100%",alt="Create security group"]
+
+For more detailed information on AWS EC2 Security Groups please see the Amazon documentation http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html[here].
+
+[[cli-appendix]]
+[appendix]
+<<<
+
+=== AWS CLI Setup
+
+Please see the Amazon documentation http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html[here].

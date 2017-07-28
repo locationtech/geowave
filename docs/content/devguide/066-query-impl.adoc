@@ -1,0 +1,31 @@
+[[query-impl]]
+<<<
+[[query-impl]]
+=== Query Implementation
+
+:linkattrs:
+
+GeoWave queries must implement the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/Query.java[mil.nga.giat.geowave.core.store.query.Query, window="_blank"] interface.
+
+Like most other query environments (e.g., SQL in RDBMS), queries can be as simple or as complex as necessary. The most basic query within GeoWave would be the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/EverythingQuery.java[EverythingQuery, window="_blank"], equivilent to the SQL "star-search" query, where no constraints are added to the query.
+
+A more useful example of a simple query to reference as an example with a constraint would be the link:https://github.com/locationtech/geowave/blob/master/core/geotime/src/main/java/mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.java[SpatialQuery, window="_blank"] or the link:https://github.com/locationtech/geowave/blob/master/core/geotime/src/main/java/mil/nga/giat/geowave/core/geotime/store/query/TemporalQuery.java[TemporalQuery, window="_blank"].
+
+While GeoWave query implementations can be customized to meet the specific needs of the data being ingested and/or indexed within GeoWave, the follow queries already exist in the latest version of GeoWave:
+
+* image:interface.png[] link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/Query.java[Query, window="_blank"]
+** link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/AdapterIdQuery.java[AdapterIdQuery, window="_blank"]
+** link:https://github.com/locationtech/geowave/blob/master/analytics/api/src/main/java/mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.java#L131[BatchIdQuery, window="_blank"]
+** link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/DataIdQuery.java[DataIdQuery, window="_blank"]
+** link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/EverythingQuery.java[EverythingQuery, window="_blank"]
+** link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/PrefixIdQuery.java[PrefixIdQuery, window="_blank"]
+** link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/RowIdQuery.java[RowIdQuery, window="_blank"]
+** image:interface.png[] link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/DistributableQuery.java[DistributableQuery, window="_blank"]
+*** link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/BasicQuery.java[BasicQuery, window="_blank"]
+**** link:https://github.com/locationtech/geowave/blob/master/core/geotime/src/main/java/mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.java[SpatialQuery, window="_blank"]
+***** link:https://github.com/locationtech/geowave/blob/master/core/geotime/src/main/java/mil/nga/giat/geowave/core/geotime/store/query/IndexOnlySpatialQuery.java[IndexOnlySpatialQuery, window="_blank"]
+***** link:https://github.com/locationtech/geowave/blob/master/core/geotime/src/main/java/mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.java[SpatialTemporalQuery, window="_blank"]
+**** link:https://github.com/locationtech/geowave/blob/master/core/geotime/src/main/java/mil/nga/giat/geowave/core/geotime/store/query/TemporalQuery.java[TemporalQuery, window="_blank"]
+*** link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/CoordinateRangeQuery.java[CoordinateRangeQuery, window="_blank"]
+*** link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/mil/nga/giat/geowave/adapter/vector/query/cql/CQLQuery.java[CQLQuery, window="_blank"]
+

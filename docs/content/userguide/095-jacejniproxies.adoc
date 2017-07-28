@@ -1,80 +1,39 @@
 [[jace-jni-proxies]]
 <<<
+
+:linkattrs:
+
 == Jace JNI Proxies
 
-Using Jace, we are able to create JNI proxy classes for GeoWave which can be used in C/C++ applications.
+Using Jace, we are able to create JNI proxy classes for GeoWave that can be used in C/C++ applications.
 
 Boost is required when using the Jace bindings.
 
 === Prepackaged Source and Binaries
 
-There is a public http://locationtech.github.io/geowave/packages.html[GeoWave RPM Repo] where you can download a tarball
-for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball
-which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
+There is a public link:packages.html[GeoWave RPM Repo, window="_blank"] where you can download a tarball for the GeoWave Jace bindings for your desired platform. If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
 
 === Generate Proxies and Build from Source
 
-If you want, you can generate and build the Jace proxies yourself.
-
-==== Step 1 - Checkout Jace and GeoWave
-
-First, we need to clone Jace and GeoWave.
-
-[source, bash]
-----
-$ git clone git@github.com:jwomeara/jace.git
-$ git clone git@github.com:locationtech/geowave.git
-----
-
-Note: We are using a non-standard Jace implementation.
-
-==== Step 2 - Install Jace
-
-First, we need to install Jace v1.3.0.  This is the software which is used to generate the C++ proxy classes.
-
-[source, bash]
-----
-$ cd jace
-$ git checkout tags/v1.3.0
-$ mvn clean install -Dsources
-----
-
-==== Step 3 - Generate GeoWave Jace Proxies
-
-Here, we will specify a Maven profile which specifies that we are building jace proxies.
-
-[source, bash]
-----
-$ cd geowave
-$ mvn clean package -pl deploy -am -P generate-geowave-jace -DskipTests
-----
-
-This generates the source and header files required to build GeoWave.  To build the library, simply run cmake, followed by make.
-
-Note: To build static libraries use -DBUILD_SHARED_LIBS=OFF, otherwise use -DBUILD_SHARED_LIBS=ON
+If you want, you can generate and build the Jace proxies yourself. For more details on how to do this, please check out the link:devguide.html#proxies[GeoWave Developer Guide, window="_blank"].
 
 === Mapnik Plugin Configuration
 
 ==== Mapnik
 
-http://mapnik.org/[Mapnik] is an open source toolkit for developing mapping applications.
-GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.
+link:http://mapnik.org/[Mapnik, window="_blank"] is an open source toolkit for developing mapping applications. GeoWave is supported as a plugin for Mapnik for reading vector data from Accumulo.
 
 === PDAL Plugin Configuration
 
 ==== PDAL
 
-The Point Data Abstraction Library http://www.pdal.io/index.html[PDAL] is a BSD licensed library for translating
-and manipulating point cloud data of various formats.  GeoWave is supported as a plugin for PDAL for both reading
-and writing data to Accumulo.
+The Point Data Abstraction Library link:http://www.pdal.io/index.html[PDAL, window="_blank"] is a BSD licensed library for translating and manipulating point cloud data of various formats. GeoWave is supported as a plugin for PDAL for both reading and writing data to Accumulo.
 
 Note: These instructions assume that you are using prepackaged binaries.
 
 ==== Configure CMake for PDAL
 
-To configure PDAL to run with GeoWave, there are a few CMake options which need to be configured.
-While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually.  
-Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
+To configure PDAL to run with GeoWave, there are a few CMake options that need to be configured. While some of the options (namely the JAVA options) may configure automatically, some will need to be set manually. Refer to the table below to get an idea for how these options would be configured on Ubuntu 14.04 LTS.
 
 [cols="3*", options="header"]
 |===
@@ -129,7 +88,6 @@ Note: As Boost is a PDAL dependency, it should already be included.
 
 Once CMake is configured, you can proceed with your normal PDAL build process.
 
-Last, but not least, when building shared libraries you should ensure that the libraries specified above are available via PATH or LD_LIBRARY_PATH.
+Last but not least, you should ensure that the libraries specified above are available via _PATH_ or _LD_LIBRARY_PATH_ when building shared libraries.
 
-Within the PDAL documentation, you can see examples of how GeoWave can be used as both a
-http://www.pdal.io/stages/readers.geowave.html[reader] and http://www.pdal.io/stages/writers.geowave.html[writer].
+Within the PDAL documentation, you can see examples of how GeoWave can be used as both a link:http://www.pdal.io/stages/readers.geowave.html[reader, window="_blank"] and link:http://www.pdal.io/stages/writers.geowave.html[writer, window="_blank"].

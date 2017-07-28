@@ -1,0 +1,38 @@
+[[quickstart-guide-step-4]]
+<<<
+
+[[quickstart-guide-step-4]]
+*Step 4:*
+
+image::aws-gui-method-6.png[scaledwidth="100%",alt="select emr"]
+
+Security Options
+
+- EC2 key pair
+ * Select your key pair for this cluster
+ * If you haven’t created a key pair please see the Create EC2 Key Pair section <<110-appendices.adoc#create-ec2-key-pair, here>>.
+- Cluster visible to all IAM users in account
+ * Leave selected
+- Permissions
+ * Leave “Default” selected
+ * If you do not have permission to create roles, it is acceptable to select "Custom" and change the Auto Scaling role to "Proceed without role"
+- Ignore the Encryption Options
+- Expand the EC2 Security Groups section
+ * Master: select your security group for the master node
+ * Core & Task: select your security group for the core nodes
+ * If you haven’t created a security group yet please see the Create EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
+
+--- +
+
+Click the “Create Cluster” button to create and provision your cluster.
+
+Please view the <<steps-overview,Connecting to the Cluster>> section of this document for description of how to connect to your provisioned cluster.  
+
+[NOTE]
+====
+If you used the quickstart version of bootstrap script the script will now setup the environment, then download and process one month of gdelt data.
+
+The entire process takes approximately 25 minutes on a three node cluster.
+
+Please see the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data can be visualized.
+====

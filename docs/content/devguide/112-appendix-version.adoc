@@ -1,0 +1,6 @@
+[[appendix-version]]
+<<<
+=== Version
+
+This documentation was generated for GeoWave version ${project.version}.
+

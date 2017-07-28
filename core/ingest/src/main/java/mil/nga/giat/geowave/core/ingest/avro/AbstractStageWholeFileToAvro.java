@@ -10,12 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.avro;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
 import org.apache.avro.Schema;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,14 +40,14 @@ abstract public class AbstractStageWholeFileToAvro<O> implements
 
 	@Override
 	public WholeFile[] toAvroObjects(
-			final File f ) {
+			final URL f ) {
 		try {
 			// TODO: consider a streaming mechanism in case a single file is too
 			// large
 			return new WholeFile[] {
 				new WholeFile(
-						ByteBuffer.wrap(Files.readAllBytes(f.toPath())),
-						f.getAbsolutePath())
+						ByteBuffer.wrap(IOUtils.toByteArray(f)),
+						f.getPath())
 			};
 		}
 		catch (final IOException e) {
@@ -53,4 +58,5 @@ abstract public class AbstractStageWholeFileToAvro<O> implements
 		return new WholeFile[] {};
 
 	}
+
 }

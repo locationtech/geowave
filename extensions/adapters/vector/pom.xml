@@ -5,7 +5,7 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version>0.9.5-SNAPSHOT</version>
+		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-adapter-vector</artifactId>
 	<name>Geowave Vector Adapter</name>
@@ -51,6 +51,10 @@
 			<artifactId>gt-wps</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-shapefile</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.geoserver</groupId>
 			<artifactId>gs-wms</artifactId>
 			<exclusions>
@@ -71,10 +75,6 @@
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-render</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-epsg-wkt</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.clearspring.analytics</groupId>

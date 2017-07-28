@@ -1,0 +1,39 @@
+[[geoserver-plugin]]
+<<<
+[[geoserver-plugin]]
+=== GeoServer Plugin
+
+This section will outline how to generate GeoServer plugin jar, which can be deployed and run within an operating GeoServer server in order to be able to perform GeoWave functionality within GeoServer.
+
+[[geoserver-versions]]
+==== GeoServer Versions
+
+GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions, look at the build matrix section of the .travis.yml file in the root directory of the project. 
+
+[[create-geoserver-plugin]]
+==== Create GeoServer Plugin
+
+First we need to build the GeoServer plugin. From the GeoWave root directory, run the following command:
+
+[source, bash]
+----
+mvn package -P geotools-container-singlejar <1>
+----
+<1> You can speed up the build by skipping tests by appending to the command "-Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true" (no quotes)
+
+Once the above command is successfully run, the GeoServer plugin jar file can be found within the 'deploy/target/' directory.
+
+Let's assume you have GeoServer deployed in a Tomcat container in '/opt/tomcat'.
+
+[source, bash]
+----
+cp deploy/target/*-geoserver-singlejar.jar /opt/tomcat/webapps/geoserver/WEB-INF/lib/
+----
+
+Now re-start Tomcat.
+
+[NOTE]
+====
+Previous versions of the GeoWave RPMs (0.9.5 and below) used Jetty instead of Tomcat. 
+====
+

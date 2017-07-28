@@ -190,8 +190,8 @@ public class DataStoreUtils
 		}
 
 		return Arrays.equals(
-				removeUniqueId(rowId1.getDataId()),
-				removeUniqueId(rowId2.getDataId()));
+				rowId1.getDataId(),
+				rowId2.getDataId());
 	}
 
 	public static byte[] removeUniqueId(

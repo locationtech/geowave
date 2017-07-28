@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -25,10 +25,10 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -39,8 +39,10 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
+import mil.nga.giat.geowave.mapreduce.MapReduceUtils;
 
-public abstract class SplitsProvider
+public class SplitsProvider
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SplitsProvider.class);
 
@@ -76,16 +78,7 @@ public abstract class SplitsProvider
 						indexStore)) {
 			indexIdToAdaptersMap.put(
 					indexAdapterPair.getKey().getId(),
-					Lists.transform(
-							indexAdapterPair.getValue(),
-							new Function<DataAdapter<Object>, ByteArrayId>() {
-
-								@Override
-								public ByteArrayId apply(
-										final DataAdapter<Object> input ) {
-									return input.getAdapterId();
-								}
-							}));
+					MapReduceUtils.idsFromAdapters(indexAdapterPair.getValue()));
 			populateIntermediateSplits(
 					splits,
 					operations,
@@ -148,18 +141,83 @@ public abstract class SplitsProvider
 		return retVal;
 	}
 
-	protected abstract TreeSet<IntermediateSplitInfo> populateIntermediateSplits(
-			TreeSet<IntermediateSplitInfo> splits,
-			DataStoreOperations operations,
-			PrimaryIndex left,
-			List<DataAdapter<Object>> value,
-			Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
-			AdapterStore adapterStore,
-			DataStatisticsStore statsStore,
-			Integer maxSplits,
-			DistributableQuery query,
-			String[] authorizations )
-			throws IOException;
+	protected TreeSet<IntermediateSplitInfo> populateIntermediateSplits(
+			final TreeSet<IntermediateSplitInfo> splits,
+			final DataStoreOperations operations,
+			final PrimaryIndex index,
+			final List<DataAdapter<Object>> adapters,
+			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
+			final AdapterStore adapterStore,
+			final DataStatisticsStore statsStore,
+			final Integer maxSplits,
+			final DistributableQuery query,
+			final String[] authorizations )
+			throws IOException {
+		if ((query != null) && !query.isSupported(index)) {
+			return splits;
+		}
+
+		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
+		final int partitionKeyLength = indexStrategy.getPartitionKeyLength();
+
+		// Build list of row ranges from query
+		List<ByteArrayRange> ranges = null;
+		if (query != null) {
+			final List<MultiDimensionalNumericData> indexConstraints = query.getIndexConstraints(index);
+			if ((maxSplits != null) && (maxSplits > 0)) {
+				ranges = DataStoreUtils.constraintsToQueryRanges(
+						indexConstraints,
+						indexStrategy,
+						maxSplits).getCompositeQueryRanges();
+			}
+			else {
+				ranges = DataStoreUtils.constraintsToQueryRanges(
+						indexConstraints,
+						indexStrategy,
+						-1).getCompositeQueryRanges();
+			}
+		}
+
+		if (ranges == null) {
+			return splits;
+		}
+
+		final Map<ByteArrayId, SplitInfo> splitInfo = new HashMap<ByteArrayId, SplitInfo>();
+		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
+		for (final ByteArrayRange range : ranges) {
+			final GeoWaveRowRange gwRange = SplitsProvider.toRowRange(
+					range,
+					partitionKeyLength);
+
+			final double cardinality = getCardinality(
+					getHistStats(
+							index,
+							adapters,
+							adapterStore,
+							statsStore,
+							statsCache,
+							authorizations),
+					gwRange,
+					index.getIndexStrategy().getPartitionKeyLength());
+
+			rangeList.add(new RangeLocationPair(
+					gwRange,
+					cardinality < 1 ? 1.0 : cardinality));
+		}
+
+		if (!rangeList.isEmpty()) {
+			splitInfo.put(
+					index.getId(),
+					new SplitInfo(
+							index,
+							rangeList));
+			splits.add(new IntermediateSplitInfo(
+					splitInfo,
+					this));
+		}
+
+		return splits;
+	}
 
 	protected double getCardinality(
 			final RowRangeHistogramStatistics<?> rangeStats,
@@ -408,4 +466,110 @@ public abstract class SplitsProvider
 		return bytes;
 	}
 
+	public static GeoWaveRowRange toRowRange(
+			final ByteArrayRange range,
+			final int partitionKeyLength ) {
+		final byte[] startRow = range.getStart() == null ? null : range.getStart().getBytes();
+		final byte[] stopRow = range.getEnd() == null ? null : range.getEnd().getBytes();
+
+		if (partitionKeyLength <= 0) {
+			return new GeoWaveRowRange(
+					null,
+					startRow,
+					stopRow,
+					true,
+					false);
+		}
+		else {
+			byte[] partitionKey;
+			boolean partitionKeyDiffers = false;
+			if ((startRow == null) && (stopRow == null)) {
+				return new GeoWaveRowRange(
+						null,
+						null,
+						null,
+						true,
+						true);
+			}
+			else if (startRow != null) {
+				partitionKey = ArrayUtils.subarray(
+						startRow,
+						0,
+						partitionKeyLength);
+				if (stopRow != null) {
+					partitionKeyDiffers = !Arrays.equals(
+							partitionKey,
+							ArrayUtils.subarray(
+									stopRow,
+									0,
+									partitionKeyLength));
+				}
+			}
+			else {
+				partitionKey = ArrayUtils.subarray(
+						stopRow,
+						0,
+						partitionKeyLength);
+			}
+			return new GeoWaveRowRange(
+					partitionKey,
+					startRow == null ? null : (partitionKeyLength == startRow.length ? null : ArrayUtils.subarray(
+							startRow,
+							partitionKeyLength,
+							startRow.length)),
+					partitionKeyDiffers ? null : (stopRow == null ? null : (partitionKeyLength == stopRow.length ? null
+							: ArrayUtils.subarray(
+									stopRow,
+									partitionKeyLength,
+									stopRow.length))),
+					true,
+					partitionKeyDiffers);
+
+		}
+	}
+
+	public static ByteArrayRange fromRowRange(
+			final GeoWaveRowRange range ) {
+
+		if ((range.getPartitionKey() == null) || (range.getPartitionKey().length == 0)) {
+			final byte[] startKey = (range.getStartSortKey() == null) ? null : range.getStartSortKey();
+			final byte[] endKey = (range.getEndSortKey() == null) ? null : range.getEndSortKey();
+
+			return new ByteArrayRange(
+					new ByteArrayId(
+							startKey),
+					new ByteArrayId(
+							endKey));
+		}
+		else {
+			final byte[] startKey = (range.getStartSortKey() == null) ? range.getPartitionKey() : ArrayUtils.addAll(
+					range.getPartitionKey(),
+					range.getStartSortKey());
+
+			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArrayId.getNextPrefix(range.getPartitionKey())
+					: ArrayUtils.addAll(
+							range.getPartitionKey(),
+							range.getEndSortKey());
+
+			return new ByteArrayRange(
+					new ByteArrayId(
+							startKey),
+					new ByteArrayId(
+							endKey));
+		}
+	}
+
+	public static byte[] getInclusiveEndKey(
+			final byte[] endKey ) {
+		final byte[] inclusiveEndKey = new byte[endKey.length + 1];
+
+		System.arraycopy(
+				endKey,
+				0,
+				inclusiveEndKey,
+				0,
+				inclusiveEndKey.length - 1);
+
+		return inclusiveEndKey;
+	}
 }

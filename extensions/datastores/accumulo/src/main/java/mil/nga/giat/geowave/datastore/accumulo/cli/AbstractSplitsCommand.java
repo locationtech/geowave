@@ -20,7 +20,6 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.datastore.accumulo.split.SplitCommandLineOptions;
@@ -54,8 +53,7 @@ public abstract class AbstractSplitsCommand extends
 		String inputStoreName = parameters.get(0);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

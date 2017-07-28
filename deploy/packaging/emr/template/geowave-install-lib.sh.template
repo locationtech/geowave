@@ -66,6 +66,7 @@ wait_until_hdfs_is_available() {
 }
 
 install_geowave() {
+	SET_PUBLIC_DNS=${1:-false}
 	# Install the repo config file
 	sudo rpm -Uvh $GEOWAVE_REPO_BASE_URL_TOKEN$GEOWAVE_REPO_RPM
 
@@ -81,22 +82,27 @@ repo_base_url => '$GEOWAVE_REPO_BASE_URL_TOKEN',
   repo_enabled  => 1,
 } ->
 class { 'geowave':
-	geowave_version				=> '${GEOWAVE_VERSION}',
-	hadoop_vendor_version 		=> 'apache',
-	install_$DATASTORE_TOKEN	=> true,
-	install_app           		=> true,
-	install_app_server    		=> true,
-	http_port             		=> '${GEOSERVER_PORT}',
+	geowave_version             => '${GEOWAVE_VERSION}',
+	hadoop_vendor_version       => 'apache',
+	install_$DATASTORE_TOKEN  	=> true,
+	install_app                 => true,
+	install_restservices        => true,
+	install_gwgeoserver         => true,
+	http_port                   => "${HTTP_PORT}",
+	ajp_port                    => "${AJP_PORT}",
+	shutdown_port               => "${SHUTDOWN_PORT}",
+	set_public_dns              => ${SET_PUBLIC_DNS},
+	public_dns                  => "${PUBLIC_DNS}:${HTTP_PORT}"
 }
 
-file { '/etc/geowave/geowave.config':
+file { '/usr/local/geowave/tomcat8/bin/setenv.sh':
 	ensure  => file,
 	owner   => 'geowave',
 	group   => 'geowave',
 	mode    => 644,
 	content => 'export JAVA_OPTS="${GEOSERVER_MEMORY}"',
-	require => Package['geowave-${GEOWAVE_VERSION}-core'],
-	notify  => Service['geowave'],
+	require => Package['geowave-${GEOWAVE_VERSION}-apache-gwtomcat'],
+        notify  => Service['gwtomcat'],
 }
 EOF
 

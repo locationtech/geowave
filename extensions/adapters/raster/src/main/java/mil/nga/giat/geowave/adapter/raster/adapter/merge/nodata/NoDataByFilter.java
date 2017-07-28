@@ -31,7 +31,7 @@ public class NoDataByFilter implements
 	private Geometry shape;
 	private double[][] noDataPerBand;
 
-	protected NoDataByFilter() {}
+	public NoDataByFilter() {}
 
 	public NoDataByFilter(
 			final Geometry shape,

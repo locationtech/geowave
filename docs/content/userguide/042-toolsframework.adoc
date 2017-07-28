@@ -1,35 +1,163 @@
 [[toolsframework]]
 <<<
+
+:linkattrs:
+
 == Tools Framework
-A plugin framework (using Service Provider Interface (SPI) based injection) is provided with several input formats and utilities supported out of the box.
+A plugin framework (using Service Provider Interface [SPI] based injection) is provided with several input formats and utilities supported out of the box.
 
-First we'll show how to build and use the built in formats, and after that describe how to create a new plugin.
+[NOTE]
+====
+This section assumes that a GeoWave build is available. Building GeoWave from source is outside the scope of this document. For details on generating a GeoWave build, please reference the link:devguide.html#building-code[GeoWave Developer Guide, window="_blank"].
+====
 
-=== Building
+=== GeoWave Command Line Instructions
+GeoWave comes available with several levels of command-line functionality. In this section, we will provide a high-level overview of the commands and will also outline a few of the core functions available, though for a full exhaustive list of commands, please see the link:commands.html[GeoWave CLI Appendix^, window="_blank"].
 
-First build the main project after specifying the dependency versions you'd like to build against.
+[NOTE]
+====
+It is assumed that a _geowave_ system command alias is registered in the terminal session being run through.
+
+To test this, type 'geowave' (no quotes) and press enter.
+
+If a list of geowave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term, __'geowave: command not found'__ is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the link:devguide.html#packaging-code[GeoWave Developer Guide, window="_blank"].
+
+If the alias system command is not registered, the full java command - ( e.g., java -cp {GEOWAVE_HOME} {GEOWAVE_JAR} ) - will need to be used in place of the 'geowave' alias.
+====
+
+==== General Usage & Options
+For root-level command-line usage of GeoWave, run the 'geowave' command.
+[source, bash]
+----
+$ geowave
+----
+This will return all available commands through GeoWave along with a brief description of each.
+
+.Options:
+- --config-file:
++
+Override configuration file (default is <home>/.geowave/config.properties).
++
+This flag must come after 'geowave' and before any subcommand.
+- --debug:
++
+Verbose output. Use the debug flag to increase the debug logging output by GeoWave on the console to DEBUG. By default, it is set to WARN.
++
+This flag must come after 'geowave' and before any subcommand.
+- --version:
++
+The version flag will output the build arguments that were used to build GeoWave as well as the version of the GeoWave tools jar you’re using:
+
+[NOTE]
+====
+Not all three options are required. All have been listed as example, though each can be used independently or as any combination of the three options.
+====
+
+Example:
+[source, bash]
+----
+$ geowave --config-file {path to configuration file override} --debug --version
+----
+
+==== Accumulo
+Utility operations to set accumulo splits
+[source, bash]
+----
+$ geowave accumulo
+----
+
+==== Analytic
+Commands that run mapreduce or spark processing to enhance an existing GeoWave dataset
 
 [source, bash]
 ----
-export BUILD_ARGS="-Daccumulo.version=1.7.2 -Daccumulo.api=1.7 -Dhbase.version=1.3.0 -Dhadoop.version=2.7.3 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0" <1>
-git clone https://github.com/locationtech/geowave.git <2>
-cd geowave
-mvn install $BUILD_ARGS <3>
+$ geowave analytic
 ----
-<1> Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section
-<2> If you don't need the complete history and want to speed up the clone you can limit the depth of your checkout with --depth NUM_COMMITS
-<3> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
 
-Now we can build the cli tools framework
+==== Config
+Commands that affect local configuration only
 
 [source, bash]
 ----
-mvn package -P geowave-tools-singlejar $BUILD_ARGS
+$ geowave config
 ----
 
-The geowave tools jar is now packaged in deploy/target. When packaged for installation there will be a wrapper script named geowave
-that will be installed in $PATH. In a development environment where this script has not been installed you could create a directory
-containing the tools jar and any needed plugin jars and use with something like the following command ```java -cp "$DIR/* <operation> <options>```
+==== Explain
+See what arguments are missing and what values will be used for GeoWave commands
 
-At this point you can now run GeoWave Command Line Instructions. For a full list of these commands please 
-see the http://locationtech.github.io/geowave/commands.html[GeoWave CLI Appendix^].  
+[source, bash]
+----
+$ geowave explain
+----
+
+==== GeoServer
+Commands that manage geoserver data stores and layers
+
+[source, bash]
+----
+$ geowave gs
+----
+
+==== HBase
+Utility operations to combine statistics in hbase
+
+[source, bash]
+----
+$ geowave hbase
+----
+
+==== Help
+The help command will show arguments and their defaults. It can be prepended to any GeoWave command. If you use it while also specifying a sub-command and its arguments, that command’s help information will be displayed:
+
+[source, bash]
+----
+$ geowave help <command> <subcommand>
+----
+
+==== Ingest
+Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave
+
+[source, bash]
+----
+$ geowave ingest
+----
+
+==== Landsat
+Operations to analyze, download, and ingest Landsat 8 imagery publicly available on AWS
+
+[source, bash]
+----
+$ geowave landsat
+----
+
+==== OSM
+Operations to ingest OSM nodes, ways and relations to GeoWave
+
+[source, bash]
+----
+$ geowave osm
+----
+
+==== Raster
+Operations to perform transformations on raster data in GeoWave
+
+[source, bash]
+----
+$ geowave raster
+----
+
+==== Remote
+Operations to manage a remote store
+
+[source, bash]
+----
+$ geowave remote
+----
+
+==== Vector
+Vector data operations
+
+[source, bash]
+----
+$ geowave vector
+----

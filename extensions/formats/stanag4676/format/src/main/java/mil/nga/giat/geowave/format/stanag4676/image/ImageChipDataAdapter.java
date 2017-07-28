@@ -162,4 +162,10 @@ public class ImageChipDataAdapter implements
 		return null;
 	}
 
+	@Override
+	public void init(
+			PrimaryIndex... indices ) {
+		// TODO Auto-generated method stub
+
+	}
 }

@@ -10,13 +10,33 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_CS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYMGR_ALG;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYMGR_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_FILE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_PASS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_TYPE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEY_PASS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_SECURITY_PROTOCOL;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTMGR_ALG;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTMGR_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_FILE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PASS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_TYPE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -42,17 +62,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.glassfish.jersey.SslConfigurator;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.glassfish.jersey.SslConfigurator;
-
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.beust.jcommander.ParameterException;
 
-import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
@@ -69,6 +87,7 @@ import net.sf.json.JSONObject;
 
 public class GeoServerRestClient
 {
+	private static GeoServerRestClient SINGLETON_INSTANCE;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
@@ -81,20 +100,34 @@ public class GeoServerRestClient
 	private final GeoServerConfig config;
 	private WebTarget webTarget = null;
 
-	public GeoServerRestClient(
+	private GeoServerRestClient(
 			final GeoServerConfig config ) {
 		this.config = config;
-		org.apache.log4j.Logger.getRootLogger().setLevel(
-				org.apache.log4j.Level.DEBUG);
 	}
 
-	public GeoServerRestClient(
+	private GeoServerRestClient(
 			final GeoServerConfig config,
 			WebTarget webTarget ) {
 		this.config = config;
 		this.webTarget = webTarget;
-		org.apache.log4j.Logger.getRootLogger().setLevel(
-				org.apache.log4j.Level.DEBUG);
+	}
+
+	public static GeoServerRestClient getInstance(
+			GeoServerConfig config ) {
+		if (SINGLETON_INSTANCE == null) {
+			SINGLETON_INSTANCE = new GeoServerRestClient(
+					config);
+		}
+		return SINGLETON_INSTANCE;
+	}
+
+	public void setWebTarget(
+			WebTarget webTarget ) {
+		this.webTarget = webTarget;
+	}
+
+	public static void invalidateInstance() {
+		SINGLETON_INSTANCE = null;
 	}
 
 	/**
@@ -109,14 +142,13 @@ public class GeoServerRestClient
 		if (webTarget == null) {
 			String url = getConfig().getUrl();
 			if (url != null) {
-				url = url.trim();
+				url = url.trim().toLowerCase(
+						Locale.ROOT);
 				Client client = null;
-				if (url.toLowerCase().startsWith(
-						"http://")) {
+				if (url.startsWith("http://")) {
 					client = ClientBuilder.newClient();
 				}
-				else if (url.toLowerCase().startsWith(
-						"https://")) {
+				else if (url.startsWith("https://")) {
 					SslConfigurator sslConfig = SslConfigurator.newInstance();
 					if (getConfig().getGsConfigProperties() != null) {
 						loadSSLConfigurations(
@@ -133,7 +165,15 @@ public class GeoServerRestClient
 					client.register(HttpAuthenticationFeature.basic(
 							getConfig().getUser(),
 							getConfig().getPass()));
-					webTarget = client.target(url);
+					try {
+						webTarget = client.target(new URI(
+								url));
+					}
+					catch (URISyntaxException e) {
+						LOGGER.error(
+								"Unable to parse geoserver URL: " + url,
+								e);
+					}
 				}
 			}
 		}
@@ -217,6 +257,9 @@ public class GeoServerRestClient
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_FILE)) {
 				// resolve file path - either relative or absolute - then get
 				// the canonical path
+				// HP Fortify "Path Traversal" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				File keyStoreFile = new File(
 						FileUtils.formatFilePath(getPropertyValue(
 								gsConfigProperties,
@@ -1483,13 +1526,15 @@ public class GeoServerRestClient
 			// use a transformer to create the xml string for the rest call
 			final TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
-			// HP Fortify "XML External Entity Injection" false positive
-			// The following modifications to xformerFactory are the
-			// fortify-recommended procedure to secure a TransformerFactory
-			// but the report still flags this instance
-			xformerFactory.setFeature(
-					XMLConstants.FEATURE_SECURE_PROCESSING,
-					true);
+			// HP Fortify "XML External Entity Injection" fix.
+			// These ines are the recommended fix for
+			// protecting a Java TransformerFactory from XXE.
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_DTD,
+					"");
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_STYLESHEET,
+					"");
 
 			final Transformer xformer = xformerFactory.newTransformer();
 
@@ -1502,6 +1547,10 @@ public class GeoServerRestClient
 					source,
 					result);
 
+			// HP Fortify "Improper Resource Shutdown or Release" false positive
+			// coverageXml holds onto a string rather than the writer itself.
+			// result.getWriter().close() is called explicitly in the finally
+			// clause below
 			coverageXml = result.getWriter().toString();
 		}
 		catch (final TransformerException e) {

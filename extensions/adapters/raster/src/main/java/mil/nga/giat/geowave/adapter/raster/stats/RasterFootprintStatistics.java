@@ -36,7 +36,7 @@ public class RasterFootprintStatistics extends
 			"FOOTPRINT");
 	private Geometry footprint;
 
-	protected RasterFootprintStatistics() {
+	public RasterFootprintStatistics() {
 		super();
 	}
 

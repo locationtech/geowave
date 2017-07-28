@@ -1,0 +1,51 @@
+[geoserver-management]
+<<<
+[geoserver-authorization-management]
+==== Authorization Management
+
+Authorization Management provides the set of credentials compared against the security labels attached to each cell. Authorization Management determines the set of authorizations associated with each WFS-T request. The available Authorization Management strategies are registered through the Server Provider model, within the file
+
+`META-INF/services/mil.nga.giat.geowave.vector.auth.AuthorizationFactorySPI`.
+
+The provided implementations include the following
+
+* Empty - Each request is processed without additional authorization.
+* JSON - The requester user name, extracted from the Security Context, is used as a key to find the user's set of authorizations from a JSON file. The location of the JSON file is determined by the associated _Authorization Data URL_ (e.g., _/opt/config/auth.json_). An example of the contents of the JSON file is given below.
+
+[source, json]
+----
+    {
+      "authorizationSet": {
+         "fred" : ["1","2","3"],
+         "barney" : ["a"]
+      }
+    }
+----
+
+Fred has three authorization labels. Barney has one.
+
+[geoserver-visibility-management]
+==== Visibility Management
+
+Visibility constraints, applied to feature instances during insertions, are ultimately determined in `mil.nga.giat.geowave.store.data.field.FieldWriter`. There are writers for each supported data type in Geoserver. By default, the set visibility expression attached to each feature property is empty. Visibility Management supports selection of a strategy by wrapping each writer to provide visibility. This alleviates the need to extend the type specific FieldWriters.
+
+The visibility management strategy is registered through the Java Service Provider Interface (SPI) model, within the file `META-INF/services/mil.nga.giat.geowave.vector.plugin.visibility.ColumnVisibilityManagement`. The only provided implementation is the `JsonDefinitionColumnVisibilityManagement`. The implementation expects a property within each feature instance to contain a JSON string describing how to set the visibility for each property of the feature instance. This approach allows each instance to determine its own visibility criteria.
+
+Each name/value pair within the JSON structure defines the visibility for the associated feature property with the same name. In the following example, the _geometry_ property is given a visibility `S` and the eventName is given a visibility `TS`.
+
+[source, json]
+----
+{ "geometry" : "S", "eventName": "TS" }
+----
+
+JSON attributes can be regular expressions matching more than one feature property name. In the example, all properties except for those that start with 'geo' have visibility `TS`.
+
+[source, json]
+----
+{ "geo.*" : "S", ".*" : "TS" }
+----
+
+The order of the name/value pairs must be considered if one rule is more general than another, as shown in the example. The rule `.*` matches all properties. The more specific rule `geo.*` must be ordered first.
+
+The system extracts the JSON visibility string from a feature instance property named `GEOWAVE_VISIBILITY`. Selection of an alternate property is achieved by setting the associated attribute descriptor 'visibility' to the boolean value TRUE.
+

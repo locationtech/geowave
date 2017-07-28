@@ -13,6 +13,13 @@ package mil.nga.giat.geowave.adapter.vector.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+
 public class DateUtilities
 {
 
@@ -46,5 +53,67 @@ public class DateUtilities
 
 		return df.parse(input);
 
+	}
+
+	public static TemporalRange getTemporalRange(
+			final DataStorePluginOptions dataStorePlugin,
+			final ByteArrayId adapterId,
+			final String timeField ) {
+		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
+
+		// if this is a ranged schema, we have to get complete bounds
+		if (timeField.contains("|")) {
+			int pipeIndex = timeField.indexOf("|");
+			String startField = timeField.substring(
+					0,
+					pipeIndex);
+			String endField = timeField.substring(pipeIndex + 1);
+
+			Date start = null;
+			Date end = null;
+
+			ByteArrayId timeStatsId = FeatureTimeRangeStatistics.composeId(startField);
+
+			DataStatistics<?> timeStat = statisticsStore.getDataStatistics(
+					adapterId,
+					timeStatsId,
+					null);
+			if (timeStat instanceof FeatureTimeRangeStatistics) {
+				final FeatureTimeRangeStatistics trStats = (FeatureTimeRangeStatistics) timeStat;
+				start = trStats.asTemporalRange().getStartTime();
+			}
+
+			timeStatsId = FeatureTimeRangeStatistics.composeId(endField);
+
+			timeStat = statisticsStore.getDataStatistics(
+					adapterId,
+					timeStatsId,
+					null);
+			if (timeStat instanceof FeatureTimeRangeStatistics) {
+				final FeatureTimeRangeStatistics trStats = (FeatureTimeRangeStatistics) timeStat;
+				end = trStats.asTemporalRange().getEndTime();
+			}
+
+			if (start != null && end != null) {
+				return new TemporalRange(
+						start,
+						end);
+			}
+		}
+		else {
+			// Look up the time range stat for this adapter
+			ByteArrayId timeStatsId = FeatureTimeRangeStatistics.composeId(timeField);
+
+			DataStatistics<?> timeStat = statisticsStore.getDataStatistics(
+					adapterId,
+					timeStatsId,
+					null);
+			if (timeStat instanceof FeatureTimeRangeStatistics) {
+				final FeatureTimeRangeStatistics trStats = (FeatureTimeRangeStatistics) timeStat;
+				return trStats.asTemporalRange();
+			}
+		}
+
+		return null;
 	}
 }

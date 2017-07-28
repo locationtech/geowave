@@ -33,8 +33,8 @@ import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
@@ -332,9 +332,7 @@ public abstract class AbstractPartitioner<T> implements
 			ClassNotFoundException {
 		final byte[] indexData = new byte[stream.readInt()];
 		stream.readFully(indexData);
-		index = PersistenceUtils.fromBinary(
-				indexData,
-				PrimaryIndex.class);
+		index = (PrimaryIndex) PersistenceUtils.fromBinary(indexData);
 		precisionFactor = stream.readDouble();
 		distancePerDimension = new double[stream.readInt()];
 		for (int i = 0; i < distancePerDimension.length; i++) {

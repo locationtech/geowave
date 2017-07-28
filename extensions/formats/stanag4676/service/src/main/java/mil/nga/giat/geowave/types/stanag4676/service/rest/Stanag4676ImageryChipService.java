@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -41,8 +41,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jcodec.codecs.vpx.NopRateControl;
 import org.jcodec.codecs.vpx.RateControl;
 import org.jcodec.codecs.vpx.VP8Encoder;
@@ -55,6 +53,8 @@ import org.jcodec.containers.mkv.muxer.MKVMuxer;
 import org.jcodec.containers.mkv.muxer.MKVMuxerTrack;
 import org.jcodec.scale.AWTUtil;
 import org.jcodec.scale.RgbToYuv420p;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 
@@ -69,7 +69,6 @@ import mil.nga.giat.geowave.format.stanag4676.Stanag4676IngestPlugin;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChip;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipUtils;
-import mil.nga.giat.geowave.service.ServiceUtils;
 
 @Path("stanag4676")
 public class Stanag4676ImageryChipService
@@ -104,9 +103,7 @@ public class Stanag4676ImageryChipService
 			@QueryParam("size")
 			@DefaultValue("-1")
 			final int targetPixelSize ) {
-		final Calendar cal = Calendar.getInstance(
-				TimeZone.getTimeZone(
-						"GMT"));
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		cal.set(
 				year,
 				month - 1,
@@ -152,23 +149,16 @@ public class Stanag4676ImageryChipService
 
 		if ((imageChip != null) && (imageChip instanceof ImageChip)) {
 			if (targetPixelSize <= 0) {
-				LOGGER.info(
-						"Sending ImageChip for " + chipNameStr);
+				LOGGER.info("Sending ImageChip for " + chipNameStr);
 
 				final byte[] imageData = ((ImageChip) imageChip).getImageBinary();
-				return Response
-						.ok()
-						.entity(
-								imageData)
-						.type(
-								"image/jpeg")
-						.build();
+				return Response.ok().entity(
+						imageData).type(
+						"image/jpeg").build();
 			}
 			else {
-				LOGGER.info(
-						"Sending BufferedImage for " + chipNameStr);
-				final BufferedImage image = ((ImageChip) imageChip).getImage(
-						targetPixelSize);
+				LOGGER.info("Sending BufferedImage for " + chipNameStr);
+				final BufferedImage image = ((ImageChip) imageChip).getImage(targetPixelSize);
 				final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				try {
 					ImageIO.write(
@@ -176,13 +166,9 @@ public class Stanag4676ImageryChipService
 							"jpeg",
 							baos);
 
-					return Response
-							.ok()
-							.entity(
-									baos.toByteArray())
-							.type(
-									"image/jpeg")
-							.build();
+					return Response.ok().entity(
+							baos.toByteArray()).type(
+							"image/jpeg").build();
 				}
 				catch (final IOException e) {
 					LOGGER.error(
@@ -239,8 +225,7 @@ public class Stanag4676ImageryChipService
 				final Object imageChipObj = imageChipIt.next();
 				if ((imageChipObj != null) && (imageChipObj instanceof ImageChip)) {
 					final ImageChip imageChip = (ImageChip) imageChipObj;
-					final BufferedImage image = imageChip.getImage(
-							targetPixelSize);
+					final BufferedImage image = imageChip.getImage(targetPixelSize);
 					if ((width < 0) || (image.getWidth() > width)) {
 						width = image.getWidth();
 					}
@@ -261,8 +246,7 @@ public class Stanag4676ImageryChipService
 					.serverError()
 					.entity(
 							"Video generation failed \nException: " + e1.getLocalizedMessage() + "\n stack trace: "
-									+ Arrays.toString(
-											e1.getStackTrace()))
+									+ Arrays.toString(e1.getStackTrace()))
 					.build();
 		}
 
@@ -273,13 +257,11 @@ public class Stanag4676ImageryChipService
 					"Unable to retrieve image chips").build();
 		}
 		else {
-			LOGGER.info(
-					"Sending Video for " + videoNameStr);
+			LOGGER.info("Sending Video for " + videoNameStr);
 
 			try {
 				final File responseBody;
-				LOGGER.debug(
-						"Attempting to build the video the new way ...");
+				LOGGER.debug("Attempting to build the video the new way ...");
 				responseBody = buildVideo2(
 						mission,
 						track,
@@ -287,8 +269,7 @@ public class Stanag4676ImageryChipService
 						width,
 						height,
 						speed);
-				LOGGER.debug(
-						"Got a response body (path): " + responseBody.getAbsolutePath());
+				LOGGER.debug("Got a response body (path): " + responseBody.getAbsolutePath());
 				try (FileInputStream fis = new FileInputStream(
 						responseBody) {
 
@@ -300,25 +281,18 @@ public class Stanag4676ImageryChipService
 						// returned
 
 						if (!responseBody.delete()) {
-							LOGGER.warn(
-									"Cannot delete response body");
+							LOGGER.warn("Cannot delete response body");
 						}
 
 						if (!responseBody.getParentFile().delete()) {
-							LOGGER.warn(
-									"Cannot delete response body's parent file");
+							LOGGER.warn("Cannot delete response body's parent file");
 						}
 					}
 				}) {
-					LOGGER.info(
-							"Returning video object: " + fis);
-					return Response
-							.ok()
-							.entity(
-									fis)
-							.type(
-									"video/webm")
-							.build();
+					LOGGER.info("Returning video object: " + fis);
+					return Response.ok().entity(
+							fis).type(
+							"video/webm").build();
 				}
 				catch (final FileNotFoundException fnfe) {
 					LOGGER.error(
@@ -411,6 +385,9 @@ public class Stanag4676ImageryChipService
 			throws IOException {
 
 		final File videoFileDir = Files.createTempDir();
+		// HP Fortify "Path Traversal" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		final File videoFile = new File(
 				videoFileDir,
 				mission + "_" + track + ".webm");
@@ -418,8 +395,7 @@ public class Stanag4676ImageryChipService
 		FileChannelWrapper sink = null;
 
 		try {
-			sink = NIOUtils.writableFileChannel(
-					videoFile.getAbsolutePath());
+			sink = NIOUtils.writableFileChannel(videoFile.getAbsolutePath());
 
 			/*
 			 * Version 0.1.9
@@ -454,11 +430,9 @@ public class Stanag4676ImageryChipService
 						rgb.getHeight(),
 						ColorSpace.YUV420);
 				transform.transform(
-						AWTUtil.fromBufferedImage(
-								rgb),
+						AWTUtil.fromBufferedImage(rgb),
 						yuv);
-				final ByteBuffer buf = ByteBuffer.allocate(
-						rgb.getWidth() * rgb.getHeight() * 3);
+				final ByteBuffer buf = ByteBuffer.allocate(rgb.getWidth() * rgb.getHeight() * 3);
 
 				final ByteBuffer ff = encoder.encodeFrame(
 						yuv,
@@ -475,17 +449,14 @@ public class Stanag4676ImageryChipService
 				}
 			}
 			if (i == 1) {
-				LOGGER.error(
-						"Image sequence not found");
+				LOGGER.error("Image sequence not found");
 				return null;
 			}
 			if (videoTrack != null) {
-				LOGGER.debug(
-						"Found " + y + " of " + i + " new frames." + "  videoTrack timescale is "
-								+ videoTrack.getTimescale());
+				LOGGER.debug("Found " + y + " of " + i + " new frames." + "  videoTrack timescale is "
+						+ videoTrack.getTimescale());
 			}
-			muxer.mux(
-					sink);
+			muxer.mux(sink);
 
 			// ------------------------------------------------------------------
 			// Version 0.2.0
@@ -537,8 +508,7 @@ public class Stanag4676ImageryChipService
 		finally {
 			if (sink != null) {
 				sink.close();
-				IOUtils.closeQuietly(
-						sink);
+				IOUtils.closeQuietly(sink);
 			}
 		}
 		return videoFile;
@@ -551,20 +521,16 @@ public class Stanag4676ImageryChipService
 		if (dataStore != null) {
 			return dataStore;
 		}
-		final String confPropFilename = context.getInitParameter(
-				"config.properties");
+		final String confPropFilename = context.getInitParameter("config.properties");
 		// HP Fortify "Log Forging" false positive
 		// What Fortify considers "user input" comes only
 		// from users with OS-level access anyway
-		LOGGER.info(
-				"Creating datastore singleton for 4676 service.   conf prop filename: " + confPropFilename);
+		LOGGER.info("Creating datastore singleton for 4676 service.   conf prop filename: " + confPropFilename);
 		Properties props = null;
-		try (InputStream is = context.getResourceAsStream(
-				confPropFilename)) {
-			props = ServiceUtils.loadProperties(
-					is);
+		try (InputStream is = context.getResourceAsStream(confPropFilename)) {
+			props = loadProperties(is);
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					e.getLocalizedMessage(),
 					e);
@@ -575,32 +541,59 @@ public class Stanag4676ImageryChipService
 		if (props != null) {
 			final Map<String, String> strMap = new HashMap<String, String>();
 
-		final Set<Object> keySet = props.keySet();
-		final Iterator<Object> it = keySet.iterator();
-		while (it.hasNext()) {
-			final String key = it.next().toString();
-			final String value = ServiceUtils.getProperty(
-					props,
-					key);
-			strMap.put(
-					key,
-					value);
-			// HP Fortify "Log Forging" false positive
-			// What Fortify considers "user input" comes only
-			// from users with OS-level access anyway
-			LOGGER.info(
-					"    Key/Value: " + key + "/" + value);
-		}
+			final Set<Object> keySet = props.keySet();
+			final Iterator<Object> it = keySet.iterator();
+			while (it.hasNext()) {
+				final String key = it.next().toString();
+				final String value = getProperty(
+						props,
+						key);
+				strMap.put(
+						key,
+						value);
+				// HP Fortify "Log Forging" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
+				LOGGER.info("    Key/Value: " + key + "/" + value);
+			}
 
 			dataStore = GeoWaveStoreFinder.createDataStore(strMap);
 
-		dataStore = GeoWaveStoreFinder.createDataStore(
-				strMap);
-
+			dataStore = GeoWaveStoreFinder.createDataStore(strMap);
+		}
 		if (dataStore == null) {
-			LOGGER.error(
-					"Unable to create datastore for 4676 service");
+			LOGGER.error("Unable to create datastore for 4676 service");
 		}
 		return dataStore;
+	}
+
+	private static Properties loadProperties(
+			final InputStream is ) {
+		final Properties props = new Properties();
+		if (is != null) {
+			try {
+				props.load(is);
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Could not load properties from InputStream",
+						e);
+			}
+		}
+		return props;
+	}
+
+	private static String getProperty(
+			final Properties props,
+			final String name ) {
+		if (System.getProperty(name) != null) {
+			return System.getProperty(name);
+		}
+		else if (props.containsKey(name)) {
+			return props.getProperty(name);
+		}
+		else {
+			return null;
+		}
 	}
 }

@@ -50,9 +50,7 @@ public final class OperationEntry
 		}
 		this.operationName = operation.name();
 		this.parentOperationClass = operation.parentOperation();
-		this.command = Arrays.asList(
-				this.operationClass.getInterfaces()).contains(
-				Command.class);
+		this.command = Command.class.isAssignableFrom(operationClass);
 		this.topLevel = this.parentOperationClass == null || this.parentOperationClass == Object.class;
 		this.children = new HashMap<String, OperationEntry>();
 	}

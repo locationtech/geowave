@@ -54,7 +54,7 @@ public class GeoWaveVectorSerializationIT extends
 		AbstractGeoWaveIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveVectorSerializationIT.class);
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE

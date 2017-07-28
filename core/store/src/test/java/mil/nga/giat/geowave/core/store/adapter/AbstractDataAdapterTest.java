@@ -12,8 +12,9 @@ package mil.nga.giat.geowave.core.store.adapter;
 
 import java.util.ArrayList;
 
-import junit.framework.Assert;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import org.junit.Assert;
+
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestNativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestPersistentIndexFieldHandler;
@@ -87,9 +88,8 @@ public class AbstractDataAdapterTest
 				indexFieldHandlers,
 				nativeFieldHandlers);
 
-		final MockAbstractDataAdapter obj = PersistenceUtils.fromBinary(
-				PersistenceUtils.toBinary(mockAbstractDataAdapter),
-				MockAbstractDataAdapter.class);
+		final MockAbstractDataAdapter obj = (MockAbstractDataAdapter) PersistenceUtils.fromBinary(PersistenceUtils
+				.toBinary(mockAbstractDataAdapter));
 
 		// TODO is there another test?
 		Assert.assertNotNull(obj);

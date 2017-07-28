@@ -63,4 +63,9 @@ public class CassandraOptions extends
 			final int replicationFactor ) {
 		this.replicationFactor = replicationFactor;
 	}
+
+	@Override
+	public boolean isServerSideLibraryEnabled() {
+		return false;
+	}
 }

@@ -22,6 +22,8 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.InputSplit;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * The Class GeoWaveInputSplit. Encapsulates a GeoWave Index and a set of Row

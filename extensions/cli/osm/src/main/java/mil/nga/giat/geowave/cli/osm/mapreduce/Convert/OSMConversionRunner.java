@@ -34,6 +34,7 @@ import mil.nga.giat.geowave.cli.osm.osmfeature.types.features.FeatureDefinitionS
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -179,7 +180,8 @@ public class OSMConversionRunner extends
 					fda);
 		}
 
-		final PrimaryIndex primaryIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex primaryIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				primaryIndex);

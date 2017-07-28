@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -13,10 +13,14 @@ package mil.nga.giat.geowave.datastore.accumulo.util;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -31,23 +35,28 @@ import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -57,11 +66,7 @@ import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
-import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
-import mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider;
-import mil.nga.giat.geowave.datastore.accumulo.RowMergingCombiner;
-import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloRow;
 import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
@@ -565,40 +570,6 @@ public class AccumuloUtils
 		return counter;
 	}
 
-	public static void attachRowMergingIterators(
-			final RowMergingDataAdapter<?, ?> adapter,
-			final AccumuloOperations operations,
-			final AccumuloOptions options,
-			final String tableName )
-			throws TableNotFoundException {
-		final RowTransform rowTransform = adapter.getTransform();
-		if (rowTransform != null) {
-			final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
-			final OptionProvider optionProvider = new RowMergingAdapterOptionProvider(
-					adapter);
-			final IteratorConfig rowMergingCombinerConfig = new IteratorConfig(
-					EnumSet.complementOf(visibilityCombinerScope),
-					rowTransform.getBaseTransformPriority(),
-					rowTransform.getTransformName() + ROW_MERGING_SUFFIX,
-					RowMergingCombiner.class.getName(),
-					optionProvider);
-			final IteratorConfig rowMergingVisibilityCombinerConfig = new IteratorConfig(
-					visibilityCombinerScope,
-					rowTransform.getBaseTransformPriority() + 1,
-					rowTransform.getTransformName() + ROW_MERGING_VISIBILITY_SUFFIX,
-					RowMergingVisibilityCombiner.class.getName(),
-					optionProvider);
-
-			operations.attachIterators(
-					tableName,
-					options.isCreateTable(),
-					true,
-					options.isEnableBlockCache(),
-					rowMergingCombinerConfig,
-					rowMergingVisibilityCombinerConfig);
-		}
-	}
-
 	private static CloseableIterator<Entry<Key, Value>> getIterator(
 			final Connector connector,
 			final String namespace,
@@ -633,10 +604,7 @@ public class AccumuloUtils
 					adapterStore,
 					index,
 					scanner.iterator(),
-					new DedupeFilter(),
-					new AccumuloDataStore(
-							operations,
-							options));
+					new DedupeFilter());
 
 			iterator = new CloseableIteratorWrapper<Entry<Key, Value>>(
 					new ScannerClosableWrapper(
@@ -655,19 +623,16 @@ public class AccumuloUtils
 		private final PrimaryIndex index;
 		private final QueryFilter clientFilter;
 		private Entry<Key, Value> nextValue;
-		private final BaseDataStore dataStore;
 
 		public IteratorWrapper(
 				final AdapterStore adapterStore,
 				final PrimaryIndex index,
 				final Iterator<Entry<Key, Value>> scannerIt,
-				final QueryFilter clientFilter,
-				final BaseDataStore dataStore ) {
+				final QueryFilter clientFilter ) {
 			this.adapterStore = adapterStore;
 			this.index = index;
 			this.scannerIt = scannerIt;
 			this.clientFilter = clientFilter;
-			this.dataStore = dataStore;
 			findNext();
 		}
 
@@ -690,19 +655,31 @@ public class AccumuloUtils
 				final Entry<Key, Value> row,
 				final QueryFilter clientFilter,
 				final PrimaryIndex index ) {
-			// TODO GEOWAVE-1018 - need to get this right
-			return null;
-			// return dataStore.decodeRow(
-			// row.getKey(),
-			// row.getValue(),
-			// true,
-			// // need to pass this, otherwise null value for rowId gets
-			// // dereferenced later
-			// new GeoWaveKeyImpl(
-			// row.getKey().getRow().copyBytes()),
-			// adapterStore,
-			// clientFilter,
-			// index);
+			try {
+				List<Map<Key, Value>> fieldValueMapList = new ArrayList();
+				fieldValueMapList.add(WholeRowIterator.decodeRow(
+						row.getKey(),
+						row.getValue()));
+				return BaseDataStoreUtils.decodeRow(
+						new AccumuloRow(
+								row.getKey().getRow().copyBytes(),
+								index.getIndexStrategy().getPartitionKeyLength(),
+								fieldValueMapList,
+								false),
+						clientFilter,
+						null,
+						adapterStore,
+						index,
+						null,
+						null,
+						true);
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"unable to decode row",
+						e);
+				return null;
+			}
 		}
 
 		@Override
@@ -721,4 +698,139 @@ public class AccumuloUtils
 		public void remove() {}
 	}
 
+	private static final Object MUTEX = new Object();
+	private static boolean classLoaderInitialized = false;
+
+	private static void initClassLoader()
+			throws MalformedURLException {
+		synchronized (MUTEX) {
+			if (classLoaderInitialized) {
+				return;
+			}
+			final ClassLoader classLoader = AccumuloUtils.class.getClassLoader();
+			LOGGER.info("Generating patched classloader");
+			if (classLoader instanceof VFSClassLoader) {
+				final VFSClassLoader cl = (VFSClassLoader) classLoader;
+				final FileObject[] fileObjs = cl.getFileObjects();
+				final ArrayList<URL> fileList = new ArrayList();
+
+				for (int i = 0; i < fileObjs.length; i++) {
+					String fileStr = fileObjs[i].toString();
+					if (verifyProtocol(fileStr)) {
+						fileList.add(new URL(
+								fileStr));
+					}
+					else {
+						LOGGER.error("Failed to register class loader from: " + fileStr);
+					}
+				}
+
+				final URL[] fileUrls = new URL[fileList.size()];
+				for (int i = 0; i < fileList.size(); i++) {
+					fileUrls[i] = fileList.get(i);
+				}
+
+				final ClassLoader urlCL = java.security.AccessController
+						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
+							@Override
+							public URLClassLoader run() {
+								final URLClassLoader ucl = new URLClassLoader(
+										fileUrls,
+										cl);
+								return ucl;
+							}
+						});
+
+				SPIServiceRegistry.registerClassLoader(urlCL);
+			}
+			classLoaderInitialized = true;
+		}
+	}
+
+	private static boolean verifyProtocol(
+			String fileStr ) {
+		if (fileStr.contains("s3://")) {
+			try {
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
+
+				return true;
+			}
+			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+				LOGGER.error(
+						"Error in setting up S3URLStreamHandler Factory",
+						e1);
+
+				return false;
+			}
+		}
+		else if (fileStr.contains("hdfs://")) {
+			try {
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
+
+				return true;
+			}
+			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+				LOGGER.error(
+						"Error in setting up HdfsUrlStreamHandler Factory",
+						e1);
+
+				return false;
+			}
+		}
+
+		LOGGER.debug("Assuming good URLStreamHandler for " + fileStr);
+		return true;
+	}
+
+	public static byte[] toBinary(
+			final Persistable persistable ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toBinary",
+					e);
+		}
+		return PersistenceUtils.toBinary(persistable);
+	}
+
+	public static Persistable fromBinary(
+			final byte[] bytes ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in fromBinary",
+					e);
+		}
+		return PersistenceUtils.fromBinary(bytes);
+	}
+
+	public static byte[] toBinary(
+			final Collection<? extends Persistable> persistables ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toBinary (list)",
+					e);
+		}
+		return PersistenceUtils.toBinary(persistables);
+	}
+
+	public static byte[] toClassId(
+			final Persistable persistable ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toClassId",
+					e);
+		}
+		return PersistenceUtils.toClassId(persistable);
+	}
 }

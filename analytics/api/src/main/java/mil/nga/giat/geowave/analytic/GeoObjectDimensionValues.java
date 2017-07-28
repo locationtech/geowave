@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.analytic;
 
 import java.nio.ByteBuffer;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 /**
  * 
@@ -154,5 +154,4 @@ public class GeoObjectDimensionValues implements
 		}
 
 	}
-
 }

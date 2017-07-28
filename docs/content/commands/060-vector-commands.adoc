@@ -1,0 +1,29 @@
+[[vector-commands]]
+<<<
+
+[[vector-commands]]
+=== Vector Commands
+
+Vector data operations (Required options are designated with an *)
+
+.Commands:
+* <<060-vector-commands.adoc#vector-cqldelete, CQLDelete>>
+* <<060-vector-commands.adoc#vector-localexport, LocalExport>>
+* <<060-vector-commands.adoc#vector-mrexport, MRExport>>
+
+[[vector-cqldelete]]
+==== *geowave vector cqldelete*
+
+include::manpages/vector/geowave-cqldelete.txt[]
+
+[[vector-localexport]]
+==== *geowave vector localexport*
+
+include::manpages/vector/geowave-localexport.txt[]
+
+[[vector-mrexport]]
+==== *geowave vector mrexport*
+
+include::manpages/vector/geowave-mrexport.txt[]
+
+'''

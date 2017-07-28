@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,9 +22,8 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
@@ -34,8 +33,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 @GeowaveOperation(name = "clear", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Clear ALL data from a GeoWave store and delete tables")
 public class ClearCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClearCommand.class);
@@ -47,20 +45,47 @@ public class ClearCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params ) {
+		computeResults(params);
+	}
 
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			final String storeName ) {
+		parameters = new ArrayList<String>();
+		parameters.add(storeName);
+	}
+
+	public DataStorePluginOptions getInputStoreOptions() {
+		return inputStoreOptions;
+	}
+
+	public void setInputStoreOptions(
+			final DataStorePluginOptions inputStoreOptions ) {
+		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params ) {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
 		}
 
-		String inputStoreName = parameters.get(0);
+		final String inputStoreName = parameters.get(0);
+
+		// Attempt to load store.
+		final File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
@@ -72,24 +97,6 @@ public class ClearCommand extends
 		inputStoreOptions.createDataStore().delete(
 				new QueryOptions(),
 				new EverythingQuery());
-	}
-
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
+		return null;
 	}
 }

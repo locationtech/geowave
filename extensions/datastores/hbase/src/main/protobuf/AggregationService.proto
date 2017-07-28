@@ -1,11 +1,11 @@
-option java_package = "mil.nga.giat.geowave.datastore.hbase.query.protobuf";
+option java_package = "mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf";
 option java_outer_classname = "AggregationProtos";
 option java_generic_services = true;
 option java_generate_equals_and_hash = true;
 option optimize_for = SPEED;
 
 message AggregationType {
-  required string name = 1;
+  required bytes classId = 1;
   optional bytes params = 2;
 }
 
@@ -21,6 +21,7 @@ message AggregationRequest {
   optional bool blockCaching = 9;
   optional int32 cacheSize = 10;
   optional bool wholeRowFilter = 11;
+  optional int32 partitionKeyLength = 12;
 }
 
 message AggregationResponse {

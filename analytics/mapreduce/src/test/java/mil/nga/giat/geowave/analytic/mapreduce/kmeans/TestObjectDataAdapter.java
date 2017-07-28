@@ -15,6 +15,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -26,6 +27,7 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
@@ -282,4 +284,10 @@ public class TestObjectDataAdapter extends
 		return null;
 	}
 
+	@Override
+	public void init(
+			PrimaryIndex... indices ) {
+		// TODO Auto-generated method stub
+
+	}
 }

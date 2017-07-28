@@ -55,9 +55,22 @@ public class IndexLoader
 		loadedIndices = new HashMap<String, IndexPluginOptions>();
 
 		// Properties (load them all)
-		final Properties props = ConfigOptions.loadProperties(
+		return loadFromConfig(ConfigOptions.loadProperties(
 				configFile,
-				null);
+				null));
+	}
+
+	/**
+	 * Attempt to find an index group or index name in the config file with the
+	 * given name.
+	 *
+	 * @param configFile
+	 * @return
+	 */
+	public boolean loadFromConfig(
+			final Properties props ) {
+
+		loadedIndices = new HashMap<String, IndexPluginOptions>();
 
 		// Is there a comma?
 		final String[] indices = indexName.split(",");

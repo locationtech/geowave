@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.query.aggregate;
 
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
 public class DataStatisticsAggregation<T> implements
@@ -19,7 +19,9 @@ public class DataStatisticsAggregation<T> implements
 	private DataStatistics<T> statisticsParam;
 
 	private DataStatistics<T> statisticsResult;
-	private final byte[] defaultResultBinary;
+	private byte[] defaultResultBinary;
+
+	public DataStatisticsAggregation() {}
 
 	public DataStatisticsAggregation(
 			final DataStatistics<T> statistics ) {
@@ -47,14 +49,21 @@ public class DataStatisticsAggregation<T> implements
 
 	@Override
 	public void clearResult() {
-		this.statisticsResult = PersistenceUtils.fromBinary(
-				defaultResultBinary,
-				DataStatistics.class);
+		this.statisticsResult = (DataStatistics<T>) PersistenceUtils.fromBinary(defaultResultBinary);
 	}
 
 	@Override
 	public DataStatistics<T> getResult() {
 		return statisticsResult;
 	}
+
+	@Override
+	public byte[] toBinary() {
+		return new byte[] {};
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {}
 
 }

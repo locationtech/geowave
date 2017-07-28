@@ -38,10 +38,13 @@ import com.vividsolutions.jts.geom.Envelope;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureTranslatingIterator;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -59,9 +62,8 @@ public class AttributesSubsetQueryIT extends
 	private static SimpleFeatureType simpleFeatureType;
 	private static FeatureDataAdapter dataAdapter;
 
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
@@ -76,6 +78,9 @@ public class AttributesSubsetQueryIT extends
 	private static final String POPULATION_ATTRIBUTE = "population";
 	private static final String LAND_AREA_ATTRIBUTE = "landArea";
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
+
+	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 
 	private static final Collection<String> ALL_ATTRIBUTES = Arrays.asList(
 			CITY_ATTRIBUTE,
@@ -106,6 +111,8 @@ public class AttributesSubsetQueryIT extends
 
 		dataAdapter = new FeatureDataAdapter(
 				simpleFeatureType);
+
+		dataAdapter.init(index);
 
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");

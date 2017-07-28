@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +28,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
-import junit.framework.Assert;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -43,7 +43,7 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 public class GeometryUtilsTest
 {
-
+	private float DELTA = 0;
 	private Point point3D;
 	private Point point2D;
 
@@ -77,11 +77,13 @@ public class GeometryUtilsTest
 
 		Assert.assertEquals(
 				origCoords.x,
-				convCoords.x);
+				convCoords.x,
+				DELTA);
 
 		Assert.assertEquals(
 				origCoords.y,
-				convCoords.y);
+				convCoords.y,
+				DELTA);
 
 		Assert.assertTrue(Double.isNaN(convCoords.getOrdinate(Coordinate.Z)));
 	}
@@ -101,15 +103,18 @@ public class GeometryUtilsTest
 
 		Assert.assertEquals(
 				origCoords.x,
-				convCoords.x);
+				convCoords.x,
+				DELTA);
 
 		Assert.assertEquals(
 				origCoords.y,
-				convCoords.y);
+				convCoords.y,
+				DELTA);
 
 		Assert.assertEquals(
 				origCoords.z,
-				convCoords.z);
+				convCoords.z,
+				DELTA);
 	}
 
 	@Test
@@ -268,12 +273,6 @@ public class GeometryUtilsTest
 		}
 
 		@Override
-		public Set<ByteArrayId> getInsertionPartitionKeys(
-				final MultiDimensionalNumericData insertionData ) {
-			return null;
-		}
-
-		@Override
 		public Set<ByteArrayId> getQueryPartitionKeys(
 				final MultiDimensionalNumericData queryData,
 				final IndexMetaData... hints ) {
@@ -292,6 +291,12 @@ public class GeometryUtilsTest
 			return 0;
 		}
 
-	}
+		@Override
+		public Set<ByteArrayId> getInsertionPartitionKeys(
+				MultiDimensionalNumericData insertionData ) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
+	}
 }

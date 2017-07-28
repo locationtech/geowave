@@ -14,8 +14,8 @@ import java.nio.ByteBuffer;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /**
@@ -28,7 +28,7 @@ public class PrimaryIndex implements
 	protected NumericIndexStrategy indexStrategy;
 	protected CommonIndexModel indexModel;
 
-	protected PrimaryIndex() {}
+	public PrimaryIndex() {}
 
 	public PrimaryIndex(
 			final NumericIndexStrategy indexStrategy,
@@ -91,14 +91,10 @@ public class PrimaryIndex implements
 		final byte[] indexStrategyBinary = new byte[indexStrategyLength];
 		buf.get(indexStrategyBinary);
 
-		indexStrategy = PersistenceUtils.fromBinary(
-				indexStrategyBinary,
-				NumericIndexStrategy.class);
+		indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBinary);
 
 		final byte[] indexModelBinary = new byte[bytes.length - indexStrategyLength - 4];
 		buf.get(indexModelBinary);
-		indexModel = PersistenceUtils.fromBinary(
-				indexModelBinary,
-				CommonIndexModel.class);
+		indexModel = (CommonIndexModel) PersistenceUtils.fromBinary(indexModelBinary);
 	}
 }

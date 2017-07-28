@@ -1,0 +1,45 @@
+[[theoryoverview]]
+<<<
+=== Theory
+
+==== Spatial Index
+
+GeoWave creates a spatial index to represent multi-dimensional data in a manner that can be reduced to a series of ranges on a 1 dimensional number line.
+Examples of these include:
+
+* latitude, longitude
+* latitude, longitude, time
+* latitude, longitude, altitude, time
+* feature vector1, feature vector 2 (…), feature vector n
+
+This is due to the way big-table-based databases store the data – as a sorted set of key/value pairs.
+
+The goal is to provide a property that ensures values close in n-dimensional space are still close in 1-dimensional space. There are a few reasons for this, but primarily it’s so we can represent an n-dimensional range selector (bbox typically, but can be abstracted to a hyper-rectangle) as a smaller number of highly contiguous 1-dimensional ranges.
+
+image::sfc1.png[scaledwidth="100%",width="100%",alt="Z-Curve: 2D -> 1D", title="Z-Order curve based dimensional decomposition"]
+
+Fortunately, there is already a type of transform that describes this operation in mathematics called a “Space Filling Curve” (SFC). Different SFCs have different properties, but they all take an n-dimensional space and describe a set of steps to trace all points in a single sequence.
+
+image::curves.png[scaledwidth="100%",width="100%",alt="Various space filling curves", title="Haverkort, Walderveen Locality and Bounding-Box Quality of Two-Dimensional Space-Filling Curves 2008 arXiv:0806.4787v2"]
+
+The trade-offs for the various curves are outside the scope of this user manual, but the paper cited for Figure two is an excellent starting point to start learning about these curves.
+
+GeoWave supports two space filling curves: Z-Order and Hilbert, with the latter being the primary implementation.
+
+===== Hilbert SFC
+
+The Hilbert curve is a bit more complex to work with than the Z-curve, both when calculating and when performing a decomposition. Nevertheless it is popular in certain areas in computer science where multiple variables need to be set in a linear order – process scheduling for one. A simplistic view of a standard projections of the earth mapped to a Hilbert curve would look something like the image below, which shows 4 bits of cardinality per dimension (how many buckets we have).
+
+image::hilbert1.png[scaledwidth="100%",width="100%",alt="Hilbert SFC", title="Hilbert space filling curve superimposed over a projection of the earth"]
+
+Note that the cardinality (number of buckets per dimensions) has an impact on the resolution of our Hilbert index. Here we map from -180 to +180 over 16 buckets so we have resolution of no better than 360/16, or 22.5 degrees for longitude (and incidentally 11.25 degrees for latitude). This doesn’t mean we can’t represent values more precisely than this. It just means that our initial (coarse) index (based on SFC ranges) can’t provide resolution any better than this. Adding more bits per dimensions will increase the precision of the SFC-based index.
+
+===== Z-Order SFC
+
+This is also commonly called a GeoHash or Morton order, and sometimes is incorrectly called a Peano curve. This is the most popular SFC used for multi-dimensional -> 1-dimensional mappings primarily because it is very easy to implement in code.
+
+To implement this, ideally, a bit-interleaving approach is used (that is what gives rise to the diagram in the figure _Z-Order curve based dimensional decomposition_). Imagine we had two numbers, A and B. Let the binary representation of those numbers be A1A2A3 and B1B2B3. The “bit interleaved” version would be A1B1A2B2A3B3. Since we are working with binary numbers this gives a “unit cell” of 2x2. If we added dimensions, just imagine the same interleaving, but another term — C1C2C3, etc. This is sometimes implemented in _Base 10_ instead of _Base 2_. This implementation somewhat reduces the locality (“packing property” – or the measure of how close numbers in n-dimensional space are to numbers in 1-dimensional space). As you might expect a 2-dimensional version of this gives a unit cell of 10x10 (for two dimensions) – hence the worse packing.
+
+===== XZ-Order SFC
+
+The XZ-Order SFC is an extension of Z-Ordering, and designed to map spatial objects. This is done by extending the region of each Z-Order dimension by 2, in order to support mapping spatial - non-point - objects, such as polygons or rectangles.

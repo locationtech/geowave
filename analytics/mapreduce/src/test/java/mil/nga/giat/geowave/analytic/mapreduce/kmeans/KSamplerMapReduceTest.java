@@ -45,6 +45,7 @@ import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.sample.function.SamplingRankFunction;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -139,7 +140,8 @@ public class KSamplerMapReduceTest
 
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				"altoids");

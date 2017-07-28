@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,12 +15,11 @@ import java.util.Collections;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.filter.PrefixIdQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class PrefixIdQuery implements
 		Query
@@ -45,8 +44,8 @@ public class PrefixIdQuery implements
 
 	@Override
 	public List<QueryFilter> createFilters(
-			final CommonIndexModel indexModel ) {
-		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
+			final PrimaryIndex index ) {
+		final List<QueryFilter> filters = new ArrayList<>();
 		filters.add(new PrefixIdQueryFilter(
 				partitionKey,
 				sortKeyPrefix));
@@ -61,7 +60,7 @@ public class PrefixIdQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final NumericIndexStrategy indexStrategy ) {
+			final PrimaryIndex index ) {
 		return Collections.emptyList();
 	}
 

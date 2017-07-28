@@ -27,9 +27,8 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.util.ClasspathUtils;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
-//import mil.nga.giat.geowave.datastore.cassandra.CassandraDataStoreFactory;
-//import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class CassandraStoreTestEnvironment extends
@@ -37,9 +36,8 @@ public class CassandraStoreTestEnvironment extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(CassandraStoreTestEnvironment.class);
 
-	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new AccumuloStoreFactoryFamily()
-			.getDataStoreFactory();// new
-	// CassandraDataStoreFactory();
+	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new CassandraStoreFactoryFamily()
+			.getDataStoreFactory();
 	private static CassandraStoreTestEnvironment singletonInstance = null;
 	protected static final File TEMP_DIR = new File(
 			System.getProperty("user.dir") + File.separator + "target",
@@ -69,6 +67,7 @@ public class CassandraStoreTestEnvironment extends
 			cassandraDir = new File(
 					TEMP_DIR,
 					NODE_DIRECTORY_PREFIX);
+			logLevel = "ERROR";
 			project = new MavenProject();
 			project.setFile(cassandraDir);
 			Field f;
@@ -214,6 +213,7 @@ public class CassandraStoreTestEnvironment extends
 			stopKey = "cassandra-maven-plugin";
 			maxMemory = 512;
 			cassandraDir = TEMP_DIR;
+			logLevel = "ERROR";
 			project = new MavenProject();
 			project.setFile(cassandraDir);
 			Field f;
@@ -326,9 +326,8 @@ public class CassandraStoreTestEnvironment extends
 	@Override
 	protected void initOptions(
 			final StoreFactoryOptions options ) {
-		// final CassandraRequiredOptions cassandraOpts =
-		// (CassandraRequiredOptions) options;
-		// cassandraOpts.setContactPoint("127.0.0.1");
+		final CassandraRequiredOptions cassandraOpts = (CassandraRequiredOptions) options;
+		cassandraOpts.setContactPoint("127.0.0.1");
 	}
 
 	@Override
@@ -369,7 +368,7 @@ public class CassandraStoreTestEnvironment extends
 		try {
 			// it seems sometimes one of the nodes processes is still holding
 			// onto a file, so wait a short time to be able to reliably clean up
-			Thread.sleep(1000);
+			Thread.sleep(1500);
 		}
 		catch (final InterruptedException e) {
 			LOGGER.warn(

@@ -150,6 +150,7 @@ public class WFSBoundedSpatialQueryTest extends
 				CQL.toFilter("BBOX(geometry,44,27,42,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
 				new String[] {
 					"geometry",
+					"when",
 					"pid"
 				});
 		FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
@@ -173,6 +174,7 @@ public class WFSBoundedSpatialQueryTest extends
 				CQL.toFilter("BBOX(geometry,42,28,44,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
 				new String[] {
 					"geometry",
+					"when",
 					"pid"
 				});
 		reader = dataStore.getFeatureReader(

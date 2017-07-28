@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,9 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.remote;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -20,9 +24,9 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -31,9 +35,10 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 @GeowaveOperation(name = "listadapter", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Display all adapters in this remote store")
 public class ListAdapterCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<String>();
@@ -42,21 +47,48 @@ public class ListAdapterCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
-			throws IOException {
+			final OperationParams params ) {
+		JCommander.getConsole().println(
+				"Available adapters: " + computeResults(params));
+	}
 
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			final String storeName ) {
+		parameters = new ArrayList<String>();
+		parameters.add(storeName);
+	}
+
+	public DataStorePluginOptions getInputStoreOptions() {
+		return inputStoreOptions;
+	}
+
+	public void setInputStoreOptions(
+			final DataStorePluginOptions inputStoreOptions ) {
+		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	@Override
+	public String computeResults(
+			final OperationParams params ) {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
 		}
 
-		String inputStoreName = parameters.get(0);
+		final String inputStoreName = parameters.get(0);
+
+		// Attempt to load store.
+		final File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
@@ -66,33 +98,19 @@ public class ListAdapterCommand extends
 		final CloseableIterator<DataAdapter<?>> it = inputStoreOptions.createAdapterStore().getAdapters();
 		final StringBuffer buffer = new StringBuffer();
 		while (it.hasNext()) {
-			DataAdapter<?> adapter = it.next();
+			final DataAdapter<?> adapter = it.next();
 			buffer.append(
 					adapter.getAdapterId().getString()).append(
 					' ');
 		}
-		it.close();
-
-		JCommander.getConsole().println(
-				"Available adapters: " + buffer.toString());
-	}
-
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
+		try {
+			it.close();
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Unable to close Iterator",
+					e);
+		}
+		return buffer.toString();
 	}
 }

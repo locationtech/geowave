@@ -35,7 +35,10 @@ import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -101,15 +104,17 @@ public class DBScanMapReduceTest
 				SimpleFeatureProjection.class,
 				Projection.class);
 
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final FeatureDataAdapter adapter = new FeatureDataAdapter(
+				ftype);
+		adapter.init(index);
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
-				new FeatureDataAdapter(
-						ftype));
+				adapter);
 
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
-				new FeatureDataAdapter(
-						ftype));
+				adapter);
 
 		serializations();
 	}

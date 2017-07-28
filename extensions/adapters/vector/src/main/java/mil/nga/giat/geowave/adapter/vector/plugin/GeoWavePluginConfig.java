@@ -39,6 +39,7 @@ import mil.nga.giat.geowave.adapter.auth.EmptyAuthorizationFactory;
 import mil.nga.giat.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy;
 import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
@@ -425,21 +426,18 @@ public class GeoWavePluginConfig
 	}
 
 	private static Iterator<LockingManagementFactory> getLockManagementFactoryList() {
-		final ServiceLoader<LockingManagementFactory> ldr = ServiceLoader.load(
+		return new SPIServiceRegistry(GeoWavePluginConfig.class).load(
 				LockingManagementFactory.class);
-		return ldr.iterator();
 	}
 
 	private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
-		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(
+		return new SPIServiceRegistry(GeoWavePluginConfig.class).load(
 				AuthorizationFactorySPI.class);
-		return ldr.iterator();
 	}
 
 	private static Iterator<IndexQueryStrategySPI> getInxexQueryStrategyList() {
-		final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader.load(
+		return new SPIServiceRegistry(GeoWavePluginConfig.class).load(
 				IndexQueryStrategySPI.class);
-		return ldr.iterator();
 	}
 
 	private static class GeoWaveConfigOptionToGeoToolsConfigOption implements

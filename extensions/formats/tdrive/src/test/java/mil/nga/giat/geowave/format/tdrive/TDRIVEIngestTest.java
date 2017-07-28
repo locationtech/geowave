@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -50,9 +51,8 @@ public class TDRIVEIngestTest
 	public void testIngest()
 			throws IOException {
 
-		final File toIngest = new File(
-				this.getClass().getClassLoader().getResource(
-						filePath).getPath());
+		final URL toIngest = this.getClass().getClassLoader().getResource(
+				filePath);
 
 		assertTrue(TdriveUtils.validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();

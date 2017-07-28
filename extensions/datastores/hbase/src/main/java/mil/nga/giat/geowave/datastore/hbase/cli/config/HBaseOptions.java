@@ -21,9 +21,6 @@ public class HBaseOptions extends
 {
 	public static final String COPROCESSOR_JAR_KEY = "coprocessorJar";
 
-	@Parameter(names = "--disableServer", description = "Disable all custom GeoWave server side processing, to include coprocessors and custom filters.  This will alleviate the requirement to have a GeoWave jar on HBase's region server classpath.")
-	protected boolean disableServiceSide = false;
-
 	@Parameter(names = "--scanCacheSize")
 	protected int scanCacheSize = HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING;
 
@@ -41,21 +38,12 @@ public class HBaseOptions extends
 			final boolean bigTable ) {
 		this.bigTable = bigTable;
 		if (bigTable) {
-			setServerSideDisabled(true);
+			this.enableServerSideLibrary = false;
 		}
 	}
 
 	public boolean isBigTable() {
 		return bigTable;
-	}
-
-	public boolean isServerSideDisabled() {
-		return disableServiceSide;
-	}
-
-	public void setServerSideDisabled(
-			final boolean disableServiceSide ) {
-		this.disableServiceSide = disableServiceSide;
 	}
 
 	public int getScanCacheSize() {
@@ -68,7 +56,7 @@ public class HBaseOptions extends
 	}
 
 	public boolean isVerifyCoprocessors() {
-		return !disableVerifyCoprocessors && !disableServiceSide;
+		return !disableVerifyCoprocessors && enableServerSideLibrary;
 	}
 
 	public void setVerifyCoprocessors(
@@ -83,10 +71,5 @@ public class HBaseOptions extends
 	public void setCoprocessorJar(
 			final String coprocessorJar ) {
 		this.coprocessorJar = coprocessorJar;
-	}
-
-	@Override
-	public boolean isServerSideLibraryEnabled() {
-		return !isServerSideDisabled();
 	}
 }

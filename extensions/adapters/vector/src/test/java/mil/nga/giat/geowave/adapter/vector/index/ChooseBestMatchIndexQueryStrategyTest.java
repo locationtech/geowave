@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -34,6 +35,7 @@ import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
@@ -66,15 +68,15 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		final PrimaryIndex temporalindex = new SpatialTemporalIndexBuilder().createIndex();
 		final PrimaryIndex spatialIndex = new SpatialIndexBuilder().createIndex();
 
-		final RowRangeHistogramStatistics<SimpleFeature> rangeTempStats = new RowRangeHistogramStatistics<SimpleFeature>(
+		final RowRangeHistogramStatistics<SimpleFeature> rangeTempStats = new RowRangeHistogramStatistics<>(
 				temporalindex.getId(),
 				temporalindex.getId());
 
-		final RowRangeHistogramStatistics<SimpleFeature> rangeStats = new RowRangeHistogramStatistics<SimpleFeature>(
+		final RowRangeHistogramStatistics<SimpleFeature> rangeStats = new RowRangeHistogramStatistics<>(
 				spatialIndex.getId(),
 				spatialIndex.getId());
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		statsMap.put(
 				RowRangeHistogramStatistics.composeId(spatialIndex.getId()),
 				rangeStats);
@@ -152,8 +154,8 @@ public class ChooseBestMatchIndexQueryStrategyTest
 								new GeoWaveValue[] {}));
 			}
 		}
-
-		final NumericIndexStrategy indexStrategy = new SpatialIndexBuilder().createIndex().getIndexStrategy();
+		PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
 
 		for (int i = 0; i < ROWS; i++) {
 			final double x = r.nextDouble();

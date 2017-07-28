@@ -36,11 +36,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderClosableWrapper;
@@ -91,6 +93,8 @@ public class GeoWaveRecordReader<T> extends
 	protected QueryOptions queryOptions;
 	protected boolean isOutputWritable;
 	protected AdapterStore adapterStore;
+	protected AdapterIndexMappingStore aimStore;
+	protected IndexStore indexStore;
 	protected BaseDataStore dataStore;
 	protected MapReduceDataStoreOperations operations;
 
@@ -99,11 +103,15 @@ public class GeoWaveRecordReader<T> extends
 			final QueryOptions queryOptions,
 			final boolean isOutputWritable,
 			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore aimStore,
+			final IndexStore indexStore,
 			final MapReduceDataStoreOperations operations ) {
 		this.query = query;
 		this.queryOptions = queryOptions;
 		this.isOutputWritable = isOutputWritable;
 		this.adapterStore = adapterStore;
+		this.aimStore = aimStore;
+		this.indexStore = indexStore;
 		this.operations = operations;
 	}
 
@@ -131,7 +139,7 @@ public class GeoWaveRecordReader<T> extends
 			final SplitInfo splitInfo = split.getInfo(i);
 			List<QueryFilter> queryFilters = null;
 			if (query != null) {
-				queryFilters = query.createFilters(splitInfo.getIndex().getIndexModel());
+				queryFilters = query.createFilters(splitInfo.getIndex());
 			}
 			for (final RangeLocationPair r : splitInfo.getRangeLocationPairs()) {
 				final QueryOptions rangeQueryOptions = new QueryOptions(
@@ -211,7 +219,7 @@ public class GeoWaveRecordReader<T> extends
 	}
 
 	protected CloseableIterator<Entry<GeoWaveInputKey, T>> queryRange(
-			final PrimaryIndex i,
+			final PrimaryIndex index,
 			final GeoWaveRowRange range,
 			final List<QueryFilter> queryFilters,
 			final QueryOptions rangeQueryOptions,
@@ -222,8 +230,10 @@ public class GeoWaveRecordReader<T> extends
 				queryFilters);
 		try {
 			final Reader reader = operations.createReader(new RecordReaderParams(
-					i,
-					rangeQueryOptions.getAdapterIds(adapterStore),
+					index,
+					rangeQueryOptions.getValidAdapterIds(
+							adapterStore,
+							aimStore),
 					rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 					rangeQueryOptions.getAggregation(),
 					rangeQueryOptions.getFieldIdsAdapterPair(),
@@ -238,7 +248,7 @@ public class GeoWaveRecordReader<T> extends
 							reader,
 							singleFilter,
 							adapterStore,
-							i,
+							index,
 							isOutputWritable));
 		}
 		catch (final IOException e) {
@@ -418,10 +428,14 @@ public class GeoWaveRecordReader<T> extends
 					currentGeoWaveRangeIndexPair.getRange(),
 					currentGeoWaveKey);
 		}
-		return getOverallProgress(
-				currentGeoWaveRangeIndexPair.getRange(),
-				currentGeoWaveKey,
-				progress);
+		return Math.min(
+				1,
+				Math.max(
+						0,
+						getOverallProgress(
+								currentGeoWaveRangeIndexPair.getRange(),
+								currentGeoWaveKey,
+								progress)));
 	}
 
 }

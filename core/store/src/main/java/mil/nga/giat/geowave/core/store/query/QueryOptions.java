@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -28,9 +29,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -492,7 +493,6 @@ public class QueryOptions implements
 				}
 			}
 			return adapters.toArray(new DataAdapter[adapters.size()]);
-
 		}
 		final List<DataAdapter> list = new ArrayList<DataAdapter>();
 		if (adapterStore != null && adapterStore.getAdapters() != null) {
@@ -520,6 +520,27 @@ public class QueryOptions implements
 			ids.addAll(adapterIds);
 		}
 		return ids;
+	}
+
+	public List<ByteArrayId> getValidAdapterIds(
+			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore )
+			throws IOException {
+		// Grab the list of adapter ids, either from the query (if included),
+		// Or the whole list from the adapter store...
+		final List<ByteArrayId> adapterIds = getAdapterIds(adapterStore);
+
+		// Then for each adapter, verify that it exists in the index-adapter
+		// mapping
+		Iterator<ByteArrayId> adapterIterator = adapterIds.iterator();
+		while (adapterIterator.hasNext()) {
+			AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(adapterIterator.next());
+			if (!mapping.contains(indexId)) {
+				adapterIterator.remove();
+			}
+		}
+
+		return adapterIds;
 	}
 
 	/**
@@ -620,9 +641,7 @@ public class QueryOptions implements
 		if (adapterBytesLength > 0) {
 			final byte[] adapterBytes = new byte[adapterBytesLength];
 			buf.get(adapterBytes);
-			dataAdapter = PersistenceUtils.fromBinary(
-					adapterBytes,
-					AbstractDataAdapter.class);
+			dataAdapter = (AbstractDataAdapter<?>) PersistenceUtils.fromBinary(adapterBytes);
 		}
 		final int fieldIdsLength = buf.getInt();
 		List<String> fieldIds = null;

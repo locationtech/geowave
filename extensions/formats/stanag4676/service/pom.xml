@@ -4,7 +4,7 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../../</relativePath>
-		<version>0.9.5-SNAPSHOT</version>
+		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-service-4676</artifactId>
 	<packaging>war</packaging>
@@ -13,11 +13,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-service-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
@@ -35,7 +30,7 @@
  		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

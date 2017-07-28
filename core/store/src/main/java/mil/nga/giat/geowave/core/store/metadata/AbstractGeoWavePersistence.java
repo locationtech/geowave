@@ -6,11 +6,12 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveMetadata;
@@ -35,7 +36,7 @@ import mil.nga.giat.geowave.core.store.operations.MetadataWriter;
  */
 public abstract class AbstractGeoWavePersistence<T extends Persistable>
 {
-	private final static Logger LOGGER = Logger.getLogger(AbstractGeoWavePersistence.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWavePersistence.class);
 
 	// TODO: should we concern ourselves with multiple distributed processes
 	// updating and looking up objects simultaneously that would require some
@@ -43,7 +44,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	// notifications?
 	protected static final int MAX_ENTRIES = 100;
 	public final static String METADATA_TABLE = "GEOWAVE_METADATA";
-	private final static ByteArrayId METADATA_INDEX_ID = new ByteArrayId(
+	public final static ByteArrayId METADATA_INDEX_ID = new ByteArrayId(
 			METADATA_TABLE);
 	protected final DataStoreOperations operations;
 	protected final DataStoreOptions options;
@@ -142,6 +143,10 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
+		// TODO if the cache isn't taking authorizations into account, this
+		// seems insufficient for mixed visibility use cases, but on the
+		// otherhand this is an optimization for the majority use case that
+		// doesn't include mixed visibility that we want to take advantage of
 		return deleteObjectFromCache(
 				primaryId,
 				secondaryId) && deleteObjects(
@@ -194,6 +199,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			LOGGER.warn(
 					"Unable to close metadata writer",
 					e);
+			e.printStackTrace();
 		}
 	}
 
@@ -230,7 +236,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			return (T) cacheResult;
 		}
 		try {
-			if (!operations.indexExists(METADATA_INDEX_ID)) {
+			if (!operations.metadataExists(getType())) {
 				if (warnIfNotExists) {
 					LOGGER.warn("Object '" + getCombinedId(
 							primaryId,
@@ -297,7 +303,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	private CloseableIterator<T> internalGetObjects(
 			final MetadataQuery query ) {
 		try {
-			if (!operations.indexExists(METADATA_INDEX_ID)) {
+			if (!operations.metadataExists(getType())) {
 				return new CloseableIterator.Empty<>();
 			}
 		}
@@ -316,9 +322,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	@SuppressWarnings("unchecked")
 	protected T entryToValue(
 			final GeoWaveMetadata entry ) {
-		final T result = (T) PersistenceUtils.fromBinary(
-				entry.getValue(),
-				Persistable.class);
+		final T result = (T) PersistenceUtils.fromBinary(entry.getValue());
 		if (result != null) {
 			addObjectToCache(
 					new ByteArrayId(
@@ -344,7 +348,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
 		try {
-			if (!operations.indexExists(METADATA_INDEX_ID)) {
+			if (!operations.metadataExists(getType())) {
 				return false;
 			}
 		}
@@ -381,7 +385,6 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 							authorizations));
 				}
 			}
-
 			return retVal;
 		}
 		catch (final Exception e) {

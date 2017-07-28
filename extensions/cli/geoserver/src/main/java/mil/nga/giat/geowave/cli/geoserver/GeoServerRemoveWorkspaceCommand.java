@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,45 +16,34 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+
 @GeowaveOperation(name = "rmws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer workspace")
 public class GeoServerRemoveWorkspaceCommand extends
-		DefaultOperation implements
-		Command
+		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(description = "<workspace name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String wsName = null;
 
 	@Override
-	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
+	public void execute(
+			final OperationParams params )
+			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
 	}
 
 	@Override
-	public void execute(
-			OperationParams params )
+	public String computeResults(
+			final OperationParams params )
 			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
@@ -63,13 +52,11 @@ public class GeoServerRemoveWorkspaceCommand extends
 
 		wsName = parameters.get(0);
 
-		Response deleteWorkspaceResponse = geoserverClient.deleteWorkspace(wsName);
+		final Response deleteWorkspaceResponse = geoserverClient.deleteWorkspace(wsName);
 		if (deleteWorkspaceResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("Delete workspace '" + wsName + "' from GeoServer: OK");
+			return "Delete workspace '" + wsName + "' from GeoServer: OK";
 		}
-		else {
-			System.err.println("Error deleting workspace '" + wsName + "' from GeoServer; code = "
-					+ deleteWorkspaceResponse.getStatus());
-		}
+		return "Error deleting workspace '" + wsName + "' from GeoServer; code = "
+				+ deleteWorkspaceResponse.getStatus();
 	}
 }

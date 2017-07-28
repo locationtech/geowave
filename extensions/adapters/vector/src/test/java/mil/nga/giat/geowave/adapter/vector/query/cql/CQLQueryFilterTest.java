@@ -34,6 +34,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
@@ -78,17 +79,18 @@ public class CQLQueryFilterTest
 				exp1,
 				exp2,
 				false);
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				type);
+		adapter.init(spatialIndex);
 		final CQLQuery cqlQuery = new CQLQuery(
 				null,
 				f,
 				adapter);
 
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-
-		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex.getIndexModel());
+		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex);
 		final List<DistributableQueryFilter> dFilters = new ArrayList<DistributableQueryFilter>();
 		for (final QueryFilter filter : filters) {
 			dFilters.add((DistributableQueryFilter) filter);

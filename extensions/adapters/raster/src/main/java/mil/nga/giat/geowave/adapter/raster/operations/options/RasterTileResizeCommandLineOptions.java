@@ -28,7 +28,7 @@ public class RasterTileResizeCommandLineOptions
 	@Parameter(names = "--maxSplits", description = "The max partitions for the input data")
 	private Integer maxSplits;
 
-	@Parameter(names = "--hdfsHostPort", description = "he hdfs host port", converter = HdfsHostPortConverter.class, required = true)
+	@Parameter(names = "--hdfsHostPort", description = "he hdfs host port", converter = HdfsHostPortConverter.class)
 	private String hdfsHostPort;
 
 	@Parameter(names = "--jobSubmissionHostPort", description = "The job submission tracker", required = true)

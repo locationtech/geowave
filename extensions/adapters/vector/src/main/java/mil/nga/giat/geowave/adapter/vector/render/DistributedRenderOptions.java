@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -35,7 +35,6 @@ import org.geoserver.wms.WMS;
 import org.geoserver.wms.WMSMapContent;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.Layer;
 import org.geotools.referencing.CRS;
 import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.styling.SLDParser;
@@ -49,9 +48,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class DistributedRenderOptions implements
 		Persistable
@@ -85,7 +85,7 @@ public class DistributedRenderOptions implements
 
 	private Style style;
 
-	protected DistributedRenderOptions() {}
+	public DistributedRenderOptions() {}
 
 	public DistributedRenderOptions(
 			final WMS wms,
@@ -184,7 +184,7 @@ public class DistributedRenderOptions implements
 	public int getMaxRenderTime(
 			final int localMaxRenderTime,
 			final WMS wms ) {
-		int wmsMaxRenderTime = wms.getMaxRenderingTime();
+		final int wmsMaxRenderTime = wms.getMaxRenderingTime();
 
 		if (wmsMaxRenderTime == 0) {
 			maxRenderTime = localMaxRenderTime;
@@ -435,7 +435,7 @@ public class DistributedRenderOptions implements
 		bitSet.set(
 				6,
 				renderScaleMethodAccurate);
-		boolean storeInterpolationOrdinals = ((interpolationOrdinals != null) && !interpolationOrdinals.isEmpty());
+		final boolean storeInterpolationOrdinals = ((interpolationOrdinals != null) && !interpolationOrdinals.isEmpty());
 		bitSet.set(
 				7,
 				storeInterpolationOrdinals);
@@ -460,7 +460,7 @@ public class DistributedRenderOptions implements
 		bitSet.set(
 				14,
 				style != null);
-		final boolean storeCRS = !((envelope.getCoordinateReferenceSystem() == null) || GeoWaveGTDataStore.DEFAULT_CRS
+		final boolean storeCRS = !((envelope.getCoordinateReferenceSystem() == null) || GeometryUtils.DEFAULT_CRS
 				.equals(envelope.getCoordinateReferenceSystem()));
 		bitSet.set(
 				15,
@@ -633,11 +633,11 @@ public class DistributedRenderOptions implements
 				LOGGER.warn(
 						"Unable to parse coordinate reference system",
 						e);
-				crs = GeoWaveGTDataStore.DEFAULT_CRS;
+				crs = GeometryUtils.DEFAULT_CRS;
 			}
 		}
 		else {
-			crs = GeoWaveGTDataStore.DEFAULT_CRS;
+			crs = GeometryUtils.DEFAULT_CRS;
 		}
 		envelope = new ReferencedEnvelope(
 				minX,
@@ -731,5 +731,4 @@ public class DistributedRenderOptions implements
 			style = null;
 		}
 	}
-
 }

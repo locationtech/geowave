@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,33 +16,29 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+
 @GeowaveOperation(name = "addcs", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer coverage store")
 public class GeoServerAddCoverageStoreCommand extends
-		DefaultOperation implements
-		Command
+		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
-	}, required = false, description = "<workspace name>")
+	}, required = false, description = "workspace name")
 	private String workspace = null;
 
 	@Parameter(names = {
 		"-cs",
 		"--coverageStore"
-	}, required = false, description = "<coverage store name>")
+	}, required = false, description = "coverage store name")
 	private String coverageStore = null;
 
 	@Parameter(names = {
@@ -68,24 +64,16 @@ public class GeoServerAddCoverageStoreCommand extends
 	private String gwStore = null;
 
 	@Override
-	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
+	public void execute(
+			final OperationParams params )
+			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
 	}
 
 	@Override
-	public void execute(
-			OperationParams params )
-			throws Exception {
+	public String computeResults(
+			final OperationParams params ) {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <GeoWave store name>");
@@ -93,11 +81,11 @@ public class GeoServerAddCoverageStoreCommand extends
 
 		gwStore = parameters.get(0);
 
-		if (workspace == null || workspace.isEmpty()) {
+		if ((workspace == null) || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}
 
-		Response addStoreResponse = geoserverClient.addCoverageStore(
+		final Response addStoreResponse = geoserverClient.addCoverageStore(
 				workspace,
 				coverageStore,
 				gwStore,
@@ -105,14 +93,11 @@ public class GeoServerAddCoverageStoreCommand extends
 				interpolationOverride,
 				scaleTo8Bit);
 
-		if (addStoreResponse.getStatus() == Status.OK.getStatusCode()
-				|| addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
-			System.out.println("Add coverage store for '" + gwStore + "' to workspace '" + workspace
-					+ "' on GeoServer: OK");
+		if ((addStoreResponse.getStatus() == Status.OK.getStatusCode())
+				|| (addStoreResponse.getStatus() == Status.CREATED.getStatusCode())) {
+			return "Add coverage store for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer: OK";
 		}
-		else {
-			System.err.println("Error adding coverage store for '" + gwStore + "' to workspace '" + workspace
-					+ "' on GeoServer; code = " + addStoreResponse.getStatus());
-		}
+		return "Error adding coverage store for '" + gwStore + "' to workspace '" + workspace
+				+ "' on GeoServer; code = " + addStoreResponse.getStatus();
 	}
 }

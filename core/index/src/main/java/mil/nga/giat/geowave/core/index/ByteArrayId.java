@@ -30,9 +30,17 @@ public class ByteArrayId implements
 		Comparable<ByteArrayId>
 {
 	private static final long serialVersionUID = 1L;
+
+	public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
 	private final byte[] id;
 	@SuppressFBWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
 	private transient String stringId;
+
+	public ByteArrayId() {
+		this(
+				EMPTY_BYTE_ARRAY);
+	}
 
 	public ByteArrayId(
 			final byte[] id ) {
@@ -149,7 +157,7 @@ public class ByteArrayId implements
 
 	}
 
-	private static byte[] getNextPrefix(
+	public static byte[] getNextPrefix(
 			final byte[] rowKeyPrefix ) {
 		int offset = rowKeyPrefix.length;
 		while (offset > 0) {

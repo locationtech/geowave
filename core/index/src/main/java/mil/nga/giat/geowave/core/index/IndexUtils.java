@@ -11,6 +11,13 @@
 package mil.nga.giat.geowave.core.index;
 
 import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
@@ -232,5 +239,40 @@ public class IndexUtils
 	private static double log2(
 			final double v ) {
 		return Math.log(v) / Math.log(2);
+	}
+
+	public static Set<ByteArrayId> getQueryPartitionKeys(
+			final NumericIndexStrategy strategy,
+			final MultiDimensionalNumericData queryData,
+			final IndexMetaData... hints ) {
+		final QueryRanges queryRanges = strategy.getQueryRanges(
+				queryData,
+				hints);
+		return Sets.newHashSet(Collections2.transform(
+				queryRanges.getPartitionQueryRanges(),
+				new Function<SinglePartitionQueryRanges, ByteArrayId>() {
+					@Override
+					public ByteArrayId apply(
+							@Nonnull
+							final SinglePartitionQueryRanges input ) {
+						return input.getPartitionKey();
+					}
+				}));
+	}
+
+	public static Set<ByteArrayId> getInsertionPartitionKeys(
+			final NumericIndexStrategy strategy,
+			final MultiDimensionalNumericData insertionData ) {
+		final InsertionIds insertionIds = strategy.getInsertionIds(insertionData);
+		return Sets.newHashSet(Collections2.transform(
+				insertionIds.getPartitionKeys(),
+				new Function<SinglePartitionInsertionIds, ByteArrayId>() {
+					@Override
+					public ByteArrayId apply(
+							@Nonnull
+							final SinglePartitionInsertionIds input ) {
+						return input.getPartitionKey();
+					}
+				}));
 	}
 }

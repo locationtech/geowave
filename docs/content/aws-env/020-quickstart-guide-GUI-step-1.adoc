@@ -1,0 +1,26 @@
+[[quickstart-guide-steo-1]]
+<<<
+
+[[quickstart-guide-steo-1]]
+*Step 1:*
+
+image::aws-gui-method-2.png[scaledwidth="100%",alt="select emr"]
+
+Software Configuration
+
+
+- Release
+ * Select emr-5.7.0 from the dropdown list (older versions of GeoWave may not support all functions on newer versions of EMR) 
+ * Ensure Hadoop is selected
+ * If you are using HBase you will need to select it here
+ * It won’t hurt to have other software selected as well, but they aren’t needed for this guide
+- Storage Mode
+ * Select HDFS
+- Edit software settings
+ * Don’t touch anything here
+
+Add Steps
+
+- We won’t be adding any steps for this quickstart guide
+
+--- +

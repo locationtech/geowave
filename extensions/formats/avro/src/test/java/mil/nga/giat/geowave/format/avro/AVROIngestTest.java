@@ -14,11 +14,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
-
 import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -26,8 +26,8 @@ import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 import org.apache.avro.file.DataFileReader;
+import org.apache.avro.file.DataFileStream;
 import org.apache.avro.specific.SpecificDatumReader;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
@@ -56,9 +56,8 @@ public class AVROIngestTest
 	public void testIngest()
 			throws IOException {
 
-		final File toIngest = new File(
-				this.getClass().getClassLoader().getResource(
-						filePath).getPath());
+		final URL toIngest = this.getClass().getClassLoader().getResource(
+				filePath);
 
 		assertTrue(validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
@@ -105,12 +104,13 @@ public class AVROIngestTest
 	}
 
 	private boolean validate(
-			File file ) {
-		try {
-			DataFileReader.openReader(
-					file,
-					new SpecificDatumReader<AvroSimpleFeatureCollection>()).close();
-			return true;
+			URL file ) {
+		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(
+				file.openStream(),
+				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
+			if (ds.getHeader() != null) {
+				return true;
+			}
 		}
 		catch (final IOException e) {
 			// Do nothing for now

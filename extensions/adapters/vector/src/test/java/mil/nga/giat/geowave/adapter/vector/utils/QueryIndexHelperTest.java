@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -19,23 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
-import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
-import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
-import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
-import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
@@ -56,14 +39,31 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.BasicQuery;
+import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
+
 public class QueryIndexHelperTest
 {
-	private static final NumericIndexStrategy SPATIAL_INDEX_STRATEGY = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex()
-			.getIndexStrategy();
-	private static final NumericIndexStrategy SPATIAL_TEMPORAL_INDEX_STRATEGY = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex()
-			.getIndexStrategy();
+	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
+	private static final PrimaryIndex SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialTemporalOptions());
 	final ByteArrayId dataAdapterId = new ByteArrayId(
 			"123");
 
@@ -159,7 +159,7 @@ public class QueryIndexHelperTest
 		final Date stime1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
 		final Date etime1 = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics whenStats = new FeatureTimeRangeStatistics(
 				dataAdapterId,
 				"when");
@@ -228,7 +228,7 @@ public class QueryIndexHelperTest
 	public void testGetTemporalConstraintsForRangeClippedFullRange()
 			throws ParseException {
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
 				dataAdapterId,
 				"start");
@@ -300,7 +300,7 @@ public class QueryIndexHelperTest
 	public void testComposeQueryWithTimeRange()
 			throws ParseException {
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
 				dataAdapterId,
 				"start");
@@ -358,7 +358,7 @@ public class QueryIndexHelperTest
 										41.25)).getEnvelopeInternal()),
 						constraintsSet));
 
-		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
 		assertEquals(
 				stime.getTime(),
 				(long) nd.get(
@@ -379,7 +379,7 @@ public class QueryIndexHelperTest
 										41.25)).getEnvelopeInternal()),
 						null));
 
-		final List<MultiDimensionalNumericData> nd1 = query1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> nd1 = query1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
 		assertEquals(
 				statsStart1.getTime(),
 				(long) nd1.get(
@@ -392,7 +392,7 @@ public class QueryIndexHelperTest
 
 	@Test
 	public void testComposeQueryWithOutTimeRange() {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
 				dataAdapterId,
 				"geometry");
@@ -426,7 +426,7 @@ public class QueryIndexHelperTest
 						new GeometryFactory().toGeometry(bounds),
 						null));
 
-		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_INDEX);
 		assertEquals(
 				21.23,
 				nd.get(
@@ -452,7 +452,7 @@ public class QueryIndexHelperTest
 
 	@Test
 	public void testGetBBOX() {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
 				dataAdapterId,
 				"geometry");
@@ -514,16 +514,14 @@ public class QueryIndexHelperTest
 
 		// convert from EPSG:3785 to EPSG:4326 (convert to degrees lon/lat)
 		// approximately 180.0, 85.0
-		final SimpleFeature defaultCRSFeat = FeatureDataUtils.defaultCRSTransform(
+		final SimpleFeature defaultCRSFeat = FeatureDataUtils.crsTransform(
 				mercFeat,
-				geoMercType,
 				geoType,
 				transform);
 
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
 				dataAdapterId,
 				"geometry",
-				geoMercType,
 				geoType,
 				transform);
 
@@ -614,7 +612,7 @@ public class QueryIndexHelperTest
 	public void testComposeSubsetConstraints()
 			throws ParseException {
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
 				dataAdapterId,
 				"start");
@@ -666,7 +664,8 @@ public class QueryIndexHelperTest
 				rangeTimeDescriptors,
 				statsMap,
 				constraintsSet);
-		final List<MultiDimensionalNumericData> nd = constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> nd = constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX
+				.getIndexStrategy());
 		assertTrue(nd.isEmpty());
 
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
@@ -693,7 +692,8 @@ public class QueryIndexHelperTest
 				statsMap,
 				null,
 				constraintsSet);
-		final List<MultiDimensionalNumericData> nd1 = constraints1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> nd1 = constraints1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX
+				.getIndexStrategy());
 		assertTrue(nd1.isEmpty());
 		/*
 		 * assertEquals( stime.getTime(), (long) nd1.get(
@@ -713,7 +713,8 @@ public class QueryIndexHelperTest
 				rangeTimeDescriptors,
 				statsMap,
 				constraintsSet2);
-		final List<MultiDimensionalNumericData> nd2 = constraints2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> nd2 = constraints2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX
+				.getIndexStrategy());
 		assertTrue(nd2.isEmpty());
 	}
 

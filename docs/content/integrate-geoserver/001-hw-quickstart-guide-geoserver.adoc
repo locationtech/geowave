@@ -1,0 +1,74 @@
+<<<
+
+:linkattrs:
+
+== GeoWave Quickstart Guide Integrate with GeoServer image:geowave-icon-logo-cropped.png[width="28%"]
+
+In order to view the images generated from the vector and raster demos, use the GeoServer web interface. The following command configures and restarts GeoServer.
+
+=== Configure GeoServer
+
+SandBox
+
+[source, bash]
+----
+geowave config geoserver sandbox.hortonworks.com:8993
+----
+
+EMR
+
+[source, bash]
+----
+geowave config geoserver "$HOSTNAME:8000"
+----
+
+Please allow 1-2 minutes for the GeoServer to restart before attempting to complete Add Layers and Styles.
+
+=== Add Layers and Styles
+
+Add the layers for the demo(s) that you have completed. If you experience any errors while adding the layers, GeoServer likely needs more time to finish its restart.
+
+==== Vector Demo Layers
+
+- Add layers for the point and kde representations of the data.
+
+[source, bash]
+----
+geowave gs addlayer gdelt
+geowave gs addlayer gdelt-kde
+----
+
+- Add the KDEColorMap and SubsamplePoints styles. These should have been downloaded at the beginning of the demo.
+
+[source, bash]
+----
+geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
+geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld
+----
+
+- Set the styles of these layers.
+
+[source, bash]
+----
+geowave gs setls gdeltevent_kde --styleName kdecolormap
+geowave gs setls gdeltevent --styleName SubsamplePoints
+----
+
+==== Raster Demo Layers
+
+- Add the layers created in the raster demo. The default styles for these layers is sufficient.
+
+[source, bash]
+----
+geowave gs addlayer landsatraster
+geowave gs addlayer landsatvector --add ALL
+----
+
+=== Cluster Interaction
+
+- link:interact-cluster.html[Interacting with the cluster, window="_blank"]
+
+=== Back to the Demos
+
+- link:walkthrough-vector.html[Vector Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]

@@ -14,7 +14,7 @@ public class InsertionIdQueryFilter implements
 	private byte[] sortKey;
 	private byte[] dataId;
 
-	protected InsertionIdQueryFilter() {}
+	public InsertionIdQueryFilter() {}
 
 	public InsertionIdQueryFilter(
 			final ByteArrayId partitionKey,

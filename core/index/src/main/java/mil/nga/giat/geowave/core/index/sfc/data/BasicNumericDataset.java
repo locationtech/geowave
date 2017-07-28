@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
 /**
  * The Basic Index Result class creates an object associated with a generic
@@ -163,10 +163,7 @@ public class BasicNumericDataset implements
 		for (int d = 0; d < numDimensions; d++) {
 			final byte[] binary = new byte[buf.getInt()];
 			buf.get(binary);
-			dataPerDimension[d] = PersistenceUtils.fromBinary(
-					binary,
-					NumericData.class);
+			dataPerDimension[d] = (NumericData) PersistenceUtils.fromBinary(binary);
 		}
 	}
-
 }

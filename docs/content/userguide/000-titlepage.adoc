@@ -3,6 +3,8 @@
 
 _v${project.version}_
 
+:linkattrs:
+
 = GeoWave User Guide image:geowave-icon-logo-cropped.png[width="28%"]
 
 ////
@@ -11,14 +13,14 @@ PDF Generation gives an error if you try to use icons
 ifdef::backend-html5[]
 == Links
 
-=== icon:home[] http://locationtech.github.io/geowave/[Site]
+=== icon:home[] link:http://locationtech.github.io/geowave/[Site, window="_blank"]
 
-=== icon:file-pdf-o[] https://s3.amazonaws.com/geowave/latest/docs/userguide.pdf[PDF^]
+=== icon:file-pdf-o[] link:https://s3.amazonaws.com/geowave/latest/docs/userguide.pdf[PDF^, window="_blank"]
 
-=== icon:file-code-o[] https://s3.amazonaws.com/geowave/latest/docs/apidocs/index.html[Javadoc]
+=== icon:file-code-o[] link:apidocs/index.html[Javadoc, window="_blank"]
 
-=== icon:github[] https://github.com/locationtech/geowave[GitHub]
+=== icon:github[] link:https://github.com/locationtech/geowave[GitHub, window="_blank"]
 
-=== icon:file-archive-o[] http://locationtech.github.io/geowave/packages.html[Packages]
+=== icon:file-archive-o[] link:packages.html[Packages, window="_blank"]
 
 endif::backend-html5[]

@@ -1,0 +1,34 @@
+//:geowave-cpindex(1)
+//:==================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config cpindex - Copy and modify existing index configuration
+
+SYNOPSIS
+//:--------
+
+geowave config cpindex [options] <name> <new name>
+
+DESCRIPTION
+//:----------- 
+
+The geowave config cpindex operator will copy and modify an existing index configuration.
+It is possible to override values as you copy, such as cpindex old new --gwNamespace new_namespace.
+
+OPTIONS
+//:-------
+
+- -d, --default
+ * Make this the default index creating stores
+
+- -np, numPartitions
+ * The number of partitions.
+ * Default: 1
+
+- -ps, --partitionStrategy
+ * The partition strategy to use.
+ * Default: NONE
+ * Possible Values: [NONE, HASH, ROUND ROBIN]

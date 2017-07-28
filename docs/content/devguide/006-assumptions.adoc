@@ -1,0 +1,44 @@
+[[assumptions]]
+<<<
+
+:linkattrs:
+
+== Assumptions
+
+Prior to setting up a development environment surrounding the GeoWave project, this guide assumes that the following components are installed. Because of the continuous changes occurring to these components, installing, and maintaining, extensive operational capabilities around these components is outside the scope of this document.
+
+=== Development & Building
+
+In order to build and/or perform development using the GeoWave source, the following components are required:
+
+[options="compact"]
+* link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java Development Kit (JDK), window="_blank"] (>= 1.8)
++
+Requires JDK v1.8 or greater
++
+Download from the link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java downloads site, window="_blank"]. The OracleJDK is the most thoroughly tested but there are no known issues with OpenJDK.
+
+* link:http://git-scm.com/[Git, window="_blank"]
++
+Reference online material at link:https://git-scm.com/[Git SCM Site, window="_blank"].
++
+For a complete reference guide for installing and using Git, please reference chapters in the online link:https://git-scm.com/book/en/v2[Pro Git book, window="_blank"].
+
+* link:https://maven.apache.org/[Maven, window="_blank"]
++
+Requires a version of Maven >= 3.2.1
++
+For a reference guide for getting started with Maven, please reference the online link:https://maven.apache.org/guides/getting-started/[Maven Getting Started Guide, window="_blank"].
++
+.GeoWave has a dependency on the following libraries - handled through Maven:
+. Uzazygezen - link:https://code.google.com/p/uzaygezen/
+. GeoTools - link:http://www.geotools.org/
+. Log4J - link:http://logging.apache.org/log4j/1.2/
+
+* link:http://www.oracle.com/technetwork/articles/javaee/jai-142803.html[Java Advanced Imaging, window="_blank"] and link:https://docs.oracle.com/javase/8/docs/technotes/guides/imageio/[Java Image I/O, window="_blank"]
++
+Both are required to be installed on the GeoServer instance(s) as well as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), so this may be skipped in some cases.
+
+=== External Components
+Depending on the environment components that are being developed towards and/or tested against, e.g., requirements, datastores, indices, etc., some external components will be beneficial. While this information is outside the scope of this document, you can find these requirements in the link:userguide.html#assumptions[GeoWave User Guide, window="_blank"].
+

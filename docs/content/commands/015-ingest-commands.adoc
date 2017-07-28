@@ -1,34 +1,54 @@
 [[ingest-commands]]
+<<<
+
+[[ingest-commands]]
 === Ingest Commands
 
 Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave (Required options are designated with an *)
 
-==== *geowave ingest listformat*
+.Commands:
+* <<015-ingest-commands.adoc#ingest-kafkaToGW, KafkaToGW>>
+* <<015-ingest-commands.adoc#ingest-listplugins, ListPlugins>>
+* <<015-ingest-commands.adoc#ingest-localToGW, LocalToGW>>
+* <<015-ingest-commands.adoc#ingest-localToHdfs, LocalToHdfs>>
+* <<015-ingest-commands.adoc#ingest-localToKafka, LocalToKafka>>
+* <<015-ingest-commands.adoc#ingest-localToMrGW, LocalToMRGW>>
+* <<015-ingest-commands.adoc#ingest-mrToGW, MRToGW>>
 
-include::manpages/geowave-listformat.txt[]
 
-==== *geowave ingest localToGW*
-
-include::manpages/geowave-localToGW.txt[]
-
-==== *geowave ingest localToMrGW*
-
-include::manpages/geowave-localToMrGW.txt[]
-
-==== *geowave ingest localToHdfs*
-
-include::manpages/geowave-localToHdfs.txt[]
-
-==== *geowave ingest localToKafka*
-
-include::manpages/geowave-localToKafka.txt[]
-
+[[ingest-kafkaToGW]]
 ==== *geowave ingest kafkaToGW*
 
-include::manpages/geowave-kafkaToGW.txt[]
+include::manpages/ingest/geowave-kafkaToGW.txt[]
 
+[[ingest-listplugins]]
+==== *geowave ingest listplugins*
+
+include::manpages/ingest/geowave-listplugins.txt[]
+
+[[ingest-localToGW]]
+==== *geowave ingest localToGW*
+
+include::manpages/ingest/geowave-localToGW.txt[]
+
+[[ingest-localToHdfs]]
+==== *geowave ingest localToHdfs*
+
+include::manpages/ingest/geowave-localToHdfs.txt[]
+
+[[ingest-localToKafka]]
+==== *geowave ingest localToKafka*
+
+include::manpages/ingest/geowave-localToKafka.txt[]
+
+[[ingest-localToMrGW]]
+==== *geowave ingest localToMrGW*
+
+include::manpages/ingest/geowave-localToMrGW.txt[]
+
+[[ingest-mrToGW]]
 ==== *geowave ingest mrToGW*
 
-include::manpages/geowave-mrToGW.txt[]
+include::manpages/ingest/geowave-mrToGW.txt[]
 
---- +
+'''

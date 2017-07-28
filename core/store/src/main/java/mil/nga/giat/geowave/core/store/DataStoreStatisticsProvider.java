@@ -45,6 +45,7 @@ public class DataStoreStatisticsProvider<T> implements
 	public ByteArrayId[] getSupportedStatisticsTypes() {
 		final ByteArrayId[] idsFromAdapter;
 		if ((adapter instanceof StatisticsProvider) && includeAdapterStats) {
+			adapter.init(index);
 			idsFromAdapter = ((StatisticsProvider) adapter).getSupportedStatisticsTypes();
 		}
 		else {

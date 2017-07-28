@@ -28,4 +28,14 @@ public class VectorOverrideCommandLineOptions
 	public String getVectorIndex() {
 		return vectorIndex;
 	}
+
+	public void setVectorStore(
+			String vectorStore ) {
+		this.vectorStore = vectorStore;
+	}
+
+	public void setVectorIndex(
+			String vectorIndex ) {
+		this.vectorIndex = vectorIndex;
+	}
 }

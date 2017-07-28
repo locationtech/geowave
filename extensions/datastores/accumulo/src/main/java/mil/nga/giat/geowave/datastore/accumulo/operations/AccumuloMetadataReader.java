@@ -2,6 +2,9 @@ package mil.nga.giat.geowave.datastore.accumulo.operations;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.accumulo.core.client.BatchScanner;
@@ -16,9 +19,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveMetadata;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.operations.MetadataQuery;
@@ -37,9 +42,9 @@ public class AccumuloMetadataReader implements
 	private final MetadataType metadataType;
 
 	public AccumuloMetadataReader(
-			AccumuloOperations operations,
-			DataStoreOptions options,
-			MetadataType metadataType ) {
+			final AccumuloOperations operations,
+			final DataStoreOptions options,
+			final MetadataType metadataType ) {
 		this.operations = operations;
 		this.options = options;
 		this.metadataType = metadataType;
@@ -48,17 +53,10 @@ public class AccumuloMetadataReader implements
 	@Override
 	public CloseableIterator<GeoWaveMetadata> query(
 			final MetadataQuery query ) {
-		BatchScanner scanner;
 		try {
-			scanner = operations.createBatchScanner(
+			final BatchScanner scanner = operations.createBatchScanner(
 					AbstractGeoWavePersistence.METADATA_TABLE,
 					query.getAuthorizations());
-			final IteratorSetting[] settings = getScanSettings();
-			if ((settings != null) && (settings.length > 0)) {
-				for (final IteratorSetting setting : settings) {
-					scanner.addScanIterator(setting);
-				}
-			}
 			final String columnFamily = metadataType.name();
 			final byte[] columnQualifier = query.getSecondaryId();
 			if (columnFamily != null) {
@@ -75,7 +73,7 @@ public class AccumuloMetadataReader implements
 				}
 			}
 			final Collection<Range> ranges = new ArrayList<Range>();
-			if (query.getPrimaryId() != null) {
+			if (query.hasPrimaryId()) {
 				ranges.add(new Range(
 						new Text(
 								query.getPrimaryId())));
@@ -84,6 +82,52 @@ public class AccumuloMetadataReader implements
 				ranges.add(new Range());
 			}
 			scanner.setRanges(ranges);
+
+			// For stats w/ no server-side support, need to merge here
+			if (metadataType == MetadataType.STATS && !options.isServerSideLibraryEnabled()) {
+
+				final HashMap<Text, Key> keyMap = new HashMap();
+				final HashMap<Text, DataStatistics> mergedDataMap = new HashMap();
+				final Iterator<Entry<Key, Value>> it = scanner.iterator();
+
+				while (it.hasNext()) {
+					final Entry<Key, Value> row = it.next();
+
+					final DataStatistics stats = (DataStatistics) PersistenceUtils.fromBinary(row.getValue().get());
+
+					if (keyMap.containsKey(row.getKey().getRow())) {
+						final DataStatistics mergedStats = mergedDataMap.get(row.getKey().getRow());
+						mergedStats.merge(stats);
+					}
+					else {
+						keyMap.put(
+								row.getKey().getRow(),
+								row.getKey());
+						mergedDataMap.put(
+								row.getKey().getRow(),
+								stats);
+					}
+				}
+
+				final List<GeoWaveMetadata> metadataList = new ArrayList();
+				for (final Entry<Text, Key> entry : keyMap.entrySet()) {
+					final Text rowId = entry.getKey();
+					final Key key = keyMap.get(rowId);
+					final DataStatistics mergedStats = mergedDataMap.get(rowId);
+
+					metadataList.add(new GeoWaveMetadata(
+							key.getRow().getBytes(),
+							key.getColumnQualifier().getBytes(),
+							key.getColumnVisibility().getBytes(),
+							PersistenceUtils.toBinary(mergedStats)));
+				}
+
+				return new CloseableIteratorWrapper<>(
+						new ScannerClosableWrapper(
+								scanner),
+						metadataList.iterator());
+			}
+
 			return new CloseableIteratorWrapper<>(
 					new ScannerClosableWrapper(
 							scanner),
@@ -112,19 +156,4 @@ public class AccumuloMetadataReader implements
 				Iterators.emptyIterator());
 	}
 
-	private IteratorSetting[] getScanSettings() {
-		if (MetadataType.STATS.equals(metadataType) && options.isServerSideLibraryEnabled()) {
-			return getStatsScanSettings();
-		}
-		return null;
-	}
-
-	private static IteratorSetting[] getStatsScanSettings() {
-		final IteratorSetting statsMultiVisibilityCombiner = new IteratorSetting(
-				STATS_MULTI_VISIBILITY_COMBINER_PRIORITY,
-				MergingVisibilityCombiner.class);
-		return new IteratorSetting[] {
-			statsMultiVisibilityCombiner
-		};
-	}
 }

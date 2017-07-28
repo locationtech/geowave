@@ -18,9 +18,9 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
@@ -35,7 +35,7 @@ public class CoordinateRangeQueryFilter implements
 	protected RangeCache rangeCache;
 	protected MultiDimensionalCoordinateRangesArray[] coordinateRanges;
 
-	protected CoordinateRangeQueryFilter() {}
+	public CoordinateRangeQueryFilter() {}
 
 	public CoordinateRangeQueryFilter(
 			final NumericIndexStrategy indexStrategy,
@@ -90,9 +90,7 @@ public class CoordinateRangeQueryFilter implements
 			final int indexStrategyLength = buf.getInt();
 			final byte[] indexStrategyBytes = new byte[indexStrategyLength];
 			buf.get(indexStrategyBytes);
-			indexStrategy = PersistenceUtils.fromBinary(
-					indexStrategyBytes,
-					NumericIndexStrategy.class);
+			indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBytes);
 			final byte[] coordRangeBytes = new byte[bytes.length - indexStrategyLength - 4];
 			buf.get(coordRangeBytes);
 			final ArrayOfArrays arrays = new ArrayOfArrays();
@@ -107,5 +105,4 @@ public class CoordinateRangeQueryFilter implements
 		}
 
 	}
-
 }

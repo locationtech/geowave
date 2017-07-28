@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -25,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
+import mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
@@ -113,13 +114,13 @@ public class GeoLifeIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {
+			final URL baseDirectory ) {
 
 	}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		return GeoLifeUtils.validate(file);
 	}
 
@@ -130,15 +131,15 @@ public class GeoLifeIngestPlugin extends
 
 	@Override
 	public WholeFile[] toAvroObjects(
-			final File input ) {
+			final URL input ) {
 		final WholeFile avroFile = new WholeFile();
-		avroFile.setOriginalFilePath(input.getAbsolutePath());
+		avroFile.setOriginalFilePath(input.getPath());
 		try {
-			avroFile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
+			avroFile.setOriginalFile(ByteBuffer.wrap(IOUtils.toByteArray(input)));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to read GeoLife file: " + input.getAbsolutePath(),
+					"Unable to read GeoLife file: " + input.getPath(),
 					e);
 			return new WholeFile[] {};
 		}
@@ -199,11 +200,11 @@ public class GeoLifeIngestPlugin extends
 					continue;
 				}
 
-				currLat = GeometryUtils.adjustCoordinateDimensionToRange(
+				currLat = FeatureGeometryUtils.adjustCoordinateDimensionToRange(
 						Double.parseDouble(vals[0]),
 						crs,
 						1);
-				currLng = GeometryUtils.adjustCoordinateDimensionToRange(
+				currLng = FeatureGeometryUtils.adjustCoordinateDimensionToRange(
 						Double.parseDouble(vals[1]),
 						crs,
 						0);

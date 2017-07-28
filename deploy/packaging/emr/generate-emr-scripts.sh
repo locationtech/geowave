@@ -40,7 +40,7 @@ else
 fi
 TARGET_ROOT=${ARGS[workspace]}/deploy/packaging/emr/generated
 TEMPLATE_ROOT=${ARGS[workspace]}/deploy/packaging/emr/template
-SLD_DIR=${ARGS[workspace]}/examples/example-slds
+SLD_DIR=${ARGS[workspace]}/examples/data/slds
 
 mkdir -p $TARGET_ROOT/quickstart
 
@@ -48,6 +48,10 @@ mkdir -p $TARGET_ROOT/quickstart
 cp $TEMPLATE_ROOT/bootstrap-geowave.sh.template $TEMPLATE_ROOT/bootstrap-geowave.sh
 cp $TEMPLATE_ROOT/geowave-install-lib.sh.template $TEMPLATE_ROOT/geowave-install-lib.sh
 cp $TEMPLATE_ROOT/quickstart/geowave-env.sh.template $TARGET_ROOT/quickstart/geowave-env.sh
+cp $TEMPLATE_ROOT/bootstrap-jupyter.sh.template $TEMPLATE_ROOT/bootstrap-jupyter.sh
+cp $TEMPLATE_ROOT/create-configure-kernel.sh.template $TEMPLATE_ROOT/create-configure-kernel.sh
+cp $TEMPLATE_ROOT/bootstrap-zeppelin.sh.template $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+cp $TEMPLATE_ROOT/configure-zeppelin.sh.template $TEMPLATE_ROOT/configure-zeppelin.sh
 
 # copy permanent resources that don't need a template
 cp $TEMPLATE_ROOT/quickstart/setup-geoserver-geowave-workspace.sh $TARGET_ROOT/quickstart/setup-geoserver-geowave-workspace.sh
@@ -62,6 +66,15 @@ sed -i -e s~'$GEOWAVE_REPO_BASE_URL_TOKEN'~${GEOWAVE_REPO_BASE_URL_TOKEN}~g $TEM
 sed -i -e s/'$GEOWAVE_REPO_NAME_TOKEN'/${GEOWAVE_REPO_NAME_TOKEN}/g $TEMPLATE_ROOT/geowave-install-lib.sh
 
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TARGET_ROOT/quickstart/geowave-env.sh
+
+# replacing tokens for jupyter bootstrap scripts
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
+sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/create-configure-kernel.sh
+
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/configure-zeppelin.sh
 
 for datastore in "${DATASTORES[@]}"
 do
@@ -86,6 +99,23 @@ do
 	sed -e '/$DATASTORE_PARAMS_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_PARAMS_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/quickstart/$datastore/ingest-and-kde-gdelt.sh
 done
 
+# Copy jupyter additions to separate generated folder
+# This will put scripts into separate jupyter folder on s3 when published.
+mkdir -p $TARGET_ROOT/jupyter
+cp $TEMPLATE_ROOT/bootstrap-jupyter.sh $TARGET_ROOT/jupyter/bootstrap-jupyter.sh
+cp $TEMPLATE_ROOT/create-configure-kernel.sh $TARGET_ROOT/jupyter/create-configure-kernel.sh
+
+# Copy zeppelin additions to separate generated folder
+# This will put scripts into separate zeppelin folder on s3 when published.
+mkdir -p $TARGET_ROOT/zeppelin
+cp $TEMPLATE_ROOT/bootstrap-zeppelin.sh $TARGET_ROOT/zeppelin/bootstrap-zeppelin.sh
+cp $TEMPLATE_ROOT/configure-zeppelin.sh $TARGET_ROOT/zeppelin/configure-zeppelin.sh
+
 # clean up temporary templates
 rm $TEMPLATE_ROOT/bootstrap-geowave.sh
 rm $TEMPLATE_ROOT/geowave-install-lib.sh
+rm $TEMPLATE_ROOT/bootstrap-jupyter.sh
+rm $TEMPLATE_ROOT/create-configure-kernel.sh
+rm $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+rm $TEMPLATE_ROOT/configure-zeppelin.sh
+

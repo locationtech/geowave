@@ -12,12 +12,14 @@ package mil.nga.giat.geowave.format.avro;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
+import org.apache.avro.file.DataFileStream;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,22 +76,24 @@ public class AvroIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
-		try {
-			DataFileReader.openReader(
-					file,
-					new SpecificDatumReader<AvroSimpleFeatureCollection>()).close();
-			return true;
+			final URL file ) {
+
+		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(
+				file.openStream(),
+				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
+			if (ds.getHeader() != null) {
+				return true;
+			}
 		}
 		catch (final IOException e) {
 			// just log as info as this may not have been intended to be read as
 			// avro vector data
 			LOGGER.info(
-					"Unable to read file as Avro vector data '" + file.getName() + "'",
+					"Unable to read file as Avro vector data '" + file.getPath() + "'",
 					e);
 		}
 
@@ -108,10 +112,10 @@ public class AvroIngestPlugin extends
 
 	@Override
 	public AvroSimpleFeatureCollection[] toAvroObjects(
-			final File input ) {
+			final URL input ) {
 		final List<AvroSimpleFeatureCollection> retVal = new ArrayList<AvroSimpleFeatureCollection>();
-		try (DataFileReader<AvroSimpleFeatureCollection> reader = new DataFileReader<AvroSimpleFeatureCollection>(
-				input,
+		try (DataFileStream<AvroSimpleFeatureCollection> reader = new DataFileStream<AvroSimpleFeatureCollection>(
+				input.openStream(),
 				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
 			while (reader.hasNext()) {
 				final AvroSimpleFeatureCollection simpleFeatureCollection = reader.next();
@@ -120,7 +124,7 @@ public class AvroIngestPlugin extends
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to read file '" + input.getAbsolutePath() + "' as AVRO SimpleFeatureCollection",
+					"Unable to read file '" + input.getPath() + "' as AVRO SimpleFeatureCollection",
 					e);
 		}
 		return retVal.toArray(new AvroSimpleFeatureCollection[] {});
@@ -219,5 +223,4 @@ public class AvroIngestPlugin extends
 			Time.class
 		};
 	}
-
 }

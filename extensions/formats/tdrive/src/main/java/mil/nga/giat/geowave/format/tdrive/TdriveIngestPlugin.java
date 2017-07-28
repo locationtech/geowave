@@ -15,7 +15,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -81,13 +83,13 @@ public class TdriveIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {
+			final URL baseDirectory ) {
 
 	}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		return TdriveUtils.validate(file);
 	}
 
@@ -105,15 +107,14 @@ public class TdriveIngestPlugin extends
 
 	@Override
 	public TdrivePoint[] toAvroObjects(
-			final File input ) {
+			final URL input ) {
 		BufferedReader fr = null;
 		BufferedReader br = null;
-		FileInputStream fis = null;
+		InputStream fis = null;
 		long pointInstance = 0l;
 		final List<TdrivePoint> pts = new ArrayList<TdrivePoint>();
 		try {
-			fis = new FileInputStream(
-					input);
+			fis = input.openStream();
 			fr = new BufferedReader(
 					new InputStreamReader(
 							fis,
@@ -146,13 +147,13 @@ public class TdriveIngestPlugin extends
 			}
 			catch (final IOException e) {
 				Log.warn(
-						"Error reading line from file: " + input.getName(),
+						"Error reading line from file: " + input.getPath(),
 						e);
 			}
 		}
-		catch (final FileNotFoundException e) {
+		catch (final IOException e) {
 			Log.warn(
-					"Error parsing tdrive file: " + input.getName(),
+					"Error parsing tdrive file: " + input.getPath(),
 					e);
 		}
 		finally {

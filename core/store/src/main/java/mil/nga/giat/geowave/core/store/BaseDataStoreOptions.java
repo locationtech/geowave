@@ -27,11 +27,16 @@ public class BaseDataStoreOptions implements
 	@Parameter(names = "--createTable", hidden = true, arity = 1)
 	protected boolean createTable = true;
 
+	// TODO GEOWAVE-1018 the secondaryIndexDataStore isn't implemented so this
+	// "alt index" option should not be used at the moment
 	@Parameter(names = "--useAltIndex", hidden = true, arity = 1)
 	protected boolean useAltIndex = false;
 
 	@Parameter(names = "--enableBlockCache", hidden = true, arity = 1)
 	protected boolean enableBlockCache = true;
+
+	@Parameter(names = "--enableServerSideLibrary", hidden = true, arity = 1)
+	protected boolean enableServerSideLibrary = true;
 
 	@Override
 	public boolean isPersistDataStatistics() {
@@ -95,7 +100,11 @@ public class BaseDataStoreOptions implements
 
 	@Override
 	public boolean isServerSideLibraryEnabled() {
-		return false;
+		return enableServerSideLibrary;
 	}
 
+	public void setServerSideLibraryEnabled(
+			final boolean enableServerSideLibrary ) {
+		this.enableServerSideLibrary = enableServerSideLibrary;
+	}
 }

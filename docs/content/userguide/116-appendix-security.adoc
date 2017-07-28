@@ -1,0 +1,88 @@
+[[security]]
+<<<
+
+:linkattrs:
+
+=== GeoWave Security
+
+[[password-security]]
+==== Datastore Passwords
+In order to provide security around account passwords, particularly those entered through command-line, GeoWave is configured to perform encryption on password fields that are configured for datastores or other configured components. To take the topic of passwords even further, GeoWave has also been updated to support multiple options around how to pass in passwords when configuring a new datastore, rather than always having to enter passwords in clear-text at command line.
+
+===== Password Options
+.The following options are currently supported for entering passwords into GeoWave:
+* *pass*: __<password>__
+** This option will allow for a clear-text password to be entered on command-line. It is strongly encouraged not to use this method outside of a local development environment (i.e., NOT in a production environment or where concurrent users are sharing the same system).
+* *env*:__<environment variable containing the password>__
+** This option will allow for an environment variable to be used to store the password, and the name of the environment variable to be entered on command-line in place of the password itself.
+* *file*:__<path to local file containing the password>__
+** This option will allow for the password to be inside a locally-accessible text file, and the path to file to be entered on command-line in place of the password itself. Please note that the password itself is the ONLY content to be stored in the file as this option will read all content from the file and store that as the password.
+* *propfile*:__<path to local properties file containing the password>__:__<property file key to password value>__
+** This option will allow for the password to be stored inside a locally-accessible properties file, and the key that stores the password field to be also specified. The value associated with the specified key will be looked up and stored as the password.
+* *stdin*
+** This option will result in the user being prompted after hitting enter, and will prevent the entered value from appearing in terminal history.
+
+[NOTE]
+====
+Users can still continue to enter their password in plain text at command line (just as was done with previous versions of GeoWave), but it is strongly encouraged not to do so outside of a local development environment (i.e., NOT in a production environment or where concurrent users are sharing the same system).
+====
+
+
+==== Password Encryption
+Passwords are encrypted within GeoWave using a local encryption token key. It is important to not manipulate the key or internal content. By doing so, you are compromising the likelihood of not being able to encrypt new data or decrypt already encrypted data.
+
+[NOTE]
+====
+It is assumed that a _geowave_ system command alias is registered in the terminal session being run through.
+
+To test this, type 'geowave' (no quotes) and press Enter.
+
+If a list of GeoWave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term __'geowave: command not found'__ is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the link:devguide.html#packaging-code[GeoWave Developer Guide, window="_blank"].
+
+If the alias system command is not registered, the full java command - e.g. java -cp {GEOWAVE_HOME} {GEOWAVE_JAR}) will need to be used in place of the 'geowave' alias.
+====
+
+In the event that the encryption token key is compromised, or thought to be compromised, a new token key can very easily be generated using a GeoWave system command.
+[source, bash]
+----
+$ geowave config newcryptokey
+----
+The above command will re-encrypt all passwords already configured against the new token key. As a result, the previous token key is obselete and can no longer be used.
+
+[NOTE]
+====
+This option is only useful to counter the event that only the token key file is compromised. In the event that both the token key file and encrypted password value have been compromised, it is recommended that steps are taken to change the datastore password and re-configure GeoWave to use the new password.
+====
+
+===== Configuring Console Echo
+When the 'stdin' option is specified for passwords to be entered at command line, it is recognized that there are circumstances where the console echo is wanted to be enabled (i.e., someone looking over your shoulder), and other times where the console echo is wanted to be disabled.
+
+For configuring the default console echo setting:
+[source, bash]
+----
+$ geowave config set geowave.console.default.echo.enabled={true|false}
+----
+The above command will set the default setting for all console prompts. Default is false if not specified, meaning any characters that are typed (when console echo is disabled) are not shown on the screen.
+
+GeoWave provides the ability to override the console echo setting for passwords specifically.
+For configuring the password console echo setting:
+[source, bash]
+----
+$ geowave config set geowave.console.password.echo.enabled={true|false}
+----
+If the above is specified, this setting will be applied for passwords when a user is promoted for input. By default, if the passwords console echo is not specified, the system will use the console default echo setting.
+
+===== Enabling/Disabling Password Encryption
+GeoWave provides the ability to enable or disable password encryption as it is seen necessary. By default, password encryption is enabled, but can be disabled for debugging purposes.
+For configuring the password encryption enabled setting:
+[source, bash]
+----
+$ geowave config set geowave.encryption.enabled={true|false}
+----
+
+[NOTE]
+====
+It is HIGHLY discouraged against disabling password encryption, particularly in a production (or similar) environment. While this option is available for assisting with debugging credentials, it should be avoided outside of production-like environments in order to avoid leaking data source credentials to unauthorized parties.
+====
+
+

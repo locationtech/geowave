@@ -1,20 +1,21 @@
 [[analytics-overview]]
 == Analytics
 
+:linkattrs:
+
 === Overview
 
 Analytics embody algorithms tailored to geospatial data.  Most analytics leverage Hadoop MapReduce for bulk computation.
 Results of analytic jobs consist of vector or raster data stored in GeoWave.  The analytics infrastructure provides tools to
 build algorithms in Spark.  For example, a Kryo serializer/deserializer enables exchange of SimpleFeatures and the GeoWaveInputFormat
-supplies data to the Hadoop RDD
+supplies data to the Hadoop RDD.
 
 [NOTE]
 ====
 GeoWaveInputFormat does not remove duplicate features that reference polygons spanning multiple index regions.
 ====
 
-The following algorithms are provided.
-
+The following algorithms are provided:
 
 [width="100%",cols="2,10",options="header"]
 |=========================================================
@@ -39,7 +40,7 @@ A infrastructure component that produces all the neighbors of a feature within a
 
 === Building
 
-Build the geowave tools project, as explained in the <<042-toolsframework.adoc#building, "ToolsFramework -> Building" section>>.
+Build the GeoWave tools project as explained in the <<012-building-code.adoc#building-tools-framework, "ToolsFramework -> Building" section>>.
 
 === Running
 
@@ -48,5 +49,4 @@ Build the geowave tools project, as explained in the <<042-toolsframework.adoc#b
 yarn jar geowave-tools.jar analytic <algorithm> <options> <store>
 ----
 
-The above command will execute <algorithm> (such as dbscan), sourcing the data
-from the <store> datastore (see config addstore)
+The above command will execute <algorithm> (such as dbscan), sourcing the data from the <store> datastore (see link:commands.html#config-addstore[config addstore in the GeoWave CLI commands, window="_blank"]).

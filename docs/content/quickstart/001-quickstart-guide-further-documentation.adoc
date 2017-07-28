@@ -1,0 +1,13 @@
+<<<
+
+:linkattrs:
+
+== Further Documentation
+
+More information on GeoWave, including the User/Developer Guides and further information on many of the commands run in these demos can be found below.
+
+link:userguide.html[**User Guide**, window="_blank"]
+
+link:devguide.html[**Developer Guide**, window="_blank"]
+
+link:commands.html[**Command Line Controls**, window="_blank"]

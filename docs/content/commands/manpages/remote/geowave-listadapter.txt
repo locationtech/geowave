@@ -1,0 +1,23 @@
+//:geowave-listadapter(1)
+//:======================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote listadapter - display all adapters in this remote store
+
+SYNOPSIS
+//:--------
+
+geowave remote listadapter [options] <store name>
+
+DESCRIPTION
+//:-----------
+
+The geowave remote listadapter operator will display all adapters in this remote store.
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

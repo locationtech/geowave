@@ -77,7 +77,7 @@ public class BasicKafkaIT extends
 			+ "mapreduce-testdata.zip";
 	protected static final String OSM_GPX_INPUT_DIR = TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/";
 
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
@@ -132,6 +132,7 @@ public class BasicKafkaIT extends
 		final DataStatisticsStore statsStore = dataStorePluginOptions.createDataStatisticsStore();
 		final AdapterStore adapterStore = dataStorePluginOptions.createAdapterStore();
 		int adapterCount = 0;
+
 		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
 				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();

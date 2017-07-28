@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,10 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.query.cql;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.filter.FilterFactoryImpl;
 import org.geotools.filter.IllegalFilterException;
 import org.geotools.filter.LiteralExpressionImpl;
@@ -28,40 +24,52 @@ import org.opengis.filter.expression.PropertyName;
 import org.opengis.filter.spatial.DWithin;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
 public class FilterToCQLTool
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(FilterToCQLTool.class);
 
-	/**
-	 * Corrects any function issues.
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	public static String toCQL(
-			Filter filter ) {
-
-		FilterToECQLExtension toCQL = new FilterToECQLExtension();
-		StringBuilder output = (StringBuilder) filter.accept(
-				toCQL,
-				new StringBuilder());
-		return output.toString();
+	public static Filter fixDWithin(
+			final Filter filter ) {
+		final HasDWithinFilterVisitor dwithinCheck = new HasDWithinFilterVisitor();
+		filter.accept(
+				dwithinCheck,
+				null);
+		if (dwithinCheck.hasDWithin()) {
+			try {
+				final Filter retVal = (Filter) filter.accept(
+						new DWithinFilterVisitor(),
+						null);
+				// We do not have a way to transform a filter directly from one
+				// to another.
+				return FilterToCQLTool.toFilter(ECQL.toCQL(retVal));
+			}
+			catch (final CQLException e) {
+				LOGGER.trace(
+						"Filter is not a CQL Expression",
+						e);
+			}
+		}
+		return filter;
 	}
 
 	public static Filter toFilter(
-			String expression )
+			final String expression )
 			throws CQLException {
 		return ECQL.toFilter(
 				expression,
 				new FilterFactoryImpl() {
 					@Override
 					public DWithin dwithin(
-							Expression geometry1,
-							Expression geometry2,
-							double distance,
-							String units,
-							MatchAction matchAction ) {
+							final Expression geometry1,
+							final Expression geometry2,
+							final double distance,
+							final String units,
+							final MatchAction matchAction ) {
 						try {
 							return matchAction == null ? new FixedDWithinImpl(
 									geometry1,
@@ -92,10 +100,10 @@ public class FilterToCQLTool
 
 					@Override
 					public DWithin dwithin(
-							Expression geometry1,
-							Expression geometry2,
-							double distance,
-							String units ) {
+							final Expression geometry1,
+							final Expression geometry2,
+							final double distance,
+							final String units ) {
 						return dwithin(
 								geometry1,
 								geometry2,
@@ -111,19 +119,19 @@ public class FilterToCQLTool
 			DWithin
 	{
 
-		private double distance;
-		private String units;
+		private final double distance;
+		private final String units;
 
 		public FixedDWithinImpl(
-				Expression e1,
-				Expression e2,
-				String units,
-				double distance )
+				final Expression e1,
+				final Expression e2,
+				final String units,
+				final double distance )
 				throws IllegalFilterException,
 				TransformException {
 			super(
 					new LiteralExpressionImpl(
-							mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
+							mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
 									getCRS(
 											e1,
 											e2),
@@ -140,22 +148,22 @@ public class FilterToCQLTool
 		}
 
 		private static CoordinateReferenceSystem getCRS(
-				Expression e1,
-				Expression e2 ) {
-			return GeoWaveGTDataStore.DEFAULT_CRS;
+				final Expression e1,
+				final Expression e2 ) {
+			return GeometryUtils.DEFAULT_CRS;
 		}
 
 		public FixedDWithinImpl(
-				Expression e1,
-				Expression e2,
-				String units,
-				double distance,
-				MatchAction matchAction )
+				final Expression e1,
+				final Expression e2,
+				final String units,
+				final double distance,
+				final MatchAction matchAction )
 				throws IllegalFilterException,
 				TransformException {
 			super(
 					new LiteralExpressionImpl(
-							mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
+							mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
 									getCRS(
 											e1,
 											e2),

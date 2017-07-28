@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.remote;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +22,9 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
@@ -33,8 +34,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 @GeowaveOperation(name = "rmadapter", parentOperation = RemoteSection.class)
 @Parameters(hidden = true, commandDescription = "Remove an adapter from the remote store and all associated data for the adapter")
 public class RemoveAdapterCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(RemoveAdapterCommand.class);
 
@@ -46,35 +46,7 @@ public class RemoveAdapterCommand extends
 	@Override
 	public void execute(
 			final OperationParams params ) {
-
-		// Ensure we have all the required arguments
-		if (parameters.size() != 2) {
-			throw new ParameterException(
-					"Requires arguments: <store name> <adapterId>");
-		}
-
-		final String inputStoreName = parameters.get(0);
-		final String adapterId = parameters.get(1);
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		}
-
-		LOGGER.info("Deleting everything in store: " + inputStoreName + " with adapter id: " + adapterId);
-		final QueryOptions options = new QueryOptions();
-		options.setAdapterId(new ByteArrayId(
-				adapterId));
-		inputStoreOptions.createDataStore().delete(
-				options,
-				new EverythingQuery());
-
+		computeResults(params);
 	}
 
 	public List<String> getParameters() {
@@ -96,6 +68,42 @@ public class RemoveAdapterCommand extends
 	public void setInputStoreOptions(
 			final DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params ) {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 2) {
+			throw new ParameterException(
+					"Requires arguments: <store name> <adapterId>");
+		}
+
+		final String inputStoreName = parameters.get(0);
+		final String adapterId = parameters.get(1);
+
+		// Attempt to load store.
+		final File configFile = getGeoWaveConfigFile(params);
+
+		// Attempt to load input store.
+		if (inputStoreOptions == null) {
+			final StoreLoader inputStoreLoader = new StoreLoader(
+					inputStoreName);
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
+			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		}
+
+		LOGGER.info("Deleting everything in store: " + inputStoreName + " with adapter id: " + adapterId);
+		final QueryOptions options = new QueryOptions();
+		options.setAdapterId(new ByteArrayId(
+				adapterId));
+		inputStoreOptions.createDataStore().delete(
+				options,
+				new EverythingQuery());
+		return null;
 	}
 
 }

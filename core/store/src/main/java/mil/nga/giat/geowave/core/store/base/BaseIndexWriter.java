@@ -71,8 +71,7 @@ class BaseIndexWriter<T> implements
 
 	@Override
 	public InsertionIds write(
-			final T entry )
-			throws IOException {
+			final T entry ) {
 		return write(
 				entry,
 				DataStoreUtils.UNCONSTRAINED_VISIBILITY);
@@ -81,8 +80,7 @@ class BaseIndexWriter<T> implements
 	@Override
 	public InsertionIds write(
 			final T entry,
-			final VisibilityWriter<T> fieldVisibilityWriter )
-			throws IOException {
+			final VisibilityWriter<T> fieldVisibilityWriter ) {
 		IntermediaryWriteEntryInfo entryInfo;
 		synchronized (this) {
 			ensureOpen();

@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;

@@ -11,6 +11,8 @@
 package mil.nga.giat.geowave.core.store.cli.remote;
 
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.store.operations.remote.MergeDataCommand;
+import mil.nga.giat.geowave.core.store.operations.remote.VersionCommand;
 
 public class RemoteOperationsProvider implements
 		CLIOperationProviderSpi
@@ -23,10 +25,10 @@ public class RemoteOperationsProvider implements
 		ListAdapterCommand.class,
 		ListIndexCommand.class,
 		ListStatsCommand.class,
+		VersionCommand.class,
 		MergeDataCommand.class,
 		RecalculateStatsCommand.class,
 		RemoveAdapterCommand.class,
-		RemoveIndexCommand.class,
 		RemoveStatCommand.class
 	};
 

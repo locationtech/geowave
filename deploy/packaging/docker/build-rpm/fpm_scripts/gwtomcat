@@ -1,0 +1,314 @@
+#!/bin/bash
+#
+# gwtomcat      This shell script takes care of starting and stopping Tomcat
+#
+# chkconfig: - 80 20
+#
+### BEGIN INIT INFO
+# Provides: gwtomcat
+# Required-Start: $network $syslog
+# Required-Stop: $network $syslog
+# Default-Start:
+# Default-Stop:
+# Description: Release implementation for Servlet 3.0 and JSP 2.2
+# Short-Description: start and stop tomcat
+### END INIT INFO
+#
+# - originally written by Henri Gomez, Keith Irwin, and Nicolas Mailhot
+# - heavily rewritten by Deepak Bhole and Jason Corley
+#
+
+## Source function library.
+. /etc/rc.d/init.d/functions
+
+NAME="gwtomcat"
+
+unset ISBOOT
+if [ "${NAME:0:1}" = "S" -o "${NAME:0:1}" = "K" ]; then
+    NAME="${NAME:3}"
+    ISBOOT="1"
+fi
+
+SU="/bin/su -s /bin/sh"
+
+# Where tomcat installation lives
+CATALINA_BASE="/usr/local/geowave/tomcat8"
+CATALINA_HOME="/usr/local/geowave/tomcat8"
+JASPER_HOME="/usr/local/geowave/tomcat8"
+CATALINA_TMPDIR="/usr/local/geowave/tomcat8/temp"
+
+# What user should run tomcat
+TOMCAT_USER="geowave"
+
+# Maximum time to wait in seconds, before killing process
+SHUTDOWN_WAIT="30"
+
+# Maximum time to wait in seconds, after killing the tomcat process
+KILL_SLEEP_WAIT="5"
+
+# Whether to annoy the user with "attempting to shut down" messages or not
+SHUTDOWN_VERBOSE="false"
+
+# Set the TOMCAT_PID location
+CATALINA_PID="/var/run/gwtomcat.pid"
+
+# Define which connector port to use
+CONNECTOR_PORT="${CONNECTOR_PORT:-8080}"
+
+# Path to the tomcat launch script
+TOMCAT_SCRIPT="/usr/sbin/tomcat8"
+
+# Tomcat program name
+TOMCAT_PROG="${NAME}"
+
+# Define the tomcat username
+TOMCAT_USER="${TOMCAT_USER:-gwtomcat}"
+
+# Define the tomcat log file
+
+# set kill timeout
+KILL_SLEEP_WAIT="${KILL_SLEEP_WAIT:-5}"
+
+RETVAL="0"
+
+# Look for open ports, as the function name might imply
+function findFreePorts() {
+    local isSet1="false"
+    local isSet2="false"
+    local isSet3="false"
+    local lower="8000"
+    randomPort1="0"
+    randomPort2="0"
+    randomPort3="0"
+    local -a listeners="( $(
+                        netstat -ntl | \
+                        awk '/^tcp/ {gsub("(.)*:", "", $4); print $4}'
+                    ) )"
+    while [ "$isSet1" = "false" ] || \
+          [ "$isSet2" = "false" ] || \
+          [ "$isSet3" = "false" ]; do
+        let port="${lower}+${RANDOM:0:4}"
+        if [ -z `expr " ${listeners[*]} " : ".*\( $port \).*"` ]; then
+            if [ "$isSet1" = "false" ]; then
+                export randomPort1="$port"
+                isSet1="true"
+            elif [ "$isSet2" = "false" ]; then
+                export randomPort2="$port"
+                isSet2="true"
+            elif [ "$isSet3" = "false" ]; then
+                export randomPort3="$port"
+                isSet3="true"
+            fi
+        fi
+    done
+}
+
+
+# See how we were called.
+function start() {
+   echo -n "Starting ${TOMCAT_PROG}: "
+   if [ "$RETVAL" != "0" ]; then
+     failure
+     echo
+     return
+   fi
+   if [ -f "/var/lock/subsys/${NAME}" ]; then
+        if [ -s "/var/run/${NAME}.pid" ]; then
+            read kpid < /var/run/${NAME}.pid
+#           if checkpid $kpid 2>&1; then
+            if [ -d "/proc/${kpid}" ]; then
+                success
+		echo
+                return 0
+            fi
+        fi
+    fi
+    # fix permissions on the log and pid files
+    export CATALINA_PID="/var/run/${NAME}.pid"
+    touch $CATALINA_PID 2>&1 || RETVAL="4"
+    if [ "$RETVAL" -eq "0" -a "$?" -eq "0" ]; then
+      chown ${TOMCAT_USER}:${TOMCAT_USER} $CATALINA_PID
+    fi
+    findFreePorts
+    sed -i -e "s/8005/${randomPort1}/g" -e "s/8080/${CONNECTOR_PORT}/g" \
+        -e "s/8009/${randomPort2}/g" -e "s/8443/${randomPort3}/g" \
+        ${CATALINA_HOME}/conf/server.xml
+    $SU - $TOMCAT_USER -c "${CATALINA_HOME}/bin/gwtomcat_tools.sh" || RETVAL="4"
+    $SU - $TOMCAT_USER -c "$CATALINA_HOME/bin/startup.sh -Dprocessname=${NAME}" || RETVAL="4"
+    PID=`ps -eaf|grep processname=${NAME}|grep -v grep|awk '{print $2}'`
+    RETVAL=$?
+    if [ "$RETVAL" -eq "0" ]; then
+        success
+	echo
+        echo "${PID}" > ${CATALINA_PID}
+        touch /var/lock/subsys/${NAME}
+    else
+        echo -n "Error code ${RETVAL}"
+        echo
+        failure
+    fi
+}
+
+function stop() {
+    #check to see if pid file is good. We only want to stop tomcat8 if 
+    #we started it from this init script
+    running_pid=`pidofproc -p ${CATALINA_PID} ${NAME}`
+    if [ -f /var/run/${NAME}.pid ]; then
+        read kpid junk< /var/run/${NAME}.pid
+        if [ -z "$kpid" ]; then
+            echo -n "PID file empty"
+            rm -f /var/lock/subsys/${NAME} /var/run/${NAME}.pid
+            failure
+            echo
+            exit 4 
+        fi
+        if [ -z "$running_pid" ]; then
+            echo -n "no ${NAME} running, but pid file exists - cleaning up"
+            rm -f /var/lock/subsys/${NAME} /var/run/${NAME}.pid
+            success
+	    echo
+            exit 0
+        fi
+        if [ -z "$(echo ${kpid} | fgrep -x "${running_pid}")" ]; then
+            echo -n "PID file does not match pid of any running ${NAME}"
+            failure
+            echo
+            rm -f /var/lock/subsys/${NAME} /var/run/${NAME}.pid
+            exit 4
+        fi
+        #stop tomcat
+        echo -n "Stopping ${TOMCAT_PROG}: "
+        $SU - $TOMCAT_USER -c "$CATALINA_HOME/bin/shutdown.sh" || RETVAL="4"
+        if [ "$RETVAL" -eq "4" ]; then
+            sleep 1
+            if [ "$SHUTDOWN_VERBOSE" = "true" ]; then
+                echo "Failed to stop ${NAME} normally, sending a graceful kill."
+            fi
+            kill $kpid > /dev/null 2>&1
+            sleep 1
+        fi
+        #wait for tomcat to really shutdown
+        count=0
+        until [ "$(ps --pid $kpid | grep -c $kpid)" -eq "0" ] || \
+          [ "$count" -gt "$SHUTDOWN_WAIT" ]; do
+            if [ "$SHUTDOWN_VERBOSE" = "true" ]; then
+                echo "waiting for processes ${NAME} ($kpid) to exit"
+            fi
+            sleep 1
+            let count="${count}+1"
+        done
+        if [ "$count" -gt "$SHUTDOWN_WAIT" ]; then
+            if [ "$SHUTDOWN_VERBOSE" = "true" ]; then
+                echo -n "Failed to stop ${NAME} ($kpid) gracefully after $SHUTDOWN_WAIT seconds, sending SIGKILL."
+            fi
+            warning
+            echo
+            kill -9 $kpid
+            if [ "$SHUTDOWN_VERBOSE" = "true" ]; then
+                echo "Waiting for ${NAME} ($kpid) to exit."
+            fi
+            count=0
+            until [ "$(ps --pid $kpid | grep -c $kpid)" -eq "0" ] || \
+              [ "$count" -gt "$KILL_SLEEP_WAIT" ]; do
+                if [ "$SHUTDOWN_VERBOSE" = "true" ]; then
+                    echo "waiting for ${NAME} ($kpid) to exit. It could be in the UNINTERRUPTIBLE state"
+                fi
+                sleep 1
+                let count="${count}+1"
+            done
+        fi
+        #check to make sure tomcat is gone
+        if [ "$(ps --pid $kpid | grep -c $kpid)" -eq "0" ]; then
+            rm -f /var/lock/subsys/${NAME} /var/run/${NAME}.pid
+            RETVAL="0"
+            success
+            echo
+        else
+            echo -n "Unable to stop ${NAME} ($kpid)"
+            RETVAL="4"
+            failure
+            echo
+        fi
+    else
+        if [ -n "$running_pid" ]; then
+            echo -n "${NAME} running, but no pid file"
+            failure
+            echo
+            RETVAL="4"
+        else
+            success
+            echo
+        fi
+    fi
+    return $RETVAL
+}
+
+function usage()
+{
+   echo "Usage: $0 {start|stop|restart|status|version}"
+   RETVAL="2"
+}
+
+function rh_status()
+{
+    status -p /var/run/${NAME}.pid ${NAME}
+}
+
+function rh_status_q()
+{
+    rh_status >/dev/null 2>&1
+}
+
+# See how we were called.
+RETVAL="0"
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        if [ -s "/var/run/${NAME}.pid" ]; then
+            read kpid junk < /var/run/${NAME}.pid
+            if [ -d "/proc/${kpid}" ]; then
+                echo -n "${NAME} (pid ${kpid}) is running..."
+                success
+                echo
+                RETVAL="0"
+            else
+# The pid file exists but the process is not running
+                echo -n "PID file exists, but process is not running"
+                warning
+                echo
+                RETVAL="1"
+            fi
+        else
+            pid="$(/usr/bin/pgrep -d , -u ${TOMCAT_USER} -G ${TOMCAT_USER} java)"
+            if [ -z "$pid" ]; then
+                echo "${NAME} is stopped"
+                success
+                echo
+                RETVAL="3"
+            else
+                echo "${NAME} (pid $pid) is running, but PID file is missing"
+                success
+                echo
+                RETVAL="0"
+            fi
+        fi
+        ;;
+    version)
+        $SU - $TOMCAT_USER -c "$CATALINA_HOME/bin/version.sh"
+        ;;
+    *)
+      usage
+      ;;
+esac
+
+exit $RETVAL

@@ -70,7 +70,6 @@ public class CountResult implements
 			count = 0;
 		}
 		if ((result != null) && (result instanceof CountResult)) {
-			@SuppressWarnings("unchecked")
 			final CountResult cStats = (CountResult) result;
 			if (cStats.isSet()) {
 				count = count + cStats.count;

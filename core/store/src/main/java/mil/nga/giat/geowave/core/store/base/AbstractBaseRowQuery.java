@@ -12,7 +12,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderClosableWrapper;
-import mil.nga.giat.geowave.core.store.operations.ReaderParams;
 import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
 
 /**
@@ -27,13 +26,11 @@ abstract class AbstractBaseRowQuery<T> extends
 	protected final ScanCallback<T, ?> scanCallback;
 
 	public AbstractBaseRowQuery(
-			final BaseDataStore dataStore,
 			final PrimaryIndex index,
 			final String[] authorizations,
 			final ScanCallback<T, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
 		super(
-				dataStore,
 				index,
 				visibilityCounts,
 				authorizations);
@@ -44,33 +41,25 @@ abstract class AbstractBaseRowQuery<T> extends
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final AdapterStore adapterStore ) {
-		Reader reader = operations.createReader(new ReaderParams(
-				index,
-				adapterIds,
+			final AdapterStore adapterStore,
+			final Integer limit ) {
+		Reader reader = getReader(
+				operations,
+				options,
+				adapterStore,
 				maxResolutionSubsamplingPerDimension,
-				getAggregation(),
-				getFieldSubsets(),
-				isMixedVisibilityRows(),
-				isServerSideAggregation(options),
-				getRanges(),
-				getServerFilter(options),
-				getScannerLimit(),
-				getCoordinateRanges(),
-				getConstraints(),
-				getAdditionalAuthorizations()));
+				limit);
 		return new CloseableIteratorWrapper(
 				new ReaderClosableWrapper(
 						reader),
 				new NativeEntryIteratorWrapper(
-						dataStore,
 						adapterStore,
 						index,
 						reader,
 						getClientFilter(options),
 						scanCallback,
+						getFieldBitmask(),
+						maxResolutionSubsamplingPerDimension,
 						!isCommonIndexAggregation()));
 	}
-
-	abstract protected Integer getScannerLimit();
 }

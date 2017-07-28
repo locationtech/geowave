@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.cli.osm.osmfeature;
 
 import mil.nga.giat.geowave.cli.osm.osmfeature.FeatureConfigParser;
-import mil.nga.giat.geowave.cli.osm.osmfeature.types.features.FeatureDefinitionSet;
 
 import org.junit.Test;
 

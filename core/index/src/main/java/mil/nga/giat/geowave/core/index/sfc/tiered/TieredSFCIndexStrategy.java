@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -25,38 +25,34 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableBiMap.Builder;
-import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.CoordinateRange;
-import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.RangeDecomposition;
 import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
 import mil.nga.giat.geowave.core.index.sfc.binned.BinnedSFCUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 /**
  * This class uses multiple SpaceFillingCurve objects, one per tier, to
@@ -75,7 +71,7 @@ public class TieredSFCIndexStrategy implements
 	private long maxEstimatedDuplicateIdsPerDimension;
 	private final Map<Integer, BigInteger> maxEstimatedDuplicatesPerDimensionalExtent = new HashMap<>();
 
-	protected TieredSFCIndexStrategy() {}
+	public TieredSFCIndexStrategy() {}
 
 	/**
 	 * Constructor used to create a Tiered Index Strategy.
@@ -369,11 +365,11 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	public boolean tierExists(
-			Byte tierId ) {
+			final Byte tierId ) {
 		return orderedSfcIndexToTierId.containsValue(tierId);
 	}
 
-	synchronized private List<ByteArrayId> getRowIds(
+	synchronized private SinglePartitionInsertionIds getRowIds(
 			final BinnedNumericDataset index,
 			final BigInteger maxEstimatedDuplicateIds ) {
 		// most times this should be a single row ID, but if the lowest
@@ -412,13 +408,13 @@ public class TieredSFCIndexStrategy implements
 
 		final BigInteger rowCount = sfc.getEstimatedIdCount(index);
 
-		ByteArrayId singleId = BinnedSFCUtils.getSingleBinnedRowId(
+		final SinglePartitionInsertionIds singleId = BinnedSFCUtils.getSingleBinnedInsertionId(
 				rowCount,
 				tierId,
 				index,
 				sfc);
 		if (singleId != null) {
-			return Collections.singletonList(singleId);
+			return singleId;
 		}
 
 		if ((maxEstimatedDuplicateIds == null) || (rowCount.compareTo(maxEstimatedDuplicateIds) <= 0)
@@ -533,16 +529,12 @@ public class TieredSFCIndexStrategy implements
 		for (int i = 0; i < numSfcs; i++) {
 			final byte[] sfc = new byte[buf.getInt()];
 			buf.get(sfc);
-			orderedSfcs[i] = PersistenceUtils.fromBinary(
-					sfc,
-					SpaceFillingCurve.class);
+			orderedSfcs[i] = (SpaceFillingCurve) PersistenceUtils.fromBinary(sfc);
 		}
 		for (int i = 0; i < numDimensions; i++) {
 			final byte[] dim = new byte[buf.getInt()];
 			buf.get(dim);
-			baseDefinitions[i] = PersistenceUtils.fromBinary(
-					dim,
-					NumericDimensionDefinition.class);
+			baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
 		}
 		final Builder<Integer, Byte> bimapBuilder = ImmutableBiMap.builder();
 		for (int i = 0; i < mappingSize; i++) {
@@ -673,10 +665,10 @@ public class TieredSFCIndexStrategy implements
 		public void insertionIdsAdded(
 				final InsertionIds ids ) {
 			for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
-				final byte first = id.getBytes()[0];
+				final byte first = partitionIds.getPartitionKey().getBytes()[0];
 				if (orderedTierIdToSfcIndex.containsKey(first)) {
 					tierCounts[orderedTierIdToSfcIndex.get(
-							partitionIds.getPartitionKey().getBytes()[0]).intValue()] += partitionIds.getSortKeys().size();
+							first).intValue()] += partitionIds.getSortKeys().size();
 				}
 			}
 		}
@@ -685,10 +677,12 @@ public class TieredSFCIndexStrategy implements
 		public void insertionIdsRemoved(
 				final InsertionIds ids ) {
 			for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
-				final byte first = id.getBytes()[0];
+				final byte first = partitionIds.getPartitionKey().getBytes()[0];
 				if (orderedTierIdToSfcIndex.containsKey(first)) {
 					tierCounts[orderedTierIdToSfcIndex.get(
-							partitionIds.getPartitionKey().getBytes()[0]).intValue()] -= partitionIds.getSortKeys().size();
+							partitionIds.getPartitionKey().getBytes()[0]).intValue()] -= partitionIds
+							.getSortKeys()
+							.size();
 				}
 			}
 		}
@@ -700,7 +694,7 @@ public class TieredSFCIndexStrategy implements
 		@Override
 		public JSONObject toJSONObject()
 				throws JSONException {
-			JSONObject jo = new JSONObject();
+			final JSONObject jo = new JSONObject();
 			jo.put(
 					"type",
 					"TieredSFCIndexStrategy");
@@ -722,59 +716,23 @@ public class TieredSFCIndexStrategy implements
 
 			return jo;
 		}
-
 	}
 
 	@Override
 	public Set<ByteArrayId> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
-		return internalGetInsertionKeys(
+		return IndexUtils.getInsertionPartitionKeys(
 				this,
 				insertionData);
-	}
-
-	protected static Set<ByteArrayId> internalGetInsertionKeys(
-			final NumericIndexStrategy strategy,
-			final MultiDimensionalNumericData insertionData ) {
-		final InsertionIds insertionIds = strategy.getInsertionIds(insertionData);
-		return Sets.newHashSet(Collections2.transform(
-				insertionIds.getPartitionKeys(),
-				new Function<SinglePartitionInsertionIds, ByteArrayId>() {
-					@Override
-					public ByteArrayId apply(
-							@Nonnull
-							final SinglePartitionInsertionIds input ) {
-						return input.getPartitionKey();
-					}
-				}));
 	}
 
 	@Override
 	public Set<ByteArrayId> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
-		return internalGetQueryPartitionKeys(
+		return IndexUtils.getQueryPartitionKeys(
 				this,
 				queryData,
 				hints);
-	}
-
-	protected static Set<ByteArrayId> internalGetQueryPartitionKeys(
-			final NumericIndexStrategy strategy,
-			final MultiDimensionalNumericData queryData,
-			final IndexMetaData... hints ) {
-		final QueryRanges queryRanges = strategy.getQueryRanges(
-				queryData,
-				hints);
-		return Sets.newHashSet(Collections2.transform(
-				queryRanges.getPartitionQueryRanges(),
-				new Function<SinglePartitionQueryRanges, ByteArrayId>() {
-					@Override
-					public ByteArrayId apply(
-							@Nonnull
-							final SinglePartitionQueryRanges input ) {
-						return input.getPartitionKey();
-					}
-				}));
 	}
 }

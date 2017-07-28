@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.adapter.vector.export;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -27,6 +28,7 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "mrexport", parentOperation = VectorSection.class)
 @Parameters(commandDescription = "Export data using map-reduce")
@@ -35,7 +37,7 @@ public class VectorMRExportCommand extends
 		Command
 {
 
-	@Parameter(description = "<hdfs host:port> <path to base directory to write to> <store name>")
+	@Parameter(description = "<path to base directory to write to> <store name>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -54,21 +56,20 @@ public class VectorMRExportCommand extends
 	public VectorMRExportJobRunner createRunner(
 			OperationParams params ) {
 		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
+		if (parameters.size() != 2) {
 			throw new ParameterException(
-					"Requires arguments: <hdfs host:port> <path to base directory to write to> <store name>");
+					"Requires arguments: <path to base directory to write to> <store name>");
 		}
 
-		String hdfsHostPort = parameters.get(0);
-		String hdfsPath = parameters.get(1);
-		String storeName = parameters.get(2);
-
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
+		String hdfsPath = parameters.get(0);
+		String storeName = parameters.get(1);
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
+		Properties configProperties = ConfigOptions.loadProperties(
+				configFile,
+				null);
+		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		// Attempt to load store.
 		if (storeOptions == null) {
@@ -94,11 +95,9 @@ public class VectorMRExportCommand extends
 	}
 
 	public void setParameters(
-			String hdfsHostPort,
 			String hdfsPath,
 			String storeName ) {
 		this.parameters = new ArrayList<String>();
-		this.parameters.add(hdfsHostPort);
 		this.parameters.add(hdfsPath);
 		this.parameters.add(storeName);
 	}

@@ -66,7 +66,7 @@ import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 public class GeoWaveNNIT extends
 		AbstractGeoWaveIT
 {
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE

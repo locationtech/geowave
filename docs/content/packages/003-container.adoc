@@ -1,0 +1,206 @@
+[[packages-container]]
+<<<
+
+:linkattrs:
+
+++++
+<!-- Start Main Content Container -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-6 col-md-1">&nbsp;</div>
+            <div class="col-xs-6 col-md-10">
+
+                <!-- Start Tabs -->
+                <div role="tabpanel">
+                    <div class="tab-content" data-toggle="tab">
+                        <div role="tabpanel" class="tab-pane active" id="packages">
+                            <div class="page-header col-md-12">
+                                <h2> GeoWave Packages</h2>
+                                <p>
+                                    This site contains links to GeoWave jar files, RPM packaged versions of GeoWave and compressed 
+									archives (which include other content like service and logrotate scripts in addition to the source code). 
+									Individual files can be download or you can configure a host to install and keep updated with YUM 
+									using the commands below.
+                                </p>
+                                <br/>
+                                <h4>Configure a host to use GeoWave Release RPMs</h4>
+                        <pre>
+						
+		rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
+		yum --enablerepo=geowave search geowave-$VERSION-$VENDOR (example: geowave-${project.version}-apache)
+                        </pre>
+                                <br/>
+								<h4>Configure a host to use GeoWave Development RPMs</h4>
+                        <pre>
+						
+		rpm -Uvh http://s3.amazonaws.com/geowave-rpms/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm
+		yum --enablerepo=geowave-dev search geowave-$VERSION-$VENDOR (example: geowave-${project.version}-apache)
+                        </pre>
+                                <br/>
+                                <p>
+								<div class="row">
+									<div class="col-lg-6">
+										<h4>Packages/RPMs Available</h4>
+										<ul class="package-listing">
+											<li>
+												<b>geowave-*-accumulo</b><br/>
+												This package installs the Accumulo components of GeoWave
+											</li>
+											<li>
+												<b>geowave-*-hbase</b><br/>
+												This package installs the HBase components of GeoWave
+											</li>
+											<li>
+												<b>geowave-*-core</b><br/>
+												This package installs the GeoWave home directory and user account
+											</li>
+											<li>
+												<b>geowave-*-docs</b><br/>
+												This package installs the GeoWave documentation
+											</li>
+											<li>
+												<b>geowave-*-tools</b><br/>
+												This package installs the GeoWave command line tools (ingest, stats etc.)
+											</li>
+											<li>
+												<b>geowave-*-jetty</b><br/>
+												This package installs the web application server
+											</li>
+											<li>
+												<b>geowave-*-puppet</b><br/>
+												This package installs the GeoWave Puppet module into /etc/puppet/modules on a Puppet Server
+											</li>
+											<li>
+												<b>geowave-*-single-host</b><br/>
+												This package installs all the components on a single host and will likely be useful for dev environments
+											</li>
+											<li>
+												<b>geowave-*.src.rpm</b><br/>
+												The source RPM file that contains definitions for all the component RPMs listed above
+											</li>
+											<li>
+												<b>geowave-$TIME_TAG.tar.gz</b><br/>
+												All of the prebuilt component jars and other artifacts that are common to all vendors packaged into a compressed archive instead of an RPM format
+											</li>
+											<li>
+												<b>geowave-$TIME_TAG-$VENDOR.tar.gz</b><br/>
+												All of the prebuilt component jars and other artifacts that are vendor-specific packaged into a compressed archive instead of an RPM format
+											</li>
+											<li>
+												<b>geowave-repo</b><br/>
+												This package will install the GeoWave RPM repo config file into /etc/yum.repos.d
+											</li>
+											<li>
+												<b>geowave-repo-dev</b><br/>
+												This package will install the GeoWave Development RPM repo config file into /etc/yum.repos.d
+											</li>
+										</ul>
+									</div>
+									<div class="col-lg-6">
+										<h4>JARs Available</h4>
+										<ul class="jar-listing">
+											<li>
+												<b>geowave-*-tools.jar</b><br/>
+												Tools jar used for GeoWave CLI commands
+											</li>
+											<li>
+												<b>geowave-*-accumulo-singlejar.jar</b><br/>
+												Accumulo datastore jar to be placed in HDFS
+											</li>
+											<li>
+												<b>geowave-*-hbase-singlejar.jar</b><br/>
+												HBase datastore jar to be placed in HDFS
+											</li>
+											<li>
+												<b>geowave-*-geoserver-singlejar.jar</b><br/>
+												GeoServer jar, added to the geoserver WEB-INF/lib to add GeoWave as a GeoServer plugin
+											</li>
+										</ul>
+									</div>
+								</div>
+                                </p>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="release">
+                            <div class="page-header col-md-12">
+                                <h3>Release Packages/RPMs</h3>
+                                <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
+                                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                                </p>
+                                <p>
+                                    These are stable releases and are the recommended option to use for your deployment. There
+                                    are RPMs, SRPMs and .tar.gz archives included in the list, use the search to filter.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="file-listing display compact" cellspacing="0" width="100%">
+                                        <thead><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead>
+                                    </table>
+                                </div>
+                                <div class="timestamp"></div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="dev">
+                            <div class="page-header col-md-12">
+                                <h3>Development Packages/RPMs</h3>
+                                <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
+                                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                                </p>
+                                <p>
+                                    These are built for every commit that passes automated tests. There
+                                    are RPMs, SRPMs and .tar.gz archives included in the list, use the search to filter.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="file-listing display compact" cellspacing="0" width="100%">
+                                        <thead><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead>
+                                    </table>
+                                </div>
+                                <div class="timestamp"></div>
+                            </div>
+                        </div>
+						<div role="tabpanel" class="tab-pane" id="release-jars">
+                            <div class="page-header col-md-12">
+                                <h3>Release JARs</h3>
+                                <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
+                                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                                </p>
+                                <p>
+                                    These are stable releases and are the recommended option to use for your deployment.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="file-listing display compact" cellspacing="0" width="100%">
+                                        <thead><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead>
+                                    </table>
+                                </div>
+                                <div class="timestamp"></div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="dev-jars">
+                            <div class="page-header col-md-12">
+                                <h3>Development JARs</h3>
+                                <p class="refresh"><a href="#" class="btn btn-xs btn-default" role="button">
+                                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                                </p>
+                                <p>
+                                    These are built for every commit that passes automated tests.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="file-listing display compact" cellspacing="0" width="100%">
+                                        <thead><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead>
+                                    </table>
+                                </div>
+                                <div class="timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Tabs -->
+
+            </div>
+            <div class="col-xs-6 col-md-1">&nbsp;</div>
+        </div>
+    </div>
+    <!-- End Content Container -->
+++++
+
+
+

@@ -1,0 +1,50 @@
+[[index-scripts]]
+<<<
+
+:linkattrs:
+
+++++
+<script>
+$( document ).ready(function() {
+		/* NOTE :: The first release version will be denoted with '(Current)' appended to the version label */
+		var releases = [ "0.9.6", "0.9.5", "0.9.4.1", "0.9.4", "0.9.3" ];
+
+		var mainDocs = { 
+				"userguide.html"		: "User Guide", 
+				"devguide.html"		: "Developer Guide", 
+				"commands.html"		: "CLI Commands", 
+				"quickstart.html"	: "Quickstart Guide"
+		};
+
+		/* Populate Documentation --> Releases Tab */
+		var releasesTab = $('#releases_submenu');
+		var menu = $('<ul/>').addClass('dropdown-menu').appendTo(releasesTab);
+
+		jQuery.each( releases, function( index, value ) {
+			var li = $('<li/>').addClass('dropdown-submenu').appendTo(menu);
+			var a = $('<a/>').addClass('dropdown-toggle').attr('href', '#').attr('data-toggle','dropdown').text(value).appendTo(li);
+			if ( index == 0 ) {
+				a.text(a.text() + " (Current)");
+				/* add a divider line to separate the current version from the other versions */
+				$('<li/>').addClass('divider').appendTo(menu);
+			}
+
+			var subList = $('<ul/>').addClass('dropdown-menu').appendTo(li);
+			$.each( mainDocs, function( filename, label ) {
+				$('<a/>').attr('href', "http://s3.amazonaws.com/geowave/" + value +"/docs/" + filename).text(label).appendTo($('<li/>').appendTo(subList));
+			});
+		});
+		
+		/* add a divider line to separate the archive link from the release versions */
+		$('<li/>').addClass('divider').appendTo(menu);
+		$('<a/>').attr('href', "documentation-archives.html").text('Archive').appendTo($('<li/>').appendTo(menu));
+	});
+</script>
+++++
+
+++++
+</body>
+</html>
+++++
+
+

@@ -24,7 +24,6 @@ class BaseInsertionIdQuery<T> extends
 	private final QueryRanges ranges;
 
 	public BaseInsertionIdQuery(
-			final BaseDataStore dataStore,
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final InsertionIdQuery query,
@@ -33,7 +32,6 @@ class BaseInsertionIdQuery<T> extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
-				dataStore,
 				Collections.<ByteArrayId> singletonList(adapter.getAdapterId()),
 				index,
 				query,

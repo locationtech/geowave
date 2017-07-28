@@ -44,7 +44,7 @@ public class FeatureFixedBinNumericStatistics extends
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FEATURE_FIXED_BIN_NUMERIC_HISTOGRAM");
 
-	protected FeatureFixedBinNumericStatistics() {
+	public FeatureFixedBinNumericStatistics() {
 		super();
 	}
 

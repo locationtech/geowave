@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest;
 
+import java.net.URL;
 import java.util.Collection;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -32,7 +33,7 @@ public interface IngestPluginBase<I, O> extends
 	 * Convert from an expected input format to a data format that can be
 	 * directly ingested into GeoWave
 	 * 
-	 * @param input
+	 * @param file
 	 *            The expected input.
 	 * @param primaryIndexIds
 	 *            The set of index IDs specified via a commandline argument

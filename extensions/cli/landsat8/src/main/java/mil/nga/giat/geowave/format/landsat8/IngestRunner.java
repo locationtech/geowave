@@ -39,8 +39,8 @@ public class IngestRunner extends
 		RasterIngestRunner
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(IngestRunner.class);
-	private IndexWriter bandWriter;
-	private IndexWriter sceneWriter;
+	private IndexWriter<SimpleFeature> bandWriter;
+	private IndexWriter<SimpleFeature> sceneWriter;
 	private final VectorOverrideCommandLineOptions vectorOverrideOptions;
 	private SimpleFeatureType sceneType;
 
@@ -58,6 +58,7 @@ public class IngestRunner extends
 		this.vectorOverrideOptions = vectorOverrideOptions;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void processParameters(
 			final OperationParams params )
@@ -70,6 +71,7 @@ public class IngestRunner extends
 		// Config file
 		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		if ((vectorOverrideOptions.getVectorStore() != null)
 				&& !vectorOverrideOptions.getVectorStore().trim().isEmpty()) {
 			String vectorStoreName = vectorOverrideOptions.getVectorStore();
@@ -131,14 +133,7 @@ public class IngestRunner extends
 	protected void nextBand(
 			final SimpleFeature band,
 			final AnalysisInfo analysisInfo ) {
-		try {
-			bandWriter.write(band);
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"Unable to write next band",
-					e);
-		}
+		bandWriter.write(band);
 		super.nextBand(
 				band,
 				analysisInfo);

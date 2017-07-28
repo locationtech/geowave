@@ -12,9 +12,9 @@ package mil.nga.giat.geowave.core.index.sfc;
 
 import java.nio.ByteBuffer;
 
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 
@@ -29,7 +29,7 @@ public class SFCDimensionDefinition implements
 	private int bitsOfPrecision;
 	private NumericDimensionDefinition dimensionDefinition;
 
-	protected SFCDimensionDefinition() {}
+	public SFCDimensionDefinition() {}
 
 	/**
 	 * @param dimensionDefinition
@@ -124,9 +124,7 @@ public class SFCDimensionDefinition implements
 		final byte[] dimensionBinary = new byte[bytes.length - 4];
 		bitsOfPrecision = buf.getInt();
 		buf.get(dimensionBinary);
-		dimensionDefinition = PersistenceUtils.fromBinary(
-				dimensionBinary,
-				NumericDimensionDefinition.class);
+		dimensionDefinition = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dimensionBinary);
 	}
 
 	@Override

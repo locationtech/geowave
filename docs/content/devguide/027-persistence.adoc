@@ -1,0 +1,37 @@
+[[architecture-persistence]]
+<<<
+=== Persistence
+Three things are required to load data into a working accumulo cluster: an index, feature type, and supported source format.
+
+:linkattrs:
+
+==== Source Formats
+Leveraging the GeoTools infrastructure, GeoWave supports ingesting any DataSource that GeoTools supports.  Currently supported data types include:
+
+* arcgrid
+* arcsde
+* db2
+* raster formats
+** geotiff
+** grassraster
+** gtopo30
+** imageio-ext-gdal
+** imagemoasaic
+** imagepyramid
+** JP2K
+* Database “jdgc-ng” support
+** h2
+** mysql
+** oracle
+** postgis
+** spatialite
+** sqlserver
+* postgis
+* property file
+* shapefile
+* dfs
+* edigeo
+* geojson
+* wfs
+
+For a current list of supported formats, refer to the link:http://docs.geotools.org/stable/userguide/faq.html["GeoTools User Guide", window="_blank"]. Reference the version of GeoTools that GeoWave was built against (currently 18.1).

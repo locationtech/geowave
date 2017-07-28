@@ -20,6 +20,7 @@ import java.net.URLClassLoader;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.data.field.FieldSerializationProviderSpi;
 
 import org.apache.commons.vfs2.CacheStrategy;
@@ -37,6 +38,7 @@ public class SPIServiceRegistryTest
 
 	@Test
 	public void test()
+			// HPFortify FP: unit test not subject to security vulnerability
 			throws FileSystemException,
 			MalformedURLException {
 		DefaultFileSystemManager fsManager = new DefaultFileSystemManager();

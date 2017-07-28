@@ -50,7 +50,7 @@ public class FeatureNumericHistogramStatistics extends
 			14)) - 1;
 	private final double minValue = -(maxValue);
 
-	protected FeatureNumericHistogramStatistics() {
+	public FeatureNumericHistogramStatistics() {
 		super();
 	}
 

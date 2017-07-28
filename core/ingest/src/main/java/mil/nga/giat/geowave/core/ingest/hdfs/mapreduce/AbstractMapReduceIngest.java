@@ -24,8 +24,8 @@ import org.apache.hadoop.util.Tool;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -118,8 +118,10 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				conf,
 				getJobName());
 		final StringBuilder indexIds = new StringBuilder();
+		final List<PrimaryIndex> indexes = new ArrayList<PrimaryIndex>();
 		for (final IndexPluginOptions indexOption : indexOptions) {
 			final PrimaryIndex primaryIndex = indexOption.createPrimaryIndex();
+			indexes.add(primaryIndex);
 			if (primaryIndex != null) {
 				// add index
 				GeoWaveOutputFormat.addIndex(
@@ -154,8 +156,10 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
 				dataStoreOptions);
+		PrimaryIndex[] indexesArray = new PrimaryIndex[indexes.size()];
 		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
 		for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
+			dataAdapter.init(indexes.toArray(indexesArray));
 			GeoWaveOutputFormat.addDataAdapter(
 					job.getConfiguration(),
 					dataAdapter);

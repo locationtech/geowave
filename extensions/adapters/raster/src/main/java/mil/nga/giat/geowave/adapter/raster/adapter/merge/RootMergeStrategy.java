@@ -33,8 +33,8 @@ import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 	public Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies = new HashMap<Integer, RasterTileMergeStrategy<T>>();
 	public Map<ByteArrayId, Integer> adapterIdToChildMergeStrategyKey = new HashMap<ByteArrayId, Integer>();
 
-	protected RootMergeStrategy() {}
+	public RootMergeStrategy() {}
 
 	public RootMergeStrategy(
 			final ByteArrayId adapterId,
@@ -374,9 +374,8 @@ public class RootMergeStrategy<T extends Persistable> implements
 			if (mergeStrategyBinary.length > 0) {
 				try {
 					buf.get(mergeStrategyBinary);
-					final RasterTileMergeStrategy mergeStrategy = PersistenceUtils.fromBinary(
-							mergeStrategyBinary,
-							RasterTileMergeStrategy.class);
+					final RasterTileMergeStrategy mergeStrategy = (RasterTileMergeStrategy) PersistenceUtils
+							.fromBinary(mergeStrategyBinary);
 					final int mergeStrategyKey = buf.getInt();
 					if (mergeStrategy != null) {
 						childMergeStrategies.put(

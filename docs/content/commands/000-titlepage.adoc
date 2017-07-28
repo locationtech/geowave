@@ -1,6 +1,8 @@
 [[commands-intro]]
 <<<
 
+:linkattrs:
+
 _v${project.version}_
 
 = GeoWave Command Line Controls image:geowave-icon-logo-cropped.png[width="28%"]
@@ -15,10 +17,10 @@ ifdef::backend-html5[]
 
 === icon:file-pdf-o[] https://s3.amazonaws.com/geowave/latest/docs/commands.pdf[PDF^]
 
-=== icon:file-code-o[] https://s3.amazonaws.com/geowave/latest/docs/apidocs/index.html[Javadoc]
+=== icon:file-code-o[] link:apidocs/index.html[Javadoc, window="_blank"]
 
 === icon:github[] https://github.com/locationtech/geowave[GitHub]
 
-=== icon:file-archive-o[] http://locationtech.github.io/geowave/packages.html[Packages]
+=== icon:file-archive-o[] link:packages.html[Packages]
 
 endif::backend-html5[]

@@ -1,0 +1,48 @@
+[[quickstart-guide-step-3]]
+<<<
+
+[[quickstart-guide-step-3]]
+*Step 3:*
+
+image::aws-gui-method-4.png[scaledwidth="100%",alt="select emr"]
+
+General Options
+
+- Cluster name
+ * Enter the desired name for your cluster
+ * Cluster names do not have to be unique
+- Logging
+ * Leave selected
+ * Click on the folder icon and select your bucket
+- Debugging
+ * Leave selected
+- Termination Protection
+ * Leave selected
+- Scale down behavior
+ * Leave at default: "Terminate at instance hour"
+- Tags
+ * Enter a tag name for your cluster
+ * This is completely optional, but may make it easier to search for your cluster later on
+
+Additional Options
+
+- EMRFS consistent view
+ * Leave unselected
+- Bootstrap Actions:
+ * Expand the Bootstrap Actions section
+ * Select Custom action from the Add bootstrap action drop down list
+ * Click the “Configure and add” button
+
+image::aws-gui-method-5.png[scaledwidth="100%",alt="select emr"]
+
+- Name
+ * Enter a name for the custom action
+ * This can be left as the default value of “Custom action”
+- Script location
+ * Enter the location of your desired bootstrap script
+ * Info on the bootstrap scripts and their locations can be found <<007-quickstart-guide-scripts.adoc#bootstrap-scripts, above>>
+ * If you are using your own bucket to host the bootstrap script you can click on the folder icon to bring up a 
+   list of your available buckets and chose a script from there. Otherwise, type in the path to the script in the geowave bucket.
+- Click the “Add” button
+
+--- +

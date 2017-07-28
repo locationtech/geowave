@@ -1,0 +1,69 @@
+[[packaging-code]]
+<<<
+
+:linkattrs:
+
+=== Packaging the Source
+
+This section is intended to outline how to package the various GeoWave builds into deployable jar files.
+
+[[packaging-tools]]
+==== Packaging CLI Tools Framework
+
+When the GeoWave code is ready for packaging and deployment, the code can be easily packaged up using Maven by running the command below from the GeoWave home directory:
+
+[source, bash]
+----
+$ mvn package -P geowave-tools-singlejar <1>
+----
+<1> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
+
+This process will take a minute or two to build.
+
+Once the packaging process has completed, the _geowave-tools_ jar is now packaged in the deploy/target directory.
+
+When packaged for installation, there will be a wrapper alias command named 'geowave' that will be installed in $PATH.
+
+In a development environment where this script has not been installed, a directory containing the tools jar can be created with any needed plugin jars and used with something like the following command:
+
+[source, bash]
+----
+java -cp "$DIR/* <operation> <options>
+----
+Alternatively, if operating in an *nix-based environment, adding the command as an alias to the user profile can be performed by following these steps:
+
+. Open the user account profile script for editing.
++
+[source, bash]
+----
+$ vi ~/.profile         [Press Enter]
+----
+
+. Add an alias to the profile for geowave. The alias will be structured similar to that below.
++
+[source]
+----
+alias geowave="java -cp $GEOWAVE_HOME/deploy/target/geowave-deploy-${project.version}-tools.jar mil.nga.giat.geowave.core.cli.GeoWaveMain"
+----
++
+[NOTE]
+====
+Replace $GEOWAVE_HOME with the value of the GeoWave home directory or create an environment variable for that name and value.
+====
+
+. Save and close editor.
++
+[source]
+----
+:q!                     [Press Enter]
+----
+
+. Update profile in current environment.
++
+[source, bash]
+----
+$ source ~/.profile     [Press Enter]
+----
+
+At this point, you can now run GeoWave Command Line Instructions. For a full list of these commands, please see the link:commands.html[GeoWave CLI Appendix, window="_blank"].
+

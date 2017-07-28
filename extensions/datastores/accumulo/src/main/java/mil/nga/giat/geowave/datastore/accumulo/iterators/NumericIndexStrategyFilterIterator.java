@@ -25,12 +25,13 @@ import org.apache.hadoop.io.Text;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class NumericIndexStrategyFilterIterator implements
 		SortedKeyValueIterator<Key, Value>
@@ -65,9 +66,7 @@ public class NumericIndexStrategyFilterIterator implements
 			if (options.containsKey(INDEX_STRATEGY_KEY)) {
 				final String idxStrategyStr = options.get(INDEX_STRATEGY_KEY);
 				final byte[] idxStrategyBytes = ByteArrayUtils.byteArrayFromString(idxStrategyStr);
-				indexStrategy = PersistenceUtils.fromBinary(
-						idxStrategyBytes,
-						NumericIndexStrategy.class);
+				indexStrategy = (NumericIndexStrategy) AccumuloUtils.fromBinary(idxStrategyBytes);
 				partitionKeyLength = indexStrategy.getPartitionKeyLength();
 			}
 			else {

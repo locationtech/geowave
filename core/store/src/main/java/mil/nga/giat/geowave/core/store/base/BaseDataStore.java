@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
@@ -33,13 +34,13 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
@@ -48,6 +49,7 @@ import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
+import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
@@ -56,7 +58,6 @@ import mil.nga.giat.geowave.core.store.index.writer.IndexCompositeWriter;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Deleter;
-import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.InsertionIdQuery;
 import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
@@ -115,6 +116,7 @@ public class BaseDataStore implements
 			final WritableDataAdapter<T> adapter,
 			final PrimaryIndex... indices )
 			throws MismatchedIndexToAdapterMapping {
+		adapter.init(indices);
 		store(adapter);
 
 		indexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(
@@ -176,6 +178,7 @@ public class BaseDataStore implements
 
 	}
 
+	@Override
 	public <T> CloseableIterator<T> query(
 			final QueryOptions queryOptions,
 			final Query query ) {
@@ -199,7 +202,7 @@ public class BaseDataStore implements
 	protected <T> CloseableIterator<T> internalQuery(
 			final QueryOptions queryOptions,
 			final Query query,
-			boolean delete ) {
+			final boolean delete ) {
 		final List<CloseableIterator<Object>> results = new ArrayList<CloseableIterator<Object>>();
 		// all queries will use the same instance of the dedupe filter for
 		// client side filtering because the filter needs to be applied across
@@ -209,7 +212,7 @@ public class BaseDataStore implements
 
 		final DedupeFilter filter = new DedupeFilter();
 		MemoryAdapterStore tempAdapterStore;
-		List<DataStoreCallbackManager> deleteCallbacks = new ArrayList<>();
+		final List<DataStoreCallbackManager> deleteCallbacks = new ArrayList<>();
 
 		try {
 			tempAdapterStore = new MemoryAdapterStore(
@@ -230,25 +233,25 @@ public class BaseDataStore implements
 								secondaryIndexDataStore,
 								queriedAdapters.add(adapter.getAdapterId()));
 						deleteCallbacks.add(callbackCache);
-						ScanCallback callback = queryOptions.getScanCallback();
+						final ScanCallback callback = queryOptions.getScanCallback();
 
 						final PrimaryIndex index = indexAdapterPair.getLeft();
-						queryOptions.setScanCallback(new ScanCallback<Object>() {
+						queryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
 
 							@Override
 							public void entryScanned(
-									DataStoreEntryInfo entryInfo,
-									Object entry ) {
+									final Object entry,
+									final GeoWaveRow row ) {
 								if (callback != null) {
 									callback.entryScanned(
-											entryInfo,
-											entry);
+											entry,
+											row);
 								}
 								callbackCache.getDeleteCallback(
 										(WritableDataAdapter<Object>) adapter,
 										index).entryDeleted(
-										entryInfo,
-										entry);
+										entry,
+										row);
 							}
 						});
 					}
@@ -306,7 +309,7 @@ public class BaseDataStore implements
 						for (final CloseableIterator<Object> result : results) {
 							result.close();
 						}
-						for (DataStoreCallbackManager c : deleteCallbacks) {
+						for (final DataStoreCallbackManager c : deleteCallbacks) {
 							c.close();
 						}
 					}
@@ -474,6 +477,7 @@ public class BaseDataStore implements
 						e);
 			}
 		}
+	}
 
 	protected boolean deleteEverything() {
 		try {
@@ -502,16 +506,9 @@ public class BaseDataStore implements
 			throws IOException {
 		final String altIdxTableName = index.getId().getString() + ALT_INDEX_TABLE;
 
-		try (final CloseableIterator<DataStatistics<?>> it = statisticsStore.getDataStatistics(adapter.getAdapterId())) {
-
-			while (it.hasNext()) {
-				final DataStatistics<?> stats = it.next();
-				statisticsStore.removeStatistics(
-						adapter.getAdapterId(),
-						stats.getStatisticsId(),
-						additionalAuthorizations);
-			}
-		}
+		statisticsStore.removeAllStatistics(
+				adapter.getAdapterId(),
+				additionalAuthorizations);
 
 		// cannot delete because authorizations are not used
 		// this.indexMappingStore.remove(adapter.getAdapterId());
@@ -541,32 +538,15 @@ public class BaseDataStore implements
 
 	}
 
-	protected CloseableIterator<Object> getEntryRows(
-			final PrimaryIndex index,
-			final AdapterStore tempAdapterStore,
-			final List<ByteArrayId> dataIds,
-			final DataAdapter<?> adapter,
-			final DedupeFilter dedupeFilter,
-			final QueryOptions queryOptions) {
-		return queryConstraints(
-				Collections.singletonList(adapter.getAdapterId()),
-				index,
-				new DataIdQuery(
-						dataIds),
-				dedupeFilter,
-				queryOptions,
-				tempAdapterStore);
-	}
-
 	protected CloseableIterator<Object> queryConstraints(
 			final List<ByteArrayId> adapterIdsToQuery,
 			final PrimaryIndex index,
 			final Query sanitizedQuery,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
 		final BaseConstraintsQuery constraintsQuery = new BaseConstraintsQuery(
-				this,
 				adapterIdsToQuery,
 				index,
 				sanitizedQuery,
@@ -605,14 +585,13 @@ public class BaseDataStore implements
 			final ByteArrayId sortPrefix,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			final List<ByteArrayId> adapterIdsToQuery ) {
+			final List<ByteArrayId> adapterIdsToQuery,
+			boolean delete ) {
 		final BaseRowPrefixQuery<Object> prefixQuery = new BaseRowPrefixQuery<Object>(
-				this,
 				index,
 				partitionKey,
 				sortPrefix,
 				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
-				sanitizedQueryOptions.getLimit(),
 				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
 						adapterIdsToQuery,
@@ -624,7 +603,8 @@ public class BaseDataStore implements
 				baseOperations,
 				baseOptions,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-				tempAdapterStore);
+				tempAdapterStore,
+				sanitizedQueryOptions.getLimit());
 
 	}
 
@@ -634,7 +614,8 @@ public class BaseDataStore implements
 			final InsertionIdQuery query,
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore ) {
+			final AdapterStore tempAdapterStore,
+			boolean delete ) {
 		final DifferingFieldVisibilityEntryCount visibilityCounts = DifferingFieldVisibilityEntryCount
 				.getVisibilityCounts(
 						index,
@@ -643,7 +624,6 @@ public class BaseDataStore implements
 						sanitizedQueryOptions.getAuthorizations());
 
 		final BaseInsertionIdQuery<Object> q = new BaseInsertionIdQuery<Object>(
-				this,
 				adapter,
 				index,
 				query,
@@ -651,7 +631,6 @@ public class BaseDataStore implements
 				filter,
 				visibilityCounts,
 				sanitizedQueryOptions.getAuthorizations());
-
 		return q.query(
 				baseOperations,
 				baseOptions,
@@ -694,7 +673,7 @@ public class BaseDataStore implements
 		}
 		catch (final Exception e) {
 			LOGGER.error(
-					"Unable to create table table for alt index to  [" + indexName + "]",
+					"Unable to create table for alt index to  [" + indexName + "]",
 					e);
 		}
 	}
@@ -723,6 +702,10 @@ public class BaseDataStore implements
 			try {
 				if (baseOperations.indexExists(new ByteArrayId(
 						indexName))) {
+					// TODO GEOWAVE-1018 the secondaryIndexDataStore isn't
+					// really implemented fully, so this warning will likely
+					// occur because there really is no "alt index" without
+					// secondary indexing
 					if (!baseOperations.indexExists(new ByteArrayId(
 							altIdxTableName))) {
 						throw new IllegalArgumentException(

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
@@ -63,9 +63,7 @@ public class OldMemoryAdapterIndexMappingStore implements
 			final byte[] data = (byte[]) in.readObject();
 			toIndexMapping.put(
 					id,
-					PersistenceUtils.fromBinary(
-							data,
-							AdapterToIndexMapping.class));
+					(AdapterToIndexMapping) PersistenceUtils.fromBinary(data));
 		}
 	}
 

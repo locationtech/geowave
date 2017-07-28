@@ -23,7 +23,7 @@ public class DataIdQueryFilter implements
 {
 	private List<ByteArrayId> dataIds;
 
-	protected DataIdQueryFilter() {}
+	public DataIdQueryFilter() {}
 
 	public DataIdQueryFilter(
 			final List<ByteArrayId> dataIds ) {
@@ -68,5 +68,4 @@ public class DataIdQueryFilter implements
 					dataIdBytes));
 		}
 	}
-
 }

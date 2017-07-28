@@ -193,7 +193,7 @@ public class ConfigOptions
 			// to be explicitly disabled
 			if (Boolean.parseBoolean(properties.getProperty(
 					Constants.ENCRYPTION_ENABLED_KEY,
-					"true"))) {
+					Constants.ENCRYPTION_ENABLED_DEFAULT))) {
 				// check if any values exist that need to be encrypted before
 				// written to properties
 				if (clazz != null) {
@@ -238,6 +238,7 @@ public class ConfigOptions
 			try (FileOutputStream str = new FileOutputStream(
 					configFile)) {
 				tmp.store(
+						// HPFortify FP: passwords are stored encrypted
 						str,
 						null);
 			}
@@ -283,64 +284,64 @@ public class ConfigOptions
 			final File configFile,
 			final String pattern ) {
 
-		Pattern p = null;
-		if (pattern != null) {
-			p = Pattern.compile(pattern);
-		}
-
 		// Load the properties file.
 		final Properties properties = new Properties();
-		InputStream is = null;
-		try {
-			if (p != null) {
-				try (FileInputStream input = new FileInputStream(
-						configFile); Scanner s = new Scanner(
-						input,
-						CHARSET)) {
-					final ByteArrayOutputStream out = new ByteArrayOutputStream();
-					final PrintWriter writer = new PrintWriter(
-							new OutputStreamWriter(
-									out,
-									CHARSET));
-					while (s.hasNext()) {
-						final String line = s.nextLine();
-						if (p.matcher(
-								line).find()) {
-							writer.println(line);
+		if (configFile.exists()) {
+			Pattern p = null;
+			if (pattern != null) {
+				p = Pattern.compile(pattern);
+			}
+			InputStream is = null;
+			try {
+				if (p != null) {
+					try (FileInputStream input = new FileInputStream(
+							configFile); Scanner s = new Scanner(
+							input,
+							CHARSET)) {
+						final ByteArrayOutputStream out = new ByteArrayOutputStream();
+						final PrintWriter writer = new PrintWriter(
+								new OutputStreamWriter(
+										out,
+										CHARSET));
+						while (s.hasNext()) {
+							final String line = s.nextLine();
+							if (p.matcher(
+									line).find()) {
+								writer.println(line);
+							}
 						}
+						writer.flush();
+						is = new ByteArrayInputStream(
+								out.toByteArray());
 					}
-					writer.flush();
-					is = new ByteArrayInputStream(
-							out.toByteArray());
 				}
-			}
-			else {
-				is = new FileInputStream(
-						configFile);
-			}
-
-			properties.load(is);
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Could not find property cache file: " + configFile,
-					e);
-
-			return null;
-		}
-		finally {
-			if (is != null) {
-				try {
-					is.close();
+				else {
+					is = new FileInputStream(
+							configFile);
 				}
-				catch (IOException e) {
-					LOGGER.error(
-							e.getMessage(),
-							e);
+
+				properties.load(is);
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Could not find property cache file: " + configFile,
+						e);
+
+				return null;
+			}
+			finally {
+				if (is != null) {
+					try {
+						is.close();
+					}
+					catch (IOException e) {
+						LOGGER.error(
+								e.getMessage(),
+								e);
+					}
 				}
 			}
 		}
-
 		return properties;
 	}
 

@@ -23,7 +23,7 @@ public class PrefixIdQueryFilter implements
 	private byte[] partitionKey;
 	private byte[] sortKeyPrefix;
 
-	protected PrefixIdQueryFilter() {}
+	public PrefixIdQueryFilter() {}
 
 	public PrefixIdQueryFilter(
 			final ByteArrayId partitionKey,
@@ -70,5 +70,4 @@ public class PrefixIdQueryFilter implements
 		sortKeyPrefix = new byte[buf.getInt()];
 		buf.get(sortKeyPrefix);
 	}
-
 }

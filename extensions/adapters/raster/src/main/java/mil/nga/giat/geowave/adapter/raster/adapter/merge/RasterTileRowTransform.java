@@ -18,8 +18,8 @@ import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 
 /**
@@ -56,9 +56,7 @@ public class RasterTileRowTransform<T extends Persistable> implements
 		final String mergeStrategyStr = options.get(MERGE_STRATEGY_KEY);
 		if (mergeStrategyStr != null) {
 			final byte[] mergeStrategyBytes = ByteArrayUtils.byteArrayFromString(mergeStrategyStr);
-			mergeStrategy = PersistenceUtils.fromBinary(
-					mergeStrategyBytes,
-					RootMergeStrategy.class);
+			mergeStrategy = (RootMergeStrategy<T>) PersistenceUtils.fromBinary(mergeStrategyBytes);
 		}
 	}
 
@@ -67,9 +65,7 @@ public class RasterTileRowTransform<T extends Persistable> implements
 			final ByteArrayId adapterId,
 			final ByteArrayId fieldId,
 			final byte[] rowValueBinary ) {
-		final RasterTile mergeable = PersistenceUtils.classFactory(
-				RasterTile.class.getName(),
-				RasterTile.class);
+		final RasterTile mergeable = new RasterTile();
 
 		if (mergeable != null) {
 			mergeable.fromBinary(rowValueBinary);

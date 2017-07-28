@@ -125,10 +125,11 @@ public class AdapterBasedPartitionerTest
 		opts.setGeowaveNamespace(namespace);
 		final PersistableStore store = new PersistableStore(
 				pluginOptions);
-
+		FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
+				ftype);
+		dataAdapter.init();
 		store.getDataStoreOptions().createAdapterStore().addAdapter(
-				new FeatureDataAdapter(
-						ftype));
+				dataAdapter);
 		((ParameterEnum<PersistableStore>) StoreParam.INPUT_STORE).getHelper().setValue(
 				configuration,
 				scope,

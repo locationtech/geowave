@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.format.geotools.raster;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.io.FilenameUtils;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
@@ -74,11 +76,11 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		AbstractGridFormat format = null;
 		try {
 			format = GridFormatFinder.findFormat(file);
@@ -95,12 +97,12 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 	}
 
 	private static AbstractGridFormat prioritizedFindFormat(
-			final File input ) {
+			final URL input ) {
 		final AbstractGridFormat format = null;
 		try {
 			final Set<AbstractGridFormat> formats = GridFormatFinder.findFormats(input);
 			if ((formats == null) || formats.isEmpty()) {
-				LOGGER.warn("Unable to support raster file " + input.getAbsolutePath());
+				LOGGER.warn("Unable to support raster file " + input.getPath());
 				return null;
 			}
 			// world image and geotiff can both open tif files, give
@@ -133,7 +135,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 
 	@Override
 	public CloseableIterator<GeoWaveData<GridCoverage>> toGeoWaveData(
-			final File input,
+			final URL input,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		final AbstractGridFormat format = prioritizedFindFormat(input);
@@ -195,7 +197,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 
 				if (optionProvider.isSeparateBands() && (coverage.getNumSampleDimensions() > 1)) {
 					final String baseName = optionProvider.getCoverageName() != null ? optionProvider.getCoverageName()
-							: input.getName();
+							: FilenameUtils.getName(input.getPath());
 					final double[][] nodata = optionProvider.getNodata(coverage.getNumSampleDimensions());
 					for (int b = 0; b < coverage.getNumSampleDimensions(); b++) {
 						final RasterDataAdapter adapter = new RasterDataAdapter(
@@ -221,7 +223,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 				else {
 					final RasterDataAdapter adapter = new RasterDataAdapter(
 							optionProvider.getCoverageName() != null ? optionProvider.getCoverageName()
-									: input.getName(),
+									: input.getPath(),
 							metadata,
 							coverage,
 							optionProvider.getTileSize(),
@@ -244,14 +246,14 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 				};
 			}
 			else {
-				LOGGER.warn("Null grid coverage from file '" + input.getAbsolutePath()
-						+ "' for discovered geotools format '" + format.getName() + "'");
+				LOGGER.warn("Null grid coverage from file '" + input.getPath() + "' for discovered geotools format '"
+						+ format.getName() + "'");
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to read grid coverage of file '" + input.getAbsolutePath()
-							+ "' for discovered geotools format '" + format.getName() + "'",
+					"Unable to read grid coverage of file '" + input.getPath() + "' for discovered geotools format '"
+							+ format.getName() + "'",
 					e);
 		}
 		return new Wrapper(

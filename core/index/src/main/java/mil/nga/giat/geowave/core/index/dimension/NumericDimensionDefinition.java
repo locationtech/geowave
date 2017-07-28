@@ -10,8 +10,8 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.index.dimension;
 
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 

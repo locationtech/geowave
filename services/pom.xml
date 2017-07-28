@@ -4,15 +4,15 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.5-SNAPSHOT</version>
+		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-service-parent</artifactId>
 	<name>GeoWave Services Parent POM</name>
 	<description>The set of services and clients provided for GeoWave</description>	
 	<packaging>pom</packaging>
 	<modules>
-		<module>api</module>
-		<module>client</module>
-		<module>webapp</module>
+		<module>rest</module>
+		<module>grpc/server</module>
+		<module>grpc/protobuf-shaded</module>
 	</modules>
 </project>

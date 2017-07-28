@@ -32,7 +32,8 @@ public abstract class StoreTestEnvironment implements
 			StoreFactoryOptions options );
 
 	public DataStorePluginOptions getDataStoreOptions(
-			final GeoWaveTestStore store ) {
+			final GeoWaveTestStore store,
+			final String[] profileOptions ) {
 		final DataStorePluginOptions pluginOptions = new TestDataStoreOptions(
 				getStoreType());
 		final GenericStoreFactory<DataStore> factory = getDataStoreFactory();
@@ -40,6 +41,7 @@ public abstract class StoreTestEnvironment implements
 		initOptions(opts);
 		opts.setGeowaveNamespace(store.namespace());
 		final Map<String, String> optionOverrides = new HashMap<>();
+
 		// now allow for overrides to take precedence
 		for (final String optionOverride : store.options()) {
 			if (optionOverride.contains("=")) {
@@ -49,6 +51,19 @@ public abstract class StoreTestEnvironment implements
 						kv[1]);
 			}
 		}
+
+		// and finally, apply maven profile options
+		if (profileOptions != null) {
+			for (final String optionOverride : profileOptions) {
+				if (optionOverride.contains("=")) {
+					final String[] kv = optionOverride.split("=");
+					optionOverrides.put(
+							kv[0],
+							kv[1]);
+				}
+			}
+		}
+
 		if (!optionOverrides.isEmpty()) {
 			opts = ConfigUtils.populateOptionsFromList(
 					opts,

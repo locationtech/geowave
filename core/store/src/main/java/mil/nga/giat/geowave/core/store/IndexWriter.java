@@ -28,13 +28,11 @@ public interface IndexWriter<T> extends
 	 * @throws IOException
 	 */
 	public InsertionIds write(
-			final T entry )
-			throws IOException;
+			final T entry );
 
 	public InsertionIds write(
 			final T entry,
-			final VisibilityWriter<T> fieldVisibilityWriter )
-			throws IOException;
+			final VisibilityWriter<T> fieldVisibilityWriter );
 
 	public PrimaryIndex[] getIndices();
 

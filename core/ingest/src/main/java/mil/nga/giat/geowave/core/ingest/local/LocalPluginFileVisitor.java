@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Path;
@@ -45,7 +46,7 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(LocalPluginFileVisitor.class);
 
-	private class PluginVisitor
+	public static class PluginVisitor<P extends LocalPluginBase>
 	{
 		private final Pattern pattern;
 		private final String typeName;
@@ -77,10 +78,22 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 			this.typeName = typeName;
 		}
 
+		public P getLocalPluginBase() {
+			return localPluginBase;
+		}
+
+		public Pattern getPattern() {
+			return pattern;
+		}
+
+		public String getTypeName() {
+			return typeName;
+		}
+
 		public boolean supportsFile(
-				final File file ) {
+				final URL file ) {
 			if ((pattern != null) && !pattern.matcher(
-					file.getName().toLowerCase(
+					file.getFile().toLowerCase(
 							Locale.ENGLISH)).matches()) {
 				return false;
 			}
@@ -92,7 +105,7 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 	}
 
 	private final AbstractLocalFileDriver<P, R> driver;
-	private final List<PluginVisitor> pluginVisitors;
+	private final List<PluginVisitor<P>> pluginVisitors;
 	private final R runData;
 
 	public LocalPluginFileVisitor(
@@ -100,10 +113,10 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 			final AbstractLocalFileDriver<P, R> driver,
 			final R runData,
 			final String[] userExtensions ) {
-		pluginVisitors = new ArrayList<PluginVisitor>(
+		pluginVisitors = new ArrayList<PluginVisitor<P>>(
 				localPlugins.size());
 		for (final Entry<String, P> localPluginBase : localPlugins.entrySet()) {
-			pluginVisitors.add(new PluginVisitor(
+			pluginVisitors.add(new PluginVisitor<P>(
 					localPluginBase.getValue(),
 					localPluginBase.getKey(),
 					userExtensions));
@@ -133,8 +146,8 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 			final Path path,
 			final BasicFileAttributes bfa )
 			throws IOException {
-		final File file = path.toFile();
-		for (final PluginVisitor visitor : pluginVisitors) {
+		final URL file = path.toUri().toURL();
+		for (final PluginVisitor<P> visitor : pluginVisitors) {
 			if (visitor.supportsFile(file)) {
 				driver.processFile(
 						file,

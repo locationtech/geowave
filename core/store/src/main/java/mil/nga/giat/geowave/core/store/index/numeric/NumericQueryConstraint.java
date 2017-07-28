@@ -100,8 +100,8 @@ public class NumericQueryConstraint implements
 	 *            constraints
 	 * @return new {@link FilterableConstraints}
 	 */
-	
-@Override
+
+	@Override
 	public FilterableConstraints intersect(
 			final FilterableConstraints other ) {
 		if ((other instanceof NumericQueryConstraint) && ((NumericQueryConstraint) other).fieldId.equals(fieldId)) {

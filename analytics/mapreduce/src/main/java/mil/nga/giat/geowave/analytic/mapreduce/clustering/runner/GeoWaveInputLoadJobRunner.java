@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -84,7 +85,8 @@ public class GeoWaveInputLoadJobRunner extends
 				OutputParameters.Output.INDEX_ID,
 				runTimeProperties.getPropertyAsString(
 						CentroidParameters.Centroid.INDEX_ID,
-						new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString()));
+						new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+								new SpatialOptions()).getId().getString()));
 		OutputParameters.Output.INDEX_ID.getHelper().setValue(
 				config,
 				getScope(),
@@ -104,6 +106,9 @@ public class GeoWaveInputLoadJobRunner extends
 				},
 				config,
 				getScope());
+		// HP Fortify "Command Injection" false positive
+		// What Fortify considers "externally-influenced input"
+		// comes only from users with OS-level access anyway
 		return super.run(
 				config,
 				runTimeProperties);

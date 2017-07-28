@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -121,7 +122,11 @@ public class ConvexHullJobRunner extends
 		checkIndex(
 				runTimeProperties,
 				HullParameters.Hull.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
+		// HP Fortify "Command Injection" false positive
+		// What Fortify considers "externally-influenced input"
+		// comes only from users with OS-level access anyway
 		return super.run(
 				config,
 				runTimeProperties);

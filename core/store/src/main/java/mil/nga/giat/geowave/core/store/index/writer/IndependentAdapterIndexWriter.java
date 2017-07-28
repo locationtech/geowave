@@ -44,8 +44,7 @@ public class IndependentAdapterIndexWriter<T> implements
 	@Override
 	public InsertionIds write(
 			final T entry,
-			final VisibilityWriter<T> feldVisibilityWriter )
-			throws IOException {
+			final VisibilityWriter<T> feldVisibilityWriter ) {
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);
@@ -69,8 +68,7 @@ public class IndependentAdapterIndexWriter<T> implements
 
 	@Override
 	public InsertionIds write(
-			T entry )
-			throws IOException {
+			T entry ) {
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);

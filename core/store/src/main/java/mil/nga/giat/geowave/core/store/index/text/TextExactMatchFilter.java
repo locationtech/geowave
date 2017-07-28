@@ -26,7 +26,7 @@ public class TextExactMatchFilter implements
 	private String matchValue;
 	private boolean caseSensitive;
 
-	protected TextExactMatchFilter() {
+	public TextExactMatchFilter() {
 		super();
 	}
 
@@ -60,9 +60,7 @@ public class TextExactMatchFilter implements
 				fieldId);
 		if (stringBytes != null) {
 			String value = stringBytes.getString();
-			value = caseSensitive ? value : value.toLowerCase();
-			final String normalizedMatchValue = caseSensitive ? matchValue : matchValue.toLowerCase();
-			return normalizedMatchValue.equals(value);
+			return caseSensitive ? matchValue.equals(value) : matchValue.equalsIgnoreCase(value);
 		}
 		return false;
 	}
@@ -93,5 +91,4 @@ public class TextExactMatchFilter implements
 		matchValue = StringUtils.stringFromBinary(matchValueBytes);
 		caseSensitive = (bb.getInt() == 1) ? true : false;
 	}
-
 }

@@ -1,0 +1,11 @@
+[[quickstart-guide-GUI]]
+<<<
+
+[[quickstart-guide-GUI]]
+=== AWS GUI Method
+
+Login to AWS and select EMR from the Services drop down menu.
+
+image::aws-gui-method-1.png[scaledwidth="100%",alt="select emr"]
+
+Select the “Create cluster” button in the top left side of the page. Once the Create Cluster application opens select the “Go to advanced options” link at the top of the page.

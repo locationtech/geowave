@@ -23,15 +23,16 @@ import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
-import mil.nga.giat.geowave.core.store.index.numeric.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy;
+
 /**
  * Class to manage secondary indexes for a Simple Feature Type. It keeps a list
  * of supported secondary indices associated with all the attributes attached to
@@ -46,8 +47,7 @@ public class SecondaryIndexManager implements
 	private transient SimpleFeatureType sft;
 	private transient StatsManager statsManager;
 
-	@Deprecated
-	protected SecondaryIndexManager() {}
+	public SecondaryIndexManager() {}
 
 	/**
 	 * Create a SecondaryIndexManager for the given DataAdapter and
@@ -153,7 +153,7 @@ public class SecondaryIndexManager implements
 						fieldId.getString());
 				statistics.add(stat);
 				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
-						new NumericIndexStrategy(),
+						new NumericFieldIndexStrategy(),
 						fieldId,
 						statistics,
 						secondaryIndexType,
@@ -222,7 +222,7 @@ public class SecondaryIndexManager implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final List<Persistable> persistables = PersistenceUtils.fromBinary(bytes);
+		final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(bytes);
 		for (final Persistable persistable : persistables) {
 			supportedSecondaryIndices.add((SecondaryIndex<SimpleFeature>) persistable);
 		}
@@ -235,5 +235,4 @@ public class SecondaryIndexManager implements
 	public StatsManager getStatsManager() {
 		return statsManager;
 	}
-
 }

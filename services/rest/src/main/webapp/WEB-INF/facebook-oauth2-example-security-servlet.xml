@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns:security="http://www.springframework.org/schema/security"
+		 xmlns:b="http://www.springframework.org/schema/beans"
+		 xmlns:aop="http://www.springframework.org/schema/aop"
+		 xmlns:context="http://www.springframework.org/schema/context"
+		 xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							 http://www.springframework.org/schema/aop 
+					         http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+							 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+							 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+							 http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd">
+	
+<!-- 
+	This security example is configured by default with oauth2 security (Facebook login in this case)
+	and also provides api key generation and protection for api end-points. 
+ -->
+	<context:property-placeholder location="classpath:/facebook-oauth2-example.properties" />
+
+	<security:http pattern="/api" security = "none"/>
+	<security:http pattern="/v0/**">
+		<security:intercept-url pattern="/v0/**" access="ROLE_ANONYMOUS"/>
+		<security:custom-filter ref="apiKeyFilter" before="PRE_AUTH_FILTER"/>
+		<security:http-basic />
+	</security:http>
+	<security:http entry-point-ref="authenticationEntryPoint">
+	    <security:form-login />
+	    <security:anonymous enabled="false"/>
+        <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"/>
+	    <security:custom-filter ref="oAuth2ClientContextFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
+        <security:custom-filter ref="oAuth2AuthenticationProcessingFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
+        <security:custom-filter ref="apiKeySetterFilter" position="LAST"/>
+  	</security:http>
+  	
+	<!-- default authentication for BASIC auth. The user service below may also be used
+	     to configure allowed users who are authenticating with another scheme besides OAuth2 -->
+	<security:authentication-manager>
+	  	<security:authentication-provider user-service-ref="defaultAdmin">         
+ 		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<security:user-service id="defaultAdmin">
+ 		<security:user name="geowave_username" password="geowave_password" authorities="ROLE_USER, ROLE_ADMIN" />
+	</security:user-service>
+	
+	<!-- The following three "apiKey" beans/filters are necessary for use-cases where the application
+		 needs to facilitate key generation and protecting calls to the api endpoints  -->
+	<b:bean id="apiKeyDB" class="mil.nga.giat.geowave.service.rest.security.GeoWaveSQLiteApiKeyDB" >
+		<b:constructor-arg index = "0" value = "ApiKeys.db"/>
+	</b:bean>
+	<b:bean id="apiKeyFilter" class="mil.nga.giat.geowave.service.rest.security.GeoWaveApiKeyFilter" />
+	<b:bean id="apiKeySetterFilter" class="mil.nga.giat.geowave.service.rest.security.GeoWaveApiKeySetterFilter" />
+	
+	<!-- Login entry point, unauthenticated users will be redirected here -->
+    <b:bean id="authenticationEntryPoint"  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    	<b:property name="loginFormUrl" value="/authLogin"/>
+    </b:bean>
+	
+	<!-- The oauth client context -->
+	<oauth:client id="oAuth2ClientContextFilter" /> 
+    
+	<!-- This filter intercepts the defaultFilterProcessesUrl and handles the redirect for OAuth2 login -->
+	<b:bean id="oAuth2AuthenticationProcessingFilter" class="org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter">
+        <b:constructor-arg name="defaultFilterProcessesUrl" value="/authLogin"/>
+        <b:property name="restTemplate" ref="oAuth2RestTemplate"/>
+        <b:property name="tokenServices" ref="oAuth2TokenServices"/>
+    </b:bean>
+    
+	<!-- 
+		Token services definition, depending on your auth provider (Facebook, Google, etc.)
+		you may end up having to write a custom token services class and a custom token converter class  
+	-->
+	<b:bean id="oAuth2TokenServices" class="mil.nga.giat.geowave.service.rest.security.oauth2.FacebookTokenServices">
+		<b:property name="checkTokenEndpointUrl" value="${oauth.checkTokenEndpointUri}"/>
+		<b:property name="clientId" value="${oauth.client.id}"/>
+		<b:property name="clientSecret" value="${oauth.client.secret}"/>
+		<b:property name="tokenName" value="access_token"/>
+	</b:bean>
+	
+	<!-- Resource details for authenticating with Facebook (provided as an example) -->
+	<oauth:resource id="facebook"
+				    type="authorization_code"
+				    client-id="${oauth.client.id}"
+				    client-secret="${oauth.client.secret}"
+				    authentication-scheme="query" 
+				    access-token-uri="${oauth.accessTokenUri}"
+				    user-authorization-uri="${oauth.userAuthorizationUri}"
+				    pre-established-redirect-uri="${oauth.redirect.url}"
+				    use-current-uri="false"
+				    scope="${oauth.authScope}"
+				    token-name="${oauth.tokenName}"
+				    client-authentication-scheme="form" />
+    
+	<!-- Rest template definition using facebook resource (provided as an example) -->
+	<oauth:rest-template id="oAuth2RestTemplate" resource="facebook">
+        <b:property name="messageConverters">
+            <b:list>
+                <b:bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                    <b:property name="supportedMediaTypes">
+                        <b:list>
+                            <b:bean class="org.springframework.http.MediaType">
+                                <b:constructor-arg value="text" />
+                                <b:constructor-arg value="javascript" />
+                            </b:bean>
+                            <b:bean class="org.springframework.http.MediaType">
+                                <b:constructor-arg value="application" />
+                                <b:constructor-arg value="json" />
+                            </b:bean>
+                        </b:list>
+                    </b:property>
+                </b:bean>
+            </b:list>
+        </b:property>
+    </oauth:rest-template>
+</b:beans>

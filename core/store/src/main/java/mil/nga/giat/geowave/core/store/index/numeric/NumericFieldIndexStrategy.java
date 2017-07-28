@@ -92,5 +92,4 @@ public class NumericFieldIndexStrategy implements
 			final ByteArrayId sortKey ) {
 		return Lexicoders.DOUBLE.fromByteArray(sortKey.getBytes());
 	}
-
 }

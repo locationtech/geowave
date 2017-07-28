@@ -41,6 +41,12 @@ public class PasswordConverter extends
 				optionName);
 	}
 
+	/*
+	 * HP Fortify
+	 * "Use of Hard-coded Password - Password Management: Hardcoded Password"
+	 * false positive This is not a hard-coded password, just a description
+	 * telling users options they have for entering a password
+	 */
 	public static final String DEFAULT_PASSWORD_DESCRIPTION = "Can be specified as 'pass:<password>', 'file:<local file containing the password>', "
 			+ "'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin";
 	public static final String STDIN = "stdin";

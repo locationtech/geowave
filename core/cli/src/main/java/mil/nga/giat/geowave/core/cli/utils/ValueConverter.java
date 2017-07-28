@@ -37,6 +37,9 @@ public class ValueConverter
 	public static <X> X convert(
 			Object value,
 			Class<X> targetType ) {
+		// HP Fortify "Improper Output Neutralization" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		LOGGER.trace("Attempting to convert " + value + " to class type " + targetType);
 		if (value != null) {
 			// if object is already in intended target type, no need to convert

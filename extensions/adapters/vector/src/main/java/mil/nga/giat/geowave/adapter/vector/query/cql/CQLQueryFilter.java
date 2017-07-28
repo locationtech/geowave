@@ -13,7 +13,6 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 
-import org.apache.log4j.Logger;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
@@ -21,8 +20,8 @@ import org.opengis.filter.Filter;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -34,10 +33,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.geotools.filter.text.cql2.CQLException;
-import org.geotools.filter.text.ecql.ECQL;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
 
 public class CQLQueryFilter implements
 		DistributableQueryFilter
@@ -46,24 +41,14 @@ public class CQLQueryFilter implements
 	private GeotoolsFeatureDataAdapter adapter;
 	private Filter filter;
 
-	protected CQLQueryFilter() {
+	public CQLQueryFilter() {
 		super();
 	}
 
 	public CQLQueryFilter(
 			final Filter filter,
 			final GeotoolsFeatureDataAdapter adapter ) {
-		try {
-			// We do not have a way to transform a filter directly from one to
-			// another.
-			this.filter = FilterToCQLTool.toFilter(FilterToCQLTool.toCQL(filter));
-		}
-		catch (final CQLException e) {
-			LOGGER.trace(
-					"Filter is not a CQL Expression",
-					e);
-			this.filter = filter;
-		}
+		this.filter = FilterToCQLTool.fixDWithin(filter);
 		this.adapter = adapter;
 	}
 
@@ -126,7 +111,7 @@ public class CQLQueryFilter implements
 			filterBytes = new byte[] {};
 		}
 		else {
-			filterBytes = StringUtils.stringToBinary(FilterToCQLTool.toCQL(filter));
+			filterBytes = StringUtils.stringToBinary(ECQL.toCQL(filter));
 		}
 		byte[] adapterBytes;
 		if (adapter != null) {
@@ -180,9 +165,7 @@ public class CQLQueryFilter implements
 			buf.get(adapterBytes);
 
 			try {
-				adapter = PersistenceUtils.fromBinary(
-						adapterBytes,
-						GeotoolsFeatureDataAdapter.class);
+				adapter = (GeotoolsFeatureDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
 			}
 			catch (final Exception e) {
 				throw new IllegalArgumentException(

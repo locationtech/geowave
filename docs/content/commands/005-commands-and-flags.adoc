@@ -7,16 +7,24 @@
 GeoWave supports a few extra commands that can be used for informational purposes to debug
 or explore command usage.
 
+.Commands:
+* <<005-commands-and-flags.adoc#debug, Debug>>
+* <<005-commands-and-flags.adoc#version, Version>>
+* <<005-commands-and-flags.adoc#help, Help>>
+* <<005-commands-and-flags.adoc#explain, Explain>>
+
+[[debug]]
 ==== Debug Flag (--debug)
 
 Use the debug flag to increase the debug logging output by GeoWave on the console to DEBUG.  By default, it is
-set to WARN.  This flag must come right after 'geowave' and before any subcommand:
+set to WARN. This flag must come right after 'geowave' and before any subcommand:
 
 [source, bash]
 ----
 geowave --debug <command> <subcommand> <options...>
 ----
 
+[[version]]
 ==== Version Flag (--version)
 
 The version flag will output the build arguments that were used to build GeoWave, as well as
@@ -27,9 +35,10 @@ the version of the GeoWave tools jar you're using:
 geowave --version
 ----
 
+[[help]]
 ==== Help Command
 
-The help command will show arguments and their defaults.  It can be prepended to any GeoWave command.
+The help command will show arguments and their defaults. It can be prepended to any GeoWave command.
 If you use it while also specifying a sub-command and its arguments, that command's help information
 will be displayed:
 
@@ -38,13 +47,16 @@ will be displayed:
 geowave help <command> <subcommand>
 ----
 
+[[explain]]
 ==== Explain Command
 
 The explain command will show a simplified tabular view of the arguments and their current values.
-Use this to determine what values are being passed to GeoWave.  It also shows hidden parameters and
-their values, if there are any.  An example would be additional Accumulo options:
+Use this to determine what values are being passed to GeoWave. It also shows hidden parameters and
+their values, if there are any. An example would be additional Accumulo options:
 
 [source, bash]
 ----
 geowave explain config addstore -t accumulo
 ----
+
+'''

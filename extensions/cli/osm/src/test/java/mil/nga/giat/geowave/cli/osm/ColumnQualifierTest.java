@@ -17,8 +17,6 @@ import mil.nga.giat.geowave.cli.osm.accumulo.osmschema.Schema;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class ColumnQualifierTest
 {
 

@@ -27,10 +27,13 @@ import com.google.common.primitives.UnsignedBytes;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
@@ -43,6 +46,7 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Deleter;
@@ -597,13 +601,10 @@ public class MemoryDataStoreOperations implements
 											currentMetadata.getSecondaryId(),
 											next.getSecondaryId())) {
 										if (currentStat == null) {
-											currentStat = PersistenceUtils.fromBinary(
-													currentMetadata.getValue(),
-													DataStatistics.class);
+											currentStat = (DataStatistics) PersistenceUtils.fromBinary(currentMetadata
+													.getValue());
 										}
-										currentStat.merge(PersistenceUtils.fromBinary(
-												next.getValue(),
-												DataStatistics.class));
+										currentStat.merge((Mergeable) PersistenceUtils.fromBinary(next.getValue()));
 										vis = combineVisibilities(
 												vis,
 												next.getVisibility());
@@ -836,5 +837,22 @@ public class MemoryDataStoreOperations implements
 			}
 			return compareTo(other) == 0;
 		}
+	}
+
+	@Override
+	public boolean mergeData(
+			PrimaryIndex index,
+			AdapterStore adapterStore,
+			AdapterIndexMappingStore adapterIndexMappingStore ) {
+		// considering memory data store is for test purposes, this
+		// implementation is unnecessary
+		return true;
+	}
+
+	@Override
+	public boolean metadataExists(
+			MetadataType type )
+			throws IOException {
+		return true;
 	}
 }

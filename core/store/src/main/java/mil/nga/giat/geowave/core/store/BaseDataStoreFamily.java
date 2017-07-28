@@ -10,6 +10,8 @@ import mil.nga.giat.geowave.core.store.metadata.AdapterStoreFactory;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreFactory;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreFactory;
 import mil.nga.giat.geowave.core.store.metadata.SecondaryIndexStoreFactory;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperationsFactory;
 
 public class BaseDataStoreFamily implements
 		StoreFactoryFamilySpi
@@ -81,6 +83,14 @@ public class BaseDataStoreFamily implements
 	@Override
 	public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore() {
 		return new SecondaryIndexStoreFactory(
+				typeName,
+				description,
+				helper);
+	}
+
+	@Override
+	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory() {
+		return new DataStoreOperationsFactory(
 				typeName,
 				description,
 				helper);

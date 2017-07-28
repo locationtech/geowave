@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.analytic.mapreduce.kde.compare;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
@@ -33,6 +34,8 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -46,11 +49,15 @@ public class ComparisonStatsJobRunner extends
 			final ComparisonCommandLineOptions inputOptions,
 			final KDECommandLineOptions kdeCommandLineOptions,
 			final DataStorePluginOptions inputDataStoreOptions,
-			final DataStorePluginOptions outputDataStoreOptions ) {
+			final DataStorePluginOptions outputDataStoreOptions,
+			final File configFile,
+			final PrimaryIndex outputIndex ) {
 		super(
 				kdeCommandLineOptions,
 				inputDataStoreOptions,
-				outputDataStoreOptions);
+				outputDataStoreOptions,
+				configFile,
+				outputIndex);
 		timeAttribute = inputOptions.getTimeAttribute();
 	}
 
@@ -72,6 +79,9 @@ public class ComparisonStatsJobRunner extends
 		// Load the params for config file.
 		opts.prepare(params);
 
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		// Don't care about output, but this will set the datastore options.
 		kdeCommand.createRunner(params);
 
@@ -79,7 +89,9 @@ public class ComparisonStatsJobRunner extends
 				comparisonOptions,
 				kdeCommand.getKdeOptions(),
 				kdeCommand.getInputStoreOptions(),
-				kdeCommand.getOutputStoreOptions());
+				kdeCommand.getOutputStoreOptions(),
+				configFile,
+				null);
 
 		final int res = ToolRunner.run(
 				new Configuration(),
@@ -195,7 +207,7 @@ public class ComparisonStatsJobRunner extends
 								ComparisonAccumuloStatsReducer.MAXES_PER_BAND,
 								ComparisonAccumuloStatsReducer.NAME_PER_BAND,
 								null),
-						new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+						new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 				return ingester.waitForCompletion(true);
 
 			}
@@ -280,7 +292,8 @@ public class ComparisonStatsJobRunner extends
 			final Configuration conf,
 			final Job statsReducer,
 			final String statsNamespace,
-			final String coverageName )
+			final String coverageName,
+			final PrimaryIndex index )
 			throws Exception {
 		FileOutputFormat.setOutputPath(
 				statsReducer,

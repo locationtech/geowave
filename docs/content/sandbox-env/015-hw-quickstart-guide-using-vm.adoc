@@ -1,0 +1,35 @@
+<<<
+
+:linkattrs:
+
+=== Using the VM
+
+After the Sandbox and virtual machine are configured, ssh into your machine. If you are using Windows it is recommended that you use http://www.putty.org/[PuTTY].
+
+- **Host Name:** root@sandbox.hortonworks.com
+
+- **Port:** 2222
+
+[source, bash]
+----
+$ ssh root@sandbox.hortonworks.com -p 2222
+Warning: Permanently added 'sandbox.hortonworks.com,xxx.xxx.xxx.xxx' (ECDSA) to the list of known hosts.
+root@sandbox.hortonworks.com's password:
+----
+
+[NOTE]
+====
+No key is necessary to access this machine
+====
+
+If you are using PuTTY, click open to continue.
+
+When prompted for a password, enter `Geowave`.
+
+=== Demo Links
+
+- link:walkthrough-vector.html[Vector Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]
+- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]
+- link:interact-cluster.html[Interacting with the cluster, window="_blank"]
+

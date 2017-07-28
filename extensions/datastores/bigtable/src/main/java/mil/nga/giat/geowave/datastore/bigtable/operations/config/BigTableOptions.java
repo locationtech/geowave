@@ -16,16 +16,15 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.bigtable.BigTableStoreFactoryFamily;
-import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseOptions;
 
 public class BigTableOptions extends
 		StoreFactoryOptions
 {
-
 	public static final String DEFAULT_PROJECT_ID = "geowave-bigtable-project-id";
 	public static final String DEFAULT_INSTANCE_ID = "geowave-bigtable-instance-id";
 
@@ -67,6 +66,11 @@ public class BigTableOptions extends
 		return internalHBaseOptions;
 	}
 
+	@Override
+	public DataStoreOptions getStoreOptions() {
+		return internalHBaseOptions;
+	}
+
 	private class InternalHBaseOptions extends
 			HBaseOptions
 	{
@@ -79,11 +83,6 @@ public class BigTableOptions extends
 		}
 
 		@Override
-		public boolean isServerSideDisabled() {
-			return true;
-		}
-
-		@Override
 		public boolean isBigTable() {
 			return true;
 		}
@@ -91,16 +90,6 @@ public class BigTableOptions extends
 		@Override
 		public int getScanCacheSize() {
 			return BigTableOptions.this.scanCacheSize;
-		}
-
-		@Override
-		public boolean isEnableCustomFilters() {
-			return false;
-		}
-
-		@Override
-		public boolean isEnableCoprocessors() {
-			return false;
 		}
 
 		@Override

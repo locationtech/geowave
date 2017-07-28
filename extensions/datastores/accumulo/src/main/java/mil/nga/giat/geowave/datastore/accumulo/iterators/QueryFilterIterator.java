@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
@@ -42,6 +42,7 @@ import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class QueryFilterIterator extends
 		Filter
@@ -267,16 +268,12 @@ public class QueryFilterIterator extends
 			if (options.containsKey(FILTER)) {
 				final String filterStr = options.get(FILTER);
 				final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
-				filter = PersistenceUtils.fromBinary(
-						filterBytes,
-						DistributableQueryFilter.class);
+				filter = (DistributableQueryFilter) AccumuloUtils.fromBinary(filterBytes);
 			}
 			if (options.containsKey(MODEL)) {
 				final String modelStr = options.get(MODEL);
 				final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
-				model = PersistenceUtils.fromBinary(
-						modelBytes,
-						CommonIndexModel.class);
+				model = (CommonIndexModel) AccumuloUtils.fromBinary(modelBytes);
 				commonIndexFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
 			}
 			if (options.containsKey(PARTITION_KEY_LENGTH)) {

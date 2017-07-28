@@ -33,6 +33,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -138,8 +139,8 @@ public class GeoWaveRasterConfig
 	}
 
 	private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
-		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(AuthorizationFactorySPI.class);
-		return ldr.iterator();
+		return new SPIServiceRegistry(
+				GeoWaveRasterConfig.class).load(AuthorizationFactorySPI.class);
 	}
 
 	public static URL getAuthorizationURL(
@@ -209,34 +210,43 @@ public class GeoWaveRasterConfig
 			throws IOException,
 			ParserConfigurationException,
 			SAXException {
-		final InputStream in = xmlURL.openStream();
-		final InputSource input = new InputSource(
-				xmlURL.toString());
+		try (final InputStream in = xmlURL.openStream()) {
+			final InputSource input = new InputSource(
+					xmlURL.toString());
 
-		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setIgnoringElementContentWhitespace(true);
-		dbf.setIgnoringComments(true);
+			final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setIgnoringElementContentWhitespace(true);
+			dbf.setIgnoringComments(true);
 
-		dbf.setFeature(
-				XMLConstants.FEATURE_SECURE_PROCESSING,
-				true);
+			dbf.setFeature(
+					XMLConstants.FEATURE_SECURE_PROCESSING,
+					true);
 
-		final DocumentBuilder db = dbf.newDocumentBuilder();
+			// HP Fortify "XML External Entity Injection" fix.
+			// These lines are the recommended fix for
+			// protecting a Java DocumentBuilderFactory from XXE.
+			String DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+			dbf.setFeature(
+					DISALLOW_DOCTYPE_DECL,
+					true);
 
-		// db.setEntityResolver(new ConfigEntityResolver(xmlURL));
-		final Document dom = db.parse(input);
-		in.close();
+			final DocumentBuilder db = dbf.newDocumentBuilder();
 
-		final NodeList children = dom.getChildNodes().item(
-				0).getChildNodes();
-		final Map<String, String> configParams = new HashMap<String, String>();
-		for (int i = 0; i < children.getLength(); i++) {
-			final Node child = children.item(i);
-			configParams.put(
-					child.getNodeName(),
-					child.getTextContent());
+			// db.setEntityResolver(new ConfigEntityResolver(xmlURL));
+			final Document dom = db.parse(input);
+			in.close();
+
+			final NodeList children = dom.getChildNodes().item(
+					0).getChildNodes();
+			final Map<String, String> configParams = new HashMap<String, String>();
+			for (int i = 0; i < children.getLength(); i++) {
+				final Node child = children.item(i);
+				configParams.put(
+						child.getNodeName(),
+						child.getTextContent());
+			}
+			return configParams;
 		}
-		return configParams;
 	}
 
 	private static void parseParamsIntoRasterConfig(

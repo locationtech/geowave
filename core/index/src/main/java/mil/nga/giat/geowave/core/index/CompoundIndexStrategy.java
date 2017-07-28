@@ -25,6 +25,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /**
@@ -84,12 +86,8 @@ public class CompoundIndexStrategy implements
 		buf.get(delegateBinary1);
 		final byte[] delegateBinary2 = new byte[bytes.length - delegateBinary1Length - 4];
 		buf.get(delegateBinary2);
-		subStrategy1 = PersistenceUtils.fromBinary(
-				delegateBinary1,
-				PartitionIndexStrategy.class);
-		subStrategy2 = PersistenceUtils.fromBinary(
-				delegateBinary2,
-				NumericIndexStrategy.class);
+		subStrategy1 = (PartitionIndexStrategy) PersistenceUtils.fromBinary(delegateBinary1);
+		subStrategy2 = (NumericIndexStrategy) PersistenceUtils.fromBinary(delegateBinary2);
 
 		defaultMaxDuplication = (int) Math.ceil(Math.pow(
 				2,
@@ -304,14 +302,14 @@ public class CompoundIndexStrategy implements
 	@Override
 	public List<IndexMetaData> createMetaData() {
 		final List<IndexMetaData> result = new ArrayList<IndexMetaData>();
-		for (final IndexMetaData metaData : subStrategy1.createMetaData()) {
+		for (final IndexMetaData metaData : (List<IndexMetaData>) subStrategy1.createMetaData()) {
 			result.add(new CompoundIndexMetaDataWrapper(
 					metaData,
 					subStrategy1.getPartitionKeyLength(),
 					(byte) 0));
 		}
 		metaDataSplit = result.size();
-		for (final IndexMetaData metaData : subStrategy2.createMetaData()) {
+		for (final IndexMetaData metaData : (List<IndexMetaData>) subStrategy2.createMetaData()) {
 			result.add(new CompoundIndexMetaDataWrapper(
 					metaData,
 					subStrategy1.getPartitionKeyLength(),
@@ -354,8 +352,7 @@ public class CompoundIndexStrategy implements
 	 *
 	 */
 	protected static class CompoundIndexMetaDataWrapper implements
-			IndexMetaData,
-			Persistable
+			IndexMetaData
 	{
 
 		private IndexMetaData metaData;
@@ -389,9 +386,7 @@ public class CompoundIndexStrategy implements
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			final byte[] metaBytes = new byte[bytes.length - 1];
 			buf.get(metaBytes);
-			metaData = PersistenceUtils.fromBinary(
-					metaBytes,
-					IndexMetaData.class);
+			metaData = (IndexMetaData) PersistenceUtils.fromBinary(metaBytes);
 			index = buf.get();
 		}
 
@@ -448,14 +443,11 @@ public class CompoundIndexStrategy implements
 			jo.put(
 					"type",
 					"CompoundIndexMetaDataWrapper");
-
 			jo.put(
 					"index",
 					index);
-
 			return jo;
 		}
-
 	}
 
 	/**
@@ -557,5 +549,4 @@ public class CompoundIndexStrategy implements
 		}
 		return partitionKeys;
 	}
-
 }

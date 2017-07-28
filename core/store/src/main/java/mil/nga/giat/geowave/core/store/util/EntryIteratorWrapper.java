@@ -33,7 +33,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public abstract class EntryIteratorWrapper<T> implements
 		Iterator<T>
 {
-	protected final BaseDataStore dataStore;
 	protected final AdapterStore adapterStore;
 	protected final PrimaryIndex index;
 	protected final Iterator<GeoWaveRow> scannerIt;
@@ -43,13 +42,11 @@ public abstract class EntryIteratorWrapper<T> implements
 	protected T nextValue;
 
 	public EntryIteratorWrapper(
-			final BaseDataStore dataStore,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, ? extends GeoWaveRow> scanCallback ) {
-		this.dataStore = dataStore;
 		this.adapterStore = adapterStore;
 		this.index = index;
 		this.scannerIt = scannerIt;

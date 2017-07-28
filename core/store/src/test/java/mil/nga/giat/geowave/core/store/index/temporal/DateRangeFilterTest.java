@@ -15,12 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Test;
-
-import junit.framework.Assert;
+import org.junit.Assert;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -42,9 +41,7 @@ public class DateRangeFilterTest
 				false,
 				false);
 		final byte[] filterBytes = PersistenceUtils.toBinary(filter);
-		final DateRangeFilter deserializedFilter = PersistenceUtils.fromBinary(
-				filterBytes,
-				DateRangeFilter.class);
+		final DateRangeFilter deserializedFilter = (DateRangeFilter) PersistenceUtils.fromBinary(filterBytes);
 		Assert.assertTrue(filter.fieldId.equals(deserializedFilter.fieldId));
 		Assert.assertTrue(filter.start.equals(deserializedFilter.start));
 		Assert.assertTrue(filter.end.equals(deserializedFilter.end));

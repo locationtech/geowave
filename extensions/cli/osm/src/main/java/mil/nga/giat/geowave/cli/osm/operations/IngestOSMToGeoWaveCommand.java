@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,11 +10,14 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.osm.operations;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.hadoop.util.ToolRunner;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -30,6 +33,8 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "ingest", parentOperation = OSMSection.class)
 @Parameters(commandDescription = "Ingest and convert OSM data from HDFS to GeoWave")
@@ -38,7 +43,7 @@ public class IngestOSMToGeoWaveCommand extends
 		Command
 {
 
-	@Parameter(description = "<hdfs host:port> <path to base directory to read from> <store name>")
+	@Parameter(description = "<path to base directory to read from> <store name>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -48,23 +53,111 @@ public class IngestOSMToGeoWaveCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 
 		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
+		if (parameters.size() != 2) {
 			throw new ParameterException(
-					"Requires arguments: <hdfs host:port> <path to base directory to read from> <store name>");
+					"Requires arguments: <path to base directory to read from> <store name>");
 		}
 
-		String hdfsHostPort = parameters.get(0);
-		String basePath = parameters.get(1);
-		String inputStoreName = parameters.get(2);
-
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
+		for (final String string : computeResults(params)) {
+			JCommander.getConsole().println(
+					string);
 		}
+	}
+
+	private List<String> ingestData()
+			throws Exception {
+
+		final OSMRunner runner = new OSMRunner(
+				ingestOptions,
+				inputStoreOptions);
+
+		final int res = ToolRunner.run(
+				runner,
+				new String[] {});
+		if (res != 0) {
+			throw new RuntimeException(
+					"OSMRunner failed: " + res);
+		}
+
+		final List<String> output = new ArrayList<>();
+		output.add("finished ingest");
+		output.add("**************************************************");
+		return output;
+	}
+
+	private List<String> convertData()
+			throws Exception {
+
+		FeatureDefinitionSet.initialize(new OSMIngestCommandArgs().getMappingContents());
+
+		final OSMConversionRunner runner = new OSMConversionRunner(
+				ingestOptions,
+				inputStoreOptions);
+
+		final int res = ToolRunner.run(
+				runner,
+				new String[] {});
+		if (res != 0) {
+			throw new RuntimeException(
+					"OSMConversionRunner failed: " + res);
+		}
+
+		final List<String> output = new ArrayList<>();
+		output.add("finished conversion");
+		output.add("**************************************************");
+		output.add("**************************************************");
+		output.add("**************************************************");
+		return output;
+	}
+
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			final String hdfsHostPort,
+			final String hdfsPath,
+			final String storeName ) {
+		parameters = new ArrayList<String>();
+		parameters.add(hdfsHostPort);
+		parameters.add(hdfsPath);
+		parameters.add(storeName);
+	}
+
+	public OSMIngestCommandArgs getIngestOptions() {
+		return ingestOptions;
+	}
+
+	public void setIngestOptions(
+			final OSMIngestCommandArgs ingestOptions ) {
+		this.ingestOptions = ingestOptions;
+	}
+
+	public DataStorePluginOptions getInputStoreOptions() {
+		return inputStoreOptions;
+	}
+
+	public void setInputStoreOptions(
+			final DataStorePluginOptions inputStoreOptions ) {
+		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	public List<String> computeResults(
+			final OperationParams params )
+			throws Exception {
+		String basePath = parameters.get(0);
+		String inputStoreName = parameters.get(1);
+
+		// Config file
+		File configFile = getGeoWaveConfigFile(params);
+		Properties configProperties = ConfigOptions.loadProperties(
+				configFile,
+				null);
+		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		if (!basePath.startsWith("/")) {
 			throw new ParameterException(
@@ -73,9 +166,9 @@ public class IngestOSMToGeoWaveCommand extends
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
@@ -99,84 +192,14 @@ public class IngestOSMToGeoWaveCommand extends
 		// This is needed by a method in OSMIngsetCommandArgs.
 		ingestOptions.setOsmNamespace(inputStoreOptions.getGeowaveNamespace());
 
+		final List<String> outputs = new ArrayList<>();
+
 		// Ingest the data.
-		ingestData();
+		outputs.addAll(ingestData());
 
 		// Convert the data
-		convertData();
-	}
+		outputs.addAll(convertData());
 
-	private void ingestData()
-			throws Exception {
-
-		OSMRunner runner = new OSMRunner(
-				ingestOptions,
-				inputStoreOptions);
-
-		int res = ToolRunner.run(
-				runner,
-				new String[] {});
-		if (res != 0) {
-			throw new RuntimeException(
-					"OSMRunner failed: " + res);
-		}
-
-		System.out.println("finished ingest");
-		System.out.println("**************************************************");
-	}
-
-	private void convertData()
-			throws Exception {
-
-		FeatureDefinitionSet.initialize(new OSMIngestCommandArgs().getMappingContents());
-
-		OSMConversionRunner runner = new OSMConversionRunner(
-				ingestOptions,
-				inputStoreOptions);
-
-		int res = ToolRunner.run(
-				runner,
-				new String[] {});
-		if (res != 0) {
-			throw new RuntimeException(
-					"OSMConversionRunner failed: " + res);
-		}
-
-		System.out.println("finished conversion");
-		System.out.println("**************************************************");
-		System.out.println("**************************************************");
-		System.out.println("**************************************************");
-	}
-
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String hdfsHostPort,
-			String hdfsPath,
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(hdfsHostPort);
-		this.parameters.add(hdfsPath);
-		this.parameters.add(storeName);
-	}
-
-	public OSMIngestCommandArgs getIngestOptions() {
-		return ingestOptions;
-	}
-
-	public void setIngestOptions(
-			OSMIngestCommandArgs ingestOptions ) {
-		this.ingestOptions = ingestOptions;
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
+		return outputs;
 	}
 }

@@ -4,8 +4,7 @@
 
 === Overview
 
-There are public maven repositories available for both release and snapshot GeoWave artifacts (no transitive dependencies).
-Automated deployment is available, but requires a S3 access key (typically added to your ~/.m2/settings.xml)
+There are public maven repositories available for both release and snapshot GeoWave artifacts (no transitive dependencies). Automated deployment is available but requires a S3 access key (typically added to your ~/.m2/settings.xml).
 
 === Maven POM fragments
 ==== Releases
@@ -41,7 +40,7 @@ Automated deployment is available, but requires a S3 access key (typically added
 ----
 
 === Maven settings.xml fragments
-(you probably don't need this unless you are deploying official GeoWave artifacts)
+You probably don't need this unless you are deploying official GeoWave artifacts.
 
 ==== Snapshots
 [source, xml]

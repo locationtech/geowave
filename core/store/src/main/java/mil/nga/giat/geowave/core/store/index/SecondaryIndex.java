@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 
@@ -47,7 +47,7 @@ public class SecondaryIndex<T> implements
 	private ByteArrayId secondaryIndexId;
 	private List<ByteArrayId> partialFieldIds;
 
-	protected SecondaryIndex() {}
+	public SecondaryIndex() {}
 
 	public SecondaryIndex(
 			final FieldIndexStrategy<?, ?> indexStrategy,
@@ -197,9 +197,7 @@ public class SecondaryIndex<T> implements
 		buf.get(fieldIdBinary);
 		buf.get(secondaryIndexTypeBinary);
 
-		indexStrategy = PersistenceUtils.fromBinary(
-				indexStrategyBinary,
-				FieldIndexStrategy.class);
+		indexStrategy = (FieldIndexStrategy<?, ?>) PersistenceUtils.fromBinary(indexStrategyBinary);
 
 		fieldId = new ByteArrayId(
 				fieldIdBinary);
@@ -208,7 +206,7 @@ public class SecondaryIndex<T> implements
 
 		final byte[] persistablesBinary = new byte[persistablesBinaryLength];
 		buf.get(persistablesBinary);
-		final List<Persistable> persistables = PersistenceUtils.fromBinary(persistablesBinary);
+		final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(persistablesBinary);
 		for (final Persistable persistable : persistables) {
 			associatedStatistics.add((DataStatistics<T>) persistable);
 		}
@@ -228,5 +226,4 @@ public class SecondaryIndex<T> implements
 			}
 		}
 	}
-
 }

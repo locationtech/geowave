@@ -1,15 +1,24 @@
 package mil.nga.giat.geowave.datastore.dynamodb;
 
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreFactory;
+import mil.nga.giat.geowave.core.store.StoreFactoryHelper;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBAdapterIndexMappingStore;
-import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBAdapterStore;
-import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBDataStatisticsStore;
-import mil.nga.giat.geowave.datastore.dynamodb.metadata.DynamoDBIndexStore;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
+import mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBOperations;
 
 public class DynamoDBDataStoreFactory extends
-		AbstractDynamoDBStoreFactory<DataStore>
+		DataStoreFactory
 {
+	public DynamoDBDataStoreFactory(
+			final String typeName,
+			final String description,
+			final StoreFactoryHelper helper ) {
+		super(
+				typeName,
+				description,
+				helper);
+	}
 
 	@Override
 	public DataStore createStore(
@@ -20,9 +29,10 @@ public class DynamoDBDataStoreFactory extends
 		}
 		final DynamoDBOptions opts = (DynamoDBOptions) options;
 
-		final DynamoDBOperations dynamodbOperations = createOperations(opts);
+		final DataStoreOperations dynamodbOperations = helper.createOperations(opts);
+
 		return new DynamoDBDataStore(
-				dynamodbOperations);
+				(DynamoDBOperations) dynamodbOperations);
 
 	}
 }

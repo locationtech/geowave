@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.apache.commons.lang.SystemUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,9 +29,9 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -41,6 +42,10 @@ public class RasterIngestRunnerTest
 	@BeforeClass
 	public static void setup()
 			throws IOException {
+
+		// Skip this test if we're on a Mac
+		org.junit.Assume.assumeTrue(isNotMac());
+
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
@@ -48,6 +53,10 @@ public class RasterIngestRunnerTest
 		InstallGdal.main(new String[] {
 			System.getenv("GDAL_DIR")
 		});
+	}
+
+	private static boolean isNotMac() {
+		return !SystemUtils.IS_OS_MAC;
 	}
 
 	@Test
@@ -99,6 +108,7 @@ public class RasterIngestRunnerTest
 			OperationParams params ) {
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		StoreLoader inputStoreLoader = new StoreLoader(
 				"memorystore");
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
@@ -111,10 +121,10 @@ public class RasterIngestRunnerTest
 
 	/*
 	 * private PrimaryIndex getIndex(OperationParams params){ File configFile =
-	 * (File) params.getContext().get( ConfigOptions.PROPERTIES_FILE_CONTEXT);
-	 * IndexLoader indexLoader = new IndexLoader("spatialindex"); if
-	 * (!indexLoader.loadFromConfig(configFile)) { throw new ParameterException(
-	 * "Cannot find index(s) by name: " + indexLoader.getIndexName()); }
+	 * getGeoWaveConfigFile(params); IndexLoader indexLoader = new
+	 * IndexLoader("spatialindex"); if (!indexLoader.loadFromConfig(configFile))
+	 * { throw new ParameterException( "Cannot find index(s) by name: " +
+	 * indexLoader.getIndexName()); }
 	 * 
 	 * IndexPluginOptions indexOptions =
 	 * Iterables.getOnlyElement(indexLoader.getLoadedIndexes()); return

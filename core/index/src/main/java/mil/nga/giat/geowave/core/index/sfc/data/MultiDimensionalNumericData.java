@@ -10,8 +10,8 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.index.sfc.data;
 
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.QueryConstraints;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 /**
  * Interface which defines the methods associated with a multi-dimensional

@@ -15,6 +15,8 @@
 
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
 trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm' EXIT
+trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
+
 # Set a default version
 VENDOR_VERSION=apache
 
@@ -30,7 +32,6 @@ echo "---------------------------------------------------------------"
 echo "GEOWAVE_VERSION=${GEOWAVE_VERSION}"
 echo "BUILD_SUFFIX=${BUILD_SUFFIX}"
 echo "TIME_TAG=${TIME_TAG}"
-echo "GEOSERVER_VERSION=${GEOSERVER_VERSION}"
 echo "BUILD_ARGS=${BUILD_ARGS}"
 echo "VENDOR_VERSION=${VENDOR_VERSION}"
 echo "---------------------------------------------------------------"
@@ -41,7 +42,7 @@ chown -R root:root $WORKSPACE/deploy/packaging/rpm
 chmod -R 777 $WORKSPACE/deploy/packaging/rpm
 
 # Staging Artifacts for Build
-cd $WORKSPACE/deploy/packaging/rpm/centos/6/SOURCES
+cd $WORKSPACE/deploy/packaging/rpm/centos/7/SOURCES
 if [ $BUILD_SUFFIX = "common" ]
 then
 	rm -f *.gz *.jar
@@ -73,4 +74,4 @@ fi
 cd ..
 
 # Build
-$WORKSPACE/deploy/packaging/rpm/centos/6/rpm.sh --command build-${BUILD_SUFFIX} --vendor-version $VENDOR_VERSION --geowave-version $GEOWAVE_VERSION --time-tag $TIME_TAG
+$WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command build-${BUILD_SUFFIX} --vendor-version $VENDOR_VERSION --geowave-version $GEOWAVE_VERSION --time-tag $TIME_TAG

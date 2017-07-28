@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.core.store.base;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,10 +13,15 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -40,11 +46,12 @@ import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class BaseDataStoreUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(BaseDataStoreUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BaseDataStoreUtils.class);
 	public static final int MAX_RANGE_DECOMPOSITION = 2000;
 	public static final int AGGREGATION_RANGE_DECOMPOSITION = 10;
 
@@ -105,7 +112,6 @@ public class BaseDataStoreUtils
 		for (final GeoWaveValue value : geowaveRow.getFieldValues()) {
 			byte[] byteValue = value.getValue();
 			byte[] fieldMask = value.getFieldMask();
-
 			if (fieldSubsetBitmask != null) {
 				final byte[] newBitmask = BitmaskUtils.generateANDBitmask(
 						fieldMask,
@@ -133,6 +139,34 @@ public class BaseDataStoreUtils
 				decodePackage,
 				clientFilter,
 				scanCallback);
+	}
+
+	public static CloseableIterator<Object> aggregate(
+			final CloseableIterator<Object> it,
+			final Aggregation aggregationFunction ) {
+		if ((it != null) && it.hasNext()) {
+			synchronized (aggregationFunction) {
+				aggregationFunction.clearResult();
+				while (it.hasNext()) {
+					final Object input = it.next();
+					if (input != null) {
+						aggregationFunction.aggregate(input);
+					}
+				}
+				try {
+					it.close();
+				}
+				catch (final IOException e) {
+					LOGGER.warn(
+							"Unable to close datastore reader",
+							e);
+				}
+
+				return new Wrapper(
+						Iterators.singletonIterator(aggregationFunction.getResult()));
+			}
+		}
+		return new CloseableIterator.Empty();
 	}
 
 	/**

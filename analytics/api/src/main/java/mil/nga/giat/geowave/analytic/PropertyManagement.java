@@ -10,11 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.analytic;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -25,8 +20,8 @@ import java.util.Map;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -663,15 +658,12 @@ public class PropertyManagement implements
 	}
 
 	private static Persistable fromBytes(
-			final byte[] data,
-			final Class<? extends Persistable> expectedType )
+			final byte[] data )
 			throws InstantiationException,
 			IllegalAccessException,
 			ClassNotFoundException,
 			UnsupportedEncodingException {
-		return PersistenceUtils.fromBinary(
-				data,
-				expectedType);
+		return PersistenceUtils.fromBinary(data);
 	}
 
 	private Object validate(
@@ -780,9 +772,7 @@ public class PropertyManagement implements
 				final Serializable ob )
 				throws Exception {
 			if (ob instanceof byte[]) {
-				return (DistributableQuery) PropertyManagement.fromBytes(
-						(byte[]) ob,
-						DistributableQuery.class);
+				return (DistributableQuery) PropertyManagement.fromBytes((byte[]) ob);
 			}
 			final PrecisionModel precision = new PrecisionModel();
 			final GeometryFactory geometryFactory = new GeometryFactory(
@@ -829,9 +819,7 @@ public class PropertyManagement implements
 				final Serializable ob )
 				throws Exception {
 			if (ob instanceof byte[]) {
-				return (QueryOptions) PropertyManagement.fromBytes(
-						(byte[]) ob,
-						QueryOptions.class);
+				return (QueryOptions) PropertyManagement.fromBytes((byte[]) ob);
 			}
 			else if (ob instanceof QueryOptions) {
 				return (QueryOptions) ob;
@@ -977,9 +965,7 @@ public class PropertyManagement implements
 				final Serializable ob )
 				throws Exception {
 			if (ob instanceof byte[]) {
-				return fromBytes(
-						(byte[]) ob,
-						Persistable.class);
+				return fromBytes((byte[]) ob);
 			}
 			throw new IllegalArgumentException(
 					String.format(

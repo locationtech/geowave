@@ -1,0 +1,118 @@
+[[accumulo-config]]
+<<<
+[[accumulo-config]]
+=== Apache Accumulo Configuration
+
+* <<086-accumulo-config.adoc#accumulo-config-overview, Overview>>
+** <<086-accumulo-config.adoc#accumulo-config-overview-procedure, Procedure>>
+* <<086-accumulo-config.adoc#accumulo-config-managing, Managing>>
+* <<086-accumulo-config.adoc#accumulo-config-versioning, Versioning>>
+** <<086-accumulo-config.adoc#accumulo-config-versioning-basic, Basic>>
+** <<086-accumulo-config.adoc#accumulo-config-versioning-advanced, Advanced>>
+
+[[accumulo-config-overview]]
+==== Overview
+
+The two high level tasks to configure Accumulo for use with GeoWave are to:
+
+. Ensure the memory allocations for the master and tablet server processes are adequate
+. Add the GeoWave Accumulo iterator to a classloader. The iterator is a rather large file, so ensure the Accumulo Master process has at least 512m of heap space and the Tablet Server processes have at least 1g of heap space.
+
+The recommended Accumulo configuration for GeoWave requires several manual configuration steps but isolates the GeoWave libraries in application specific classpath(s) reducing the possibility of dependency conflict issues. A single user for all of GeoWave data or a user per data type are two of the many local configuration options. You should just just ensure each namespace containing GeoWave tables is configured to pick up the 'geowave-accumulo.jar'.
+
+[[accumulo-config-overview-procedure]]
+===== Procedure
+
+. Create a user and namespace.
+. Grant the user ownership permissions on all tables created within the application namespace.
+. Create an application or data set specific classpath.
+. Configure all tables within the namespace to use the application classpath.
+
+[source, bash]
+----
+accumulo shell -u root
+createuser geowave // <1>
+createnamespace geowave
+grant NameSpace.CREATE_TABLE -ns geowave -u geowave <2>
+config -s general.vfs.context.classpath.geowave=hdfs://${MASTER_FQDN}:8020/${ACCUMULO_ROOT}/lib/[^.].*.jar <3>
+config -ns geowave -s table.classpath.context=geowave <4>
+exit
+----
+<1> You'll be prompted for a password.
+<2> Ensure the user has ownership of all tables created within the namespace.
+<3> The Accumulo root path in HDFS varies between hadoop vendors. For Apache and Cloudera it is '/accumulo' and for Hortonworks it is '/apps/accumulo'
+<4> Link the namespace with the application classpath. Adjust the labels as needed if you've used different user or application names
+
+These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration, you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.
+
+
+[[accumulo-config-managing]]
+==== Managing
+
+After installing a number of different iterators, you may want to figure out which iterators have been configured.
+
+[source, bash]
+----
+# Print all configuration and grep for line containing vfs.context configuration and also show the following line
+accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.context.classpath
+----
+
+You will get back a listing of context classpath override configurations that map the application or user context you configured to a specific iterator jar in HDFS.
+
+
+[[accumulo-config-versioning]]
+==== Versioning
+
+It's of critical importance to ensure that the various GeoWave components are all the same version and that your client is of the same version that was used to write the data.
+
+[[accumulo-config-versioning-basic]]
+==== Basic
+
+The RPM packaged version of GeoWave puts a timestamp in the name so it's pretty easy to verify that you have a matched set of RPMs installed. After an update of the components, you must restart Accumulo to get vfs to download the new versions and this should keep everything synched.
+
+.Compare version and timestamps of installed RPMs
+[source, bash]
+----
+[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
+geowave-${project.version}-apache-core-${project.version}-201602012009.noarch
+geowave-${project.version}-apache-jetty-${project.version}-201602012009.noarch
+geowave-${project.version}-apache-accumulo-${project.version}-201602012009.noarch
+geowave-${project.version}-apache-tools-${project.version}-201602012009.noarch
+----
+
+[[accumulo-config-versioning-advanced]]
+===== Advanced
+
+When GeoWave tables are first accessed on a tablet server, the vfs classpath tells Accumulo where to download the jar file from HDFS.
+The jar file is copied into the local /tmp directory (the default general.vfs.cache.dir setting) and loaded onto the classpath.
+If there is ever doubt as to if these versions match, you can use the commands below from a tablet server node to verify the version of
+this artifact.
+
+.Commit hash of the jar in HDFS
+[source, bash]
+----
+sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=// <1>
+----
+<1> The root directory of Accumulo in various distributions can vary, so check with 'hadoop fs -ls /' first to ensure you have the correct initial path.
+
+.Compare with the versions downloaded locally
+[source, bash]
+----
+sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//
+----
+
+.Example
+[source, bash]
+----
+[spohnae@c1-node-03 ~]$ sudo -u hdfs hadoop fs -cat /${ACCUMULO_ROOT}/lib/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=//
+294ffb267e6691de3b9edc80e312bf5af7b2d23f <1>
+[spohnae@c1-node-03 ~]$ sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//
+294ffb267e6691de3b9edc80e312bf5af7b2d23f <2>
+294ffb267e6691de3b9edc80e312bf5af7b2d23f <2>
+25cf0f895bd0318ce4071a4680d6dd85e0b34f6b
+----
+<1> This is the version loaded into hdfs and should be present on all tablet servers once Accumulo has been restarted.
+<2> The find command will probably locate a number of different versions depending on how often you clean out /tmp.
+
+There may be multiple versions copies present - one per JVM, the error scenario is when a tablet server is missing the correct iterator jar.
+

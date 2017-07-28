@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.format.tdrive;
 
 import java.io.File;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -87,12 +88,10 @@ public class TdriveUtils
 	}
 
 	public static boolean validate(
-			final File file ) {
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(
-					file,
-					StringUtils.GEOWAVE_CHAR_SET.toString());
+			final URL file ) {
+		try (Scanner scanner = new Scanner(
+				file.openStream(),
+				StringUtils.GEOWAVE_CHAR_SET.toString())) {
 			if (scanner.hasNextLine()) {
 				final String line = scanner.nextLine();
 				return line.split(",").length == 4;
@@ -100,12 +99,9 @@ public class TdriveUtils
 		}
 		catch (final Exception e) {
 			Log.warn(
-					"Error validating file: " + file.getName(),
+					"Error validating file: " + file.getPath(),
 					e);
 			return false;
-		}
-		finally {
-			IOUtils.closeQuietly(scanner);
 		}
 		return false;
 	}

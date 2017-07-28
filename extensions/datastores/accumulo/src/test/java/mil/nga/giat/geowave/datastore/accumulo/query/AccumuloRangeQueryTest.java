@@ -34,9 +34,11 @@ import com.vividsolutions.jts.io.WKBWriter;
 
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
@@ -105,7 +107,7 @@ public class AccumuloRangeQueryTest
 						options),
 				options);
 
-		index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		adapter = new TestGeometryAdapter();
 
 		try (IndexWriter writer = mockDataStore.createWriter(
@@ -329,7 +331,7 @@ public class AccumuloRangeQueryTest
 		return new TestGeometryAdapter();
 	}
 
-	protected static class TestGeometryAdapter extends
+	public static class TestGeometryAdapter extends
 			AbstractDataAdapter<TestGeometry> implements
 			StatisticsProvider<TestGeometry>
 	{
@@ -549,5 +551,11 @@ public class AccumuloRangeQueryTest
 			};
 		}
 
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 }

@@ -357,14 +357,16 @@ public class IntermediateSplitInfo implements
 
 	}
 
-	protected synchronized GeoWaveInputSplit toFinalSplit(
+	public synchronized GeoWaveInputSplit toFinalSplit(
 			final DataStatisticsStore statisticsStore,
 			final Map<ByteArrayId, List<ByteArrayId>> indexIdToAdaptersMap,
 			final String... authorizations ) {
 		final Set<String> locations = new HashSet<String>();
 		for (final Entry<ByteArrayId, SplitInfo> entry : splitInfo.entrySet()) {
 			for (final RangeLocationPair pair : entry.getValue().getRangeLocationPairs()) {
-				locations.add(pair.getLocation());
+				if (pair.getLocation() != null && !pair.getLocation().isEmpty()) {
+					locations.add(pair.getLocation());
+				}
 			}
 		}
 		for (final SplitInfo si : splitInfo.values()) {

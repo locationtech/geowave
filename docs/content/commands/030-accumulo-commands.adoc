@@ -1,0 +1,42 @@
+[[accumulo-commands]]
+<<<
+
+[[accumulo-commands]]
+=== Accumulo Commands
+
+Utility operations to set accumulo splits and run a test server (Required options are designated with an *)
+
+.Commands:
+* <<030-accumulo-commands.adoc#accumulo-presplitpartitionid, PreSplitPartitionId>>
+* <<030-accumulo-commands.adoc#accumulo-runserver, RunServer>>
+* <<030-accumulo-commands.adoc#accumulo-splitequalinterval, SplitEqualInterval>>
+* <<030-accumulo-commands.adoc#accumulo-splitnumrecords, SplitNumRecords>>
+* <<030-accumulo-commands.adoc#accumulo-splitquantile, SplitQuantile>>
+
+
+[[accumulo-presplitpartitionid]]
+==== *geowave accumulo dbscan*
+
+include::manpages/accumulo/geowave-presplitpartitionid.txt[]
+
+[[accumulo-runserver]]
+==== *geowave accumulo runserver*
+
+include::manpages/accumulo/geowave-runserver.txt[]
+
+[[accumulo-splitequalinterval]]
+==== *geowave accumulo splitequalinterval*
+
+include::manpages/accumulo/geowave-splitequalinterval.txt[]
+
+[[accumulo-splitnumrecords]]
+==== *geowave accumulo splitnumrecords*
+
+include::manpages/accumulo/geowave-splitnumrecords.txt[]
+
+[[accumulo-splitquantile]]
+==== *geowave accumulo splitquantile*
+
+include::manpages/accumulo/geowave-splitquantile.txt[]
+
+'''

@@ -1,0 +1,37 @@
+<<<
+
+:linkattrs:
+
+== Setting Up the Environment
+
+The virtual image provided for this demo https://s3.amazonaws.com/geowave-vm/0.9.6/VirtualBox_HDP_Geowave_Sandbox_0.9.6.ova[can be found here]. The image is a very large file (~15 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.
+
+=== Setting up the VirtualBox Image
+
+- Open up your VirtualBox manager. If you do not have VirtualBox downloaded, do so link:https://www.virtualbox.org/wiki/Downloads[here, window="_blank"]. This demo was tested against VirtualBox 5.1.26, you may experience trouble importing the virtual image on older versions.
+
+- Click "File" and select "Import Appliance" from the dropdown.
+
+image::sandbox/import-appliance.png[scaledwidth="100%",alt="select emr"]
+
+- Click on the folder icon, and navigate to _VirtualBox_HDP_GeoWave_Sandbox_0.9.6.ova_ (the image that you downloaded).
+
+- Select "Next" and then "Import"
+  * This should take a couple of minutes
+  
+Once the image has been imported, start it up from the manager. Every time you power the machine on it will ask you which version of Linux
+it should boot, pick the default/first option.
+
+image::sandbox/vb-image.png[scaledwidth="100%",alt="select emr"]
+
+The machine should power on shortly (this can take a few minutes). After it's powered on you should see the screen below. This is the last
+time that you will have to interact directly with the VirtualBox. Make sure that the virtual machine is active for the duration of this demo.
+
+image::sandbox/vb-image-2.png[scaledwidth="100%",alt="select emr"]
+
+[NOTE]
+=======
+VirtualBox Manager has a feature that allows Virtual Machines to be started and operated in headless ( non-Graphical-User-Interface(GUI) ) mode. Since the Sandbox was setup as a non-GUI VM, it is recommended that users' run their GeoWave Sandbox Virtual Machine in headless mode when possible.
+
+To start a VM in headless mode, within the VirtualBox Manager screen, right-click on the Sandbox VM image that was imported, and select _Start_ --> _Headless Start_. The VM status can be monitored through the _Preview_ pane within the dashboard, and once the VM has started, you can configure your machine and interface with the VM as outlined in the steps below.
+=======

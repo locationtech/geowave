@@ -75,16 +75,11 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.HBASE
-	}, options = {
-		/**
-		 * Here we are testing non-default HBase options, we may want to
-		 * consider testing some non-default Accumulo options as well
-		 */
-		"disableCustomFilters=true",
-		"disableCoprocessors=true"
 	})
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;
+	private static final boolean POINTS_ONLY = false;
+	private static final int NUM_THREADS = 4;
 
 	@BeforeClass
 	public static void reportTestStart() {
@@ -114,24 +109,37 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 				dataStore,
 				DimensionalityType.SPATIAL_TEMPORAL,
 				HAIL_SHAPEFILE_FILE,
-				1);
+				NUM_THREADS);
 
-		TestUtils.testLocalIngest(
-				dataStore,
-				DimensionalityType.SPATIAL_TEMPORAL,
-				TORNADO_TRACKS_SHAPEFILE_FILE,
-				1);
+		if (!POINTS_ONLY) {
+			TestUtils.testLocalIngest(
+					dataStore,
+					DimensionalityType.SPATIAL_TEMPORAL,
+					TORNADO_TRACKS_SHAPEFILE_FILE,
+					NUM_THREADS);
+		}
 
 		try {
+			URL[] expectedResultsUrls;
+			if (POINTS_ONLY) {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+			else {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+					new File(
+							TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+
 			testQuery(
 					new File(
 							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
-					new URL[] {
-						new File(
-								HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
-					},
+					expectedResultsUrls,
 					"bounding box and time range");
 		}
 		catch (final Exception e) {
@@ -142,15 +150,26 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		}
 
 		try {
+			URL[] expectedResultsUrls;
+			if (POINTS_ONLY) {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+			else {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+					new File(
+							TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+
 			testQuery(
 					new File(
 							TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
-					new URL[] {
-						new File(
-								HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
-					},
+					expectedResultsUrls,
 					"polygon constraint and time range");
 		}
 		catch (final Exception e) {
@@ -161,15 +180,26 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		}
 
 		try {
+			URL[] statsInputs;
+			if (POINTS_ONLY) {
+				statsInputs = new URL[] {
+					new File(
+							HAIL_SHAPEFILE_FILE).toURI().toURL()
+				};
+			}
+			else {
+				statsInputs = new URL[] {
+					new File(
+							HAIL_SHAPEFILE_FILE).toURI().toURL(),
+					new File(
+							TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
+				};
+			}
+
 			testStats(
-					new File[] {
-						new File(
-								HAIL_SHAPEFILE_FILE),
-						new File(
-								TORNADO_TRACKS_SHAPEFILE_FILE)
-					},
+					statsInputs,
 					TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX,
-					false);
+					(NUM_THREADS > 1));
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -300,17 +330,28 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 				DimensionalityType.SPATIAL_TEMPORAL,
 				exportDir.getAbsolutePath(),
 				"avro",
-				4);
+				NUM_THREADS);
 		try {
+			URL[] expectedResultsUrls;
+			if (POINTS_ONLY) {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+			else {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+					new File(
+							TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+
 			testQuery(
 					new File(
 							TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
-					new URL[] {
-						new File(
-								HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()
-					},
+					expectedResultsUrls,
 					"reingested bounding box and time range");
 		}
 		catch (final Exception e) {

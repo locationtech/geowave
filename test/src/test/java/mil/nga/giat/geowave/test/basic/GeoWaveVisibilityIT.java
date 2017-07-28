@@ -11,6 +11,8 @@
 
 package mil.nga.giat.geowave.test.basic;
 
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -23,6 +25,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -31,6 +34,9 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
+import mil.nga.giat.geowave.adapter.raster.RasterUtils;
+import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryAdapter;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -43,6 +49,7 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
@@ -55,11 +62,11 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeoWaveVisibilityIT extends
 		AbstractGeoWaveIT
 {
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
 	})
-	protected DataStorePluginOptions dataStore;
+	protected DataStorePluginOptions dataStoreOptions;
 
 	private static final Logger LOGGER = Logger.getLogger(AbstractGeoWaveIT.class);
 	private static long startMillis;
@@ -67,7 +74,7 @@ public class GeoWaveVisibilityIT extends
 	private static final int TOTAL_FEATURES = 800;
 
 	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStore;
+		return dataStoreOptions;
 	}
 
 	@BeforeClass
@@ -75,7 +82,7 @@ public class GeoWaveVisibilityIT extends
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING GeoWaveVisibilityIT        *");
+		LOGGER.warn("*         RUNNING GeoWaveVisibilityIT   *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -84,7 +91,7 @@ public class GeoWaveVisibilityIT extends
 	public static void reportTest() {
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED GeoWaveVisibilityIT          *");
+		LOGGER.warn("*      FINISHED GeoWaveVisibilityIT     *");
 		LOGGER
 				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
 						+ "s elapsed.                 *");
@@ -93,6 +100,232 @@ public class GeoWaveVisibilityIT extends
 	}
 
 	@Test
+	public void testIngestAndQueryMixedVisibilityRasters()
+			throws IOException {
+		final String coverageName = "testMixedVisibilityRasters";
+		final int tileSize = 64;
+		final double westLon = 0;
+		final double eastLon = 45;
+		final double southLat = 0;
+		final double northLat = 45;
+
+		ingestAndQueryMixedVisibilityRasters(
+				coverageName,
+				tileSize,
+				westLon,
+				eastLon,
+				southLat,
+				northLat);
+
+		TestUtils.deleteAll(dataStoreOptions);
+	}
+
+	private void ingestAndQueryMixedVisibilityRasters(
+			final String coverageName,
+			final int tileSize,
+			final double westLon,
+			final double eastLon,
+			final double southLat,
+			final double northLat )
+			throws IOException {
+		// Create two test rasters
+		final int numBands = 8;
+		final DataStore dataStore = dataStoreOptions.createDataStore();
+		final RasterDataAdapter adapter = RasterUtils.createDataAdapterTypeDouble(
+				coverageName,
+				numBands,
+				tileSize,
+				new NoDataMergeStrategy());
+		final WritableRaster raster1 = RasterUtils.createRasterTypeDouble(
+				numBands,
+				tileSize);
+		final WritableRaster raster2 = RasterUtils.createRasterTypeDouble(
+				numBands,
+				tileSize);
+
+		TestUtils.fillTestRasters(
+				raster1,
+				raster2,
+				tileSize);
+
+		try (IndexWriter writer = dataStore.createWriter(
+				adapter,
+				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+			// Write the first raster w/ vis info
+			writer.write(
+					RasterUtils.createCoverageTypeDouble(
+							coverageName,
+							westLon,
+							eastLon,
+							southLat,
+							northLat,
+							raster1),
+					getRasterVisWriter());
+
+			// Write the second raster w/ no vis info
+			writer.write(RasterUtils.createCoverageTypeDouble(
+					coverageName,
+					westLon,
+					eastLon,
+					southLat,
+					northLat,
+					raster2));
+		}
+
+		// First, query w/ no authorizations. We should get
+		// just the second raster back
+		QueryOptions queryOptions = new QueryOptions(
+				new ByteArrayId(
+						coverageName),
+				null);
+
+		try (CloseableIterator<?> it = dataStore.query(
+				queryOptions,
+				new EverythingQuery())) {
+
+			final GridCoverage coverage = (GridCoverage) it.next();
+			final Raster raster = coverage.getRenderedImage().getData();
+
+			Assert.assertEquals(
+					tileSize,
+					raster.getWidth());
+			Assert.assertEquals(
+					tileSize,
+					raster.getHeight());
+
+			for (int x = 0; x < tileSize; x++) {
+				for (int y = 0; y < tileSize; y++) {
+					for (int b = 0; b < numBands; b++) {
+						double p0 = raster.getSampleDouble(
+								x,
+								y,
+								b);
+						double p1 = raster2.getSampleDouble(
+								x,
+								y,
+								b);
+
+						Assert.assertEquals(
+								"x=" + x + ",y=" + y + ",b=" + b,
+								p0,
+								p1,
+								0.0);
+					}
+				}
+			}
+
+			// there should be exactly one
+			Assert.assertFalse(it.hasNext());
+		}
+
+		// Now, query w/ authorization. We should get
+		// just the merged raster back
+		String[] auths = {
+			"a"
+		};
+		queryOptions.setAuthorizations(auths);
+
+		try (CloseableIterator<?> it = dataStore.query(
+				queryOptions,
+				new EverythingQuery())) {
+
+			final GridCoverage coverage = (GridCoverage) it.next();
+			final Raster raster = coverage.getRenderedImage().getData();
+
+			Assert.assertEquals(
+					tileSize,
+					raster.getWidth());
+			Assert.assertEquals(
+					tileSize,
+					raster.getHeight());
+
+			// the expected outcome is:
+			// band 1,2,3,4,5,6 has every value set correctly, band 0 has every
+			// even row set correctly and every odd row should be NaN, and band
+			// 7 has the upper quadrant as NaN and the rest set
+			for (int x = 0; x < tileSize; x++) {
+				for (int y = 0; y < tileSize; y++) {
+					for (int b = 1; b < 7; b++) {
+						double pExp = TestUtils.getTileValue(
+								x,
+								y,
+								b,
+								tileSize);
+						double pAct = raster.getSampleDouble(
+								x,
+								y,
+								b);
+
+						Assert.assertEquals(
+								"x=" + x + ",y=" + y + ",b=" + b,
+								pExp,
+								pAct,
+								0.0);
+					}
+					if ((y % 2) == 0) {
+						double pExp = TestUtils.getTileValue(
+								x,
+								y,
+								0,
+								tileSize);
+						double pAct = raster.getSampleDouble(
+								x,
+								y,
+								0);
+
+						Assert.assertEquals(
+								"x=" + x + ",y=" + y + ",b=0",
+								pExp,
+								pAct,
+								0.0);
+					}
+					else {
+						double pAct = raster.getSampleDouble(
+								x,
+								y,
+								0);
+						Assert.assertEquals(
+								"x=" + x + ",y=" + y + ",b=0",
+								Double.NaN,
+								pAct,
+								0.0);
+					}
+					if ((x > ((tileSize * 3) / 4)) && (y > ((tileSize * 3) / 4))) {
+						double pAct = raster.getSampleDouble(
+								x,
+								y,
+								7);
+						Assert.assertEquals(
+								"x=" + x + ",y=" + y + ",b=7",
+								Double.NaN,
+								pAct,
+								0.0);
+					}
+					else {
+						double pExp = TestUtils.getTileValue(
+								x,
+								y,
+								7,
+								tileSize);
+						double pAct = raster.getSampleDouble(
+								x,
+								y,
+								7);
+						Assert.assertEquals(
+								"x=" + x + ",y=" + y + ",b=7",
+								pExp,
+								pAct,
+								0.0);
+					}
+				}
+			}
+
+			// there should be exactly one
+			Assert.assertFalse(it.hasNext());
+		}
+	}
+
+	// @Test
 	public void testIngestAndQueryMixedVisibilityFields()
 			throws MismatchedIndexToAdapterMapping,
 			IOException {
@@ -100,7 +333,7 @@ public class GeoWaveVisibilityIT extends
 				getType());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				getType());
-		final DataStore store = dataStore.createDataStore();
+		final DataStore store = dataStoreOptions.createDataStore();
 		try (IndexWriter writer = store.createWriter(
 				adapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
@@ -121,10 +354,10 @@ public class GeoWaveVisibilityIT extends
 								0)));
 				writer.write(
 						bldr.buildFeature(Integer.toString(i)),
-						getVisWriter());
+						getFeatureVisWriter());
 			}
 		}
-		final DifferingFieldVisibilityEntryCount differingVisibilities = (DifferingFieldVisibilityEntryCount) dataStore
+		final DifferingFieldVisibilityEntryCount differingVisibilities = (DifferingFieldVisibilityEntryCount) dataStoreOptions
 				.createDataStatisticsStore()
 				.getDataStatistics(
 						adapter.getAdapterId(),
@@ -139,9 +372,10 @@ public class GeoWaveVisibilityIT extends
 		testQueryMixed(
 				store,
 				true);
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
-	private VisibilityWriter<SimpleFeature> getVisWriter() {
+	private VisibilityWriter<SimpleFeature> getFeatureVisWriter() {
 		return new VisibilityWriter<SimpleFeature>() {
 			@Override
 			public FieldVisibilityHandler<SimpleFeature, Object> getFieldVisibilityHandler(
@@ -196,6 +430,27 @@ public class GeoWaveVisibilityIT extends
 					}
 				};
 			}
+		};
+	}
+
+	private VisibilityWriter<GridCoverage> getRasterVisWriter() {
+		return new VisibilityWriter<GridCoverage>() {
+			@Override
+			public FieldVisibilityHandler<GridCoverage, Object> getFieldVisibilityHandler(
+					ByteArrayId fieldId ) {
+				return new FieldVisibilityHandler<GridCoverage, Object>() {
+					@Override
+					public byte[] getVisibility(
+							GridCoverage rowValue,
+							ByteArrayId fieldId,
+							Object fieldValue ) {
+						return new ByteArrayId(
+								"a").getBytes();
+					}
+
+				};
+			}
+
 		};
 	}
 

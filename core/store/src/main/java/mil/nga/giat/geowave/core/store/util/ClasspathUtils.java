@@ -44,10 +44,11 @@ public class ClasspathUtils
 			final URL... additionalClasspathUrls )
 			throws IOException {
 
+		final File jarDir = jarFile.getParentFile();
 		final String classpath = getClasspath(
 				context,
 				additionalClasspathUrls);
-		final File jarDir = jarFile.getParentFile();
+
 		if (!jarDir.exists()) {
 			try {
 				jarDir.mkdirs();
@@ -81,7 +82,10 @@ public class ClasspathUtils
 					Attributes.Name.MAIN_CLASS,
 					mainClass);
 		}
-
+		// HP Fortify "Improper Resource Shutdown or Release" false positive
+		// target is inside try-as-resource clause (and is auto-closeable) and
+		// the FileOutputStream
+		// is closed implicitly by target.close()
 		try (final JarOutputStream target = new JarOutputStream(
 				new FileOutputStream(
 						jarFile),
@@ -116,6 +120,7 @@ public class ClasspathUtils
 						classpathBuilder,
 						u);
 			}
+
 			// assume 0 is the system classloader and skip it
 			for (int i = 0; i < classloaders.size(); i++) {
 				final ClassLoader classLoader = classloaders.get(i);

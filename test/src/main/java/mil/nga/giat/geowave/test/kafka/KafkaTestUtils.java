@@ -39,7 +39,8 @@ public class KafkaTestUtils
 			"kafka-logs");
 
 	public static void testKafkaStage(
-			final String ingestFilePath ) {
+			final String ingestFilePath )
+			throws Exception {
 		LOGGER.warn("Staging '" + ingestFilePath + "' to a Kafka topic - this may take several minutes...");
 		final String[] args = null;
 		String localhost = "localhost";
@@ -75,7 +76,8 @@ public class KafkaTestUtils
 	public static void testKafkaIngest(
 			final DataStorePluginOptions options,
 			final boolean spatialTemporal,
-			final String ingestFilePath ) {
+			final String ingestFilePath )
+			throws Exception {
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");
 
 		// // FIXME

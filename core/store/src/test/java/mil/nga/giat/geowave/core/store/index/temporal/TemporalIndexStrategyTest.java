@@ -14,7 +14,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.InsertionIds;

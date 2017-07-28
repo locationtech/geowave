@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.core.geotime.store.query;
 
 import static org.junit.Assert.assertEquals;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryAdapter;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
@@ -22,6 +23,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.junit.Test;
 
@@ -180,14 +182,14 @@ public class SpatialQueryTest
 		};
 
 		int pos = 0;
-		final CommonIndexModel model = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		for (final IndexedPersistenceEncoding dataItem : data) {
-			for (final QueryFilter filter : queryCopy.createFilters(model)) {
+			for (final QueryFilter filter : queryCopy.createFilters(index)) {
 				assertEquals(
 						"result: " + pos,
 						expectedResults[pos++],
 						filter.accept(
-								model,
+								index.getIndexModel(),
 								dataItem));
 			}
 		}

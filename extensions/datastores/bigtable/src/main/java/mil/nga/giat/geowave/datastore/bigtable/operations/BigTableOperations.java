@@ -12,64 +12,59 @@ package mil.nga.giat.geowave.datastore.bigtable.operations;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.HConstants;
+import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 
-import com.google.cloud.bigtable.hbase.BigtableConfiguration;
+import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.datastore.bigtable.BigTableConnectionPool;
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
 import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class BigTableOperations extends
 		HBaseOperations
 {
-
-	public BigTableOperations()
-			throws IOException {
-		this(
-				DEFAULT_TABLE_NAMESPACE);
-	}
+	private HashSet<String> tableCache = new HashSet();
 
 	public BigTableOperations(
-			final String geowaveNamespace )
-			throws IOException {
-		this(
-				BigTableOptions.DEFAULT_PROJECT_ID,
-				BigTableOptions.DEFAULT_INSTANCE_ID,
-				geowaveNamespace);
-	}
-
-	public BigTableOperations(
-			final String projectId,
-			final String instanceId,
-			final String geowaveNamespace )
+			final BigTableOptions options )
 			throws IOException {
 		super(
-				getConnection(
-						projectId,
-						instanceId),
-				geowaveNamespace);
+				BigTableConnectionPool.getInstance().getConnection(
+						options.getProjectId(),
+						options.getInstanceId()),
+				options.getGeowaveNamespace(),
+				options.getHBaseOptions());
 	}
 
-	private static Connection getConnection(
-			final String projectId,
-			final String instanceId ) {
+	@Override
+	public RegionLocator getRegionLocator(
+			final String tableName )
+			throws IOException {
+		BigtableRegionLocator regionLocator = (BigtableRegionLocator) super.getRegionLocator(tableName);
 
-		final Configuration config = BigtableConfiguration.configure(
-				projectId,
-				instanceId);
+		if (regionLocator != null) {
+			// Force region update
+			if (regionLocator.getAllRegionLocations().size() <= 1) {
+				regionLocator.getRegionLocation(
+						HConstants.EMPTY_BYTE_ARRAY,
+						true);
+			}
+		}
 
-		// TODO: Bigtable configgy things? What about connection pooling?
-		config.setBoolean(
-				"hbase.online.schema.update.enable",
-				true);
+		return regionLocator;
+	}
 
-		return BigtableConfiguration.connect(config);
+	protected void forceRegionUpdate(
+			BigtableRegionLocator regionLocator ) {
+
 	}
 
 	@Override
@@ -79,13 +74,28 @@ public class BigTableOperations extends
 			String... authorizations )
 			throws IOException {
 
-		if (tableExists(tableName)) {
-			// TODO Cache locally b/c numerous checks can be expensive
+		// Check the local cache
+		boolean tableAvailable = tableCache.contains(tableName);
+
+		// No local cache. Check the server and update cache
+		if (!tableAvailable) {
+			if (indexExists(new ByteArrayId(
+					tableName))) {
+				tableAvailable = true;
+
+				tableCache.add(tableName);
+			}
+		}
+
+		// Get the results if available
+		if (tableAvailable) {
 			return super.getScannedResults(
 					scanner,
 					tableName,
 					authorizations);
 		}
+
+		// Otherwise, return empty results
 		return new ResultScanner() {
 			@Override
 			public Iterator<Result> iterator() {
@@ -114,9 +124,7 @@ public class BigTableOperations extends
 			final BigTableOptions options )
 			throws IOException {
 		return new BigTableOperations(
-				options.getProjectId(),
-				options.getInstanceId(),
-				options.getGeowaveNamespace());
+				options);
 	}
 
 }

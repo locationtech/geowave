@@ -1,4 +1,4 @@
-option java_package = "mil.nga.giat.geowave.datastore.hbase.query.protobuf";
+option java_package = "mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf";
 option java_outer_classname = "FilterProtos";
 option java_generic_services = true;
 option java_generate_equals_and_hash = true;

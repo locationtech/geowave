@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -12,20 +12,16 @@ package mil.nga.giat.geowave.test.query;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -39,6 +35,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
@@ -69,17 +67,13 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
-import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
-@GeoWaveTestStore({
+@GeoWaveTestStore(value = {
 	GeoWaveStoreType.ACCUMULO,
-	// GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.HBASE
 })
-public class SpatialTemporalQueryIT extends
-		AbstractGeoWaveIT
+public class SpatialTemporalQueryIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd'T'hh:mm:ss'Z'");
@@ -109,21 +103,12 @@ public class SpatialTemporalQueryIT extends
 
 	protected DataStorePluginOptions dataStoreOptions;
 
-	@NamespaceOverride(TEST_DAY_RANGE_NAMESPACE)
-	protected DataStorePluginOptions dayRangeDataStoreOptions;
-
-	@Override
-	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStoreOptions;
-	}
-
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalQueryIT.class);
 	private static long startMillis;
 
 	@BeforeClass
 	public static void startTimer() {
 		CQL_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-		;
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -144,16 +129,12 @@ public class SpatialTemporalQueryIT extends
 		LOGGER.warn("-----------------------------------------");
 	}
 
-	@After
-	public void clearDayRangeDataStore() {
-		TestUtils.deleteAll(dayRangeDataStoreOptions);
-	}
-
 	@Before
 	public void initSpatialTemporalTestData()
 			throws IOException,
 			GeoWavePluginException {
 		dataStore = dataStoreOptions.createDataStore();
+
 		SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		builder.setName("simpletimestamp");
 		builder.add(
@@ -164,6 +145,10 @@ public class SpatialTemporalQueryIT extends
 				Date.class);
 		timeStampAdapter = new FeatureDataAdapter(
 				builder.buildFeatureType());
+		timeStampAdapter.init(
+				YEAR_INDEX,
+				MONTH_INDEX,
+				DAY_INDEX);
 
 		builder = new SimpleFeatureTypeBuilder();
 		builder.setName("simpletimerange");
@@ -178,6 +163,10 @@ public class SpatialTemporalQueryIT extends
 				Date.class);
 		timeRangeAdapter = new FeatureDataAdapter(
 				builder.buildFeatureType());
+		timeRangeAdapter.init(
+				YEAR_INDEX,
+				MONTH_INDEX,
+				DAY_INDEX);
 
 		Calendar cal = getInitialDayCalendar();
 		final GeometryFactory geomFactory = new GeometryFactory();

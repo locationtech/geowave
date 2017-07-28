@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
+import java.net.URL;
 
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
 import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
@@ -25,7 +26,7 @@ import mil.nga.giat.geowave.core.ingest.index.IndexProvider;
  */
 public interface LocalFileIngestPlugin<O> extends
 		LocalPluginBase,
-		IngestPluginBase<File, O>,
+		IngestPluginBase<URL, O>,
 		IndexProvider
 {
 }

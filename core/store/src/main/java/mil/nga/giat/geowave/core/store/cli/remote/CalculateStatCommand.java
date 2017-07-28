@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,7 +22,6 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -32,9 +31,9 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StatsCommandLineOptions;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
@@ -45,8 +44,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
  * existing value.
  */
 public class CalculateStatCommand extends
-		AbstractStatsCommand implements
-		Command
+		AbstractStatsCommand<Void>
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CalculateStatCommand.class);
@@ -61,20 +59,10 @@ public class CalculateStatCommand extends
 	@Override
 	public void execute(
 			final OperationParams params ) {
-
-		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
-			throw new ParameterException(
-					"Requires arguments: <store name> <adapterId> <statId>");
-		}
-
-		statId = parameters.get(2);
-
-		super.run(
-				params,
-				parameters);
+		computeResults(params);
 	}
 
+	@Override
 	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
 			final DataAdapter<?> adapter,
@@ -92,11 +80,11 @@ public class CalculateStatCommand extends
 					adapter.getAdapterId()).getIndices(
 					indexStore)) {
 
-				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 				@SuppressWarnings({
 					"rawtypes",
 					"unchecked"
 				})
+				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 				final DataStoreStatisticsProvider provider = new DataStoreStatisticsProvider(
 						adapter,
 						index,
@@ -110,11 +98,7 @@ public class CalculateStatCommand extends
 					}
 				};
 
-				try (@SuppressWarnings({
-					"rawtypes",
-					"unchecked"
-				})
-				StatsCompositionTool<?> statsTool = new StatsCompositionTool(
+				try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
 						provider,
 						storeOptions.createDataStatisticsStore(),
 						index,
@@ -158,5 +142,22 @@ public class CalculateStatCommand extends
 		parameters.add(storeName);
 		parameters.add(adapterId);
 		parameters.add(statId);
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params ) {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 3) {
+			throw new ParameterException(
+					"Requires arguments: <store name> <adapterId> <statId>");
+		}
+
+		statId = parameters.get(2);
+
+		super.run(
+				params,
+				parameters);
+		return null;
 	}
 }

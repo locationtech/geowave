@@ -35,7 +35,7 @@ public class DistributedRenderResult implements
 		// original draw order
 		private List<Pair<PersistableRenderedImage, PersistableComposite>> orderedStyles;
 
-		protected CompositeGroupResult() {}
+		public CompositeGroupResult() {}
 
 		public CompositeGroupResult(
 				final PersistableComposite composite,
@@ -275,7 +275,7 @@ public class DistributedRenderResult implements
 	// the parent image essentially gets labels rendered to it
 	private PersistableRenderedImage parentImage;
 
-	protected DistributedRenderResult() {}
+	public DistributedRenderResult() {}
 
 	public DistributedRenderResult(
 			final PersistableRenderedImage parentImage,

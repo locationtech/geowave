@@ -26,14 +26,15 @@ import org.apache.accumulo.server.init.Initialize;
 import org.apache.accumulo.tserver.TabletServer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.junit.Assert;
 
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
@@ -53,6 +54,9 @@ public class AccumuloStoreTestEnvironment extends
 	}
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloStoreTestEnvironment.class);
+	private final static boolean KEEP_LOGS = false;
+	private final static int NUM_TABLET_SERVERS = 2;
+
 	protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 	protected static final String HADOOP_DLL = "hadoop.dll";
@@ -100,7 +104,7 @@ public class AccumuloStoreTestEnvironment extends
 							TEMP_DIR,
 							DEFAULT_MINI_ACCUMULO_PASSWORD);
 					config.setZooKeeperPort(Integer.parseInt(zookeeper.split(":")[1]));
-					config.setNumTservers(2);
+					config.setNumTservers(NUM_TABLET_SERVERS);
 
 					miniAccumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
 							config,
@@ -213,7 +217,7 @@ public class AccumuloStoreTestEnvironment extends
 						e);
 			}
 		}
-		if (TEMP_DIR != null) {
+		if (!KEEP_LOGS && TEMP_DIR != null) {
 			try {
 				// sleep because mini accumulo processes still have a
 				// hold on the log files and there is no hook to get
@@ -238,6 +242,23 @@ public class AccumuloStoreTestEnvironment extends
 		accumuloOpts.setPassword(accumuloPassword);
 		accumuloOpts.setInstance(accumuloInstance);
 		accumuloOpts.setZookeeper(zookeeper);
+
+		// String serverEnabledProp =
+		// System.getProperty(GeoWaveITRunner.SERVER_ENABLED_PROPERTY_NAME);
+		// if (TestUtils.isSet(serverEnabledProp)) {
+		// Boolean enabled = Boolean.parseBoolean(serverEnabledProp);
+		// ((AccumuloOptions)
+		// accumuloOpts.getStoreOptions()).setServerSideLibraryEnabled(enabled);
+		//
+		// LOGGER.warn("Accumulo server-side libraries enabled: " + enabled);
+		// }
+		// else {
+		// LOGGER.warn("Accumulo server-side libraries enabled: "
+		// + ((AccumuloOptions)
+		// accumuloOpts.getStoreOptions()).isServerSideLibraryEnabled() +
+		// " (DEFAULT)");
+		// }
+
 	}
 
 	@Override

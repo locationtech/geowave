@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -24,15 +26,13 @@ import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 
-import org.opengis.feature.simple.SimpleFeature;
-
 /**
  * This Query Strategy purely chooses the index that most closely preserves
  * locality given a query. It will behave the best assuming a single prefix
  * query but because it doesn't always choose the index with the most dimensions
  * defined, it will not always have the most fine-grained contraints given a
  * larger set of indexable ranges.
- * 
+ *
  *
  */
 public class ChooseLocalityPreservingQueryStrategy implements
@@ -59,11 +59,12 @@ public class ChooseLocalityPreservingQueryStrategy implements
 			public boolean hasNext() {
 				double indexMax = -1;
 				PrimaryIndex bestIdx = null;
-				while (!done && i < indices.length) {
+				while (!done && (i < indices.length)) {
 					nextIdx = indices[i++];
-					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) continue;
-					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx
-							.getIndexStrategy());
+					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) {
+						continue;
+					}
+					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx);
 					if (IndexUtils.isFullTableScan(queryRanges)) {
 						// keep this is as a default in case all indices
 						// result in a full table scan

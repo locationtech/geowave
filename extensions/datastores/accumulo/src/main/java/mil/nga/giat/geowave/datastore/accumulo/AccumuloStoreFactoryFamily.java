@@ -12,7 +12,6 @@ package mil.nga.giat.geowave.datastore.accumulo;
 
 import mil.nga.giat.geowave.core.store.BaseDataStoreFamily;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStoreFactory;
@@ -44,10 +43,6 @@ public class AccumuloStoreFactoryFamily extends
 				TYPE,
 				DESCRIPTION,
 				new AccumuloFactoryHelper());
-	}
-	@Override
-	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory() {
-		return new AccumuloOperationsFactory();
 	}
 
 }

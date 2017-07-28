@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -12,15 +12,15 @@ package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Mapper;
+
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 /**
  * This class is the mapper used when aggregating key value pairs from
@@ -59,9 +59,7 @@ public class IntermediateKeyValueMapper extends
 			final String ingestWithReducerStr = context.getConfiguration().get(
 					AbstractMapReduceIngest.INGEST_PLUGIN_KEY);
 			final byte[] ingestWithReducerBytes = ByteArrayUtils.byteArrayFromString(ingestWithReducerStr);
-			ingestWithReducer = PersistenceUtils.fromBinary(
-					ingestWithReducerBytes,
-					IngestWithReducer.class);
+			ingestWithReducer = (IngestWithReducer) PersistenceUtils.fromBinary(ingestWithReducerBytes);
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(
