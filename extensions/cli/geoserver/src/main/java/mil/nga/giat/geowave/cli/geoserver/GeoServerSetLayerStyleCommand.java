@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.io.IOUtils;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -45,6 +46,9 @@ public class GeoServerSetLayerStyleCommand extends
 	private String styleName = null;
 
 	@Parameter(description = "<layer name>")
+	@RestParameters(names = {
+		"layerName"
+	})
 	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
