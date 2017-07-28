@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>api</module>
+		<module>javaspark</module>
 		<module>mapreduce</module>
 		<module>spark</module>
 	</modules>
