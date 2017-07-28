@@ -8,7 +8,7 @@ Boost is required when using the Jace bindings.
 
 === Prepackaged Source and Binaries
 
-There is a public http://ngageoint.github.io/geowave/packages.html[GeoWave RPM Repo] where you can download a tarball
+There is a public http://locationtech.github.io/geowave/packages.html[GeoWave RPM Repo] where you can download a tarball
 for the GeoWave Jace bindings for your desired platform.  If your platform is not available, there is a source tarball
 which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
 
@@ -23,7 +23,7 @@ First, we need to clone Jace and GeoWave.
 [source, bash]
 ----
 $ git clone git@github.com:jwomeara/jace.git
-$ git clone git@github.com:ngageoint/geowave.git
+$ git clone git@github.com:locationtech/geowave.git
 ----
 
 Note: We are using a non-standard Jace implementation.

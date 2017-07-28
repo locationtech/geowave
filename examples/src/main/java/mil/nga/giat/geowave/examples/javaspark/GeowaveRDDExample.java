@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.example.javaspark;
+package mil.nga.giat.geowave.examples.javaspark;
 
 import java.io.IOException;
 

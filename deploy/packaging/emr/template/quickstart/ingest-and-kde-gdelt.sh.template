@@ -10,6 +10,9 @@ for file in `cat md5sums | cut -d' ' -f3 | grep "^${TIME_REGEX}"` ; do sudo wget
 md5sum -c md5sums 2>&1 | grep "^${TIME_REGEX}"
 cd $STAGING_DIR
 
+# disabling encryption
+geowave config set geowave.encryption.enabled=false
+
 # Ingest the data. Indexed spatial only in this example. It can also be indexed using spatial-temporal
 geowave config addstore gdelt --gwNamespace geowave.gdelt \
 $DATASTORE_PARAMS_TOKEN
