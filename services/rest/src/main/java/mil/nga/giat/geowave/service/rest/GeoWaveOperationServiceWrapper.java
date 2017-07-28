@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
@@ -22,6 +23,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.service.rest.GeoWaveOperationServiceWrapper.MissingArgumentException;
 
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
@@ -82,9 +84,26 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			throws MissingArgumentException {
 
 		for (final Field field : FieldUtils.getFieldsWithAnnotation(
+				// TODO Take out this loop?
 				getClass(),
 				Parameter.class)) {
-			final Parameter parameter = field.getAnnotation(Parameter.class);
+			processField(
+					form,
+					field);
+
+		}
+	}
+
+	private Field processField(
+			Form form,
+			Field field )
+			throws MissingArgumentException {
+		final Parameter parameter = field.getAnnotation(Parameter.class);
+
+		ParametersDelegate parametersDelegate = null;
+		parametersDelegate = field.getAnnotation(ParametersDelegate.class);
+
+		if (parameter != null) {
 			if (field.getType() == String.class) {
 				final String value = (form == null) ? getQueryValue(field.getName()) : form.getFirstValue(field
 						.getName());
@@ -176,7 +195,16 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				throw new RuntimeException(
 						"Unsupported format on field " + field);
 			}
+			return field;
 		}
+		else if (parametersDelegate != null) {
+			for (Field f : FieldUtils.getAllFields(field.getType())) {
+				return processField(
+						form,
+						field);
+			}
+		}
+		return null;
 	}
 
 	private T handleRequest(
@@ -214,7 +242,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
-	private static class MissingArgumentException extends
+	public static class MissingArgumentException extends
 			Exception
 	{
 		/**

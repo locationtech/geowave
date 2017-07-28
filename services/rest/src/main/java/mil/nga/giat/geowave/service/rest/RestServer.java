@@ -85,7 +85,10 @@ public class RestServer extends
 		// Add paths for each command
 		final Router router = new Router();
 
-		SwaggerApiParser apiParser = new SwaggerApiParser("1.0.0", "GeoWave API", "REST API for GeoWave CLI commands");
+		SwaggerApiParser apiParser = new SwaggerApiParser(
+				"1.0.0",
+				"GeoWave API",
+				"REST API for GeoWave CLI commands");
 		for (final RestRoute route : availableRoutes) {
 
 			if (DefaultOperation.class.isAssignableFrom(route.getOperation())) {
@@ -96,7 +99,7 @@ public class RestServer extends
 
 				Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
 						.getOperation());
-				
+
 				apiParser.AddRoute(route);
 			}
 			else {
@@ -105,7 +108,7 @@ public class RestServer extends
 						(Class<? extends ServerResource>) route.getOperation());
 			}
 		}
-		
+
 		apiParser.SerializeSwaggerJson("swagger.json");
 
 		// Provide basic 404 error page for unknown route
@@ -175,7 +178,6 @@ public class RestServer extends
 			System.out.println("Could not create Restlet server - is the port already bound?");
 		}
 	}
-
 
 	/**
 	 * A simple ServerResource to show if the route's operation does not extend
