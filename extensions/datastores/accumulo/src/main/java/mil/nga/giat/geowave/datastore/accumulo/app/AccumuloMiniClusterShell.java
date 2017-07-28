@@ -28,7 +28,7 @@ import jline.console.ConsoleReader;
 
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
-public class GeoWaveDemoAppShell
+public class AccumuloMiniClusterShell
 {
 
 	public static void main(

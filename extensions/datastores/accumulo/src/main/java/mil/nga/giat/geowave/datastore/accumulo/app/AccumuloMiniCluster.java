@@ -1,3 +1,5 @@
+package mil.nga.giat.geowave.datastore.accumulo.app;
+
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
  * 
@@ -8,8 +10,6 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.examples.accumulo.app;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -26,9 +26,9 @@ import com.google.common.io.Files;
 
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
 
-public class GeoWaveDemoApp
+public class AccumuloMiniCluster
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveDemoApp.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloMiniCluster.class);
 	protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 
 	protected static boolean isYarn() {
@@ -64,7 +64,7 @@ public class GeoWaveDemoApp
 
 		final MiniAccumuloClusterImpl accumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
 				miniAccumuloConfig,
-				GeoWaveDemoApp.class);
+				AccumuloMiniCluster.class);
 		accumulo.start();
 
 		accumulo.exec(Monitor.class);
