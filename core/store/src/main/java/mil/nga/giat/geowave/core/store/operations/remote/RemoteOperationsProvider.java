@@ -23,6 +23,7 @@ public class RemoteOperationsProvider implements
 		ListAdapterCommand.class,
 		ListIndexCommand.class,
 		ListStatsCommand.class,
+		VersionCommand.class,
 		MergeDataCommand.class,
 		RecalculateStatsCommand.class,
 		RemoveAdapterCommand.class,

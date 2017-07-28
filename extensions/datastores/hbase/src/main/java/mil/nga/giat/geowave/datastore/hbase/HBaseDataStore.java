@@ -33,6 +33,7 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -60,9 +61,11 @@ import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseDataStatisticsStore;
 import mil.nga.giat.geowave.datastore.hbase.metadata.HBaseIndexStore;
 import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseConstraintsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowIdsQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.HBaseRowPrefixQuery;
+import mil.nga.giat.geowave.datastore.hbase.query.HBaseVersionQuery;
 import mil.nga.giat.geowave.datastore.hbase.query.SingleEntryFilter;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
@@ -207,7 +210,7 @@ public class HBaseDataStore extends
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String[] authorizations,
-			boolean delete ) {
+			final boolean delete ) {
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 
@@ -243,10 +246,10 @@ public class HBaseDataStore extends
 			Iterator<Result> resultIt;
 
 			if (!options.isEnableCustomFilters()) {
-				ArrayList<Result> filteredResults = new ArrayList<Result>();
+				final ArrayList<Result> filteredResults = new ArrayList<Result>();
 
 				for (Result result = results.next(); result != null; result = results.next()) {
-					byte[] rowId = result.getRow();
+					final byte[] rowId = result.getRow();
 
 					if (rowHasData(
 							rowId,
@@ -315,7 +318,7 @@ public class HBaseDataStore extends
 		buf.get(rawAdapterId);
 		buf.get(rawDataId);
 
-		for (ByteArrayId dataId : dataIds) {
+		for (final ByteArrayId dataId : dataIds) {
 			if (Arrays.equals(
 					rawDataId,
 					dataId.getBytes())) {
@@ -372,7 +375,7 @@ public class HBaseDataStore extends
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			boolean delete ) {
+			final boolean delete ) {
 
 		final HBaseConstraintsQuery hbaseQuery = new HBaseConstraintsQuery(
 				adapterIdsToQuery,
@@ -410,7 +413,7 @@ public class HBaseDataStore extends
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> adapterIdsToQuery,
-			boolean delete ) {
+			final boolean delete ) {
 		final HBaseRowPrefixQuery<Object> prefixQuery = new HBaseRowPrefixQuery<Object>(
 				index,
 				rowPrefix,
@@ -434,7 +437,7 @@ public class HBaseDataStore extends
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			boolean delete ) {
+			final boolean delete ) {
 		final HBaseRowIdsQuery<Object> q = new HBaseRowIdsQuery<Object>(
 				adapter,
 				index,
@@ -623,7 +626,16 @@ public class HBaseDataStore extends
 		public void flush() {
 			// HBase writer does not require/support flush
 		}
-
 	}
 
+	@Override
+	public String getVersion(
+			final StoreFactoryOptions options ) {
+		final HBaseRequiredOptions hbaseRequiredOptions = (HBaseRequiredOptions) options;
+		if (hbaseRequiredOptions == null) {
+			return null;
+		}
+		return new HBaseVersionQuery(
+				operations).queryVersion(hbaseRequiredOptions.getAdditionalOptions());
+	}
 }
