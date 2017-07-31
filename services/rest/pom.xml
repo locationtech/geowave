@@ -12,7 +12,6 @@
 	</properties>
 	<artifactId>geowave-service-rest</artifactId>
 	<name>GeoWave Services Rest</name>
-	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>

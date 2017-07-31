@@ -5,19 +5,12 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>Geowave Rest API</display-name>
 	<servlet>
-		<servlet-name>jersey-geowave-servlet</servlet-name>
-		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<servlet-name>MyApplication</servlet-name>
+		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
 		<init-param>
-			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>mil.nga.giat.geowave.service.impl</param-value>
+			<param-name>org.restlet.application</param-name>
+			<param-value>my.class.that.extends.Application.MyApplication</param-value>
 		</init-param>
-		<init-param>
-			<param-name>jersey.config.server.provider.classnames</param-name>
-			<param-value>
-				org.glassfish.jersey.media.multipart.MultiPartFeature
-			</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
