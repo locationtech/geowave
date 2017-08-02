@@ -8,7 +8,7 @@
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
-	<url>https://github.com/ngageoint/geowave</url>
+	<url>https://github.com/locationtech/geowave</url>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -28,8 +28,8 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
-		<url>https://github.com/ngageoint/geowave.git</url>
-		<connection>scm:git:https://github.com/ngageoint/geowave.git</connection>
+		<url>https://github.com/locationtech/geowave.git</url>
+		<connection>scm:git:https://github.com/locationtech/geowave.git</connection>
 		<tag>HEAD</tag>
 	</scm>
 	<properties>

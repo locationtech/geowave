@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.javaspark.kmeans;
+package mil.nga.giat.geowave.analytic.javaspark;
 
 import java.util.Collections;
 import java.util.List;

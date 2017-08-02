@@ -7,14 +7,13 @@ node {
    // Mark the code checkout 'stage'
    stage 'Checkout'
    // Get GeoWave source from GitHub repository
-   checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: true], [$class: 'LocalBranch', localBranch: 'master']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/locationtech/geowave.git']]])
-
+   checkout scm
    // Mark the create docker image 'stage'
    stage 'Create Docker Image'
    // Build the docker container
-   sh 'docker build -t ngageoint/geowave-centos6-java8-build -f deploy/packaging/docker/geowave-centos6-java8-build.dockerfile deploy/packaging/docker'
-   sh 'docker build -t ngageoint/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
-   sh 'docker build -t ngageoint/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
+   sh 'docker build -t locationtech/geowave-centos6-java8-build -f deploy/packaging/docker/geowave-centos6-java8-build.dockerfile deploy/packaging/docker'
+   sh 'docker build -t locationtech/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
+   sh 'docker build -t locationtech/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
 
    stage 'Clean bucket and local space'
    sh 'deploy/scripts/clean-up.py'

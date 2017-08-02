@@ -7,16 +7,22 @@ image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
 
 Hardware Configuration
 
+* Instance Group Configuration
+** Select Uniform Instance Groups 
 * Network
 ** Select your VPC
-** If you haven’t setup a VPC please see the Create EC2 VPC section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here)>>.
+** If you haven’t setup a VPC please see the Create EC2 VPC section <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, here>>.
 * EC2 Subnet
 ** Select the subnet (or one of the subnets) associated with your VPC
+* Root device EBS volume size
+** You can ignore this
 * Master
-** Select m4.xlarge from the EC2 instance type dropdown list
+** Edit the Instance Type to be m4.xlarge
+** Do not touch the EBS Storage
 * Core
-** Select m4.xlarge from the EC2 instance type dropdown list
+** Edit the Instance Type to be m4.xlarge
 ** Select 2 for the Instance count
+** Do not touch the EBS Storage or Auto Scaling
 * Task
 ** We won’t be using a task node in this walkthrough so leave the instance count at 0
 
@@ -24,5 +30,5 @@ Hardware Configuration
 
 [NOTE]
 ====
-You can request spot instances here to save money. 
+You can request spot instances here to save money. Info and current pricing on spot instances can be found https://aws.amazon.com/ec2/spot/pricing/[here].
 ====

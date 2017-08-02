@@ -1,6 +1,8 @@
-package mil.nga.giat.geowave.analytic.javaspark.kmeans;
+package mil.nga.giat.geowave.analytic.javaspark;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.spark.SparkConf;
@@ -18,12 +20,10 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import mil.nga.giat.geowave.analytic.javaspark.GeoWaveRDD;
+import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -82,25 +82,26 @@ public class KMeansRunner
 					"You must supply an input datastore!");
 		}
 
-		QueryOptions queryOptions = null;
+		// Retrieve the feature adapters
+		List<ByteArrayId> featureAdapterIds;
+
+		// If provided, just use the one
 		if (adapterId != null) {
-			// Retrieve the adapters
-			CloseableIterator<DataAdapter<?>> adapterIt = inputDataStore.createAdapterStore().getAdapters();
-			DataAdapter adapterForQuery = null;
-
-			while (adapterIt.hasNext()) {
-				DataAdapter adapter = adapterIt.next();
-				String adapterName = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
-
-				if (adapterName.equals(adapterId)) {
-					adapterForQuery = adapter;
-					queryOptions = new QueryOptions(
-							adapterForQuery);
-					break;
-				}
-			}
+			featureAdapterIds = new ArrayList<>();
+			featureAdapterIds.add(new ByteArrayId(
+					adapterId));
+		}
+		else { // otherwise, grab all the feature adapters
+			featureAdapterIds = FeatureDataUtils.getFeatureAdapterIds(inputDataStore);
 		}
 
+		QueryOptions queryOptions = new QueryOptions();
+		queryOptions.setAdapter(featureAdapterIds);
+
+		// This is required due to some funkiness in GeoWaveInputFormat
+		queryOptions.getAdaptersArray(inputDataStore.createAdapterStore());
+
+		// Add a spatial filter if requested
 		DistributableQuery query = null;
 		if (bbox != null) {
 			Geometry geom = new GeometryFactory().toGeometry(bbox);
@@ -109,7 +110,7 @@ public class KMeansRunner
 		}
 
 		// Load RDD from datastore
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaPairRdd = GeoWaveRDD.rddForSimpleFeatures(
+		JavaPairRDD<GeoWaveInputKey, SimpleFeature> featureRdd = GeoWaveRDD.rddForSimpleFeatures(
 				jsc.sc(),
 				inputDataStore,
 				query,
@@ -117,7 +118,7 @@ public class KMeansRunner
 
 		// Retrieve the input centroids
 		centroidVectors = GeoWaveRDD.rddFeatureVectors(
-				javaPairRdd,
+				featureRdd,
 				timeField,
 				scaledTimeRange);
 		centroidVectors.cache();
@@ -186,14 +187,14 @@ public class KMeansRunner
 	public void setBoundingBox(
 			String bboxStr ) {
 		try {
-			// Expecting bbox in "LL-Lat LL-Lon UR-Lat UR-Lon" format
+			// Expecting bbox in "x1 y1 x2 y2" format
 			StringTokenizer tok = new StringTokenizer(
 					bboxStr,
 					" ");
-			String southStr = tok.nextToken();
 			String westStr = tok.nextToken();
-			String northStr = tok.nextToken();
+			String southStr = tok.nextToken();
 			String eastStr = tok.nextToken();
+			String northStr = tok.nextToken();
 
 			double west = Double.parseDouble(westStr);
 			double east = Double.parseDouble(eastStr);

@@ -1,7 +1,8 @@
-package mil.nga.giat.geowave.analytic.javaspark.kmeans;
+package mil.nga.giat.geowave.analytic.javaspark;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -222,49 +223,71 @@ public class KMeansUtils
 			final KMeansRunner runner,
 			final DataStorePluginOptions inputDataStore,
 			ByteArrayId adapterId ) {
-		if (adapterId == null) { // locate the first feature adapter
-			adapterId = FeatureDataUtils.getFirstFeatureAdapter(inputDataStore);
+		if (adapterId == null) { // if no id provided, locate a single
+									// featureadapter
+			List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(inputDataStore);
+			if (adapterIdList.size() == 1) {
+				adapterId = adapterIdList.get(0);
+			}
+			else if (adapterIdList.isEmpty()) {
+				LOGGER.error("No feature adapters found for use with time param");
+
+				return null;
+			}
+			else {
+				LOGGER.error("Multiple feature adapters found for use with time param. Please specify one.");
+
+				return null;
+
+			}
 		}
 
-		if (adapterId != null) {
-			ScaledTemporalRange scaledRange = new ScaledTemporalRange();
-			String timeField = FeatureDataUtils.getFirstTimeField(
+		ScaledTemporalRange scaledRange = new ScaledTemporalRange();
+
+		String timeField = FeatureDataUtils.getTimeField(
+				inputDataStore,
+				adapterId);
+
+		if (timeField != null) {
+			TemporalRange timeRange = DateUtilities.getTemporalRange(
+					inputDataStore,
+					adapterId,
+					timeField);
+
+			if (timeRange != null) {
+				scaledRange.setTimeRange(
+						timeRange.getStartTime(),
+						timeRange.getEndTime());
+			}
+
+			String geomField = FeatureDataUtils.getGeomField(
 					inputDataStore,
 					adapterId);
 
-			if (timeField != null) {
-				TemporalRange timeRange = DateUtilities.getTemporalRange(
-						inputDataStore,
-						adapterId);
+			Envelope bbox = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.getGeoBounds(
+					inputDataStore,
+					adapterId,
+					geomField);
 
-				if (timeRange != null) {
-					scaledRange.setTimeRange(
-							timeRange.getStartTime(),
-							timeRange.getEndTime());
-				}
-
-				Envelope bbox = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.getGeoBounds(
-						inputDataStore,
-						adapterId);
-
-				if (bbox != null) {
-					double xRange = bbox.getMaxX() - bbox.getMinX();
-					double yRange = bbox.getMaxY() - bbox.getMinY();
-					double valueRange = Math.min(
-							xRange,
-							yRange);
-					scaledRange.setValueRange(
-							0.0,
-							valueRange);
-				}
-
-				runner.setTimeParams(
-						timeField,
-						scaledRange);
-
-				return scaledRange;
+			if (bbox != null) {
+				double xRange = bbox.getMaxX() - bbox.getMinX();
+				double yRange = bbox.getMaxY() - bbox.getMinY();
+				double valueRange = Math.min(
+						xRange,
+						yRange);
+				scaledRange.setValueRange(
+						0.0,
+						valueRange);
 			}
+
+			runner.setTimeParams(
+					timeField,
+					scaledRange);
+
+			return scaledRange;
 		}
+
+		LOGGER.error("Couldn't determine field to use for time param");
 
 		return null;
 	}

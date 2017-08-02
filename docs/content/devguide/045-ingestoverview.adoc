@@ -27,4 +27,4 @@ cases it could make sense to provide a custom implementation of the writer (This
 HBase datastore). When performing a bulk ingest within the mapper or reducer of a job, it would be appropriate to define 
 a writer to add the mutations to the context of the bulk ingest rather than writing live to Accumulo or HBase.
 
-The full list of GeoWave ingest commands can be found in the http://ngageoint.github.io/geowave/commands.html#ingest-commands[GeoWave CLI Appendix^].
+The full list of GeoWave ingest commands can be found in the http://locationtech.github.io/geowave/commands.html#ingest-commands[GeoWave CLI Appendix^].

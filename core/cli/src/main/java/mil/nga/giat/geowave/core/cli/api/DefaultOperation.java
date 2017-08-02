@@ -12,14 +12,7 @@ package mil.nga.giat.geowave.core.cli.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
@@ -28,11 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
 
-import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
-import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 import mil.nga.giat.geowave.core.cli.spi.DefaultConfigProviderSpi;
 
 /**

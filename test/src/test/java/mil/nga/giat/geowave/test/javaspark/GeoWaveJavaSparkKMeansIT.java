@@ -96,18 +96,19 @@ public class GeoWaveJavaSparkKMeansIT
 				HAIL_SHAPEFILE_FILE,
 				1);
 
-		ByteArrayId adapterId = new ByteArrayId(
-				"hail");
+		String adapterId = "hail";
 
 		// Create the runner
 		final KMeansRunner runner = new KMeansRunner();
 		runner.setInputDataStore(inputDataStore);
+		runner.setAdapterId(adapterId);
 
 		// Attempt to set the time params
 		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(
 				runner,
 				inputDataStore,
-				adapterId);
+				new ByteArrayId(
+						adapterId));
 
 		if (scaledRange == null) {
 			Assert.fail("Failed to set time params");

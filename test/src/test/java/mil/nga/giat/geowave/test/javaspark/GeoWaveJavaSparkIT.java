@@ -59,7 +59,7 @@ public class GeoWaveJavaSparkIT extends
 	private static final int TORNADO_COUNT = 1196;
 
 	@GeoWaveTestStore(value = {
-		// GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;

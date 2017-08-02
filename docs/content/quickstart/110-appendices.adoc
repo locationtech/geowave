@@ -56,6 +56,18 @@ For more detailed information on creating and using S3 buckets please see the Am
 [appendix]
 <<<
 
+=== Upload to AWS S3 Bucket
+From the “Services” dropdown, select S3. Navigate to the bucket that you plan to use and click on the blue "Upload" button.
+
+image::upload-aws-bucket-1.png[scaledwidth="100%",alt="Upload bucket"]
+
+You can drag/drop the desired scripts into this bucket, or navigate to your file by clicking "add files."
+
+For more detailed information on uploading to S3 buckets please see the Amazon documentation http://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html[here].
+[[keypair-appendix]]
+[appendix]
+<<<
+
 === Create EC2 Key Pair
 
 From the “Services” dropdown, select EC2. Then select the “Key Pairs” link on the left side of the page and click the

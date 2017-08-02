@@ -17,7 +17,7 @@ aws emr create-cluster \
 --applications Name=Hadoop Name=HBase \
 --use-default-roles \
 --no-auto-terminate \
---bootstrap-actions Path=s3.amazonaws.com/geowave/latest/scripts/emr/${DATASTORE}/bootstrap-geowave.sh,Name=Bootstrap_GeoWave \
+--bootstrap-actions Path=s3://{Your_Bucket}/{Path_To_Your_Script},Name=Bootstrap_GeoWave \
 --tags ${YOUR_TAGNAME} \
 --region ${YOUR_REGION} \
 ----
@@ -37,15 +37,23 @@ aws emr create-cluster \
  * If your AWS EMR account has default security groups setup you can leave the EmrManagedMasterSecurityGroup and EmrManagedSlaveSecurityGroup out of --ec2-attributes
  * If you are unsure of which groups to use here please see the EC2 Security Group section <<110-appendices.adoc#create-ec2-security-group, here>>.
 - ${EMR_VERSION} - The version of EMR that you want to use for your cluster
- * Example: emr-5.1.0
- * GeoWave version 0.9.3 suports up to EMR version 5.2.0
-- ${DATASTORE} - The datastore you want to use. GeoWave curently suports Accumulo and HBase.
- * Example: accumulo
+ * Example: emr-5.7.0
+- ${Your_Bucket} - The name of the bucket that you created in s3. This is the home to your script.
+ * Example: geowave-guide-bucket
+- ${Path_To_Your_Script} - The path to the script that you are planning to use
+ * Example: scripts/hbase/bootstrap-geowave.sh
+ * Info on the bootstrap scripts and their locations can be found <<007-appendices.adoc#quickstart-guide-scripts, above>>
 - ${YOUR_TAGNAME} - Tag name for the cluster you are creating
  * Example: “geowave-guide”
  * The --tags is completely optional, but may help you search for this cluster if there are many on the aws account you are using
 - ${YOUR_REGION} - Your aws region
  * Example: “us-east-1”
+- Spot Instances
+ * You can opt to use spot instances to save money by adding `BidPrice` in your `--instance-groups` line. Info and current pricing on spot instances can be found https://aws.amazon.com/ec2/spot/pricing/[here]. The new line should look something like
+[source, bash]
+----
+--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.xlarge,BidPrice=${Bid_Price} InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m4.xlarge,BidPrice=${Bid_Price} \
+----  
 
 If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a 
 message  detailing why the command failed.
