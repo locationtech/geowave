@@ -49,13 +49,13 @@ public class KMeansSparkOptions
 	@Parameter(names = {
 		"-b",
 		"--bbox"
-	}, description = "Bounding box for spatial query (LL-Lat LL-Lon UR-Lat UR-Lon)")
+	}, description = "Bounding box for spatial query <x1 y1 x2 y2>")
 	private String bbox = null;
 
 	@Parameter(names = {
-		"-a",
-		"--adapterId"
-	}, description = "Adapter ID to query")
+		"-f",
+		"--featureType"
+	}, description = "Feature type name (adapter ID) to query")
 	private String adapterId = null;
 
 	public KMeansSparkOptions() {}

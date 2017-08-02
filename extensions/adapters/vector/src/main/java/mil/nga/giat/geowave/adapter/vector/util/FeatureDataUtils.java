@@ -241,7 +241,7 @@ public class FeatureDataUtils
 		}
 
 		AdapterStore adapterStore = dataStore.createAdapterStore();
-		
+
 		DataAdapter adapter = adapterStore.getAdapter(adapterId);
 
 		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
@@ -342,7 +342,7 @@ public class FeatureDataUtils
 
 		return null;
 	}
-	
+
 	public static int getFeatureAdapterCount(
 			DataStorePluginOptions dataStore ) {
 		CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();

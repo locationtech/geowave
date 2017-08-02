@@ -22,7 +22,6 @@ import com.vividsolutions.jts.io.ParseException;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.javaspark.sparksql.util.GeomReader;
-import mil.nga.giat.geowave.analytic.javaspark.sparksql.util.GeomWriter;
 import mil.nga.giat.geowave.analytic.javaspark.sparksql.util.SchemaConverter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -34,6 +33,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 public class SqlResultsWriter
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SqlResultsWriter.class);
+
+	private static final String DEFAULT_TYPE_NAME = "sqlresults";
 
 	private final Dataset<Row> results;
 	private final DataStorePluginOptions outputDataStore;
@@ -51,6 +52,11 @@ public class SqlResultsWriter
 
 	public void writeResults(
 			String typeName ) {
+		if (typeName == null) {
+			typeName = DEFAULT_TYPE_NAME;
+			LOGGER.warn("Using default type name (adapter id): '" + DEFAULT_TYPE_NAME + "' for SQL output");
+		}
+
 		StructType schema = results.schema();
 		SimpleFeatureType featureType = SchemaConverter.schemaToFeatureType(
 				schema,

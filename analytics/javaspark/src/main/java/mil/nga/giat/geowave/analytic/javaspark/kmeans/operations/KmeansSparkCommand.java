@@ -128,7 +128,7 @@ public class KmeansSparkCommand extends
 					adapterId);
 
 			if (scaledRange == null) {
-				LOGGER.error("Failed to set time params for kmeans");
+				LOGGER.error("Failed to set time params for kmeans. Please specify a valid feature type.");
 				throw new ParameterException(
 						"--useTime option: Failed to set time params");
 			}
@@ -159,7 +159,7 @@ public class KmeansSparkCommand extends
 		}
 
 		stopwatch.stop();
-		LOGGER.warn("KMeans runner took " + stopwatch.getTimeString());
+		LOGGER.debug("KMeans runner took " + stopwatch.getTimeString());
 
 		final KMeansModel clusterModel = runner.getOutputModel();
 
@@ -182,7 +182,7 @@ public class KmeansSparkCommand extends
 					"kmeans-hulls");
 
 			stopwatch.stop();
-			LOGGER.warn("KMeans hull generation took " + stopwatch.getTimeString());
+			LOGGER.debug("KMeans hull generation took " + stopwatch.getTimeString());
 		}
 	}
 

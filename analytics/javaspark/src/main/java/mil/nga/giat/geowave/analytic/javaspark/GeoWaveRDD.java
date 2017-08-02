@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -19,16 +14,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -164,7 +149,8 @@ public class GeoWaveRDD
 					if (timeField != null) {
 						// if this is a ranged schema, we have to take the
 						// midpoint
-						if (timeField.contains("|")) {
+						if (timeField.contains(
+								"|")) {
 							int pipeIndex = timeField.indexOf(
 									"|");
 							String startField = timeField.substring(
@@ -172,15 +158,16 @@ public class GeoWaveRDD
 									pipeIndex);
 							String endField = timeField.substring(
 									pipeIndex + 1);
-							
+
 							Date start = (Date) feature.getAttribute(
 									startField);
 							Date end = (Date) feature.getAttribute(
 									endField);
-							
+
 							long halfDur = (end.getTime() - start.getTime()) / 2;
-							
-							time = new Date(start.getTime() + halfDur);
+
+							time = new Date(
+									start.getTime() + halfDur);
 						}
 						else {
 							time = (Date) feature.getAttribute(
