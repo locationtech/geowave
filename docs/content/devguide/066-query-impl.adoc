@@ -1,0 +1,12 @@
+[[query-impl]]
+<<<
+[[query-impl]]
+=== Query Implementation
+
+:linkattrs:
+
+GeoWave queries must implement the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/Query.java[mil.nga.giat.geowave.core.store.query.Query, window="_blank"] interface.
+
+Like most other query environments (e.g., SQL in RDBMS), queries can be as simple or as complex as necessary. The most basic query within GeoWave would be the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/EverythingQuery.java[EverythingQuery, window="_blank"], equivilent to the SQL "star-search" query, where no constraints are added to the query.
+
+A more useful example of a simple query to reference as an example with a constraint would be the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/PrefixIdQuery.java[PrefixIdQuery, window="_blank"] or the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/query/AdapterIdQuery.java[AdapterIdQuery, window="_blank"].

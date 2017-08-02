@@ -1,0 +1,55 @@
+[[assumptions]]
+<<<
+
+:linkattrs:
+
+== Assumptions
+
+Prior to running GeoWave functionality, this guide assumes that the following components are installed and/or available. Because of the continuous changes occurring to these components, installing and maintaining extensive operational capabilities around these components is outside the scope of this document.
+
+=== Running GeoWave
+
+In order to build and/or perform development using the GeoWave source, the following components are required:
+
+[options="compact"]
+* link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java Development Kit (JDK), window="_blank"] (>= 1.8)
++
+Requires JDK or JRE v1.8 or greater
++
+At a minimum, requires a JRE to run the GeoWave functionality, though requires a JDK to build and/or perform development.
++
+Download JDK and/or JRE from the link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java downloads site, window="_blank"]. The OracleJDK is the most thoroughly tested but there are no known issues with OpenJDK.
+
+* link:http://git-scm.com/[Git, window="_blank"]
++
+Only required if interacting with Git. This is required if performing development activities, though optional if only running GeoWave through an existing build.
++
+Reference online material at link:https://git-scm.com/[Git SCM Site, window="_blank"].
++
+For a complete reference guide for installing and using Git, please reference chapters in the online link:https://git-scm.com/book/en/v2[Pro Git book, window="_blank"].
+
+* link:https://maven.apache.org/[Maven, window="_blank"]
++
+Only required if interfacing with Maven through command-line or other methods. This is typically required if performing development activities, though optional if only running GeoWave through an existing build.
++
+Requires a version of Maven >= 3.2.1
++
+For a reference guide for getting started with Maven, please reference the online link:https://maven.apache.org/guides/getting-started/[Maven Getting Started Guide, window="_blank"].
+
+* GeoWave build or RPM
++
+At minimum, an existing GeoWave build or RPM is required. For building the GeoWave source, please refer to the development guide.
+
+
+=== External Components
+Depending on the environment components being developed towards (e.g., requirements, datastores, indices, etc), the following are not all required, though constraints are listed below for which versions are supported by GeoWave.
+
+[options="compact"]
+* link:http://geoserver.org/[GeoServer, window="_blank"] instance >= 2.5.2
+* link:https://accumulo.apache.org/[Apache Accumulo, window="_blank"] version 1.5 or greater is required. 1.5.0, 1.5.1, and 1.6.0 have all been tested.
+* link:https://hbase.apache.org/[Apache HBase, window="_blank"] >= 1.2.1
+* link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] versions 1.x and 2.x
+* link:http://cloudera.com/content/cloudera/en/home.html[Cloudera, window="_blank"] CDH4 and CDH5
+* link:http://hortonworks.com/hdp/[Hortonworks Data Platform, window="_blank"] 2.1+
+* link:http://www.oracle.com/technetwork/articles/javaee/jai-142803.html[Java Advanced Imaging, window="_blank"] and link:https://docs.oracle.com/javase/8/docs/technotes/guides/imageio/[Java Image I/O, window="_blank"] are also both required to be installed on the GeoServer instance(s) _as well_ as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), - so this may be skipped in some cases.
+

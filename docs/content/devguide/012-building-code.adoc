@@ -1,0 +1,213 @@
+[[building-code]]
+<<<
+
+:linkattrs:
+
+[[building-code]]
+=== Building the Source
+
+==== Tools Framework Overview
+
+A plugin framework (using Service Provider Interface (SPI)-based injection) is provided with several input formats and utilities supported out of the box.
+First, we’ll show how to build and use the built-in formats and then describe how to create a new plugin.
+
+[[building-tools-framework]]
+==== Building
+
+GeoWave will shortly be available in Maven central (for tagged releases) but until then, or to get the latest features, building GeoWave from source is the best bet.
+
+[[set-env-variables]]
+===== Set Environment Variables
+The first step in building the GeoWave source is to set environment variables, so the system knows what versions of the varying components to build against. To do this, open a terminal and execute the command shown below.
+
+The versions specified below are examples; replace them with versions of your choice if they are different.
+
+[source, bash]
+----
+$ export BUILD_ARGS="-Daccumulo.version=1.7.2 -Daccumulo.api=1.7 -Dhbase.version=1.2.3
+-Dhadoop.version=2.7.3 -Dgeotools.version=16.0 -Dgeoserver.version=2.10.0"
+----
+
+[NOTE]
+====
+Examples of current build args can be seen in the top level .travis.yml file in the env/matrix section.
+====
+
+Validate that the build arguments were successfully set by performing an echo on the BUILD_ARGS environment variable just set.
+
+[source, bash]
+----
+$ echo $BUILD_ARGS
+----
+
+[[building]]
+===== Building GeoWave
+To build the project source, navigate to the directory into which the GeoWave code was downloaded. Using Maven from the command line, run the following command in a local terminal:
+
+[source, bash]
+----
+$ mvn clean install $BUILD_ARGS <1>
+----
+<1> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
+
+[NOTE]
+====
+Integration Tests: Windows
+
+Integration tests are currently not working on Windows out of the box. If you install cygwin and set the environmental variable CYGPATH to the location of the cygpath binary provided by cygwin to make it work.
+====
+
+Upon executing the command above, you should see a terminal output beginning with similar code below. Maven will build all the projects in the repository, so this will take a few minutes to complete.
+
+----
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] GeoWave Parent POM
+[INFO] GeoWave Core Parent POM
+[INFO] GeoWave CLI
+[INFO] GeoWave Index
+[INFO] GeoWave Store
+[INFO] GeoWave MapReduce
+[INFO] GeoWave Ingest Framework
+[INFO] GeoWave Spatial and Temporal Support
+[INFO] GeoWave Extensions
+[INFO] Geowave Vector Adapter
+[INFO] Geowave Raster Adapter
+[INFO] GeoWave Analytics Parent POM
+[INFO] GeoWave Analytics API
+[INFO] GeoWave MapReduce Analytics
+[INFO] GeoWave Spark Analytics
+[INFO] GeoWave Deployment Configurations
+[INFO] GeoWave Documentation
+[INFO] GeoWave Accumulo
+[INFO] GeoWave Hbase
+[INFO] GeoWave Examples
+[INFO] GeoWave BigTable
+[INFO] GeoWave GeoLife Format Support
+[INFO] GeoWave Raster Format
+[INFO] GeoWave Vector Format
+[INFO] GeoWave GPX Format
+[INFO] GeoWave T-Drive Format
+[INFO] GeoWave GDELT Format Support
+[INFO] GeoWave Avro Format
+[INFO] GeoWave Twitter Format Support
+[INFO] geowave-format-4676
+[INFO] GeoWave Services Parent POM
+[INFO] GeoWave Services API
+[INFO] geowave-service-4676
+[INFO] GeoWave Debug Commandline Tools
+[INFO] Geowave GeoServer Commandline Tools
+[INFO] Geowave OSM Commandline Tools
+[INFO] GeoWave LandSat8 Operations
+[INFO] GeoWave Java Client for REST services
+[INFO] GeoWave REST Services WebApp
+[INFO] GeoWave Integration Tests
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building GeoWave Parent POM 0.9.4-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+----
+
+Once this is completed, the compiled artifacts (jar, war, etc.) are “installed” into your local repository for each respective project. The compiled artifacts are also available in each project target directory.
+
+==== Maven dependencies
+
+Required repositories not in Maven Central have been added to the parent POM, specifically the cloudera and opengeo repositories.
+
+==== Docker Build Process
+
+We have support for building both the GeoWave jar artifacts and RPMs from Docker containers. This capability is
+useful for a number of different situations:
+
+* Jenkins build workers can run Docker on a variety of host-operating systems and build for others
+* Anyone running Docker will be able to duplicate our build and packaging environments
+* Will allow us to build on existing container clusters instead of single purpose build VMs
+
+If building artifacts using Docker containers interests you, check out the README in link:https://github.com/locationtech/geowave/tree/master/deploy/packaging/docker[`deploy/packaging/docker`, window="_blank"].
+
+
+=== Creating Eclipse Projects
+
+In order to facilitate a more complete development environment, we now need to get the GeoWave source code into an Integrated Development Environment (IDE).
+
+[NOTE]
+====
+There are several IDEs available, though this guide will assume use of Eclipse. If you are developing in a different IDE than Eclipse, there are likely guides on the internet to guide you through converting a Maven project into your IDE.
+====
+
+There are two primary options for importing Maven projects into Eclipse: through <<012-building-code.adoc#command-line, command-line>> or through the <<012-building-code.adoc#maven-import-wizard, Eclipse Maven import wizard>> which requires the third party http://www.eclipse.org/m2e/[Eclipse Maven M2Eclipse plugin].
+
+[[command-line]]
+==== Command Line
+Using Maven, we can create Eclipse projects from each respective project source and then import the projects into an eclipse workspace.
+
+.	Using Maven from the command line, run the following command in a local terminal.
+
+[source, bash]
+----
+$ mvn eclipse:eclipse
+----
+
+Upon executing the command above, Maven will begin creating Eclipse projects for all the projects in the repository so this will likely take a few minutes to complete.
+
+. Once all the projects are created, open a new or existing Eclipse workspace for the GeoWave projects code.
+
+. Now we will import the generated GeoWave projects into the Eclipse workspace.
+
+.. Within Eclipse, select File -> Import
++
+image::Eclipse-File-Import.png[scaledwidth="35%",width="35%",alt="Eclipse-File-Import.png"]
+
+.. From the "Import" window, select the option under "General" for "Existing Projects into Workspace" and select the "Next" button.
++
+image::import-existing-eclipse-projects.png[scaledwidth="30%",width="25%",alt="import-existing-eclipse-projects.png"]
+
+.. From the "Import Projects" window, select the "Select root directory" option selected, then select the “Browse” button and then navigate to the root directory where the GeoWave source is centrally located. Once found, select the _geowave_ directory and select the "Open" button.
+.. Within the "Import Projects" window, the “Projects” pane should now be populated with all of the GeoWave projects. Un-check the projects not wanting to be imported and then select the "Finish" button to exit.
++
+[NOTE]
+====
+Eclipse will typically treat all pom.xml files as a separate import. This means is that, for parent pom.xml files over a set of projects, Eclipse will import these as separate projects containing no source. It is typically recommended that parent pom.xml files (e.g., geowave/core/pom.xml, geowave/analytics/pom.xml, etc.) are un-checked so they are not imported and over-crowd the development workspace un-necessarily.
+====
+
+.. Upon returning to the workspace in Eclipse, the _Project Explorer_ pane should now be populated with all of the GeoWave projects.
++
+image::EclipseWorkspace.png[scaledwidth="25%",width="25%",alt="EclipseWorkspace.png"]
+
+[NOTE]
+====
+If any project dependencies change, it is important to note that the "mvn eclipse:eclipse" command, above, will need to be re-run. The project should then be refreshed within Eclipse.
+====
+
+For more information, and a more exhaustive guide to maven commands from command-line, please refer to the following links:
+
+* https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html[Maven in 5 Minutes]
+* https://maven.apache.org/guides/getting-started/index.html[Maven Getting Started Guide]
+
+[[maven-import-wizard]]
+==== Maven Import Wizard
+Using the http://www.eclipse.org/m2e/[Eclipse Maven M2Eclipse plugin], we can import maven projects into eclipse, and eclipse will automatically resolve/download dependencies listed in the pom.xml file for each project.
+
+[NOTE]
+====
+If any project pom.xml dependencies are changed/updated, Eclipse will automatically update the project and any downstream changes to related/depependent projects.
+====
+
+. Import the Maven GeoWave projects into the Eclipse workspace.
+
+.. Within Eclipse, select File -> Import.
++
+image::Eclipse-File-Import.png[scaledwidth="35%","width="35%",alt="Eclipse-File-Import.png"]
+
+.. From the "Import" window, select the option under "Maven" for "Existing Maven Projects" and select the "Next" button.
++
+image::import-maven-eclipse-projects.png[scaledwidth="30%",width="30%",alt="import-maven-eclipse-projects.png"]
+
+.. From the "Import Maven Projects" window, select the “Browse” button and navigate to the root directory where the GeoWave source is located on the file system. Once found, select the _geowave_ directory and select the "Open" button.
+.. Within the "Import Maven Projects" window, the “Projects” pane should now be populated with all of the GeoWave projects. Select the "Finish" button to exit.
+.. Upon returning to the workspace in Eclipse, the _Project Explorer_ pane should now be populated with all of the GeoWave projects.
++
+image::EclipseWorkspace.png[scaledwidth="25%",width="25%",alt="EclipseWorkspace.png"]
+
