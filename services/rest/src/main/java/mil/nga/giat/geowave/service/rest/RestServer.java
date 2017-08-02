@@ -33,11 +33,12 @@ public class RestServer extends
 	/**
 	 * Run the Restlet server (localhost:5152)
 	 */
-	public static void main(
-			final String[] args ) {
-		final RestServer server = new RestServer();
-		server.run(5152);
-	}
+	
+	  public static void main( final String[] args ) { 
+		  final RestServer server = new RestServer(); 
+		  server.run(5152); 
+	  }
+	 
 
 	public RestServer() {
 		availableRoutes = new ArrayList<RestRoute>();
@@ -167,16 +168,17 @@ public class RestServer extends
 				myApp);
 
 		// Start server
-		try {
-			new Server(
-					Protocol.HTTP,
-					port,
-					component).start();
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-			System.out.println("Could not create Restlet server - is the port already bound?");
-		}
+		
+		  try { 
+			  new Server( Protocol.HTTP, port, component).start(); 
+			  } 
+		  catch (final Exception e) {
+			  e.printStackTrace(); System.out.println(
+					  "Could not create Restlet server - is the port already bound?"); 
+		  }
+		 
+
+		// return router;
 	}
 
 	/**

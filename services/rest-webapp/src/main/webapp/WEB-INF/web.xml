@@ -4,17 +4,19 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 	<display-name>Geowave Rest API</display-name>
+	<context-param>
+		<param-name>org.restlet.application</param-name>
+		<param-value>mil.nga.giat.geowave.service.rest.webapp.RestFirstStep</param-value>
+	</context-param>
+	<!-- Restlet adapter -->
 	<servlet>
-		<servlet-name>MyApplication</servlet-name>
+		<servlet-name>RestletServlet</servlet-name>
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
-		<init-param>
-			<param-name>org.restlet.application</param-name>
-			<param-value>my.class.that.extends.Application.MyApplication</param-value>
-		</init-param>
 	</servlet>
 
+	<!--  Catch all requests -->
 	<servlet-mapping>
-		<servlet-name>jersey-geowave-servlet</servlet-name>
+		<servlet-name>RestletServlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 </web-app>
