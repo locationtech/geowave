@@ -99,9 +99,14 @@ public class SqlQueryRunner
 
 		// Create a DataFrame from the Left RDD
 		SimpleFeatureDataFrame dataFrame1 = new SimpleFeatureDataFrame(
-				spark,
+				spark);
+
+		if (!dataFrame1.init(
 				inputDataStore1,
-				adapterId1);
+				adapterId1)) {
+			LOGGER.error("Failed to initialize dataframe");
+			return null;
+		}
 
 		LOGGER.debug(dataFrame1.getSchema().json());
 
@@ -144,9 +149,14 @@ public class SqlQueryRunner
 
 			// Create a DataFrame from the Left RDD
 			SimpleFeatureDataFrame dataFrame2 = new SimpleFeatureDataFrame(
-					spark,
+					spark);
+
+			if (!dataFrame2.init(
 					inputDataStore2,
-					adapterId2);
+					adapterId2)) {
+				LOGGER.error("Failed to initialize dataframe");
+				return null;
+			}
 
 			LOGGER.debug(dataFrame2.getSchema().json());
 

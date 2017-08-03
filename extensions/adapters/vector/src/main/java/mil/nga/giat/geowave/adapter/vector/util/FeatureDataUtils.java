@@ -42,9 +42,6 @@ import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
@@ -236,8 +233,22 @@ public class FeatureDataUtils
 	public static SimpleFeatureType getFeatureType(
 			final DataStorePluginOptions dataStore,
 			ByteArrayId adapterId ) {
+		// if no id provided, locate a single featureadapter
 		if (adapterId == null) {
-			adapterId = getFirstFeatureAdapter(dataStore);
+			List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(dataStore);
+			if (adapterIdList.size() == 1) {
+				adapterId = adapterIdList.get(0);
+			}
+			else if (adapterIdList.isEmpty()) {
+				LOGGER.error("No feature adapters found for use with time param");
+
+				return null;
+			}
+			else {
+				LOGGER.error("Multiple feature adapters found. Please specify one.");
+
+				return null;
+			}
 		}
 
 		AdapterStore adapterStore = dataStore.createAdapterStore();
@@ -265,28 +276,6 @@ public class FeatureDataUtils
 
 			if (featureType.getGeometryDescriptor() != null) {
 				return featureType.getGeometryDescriptor().getLocalName();
-			}
-		}
-
-		return null;
-	}
-
-	public static String getFirstTimeField(
-			final DataStorePluginOptions dataStore,
-			final ByteArrayId adapterId ) {
-		AdapterStore adapterStore = dataStore.createAdapterStore();
-
-		DataAdapter adapter = adapterStore.getAdapter(adapterId);
-
-		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
-			GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
-			SimpleFeatureType featureType = gtAdapter.getFeatureType();
-
-			for (AttributeDescriptor attrDesc : featureType.getAttributeDescriptors()) {
-				final Class<?> bindingClass = attrDesc.getType().getBinding();
-				if (TimeUtils.isTemporal(bindingClass)) {
-					return attrDesc.getLocalName();
-				}
 			}
 		}
 
@@ -323,20 +312,6 @@ public class FeatureDataUtils
 					return timeDescriptors.getStartRange().getLocalName() + "|"
 							+ timeDescriptors.getEndRange().getLocalName();
 				}
-			}
-		}
-
-		return null;
-	}
-
-	public static ByteArrayId getFirstFeatureAdapter(
-			DataStorePluginOptions dataStore ) {
-		CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
-
-		while (adapterIt.hasNext()) {
-			DataAdapter adapter = adapterIt.next();
-			if (adapter instanceof FeatureDataAdapter) {
-				return adapter.getAdapterId();
 			}
 		}
 

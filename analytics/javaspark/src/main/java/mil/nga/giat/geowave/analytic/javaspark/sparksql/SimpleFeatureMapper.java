@@ -16,15 +16,17 @@ import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.analytic.javaspark.sparksql.util.GeomWriter;
 
+@SuppressFBWarnings
 public class SimpleFeatureMapper implements
 		Function<SimpleFeature, Row>
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureDataFrame.class);
 
 	private final StructType schema;
-	private final GeomWriter geomWriter = new GeomWriter();
+	private transient GeomWriter geomWriter = new GeomWriter();
 
 	public SimpleFeatureMapper(
 			StructType schema ) {

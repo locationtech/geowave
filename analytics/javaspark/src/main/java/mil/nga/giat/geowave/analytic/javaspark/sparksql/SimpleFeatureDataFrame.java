@@ -1,25 +1,15 @@
 package mil.nga.giat.geowave.analytic.javaspark.sparksql;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataType;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.analytic.javaspark.sparksql.udf.GeomFunctionRegistry;
@@ -33,24 +23,34 @@ public class SimpleFeatureDataFrame
 	private static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureDataFrame.class);
 
 	private final SparkSession sparkSession;
-	private final SimpleFeatureType featureType;
+	private SimpleFeatureType featureType;
 	private StructType schema;
 	private JavaRDD<Row> rowRDD = null;
 	private Dataset<Row> dataFrame = null;
 
 	public SimpleFeatureDataFrame(
-			final SparkSession sparkSession,
+			final SparkSession sparkSession ) {
+		this.sparkSession = sparkSession;
+	}
+
+	public boolean init(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {
-		this.sparkSession = sparkSession;
-
 		featureType = FeatureDataUtils.getFeatureType(
 				dataStore,
 				adapterId);
+		if (featureType == null) {
+			return false;
+		}
 
 		schema = SchemaConverter.schemaFromFeatureType(featureType);
+		if (schema == null) {
+			return false;
+		}
 
 		GeomFunctionRegistry.registerGeometryFunctions(sparkSession);
+
+		return true;
 	}
 
 	public SimpleFeatureType getFeatureType() {

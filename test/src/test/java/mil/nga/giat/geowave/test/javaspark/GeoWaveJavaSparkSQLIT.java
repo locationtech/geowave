@@ -38,7 +38,7 @@ public class GeoWaveJavaSparkSQLIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkSQLIT.class);
 
 	@GeoWaveTestStore(value = {
-		// GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
@@ -95,9 +95,13 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			// Create a DataFrame from the RDD
 			SimpleFeatureDataFrame sfDataFrame = new SimpleFeatureDataFrame(
-					spark,
+					spark);
+
+			if (!sfDataFrame.init(
 					dataStore,
-					null);
+					null)) {
+				Assert.fail("Failed to initialize dataframe");
+			}
 
 			LOGGER.warn(sfDataFrame.getSchema().json());
 
@@ -200,9 +204,13 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			// Create a DataFrame from the Left RDD
 			SimpleFeatureDataFrame leftDataFrame = new SimpleFeatureDataFrame(
-					spark,
+					spark);
+
+			if (!leftDataFrame.init(
 					dataStore,
-					null);
+					null)) {
+				Assert.fail("Failed to initialize dataframe");
+			}
 
 			Dataset<Row> dfLeft = leftDataFrame.getDataFrame(leftRdd);
 
@@ -226,9 +234,13 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			// Create a DataFrame from the Left RDD
 			SimpleFeatureDataFrame rightDataFrame = new SimpleFeatureDataFrame(
-					spark,
+					spark);
+
+			if (!rightDataFrame.init(
 					dataStore,
-					null);
+					null)) {
+				Assert.fail("Failed to initialize dataframe");
+			}
 
 			Dataset<Row> dfRight = rightDataFrame.getDataFrame(rightRdd);
 

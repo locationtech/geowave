@@ -122,6 +122,11 @@ public class SchemaConverter
 			fields.add(field);
 		}
 
+		if (fields.isEmpty()) {
+			LOGGER.error("Feature type produced empty dataframe schema!");
+			return null;
+		}
+
 		return DataTypes.createStructType(fields);
 	}
 
