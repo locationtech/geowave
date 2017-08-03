@@ -39,7 +39,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	@Get("json")
 	public T restGet()
 			throws Exception {
-		if (getClass().getAnnotation(
+		if (operation.getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
 			return handleRequest(null);
 		}
@@ -53,7 +53,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	public T restPost(
 			final Representation request )
 			throws Exception {
-		if (getClass().getAnnotation(
+		if (operation.getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST) {
 
 			final Form form = new Form(
@@ -85,7 +85,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		for (final Field field : FieldUtils.getFieldsWithAnnotation(
 				// TODO Take out this loop?
-				getClass(),
+				operation.getClass(),
 				Parameter.class)) {
 			processField(
 					form,
