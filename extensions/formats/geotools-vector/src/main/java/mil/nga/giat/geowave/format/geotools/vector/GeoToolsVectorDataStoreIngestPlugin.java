@@ -124,7 +124,9 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		DataStore dataStore = null;
 		try {
 			dataStore = getDataStore(file);
-			dataStore.dispose();
+			if (dataStore != null) {
+				dataStore.dispose();
+			}
 		}
 		catch (final Exception e) {
 			LOGGER.info(

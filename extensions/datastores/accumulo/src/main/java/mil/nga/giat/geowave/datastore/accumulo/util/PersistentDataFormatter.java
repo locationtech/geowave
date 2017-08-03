@@ -26,6 +26,12 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.accumulo.core.util.format.Formatter;
+// @formatter:off
+/*if[accumulo.api=1.7]
+else[accumulo.api=1.7]*/
+import org.apache.accumulo.core.util.format.FormatterConfig;
+/*end[accumulo.api=1.7]*/
+//@formatter:on
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +46,8 @@ public class PersistentDataFormatter implements
 	}
 
 	private Iterator<Entry<Key, Value>> si;
+	// @formatter:off
+	/*if[accumulo.api=1.7]
 	private boolean doTimestamps;
 	private static final ThreadLocal<DateFormat> formatter = new ThreadLocal<DateFormat>() {
 		@Override
@@ -71,14 +79,34 @@ public class PersistentDataFormatter implements
 
 		}
 	};
+	else[accumulo.api=1.7]*/
+	// @formatter:on
+	private FormatterConfig config;
+
+	/* end[accumulo.api=1.7] */
 
 	@Override
 	public void initialize(
 			Iterable<Entry<Key, Value>> scanner,
-			boolean printTimestamps ) {
+
+			// @formatter:off
+			/*if[accumulo.api=1.7]
+			boolean printTimestamps	
+			else[accumulo.api=1.7]*/
+			// @formatter:on
+			FormatterConfig config
+	/* end[accumulo.api=1.7] */
+	) {
 		checkState(false);
 		si = scanner.iterator();
+
+		// @formatter:off
+		/*if[accumulo.api=1.7]
 		doTimestamps = printTimestamps;
+		else[accumulo.api=1.7]*/
+		// @formatter:on
+		this.config = config;
+		/* end[accumulo.api=1.7] */
 	}
 
 	public boolean hasNext() {
@@ -88,9 +116,15 @@ public class PersistentDataFormatter implements
 
 	public String next() {
 		DateFormat timestampFormat = null;
-
+		// @formatter:off
+		/*if[accumulo.api=1.7]
 		if (doTimestamps) {
 			timestampFormat = formatter.get();
+		else[accumulo.api=1.7]*/
+		// @formatter:on
+		if (config != null && config.willPrintTimestamps()) {
+			timestampFormat = config.getDateFormatSupplier().get();
+			/* end[accumulo.api=1.7] */
 		}
 
 		return next(timestampFormat);
@@ -115,21 +149,6 @@ public class PersistentDataFormatter implements
 				"Not initialized");
 		if (!expectInitialized && si != null) throw new IllegalStateException(
 				"Already initialized");
-	}
-
-	// this should be replaced with something like Record.toString();
-	public String formatEntry(
-			Entry<Key, Value> entry,
-			boolean showTimestamps ) {
-		DateFormat timestampFormat = null;
-
-		if (showTimestamps) {
-			timestampFormat = formatter.get();
-		}
-
-		return formatEntry(
-				entry,
-				timestampFormat);
 	}
 
 	/*
@@ -289,10 +308,6 @@ public class PersistentDataFormatter implements
 
 	public Iterator<Entry<Key, Value>> getScannerIterator() {
 		return si;
-	}
-
-	protected boolean isDoTimestamps() {
-		return doTimestamps;
 	}
 
 }

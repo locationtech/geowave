@@ -37,8 +37,8 @@
 		<geotools.version>16.0</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
-		<accumulo.version>1.7.2</accumulo.version>
-		<accumulo.api>1.7</accumulo.api>
+		<accumulo.version>1.8.1</accumulo.version>
+		<accumulo.api>1.8</accumulo.api>
 		<skipITs>true</skipITs>
 		<bigtable.version>0.9.4</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
@@ -959,6 +959,7 @@
 				<accumulo.version>1.7.2-cdh5.5.0</accumulo.version>
 				<hbase.version>1.2.0-cdh5.9.0</hbase.version>
 				<hadoop.version>2.6.0-cdh5.9.0</hadoop.version>
+				<accumulo.api>1.7</accumulo.api>
 			</properties>
 			<repositories>
 				<repository>
@@ -995,6 +996,7 @@
 				<accumulo.version>1.7.0.2.6.0.3-8</accumulo.version>
 				<hbase.version>1.1.2.2.6.0.3-8</hbase.version>
 				<hadoop.version>2.7.3.2.6.0.3-8</hadoop.version>
+				<accumulo.api>1.7</accumulo.api>
 			</properties>
 			<repositories>
 				<repository>
@@ -1034,8 +1036,8 @@
 		<profile>
 			<id>compatibility</id>
 			<properties>
-				<accumulo.version>1.6.5</accumulo.version>
-				<accumulo.api>1.6</accumulo.api>
+				<accumulo.version>1.7.2</accumulo.version>
+				<accumulo.api>1.7</accumulo.api>
 				<hadoop.version>2.6.4</hadoop.version>
 				<geotools.version>15.2</geotools.version>
 				<geoserver.version>2.9.2</geoserver.version>
