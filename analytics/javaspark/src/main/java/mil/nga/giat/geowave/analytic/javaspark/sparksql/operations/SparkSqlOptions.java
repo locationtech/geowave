@@ -19,7 +19,7 @@ public class SparkSqlOptions
 		"-s",
 		"--show"
 	}, description = "Number of result rows to display")
-	private int showResults = 0;
+	private int showResults = 20;
 
 	public SparkSqlOptions() {}
 
