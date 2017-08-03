@@ -58,6 +58,12 @@
 			<groupId>org.restlet.osgi</groupId>
 			<artifactId>org.restlet.ext.swagger</artifactId>
 			<version>${restlet.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.raml</groupId>
+					<artifactId>raml-parser</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
     		<groupId>com.google.code.gson</groupId>
