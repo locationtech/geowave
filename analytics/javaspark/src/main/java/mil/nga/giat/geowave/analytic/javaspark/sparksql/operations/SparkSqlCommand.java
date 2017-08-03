@@ -36,7 +36,7 @@ public class SparkSqlCommand extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SparkSqlCommand.class);
 
-	@Parameter(description = "<sql query>")
+	@Parameter(description = "<sql query> - e.g. 'select * from storename[.adaptername] where condition...'")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
