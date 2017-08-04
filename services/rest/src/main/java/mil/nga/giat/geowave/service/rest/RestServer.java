@@ -37,43 +37,33 @@ public class RestServer extends
 	 * Run the Restlet server (localhost:5152)
 	 */
 
-	public static void main(
-			final String[] args ) {
-		final RestServer server = new RestServer();
-		server.run(
-				5152);
-	}
+	/*
+	 * public static void main( final String[] args ) { final RestServer server
+	 * = new RestServer(); server.run( 5152); }
+	 */
 
 	public RestServer() {
 		availableRoutes = new ArrayList<RestRoute>();
 		unavailableCommands = new ArrayList<String>();
 
 		for (final Class<?> operation : new Reflections(
-				"mil.nga.giat.geowave").getTypesAnnotatedWith(
-						GeowaveOperation.class)) {
+				"mil.nga.giat.geowave").getTypesAnnotatedWith(GeowaveOperation.class)) {
 			if ((operation.getAnnotation(
 					GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET)
 					|| (((operation.getAnnotation(
-							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST))
-							&& DefaultOperation.class.isAssignableFrom(
-									operation))
-					|| ServerResource.class.isAssignableFrom(
-							operation)) {
+							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST)) && DefaultOperation.class
+							.isAssignableFrom(operation)) || ServerResource.class.isAssignableFrom(operation)) {
 
-				availableRoutes.add(
-						new RestRoute(
-								operation));
+				availableRoutes.add(new RestRoute(
+						operation));
 			}
 			else {
-				final GeowaveOperation operationInfo = operation.getAnnotation(
-						GeowaveOperation.class);
-				unavailableCommands.add(
-						operation.getName() + " " + operationInfo.name());
+				final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
+				unavailableCommands.add(operation.getName() + " " + operationInfo.name());
 			}
 		}
 
-		Collections.sort(
-				availableRoutes);
+		Collections.sort(availableRoutes);
 	}
 
 	// Show a simple 404 if the route is unknown to the server
@@ -83,23 +73,20 @@ public class RestServer extends
 				"Available Routes:<br>");
 
 		for (final RestRoute route : availableRoutes) {
-			routeStringBuilder.append(
-					route.getPath() + " --> " + route.getOperation() + "<br>");
+			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
 		}
-		routeStringBuilder.append(
-				"<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
+		routeStringBuilder.append("<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
 		for (final String command : unavailableCommands) {
-			routeStringBuilder.append(
-					"<span style='color:blue'>" + command + "</span><br>");
+			routeStringBuilder.append("<span style='color:blue'>" + command + "</span><br>");
 		}
 		return "<b>404</b>: Route not found<br><br>" + routeStringBuilder.toString();
 	}
 
-	public void run(
-			final int port ) {
+	public Router run(
+			Router router ) {
 
 		// Add paths for each command
-		final Router router = new Router();
+		// final Router router = new Router();
 
 		final SwaggerApiParser apiParser = new SwaggerApiParser(
 				"1.0.0",
@@ -107,8 +94,7 @@ public class RestServer extends
 				"REST API for GeoWave CLI commands");
 		for (final RestRoute route : availableRoutes) {
 
-			if (DefaultOperation.class.isAssignableFrom(
-					route.getOperation())) {
+			if (DefaultOperation.class.isAssignableFrom(route.getOperation())) {
 				router.attach(
 						route.getPath(),
 						new GeoWaveOperationFinder(
@@ -117,8 +103,7 @@ public class RestServer extends
 				final Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
 						.getOperation());
 
-				apiParser.AddRoute(
-						route);
+				apiParser.AddRoute(route);
 			}
 			else {
 				router.attach(
@@ -127,20 +112,17 @@ public class RestServer extends
 			}
 		}
 
-		apiParser.SerializeSwaggerJson(
-				"swagger.json");
+		apiParser.SerializeSwaggerJson("swagger.json");
 
 		// Provide basic 404 error page for unknown route
-		router.attachDefault(
-				RestServer.class);
+		router.attachDefault(RestServer.class);
 
 		// Setup router
 		final Application myApp = new SwaggerApplication() {
 
 			@Override
 			public Restlet createInboundRoot() {
-				router.setContext(
-						getContext());
+				router.setContext(getContext());
 
 				attachSwaggerSpecificationRestlet(
 						router,
@@ -186,12 +168,9 @@ public class RestServer extends
 		// TODO I don't know exactly what we want to do, but I added this for my
 		// ease at the moment
 		final CorsService corsService = new CorsService();
-		corsService.setAllowedOrigins(
-				new HashSet(
-						Arrays.asList(
-								"*")));
-		corsService.setAllowedCredentials(
-				true);
+		corsService.setAllowedOrigins(new HashSet(
+				Arrays.asList("*")));
+		corsService.setAllowedCredentials(true);
 		myApp.getServices().add(
 				corsService);
 		component.getDefaultHost().attach(
@@ -200,19 +179,13 @@ public class RestServer extends
 
 		// Start server
 
-		try {
-			new Server(
-					Protocol.HTTP,
-					port,
-					component).start();
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-			System.out.println(
-					"Could not create Restlet server - is the port already bound?");
-		}
+		/*
+		 * try { new Server( Protocol.HTTP, port, component).start(); } catch
+		 * (final Exception e) { e.printStackTrace(); System.out.println(
+		 * "Could not create Restlet server - is the port already bound?"); }
+		 */
 
-		// return router;
+		return router;
 	}
 
 	/**

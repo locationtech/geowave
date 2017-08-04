@@ -28,8 +28,7 @@ import scala.actors.threadpool.Arrays;
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveOperationServiceWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
 	private final DefaultOperation<T> operation;
 
 	public GeoWaveOperationServiceWrapper(
@@ -42,12 +41,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			throws Exception {
 		if (operation.getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
-			return handleRequest(
-					null);
+			return handleRequest(null);
 		}
 		else {
-			setStatus(
-					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -61,12 +58,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 			final Form form = new Form(
 					request);
-			return handleRequest(
-					form);
+			return handleRequest(form);
 		}
 		else {
-			setStatus(
-					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -103,12 +98,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final Form form,
 			final Field field )
 			throws MissingArgumentException {
-		final Parameter parameter = field.getAnnotation(
-				Parameter.class);
+		final Parameter parameter = field.getAnnotation(Parameter.class);
 
 		ParametersDelegate parametersDelegate = null;
-		parametersDelegate = field.getAnnotation(
-				ParametersDelegate.class);
+		parametersDelegate = field.getAnnotation(ParametersDelegate.class);
 
 		if (parameter != null) {
 			if (field.getType() == String.class) {
@@ -116,10 +109,9 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(
-							true); // Get around restrictions on
-									// private fields. JCommander
-									// does this too.
+					field.setAccessible(true); // Get around restrictions on
+												// private fields. JCommander
+												// does this too.
 					try {
 						field.set(
 								operation,
@@ -140,13 +132,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(
-							true);
+					field.setAccessible(true);
 					try {
 						field.set(
 								operation,
-								Boolean.valueOf(
-										value));
+								Boolean.valueOf(value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -163,13 +153,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(
-							true);
+					field.setAccessible(true);
 					try {
 						field.set(
 								operation,
-								Integer.valueOf(
-										value));
+								Integer.valueOf(value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -182,12 +170,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				}
 			}
 			else if (field.getType() == List.class) {
-				field.setAccessible(
-						true);
+				field.setAccessible(true);
 				String[] parameters = getFieldValues(
 						form,
 						field.getName());
-				
+
 				try {
 					field.set(
 							operation,
@@ -205,8 +192,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			return field;
 		}
 		else if (parametersDelegate != null) {
-			for (final Field f : FieldUtils.getAllFields(
-					field.getType())) {
+			for (final Field f : FieldUtils.getAllFields(field.getType())) {
 				return processField(
 						form,
 						f);
@@ -220,8 +206,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String[] val = null;
 		if (form != null) {
-			val = form.getValuesArray(
-					name);
+			val = form.getValuesArray(name);
 		}
 		if (val == null || val.length == 0) {
 			val = getQuery().getValuesArray(
@@ -235,12 +220,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String val = null;
 		if (form != null) {
-			val = form.getFirstValue(
-					name);
+			val = form.getFirstValue(name);
 		}
 		if (val == null) {
-			val = getQueryValue(
-					name);
+			val = getQueryValue(name);
 		}
 		return val;
 	}
@@ -248,10 +231,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	private T handleRequest(
 			final Form form )
 			throws Exception {
-		final String configFileParameter = (form == null) ? getQueryValue(
-				"config_file")
-				: form.getFirstValue(
-						"config_file");
+		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
+				.getFirstValue("config_file");
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
@@ -261,8 +242,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				configFile);
 
 		try {
-			injectParameters(
-					form);
+			injectParameters(form);
 		}
 		catch (final MissingArgumentException e) {
 			setStatus(
@@ -272,10 +252,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 
 		try {
-			operation.prepare(
-					params);
-			return operation.computeResults(
-					params);
+			operation.prepare(params);
+			return operation.computeResults(params);
 		}
 		catch (final Exception e) {
 			LOGGER.error(
