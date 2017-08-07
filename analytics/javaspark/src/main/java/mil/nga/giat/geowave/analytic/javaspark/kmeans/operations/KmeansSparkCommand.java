@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.javaspark.operations;
+package mil.nga.giat.geowave.analytic.javaspark.kmeans.operations;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,8 @@ import com.beust.jcommander.ParametersDelegate;
 import com.vividsolutions.jts.util.Stopwatch;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
-import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
-import mil.nga.giat.geowave.analytic.javaspark.KMeansUtils;
+import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansRunner;
+import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.AnalyticSection;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.PropertyManagementConverter;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;

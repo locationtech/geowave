@@ -230,6 +230,39 @@ public class FeatureDataUtils
 		return newFeature;
 	}
 
+	public static SimpleFeatureType getFeatureType(
+			final DataStorePluginOptions dataStore,
+			ByteArrayId adapterId ) {
+		// if no id provided, locate a single featureadapter
+		if (adapterId == null) {
+			List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(dataStore);
+			if (adapterIdList.size() == 1) {
+				adapterId = adapterIdList.get(0);
+			}
+			else if (adapterIdList.isEmpty()) {
+				LOGGER.error("No feature adapters found for use with time param");
+
+				return null;
+			}
+			else {
+				LOGGER.error("Multiple feature adapters found. Please specify one.");
+
+				return null;
+			}
+		}
+
+		AdapterStore adapterStore = dataStore.createAdapterStore();
+
+		DataAdapter adapter = adapterStore.getAdapter(adapterId);
+
+		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
+			GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
+			return gtAdapter.getFeatureType();
+		}
+
+		return null;
+	}
+
 	public static String getGeomField(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {

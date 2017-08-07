@@ -149,7 +149,8 @@ public class GeoWaveRDD
 					if (timeField != null) {
 						// if this is a ranged schema, we have to take the
 						// midpoint
-						if (timeField.contains("|")) {
+						if (timeField.contains(
+								"|")) {
 							int pipeIndex = timeField.indexOf(
 									"|");
 							String startField = timeField.substring(
@@ -157,15 +158,16 @@ public class GeoWaveRDD
 									pipeIndex);
 							String endField = timeField.substring(
 									pipeIndex + 1);
-							
+
 							Date start = (Date) feature.getAttribute(
 									startField);
 							Date end = (Date) feature.getAttribute(
 									endField);
-							
+
 							long halfDur = (end.getTime() - start.getTime()) / 2;
-							
-							time = new Date(start.getTime() + halfDur);
+
+							time = new Date(
+									start.getTime() + halfDur);
 						}
 						else {
 							time = (Date) feature.getAttribute(

@@ -47,18 +47,17 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	LandsatIT.class,
 	BulkIngestInputGenerationIT.class,
 	KDERasterResizeIT.class,
-	// GeoWaveKMeansIT.class,
 	GeoWaveNNIT.class,
 	GeoServerIT.class,
 	GeoWaveServicesIT.class,
 	GeoWaveIngestGeoserverIT.class,
 	AttributesSubsetQueryIT.class,
-	DBScanIT.class,
 	SpatialTemporalQueryIT.class,
 	PolygonDataIdQueryIT.class,
 	ConfigCacheIT.class,
 	DataStatisticsStoreIT.class,
-	SecondaryIndexIT.class
+	SecondaryIndexIT.class,
+	DBScanIT.class
 })
 public class GeoWaveITSuite
 {

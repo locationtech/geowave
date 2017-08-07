@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.javaspark.operations;
+package mil.nga.giat.geowave.analytic.javaspark.kmeans.operations;
 
 import com.beust.jcommander.Parameter;
 

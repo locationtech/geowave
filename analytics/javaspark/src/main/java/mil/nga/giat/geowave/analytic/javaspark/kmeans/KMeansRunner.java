@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.javaspark;
+package mil.nga.giat.geowave.analytic.javaspark.kmeans;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.analytic.javaspark.GeoWaveRDD;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;

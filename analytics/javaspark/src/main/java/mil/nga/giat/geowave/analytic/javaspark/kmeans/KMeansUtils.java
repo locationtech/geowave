@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.javaspark;
+package mil.nga.giat.geowave.analytic.javaspark.kmeans;
 
 import java.io.IOException;
 import java.util.Date;

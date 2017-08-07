@@ -33,7 +33,7 @@
 		<tag>HEAD</tag>
 	</scm>
 	<properties>
-		<spark.version>2.1.1</spark.version>
+		<spark.version>2.2.0</spark.version>
 		<geotools.version>16.0</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>

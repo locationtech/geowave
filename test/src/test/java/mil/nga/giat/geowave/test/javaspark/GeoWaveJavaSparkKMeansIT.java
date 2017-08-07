@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import mil.nga.giat.geowave.analytic.javaspark.KMeansHullGenerator;
-import mil.nga.giat.geowave.analytic.javaspark.KMeansRunner;
-import mil.nga.giat.geowave.analytic.javaspark.KMeansUtils;
+import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansHullGenerator;
+import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansRunner;
+import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansUtils;
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
