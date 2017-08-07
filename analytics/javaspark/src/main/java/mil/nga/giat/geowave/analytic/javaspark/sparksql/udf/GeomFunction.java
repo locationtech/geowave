@@ -14,7 +14,7 @@ public abstract class GeomFunction implements
 		UDF2<String, String, Boolean>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeomFunction.class);
-	protected transient GeomReader geomReader = new GeomReader();
+	protected final GeomReader geomReader = new GeomReader();
 
 	protected Geometry parseGeom(
 			String geomStr ) {

@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.analytic.javaspark.sparksql.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -35,18 +34,21 @@ public class SparkSqlCommand extends
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SparkSqlCommand.class);
+	private final static String STORE_ADAPTER_DELIM = "_";
 
-	@Parameter(description = "<sql query> - e.g. 'select * from storename[.adaptername] where condition...'")
+	@Parameter(description = "<sql query> - e.g. 'select * from storename[_adaptername] where condition...'")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
 	private SparkSqlOptions sparkSqlOptions = new SparkSqlOptions();
 
-	DataStorePluginOptions inputDataStore1 = null;
-	ByteArrayId adapterId1 = null;
+	private DataStorePluginOptions inputDataStore1 = null;
+	private ByteArrayId adapterId1 = null;
+	private String tempView1 = null;
 
-	DataStorePluginOptions inputDataStore2 = null;
-	ByteArrayId adapterId2 = null;
+	private DataStorePluginOptions inputDataStore2 = null;
+	private ByteArrayId adapterId2 = null;
+	private String tempView2 = null;
 
 	DataStorePluginOptions outputDataStore = null;
 
@@ -69,23 +71,23 @@ public class SparkSqlCommand extends
 
 		final String sql = parameters.get(0);
 
-		String convertedSql = initStores(
+		initStores(
 				configFile,
 				sql,
 				sparkSqlOptions.getOutputStoreName());
 
-		LOGGER.debug("Converted SQL: " + convertedSql);
-
 		SqlQueryRunner sqlRunner = new SqlQueryRunner();
 		sqlRunner.setInputDataStore1(inputDataStore1);
 		sqlRunner.setAdapterId1(adapterId1);
+		sqlRunner.setTempView1(tempView1);
 
 		if (inputDataStore2 != null) {
 			sqlRunner.setInputDataStore2(inputDataStore2);
 			sqlRunner.setAdapterId2(adapterId2);
+			sqlRunner.setTempView2(tempView2);
 		}
 
-		sqlRunner.setSql(convertedSql);
+		sqlRunner.setSql(sql);
 
 		stopwatch.reset();
 		stopwatch.start();
@@ -108,6 +110,8 @@ public class SparkSqlCommand extends
 					false);
 		}
 
+		System.out.println("GeoWave SparkSQL query returned " + results.count() + " results");
+
 		if (outputDataStore != null) {
 			SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(
 					results,
@@ -122,47 +126,63 @@ public class SparkSqlCommand extends
 				typeName = "sqlresults";
 			}
 
+			System.out.print("Writing GeoWave SparkSQL query results...");
 			sqlResultsWriter.writeResults(typeName);
+			System.out.println("Done.");
 		}
 	}
 
-	private String initStores(
+	private void initStores(
 			File configFile,
 			String sql,
 			String outputStoreName ) {
-		String convertedSql = sql;
-
 		// Extract input store(s) from sql
 		String inputStoreInfo1 = null;
 		String inputStoreInfo2 = null;
+		String escapedSpaceRegex = java.util.regex.Pattern.quote(" ");
 
-		StringTokenizer tokenizer = new StringTokenizer(
-				sql,
-				" ");
-		while (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
+		LOGGER.debug("Input SQL: " + sql);
 
-			if (token.equalsIgnoreCase("from")) {
-				if (tokenizer.hasMoreTokens()) {
-					inputStoreInfo1 = tokenizer.nextToken();
+		String[] sqlSplits = sql.split(escapedSpaceRegex);
+		int splitIndex = 0;
+
+		while (splitIndex < sqlSplits.length) {
+			String split = sqlSplits[splitIndex];
+
+			if (split.equalsIgnoreCase("from")) {
+				if (splitIndex < sqlSplits.length - 1) {
+					splitIndex++;
+					inputStoreInfo1 = sqlSplits[splitIndex];
 					LOGGER.debug("Input store info (1): " + inputStoreInfo1);
 				}
 			}
-			else if (token.equalsIgnoreCase("join")) {
-				if (tokenizer.hasMoreTokens()) {
-					inputStoreInfo2 = tokenizer.nextToken();
+			else if (split.equalsIgnoreCase("join")) {
+				if (splitIndex < sqlSplits.length - 1) {
+					splitIndex++;
+					inputStoreInfo2 = sqlSplits[splitIndex];
 					LOGGER.debug("Input store info (2): " + inputStoreInfo2);
 				}
 			}
+
+			splitIndex++;
 		}
+
+		String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
 
 		// Parse SQL for store.adapter
 		if (inputStoreInfo1 != null) {
 			String inputStoreName = inputStoreInfo1;
+
 			String adapterName = null;
 
-			if (inputStoreInfo1.contains(".")) {
-				String[] infoParts = inputStoreInfo1.split("\\.");
+			if (inputStoreInfo1.contains(STORE_ADAPTER_DELIM)) {
+				String[] infoParts = inputStoreInfo1.split(escapedDelimRegex);
+
+				if (infoParts.length > 2) {
+					throw new ParameterException(
+							"Ambiguous datastore$adapter designation: " + inputStoreInfo1);
+				}
+
 				inputStoreName = infoParts[0];
 				adapterName = infoParts[1];
 			}
@@ -183,25 +203,23 @@ public class SparkSqlCommand extends
 						adapterName);
 			}
 
-			String tempFind = " " + inputStoreInfo1 + " ";
-			String tempReplace = " " + SqlQueryRunner.TEMP1 + " ";
-			convertedSql = convertedSql.replace(
-					tempFind,
-					tempReplace);
-
-			tempFind = inputStoreInfo1 + ".";
-			tempReplace = SqlQueryRunner.TEMP1 + ".";
-			convertedSql = convertedSql.replace(
-					tempFind,
-					tempReplace);
+			// We use datastore_adapter as the temp view name
+			tempView1 = inputStoreInfo1;
 		}
 
+		// If there's a join, set up the 2nd store info
 		if (inputStoreInfo2 != null) {
 			String inputStoreName = inputStoreInfo2;
 			String adapterName = null;
 
-			if (inputStoreInfo2.contains(".")) {
-				String[] infoParts = inputStoreInfo2.split("\\.");
+			if (inputStoreInfo2.contains(STORE_ADAPTER_DELIM)) {
+				String[] infoParts = inputStoreInfo2.split(escapedDelimRegex);
+
+				if (infoParts.length > 2) {
+					throw new ParameterException(
+							"Ambiguous datastore$adapter designation: " + inputStoreInfo2);
+				}
+
 				inputStoreName = infoParts[0];
 				adapterName = infoParts[1];
 			}
@@ -222,17 +240,7 @@ public class SparkSqlCommand extends
 						adapterName);
 			}
 
-			String tempFind = " " + inputStoreInfo2 + " ";
-			String tempReplace = " " + SqlQueryRunner.TEMP2 + " ";
-			convertedSql = convertedSql.replace(
-					tempFind,
-					tempReplace);
-
-			tempFind = inputStoreInfo2 + ".";
-			tempReplace = SqlQueryRunner.TEMP2 + ".";
-			convertedSql = convertedSql.replace(
-					tempFind,
-					tempReplace);
+			tempView2 = inputStoreInfo2;
 		}
 
 		if (outputStoreName != null) {
@@ -244,8 +252,6 @@ public class SparkSqlCommand extends
 			}
 			outputDataStore = outputStoreLoader.getDataStorePlugin();
 		}
-
-		return convertedSql;
 	}
 
 	public List<String> getParameters() {

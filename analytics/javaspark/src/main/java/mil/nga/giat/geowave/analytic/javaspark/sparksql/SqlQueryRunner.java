@@ -32,11 +32,11 @@ public class SqlQueryRunner
 
 	private DataStorePluginOptions inputDataStore1 = null;
 	private ByteArrayId adapterId1 = null;
-	public static final String TEMP1 = "temp1";
+	private String tempView1 = null;
 
 	private DataStorePluginOptions inputDataStore2 = null;
 	private ByteArrayId adapterId2 = null;
-	public static final String TEMP2 = "temp2";
+	private String tempView2 = null;
 
 	private String sql = null;
 
@@ -118,7 +118,7 @@ public class SqlQueryRunner
 					false);
 		}
 
-		dfTemp1.createOrReplaceTempView(TEMP1);
+		dfTemp1.createOrReplaceTempView(tempView1);
 
 		if (inputDataStore2 != null) {
 			queryOptions = null;
@@ -168,7 +168,7 @@ public class SqlQueryRunner
 						false);
 			}
 
-			dfTemp2.createOrReplaceTempView(TEMP2);
+			dfTemp2.createOrReplaceTempView(tempView2);
 		}
 
 		// Run the query
@@ -210,6 +210,11 @@ public class SqlQueryRunner
 		this.adapterId1 = adapterId;
 	}
 
+	public void setTempView1(
+			String tempView1 ) {
+		this.tempView1 = tempView1;
+	}
+
 	public void setInputDataStore2(
 			DataStorePluginOptions inputDataStore ) {
 		this.inputDataStore2 = inputDataStore;
@@ -218,6 +223,11 @@ public class SqlQueryRunner
 	public void setAdapterId2(
 			ByteArrayId adapterId ) {
 		this.adapterId2 = adapterId;
+	}
+
+	public void setTempView2(
+			String tempView2 ) {
+		this.tempView2 = tempView2;
 	}
 
 	public void setSql(
