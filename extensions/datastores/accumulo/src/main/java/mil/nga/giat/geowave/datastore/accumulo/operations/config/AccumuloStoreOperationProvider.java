@@ -8,15 +8,15 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.operations.config.addstore;
+package mil.nga.giat.geowave.datastore.accumulo.operations.config;
 
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 
-public class AddStoreOperationProvider implements
+public class AccumuloStoreOperationProvider implements
 		CLIOperationProviderSpi
 {
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
-		AddStoreSection.class
+		AddAccumuloStoreCommand.class
 	};
 
 	@Override

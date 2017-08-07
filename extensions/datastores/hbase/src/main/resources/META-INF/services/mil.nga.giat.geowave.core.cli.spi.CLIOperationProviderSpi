@@ -1,1 +1,2 @@
 mil.nga.giat.geowave.datastore.hbase.cli.HBaseOperationProvider
+mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseStoreOperationProvider

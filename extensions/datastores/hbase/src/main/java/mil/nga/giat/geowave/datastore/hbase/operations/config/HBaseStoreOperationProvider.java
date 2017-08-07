@@ -8,9 +8,20 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.spi;
+package mil.nga.giat.geowave.datastore.hbase.operations.config;
 
-public interface CLIOperationProviderSpi
+import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
+
+public class HBaseStoreOperationProvider implements
+		CLIOperationProviderSpi
 {
-	public Class<?>[] getOperations();
+	private static final Class<?>[] OPERATIONS = new Class<?>[] {
+		AddHBaseStoreCommand.class
+	};
+
+	@Override
+	public Class<?>[] getOperations() {
+		return OPERATIONS;
+	}
+
 }

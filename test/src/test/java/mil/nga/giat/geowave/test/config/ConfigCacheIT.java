@@ -34,7 +34,6 @@ import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
-import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.config.CopyIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.CopyStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexCommand;
@@ -98,106 +97,74 @@ public class ConfigCacheIT
 				"memory");
 	}
 
-	@Test
-	public void addStore() {
-		final String storeName = new MemoryDataStoreFactory().getType();
-
-		final AddStoreCommand command = new AddStoreCommand();
-		command.setParameters("abc");
-		command.setMakeDefault(true);
-		command.setStoreType(storeName);
-
-		// This will load the params via SPI.
-		command.prepare(operationParams);
-
-		final DataStorePluginOptions options = command.getPluginOptions();
-
-		final MemoryRequiredOptions opts = (MemoryRequiredOptions) options.getFactoryOptions();
-		opts.setGeowaveNamespace("namespace");
-
-		command.execute(operationParams);
-
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
-
-		Assert.assertEquals(
-				"namespace",
-				props.getProperty("store.abc.opts." + StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION));
-		Assert.assertEquals(
-				"abc",
-				props.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE));
-	}
-
-	@Test
-	public void addStoreFromDefault() {
-		addStore();
-
-		// Now make from default
-		final AddStoreCommand command = new AddStoreCommand();
-		command.setParameters("abc2");
-		command.setMakeDefault(false);
-
-		// This will load the params via SPI.
-		command.prepare(operationParams);
-
-		final DataStorePluginOptions options = command.getPluginOptions();
-
-		final MemoryRequiredOptions opts = (MemoryRequiredOptions) options.getFactoryOptions();
-		opts.setGeowaveNamespace("namespace2");
-
-		command.execute(operationParams);
-
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
-
-		Assert.assertEquals(
-				"namespace2",
-				props.getProperty("store.abc2.opts." + StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION));
-	}
-
-	@Test
-	public void copyStore() {
-		addStore();
-
-		// Now make from default
-		final CopyStoreCommand command = new CopyStoreCommand();
-		command.setParameters(
-				"abc",
-				"abc2");
-
-		// This will load the params via SPI.
-		command.prepare(operationParams);
-		command.execute(operationParams);
-
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
-
-		Assert.assertEquals(
-				"namespace",
-				props.getProperty("store.abc2.opts." + StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION));
-	}
-
-	@Test
-	public void removeStore() {
-		addStore();
-
-		final RemoveStoreCommand command = new RemoveStoreCommand();
-		command.setEntryName("abc");
-
-		command.prepare(operationParams);
-		command.execute(operationParams);
-
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
-
-		Assert.assertEquals(
-				1,
-				props.size());
-	}
+	/*
+	 * @Test public void addStore() { final String storeName = new
+	 * MemoryDataStoreFactory().getType();
+	 * 
+	 * final AddStoreCommand command = new AddStoreCommand();
+	 * command.setParameters("abc"); command.setMakeDefault(true);
+	 * command.setStoreType(storeName);
+	 * 
+	 * // This will load the params via SPI. command.prepare(operationParams);
+	 * 
+	 * final DataStorePluginOptions options = command.getPluginOptions();
+	 * 
+	 * final MemoryRequiredOptions opts = (MemoryRequiredOptions)
+	 * options.getFactoryOptions(); opts.setGeowaveNamespace("namespace");
+	 * 
+	 * command.execute(operationParams);
+	 * 
+	 * final Properties props = ConfigOptions.loadProperties( configFile, null);
+	 * 
+	 * Assert.assertEquals( "namespace", props.getProperty("store.abc.opts." +
+	 * StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION)); Assert.assertEquals(
+	 * "abc",
+	 * props.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE)); }
+	 * 
+	 * @Test public void addStoreFromDefault() { addStore();
+	 * 
+	 * // Now make from default final AddStoreCommand command = new
+	 * AddStoreCommand(); command.setParameters("abc2");
+	 * command.setMakeDefault(false);
+	 * 
+	 * // This will load the params via SPI. command.prepare(operationParams);
+	 * 
+	 * final DataStorePluginOptions options = command.getPluginOptions();
+	 * 
+	 * final MemoryRequiredOptions opts = (MemoryRequiredOptions)
+	 * options.getFactoryOptions(); opts.setGeowaveNamespace("namespace2");
+	 * 
+	 * command.execute(operationParams);
+	 * 
+	 * final Properties props = ConfigOptions.loadProperties( configFile, null);
+	 * 
+	 * Assert.assertEquals( "namespace2", props.getProperty("store.abc2.opts." +
+	 * StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION)); }
+	 * 
+	 * @Test public void copyStore() { addStore();
+	 * 
+	 * // Now make from default final CopyStoreCommand command = new
+	 * CopyStoreCommand(); command.setParameters( "abc", "abc2");
+	 * 
+	 * // This will load the params via SPI. command.prepare(operationParams);
+	 * command.execute(operationParams);
+	 * 
+	 * final Properties props = ConfigOptions.loadProperties( configFile, null);
+	 * 
+	 * Assert.assertEquals( "namespace", props.getProperty("store.abc2.opts." +
+	 * StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION)); }
+	 * 
+	 * @Test public void removeStore() { addStore();
+	 * 
+	 * final RemoveStoreCommand command = new RemoveStoreCommand();
+	 * command.setEntryName("abc");
+	 * 
+	 * command.prepare(operationParams); command.execute(operationParams);
+	 * 
+	 * final Properties props = ConfigOptions.loadProperties( configFile, null);
+	 * 
+	 * Assert.assertEquals( 1, props.size()); }
+	 */
 
 	@Test
 	public void addIndex() {

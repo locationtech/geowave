@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.adapter.vector.AvroFeatureUtils;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.avro.AttributeValues;
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
+import mil.nga.giat.geowave.adapter.vector.cli.VectorSection;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;

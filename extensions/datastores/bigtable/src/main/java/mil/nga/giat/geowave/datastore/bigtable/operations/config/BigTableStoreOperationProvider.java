@@ -8,19 +8,20 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.operations.config;
+package mil.nga.giat.geowave.datastore.bigtable.operations.config;
 
-import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
-import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 
-public class StoreOptions extends
-		StoreFactoryOptions
+public class BigTableStoreOperationProvider implements
+		CLIOperationProviderSpi
 {
+	private static final Class<?>[] OPERATIONS = new Class<?>[] {
+		AddBigTableStoreCommand.class
+	};
 
 	@Override
-	public StoreFactoryFamilySpi getStoreFactory() {
-		// TODO Auto-generated method stub
-		return null;
+	public Class<?>[] getOperations() {
+		return OPERATIONS;
 	}
 
 }

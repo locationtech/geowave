@@ -30,18 +30,17 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.config.addstore.AddStoreSection;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-@GeowaveOperation(name = "addaccumulostore", parentOperation = AddStoreSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "accumulo", parentOperation = AddStoreSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create an accumulo store within Geowave")
 public class AddAccumuloStoreCommand extends
 		DefaultOperation<Void> implements
 		Command
 {
-	
-	private final static Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(AddAccumuloStoreCommand.class);
 
 	public static final String PROPERTIES_CONTEXT = "properties";
 
@@ -57,7 +56,7 @@ public class AddAccumuloStoreCommand extends
 	}, description = "Make this the default store in all operations")
 	private Boolean makeDefault;
 
-	private String storeType = "acummulo";
+	private String storeType = "accumulo";
 
 	@ParametersDelegate
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
@@ -68,7 +67,6 @@ public class AddAccumuloStoreCommand extends
 
 		// Load SPI options for the given type into pluginOptions.
 		pluginOptions.selectPlugin(storeType);
-		
 
 		// Successfully prepared.
 		return true;
