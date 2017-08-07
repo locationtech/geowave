@@ -34,7 +34,12 @@ mil.nga.giat.geowave.analytic.clustering.exception
 mil.nga.giat.geowave.analytic.distance
 mil.nga.giat.geowave.analytic.extract
 mil.nga.giat.geowave.analytic.javaspark
-mil.nga.giat.geowave.analytic.javaspark.operations
+mil.nga.giat.geowave.analytic.javaspark.kmeans
+mil.nga.giat.geowave.analytic.javaspark.kmeans.operations
+mil.nga.giat.geowave.analytic.javaspark.sparksql
+mil.nga.giat.geowave.analytic.javaspark.sparksql.operations
+mil.nga.giat.geowave.analytic.javaspark.sparksql.udf
+mil.nga.giat.geowave.analytic.javaspark.sparksql.util
 mil.nga.giat.geowave.analytic.kmeans
 mil.nga.giat.geowave.analytic.kmeans.serial
 mil.nga.giat.geowave.analytic.kryo
