@@ -26,7 +26,7 @@ public class SimpleFeatureMapper implements
 	private static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureDataFrame.class);
 
 	private final StructType schema;
-	private transient GeomWriter geomWriter = new GeomWriter();
+	private final GeomWriter geomWriter = new GeomWriter();
 
 	public SimpleFeatureMapper(
 			StructType schema ) {
