@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -162,40 +162,31 @@ implements org.apache.accumulo.core.util.format.Formatter</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#formatEntry-java.util.Map.Entry-boolean-">formatEntry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;entry,
-           boolean&nbsp;showTimestamps)</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#formatEntry-java.util.Map.Entry-java.text.DateFormat-">formatEntry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;entry,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/text/DateFormat.html?is-external=true" title="class or interface in java.text">DateFormat</a>&nbsp;timestampFormat)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#getScannerIterator--">getScannerIterator</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#hasNext--">hasNext</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#initialize-java.lang.Iterable-boolean-">initialize</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&gt;&nbsp;scanner,
-          boolean&nbsp;printTimestamps)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#initialize-java.lang.Iterable-org.apache.accumulo.core.util.format.FormatterConfig-">initialize</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&gt;&nbsp;scanner,
+          org.apache.accumulo.core.util.format.FormatterConfig&nbsp;config)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#isDoTimestamps--">isDoTimestamps</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#next-java.text.DateFormat-">next</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/text/DateFormat.html?is-external=true" title="class or interface in java.text">DateFormat</a>&nbsp;timestampFormat)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/PersistentDataFormatter.html#remove--">remove</a></span>()</code>&nbsp;</td>
 </tr>
@@ -245,14 +236,14 @@ implements org.apache.accumulo.core.util.format.Formatter</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="initialize-java.lang.Iterable-boolean-">
+<a name="initialize-java.lang.Iterable-org.apache.accumulo.core.util.format.FormatterConfig-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
 <pre>public&nbsp;void&nbsp;initialize(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&gt;&nbsp;scanner,
-                       boolean&nbsp;printTimestamps)</pre>
+                       org.apache.accumulo.core.util.format.FormatterConfig&nbsp;config)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>initialize</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.util.format.Formatter</code></dd>
@@ -316,16 +307,6 @@ implements org.apache.accumulo.core.util.format.Formatter</pre>
 <pre>protected&nbsp;void&nbsp;checkState(boolean&nbsp;expectInitialized)</pre>
 </li>
 </ul>
-<a name="formatEntry-java.util.Map.Entry-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>formatEntry</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatEntry(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;entry,
-                          boolean&nbsp;showTimestamps)</pre>
-</li>
-</ul>
 <a name="formatEntry-java.util.Map.Entry-java.text.DateFormat-">
 <!--   -->
 </a>
@@ -349,19 +330,10 @@ implements org.apache.accumulo.core.util.format.Formatter</pre>
 <a name="getScannerIterator--">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getScannerIterator</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&gt;&nbsp;getScannerIterator()</pre>
-</li>
-</ul>
-<a name="isDoTimestamps--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>isDoTimestamps</h4>
-<pre>protected&nbsp;boolean&nbsp;isDoTimestamps()</pre>
 </li>
 </ul>
 </li>
