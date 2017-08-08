@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
+import com.google.gson.JsonObject;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
@@ -23,12 +25,15 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import scala.actors.threadpool.Arrays;
 
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			GeoWaveOperationServiceWrapper.class);
 	private final DefaultOperation<T> operation;
 
 	public GeoWaveOperationServiceWrapper(
@@ -41,10 +46,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			throws Exception {
 		if (operation.getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
-			return handleRequest(null);
+			return handleRequest(
+					null);
 		}
 		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(
+					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -58,10 +65,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 			final Form form = new Form(
 					request);
-			return handleRequest(form);
+			return handleRequest(
+					form);
 		}
 		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(
+					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -78,10 +87,14 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	 * @param form
 	 *            The form to fetch parameters from, or the query if form is
 	 *            null.
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
 	private void injectParameters(
 			final Form form )
-			throws MissingArgumentException {
+			throws MissingArgumentException,
+			InstantiationException,
+			IllegalAccessException {
 
 		for (final Field field : FieldUtils.getFieldsWithAnnotation(
 				// TODO Take out this loop?
@@ -89,19 +102,35 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				Parameter.class)) {
 			processField(
 					form,
+					operation,
+					field);
+
+		}
+		for (final Field field : FieldUtils.getFieldsWithAnnotation(
+				// TODO Take out this loop?
+				operation.getClass(),
+				ParametersDelegate.class)) {
+			processField(
+					form,
+					operation,
 					field);
 
 		}
 	}
 
-	private Field processField(
+	private void processField(
 			final Form form,
+			final Object instance,
 			final Field field )
-			throws MissingArgumentException {
-		final Parameter parameter = field.getAnnotation(Parameter.class);
+			throws MissingArgumentException,
+			InstantiationException,
+			IllegalAccessException {
+		final Parameter parameter = field.getAnnotation(
+				Parameter.class);
 
 		ParametersDelegate parametersDelegate = null;
-		parametersDelegate = field.getAnnotation(ParametersDelegate.class);
+		parametersDelegate = field.getAnnotation(
+				ParametersDelegate.class);
 
 		if (parameter != null) {
 			if (field.getType() == String.class) {
@@ -109,12 +138,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(true); // Get around restrictions on
-												// private fields. JCommander
-												// does this too.
+					field.setAccessible(
+							true); // Get around restrictions on
+									// private fields. JCommander
+									// does this too.
 					try {
 						field.set(
-								operation,
+								instance,
 								value);
 					}
 					catch (final IllegalAccessException e) {
@@ -132,11 +162,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(true);
+					field.setAccessible(
+							true);
 					try {
 						field.set(
-								operation,
-								Boolean.valueOf(value));
+								instance,
+								Boolean.valueOf(
+										value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -153,11 +185,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(true);
+					field.setAccessible(
+							true);
 					try {
 						field.set(
-								operation,
-								Integer.valueOf(value));
+								instance,
+								Integer.valueOf(
+										value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -170,15 +204,17 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				}
 			}
 			else if (field.getType() == List.class) {
-				field.setAccessible(true);
+				field.setAccessible(
+						true);
 				String[] parameters = getFieldValues(
 						form,
 						field.getName());
 
 				try {
 					field.set(
-							operation,
-							Arrays.asList(parameters));
+							instance,
+							Arrays.asList(
+									parameters));
 				}
 				catch (final IllegalAccessException e) {
 					throw new RuntimeException(
@@ -189,16 +225,28 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				throw new RuntimeException(
 						"Unsupported format on field " + field);
 			}
-			return field;
 		}
 		else if (parametersDelegate != null) {
-			for (final Field f : FieldUtils.getAllFields(field.getType())) {
-				return processField(
+			if (field.getType().isAssignableFrom(
+					StoreFactoryOptions.class)) {
+				//TODO figure out how to do this right, essentially the command is setting the factory options separately right now
+				return;
+			}
+			Object delegateObj = field.getType().newInstance();
+			for (Field f : FieldUtils.getAllFields(
+					field.getType())) {
+				processField(
 						form,
+						delegateObj,
 						f);
 			}
+			field.setAccessible(
+					true);
+			field.set(
+					instance,
+					delegateObj);
 		}
-		return null;
+
 	}
 
 	private String[] getFieldValues(
@@ -206,7 +254,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String[] val = null;
 		if (form != null) {
-			val = form.getValuesArray(name);
+			val = form.getValuesArray(
+					name);
 		}
 		if (val == null || val.length == 0) {
 			val = getQuery().getValuesArray(
@@ -220,10 +269,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String val = null;
 		if (form != null) {
-			val = form.getFirstValue(name);
+			val = form.getFirstValue(
+					name);
 		}
 		if (val == null) {
-			val = getQueryValue(name);
+			val = getQueryValue(
+					name);
 		}
 		return val;
 	}
@@ -231,8 +282,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	private T handleRequest(
 			final Form form )
 			throws Exception {
-		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
-				.getFirstValue("config_file");
+		final String configFileParameter = (form == null) ? getQueryValue(
+				"config_file")
+				: form.getFirstValue(
+						"config_file");
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
@@ -242,7 +295,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				configFile);
 
 		try {
-			injectParameters(form);
+			injectParameters(
+					form);
 		}
 		catch (final MissingArgumentException e) {
 			setStatus(
@@ -252,8 +306,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 
 		try {
-			operation.prepare(params);
-			return operation.computeResults(params);
+			operation.prepare(
+					params);
+			return operation.computeResults(
+					params);
 		}
 		catch (final Exception e) {
 			LOGGER.error(

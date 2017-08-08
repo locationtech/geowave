@@ -1,9 +1,12 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -13,9 +16,11 @@ import com.google.gson.JsonObject;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import scala.actors.threadpool.Arrays;
 
 public class SwaggerOperationParser<T>
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(SwaggerOperationParser.class);
 	/**
 	 * Reads Geowave CLI operations and parses class fields for particular
 	 * annotations ( @Parameter and @ParametersDelegate from JCommander) The
@@ -36,14 +41,14 @@ public class SwaggerOperationParser<T>
 		this.json_obj = parseParameters();
 	}
 
-	public JsonObject processField(
+	public JsonObject[] processField(
 			Field f ) {
 		Parameter parameter = null;
 		try {
 			parameter = f.getAnnotation(Parameter.class);
 		}
 		catch (NoClassDefFoundError e) {
-			System.out.println(e.getMessage());
+			LOGGER.error("Cannot get parameter",e);
 		}
 
 		ParametersDelegate parametersDelegate = null;
@@ -51,7 +56,7 @@ public class SwaggerOperationParser<T>
 			parametersDelegate = f.getAnnotation(ParametersDelegate.class);
 		}
 		catch (NoClassDefFoundError e) {
-			System.out.println(e.getMessage());
+			LOGGER.error("Cannot get parameter delegate", e);
 		}
 
 		if (parameter != null) {
@@ -59,7 +64,6 @@ public class SwaggerOperationParser<T>
 
 			// first get the field name
 			String f_name = f.getName();
-			System.out.print(f_name + " ");
 			param_json.addProperty(
 					"name",
 					f_name);
@@ -132,7 +136,6 @@ public class SwaggerOperationParser<T>
 				desc = desc.replace(
 						">",
 						"]");
-				System.out.print(desc);
 				param_json.addProperty(
 						"description",
 						desc);
@@ -140,7 +143,6 @@ public class SwaggerOperationParser<T>
 
 			// find out if this parameter is required
 			if (parameter.required() || f_name == "parameters") {
-				System.out.print(" required");
 				param_json.addProperty(
 						"required",
 						true);
@@ -151,14 +153,18 @@ public class SwaggerOperationParser<T>
 						false);
 			}
 
-			System.out.println(" ");
-			return param_json;
+			return new JsonObject[]{param_json};
 		}
 		else if (parametersDelegate != null) {
 			// return;
+			List<JsonObject> delegateList = new ArrayList<>(); 
 			for (Field field : FieldUtils.getAllFields(f.getType())) {
-				return processField(field);
+				JsonObject[] fieldArray = processField(field);
+				if (fieldArray != null){
+					delegateList.addAll(Arrays.asList(fieldArray));
+				}
 			}
+			return delegateList.toArray(new JsonObject[0]);
 		}
 		return null;
 	}
@@ -185,9 +191,11 @@ public class SwaggerOperationParser<T>
 		// json object
 		JsonArray fields_obj = new JsonArray();
 		for (final Field field : FieldUtils.getAllFields(this.operation.getClass())) {
-			JsonObject field_obj = processField(field);
-			if (field_obj != null) {
+			JsonObject[] field_obj_array = processField(field);
+			if (field_obj_array != null) {
+				for (JsonObject field_obj : field_obj_array){
 				fields_obj.add(field_obj);
+				}
 			}
 		}
 		op_json.add(
@@ -224,7 +232,6 @@ public class SwaggerOperationParser<T>
 				"responses",
 				resp_json);
 
-		System.out.println(op_json.toString());
 		return op_json;
 	}
 
@@ -239,7 +246,7 @@ public class SwaggerOperationParser<T>
 			return "integer";
 		}
 		else if (type == Float.class || type == float.class) {
-			return "nummber";
+			return "number";
 		}
 		else if (type == Boolean.class || type == boolean.class) {
 			return "boolean";
