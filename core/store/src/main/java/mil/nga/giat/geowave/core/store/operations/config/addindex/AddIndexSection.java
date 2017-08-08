@@ -8,17 +8,25 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.operations.config;
+package mil.nga.giat.geowave.core.store.operations.config.addindex;
 
-import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
-import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import com.beust.jcommander.Parameters;
 
-public class StoreOptions extends
-		StoreFactoryOptions
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
+
+@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
+@Parameters(commandDescription = "Commands that add local GeoWave indexes")
+public class AddIndexSection extends
+		DefaultOperation
 {
 
 	@Override
-	public StoreFactoryFamilySpi getStoreFactory() {
+	public Object computeResults(
+			OperationParams params )
+			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
