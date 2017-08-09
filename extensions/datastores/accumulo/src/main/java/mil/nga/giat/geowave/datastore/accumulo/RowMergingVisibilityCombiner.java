@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class RowMergingVisibilityCombiner extends
 		MergingVisibilityCombiner
@@ -59,7 +60,7 @@ public class RowMergingVisibilityCombiner extends
 				env);
 		final String rowTransformStr = options.get(RowMergingAdapterOptionProvider.ROW_TRANSFORM_KEY);
 		final byte[] rowTransformBytes = ByteArrayUtils.byteArrayFromString(rowTransformStr);
-		rowTransform = (RowTransform<Mergeable>) PersistenceUtils.fromBinary(rowTransformBytes);
+		rowTransform = (RowTransform<Mergeable>) AccumuloUtils.fromBinary(rowTransformBytes);
 		rowTransform.initOptions(options);
 	}
 

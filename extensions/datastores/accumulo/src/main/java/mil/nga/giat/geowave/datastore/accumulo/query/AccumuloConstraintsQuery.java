@@ -46,6 +46,7 @@ import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 /**
  * This class represents basic numeric contraints applied to an Accumulo Query
@@ -146,30 +147,30 @@ public class AccumuloConstraintsQuery extends
 			if (!(base.aggregation.getRight() instanceof CommonIndexAggregation) && base.aggregation.getLeft() != null) {
 				iteratorSettings.addOption(
 						AggregationIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(base.aggregation.getLeft())));
+						ByteArrayUtils.byteArrayToString(AccumuloUtils.toBinary(base.aggregation.getLeft())));
 			}
 			final Aggregation aggr = base.aggregation.getRight();
 			iteratorSettings.addOption(
 					AggregationIterator.AGGREGATION_OPTION_NAME,
 					// we just want an empty aggregation, which is why we only
 					// use class ID
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toClassId(aggr)));
+					ByteArrayUtils.byteArrayToString(AccumuloUtils.toClassId(aggr)));
 			if (aggr.getParameters() != null) { // sets the parameters
 				iteratorSettings.addOption(
 						AggregationIterator.PARAMETER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(aggr.getParameters()))));
+						ByteArrayUtils.byteArrayToString((AccumuloUtils.toBinary(aggr.getParameters()))));
 			}
 			iteratorSettings.addOption(
 					AggregationIterator.CONSTRAINTS_OPTION_NAME,
-					ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(base.constraints))));
+					ByteArrayUtils.byteArrayToString((AccumuloUtils.toBinary(base.constraints))));
 			iteratorSettings.addOption(
 					AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexStrategy())));
+					ByteArrayUtils.byteArrayToString(AccumuloUtils.toBinary(index.getIndexStrategy())));
 			// the index model must be provided for the aggregation iterator to
 			// deserialize each entry
 			iteratorSettings.addOption(
 					QueryFilterIterator.MODEL,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexModel())));
+					ByteArrayUtils.byteArrayToString(AccumuloUtils.toBinary(index.getIndexModel())));
 			// don't bother setting max decomposition because it is just the
 			// default anyways
 		}
@@ -239,7 +240,7 @@ public class AccumuloConstraintsQuery extends
 
 			iteratorSetting.addOption(
 					NumericIndexStrategyFilterIterator.INDEX_STRATEGY_KEY,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(index.getIndexStrategy())));
+					ByteArrayUtils.byteArrayToString(AccumuloUtils.toBinary(index.getIndexStrategy())));
 
 			iteratorSetting.addOption(
 					NumericIndexStrategyFilterIterator.COORDINATE_RANGE_KEY,
@@ -281,12 +282,12 @@ public class AccumuloConstraintsQuery extends
 						final Entry<Key, Value> input = it.next();
 						if (input.getValue() != null) {
 							if (mergedAggregationResult == null) {
-								mergedAggregationResult = (Mergeable) PersistenceUtils.fromBinary(input
+								mergedAggregationResult = (Mergeable) AccumuloUtils.fromBinary(input
 										.getValue()
 										.get());
 							}
 							else {
-								mergedAggregationResult.merge((Mergeable) PersistenceUtils.fromBinary(input
+								mergedAggregationResult.merge((Mergeable) AccumuloUtils.fromBinary(input
 										.getValue()
 										.get()));
 							}

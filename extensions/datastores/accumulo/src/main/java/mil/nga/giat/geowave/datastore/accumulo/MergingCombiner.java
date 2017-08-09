@@ -18,6 +18,7 @@ import org.apache.accumulo.core.iterators.Combiner;
 
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class MergingCombiner extends
 		Combiner
@@ -57,11 +58,11 @@ public class MergingCombiner extends
 	protected Mergeable getMergeable(
 			final Key key,
 			final byte[] binary ) {
-		return (Mergeable) PersistenceUtils.fromBinary(binary);
+		return (Mergeable) AccumuloUtils.fromBinary(binary);
 	}
 
 	protected byte[] getBinary(
 			final Mergeable mergeable ) {
-		return PersistenceUtils.toBinary(mergeable);
+		return AccumuloUtils.toBinary(mergeable);
 	}
 }

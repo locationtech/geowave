@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -13,21 +13,20 @@ package mil.nga.giat.geowave.datastore.accumulo.util;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -44,15 +43,19 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -62,23 +65,16 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.Writer;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedDataSet;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -94,7 +90,6 @@ import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
@@ -108,29 +103,33 @@ import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloConstraintsQuery;
  */
 public class AccumuloUtils
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			AccumuloUtils.class);
 	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
 	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
 		if (byteArrayRange.isSingleValue()) {
-			return Range.exact(new Text(
-					byteArrayRange.getStart().getBytes()));
+			return Range.exact(
+					new Text(
+							byteArrayRange.getStart().getBytes()));
 		}
 		final Text start = new Text(
 				byteArrayRange.getStart().getBytes());
 		final Text end = new Text(
 				byteArrayRange.getEnd().getBytes());
-		if (start.compareTo(end) > 0) {
+		if (start.compareTo(
+				end) > 0) {
 			return null;
 		}
 		return new Range(
 				new Text(
 						byteArrayRange.getStart().getBytes()),
 				true,
-				Range.followingPrefix(new Text(
-						byteArrayRange.getEnd().getBytes())),
+				Range.followingPrefix(
+						new Text(
+								byteArrayRange.getEnd().getBytes())),
 				false);
 	}
 
@@ -138,20 +137,24 @@ public class AccumuloUtils
 			final List<ByteArrayRange> byteArrayRanges ) {
 		if (byteArrayRanges == null) {
 			final TreeSet<Range> range = new TreeSet<Range>();
-			range.add(new Range());
+			range.add(
+					new Range());
 			return range;
 		}
 		final TreeSet<Range> accumuloRanges = new TreeSet<Range>();
 		for (final ByteArrayRange byteArrayRange : byteArrayRanges) {
-			final Range range = byteArrayRangeToAccumuloRange(byteArrayRange);
+			final Range range = byteArrayRangeToAccumuloRange(
+					byteArrayRange);
 			if (range == null) {
 				continue;
 			}
-			accumuloRanges.add(range);
+			accumuloRanges.add(
+					range);
 		}
 		if (accumuloRanges.isEmpty()) {
 			// implies full table scan
-			accumuloRanges.add(new Range());
+			accumuloRanges.add(
+					new Range());
 		}
 		return accumuloRanges;
 	}
@@ -159,8 +162,8 @@ public class AccumuloUtils
 	public static String getQualifiedTableName(
 			final String tableNamespace,
 			final String unqualifiedTableName ) {
-		return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName : tableNamespace + "_"
-				+ unqualifiedTableName;
+		return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName
+				: tableNamespace + "_" + unqualifiedTableName;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -242,7 +245,8 @@ public class AccumuloUtils
 			final PrimaryIndex index,
 			final ScanCallback<T> scanCallback ) {
 		if ((dataAdapter == null) && (adapterStore == null)) {
-			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
+			LOGGER.error(
+					"Could not decode row from iterator. Either adapter or adapter store must be non-null.");
 			return null;
 		}
 		DataAdapter<T> adapter = dataAdapter;
@@ -295,14 +299,17 @@ public class AccumuloUtils
 			}
 
 			if (adapter == null) {
-				adapter = (DataAdapter<T>) adapterStore.getAdapter(adapterId);
+				adapter = (DataAdapter<T>) adapterStore.getAdapter(
+						adapterId);
 				if (adapter == null) {
-					LOGGER.error("DataAdapter does not exist");
+					LOGGER.error(
+							"DataAdapter does not exist");
 					return null;
 				}
 			}
 			if (!adapterMatchVerified) {
-				if (!adapterId.equals(adapter.getAdapterId())) {
+				if (!adapterId.equals(
+						adapter.getAdapterId())) {
 					return null;
 				}
 				adapterMatchVerified = true;
@@ -335,7 +342,8 @@ public class AccumuloUtils
 				encodedRow)) {
 			// cannot get here unless adapter is found (not null)
 			if (adapter == null) {
-				LOGGER.error("Error, adapter was null when it should not be");
+				LOGGER.error(
+						"Error, adapter was null when it should not be");
 			}
 			else {
 				final Pair<T, DataStoreEntryInfo> pair = Pair.of(
@@ -344,10 +352,12 @@ public class AccumuloUtils
 								index),
 						new DataStoreEntryInfo(
 								rowId.getDataId(),
-								Arrays.asList(new ByteArrayId(
-										rowId.getInsertionId())),
-								Arrays.asList(new ByteArrayId(
-										k.getRowData().getBackingArray())),
+								Arrays.asList(
+										new ByteArrayId(
+												rowId.getInsertionId())),
+								Arrays.asList(
+										new ByteArrayId(
+												k.getRowData().getBackingArray())),
 								fieldInfoList));
 				if (scanCallback != null) {
 					scanCallback.entryScanned(
@@ -380,7 +390,8 @@ public class AccumuloUtils
 					if ((field.getVisibility() != null) && (field.getVisibility().length > 0)) {
 						operations.insureAuthorization(
 								null,
-								StringUtils.stringFromBinary(field.getVisibility()));
+								StringUtils.stringFromBinary(
+										field.getVisibility()));
 
 					}
 				}
@@ -391,7 +402,8 @@ public class AccumuloUtils
 					index,
 					writableAdapter);
 
-			writer.write(mutations);
+			writer.write(
+					mutations);
 			return ingestInfo;
 		}
 		catch (AccumuloException | AccumuloSecurityException e) {
@@ -417,7 +429,7 @@ public class AccumuloUtils
 					new Text(
 							rowId.getBytes()));
 			for (final FieldInfo<?> fieldInfo : fieldInfoList) {
-				if (fieldInfo.getVisibility() != null && fieldInfo.getVisibility().length > 0) {
+				if ((fieldInfo.getVisibility() != null) && (fieldInfo.getVisibility().length > 0)) {
 					mutation.put(
 							new Text(
 									adapterId),
@@ -439,7 +451,8 @@ public class AccumuloUtils
 				}
 			}
 
-			mutations.add(mutation);
+			mutations.add(
+					mutation);
 		}
 		return mutations;
 	}
@@ -459,7 +472,8 @@ public class AccumuloUtils
 		final AdapterPersistenceEncoding encodedData = dataWriter.encode(
 				entry,
 				indexModel);
-		final List<ByteArrayId> insertionIds = encodedData.getInsertionIds(index);
+		final List<ByteArrayId> insertionIds = encodedData.getInsertionIds(
+				index);
 		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
 				insertionIds.size());
 
@@ -484,11 +498,13 @@ public class AccumuloUtils
 		final List<String> namespaces = new ArrayList<String>();
 
 		for (final String table : connector.tableOperations().list()) {
-			final int idx = table.indexOf(AbstractGeowavePersistence.METADATA_TABLE) - 1;
+			final int idx = table.indexOf(
+					AbstractGeowavePersistence.METADATA_TABLE) - 1;
 			if (idx > 0) {
-				namespaces.add(table.substring(
-						0,
-						idx));
+				namespaces.add(
+						table.substring(
+								0,
+								idx));
 			}
 		}
 		return namespaces;
@@ -513,7 +529,8 @@ public class AccumuloUtils
 		try (final CloseableIterator<DataAdapter<?>> itr = adapterStore.getAdapters()) {
 
 			while (itr.hasNext()) {
-				adapters.add(itr.next());
+				adapters.add(
+						itr.next());
 			}
 		}
 		catch (final IOException e) {
@@ -544,7 +561,8 @@ public class AccumuloUtils
 		try (final CloseableIterator<Index<?, ?>> itr = indexStore.getIndices()) {
 
 			while (itr.hasNext()) {
-				indices.add(itr.next());
+				indices.add(
+						itr.next());
 			}
 		}
 		catch (final IOException e) {
@@ -622,20 +640,23 @@ public class AccumuloUtils
 				index)) {
 
 			if (iterator == null) {
-				LOGGER.error("Could not get iterator instance, getIterator returned null");
+				LOGGER.error(
+						"Could not get iterator instance, getIterator returned null");
 				throw new IOException(
 						"Could not get iterator instance, getIterator returned null");
 			}
 
 			long ii = 0;
-			final long splitInterval = (long) Math.ceil((double) count / (double) quantile);
+			final long splitInterval = (long) Math.ceil(
+					(double) count / (double) quantile);
 			final SortedSet<Text> splits = new TreeSet<Text>();
 			while (iterator.hasNext()) {
 				final Entry<Key, Value> entry = iterator.next();
 				ii++;
 				if (ii >= splitInterval) {
 					ii = 0;
-					splits.add(entry.getKey().getRow());
+					splits.add(
+							entry.getKey().getRow());
 				}
 			}
 
@@ -683,7 +704,8 @@ public class AccumuloUtils
 				index)) {
 
 			if (iterator == null) {
-				LOGGER.error("could not get iterator instance, getIterator returned null");
+				LOGGER.error(
+						"could not get iterator instance, getIterator returned null");
 				throw new IOException(
 						"could not get iterator instance, getIterator returned null");
 			}
@@ -701,8 +723,10 @@ public class AccumuloUtils
 					min = value;
 					max = value;
 				}
-				min = min.min(value);
-				max = max.max(value);
+				min = min.min(
+						value);
+				max = max.max(
+						value);
 			}
 
 			if ((min != null) && (max != null)) {
@@ -710,23 +734,30 @@ public class AccumuloUtils
 						max);
 				final BigDecimal dMin = new BigDecimal(
 						min);
-				BigDecimal delta = dMax.subtract(dMin);
-				delta = delta.divideToIntegralValue(new BigDecimal(
-						numSplits));
+				BigDecimal delta = dMax.subtract(
+						dMin);
+				delta = delta.divideToIntegralValue(
+						new BigDecimal(
+								numSplits));
 
 				for (int ii = 1; ii <= numberSplits; ii++) {
-					final BigDecimal temp = delta.multiply(BigDecimal.valueOf(ii));
-					final BigInteger value = min.add(temp.toBigInteger());
+					final BigDecimal temp = delta.multiply(
+							BigDecimal.valueOf(
+									ii));
+					final BigInteger value = min.add(
+							temp.toBigInteger());
 
 					final Text split = new Text(
 							value.toByteArray());
-					splits.add(split);
+					splits.add(
+							split);
 				}
 			}
 
 			final String tableName = AccumuloUtils.getQualifiedTableName(
 					namespace,
-					StringUtils.stringFromBinary(index.getId().getBytes()));
+					StringUtils.stringFromBinary(
+							index.getId().getBytes()));
 			connector.tableOperations().addSplits(
 					tableName,
 					splits);
@@ -765,7 +796,8 @@ public class AccumuloUtils
 				index)) {
 
 			if (iterator == null) {
-				LOGGER.error("Unable to get iterator instance, getIterator returned null");
+				LOGGER.error(
+						"Unable to get iterator instance, getIterator returned null");
 				throw new IOException(
 						"Unable to get iterator instance, getIterator returned null");
 			}
@@ -777,13 +809,15 @@ public class AccumuloUtils
 				ii++;
 				if (ii >= numberRows) {
 					ii = 0;
-					splits.add(entry.getKey().getRow());
+					splits.add(
+							entry.getKey().getRow());
 				}
 			}
 
 			final String tableName = AccumuloUtils.getQualifiedTableName(
 					namespace,
-					StringUtils.stringFromBinary(index.getId().getBytes()));
+					StringUtils.stringFromBinary(
+							index.getId().getBytes()));
 			connector.tableOperations().addSplits(
 					tableName,
 					splits);
@@ -821,7 +855,8 @@ public class AccumuloUtils
 				connector,
 				namespace);
 		// get unqualified table name
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+		final String tableName = StringUtils.stringFromBinary(
+				index.getId().getBytes());
 		return operations.localityGroupExists(
 				tableName,
 				adapter.getAdapterId().getBytes());
@@ -851,7 +886,8 @@ public class AccumuloUtils
 				connector,
 				namespace);
 		// get unqualified table name
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+		final String tableName = StringUtils.stringFromBinary(
+				index.getId().getBytes());
 		operations.addLocalityGroup(
 				tableName,
 				adapter.getAdapterId().getBytes());
@@ -884,9 +920,13 @@ public class AccumuloUtils
 				operations);
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				operations);
-		if (indexStore.indexExists(index.getId()) && adapterStore.adapterExists(adapter.getAdapterId())) {
+		if (indexStore.indexExists(
+				index.getId())
+				&& adapterStore.adapterExists(
+						adapter.getAdapterId())) {
 			final List<ByteArrayId> adapterIds = new ArrayList<>();
-			adapterIds.add(adapter.getAdapterId());
+			adapterIds.add(
+					adapter.getAdapterId());
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
 					adapterIds,
 					index,
@@ -937,7 +977,8 @@ public class AccumuloUtils
 				namespace);
 		final AccumuloIndexStore indexStore = new AccumuloIndexStore(
 				operations);
-		if (indexStore.indexExists(index.getId())) {
+		if (indexStore.indexExists(
+				index.getId())) {
 			final AccumuloConstraintsQuery accumuloQuery = new AccumuloConstraintsQuery(
 					null,
 					index,
@@ -974,11 +1015,13 @@ public class AccumuloUtils
 			throws TableNotFoundException {
 		final RowTransform rowTransform = adapter.getTransform();
 		if (rowTransform != null) {
-			final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(IteratorScope.scan);
+			final EnumSet<IteratorScope> visibilityCombinerScope = EnumSet.of(
+					IteratorScope.scan);
 			final OptionProvider optionProvider = new RowMergingAdapterOptionProvider(
 					adapter);
 			final IteratorConfig rowMergingCombinerConfig = new IteratorConfig(
-					EnumSet.complementOf(visibilityCombinerScope),
+					EnumSet.complementOf(
+							visibilityCombinerScope),
 					rowTransform.getBaseTransformPriority(),
 					rowTransform.getTransformName() + ROW_MERGING_SUFFIX,
 					RowMergingCombiner.class.getName(),
@@ -1018,14 +1061,19 @@ public class AccumuloUtils
 		final AccumuloAdapterStore adapterStore = new AccumuloAdapterStore(
 				operations);
 
-		if (indexStore.indexExists(index.getId())) {
-			final ScannerBase scanner = operations.createBatchScanner(index.getId().getString());
-			((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(null));
+		if (indexStore.indexExists(
+				index.getId())) {
+			final ScannerBase scanner = operations.createBatchScanner(
+					index.getId().getString());
+			((BatchScanner) scanner).setRanges(
+					AccumuloUtils.byteArrayRangesToAccumuloRanges(
+							null));
 			final IteratorSetting iteratorSettings = new IteratorSetting(
 					10,
 					"GEOWAVE_WHOLE_ROW_ITERATOR",
 					WholeRowIterator.class);
-			scanner.addScanIterator(iteratorSettings);
+			scanner.addScanIterator(
+					iteratorSettings);
 
 			final Iterator<Entry<Key, Value>> it = new IteratorWrapper(
 					adapterStore,
@@ -1111,4 +1159,96 @@ public class AccumuloUtils
 		public void remove() {}
 	}
 
+	private static final Object MUTEX = new Object();
+	private static boolean classLoaderInitialized = false;
+
+	private static void initClassLoader()
+			throws MalformedURLException {
+		synchronized (MUTEX) {
+			if (classLoaderInitialized) {
+				return;
+			}
+			final ClassLoader classLoader = AccumuloUtils.class.getClassLoader();
+			LOGGER.info(
+					"Generating patched classloader");
+			if (classLoader instanceof VFSClassLoader) {
+				final VFSClassLoader cl = (VFSClassLoader) classLoader;
+				final FileObject[] fileObjs = cl.getFileObjects();
+				final URL[] fileUrls = new URL[fileObjs.length];
+				for (int i = 0; i < fileObjs.length; i++) {
+					fileUrls[i] = new URL(
+							fileObjs[i].toString());
+				}
+				final ClassLoader urlCL = java.security.AccessController.doPrivileged(
+						new java.security.PrivilegedAction<URLClassLoader>() {
+							@Override
+							public URLClassLoader run() {
+								final URLClassLoader ucl = new URLClassLoader(
+										fileUrls,
+										cl);
+								return ucl;
+							}
+						});
+				SPIServiceRegistry.registerClassLoader(
+						urlCL);
+			}
+			classLoaderInitialized = true;
+		}
+	}
+
+	public static byte[] toBinary(
+			final Persistable persistable ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toBinary",
+					e);
+		}
+		return PersistenceUtils.toBinary(
+				persistable);
+	}
+
+	public static Persistable fromBinary(
+			final byte[] bytes ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in fromBinary",
+					e);
+		}
+		return PersistenceUtils.fromBinary(
+				bytes);
+	}
+
+	public static byte[] toBinary(
+			final Collection<? extends Persistable> persistables ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toBinary (list)",
+					e);
+		}
+		return PersistenceUtils.toBinary(
+				persistables);
+	}
+
+	public static byte[] toClassId(
+			final Persistable persistable ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toClassId",
+					e);
+		}
+		return PersistenceUtils.toClassId(
+				persistable);
+	}
 }

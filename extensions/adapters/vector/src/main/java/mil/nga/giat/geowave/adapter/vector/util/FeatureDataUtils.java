@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.vfs2.FileObject;
@@ -78,11 +78,9 @@ public class FeatureDataUtils
 						});
 				GeoTools.addClassLoader(urlCL);
 				SPIServiceRegistry.registerClassLoader(urlCL);
-
 			}
 			classLoaderInitialized = true;
 		}
-
 	}
 
 	public static SimpleFeature defaultCRSTransform(
