@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ServiceLoader;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi.PersistableIdAndConstructor;
 
 public class PersistableFactory
@@ -34,8 +34,8 @@ public class PersistableFactory
 	public static synchronized PersistableFactory getInstance() {
 		if (singletonInstance == null) {
 			final PersistableFactory internalFactory = new PersistableFactory();
-			final Iterator<PersistableRegistrySpi> persistableRegistries = ServiceLoader.load(
-					PersistableRegistrySpi.class).iterator();
+			final Iterator<PersistableRegistrySpi> persistableRegistries = new SPIServiceRegistry(PersistableFactory.class).load(
+					PersistableRegistrySpi.class);
 			while (persistableRegistries.hasNext()) {
 				final PersistableRegistrySpi persistableRegistry = persistableRegistries.next();
 				if (persistableRegistry != null) {

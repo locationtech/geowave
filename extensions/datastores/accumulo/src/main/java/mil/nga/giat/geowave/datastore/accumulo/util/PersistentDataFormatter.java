@@ -268,7 +268,7 @@ public class PersistentDataFormatter implements
 			StringBuilder sb,
 			Value value ) {
 		try {
-			Persistable persistable = PersistenceUtils.fromBinary(value.get());
+			Persistable persistable = AccumuloUtils.fromBinary(value.get());
 			sb.append(persistable.toString());
 		}
 		catch (Exception ex) {

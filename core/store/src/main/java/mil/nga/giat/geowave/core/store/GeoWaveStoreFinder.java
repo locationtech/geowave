@@ -24,6 +24,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -322,8 +323,7 @@ public class GeoWaveStoreFinder
 			Map<String, T> registeredFactories ) {
 		if (registeredFactories == null) {
 			registeredFactories = new HashMap<String, T>();
-			final Iterator<T> storeFactories = ServiceLoader.load(
-					cls).iterator();
+			final Iterator<T> storeFactories = new SPIServiceRegistry(GeoWaveStoreFinder.class).load(cls);
 			while (storeFactories.hasNext()) {
 				final T storeFactory = storeFactories.next();
 				if (storeFactory != null) {

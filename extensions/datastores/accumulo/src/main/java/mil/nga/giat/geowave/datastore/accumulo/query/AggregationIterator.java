@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.datastore.accumulo.query;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

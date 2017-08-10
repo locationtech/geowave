@@ -44,6 +44,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.encoding.AccumuloCommonIndexedPersistenceEncoding;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class QueryFilterIterator extends
 		Filter
@@ -277,12 +278,12 @@ public class QueryFilterIterator extends
 			if (options.containsKey(FILTER)) {
 				final String filterStr = options.get(FILTER);
 				final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
-				filter = (DistributableQueryFilter) PersistenceUtils.fromBinary(filterBytes);
+				filter = (DistributableQueryFilter) AccumuloUtils.fromBinary(filterBytes);
 			}
 			if (options.containsKey(MODEL)) {
 				final String modelStr = options.get(MODEL);
 				final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
-				model = (CommonIndexModel) PersistenceUtils.fromBinary(modelBytes);
+				model = (CommonIndexModel) AccumuloUtils.fromBinary(modelBytes);
 				for (final NumericDimensionField<? extends CommonIndexValue> numericDimension : model.getDimensions()) {
 					commonIndexFieldIds.add(numericDimension.getFieldId());
 				}

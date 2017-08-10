@@ -31,6 +31,7 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class NumericIndexStrategyFilterIterator implements
 		SortedKeyValueIterator<Key, Value>
@@ -64,7 +65,7 @@ public class NumericIndexStrategyFilterIterator implements
 			if (options.containsKey(INDEX_STRATEGY_KEY)) {
 				final String idxStrategyStr = options.get(INDEX_STRATEGY_KEY);
 				final byte[] idxStrategyBytes = ByteArrayUtils.byteArrayFromString(idxStrategyStr);
-				indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(idxStrategyBytes);
+				indexStrategy = (NumericIndexStrategy) AccumuloUtils.fromBinary(idxStrategyBytes);
 			}
 			else {
 				throw new IllegalArgumentException(
