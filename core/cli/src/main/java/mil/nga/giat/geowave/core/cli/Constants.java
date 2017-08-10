@@ -28,4 +28,10 @@ public interface Constants
 	 * Properties file key denoting if encryption is enabled for passwords
 	 */
 	public static final String ENCRYPTION_ENABLED_KEY = "geowave.encryption.enabled";
+
+	/**
+	 * Default setting for encryption turned on. Currently defaults to disabled.
+	 * Must be a boolean string.
+	 */
+	public static final String ENCRYPTION_ENABLED_DEFAULT = Boolean.FALSE.toString();
 }
