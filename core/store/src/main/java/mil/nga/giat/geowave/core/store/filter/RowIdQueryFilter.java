@@ -23,7 +23,7 @@ public class RowIdQueryFilter implements
 {
 	private List<ByteArrayId> rowIds;
 
-	protected RowIdQueryFilter() {}
+	public RowIdQueryFilter() {}
 
 	public RowIdQueryFilter(
 			final List<ByteArrayId> rowIds ) {
@@ -69,5 +69,4 @@ public class RowIdQueryFilter implements
 		}
 
 	}
-
 }

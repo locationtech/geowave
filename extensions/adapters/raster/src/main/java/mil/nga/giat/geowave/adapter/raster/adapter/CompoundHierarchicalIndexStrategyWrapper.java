@@ -20,14 +20,13 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
-import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 
@@ -52,7 +51,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 		this.firstHierarchicalStrategy = firstHierarchicalStrategy;
 	}
 
-	protected CompoundHierarchicalIndexStrategyWrapper() {
+	public CompoundHierarchicalIndexStrategyWrapper() {
 		super();
 	}
 
@@ -111,9 +110,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		final CompoundIndexStrategy rootStrategy = PersistenceUtils.fromBinary(
-				bytes,
-				CompoundIndexStrategy.class);
+		final CompoundIndexStrategy rootStrategy = (CompoundIndexStrategy) PersistenceUtils.fromBinary(bytes);
 		parentStrategies = new ArrayList<CompoundIndexStrategy>();
 		// discover hierarchy
 		firstHierarchicalStrategy = findHierarchicalStrategy(

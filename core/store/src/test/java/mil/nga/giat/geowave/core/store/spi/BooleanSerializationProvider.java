@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.core.store.spi;
 import java.nio.ByteBuffer;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;

@@ -79,7 +79,7 @@ public class SpatialQueryExample
 			IOException {
 		SpatialQueryExample example = new SpatialQueryExample();
 		log.info("Setting up datastores");
-		example.setupDataStores();
+		SpatialQueryExample.setupDataStores();
 		log.info("Running point query examples");
 		example.runPointExamples();
 		log.info("Running polygon query examples");

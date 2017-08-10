@@ -32,7 +32,7 @@ public class CountDataStatistics<T> extends
 
 	private long count = Long.MIN_VALUE;
 
-	protected CountDataStatistics() {
+	public CountDataStatistics() {
 		super();
 	}
 

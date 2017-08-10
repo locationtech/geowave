@@ -19,6 +19,8 @@ import java.util.ServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
+
 /**
  * These are the plugin index types that can be registered and used within
  * Geowave.
@@ -33,8 +35,8 @@ public class DimensionalityTypeRegistry
 
 	private static synchronized void initDimensionalityTypeRegistry() {
 		registeredDimensionalityTypes = new HashMap<String, DimensionalityTypeProviderSpi>();
-		final Iterator<DimensionalityTypeProviderSpi> dimensionalityTypesProviders = ServiceLoader.load(
-				DimensionalityTypeProviderSpi.class).iterator();
+		final Iterator<DimensionalityTypeProviderSpi> dimensionalityTypesProviders = new SPIServiceRegistry(
+				DimensionalityTypeRegistry.class).load(DimensionalityTypeProviderSpi.class);
 		int currentDefaultPriority = Integer.MIN_VALUE;
 		while (dimensionalityTypesProviders.hasNext()) {
 			final DimensionalityTypeProviderSpi dimensionalityTypeProvider = dimensionalityTypesProviders.next();

@@ -27,7 +27,7 @@ public class NumericRange implements
 	private double min;
 	private double max;
 
-	protected NumericRange() {}
+	public NumericRange() {}
 
 	/**
 	 * Constructor used to create a IndexRange object

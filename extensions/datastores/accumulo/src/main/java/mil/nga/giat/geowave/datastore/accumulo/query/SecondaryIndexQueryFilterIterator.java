@@ -21,13 +21,14 @@ import org.apache.accumulo.core.iterators.user.RowFilter;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class SecondaryIndexQueryFilterIterator extends
 		RowFilter
@@ -56,9 +57,7 @@ public class SecondaryIndexQueryFilterIterator extends
 		if (options.containsKey(FILTERS)) {
 			final String filterStr = options.get(FILTERS);
 			final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
-			filter = PersistenceUtils.fromBinary(
-					filterBytes,
-					DistributableQueryFilter.class);
+			filter = (DistributableQueryFilter) AccumuloUtils.fromBinary(filterBytes);
 		}
 		primaryIndexId = options.get(PRIMARY_INDEX_ID);
 	}

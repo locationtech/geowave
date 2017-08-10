@@ -25,7 +25,7 @@ public class MaxDuplicatesStatistics<T> extends
 			"MAX_DUPLICATES");
 	private int maxDuplicates = 0;
 
-	protected MaxDuplicatesStatistics() {
+	public MaxDuplicatesStatistics() {
 		super();
 	}
 
@@ -101,5 +101,4 @@ public class MaxDuplicatesStatistics<T> extends
 					((MaxDuplicatesStatistics) merge).maxDuplicates);
 		}
 	}
-
 }

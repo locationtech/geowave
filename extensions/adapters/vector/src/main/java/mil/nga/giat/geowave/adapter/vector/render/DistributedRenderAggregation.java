@@ -45,7 +45,7 @@ public class DistributedRenderAggregation implements
 	private CompletableFuture<DistributedRenderResult> asyncRenderer;
 	private DistributedRenderOptions options;
 
-	protected DistributedRenderAggregation() {}
+	public DistributedRenderAggregation() {}
 
 	public DistributedRenderAggregation(
 			final DistributedRenderOptions options ) {
@@ -236,5 +236,14 @@ public class DistributedRenderAggregation implements
 		ensureOpen(entry.getFeatureType());
 		queue.add(entry);
 	}
+
+	@Override
+	public byte[] toBinary() {
+		return new byte[] {};
+	}
+
+	@Override
+	public void fromBinary(
+			byte[] bytes ) {}
 
 }

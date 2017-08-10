@@ -19,9 +19,10 @@ import org.apache.accumulo.core.iterators.conf.ColumnSet;
 import org.apache.hadoop.io.Text;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class RowMergingAdapterOptionProvider implements
 		OptionProvider
@@ -69,7 +70,7 @@ public class RowMergingAdapterOptionProvider implements
 				nextColumnValue);
 		newOptions.put(
 				ROW_TRANSFORM_KEY,
-				ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapter.getTransform())));
+				ByteArrayUtils.byteArrayToString(AccumuloUtils.toBinary(adapter.getTransform())));
 		return newOptions;
 	}
 }

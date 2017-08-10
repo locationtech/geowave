@@ -222,5 +222,4 @@ public class RowRangeDataStatistics<T> extends
 
 		return jo;
 	}
-
 }

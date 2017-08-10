@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 public class NumericIndexStrategyWrapper implements
@@ -58,9 +59,7 @@ public class NumericIndexStrategyWrapper implements
 		buf.get(idBinary);
 		buf.get(delegateBinary);
 		id = StringUtils.stringFromBinary(idBinary);
-		indexStrategy = PersistenceUtils.fromBinary(
-				delegateBinary,
-				NumericIndexStrategy.class);
+		indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(delegateBinary);
 	}
 
 	@Override

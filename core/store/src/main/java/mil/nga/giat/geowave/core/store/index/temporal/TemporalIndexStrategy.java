@@ -99,5 +99,4 @@ public class TemporalIndexStrategy implements
 	public List<IndexMetaData> createMetaData() {
 		return Collections.emptyList();
 	}
-
 }

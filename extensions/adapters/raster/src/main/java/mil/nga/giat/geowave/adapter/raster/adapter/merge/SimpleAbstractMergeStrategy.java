@@ -17,7 +17,7 @@ import java.awt.image.WritableRaster;
 import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 import org.opengis.coverage.grid.GridCoverage;
 

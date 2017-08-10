@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -493,7 +494,5 @@ public class DistortionGroupManagement
 			}
 			return null;
 		}
-
 	}
-
 }

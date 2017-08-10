@@ -13,7 +13,7 @@ package mil.nga.giat.geowave.core.store.query;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 

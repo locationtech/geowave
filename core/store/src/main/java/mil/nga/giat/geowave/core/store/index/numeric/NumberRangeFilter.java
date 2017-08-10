@@ -27,7 +27,7 @@ public class NumberRangeFilter implements
 	protected boolean inclusiveLow;
 	protected boolean inclusiveHigh;
 
-	protected NumberRangeFilter() {
+	public NumberRangeFilter() {
 		super();
 	}
 
@@ -109,5 +109,4 @@ public class NumberRangeFilter implements
 				bb.getDouble());
 
 	}
-
 }

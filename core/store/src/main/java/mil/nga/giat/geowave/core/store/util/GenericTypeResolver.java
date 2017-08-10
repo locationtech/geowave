@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mil.nga.giat.geowave.core.store.filter;
+package mil.nga.giat.geowave.core.store.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -610,7 +610,7 @@ public class BasicQuery implements
 	private Map<ByteArrayId, FilterableConstraints> additionalConstraints = Collections.emptyMap();
 	BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.INTERSECTS;
 
-	protected BasicQuery() {}
+	public BasicQuery() {}
 
 	public BasicQuery(
 			final Constraints constraints ) {

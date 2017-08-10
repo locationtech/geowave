@@ -21,19 +21,19 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
-import mil.nga.giat.geowave.core.store.filter.GenericTypeResolver;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.util.GenericTypeResolver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -347,7 +347,7 @@ abstract public class AbstractDataAdapter<T> implements
 		final byte[] persistablesBytes = new byte[bytes.length - defaultTypeDataBinary.length - 4];
 		if (persistablesBytes.length > 0) {
 			buf.get(persistablesBytes);
-			final List<Persistable> persistables = PersistenceUtils.fromBinary(persistablesBytes);
+			final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(persistablesBytes);
 			for (final Persistable persistable : persistables) {
 				if (persistable instanceof IndexFieldHandler) {
 					indexFieldHandlers.add((IndexFieldHandler<T, CommonIndexValue, Object>) persistable);

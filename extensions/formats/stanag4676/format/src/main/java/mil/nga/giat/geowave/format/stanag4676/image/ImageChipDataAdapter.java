@@ -161,5 +161,4 @@ public class ImageChipDataAdapter implements
 		}
 		return null;
 	}
-
 }

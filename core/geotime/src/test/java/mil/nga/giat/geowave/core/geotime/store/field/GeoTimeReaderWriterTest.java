@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 
 import org.junit.Before;

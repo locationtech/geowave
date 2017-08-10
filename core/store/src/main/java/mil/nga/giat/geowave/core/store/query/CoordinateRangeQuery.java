@@ -80,5 +80,4 @@ public class CoordinateRangeQuery implements
 		// TODO should we consider implementing this?
 		return null;
 	}
-
 }

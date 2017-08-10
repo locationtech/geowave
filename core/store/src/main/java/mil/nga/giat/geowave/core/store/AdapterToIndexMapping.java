@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
@@ -130,5 +130,4 @@ public class AdapterToIndexMapping implements
 		buf.get(indexIdBytes);
 		this.indexIds = ByteArrayId.fromBytes(indexIdBytes);
 	}
-
 }

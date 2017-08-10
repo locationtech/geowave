@@ -5,7 +5,7 @@ option java_generate_equals_and_hash = true;
 option optimize_for = SPEED;
 
 message AggregationType {
-  required string name = 1;
+  required bytes classId = 1;
   optional bytes params = 2;
 }
 

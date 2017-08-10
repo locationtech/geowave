@@ -19,7 +19,7 @@ public class NoDataBySampleIndex implements
 {
 	private Set<SampleIndex> noDataIndexSet;
 
-	protected NoDataBySampleIndex() {
+	public NoDataBySampleIndex() {
 		super();
 	}
 
@@ -68,5 +68,4 @@ public class NoDataBySampleIndex implements
 	public Set<SampleIndex> getNoDataIndices() {
 		return noDataIndexSet;
 	}
-
 }

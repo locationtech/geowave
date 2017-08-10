@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 /**

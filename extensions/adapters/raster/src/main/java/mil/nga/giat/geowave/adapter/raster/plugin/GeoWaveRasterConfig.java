@@ -33,6 +33,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -138,8 +139,8 @@ public class GeoWaveRasterConfig
 	}
 
 	private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
-		final ServiceLoader<AuthorizationFactorySPI> ldr = ServiceLoader.load(AuthorizationFactorySPI.class);
-		return ldr.iterator();
+		return new SPIServiceRegistry(
+				GeoWaveRasterConfig.class).load(AuthorizationFactorySPI.class);
 	}
 
 	public static URL getAuthorizationURL(

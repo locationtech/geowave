@@ -47,5 +47,4 @@ public class SimpleShortIndexStrategy extends
 	public int getByteOffsetFromDimensionalIndex() {
 		return 0;
 	}
-
 }

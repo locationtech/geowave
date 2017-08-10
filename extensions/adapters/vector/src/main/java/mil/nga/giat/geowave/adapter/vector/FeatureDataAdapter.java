@@ -44,8 +44,8 @@ import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -635,6 +635,7 @@ public class FeatureDataAdapter extends
 		// version
 		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length
 				+ namespaceBytes.length + attrBytes.length + axisBytes.length + secondaryIndexBytes.length + 21);
+
 		buf.put(VERSION);
 		buf.putInt(typeNameBytes.length);
 		buf.putInt(namespaceBytes.length);
@@ -694,10 +695,10 @@ public class FeatureDataAdapter extends
 			namespace = null;
 		}
 
-		// 24 bytes is the 6 four byte length fields and one byte for the
+		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
 		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
-				- namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 29];
+				- namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 21];
 		buf.get(secondaryIndexBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
@@ -743,9 +744,7 @@ public class FeatureDataAdapter extends
 					e);
 		}
 
-		secondaryIndexManager = PersistenceUtils.fromBinary(
-				secondaryIndexBytes,
-				SecondaryIndexManager.class);
+		secondaryIndexManager = (SecondaryIndexManager) PersistenceUtils.fromBinary(secondaryIndexBytes);
 
 		return null;
 	}

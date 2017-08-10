@@ -38,7 +38,6 @@ import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.extract.DimensionExtractor;
 import mil.nga.giat.geowave.analytic.extract.SimpleFeatureGeometryExtractor;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
@@ -249,7 +248,6 @@ public class OrthodromicDistancePartitioner<T> extends
 				distancePerDimensionForIndex);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(
 			final JobContext context,

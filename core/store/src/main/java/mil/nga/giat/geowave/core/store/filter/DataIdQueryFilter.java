@@ -24,7 +24,7 @@ public class DataIdQueryFilter implements
 	private ByteArrayId adapterId;
 	private List<ByteArrayId> dataIds;
 
-	protected DataIdQueryFilter() {}
+	public DataIdQueryFilter() {}
 
 	public DataIdQueryFilter(
 			final ByteArrayId adapterId,
@@ -80,5 +80,4 @@ public class DataIdQueryFilter implements
 		this.adapterId = new ByteArrayId(
 				adapterIdBytes);
 	}
-
 }

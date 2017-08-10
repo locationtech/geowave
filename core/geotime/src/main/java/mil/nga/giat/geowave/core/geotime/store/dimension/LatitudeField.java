@@ -65,5 +65,4 @@ public class LatitudeField extends
 			final GeometryWrapper geometry ) {
 		return GeometryUtils.latitudeRangeFromGeometry(geometry.getGeometry());
 	}
-
 }

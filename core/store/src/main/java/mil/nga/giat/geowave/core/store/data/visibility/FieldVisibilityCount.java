@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
@@ -35,7 +33,7 @@ public class FieldVisibilityCount<T> extends
 			"FIELD_VISIBILITY_COUNT");
 	private final Map<ByteArrayId, Long> countsPerVisibility;
 
-	protected FieldVisibilityCount() {
+	public FieldVisibilityCount() {
 		super();
 		countsPerVisibility = new HashMap<ByteArrayId, Long>();
 	}

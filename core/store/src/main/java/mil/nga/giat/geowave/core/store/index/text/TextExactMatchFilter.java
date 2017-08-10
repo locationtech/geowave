@@ -26,7 +26,7 @@ public class TextExactMatchFilter implements
 	private String matchValue;
 	private boolean caseSensitive;
 
-	protected TextExactMatchFilter() {
+	public TextExactMatchFilter() {
 		super();
 	}
 
@@ -93,5 +93,4 @@ public class TextExactMatchFilter implements
 		matchValue = StringUtils.stringFromBinary(matchValueBytes);
 		caseSensitive = (bb.getInt() == 1) ? true : false;
 	}
-
 }

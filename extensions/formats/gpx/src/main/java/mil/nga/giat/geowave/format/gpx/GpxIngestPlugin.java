@@ -305,5 +305,4 @@ public class GpxIngestPlugin extends
 			Time.class
 		};
 	}
-
 }

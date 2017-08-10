@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata;
 
 import java.util.Set;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public interface NoDataMetadata extends
 		Persistable

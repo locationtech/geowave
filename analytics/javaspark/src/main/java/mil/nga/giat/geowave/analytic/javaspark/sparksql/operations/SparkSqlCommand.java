@@ -198,7 +198,7 @@ public class SparkSqlCommand extends
 							crapRegex,
 							"_"));
 				}
-				}
+			}
 			else {
 				cleanSqlBuf.append(split);
 			}

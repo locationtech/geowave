@@ -13,7 +13,7 @@ package mil.nga.giat.geowave.adapter.raster;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class Resolution implements
 		Comparable<Resolution>,

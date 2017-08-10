@@ -31,7 +31,7 @@ public class DuplicateEntryCount<T> extends
 			"DUPLICATE_ENTRY_COUNT");
 	private long entriesWithDuplicates = 0;
 
-	protected DuplicateEntryCount() {
+	public DuplicateEntryCount() {
 		super();
 	}
 
@@ -169,5 +169,4 @@ public class DuplicateEntryCount<T> extends
 
 		return jo;
 	}
-
 }

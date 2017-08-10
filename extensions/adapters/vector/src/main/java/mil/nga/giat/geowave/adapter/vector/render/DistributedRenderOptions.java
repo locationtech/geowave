@@ -35,7 +35,6 @@ import org.geoserver.wms.WMS;
 import org.geoserver.wms.WMSMapContent;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.Layer;
 import org.geotools.referencing.CRS;
 import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.styling.SLDParser;
@@ -50,8 +49,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-import mil.nga.giat.geowave.core.index.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class DistributedRenderOptions implements
 		Persistable
@@ -85,7 +84,7 @@ public class DistributedRenderOptions implements
 
 	private Style style;
 
-	protected DistributedRenderOptions() {}
+	public DistributedRenderOptions() {}
 
 	public DistributedRenderOptions(
 			final WMS wms,
@@ -731,5 +730,4 @@ public class DistributedRenderOptions implements
 			style = null;
 		}
 	}
-
 }

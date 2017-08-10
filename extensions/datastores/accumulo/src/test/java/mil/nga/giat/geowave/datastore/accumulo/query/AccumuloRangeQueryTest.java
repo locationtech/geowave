@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
@@ -323,7 +324,7 @@ public class AccumuloRangeQueryTest
 		return new TestGeometryAdapter();
 	}
 
-	protected static class TestGeometryAdapter extends
+	public static class TestGeometryAdapter extends
 			AbstractDataAdapter<TestGeometry> implements
 			StatisticsProvider<TestGeometry>
 	{
@@ -537,9 +538,7 @@ public class AccumuloRangeQueryTest
 						TestGeometry entry ) {
 					return null;
 				}
-
 			};
 		}
-
 	}
 }

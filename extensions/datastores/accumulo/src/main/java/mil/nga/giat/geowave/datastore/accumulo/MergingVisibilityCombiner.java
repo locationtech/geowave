@@ -22,8 +22,9 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class MergingVisibilityCombiner extends
 		TransformingIterator
@@ -56,7 +57,7 @@ public class MergingVisibilityCombiner extends
 				output.append(
 						outputKey,
 						new Value(
-								PersistenceUtils.toBinary(currentMergeable)));
+								AccumuloUtils.toBinary(currentMergeable)));
 				currentMergeable = null;
 				outputKey = currentKey;
 				continue;
@@ -96,14 +97,12 @@ public class MergingVisibilityCombiner extends
 	protected Mergeable getMergeable(
 			final Key key,
 			final byte[] binary ) {
-		return PersistenceUtils.fromBinary(
-				binary,
-				Mergeable.class);
+		return (Mergeable) AccumuloUtils.fromBinary(binary);
 	}
 
 	protected byte[] getBinary(
 			final Mergeable mergeable ) {
-		return PersistenceUtils.toBinary(mergeable);
+		return AccumuloUtils.toBinary(mergeable);
 	}
 
 	private static byte[] combineVisibilities(

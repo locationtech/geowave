@@ -20,6 +20,7 @@ import java.net.URLClassLoader;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.data.field.FieldSerializationProviderSpi;
 
 import org.apache.commons.vfs2.CacheStrategy;

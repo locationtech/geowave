@@ -31,6 +31,7 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -370,9 +371,12 @@ public class PersistenceEncodingTest
 		NATIVE_FIELD_RANGE_HANDLER_LIST.add(ID_FIELD_HANDLER);
 	}
 
-	private static class GeoObjDataAdapter extends
+	public static class GeoObjDataAdapter extends
 			AbstractDataAdapter<GeoObj>
 	{
+		public GeoObjDataAdapter() {
+			super();
+		}
 
 		public GeoObjDataAdapter(
 				final List<NativeFieldHandler<GeoObj, Object>> nativeFields,
@@ -533,7 +537,6 @@ public class PersistenceEncodingTest
 			}
 			return null;
 		}
-
 	}
 
 	private static class GeoObj
@@ -557,7 +560,7 @@ public class PersistenceEncodingTest
 
 	}
 
-	private static class TimeFieldHandler implements
+	public static class TimeFieldHandler implements
 			PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
 			DimensionMatchingIndexFieldHandler<GeoObj, CommonIndexValue, Object>
 	{
@@ -614,7 +617,7 @@ public class PersistenceEncodingTest
 		}
 	}
 
-	private static class TimeRangeFieldHandler implements
+	public static class TimeRangeFieldHandler implements
 			PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
 			DimensionMatchingIndexFieldHandler<GeoObj, CommonIndexValue, Object>
 	{
@@ -672,5 +675,4 @@ public class PersistenceEncodingTest
 
 		}
 	}
-
 }

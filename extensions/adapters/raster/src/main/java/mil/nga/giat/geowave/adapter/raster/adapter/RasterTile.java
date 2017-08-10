@@ -22,8 +22,8 @@ import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
 
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class RasterTile<T extends Persistable> implements
 	private DataBuffer dataBuffer;
 	private T metadata;
 
-	protected RasterTile() {
+	public RasterTile() {
 		super();
 	}
 
@@ -113,9 +113,7 @@ public class RasterTile<T extends Persistable> implements
 			if (metadataLength > 0) {
 				final byte[] metadataBytes = new byte[metadataLength];
 				buf.get(metadataBytes);
-				metadata = (T) PersistenceUtils.fromBinary(
-						metadataBytes,
-						Persistable.class);
+				metadata = (T) PersistenceUtils.fromBinary(metadataBytes);
 			}
 			final byte[] dataBufferBytes = new byte[bytes.length - metadataLength - 4];
 			buf.get(dataBufferBytes);

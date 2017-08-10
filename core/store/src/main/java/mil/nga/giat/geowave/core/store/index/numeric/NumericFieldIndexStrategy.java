@@ -100,5 +100,4 @@ public class NumericFieldIndexStrategy implements
 	public List<IndexMetaData> createMetaData() {
 		return Collections.emptyList();
 	}
-
 }

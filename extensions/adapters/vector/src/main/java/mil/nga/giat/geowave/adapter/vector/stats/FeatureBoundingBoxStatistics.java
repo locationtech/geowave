@@ -39,7 +39,7 @@ public class FeatureBoundingBoxStatistics extends
 	private SimpleFeatureType reprojectedType;
 	private MathTransform transform;
 
-	protected FeatureBoundingBoxStatistics() {
+	public FeatureBoundingBoxStatistics() {
 		super();
 	}
 

@@ -47,11 +47,11 @@ import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.spi.SPIServiceRegistry;
 
 public class FeatureDataUtils
 {
@@ -87,11 +87,9 @@ public class FeatureDataUtils
 						});
 				GeoTools.addClassLoader(urlCL);
 				SPIServiceRegistry.registerClassLoader(urlCL);
-
 			}
 			classLoaderInitialized = true;
 		}
-
 	}
 
 	public static SimpleFeature defaultCRSTransform(

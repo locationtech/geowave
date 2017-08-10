@@ -219,5 +219,4 @@ public class AvroIngestPlugin extends
 			Time.class
 		};
 	}
-
 }

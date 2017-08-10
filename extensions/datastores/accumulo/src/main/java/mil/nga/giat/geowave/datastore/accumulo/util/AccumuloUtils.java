@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -13,21 +13,20 @@ package mil.nga.giat.geowave.datastore.accumulo.util;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -44,15 +43,19 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorUtil.IteratorScope;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -62,23 +65,16 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.Writer;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.base.Writer;
+import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.entities.GeowaveRowId;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
-import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedDataSet;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -94,7 +90,6 @@ import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig.OptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingAdapterOptionProvider;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.RowMergingVisibilityCombiner;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AbstractAccumuloPersistence;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
 import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloIndexStore;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions;
@@ -417,7 +412,7 @@ public class AccumuloUtils
 					new Text(
 							rowId.getBytes()));
 			for (final FieldInfo<?> fieldInfo : fieldInfoList) {
-				if (fieldInfo.getVisibility() != null && fieldInfo.getVisibility().length > 0) {
+				if ((fieldInfo.getVisibility() != null) && (fieldInfo.getVisibility().length > 0)) {
 					mutation.put(
 							new Text(
 									adapterId),
@@ -1111,4 +1106,90 @@ public class AccumuloUtils
 		public void remove() {}
 	}
 
+	private static final Object MUTEX = new Object();
+	private static boolean classLoaderInitialized = false;
+
+	private static void initClassLoader()
+			throws MalformedURLException {
+		synchronized (MUTEX) {
+			if (classLoaderInitialized) {
+				return;
+			}
+			final ClassLoader classLoader = AccumuloUtils.class.getClassLoader();
+			LOGGER.info("Generating patched classloader");
+			if (classLoader instanceof VFSClassLoader) {
+				final VFSClassLoader cl = (VFSClassLoader) classLoader;
+				final FileObject[] fileObjs = cl.getFileObjects();
+				final URL[] fileUrls = new URL[fileObjs.length];
+				for (int i = 0; i < fileObjs.length; i++) {
+					fileUrls[i] = new URL(
+							fileObjs[i].toString());
+				}
+				final ClassLoader urlCL = java.security.AccessController
+						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
+							@Override
+							public URLClassLoader run() {
+								final URLClassLoader ucl = new URLClassLoader(
+										fileUrls,
+										cl);
+								return ucl;
+							}
+						});
+				SPIServiceRegistry.registerClassLoader(urlCL);
+			}
+			classLoaderInitialized = true;
+		}
+	}
+
+	public static byte[] toBinary(
+			final Persistable persistable ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toBinary",
+					e);
+		}
+		return PersistenceUtils.toBinary(persistable);
+	}
+
+	public static Persistable fromBinary(
+			final byte[] bytes ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in fromBinary",
+					e);
+		}
+		return PersistenceUtils.fromBinary(bytes);
+	}
+
+	public static byte[] toBinary(
+			final Collection<? extends Persistable> persistables ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toBinary (list)",
+					e);
+		}
+		return PersistenceUtils.toBinary(persistables);
+	}
+
+	public static byte[] toClassId(
+			final Persistable persistable ) {
+		try {
+			initClassLoader();
+		}
+		catch (final MalformedURLException e) {
+			LOGGER.warn(
+					"Unable to initialize classloader in toClassId",
+					e);
+		}
+		return PersistenceUtils.toClassId(persistable);
+	}
 }

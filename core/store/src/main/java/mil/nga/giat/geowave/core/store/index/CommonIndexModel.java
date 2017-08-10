@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.data.DataReader;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.ingest.IngestPluginBase;
 
 /**

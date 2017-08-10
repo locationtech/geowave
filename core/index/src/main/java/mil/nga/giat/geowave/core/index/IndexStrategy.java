@@ -13,6 +13,8 @@ package mil.nga.giat.geowave.core.index;
 import java.util.List;
 import java.util.Set;
 
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+
 /**
  * Interface which defines an index strategy.
  * 

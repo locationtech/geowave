@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,19 +14,19 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
 /**
  * This class wraps a list of distributable filters into a single distributable
  * filter such that the list is persisted in its original order and if any one
  * filter fails this class will fail acceptance.
- * 
+ *
  */
 public class DistributableFilterList extends
 		FilterList<DistributableQueryFilter> implements
 		DistributableQueryFilter
 {
-	protected DistributableFilterList() {
+	public DistributableFilterList() {
 		super();
 	}
 
@@ -55,7 +55,7 @@ public class DistributableFilterList extends
 			filterBinaries.add(filterBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
-		buf.putInt(this.logicalAnd ? 1 : 0);
+		buf.putInt(logicalAnd ? 1 : 0);
 		buf.putInt(filters.size());
 		for (final byte[] filterBinary : filterBinaries) {
 			buf.putInt(filterBinary.length);
@@ -68,16 +68,14 @@ public class DistributableFilterList extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		this.logicalAnd = buf.getInt() > 0;
+		logicalAnd = buf.getInt() > 0;
 		final int numFilters = buf.getInt();
 		filters = new ArrayList<DistributableQueryFilter>(
 				numFilters);
 		for (int i = 0; i < numFilters; i++) {
 			final byte[] filter = new byte[buf.getInt()];
 			buf.get(filter);
-			filters.add(PersistenceUtils.fromBinary(
-					filter,
-					DistributableQueryFilter.class));
+			filters.add((DistributableQueryFilter) PersistenceUtils.fromBinary(filter));
 		}
 	}
 }

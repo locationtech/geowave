@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 
 public class FeatureSerializationOptionProvider implements
 		Persistable

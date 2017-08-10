@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.core.index.sfc;
 
 import java.math.BigInteger;
 
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /***

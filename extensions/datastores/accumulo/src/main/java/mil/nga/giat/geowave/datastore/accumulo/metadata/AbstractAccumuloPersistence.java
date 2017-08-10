@@ -31,14 +31,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.base.Writer;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 /**
@@ -149,14 +150,14 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 						new ColumnVisibility(
 								visibility),
 						new Value(
-								PersistenceUtils.toBinary(object)));
+								AccumuloUtils.toBinary(object)));
 			}
 			else {
 				mutation.put(
 						cf,
 						cq,
 						new Value(
-								PersistenceUtils.toBinary(object)));
+								AccumuloUtils.toBinary(object)));
 			}
 			writer.write(mutation);
 			try {
@@ -269,9 +270,7 @@ abstract public class AbstractAccumuloPersistence<T extends Persistable> extends
 	@SuppressWarnings("unchecked")
 	protected T entryToValue(
 			final Entry<Key, Value> entry ) {
-		final T result = (T) PersistenceUtils.fromBinary(
-				entry.getValue().get(),
-				Persistable.class);
+		final T result = (T) AccumuloUtils.fromBinary(entry.getValue().get());
 		if (result != null) {
 			addObjectToCache(
 					getPrimaryId(result),

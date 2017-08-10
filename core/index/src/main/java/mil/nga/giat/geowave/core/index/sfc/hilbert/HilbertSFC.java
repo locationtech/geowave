@@ -22,7 +22,7 @@ import com.google.uzaygezen.core.CompactHilbertCurve;
 import com.google.uzaygezen.core.MultiDimensionalSpec;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.RangeDecomposition;
 import mil.nga.giat.geowave.core.index.sfc.SFCDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve;
@@ -119,7 +119,7 @@ public class HilbertSFC implements
 	protected HilbertSFCOperations getIdOperations;
 	protected HilbertSFCOperations decomposeQueryOperations;
 
-	protected HilbertSFC() {}
+	public HilbertSFC() {}
 
 	/***
 	 * Use the SFCFactory.createSpaceFillingCurve method - don't call this
@@ -314,9 +314,7 @@ public class HilbertSFC implements
 		for (int i = 0; i < numDimensions; i++) {
 			final byte[] dim = new byte[buf.getInt()];
 			buf.get(dim);
-			dimensionDefinitions[i] = PersistenceUtils.fromBinary(
-					dim,
-					SFCDimensionDefinition.class);
+			dimensionDefinitions[i] = (SFCDimensionDefinition) PersistenceUtils.fromBinary(dim);
 		}
 		init(dimensionDefinitions);
 	}

@@ -8,29 +8,24 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.adapter.vector;
+package mil.nga.giat.geowave.format.twitter;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
+import mil.nga.giat.geowave.format.twitter.TwitterIngestPlugin.IngestTwitterFromHdfs;
 
-import org.opengis.feature.simple.SimpleFeature;
-
-public class WholeFeatureRowBuilder implements
-		RowBuilder<SimpleFeature, Object>
+public class TwitterPersistableRegistry implements
+		PersistableRegistrySpi
 {
-	private SimpleFeature feature;
 
 	@Override
-	public void setField(
-			PersistentValue<Object> fieldValue ) {
-		feature = (SimpleFeature) fieldValue.getValue();
+	public PersistableIdAndConstructor[] getSupportedPersistables() {
+		return new PersistableIdAndConstructor[] {
+			new PersistableIdAndConstructor(
+					(short) 600,
+					TwitterIngestPlugin::new),
+			new PersistableIdAndConstructor(
+					(short) 601,
+					IngestTwitterFromHdfs::new),
+		};
 	}
-
-	@Override
-	public SimpleFeature buildRow(
-			ByteArrayId dataId ) {
-		return feature;
-	}
-
 }

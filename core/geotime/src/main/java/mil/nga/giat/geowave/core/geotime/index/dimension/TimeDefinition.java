@@ -24,7 +24,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 public class TimeDefinition extends
 		UnboundedDimensionDefinition
 {
-	protected TimeDefinition() {
+	public TimeDefinition() {
 		super();
 	}
 

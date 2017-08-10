@@ -15,7 +15,7 @@ import org.junit.Test;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 public class JCommanderTranslationMapTest
 {

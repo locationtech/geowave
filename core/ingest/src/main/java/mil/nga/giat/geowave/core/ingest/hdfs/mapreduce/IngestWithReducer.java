@@ -13,7 +13,7 @@ package mil.nga.giat.geowave.core.ingest.hdfs.mapreduce;
 import java.util.Collection;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Persistable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;

@@ -142,7 +142,7 @@ public class SpatialQuery extends
 		this.nonSpatialCompareOp = nonSpatialCompareOp;
 	}
 
-	protected SpatialQuery() {
+	public SpatialQuery() {
 		super();
 	}
 
@@ -203,5 +203,4 @@ public class SpatialQuery extends
 					e);
 		}
 	}
-
 }

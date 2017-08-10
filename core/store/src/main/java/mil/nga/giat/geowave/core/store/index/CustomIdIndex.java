@@ -78,5 +78,4 @@ public class CustomIdIndex extends
 	public int hashCode() {
 		return super.hashCode();
 	}
-
 }

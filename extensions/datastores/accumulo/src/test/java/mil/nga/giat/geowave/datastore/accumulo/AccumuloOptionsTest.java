@@ -24,6 +24,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -511,7 +512,6 @@ public class AccumuloOptionsTest
 			it.next();
 			count++;
 		}
-
 		assertEquals(
 				2,
 				count);
@@ -656,7 +656,7 @@ public class AccumuloOptionsTest
 		}
 	}
 
-	private static class TestGeometryAdapter extends
+	protected static class TestGeometryAdapter extends
 			AbstractDataAdapter<TestGeometry>
 	{
 		private static final ByteArrayId GEOM = new ByteArrayId(

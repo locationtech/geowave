@@ -11,10 +11,11 @@
 package mil.nga.giat.geowave.adapter.vector.plugin.visibility;
 
 import java.util.Iterator;
-import java.util.ServiceLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 
 /**
  * At the moment, the expectation is that a single GeoServer instance supports
@@ -34,8 +35,8 @@ public class VisibilityManagementHelper
 		"unchecked"
 	})
 	public static final <T> ColumnVisibilityManagementSpi<T> loadVisibilityManagement() {
-		ServiceLoader<ColumnVisibilityManagementSpi> ldr = ServiceLoader.load(ColumnVisibilityManagementSpi.class);
-		Iterator<ColumnVisibilityManagementSpi> managers = ldr.iterator();
+		Iterator<ColumnVisibilityManagementSpi> managers = new SPIServiceRegistry(
+				VisibilityManagementHelper.class).load(ColumnVisibilityManagementSpi.class);
 		if (!managers.hasNext()) return new JsonDefinitionColumnVisibilityManagement<T>();
 		return (ColumnVisibilityManagementSpi<T>) managers.next();
 	}

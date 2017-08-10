@@ -143,5 +143,4 @@ public class NullNumericIndexStrategy implements
 			new MultiDimensionalCoordinateRanges()
 		};
 	}
-
 }

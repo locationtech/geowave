@@ -104,7 +104,7 @@ public class TemporalBinningStrategy implements
 	private Unit unit;
 	private String timezone;
 
-	protected TemporalBinningStrategy() {}
+	public TemporalBinningStrategy() {}
 
 	public TemporalBinningStrategy(
 			final Unit unit ) {

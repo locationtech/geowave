@@ -26,7 +26,7 @@ public class NumericValue implements
 	private static final long serialVersionUID = 1L;
 	private double value;
 
-	protected NumericValue() {}
+	public NumericValue() {}
 
 	/**
 	 * Constructor used to create a new NumericValue object
