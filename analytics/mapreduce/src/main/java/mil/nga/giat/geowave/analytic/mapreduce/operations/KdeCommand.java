@@ -22,6 +22,7 @@ import com.beust.jcommander.ParametersDelegate;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.KDEJobRunner;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -37,6 +38,10 @@ public class KdeCommand extends
 {
 
 	@Parameter(description = "<input storename> <output storename>")
+	@RestParameters(names = {
+		"inputStorename",
+		"outputStorename"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate

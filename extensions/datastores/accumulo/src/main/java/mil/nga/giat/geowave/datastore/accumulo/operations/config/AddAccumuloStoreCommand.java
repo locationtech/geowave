@@ -66,9 +66,7 @@ public class AddAccumuloStoreCommand extends
 	public boolean prepare(
 			final OperationParams params ) {
 		
-		// Load SPI options for the given type into pluginOptions.
-		pluginOptions.setFactoryOptions(accumuloReqOptions);
-		pluginOptions.setFactoryFamily(new AccumuloStoreFactoryFamily());
+		
 		// Successfully prepared.
 		return true;
 	}
@@ -76,6 +74,7 @@ public class AddAccumuloStoreCommand extends
 	@Override
 	public void execute(
 			final OperationParams params ) {
+		// Load SPI options for the given type into pluginOptions.
 		computeResults(params);
 	}
 
@@ -83,6 +82,8 @@ public class AddAccumuloStoreCommand extends
 	public Void computeResults(
 			final OperationParams params ) {
 
+		pluginOptions.setFactoryOptions(accumuloReqOptions);
+		pluginOptions.setFactoryFamily(new AccumuloStoreFactoryFamily());
 		final File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 		final Properties existingProps = ConfigOptions.loadProperties(

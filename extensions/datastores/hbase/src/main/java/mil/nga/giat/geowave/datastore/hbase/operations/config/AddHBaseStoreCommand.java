@@ -29,9 +29,9 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.operations.config.addstore.AddStoreSection;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 
 @GeowaveOperation(name = "hbase", parentOperation = AddStoreSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a HBase store within Geowave")
@@ -56,17 +56,19 @@ public class AddHBaseStoreCommand extends
 	}, description = "Make this the default store in all operations")
 	private Boolean makeDefault;
 
-	private String storeType = "hbase";
-
 	@ParametersDelegate
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+	
+	@ParametersDelegate
+	private HBaseRequiredOptions hbaseReqOptions = new HBaseRequiredOptions();
 
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
 
 		// Load SPI options for the given type into pluginOptions.
-		pluginOptions.selectPlugin(storeType);
+		pluginOptions.setFactoryOptions(hbaseReqOptions);
+		pluginOptions.setFactoryFamily(new HBaseStoreFactoryFamily());
 
 		// Successfully prepared.
 		return true;
@@ -107,9 +109,6 @@ public class AddHBaseStoreCommand extends
 		pluginOptions.save(
 				existingProps,
 				getNamespace());
-
-		final StoreFactoryOptions opts = pluginOptions.getFactoryOptions();
-		opts.setGeowaveNamespace("namespace");
 
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
@@ -155,15 +154,6 @@ public class AddHBaseStoreCommand extends
 	public void setMakeDefault(
 			final Boolean makeDefault ) {
 		this.makeDefault = makeDefault;
-	}
-
-	public String getStoreType() {
-		return storeType;
-	}
-
-	public void setStoreType(
-			final String storeType ) {
-		this.storeType = storeType;
 	}
 
 	public void setPluginOptions(

@@ -113,9 +113,6 @@ public class AddMemoryStoreCommand extends
 				existingProps,
 				getNamespace());
 
-		final StoreFactoryOptions opts = pluginOptions.getFactoryOptions();
-		opts.setGeowaveNamespace("namespace");
-
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
 			existingProps.setProperty(
