@@ -8,7 +8,7 @@
 Once your cluster is running and bootstrapped, ssh into the cluster. 
 
 Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. You will use the “Master public DNS” 
-value as your hostname and the security key you assigned to the cluster to access it. 
+value as your hostname and the security key you assigned to the cluster to access it. If you are prompted for a login, the default name is "hadoop"
 
 If you are unsure of how to do this, click on the blue SSH link to the right of your Master public DNS to open a popup that will walk you though it.
 
@@ -17,7 +17,7 @@ image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
 [NOTE]
 ====
 The cluster status may show as waiting before the bootstrap script has completed. Please allow 5-7 minutes 
-for the cluster to bet setup and bootstrapped. This may take longer if you are using spot instances.  
+for the cluster to be setup and bootstrapped. This may take longer if you are using spot instances.  
 ====
 
 === Download and Source Files
@@ -40,25 +40,4 @@ The geowave-env.sh script has a number of predefined variables that we will use 
 source /mnt/geowave-env.sh
 ----
 
-If you are using Accumulo as your datastore you must setup a geowave user with a password and table creation permissions, 
-as well as pointing accumulo to the geowave jar on hdfs. This can be done with the commands below.
-
-[source, bash]
-----
-cat <<EOF | accumulo shell -u root -p secret -e "createuser geowave"
-geowave
-geowave
-EOF
-accumulo shell -u root -p secret -e "createnamespace geowave"
-accumulo shell -u root -p secret -e "grant NameSpace.CREATE_TABLE -ns geowave -u geowave"
-accumulo shell -u root -p secret -e "config -s general.vfs.context.classpath.geowave=hdfs://${HOSTNAME}:8020/accumulo/lib/geowave-accumulo-${GEOWAVE_VERSION}-apache.jar" <1>
-accumulo shell -u root -p secret -e "config -ns geowave -s table.classpath.context=geowave"
-----
-
-<1> AWS recognizes the HOSTNAME variable, but you will need to replace the GEOWAVE_VERSION variable. Use the 
-“geowave --version” command to get the version of Geowave you are currently using.
-
-[NOTE]
-====
-This step is in the process of being automated and will be set up automatically in the near future.
-====
+If you are using Accumulo as your datastore, the script will automatically create a geowave user with a password (geowave) and table creation permissions, as well as pointing accumulo to the geowave jar on hdfs.

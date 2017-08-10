@@ -5,7 +5,7 @@
 [NOTE]
 ====
 This is meant to be a high level overview for those already familiar with AWS EMR. For a step by step walkthrough of setting 
-up GeoWave on an EMR cluster, please see our http://ngageoint.github.io/geowave/quickstart.html[Quickstart Guide].
+up GeoWave on an EMR cluster, please see our http://locationtech.github.io/geowave/quickstart.html[Quickstart Guide].
 ====
 
 === Provisioning

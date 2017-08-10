@@ -4,7 +4,7 @@
 
 === Overview
 
-There is a public http://ngageoint.github.io/geowave/packages.html[GeoWave RPM Repo] available with the following packages.
+There is a public http://locationtech.github.io/geowave/packages.html[GeoWave RPM Repo] available with the following packages.
 As you'll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to
 be disabled so you can keep auto updates enabled. When ready to do an update simply add `--enablerepo=geowave` to your
 command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks and Apache) the RPMs

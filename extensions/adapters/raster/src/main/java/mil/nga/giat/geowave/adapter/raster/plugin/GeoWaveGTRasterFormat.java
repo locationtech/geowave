@@ -83,7 +83,7 @@ public class GeoWaveGTRasterFormat extends
 				"GeoWave");
 		info.put(
 				"docURL",
-				"https://github.com/ngageoint/geowave");
+				"https://github.com/locationtech/geowave");
 		info.put(
 				"version",
 				"0.9.2");

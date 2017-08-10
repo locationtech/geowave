@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -50,6 +50,7 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -95,6 +96,7 @@ import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowIdsQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixDelete;
 import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloRowPrefixQuery;
+import mil.nga.giat.geowave.datastore.accumulo.query.AccumuloVersionQuery;
 import mil.nga.giat.geowave.datastore.accumulo.query.SingleEntryFilterIterator;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloEntryIteratorWrapper;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
@@ -360,7 +362,7 @@ public class AccumuloDataStore extends
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			boolean delete ) {
+			final boolean delete ) {
 		final AccumuloConstraintsQuery accumuloQuery;
 		if (delete) {
 			accumuloQuery = new AccumuloConstraintsDelete(
@@ -428,13 +430,13 @@ public class AccumuloDataStore extends
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
 			final List<ByteArrayId> adapterIdsToQuery,
-			boolean delete ) {
+			final boolean delete ) {
 		final AccumuloRowPrefixQuery<Object> prefixQuery;
 		if (delete) {
 			prefixQuery = new AccumuloRowPrefixDelete<Object>(
 					index,
 					rowPrefix,
-					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getScanCallback(),
 					sanitizedQueryOptions.getLimit(),
 					DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 							index,
@@ -470,14 +472,14 @@ public class AccumuloDataStore extends
 			final DedupeFilter filter,
 			final QueryOptions sanitizedQueryOptions,
 			final AdapterStore tempAdapterStore,
-			boolean delete ) {
+			final boolean delete ) {
 		final AccumuloRowIdsQuery<Object> q;
 		if (delete) {
 			q = new AccumuloRowIdsDelete<Object>(
 					adapter,
 					index,
 					rowIds,
-					(ScanCallback<Object>) sanitizedQueryOptions.getScanCallback(),
+					sanitizedQueryOptions.getScanCallback(),
 					filter,
 					sanitizedQueryOptions.getAuthorizations());
 		}
@@ -548,7 +550,7 @@ public class AccumuloDataStore extends
 			final ScanCallback<Object> scanCallback,
 			final DedupeFilter dedupeFilter,
 			final String[] authorizations,
-			boolean delete ) {
+			final boolean delete ) {
 
 		try {
 
@@ -834,7 +836,7 @@ public class AccumuloDataStore extends
 		final DupTracker dupTracker = new DupTracker();
 
 		// Get BatchDeleters for the query
-		CloseableIterator<Object> deleteIt = getBatchDeleters(
+		final CloseableIterator<Object> deleteIt = getBatchDeleters(
 				callbackCache,
 				tempAdapterStore,
 				indexAdapterPairs,
@@ -851,7 +853,7 @@ public class AccumuloDataStore extends
 			deleteIt.close();
 			callbackCache.close();
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Failed to close delete iterator",
 					e);
@@ -864,7 +866,7 @@ public class AccumuloDataStore extends
 			int dupFailCount = 0;
 			boolean deleteByIdSuccess = true;
 
-			for (ByteArrayId dataId : dupTracker.dupCountMap.keySet()) {
+			for (final ByteArrayId dataId : dupTracker.dupCountMap.keySet()) {
 				if (!super.delete(
 						new QueryOptions(),
 						new DataIdQuery(
@@ -886,10 +888,10 @@ public class AccumuloDataStore extends
 			}
 		}
 
-		boolean countAggregation = (sanitizedQuery instanceof DataIdQuery ? false : true);
+		final boolean countAggregation = (sanitizedQuery instanceof DataIdQuery ? false : true);
 
 		// Count after the delete. Should always be zero
-		int undeleted = getCount(
+		final int undeleted = getCount(
 				indexAdapterPairs,
 				sanitizedQueryOptions,
 				sanitizedQuery,
@@ -909,15 +911,15 @@ public class AccumuloDataStore extends
 	}
 
 	protected int getCount(
-			List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> indexAdapterPairs,
+			final List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> indexAdapterPairs,
 			final QueryOptions sanitizedQueryOptions,
 			final Query sanitizedQuery,
 			final boolean countAggregation ) {
 		int count = 0;
 
 		for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : indexAdapterPairs) {
-			for (DataAdapter dataAdapter : indexAdapterPair.getRight()) {
-				QueryOptions countOptions = new QueryOptions(
+			for (final DataAdapter dataAdapter : indexAdapterPair.getRight()) {
+				final QueryOptions countOptions = new QueryOptions(
 						sanitizedQueryOptions);
 				if (countAggregation) {
 					countOptions.setAggregation(
@@ -1046,14 +1048,14 @@ public class AccumuloDataStore extends
 	protected void updateDupCounts(
 			final DupTracker dupTracker,
 			final ByteArrayId adapterId,
-			DataStoreEntryInfo entryInfo ) {
-		ByteArrayId dataId = new ByteArrayId(
+			final DataStoreEntryInfo entryInfo ) {
+		final ByteArrayId dataId = new ByteArrayId(
 				entryInfo.getDataId());
 
-		for (ByteArrayId rowId : entryInfo.getRowIds()) {
-			GeowaveRowId rowData = new GeowaveRowId(
+		for (final ByteArrayId rowId : entryInfo.getRowIds()) {
+			final GeowaveRowId rowData = new GeowaveRowId(
 					rowId.getBytes());
-			int rowDups = rowData.getNumberOfDuplicates();
+			final int rowDups = rowData.getNumberOfDuplicates();
 
 			if (rowDups > 0) {
 				if (dupTracker.idMap.get(dataId) == null) {
@@ -1062,7 +1064,7 @@ public class AccumuloDataStore extends
 							adapterId);
 				}
 
-				Integer mapDups = dupTracker.dupCountMap.get(dataId);
+				final Integer mapDups = dupTracker.dupCountMap.get(dataId);
 
 				if (mapDups == null) {
 					dupTracker.dupCountMap.put(
@@ -1080,5 +1082,12 @@ public class AccumuloDataStore extends
 			}
 		}
 
+	}
+
+	@Override
+	public String getVersion(
+			final StoreFactoryOptions options ) {
+		return new AccumuloVersionQuery(
+				accumuloOperations).queryVersion();
 	}
 }

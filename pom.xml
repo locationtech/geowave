@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
@@ -7,7 +8,7 @@
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
-	<url>https://github.com/ngageoint/geowave</url>
+	<url>https://github.com/locationtech/geowave</url>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -27,16 +28,17 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
-		<url>https://github.com/ngageoint/geowave.git</url>
-		<connection>scm:git:https://github.com/ngageoint/geowave.git</connection>
+		<url>https://github.com/locationtech/geowave.git</url>
+		<connection>scm:git:https://github.com/locationtech/geowave.git</connection>
 		<tag>HEAD</tag>
 	</scm>
 	<properties>
+		<spark.version>2.2.0</spark.version>
 		<geotools.version>16.0</geotools.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.10.0</geoserver.version>
-		<accumulo.version>1.7.2</accumulo.version>
-		<accumulo.api>1.7</accumulo.api>
+		<accumulo.version>1.8.1</accumulo.version>
+		<accumulo.api>1.8</accumulo.api>
 		<skipITs>true</skipITs>
 		<bigtable.version>0.9.4</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
@@ -49,12 +51,13 @@
 		<hbase.scope>compile</hbase.scope>
 		<hadoop.scope>compile</hadoop.scope>
 		<zookeeper.version>3.4.6</zookeeper.version>
-		<jersey.version>2.14</jersey.version>
+		<jersey.version>2.22.2</jersey.version>
 		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.0.5</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
+		<fasterxml.jackson.version>2.6.5</fasterxml.jackson.version>
 		<spring-security.version>4.0.4.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
@@ -76,7 +79,7 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=256m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
@@ -396,6 +399,21 @@
 				<groupId>org.codehaus.jackson</groupId>
 				<artifactId>jackson-core-asl</artifactId>
 				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${fasterxml.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${fasterxml.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${fasterxml.jackson.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
@@ -941,6 +959,7 @@
 				<accumulo.version>1.7.2-cdh5.5.0</accumulo.version>
 				<hbase.version>1.2.0-cdh5.9.0</hbase.version>
 				<hadoop.version>2.6.0-cdh5.9.0</hadoop.version>
+				<accumulo.api>1.7</accumulo.api>
 			</properties>
 			<repositories>
 				<repository>
@@ -977,6 +996,7 @@
 				<accumulo.version>1.7.0.2.6.0.3-8</accumulo.version>
 				<hbase.version>1.1.2.2.6.0.3-8</hbase.version>
 				<hadoop.version>2.7.3.2.6.0.3-8</hadoop.version>
+				<accumulo.api>1.7</accumulo.api>
 			</properties>
 			<repositories>
 				<repository>
@@ -1016,8 +1036,8 @@
 		<profile>
 			<id>compatibility</id>
 			<properties>
-				<accumulo.version>1.6.5</accumulo.version>
-				<accumulo.api>1.6</accumulo.api>
+				<accumulo.version>1.7.2</accumulo.version>
+				<accumulo.api>1.7</accumulo.api>
 				<hadoop.version>2.6.4</hadoop.version>
 				<geotools.version>15.2</geotools.version>
 				<geoserver.version>2.9.2</geoserver.version>

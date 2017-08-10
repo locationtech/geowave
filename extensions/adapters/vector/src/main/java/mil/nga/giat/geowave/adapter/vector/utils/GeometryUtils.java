@@ -21,17 +21,15 @@ import java.util.List;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.ows.bindings.UnitBinding;
 import org.geotools.referencing.GeodeticCalculator;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.uzaygezen.core.BitSetMath;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -42,6 +40,13 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
+
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class GeometryUtils
 {
@@ -467,6 +472,32 @@ public class GeometryUtils
 			final GeometryFactory factory,
 			final CoordinateReferenceSystem crs ) {
 		return factory.createPolygon(toPolygonCoordinates(crs.getCoordinateSystem()));
+	}
+
+	public static Envelope getGeoBounds(
+			final DataStorePluginOptions dataStorePlugin,
+			final ByteArrayId adapterId,
+			final String geomField ) {
+		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
+		ByteArrayId geoStatId = FeatureBoundingBoxStatistics.composeId(geomField);
+
+		DataStatistics<?> geoStat = statisticsStore.getDataStatistics(
+				adapterId,
+				geoStatId,
+				null);
+
+		if (geoStat != null) {
+			if (geoStat instanceof FeatureBoundingBoxStatistics) {
+				final FeatureBoundingBoxStatistics bbStats = (FeatureBoundingBoxStatistics) geoStat;
+				return new Envelope(
+						bbStats.getMinX(),
+						bbStats.getMaxX(),
+						bbStats.getMinY(),
+						bbStats.getMaxY());
+			}
+		}
+
+		return null;
 	}
 
 	private static Coordinate[] toPolygonCoordinates(

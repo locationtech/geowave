@@ -5,7 +5,7 @@
 [NOTE]
 ==== 
 This is a brief overview of the theory and concepts behind GeoWave. For an in-depth discussion, please see the 
-http://ngageoint.github.io/geowave/devguide.html#theory[GeoWave Developer Guide.]
+http://locationtech.github.io/geowave/devguide.html#theory[GeoWave Developer Guide.]
 ====
 
 === Spatial Index

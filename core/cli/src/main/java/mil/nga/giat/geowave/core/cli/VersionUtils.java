@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -56,15 +56,29 @@ public class VersionUtils
 				VERSION_PROPERTY_KEY);
 	}
 
-	public static void printVersionInfo() {
-
+	public static List<String> getVersionInfo() {
 		final List<String> buildAndPropertyList = Arrays.asList(getBuildProperties().toString().split(
 				","));
-
 		Collections.sort(buildAndPropertyList.subList(
 				1,
 				buildAndPropertyList.size()));
-		for (String str : buildAndPropertyList) {
+		return buildAndPropertyList;
+	}
+
+	public static String asLineDelimitedString(
+			final List<String> value ) {
+		final StringBuilder str = new StringBuilder();
+		for (final String v : value) {
+			str.append(
+					v).append(
+					'\n');
+		}
+		return str.toString();
+	}
+
+	public static void printVersionInfo() {
+		final List<String> buildAndPropertyList = getVersionInfo();
+		for (final String str : buildAndPropertyList) {
 			JCommander.getConsole().println(
 					str);
 		}

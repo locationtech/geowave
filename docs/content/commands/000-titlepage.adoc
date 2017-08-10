@@ -11,14 +11,14 @@ PDF Generation gives an error if you try to use icons
 ifdef::backend-html5[]
 == Links
 
-=== icon:home[] http://ngageoint.github.io/geowave/[Site]
+=== icon:home[] http://locationtech.github.io/geowave/[Site]
 
 === icon:file-pdf-o[] https://s3.amazonaws.com/geowave/latest/docs/commands.pdf[PDF^]
 
 === icon:file-code-o[] https://s3.amazonaws.com/geowave/latest/docs/apidocs/index.html[Javadoc]
 
-=== icon:github[] https://github.com/ngageoint/geowave[GitHub]
+=== icon:github[] https://github.com/locationtech/geowave[GitHub]
 
-=== icon:file-archive-o[] http://ngageoint.github.io/geowave/packages.html[Packages]
+=== icon:file-archive-o[] http://locationtech.github.io/geowave/packages.html[Packages]
 
 endif::backend-html5[]

@@ -5,7 +5,7 @@
 
 Once the data has been ingested and the KDE has completed you can setup GeoServer to display it. 
 
-Configue the local host.
+Configure the local host.
 
 [source, bash]
 ----
