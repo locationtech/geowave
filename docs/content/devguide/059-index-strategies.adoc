@@ -1,0 +1,28 @@
+[[index-strategies]]
+<<<
+=== Index Strategies
+
+:linkattrs:
+
+Indexing data within GeoWave can be done in many ways, depending on the nature of what data is being indexed and which properties are of interest to be indexed/queried.
+
+All GeoWave indexes must implement the link:https://github.com/locationtech/geowave/tree/master/core/index/src/main/java/mil/nga/giat/geowave/core/index/IndexStrategy.java[IndexStrategy, window="_blank"] interface. When data is indexed, the IndexStrategy implementation is applied during processing and indexes the data as a link:https://github.com/locationtech/geowave/tree/master/core/index/src/main/java/mil/nga/giat/geowave/core/index/Persistable.java[Persistable, window="_blank"] object in order to support serialization and deserialization within GeoWave.
+
+Currently, all index strategy implementations implement either the link:https://github.com/locationtech/geowave/tree/master/core/index/src/main/java/mil/nga/giat/geowave/core/index/FieldIndexStrategy.java[FieldIndexStrategy, window="_blank"] interface or the link:https://github.com/locationtech/geowave/tree/master/core/index/src/main/java/mil/nga/giat/geowave/core/index/NumericIndexStrategy.java[NumericIndexStrategy, window="_blank"] interface.
+
+.FieldIndexStrategy
+
+The FieldIndexStrategy interface is a more generic strategy for defining data to be indexed, which can be mostly any type. Each implementation of this strategy is responsible for defining how to serialize and de-serialize the data as well as each of the other indexing strategy methods.
+
+.NumericIndexStrategy
+
+As the name implies, the NumericIndexStrategy was designed for indexing numeric data and defines methods which describe the numeric data a bit further.
+
+==== IndexStrategy Hierarchy
+
+The diagram below outlines the hierarchy of the various index strategies currently available within GeoWave.
+
+image::IndexStrategyHierarchy.png[scaledwidth="75%",width="75%",alt="IndexStrategy Hierarchy", title="IndexStrategy Hierarchy"]
+
+If there is not a suitable index strategy implementation that exists for your data being indexed, one can be developed according to the specific needs of your data and mission. Feel free to reference the strategies described above or any of the examples available.
+

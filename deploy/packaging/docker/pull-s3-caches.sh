@@ -15,7 +15,7 @@
 if [ -z $NO_MAVEN_INIT ] && [ ! -d $1/.m2 ]; then
 	echo "Downloading Maven Cache ..."
 	MVN_CACHE_BASE=https://s3.amazonaws.com/geowave-deploy/cache-bundle
-	CACHE_FILE=mvn-repo-cache-20170519.tar.gz
+	CACHE_FILE=mvn-repo-cache-20170810.tar.gz
 	pushd $1
 	curl -O $MVN_CACHE_BASE/$CACHE_FILE
 	tar xf $1/$CACHE_FILE

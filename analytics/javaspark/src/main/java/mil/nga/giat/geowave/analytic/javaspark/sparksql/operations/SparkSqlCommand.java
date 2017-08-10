@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -34,7 +36,7 @@ public class SparkSqlCommand extends
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SparkSqlCommand.class);
-	private final static String STORE_ADAPTER_DELIM = "_";
+	private final static String STORE_ADAPTER_DELIM = "|";
 	private final static String CMD_DESCR = "<sql query> - e.g. 'select * from storename[" + STORE_ADAPTER_DELIM
 			+ "adaptername] where condition...'";
 
@@ -73,7 +75,7 @@ public class SparkSqlCommand extends
 
 		final String sql = parameters.get(0);
 
-		initStores(
+		String cleanSql = initStores(
 				configFile,
 				sql,
 				sparkSqlOptions.getOutputStoreName());
@@ -89,7 +91,8 @@ public class SparkSqlCommand extends
 			sqlRunner.setTempView2(tempView2);
 		}
 
-		sqlRunner.setSql(sql);
+		LOGGER.debug("Running with SQL: " + cleanSql);
+		sqlRunner.setSql(cleanSql);
 
 		stopwatch.reset();
 		stopwatch.start();
@@ -112,7 +115,8 @@ public class SparkSqlCommand extends
 					false);
 		}
 
-		System.out.println("GeoWave SparkSQL query returned " + results.count() + " results");
+		JCommander.getConsole().println(
+				"GeoWave SparkSQL query returned " + results.count() + " results");
 
 		if (outputDataStore != null) {
 			SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(
@@ -128,13 +132,26 @@ public class SparkSqlCommand extends
 				typeName = "sqlresults";
 			}
 
-			System.out.print("Writing GeoWave SparkSQL query results...");
+			JCommander.getConsole().println(
+					"Writing GeoWave SparkSQL query results to datastore...");
 			sqlResultsWriter.writeResults(typeName);
-			System.out.println("Done.");
+			JCommander.getConsole().println(
+					"Datastore write complete.");
+		}
+
+		if (sparkSqlOptions.getCsvOutputFile() != null) {
+			results.repartition(
+					1).write().format(
+					"com.databricks.spark.csv").option(
+					"header",
+					"true").mode(
+					SaveMode.Overwrite).save(
+					sparkSqlOptions.getCsvOutputFile());
+
 		}
 	}
 
-	private void initStores(
+	private String initStores(
 			File configFile,
 			String sql,
 			String outputStoreName ) {
@@ -142,33 +159,58 @@ public class SparkSqlCommand extends
 		String inputStoreInfo1 = null;
 		String inputStoreInfo2 = null;
 		String escapedSpaceRegex = java.util.regex.Pattern.quote(" ");
+		String crapRegex = "[^a-zA-Z\\d\\s]";
 
 		LOGGER.debug("Input SQL: " + sql);
 
 		String[] sqlSplits = sql.split(escapedSpaceRegex);
 		int splitIndex = 0;
 
+		StringBuffer cleanSqlBuf = new StringBuffer();
+
 		while (splitIndex < sqlSplits.length) {
 			String split = sqlSplits[splitIndex];
 
 			if (split.equalsIgnoreCase("from")) {
+				cleanSqlBuf.append(split);
+				cleanSqlBuf.append(" ");
+
 				if (splitIndex < sqlSplits.length - 1) {
 					splitIndex++;
 					inputStoreInfo1 = sqlSplits[splitIndex];
 					LOGGER.debug("Input store info (1): " + inputStoreInfo1);
+
+					cleanSqlBuf.append(inputStoreInfo1.replaceAll(
+							crapRegex,
+							"_"));
 				}
 			}
 			else if (split.equalsIgnoreCase("join")) {
+				cleanSqlBuf.append(split);
+				cleanSqlBuf.append(" ");
+
 				if (splitIndex < sqlSplits.length - 1) {
 					splitIndex++;
 					inputStoreInfo2 = sqlSplits[splitIndex];
 					LOGGER.debug("Input store info (2): " + inputStoreInfo2);
+
+					cleanSqlBuf.append(inputStoreInfo2.replaceAll(
+							crapRegex,
+							"_"));
 				}
+				}
+			else {
+				cleanSqlBuf.append(split);
+			}
+
+			if (splitIndex < sqlSplits.length - 1) {
+				cleanSqlBuf.append(" ");
 			}
 
 			splitIndex++;
 		}
 
+		// For eliminating invalid chars in view names
 		String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
 
 		// Parse SQL for store.adapter
@@ -187,6 +229,10 @@ public class SparkSqlCommand extends
 
 				inputStoreName = infoParts[0];
 				adapterName = infoParts[1];
+
+				inputStoreInfo1 = inputStoreInfo1.replaceAll(
+						crapRegex,
+						"_");
 			}
 
 			LOGGER.debug("Input store (1): " + inputStoreName);
@@ -207,6 +253,7 @@ public class SparkSqlCommand extends
 
 			// We use datastore_adapter as the temp view name
 			tempView1 = inputStoreInfo1;
+			LOGGER.debug("Temp view (1): " + tempView1);
 		}
 
 		// If there's a join, set up the 2nd store info
@@ -224,6 +271,10 @@ public class SparkSqlCommand extends
 
 				inputStoreName = infoParts[0];
 				adapterName = infoParts[1];
+
+				inputStoreInfo2 = inputStoreInfo2.replaceAll(
+						crapRegex,
+						"_");
 			}
 
 			LOGGER.debug("Input store (2): " + inputStoreName);
@@ -243,6 +294,7 @@ public class SparkSqlCommand extends
 			}
 
 			tempView2 = inputStoreInfo2;
+			LOGGER.debug("Temp view (2): " + tempView2);
 		}
 
 		if (outputStoreName != null) {
@@ -254,6 +306,9 @@ public class SparkSqlCommand extends
 			}
 			outputDataStore = outputStoreLoader.getDataStorePlugin();
 		}
+
+		// Clean up any other disallowed chars:
+		return cleanSqlBuf.toString();
 	}
 
 	public List<String> getParameters() {

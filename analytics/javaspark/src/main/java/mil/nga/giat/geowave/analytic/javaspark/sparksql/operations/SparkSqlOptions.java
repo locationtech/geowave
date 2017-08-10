@@ -5,14 +5,18 @@ import com.beust.jcommander.Parameter;
 public class SparkSqlOptions
 {
 	@Parameter(names = {
-		"-o",
+		"--csv"
+	}, description = "The output CSV file name")
+	private String csvOutputFile = null;
+
+	@Parameter(names = {
 		"--out"
 	}, description = "The output datastore name")
 	private String outputStoreName = null;
 
 	@Parameter(names = {
 		"--outtype"
-	}, description = "The output type name")
+	}, description = "The output feature type (adapter) name")
 	private String outputTypeName = null;
 
 	@Parameter(names = {
@@ -48,5 +52,14 @@ public class SparkSqlOptions
 	public void setOutputTypeName(
 			String outputTypeName ) {
 		this.outputTypeName = outputTypeName;
+	}
+
+	public String getCsvOutputFile() {
+		return csvOutputFile;
+	}
+
+	public void setCsvOutputFile(
+			String csvOutputFile ) {
+		this.csvOutputFile = csvOutputFile;
 	}
 }

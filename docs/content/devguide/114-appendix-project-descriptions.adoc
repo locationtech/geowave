@@ -1,0 +1,70 @@
+[[appendix-project-descriptions]]
+<<<
+
+:linkattrs:
+
+=== GeoWave Project Descriptions
+
+The table below outlines the different project hierarchies within the GeoWave project
+
+[frame="topbot", width="100%", cols="4%,4%,4%,4%,9%,25%,50%", grid="rows", options="header"]
+|==========================
+5.1+| Path                   | Name                                  | Description
+5.1+| geowave                | GeoWave Parent                        | Parent directory
+
+1.1+| 4.1+| analytics        | GeoWave Analytics                     | The set of analytics provided for GeoWave Datasets. Extensions to geowave-core-mapreduce for particular methodogies (spark on hadoop/yarn or mapreduce on hadoop/yarn).
+2.1+| 3.1+| api              | GeoWave Analytics API                 | GeoWave APIs and re-usable analytic code that can be shared across specific external frameworks, e.g., mapreduce and spark
+2.1+| 3.1+| mapreduce        | GeoWave MapReduce Analytics           | Specific algorithms written in mapreduce for GeoWave
+2.1+| 3.1+| spark            | GeoWave Spark Analytics               | Specific algorithms written for spark on GeoWave data
+
+1.1+| 4.1+| core             | GeoWave Core                          | The set of base functionalities provided for all configurations of GeoWave
+2.1+| 3.1+| cli              | GeoWave Core CLI                      | Command Line Interface for GeoWave Tools. Builds on store to provide the commandline tool framework for interacting with GeoWave
+2.1+| 3.1+| geotime          | GeoWave Spatial and Temporal Support  | Builds on the core store and index modules special casing the multidimensional index problem as spatial and spatial-temporal index on a sorted key value store
+2.1+| 3.1+| index            | GeoWave Index                         | Focused on the problem of maintaining good lexicographic sort order for multidimensional data, exposed primarily through NumericIndexStrategy, i.e., how do I form my key in the key-value store
+2.1+| 3.1+| ingest           | GeoWave Ingest Framework              | Builds on cli to provide the ingest commandline tools
+2.1+| 3.1+| mapreduce        | GeoWave MapReduce                     | Builds on store to provide the basic analytic components for running jobs on Hadoop. Primarily, this exposes Hadoop input and output formats for GeoWave that can be used to intelligently distribute jobs across GeoWave data within the context of any distributed processing framework run on YARN such as Spark or MapReduce.
+2.1+| 3.1+| store            | GeoWave Store                         | Focused on applying that indexing to a sorted key value store, exposed primarily through DataStore, i.e., how to persist and retrieve objects by its multi-dimensional bounds
+
+1.1+| 4.1+| deploy           | GeoWave Deployment Configurations     | Various scripts for packaging and deploying GeoWave in production
+
+1.1+| 4.1+| dev-resources    | GeoWave Development Resources         | Development resources and settings for GeoWave
+
+1.1+| 4.1+| docs             | GeoWave Documentation                 | Documentation, primarily in the form of asciidoc that can be compiled into a variety of formats including HTML, PDF, EPUB, and others (everything seen on link:http://locationtech.github.io/geowave[http://locationtech.github.io/geowave, window="_blank"] is automatically built and published on each commit)
+
+1.1+| 4.1+| examples         | GeoWave Examples                      | Some very basic code examples for reading and writing vector data in GeoWave, and running some basic analytics. This is a great and simple place to contribute if you see a gap that you think should be covered.
+
+1.1+| 4.1+| extensions       | GeoWave Extensions                    | The set of extended capabilities supported for GeoWave
+2.1+| 3.1+| adapters         | GeoWave Extension Adapaters           | A DataAdapter in the system is essentially responsible for taking any java object and handling serialization/deserialization to/from the value portion of the key-value pair. It's called _encode_ and _decode_ in the code because it is a little more complex than just _serialization_ and _deserialization-, but in general, the over-simplified high-level view is that the link:https://github.com/locationtech/geowave/blob/master/core/index/src/main/java/mil/nga/giat/geowave/core/index/NumericIndexStrategy.java[NumericIndexStrategy, window="_blank"] from geowave-core-index handles building a good key, and the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/adapter/DataAdapter.java[DataAdapter, window="_blank"] handles building a good value, then the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/DataStore.java[DataStore, window="_blank"] has no direct logic for mapping the java object to a key or a value. If you have a new java object, you can write a new adapter independent of specific datastores. Likewise, if you have a new strategy for indexing or a different dimensionality to index, that would be independent of any of the specific datastores (ie. you can simply write your own adapter if you have a unique dataset and it can store your data with any indexing scheme on any backend datastore).
+3.1+| 2.1+| auth             |                                       | Authorization functionality for GeoWave Data Adapters
+3.1+| 2.1+| raster           | Geowave Raster Adapter                | The DataAdapter for GridCoverage data (e.g., "raster" data in GIS vocabulary) is RasterDataAdapter, this also contains GeoTools/GeoServer extensions for GeoWave raster data within the plugin package.
+3.1+| 2.1+| vector           | Geowave Vector Adapter                | The DataAdapter for SimpleFeature data (e.g., "vector" data in GIS vocabulary) is FeatureDataAdapter, this also contains geotools/geoserver extensions for GeoWave vector data within the plugin package
+2.1+| 3.1+| cli              | GeoWave Extension CLI's               | Other tools plugin, that can be included as a command in the commandline framework, this is where any tool goes that plugins in to geowave-core-cli as commands for GeoWave. GeoWave services are now available, which automatically exposes CLI commands as service endpoints.
+3.1+| 2.1+| debug            | GeoWave Debug Commandline Tools       | A set of ad-hoc debug tools available through the command line that can be applied to GeoWave data
+3.1+| 2.1+| geoserver        | Geowave GeoServer Commandline Tools   | GeoWave Commandline Tools for Managing GeoServer Layers and Data Stores
+3.1+| 2.1+| landsat8         | GeoWave LandSat8 Operations           | GeoWave support for public LandSat8 data
+3.1+| 2.1+| osm              | Geowave OSM Commandline Tools         | OSM Data processing system for GeoWave
+2.1+| 3.1+| datastores       | GeoWave DataStores                    | The only dependency on a particular datastore (e.g., Accumulo, HBase), the rest of the project is independent of the datastore; the intent is to keep as much reusuable code outside of the concrete datastore implementation as can be sensible
+3.1+| 2.1+| accumulo         | GeoWave Accumulo                      | Geowave Data Store on Apache Accumulo
+3.1+| 2.1+| bigtable         | GeoWave BigTable                      | Geowave Data Store on Google BigTable
+3.1+| 2.1+| hbase            | GeoWave HBase                         | Geowave Data Store on Apache HBase
+2.1+| 3.1+| formats          | GeoWave Extension Formats             | A format plugin in the system is an extension to the commandline ingest framework, providing a means to read data from a particular format of interest and map it to a particular adapter; in the open source project, we provide a variety of vector formats and a single raster format that wraps a popular library; GeoTools ("geotools-vector" format covers all formats supported by GeoTools and geotools-raster covers all raster formats supported by geotools, each covering a large variety of popular geospatial formats)
+3.1+| 2.1+| avro             | GeoWave Avro Format                   | GeoWave ingest support for Avro data matching GeoWave's generic vector avro schema
+3.1+| 2.1+| gdelt            | GeoWave GDELT Format Support          | GeoWave ingest support for Google Ideas' GDELT dataset
+3.1+| 2.1+| geolife          | GeoWave GeoLife Format Support        | GeoWave ingest support for Microsoft Research's GeoLife dataset
+3.1+| 2.1+| geotools-raster  | GeoWave Raster Format                 | GeoWave ingest support for all raster formats that are supported within geotools
+3.1+| 2.1+| geotools-vector  | GeoWave Vector Format                 | GeoWave ingest support for all vector formats that are supported within geotools
+3.1+| 2.1+| gpx              | GeoWave GPX Format                    | GeoWave ingest support for GPX data
+3.1+| 2.1+| stanag4676       |                                       | GeoWave stanag4676 support for the NATO specification for track data.
+4.1+| 1.1+| format           | geowave-format-4676                   | The GeoWave stanag4746 format implementation supports ingest of tracks, track points, motion events, and associated image chips into GeoWave.
+4.1+| 1.1+| service          | geowave-service-4676                  | The GeoWave stanag4746 service implementation provides a rest endpoint to get the image chips per point and motion event, and stitch videos together per track.
+3.1+| 2.1+| tdrive           | GeoWave T-Drive Format                | GeoWave ingest support for Microsoft Research's T-Drive dataset
+3.1+| 2.1+| twitter          | GeoWave Twitter Format Support        | GeoWave ingest support for twitter JSON data
+
+1.1+| 4.1+| services         | GeoWave Services                      | The set of REST services and clients provided for interacting with GeoWave.
+2.1+| 3.1+| api              | GeoWave Services API                  | Service APIs for use when interfacing with GeoWave as a consumer.
+2.1+| 3.1+| client           | GeoWave Java Client for REST services | Java clients exposing GeoWave CLI interfaces and functionality.
+2.1+| 3.1+| webapp           | GeoWave REST Services WebApp          | The server-side implementation of GeoWave services API
+
+1.1+| 4.1+| test             | GeoWave Integration Tests             | A module for integration and functional tests of GeoWave. Integration tests for end-to-end functionality with local test environments for each datastore (often can serve as examples as well, but typically the intent of examples is to be simple and straightforward; the integration tests are more complex, but certainly more inclusive of a variety of functionality)
+
+|==========================
