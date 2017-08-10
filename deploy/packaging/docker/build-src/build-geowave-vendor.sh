@@ -16,7 +16,7 @@
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
 trap 'chmod -R 777 $WORKSPACE' EXIT
 
-GEOWAVE_VERSION=$(mvn -q -o -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec | sed -e 's/"//g' -e 's/-SNAPSHOT//g')
+GEOWAVE_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec | sed -e 's/"//g' -e 's/-SNAPSHOT//g')
 # Set a default version
 VENDOR_VERSION=apache
 
@@ -38,13 +38,13 @@ mkdir -p $WORKSPACE/deploy/target/geowave-c++/bin
 mvn -q clean
 
 # Build each of the "fat jar" artifacts and rename to remove any version strings in the file name
-mvn -o -q package -am -pl deploy -P geotools-container-singlejar -Dgeotools.finalName=geowave-geoserver-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
+mvn -q package -am -pl deploy -P geotools-container-singlejar -Dgeotools.finalName=geowave-geoserver-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
 
-mvn -o -q package -am -pl deploy -P accumulo-container-singlejar -Daccumulo.finalName=geowave-accumulo-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
+mvn -q package -am -pl deploy -P accumulo-container-singlejar -Daccumulo.finalName=geowave-accumulo-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
 
-mvn -o -q package -am -pl deploy -P hbase-container-singlejar -Dhbase.finalName=geowave-hbase-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
+mvn -q package -am -pl deploy -P hbase-container-singlejar -Dhbase.finalName=geowave-hbase-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
 
-mvn -o -q package -am -pl deploy -P geowave-tools-singlejar -Dtools.finalName=geowave-tools-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
+mvn -q package -am -pl deploy -P geowave-tools-singlejar -Dtools.finalName=geowave-tools-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
 
 # Copy the tools fat jar
 cp $WORKSPACE/deploy/target/geowave-tools-${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar $WORKSPACE/deploy/target/geowave-c++/bin/geowave-tools-${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar
@@ -58,7 +58,7 @@ cd $WORKSPACE
 # Build the jace bindings
 if [[ ! -f $WORKSPACE/deploy/target/geowave-c++-${GEOWAVE_VERSION}-${VENDOR_VERSION}.tar.gz ]]; then
 	rm -rf $WORKSPACE/deploy/target/dependency
-	mvn -o -q package -am -pl deploy -P generate-geowave-jace -Djace.finalName=geowave-runtime-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
+	mvn -q package -am -pl deploy -P generate-geowave-jace -Djace.finalName=geowave-runtime-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
     mv $WORKSPACE/deploy/target/geowave-runtime-${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar $WORKSPACE/deploy/target/geowave-c++/bin/geowave-runtime-${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar
     cp $WORKSPACE/deploy/jace/CMakeLists.txt $WORKSPACE/deploy/target/geowave-c++
     cp -R $WORKSPACE/deploy/target/dependency/jace/source $WORKSPACE/deploy/target/geowave-c++
