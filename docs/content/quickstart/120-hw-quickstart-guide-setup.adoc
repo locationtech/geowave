@@ -1,0 +1,30 @@
+<<<
+
+
+== Setting Up the Environment
+
+The virtual image provided for this demo can be found at http://s3.amazonaws.com/geowave/VirtualBox_HDP_GeoWave_Sandbox.ova[here]. The image is a very large file (~14 GB) so make sure that you give yourself enough time to download it and that your machine has
+enough room to store it.
+
+=== Setting up the VirtualBox Image
+
+- Open up your VirtualBox manager. If you do not have VirtualBox downloaded, do so https://www.virtualbox.org/wiki/Downloads[here]. This demo was tested against VirtualBox 5.1.26, you may experience trouble importing the virtual image on older versions.
+
+- Click "File" and select "Import Appliance" from the dropdown.
+
+image::sandbox/import-appliance.png[scaledwidth="100%",alt="select emr"]
+
+- Click on the folder icon, and navigate to VirtualBox_HDP_GeoWave_Sandbox.ova (the image that you downloaded).
+
+- Select "Next" and then "Import"
+  * This should take a couple of minutes
+  
+Once the image has been imported, start it up from the manager. Every time you power the machine on it will ask you which version of Linux
+it should boot, pick the default/first option.
+
+image::sandbox/vb-image.png[scaledwidth="100%",alt="select emr"]
+
+The machine should power on shortly (this can take a few minutes). After it's powered on you should see the screen below. This is the last
+time that you will have to interact directly with the VirtualBox. Make sure that the virtual machine is active for the duration of this demo.
+
+image::sandbox/vb-image-2.png[scaledwidth="100%",alt="select emr"]
