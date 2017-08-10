@@ -1,0 +1,11 @@
+<<<
+
+== Further Documentation
+
+More information on GeoWave, including the User/Developer Guides and further information on many of the commands run in these demos can be found below.
+
+**User Guide** - http://locationtech.github.io/geowave/userguide.html
+
+**Developer Guide** - http://locationtech.github.io/geowave/devguide.html
+
+**Command Line Controls** - http://locationtech.github.io/geowave/commands.html
