@@ -282,9 +282,7 @@ public class AccumuloConstraintsQuery extends
 						final Entry<Key, Value> input = it.next();
 						if (input.getValue() != null) {
 							if (mergedAggregationResult == null) {
-								mergedAggregationResult = (Mergeable) AccumuloUtils.fromBinary(input
-										.getValue()
-										.get());
+								mergedAggregationResult = (Mergeable) AccumuloUtils.fromBinary(input.getValue().get());
 							}
 							else {
 								mergedAggregationResult.merge((Mergeable) AccumuloUtils.fromBinary(input

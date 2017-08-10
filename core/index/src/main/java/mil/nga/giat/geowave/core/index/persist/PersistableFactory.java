@@ -34,8 +34,8 @@ public class PersistableFactory
 	public static synchronized PersistableFactory getInstance() {
 		if (singletonInstance == null) {
 			final PersistableFactory internalFactory = new PersistableFactory();
-			final Iterator<PersistableRegistrySpi> persistableRegistries = new SPIServiceRegistry(PersistableFactory.class).load(
-					PersistableRegistrySpi.class);
+			final Iterator<PersistableRegistrySpi> persistableRegistries = new SPIServiceRegistry(
+					PersistableFactory.class).load(PersistableRegistrySpi.class);
 			while (persistableRegistries.hasNext()) {
 				final PersistableRegistrySpi persistableRegistry = persistableRegistries.next();
 				if (persistableRegistry != null) {

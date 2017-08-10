@@ -28,8 +28,7 @@ import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 public class VisibilityManagementHelper
 {
 
-	protected final static Logger LOGGER = LoggerFactory.getLogger(
-			VisibilityManagementHelper.class);
+	protected final static Logger LOGGER = LoggerFactory.getLogger(VisibilityManagementHelper.class);
 
 	@SuppressWarnings({
 		"rawtypes",
@@ -37,8 +36,7 @@ public class VisibilityManagementHelper
 	})
 	public static final <T> ColumnVisibilityManagementSpi<T> loadVisibilityManagement() {
 		Iterator<ColumnVisibilityManagementSpi> managers = new SPIServiceRegistry(
-				VisibilityManagementHelper.class).load(
-						ColumnVisibilityManagementSpi.class);
+				VisibilityManagementHelper.class).load(ColumnVisibilityManagementSpi.class);
 		if (!managers.hasNext()) return new JsonDefinitionColumnVisibilityManagement<T>();
 		return (ColumnVisibilityManagementSpi<T>) managers.next();
 	}

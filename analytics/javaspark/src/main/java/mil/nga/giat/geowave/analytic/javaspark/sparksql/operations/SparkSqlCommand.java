@@ -33,8 +33,7 @@ public class SparkSqlCommand extends
 		DefaultOperation implements
 		Command
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			SparkSqlCommand.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SparkSqlCommand.class);
 	private final static String STORE_ADAPTER_DELIM = "_";
 	private final static String CMD_DESCR = "<sql query> - e.g. 'select * from storename[" + STORE_ADAPTER_DELIM
 			+ "adaptername] where condition...'";
@@ -72,8 +71,7 @@ public class SparkSqlCommand extends
 		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-		final String sql = parameters.get(
-				0);
+		final String sql = parameters.get(0);
 
 		initStores(
 				configFile,
@@ -81,24 +79,17 @@ public class SparkSqlCommand extends
 				sparkSqlOptions.getOutputStoreName());
 
 		SqlQueryRunner sqlRunner = new SqlQueryRunner();
-		sqlRunner.setInputDataStore1(
-				inputDataStore1);
-		sqlRunner.setAdapterId1(
-				adapterId1);
-		sqlRunner.setTempView1(
-				tempView1);
+		sqlRunner.setInputDataStore1(inputDataStore1);
+		sqlRunner.setAdapterId1(adapterId1);
+		sqlRunner.setTempView1(tempView1);
 
 		if (inputDataStore2 != null) {
-			sqlRunner.setInputDataStore2(
-					inputDataStore2);
-			sqlRunner.setAdapterId2(
-					adapterId2);
-			sqlRunner.setTempView2(
-					tempView2);
+			sqlRunner.setInputDataStore2(inputDataStore2);
+			sqlRunner.setAdapterId2(adapterId2);
+			sqlRunner.setTempView2(tempView2);
 		}
 
-		sqlRunner.setSql(
-				sql);
+		sqlRunner.setSql(sql);
 
 		stopwatch.reset();
 		stopwatch.start();
@@ -108,10 +99,8 @@ public class SparkSqlCommand extends
 
 		stopwatch.stop();
 
-		LOGGER.debug(
-				"Spark SQL query took " + stopwatch.getTimeString());
-		LOGGER.debug(
-				"   and got " + results.count() + " results");
+		LOGGER.debug("Spark SQL query took " + stopwatch.getTimeString());
+		LOGGER.debug("   and got " + results.count() + " results");
 
 		if (LOGGER.isDebugEnabled()) {
 			results.printSchema();
@@ -123,8 +112,7 @@ public class SparkSqlCommand extends
 					false);
 		}
 
-		System.out.println(
-				"GeoWave SparkSQL query returned " + results.count() + " results");
+		System.out.println("GeoWave SparkSQL query returned " + results.count() + " results");
 
 		if (outputDataStore != null) {
 			SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(
@@ -140,12 +128,9 @@ public class SparkSqlCommand extends
 				typeName = "sqlresults";
 			}
 
-			System.out.print(
-					"Writing GeoWave SparkSQL query results...");
-			sqlResultsWriter.writeResults(
-					typeName);
-			System.out.println(
-					"Done.");
+			System.out.print("Writing GeoWave SparkSQL query results...");
+			sqlResultsWriter.writeResults(typeName);
+			System.out.println("Done.");
 		}
 	}
 
@@ -156,43 +141,35 @@ public class SparkSqlCommand extends
 		// Extract input store(s) from sql
 		String inputStoreInfo1 = null;
 		String inputStoreInfo2 = null;
-		String escapedSpaceRegex = java.util.regex.Pattern.quote(
-				" ");
+		String escapedSpaceRegex = java.util.regex.Pattern.quote(" ");
 
-		LOGGER.debug(
-				"Input SQL: " + sql);
+		LOGGER.debug("Input SQL: " + sql);
 
-		String[] sqlSplits = sql.split(
-				escapedSpaceRegex);
+		String[] sqlSplits = sql.split(escapedSpaceRegex);
 		int splitIndex = 0;
 
 		while (splitIndex < sqlSplits.length) {
 			String split = sqlSplits[splitIndex];
 
-			if (split.equalsIgnoreCase(
-					"from")) {
+			if (split.equalsIgnoreCase("from")) {
 				if (splitIndex < sqlSplits.length - 1) {
 					splitIndex++;
 					inputStoreInfo1 = sqlSplits[splitIndex];
-					LOGGER.debug(
-							"Input store info (1): " + inputStoreInfo1);
+					LOGGER.debug("Input store info (1): " + inputStoreInfo1);
 				}
 			}
-			else if (split.equalsIgnoreCase(
-					"join")) {
+			else if (split.equalsIgnoreCase("join")) {
 				if (splitIndex < sqlSplits.length - 1) {
 					splitIndex++;
 					inputStoreInfo2 = sqlSplits[splitIndex];
-					LOGGER.debug(
-							"Input store info (2): " + inputStoreInfo2);
+					LOGGER.debug("Input store info (2): " + inputStoreInfo2);
 				}
 			}
 
 			splitIndex++;
 		}
 
-		String escapedDelimRegex = java.util.regex.Pattern.quote(
-				STORE_ADAPTER_DELIM);
+		String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
 
 		// Parse SQL for store.adapter
 		if (inputStoreInfo1 != null) {
@@ -200,10 +177,8 @@ public class SparkSqlCommand extends
 
 			String adapterName = null;
 
-			if (inputStoreInfo1.contains(
-					STORE_ADAPTER_DELIM)) {
-				String[] infoParts = inputStoreInfo1.split(
-						escapedDelimRegex);
+			if (inputStoreInfo1.contains(STORE_ADAPTER_DELIM)) {
+				String[] infoParts = inputStoreInfo1.split(escapedDelimRegex);
 
 				if (infoParts.length > 2) {
 					throw new ParameterException(
@@ -214,15 +189,12 @@ public class SparkSqlCommand extends
 				adapterName = infoParts[1];
 			}
 
-			LOGGER.debug(
-					"Input store (1): " + inputStoreName);
-			LOGGER.debug(
-					"Input adapter (1): " + adapterName);
+			LOGGER.debug("Input store (1): " + inputStoreName);
+			LOGGER.debug("Input adapter (1): " + adapterName);
 
 			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configFile)) {
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find input store: " + inputStoreLoader.getStoreName());
 			}
@@ -242,10 +214,8 @@ public class SparkSqlCommand extends
 			String inputStoreName = inputStoreInfo2;
 			String adapterName = null;
 
-			if (inputStoreInfo2.contains(
-					STORE_ADAPTER_DELIM)) {
-				String[] infoParts = inputStoreInfo2.split(
-						escapedDelimRegex);
+			if (inputStoreInfo2.contains(STORE_ADAPTER_DELIM)) {
+				String[] infoParts = inputStoreInfo2.split(escapedDelimRegex);
 
 				if (infoParts.length > 2) {
 					throw new ParameterException(
@@ -256,15 +226,12 @@ public class SparkSqlCommand extends
 				adapterName = infoParts[1];
 			}
 
-			LOGGER.debug(
-					"Input store (2): " + inputStoreName);
-			LOGGER.debug(
-					"Input adapter (2): " + adapterName);
+			LOGGER.debug("Input store (2): " + inputStoreName);
+			LOGGER.debug("Input adapter (2): " + adapterName);
 
 			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configFile)) {
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find input store: " + inputStoreLoader.getStoreName());
 			}
@@ -281,8 +248,7 @@ public class SparkSqlCommand extends
 		if (outputStoreName != null) {
 			final StoreLoader outputStoreLoader = new StoreLoader(
 					outputStoreName);
-			if (!outputStoreLoader.loadFromConfig(
-					configFile)) {
+			if (!outputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
 						"Cannot find output store: " + outputStoreLoader.getStoreName());
 			}
@@ -297,8 +263,7 @@ public class SparkSqlCommand extends
 	public void setParameters(
 			final String sql ) {
 		parameters = new ArrayList<String>();
-		parameters.add(
-				sql);
+		parameters.add(sql);
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {

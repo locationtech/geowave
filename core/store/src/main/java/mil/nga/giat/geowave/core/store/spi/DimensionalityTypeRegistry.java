@@ -35,8 +35,8 @@ public class DimensionalityTypeRegistry
 
 	private static synchronized void initDimensionalityTypeRegistry() {
 		registeredDimensionalityTypes = new HashMap<String, DimensionalityTypeProviderSpi>();
-		final Iterator<DimensionalityTypeProviderSpi> dimensionalityTypesProviders = new SPIServiceRegistry(DimensionalityTypeRegistry.class).load(
-				DimensionalityTypeProviderSpi.class);
+		final Iterator<DimensionalityTypeProviderSpi> dimensionalityTypesProviders = new SPIServiceRegistry(
+				DimensionalityTypeRegistry.class).load(DimensionalityTypeProviderSpi.class);
 		int currentDefaultPriority = Integer.MIN_VALUE;
 		while (dimensionalityTypesProviders.hasNext()) {
 			final DimensionalityTypeProviderSpi dimensionalityTypeProvider = dimensionalityTypesProviders.next();

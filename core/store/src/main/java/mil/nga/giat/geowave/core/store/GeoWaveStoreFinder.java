@@ -323,7 +323,8 @@ public class GeoWaveStoreFinder
 			Map<String, T> registeredFactories ) {
 		if (registeredFactories == null) {
 			registeredFactories = new HashMap<String, T>();
-			final Iterator<T> storeFactories = new SPIServiceRegistry(GeoWaveStoreFinder.class).load(cls);
+			final Iterator<T> storeFactories = new SPIServiceRegistry(
+					GeoWaveStoreFinder.class).load(cls);
 			while (storeFactories.hasNext()) {
 				final T storeFactory = storeFactories.next();
 				if (storeFactory != null) {

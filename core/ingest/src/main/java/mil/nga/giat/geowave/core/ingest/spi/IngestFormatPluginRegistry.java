@@ -27,8 +27,8 @@ public class IngestFormatPluginRegistry
 	@SuppressWarnings("rawtypes")
 	private static void initPluginProviderRegistry() {
 		pluginProviderRegistry = new HashMap<String, IngestFormatPluginProviderSpi<?, ?>>();
-		final Iterator<IngestFormatPluginProviderSpi> pluginProviders = new SPIServiceRegistry(IngestFormatPluginRegistry.class).load(
-				IngestFormatPluginProviderSpi.class);
+		final Iterator<IngestFormatPluginProviderSpi> pluginProviders = new SPIServiceRegistry(
+				IngestFormatPluginRegistry.class).load(IngestFormatPluginProviderSpi.class);
 		while (pluginProviders.hasNext()) {
 			final IngestFormatPluginProviderSpi pluginProvider = pluginProviders.next();
 			pluginProviderRegistry.put(
