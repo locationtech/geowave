@@ -5,15 +5,15 @@
 
 === Overview
 
-Analytics embody algorithms tailored to geospatial data.  Most analytics leverage Hadoop MapReduce for bulk computation.
-Results of analytic jobs consist of vector or raster data stored in GeoWave.  The analytics infrastructure provides tools to
-build algorithms in Spark. For example, a Kryo serializer/deserializer enables exchange of SimpleFeatures and the GeoWaveInputFormat
-supplies data to the Hadoop RDD.
+Analytics embody algorithms tailored to geospatial data.  Most analytics leverage Hadoop MapReduce for bulk computation. Results of analytic jobs consist of vector or raster data stored in GeoWave.  The analytics infrastructure provides tools to build algorithms in Spark. For example, a Kryo serializer/deserializer enables exchange of SimpleFeatures and the GeoWaveInputFormat supplies data to the Hadoop RDD.
 
 [NOTE]
 ====
-GeoWaveInputFormat does not remove duplicate features that reference polygons spanning multiple index regions.
+GeoWaveInputFormat does not remove duplicate features that reference lines and/or polygons spanning multiple index regions. If working with duplication in time ranges, please take a look at the GeoWave https://github.com/locationtech/geowave/blob/master/core/mapreduce/src/main/java/mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.java[GeoWaveDedupeJobRunner, window="_blank"].
+
+It is also important to note that, while duplication can arise as an issue, though if using the XZ-Order SFC (which is used by default for lines and polygons), it does not require duplication. The only time there should be a duplication issue is if you are indexing a time range and the time range spans multiple periods based on your temporal binning strategy. The default periodicity is "YEAR," meaning that a row must be duplicate under default spatial-temporal indexing if you are trying to index a time range that crosses December 31 23:59:59.999 and January 1 00:00:00 of the following year.
 ====
+
 
 The following algorithms are provided.
 
@@ -41,7 +41,7 @@ Building/Developing GeoWave analytics is outside the scope of this document. For
 ====
 
 === Running
-The GeoWave analytical tools are made available through MapReduce and Spark implementations. To run the tools, use the yarn or hadoop system API's, as outlined below.
+The GeoWave analytical tools are made available through MapReduce and Spark implementations. To run the tools, use the yarn or hadoop system APIs, as outlined below.
 [source, bash]
 ----
 yarn jar geowave-tools.jar analytic <algorithm> <options> <store>

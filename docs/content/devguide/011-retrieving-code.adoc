@@ -19,12 +19,12 @@ To download a read-only version of the code repository:
 
 . Locate the green “Clone or download” button near the top right of the file navigation section.
 
-image::Clone_Download_Repo.png[scaledwidth="100%",width="100%",alt="Clone_Download_Repo.png"]
+image::Clone_Download_Repo.png[scaledwidth="100%",width="100%",alt="Clone_Download_Repo.png", title="Clone & Download GeoWave Repository"]
 
 [start=4]
 . Expand the “Clone or download” pane by clicking on the green button labeled "Clone or download".
 
-image::Clone_Download_Expand.png[scaledwidth="50%",width="50%",alt="Clone_Download_Expand.png"]
+image::Clone_Download_Expand.png[scaledwidth="50%",width="50%",alt="Clone_Download_Expand.png", title="Clone & Download GeoWave Source Expanded"]
 
 [start=5]
 . Download the code by clicking on the “Download ZIP” button. Depending on browser settings, the code will either download automatically to the user account’s downloads directory or a prompt will ask for the download destination. If the zip file is automatically downloaded to the downloads directory, manually move the zip file to the intended destination directory.

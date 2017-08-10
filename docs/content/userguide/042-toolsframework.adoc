@@ -8,7 +8,7 @@ A plugin framework (using Service Provider Interface [SPI] based injection) is p
 
 [NOTE]
 ====
-This section assumes that a GeoWave build is available. Building GeoWave from source is outside the scope of this document. For details on generating a GeoWave build, please reference the link:http://locationtech.github.io/geowave/devguide.html#toolsframework[GeoWave Developer Guide, window="_blank"].
+This section assumes that a GeoWave build is available. Building GeoWave from source is outside the scope of this document. For details on generating a GeoWave build, please reference the link:http://locationtech.github.io/geowave/devguide.html#building-code[GeoWave Developer Guide, window="_blank"].
 ====
 
 === GeoWave Command Line Instructions

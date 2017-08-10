@@ -22,7 +22,7 @@ As the name implies, the NumericIndexStrategy was designed for indexing numeric 
 
 The diagram below outlines the hierarchy of the various index strategies currently available within GeoWave.
 
-image::IndexStrategyHierarchy.png[scaledwidth="100%",width="100%",alt="IndexStrategy Hierarchy"]
+image::IndexStrategyHierarchy.png[scaledwidth="75%",width="75%",alt="IndexStrategy Hierarchy", title="IndexStrategy Hierarchy"]
 
 If there is not a suitable index strategy implementation that exists for your data being indexed, one can be developed according to the specific needs of your data and mission. Feel free to reference the strategies described above or any of the examples available.
 

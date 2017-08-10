@@ -16,8 +16,7 @@ Use the GeoWave repo RPM to configure a host and search for GeoWave RPMs to inst
 
 [NOTE]
 ====
-Several of the RPMs (accumulo, hbase, jetty, single-host, and tools) are both GeoWave version and vendor version specific.
-In the examples, below the rpm name geowave-$VERSION-VENDOR_VERSION should be adjusted as needed.
+Several of the RPMs (accumulo, hbase, jetty, single-host, and tools) are both GeoWave version and vendor version specific. In the examples, below the rpm name geowave-$VERSION-VENDOR_VERSION should be adjusted as needed.
 ====
 
 Currently supported distribution vendors through GeoWave include:
@@ -53,7 +52,7 @@ GeoWave RPMs
 | geowave-$VERSION-core                | Core (home directory and geowave user)
 | geowave-$VERSION-docs                | Documentation (HTML, PDF and man pages)
 | geowave-$VERSION-$VENDOR-tools       | Command Line Tools (ingest, etc.)
-| geowave-$VERSION-$VENDOR-jetty       | GeoServer components installed into /usr/local/geowave/geoserver and available at http://FQDN:8000/geoserver/web
+| geowave-$VERSION-$VENDOR-jetty       | GeoServer components installed into /usr/local/geowave/geoserver and available at, e.g., http://localhost:8000/geoserver/web
 | geowave-$VERSION-puppet              | Puppet Scripts
 | geowave-$VERSION-$VENDOR-single-host | All GeoWave components installed on a single host (sometimes useful for development)
 | geowave-repo                         | GeoWave RPM Repo config file

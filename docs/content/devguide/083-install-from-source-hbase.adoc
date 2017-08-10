@@ -8,7 +8,7 @@ This section will outline how to generate an hbase plugin jar, that can be deplo
 [[hbase-versions]]
 ==== HBase Versions
 
-GeoWave has been tested and worked against HBase 1.2.1 and forward. Ensure you've set the desired version in the BUILD_ARGS environment variable.
+GeoWave has been tested and worked against HBase 1.2.1 and forward.
 
 [[create-hbase-plugin]]
 ==== Create HBase Plugin
@@ -17,11 +17,10 @@ From the GeoWave root directory, run the following command to create the hbase p
 
 [source, bash]
 ----
-mvn package -P hbase-container-singlejar $BUILD_ARGS <1> <2>
+mvn package -P hbase-container-singlejar <1>
 
 ----
 <1> You can speed up the build by skipping tests by appending to the command: "-Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true" (no quotes).
-<2> As a reminder, refer to the section on building the GeoWave code for <<012-building-code.adoc#set-env-variables, setting the environment variables>>.
 
 Once the above command is successfully run, the hbase plugin jar file can be found within the 'deploy/target/' directory.
 

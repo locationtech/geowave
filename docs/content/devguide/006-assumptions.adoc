@@ -26,25 +26,16 @@ For a complete reference guide for installing and using Git, please reference ch
 Requires a version of Maven >= 3.2.1
 +
 For a reference guide for getting started with Maven, please reference the online https://maven.apache.org/guides/getting-started/[Maven Getting Started Guide].
++
+.GeoWave has a dependency on the following libraries - handled through Maven:
+. Uzazygezen - https://code.google.com/p/uzaygezen/
+. GeoTools - http://www.geotools.org/
+. Log4J - http://logging.apache.org/log4j/1.2/
 
-* Eclipse IDE
+* http://www.oracle.com/technetwork/articles/javaee/jai-142803.html[Java Advanced Imaging] and https://docs.oracle.com/javase/8/docs/technotes/guides/imageio/[Java Image I/O]
 +
-Eclipse is used as the primarily supported IDE for editing GeoWave-related source code.
-+
-For a comprehensive getting started guide with Eclipse, ranging from downloading and installing the most preferred version to extending capabilities well beyond the use within this guide and project, please reference the https://eclipse.org/users/[Eclipse Getting Started Guide].
+Both are required to be installed on the GeoServer instance(s) as well as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), so this may be skipped in some cases.
 
 === External Components
-Depending on the environment components being used in the development and/or operational environment(s), e.g., requirements, datastores, indices, etc., the following are not all required, though constraints are listed below for which versions are supported by GeoWave.
-
-[options="compact"]
-* http://geoserver.org/[GeoServer] instance >= 2.5.2
-* https://accumulo.apache.org/[Apache Accumulo] version 1.5 or greater is required. 1.5.0, 1.5.1, and 1.6.0 have all
-been tested.
-* https://hbase.apache.org/[Apache HBase] >= 1.2.1
-* http://hadoop.apache.org/[Apache Hadoop] versions 1.x and 2.x
-* http://cloudera.com/content/cloudera/en/home.html[Cloudera] CDH4 and CDH5
-* http://hortonworks.com/hdp/[Hortonworks Data Platform] 2.1+
-* http://www.oracle.com/technetwork/articles/javaee/jai-142803.html[Java Advanced Imaging] and https://docs.oracle.com/javase/8/docs/technotes/guides/imageio/[Java
-Image I/O] are also both required to be installed on the GeoServer instance(s) as well as on the Accumulo nodes. The Accumulo support is
-only required for certain functions (distributed rendering), so this may be skipped in some cases.
+Depending on the environment components that are being developed towards and/or tested against, e.g., requirements, datastores, indices, etc., some external components will be beneficial. While this information is outside the scope of this document, you can find these requirements in the link:http://locationtech.github.io/geowave/userguide.html#assumptions[GeoWave User Guide, window="_blank"].
 

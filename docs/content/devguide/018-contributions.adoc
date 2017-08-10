@@ -1,10 +1,11 @@
 [[contributions]]
 <<<
-== How to Contribute
+[[contributions]]
+=== How to Contribute
 
 GeoWave is an open source project and we welcome contributions from the community.
 
-=== Pull Requests
+==== Pull Requests
 
 Pull requests from non locationtech member must be done though a forked repository.
 

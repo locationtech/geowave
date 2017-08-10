@@ -1,7 +1,7 @@
 [geoserver-transactions]
 <<<
 [geoserver-transactions]
-===== Transactions
+===== WFS-T
 
 Transactions are initiated through a Transaction operation, that contains inserts, updates, and deletes to features. WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent use of a provided _Lock ID_. The GeoWave implementation supports transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a transaction may leave the affected data in an intermediary state. Some deletions, updates, or insertions may not be processed in such a case. The client application must implement its own compensation logic upon receiving a commit-time error response. As expected with Accumulo, operations on a single feature instances are atomic.
 
@@ -9,7 +9,7 @@ Inserted features are buffered prior to commit. The features are bulk fed to the
 
 ===== Lock Management
 
-Lock management supports life-limited locks on feature instances. There are only two supported lock managers: in-memory and Zookeeper. In-memory is suitable for single Geoserver instance installations.
+Lock management supports life-limited locks on feature instances. The only supported lock manager is in-memory, which is suitable for single Geoserver instance installations.
 
 ===== Index Selection
 

@@ -3,13 +3,13 @@
 
 :linkattrs:
 
-== GeoWave Security
+=== GeoWave Security
 
 [[password-security]]
-=== Datastore Passwords
+==== Datastore Passwords
 In order to provide security around account passwords, particularly those entered through command-line, GeoWave is configured to perform encryption on password fields that are configured for datastores or other configured components. To take the topic of passwords even further, GeoWave has also been updated to support multiple options around how to pass in passwords when configuring a new datastore, rather than always having to enter passwords in clear-text at command line.
 
-==== Password Options
+===== Password Options
 .The following options are currently supported for entering passwords into GeoWave:
 * *pass*: __<password>__
 ** This option will allow for a clear-text password to be entered on command-line. It is strongly encouraged not to use this method outside of a local development environment (i.e., NOT in a production environment or where concurrent users are sharing the same system).
@@ -28,7 +28,7 @@ Users can still continue to enter their password in plain text at command line (
 ====
 
 
-=== Password Encryption
+==== Password Encryption
 Passwords are encrypted within GeoWave using a local encryption token key. It is important to not manipulate the key or internal content. By doing so, you are compromising the likelihood of not being able to encrypt new data or decrypt already encrypted data.
 
 [NOTE]
@@ -54,7 +54,7 @@ The above command will re-encrypt all passwords already configured against the n
 This option is only useful to counter the event that only the token key file is compromised. In the event that both the token key file and encrypted password value have been compromised, it is recommended that steps are taken to change the datastore password and re-configure GeoWave to use the new password.
 ====
 
-==== Configuring Console Echo
+===== Configuring Console Echo
 When the 'stdin' option is specified for passwords to be entered at command line, it is recognized that there are circumstances where the console echo is wanted to be enabled (i.e., someone looking over your shoulder), and other times where the console echo is wanted to be disabled.
 
 For configuring the default console echo setting:
@@ -72,7 +72,7 @@ $ geowave config set geowave.console.password.echo.enabled={true|false}
 ----
 If the above is specified, this setting will be applied for passwords when a user is promoted for input. By default, if the passwords console echo is not specified, the system will use the console default echo setting.
 
-==== Enabling/Disabling Password Encryption
+===== Enabling/Disabling Password Encryption
 GeoWave provides the ability to enable or disable password encryption as it is seen necessary. By default, password encryption is enabled, but can be disabled for debugging purposes.
 For configuring the password encryption enabled setting:
 [source, bash]

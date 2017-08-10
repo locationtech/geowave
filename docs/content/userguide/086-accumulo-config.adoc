@@ -1,16 +1,26 @@
 [[accumulo-config]]
 <<<
-== Accumulo Configuration
+=== Apache Accumulo Configuration
 
-=== Overview
+* <<086-accumulo-config.adoc#accumulo-config-overview, Overview>>
+** <<086-accumulo-config.adoc#accumulo-config-overview-procedure, Procedure>>
+* <<086-accumulo-config.adoc#accumulo-config-managing, Managing>>
+* <<086-accumulo-config.adoc#accumulo-config-versioning, Versioning>>
+** <<086-accumulo-config.adoc#accumulo-config-versioning-basic, Basic>>
+** <<086-accumulo-config.adoc#accumulo-config-versioning-advanced, Advanced>>
 
-The two high level tasks to configure Accumulo for use with GeoWave are to
+[[accumulo-config-overview]]
+==== Overview
+
+The two high level tasks to configure Accumulo for use with GeoWave are to:
+
 . Ensure the memory allocations for the master and tablet server processes are adequate
 . Add the GeoWave Accumulo iterator to a classloader. The iterator is a rather large file, so ensure the Accumulo Master process has at least 512m of heap space and the Tablet Server processes have at least 1g of heap space.
 
 The recommended Accumulo configuration for GeoWave requires several manual configuration steps but isolates the GeoWave libraries in application specific classpath(s) reducing the possibility of dependency conflict issues. A single user for all of GeoWave data or a user per data type are two of the many local configuration options. You should just just ensure each namespace containing GeoWave tables is configured to pick up the 'geowave-accumulo.jar'.
 
-==== Procedure
+[[accumulo-config-overview-procedure]]
+===== Procedure
 
 . Create a user and namespace.
 . Grant the user ownership permissions on all tables created within the application namespace.
@@ -34,7 +44,9 @@ exit
 
 These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration, you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.
 
-=== Managing
+
+[[accumulo-config-managing]]
+==== Managing
 
 After installing a number of different iterators, you may want to figure out which iterators have been configured.
 
@@ -46,10 +58,13 @@ accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.conte
 
 You will get back a listing of context classpath override configurations that map the application or user context you configured to a specific iterator jar in HDFS.
 
-=== Versioning
+
+[[accumulo-config-versioning]]
+==== Versioning
 
 It's of critical importance to ensure that the various GeoWave components are all the same version and that your client is of the same version that was used to write the data.
 
+[[accumulo-config-versioning-basic]]
 ==== Basic
 
 The RPM packaged version of GeoWave puts a timestamp in the name so it's pretty easy to verify that you have a matched set of RPMs installed. After an update of the components, you must restart Accumulo to get vfs to download the new versions and this should keep everything synched.
@@ -64,7 +79,8 @@ geowave-0.9.3-apache-accumulo-0.9.3-201602012009.noarch
 geowave-0.9.3-apache-tools-0.9.3-201602012009.noarch
 ----
 
-==== Advanced
+[[accumulo-config-versioning-advanced]]
+===== Advanced
 
 When GeoWave tables are first accessed on a tablet server, the vfs classpath tells Accumulo where to download the jar file from HDFS.
 The jar file is copied into the local /tmp directory (the default general.vfs.cache.dir setting) and loaded onto the classpath.
@@ -98,3 +114,4 @@ sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties 
 <2> The find command will probably locate a number of different versions depending on how often you clean out /tmp.
 
 There may be multiple versions copies present - one per JVM, the error scenario is when a tablet server is missing the correct iterator jar.
+

@@ -1,7 +1,0 @@
-[geoserver-statistics]
-<<<
-[geoserver-statistics]
-==== Statistics
-
-The adapter captures statistics for each numeric, temporal, and geo-spatial attribute. Statistics are used to constrain queries and
-answer inquiries by GeoServer for data ranges, as required for map requests and calibration of zoom levels in OpenLayers.

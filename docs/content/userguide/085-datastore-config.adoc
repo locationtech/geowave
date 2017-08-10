@@ -1,0 +1,11 @@
+[[datastore-config]]
+<<<
+== DataStore Configuration
+This section outlines any particular methods for configurations that are necessary for GeoWave-supported datastores.
+
+GeoWave currently supports the following datastores:
+
+* <<086-accumulo-config.adoc#accumulo-config, Apache Accumulo Configuration>>
+* <<087-bigtable-config.adoc#bigtable-config, Google BigTable Configuration>>
+* <<088-hbase-config.adoc#hbase-config, Apache HBase Configuration>>
+

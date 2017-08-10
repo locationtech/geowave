@@ -1,0 +1,8 @@
+[[bigtable-config]]
+<<<
+
+[[bigtable-config]]
+=== Google BigTable Configuration
+
+There are no additional configuration steps required for Google BigTable, once the RPM has performed the installation.
+

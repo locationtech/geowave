@@ -9,9 +9,7 @@
 
 A GeoWave link:http://puppetlabs.com/[Puppet module^, window="_blank"] has been provided as part of both the tar.gz archive bundle and as an RPM. This module can be used to install the various GeoWave services onto separate nodes in a cluster or all onto a single node for development.
 
-There are a couple of different RPM repo settings that may need setting. As the repo is disabled by default to avoid picking
-up new Accumulo iterator jars without coordinating a service restart, you'll have to enable and then disable in consecutive
-Puppet runs to do the initial install.
+There are a couple of different RPM repo settings that may need setting. As the repo is disabled by default to avoid picking up new Accumulo iterator jars without coordinating a service restart, there is likely some customization required for a particular use case. Class parameters are intended to be overridden to provide extensibility.
 
 === Options
 
@@ -34,12 +32,10 @@ http_port::
 The port on which the Jetty application server will run - defaults to 8080.
 
 repo_base_url::
-Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs.
-The default location is http://s3.amazonaws.com/geowave-rpms/release/noarch/.
+Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs. The default location is http://s3.amazonaws.com/geowave-rpms/release/noarch/.
 
 repo_enabled::
-To pick up an updated Accumulo iterator you'll need to restart the Accumulo service. We don't want to pick up new
-RPMs with something like a yum-cron job without coordinating a restart so the repo is disabled by default.
+To pick up an updated Accumulo iterator you'll need to restart the Accumulo service. We don't want to pick up new RPMs with something like a yum-cron job without coordinating a restart so the repo is disabled by default.
 
 repo_refresh_md::
 The number of seconds before checking for new RPMs. On a production system the default of every 6 hours should be sufficient, but you can lower this down to 0 for a development system on which you wish to pick up new packages as soon as they are made available.
@@ -101,8 +97,7 @@ node 'c1-app-01' {
 
 === Puppet script management
 
-As mentioned in the overview, the scripts are available from within the link:http://locationtech.github.io/geowave/packages.html[GeoWave source tar bundle^, window="_blank"]
-(Search for gz to filter the list). You could also use the RPM package to install and pick up future updates on your puppet server.
+As mentioned in the overview, the scripts are available from within the link:http://locationtech.github.io/geowave/packages.html[GeoWave source tar bundle^, window="_blank"] (Search for gz to filter the list). You could also use the RPM package to install and pick up future updates on your puppet server.
 
 ==== Source Archive
 

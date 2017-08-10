@@ -8,7 +8,7 @@ This section will outline how to generate GeoServer plugin jar, which can be dep
 [[geoserver-versions]]
 ==== GeoServer Versions
 
-GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions, look at the build matrix section of the .travis.yml file in the root directory of the project. All of the examples below use the variable _$BUILD_ARGS_ to represent your choice of all the dependency versions.
+GeoWave has to be built against specific versions of GeoWave and GeoTools. To see the currently supported versions, look at the build matrix section of the .travis.yml file in the root directory of the project. 
 
 [[create-geoserver-plugin]]
 ==== Create GeoServer Plugin
@@ -17,10 +17,9 @@ First we need to build the GeoServer plugin. From the GeoWave root directory, ru
 
 [source, bash]
 ----
-mvn package -P geotools-container-singlejar $BUILD_ARGS <1> <2>
+mvn package -P geotools-container-singlejar <1>
 ----
 <1> You can speed up the build by skipping tests by appending to the command "-Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true" (no quotes)
-<2> As a reminder, refer to the section on building the GeoWave code for  <<012-building-code.adoc#set-env-variables, setting the environment variables>>.
 
 Once the above command is successfully run, the GeoServer plugin jar file can be found within the 'deploy/target/' directory.
 

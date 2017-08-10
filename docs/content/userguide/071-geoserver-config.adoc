@@ -7,7 +7,7 @@ GeoWave can be configured for a GeoServer connection through the GeoServer confi
 
 [source, bash]
 ----
-geowave config geoserver --url {GEOSERVER URL} --name {USERNAME} --pass {PASSWORD}
+geowave config geoserver {GEOSERVER URL} --user {USERNAME} --pass {PASSWORD}
 ----
 
 [frame="topbot", width="100%", cols="15%,10%,75%", grid="rows", options="header"]

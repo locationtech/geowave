@@ -50,25 +50,28 @@ GeoWave stores the information needed to manipulate data, such as configuration 
 GeoWave is designed to operate either in a single-node setup or it can scale out as large as needed to support the amount of data and/or processing resources necessary. By utilizing distributed computing clusters and server-side fine grain filtering, GeoWave is fully capable of performing interactive time and/or location specific queries on datasets containing billions of features with 100 percent accuracy.
 
 == Overview
-For GeoWave users, the primary method of interfacing with GeoWave is through the various Command-Line Interface (CLI) commands and options. Users
-will use GeoWave to store, index, or search multi-dimensional data in a key-value datastore.
+For GeoWave users, the primary method of interfacing with GeoWave is through the various Command-Line Interface (CLI) commands and options. Users will use GeoWave to store, index, or search multi-dimensional data in a key-value datastore.
 
-image::operational_overview.png[scaledwidth="75%",width="75%",alt="Operational Overview"]
+image::operational_overview.png[scaledwidth="75%",width="75%",alt="Operational Overview", title="High-Level Operational Overview"]
 
-This _typically_ involves following these three steps:
+This _typically_ involves these four steps:
 [options="compact"]
 * *Configure*
 +
 Set up/configure a datastore or index on GeoWave for re-use across various operations as needed.
-* *Ingest*/*Index*/*Process*
+* *Ingest*/*Index*
 +
-Ingest, or Index, data within a specific store or index, or process data using a distributed processing engine (e.g., MapReduce, Spark)
+Ingest, or Index, data into a specific store (e.g., Accumulo, HBase)
+* *Process*
++
+Process data using a distributed processing engine (e.g. MapReduce, Spark)
 * *Query*/*Discover*
 +
 Search/Query or Discover data ingested, indexed, or processed/transformed through GeoWave operations. A common data discovery tool used is http://geoserver.org/[GeoServer^], which interfaces with GeoWave through the plugin, for interfacing with the selected datastore, e.g., Accumulo or HBase.
 
 GeoWave uses tiered, gridded, Space Filling Curves (SFCs) to index data into your desired key-value store. The indexing information is stored in a generic key structure that can also be used for server-side processing. This architecture allows query, processing, and rendering times to be reduced by multiple orders of magnitude.
 
-image::tiered.png[scaledwidth="50%",width="50%",alt="Tiered"]
+image::tiered.png[scaledwidth="50%",width="50%",alt="Tiered", title="Tiered, Space Filling Curves"]
 
 If there are questions or issues encountered, or topics of interest that could be expounded on, please create an issue within the https://github.com/locationtech/geowave/issues[GeoWave project GitHub page].
+

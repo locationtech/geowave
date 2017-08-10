@@ -20,8 +20,8 @@ Re-computation of statistics is required in three circumstances:
 
 Statistics retain the same visibility constraints as the associated attributes. Thus, there is a set of statistics for each unique constraint. The statistics store answers each statistics inquiry for a given adapter with only those statistics matching the authorizations of the requester. The statistics store merges authorized statistics covering the same attribute.
 
-image::stats_merge.png[scaledwidth="75%",width="75%",alt="Statistics Merge"]
+image::stats_merge.png[scaledwidth="75%",width="75%",alt="Statistics Merge", title="Statistics Merge"]
 
 === Table Structure
 
-image::stats.png[scaledwidth="75%",width="75%",alt="Statistics Structure"]
+image::stats.png[scaledwidth="75%",width="75%",alt="Statistics Structure", title="Statistics Structure"]

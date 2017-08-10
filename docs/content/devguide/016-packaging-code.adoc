@@ -14,13 +14,9 @@ When the GeoWave code is ready for packaging and deployment, the code can be eas
 
 [source, bash]
 ----
-$ mvn package -P geowave-tools-singlejar $BUILD_ARGS
+$ mvn package -P geowave-tools-singlejar <1>
 ----
-
-[NOTE]
-====
-As a reminder, refer to the section on building the GeoWave code for  <<012-building-code.adoc#set-env-variables, setting the environment variables>>.
-====
+<1> You can speed up the build by skipping tests by adding -Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true
 
 This process will take a minute or two to build.
 

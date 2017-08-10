@@ -57,14 +57,17 @@ For GeoWave users, the primary method of interfacing with GeoWave is through the
 
 image::operational_overview.png[scaledwidth="75%",width="75%",alt="Operational Overview"]
 
-This _typically_ involves these three steps:
+This _typically_ involves these four steps:
 [options="compact"]
 * *Configure*
 +
 Set up/configure a datastore or index on GeoWave for re-use across various operations as needed.
-* *Ingest*/*Index*/*Process*
+* *Ingest*/*Index*
 +
-Ingest, or Index, data within a specific store or index, or process data using a distributed processing engine (e.g. MapReduce, Spark)
+Ingest, or Index, data into a specific store (e.g., Accumulo, HBase)
+* *Process*
++
+Process data using a distributed processing engine (e.g. MapReduce, Spark)
 * *Query*/*Discover*
 +
 Search/Query or Discover data ingested, indexed, or processed/transformed through GeoWave operations. A common data discovery tool used is link:http://geoserver.org/[GeoServer^, window="_blank"], which interfaces with GeoWave through the plugin, for interfacing with the selected datastore, e.g., Accumulo or HBase.
