@@ -46,11 +46,14 @@ public class AccumuloMiniCluster
 		final boolean interactive = (System.getProperty("interactive") != null) ? Boolean.parseBoolean(System
 				.getProperty("interactive")) : true;
 
-		final String password = System.getProperty("password");
+		final String password = System.getProperty(
+				"password",
+				"secret");
 
 		final File tempDir = Files.createTempDir();
-		final String instanceName = (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
-				: "geowave";
+		final String instanceName = System.getProperty(
+				"instanceName",
+				"accumulo");
 		final MiniAccumuloConfigImpl miniAccumuloConfig = new MiniAccumuloConfigImpl(
 				tempDir,
 				password).setNumTservers(
