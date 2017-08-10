@@ -1,0 +1,26 @@
+[[hbase-plugin]]
+<<<
+[[hbase-plugin]]
+=== HBase Plugin
+
+This section will outline how to generate an hbase plugin jar, that can be deployed and run on either a single node or an operational and distributed cluster for interacting with HBase within GeoWave.
+
+[[hbase-versions]]
+==== HBase Versions
+
+GeoWave has been tested and worked against HBase 1.2.1 and forward.
+
+[[create-hbase-plugin]]
+==== Create HBase Plugin
+
+From the GeoWave root directory, run the following command to create the hbase plugin:
+
+[source, bash]
+----
+mvn package -P hbase-container-singlejar <1>
+
+----
+<1> You can speed up the build by skipping tests by appending to the command: "-Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true" (no quotes).
+
+Once the above command is successfully run, the hbase plugin jar file can be found within the 'deploy/target/' directory.
+

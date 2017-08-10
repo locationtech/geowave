@@ -1,35 +1,53 @@
 [[remote-commands]]
+<<<
 
+[[remote-commands]]
 === Remote Commands
 
-Operations to manage a remote store
+Operations to manage a remote store (Required options are designated with an *)
 
+.Commands:
+* <<020-remote-commands.adoc#remote-calcstat, Calcstat>>
+* <<020-remote-commands.adoc#remote-clear, Clear>>
+* <<020-remote-commands.adoc#remote-listadapter, ListAdapter>>
+* <<020-remote-commands.adoc#remote-listindex, ListIndex>>
+* <<020-remote-commands.adoc#remote-liststats, ListStats>>
+* <<020-remote-commands.adoc#remote-recalcstats, ReCalcStats>>
+* <<020-remote-commands.adoc#remote-rmstat, RmStat>>
+
+[[remote-calcstat]]
 ==== *geowave remote calcstat*
 
 include::manpages/geowave-calcstat.txt[]
 
+[[remote-clear]]
 ==== *geowave remote clear*
 
 include::manpages/geowave-clear.txt[]
 
+[[remote-listadapter]]
 ==== *geowave remote listadapter*
 
 include::manpages/geowave-listadapter.txt[]
 
+[[remote-listindex]]
 ==== *geowave remote listindex*
 
 include::manpages/geowave-listindex.txt[]
 
+[[remote-liststats]]
 ==== *geowave remote liststats*
 
 include::manpages/geowave-liststats.txt[]
 
+[[remote-recalcstats]]
 ==== *geowave remote recalcstats*
 
 include::manpages/geowave-recalcstats.txt[]
 
+[[remote-rmstat]]
 ==== *geowave remote rmstat*
 
 include::manpages/geowave-rmstat.txt[]
 
---- +
+'''

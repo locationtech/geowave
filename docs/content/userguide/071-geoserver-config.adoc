@@ -1,0 +1,50 @@
+[geoserver-config]
+<<<
+
+==== GeoServer Configuration
+
+GeoWave can be configured for a GeoServer connection through the GeoServer config command line interface (CLI) operation.
+
+[source, bash]
+----
+geowave config geoserver {GEOSERVER URL} --user {USERNAME} --pass {PASSWORD}
+----
+
+[frame="topbot", width="100%", cols="15%,10%,75%", grid="rows", options="header"]
+|==========================
+| Argument    | Required | Description
+| --url       | True     | GeoServer URL (for example http://localhost:8080/geoserver), or simply host:port and appropriate assumptions are made
+| --username  | True     | GeoServer User
+| --password  | True     | GeoServer Password - Refer to the <<007-security.adoc#password-security, password security>> section for more details and options
+| --workspace | False    | GeoServer Default Workspace
+|==========================
+
+GeoWave supports connecting to GeoServer through both HTTP and HTTPS (HTTP + SSL) connections. If connecting to GeoServer through an HTTP connection (e.g., http://localhost:8080/geoserver), the command above is sufficient.
+
+===== GeoServer SSL Connection Properties
+If connecting to GeoServer through a Secure Sockets Layer (SSL) connection over HTTPS (e.g., https://localhost:8443/geoserver), some additional configuration options need to be specified, in order for the system to properly establish the secure connection’s SSL parameters. Depending on the particular SSL configuration through which the GeoServer server is being connected, you will need to specify which parameters are necessary.
+
+[NOTE]
+====
+Not all SSL configuration settings may be necessary, as it depends on the setup of the SSL connection through which GeoServer is hosted. Contact your GeoServer administrator for SSL connection related details.
+====
+
+[frame="topbot", width="100%", cols="30%,70%", grid="rows", options="header"]
+|==========================
+| SSL Argument               | Description
+| --sslKeyManagerAlgorithm   | Specify the algorithm to use for the keystore.
+| --sslKeyManagerProvider    | Specify the key manager factory provider.
+| --sslKeyPassword           | Specify the password to be used to access the server certificate from the specified keystore file. - Refer to the <<007-security.adoc#password-security, password security>> section for more details and options.
+| --sslKeyStorePassword      | Specify the password to use to access the keystore file. - Refer to the <<007-security.adoc#password-security, password security>> section for more details and options.
+| --sslKeyStorePath          | Specify the absolute path to where the keystore file is located on system. The keystore contains the server certificate to be loaded.
+| --sslKeyStoreProvider      | Specify the name of the keystore provider to be used for the server certificate.
+| --sslKeyStoreType          | The type of keystore file to be used for the server certificate, e.g., JKS (Java KeyStore).
+| --sslSecurityProtocol      | Specify the Transport Layer Security (TLS) protocol to use when connecting to the server. By default, the system will use TLS.
+| --sslTrustManagerAlgorithm | Specify the algorithm to use for the truststore.
+| --sslTrustManagerProvider  | Specify the trust manager factory provider.
+| --sslTrustStorePassword    | Specify the password to use to access the truststore file. - Refer to the <<007-security.adoc#password-security, password security>> section for more details and options
+| --sslTrustStorePath        | Specify the absolute path to where truststore file is located on system. The truststore file is used to validate client certificates.
+| --sslTrustStoreProvider    | Specify the name of the truststore provider to be used for the server certificate.
+| --sslTrustStoreType        | Specify the type of key store used for the truststore, e.g., JKS (Java KeyStore).
+|==========================
+

@@ -1,0 +1,6 @@
+[[appendix-version]]
+<<<
+=== Version
+
+This documentation was generated for GeoWave version 0.9.5-SNAPSHOT from commit bcd8b4dd37a3b4a133524a0dd1d2c7aa766ea441.
+

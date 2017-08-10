@@ -1,0 +1,28 @@
+[[accumulo-plugin]]
+<<<
+[[accumulo-plugin]]
+=== Accumulo Plugin
+
+This section will outline how to generate an Accumulo plugin jar, that can be either deployed and run on either a single node or an operational and distributed cluster for interacting with Accumulo within GeoWave.
+
+[[accumulo-versions]]
+==== Accumulo Versions
+
+GeoWave has been tested and worked against Accumulo 1.5.0 through 1.7.2.
+
+[[create-accumulo-plugin]]
+==== Create Accumulo Plugin
+
+From the GeoWave root directory, run the following command to create the accumulo plugin:
+
+[source, bash]
+----
+mvn package -P accumulo-container-singlejar <1>
+
+----
+<1> You can speed up the build by skipping tests by appending to the command: "-Dfindbugs.skip=true -Dformatter.skip=true -DskipITs=true -DskipTests=true" (no quotes).
+
+Once the above command is successfully run, the Accumulo plugin jar file can be found within the 'deploy/target/' directory.
+
+For details on configuring Accumulo, please refer to the <<091-accumulo-config.adoc#accumulo-config, Accumulo Configuration section>>.
+

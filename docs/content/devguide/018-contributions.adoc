@@ -1,0 +1,20 @@
+[[contributions]]
+<<<
+[[contributions]]
+=== How to Contribute
+
+GeoWave is an open source project and we welcome contributions from the community.
+
+==== Pull Requests
+
+Pull requests from non locationtech member must be done though a forked repository.
+
+To create a new fork, just click the the "Fork" button at the top of the GeoWave GitHub page. You can now submit pull requests from your working branch on your fork directly to the master branch on locationtech.
+
+GeoWave uses a Maven plugin formatter to keep all of our code standardized. You should run a Maven install immediately prior to committing and pushing changes.
+
+Prior to submitting a pull request, please squash down your commits into one. This will help keep our commit history clean and will cut down on "in progress commits" that don't relay any helpful information in the future.
+
+All pull request contributions to this project will be released under the Apache 2.0 license.
+
+Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see __17 USC 101__); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.

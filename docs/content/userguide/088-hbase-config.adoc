@@ -1,0 +1,8 @@
+[[hbase-config]]
+<<<
+
+[[hbase-config]]
+=== Apache HBase Configuration
+
+There are no additional configuration steps required for Apache HBase, once the RPM has performed the installation.
+

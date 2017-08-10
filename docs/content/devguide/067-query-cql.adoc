@@ -1,0 +1,13 @@
+[[query-cql]]
+<<<
+[[query-cql]]
+=== Contextual Query Language
+
+:linkattrs:
+
+Queries are structured implementing the Contextual Query Language (CQL), formerly known/referred to as the Common Query Language. CQL was developed with the intent of being a formalized representation for queries in various databases or for other information in storage systems. It was intended to make queries more human readable and understandable while still maintaining the complexity that is often necessary.
+
+CQL is used primarily by GeoServer for performing filters and queries on GeoWave data. For more details on this, please refer to the link:http://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html[GeoServer tutorials, window="_blank"].
+
+For more information on the CQL specifications, please reference the link:http://www.loc.gov/standards/sru/cql/[official Library of Congress CQL standards, window="_blank"] website. Additionally, examples and details on the Query Syntax can be found in the link:http://www.loc.gov/standards/sru/cql/spec.html[CQL specs section, window="_blank"].
+
