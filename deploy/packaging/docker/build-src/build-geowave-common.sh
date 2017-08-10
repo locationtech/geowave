@@ -20,7 +20,7 @@ echo "---------------------------------------------------------------"
 echo "         Building GeoWave Common"
 echo "---------------------------------------------------------------"
 mkdir -p $WORKSPACE/deploy/target
-GEOWAVE_VERSION_STR="$(mvn -q -o -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec)"
+GEOWAVE_VERSION_STR="$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec)"
 GEOWAVE_VERSION="$(echo ${GEOWAVE_VERSION_STR} | sed -e 's/"//g' -e 's/-SNAPSHOT//g')"
 echo $GEOWAVE_VERSION > $WORKSPACE/deploy/target/version.txt
 if [[ "$GEOWAVE_VERSION_STR" =~ "-SNAPSHOT" ]]
@@ -35,8 +35,8 @@ else
 fi
 # Build and archive HTML/PDF docs
 if [[ ! -f $WORKSPACE/target/site-${GEOWAVE_VERSION}.tar.gz ]]; then
-    mvn -o -q javadoc:aggregate $BUILD_ARGS "$@"
-    mvn -o -q -P pdfs,epubs,html -pl docs install $BUILD_ARGS "$@"
+    mvn -q javadoc:aggregate $BUILD_ARGS "$@"
+    mvn -q -P pdfs,epubs,html -pl docs install $BUILD_ARGS "$@"
     tar -czf $WORKSPACE/target/site-${GEOWAVE_VERSION}.tar.gz -C $WORKSPACE/target site
 fi
 
