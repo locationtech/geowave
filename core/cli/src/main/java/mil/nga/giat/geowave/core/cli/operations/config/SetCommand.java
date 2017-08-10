@@ -94,7 +94,7 @@ public class SetCommand extends
 			// check if encryption is enabled in configuration
 			if (Boolean.parseBoolean(existingProps.getProperty(
 					Constants.ENCRYPTION_ENABLED_KEY,
-					"true"))) {
+					Constants.ENCRYPTION_ENABLED_DEFAULT))) {
 				try {
 					File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(getGeoWaveConfigFile());
 					value = SecurityUtils.encryptAndHexEncodeValue(
@@ -109,7 +109,7 @@ public class SetCommand extends
 				}
 			}
 			else {
-				LOGGER.warn(
+				LOGGER.debug(
 						"Value was set as a password, though encryption is currently disabled, so value was not encrypted. "
 								+ "Please enable encryption and re-try.\n"
 								+ "Note: To enable encryption, run the following command: geowave config set {}=true",

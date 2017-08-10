@@ -193,7 +193,7 @@ public class ConfigOptions
 			// to be explicitly disabled
 			if (Boolean.parseBoolean(properties.getProperty(
 					Constants.ENCRYPTION_ENABLED_KEY,
-					"true"))) {
+					Constants.ENCRYPTION_ENABLED_DEFAULT))) {
 				// check if any values exist that need to be encrypted before
 				// written to properties
 				if (clazz != null) {
