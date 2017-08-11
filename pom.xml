@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.5</version>
+	<version>0.9.6-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -29,7 +29,7 @@
 	<scm>
 		<url>https://github.com/locationtech/geowave.git</url>
 		<connection>scm:git:https://github.com/locationtech/geowave.git</connection>
-		<tag>v0.9.5</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<properties>
 		<spark.version>2.2.0</spark.version>
