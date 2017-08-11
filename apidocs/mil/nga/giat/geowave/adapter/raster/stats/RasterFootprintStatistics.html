@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</dd>
 </dl>
 <hr>
 <br>
@@ -161,16 +161,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colFirst" scope="col">Modifier</th>
-<th class="colLast" scope="col">Constructor and Description</th>
+<th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/RasterFootprintStatistics.html#RasterFootprintStatistics--">RasterFootprintStatistics</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/RasterFootprintStatistics.html#RasterFootprintStatistics--">RasterFootprintStatistics</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/RasterFootprintStatistics.html#RasterFootprintStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">RasterFootprintStatistics</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/stats/RasterFootprintStatistics.html#RasterFootprintStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">RasterFootprintStatistics</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -264,7 +261,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <ul class="blockList">
 <li class="blockList">
 <h4>RasterFootprintStatistics</h4>
-<pre>protected&nbsp;RasterFootprintStatistics()</pre>
+<pre>public&nbsp;RasterFootprintStatistics()</pre>
 </li>
 </ul>
 <a name="RasterFootprintStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">
@@ -291,7 +288,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
 <div class="block">Convert fields and data within an object to binary form for transmission
  or storage.</div>
 <dl>
@@ -308,7 +305,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/st
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
 <div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 </li>
 </ul>

@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -135,16 +135,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colFirst" scope="col">Modifier</th>
-<th class="colLast" scope="col">Constructor and Description</th>
+<th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributedRenderResult.CompositeGroupResult.html#CompositeGroupResult--">CompositeGroupResult</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributedRenderResult.CompositeGroupResult.html#CompositeGroupResult--">CompositeGroupResult</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributedRenderResult.CompositeGroupResult.html#CompositeGroupResult-mil.nga.giat.geowave.adapter.vector.render.PersistableComposite-java.util.List-">CompositeGroupResult</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/PersistableComposite.html" title="class in mil.nga.giat.geowave.adapter.vector.render">PersistableComposite</a>&nbsp;composite,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/DistributedRenderResult.CompositeGroupResult.html#CompositeGroupResult-mil.nga.giat.geowave.adapter.vector.render.PersistableComposite-java.util.List-">CompositeGroupResult</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/PersistableComposite.html" title="class in mil.nga.giat.geowave.adapter.vector.render">PersistableComposite</a>&nbsp;composite,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/PersistableRenderedImage.html" title="class in mil.nga.giat.geowave.adapter.vector.render">PersistableRenderedImage</a>,<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/render/PersistableComposite.html" title="class in mil.nga.giat.geowave.adapter.vector.render">PersistableComposite</a>&gt;&gt;&nbsp;orderedStyles)</code>&nbsp;</td>
 </tr>
 </table>
@@ -207,7 +204,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <ul class="blockList">
 <li class="blockList">
 <h4>CompositeGroupResult</h4>
-<pre>protected&nbsp;CompositeGroupResult()</pre>
+<pre>public&nbsp;CompositeGroupResult()</pre>
 </li>
 </ul>
 <a name="CompositeGroupResult-mil.nga.giat.geowave.adapter.vector.render.PersistableComposite-java.util.List-">
@@ -235,12 +232,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
 <div class="block">Convert fields and data within an object to binary form for transmission
  or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array of bytes representing a binary stream representation of
          the object.</dd>
@@ -254,11 +251,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
 <div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></code></dd>
 </dl>
 </li>
 </ul>

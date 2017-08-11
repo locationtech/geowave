@@ -410,6 +410,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
+<!-- docinfo.html -->
+<link rel="icon"
+type="image/png"
+href="images/geowave-icon-logo-small.png">
 </head>
 <body class="book toc2 toc-right">
 <div id="header">
@@ -433,6 +437,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#config-commands">Config Commands</a></li>
 <li><a href="#ingest-commands">Ingest Commands</a></li>
 <li><a href="#remote-commands">Remote Commands</a></li>
+<li><a href="#analytic-commands">Analytic Commands</a></li>
 </ul>
 </li>
 </ul>
@@ -484,11 +489,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>GeoWave supports a few extra commands that can be used for informational purposes to debug
 or explore command usage.</p>
 </div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#debug">Debug</a></p>
+</li>
+<li>
+<p><a href="#version">Version</a></p>
+</li>
+<li>
+<p><a href="#help">Help</a></p>
+</li>
+<li>
+<p><a href="#explain">Explain</a></p>
+</li>
+</ul>
+</div>
 <div class="sect3">
-<h4 id="debug-flag-debug"><a class="anchor" href="#debug-flag-debug"></a>Debug Flag (--debug)</h4>
+<h4 id="debug"><a class="anchor" href="#debug"></a>Debug Flag (--debug)</h4>
 <div class="paragraph">
 <p>Use the debug flag to increase the debug logging output by GeoWave on the console to DEBUG.  By default, it is
-set to WARN.  This flag must come right after 'geowave' and before any subcommand:</p>
+set to WARN. This flag must come right after 'geowave' and before any subcommand:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -497,7 +519,7 @@ set to WARN.  This flag must come right after 'geowave' and before any subcomman
 </div>
 </div>
 <div class="sect3">
-<h4 id="version-flag-version"><a class="anchor" href="#version-flag-version"></a>Version Flag (--version)</h4>
+<h4 id="version"><a class="anchor" href="#version"></a>Version Flag (--version)</h4>
 <div class="paragraph">
 <p>The version flag will output the build arguments that were used to build GeoWave, as well as
 the version of the GeoWave tools jar you&#8217;re using:</p>
@@ -509,9 +531,9 @@ the version of the GeoWave tools jar you&#8217;re using:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="help-command"><a class="anchor" href="#help-command"></a>Help Command</h4>
+<h4 id="help"><a class="anchor" href="#help"></a>Help Command</h4>
 <div class="paragraph">
-<p>The help command will show arguments and their defaults.  It can be prepended to any GeoWave command.
+<p>The help command will show arguments and their defaults. It can be prepended to any GeoWave command.
 If you use it while also specifying a sub-command and its arguments, that command&#8217;s help information
 will be displayed:</p>
 </div>
@@ -522,17 +544,18 @@ will be displayed:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="explain-command"><a class="anchor" href="#explain-command"></a>Explain Command</h4>
+<h4 id="explain"><a class="anchor" href="#explain"></a>Explain Command</h4>
 <div class="paragraph">
 <p>The explain command will show a simplified tabular view of the arguments and their current values.
-Use this to determine what values are being passed to GeoWave.  It also shows hidden parameters and
-their values, if there are any.  An example would be additional Accumulo options:</p>
+Use this to determine what values are being passed to GeoWave. It also shows hidden parameters and
+their values, if there are any. An example would be additional Accumulo options:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave explain config addstore -t accumulo</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect2">
@@ -540,8 +563,43 @@ their values, if there are any.  An example would be additional Accumulo options
 <div class="paragraph">
 <p>Commands that affect local configuration only (Required options are designated with an *)</p>
 </div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#config-addindex">AddIndex</a></p>
+</li>
+<li>
+<p><a href="#config-addindexgrp">AddIndexGrp</a></p>
+</li>
+<li>
+<p><a href="#config-addstore">AddStore</a></p>
+</li>
+<li>
+<p><a href="#config-cpindex">CpIndex</a></p>
+</li>
+<li>
+<p><a href="#config-cpstore">CpStore</a></p>
+</li>
+<li>
+<p><a href="#config-list">List</a></p>
+</li>
+<li>
+<p><a href="#config-rmindex">RmIndex</a></p>
+</li>
+<li>
+<p><a href="#config-rmindexgrp">RmIndexGrp</a></p>
+</li>
+<li>
+<p><a href="#config-rmstore">RmStore</a></p>
+</li>
+<li>
+<p><a href="#config-set">Set</a></p>
+</li>
+</ul>
+</div>
 <div class="sect3">
-<h4 id="strong-geowave-config-addindex-strong"><a class="anchor" href="#strong-geowave-config-addindex-strong"></a><strong>geowave config addindex</strong></h4>
+<h4 id="config-addindex"><a class="anchor" href="#config-addindex"></a><strong>geowave config addindex</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -796,7 +854,7 @@ behavior is to handle any geometry and time ranges well.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-addindexgrp-strong"><a class="anchor" href="#strong-geowave-config-addindexgrp-strong"></a><strong>geowave config addindexgrp</strong></h4>
+<h4 id="config-addindexgrp"><a class="anchor" href="#config-addindexgrp"></a><strong>geowave config addindexgrp</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -824,7 +882,7 @@ This acts as a convenience for re-using multiple indices together on ingest.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-addstore-strong"><a class="anchor" href="#strong-geowave-config-addstore-strong"></a><strong>geowave config addstore</strong></h4>
+<h4 id="config-addstore"><a class="anchor" href="#config-addstore"></a><strong>geowave config addstore</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -997,7 +1055,7 @@ This acts as a convenience for re-using multiple indices together on ingest.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-cpindex-strong"><a class="anchor" href="#strong-geowave-config-cpindex-strong"></a><strong>geowave config cpindex</strong></h4>
+<h4 id="config-cpindex"><a class="anchor" href="#config-cpindex"></a><strong>geowave config cpindex</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1065,7 +1123,7 @@ It is possible to override values as you copy, such as cpindex old new --gwNames
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-cpstore-strong"><a class="anchor" href="#strong-geowave-config-cpstore-strong"></a><strong>geowave config cpstore</strong></h4>
+<h4 id="config-cpstore"><a class="anchor" href="#config-cpstore"></a><strong>geowave config cpstore</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1104,7 +1162,7 @@ It is possible to override values as you copy, such as cpstore old new --gwNames
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-list-strong"><a class="anchor" href="#strong-geowave-config-list-strong"></a><strong>geowave config list</strong></h4>
+<h4 id="config-list"><a class="anchor" href="#config-list"></a><strong>geowave config list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1145,7 +1203,7 @@ the other or a particular store/index name to further isolate the list).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-rmindex-strong"><a class="anchor" href="#strong-geowave-config-rmindex-strong"></a><strong>geowave config rmindex</strong></h4>
+<h4 id="config-rmindex"><a class="anchor" href="#config-rmindex"></a><strong>geowave config rmindex</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1172,7 +1230,7 @@ the other or a particular store/index name to further isolate the list).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-rmindexgrp-strong"><a class="anchor" href="#strong-geowave-config-rmindexgrp-strong"></a><strong>geowave config rmindexgrp</strong></h4>
+<h4 id="config-rmindexgrp"><a class="anchor" href="#config-rmindexgrp"></a><strong>geowave config rmindexgrp</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1199,7 +1257,7 @@ the other or a particular store/index name to further isolate the list).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-rmstore-strong"><a class="anchor" href="#strong-geowave-config-rmstore-strong"></a><strong>geowave config rmstore</strong></h4>
+<h4 id="config-rmstore"><a class="anchor" href="#config-rmstore"></a><strong>geowave config rmstore</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1226,7 +1284,7 @@ the other or a particular store/index name to further isolate the list).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-config-set-strong"><a class="anchor" href="#strong-geowave-config-set-strong"></a><strong>geowave config set</strong></h4>
+<h4 id="config-set"><a class="anchor" href="#config-set"></a><strong>geowave config set</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1252,9 +1310,8 @@ This can be useful if you want to update a particular property of a index or sto
 <div class="paragraph">
 <p>There are currently no options for this command</p>
 </div>
-<div class="paragraph">
-<p>---<br></p>
-</div>
+<hr>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect2">
@@ -1262,8 +1319,34 @@ This can be useful if you want to update a particular property of a index or sto
 <div class="paragraph">
 <p>Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave (Required options are designated with an *)</p>
 </div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#ingest-listformat">ListFormat</a></p>
+</li>
+<li>
+<p><a href="#ingest-localToGW">LocalToGW</a></p>
+</li>
+<li>
+<p><a href="#ingest-localToMrGW">LocalToMRGW</a></p>
+</li>
+<li>
+<p><a href="#ingest-localToHdfs">LocalToHdfs</a></p>
+</li>
+<li>
+<p><a href="#ingest-localToKafka">LocalToKafka</a></p>
+</li>
+<li>
+<p><a href="#ingest-kafkaToGW">KafkaToGW</a></p>
+</li>
+<li>
+<p><a href="#ingest-mrToGW">MRToGW</a></p>
+</li>
+</ul>
+</div>
 <div class="sect3">
-<h4 id="strong-geowave-ingest-listformat-strong"><a class="anchor" href="#strong-geowave-ingest-listformat-strong"></a><strong>geowave ingest listformat</strong></h4>
+<h4 id="ingest-listformat"><a class="anchor" href="#ingest-listformat"></a><strong>geowave ingest listformat</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1290,7 +1373,7 @@ This can be useful if you want to update a particular property of a index or sto
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-ingest-localtogw-strong"><a class="anchor" href="#strong-geowave-ingest-localtogw-strong"></a><strong>geowave ingest localToGW</strong></h4>
+<h4 id="ingest-localToGW"><a class="anchor" href="#ingest-localToGW"></a><strong>geowave ingest localToGW</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1365,7 +1448,7 @@ formats), if not set all available ingest formats will be used</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-ingest-localtomrgw-strong"><a class="anchor" href="#strong-geowave-ingest-localtomrgw-strong"></a><strong>geowave ingest localToMrGW</strong></h4>
+<h4 id="ingest-localToMrGW"><a class="anchor" href="#ingest-localToMrGW"></a><strong>geowave ingest localToMrGW</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1447,7 +1530,7 @@ formats), if not set all available ingest formats will be used</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-ingest-localtohdfs-strong"><a class="anchor" href="#strong-geowave-ingest-localtohdfs-strong"></a><strong>geowave ingest localToHdfs</strong></h4>
+<h4 id="ingest-localToHdfs"><a class="anchor" href="#ingest-localToHdfs"></a><strong>geowave ingest localToHdfs</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1496,7 +1579,7 @@ formats), if not set all available ingest formats will be used</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-ingest-localtokafka-strong"><a class="anchor" href="#strong-geowave-ingest-localtokafka-strong"></a><strong>geowave ingest localToKafka</strong></h4>
+<h4 id="ingest-localToKafka"><a class="anchor" href="#ingest-localToKafka"></a><strong>geowave ingest localToKafka</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1618,7 +1701,7 @@ returns the same byte[].</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-ingest-kafkatogw-strong"><a class="anchor" href="#strong-geowave-ingest-kafkatogw-strong"></a><strong>geowave ingest kafkaToGW</strong></h4>
+<h4 id="ingest-kafkaToGW"><a class="anchor" href="#ingest-kafkaToGW"></a><strong>geowave ingest kafkaToGW</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1792,7 +1875,7 @@ hostname1:port1,hostname2:port2,hostname3:port3.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-ingest-mrtogw-strong"><a class="anchor" href="#strong-geowave-ingest-mrtogw-strong"></a><strong>geowave ingest mrToGW</strong></h4>
+<h4 id="ingest-mrToGW"><a class="anchor" href="#ingest-mrToGW"></a><strong>geowave ingest mrToGW</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1872,18 +1955,43 @@ formats), if not set all available ingest formats will be used</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>---<br></p>
-</div>
+<hr>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="remote-commands"><a class="anchor" href="#remote-commands"></a>Remote Commands</h3>
 <div class="paragraph">
-<p>Operations to manage a remote store</p>
+<p>Operations to manage a remote store (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#remote-calcstat">Calcstat</a></p>
+</li>
+<li>
+<p><a href="#remote-clear">Clear</a></p>
+</li>
+<li>
+<p><a href="#remote-listadapter">ListAdapter</a></p>
+</li>
+<li>
+<p><a href="#remote-listindex">ListIndex</a></p>
+</li>
+<li>
+<p><a href="#remote-liststats">ListStats</a></p>
+</li>
+<li>
+<p><a href="#remote-recalcstats">ReCalcStats</a></p>
+</li>
+<li>
+<p><a href="#remote-rmstat">RmStat</a></p>
+</li>
+</ul>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-remote-calcstat-strong"><a class="anchor" href="#strong-geowave-remote-calcstat-strong"></a><strong>geowave remote calcstat</strong></h4>
+<h4 id="remote-calcstat"><a class="anchor" href="#remote-calcstat"></a><strong>geowave remote calcstat</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1922,7 +2030,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-remote-clear-strong"><a class="anchor" href="#strong-geowave-remote-clear-strong"></a><strong>geowave remote clear</strong></h4>
+<h4 id="remote-clear"><a class="anchor" href="#remote-clear"></a><strong>geowave remote clear</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1949,7 +2057,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-remote-listadapter-strong"><a class="anchor" href="#strong-geowave-remote-listadapter-strong"></a><strong>geowave remote listadapter</strong></h4>
+<h4 id="remote-listadapter"><a class="anchor" href="#remote-listadapter"></a><strong>geowave remote listadapter</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -1976,7 +2084,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-remote-listindex-strong"><a class="anchor" href="#strong-geowave-remote-listindex-strong"></a><strong>geowave remote listindex</strong></h4>
+<h4 id="remote-listindex"><a class="anchor" href="#remote-listindex"></a><strong>geowave remote listindex</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -2003,7 +2111,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-remote-liststats-strong"><a class="anchor" href="#strong-geowave-remote-liststats-strong"></a><strong>geowave remote liststats</strong></h4>
+<h4 id="remote-liststats"><a class="anchor" href="#remote-liststats"></a><strong>geowave remote liststats</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -2042,7 +2150,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-remote-recalcstats-strong"><a class="anchor" href="#strong-geowave-remote-recalcstats-strong"></a><strong>geowave remote recalcstats</strong></h4>
+<h4 id="remote-recalcstats"><a class="anchor" href="#remote-recalcstats"></a><strong>geowave remote recalcstats</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -2081,7 +2189,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="strong-geowave-remote-rmstat-strong"><a class="anchor" href="#strong-geowave-remote-rmstat-strong"></a><strong>geowave remote rmstat</strong></h4>
+<h4 id="remote-rmstat"><a class="anchor" href="#remote-rmstat"></a><strong>geowave remote rmstat</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
@@ -2119,9 +2227,1781 @@ accumulo user authorization; by default all authorizations are used.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>---<br></p>
+<hr>
+<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="analytic-commands"><a class="anchor" href="#analytic-commands"></a>Analytic Commands</h3>
+<div class="paragraph">
+<p>Commands that run mapreduce or spark processing to enhance an existing GeoWave dataset (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#analytic-dbscan">DBScan</a></p>
+</li>
+<li>
+<p><a href="#analytic-kde">KDE</a></p>
+</li>
+<li>
+<p><a href="#analytic-kmeansjump">KMeansJump</a></p>
+</li>
+<li>
+<p><a href="#analytic-kmeansparallel">KMeansParallel</a></p>
+</li>
+<li>
+<p><a href="#analytic-nn">NearestNeighbor</a></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The commands below can also be run as a yarn or hadoop api commands (i.e. mapreduce)</p>
+</div>
+<div class="paragraph">
+<p>For instance, if running the analytic using yarn:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>yarn jar geowave-tools.jar analytic &lt;algorithm&gt; &lt;options&gt; &lt;store&gt;</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="analytic-dbscan"><a class="anchor" href="#analytic-dbscan"></a><strong>geowave analytic dbscan</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic dbscan - Density Based Scanner</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic dbscan [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic dbscan operator will run a density based scanner analytic on GeoWave data</p>
+</div>
+<div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic dbscan -cmi 5 -cms 10 -emn 2 -emx 6 -pmd 1000 -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.adapters gpxpoint my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run through 5 max iterations (cmi), with max distance between points as 10 meters (cms), min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd),
+reducer count is 4 (orc), the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the temporary files needed by this job are stored in hdfs:/host:port//user/rwgdrummer (hdfsbase), and the data executed against DBSCAN is 'gpxpoint' (query.adapters).
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>DBSCAN uses GeoWaveInputFormat to load data from GeoWave into HDFS.  You can use the extract query parameter to limit
+the records used in the analytic.</p>
+</div>
+<div class="paragraph">
+<p>It iteratively calls Nearest Neighbor to execute a sequence of concave hulls.  The hulls are saved into sequence files
+written to a temporary HDFS directory, and then read in again for the next DBSCAN iteration.</p>
+</div>
+<div class="paragraph">
+<p>After completion, the data is written back from HDFS to Accumulo using a job called the "input load runner".</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-dt, --clusteringDistanceThresholds</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma separated list of distance thresholds, per dimension</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-du, --clusteringGeometricDistanceUnit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Geometric distance unit (m=meters,km=kilometers, see symbols for
+javax.units.BaseUnit)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cmi, --clusteringMaxIterations</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum number of iterations when finding optimal clusters</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cms, --clusteringMinimumSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum Cluster Size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cdf, --commonDistanceFunctionClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eit, --extractAdapterId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Input Data Type ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ei, --extractIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Extract from a specific index</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emx, --extractMaxInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emn, --extractMinInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eq, --extractQuery</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Query</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-b, --globalBatchId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Batch ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdt, --hullDataTypeId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Type ID for a centroid item</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hhb, --hullHullBuilder</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Hull Builder</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hpe, --hullProjectionClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-conf, --mapReduceConfigFile</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MapReduce Configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdfsbase, --mapReduceHdfsBaseDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fully qualified path to the base directory in hdfs</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdfs, --mapReduceHdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>HDFS hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-jobtracker, --mapReduceJobtrackerHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-resourceman, --mapReduceYarnResourceManager</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ons, --outputDataNamespaceUri</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output namespace for objects that will be written to GeoWave</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-odt, --outputDataTypeId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Data ID assigned to objects that will be written to GeoWave</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-oid, --outputIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Index ID for objects that will be written to GeoWave</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ofc, --outputOutputFormat</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Format Class</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--oop, --outputHdfsOutputPath</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output HDFS File Path when used with a output format "SequenceFileOutputFormatConfiguration"</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-orc, --outputReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Reducers For Output</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pmd, --partitionMaxDistance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum Partition Distance</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pms, --partitionMaxMemberSelection::</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum number of members selected from a partition</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pdr, --partitionPartitionDecreaseRate</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Rate of decrease for precision(within (0,1])</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pd, --partitionPartitionDistance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Partition Distance</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pdt, --partitionDistanceThresholds</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Partition Distance Threshold</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pdu, --partitionGeometricDistanceUnit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Partition Geometric Distance Unit</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pp, --partitionPartitionPrecision</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Partition Precision</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pc, --partitionPartitionerClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Index Identifier for Centroids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-psp, --partitionSecondaryPartitionerClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Perform secondary partitioning with the provided class</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.adapters</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma-separated data adapters to query; by default all are used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated list of authorizations used during extract; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.fields</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated set of field names to extract; by default all are extracted</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.index</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The input index to pull the data from (if different than expected)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="analytic-kde"><a class="anchor" href="#analytic-kde"></a><strong>geowave analytic kde</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kde - Kernel Density Estimate</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kde [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic kde operator will run a Kernel Density Estimate analytic on GeoWave data</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--coverageName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The coverage name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--cqlFilter</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An optional CQL filter applied to the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--featureType</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The name of the feature type to run a KDE on</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--hdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The hdfs host port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An optional index ID to filter the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--jobSubmissionHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The job submission tracker</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--maxLevel</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The max level to run a KDE at</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--maxSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The max partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--minLevel</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The min level to run a KDE at</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--minSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The min partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The tile size</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="analytic-kmeansjump"><a class="anchor" href="#analytic-kmeansjump"></a><strong>geowave analytic kmeansjump</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kmeansjump - KMeans Clustering using Jump Method</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kmeansjump [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic kmeansjump operator will execute a KMeans Clustering analytic using a Jump Method</p>
+</div>
+<div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic kmeansjump -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans
+-hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -jkp 3 -jrc 4,8 my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
+the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the data executed against is 'hail' (query.adapters), the min k for kmeans parallel sampling is 3 (jkp),
+the comma separated range of centroids is 4,8 (jrc).
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>KMeansJump uses most of the same parameters from KMeansParallel.  It tries every k value given (-jrc) to find
+the value with least entropy.  The other value, jkp, will specify which k values should use kmeans parallel for
+sampling versus a single sampler (which uses a random sample).  For instance, if you specify 4,8 for jrc and
+6 for jkp, then k=4,5 will use the kmeansparallel sampler, while 6,7,8 will use the single sampler.</p>
+</div>
+<div class="paragraph">
+<p>KMeansJump executes by executing several iterations, running the sampler (described above, which also
+calls the normal k-means algorithm to determine centroids) and then executing
+a KMeans distortion job, which calculates the entropy of the calculated centroids.</p>
+</div>
+<div class="paragraph">
+<p>Look at the "EXECUTION" documentation for kmeansparallel operation for discussion of output, tolerance and
+performance variables.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-cce, --centroidExtractorClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cid, --centroidIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Index Identifier for Centroids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cfc, --centroidWrapperFactoryClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A factory class that implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-czl, --centroidZoomLevel</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Zoom Level Number</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cct, --clusteringConverganceTolerance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Convergence Tolerance</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cmi, --clusteringMaxIterations</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum number of iterations when finding optimal clusters</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-crc, --clusteringMaxReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum Clustering Reducer Count</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-zl, --clusteringZoomLevels</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Zoom Levels to Process</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-dde, --commonDimensionExtractClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Dimension Extractor Class implements mil.nga.giat.geowave.analytics.extract.DimensionExtractor</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cdf, --commonDistanceFunctionClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eit, --extractAdapterId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Input Data Type ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ens, --extractDataNamespaceUri</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Data Namespace URI</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ede, --extractDimensionExtractClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class to extract dimensions into a simple feature output</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ei, --extractIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Extract from a specific index</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emx, --extractMaxInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emn, --extractMinInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eot, --extractOutputDataTypeId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Data Type ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eq, --extractQuery</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Query</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-erc, --extractReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Reducers For initial data extraction and de-duplication</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-b, --globalBatchId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Batch ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pb, --globalParentBatchId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Batch ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hns, --hullDataNamespaceUri</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Type Namespace for a centroid item</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdt, --hullDataTypeId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Type ID for a centroid item</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hid, --hullIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Index Identifier for Centroids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hpe, --hullProjectionClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hrc, --hullReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Centroid Reducer Count</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hfc, --hullWrapperFactoryClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-jkp, --jumpKplusplusMin</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The minimum k when K means ++ takes over sampling</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-jrc, --jumpRangeOfCentroids</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma-separated range of centroids (e.g. 2,100)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-conf, --mapReduceConfigFile</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MapReduce Configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdfsbase, --mapReduceHdfsBaseDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fully qualified path to the base directory in hdfs</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdfs, --mapReduceHdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>HDFS hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-jobtracker, --mapReduceJobtrackerHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-resourceman, --mapReduceYarnResourceManager</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ofc, --outputOutputFormat</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Format Class</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-orc, --outputReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Reducers For Output</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.adapters</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma-separated data adapters to query; by default all are used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated list of authorizations used during extract; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.fields</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated set of field names to extract; by default all are extracted</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.index</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The specific index to query; by default one is chosen for each adapter.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-sxs, --sampleMaxSampleSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Max Sample Size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-sms, --sampleMinSampleSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum Sample Size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ssi, --sampleSampleIterations</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum number of sample iterations</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-srf, --sampleSampleRankFunction</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The rank function used when sampling the first N highest rank items</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-sss, --sampleSampleSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Sample Size</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="analytic-kmeansparallel"><a class="anchor" href="#analytic-kmeansparallel"></a><strong>geowave analytic kmeansparallel</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kmeansparallel - KMeans Parallel Clustering</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic kmeansparallel [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic kmeansparallel operator will execute a KMeans Parallel Clustering analytic</p>
+</div>
+<div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic kmeansparallel -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans
+-hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -sms 4 -sxs 8 -ssi 10 my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
+the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the data executed against is 'hail' (query.adapters), the min sample size is 4 (sms, which is kmin),
+the max sample size is 8 (which is kmax), the minimum number of sampling iterations is 10.
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>KMeansParallel tries to identify the optimal k (sms, smx) for a set of zoom levels (1 &#8594; zl).  When zoom level is 1,
+it will perform a normal kmeans and find k clusters.  If zoomlevel is 2 or higher, it will take each cluster found,
+and then try to create sub-clusters (bounded by that cluster), identifying a new optimal k for that sub-cluster.  As
+such, without powerful infrastucture, this approach could take a significant amount of time to complete with zoom levels
+higher than 1.</p>
+</div>
+<div class="paragraph">
+<p>KMeansParallel executes by first executing an extraction and de-duplication on data received via
+GeoWaveInputFormat.  The data is copied to HDFS for faster processing.  The K-Sampler job is used to pick sample
+centroid points.  These centroids are then assigned a cost, and then weak centroids are stripped before the
+K-Sampler is executed again.  This process iterates several times, before the best centroid locations are found,
+which are fed into the real K-Means algorithm as initial guesses.  K-Means iterates until the tolerance is
+reached (-cct, which defaults to 0.0001) or the max iterations is met (-cmi).</p>
+</div>
+<div class="paragraph">
+<p>After execution, KMeansParallel writes the centroids to an output data type (-eot, defaults to centroid), and then
+creates an informational set of convex hulls which you can plot in GeoServer to visually identify cluster groups
+(-hdt, defaults to convex_hull).</p>
+</div>
+<div class="paragraph">
+<p>For tuning performance, you can set the number of reducers used in each step.  Extraction/Dedupe reducer count is
+-crc, Clustering reducer count is -erc, Convex Hull reducer count is -hrc, and Output reducer count is -orc).</p>
+</div>
+<div class="paragraph">
+<p>If you would like to run the algorithm multiple times, it may be useful to set the batch id (-b), which can
+be used to distinguish between multiple batches (runs).</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-cce, --centroidExtractorClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cid, --centroidIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Index Identifier for Centroids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cfc, --centroidWrapperFactoryClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A factory class that implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-czl, --centroidZoomLevel</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Zoom Level Number</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cct, --clusteringConverganceTolerance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Convergence Tolerance</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cmi, --clusteringMaxIterations</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum number of iterations when finding optimal clusters</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-crc, --clusteringMaxReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum Clustering Reducer Count</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-zl, --clusteringZoomLevels</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Zoom Levels to Process</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-dde, --commonDimensionExtractClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Dimension Extractor Class implements mil.nga.giat.geowave.analytics.extract.DimensionExtractor</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-cdf, --commonDistanceFunctionClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eit, --extractAdapterId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Input Data Type ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ens, --extractDataNamespaceUri</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Data Namespace URI</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ede, --extractDimensionExtractClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class to extract dimensions into a simple feature output</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ei, --extractIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Extract from a specific index</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emx, --extractMaxInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emn, --extractMinInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eot, --extractOutputDataTypeId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Data Type ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eq, --extractQuery</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Query</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-erc, --extractReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Reducers For initial data extraction and de-duplication</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-b, --globalBatchId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Batch ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pb, --globalParentBatchId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Batch ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hns, --hullDataNamespaceUri</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Type Namespace for a centroid item</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdt, --hullDataTypeId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Type ID for a centroid item</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hid, --hullIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Index Identifier for Centroids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hpe, --hullProjectionClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hrc, --hullReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Centroid Reducer Count</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hfc, --hullWrapperFactoryClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-conf, --mapReduceConfigFile</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MapReduce Configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdfsbase, --mapReduceHdfsBaseDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fully qualified path to the base directory in hdfs</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-hdfs, --mapReduceHdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>HDFS hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-jobtracker, --mapReduceJobtrackerHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-resourceman, --mapReduceYarnResourceManager</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ofc, --outputOutputFormat</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Format Class</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-orc, --outputReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Reducers For Output</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-sxs, --sampleMaxSampleSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Max Sample Size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-sms, --sampleMinSampleSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum Sample Size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ssi, --sampleSampleIterations</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum number of sample iterations</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="analytic-nn"><a class="anchor" href="#analytic-nn"></a><strong>geowave analytic nn</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic nn - Nearest Neighbors</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic nn [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic nn operator will execute a Nearest Neighbors analytic.
+Analytic 'nn' is similar to DBScan, with less arguments.
+'nn' just dumps all near neighbors for every feature id in a list of pairs.
+Most developers will want to extend the framework to add their own extensions.</p>
+</div>
+<div class="paragraph">
+<p>EXAMPLE</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic nn -emn 2 -emx 6 -pmd 1000 -oop /user/rwgdrummer_out -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.adapters gpxpoint my_store</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd),
+the sequence file output directory is hdfs://host:port/user/rwgdrummer_out, reducer count is 4 (orc),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the temporary files needed by this job are stored in hdfs:/host:port//user/rwgdrummer (hdfsbase), and the data executed against is 'gpxpoint' (query.adapters).
+The accumulo connection parameters are loaded from my_store.</p>
+</div>
+<div class="paragraph">
+<p>EXECUTION</p>
+</div>
+<div class="paragraph">
+<p>To execute nearest neighbor search in GeoWave, we use the concept of a "partitioner" to
+partition all data on the hilbert curve into square segments for the
+purposes of parallelizing the search.</p>
+</div>
+<div class="paragraph">
+<p>The default partitioner will multiply this value by 2 and use that for the actual partition sizes.
+Because of this, the terminology is a bit confusing, but the "pmd" option is actually the most
+important variable here, describing the max distance for a point to be considered a neighbor to
+another point.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-cdf, --commonDistanceFunctionClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eit, --extractAdapterId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Input Data Type ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ei, --extractIndexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Extract from a specific index</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emx, --extractMaxInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-emn, --extractMinInputSplit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimum input split size</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-eq, --extractQuery</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Query</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-oop, --outputHdfsOutputPath</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output HDFS File Path</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ofc, --outputOutputFormat</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output Format Class</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-orc, --outputReducerCount</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of Reducers For Output</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pms, --partitionMaxMemberSelection</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum number of members selected from a partition</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pd, --partitionPartitionDistance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Partition Distance</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pc, --partitionPartitionerClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Index Identifier for Centroids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-psp, --partitionSecondaryPartitionerClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Perform secondary partitioning with the provided class</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
 </div>
 </div>
 </div>
@@ -2129,7 +4009,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-08-10 16:30:04 +00:00
+Last updated 2017-08-11 00:30:45 +00:00
 </div>
 </div>
 </body>

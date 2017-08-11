@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.datastore.accumulo.metadata</div>
-<h2 title="Class AbstractAccumuloPersistence" class="title">Class AbstractAccumuloPersistence&lt;T extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&gt;</h2>
+<h2 title="Class AbstractAccumuloPersistence" class="title">Class AbstractAccumuloPersistence&lt;T extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
@@ -122,7 +122,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public abstract class <span class="typeNameLabel">AbstractAccumuloPersistence&lt;T extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&gt;</span>
+<pre>public abstract class <span class="typeNameLabel">AbstractAccumuloPersistence&lt;T extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span>
 extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a>&lt;T&gt;</pre>
 <div class="block">This abstract class does most of the work for storing persistable objects in
  Accumulo and can be easily extended for any object that needs to be
@@ -362,7 +362,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/A
 <pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getPeristenceTypeName(org.apache.accumulo.core.data.Key&nbsp;key)</pre>
 </li>
 </ul>
-<a name="addObject-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.Persistable-">
+<a name="addObject-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.persist.Persistable-">
 <!--   -->
 </a><a name="addObject-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-T-">
 <!--   -->
@@ -375,7 +375,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/A
                          <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a>&nbsp;object)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#addObject-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-T-">addObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#addObject-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-T-">addObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -473,7 +473,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/A
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#deleteObjects-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String...-">deleteObjects</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html#deleteObjects-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String...-">deleteObjects</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeowavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeowavePersistence</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/metadata/AbstractAccumuloPersistence.html" title="type parameter in AbstractAccumuloPersistence">T</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

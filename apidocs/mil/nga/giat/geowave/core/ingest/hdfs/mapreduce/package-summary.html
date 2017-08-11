@@ -124,28 +124,36 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Persistable.html" title="interface in mil.nga.giat.geowave.core.index">Persistable</a> &amp; <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&gt;</td>
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.InternalIngestWithMapper.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper.InternalIngestWithMapper</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> &amp; <a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;?&gt;&gt;</td>
 <td class="colLast">
 <div class="block">This class can be sub-classed to run map-reduce jobs within the ingest
  framework using plugins provided by types that are discovered through SPI.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/ByteBufferBackedInputStream.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">ByteBufferBackedInputStream</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsDriver.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsDriver</a></td>
 <td class="colLast">
 <div class="block">This class actually executes the ingestion of intermediate data into GeoWave
  that had been staged in HDFS.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestMapper.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestMapper</a></td>
 <td class="colLast">
 <div class="block">This class is the map-reduce mapper for ingestion with the mapper only.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestPersistableRegistry.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestPersistableRegistry</a></td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestReducer.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestReducer</a></td>

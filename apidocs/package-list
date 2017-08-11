@@ -103,6 +103,7 @@ mil.nga.giat.geowave.core.index
 mil.nga.giat.geowave.core.index.dimension
 mil.nga.giat.geowave.core.index.dimension.bin
 mil.nga.giat.geowave.core.index.lexicoder
+mil.nga.giat.geowave.core.index.persist
 mil.nga.giat.geowave.core.index.sfc
 mil.nga.giat.geowave.core.index.sfc.binned
 mil.nga.giat.geowave.core.index.sfc.data

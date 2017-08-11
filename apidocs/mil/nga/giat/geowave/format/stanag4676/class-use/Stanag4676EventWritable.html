@@ -119,6 +119,10 @@
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/KeyValueData.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">KeyValueData</a>&lt;org.apache.hadoop.io.Text,<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in mil.nga.giat.geowave.format.stanag4676">Stanag4676EventWritable</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestMessageHandler.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/IngestMessageHandler.html#getIntermediateData--">getIntermediateData</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/KeyValueData.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">KeyValueData</a>&lt;org.apache.hadoop.io.Text,<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in mil.nga.giat.geowave.format.stanag4676">Stanag4676EventWritable</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.IngestWithReducerImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestPlugin.IngestWithReducerImpl.html#toIntermediateMapReduceData-mil.nga.giat.geowave.core.ingest.avro.WholeFile-">toIntermediateMapReduceData</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&nbsp;input)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -136,6 +140,22 @@
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="typeNameLabel">ComparatorStanag4676EventWritable.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/ComparatorStanag4676EventWritable.html#compare-mil.nga.giat.geowave.format.stanag4676.Stanag4676EventWritable-mil.nga.giat.geowave.format.stanag4676.Stanag4676EventWritable-">compare</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in mil.nga.giat.geowave.format.stanag4676">Stanag4676EventWritable</a>&nbsp;obj1,
        <a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in mil.nga.giat.geowave.format.stanag4676">Stanag4676EventWritable</a>&nbsp;obj2)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/package-summary.html">mil.nga.giat.geowave.format.stanag4676</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in mil.nga.giat.geowave.format.stanag4676">Stanag4676EventWritable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.IngestWithReducerImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676IngestPlugin.IngestWithReducerImpl.html#toGeoWaveData-org.apache.hadoop.io.Text-java.util.Collection-java.lang.String-java.lang.Iterable-">toGeoWaveData</a></span>(org.apache.hadoop.io.Text&nbsp;key,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in mil.nga.giat.geowave.format.stanag4676">Stanag4676EventWritable</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

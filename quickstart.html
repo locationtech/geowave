@@ -444,7 +444,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#quickstart-bootstrap-script-breakdown">Quickstart Bootstrap Script Breakdown</a></li>
-<li><a href="#appendices-2">Appendices</a>
+<li><a href="#appendices">Appendices</a>
 <ul class="sectlevel2">
 <li><a href="#version">Version</a></li>
 <li><a href="#create-ec2-vpc-network-interface-subnet-id">Create EC2 VPC (Network Interface/Subnet Id)</a></li>
@@ -455,6 +455,46 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#aws-cli-setup">AWS CLI Setup</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#hortonworks-quickstart-guide">HortonWorks Quickstart Guide</a>
+<ul class="sectlevel1">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#setting-up-the-environment">Setting Up the Environment</a>
+<ul class="sectlevel2">
+<li><a href="#setting-up-the-virtualbox-image">Setting up the VirtualBox Image</a></li>
+<li><a href="#configure-sandbox">Configure Sandbox</a></li>
+<li><a href="#using-the-vm">Using the VM</a></li>
+</ul>
+</li>
+<li><a href="#vector-demo">Vector Demo</a>
+<ul class="sectlevel2">
+<li><a href="#set-up-environment-variables">Set-Up Environment Variables</a></li>
+<li><a href="#download-gdelt-data-2">Download GDELT Data</a></li>
+<li><a href="#config-and-ingest-2">Config and Ingest</a></li>
+<li><a href="#kernel-density-estimation-kde">Kernel Density Estimation (KDE)</a></li>
+</ul>
+</li>
+<li><a href="#raster-demo">Raster Demo</a>
+<ul class="sectlevel2">
+<li><a href="#set-up-environment-variables-2">Set-Up Environment Variables</a></li>
+<li><a href="#download-and-unpack-the-gdal-library">Download and Unpack the GDAL Library</a></li>
+<li><a href="#config-and-ingest-3">Config and Ingest.</a></li>
+</ul>
+</li>
+<li><a href="#integrate-with-geoserver-2">Integrate with GeoServer</a>
+<ul class="sectlevel2">
+<li><a href="#configure-geoserver">Configure GeoServer</a></li>
+<li><a href="#add-layers-and-styles">Add Layers and Styles</a></li>
+</ul>
+</li>
+<li><a href="#interacting-with-the-cluster-2">Interacting with the Cluster</a>
+<ul class="sectlevel2">
+<li><a href="#hbase-master-view">HBase Master View</a></li>
+<li><a href="#geoserver-2">GeoServer</a></li>
+</ul>
+</li>
+<li><a href="#further-documentation">Further Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -1371,14 +1411,6 @@ cd $STAGING_DIR</code></pre>
 <div class="sect2">
 <h3 id="config-and-ingest"><a class="anchor" href="#config-and-ingest"></a>Config and Ingest</h3>
 <div class="paragraph">
-<p>Disable Encryption (This will avoid a possible complication in with the analytic steps)</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config set geowave.encryption.enabled=false</code></pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Add a GeoWave store (Accumulo)</p>
 </div>
 <div class="listingblock">
@@ -1543,12 +1575,12 @@ web connection for Linux or Windows.</p>
 <p>You can follow the progress of the data ingest and scan (kde) performed by the cluster on hte accumulo web server.</p>
 </div>
 <div class="paragraph">
-<p>Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :50095</p>
+<p>Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :9995</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: ec2-52-91-215-215.compute-1.amazonaws.com:50095</p>
+<p>Example: ec2-52-91-215-215.compute-1.amazonaws.com:9995</p>
 </li>
 </ul>
 </div>
@@ -1787,9 +1819,6 @@ want to see the commands used to perform these actions.</p>
 <li>
 <p>Uses the geowave cli commands and the styles downloaded by the script to setup your geoserver workspace, stores, and
 layers. This can also be done by the user through the geoserver GUI.</p>
-<div id="appendices" class="paragraph">
-<p>&lt;&lt;&lt;</p>
-</div>
 </li>
 </ul>
 </div>
@@ -1799,13 +1828,13 @@ layers. This can also be done by the user through the geoserver GUI.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="appendices-2"><a class="anchor" href="#appendices-2"></a>Appendices</h2>
+<h2 id="appendices"><a class="anchor" href="#appendices"></a>Appendices</h2>
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.5-SNAPSHOT from commit 737eb1f9efacf7ae3fd5d068649dd5aa6fa4dbcb.</p>
+<p>This documentation was generated for GeoWave version 0.9.5-SNAPSHOT from commit abdea48c9da05cdd71a93554b4d581ef224f1979.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1973,13 +2002,580 @@ button.</p>
 <div class="paragraph">
 <p>Please see the Amazon documentation <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html">here</a>.</p>
 </div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<h1 id="hortonworks-quickstart-guide" class="sect0"><a class="anchor" href="#hortonworks-quickstart-guide"></a>HortonWorks Quickstart Guide</h1>
+<div class="sect1">
+<h2 id="introduction"><a class="anchor" href="#introduction"></a>Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The HortonWorks Sandbox Quickstart Guide is designed to allow a user to see some of the capabilities of the GeoWave library on a personal computer, even though GeoWave is primarily designed to be used with massive datasets that would require
+a much more powerful machine to process. The HortonWorks Sandbox VirtualBox image provided will allow a user to deploy a single node cluster where they can demo GeoWave on sets of vector and raster data. Further information on Geowave and the commands
+that will be called in this demo can be found in the <a href="#further-documentation">Further Documentation</a> section.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="setting-up-the-environment"><a class="anchor" href="#setting-up-the-environment"></a>Setting Up the Environment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The virtual image provided for this demo can be found at <a href="http://s3.amazonaws.com/geowave/VirtualBox_HDP_GeoWave_Sandbox.ova">here</a>. The image is a very large file (~14 GB) so make sure that you give yourself enough time to download it and that your machine has
+enough room to store it.</p>
+</div>
+<div class="sect2">
+<h3 id="setting-up-the-virtualbox-image"><a class="anchor" href="#setting-up-the-virtualbox-image"></a>Setting up the VirtualBox Image</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Open up your VirtualBox manager. If you do not have VirtualBox downloaded, do so <a href="https://www.virtualbox.org/wiki/Downloads">here</a>. This demo was tested against VirtualBox 5.1.26, you may experience trouble importing the virtual image on older versions.</p>
+</li>
+<li>
+<p>Click "File" and select "Import Appliance" from the dropdown.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/import-appliance.png" alt="select emr">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Click on the folder icon, and navigate to VirtualBox_HDP_GeoWave_Sandbox.ova (the image that you downloaded).</p>
+</li>
+<li>
+<p>Select "Next" and then "Import"</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This should take a couple of minutes</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Once the image has been imported, start it up from the manager. Every time you power the machine on it will ask you which version of Linux
+it should boot, pick the default/first option.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/vb-image.png" alt="select emr">
+</div>
+</div>
+<div class="paragraph">
+<p>The machine should power on shortly (this can take a few minutes). After it&#8217;s powered on you should see the screen below. This is the last
+time that you will have to interact directly with the VirtualBox. Make sure that the virtual machine is active for the duration of this demo.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/vb-image-2.png" alt="select emr">
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="configure-sandbox"><a class="anchor" href="#configure-sandbox"></a>Configure Sandbox</h3>
+<div class="paragraph">
+<p>Before you can configure the Sandbox, you will need to edit your hosts file to make sure that you can access the sandbox through your browser. You will need root or admin permissions to change these files.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Linux:</strong> Add the line <code>127.0.0.1  sandbox.hortonworks.com</code> to the <code>/etc/hosts</code> file</p>
+</li>
+<li>
+<p><strong>Mac:</strong> Add the line <code>127.0.0.1  sandbox.hortonworks.com</code> to the <code>/private/etc/hosts</code> file</p>
+</li>
+<li>
+<p><strong>Windows:</strong> Add the line <code>127.0.0.1  sandbox.hortonworks.com</code> to the <code>C:/Windows/System32/drivers/etc/hosts</code> file</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Make sure that you save <code>hosts</code> as type "all files" and not as a .txt file. That should be how it appears in the /etc/ folder.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/hosts-linux.png" alt="select emr">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/hosts-windows.png" alt="select emr">
+</div>
+</div>
+<div class="paragraph">
+<p>After this you should be able to log into the Ambari Server at <a href="http://localhost:8080" class="bare">http://localhost:8080</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Username:</strong> raj_ops</p>
+</li>
+<li>
+<p><strong>Password:</strong> raj_ops</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Ambari server provides an interface that allows you to control which services you&#8217;d like to run in your environment. However, on start-up, the Sandbox automatically runs a number of unnecessary services.</p>
+</div>
+<div class="paragraph">
+<p>To best run this demo you should stop: <strong>Oozie, Flume, Ranger, Spark2,</strong> and <strong>Zeppelin Notebook</strong>. To stop a service, select it from the list on the left, click on "Service Actions," and select "Stop" from the dropdown menu.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/ambari-gui.png" alt="select emr">
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="using-the-vm"><a class="anchor" href="#using-the-vm"></a>Using the VM</h3>
+<div class="paragraph">
+<p>After the Sandbox and virtual machine are configured, ssh into your machine. If you are using Windows it is recommended that you use <a href="http://www.putty.org/">PuTTY</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Host Name:</strong> root@127.0.0.1</p>
+</li>
+<li>
+<p><strong>Port:</strong> 2222</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>No key is necessary to access this machine</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you are using PuTTY, click open to continue. You will be prompted for a password, it is <code>geowave1</code>. At this point, your set-up should be complete and you should be able to complete the <a href="#vector-demo">Vector</a> and <a href="#raster-demo">Raster</a> demos.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="vector-demo"><a class="anchor" href="#vector-demo"></a>Vector Demo</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the Vector Demo, we use GeoWave to ingest and runs a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.</p>
+</div>
+<div class="sect2">
+<h3 id="set-up-environment-variables"><a class="anchor" href="#set-up-environment-variables"></a>Set-Up Environment Variables</h3>
+<div class="paragraph">
+<p>Download the GeoWave environment script. We will also download two .sld files to use later on in the guide.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
+sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env.sh
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This script defines a number of the variables that will be used in future commands, so we will source it here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">source /mnt/geowave-env.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="download-gdelt-data-2"><a class="anchor" href="#download-gdelt-data-2"></a>Download GDELT Data</h3>
+<div class="paragraph">
+<p>We will be using data from the GDELT Project in this guide. For more information about the
+GDELT Project please visit their website <a href="http://www.gdeltproject.org/">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Download whatever gdelt data matches $TIME_REGEX. The example is set to 201602 by sourcing the geowave-env.sh script. <strong>Please make sure that you
+have sourced the environment script before calling this command.</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">sudo mkdir $STAGING_DIR/gdelt;cd $STAGING_DIR/gdelt
+sudo wget http://data.gdeltproject.org/events/md5sums
+for file in `cat md5sums | cut -d' ' -f3 | grep "^${TIME_REGEX}"` ; \
+do sudo wget http://data.gdeltproject.org/events/$file ; done
+md5sum -c md5sums 2&gt;&amp;1 | grep "^${TIME_REGEX}"
+cd $STAGING_DIR</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the data has been downloaded, we are ready to set up the store and index used to ingest the data.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="config-and-ingest-2"><a class="anchor" href="#config-and-ingest-2"></a>Config and Ingest</h3>
+<div class="paragraph">
+<p>Add a GeoWave store.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper sandbox.hortonworks.com:2181</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add a spatial index.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin --numPartitions $NUM_PARTITIONS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ingest the data into geowave.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave ingest localtogw /mnt/gdelt gdelt gdelt-spatial -f gdelt --gdelt.cql "INTERSECTS(geometry,$GERMANY)"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The ingest should take about ~3 minutes. Once the Ingest has started, you can monitor HBase status at the <a href="#hbase-master-view">HBase web interface</a>. The ingest is complete when your terminal will
+accept user input.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="kernel-density-estimation-kde"><a class="anchor" href="#kernel-density-estimation-kde"></a>Kernel Density Estimation (KDE)</h3>
+<div class="paragraph">
+<p>Once the ingest has completed, add another store for the kde.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+-t hbase --zookeeper $HOSTNAME:2181</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the KDE analytic</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">hadoop jar /usr/local/geowave-0.9.5-hdp2/tools/geowave-tools-0.9.5-hdp2.jar analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde --hdfsHostPort sandbox.hortonworks.com:${HDFS_PORT} --jobSubmissionHostPort sandbox.hortonworks.com:${RESOURCE_MAN_PORT} --tileSize 1 gdelt gdelt-kde</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The KDE can take 5-10 minutes to complete due to the size of the dataset. Once it starts, its progress will be displayed in the terminal, and HBase status can be monitored at the <a href="#hbase-master-view">HBase web interface</a>.</p>
+</div>
+<div class="paragraph">
+<p>Once the KDE has run its course successfully, you should be able to view the heatmap generated by it, as well as a map of all of the ingested data points. If you would like to do this before completing the Raster Demo, proceed to <a href="#integrate-with-geoserver-2">Integrate with Geoserver</a>
+and then to the <a href="#interacting-with-the-cluster-2">Interacting with the Cluster</a> section. You will still be able to view the results for both demos after completing the Raster Demo.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="raster-demo"><a class="anchor" href="#raster-demo"></a>Raster Demo</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command
+downloads those images and combines them to create a mosaic.</p>
+</div>
+<div class="sect2">
+<h3 id="set-up-environment-variables-2"><a class="anchor" href="#set-up-environment-variables-2"></a>Set-Up Environment Variables</h3>
+<div class="paragraph">
+<p>Download and source the GeoWave environment script. If you have already done this in the Vector Demo, you can skip this step.
+This script defines a number of the variables that will be used in future commands.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
+sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env.sh
+source /mnt/geowave-env.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="download-and-unpack-the-gdal-library"><a class="anchor" href="#download-and-unpack-the-gdal-library"></a>Download and Unpack the GDAL Library</h3>
+<div class="paragraph">
+<p>GDAL (Geospatial Data Abstraction Library) is an image processing library. We need to download the proper GDAL files to process the raster data. More info on GDAL can be found <a href="http://www.gdal.org">here</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
+sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set the path to the GDAL libraries.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/mnt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>At this point, we should be ready to ingest the data.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="config-and-ingest-3"><a class="anchor" href="#config-and-ingest-3"></a>Config and Ingest.</h3>
+<div class="paragraph">
+<p>We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the <a href="https://landsat.usgs.gov/landsat-8">Landsat 8 Satellite</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t hbase -z sandbox.hortonworks.com:2181 landsatraster --gwNamespace landsat_raster
+
+geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add a spatial index.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addindex -t spatial spatial</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Filter the dataset by calling analyze. In this example we look for Band 8 images that are in Berlin.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql  "INTERSECTS(shape,$GERMANY) AND band='B8' AND cloudCover&gt;0" -ws /mnt/landsat
+
+geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover&gt;0" -ws /mnt/landsat</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Call the ingest command to download the data, ingest it into the GeoWave stores, and create the mosaic image. HBase status can be monitored at the <a href="#hbase-master-view">HBase web interface</a>. More information on the
+landsat ingest and analyze commands can be found <a href="https://github.com/locationtech/geowave/tree/master/extensions/cli/landsat8">here</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover&gt;0" --crop --retainimages -ws /mnt/landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic  landsatraster spatial</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="integrate-with-geoserver-2"><a class="anchor" href="#integrate-with-geoserver-2"></a>Integrate with GeoServer</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to view the images generated from the vector and raster demos, use the GeoServer web interface. The following command configures and restarts GeoServer.</p>
+</div>
+<div class="sect2">
+<h3 id="configure-geoserver"><a class="anchor" href="#configure-geoserver"></a>Configure GeoServer</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config geoserver sandbox.hortonworks.com:8993
+export HADOOP_HOME="/usr/hdp/2.6.0.3-8/hadoop/"
+service geowave restart</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please allow 1-2 minutes for the GeoServer to restart before attempting to complete Add Layers and Styles.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="add-layers-and-styles"><a class="anchor" href="#add-layers-and-styles"></a>Add Layers and Styles</h3>
+<div class="paragraph">
+<p>Add the layers for the demo(s) that you have completed. If you experience any errors while adding the layers, GeoServer likely needs more time to finish its restart.</p>
+</div>
+<div class="sect3">
+<h4 id="vector-demo-layers"><a class="anchor" href="#vector-demo-layers"></a>Vector Demo Layers</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Add layers for the point and kde representations of the data.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs addlayer gdelt
+geowave gs addlayer gdelt-kde</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add the KDEColorMap and SubsamplePoints styles. These should have been downloaded at the beginning of the demo.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
+geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set the styles of these layers.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs setls gdeltevent_kde --styleName kdecolormap
+geowave gs setls gdeltevent --styleName SubsamplePoints</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="raster-demo-layers"><a class="anchor" href="#raster-demo-layers"></a>Raster Demo Layers</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Add the layers created in the raster demo. The default styles for these layers is sufficient.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs addlayer landsatraster
+geowave gs addlayer landsatvector --add ALL</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="interacting-with-the-cluster-2"><a class="anchor" href="#interacting-with-the-cluster-2"></a>Interacting with the Cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you have not successfully completed the <a href="#integrate-with-geoserver-2">Integrate with Geoserver</a> section, please do so before continuing.</p>
+</div>
+<div class="sect2">
+<h3 id="hbase-master-view"><a class="anchor" href="#hbase-master-view"></a>HBase Master View</h3>
+<div class="paragraph">
+<p>HBase status can be monitored via the HBase web interface at <a href="http://localhost:16010" class="bare">http://localhost:16010</a>. The interface provides information on the number of reads/writes, requests per second, and the status of its servers. If HBase experiences any issues
+during the ingest, they will be reflected here.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/hbase-overview.png" alt="select emr">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="geoserver-2"><a class="anchor" href="#geoserver-2"></a>GeoServer</h3>
+<div class="paragraph">
+<p>The GeoServer web interface can be accessed in your browser at <a href="http://localhost:8993/geoserver/web" class="bare">http://localhost:8993/geoserver/web</a>. Login to see the layers.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Username:</strong> admin</p>
+</li>
+<li>
+<p><strong>Password:</strong> geoserver</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/geoserver-home.png" alt="select emr">
+</div>
+</div>
+<div class="paragraph">
+<p>The homepage displays the layers, stores, and workspaces that were created in the demo.
+Select "Layer Preview" from the menu on the left side.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/layer-preview.png" alt="select emr">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the OpenLayers link by any of the layers to view any of the images. Clicking on the layer will give you the metadata associated with that point.</p>
+</div>
+<div class="paragraph">
+<p><strong>gdeltevent</strong> - shows all of the gdelt events in a bounding box around Berlin as individual points.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/point-view.png" alt="select emr">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>gdeltevent_kde</strong> - a heat map produced using kernel density estimation in a bounding box around Berlin.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/kde-view.png" alt="select emr">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>berlin_mosaic</strong> - a mosaic created from the raster data that fit into our specifications. This mosaic is made of 5 images.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/berlin-mosaic-view.png" alt="select emr">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>band/scene</strong> - representations of the vector data associated with the images. The band and scene layers are identical in this demo.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/sandbox/scene-view.png" alt="select emr">
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="further-documentation"><a class="anchor" href="#further-documentation"></a>Further Documentation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>More information on GeoWave, including the User/Developer Guides and further information on many of the commands run in these demos can be found below.</p>
+</div>
+<div class="paragraph">
+<p><strong>User Guide</strong> - <a href="http://locationtech.github.io/geowave/userguide.html" class="bare">http://locationtech.github.io/geowave/userguide.html</a></p>
+</div>
+<div class="paragraph">
+<p><strong>Developer Guide</strong> - <a href="http://locationtech.github.io/geowave/devguide.html" class="bare">http://locationtech.github.io/geowave/devguide.html</a></p>
+</div>
+<div class="paragraph">
+<p><strong>Command Line Controls</strong> - <a href="http://locationtech.github.io/geowave/commands.html" class="bare">http://locationtech.github.io/geowave/commands.html</a></p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-08-10 16:30:04 +00:00
+Last updated 2017-08-11 00:30:45 +00:00
 </div>
 </div>
 </body>
