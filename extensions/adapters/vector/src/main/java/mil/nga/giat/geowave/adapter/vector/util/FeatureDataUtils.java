@@ -86,7 +86,7 @@ public class FeatureDataUtils
 							}
 						});
 				GeoTools.addClassLoader(urlCL);
-				SPIServiceRegistry.registerClassLoader(urlCL);
+		
 			}
 			classLoaderInitialized = true;
 		}
