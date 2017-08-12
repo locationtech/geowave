@@ -15,8 +15,8 @@ node {
    sh 'docker build -t locationtech/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
    sh 'docker build -t locationtech/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
 
-   stage 'Clean bucket and local space'
-   sh 'deploy/scripts/clean-up.py'
+   //stage 'Clean bucket and local space'
+   //sh 'deploy/scripts/clean-up.py'
    
   // Mark the build artifacts 'stage'....
    stage 'Build and Publish RPMs'
