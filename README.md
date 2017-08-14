@@ -27,14 +27,14 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 
 ## The Software
 * We have a [RPM repository](http://locationtech.github.io/geowave/packages.html)
-  * See [Documentation: Installation from RPM](http://locationtech.github.io/geowave/userguide.html#installation-from-rpm) for more info.
+  * See [Documentation: Installation from RPM](http://locationtech.github.io/geowave/devguide.html#installation-from-rpm) for more info.
   * Deb packages if enough people request them
-* We have [Maven artifact repositories](http://locationtech.github.io/geowave/userguide.html#maven-repositories-2) (indexes not enabled, but it works in a maven repo fragment)
+* We have [Maven artifact repositories](http://locationtech.github.io/geowave/devguide.html#maven-pom-fragments) (indexes not enabled, but it works in a maven repo fragment)
   * Releases: http://geowave-maven.s3-website-us-east-1.amazonaws.com/release
   * Snapshots: http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot (nightly)
 * We have a [vagrant dev environment](https://github.com/locationtech/geowave-vagrant)
 * We have a development all in one RPM package: "geowave-cdh5-single-host"
-* And you can always [build from source](http://locationtech.github.io/geowave/userguide.html#installation-from-source)
+* And you can always [build from source](http://locationtech.github.io/geowave/devguide.html#development-setup)
   
  
 ## Community
@@ -58,7 +58,7 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 
 | Geoserver | Geotools | Accumulo | HBase | Hadoop | PDAL | Mapnik | Java |
 |:---------:|:--------:|:--------:|:-----:|:------:|:----:|:------:|:----:|
-| 2.10.x | 16.x | 1.6.x,1.7.x | 1.1.x,1.2.x,1.3.x | 2.x | 0.9.9 |  master (pull request pending) | Java8 |
+| 2.10.x | 16.x | 1.7.x,1.8.x | 1.1.x,1.2.x,1.3.x | 2.x | 0.9.9 |  master (pull request pending) | Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
 * [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html) should both be installed on Geoserver for GeoWave versions 0.9.2.1 and below (licensing prohibits us redistributing)
