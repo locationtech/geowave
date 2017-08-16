@@ -84,33 +84,35 @@ public class SqlResultsWriter
 
 				for (int i = 0; i < schema.fields().length; i++) {
 					StructField field = schema.apply(i);
+					Object rowObj = row.apply(i);
+					if (rowObj != null) {
+						if (field.name().equals(
+								"geom")) {
+							try {
+								Geometry geom = geomReader.read((String) rowObj);
 
-					if (field.name().equals(
-							"geom")) {
-						try {
-							Geometry geom = geomReader.read((String) row.apply(i));
+								sfBuilder.set(
+										"geom",
+										geom);
+							}
+							catch (ParseException e) {
+								LOGGER.error(e.getMessage());
+							}
+						}
+						else if (field.dataType() == DataTypes.TimestampType) {
+							long millis = ((Timestamp) rowObj).getTime();
+							Date date = new Date(
+									millis);
 
 							sfBuilder.set(
-									"geom",
-									geom);
+									field.name(),
+									date);
 						}
-						catch (ParseException e) {
-							LOGGER.error(e.getMessage());
+						else {
+							sfBuilder.set(
+									field.name(),
+									rowObj);
 						}
-					}
-					else if (field.dataType() == DataTypes.TimestampType) {
-						long millis = ((Timestamp) row.apply(i)).getTime();
-						Date date = new Date(
-								millis);
-
-						sfBuilder.set(
-								field.name(),
-								date);
-					}
-					else {
-						sfBuilder.set(
-								field.name(),
-								row.apply(i));
 					}
 				}
 

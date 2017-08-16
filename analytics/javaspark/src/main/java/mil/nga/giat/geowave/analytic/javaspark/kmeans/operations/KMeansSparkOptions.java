@@ -58,6 +58,12 @@ public class KMeansSparkOptions
 	}, description = "Feature type name (adapter ID) to query")
 	private String adapterId = null;
 
+	@Parameter(names = "--minSplits", description = "The min partitions for the input data")
+	private Integer minSplits = -1;
+
+	@Parameter(names = "--maxSplits", description = "The max partitions for the input data")
+	private Integer maxSplits = -1;
+
 	public KMeansSparkOptions() {}
 
 	public String getAppName() {
@@ -139,5 +145,23 @@ public class KMeansSparkOptions
 	public void setAdapterId(
 			String adapterId ) {
 		this.adapterId = adapterId;
+	}
+
+	public Integer getMinSplits() {
+		return minSplits;
+	}
+
+	public void setMinSplits(
+			Integer minSplits ) {
+		this.minSplits = minSplits;
+	}
+
+	public Integer getMaxSplits() {
+		return maxSplits;
+	}
+
+	public void setMaxSplits(
+			Integer maxSplits ) {
+		this.maxSplits = maxSplits;
 	}
 }
