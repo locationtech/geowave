@@ -40,20 +40,23 @@ public class SimpleFeatureMapper implements
 		Object[] fields = new Serializable[schema.size()];
 
 		for (int i = 0; i < schema.size(); i++) {
-			StructField structField = schema.apply(i);
-			if (structField.name().equals(
-					"geom")) {
-				fields[i] = geomWriter.write((Geometry) feature.getAttribute(i));
-			}
-			else if (structField.dataType() == DataTypes.TimestampType) {
-				fields[i] = ((Timestamp) new Timestamp(
-						((Date) feature.getAttribute(i)).getTime()));
-			}
-			else if (structField.dataType() != null) {
-				fields[i] = (Serializable) feature.getAttribute(i);
-			}
-			else {
-				LOGGER.error("Unexpected attribute in field(" + structField.name() + "): " + feature.getAttribute(i));
+			Object fieldObj = feature.getAttribute(i);
+			if (fieldObj != null) {
+				StructField structField = schema.apply(i);
+				if (structField.name().equals(
+						"geom")) {
+					fields[i] = geomWriter.write((Geometry) fieldObj);
+				}
+				else if (structField.dataType() == DataTypes.TimestampType) {
+					fields[i] = ((Timestamp) new Timestamp(
+							((Date) fieldObj).getTime()));
+				}
+				else if (structField.dataType() != null) {
+					fields[i] = (Serializable) fieldObj;
+				}
+				else {
+					LOGGER.error("Unexpected attribute in field(" + structField.name() + "): " + fieldObj);
+				}
 			}
 		}
 

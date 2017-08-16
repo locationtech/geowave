@@ -50,6 +50,8 @@ public class KMeansRunner
 	private String adapterId = null;
 	private String timeField = null;
 	private ScaledTemporalRange scaledTimeRange = null;
+	private int minSplits = -1;
+	private int maxSplits = -1;
 
 	public KMeansRunner() {}
 
@@ -115,7 +117,9 @@ public class KMeansRunner
 				jsc.sc(),
 				inputDataStore,
 				query,
-				queryOptions);
+				queryOptions,
+				minSplits,
+				maxSplits);
 
 		// Retrieve the input centroids
 		centroidVectors = GeoWaveRDD.rddFeatureVectors(
@@ -224,5 +228,12 @@ public class KMeansRunner
 			ScaledTemporalRange timeRange ) {
 		this.timeField = timeField;
 		this.scaledTimeRange = timeRange;
+	}
+
+	public void setSplits(
+			int min,
+			int max ) {
+		this.minSplits = min;
+		this.maxSplits = max;
 	}
 }
