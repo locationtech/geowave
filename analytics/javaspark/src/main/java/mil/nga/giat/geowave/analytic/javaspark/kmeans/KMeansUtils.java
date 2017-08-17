@@ -19,6 +19,7 @@ import org.opengis.referencing.FactoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Iterables;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
@@ -26,6 +27,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
+import mil.nga.giat.geowave.adapter.vector.utils.PolygonAreaCalculator;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
@@ -78,9 +80,9 @@ public class KMeansUtils
 		}
 
 		typeBuilder.add(attrBuilder.binding(
-				String.class).nillable(
+				Integer.class).nillable(
 				false).buildDescriptor(
-				"KMeansData"));
+				"ClusterIndex"));
 
 		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
 		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
@@ -95,8 +97,9 @@ public class KMeansUtils
 		try (IndexWriter writer = featureStore.createWriter(
 				featureAdapter,
 				featureIndex)) {
-			int i = 0;
 			for (final Vector center : clusterModel.clusterCenters()) {
+				int index = clusterModel.predict(center);
+
 				final double lon = center.apply(0);
 				final double lat = center.apply(1);
 
@@ -119,10 +122,10 @@ public class KMeansUtils
 				}
 
 				sfBuilder.set(
-						"KMeansData",
-						"KMeansCentroid");
+						"ClusterIndex",
+						index);
 
-				final SimpleFeature sf = sfBuilder.buildFeature("Centroid-" + i++);
+				final SimpleFeature sf = sfBuilder.buildFeature("Centroid-" + index);
 
 				writer.write(sf);
 			}
@@ -145,10 +148,13 @@ public class KMeansUtils
 			final JavaRDD<Vector> inputCentroids,
 			final KMeansModel clusterModel,
 			final DataStorePluginOptions outputDataStore,
-			final String hullAdapterName ) {
-		final JavaPairRDD<Integer, Geometry> hullRdd = KMeansHullGenerator.generateHullsRDD(
+			final String hullAdapterName,
+			final boolean computeMetadata ) {
+		final JavaPairRDD<Integer, Iterable<Vector>> groupByRdd = KMeansHullGenerator.groupByIndex(
 				inputCentroids,
 				clusterModel);
+
+		final JavaPairRDD<Integer, Geometry> hullRdd = KMeansHullGenerator.generateHullsRDD(groupByRdd);
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName(hullAdapterName);
@@ -172,9 +178,24 @@ public class KMeansUtils
 				Geometry.class.getName().toString()));
 
 		typeBuilder.add(attrBuilder.binding(
-				String.class).nillable(
+				Integer.class).nillable(
 				false).buildDescriptor(
-				"KMeansData"));
+				"ClusterIndex"));
+
+		typeBuilder.add(attrBuilder.binding(
+				Integer.class).nillable(
+				false).buildDescriptor(
+				"Count"));
+
+		typeBuilder.add(attrBuilder.binding(
+				Double.class).nillable(
+				false).buildDescriptor(
+				"Area"));
+
+		typeBuilder.add(attrBuilder.binding(
+				Double.class).nillable(
+				false).buildDescriptor(
+				"Density"));
 
 		final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
 		final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(
@@ -186,21 +207,59 @@ public class KMeansUtils
 		final DataStore featureStore = outputDataStore.createDataStore();
 		final PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 
+		PolygonAreaCalculator polyCalc = (computeMetadata ? new PolygonAreaCalculator() : null);
+
 		try (IndexWriter writer = featureStore.createWriter(
 				featureAdapter,
 				featureIndex)) {
 
-			int i = 0;
 			for (final Tuple2<Integer, Geometry> hull : hullRdd.collect()) {
+				Integer index = hull._1;
+				Geometry geom = hull._2;
+
 				sfBuilder.set(
 						Geometry.class.getName(),
-						hull._2);
+						geom);
 
 				sfBuilder.set(
-						"KMeansData",
-						"KMeansHull");
+						"ClusterIndex",
+						index);
 
-				final SimpleFeature sf = sfBuilder.buildFeature("Hull-" + i++);
+				int count = 0;
+				double area = 0.0;
+				double density = 0.0;
+
+				if (computeMetadata) {
+					for (Iterable<Vector> points : groupByRdd.lookup(index)) {
+						Vector[] pointVec = Iterables.toArray(
+								points,
+								Vector.class);
+						count += pointVec.length;
+					}
+
+					try {
+						area = polyCalc.getAreaDensify(geom);
+
+						density = (double) count / area;
+					}
+					catch (Exception e) {
+						LOGGER.error("Problem computing polygon area: " + e.getMessage());
+					}
+				}
+
+				sfBuilder.set(
+						"Count",
+						count);
+
+				sfBuilder.set(
+						"Area",
+						area);
+
+				sfBuilder.set(
+						"Density",
+						density);
+
+				final SimpleFeature sf = sfBuilder.buildFeature("Hull-" + index);
 
 				writer.write(sf);
 			}

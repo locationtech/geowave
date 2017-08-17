@@ -47,10 +47,13 @@ public class KMeansSparkOptions
 	private Boolean generateHulls = false;
 
 	@Parameter(names = {
-		"-b",
-		"--bbox"
-	}, description = "Bounding box for spatial query <x1 y1 x2 y2>")
-	private String bbox = null;
+		"-ch",
+		"--computeHullData"
+	}, description = "Compute hull count, area and density?")
+	private Boolean computeHullData = false;
+
+	@Parameter(names = "--cqlFilter", description = "An optional CQL filter applied to the input data")
+	private String cqlFilter;
 
 	@Parameter(names = {
 		"-f",
@@ -63,6 +66,18 @@ public class KMeansSparkOptions
 
 	@Parameter(names = "--maxSplits", description = "The max partitions for the input data")
 	private Integer maxSplits = -1;
+
+	@Parameter(names = {
+		"-ct",
+		"--centroidType"
+	}, description = "Feature type name (adapter ID) for centroid output")
+	private String centroidTypeName = "kmeans-centroids";
+
+	@Parameter(names = {
+		"-ht",
+		"--hullType"
+	}, description = "Feature type name (adapter ID) for hull output")
+	private String hullTypeName = "kmeans-hulls";
 
 	public KMeansSparkOptions() {}
 
@@ -129,13 +144,22 @@ public class KMeansSparkOptions
 		this.generateHulls = generateHulls;
 	}
 
-	public String getBoundingBox() {
-		return bbox;
+	public Boolean isComputeHullData() {
+		return computeHullData;
 	}
 
-	public void setBoundingBox(
-			String bbox ) {
-		this.bbox = bbox;
+	public void setComputeHullData(
+			Boolean computeHullData ) {
+		this.computeHullData = computeHullData;
+	}
+
+	public String getCqlFilter() {
+		return cqlFilter;
+	}
+
+	public void setCqlFilter(
+			String cqlFilter ) {
+		this.cqlFilter = cqlFilter;
 	}
 
 	public String getAdapterId() {
@@ -163,5 +187,23 @@ public class KMeansSparkOptions
 	public void setMaxSplits(
 			Integer maxSplits ) {
 		this.maxSplits = maxSplits;
+	}
+
+	public String getCentroidTypeName() {
+		return centroidTypeName;
+	}
+
+	public void setCentroidTypeName(
+			String centroidTypeName ) {
+		this.centroidTypeName = centroidTypeName;
+	}
+
+	public String getHullTypeName() {
+		return hullTypeName;
+	}
+
+	public void setHullTypeName(
+			String hullTypeName ) {
+		this.hullTypeName = hullTypeName;
 	}
 }
