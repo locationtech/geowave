@@ -32,14 +32,14 @@ import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreFactory;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
+import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.config.CopyIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.CopyStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexGroupCommand;
 import mil.nga.giat.geowave.core.store.operations.config.RemoveStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.config.addindex.AddSpatialIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.addstore.AddMemoryStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
@@ -102,9 +102,10 @@ public class ConfigCacheIT
 	public void addStore() {
 		final String storeName = new MemoryDataStoreFactory().getType();
 
-		final AddMemoryStoreCommand command = new AddMemoryStoreCommand();
+		final AddStoreCommand command = new AddStoreCommand();
 		command.setParameters("abc");
 		command.setMakeDefault(true);
+		command.setStoreType(storeName);
 
 		// This will load the params via SPI.
 		command.prepare(operationParams);
@@ -133,7 +134,7 @@ public class ConfigCacheIT
 		addStore();
 
 		// Now make from default
-		final AddMemoryStoreCommand command = new AddMemoryStoreCommand();
+		final AddStoreCommand command = new AddStoreCommand();
 		command.setParameters("abc2");
 		command.setMakeDefault(false);
 
@@ -202,9 +203,10 @@ public class ConfigCacheIT
 	public void addIndex() {
 		final String spatialType = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
 
-		final AddSpatialIndexCommand command = new AddSpatialIndexCommand();
+		final AddIndexCommand command = new AddIndexCommand();
 		command.setParameters("abc");
 		command.setMakeDefault(true);
+		command.setType(spatialType);
 
 		// This will load the params via SPI.
 		command.prepare(operationParams);
@@ -228,7 +230,7 @@ public class ConfigCacheIT
 
 		final String spatialType = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
 
-		final AddSpatialIndexCommand command = new AddSpatialIndexCommand();
+		final AddIndexCommand command = new AddIndexCommand();
 		command.setParameters("abc2");
 		command.setMakeDefault(false);
 

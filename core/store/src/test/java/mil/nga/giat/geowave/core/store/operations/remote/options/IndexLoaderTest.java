@@ -19,15 +19,15 @@ import org.junit.Test;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
-import mil.nga.giat.geowave.core.store.operations.config.addindex.AddSpatialIndexCommand;
 
 public class IndexLoaderTest
 {
 	@Test
 	public void testMultipleIndices()
 			throws IOException {
-		final AddSpatialIndexCommand addIndex = new AddSpatialIndexCommand();
+		final AddIndexCommand addIndex = new AddIndexCommand();
 		addIndex.setType("test");
 		addIndex.setParameters("index1");
 		final ManualOperationParams params = new ManualOperationParams();
@@ -58,7 +58,7 @@ public class IndexLoaderTest
 	@Test
 	public void testIndexGroup()
 			throws IOException {
-		final AddSpatialIndexCommand addIndex = new AddSpatialIndexCommand();
+		final AddIndexCommand addIndex = new AddIndexCommand();
 		addIndex.setType("test");
 		addIndex.setParameters("index1");
 		final ManualOperationParams params = new ManualOperationParams();
@@ -95,7 +95,7 @@ public class IndexLoaderTest
 	@Test
 	public void testMutlipleIndexGroupsAndIndices()
 			throws IOException {
-		final AddSpatialIndexCommand addIndex = new AddSpatialIndexCommand();
+		final AddIndexCommand addIndex = new AddIndexCommand();
 		addIndex.setType("test");
 		addIndex.setParameters("index1");
 		final ManualOperationParams params = new ManualOperationParams();

@@ -8,7 +8,7 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.operations.config.addstore;
+package mil.nga.giat.geowave.core.store.operations.config;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,21 +28,21 @@ import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.config.addstore.AddStoreSection;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-@GeowaveOperation(name = "memory", parentOperation = AddStoreSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddMemoryStoreCommand extends
+public class AddStoreCommand extends
 		DefaultOperation<Void> implements
 		Command
 {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(AddMemoryStoreCommand.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
 
 	public static final String PROPERTIES_CONTEXT = "properties";
 
@@ -58,7 +58,11 @@ public class AddMemoryStoreCommand extends
 	}, description = "Make this the default store in all operations")
 	private Boolean makeDefault;
 
-	private String storeType = "memory";
+	@Parameter(names = {
+		"-t",
+		"--type"
+	}, required = true, description = "The type of store, such as accumulo, memory, etc")
+	private String storeType;
 
 	@ParametersDelegate
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
@@ -68,10 +72,42 @@ public class AddMemoryStoreCommand extends
 			final OperationParams params ) {
 
 		// Load SPI options for the given type into pluginOptions.
-		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-				storeType,
-				new MemoryStoreFactoryFamily());
-		pluginOptions.selectPlugin(storeType);
+		if (storeType != null) {
+			if (storeType.equals("memory")) {
+				GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+						storeType,
+						new MemoryStoreFactoryFamily());
+			}
+			pluginOptions.selectPlugin(storeType);
+		}
+		else {
+			// Try to load the 'default' options.
+
+			final File configFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+			final Properties existingProps = ConfigOptions.loadProperties(
+					configFile,
+					null);
+
+			final String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+
+			// Load the default index.
+			if (defaultStore != null) {
+				try {
+					if (pluginOptions.load(
+							existingProps,
+							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
+						// Set the required type option.
+						storeType = pluginOptions.getType();
+					}
+				}
+				catch (final ParameterException pe) {
+					LOGGER.warn(
+							"Couldn't load default store: " + defaultStore,
+							pe);
+				}
+			}
+		}
 
 		// Successfully prepared.
 		return true;
@@ -112,6 +148,9 @@ public class AddMemoryStoreCommand extends
 		pluginOptions.save(
 				existingProps,
 				getNamespace());
+
+		final StoreFactoryOptions opts = pluginOptions.getFactoryOptions();
+		opts.setGeowaveNamespace("namespace");
 
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {

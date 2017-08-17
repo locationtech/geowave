@@ -11,34 +11,28 @@
 package mil.nga.giat.geowave.core.store.operations.config;
 
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexGroupCommand;
+import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.config.CopyIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.CopyStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.config.RemoveIndexGroupCommand;
 import mil.nga.giat.geowave.core.store.operations.config.RemoveStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.config.addindex.AddIndexSection;
-import mil.nga.giat.geowave.core.store.operations.config.addindex.AddSpatialIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.addindex.AddSpatialTemporalIndexCommand;
-import mil.nga.giat.geowave.core.store.operations.config.addstore.AddMemoryStoreCommand;
-import mil.nga.giat.geowave.core.store.operations.config.addstore.AddStoreSection;
 
 public class ConfigOperationProvider implements
 		CLIOperationProviderSpi
 {
 
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
-		AddSpatialIndexCommand.class,
-		AddSpatialTemporalIndexCommand.class,
+		AddIndexCommand.class,
 		AddIndexGroupCommand.class,
+		AddStoreCommand.class,
 		CopyIndexCommand.class,
 		CopyStoreCommand.class,
 		RemoveIndexCommand.class,
 		RemoveIndexGroupCommand.class,
-		RemoveStoreCommand.class,
-		AddStoreSection.class,
-		AddIndexSection.class,
-		AddMemoryStoreCommand.class,
+		RemoveStoreCommand.class
 	};
 
 	@Override

@@ -8,7 +8,7 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.operations.config.addindex;
+package mil.nga.giat.geowave.core.store.operations.config;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,13 +32,13 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
-@GeowaveOperation(name = "spatial_temporal", parentOperation = AddIndexSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
-public class AddSpatialTemporalIndexCommand extends
+public class AddIndexCommand extends
 		DefaultOperation<Void> implements
 		Command
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(AddSpatialTemporalIndexCommand.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
 	@Parameter(description = "<name>", required = true)
 	@RestParameters(names = {
@@ -52,7 +52,11 @@ public class AddSpatialTemporalIndexCommand extends
 	}, description = "Make this the default index creating stores")
 	private Boolean makeDefault;
 
-	private String type = "spatial_temporal";
+	@Parameter(names = {
+		"-t",
+		"--type"
+	}, required = true, description = "The type of index, such as spatial, or spatial_temporal")
+	private String type;
 
 	@ParametersDelegate
 	private IndexPluginOptions pluginOptions = new IndexPluginOptions();
@@ -62,7 +66,37 @@ public class AddSpatialTemporalIndexCommand extends
 			final OperationParams params ) {
 
 		// Load SPI options for the given type into pluginOptions.
-		pluginOptions.selectPlugin(type);
+		if (type != null) {
+			pluginOptions.selectPlugin(type);
+		}
+		else {
+			// Try to load the 'default' options.
+
+			final File configFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+			final Properties existingProps = ConfigOptions.loadProperties(
+					configFile,
+					null);
+
+			final String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+
+			// Load the default index.
+			if (defaultIndex != null) {
+				try {
+					if (pluginOptions.load(
+							existingProps,
+							IndexPluginOptions.getIndexNamespace(defaultIndex))) {
+						// Set the required type option.
+						type = pluginOptions.getType();
+					}
+				}
+				catch (final ParameterException pe) {
+					LOGGER.warn(
+							"Couldn't load default index: " + defaultIndex,
+							pe);
+				}
+			}
+		}
 
 		// Successfully prepared.
 		return true;
