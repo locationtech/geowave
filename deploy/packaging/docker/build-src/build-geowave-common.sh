@@ -15,6 +15,7 @@
 
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
 trap 'chmod -R 777 $WORKSPACE' EXIT
+trap 'exit' ERR
 
 echo "---------------------------------------------------------------"
 echo "         Building GeoWave Common"
