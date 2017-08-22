@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.FileOutputStream;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -30,14 +32,15 @@ public class SwaggerApiParser
 	private final String swaggerHeader;
 
 	public SwaggerApiParser(
+			final String host,
 			final String apiVersion,
 			final String apiTitle,
 			final String apiDescription ) {
-		routesJson = new JsonObject();
-		swaggerHeader = "{\"swagger\": \"2.0\"," + "\"info\": {" + "\"version\": \"" + apiVersion + "\","
+		this.routesJson = new JsonObject();
+		this.swaggerHeader = "{\"swagger\": \"2.0\"," + "\"info\": {" + "\"version\": \"" + apiVersion + "\","
 				+ "\"title\": \"" + apiTitle + "\"," + "\"description\": \"" + apiDescription + "\","
 				+ "\"termsOfService\": \"http://localhost:5152/\"," + "\"contact\": {" + "\"name\": \"GeoWave Team\""
-				+ "}," + "\"license\": {" + "\"name\": \"MIT\"" + "}" + "}," + "\"host\": \"localhost:5152\","
+				+ "}," + "\"license\": {" + "\"name\": \"MIT\"" + "}" + "}," + "\"host\": \"" + host + "\","
 				+ "\"basePath\": \"/\"," + "\"schemes\": [" + "\"http\"" + "]," + "\"consumes\": ["
 				+ "\"application/json\"" + "]," + "\"produces\": [" + "\"application/json\"" + "]," + "\"paths\":";
 	}
@@ -74,24 +77,24 @@ public class SwaggerApiParser
 				method_json);
 	}
 
-	public void serializeSwaggerJson(
+	public boolean serializeSwaggerJson(
 			final String filename ) {
 		Writer writer = null;
 		try {
 			writer = new OutputStreamWriter(
-					new FileOutputStream(
+						new FileOutputStream(
 							filename),
-					"UTF-8");
-
+						"UTF-8");
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
 					"Unable to write swagger json",
 					e);
 		}
+		if (writer == null) return false;
+		
 		final Gson gson = new GsonBuilder().create();
 
-		if (writer != null) {
 			try {
 				writer.write(swaggerHeader);
 				gson.toJson(
@@ -103,6 +106,7 @@ public class SwaggerApiParser
 			catch (final IOException e1) {
 				e1.printStackTrace();
 			}
-		}
+		
+		return true;
 	}
 }
