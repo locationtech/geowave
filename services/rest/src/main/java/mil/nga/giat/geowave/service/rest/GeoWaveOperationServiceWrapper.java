@@ -2,9 +2,16 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.restlet.Application;
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -18,7 +25,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -240,6 +246,56 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
+
+		String apiKey = getQueryValue("apiKey");
+		if (apiKey == null) {
+			setStatus(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					"apiKey is null");
+			return null;
+		}
+		else {
+			Application app = this.getApplication();
+			Context c = app.getContext();
+			final String dbUrl = (String) c.getAttributes().get(
+					"databaseUrl");
+
+			try (Connection conn = DriverManager.getConnection(dbUrl)) {
+				if (conn != null) {
+
+					final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
+					PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
+					query_stmnt.setString(
+							1,
+							apiKey);
+					ResultSet rs = query_stmnt.executeQuery();
+					// There is no existing row, the apiKey is invalid
+					if (!rs.next()) {
+
+						// close resources we are done with
+						rs.close();
+						query_stmnt.close();
+						conn.close();
+						setStatus(
+								Status.CLIENT_ERROR_BAD_REQUEST,
+								"apiKey is invalid");
+						return null;
+					}
+					else {
+						// final String apiKeyStr = rs.getString("apiKey");
+						// userAndKey = userAndKey + ":" + apiKeyStr;
+						// close resources we are done with
+						rs.close();
+						query_stmnt.close();
+					}
+					conn.close();
+				}
+
+			}
+			catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		}
 
 		try {
 			injectParameters(form);

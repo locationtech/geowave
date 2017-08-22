@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.service.rest;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import com.google.gson.Gson;
@@ -27,6 +30,7 @@ public class SwaggerApiParser
 	private String swaggerHeader;
 
 	public SwaggerApiParser(
+			String host,
 			String apiVersion,
 			String apiTitle,
 			String apiDescription ) {
@@ -34,22 +38,21 @@ public class SwaggerApiParser
 		this.swaggerHeader = "{\"swagger\": \"2.0\"," + "\"info\": {" + "\"version\": \"" + apiVersion + "\","
 				+ "\"title\": \"" + apiTitle + "\"," + "\"description\": \"" + apiDescription + "\","
 				+ "\"termsOfService\": \"http://localhost:5152/\"," + "\"contact\": {" + "\"name\": \"GeoWave Team\""
-				+ "}," + "\"license\": {" + "\"name\": \"MIT\"" + "}" + "}," + "\"host\": \"localhost:5152\","
+				+ "}," + "\"license\": {" + "\"name\": \"MIT\"" + "}" + "}," + "\"host\": \"" + host + "\","
 				+ "\"basePath\": \"/\"," + "\"schemes\": [" + "\"http\"" + "]," + "\"consumes\": ["
 				+ "\"application/json\"" + "]," + "\"produces\": [" + "\"application/json\"" + "]," + "\"paths\":";
 	}
 
-	public void AddRoute(
+	public void addRoute(
 			RestRoute route ) {
 		Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route.getOperation());
 		// iterate over routes and paths here
 		SwaggerOperationParser parser = null;
 		try {
-			System.out.println("OPERATION: " + route.getPath() + " : " + opClass.getName());
-
+			
 			parser = new SwaggerOperationParser<>(
 					opClass.newInstance());
-			JsonObject op_json = ((SwaggerOperationParser) parser).GetJsonObject();
+			JsonObject op_json = ((SwaggerOperationParser) parser).getJsonObject();
 
 			JsonObject method_json = new JsonObject();
 			String method = route.getOperation().getAnnotation(
@@ -75,20 +78,25 @@ public class SwaggerApiParser
 					method_json);
 		}
 		catch (InstantiationException | IllegalAccessException e) {
-			System.out.println("Exception while instantiating the geowave operation server resource.");
+			//TODO: log error
 		}
 	}
 
-	public void SerializeSwaggerJson(
+	public boolean serializeSwaggerJson(
 			String filename ) {
 		Writer writer = null;
 		try {
-			writer = new FileWriter(
-					filename);
+			writer = new BufferedWriter(
+					new OutputStreamWriter(
+							new FileOutputStream(
+									filename),
+							"UTF-8"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		if (writer == null) return false;
+
 		Gson gson = new GsonBuilder().create();
 
 		try {
@@ -102,6 +110,7 @@ public class SwaggerApiParser
 		catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		return true;
 	}
 
 }

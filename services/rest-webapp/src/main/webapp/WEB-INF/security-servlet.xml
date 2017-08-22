@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns:security="http://www.springframework.org/schema/security"
+		 xmlns:b="http://www.springframework.org/schema/beans"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<!--<b:bean id="successLoginHandler" class="mil.nga.giat.geowave.service.rest.webapp.RedirectLoginSuccessHandler" />-->
+	<security:http pattern="/api" security="none"/>
+	<security:http pattern="/geowave/**" security="none"/>
+	<security:http auto-config="true">
+	    <security:http-basic />
+	    <security:form-login />
+	    <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')"  />
+	    <security:intercept-url pattern="/login.jsp*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+  	</security:http>
+	<security:authentication-manager>
+	  	<security:authentication-provider user-service-ref="customAdmin">         
+  </security:authentication-provider>
+	</security:authentication-manager>
+	<security:user-service id="customAdmin">
+ 		<security:user name="geowave_username" password="geowave_password" authorities="ROLE_USER, ROLE_ADMIN" />
+	</security:user-service>
+</b:beans>
