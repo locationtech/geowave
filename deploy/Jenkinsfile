@@ -10,10 +10,14 @@ node {
    checkout scm
    // Mark the create docker image 'stage'
    stage 'Create Docker Image'
+
    // Build the docker container
    sh 'docker build -t locationtech/geowave-centos6-java8-build -f deploy/packaging/docker/geowave-centos6-java8-build.dockerfile deploy/packaging/docker'
    sh 'docker build -t locationtech/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
    sh 'docker build -t locationtech/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
+
+   stage 'Maven Deploy'
+   sh 'mvn deploy -DskipTests -Dfindbugs.skip'
 
    // Mark the build artifacts 'stage'....
    stage 'Build and Publish RPMs'
