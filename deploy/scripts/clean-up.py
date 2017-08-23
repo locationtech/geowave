@@ -12,9 +12,9 @@ This script is used to access the geowave-rpms s3 container and clean up the dev
 
 class CleanUp():
     def __init__(self, bucket_name = None):
+        self.workspace_path = os.path.join(os.sep, 'var', 'lib', 'jenkins', 'jobs', 'geowave-pipeline', 'workspace')
         self.remove_builds_before = None
         #lists for cleaning up s3 bucket
-        self.max_number_of_objs = 500
         self.objs_in_dev_noarch = []
         self.objs_in_dev_tarball = []
         self.objs_in_dev_srpms = []
@@ -25,6 +25,19 @@ class CleanUp():
         self.dev_path = os.path.join(os.sep, 'var','www','geowave-efs','html','repos','snapshots','geowave','dev')
         self.dev_jar_path = os.path.join(os.sep, 'var','www','geowave-efs','html','repos','snapshots','geowave','dev-jars')
 
+    def find_build_type(self):
+        build_type_file = os.path.join(self.workspace_path, 'deploy', 'target', 'build-type.txt')
+        build_type = ""
+        if os.path.isfile(build_type_file):
+            fileptr = open(build_type_file, 'r')
+            build_type = fileptr.readline().rstrip()
+            fileptr.close()
+        else:
+            print("WARNING: \"{}\" file now found. Script will not clean clean".format(build_type_file)) 
+            build_type = None
+
+        return build_type
+        
 
     def query_s3_bucket(self):
         """
@@ -128,6 +141,10 @@ class CleanUp():
 if __name__ == "__main__":
     bucket_name = 'geowave-rpms'
     cleaner = CleanUp(bucket_name)
-    cleaner.clean_bucket()
-    cleaner.clean_dirs()
+    build_type = cleaner.find_build_type()
+    if build_type == 'dev':
+        cleaner.clean_bucket()
+        cleaner.clean_dirs()
+    elif build_type == 'release':
+        print("Build type detected as release. Not doing clean up.") 
 
