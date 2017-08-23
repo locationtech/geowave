@@ -6,8 +6,13 @@ node {
    
    // Mark the code checkout 'stage'
    stage 'Checkout'
-   // Get GeoWave source from GitHub repository
+   def commitHash = checkout(scm).GIT_COMMIT
+   // For testing
+   print commitHash
+
    checkout scm
+   
+
    // Mark the create docker image 'stage'
    stage 'Create Docker Image'
 
