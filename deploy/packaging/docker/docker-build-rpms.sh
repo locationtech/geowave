@@ -13,6 +13,7 @@
 # This script will build and package all of the configurations listed in the BUILD_ARGS_MATRIX array.
 #
 # Source all our reusable functionality, argument is the location of this script.
+trap 'exit' ERR
 
 echo '###### Build Variables'
 declare -A ARGS
