@@ -1,0 +1,26 @@
+[[quickstart-launch-page]]
+<<<
+
+_v${project.version}_
+
+:linkattrs:
+
+= GeoWave Quickstart Guide image:geowave-icon-logo-cropped.png[width="28%"]
+
+The GeoWave quickstart guide is designed to allow a new user to walkthrough a simple use case using the tools built 
+into the GeoWave framework. We currently have both a vector and raster walkthough which can be run in and AWS EMR environment 
+or on your local machine in a single node sandbox using VirtualBox. There are also Zeppelin Notebook examples for users 
+looking try out GeoWave in that manor.   
+
+== Environment Options
+- link:http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR, window="_blank"]
+- link:http://locationtech.github.io/geowave/sandbox-env.html#[Sandbox VirtualBox Image, window="_blank"]
+
+== Walkthroughs
+- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo, window="_blank"]
+- link:http://locationtech.github.io/geowave/walkthrough-raster.html#[Raster Demo, window="_blank"]
+- link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration, window="_blank"]
+- link:http://locationtech.github.io/geowave/interact-cluster.html#[Interacting with the cluster, window="_blank"]
+
+== Notebook Examples
+- link:https://github.com/locationtech/geowave/tree/master/examples/data/notebooks/zeppelin[Zeppelin, window="_blank"]
