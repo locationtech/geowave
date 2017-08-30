@@ -35,5 +35,14 @@ node ('master') {
    
    // Deploy to geowave-rpms
    stage 'Deploying to s3://geowave-rpms/'
-   sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+   def build_type = readFile('deploy/target/build-type.txt').trim()
+   if ( build_type == "dev" ) {
+     echo 'Build type determined as Dev. Sync will delete content on s3.'
+     sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/ --delete'
+   } else if (build_type == "release" ) {
+     echo 'Build type determined as Release. Sync will not delete content on s3.'
+     sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+   } else {
+     error("ERROR: Could not determine build type.")
+   }
 }
