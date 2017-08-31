@@ -1,48 +1,77 @@
 #!groovy 
 
 node ('master') {
-   jdk = tool name: 'JDK18'
-   env.JAVA_HOME = "${jdk}"
+  // Setting java home for the withMaven block
+  jdk = tool name: 'JDK18'
+  env.JAVA_HOME = "${jdk}"
 
-   stage 'Wipe workspace'
-   deleteDir()
-   
-   // Mark the code checkout 'stage'
-   stage 'Checkout'
-   // Get GeoWave source from GitHub repository
-   checkout scm
-   // Mark the create docker image 'stage'
-   stage 'Create Docker Image'
-   // Build the docker container
-   sh 'docker build -t locationtech/geowave-centos6-java8-build -f deploy/packaging/docker/geowave-centos6-java8-build.dockerfile deploy/packaging/docker'
-   sh 'docker build -t locationtech/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
-   sh 'docker build -t locationtech/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
+  stage('Wipe workspace'){
+    deleteDir()
+  }
 
-   stage 'Maven Deploy'
-     withMaven(
-       maven: 'maven-3.5.0',
-       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
-       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
-       sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
-     }
-  
-   // Mark the build artifacts 'stage'....
-   stage 'Build and Publish RPMs'
-   sh 'deploy/packaging/docker/docker-build-rpms.sh'
+  // Mark the code checkout 'stage'
+  stage('Checkout'){
+  // Get GeoWave source from GitHub repository
+    checkout scm
+  }
+  // Mark the create docker image 'stage'
+  stage('Create Docker Image'){
+    // Build the docker container
+    sh 'docker build -t locationtech/geowave-centos6-java8-build -f deploy/packaging/docker/geowave-centos6-java8-build.dockerfile deploy/packaging/docker'
+    sh 'docker build -t locationtech/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
+    sh 'docker build -t locationtech/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
+  }
 
-   stage 'Clean bucket and local space'
-   sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
-   
-   // Deploy to geowave-rpms
-   stage 'Deploying to s3://geowave-rpms/'
-   def build_type = readFile('deploy/target/build-type.txt').trim()
-   if ( build_type == "dev" ) {
-     echo 'Build type determined as Dev. Sync will delete content on s3.'
-     sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/ --delete'
-   } else if (build_type == "release" ) {
-     echo 'Build type determined as Release. Sync will not delete content on s3.'
-     sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
-   } else {
-     error("ERROR: Could not determine build type.")
-   }
+  stage('Maven Deploy'){
+    withMaven(
+      maven: 'maven-3.5.0',
+      mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
+      options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
+      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
+    }
+  }
+
+  // Mark the build artifacts 'stage'....
+  stage('Build and Publish RPMs'){
+    sh 'deploy/packaging/docker/docker-build-rpms.sh'
+  }
+
+  stage('Clean bucket and local space'){
+    sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
+  }
+
+  // Deploy to geowave-rpms
+  stage('Deploying to s3://geowave-rpms/'){
+    def build_type = readFile('deploy/target/build-type.txt').trim()
+    if ( build_type == "dev" ) {
+      echo 'Build type determined as Dev. Sync will delete content on s3.'
+      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/ --delete'
+    } else if (build_type == "release" ) {
+      echo 'Build type determined as Release. Sync will not delete content on s3.'
+      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+    } else {
+      error("ERROR: Could not determine build type. Unable to upload rpm's.")
+    }
+  }
+
+  stage('Bundle maven cache'){
+    def build_type = readFile('deploy/target/build-type.txt').trim()
+    if ( build_type == "dev" ) {
+      dir("${env.WORKSPACE}/docker-root") {
+        sh "tar cvzf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz .m2"
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz"
+      // upload to upload s3://geowave/mvn-cache/dev/mvn-repo-cache-latest.tar.gz
+      }
+    }
+    else if (build_type == "release" ){
+      def version  = readFile('deploy/target/version.txt').trim()
+      dir("${env.WORKSPACE}/docker-root") {
+        sh "tar cvzf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz .m2"
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-${version}.tar.gz"
+      // $DOCKERROOT/.m2 and upload to upload s3://geowave/mvn-cache/release/mvn-repo-cache-version.tar.gz
+      }
+    } else {
+      error("ERROR: Could not determine build type. Unable to upload maven cache")
+    }
+  }
 }
