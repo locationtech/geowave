@@ -161,10 +161,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansUtils.html#writeClusterHulls-org.apache.spark.api.java.JavaRDD-org.apache.spark.mllib.clustering.KMeansModel-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-java.lang.String-">writeClusterHulls</a></span>(org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;&nbsp;inputCentroids,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansUtils.html#writeClusterHulls-org.apache.spark.api.java.JavaRDD-org.apache.spark.mllib.clustering.KMeansModel-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-java.lang.String-boolean-">writeClusterHulls</a></span>(org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;&nbsp;inputCentroids,
                  org.apache.spark.mllib.clustering.KMeansModel&nbsp;clusterModel,
                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStore,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hullAdapterName)</code>&nbsp;</td>
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hullAdapterName,
+                 boolean&nbsp;computeMetadata)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -217,7 +218,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                 <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">ScaledTemporalRange</a>&nbsp;scaledRange)</pre>
 </li>
 </ul>
-<a name="writeClusterHulls-org.apache.spark.api.java.JavaRDD-org.apache.spark.mllib.clustering.KMeansModel-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-java.lang.String-">
+<a name="writeClusterHulls-org.apache.spark.api.java.JavaRDD-org.apache.spark.mllib.clustering.KMeansModel-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -226,7 +227,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;writeClusterHulls(org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;&nbsp;inputCentroids,
                                             org.apache.spark.mllib.clustering.KMeansModel&nbsp;clusterModel,
                                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStore,
-                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hullAdapterName)</pre>
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hullAdapterName,
+                                            boolean&nbsp;computeMetadata)</pre>
 </li>
 </ul>
 <a name="setRunnerTimeParams-mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansRunner-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.index.ByteArrayId-">
