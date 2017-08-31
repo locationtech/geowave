@@ -86,7 +86,7 @@ public class FeatureDataUtils
 							}
 						});
 				GeoTools.addClassLoader(urlCL);
-		
+
 			}
 			classLoaderInitialized = true;
 		}

@@ -144,8 +144,8 @@ public class KmeansSparkCommand extends
 			runner.setAdapterId(kMeansSparkOptions.getAdapterId());
 		}
 
-		if (kMeansSparkOptions.getBoundingBox() != null) {
-			runner.setBoundingBox(kMeansSparkOptions.getBoundingBox());
+		if (kMeansSparkOptions.getCqlFilter() != null) {
+			runner.setCqlFilter(kMeansSparkOptions.getCqlFilter());
 		}
 
 		stopwatch.reset();
@@ -169,7 +169,7 @@ public class KmeansSparkCommand extends
 		KMeansUtils.writeClusterCentroids(
 				clusterModel,
 				outputDataStore,
-				"kmeans-centroids",
+				kMeansSparkOptions.getCentroidTypeName(),
 				scaledRange);
 
 		if (kMeansSparkOptions.isGenerateHulls()) {
@@ -181,7 +181,8 @@ public class KmeansSparkCommand extends
 					inputCentroids,
 					clusterModel,
 					outputDataStore,
-					"kmeans-hulls");
+					kMeansSparkOptions.getHullTypeName(),
+					kMeansSparkOptions.isComputeHullData());
 
 			stopwatch.stop();
 			LOGGER.debug("KMeans hull generation took " + stopwatch.getTimeString());

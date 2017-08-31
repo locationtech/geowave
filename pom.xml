@@ -862,7 +862,7 @@
 		<module>core</module>
 		<module>deploy</module>
 		<module>docs</module>
-		<module>examples</module>
+		<module>examples/java-api</module>
 		<module>extensions</module>
 		<module>services</module>
 		<module>test</module>

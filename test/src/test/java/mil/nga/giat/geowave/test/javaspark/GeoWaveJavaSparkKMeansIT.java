@@ -15,6 +15,7 @@ import java.util.Date;
 
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.mllib.clustering.KMeansModel;
+import org.apache.spark.mllib.linalg.Vector;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -54,6 +55,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 	protected static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
 	protected static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
+	protected static final String CQL_FILTER = "BBOX(the_geom, -100, 30, -90, 40)";
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
@@ -102,6 +104,7 @@ public class GeoWaveJavaSparkKMeansIT
 		final KMeansRunner runner = new KMeansRunner();
 		runner.setInputDataStore(inputDataStore);
 		runner.setAdapterId(adapterId);
+		runner.setCqlFilter(CQL_FILTER);
 
 		// Attempt to set the time params
 		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(
@@ -143,9 +146,10 @@ public class GeoWaveJavaSparkKMeansIT
 				clusterModel.clusterCenters().length);
 
 		// Generate the hulls
-		final JavaPairRDD<Integer, Geometry> hullsRDD = KMeansHullGenerator.generateHullsRDD(
+		final JavaPairRDD<Integer, Iterable<Vector>> groupByRDD = KMeansHullGenerator.groupByIndex(
 				runner.getInputCentroids(),
 				clusterModel);
+		final JavaPairRDD<Integer, Geometry> hullsRDD = KMeansHullGenerator.generateHullsRDD(groupByRDD);
 
 		Assert.assertTrue(
 				"centroids from the model should match the hull count",
@@ -159,12 +163,13 @@ public class GeoWaveJavaSparkKMeansIT
 
 		}
 
-		// Write out the hull features
+		// Write out the hull features w/ metadata
 		DataAdapter hullAdapter = KMeansUtils.writeClusterHulls(
 				runner.getInputCentroids(),
 				clusterModel,
 				inputDataStore,
-				"kmeans-hulls-test");
+				"kmeans-hulls-test",
+				true);
 
 		// Query back from the new adapter
 		queryFeatures(
@@ -207,6 +212,9 @@ public class GeoWaveJavaSparkKMeansIT
 						String timeField = attrDesc.getLocalName();
 						Date time = (Date) isFeat.getAttribute(timeField);
 						LOGGER.warn("  time = " + time);
+					}
+					else {
+						LOGGER.warn(attrDesc.getLocalName() + " = " + isFeat.getAttribute(attrDesc.getLocalName()));
 					}
 				}
 
