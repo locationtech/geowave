@@ -1,6 +1,9 @@
 #!groovy 
 
-node {
+node ('master') {
+   jdk = tool name: 'JDK18'
+   env.JAVA_HOME = "${jdk}"
+
    stage 'Wipe workspace'
    deleteDir()
    
@@ -15,14 +18,31 @@ node {
    sh 'docker build -t locationtech/geowave-centos6-rpm-build -f deploy/packaging/docker/geowave-centos6-rpm-build.dockerfile deploy/packaging/docker'
    sh 'docker build -t locationtech/geowave-centos6-publish -f deploy/packaging/docker/geowave-centos6-publish.dockerfile deploy/packaging/docker'
 
-   stage 'Clean bucket and local space'
-   sh 'deploy/scripts/clean-up.py'
-   
-  // Mark the build artifacts 'stage'....
+   stage 'Maven Deploy'
+     withMaven(
+       maven: 'maven-3.5.0',
+       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
+       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
+       sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
+     }
+  
+   // Mark the build artifacts 'stage'....
    stage 'Build and Publish RPMs'
    sh 'deploy/packaging/docker/docker-build-rpms.sh'
+
+   stage 'Clean bucket and local space'
+   sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
    
    // Deploy to geowave-rpms
    stage 'Deploying to s3://geowave-rpms/'
-   sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+   def build_type = readFile('deploy/target/build-type.txt').trim()
+   if ( build_type == "dev" ) {
+     echo 'Build type determined as Dev. Sync will delete content on s3.'
+     sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/ --delete'
+   } else if (build_type == "release" ) {
+     echo 'Build type determined as Release. Sync will not delete content on s3.'
+     sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+   } else {
+     error("ERROR: Could not determine build type.")
+   }
 }

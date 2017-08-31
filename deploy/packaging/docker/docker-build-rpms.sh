@@ -62,9 +62,14 @@ if [ -z $BUILD_ARGS_MATRIX  ]; then
     	)
 	fi
 fi
-mkdir $DOCKER_ROOT
 
-$WORKSPACE/deploy/packaging/docker/pull-s3-caches.sh $DOCKER_ROOT
+# make the docker_root directory if it has not been created already
+if [[ ! -d $DOCKER_ROOT ]]; then
+  echo "WARNING: The docker-root directory did not exist. Creating now." 
+  mkdir $DOCKER_ROOT
+fi
+
+#$WORKSPACE/deploy/packaging/docker/pull-s3-caches.sh $DOCKER_ROOT
 $WORKSPACE/deploy/packaging/rpm/centos/6/rpm.sh --command clean
 	
 docker run $DOCKER_ARGS --rm \
