@@ -40,7 +40,7 @@ else
 fi
 TARGET_ROOT=${ARGS[workspace]}/deploy/packaging/emr/generated
 TEMPLATE_ROOT=${ARGS[workspace]}/deploy/packaging/emr/template
-SLD_DIR=${ARGS[workspace]}/examples/example-slds
+SLD_DIR=${ARGS[workspace]}/examples/data/slds
 
 mkdir -p $TARGET_ROOT/quickstart
 
