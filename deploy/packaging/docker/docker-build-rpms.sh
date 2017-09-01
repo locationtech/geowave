@@ -69,7 +69,6 @@ if [[ ! -d $DOCKER_ROOT ]]; then
   mkdir $DOCKER_ROOT
 fi
 
-#$WORKSPACE/deploy/packaging/docker/pull-s3-caches.sh $DOCKER_ROOT
 $WORKSPACE/deploy/packaging/rpm/centos/6/rpm.sh --command clean
 	
 docker run $DOCKER_ARGS --rm \
