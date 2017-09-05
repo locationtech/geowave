@@ -128,7 +128,6 @@ public class AddAccumuloStoreSwaggerCommand extends
 	public Void computeResults(
 			final OperationParams params ) {
 
-		System.out.println(params);
 		final File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 		final Properties existingProps = ConfigOptions.loadProperties(
