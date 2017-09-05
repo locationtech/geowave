@@ -68,6 +68,13 @@ public class SparkSqlCommand extends
 			throw new ParameterException(
 					"Requires argument: <sql query>");
 		}
+		computeResults(params);
+	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params )
+			throws Exception {
 
 		// Config file
 		final File configFile = (File) params.getContext().get(
@@ -149,6 +156,7 @@ public class SparkSqlCommand extends
 					sparkSqlOptions.getCsvOutputFile());
 
 		}
+		return null;
 	}
 
 	private String initStores(
@@ -347,4 +355,5 @@ public class SparkSqlCommand extends
 			final SparkSqlOptions sparkSqlOptions ) {
 		this.sparkSqlOptions = sparkSqlOptions;
 	}
+
 }

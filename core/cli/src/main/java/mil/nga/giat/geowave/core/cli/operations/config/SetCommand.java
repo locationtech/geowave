@@ -39,7 +39,7 @@ public class SetCommand extends
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SetCommand.class);
-	
+
 	@Parameter(description = "<name> <value>")
 	@RestParameters(names = {
 		"key",
@@ -48,19 +48,19 @@ public class SetCommand extends
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
-			"--password"
-		}, description = "boolean (true|false) - specify if the value being set is a password and should be encrypted in the configurations")
-		private String password = null;
+		"--password"
+	}, description = "boolean (true|false) - specify if the value being set is a password and should be encrypted in the configurations")
+	private String password = null;
 
-		private boolean isPassword;
-		
+	private boolean isPassword;
+
 	@Override
 	public void execute(
 			OperationParams params ) {
 		if (password != null && !"".equals(password.trim())) {
 			isPassword = Boolean.parseBoolean(password.trim());
 		}
-		setKeyValue(params);
+		computeResults(params);
 	}
 
 	/**
@@ -118,7 +118,6 @@ public class SetCommand extends
 					"Requires: <name> <value>");
 		}
 
-
 		if (isPassword) {
 			// check if encryption is enabled in configuration
 			if (Boolean.parseBoolean(p.getProperty(
@@ -145,7 +144,7 @@ public class SetCommand extends
 						Constants.ENCRYPTION_ENABLED_KEY);
 			}
 		}
-		
+
 		Object previousValue = p.setProperty(
 				key,
 				value);
