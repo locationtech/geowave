@@ -32,6 +32,7 @@ public class RestServer extends
 {
 	private final ArrayList<RestRoute> availableRoutes;
 	private final ArrayList<String> unavailableCommands;
+	public static final String ADD_STORE_COMMAND = "mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand";
 
 	/**
 	 * Run the Restlet server (localhost:5152)
@@ -54,13 +55,16 @@ public class RestServer extends
 					|| (((operation.getAnnotation(
 							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST)) && DefaultOperation.class
 							.isAssignableFrom(operation)) || ServerResource.class.isAssignableFrom(operation)) {
-
+				
+				if(!operation.getName().equals(ADD_STORE_COMMAND)){ //Take out the AddStoreCommand operation
 				availableRoutes.add(new RestRoute(
 						operation));
+			}
 			}
 			else {
 				final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
 				unavailableCommands.add(operation.getName() + " " + operationInfo.name());
+
 			}
 		}
 
@@ -103,7 +107,6 @@ public class RestServer extends
 
 				final Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
 						.getOperation());
-
 				apiParser.AddRoute(route);
 			}
 			else {
@@ -114,7 +117,6 @@ public class RestServer extends
 		}
 
 		apiParser.SerializeSwaggerJson("swagger.json");
-
 		// Provide basic 404 error page for unknown route
 		router.attachDefault(RestServer.class);
 
@@ -150,6 +152,7 @@ public class RestServer extends
 										MediaType.APPLICATION_JSON),
 								ApiDeclaration.class);
 						return result;
+
 					}
 
 					@Override

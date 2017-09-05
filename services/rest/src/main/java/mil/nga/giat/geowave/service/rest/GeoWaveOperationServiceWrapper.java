@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 import scala.actors.threadpool.Arrays;
@@ -32,8 +33,7 @@ import scala.actors.threadpool.Arrays;
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveOperationServiceWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
 	private final DefaultOperation<T> operation;
 
 	public GeoWaveOperationServiceWrapper(
@@ -46,12 +46,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			throws Exception {
 		if (operation.getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
-			return handleRequest(
-					null);
+			return handleRequest(null);
 		}
 		else {
-			setStatus(
-					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -62,15 +60,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			throws Exception {
 		if (operation.getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST) {
-
 			final Form form = new Form(
 					request);
-			return handleRequest(
-					form);
+			return handleRequest(form);
 		}
 		else {
-			setStatus(
-					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -91,31 +86,33 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	 * @throws InstantiationException
 	 */
 	private void injectParameters(
-			final Form form )
+			final Form form ,
+			Object instance)
 			throws MissingArgumentException,
 			InstantiationException,
 			IllegalAccessException {
-
+		
 		for (final Field field : FieldUtils.getFieldsWithAnnotation(
 				// TODO Take out this loop?
-				operation.getClass(),
+				instance.getClass(),
 				Parameter.class)) {
-			processField(
+				processField(
 					form,
-					operation,
+					instance,
 					field);
 
-		}
-		for (final Field field : FieldUtils.getFieldsWithAnnotation(
-				// TODO Take out this loop?
-				operation.getClass(),
-				ParametersDelegate.class)) {
-			processField(
-					form,
-					operation,
-					field);
 
 		}
+
+		 for (final Field field : FieldUtils.getFieldsWithAnnotation(
+		 // TODO Take out this loop?
+				 instance.getClass(),
+		 ParametersDelegate.class)) {
+		 processField(
+		 form,
+		 instance,
+		 field);
+		 }
 	}
 
 	private void processField(
@@ -125,28 +122,27 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			throws MissingArgumentException,
 			InstantiationException,
 			IllegalAccessException {
-		final Parameter parameter = field.getAnnotation(
-				Parameter.class);
+		final Parameter parameter = field.getAnnotation(Parameter.class);
 
 		ParametersDelegate parametersDelegate = null;
-		parametersDelegate = field.getAnnotation(
-				ParametersDelegate.class);
-
+		parametersDelegate = field.getAnnotation(ParametersDelegate.class);
+		
 		if (parameter != null) {
 			if (field.getType() == String.class) {
 				final String value = getFieldValue(
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(
-							true); // Get around restrictions on
-									// private fields. JCommander
-									// does this too.
+					field.setAccessible(true); // Get around restrictions on
+												// private fields. JCommander
+												// does this too.
 					try {
 						field.set(
 								instance,
 								value);
+
 					}
+
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
 								e);
@@ -162,13 +158,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(
-							true);
+					field.setAccessible(true);
 					try {
 						field.set(
 								instance,
-								Boolean.valueOf(
-										value));
+								Boolean.valueOf(value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -185,13 +179,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(
-							true);
+					field.setAccessible(true);
 					try {
 						field.set(
 								instance,
-								Integer.valueOf(
-										value));
+								Integer.valueOf(value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -204,8 +196,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				}
 			}
 			else if (field.getType() == List.class) {
-				field.setAccessible(
-						true);
+				field.setAccessible(true);
 				String[] parameters = getFieldValues(
 						form,
 						field.getName());
@@ -213,8 +204,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				try {
 					field.set(
 							instance,
-							Arrays.asList(
-									parameters));
+							Arrays.asList(parameters));
 				}
 				catch (final IllegalAccessException e) {
 					throw new RuntimeException(
@@ -227,21 +217,15 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			}
 		}
 		else if (parametersDelegate != null) {
-			if (field.getType().isAssignableFrom(
-					StoreFactoryOptions.class)) {
-				//TODO figure out how to do this right, essentially the command is setting the factory options separately right now
-				return;
-			}
-			Object delegateObj = field.getType().newInstance();
-			for (Field f : FieldUtils.getAllFields(
-					field.getType())) {
-				processField(
-						form,
-						delegateObj,
-						f);
-			}
-			field.setAccessible(
-					true);
+			Object delegateObj;
+		
+			 delegateObj = field.getType().newInstance();
+//			}
+
+			injectParameters(
+					form,
+					delegateObj);
+			field.setAccessible(true);
 			field.set(
 					instance,
 					delegateObj);
@@ -254,8 +238,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String[] val = null;
 		if (form != null) {
-			val = form.getValuesArray(
-					name);
+			val = form.getValuesArray(name);
 		}
 		if (val == null || val.length == 0) {
 			val = getQuery().getValuesArray(
@@ -269,12 +252,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String val = null;
 		if (form != null) {
-			val = form.getFirstValue(
-					name);
+			val = form.getFirstValue(name);
 		}
 		if (val == null) {
-			val = getQueryValue(
-					name);
+			val = getQueryValue(name);
 		}
 		return val;
 	}
@@ -282,10 +263,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	private T handleRequest(
 			final Form form )
 			throws Exception {
-		final String configFileParameter = (form == null) ? getQueryValue(
-				"config_file")
-				: form.getFirstValue(
-						"config_file");
+		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
+				.getFirstValue("config_file");
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
@@ -295,9 +274,9 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				configFile);
 
 		try {
-			injectParameters(
-					form);
+			injectParameters(form,operation);
 		}
+		
 		catch (final MissingArgumentException e) {
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
@@ -306,10 +285,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 
 		try {
-			operation.prepare(
-					params);
-			return operation.computeResults(
-					params);
+			operation.prepare(params);
+			return operation.computeResults(params);
 		}
 		catch (final Exception e) {
 			LOGGER.error(

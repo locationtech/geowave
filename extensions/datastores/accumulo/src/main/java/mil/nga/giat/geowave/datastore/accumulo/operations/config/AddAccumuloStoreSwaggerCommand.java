@@ -8,7 +8,7 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.operations.config;
+package mil.nga.giat.geowave.datastore.accumulo.operations.config;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,17 +28,19 @@ import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.PluginOptions;
+import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
-@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addstore(accumulo)", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddStoreCommand extends
+public class AddAccumuloStoreSwaggerCommand extends
 		DefaultOperation<Void> implements
 		Command
 {
@@ -47,6 +49,8 @@ public class AddStoreCommand extends
 
 	public static final String PROPERTIES_CONTEXT = "properties";
 
+
+	//Default AddStore Options
 	@Parameter(description = "<name>")
 	@RestParameters(names = {
 		"name"
@@ -59,57 +63,56 @@ public class AddStoreCommand extends
 	}, description = "Make this the default store in all operations")
 	private Boolean makeDefault;
 
-	@Parameter(names = {
-		"-t",
-		"--type"
-	}, required = true, description = "The type of store, such as accumulo, memory, etc")
-	private String storeType;
-
-	@ParametersDelegate
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 	
+	@ParametersDelegate
+	private AccumuloRequiredOptions requiredOptions;
 	
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
+
 		// Load SPI options for the given type into pluginOptions.
-		if (storeType != null) {
-			if (storeType.equals("memory")) {
-				GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-						storeType,
-						new MemoryStoreFactoryFamily());
-			}
-			pluginOptions.selectPlugin(storeType);
+		// if (storeType != null) {
+		// if (storeType.equals("memory")) {
+		// GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+		// storeType,
+		// new MemoryStoreFactoryFamily());
+		// }
+		// pluginOptions.selectPlugin(storeType);
+		// }
+		// else {
+		// // Try to load the 'default' options.
+		//
+		// final File configFile = (File) params.getContext().get(
+		// ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		// final Properties existingProps = ConfigOptions.loadProperties(
+		// configFile,
+		// null);
+		//
+		// final String defaultStore =
+		// existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+		//
+		// // Load the default index.
+		// if (defaultStore != null) {
+		// try {
+		// if (pluginOptions.load(
+		// existingProps,
+		// DataStorePluginOptions.getStoreNamespace(defaultStore))) {
+		// // Set the required type option.
+		// storeType = pluginOptions.getType();
+		// }
+		// }
+		// catch (final ParameterException pe) {
+		// LOGGER.warn(
+		// "Couldn't load default store: " + defaultStore,
+		// pe);
+		// }
+		// }
+		// }
 
-		}
-		else {
-			// Try to load the 'default' options.
-
-			final File configFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-			final Properties existingProps = ConfigOptions.loadProperties(
-					configFile,
-					null);
-
-			final String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
-
-			// Load the default index.
-			if (defaultStore != null) {
-				try {
-					if (pluginOptions.load(
-							existingProps,
-							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
-						// Set the required type option.
-						storeType = pluginOptions.getType();
-					}
-				}
-				catch (final ParameterException pe) {
-					LOGGER.warn(
-							"Couldn't load default store: " + defaultStore,
-							pe);
-				}
-			}
-		}
+		pluginOptions.selectPlugin("accumulo");
+		pluginOptions.setFactoryOptions(requiredOptions);
 
 		// Successfully prepared.
 		return true;
@@ -124,6 +127,8 @@ public class AddStoreCommand extends
 	@Override
 	public Void computeResults(
 			final OperationParams params ) {
+
+		System.out.println(params);
 		final File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 		final Properties existingProps = ConfigOptions.loadProperties(
@@ -135,6 +140,9 @@ public class AddStoreCommand extends
 			throw new ParameterException(
 					"Must specify store name");
 		}
+
+//		
+
 
 		// Make sure we're not already in the index.
 		final DataStorePluginOptions existingOptions = new DataStorePluginOptions();
@@ -149,7 +157,6 @@ public class AddStoreCommand extends
 		pluginOptions.save(
 				existingProps,
 				getNamespace());
-
 
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
@@ -198,13 +205,9 @@ public class AddStoreCommand extends
 	}
 
 	public String getStoreType() {
-		return storeType;
+		return "accumulo";
 	}
 
-	public void setStoreType(
-			final String storeType ) {
-		this.storeType = storeType;
-	}
 
 	public void setPluginOptions(
 			final DataStorePluginOptions pluginOptions ) {
