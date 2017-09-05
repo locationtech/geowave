@@ -8,7 +8,7 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.operations.config;
+package mil.nga.giat.geowave.service.rest.operations;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,85 +30,49 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
-@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addstore/hbase", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddStoreCommand extends
+public class AddHBaseStoreCommand extends
 		DefaultOperation<Void> implements
 		Command
 {
-
-	private final static Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
+	/**
+	 * A REST Operation for the AddStoreCommand where --type=hbase 
+	 */
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(AddHBaseStoreCommand.class);
 
 	public static final String PROPERTIES_CONTEXT = "properties";
 
+	//Default AddStore Options
 	@Parameter(description = "<name>")
 	@RestParameters(names = {
 		"name"
 	})
 	private List<String> parameters = new ArrayList<String>();
 
+
 	@Parameter(names = {
 		"-d",
 		"--default"
 	}, description = "Make this the default store in all operations")
 	private Boolean makeDefault;
-
-	@Parameter(names = {
-		"-t",
-		"--type"
-	}, required = true, description = "The type of store, such as accumulo, memory, etc")
-	private String storeType;
-
-	@ParametersDelegate
+	
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+	
+	@ParametersDelegate
+	private HBaseRequiredOptions requiredOptions;
 
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
 
-		// Load SPI options for the given type into pluginOptions.
-		if (storeType != null) {
-			if (storeType.equals("memory")) {
-				GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-						storeType,
-						new MemoryStoreFactoryFamily());
-			}
-			pluginOptions.selectPlugin(storeType);
-		}
-		else {
-			// Try to load the 'default' options.
-
-			final File configFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-			final Properties existingProps = ConfigOptions.loadProperties(
-					configFile,
-					null);
-
-			final String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
-
-			// Load the default index.
-			if (defaultStore != null) {
-				try {
-					if (pluginOptions.load(
-							existingProps,
-							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
-						// Set the required type option.
-						storeType = pluginOptions.getType();
-					}
-				}
-				catch (final ParameterException pe) {
-					LOGGER.warn(
-							"Couldn't load default store: " + defaultStore,
-							pe);
-				}
-			}
-		}
-
-		// Successfully prepared.
+		pluginOptions.selectPlugin("hbase");
+		pluginOptions.setFactoryOptions(requiredOptions);
+		
 		return true;
 	}
 
@@ -134,7 +98,6 @@ public class AddStoreCommand extends
 					"Must specify store name");
 		}
 
-		// Make sure we're not already in the index.
 		final DataStorePluginOptions existingOptions = new DataStorePluginOptions();
 		if (existingOptions.load(
 				existingProps,
@@ -147,8 +110,6 @@ public class AddStoreCommand extends
 		pluginOptions.save(
 				existingProps,
 				getNamespace());
-
-
 
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
@@ -197,12 +158,7 @@ public class AddStoreCommand extends
 	}
 
 	public String getStoreType() {
-		return storeType;
-	}
-
-	public void setStoreType(
-			final String storeType ) {
-		this.storeType = storeType;
+		return "hbase";
 	}
 
 	public void setPluginOptions(

@@ -107,7 +107,7 @@ public class SpatialDimensionalityTypeProvider implements
 						options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID));
 	}
 
-	private static class SpatialOptions implements
+	public static class SpatialOptions implements
 			DimensionalityTypeOptions
 	{
 		@Parameter(names = {

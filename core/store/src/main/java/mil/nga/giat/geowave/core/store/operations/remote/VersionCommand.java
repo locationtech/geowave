@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.remote;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
@@ -44,8 +46,14 @@ public class VersionCommand extends
 	@Override
 	public void execute(
 			OperationParams params )
-			throws IOException {
+			throws Exception {
+		computeResults(params);
+	}
 
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
@@ -53,12 +61,15 @@ public class VersionCommand extends
 
 		String inputStoreName = parameters.get(0);
 
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
-		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
 			JCommander.getConsole().println(
 					"Cannot find store name: " + inputStoreLoader.getStoreName());
-			return;
+			return null;
 		}
 
 		DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
@@ -78,5 +89,7 @@ public class VersionCommand extends
 			JCommander.getConsole().println(
 					"Version: " + version);
 		}
+		return null;
 	}
+
 }
