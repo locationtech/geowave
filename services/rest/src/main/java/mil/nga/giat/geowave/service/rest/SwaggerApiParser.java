@@ -59,7 +59,7 @@ public class SwaggerApiParser
 			String[] path_toks = route.getPath().split(
 					"/");
 			JsonPrimitive tag = new JsonPrimitive(
-					path_toks[path_toks.length - 2]);
+					path_toks[1]);
 			tags_json.add(tag);
 
 			op_json.add(

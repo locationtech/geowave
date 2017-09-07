@@ -38,7 +38,7 @@ import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
 
-@GeowaveOperation(name = "addstore(accumulo)", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addstore/accumulo", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddAccumuloStoreSwaggerCommand extends
 		DefaultOperation<Void> implements

@@ -39,7 +39,7 @@ import mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
-@GeowaveOperation(name = "addstore(hbase)", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addstore/hbase", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddHBaseStoreSwaggerCommand extends
 		DefaultOperation<Void> implements
