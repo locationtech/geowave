@@ -84,8 +84,6 @@ public class GeoServerRestClient
 	public GeoServerRestClient(
 			final GeoServerConfig config ) {
 		this.config = config;
-		org.apache.log4j.Logger.getRootLogger().setLevel(
-				org.apache.log4j.Level.DEBUG);
 	}
 
 	public GeoServerRestClient(
@@ -93,8 +91,6 @@ public class GeoServerRestClient
 			WebTarget webTarget ) {
 		this.config = config;
 		this.webTarget = webTarget;
-		org.apache.log4j.Logger.getRootLogger().setLevel(
-				org.apache.log4j.Level.DEBUG);
 	}
 
 	/**
