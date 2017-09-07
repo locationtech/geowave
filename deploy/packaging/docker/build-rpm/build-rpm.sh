@@ -43,7 +43,7 @@ chown -R root:root $WORKSPACE/deploy/packaging/rpm
 chmod -R 777 $WORKSPACE/deploy/packaging/rpm
 
 # Staging Artifacts for Build
-cd $WORKSPACE/deploy/packaging/rpm/centos/6/SOURCES
+cd $WORKSPACE/deploy/packaging/rpm/centos/7/SOURCES
 if [ $BUILD_SUFFIX = "common" ]
 then
 	rm -f *.gz *.jar
@@ -75,4 +75,4 @@ fi
 cd ..
 
 # Build
-$WORKSPACE/deploy/packaging/rpm/centos/6/rpm.sh --command build-${BUILD_SUFFIX} --vendor-version $VENDOR_VERSION --geowave-version $GEOWAVE_VERSION --time-tag $TIME_TAG
+$WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command build-${BUILD_SUFFIX} --vendor-version $VENDOR_VERSION --geowave-version $GEOWAVE_VERSION --time-tag $TIME_TAG
