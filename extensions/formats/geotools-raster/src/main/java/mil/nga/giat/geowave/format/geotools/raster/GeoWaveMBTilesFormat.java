@@ -66,7 +66,6 @@ public class GeoWaveMBTilesFormat extends
 						new GeneralParameterDescriptor[] {
 							READ_GRIDGEOMETRY2D
 						}));
-
 		writeParameters = null;
 	}
 

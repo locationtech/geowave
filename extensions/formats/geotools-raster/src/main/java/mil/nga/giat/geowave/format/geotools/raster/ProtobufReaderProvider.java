@@ -56,6 +56,7 @@ public class ProtobufReaderProvider extends
 	public Class[] getInputTypes() {
 		return new Class[] {
 			ImageInputStream.class,
+
 		};
 	}
 
