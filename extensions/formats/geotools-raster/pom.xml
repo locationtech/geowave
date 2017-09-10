@@ -22,10 +22,23 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-				<groupId>org.geotools</groupId>
-				<artifactId>gt-mbtiles</artifactId>
-				<version>16.0</version>
-				<scope>compile</scope>
-			</dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-mbtiles</artifactId>
+			<version>16.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- <dependency>
+    		<groupId>com.wdtinc</groupId>
+    		<artifactId>mapbox-vector-tile</artifactId>
+    		<version>1.2.0</version>
+		</dependency> -->	
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.os72</groupId>
+				<artifactId>protoc-jar-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
