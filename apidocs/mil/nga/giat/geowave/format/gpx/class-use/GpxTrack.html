@@ -107,6 +107,12 @@
 <td class="colLast"><span class="typeNameLabel">GpxTrack.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.Builder.html#build--">build</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GpxTrack.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html#fromByteBuffer-java.nio.ByteBuffer-">fromByteBuffer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;b)</code>
+<div class="block">Deserializes a GpxTrack from a ByteBuffer.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GpxIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#toAvroObjects-java.io.File-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
@@ -119,6 +125,19 @@
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.avro.message.BinaryMessageDecoder&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GpxTrack.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html#createDecoder-org.apache.avro.message.SchemaStore-">createDecoder</a></span>(org.apache.avro.message.SchemaStore&nbsp;resolver)</code>
+<div class="block">Create a new BinaryMessageDecoder instance for this class that uses the
+ specified <code>SchemaStore</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static org.apache.avro.message.BinaryMessageDecoder&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GpxTrack.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html#getDecoder--">getDecoder</a></span>()</code>
+<div class="block">Return the BinaryMessageDecoder instance used by this class.</div>
+</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GpxIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#getIngestWithAvroPlugin--">getIngestWithAvroPlugin</a></span>()</code>&nbsp;</td>
@@ -152,7 +171,7 @@
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.Builder.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack.Builder</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GpxTrack.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html#newBuilder-mil.nga.giat.geowave.format.gpx.GpxTrack-">newBuilder</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&nbsp;other)</code>
 <div class="block">Creates a new GpxTrack RecordBuilder by copying an existing GpxTrack
- instance</div>
+ instance.</div>
 </td>
 </tr>
 <tr class="rowColor">

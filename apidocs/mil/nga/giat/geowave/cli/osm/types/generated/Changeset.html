@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":9,"i17":9,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10};
+var methods = {"i0":9,"i1":9,"i2":10,"i3":9,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":9,"i19":9,"i20":9,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -114,13 +114,17 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;org.apache.avro.specific.SpecificRecord&gt;, org.apache.avro.generic.GenericContainer, org.apache.avro.generic.GenericRecord, org.apache.avro.generic.IndexedRecord, org.apache.avro.specific.SpecificRecord</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Externalizable.html?is-external=true" title="class or interface in java.io">Externalizable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;org.apache.avro.specific.SpecificRecord&gt;, org.apache.avro.generic.GenericContainer, org.apache.avro.generic.GenericRecord, org.apache.avro.generic.IndexedRecord, org.apache.avro.specific.SpecificRecord</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">Changeset</span>
 extends org.apache.avro.specific.SpecificRecordBase
 implements org.apache.avro.specific.SpecificRecord</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../../serialized-form.html#mil.nga.giat.geowave.cli.osm.types.generated.Changeset">Serialized Form</a></dd>
+</dl>
 </li>
 </ul>
 </div>
@@ -287,184 +291,217 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static org.apache.avro.message.BinaryMessageDecoder&lt;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#createDecoder-org.apache.avro.message.SchemaStore-">createDecoder</a></span>(org.apache.avro.message.SchemaStore&nbsp;resolver)</code>
+<div class="block">Create a new BinaryMessageDecoder instance for this class that uses the
+ specified <code>SchemaStore</code>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#fromByteBuffer-java.nio.ByteBuffer-">fromByteBuffer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;b)</code>
+<div class="block">Deserializes a Changeset from a ByteBuffer.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#get-int-">get</a></span>(int&nbsp;field$)</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static org.apache.avro.Schema</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getClassSchema--">getClassSchema</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getClosedAt--">getClosedAt</a></span>()</code>
 <div class="block">Gets the value of the 'closed_at' field.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getCreatedAt--">getCreatedAt</a></span>()</code>
 <div class="block">Gets the value of the 'created_at' field.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static org.apache.avro.message.BinaryMessageDecoder&lt;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getDecoder--">getDecoder</a></span>()</code>
+<div class="block">Return the BinaryMessageDecoder instance used by this class.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getId--">getId</a></span>()</code>
 <div class="block">Gets the value of the 'id' field.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getMaxLat--">getMaxLat</a></span>()</code>
 <div class="block">Gets the value of the 'max_lat' field.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getMaxLon--">getMaxLon</a></span>()</code>
 <div class="block">Gets the value of the 'max_lon' field.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getMinLat--">getMinLat</a></span>()</code>
 <div class="block">Gets the value of the 'min_lat' field.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getMinLon--">getMinLon</a></span>()</code>
 <div class="block">Gets the value of the 'min_lon' field.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getNumChanges--">getNumChanges</a></span>()</code>
 <div class="block">Gets the value of the 'num_changes' field.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getOpen--">getOpen</a></span>()</code>
 <div class="block">Gets the value of the 'open' field.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>org.apache.avro.Schema</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getSchema--">getSchema</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getTags--">getTags</a></span>()</code>
 <div class="block">Gets the value of the 'tags' field.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getUserId--">getUserId</a></span>()</code>
 <div class="block">Gets the value of the 'user_id' field.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#getUserName--">getUserName</a></span>()</code>
 <div class="block">Gets the value of the 'user_name' field.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#newBuilder--">newBuilder</a></span>()</code>
-<div class="block">Creates a new Changeset RecordBuilder</div>
+<div class="block">Creates a new Changeset RecordBuilder.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#newBuilder-mil.nga.giat.geowave.cli.osm.types.generated.Changeset.Builder-">newBuilder</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a>&nbsp;other)</code>
-<div class="block">Creates a new Changeset RecordBuilder by copying an existing Builder</div>
+<div class="block">Creates a new Changeset RecordBuilder by copying an existing Builder.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#newBuilder-mil.nga.giat.geowave.cli.osm.types.generated.Changeset-">newBuilder</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a>&nbsp;other)</code>
 <div class="block">Creates a new Changeset RecordBuilder by copying an existing Changeset
- instance</div>
+ instance.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#put-int-java.lang.Object-">put</a></span>(int&nbsp;field$,
    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value$)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#readExternal-java.io.ObjectInput-">readExternal</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectInput.html?is-external=true" title="class or interface in java.io">ObjectInput</a>&nbsp;in)</code>&nbsp;</td>
+</tr>
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setClosedAt-java.lang.Long-">setClosedAt</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'closed_at' field.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setCreatedAt-java.lang.Long-">setCreatedAt</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'created_at' field.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setId-java.lang.Long-">setId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'id' field.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setMaxLat-java.lang.Integer-">setMaxLat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'max_lat' field.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setMaxLon-java.lang.Integer-">setMaxLon</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'max_lon' field.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setMinLat-java.lang.Integer-">setMinLat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'min_lat' field.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setMinLon-java.lang.Integer-">setMinLon</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'min_lon' field.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setNumChanges-java.lang.Integer-">setNumChanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'num_changes' field.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setOpen-java.lang.Boolean-">setOpen</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'open' field.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setTags-java.util.Map-">setTags</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;value)</code>
 <div class="block">Sets the value of the 'tags' field.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setUserId-java.lang.Long-">setUserId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'user_id' field.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#setUserName-java.lang.String-">setUserName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'user_name' field.</div>
 </td>
+</tr>
+<tr id="i35" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#toByteBuffer--">toByteBuffer</a></span>()</code>
+<div class="block">Serializes this Changeset to a ByteBuffer.</div>
+</td>
+</tr>
+<tr id="i36" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html#writeExternal-java.io.ObjectOutput-">writeExternal</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutput.html?is-external=true" title="class or interface in java.io">ObjectOutput</a>&nbsp;out)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -472,7 +509,7 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.apache.avro.specific.SpecificRecordBase</h3>
-<code>compareTo, equals, get, hashCode, put, toString</code></li>
+<code>compareTo, equals, get, getConverion, getConversion, getConversion, hashCode, put, toString</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -675,6 +712,21 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;max_lat,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;tags)</pre>
 <div class="block">All-args constructor.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>id</code> - The new value for id</dd>
+<dd><code>user_id</code> - The new value for user_id</dd>
+<dd><code>user_name</code> - The new value for user_name</dd>
+<dd><code>created_at</code> - The new value for created_at</dd>
+<dd><code>closed_at</code> - The new value for closed_at</dd>
+<dd><code>open</code> - The new value for open</dd>
+<dd><code>num_changes</code> - The new value for num_changes</dd>
+<dd><code>min_lon</code> - The new value for min_lon</dd>
+<dd><code>min_lat</code> - The new value for min_lat</dd>
+<dd><code>max_lon</code> - The new value for max_lon</dd>
+<dd><code>max_lat</code> - The new value for max_lat</dd>
+<dd><code>tags</code> - The new value for tags</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -692,6 +744,61 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <li class="blockList">
 <h4>getClassSchema</h4>
 <pre>public static&nbsp;org.apache.avro.Schema&nbsp;getClassSchema()</pre>
+</li>
+</ul>
+<a name="getDecoder--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDecoder</h4>
+<pre>public static&nbsp;org.apache.avro.message.BinaryMessageDecoder&lt;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a>&gt;&nbsp;getDecoder()</pre>
+<div class="block">Return the BinaryMessageDecoder instance used by this class.</div>
+</li>
+</ul>
+<a name="createDecoder-org.apache.avro.message.SchemaStore-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createDecoder</h4>
+<pre>public static&nbsp;org.apache.avro.message.BinaryMessageDecoder&lt;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a>&gt;&nbsp;createDecoder(org.apache.avro.message.SchemaStore&nbsp;resolver)</pre>
+<div class="block">Create a new BinaryMessageDecoder instance for this class that uses the
+ specified <code>SchemaStore</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resolver</code> - a <code>SchemaStore</code> used to find schemas by fingerprint</dd>
+</dl>
+</li>
+</ul>
+<a name="toByteBuffer--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toByteBuffer</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;toByteBuffer()
+                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Serializes this Changeset to a ByteBuffer.</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="fromByteBuffer-java.nio.ByteBuffer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromByteBuffer</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a>&nbsp;fromByteBuffer(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;b)
+                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Deserializes a Changeset from a ByteBuffer.</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="getSchema--">
@@ -748,6 +855,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getId</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;getId()</pre>
 <div class="block">Gets the value of the 'id' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'id' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setId-java.lang.Long-">
@@ -772,6 +883,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getUserId</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;getUserId()</pre>
 <div class="block">Gets the value of the 'user_id' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'user_id' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setUserId-java.lang.Long-">
@@ -796,6 +911,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getUserName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getUserName()</pre>
 <div class="block">Gets the value of the 'user_name' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'user_name' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setUserName-java.lang.String-">
@@ -820,6 +939,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getCreatedAt</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;getCreatedAt()</pre>
 <div class="block">Gets the value of the 'created_at' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'created_at' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setCreatedAt-java.lang.Long-">
@@ -844,6 +967,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getClosedAt</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;getClosedAt()</pre>
 <div class="block">Gets the value of the 'closed_at' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'closed_at' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setClosedAt-java.lang.Long-">
@@ -868,6 +995,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getOpen</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;getOpen()</pre>
 <div class="block">Gets the value of the 'open' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'open' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setOpen-java.lang.Boolean-">
@@ -892,6 +1023,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getNumChanges</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getNumChanges()</pre>
 <div class="block">Gets the value of the 'num_changes' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'num_changes' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setNumChanges-java.lang.Integer-">
@@ -916,6 +1051,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getMinLon</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getMinLon()</pre>
 <div class="block">Gets the value of the 'min_lon' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'min_lon' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setMinLon-java.lang.Integer-">
@@ -940,6 +1079,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getMinLat</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getMinLat()</pre>
 <div class="block">Gets the value of the 'min_lat' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'min_lat' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setMinLat-java.lang.Integer-">
@@ -964,6 +1107,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getMaxLon</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getMaxLon()</pre>
 <div class="block">Gets the value of the 'max_lon' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'max_lon' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setMaxLon-java.lang.Integer-">
@@ -988,6 +1135,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getMaxLat</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getMaxLat()</pre>
 <div class="block">Gets the value of the 'max_lat' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'max_lat' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setMaxLat-java.lang.Integer-">
@@ -1012,6 +1163,10 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <h4>getTags</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getTags()</pre>
 <div class="block">Gets the value of the 'tags' field.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value of the 'tags' field.</dd>
+</dl>
 </li>
 </ul>
 <a name="setTags-java.util.Map-">
@@ -1035,7 +1190,11 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <li class="blockList">
 <h4>newBuilder</h4>
 <pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a>&nbsp;newBuilder()</pre>
-<div class="block">Creates a new Changeset RecordBuilder</div>
+<div class="block">Creates a new Changeset RecordBuilder.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A new Changeset RecordBuilder</dd>
+</dl>
 </li>
 </ul>
 <a name="newBuilder-mil.nga.giat.geowave.cli.osm.types.generated.Changeset.Builder-">
@@ -1045,18 +1204,66 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <li class="blockList">
 <h4>newBuilder</h4>
 <pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a>&nbsp;newBuilder(<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a>&nbsp;other)</pre>
-<div class="block">Creates a new Changeset RecordBuilder by copying an existing Builder</div>
+<div class="block">Creates a new Changeset RecordBuilder by copying an existing Builder.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - The existing builder to copy.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A new Changeset RecordBuilder</dd>
+</dl>
 </li>
 </ul>
 <a name="newBuilder-mil.nga.giat.geowave.cli.osm.types.generated.Changeset-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>newBuilder</h4>
 <pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.Builder.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset.Builder</a>&nbsp;newBuilder(<a href="../../../../../../../../mil/nga/giat/geowave/cli/osm/types/generated/Changeset.html" title="class in mil.nga.giat.geowave.cli.osm.types.generated">Changeset</a>&nbsp;other)</pre>
 <div class="block">Creates a new Changeset RecordBuilder by copying an existing Changeset
- instance</div>
+ instance.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - The existing instance to copy.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A new Changeset RecordBuilder</dd>
+</dl>
+</li>
+</ul>
+<a name="writeExternal-java.io.ObjectOutput-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeExternal</h4>
+<pre>public&nbsp;void&nbsp;writeExternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutput.html?is-external=true" title="class or interface in java.io">ObjectOutput</a>&nbsp;out)
+                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Externalizable.html?is-external=true#writeExternal-java.io.ObjectOutput-" title="class or interface in java.io">writeExternal</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Externalizable.html?is-external=true" title="class or interface in java.io">Externalizable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>writeExternal</code>&nbsp;in class&nbsp;<code>org.apache.avro.specific.SpecificRecordBase</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="readExternal-java.io.ObjectInput-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>readExternal</h4>
+<pre>public&nbsp;void&nbsp;readExternal(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectInput.html?is-external=true" title="class or interface in java.io">ObjectInput</a>&nbsp;in)
+                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Externalizable.html?is-external=true#readExternal-java.io.ObjectInput-" title="class or interface in java.io">readExternal</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Externalizable.html?is-external=true" title="class or interface in java.io">Externalizable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>readExternal</code>&nbsp;in class&nbsp;<code>org.apache.avro.specific.SpecificRecordBase</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>
