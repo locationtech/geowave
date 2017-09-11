@@ -158,7 +158,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				}
 			}
 
-			if (field.getType() == String.class) {
+			else if (field.getType() == String.class) {
 				final String value = getFieldValue(
 						form,
 						field.getName());
