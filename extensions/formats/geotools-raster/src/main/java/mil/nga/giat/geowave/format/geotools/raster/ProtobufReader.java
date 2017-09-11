@@ -6,6 +6,7 @@ import java.awt.image.DataBuffer;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,15 +16,18 @@ import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.spi.ImageReaderSpi;
 import javax.imageio.stream.ImageInputStream;
+import javax.media.jai.PlanarImage;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.wdtinc.mapbox_vector_tile.adapt.jts.MvtReader;
+import com.wdtinc.mapbox_vector_tile.adapt.jts.TagKeyValueMapConverter;
 
-import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos;
-import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile;
-import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile.Feature;
-import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile.Layer;
-import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile.Value;
+/*import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos;
+ import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile;
+ import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile.Feature;
+ import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile.Layer;
+ import mil.nga.giat.geowave.format.geotools.raster.protobuf.VectorTileProtos.Tile.Value;*/
 
 public class ProtobufReader extends
 		ImageReader
@@ -88,18 +92,14 @@ public class ProtobufReader extends
 			int imageIndex,
 			ImageReadParam param )
 			throws IOException {
-		Raster readRaster = readRaster(
-				imageIndex,
-				param);
-		/*
-		 * BufferedImage img = new BufferedImage(256, 256,
-		 * BufferedImage.TYPE_INT_ARGB); Graphics2D g2d =
-		 * img.getRaster().setcreateGraphics(); g2d.
-		 */
+		return new BufferedImage(
+				PlanarImage.getDefaultColorModel(
+						DataBuffer.TYPE_INT,
+						2),
+				(WritableRaster) createRaster(),
+				false,
+				null);
 
-		VectorTileProtos proto;
-
-		return null;
 	}
 
 	public Raster readRaster(
@@ -107,20 +107,12 @@ public class ProtobufReader extends
 			ImageReadParam param )
 			throws IOException {
 		ImageInputStream inputStream = (ImageInputStream) getInput();
-		// TODO read inputStream to get tile data
 		return null;
 
 	}
 
-	public Raster createRaster(
-			Tile tile ) {
+	public Raster createRaster() {
 		WritableRaster raster;
-
-		/*
-		 * int[] bandMasks; bandMasks = new int[2]; raster =
-		 * Raster.createPackedRaster(DataBuffer.TYPE_INT, 256, 256, bandMasks,
-		 * null);
-		 */
 
 		raster = Raster.createPackedRaster(
 				DataBuffer.TYPE_INT,
@@ -135,30 +127,39 @@ public class ProtobufReader extends
 		int xValue = 0;
 		int yValue = 0;
 
-		// calculate resolution level
-		// tile.getLayers(0).getFeatures(0).getGeometryList().get
+		InputStream inputStream = (InputStream) getInput();
+		GeometryFactory geomFactory = new GeometryFactory();
+		TagKeyValueMapConverter converter = new TagKeyValueMapConverter();
 
-		for (Layer layer : tile.getLayersList()) {
-			for (Feature feature : layer.getFeaturesList()) {
-				// TODO calculate and set the grid values
-			}
-			density = (int) layer.getValues(
-					0).getIntValue();
-			count = (int) layer.getValues(
-					1).getIntValue();
-
-			// Count is band 0, density is band 1
-			raster.setSample(
-					xValue,
-					yValue,
-					0,
-					count);
-			raster.setSample(
-					xValue,
-					yValue,
-					1,
-					density);
+		try {
+			List<Geometry> geometryList = MvtReader.loadMvt(
+					inputStream,
+					geomFactory,
+					converter);
+			// What is the difference b/t the envelope and coordinates?
+			geometryList.get(
+					0).getEnvelope();
+			geometryList.get(
+					0).getCoordinates();
+			geometryList.get(
+					0).getUserData();
 		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// calculate resolution level
+
+		/*
+		 * for (Layer layer : tile.getLayersList()) { for (Feature feature :
+		 * layer.getFeaturesList()) { // TODO calculate and set the grid values
+		 * } density = (int) layer.getValues( 0).getIntValue(); count = (int)
+		 * layer.getValues( 1).getIntValue();
+		 * 
+		 * // Count is band 0, density is band 1 raster.setSample( xValue,
+		 * yValue, 0, count); raster.setSample( xValue, yValue, 1, density); }
+		 */
 
 		return raster;
 	}
