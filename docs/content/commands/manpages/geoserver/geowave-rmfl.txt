@@ -1,0 +1,23 @@
+//:geowave-rmfl(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs rmfl - Remove GeoServer feature Layer
+
+SYNOPSIS
+//:--------
+
+geowave gs rmfl [options] <layer name>
+
+DESCRIPTION
+//:-----------
+
+This command will remove a GeoServer feature Layer
+
+OPTIONS
+//:-------
+
+There are currently no options available for this command

@@ -1,0 +1,23 @@
+[[hbase-commands]]
+<<<
+
+[[hbase-commands]]
+=== HBase Commands
+
+Utility operations to combine statistics in hbase (Required options are designated with an *)
+
+.Commands:
+* <<040-hbase-commands.adoc#hbase-combinestats, CombineStats>>
+* <<040-hbase-commands.adoc#hbase-runserver, RunServer>>
+
+[[hbase-dbscan]]
+==== *geowave hbase combinestats*
+
+include::manpages/hbase/geowave-combinestats.txt[]
+
+[[hbase-runserver]]
+==== *geowave hbase runserver*
+
+include::manpages/hbase/geowave-runserver.txt[]
+
+'''

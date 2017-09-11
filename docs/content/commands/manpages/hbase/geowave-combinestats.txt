@@ -1,0 +1,23 @@
+//:geowave-combinestats(1)
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave hbase combinestats - Combine all statistics in HBase namespace
+
+SYNOPSIS
+//:--------
+
+geowave hbase combinestats [options] <storename> <adapter id>
+
+DESCRIPTION
+//:-----------
+
+This command will combine all statistics in an HBase namespace
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

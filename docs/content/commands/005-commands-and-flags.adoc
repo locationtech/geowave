@@ -58,3 +58,5 @@ their values, if there are any. An example would be additional Accumulo options:
 ----
 geowave explain config addstore -t accumulo
 ----
+
+'''

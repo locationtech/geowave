@@ -1,0 +1,24 @@
+//:geowave-listds(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs listds - List GeoServer datastores
+
+SYNOPSIS
+//:--------
+
+geowave gs listds [options]
+
+DESCRIPTION
+//:-----------
+
+This command will list all GeoServer datastores
+
+OPTIONS
+//:-------
+
+- -ws, --workspace
+ * <workspace name>

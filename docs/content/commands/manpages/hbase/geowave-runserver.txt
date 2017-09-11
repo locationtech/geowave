@@ -1,0 +1,24 @@
+//:geowave-runserver(1)
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave hbase runserver - Runs a standalone mini HBase server for test and debug with GeoWave
+
+SYNOPSIS
+//:--------
+
+geowave hbase runserver [options]
+
+DESCRIPTION
+//:-----------
+
+This command will run a standalone mini single-node HBase server, which can be used locally for testing and debugging GeoWave, without needing to stand up an entire cluster.
+
+OPTIONS
+//:-------
+
+There are currently no options for this command
+

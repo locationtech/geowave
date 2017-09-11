@@ -1,0 +1,34 @@
+//:geowave-addcs(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs addcs - Add a GeoServer coverage store
+
+SYNOPSIS
+//:--------
+
+geowave gs addcs [options] <GeoWave store name>
+
+DESCRIPTION
+//:-----------
+
+This command will add a GeoServer coverage store
+
+OPTIONS
+//:-------
+
+- -cs, --coverageStore
+ * <coverage store name>
+- -histo, --equalizeHistogramOverride
+ * This parameter will override the behavior to always perform histogram equalization if a histogram exists. 
+ * Valid values are true and false.
+- -interp, --interpolationOverride
+ * This will override the default interpolation stored for each layer. 
+ * Valid values are 0, 1, 2, 3 for NearestNeighbor, Bilinear, Bicubic, and Bicubic (polynomial variant) resepctively.
+- -scale, --scaleTo8Bit
+ * By default, integer values will automatically be scaled to 8-bit and floating point values will not. This can be overridden setting this value to true or false.
+- -ws, --workspace
+ * <workspace name>

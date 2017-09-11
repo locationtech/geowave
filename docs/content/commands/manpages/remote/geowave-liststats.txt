@@ -1,0 +1,27 @@
+//:geowave-liststats(1)
+//:====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote liststats - Print statistics of an existing GeoWave dataset to standard output
+
+SYNOPSIS
+//:--------
+
+geowave remote liststats [options] <store name> [<adapter name>]
+
+DESCRIPTION
+//:-----------
+
+The geowave remote liststats operator will print statistics of an existing GeoWave dataset to standard output
+
+OPTIONS
+//:-------
+
+- --auth
+ * The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.
+- --json
+ * Output in JSON format.
+ * Default: false

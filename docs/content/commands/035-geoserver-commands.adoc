@@ -1,0 +1,168 @@
+[[geoserver-commands]]
+<<<
+
+[[geoserver-commands]]
+=== GeoServer Commands
+
+Commands that manage geoserver data stores and layers (Required options are designated with an *)
+
+.Commands:
+* <<035-geoserver-commands.adoc#geoserver-addcs, AddCS>>
+* <<035-geoserver-commands.adoc#geoserver-addcv, AddCV>>
+* <<035-geoserver-commands.adoc#geoserver-addds, AddDS>>
+* <<035-geoserver-commands.adoc#geoserver-addfl, AddFL>>
+* <<035-geoserver-commands.adoc#geoserver-addlayer, AddLayer>>
+* <<035-geoserver-commands.adoc#geoserver-addstyle, AddStyle>>
+* <<035-geoserver-commands.adoc#geoserver-addws, AddWS>>
+* <<035-geoserver-commands.adoc#geoserver-getcs, GetCS>>
+* <<035-geoserver-commands.adoc#geoserver-getcv, GetCV>>
+* <<035-geoserver-commands.adoc#geoserver-getds, GetDS>>
+* <<035-geoserver-commands.adoc#geoserver-getfl, GetFL>>
+* <<035-geoserver-commands.adoc#geoserver-getsa, GetSA>>
+* <<035-geoserver-commands.adoc#geoserver-getstyle, GetStyle>>
+* <<035-geoserver-commands.adoc#geoserver-listcs, ListCS>>
+* <<035-geoserver-commands.adoc#geoserver-listcv, ListCV>>
+* <<035-geoserver-commands.adoc#geoserver-listds, ListDS>>
+* <<035-geoserver-commands.adoc#geoserver-listfl, ListFL>>
+* <<035-geoserver-commands.adoc#geoserver-liststyles, ListStyles>>
+* <<035-geoserver-commands.adoc#geoserver-listws, ListWS>>
+* <<035-geoserver-commands.adoc#geoserver-rmcs, RmCS>>
+* <<035-geoserver-commands.adoc#geoserver-rmcv, RmCV>>
+* <<035-geoserver-commands.adoc#geoserver-rmds, RmDS>>
+* <<035-geoserver-commands.adoc#geoserver-rmfl, RmFL>>
+* <<035-geoserver-commands.adoc#geoserver-rmstyle, RmStyle>>
+* <<035-geoserver-commands.adoc#geoserver-rmws, RmWS>>
+* <<035-geoserver-commands.adoc#geoserver-setls, SetLS>>
+
+
+[[geoserver-addcs]]
+==== *geowave gs addcs*
+
+include::manpages/geoserver/geowave-addcs.txt[]
+
+[[geoserver-addcv]]
+==== *geowave gs addcvs*
+
+include::manpages/geoserver/geowave-addcv.txt[]
+
+[[geoserver-addds]]
+==== *geowave gs addds*
+
+include::manpages/geoserver/geowave-addds.txt[]
+
+[[geoserver-addfl]]
+==== *geowave gs addfl*
+
+include::manpages/geoserver/geowave-addfl.txt[]
+
+[[geoserver-addlayer]]
+==== *geowave gs addlayer*
+
+include::manpages/geoserver/geowave-addlayer.txt[]
+
+[[geoserver-addstyle]]
+==== *geowave gs addstyle*
+
+include::manpages/geoserver/geowave-addstyle.txt[]
+
+[[geoserver-addws]]
+==== *geowave gs addws*
+
+include::manpages/geoserver/geowave-addws.txt[]
+
+[[geoserver-getcs]]
+==== *geowave gs getcs*
+
+include::manpages/geoserver/geowave-getcs.txt[]
+
+[[geoserver-getcv]]
+==== *geowave gs getcv*
+
+include::manpages/geoserver/geowave-getcv.txt[]
+
+[[geoserver-getds]]
+==== *geowave gs getds*
+
+include::manpages/geoserver/geowave-getds.txt[]
+
+[[geoserver-getfl]]
+==== *geowave gs getfl*
+
+include::manpages/geoserver/geowave-getfl.txt[]
+
+[[geoserver-getsa]]
+==== *geowave gs getsa*
+
+include::manpages/geoserver/geowave-getsa.txt[]
+
+[[geoserver-getstyle]]
+==== *geowave gs getstyle*
+
+include::manpages/geoserver/geowave-getstyle.txt[]
+
+[[geoserver-listcs]]
+==== *geowave gs listcs*
+
+include::manpages/geoserver/geowave-listcs.txt[]
+
+[[geoserver-listcv]]
+==== *geowave gs listcv*
+
+include::manpages/geoserver/geowave-listcv.txt[]
+
+[[geoserver-listds]]
+==== *geowave gs listds*
+
+include::manpages/geoserver/geowave-listds.txt[]
+
+[[geoserver-listfl]]
+==== *geowave gs listfl*
+
+include::manpages/geoserver/geowave-listfl.txt[]
+
+[[geoserver-liststyles]]
+==== *geowave gs liststyles*
+
+include::manpages/geoserver/geowave-liststyles.txt[]
+
+[[geoserver-listws]]
+==== *geowave gs listws*
+
+include::manpages/geoserver/geowave-listws.txt[]
+
+[[geoserver-rmcs]]
+==== *geowave gs rmcs*
+
+include::manpages/geoserver/geowave-rmcs.txt[]
+
+[[geoserver-rmcv]]
+==== *geowave gs rmcv*
+
+include::manpages/geoserver/geowave-rmcv.txt[]
+
+[[geoserver-rmds]]
+==== *geowave gs rmds*
+
+include::manpages/geoserver/geowave-rmds.txt[]
+
+[[geoserver-rmfl]]
+==== *geowave gs rmfl*
+
+include::manpages/geoserver/geowave-rmfl.txt[]
+
+[[geoserver-rmstyle]]
+==== *geowave gs rmstyle*
+
+include::manpages/geoserver/geowave-rmstyle.txt[]
+
+[[geoserver-rmws]]
+==== *geowave gs rmws*
+
+include::manpages/geoserver/geowave-rmws.txt[]
+
+[[geoserver-setls]]
+==== *geowave gs setls*
+
+include::manpages/geoserver/geowave-setls.txt[]
+
+'''

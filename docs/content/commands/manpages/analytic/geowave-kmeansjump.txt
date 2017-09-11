@@ -1,0 +1,127 @@
+//:geowave-kmeansjump(1)
+//:=====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave analytic kmeansjump - KMeans Clustering using Jump Method
+
+SYNOPSIS
+//:--------
+
+geowave analytic kmeansjump [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+The geowave analytic kmeansjump operator will execute a KMeans Clustering analytic using a Jump Method
+
+EXAMPLE
+//:-----------
+
+[source, bash]
+----
+yarn jar geowave-tools.jar analytic kmeansjump -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans -hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -jkp 3 -jrc 4,8 my_store
+----
+
+The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
+the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the data executed against is 'hail' (query.adapters), the min k for kmeans parallel sampling is 3 (jkp),
+the comma separated range of centroids is 4,8 (jrc).
+The accumulo connection parameters are loaded from my_store.
+
+EXECUTION
+//:-----------
+
+KMeansJump uses most of the same parameters from KMeansParallel.  It tries every k value given (-jrc) to find
+the value with least entropy.  The other value, jkp, will specify which k values should use kmeans parallel for
+sampling versus a single sampler (which uses a random sample).  For instance, if you specify 4,8 for jrc and 
+6 for jkp, then k=4,5 will use the kmeansparallel sampler, while 6,7,8 will use the single sampler.
+
+KMeansJump executes by executing several iterations, running the sampler (described above, which also
+calls the normal k-means algorithm to determine centroids) and then executing 
+a KMeans distortion job, which calculates the entropy of the calculated centroids.
+
+Look at the "EXECUTION" documentation for kmeansparallel operation for discussion of output, tolerance and  performance variables.
+
+OPTIONS
+//:-------
+
+- -cce, --centroidExtractorClass
+ * Centroid Exractor Class implements _mil.nga.giat.geowave.analytics.extract.CentroidExtractor_
+- -cid, --centroidIndexId
+ * Index Identifier for Centroids
+- -cfc, --centroidWrapperFactoryClass
+ * A factory class that implements _mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory_
+- -czl, --centroidZoomLevel
+ * Zoom Level Number
+- -cct, --clusteringConverganceTolerance
+ * Convergence Tolerance
+- * -cmi, --clusteringMaxIterations
+ * Maximum number of iterations when finding optimal clusters
+- -crc, --clusteringMaxReducerCount
+ * Maximum Clustering Reducer Count
+- * -zl, --clusteringZoomLevels
+ * Number of Zoom Levels to Process
+- -dde, --commonDimensionExtractClass
+ * Dimension Extractor Class implements _mil.nga.giat.geowave.analytics.extract.DimensionExtractor_
+- -cdf, --commonDistanceFunctionClass
+ * Distance Function Class implements _mil.nga.giat.geowave.analytics.distance.DistanceFn_
+- -ens, --extractDataNamespaceUri
+ * Output Data Namespace URI
+- -ede, --extractDimensionExtractClass
+ * Class to extract dimensions into a simple feature output
+- * -emx, --extractMaxInputSplit
+ * Maximum hdfs input split size
+- * -emn, --extractMinInputSplit
+ * Minimum hdfs input split size
+- -eot, --extractOutputDataTypeId
+ * Output Data Type ID
+- -eq, --extractQuery
+ * Query
+- -erc, --extractReducerCount
+ * Number of Reducers For initial data extraction and de-duplication
+- -b, --globalBatchId
+ * Batch ID
+- -pb, --globalParentBatchId
+ * Batch ID
+- -hns, --hullDataNamespaceUri
+ * Data Type Namespace for a centroid item
+- -hdt, --hullDataTypeId
+ * Data Type ID for a centroid item
+- -hid, --hullIndexId
+ * Index Identifier for Centroids
+- -hpe, --hullProjectionClass
+ * Class to project on to 2D space. Implements _mil.nga.giat.geowave.analytics.tools.Projection_
+- -hrc, --hullReducerCount
+ * Centroid Reducer Count
+- -hfc, --hullWrapperFactoryClass
+ * Class to create analytic item to capture hulls. Implements _mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory_
+- -ifc, --inputFormatClass
+ * Input Format Class
+- * -jkp, --jumpKplusplusMin
+ * The minimum k when K means ++ takes over sampling.
+- * -jrc, --jumpRangeOfCentroids
+ * Comma-separated range of centroids (e.g. 2,100)
+- -conf, --mapReduceConfigFile
+ * MapReduce Configuration
+- * -hdfsbase, --mapReduceHdfsBaseDir
+ * Fully qualified path to the base directory in hdfs
+- * -hdfs, --mapReduceHdfsHostPort
+ * HDFS hostname and port in the format hostname:port
+- -jobtracker, --mapReduceJobtrackerHostPort
+ * [REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port
+- -resourceman, --mapReduceYarnResourceManager
+ * [REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port
+- -ofc, --outputOutputFormat
+ * Output Format Class
+- -orc, --outputReducerCount
+ * Number of Reducers For Output
+- * --query.adapters
+ * The comma-separated list of data adapters to query; by default all adapters are used.
+- --query.auth
+ * The comma-separated list of authorizations used during extract; by default all authorizations are used.
+- --query.index
+ * The specific index to query; by default one is chosen for each adapter.
