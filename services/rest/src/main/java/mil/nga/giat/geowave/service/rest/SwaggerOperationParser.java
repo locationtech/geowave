@@ -245,6 +245,9 @@ public class SwaggerOperationParser<T>
 		else if (type == Integer.class || type == int.class) {
 			return "integer";
 		}
+		else if (type == long.class || type == Long.class){
+			return "long";
+		}
 		else if (type == Float.class || type == float.class) {
 			return "number";
 		}

@@ -33,6 +33,7 @@ public class RestServer extends
 	private final ArrayList<RestRoute> availableRoutes;
 	private final ArrayList<String> unavailableCommands;
 	public static final String ADD_STORE_COMMAND = "mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand";
+	public static final String ADD_INDEX_COMMAND = "mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand";
 
 	/**
 	 * Run the Restlet server (localhost:5152)
@@ -56,7 +57,7 @@ public class RestServer extends
 							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST)) && DefaultOperation.class
 							.isAssignableFrom(operation)) || ServerResource.class.isAssignableFrom(operation)) {
 				
-				if(!operation.getName().equals(ADD_STORE_COMMAND)){ //Take out the AddStoreCommand operation
+				if(!operation.getName().equals(ADD_STORE_COMMAND) && !operation.getName().equals(ADD_INDEX_COMMAND)){ //Take out the AddStoreCommand and AddIndexCommand operations
 				availableRoutes.add(new RestRoute(
 						operation));
 			}

@@ -128,7 +128,32 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		parametersDelegate = field.getAnnotation(ParametersDelegate.class);
 		
 		if (parameter != null) {
-			if (field.getType() == String.class) {
+			if(field.getType().isEnum()){
+				final String value = getFieldValue(
+						form,
+						field.getName());
+				if (value != null) {
+					field.setAccessible(true); // Get around restrictions on
+												// private fields. JCommander
+												// does this too.
+					try {					
+						Enum<?> retv = Enum.valueOf((Class<Enum>)field.getType(), value);
+				
+						field.set(
+							instance,
+							retv);
+						}
+					catch (final IllegalAccessException e) {
+						throw new RuntimeException(
+								e);
+					}				
+				}
+				else if (parameter.required()) {
+					throw new MissingArgumentException(
+							field.getName());
+				}
+			}
+			else if (field.getType() == String.class) {
 				final String value = getFieldValue(
 						form,
 						field.getName());
@@ -184,6 +209,27 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						field.set(
 								instance,
 								Integer.valueOf(value));
+					}
+					catch (final IllegalAccessException e) {
+						throw new RuntimeException(
+								e);
+					}
+				}
+				else if (parameter.required()) {
+					throw new MissingArgumentException(
+							field.getName());
+				}
+			}
+			else if ((field.getType() == Long.class) || (field.getType() == long.class)) {
+				final String value = getFieldValue(
+						form,
+						field.getName());
+				if (value != null) {
+					field.setAccessible(true);
+					try {
+						field.set(
+								instance,
+								Long.valueOf(value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
