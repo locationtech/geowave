@@ -279,8 +279,14 @@
 			<dependency>
 				<groupId>org.geotools</groupId>
 				<artifactId>gt-mbtiles</artifactId>
-				<version>16.0</version>
-				<scope>compile</scope>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+    			<groupId>org.geotools</groupId>
+    			<artifactId>gt-imagemosaic</artifactId>
+    			<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.hsqldb</groupId>

@@ -15,7 +15,7 @@ public class ProtobufReaderProvider extends
 			Object source )
 			throws IOException {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	@Override

@@ -136,9 +136,6 @@ public class ProtobufReader extends
 					inputStream,
 					geomFactory,
 					converter);
-			// What is the difference b/t the envelope and coordinates?
-			geometryList.get(
-					0).getEnvelope();
 			geometryList.get(
 					0).getCoordinates();
 			geometryList.get(
