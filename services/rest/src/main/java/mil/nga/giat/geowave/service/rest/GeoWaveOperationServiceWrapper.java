@@ -157,21 +157,21 @@ public class GeoWaveOperationServiceWrapper<T> extends
 							field.getName());
 				}
 			}
-			else if (field.getType() == String.class) {
+
+			if (field.getType() == String.class) {
 				final String value = getFieldValue(
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(true); // Get around restrictions on
-												// private fields. JCommander
-												// does this too.
+					field.setAccessible(
+							true); // Get around restrictions on
+									// private fields. JCommander
+									// does this too.
 					try {
 						field.set(
 								instance,
 								value);
-
 					}
-
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
 								e);
@@ -188,12 +188,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						field.getName());
 				if (value != null) {
 					field.setAccessible(
-									true);
+							true);
 					try {
 						field.set(
 								instance,
 								Boolean.valueOf(
-												value));
+										value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -211,12 +211,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						field.getName());
 				if (value != null) {
 					field.setAccessible(
-									true);
+							true);
 					try {
 						field.set(
 								instance,
 								Integer.valueOf(
-												value));
+										value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -251,7 +251,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				}
 			}
 			else if (field.getType() == List.class) {
-				field.setAccessible(true);
+				field.setAccessible(
+						true);
 				String[] parameters = getFieldValues(
 						form,
 						field.getName());
@@ -260,7 +261,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					field.set(
 							instance,
 							Arrays.asList(
-											parameters));
+									parameters));
 				}
 				catch (final IllegalAccessException e) {
 					throw new RuntimeException(
@@ -323,9 +324,9 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final Form form )
 			throws Exception {
 		final String configFileParameter = (form == null) ? getQueryValue(
-					"config_file") 
-					: form.getFirstValue(
-									"config_file");
+				"config_file")
+				: form.getFirstValue(
+						"config_file");
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 

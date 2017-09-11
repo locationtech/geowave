@@ -28,11 +28,9 @@ import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.PluginOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
@@ -67,11 +65,11 @@ public class AddStoreCommand extends
 
 	@ParametersDelegate
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-	
-	
+
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
+
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
 			if (storeType.equals("memory")) {
@@ -80,7 +78,6 @@ public class AddStoreCommand extends
 						new MemoryStoreFactoryFamily());
 			}
 			pluginOptions.selectPlugin(storeType);
-
 		}
 		else {
 			// Try to load the 'default' options.
@@ -124,6 +121,7 @@ public class AddStoreCommand extends
 	@Override
 	public Void computeResults(
 			final OperationParams params ) {
+
 		final File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 		final Properties existingProps = ConfigOptions.loadProperties(
@@ -149,6 +147,7 @@ public class AddStoreCommand extends
 		pluginOptions.save(
 				existingProps,
 				getNamespace());
+
 
 
 		// Make default?
