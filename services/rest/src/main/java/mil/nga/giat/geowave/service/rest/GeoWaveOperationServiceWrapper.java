@@ -296,7 +296,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		String[] val = null;
 		if (form != null) {
 			val = form.getValuesArray(
-							name);
+					name);
 		}
 		if (val == null || val.length == 0) {
 			val = getQuery().getValuesArray(
@@ -311,11 +311,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		String val = null;
 		if (form != null) {
 			val = form.getFirstValue(
-							name);
+					name);
 		}
 		if (val == null) {
 			val = getQueryValue(
-							name);
+					name);
 		}
 		return val;
 	}
@@ -348,9 +348,9 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			operation.prepare(
-							params);
+					params);
 			return operation.computeResults(
-							params);
+					params);
 		}
 		catch (final Exception e) {
 			LOGGER.error(
