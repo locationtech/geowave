@@ -42,7 +42,7 @@ public class AddSpatialIndexCommand extends
 		Command
 {
 	/**
-	 * A REST Operation for the AddStoreCommand where --type=spatial
+	 * A REST Operation for the AddIndexCommand where --type=spatial
 	 */
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
