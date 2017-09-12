@@ -45,7 +45,7 @@ public class IndexPluginOptions extends
 
 	private String indexType;
 	@ParametersDelegate
-	private BasicIndexOptions basicIndexOptions = null;
+	private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
 	
 	// This is the plugin loaded from SPI based on "type"
 	private DimensionalityTypeProviderSpi indexPlugin = null;
