@@ -1,10 +1,12 @@
 package mil.nga.giat.geowave.format.geotools.raster;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 
 import javax.imageio.ImageReader;
 import javax.imageio.spi.ImageReaderSpi;
+import javax.imageio.stream.ImageInputStream;
 
 public class ProtobufReaderProvider extends
 		ImageReaderSpi
@@ -14,23 +16,15 @@ public class ProtobufReaderProvider extends
 	public boolean canDecodeInput(
 			Object source )
 			throws IOException {
-		// TODO Auto-generated method stub
-		return false;
+		// TODO Make this more selective
+		return true;
 	}
 
 	@Override
 	public ImageReader createReaderInstance(
 			Object extension )
 			throws IOException {
-		ProtobufReader reader = null;
-		try {
-			reader = new ProtobufReader(
-					this.getClass().newInstance());
-		}
-		catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ProtobufReader reader = new ProtobufReader(this);
 
 		return reader;
 	}
@@ -38,8 +32,31 @@ public class ProtobufReaderProvider extends
 	@Override
 	public String getDescription(
 			Locale locale ) {
-		// TODO Auto-generated method stub
-		return null;
+		return "my description";
 	}
+
+	@Override
+	public String getVendorName() {
+		return "locationtech";
+	}
+
+	@Override
+	public String[] getFormatNames() {
+		return new String[] {
+			"pbf",
+			"mbtiles",
+			"MBTILES",
+			"vector-tile",
+			"VECTOR-TILE"
+		};
+	}
+	
+	@Override
+	public Class[] getInputTypes() {
+        return new Class[] {
+        	ImageInputStream.class,
+        	InputStream.class
+        };
+    }
 
 }

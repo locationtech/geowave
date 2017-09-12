@@ -21,16 +21,18 @@
 			<artifactId>geowave-core-ingest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency>
+		 <dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-mbtiles</artifactId>
-			<version>16.0</version>
-			<scope>compile</scope>
-		</dependency> -->
+		</dependency>
 		<dependency>
     		<groupId>com.wdtinc</groupId>
     		<artifactId>mapbox-vector-tile</artifactId>
     		<version>1.2.0</version>
+		</dependency>	
+		<dependency>
+    		<groupId>org.geotools</groupId>
+    		<artifactId>gt-imagemosaic</artifactId>
 		</dependency>	
 	</dependencies>
 	<!-- <build>
