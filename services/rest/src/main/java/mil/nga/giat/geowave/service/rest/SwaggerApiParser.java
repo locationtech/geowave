@@ -1,7 +1,9 @@
 package mil.nga.giat.geowave.service.rest;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import com.google.gson.Gson;
@@ -39,7 +41,7 @@ public class SwaggerApiParser
 				+ "\"application/json\"" + "]," + "\"produces\": [" + "\"application/json\"" + "]," + "\"paths\":";
 	}
 
-	public void AddRoute(
+	public void addRoute(
 			RestRoute route ) {
 		Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route.getOperation());
 		// iterate over routes and paths here
@@ -49,7 +51,7 @@ public class SwaggerApiParser
 
 			parser = new SwaggerOperationParser<>(
 					opClass.newInstance());
-			JsonObject op_json = ((SwaggerOperationParser) parser).GetJsonObject();
+			JsonObject op_json = ((SwaggerOperationParser) parser).getJsonObject();
 
 			JsonObject method_json = new JsonObject();
 			String method = route.getOperation().getAnnotation(
@@ -79,18 +81,19 @@ public class SwaggerApiParser
 		}
 	}
 
-	public void SerializeSwaggerJson(
+	public void serializeSwaggerJson(
 			String filename ) {
 		Writer writer = null;
 		try {
-			writer = new FileWriter(
-					filename);
+			writer = new OutputStreamWriter(new FileOutputStream(filename), "UTF-8");
+
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 		Gson gson = new GsonBuilder().create();
-
+		
+		if(writer!=null){
 		try {
 			writer.write(this.swaggerHeader);
 			gson.toJson(
@@ -103,5 +106,5 @@ public class SwaggerApiParser
 			e1.printStackTrace();
 		}
 	}
-
+	}
 }

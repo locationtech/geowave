@@ -108,7 +108,7 @@ public class RestServer extends
 
 				final Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
 						.getOperation());
-				apiParser.AddRoute(route);
+				apiParser.addRoute(route);
 			}
 			else {
 				router.attach(
@@ -117,7 +117,7 @@ public class RestServer extends
 			}
 		}
 
-		apiParser.SerializeSwaggerJson("swagger.json");
+		apiParser.serializeSwaggerJson("swagger.json");
 		// Provide basic 404 error page for unknown route
 		router.attachDefault(RestServer.class);
 
