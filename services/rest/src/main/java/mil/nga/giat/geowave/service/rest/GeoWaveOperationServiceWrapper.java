@@ -138,8 +138,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				if (value != null) {
 					field.setAccessible(
 									true); // Get around restrictions on
-												// private fields. JCommander
-												// does this too.
+										   // private fields. JCommander
+										   // does this too.
 					try {					
 						Enum<?> retv = Enum.valueOf((Class<Enum>)field.getType(), value);
 				
@@ -164,9 +164,9 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						field.getName());
 				if (value != null) {
 					field.setAccessible(
-							true); // Get around restrictions on
-									// private fields. JCommander
-									// does this too.
+									true); // Get around restrictions on
+										   // private fields. JCommander
+										   // does this too.
 					try {
 						field.set(
 								instance,
@@ -274,10 +274,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			}
 		}
 		else if (parametersDelegate != null) {
-			Object delegateObj;
-		
-			 delegateObj = field.getType().newInstance();
-//			}
+			Object delegateObj = field.getType().newInstance();
 
 			injectParameters(
 					form,

@@ -73,7 +73,6 @@ public class AddAccumuloStoreCommand extends
 		pluginOptions.selectPlugin("accumulo");
 		pluginOptions.setFactoryOptions(requiredOptions);
 
-		// Successfully prepared.
 		return true;
 	}
 
@@ -99,7 +98,7 @@ public class AddAccumuloStoreCommand extends
 					"Must specify store name");
 		}
 
-//		
+		
 
 
 		// Make sure we're not already in the index.

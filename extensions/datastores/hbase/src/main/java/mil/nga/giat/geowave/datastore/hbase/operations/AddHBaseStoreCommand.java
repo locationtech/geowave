@@ -73,7 +73,6 @@ public class AddHBaseStoreCommand extends
 		pluginOptions.selectPlugin("hbase");
 		pluginOptions.setFactoryOptions(requiredOptions);
 		
-		// Successfully prepared.
 		return true;
 	}
 

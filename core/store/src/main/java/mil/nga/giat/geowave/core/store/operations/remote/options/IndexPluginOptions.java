@@ -13,7 +13,6 @@ package mil.nga.giat.geowave.core.store.operations.remote.options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 

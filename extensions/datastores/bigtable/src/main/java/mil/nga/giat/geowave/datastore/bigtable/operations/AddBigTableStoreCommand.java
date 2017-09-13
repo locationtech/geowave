@@ -73,7 +73,6 @@ public class AddBigTableStoreCommand extends
 		pluginOptions.selectPlugin("bigtable");
 		pluginOptions.setFactoryOptions(opts);
 
-		// Successfully prepared.
 		return true;
 	}
 

@@ -59,12 +59,6 @@ public class AddSpatialTemporalIndexCommand extends
 	}, description = "Make this the default index creating stores")
 	private Boolean makeDefault;
 
-//	@Parameter(names = {
-//		"-t",
-//		"--type"
-//	}, required = true, description = "The type of index, such as spatial, or spatial_temporal")
-//	private String type;
-
 	@ParametersDelegate
 	private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
 	
