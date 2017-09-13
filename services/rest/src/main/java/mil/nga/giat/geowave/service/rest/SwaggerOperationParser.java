@@ -31,7 +31,7 @@ public class SwaggerOperationParser<T>
 	private final DefaultOperation<T> operation;
 	private JsonObject json_obj = null;
 
-	public JsonObject GetJsonObject() {
+	public JsonObject getJsonObject() {
 		return this.json_obj;
 	}
 
@@ -245,16 +245,19 @@ public class SwaggerOperationParser<T>
 		else if (type == Integer.class || type == int.class) {
 			return "integer";
 		}
+		else if (type == long.class || type == Long.class){
+			return "long";
+		}
 		else if (type == Float.class || type == float.class) {
 			return "number";
 		}
 		else if (type == Boolean.class || type == boolean.class) {
 			return "boolean";
 		}
-		else if (type instanceof Class && ((Class<?>) type).isEnum()) {
+		else if (((Class<?>) type).isEnum()) {
 			return "enum";
 		}
-		else if (type == List.class || (type instanceof Class && ((Class<?>) type).isArray())) {
+		else if (type == List.class || ((Class<?>) type).isArray()) {
 			return "array";
 		}
 		return "string";
