@@ -8,7 +8,7 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.geotime.services;
+package mil.nga.giat.geowave.service.rest.operations;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,19 +30,19 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
-@GeowaveOperation(name = "addindex/spatial", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addindex/spatial_temporal", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
-public class AddSpatialIndexCommand extends
+public class AddSpatialTemporalIndexCommand extends
 		DefaultOperation<Void> implements
 		Command
 {
 	/**
-	 * A REST Operation for the AddIndexCommand where --type=spatial
+	 * A REST Operation for the AddIndexCommand where --type=spatial_temporal 
 	 */
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
@@ -59,22 +59,22 @@ public class AddSpatialIndexCommand extends
 	}, description = "Make this the default index creating stores")
 	private Boolean makeDefault;
 
-
 	@ParametersDelegate
 	private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
 	
 	private IndexPluginOptions pluginOptions = new IndexPluginOptions();
 		
 	@ParametersDelegate
-	SpatialOptions opts = new SpatialOptions();
+	SpatialTemporalOptions opts = new SpatialTemporalOptions();
 		
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
 
-		pluginOptions.selectPlugin("spatial");
+		pluginOptions.selectPlugin("spatial_temporal");
 		pluginOptions.setBasicIndexOptions(basicIndexOptions);
 		pluginOptions.setDimensionalityTypeOptions(opts);
+		// Successfully prepared.
 		return true;
 	}
 
@@ -116,7 +116,7 @@ public class AddSpatialIndexCommand extends
 	}
 
 	public String getType() {
-		return "spatial";
+		return "spatial_temporal";
 	}
 
 	public void setPluginOptions(
