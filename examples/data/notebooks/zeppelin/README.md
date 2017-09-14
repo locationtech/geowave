@@ -12,6 +12,6 @@ This notebook demonstrates interaction with a large dataset. The GPX data is in 
 
 ### Getting Started
 
-> How to run Zeppelin on EMR and load these notebooks
-
-
+In order to run these notebook examples, you'll need to have a working GeoWave installation.  
+Please see the [GeoWave Quick Start Guide](http://locationtech.github.io/geowave/quickstart.html) for instructions.  
+ 
