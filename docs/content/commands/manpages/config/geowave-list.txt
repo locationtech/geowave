@@ -1,0 +1,27 @@
+//:geowave-list(1)
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config list - List property name within cache
+
+SYNOPSIS
+//:--------
+
+geowave config list [options]
+
+DESCRIPTION
+//:-----------
+
+The geowave config list operator will list all properties in local config.
+-f or --filter will allow you to give a regex to filter the list by
+(useful regexes may be 'store' or 'index' to isolate properties for one or 
+the other or a particular store/index name to further isolate the list).
+
+OPTIONS
+//:-------
+
+- -f or --filter <arg>
+ * Filter list by a regex

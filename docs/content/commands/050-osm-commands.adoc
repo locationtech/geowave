@@ -1,0 +1,23 @@
+[[osm-commands]]
+<<<
+
+[[osm-commands]]
+=== OSM Commands
+
+Operations to ingest Open Street Map (OSM) nodes, ways and relations to GeoWave (Required options are designated with an *)
+
+.Commands:
+* <<050-osm-commands.adoc#osm-ingest, Ingest>>
+* <<050-osm-commands.adoc#osm-stage, Stage>>
+
+[[osm-ingest]]
+==== *geowave osm ingest*
+
+include::manpages/osm/geowave-ingest.txt[]
+
+[[osm-stage]]
+==== *geowave osm stage*
+
+include::manpages/osm/geowave-stage.txt[]
+
+'''

@@ -1,0 +1,41 @@
+[[landsat-commands]]
+<<<
+
+[[landsat-commands]]
+=== Landsat8 Commands
+
+Operations to analyze, download, and ingest Landsat 8 imagery publicly available on AWS (Required options are designated with an *)
+
+.Commands:
+* <<045-landsat-commands.adoc#landsat-analyze, Analyze>>
+* <<045-landsat-commands.adoc#landsat-download, Download>>
+* <<045-landsat-commands.adoc#landsat-ingest, Ingest>>
+* <<045-landsat-commands.adoc#landsat-ingestraster, IngestRaster>>
+* <<045-landsat-commands.adoc#landsat-ingestvector, IngestVector>>
+
+[[landsat-analyze]]
+==== *geowave landsat analyze*
+
+include::manpages/landsat/geowave-analyze.txt[]
+
+[[landsat-download]]
+==== *geowave landsat download*
+
+include::manpages/landsat/geowave-download.txt[]
+
+[[landsat-ingest]]
+==== *geowave landsat ingest*
+
+include::manpages/landsat/geowave-ingest.txt[]
+
+[[landsat-ingestraster]]
+==== *geowave landsat ingestraster*
+
+include::manpages/landsat/geowave-ingestraster.txt[]
+
+[[landsat-ingestvector]]
+==== *geowave landsat ingestvector*
+
+include::manpages/landsat/geowave-ingestvector.txt[]
+
+'''

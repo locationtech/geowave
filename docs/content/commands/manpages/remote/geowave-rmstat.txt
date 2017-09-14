@@ -1,0 +1,28 @@
+//:geowave-rmstat(1)
+//:=================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote rmstat - Remove a statistic from the remote store
+
+SYNOPSIS
+//:--------
+
+geowave remote rmstat [options] <store name> <adapterId> <statId>
+
+DESCRIPTION
+//:-----------
+
+The geowave remote rmstat operator will Remove a statistic from the remote store.
+You will be prompted with "Are you sure?"
+
+OPTIONS
+//:-------
+
+- --auth
+ * The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.
+- --json
+ * Output in JSON format.
+ * Default: false

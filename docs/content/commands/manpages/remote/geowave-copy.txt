@@ -1,0 +1,33 @@
+//:geowave-copy(1)
+//:================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote copy - Copy a data store
+
+SYNOPSIS
+//:--------
+
+geowave remote copy [options] <input store name> <output store name>
+
+DESCRIPTION
+//:-----------
+
+This command will allow a user to copy a data store
+
+OPTIONS
+//:-------
+
+- * --hdfsHostPort
+ * The hdfs host port
+- * --jobSubmissionHostPort
+ * The job submission tracker
+- --maxSplits
+ * The max partitions for the input data
+- --minSplits
+ * The min partitions for the input data
+- --numReducers
+ * Number of threads writing at a time (default: 8)
+ * Default: 8

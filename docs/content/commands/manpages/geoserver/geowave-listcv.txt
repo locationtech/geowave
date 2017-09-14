@@ -1,0 +1,24 @@
+//:geowave-listcv(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs listcv - List GeoServer Coverages
+
+SYNOPSIS
+//:--------
+
+geowave gs listcv [options] <coverage store name>
+
+DESCRIPTION
+//:-----------
+
+This command will list all GeoServer Coverages
+
+OPTIONS
+//:-------
+
+- -ws, --workspace
+ * <workspace name>

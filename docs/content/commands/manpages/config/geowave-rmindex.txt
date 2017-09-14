@@ -1,0 +1,23 @@
+//:geowave-rmindex(1)
+//:==================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config rmindex - Remove index configuration from Geowave configuration
+
+SYNOPSIS
+//:--------
+
+geowave config rmindex [options] <name>
+
+DESCRIPTION
+//:-----------
+
+The geowave config rmindex operator will remove an index configuration from GeoWave configuration
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

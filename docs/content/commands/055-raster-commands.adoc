@@ -1,0 +1,17 @@
+[[raster-commands]]
+<<<
+
+[[raster-commands]]
+=== Raster Commands
+
+Operations to perform transformations on raster data in GeoWave (Required options are designated with an *)
+
+.Commands:
+* <<055-raster-commands.adoc#raster-resize, ReSize>>
+
+[[raster-resize]]
+==== *geowave raster resize*
+
+include::manpages/raster/geowave-resize.txt[]
+
+'''
