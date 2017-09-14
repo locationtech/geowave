@@ -1,0 +1,27 @@
+//:geowave-splitequalinterval(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave accumulo splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy
+
+SYNOPSIS
+//:--------
+
+geowave accumulo splitequalinterval [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+This command will allow a user to set the accumulated splits through providing the number of partitions based on an equal interval strategy.
+
+OPTIONS
+//:-------
+
+- --indexId
+ * The geowave index ID (optional; default is all indices)
+- --num
+ * The number of partitions (or entries)
+ * Default: 0

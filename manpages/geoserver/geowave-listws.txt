@@ -1,0 +1,23 @@
+//:geowave-listws(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs listws - List GeoServer workspaces
+
+SYNOPSIS
+//:--------
+
+geowave gs listws [options]
+
+DESCRIPTION
+//:-----------
+
+This command will list all GeoServer workspaces
+
+OPTIONS
+//:-------
+
+There are currently no options available for this command

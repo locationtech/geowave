@@ -1,0 +1,24 @@
+//:geowave-setls(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs setls - Set GeoServer Layer Style
+
+SYNOPSIS
+//:--------
+
+geowave gs setls [options] <layer name>
+
+DESCRIPTION
+//:-----------
+
+This command will set a GeoServer layer style
+
+OPTIONS
+//:-------
+
+- * -sn, --styleName
+ * <style name>

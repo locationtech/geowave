@@ -1,0 +1,23 @@
+//:geowave-version(1)
+//:================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote version - Get the version of GeoWave running on the instance of a remote datastore
+
+SYNOPSIS
+//:--------
+
+geowave remote version [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+This command will return the version of GeoWave running on the instance of a remote datastore.
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

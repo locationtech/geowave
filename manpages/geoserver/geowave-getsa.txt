@@ -1,0 +1,23 @@
+//:geowave-getsa(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config getsa - Get GeoWave store adapters
+
+SYNOPSIS
+//:--------
+
+geowave gs getsa [options] <store name>
+
+DESCRIPTION
+//:-----------
+
+This command will return GeoWave store adapters
+
+OPTIONS
+//:-------
+
+There are currently no options available for this command

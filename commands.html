@@ -438,6 +438,13 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#ingest-commands">Ingest Commands</a></li>
 <li><a href="#remote-commands">Remote Commands</a></li>
 <li><a href="#analytic-commands">Analytic Commands</a></li>
+<li><a href="#accumulo-commands">Accumulo Commands</a></li>
+<li><a href="#geoserver-commands">GeoServer Commands</a></li>
+<li><a href="#hbase-commands">HBase Commands</a></li>
+<li><a href="#landsat-commands">Landsat8 Commands</a></li>
+<li><a href="#osm-commands">OSM Commands</a></li>
+<li><a href="#raster-commands">Raster Commands</a></li>
+<li><a href="#vector-commands">Vector Commands</a></li>
 </ul>
 </li>
 </ul>
@@ -555,6 +562,7 @@ their values, if there are any. An example would be additional Accumulo options:
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave explain config addstore -t accumulo</code></pre>
 </div>
 </div>
+<hr>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -582,7 +590,13 @@ their values, if there are any. An example would be additional Accumulo options:
 <p><a href="#config-cpstore">CpStore</a></p>
 </li>
 <li>
+<p><a href="#config-geoserver">GeoServer</a></p>
+</li>
+<li>
 <p><a href="#config-list">List</a></p>
+</li>
+<li>
+<p><a href="#config-newcryptokey">NewCryptoKey</a></p>
 </li>
 <li>
 <p><a href="#config-rmindex">RmIndex</a></p>
@@ -604,7 +618,7 @@ their values, if there are any. An example would be additional Accumulo options:
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config addindex - creates an index configuration for use in GeoWave</p>
+<p>geowave config addindex - Configure an index for usage in GeoWave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -616,8 +630,7 @@ their values, if there are any. An example would be additional Accumulo options:
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave config addindex operator will create a local index configuration
-that can be reused but is not associated with a store until data is ingested.</p>
+<p>The geowave config addindex operator will create a local index configuration that can be reused but is not associated with a store until data is ingested.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -625,75 +638,7 @@ that can be reused but is not associated with a store until data is ingested.</p
 <div class="ulist">
 <ul>
 <li>
-<p>-d, --default</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Make this the default index  for creating stores</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-np, --numPartitions &lt;arg&gt;</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The number of partitions</p>
-</li>
-<li>
-<p>Default: 1</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-ps, --partitionStrategy &lt;arg&gt;</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The partition strategy to use</p>
-</li>
-<li>
-<p>Default: NONE</p>
-</li>
-<li>
-<p>Possible Values: NONE, HASH, ROUND_ROBIN</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>*-t, --type &lt;arg&gt;</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The type of index, such as spatial or spatial_temporal</p>
-</li>
-<li>
-<p>Required!</p>
-</li>
-<li>
-<p>When -t, --type is spatial, the following options are available</p>
-<div class="ulist">
-<ul>
-<li>
-<p>--allTiers</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The index will represent all tiers.  Typically for vector data we only
-need a subset of the tiers to minimize query decomposition, but for raster
-data typically all tiers is better.</p>
-</li>
-<li>
-<p>Default: false</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-d, --default</p>
+<p>--d, --default</p>
 <div class="ulist">
 <ul>
 <li>
@@ -703,83 +648,11 @@ data typically all tiers is better.</p>
 </div>
 </li>
 <li>
-<p>-np, --numPartitions</p>
+<p>--indexName</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The number of partitions.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Default: 1</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-ps, --partitionStrategy</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The partition strategy to use.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Default: NONE</p>
-</li>
-<li>
-<p>Possible Values: [NONE, HASH, ROUND_ROBIN]</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--pointOnly</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The index will only be good at handling pointsand will not be optimized
-for handling lines/polys.  The default behavior is to handle any geometry.
-Default: false</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>When -t, --type is spatial_temporal, the following options are available</p>
-<div class="ulist">
-<ul>
-<li>
-<p>--bias</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.</p>
-</li>
-<li>
-<p>Default: BALANCED</p>
-</li>
-<li>
-<p>Possible Values: [TEMPORAL, BALANCED, SPATIAL]</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-d, --default</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Make this the default index creating stores</p>
+<p>A custom name can be given to this index. Default name will be the based on configuration parameters.</p>
 </li>
 </ul>
 </div>
@@ -789,7 +662,7 @@ Default: false</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The number of partitions.</p>
+<p>The number of partitions.  Default partitions will be 1.</p>
 </li>
 <li>
 <p>Default: 1</p>
@@ -802,7 +675,7 @@ Default: false</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The partition strategy to use.</p>
+<p>The partition strategy to use.  Default will be none.</p>
 </li>
 <li>
 <p>Default: NONE</p>
@@ -814,38 +687,11 @@ Default: false</p>
 </div>
 </li>
 <li>
-<p>--period</p>
+<p>* -t, --type</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.</p>
-</li>
-<li>
-<p>Default: YEAR</p>
-</li>
-<li>
-<p>Possible Values: [DAY, MONTH, YEAR]</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--pointTimestampOnly</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The index will only be good at handling points and timestamps and will
-not be optimized for handling lines/polys or time ranges.  The default
-behavior is to handle any geometry and time ranges well.</p>
-</li>
-<li>
-<p>Default: false</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<p>The type of index, such as spatial, or spatial_temporal</p>
 </li>
 </ul>
 </div>
@@ -859,7 +705,7 @@ behavior is to handle any geometry and time ranges well.</p>
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config addindexgrp - Group multiple index configurations together given a name</p>
+<p>geowave config addindexgrp - Create an index group for usage in GeoWave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -871,8 +717,7 @@ behavior is to handle any geometry and time ranges well.</p>
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave config addindexgrp operator will group multiple index configurations together given a name.
-This acts as a convenience for re-using multiple indices together on ingest.</p>
+<p>The geowave config addindexgrp operator will group multiple index configurations together given a name. This acts as a convenience for re-using multiple indices together on ingest.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -887,7 +732,7 @@ This acts as a convenience for re-using multiple indices together on ingest.</p>
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config addstore - creates a new store in GeoWave</p>
+<p>geowave config addstore - Create a store within Geowave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -1060,7 +905,7 @@ This acts as a convenience for re-using multiple indices together on ingest.</p>
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config cpindex - copies and modifies an existing index configuration</p>
+<p>geowave config cpindex - Copy and modify existing index configuration</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -1128,7 +973,7 @@ It is possible to override values as you copy, such as cpindex old new --gwNames
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config cpstore - copies and modifies an existing GeoWave store</p>
+<p>geowave config cpstore - Copy and modify existing store configuration</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -1162,12 +1007,229 @@ It is possible to override values as you copy, such as cpstore old new --gwNames
 </div>
 </div>
 <div class="sect3">
+<h4 id="config-geoserver"><a class="anchor" href="#config-geoserver"></a><strong>geowave config geoserver</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config geoserver - Create a local configuration for GeoServer</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave config geoserver [options] &lt;GeoServer URL (for example <a href="http://localhost:8080/geoserver" class="bare">http://localhost:8080/geoserver</a> or <a href="https://localhost:8443/geoserver" class="bare">https://localhost:8443/geoserver</a>), or simply host:port and appropriate assumptions are made&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will create a local configuration for connecting to GeoServer.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-p, --password</p>
+<div class="ulist">
+<ul>
+<li>
+<p>GeoServer Password - Can be specified as 'pass:&lt;password&gt;', 'file:&lt;local file containing the password&gt;', 'propfile:&lt;local properties file containing the password&gt;:&lt;property file key&gt;', 'env:&lt;variable containing the pass&gt;', or stdin</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-u, --username</p>
+<div class="ulist">
+<ul>
+<li>
+<p>GeoServer User</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>GeoServer Default Workspace</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SSL CONFIGURATION OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--sslKeyManagerAlgorithm</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the algorithm to use for the keystore.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslKeyManagerProvider</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the key manager factory provider.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslKeyPassword</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the password to be used to access the server certificate from the specified keystore file.</p>
+</li>
+<li>
+<p>Can be specified as 'pass:&lt;password&gt;', 'file:&lt;local file containing the password&gt;', 'propfile:&lt;local properties file containing the password&gt;:&lt;property file key&gt;', 'env:&lt;variable containing the pass&gt;', or stdin</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslKeyStorePassword</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the password to use to access the keystore file.</p>
+</li>
+<li>
+<p>Can be specified as 'pass:&lt;password&gt;', 'file:&lt;local file containing the password&gt;', 'propfile:&lt;local properties file containing the password&gt;:&lt;property file key&gt;', 'env:&lt;variable containing the pass&gt;', or stdin</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslKeyStorePath</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the absolute path to where the keystore file is located on system. The keystore contains the server certificate to be loaded.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslKeyStoreProvider</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the name of the keystore provider to be used for the server certificate.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslKeyStoreType</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The type of keystore file to be used for the server certificate.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslSecurityProtocol</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the Transport Layer Security (TLS) protocol to use when connecting to the server. By default, the system will use TLS.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslTrustManagerAlgorithm</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the algorithm to use for the truststore.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslTrustManagerProvider</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the trust manager factory provider.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslTrustStorePassword</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the password to use to access the truststore file.</p>
+</li>
+<li>
+<p>Can be specified as 'pass:&lt;password&gt;', 'file:&lt;local file containing the password&gt;', 'propfile:&lt;local properties file containing the password&gt;:&lt;property file key&gt;', 'env:&lt;variable containing the pass&gt;', or stdin</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslTrustStorePath</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the absolute path to where truststore file is located on system.</p>
+</li>
+<li>
+<p>The truststore file is used to validate client certificates.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslTrustStoreProvider</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the name of the truststore provider to be used for the server certificate.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sslTrustStoreType</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Specify the type of key store used for the truststore, i.e. JKS (Java KeyStore).</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="config-list"><a class="anchor" href="#config-list"></a><strong>geowave config list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config list - will list all properties in local config</p>
+<p>geowave config list - List property name within cache</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -1203,12 +1265,39 @@ the other or a particular store/index name to further isolate the list).</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="config-newcryptokey"><a class="anchor" href="#config-newcryptokey"></a><strong>geowave config newcryptokey</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config newcryptokey - Generate a new security cryptography key for use with configuration properties</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave config newcryptokey</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will generate a new security cryptography key for use with configuration properties. This is primarily used if there is a need to re-encrypt the local configurations based on a new security token, should the old one have been compromised.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="config-rmindex"><a class="anchor" href="#config-rmindex"></a><strong>geowave config rmindex</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config rmindex - removes an index configuration from GeoWave configuration</p>
+<p>geowave config rmindex - Remove index configuration from Geowave configuration</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -1323,13 +1412,13 @@ This can be useful if you want to update a particular property of a index or sto
 <div class="title">Commands:</div>
 <ul>
 <li>
-<p><a href="#ingest-listformat">ListFormat</a></p>
+<p><a href="#ingest-kafkaToGW">KafkaToGW</a></p>
+</li>
+<li>
+<p><a href="#ingest-listplugins">ListPlugins</a></p>
 </li>
 <li>
 <p><a href="#ingest-localToGW">LocalToGW</a></p>
-</li>
-<li>
-<p><a href="#ingest-localToMrGW">LocalToMRGW</a></p>
 </li>
 <li>
 <p><a href="#ingest-localToHdfs">LocalToHdfs</a></p>
@@ -1338,367 +1427,12 @@ This can be useful if you want to update a particular property of a index or sto
 <p><a href="#ingest-localToKafka">LocalToKafka</a></p>
 </li>
 <li>
-<p><a href="#ingest-kafkaToGW">KafkaToGW</a></p>
+<p><a href="#ingest-localToMrGW">LocalToMRGW</a></p>
 </li>
 <li>
 <p><a href="#ingest-mrToGW">MRToGW</a></p>
 </li>
 </ul>
-</div>
-<div class="sect3">
-<h4 id="ingest-listformat"><a class="anchor" href="#ingest-listformat"></a><strong>geowave ingest listformat</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote listformat - List supported ingest formats</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote listformat [options]</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote listformat lists supported ingest formats</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="ingest-localToGW"><a class="anchor" href="#ingest-localToGW"></a><strong>geowave ingest localToGW</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToGW - Ingest supported files in local file system directly, without using HDFS</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToGW [options] &lt;file or directory&gt; &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave ingest localToGW operator will run the ingest code (parse to features, load features to geowave) against local file system content.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-x, --extension</p>
-<div class="ulist">
-<ul>
-<li>
-<p>individual or comma-delimited set of file extensions to accept</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-f, --formats</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited
-formats), if not set all available ingest formats will be used</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-t, --threads</p>
-<div class="ulist">
-<ul>
-<li>
-<p>number of threads to use for ingest</p>
-</li>
-<li>
-<p>Default is 1</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-v, --visibility</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The visibility of the data ingested</p>
-</li>
-<li>
-<p>Default is 'public'</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="ingest-localToMrGW"><a class="anchor" href="#ingest-localToMrGW"></a><strong>geowave ingest localToMrGW</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToMrGW - Copy supported files from local file system to HDFS and ingest from HDFS</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToMrGW [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave ingest localToMrGW operator will Copy supported files from local file system to HDFS and ingest from HDFS</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-x, --extension</p>
-<div class="ulist">
-<ul>
-<li>
-<p>individual or comma-delimited set of file extensions to accept</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-f, --formats</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited
-formats), if not set all available ingest formats will be used</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--jobtracker</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Hadoop job tracker hostname and port in the format hostname:port</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--resourceman</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Yarn resource manager hostname and port in the format hostname:port</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-v, --visibility</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The visibility of the data ingested</p>
-</li>
-<li>
-<p>Default is 'public'</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="ingest-localToHdfs"><a class="anchor" href="#ingest-localToHdfs"></a><strong>geowave ingest localToHdfs</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToHdfs - Stage supported files in local file system to HDFS</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToHdfs [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave ingest localToHdfs operator will stage supported files in the local file system to HDFS</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-x, --extension</p>
-<div class="ulist">
-<ul>
-<li>
-<p>individual or comma-delimited set of file extensions to accept</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-f, --formats</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited
-formats), if not set all available ingest formats will be used</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="ingest-localToKafka"><a class="anchor" href="#ingest-localToKafka"></a><strong>geowave ingest localToKafka</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToKafka - Stage supported files in local file system to a Kafka topic</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave ingest localToKafka [options] &lt;file or directory&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave ingest localToKafka operator will stage supported files in the local file system to a Kafka topic</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-x, --extension</p>
-<div class="ulist">
-<ul>
-<li>
-<p>individual or comma-delimited set of file extensions to accept</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-f, --formats</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited
-formats), if not set all available ingest formats will be used</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>*--kafkaprops</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Properties file containing Kafka properties</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--metadataBrokerList</p>
-<div class="ulist">
-<ul>
-<li>
-<p>This is for bootstrapping and the producer will only use it for getting
-metadata (topics, partitions and replicas). The socket connections for sending the
-actual data will be established based on the broker information returned in the
-metadata. The format is host1:port1,host2:port2, and the list can be a subset of
-brokers or a VIP pointing to a subset of brokers.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--producerType</p>
-<div class="ulist">
-<ul>
-<li>
-<p>This parameter specifies whether the messages are sent asynchronously in
-a background thread. Valid values are (1) async for asynchronous send and
-(2) sync for synchronous send. By setting the producer to async we allow
-batching together of requests (which is great for throughput) but open the
-possibility of a failure of the client machine dropping unsent data.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--requestRequiredAcks</p>
-<div class="ulist">
-<ul>
-<li>
-<p>This value controls when a produce request is considered completed.
-Specifically, how many other brokers must have committed the data to their log and
-acknowledged this to the leader?</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--retryBackoffMs</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The amount of time to wait before attempting to retry a failed produce
-request to a given topic partition. This avoids repeated sending-and-failing in a
-tight loop.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--serializerClass</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The serializer class for messages. The default encoder takes a byte[] and
-returns the same byte[].</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
 </div>
 <div class="sect3">
 <h4 id="ingest-kafkaToGW"><a class="anchor" href="#ingest-kafkaToGW"></a><strong>geowave ingest kafkaToGW</strong></h4>
@@ -1749,6 +1483,42 @@ returns the same byte[].</p>
 </div>
 </li>
 <li>
+<p>--avro.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>--batchSize</p>
 <div class="ulist">
 <ul>
@@ -1756,7 +1526,7 @@ returns the same byte[].</p>
 <p>The data will automatically flush after this number of entries</p>
 </li>
 <li>
-<p>Default is 10000</p>
+<p>Default: 10000</p>
 </li>
 </ul>
 </div>
@@ -1766,10 +1536,7 @@ returns the same byte[].</p>
 <div class="ulist">
 <ul>
 <li>
-<p>By default, this value is -1 and a consumer blocks indefinitely if no new
-message is available for consumption. By setting the value to a positive integer,
-a timeout exception is thrown to the consumer if no message is available
-for consumption after the specified timeout value.</p>
+<p>By default, this value is -1 and a consumer blocks indefinitely if no new message is available for consumption. By setting the value to a positive integer,a timeout exception is thrown to the consumer if no message is available for consumption after the specified timeout value.</p>
 </li>
 </ul>
 </div>
@@ -1779,7 +1546,7 @@ for consumption after the specified timeout value.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>individual or comma-delimited set of file extensions to accept</p>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
 </li>
 </ul>
 </div>
@@ -1789,12 +1556,7 @@ for consumption after the specified timeout value.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The number of bytes of messages to attempt to fetch for each
-topic-partition in each fetch request. These bytes will be read into memory for each
-partition, so this helps control the memory used by the consumer. The fetch request
-size must be at least as large as the maximum message size the server allows
-or else it is possible for the producer to send messages larger than the
-consumer can fetch.</p>
+<p>The number of bytes of messages to attempt to fetch for each topic-partition in each fetch request. These bytes will be read into memory for each partition, so this helps control the memory used by the consumer. The fetch request size must be at least as large as the maximum message size the server allows or else it is possible for the producer to send messages larger than the consumer can fetch.</p>
 </li>
 </ul>
 </div>
@@ -1804,8 +1566,265 @@ consumer can fetch.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited
-formats), if not set all available ingest formats will be used</p>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.extended</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether extended data format should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the coverage name (default is the file name)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.crs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CRS override for the provided raster file</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build a histogram of samples per band on ingest for performing band equalization</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.mergeStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to choose a tile merge strategy used for mosaic.</p>
+</li>
+<li>
+<p>Default behavior will be <code>none</code>.</p>
+</li>
+<li>
+<p>Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.nodata</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an image pyramid on ingest for quick reduced resolution query</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.separateBands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where <code>n</code> is the band&#8217;s index.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.tileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the tile size stored (default is 256)</p>
+</li>
+<li>
+<p>Default: 256</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter that specifies specific type name(s) from the source file</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
 </li>
 </ul>
 </div>
@@ -1815,15 +1834,13 @@ formats), if not set all available ingest formats will be used</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A string that uniquely identifies the group of consumer processes to
-which this consumer belongs. By setting the same group id multiple processes
-indicate that they are all part of the same consumer group.</p>
+<p>A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id multiple processes indicate that they are all part of the same consumer group.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>*--kafkaprops</p>
+<p>* --kafkaprops</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1837,9 +1854,82 @@ indicate that they are all part of the same consumer group.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>This flag will flush when the consumer timeout occurs (based on kafka
-property 'consumer.timeout.ms') and immediately reconnect
-Default: false</p>
+<p>This flag will flush when the consumer timeout occurs (based on kafka property 'consumer.timeout.ms') and immediately reconnect</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
 </li>
 </ul>
 </div>
@@ -1849,10 +1939,7 @@ Default: false</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The visibility of the data ingested</p>
-</li>
-<li>
-<p>Default is 'public'</p>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
 </li>
 </ul>
 </div>
@@ -1862,11 +1949,7 @@ Default: false</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Specifies the ZooKeeper connection string in the form hostname:port where
-host and port are the host and port of a ZooKeeper server. To allow connecting
-through other ZooKeeper nodes when that ZooKeeper machine is down you can also
-specify multiple hosts in the form
-hostname1:port1,hostname2:port2,hostname3:port3.</p>
+<p>Specifies the ZooKeeper connection string in the form hostname:port where host and port are the host and port of a ZooKeeper server. To allow connecting through other ZooKeeper nodes when that ZooKeeper machine is down you can also specify multiple hosts in the form hostname1:port1,hostname2:port2,hostname3:port3.</p>
 </li>
 </ul>
 </div>
@@ -1875,24 +1958,51 @@ hostname1:port1,hostname2:port2,hostname3:port3.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ingest-mrToGW"><a class="anchor" href="#ingest-mrToGW"></a><strong>geowave ingest mrToGW</strong></h4>
+<h4 id="ingest-listplugins"><a class="anchor" href="#ingest-listplugins"></a><strong>geowave ingest listplugins</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest mrToGW - Ingest supported files that already exist in HDFS</p>
+<p>geowave ingest listplugins - List supported data store types, index types, and ingest formats</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest mrToGW [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave ingest listplugins [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave ingest mrToGW operator will ingest supported files that already exist in HDFS</p>
+<p>This command will list all the data store types, index types, and ingest formats supported by the version of GeoWave being run.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ingest-localToGW"><a class="anchor" href="#ingest-localToGW"></a><strong>geowave ingest localToGW</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToGW - Ingest supported files in local file system directly, without using HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToGW [options] &lt;file or directory&gt; &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest localToGW operator will run the ingest code (parse to features, load features to geowave) against local file system content.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -1900,11 +2010,47 @@ hostname1:port1,hostname2:port2,hostname3:port3.</p>
 <div class="ulist">
 <ul>
 <li>
+<p>--avro.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>-x, --extension</p>
 <div class="ulist">
 <ul>
 <li>
-<p>individual or comma-delimited set of file extensions to accept</p>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
 </li>
 </ul>
 </div>
@@ -1914,8 +2060,1590 @@ hostname1:port1,hostname2:port2,hostname3:port3.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Explicitly set the ingest formats by name (or multiple comma-delimited
-formats), if not set all available ingest formats will be used</p>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.extended</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether extended data format should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the coverage name (default is the file name)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.crs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CRS override for the provided raster file</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build a histogram of samples per band on ingest for performing band equalization</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.mergeStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to choose a tile merge strategy used for mosaic.</p>
+</li>
+<li>
+<p>Default behavior will be <code>none</code>.  Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.</p>
+</li>
+<li>
+<p>Default: none</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.nodata</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an image pyramid on ingest for quick reduced resolution query</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.separateBands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where <code>n</code> is the band&#8217;s index.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.tileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the tile size stored (default is 256)</p>
+</li>
+<li>
+<p>Default: 256</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter that specifies specific type name(s) from the source file</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-t, --threads</p>
+<div class="ulist">
+<ul>
+<li>
+<p>number of threads to use for ingest, default to 1 (optional)</p>
+</li>
+<li>
+<p>Default: 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-v, --visibility</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ingest-localToHdfs"><a class="anchor" href="#ingest-localToHdfs"></a><strong>geowave ingest localToHdfs</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToHdfs - Stage supported files in local file system to HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToHdfs [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest localToHdfs operator will stage supported files in the local file system to HDFS</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--avro.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-x, --extension</p>
+<div class="ulist">
+<ul>
+<li>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-f, --formats</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.extended</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether extended data format should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the coverage name (default is the file name)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.crs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CRS override for the provided raster file</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build a histogram of samples per band on ingest for performing band equalization</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.mergeStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to choose a tile merge strategy used for mosaic.</p>
+</li>
+<li>
+<p>Default behavior will be <code>none</code>. Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.</p>
+</li>
+<li>
+<p>Default: none</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.nodata</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an image pyramid on ingest for quick reduced resolution query</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.separateBands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where <code>n</code> is the band&#8217;s index.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.tileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the tile size stored (default is 256)</p>
+</li>
+<li>
+<p>Default: 256</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter that specifies specific type name(s) from the source file</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ingest-localToKafka"><a class="anchor" href="#ingest-localToKafka"></a><strong>geowave ingest localToKafka</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToKafka - Stage supported files in local file system to a Kafka topic</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToKafka [options] &lt;file or directory&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest localToKafka operator will stage supported files in the local file system to a Kafka topic</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--avro.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-x, --extension</p>
+<div class="ulist">
+<ul>
+<li>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-f, --formats</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.extended</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether extended data format should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the coverage name (default is the file name)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.crs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CRS override for the provided raster file</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build a histogram of samples per band on ingest for performing band equalization</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.mergeStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to choose a tile merge strategy used for mosaic.</p>
+</li>
+<li>
+<p>Default behavior will be <code>none</code>.  Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.</p>
+</li>
+<li>
+<p>Default: none</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.nodata</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an image pyramid on ingest for quick reduced resolution query</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.separateBands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where <code>n</code> is the band&#8217;s index.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.tileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the tile size stored (default is 256)</p>
+</li>
+<li>
+<p>Default: 256</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter that specifies specific type name(s) from the source file</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --kafkaprops</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Properties file containing Kafka properties</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--metadataBrokerList</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This is for bootstrapping and the producer will only use it for getting metadata (topics, partitions and replicas). The socket connections for sending the actual data will be established based on the broker information returned in the metadata. The format is host1:port1,host2:port2, and the list can be a subset of brokers or a VIP pointing to a subset of brokers.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--producerType</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This parameter specifies whether the messages are sent asynchronously in a background thread. Valid values are (1) async for asynchronous send and (2) sync for synchronous send. By setting the producer to async we allow batching together of requests (which is great for throughput) but open the possibility of a failure of the client machine dropping unsent data.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--requestRequiredAcks</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This value controls when a produce request is considered completed. Specifically, how many other brokers must have committed the data to their log and acknowledged this to the leader?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--retryBackoffMs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The amount of time to wait before attempting to retry a failed produce request to a given topic partition. This avoids repeated sending-and-failing in a tight loop.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--serializerClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The serializer class for messages. The default encoder takes a byte[] and returns the same byte[].</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ingest-localToMrGW"><a class="anchor" href="#ingest-localToMrGW"></a><strong>geowave ingest localToMrGW</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToMrGW - Copy supported files from local file system to HDFS and ingest from HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest localToMrGW [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest localToMrGW operator will Copy supported files from local file system to HDFS and ingest from HDFS</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--avro.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-x, --extension</p>
+<div class="ulist">
+<ul>
+<li>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-f, --formats</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.extended</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether extended data format should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the coverage name (default is the file name)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.crs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CRS override for the provided raster file</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build a histogram of samples per band on ingest for performing band equalization</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.mergeStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to choose a tile merge strategy used for mosaic.</p>
+</li>
+<li>
+<p>Default behavior will be <code>none</code>.  Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.</p>
+</li>
+<li>
+<p>Default: none</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.nodata</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an image pyramid on ingest for quick reduced resolution query</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.separateBands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where <code>n</code> is the band&#8217;s index.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.tileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the tile size stored (default is 256)</p>
+</li>
+<li>
+<p>Default: 256</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter that specifies specific type name(s) from the source file</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
 </li>
 </ul>
 </div>
@@ -1941,14 +3669,527 @@ formats), if not set all available ingest formats will be used</p>
 </div>
 </li>
 <li>
+<p>--tdrive.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>-v, --visibility</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The visibility of the data ingested</p>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ingest-mrToGW"><a class="anchor" href="#ingest-mrToGW"></a><strong>geowave ingest mrToGW</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest mrToGW - Ingest supported files that already exist in HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest mrToGW [options] &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave ingest mrToGW operator will ingest supported files that already exist in HDFS</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--avro.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
 </li>
 <li>
-<p>Default is 'public'</p>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--avro.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-x, --extension</p>
+<div class="ulist">
+<ul>
+<li>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-f, --formats</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.extended</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether extended data format should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gdelt.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geolife.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the coverage name (default is the file name)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.crs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CRS override for the provided raster file</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build a histogram of samples per band on ingest for performing band equalization</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.mergeStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to choose a tile merge strategy used for mosaic.</p>
+</li>
+<li>
+<p>Default behavior will be <code>none</code>.  Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.</p>
+</li>
+<li>
+<p>Default: none</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.nodata</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an image pyramid on ingest for quick reduced resolution query</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.separateBands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where <code>n</code> is the band&#8217;s index.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-raster.tileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter to set the tile size stored (default is 256)</p>
+</li>
+<li>
+<p>Default: 256</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--geotools-vector.type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional parameter that specifies specific type name(s) from the source file</p>
+</li>
+<li>
+<p>Default: []</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--gpx.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--jobtracker</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--resourceman</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Yarn resource manager hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tdrive.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.avro</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A flag to indicate whether avro feature serialization should be used</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A CQL filter, only data matching this filter will be ingested</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--twitter.typename</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-v, --visibility</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
 </li>
 </ul>
 </div>
@@ -1974,6 +4215,9 @@ formats), if not set all available ingest formats will be used</p>
 <p><a href="#remote-clear">Clear</a></p>
 </li>
 <li>
+<p><a href="#remote-copy">Copy</a></p>
+</li>
+<li>
 <p><a href="#remote-listadapter">ListAdapter</a></p>
 </li>
 <li>
@@ -1983,10 +4227,16 @@ formats), if not set all available ingest formats will be used</p>
 <p><a href="#remote-liststats">ListStats</a></p>
 </li>
 <li>
+<p><a href="#remote-mergedata">MergeData</a></p>
+</li>
+<li>
 <p><a href="#remote-recalcstats">ReCalcStats</a></p>
 </li>
 <li>
 <p><a href="#remote-rmstat">RmStat</a></p>
+</li>
+<li>
+<p><a href="#remote-version">Version</a></p>
 </li>
 </ul>
 </div>
@@ -2020,8 +4270,20 @@ formats), if not set all available ingest formats will be used</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The authorizations used for the statistics calculation as a subset of the
-accumulo user authorization; by default all authorizations are used.</p>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
 </li>
 </ul>
 </div>
@@ -2057,24 +4319,105 @@ accumulo user authorization; by default all authorizations are used.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="remote-listadapter"><a class="anchor" href="#remote-listadapter"></a><strong>geowave remote listadapter</strong></h4>
+<h4 id="remote-copy"><a class="anchor" href="#remote-copy"></a><strong>geowave remote copy</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest listadapter - display all adapters in this remote store</p>
+<p>geowave remote copy - Copy a data store</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest listadapter [options] &lt;store name&gt;</p>
+<p>geowave remote copy [options] &lt;input store name&gt; &lt;output store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave ingest listadapter operator will display all adapters in this remote store.</p>
+<p>This command will allow a user to copy a data store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* --hdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The hdfs host port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --jobSubmissionHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The job submission tracker</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--maxSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The max partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--minSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The min partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--numReducers</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of threads writing at a time (default: 8)</p>
+</li>
+<li>
+<p>Default: 8</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="remote-listadapter"><a class="anchor" href="#remote-listadapter"></a><strong>geowave remote listadapter</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote listadapter - display all adapters in this remote store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave remote listadapter [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave remote listadapter operator will display all adapters in this remote store.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -2140,13 +4483,52 @@ accumulo user authorization; by default all authorizations are used.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The authorizations used for the statistics calculation as a subset of the
-accumulo user authorization; by default all authorizations are used.</p>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
 </li>
 </ul>
 </div>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="remote-mergedata"><a class="anchor" href="#remote-mergedata"></a><strong>geowave remote mergedata</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote mergedata - Merge all rows for a given adapter and index</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave remote mergedata [options] &lt;storename&gt; &lt;indexname&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will allow a user to merge all rows for a given adapter and index</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
 </div>
 </div>
 <div class="sect3">
@@ -2161,7 +4543,7 @@ accumulo user authorization; by default all authorizations are used.</p>
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave remote recalcstats [options] &lt;store name&gt; &lt;adapterId&gt; &lt;statId&gt;</p>
+<p>geowave remote recalcstats [options] &lt;store name&gt; [&lt;adapter name&gt;]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -2179,8 +4561,20 @@ accumulo user authorization; by default all authorizations are used.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The authorizations used for the statistics calculation as a subset of the
-accumulo user authorization; by default all authorizations are used.</p>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
 </li>
 </ul>
 </div>
@@ -2219,13 +4613,52 @@ You will be prompted with "Are you sure?"</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The authorizations used for the statistics calculation as a subset of the
-accumulo user authorization; by default all authorizations are used.</p>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
 </li>
 </ul>
 </div>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="remote-version"><a class="anchor" href="#remote-version"></a><strong>geowave remote version</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote version - Get the version of GeoWave running on the instance of a remote datastore</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave remote version [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return the version of GeoWave running on the instance of a remote datastore.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
 </div>
 <hr>
 <div style="page-break-after: always;"></div>
@@ -2252,7 +4685,13 @@ accumulo user authorization; by default all authorizations are used.</p>
 <p><a href="#analytic-kmeansparallel">KMeansParallel</a></p>
 </li>
 <li>
+<p><a href="#analytic-kmeansspark">KMeansSpark</a></p>
+</li>
+<li>
 <p><a href="#analytic-nn">NearestNeighbor</a></p>
+</li>
+<li>
+<p><a href="#analytic-sql">SQL</a></p>
 </li>
 </ul>
 </div>
@@ -2316,12 +4755,10 @@ The accumulo connection parameters are loaded from my_store.</p>
 <p>EXECUTION</p>
 </div>
 <div class="paragraph">
-<p>DBSCAN uses GeoWaveInputFormat to load data from GeoWave into HDFS.  You can use the extract query parameter to limit
-the records used in the analytic.</p>
+<p>DBSCAN uses GeoWaveInputFormat to load data from GeoWave into HDFS. You can use the extract query parameter to limit the records used in the analytic.</p>
 </div>
 <div class="paragraph">
-<p>It iteratively calls Nearest Neighbor to execute a sequence of concave hulls.  The hulls are saved into sequence files
-written to a temporary HDFS directory, and then read in again for the next DBSCAN iteration.</p>
+<p>It iteratively calls Nearest Neighbor to execute a sequence of concave hulls. The hulls are saved into sequence files  written to a temporary HDFS directory, and then read in again for the next DBSCAN iteration.</p>
 </div>
 <div class="paragraph">
 <p>After completion, the data is written back from HDFS to Accumulo using a job called the "input load runner".</p>
@@ -2332,28 +4769,7 @@ written to a temporary HDFS directory, and then read in again for the next DBSCA
 <div class="ulist">
 <ul>
 <li>
-<p>-dt, --clusteringDistanceThresholds</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Comma separated list of distance thresholds, per dimension</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-du, --clusteringGeometricDistanceUnit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Geometric distance unit (m=meters,km=kilometers, see symbols for
-javax.units.BaseUnit)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-cmi, --clusteringMaxIterations</p>
+<p>* -cmi, --clusteringMaxIterations</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2363,7 +4779,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>-cms, --clusteringMinimumSize</p>
+<p>* -cms, --clusteringMinimumSize</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2373,51 +4789,31 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>-cdf, --commonDistanceFunctionClass</p>
+<p>--cdf, --commonDistanceFunctionClass</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+<p>Distance Function Class implements <em>mil.nga.giat.geowave.analytics.distance.DistanceFn</em></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-eit, --extractAdapterId</p>
+<p>* -emx, --extractMaxInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Input Data Type ID</p>
+<p>Maximum hdfs input split size</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-ei, --extractIndexId</p>
+<p>* -emn, --extractMinInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Extract from a specific index</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-emx, --extractMaxInputSplit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Maximum input split size</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-emn, --extractMinInputSplit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Minimum input split size</p>
+<p>Minimum hdfs input split size</p>
 </li>
 </ul>
 </div>
@@ -2453,21 +4849,21 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>-hhb, --hullHullBuilder</p>
+<p>-hpe, --hullProjectionClass</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Hull Builder</p>
+<p>Class to project on to 2D space. Implements <em>mil.nga.giat.geowave.analytics.tools.Projection</em></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-hpe, --hullProjectionClass</p>
+<p>-ifc, --inputFormatClass</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection</p>
+<p>Input Format Class</p>
 </li>
 </ul>
 </div>
@@ -2483,7 +4879,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>-hdfsbase, --mapReduceHdfsBaseDir</p>
+<p>* -hdfsbase, --mapReduceHdfsBaseDir</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2493,7 +4889,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>-hdfs, --mapReduceHdfsHostPort</p>
+<p>* -hdfs, --mapReduceHdfsHostPort</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2507,7 +4903,7 @@ javax.units.BaseUnit)</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+<p>[REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port</p>
 </li>
 </ul>
 </div>
@@ -2517,7 +4913,7 @@ javax.units.BaseUnit)</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Yarn resource manager hostname and port in the format hostname:port</p>
+<p>[REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port</p>
 </li>
 </ul>
 </div>
@@ -2543,6 +4939,16 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
+<p>-oop, --outputHdfsOutputPath</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output HDFS File Path</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>-oid, --outputIndexId</p>
 <div class="ulist">
 <ul>
@@ -2563,16 +4969,6 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--oop, --outputHdfsOutputPath</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Output HDFS File Path when used with a output format "SequenceFileOutputFormatConfiguration"</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>-orc, --outputReducerCount</p>
 <div class="ulist">
 <ul>
@@ -2583,7 +4979,27 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>-pmd, --partitionMaxDistance</p>
+<p>-pdt, --partitionDistanceThresholds</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma separated list of distance thresholds, per dimension</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pdu, --partitionGeometricDistanceUnit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -pmd, --partitionMaxDistance</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2593,7 +5009,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>-pms, --partitionMaxMemberSelection::</p>
+<p>-pms, --partitionMaxMemberSelection</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2608,36 +5024,6 @@ javax.units.BaseUnit)</p>
 <ul>
 <li>
 <p>Rate of decrease for precision(within (0,1])</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-pd, --partitionPartitionDistance</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Partition Distance</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-pdt, --partitionDistanceThresholds</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Partition Distance Threshold</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-pdu, --partitionGeometricDistanceUnit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Partition Geometric Distance Unit</p>
 </li>
 </ul>
 </div>
@@ -2673,11 +5059,11 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--query.adapters</p>
+<p>* --query.adapters</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Comma-separated data adapters to query; by default all are used</p>
+<p>The comma-separated list of data adapters to query; by default all adapters are used.</p>
 </li>
 </ul>
 </div>
@@ -2693,21 +5079,11 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--query.fields</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The comma-separated set of field names to extract; by default all are extracted</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>--query.index</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The input index to pull the data from (if different than expected)</p>
+<p>The specific index to query; by default one is chosen for each adapter.</p>
 </li>
 </ul>
 </div>
@@ -2727,7 +5103,7 @@ javax.units.BaseUnit)</p>
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave analytic kde [options] &lt;storename&gt;</p>
+<p>geowave analytic kde [options] &lt;input storename&gt; &lt;output storename&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -2741,7 +5117,7 @@ javax.units.BaseUnit)</p>
 <div class="ulist">
 <ul>
 <li>
-<p>--coverageName</p>
+<p>* --coverageName</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2761,7 +5137,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--featureType</p>
+<p>* --featureType</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2771,7 +5147,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--hdfsHostPort</p>
+<p>* --hdfsHostPort</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2791,7 +5167,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--jobSubmissionHostPort</p>
+<p>* --jobSubmissionHostPort</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2801,7 +5177,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--maxLevel</p>
+<p>* --maxLevel</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2811,7 +5187,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--maxSplits</p>
+<p>—maxSplits</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2821,7 +5197,7 @@ javax.units.BaseUnit)</p>
 </div>
 </li>
 <li>
-<p>--minLevel</p>
+<p>* --minLevel</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2846,6 +5222,9 @@ javax.units.BaseUnit)</p>
 <ul>
 <li>
 <p>The tile size</p>
+</li>
+<li>
+<p>Default: 1</p>
 </li>
 </ul>
 </div>
@@ -2878,8 +5257,7 @@ javax.units.BaseUnit)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic kmeansjump -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans
--hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -jkp 3 -jrc 4,8 my_store</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">yarn jar geowave-tools.jar analytic kmeansjump -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans -hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -jkp 3 -jrc 4,8 my_store</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2905,8 +5283,7 @@ calls the normal k-means algorithm to determine centroids) and then executing
 a KMeans distortion job, which calculates the entropy of the calculated centroids.</p>
 </div>
 <div class="paragraph">
-<p>Look at the "EXECUTION" documentation for kmeansparallel operation for discussion of output, tolerance and
-performance variables.</p>
+<p>Look at the "EXECUTION" documentation for kmeansparallel operation for discussion of output, tolerance and  performance variables.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -2918,7 +5295,7 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor</p>
+<p>Centroid Exractor Class implements <em>mil.nga.giat.geowave.analytics.extract.CentroidExtractor</em></p>
 </li>
 </ul>
 </div>
@@ -2938,7 +5315,7 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A factory class that implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+<p>A factory class that implements <em>mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</em></p>
 </li>
 </ul>
 </div>
@@ -2964,7 +5341,7 @@ performance variables.</p>
 </div>
 </li>
 <li>
-<p>-cmi, --clusteringMaxIterations</p>
+<p>* -cmi, --clusteringMaxIterations</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2984,7 +5361,7 @@ performance variables.</p>
 </div>
 </li>
 <li>
-<p>-zl, --clusteringZoomLevels</p>
+<p>* -zl, --clusteringZoomLevels</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2998,7 +5375,7 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Dimension Extractor Class implements mil.nga.giat.geowave.analytics.extract.DimensionExtractor</p>
+<p>Dimension Extractor Class implements <em>mil.nga.giat.geowave.analytics.extract.DimensionExtractor</em></p>
 </li>
 </ul>
 </div>
@@ -3008,17 +5385,7 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-eit, --extractAdapterId</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Input Data Type ID</p>
+<p>Distance Function Class implements <em>mil.nga.giat.geowave.analytics.distance.DistanceFn</em></p>
 </li>
 </ul>
 </div>
@@ -3044,31 +5411,21 @@ performance variables.</p>
 </div>
 </li>
 <li>
-<p>-ei, --extractIndexId</p>
+<p>* -emx, --extractMaxInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Extract from a specific index</p>
+<p>Maximum hdfs input split size</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-emx, --extractMaxInputSplit</p>
+<p>* -emn, --extractMinInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Maximum input split size</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-emn, --extractMinInputSplit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Minimum input split size</p>
+<p>Minimum hdfs input split size</p>
 </li>
 </ul>
 </div>
@@ -3158,7 +5515,7 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection</p>
+<p>Class to project on to 2D space. Implements <em>mil.nga.giat.geowave.analytics.tools.Projection</em></p>
 </li>
 </ul>
 </div>
@@ -3178,23 +5535,33 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+<p>Class to create analytic item to capture hulls. Implements <em>mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</em></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-jkp, --jumpKplusplusMin</p>
+<p>-ifc, --inputFormatClass</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The minimum k when K means ++ takes over sampling</p>
+<p>Input Format Class</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-jrc, --jumpRangeOfCentroids</p>
+<p>* -jkp, --jumpKplusplusMin</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The minimum k when K means ++ takes over sampling.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -jrc, --jumpRangeOfCentroids</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3214,7 +5581,7 @@ performance variables.</p>
 </div>
 </li>
 <li>
-<p>-hdfsbase, --mapReduceHdfsBaseDir</p>
+<p>* -hdfsbase, --mapReduceHdfsBaseDir</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3224,7 +5591,7 @@ performance variables.</p>
 </div>
 </li>
 <li>
-<p>-hdfs, --mapReduceHdfsHostPort</p>
+<p>* -hdfs, --mapReduceHdfsHostPort</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3238,7 +5605,7 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+<p>[REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port</p>
 </li>
 </ul>
 </div>
@@ -3248,7 +5615,7 @@ performance variables.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Yarn resource manager hostname and port in the format hostname:port</p>
+<p>[REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port</p>
 </li>
 </ul>
 </div>
@@ -3274,11 +5641,11 @@ performance variables.</p>
 </div>
 </li>
 <li>
-<p>--query.adapters</p>
+<p>* --query.adapters</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Comma-separated data adapters to query; by default all are used</p>
+<p>The comma-separated list of data adapters to query; by default all adapters are used.</p>
 </li>
 </ul>
 </div>
@@ -3294,71 +5661,11 @@ performance variables.</p>
 </div>
 </li>
 <li>
-<p>--query.fields</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The comma-separated set of field names to extract; by default all are extracted</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>--query.index</p>
 <div class="ulist">
 <ul>
 <li>
 <p>The specific index to query; by default one is chosen for each adapter.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-sxs, --sampleMaxSampleSize</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Max Sample Size</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-sms, --sampleMinSampleSize</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Minimum Sample Size</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-ssi, --sampleSampleIterations</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Minimum number of sample iterations</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-srf, --sampleSampleRankFunction</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The rank function used when sampling the first N highest rank items</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-sss, --sampleSampleSize</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Sample Size</p>
 </li>
 </ul>
 </div>
@@ -3444,7 +5751,7 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Centroid Exractor Class implements mil.nga.giat.geowave.analytics.extract.CentroidExtractor</p>
+<p>Centroid Exractor Class implements <em>mil.nga.giat.geowave.analytics.extract.CentroidExtractor</em></p>
 </li>
 </ul>
 </div>
@@ -3464,7 +5771,7 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A factory class that implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+<p>A factory class that implements <em>mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</em></p>
 </li>
 </ul>
 </div>
@@ -3490,7 +5797,7 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-cmi, --clusteringMaxIterations</p>
+<p>* -cmi, --clusteringMaxIterations</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3510,7 +5817,7 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-zl, --clusteringZoomLevels</p>
+<p>* -zl, --clusteringZoomLevels</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3524,7 +5831,7 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Dimension Extractor Class implements mil.nga.giat.geowave.analytics.extract.DimensionExtractor</p>
+<p>Dimension Extractor Class implements <em>mil.nga.giat.geowave.analytics.extract.DimensionExtractor</em></p>
 </li>
 </ul>
 </div>
@@ -3534,17 +5841,7 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-eit, --extractAdapterId</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Input Data Type ID</p>
+<p>Distance Function Class implements <em>mil.nga.giat.geowave.analytics.distance.DistanceFn</em></p>
 </li>
 </ul>
 </div>
@@ -3570,31 +5867,21 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-ei, --extractIndexId</p>
+<p>* -emx, --extractMaxInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Extract from a specific index</p>
+<p>Maximum hdfs input split size</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-emx, --extractMaxInputSplit</p>
+<p>* -emn, --extractMinInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Maximum input split size</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-emn, --extractMinInputSplit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Minimum input split size</p>
+<p>Minimum hdfs input split size</p>
 </li>
 </ul>
 </div>
@@ -3684,7 +5971,7 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Class to project on to 2D space. Implements mil.nga.giat.geowave.analytics.tools.Projection</p>
+<p>Class to project on to 2D space. Implements <em>mil.nga.giat.geowave.analytics.tools.Projection</em></p>
 </li>
 </ul>
 </div>
@@ -3704,7 +5991,17 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Class to create analytic item to capture hulls. Implements mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</p>
+<p>Class to create analytic item to capture hulls. Implements <em>mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ifc, --inputFormatClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Input Format Class</p>
 </li>
 </ul>
 </div>
@@ -3720,7 +6017,7 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-hdfsbase, --mapReduceHdfsBaseDir</p>
+<p>* -hdfsbase, --mapReduceHdfsBaseDir</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3730,7 +6027,7 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-hdfs, --mapReduceHdfsHostPort</p>
+<p>* -hdfs, --mapReduceHdfsHostPort</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3744,7 +6041,7 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Hadoop job tracker hostname and port in the format hostname:port</p>
+<p>[REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port</p>
 </li>
 </ul>
 </div>
@@ -3754,7 +6051,7 @@ be used to distinguish between multiple batches (runs).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Yarn resource manager hostname and port in the format hostname:port</p>
+<p>[REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port</p>
 </li>
 </ul>
 </div>
@@ -3780,7 +6077,37 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-sxs, --sampleMaxSampleSize</p>
+<p>* --query.adapters</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated list of data adapters to query; by default all adapters are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated list of authorizations used during extract; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.index</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The specific index to query; by default one is chosen for each adapter.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -sxs, --sampleMaxSampleSize</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3790,7 +6117,7 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-sms, --sampleMinSampleSize</p>
+<p>* -sms, --sampleMinSampleSize</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3800,7 +6127,7 @@ be used to distinguish between multiple batches (runs).</p>
 </div>
 </li>
 <li>
-<p>-ssi, --sampleSampleIterations</p>
+<p>* -ssi, --sampleSampleIterations</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3845,10 +6172,10 @@ Most developers will want to extend the framework to add their own extensions.</
 </div>
 <div class="paragraph">
 <p>The min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd),
-the sequence file output directory is hdfs://host:port/user/rwgdrummer_out, reducer count is 4 (orc),
-the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
-the temporary files needed by this job are stored in hdfs:/host:port//user/rwgdrummer (hdfsbase), and the data executed against is 'gpxpoint' (query.adapters).
-The accumulo connection parameters are loaded from my_store.</p>
+the sequence file output directory is <em>hdfs://host:port/user/rwgdrummer_out</em>, reducer count is 4 (orc),
+the hdfs ipc port is <em>localhost:53000</em> (hdfs), the yarn job tracker is at <em>localhost:8032</em> (-jobtracker),
+the temporary files needed by this job are stored in <em>hdfs:/host:port//user/rwgdrummer</em> (hdfsbase), and the data executed against is 'gpxpoint' (query.adapters).
+The accumulo connection parameters are loaded from <em>my_store</em>.</p>
 </div>
 <div class="paragraph">
 <p>EXECUTION</p>
@@ -3874,47 +6201,27 @@ another point.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Distance Function Class implements mil.nga.giat.geowave.analytics.distance.DistanceFn</p>
+<p>Distance Function Class implements <em>mil.nga.giat.geowave.analytics.distance.DistanceFn</em></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-eit, --extractAdapterId</p>
+<p>* -emx, --extractMaxInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Input Data Type ID</p>
+<p>Maximum hdfs input split size</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-ei, --extractIndexId</p>
+<p>* -emn, --extractMinInputSplit</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Extract from a specific index</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-emx, --extractMaxInputSplit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Maximum input split size</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-emn, --extractMinInputSplit</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Minimum input split size</p>
+<p>Minimum hdfs input split size</p>
 </li>
 </ul>
 </div>
@@ -3930,7 +6237,67 @@ another point.</p>
 </div>
 </li>
 <li>
-<p>-oop, --outputHdfsOutputPath</p>
+<p>-ifc, --inputFormatClass</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Input Format Class</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-conf, --mapReduceConfigFile</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MapReduce Configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -hdfsbase, --mapReduceHdfsBaseDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fully qualified path to the base directory in hdfs</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -hdfs, --mapReduceHdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>HDFS hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-jobtracker, --mapReduceJobtrackerHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>[REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-resourceman, --mapReduceYarnResourceManager</p>
+<div class="ulist">
+<ul>
+<li>
+<p>[REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -oop, --outputHdfsOutputPath</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3960,6 +6327,36 @@ another point.</p>
 </div>
 </li>
 <li>
+<p>-pdt, --partitionDistanceThresholds</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma separated list of distance thresholds, per dimension</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-pdu, --partitionGeometricDistanceUnit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -pmd, --partitionMaxDistance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum Partition Distance</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>-pms, --partitionMaxMemberSelection</p>
 <div class="ulist">
 <ul>
@@ -3970,11 +6367,11 @@ another point.</p>
 </div>
 </li>
 <li>
-<p>-pd, --partitionPartitionDistance</p>
+<p>-pp, --partitionPartitionPrecision</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Partition Distance</p>
+<p>Partition Precision</p>
 </li>
 </ul>
 </div>
@@ -3999,6 +6396,3003 @@ another point.</p>
 </ul>
 </div>
 </li>
+<li>
+<p>* --query.adapters</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated list of data adapters to query; by default all adapters are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The comma-separated list of authorizations used during extract; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--query.index</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The specific index to query; by default one is chosen for each adapter.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="analytic-sql"><a class="anchor" href="#analytic-sql"></a><strong>geowave analytic sql</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic sql - SparkSQL queries</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave analytic sql [options] &lt;sql query&gt; - e.g. 'select * from storename[|adaptername] where condition&#8230;&#8203;'</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave analytic sql operator will execute a SparkSQL query</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--csv</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The output CSV file name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--out</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The output datastore name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--outtype</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The output feature type (adapter) name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-s, --show</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of result rows to display</p>
+</li>
+<li>
+<p>Default: 20</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="accumulo-commands"><a class="anchor" href="#accumulo-commands"></a>Accumulo Commands</h3>
+<div class="paragraph">
+<p>Utility operations to set accumulo splits and run a test server (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#accumulo-presplitpartitionid">PreSplitPartitionId</a></p>
+</li>
+<li>
+<p><a href="#accumulo-runserver">RunServer</a></p>
+</li>
+<li>
+<p><a href="#accumulo-splitequalinterval">SplitEqualInterval</a></p>
+</li>
+<li>
+<p><a href="#accumulo-splitnumrecords">SplitNumRecords</a></p>
+</li>
+<li>
+<p><a href="#accumulo-splitquantile">SplitQuantile</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="accumulo-presplitpartitionid"><a class="anchor" href="#accumulo-presplitpartitionid"></a><strong>geowave accumulo dbscan</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo presplitpartitionid [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will pre-split an accumulo table by providing the number of partition IDs</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The geowave index ID (optional; default is all indices)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--num</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of partitions (or entries)</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="accumulo-runserver"><a class="anchor" href="#accumulo-runserver"></a><strong>geowave accumulo runserver</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo runserver - Runs a standalone mini Accumulo server for test and debug with GeoWave</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo runserver [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will run a standalone mini single-node accumulo server, which can be used locally for testing and debugging GeoWave, without needing to stand up an entire cluster.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="accumulo-splitequalinterval"><a class="anchor" href="#accumulo-splitequalinterval"></a><strong>geowave accumulo splitequalinterval</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo splitequalinterval [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will allow a user to set the accumulated splits through providing the number of partitions based on an equal interval strategy.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The geowave index ID (optional; default is all indices)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--num</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of partitions (or entries)</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="accumulo-splitnumrecords"><a class="anchor" href="#accumulo-splitnumrecords"></a><strong>geowave accumulo splitnumrecords</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo splitnumrecords - Set Accumulo splits by providing the number of entries per split</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo splitnumrecords [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will set the accumulo datastore splits by providing the number of entries per split.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The geowave index ID (optional; default is all indices)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--num</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of partitions (or entries)</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="accumulo-splitquantile"><a class="anchor" href="#accumulo-splitquantile"></a><strong>geowave accumulo splitquantile</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo splitquantile - Set Accumulo splits by providing the number of partitions based on a quantile distribution strategy</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave accumulo splitquantile [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will allow a user to set the accumulo datastore splits by providing the number of partitions based on a quantile distribution strategy.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The geowave index ID (optional; default is all indices)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--num</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of partitions (or entries)</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="geoserver-commands"><a class="anchor" href="#geoserver-commands"></a>GeoServer Commands</h3>
+<div class="paragraph">
+<p>Commands that manage geoserver data stores and layers (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#geoserver-addcs">AddCS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-addcv">AddCV</a></p>
+</li>
+<li>
+<p><a href="#geoserver-addds">AddDS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-addfl">AddFL</a></p>
+</li>
+<li>
+<p><a href="#geoserver-addlayer">AddLayer</a></p>
+</li>
+<li>
+<p><a href="#geoserver-addstyle">AddStyle</a></p>
+</li>
+<li>
+<p><a href="#geoserver-addws">AddWS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-getcs">GetCS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-getcv">GetCV</a></p>
+</li>
+<li>
+<p><a href="#geoserver-getds">GetDS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-getfl">GetFL</a></p>
+</li>
+<li>
+<p><a href="#geoserver-getsa">GetSA</a></p>
+</li>
+<li>
+<p><a href="#geoserver-getstyle">GetStyle</a></p>
+</li>
+<li>
+<p><a href="#geoserver-listcs">ListCS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-listcv">ListCV</a></p>
+</li>
+<li>
+<p><a href="#geoserver-listds">ListDS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-listfl">ListFL</a></p>
+</li>
+<li>
+<p><a href="#geoserver-liststyles">ListStyles</a></p>
+</li>
+<li>
+<p><a href="#geoserver-listws">ListWS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-rmcs">RmCS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-rmcv">RmCV</a></p>
+</li>
+<li>
+<p><a href="#geoserver-rmds">RmDS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-rmfl">RmFL</a></p>
+</li>
+<li>
+<p><a href="#geoserver-rmstyle">RmStyle</a></p>
+</li>
+<li>
+<p><a href="#geoserver-rmws">RmWS</a></p>
+</li>
+<li>
+<p><a href="#geoserver-setls">SetLS</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="geoserver-addcs"><a class="anchor" href="#geoserver-addcs"></a><strong>geowave gs addcs</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addcs - Add a GeoServer coverage store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addcs [options] &lt;GeoWave store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will add a GeoServer coverage store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-cs, --coverageStore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;coverage store name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-histo, --equalizeHistogramOverride</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This parameter will override the behavior to always perform histogram equalization if a histogram exists.</p>
+</li>
+<li>
+<p>Valid values are true and false.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-interp, --interpolationOverride</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This will override the default interpolation stored for each layer.</p>
+</li>
+<li>
+<p>Valid values are 0, 1, 2, 3 for NearestNeighbor, Bilinear, Bicubic, and Bicubic (polynomial variant) resepctively.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-scale, --scaleTo8Bit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>By default, integer values will automatically be scaled to 8-bit and floating point values will not. This can be overridden setting this value to true or false.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-addcv"><a class="anchor" href="#geoserver-addcv"></a><strong>geowave gs addcvs</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addcv - Add a GeoServer coverage</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addcv [options] &lt;coverage name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will add a GeoServer coverage</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* -cs, --cvgstore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;coverage store name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-addds"><a class="anchor" href="#geoserver-addds"></a><strong>geowave gs addds</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addds - Add a GeoServer datastore</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addds [options] &lt;GeoWave store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will add a GeoServer datastore</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ds, --datastore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;datastore name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-addfl"><a class="anchor" href="#geoserver-addfl"></a><strong>geowave gs addfl</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addfl - Add a GeoServer feature layer</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addfl [options] &lt;layer name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will add a GeoServer feature layer</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* -ds, --datastore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;datastore name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-addlayer"><a class="anchor" href="#geoserver-addlayer"></a><strong>geowave gs addlayer</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addlayer - Add a GeoServer layer from the given GeoWave store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addlayer [options] &lt;GeoWave store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will add a GeoServer layer from the given GeoWave store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-id, --adapterId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>select just &lt;adapter id&gt; from the store</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-a, --add</p>
+<div class="ulist">
+<ul>
+<li>
+<p>For multiple layers, add (all | raster | vector)</p>
+</li>
+<li>
+<p>Possible Values: [ALL, RASTER, VECTOR]</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-sld, --setStyle</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;default style sld&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-addstyle"><a class="anchor" href="#geoserver-addstyle"></a><strong>geowave gs addstyle</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addstyle - Add a GeoServer style</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addstyle [options] &lt;GeoWave style name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will add a GeoServer style</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* -sld, --stylesld</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;style sld file&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-addws"><a class="anchor" href="#geoserver-addws"></a><strong>geowave gs addws</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addws - Add GeoServer workspace</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs addws [options] &lt;workspace name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will add a GeoServer workspace</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-getcs"><a class="anchor" href="#geoserver-getcs"></a><strong>geowave gs getcs</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getcs - Get GeoServer CoverageStore info</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getcs [options] &lt;coverage store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return GeoServer CoverageStore info</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-getcv"><a class="anchor" href="#geoserver-getcv"></a><strong>geowave gs getcv</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getcv - Get a GeoServer coverage&#8217;s info</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getcv [options] &lt;coverage name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return a GeoServer coverage&#8217;s info</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-cs, --coverageStore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;coverage store name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-getds"><a class="anchor" href="#geoserver-getds"></a><strong>geowave gs getds</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getds - Get GeoServer DataStore info</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getds [options] &lt;datastore name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return a GeoServer DataStore info</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-getfl"><a class="anchor" href="#geoserver-getfl"></a><strong>geowave gs getfl</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getfl - Get GeoServer feature layer info</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getfl [options] &lt;layer name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return GeoServer feature layer info</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-getsa"><a class="anchor" href="#geoserver-getsa"></a><strong>geowave gs getsa</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config getsa - Get GeoWave store adapters</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getsa [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return GeoWave store adapters</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-getstyle"><a class="anchor" href="#geoserver-getstyle"></a><strong>geowave gs getstyle</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getstyle - Get GeoServer Style info</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs getstyle [options] &lt;style name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return GeoServer Style info</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-listcs"><a class="anchor" href="#geoserver-listcs"></a><strong>geowave gs listcs</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listcs - List GeoServer coverage stores</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listcs [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will list all GeoServer coverage stores</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-listcv"><a class="anchor" href="#geoserver-listcv"></a><strong>geowave gs listcv</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listcv - List GeoServer Coverages</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listcv [options] &lt;coverage store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will list all GeoServer Coverages</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-listds"><a class="anchor" href="#geoserver-listds"></a><strong>geowave gs listds</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listds - List GeoServer datastores</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listds [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will list all GeoServer datastores</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-listfl"><a class="anchor" href="#geoserver-listfl"></a><strong>geowave gs listfl</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listfl - List GeoServer feature layers</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listfl [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will list all GeoServer feature layers</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ds, --datastore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Datastore Name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-g, --geowaveOnly</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Show only GeoWave feature layers (default: false)</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Workspace Name</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-liststyles"><a class="anchor" href="#geoserver-liststyles"></a><strong>geowave gs liststyles</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs liststyles - List GeoServer styles</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs liststyles [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will list all GeoServer styles</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-listws"><a class="anchor" href="#geoserver-listws"></a><strong>geowave gs listws</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listws - List GeoServer workspaces</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs listws [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will list all GeoServer workspaces</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-rmcs"><a class="anchor" href="#geoserver-rmcs"></a><strong>geowave gs rmcs</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmcs - Remove GeoServer Coverage Store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmcs [options] &lt;coverage store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will remove a GeoServer Coverage Store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Workspace Name</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-rmcv"><a class="anchor" href="#geoserver-rmcv"></a><strong>geowave gs rmcv</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmcv - Remove a GeoServer coverage</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmcv [options] &lt;coverage name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will remove a GeoServer coverage</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* -cs, --cvgstore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;coverage store name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-rmds"><a class="anchor" href="#geoserver-rmds"></a><strong>geowave gs rmds</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmds - Remove GeoServer DataStore</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmds [options] &lt;datastore name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will remove a GeoServer DataStore</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ws, --workspace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;workspace name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-rmfl"><a class="anchor" href="#geoserver-rmfl"></a><strong>geowave gs rmfl</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmfl - Remove GeoServer feature Layer</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmfl [options] &lt;layer name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will remove a GeoServer feature Layer</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-rmstyle"><a class="anchor" href="#geoserver-rmstyle"></a><strong>geowave gs rmstyle</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmstyle - Remove GeoServer Style</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmstyle [options] &lt;style name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will remove a GeoServer Style</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-rmws"><a class="anchor" href="#geoserver-rmws"></a><strong>geowave gs rmws</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmws - Remove GeoServer workspace</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs rmws [options] &lt;workspace name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will remove a GeoServer workspace</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options available for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="geoserver-setls"><a class="anchor" href="#geoserver-setls"></a><strong>geowave gs setls</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave gs setls - Set GeoServer Layer Style</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave gs setls [options] &lt;layer name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will set a GeoServer layer style</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* -sn, --styleName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;style name&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hbase-commands"><a class="anchor" href="#hbase-commands"></a>HBase Commands</h3>
+<div class="paragraph">
+<p>Utility operations to combine statistics in hbase (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#hbase-combinestats">CombineStats</a></p>
+</li>
+<li>
+<p><a href="#hbase-runserver">RunServer</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="hbase-dbscan"><a class="anchor" href="#hbase-dbscan"></a><strong>geowave hbase combinestats</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave hbase combinestats - Combine all statistics in HBase namespace</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave hbase combinestats [options] &lt;storename&gt; &lt;adapter id&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will combine all statistics in an HBase namespace</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hbase-runserver"><a class="anchor" href="#hbase-runserver"></a><strong>geowave hbase runserver</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave hbase runserver - Runs a standalone mini HBase server for test and debug with GeoWave</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave hbase runserver [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will run a standalone mini single-node HBase server, which can be used locally for testing and debugging GeoWave, without needing to stand up an entire cluster.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="landsat-commands"><a class="anchor" href="#landsat-commands"></a>Landsat8 Commands</h3>
+<div class="paragraph">
+<p>Operations to analyze, download, and ingest Landsat 8 imagery publicly available on AWS (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#landsat-analyze">Analyze</a></p>
+</li>
+<li>
+<p><a href="#landsat-download">Download</a></p>
+</li>
+<li>
+<p><a href="#landsat-ingest">Ingest</a></p>
+</li>
+<li>
+<p><a href="#landsat-ingestraster">IngestRaster</a></p>
+</li>
+<li>
+<p><a href="#landsat-ingestvector">IngestVector</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="landsat-analyze"><a class="anchor" href="#landsat-analyze"></a><strong>geowave landsat analyze</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat analyze - Print out basic aggregate statistics for available Landsat 8 imagery</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat analyze [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will print out basic aggregate statistics that are for available Landsat 8 imagery</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene.  Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestbands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of bands with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestperspatial</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of scenes with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sincelastrun</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--usecachedscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to run against the existing scenes catalog in the workspace directory if it exists.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspaceDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A local directory to write temporary files needed for landsat 8 ingest.</p>
+</li>
+<li>
+<p>Default is &lt;TEMP_DIR&gt;/landsat8</p>
+</li>
+<li>
+<p>Default: landsat8</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="landsat-download"><a class="anchor" href="#landsat-download"></a><strong>geowave landsat download</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat download - Download Landsat 8 imagery to a local directory</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat download [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will download the Landsat 8 imagery to a local directory</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene. Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestbands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of bands with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestperspatial</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of scenes with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sincelastrun</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--usecachedscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to run against the existing scenes catalog in the workspace directory if it exists.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspaceDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A local directory to write temporary files needed for landsat 8 ingest.</p>
+</li>
+<li>
+<p>Default is &lt;TEMP_DIR&gt;/landsat8</p>
+</li>
+<li>
+<p>Default: landsat8</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="landsat-ingest"><a class="anchor" href="#landsat-ingest"></a><strong>geowave landsat ingest</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat ingest - Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave&#8217;s raster store and in parallel ingesting the scene metadata into GeoWave&#8217;s vector store. These two stores can actually be the same or they can be different.</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat ingest [options] &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command provides a standard ingest routine for downloading Landsat 8 imagery and ingesting it into GeoWave&#8217;s raster store. In parallel, it allows for ingesting the scene metadata into GeoWave&#8217;s vector store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--converter</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Prior to ingesting an image, this converter will be used to massage the data. The default is not to convert the data.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering. The default coverage name is '${entityId}_${band}'.  If ${band} is unused in the coverage name, all bands will be merged together into the same coverage.</p>
+</li>
+<li>
+<p>Default: ${entityId}_${band}</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene. Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--crop</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Use the spatial constraint provided in CQL to crop the image.  If no spatial constraint is provided, this will not have an effect.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to store the histogram of the values of the coverage so that histogram equalization will be performed</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestbands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of bands with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestperspatial</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of scenes with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--overwrite</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to overwrite images that are ingested in the local workspace directory. By default it will keep an existing image rather than downloading it again.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to store an image pyramid for the coverage</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--retainimages</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to keep the images that are ingested in the local workspace directory. By default it will delete the local file after it is ingested successfully.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sincelastrun</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--skipMerge</p>
+<div class="ulist">
+<ul>
+<li>
+<p>By default the ingest will automerge overlapping tiles as a post-processing optimization step for efficient retrieval, but this will skip the merge process</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--subsample</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Subsample the image prior to ingest by the scale factor provided. The scale factor should be an integer value greater than 1.</p>
+</li>
+<li>
+<p>Default: 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tilesize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The option to set the pixel size for each tile stored in GeoWave.</p>
+</li>
+<li>
+<p>Default: 512</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--usecachedscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to run against the existing scenes catalog in the workspace directory if it exists.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--vectorindex</p>
+<div class="ulist">
+<ul>
+<li>
+<p>By ingesting as both vectors and rasters you may want each indexed differently. This will override the index used for vector output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--vectorstore</p>
+<div class="ulist">
+<ul>
+<li>
+<p>By ingesting as both vectors and rasters you may want to ingest into different stores. This will override the store for vector output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspaceDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A local directory to write temporary files needed for landsat 8 ingest. Default is &lt;TEMP_DIR&gt;/landsat8</p>
+</li>
+<li>
+<p>Default: landsat8</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="landsat-ingestraster"><a class="anchor" href="#landsat-ingestraster"></a><strong>geowave landsat ingestraster</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat ingestraster - Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat analyze [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command provides an ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--converter</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Prior to ingesting an image, this converter will be used to massage the data. The default is not to convert the data.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering.  The default coverage name is '${entityId}_${band}'. If ${band} is unused in the coverage name, all bands will be merged together into the same coverage.</p>
+</li>
+<li>
+<p>Default: ${entityId}_${band}</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene. Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--crop</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Use the spatial constraint provided in CQL to crop the image. If no spatial constraint is provided, this will not have an effect.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--histogram</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to store the histogram of the values of the coverage so that histogram equalization will be performed</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestbands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of bands with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestperspatial</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of scenes with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--overwrite</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to overwrite images that are ingested in the local workspace directory.  By default it will keep an existing image rather than downloading it again.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--pyramid</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to store an image pyramid for the coverage</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--retainimages</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to keep the images that are ingested in the local workspace directory. By default it will delete the local file after it is ingested successfully.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sincelastrun</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--skipMerge</p>
+<div class="ulist">
+<ul>
+<li>
+<p>By default the ingest will automerge overlapping tiles as a post-processing optimization step for efficient retrieval, but this will skip the merge process</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--subsample</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Subsample the image prior to ingest by the scale factor provided. The scale factor should be an integer value greater than 1.</p>
+</li>
+<li>
+<p>Default: 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--tilesize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The option to set the pixel size for each tile stored in GeoWave. The default is 512</p>
+</li>
+<li>
+<p>Default: 512</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--usecachedscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to run against the existing scenes catalog in the workspace directory if it exists.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspaceDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A local directory to write temporary files needed for landsat 8 ingest. Default is &lt;TEMP_DIR&gt;/landsat8</p>
+</li>
+<li>
+<p>Default: landsat8</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="landsat-ingestvector"><a class="anchor" href="#landsat-ingestvector"></a><strong>geowave landsat ingestvector</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat ingestvector - Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave&#8217;s vector store.</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave landsat ingestvector [options] &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command provides an ingest routine for searching landsat scenes that match certain criteria, and ingesting the scene and band metadata into GeoWave&#8217;s vector store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene.  Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)</p>
+</li>
+<li>
+<p>Default: &lt;empty string&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestbands</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of bands with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestperspatial</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--nbestscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to identify and only use a set number of scenes with the best cloud cover</p>
+</li>
+<li>
+<p>Default: 0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--sincelastrun</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--usecachedscenes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An option to run against the existing scenes catalog in the workspace directory if it exists.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ws, --workspaceDir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A local directory to write temporary files needed for landsat 8 ingest. Default is &lt;TEMP_DIR&gt;/landsat8</p>
+</li>
+<li>
+<p>Default: landsat8</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-commands"><a class="anchor" href="#osm-commands"></a>OSM Commands</h3>
+<div class="paragraph">
+<p>Operations to ingest Open Street Map (OSM) nodes, ways and relations to GeoWave (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#osm-ingest">Ingest</a></p>
+</li>
+<li>
+<p><a href="#osm-stage">Stage</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="osm-ingest"><a class="anchor" href="#osm-ingest"></a><strong>geowave osm ingest</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave osm ingest - Ingest and convert OSM data from HDFS to GeoWave</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave osm ingest [options] &lt;hdfs host:port&gt; &lt;path to base directory to read from&gt; &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will ingest and convert OSM data from HDFS to GeoWave.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-jn, --jobName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Name of mapreduce job</p>
+</li>
+<li>
+<p>Default: Ingest (mcarrier)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-m, --mappingFile</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Mapping file, imposm3 form</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--table</p>
+<div class="ulist">
+<ul>
+<li>
+<p>OSM Table name in GeoWave</p>
+</li>
+<li>
+<p>Default: OSM</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -t, --type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Mapper type - one of node, way, or relation</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-v, --visibility</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="osm-stage"><a class="anchor" href="#osm-stage"></a><strong>geowave osm stage</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave osm stage - Stage OSM data to HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave osm stage [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will stage OSM data from a local directory and write it to HDFS</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--extension</p>
+<div class="ulist">
+<ul>
+<li>
+<p>PBF File extension</p>
+</li>
+<li>
+<p>Default: .pbf</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="raster-commands"><a class="anchor" href="#raster-commands"></a>Raster Commands</h3>
+<div class="paragraph">
+<p>Operations to perform transformations on raster data in GeoWave (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#raster-resize">ReSize</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="raster-resize"><a class="anchor" href="#raster-resize"></a><strong>geowave raster resize</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave raster resize - Resize Raster Tiles</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave raster resize [options] &lt;input store name&gt; &lt;output store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will resize raster tiles that are stored in a GeoWave datastore, and write the resized tiles to a new output store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* --hdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>the hdfs host port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The index that the input raster is stored in</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --inputCoverageName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The name of the input raster coverage</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --jobSubmissionHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The job submission tracker</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--maxSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The max partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--minSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The min partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --outputCoverageName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The out output raster coverage name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --outputTileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The tile size to output</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="vector-commands"><a class="anchor" href="#vector-commands"></a>Vector Commands</h3>
+<div class="paragraph">
+<p>Vector data operations (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#vector-cqldelete">CQLDelete</a></p>
+</li>
+<li>
+<p><a href="#vector-localexport">LocalExport</a></p>
+</li>
+<li>
+<p><a href="#vector-mrexport">MRExport</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="vector-cqldelete"><a class="anchor" href="#vector-cqldelete"></a><strong>geowave vector cqldelete</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave vector cqldelete - Delete data that matches a CQL filter</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave vector cqldelete [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will delete all data in a data store that matches a CQL filter.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--adapterId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Optional ability to provide an adapter ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --cql</p>
+<div class="ulist">
+<ul>
+<li>
+<p>CQL Filter for delete</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--debug</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Print out additional info for debug purposes</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The name of the index (optional)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="vector-localexport"><a class="anchor" href="#vector-localexport"></a><strong>geowave vector localexport</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave vector localexport - Export data directly</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave vector localexport [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will export data from a data store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--adapterIds</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma separated list of adapter Ids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--batchSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Records to process at a time</p>
+</li>
+<li>
+<p>Default: 10000</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--cqlFilter</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Filter exported data based on CQL filter</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The index to export from</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --outputFile</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="vector-mrexport"><a class="anchor" href="#vector-mrexport"></a><strong>geowave vector mrexport</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave vector mrexport - Export data using map-reduce</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave vector mrexport [options] &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will perform a data export for data in a data store, and will use MapReduce to support high-volume data stores.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--adapterIds</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Comma separated list of adapter Ids</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--batchSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Records to process at a time</p>
+</li>
+<li>
+<p>Default: 10000</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--cqlFilter</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Filter exported data based on CQL filter</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--indexId</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The index to export from</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--maxSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The max partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--minSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The min partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--resourceManagerHostPort</p>
+</li>
 </ul>
 </div>
 <hr>
@@ -4009,7 +9403,7 @@ another point.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-09-12 21:30:21 +00:00
+Last updated 2017-09-14 14:22:30 +00:00
 </div>
 </div>
 </body>

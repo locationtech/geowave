@@ -1,0 +1,38 @@
+//:geowave-resize(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave raster resize - Resize Raster Tiles
+
+SYNOPSIS
+//:--------
+
+geowave raster resize [options] <input store name> <output store name>
+
+DESCRIPTION
+//:-----------
+
+This command will resize raster tiles that are stored in a GeoWave datastore, and write the resized tiles to a new output store.
+
+OPTIONS
+//:-------
+
+- * --hdfsHostPort
+ * the hdfs host port
+- --indexId
+ * The index that the input raster is stored in
+- * --inputCoverageName
+ * The name of the input raster coverage
+- * --jobSubmissionHostPort
+ * The job submission tracker
+- --maxSplits
+ * The max partitions for the input data
+- --minSplits
+ * The min partitions for the input data
+- * --outputCoverageName
+ * The out output raster coverage name
+- * --outputTileSize
+ * The tile size to output

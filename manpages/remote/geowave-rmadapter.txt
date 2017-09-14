@@ -1,0 +1,23 @@
+//:geowave-rmadapter(1)
+//:====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote rmadapter - Remove an adapter from the remote store and all associated data for the adapter
+
+SYNOPSIS
+//:--------
+
+geowave remote rmadapter [options] <store name> <adapterId>
+
+DESCRIPTION
+//:-----------
+
+The geowave remote rmadapter operator will remove an adapter from the remote store and all associated data for the adapter.
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

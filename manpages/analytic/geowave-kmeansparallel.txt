@@ -1,0 +1,142 @@
+//:geowave-kmeansparallel(1)
+//:=========================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave analytic kmeansparallel - KMeans Parallel Clustering
+
+SYNOPSIS
+//:--------
+
+geowave analytic kmeansparallel [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+The geowave analytic kmeansparallel operator will execute a KMeans Parallel Clustering analytic
+
+EXAMPLE
+//:-----------
+
+[source, bash]
+----
+yarn jar geowave-tools.jar analytic kmeansparallel -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans 
+-hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -sms 4 -sxs 8 -ssi 10 my_store
+----
+
+The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
+the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
+the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
+the data executed against is 'hail' (query.adapters), the min sample size is 4 (sms, which is kmin),
+the max sample size is 8 (which is kmax), the minimum number of sampling iterations is 10. 
+The accumulo connection parameters are loaded from my_store.
+
+EXECUTION
+//:-----------
+
+KMeansParallel tries to identify the optimal k (sms, smx) for a set of zoom levels (1 -> zl).  When zoom level is 1,
+it will perform a normal kmeans and find k clusters.  If zoomlevel is 2 or higher, it will take each cluster found,
+and then try to create sub-clusters (bounded by that cluster), identifying a new optimal k for that sub-cluster.  As 
+such, without powerful infrastucture, this approach could take a significant amount of time to complete with zoom levels
+higher than 1.
+
+KMeansParallel executes by first executing an extraction and de-duplication on data received via 
+GeoWaveInputFormat.  The data is copied to HDFS for faster processing.  The K-Sampler job is used to pick sample
+centroid points.  These centroids are then assigned a cost, and then weak centroids are stripped before the 
+K-Sampler is executed again.  This process iterates several times, before the best centroid locations are found,
+which are fed into the real K-Means algorithm as initial guesses.  K-Means iterates until the tolerance is 
+reached (-cct, which defaults to 0.0001) or the max iterations is met (-cmi).
+
+After execution, KMeansParallel writes the centroids to an output data type (-eot, defaults to centroid), and then
+creates an informational set of convex hulls which you can plot in GeoServer to visually identify cluster groups
+(-hdt, defaults to convex_hull).
+
+For tuning performance, you can set the number of reducers used in each step.  Extraction/Dedupe reducer count is
+-crc, Clustering reducer count is -erc, Convex Hull reducer count is -hrc, and Output reducer count is -orc).
+
+If you would like to run the algorithm multiple times, it may be useful to set the batch id (-b), which can
+be used to distinguish between multiple batches (runs).
+
+OPTIONS
+//:-------
+
+- -cce, --centroidExtractorClass
+ * Centroid Exractor Class implements _mil.nga.giat.geowave.analytics.extract.CentroidExtractor_
+- -cid, --centroidIndexId
+ * Index Identifier for Centroids
+- -cfc, --centroidWrapperFactoryClass
+ * A factory class that implements _mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory_
+- -czl, --centroidZoomLevel
+ * Zoom Level Number
+- -cct, --clusteringConverganceTolerance
+ * Convergence Tolerance
+- * -cmi, --clusteringMaxIterations
+ * Maximum number of iterations when finding optimal clusters
+- -crc, --clusteringMaxReducerCount
+ * Maximum Clustering Reducer Count
+- * -zl, --clusteringZoomLevels
+ * Number of Zoom Levels to Process
+- -dde, --commonDimensionExtractClass
+ * Dimension Extractor Class implements _mil.nga.giat.geowave.analytics.extract.DimensionExtractor_
+- -cdf, --commonDistanceFunctionClass
+ * Distance Function Class implements _mil.nga.giat.geowave.analytics.distance.DistanceFn_
+- -ens, --extractDataNamespaceUri
+ * Output Data Namespace URI
+- -ede, --extractDimensionExtractClass
+ * Class to extract dimensions into a simple feature output
+- * -emx, --extractMaxInputSplit
+ * Maximum hdfs input split size
+- * -emn, --extractMinInputSplit
+ * Minimum hdfs input split size
+- -eot, --extractOutputDataTypeId
+ * Output Data Type ID
+- -eq, --extractQuery
+ * Query
+- -erc, --extractReducerCount
+ * Number of Reducers For initial data extraction and de-duplication
+- -b, --globalBatchId
+ * Batch ID
+- -pb, --globalParentBatchId
+ * Batch ID
+- -hns, --hullDataNamespaceUri
+ * Data Type Namespace for a centroid item
+- -hdt, --hullDataTypeId
+ * Data Type ID for a centroid item
+- -hid, --hullIndexId
+ * Index Identifier for Centroids
+- -hpe, --hullProjectionClass
+ * Class to project on to 2D space. Implements _mil.nga.giat.geowave.analytics.tools.Projection_
+- -hrc, --hullReducerCount
+ * Centroid Reducer Count
+- -hfc, --hullWrapperFactoryClass
+ * Class to create analytic item to capture hulls. Implements _mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory_
+- -ifc, --inputFormatClass
+ * Input Format Class
+- -conf, --mapReduceConfigFile
+ * MapReduce Configuration
+- * -hdfsbase, --mapReduceHdfsBaseDir
+ * Fully qualified path to the base directory in hdfs
+- * -hdfs, --mapReduceHdfsHostPort
+ * HDFS hostname and port in the format hostname:port
+- -jobtracker, --mapReduceJobtrackerHostPort
+ * [REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port
+- -resourceman, --mapReduceYarnResourceManager
+ * [REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port
+- -ofc, --outputOutputFormat
+ * Output Format Class
+- -orc, --outputReducerCount
+ * Number of Reducers For Output
+- * --query.adapters
+ * The comma-separated list of data adapters to query; by default all adapters are used.
+- --query.auth
+ * The comma-separated list of authorizations used during extract; by default all authorizations are used.
+- --query.index
+ * The specific index to query; by default one is chosen for each adapter.
+- * -sxs, --sampleMaxSampleSize
+ * Max Sample Size
+- * -sms, --sampleMinSampleSize
+ * Minimum Sample Size
+- * -ssi, --sampleSampleIterations
+ * Minimum number of sample iterations

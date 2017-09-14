@@ -1,0 +1,36 @@
+//:geowave-mrexport(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave vector mrexport - Export data using map-reduce
+
+SYNOPSIS
+//:--------
+
+geowave vector mrexport [options] <hdfs host:port> <path to base directory to write to> <store name>
+
+DESCRIPTION
+//:-----------
+
+This command will perform a data export for data in a data store, and will use MapReduce to support high-volume data stores.
+
+OPTIONS
+//:-------
+
+- --adapterIds
+ * Comma separated list of adapter Ids
+- --batchSize
+ * Records to process at a time
+ * Default: 10000
+- --cqlFilter
+ * Filter exported data based on CQL filter
+- --indexId
+ * The index to export from
+- --maxSplits
+ * The max partitions for the input data
+-  --minSplits
+ * The min partitions for the input data
+-  --resourceManagerHostPort

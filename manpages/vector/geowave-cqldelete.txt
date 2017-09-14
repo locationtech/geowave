@@ -1,0 +1,31 @@
+//:geowave-cqldelete(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave vector cqldelete - Delete data that matches a CQL filter
+
+SYNOPSIS
+//:--------
+
+geowave vector cqldelete [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+This command will delete all data in a data store that matches a CQL filter.
+
+OPTIONS
+//:-------
+
+- --adapterId
+ * Optional ability to provide an adapter ID
+- * --cql
+ * CQL Filter for delete
+- --debug
+ * Print out additional info for debug purposes
+ * Default: false
+- --indexId
+ * The name of the index (optional)
