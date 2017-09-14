@@ -1,8 +1,8 @@
 ﻿{
 	"paragraphs": [
 		{
-			"text": "%md\n## Welcome to the GeoWave KMeans GPX Example (EMR Version).\n##### This is a live note - you can run the code yourself.\n\n### Setup\n<p>\nThe only prerequisite to running this example is increasing your shell interpreter's timeout.<br>\nGo to the <b>Interpreter</b> page, and scroll down to the <b>'sh'</b> section. Click on the <b>'edit'</b> button.<br><br>\nSet the <b>'shell.command.timeout.millisecs'</b> entry to <b>600000</b> (10 minutes).\n</p>\n\n### Execution\n<p>\nThe list of paragraphs below needs to be run sequentially.<br>\nStart at the top, and click the <b>play</b> button in each paragraph, waiting for completion.<br>\nEach paragraph is labeled and commented so you can tell what's happening. A paragraph will be marked<br>\nwith a <b>FINISHED</b> indicator next to the play button when it has run without error.<br><br>\nEnjoy!\n</p>",
-			"dateUpdated": "2017-08-17T14:08:07+0000",
+			"text": "%md\n## Welcome to the GeoWave GPX KMeans Example (EMR Version).\n##### This is a live note - you can run the code yourself.\n\n### Setup\n<p>\nThe only prerequisite to running this example is increasing your shell interpreter's timeout.<br>\nGo to the <b>Interpreter</b> page, and scroll down to the <b>'sh'</b> section. Click on the <b>'edit'</b> button.<br><br>\nSet the <b>'shell.command.timeout.millisecs'</b> entry to <b>600000</b> (10 minutes).\n</p>\n\n### Execution\n<p>\nThe list of paragraphs below needs to be run sequentially.<br>\nStart at the top, and click the <b>play</b> button in each paragraph, waiting for completion.<br>\nEach paragraph is labeled and commented so you can tell what's happening. A paragraph will be marked<br>\nwith a <b>FINISHED</b> indicator next to the play button when it has run without error.<br><br>\nEnjoy!\n</p>",
+			"dateUpdated": "2017-09-14T11:08:44-0700",
 			"config": {
 				"tableHide": false,
 				"editorSetting": {
@@ -27,25 +27,27 @@
 				"msg": [
 					{
 						"type": "HTML",
-						"data": "<h2>Welcome to the GeoWave KMeans GPX Example (EMR Version).</h2>\n<h5>This is a live note - you can run the code yourself.</h5>\n<h3>Setup</h3>\n<p>\nThe only prerequisite to running this example is increasing your shell interpreter's timeout.<br>\nGo to the <b>Interpreter</b> page, and scroll down to the <b>'sh'</b> section. Click on the <b>'edit'</b> button.<br><br>\nSet the <b>'shell.command.timeout.millisecs'</b> entry to <b>600000</b> (10 minutes).\n</p>\n<h3>Execution</h3>\n<p>\nThe list of paragraphs below needs to be run sequentially.<br>\nStart at the top, and click the <b>play</b> button in each paragraph, waiting for completion.<br>\nEach paragraph is labeled and commented so you can tell what's happening. A paragraph will be marked<br>\nwith a <b>FINISHED</b> indicator next to the play button when it has run without error.<br><br>\nEnjoy!\n</p>\n"
+						"data": "<div class=\"markdown-body\">\n<h2>Welcome to the GeoWave GPX KMeans Example (EMR Version).</h2>\n<h5>This is a live note - you can run the code yourself.</h5>\n<h3>Setup</h3>\n<p>\nThe only prerequisite to running this example is increasing your shell interpreter's timeout.<br>\nGo to the <b>Interpreter</b> page, and scroll down to the <b>'sh'</b> section. Click on the <b>'edit'</b> button.<br><br>\nSet the <b>'shell.command.timeout.millisecs'</b> entry to <b>600000</b> (10 minutes).\n</p>\n<h3>Execution</h3>\n<p>\nThe list of paragraphs below needs to be run sequentially.<br>\nStart at the top, and click the <b>play</b> button in each paragraph, waiting for completion.<br>\nEach paragraph is labeled and commented so you can tell what's happening. A paragraph will be marked<br>\nwith a <b>FINISHED</b> indicator next to the play button when it has run without error.<br><br>\nEnjoy!\n</p>\n</div>"
 					}
 				]
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887586_-1736619222",
+			"jobName": "paragraph_1505412249530_-577076375",
 			"id": "20170814-190601_1767735731",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "READY",
-			"errorMessage": "",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "FINISHED",
 			"progressUpdateIntervalMs": 500,
 			"focus": true,
-			"$$hashKey": "object:1781"
+			"$$hashKey": "object:4326",
+			"user": "anonymous",
+			"dateFinished": "2017-09-14T11:08:46-0700",
+			"dateStarted": "2017-09-14T11:08:45-0700"
 		},
 		{
 			"title": "Import GPX Data",
 			"text": "%sh\ns3-dist-cp --src=s3://geowave-0.9.5-accumulo/gpx --dest=hdfs://$HOSTNAME:8020/tmp/\n\n/opt/accumulo/bin/accumulo shell -u root -p secret -e \"importtable geowave.germany_gpx_SPATIAL_IDX /tmp/spatial\"\n/opt/accumulo/bin/accumulo shell -u root -p secret -e \"importtable geowave.germany_gpx_GEOWAVE_METADATA /tmp/metadata\"",
-			"dateUpdated": "2017-08-17T14:15:40+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"tableHide": true,
 				"editorSetting": {
@@ -81,20 +83,18 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887589_-1739312464",
+			"jobName": "paragraph_1505412249532_-579384868",
 			"id": "20170815-204020_1185378225",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1782",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:14:19+0000",
-			"dateStarted": "2017-08-17T14:13:04+0000"
+			"$$hashKey": "object:4327"
 		},
 		{
 			"title": "Configure GeoWave",
 			"text": "%sh\n# clear out potential old runs\ngeowave config rmstore kmeans_hbase\ngeowave config rmstore germany_gpx_accumulo\n\n# configure geowave connection params for name stores \"germany_gpx_accumulo\" and \"kmeans_hbase\"\ngeowave config addstore germany_gpx_accumulo --gwNamespace geowave.germany_gpx -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user root --password secret\ngeowave config addstore kmeans_hbase --gwNamespace geowave.kmeans -t hbase --zookeeper $HOSTNAME:2181\n\n# set up geoserver\ngeowave config geoserver \"$HOSTNAME:8000\"\n\n# add gpx layer\ngeowave gs addlayer germany_gpx_accumulo -id gpxpoint\nwget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld\ngeowave gs addstyle SubsamplePoints -sld SubsamplePoints.sld\ngeowave gs setls gpxpoint --styleName SubsamplePoints\n\n# add landsat layer\ngeowave config rmstore imagery\ngeowave config addstore imagery -t hbase -z $HOSTNAME:2181 --gwNamespace geowave.landsat_raster\ngeowave gs addlayer imagery -id germany_mosaic\n",
-			"dateUpdated": "2017-08-17T14:16:16+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"tableHide": true,
 				"editorSetting": {
@@ -126,20 +126,18 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887590_-1738158217",
+			"jobName": "paragraph_1505412249533_-579769617",
 			"id": "20170809-181755_1512238840",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1783",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:16:06+0000",
-			"dateStarted": "2017-08-17T14:15:48+0000"
+			"$$hashKey": "object:4328"
 		},
 		{
 			"title": "Run KMeans on GPX Subset",
-			"text": "%sh\n# clear out potential old runs\ngeowave remote clear kmeans_hbase\n\n# run kmeans\ngeowave analytic kmeansspark germany_gpx_accumulo kmeans_hbase -k 8 -f gpxpoint --hulls --bbox \"13.3 52.45 13.5 52.55\"\n",
-			"dateUpdated": "2017-08-17T14:17:42+0000",
+			"text": "%sh\n# clear out potential old runs\ngeowave remote clear kmeans_hbase\n\n# run kmeans\ngeowave analytic kmeansspark germany_gpx_accumulo kmeans_hbase -k 8 -f gpxpoint --hulls --cqlFilter \"BBOX(geometry, 13.3, 52.45, 13.5, 52.55)\"\n",
+			"dateUpdated": "2017-09-14T11:05:51-0700",
 			"config": {
 				"tableHide": true,
 				"editorSetting": {
@@ -171,20 +169,18 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887590_-1738158217",
+			"jobName": "paragraph_1505412249534_-578615370",
 			"id": "20170809-194032_1817638679",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1784",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:17:32+0000",
-			"dateStarted": "2017-08-17T14:16:27+0000"
+			"$$hashKey": "object:4329"
 		},
 		{
 			"title": "Add KMeans Results to GeoServer",
 			"text": "%sh\n\n# add the centroids layer\ngeowave gs addlayer kmeans_hbase -id kmeans-centroids\ngeowave gs setls kmeans-centroids --styleName point\n\n# add the hulls layer\ngeowave gs addlayer kmeans_hbase -id kmeans-hulls\ngeowave gs setls kmeans-hulls --styleName line",
-			"dateUpdated": "2017-08-17T14:17:46+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"tableHide": true,
 				"editorSetting": {
@@ -215,19 +211,17 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887591_-1738542966",
+			"jobName": "paragraph_1505412249535_-579000119",
 			"id": "20170817-030121_1271873891",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1785",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:17:52+0000",
-			"dateStarted": "2017-08-17T14:17:46+0000"
+			"$$hashKey": "object:4330"
 		},
 		{
 			"text": "%angular\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css\" />\n<h3>GeoWave Leaflet Map</h3>\n<div id=\"map\" style=\"height: 600px; width: 100%\"></div>\n\n<script type=\"text/javascript\">\n\n\nfunction initMap() {\n    var map = L.map('map').setView([50.00, 10.00], 5);\n    \n    var host='localhost';\n    mapLink = '<a href=\"http://www.esri.com/\">Esri</a>';\n    wholink = 'i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';\n\n    var basemaps = {\n        OSM: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {\n            attribution: 'Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors',\n            maxZoom: 15,\n            minZoom: 2\n        }),\n        Satellite:L.tileLayer(\n            'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {\n            attribution: '&copy; '+mapLink+', '+wholink,\n            maxZoom: 18,\n        }),\n        LANDSAT: L.tileLayer.wms('http://'+host+':8000/geoserver/geowave/wms?', {\n            layers: 'geowave:germany_mosaic',\n            format: 'image/jpeg'\n        })\n    };\n    \n    var overlays = {\n        GPX:L.tileLayer.wms('http://'+host+':8000/geoserver/geowave/wms?', {\n            layers: 'geowave:gpxpoint',\n            format: 'image/png',\n            transparent: true\n        }),\n        \n        KMeansCentroids:L.tileLayer.wms('http://'+host+':8000/geoserver/geowave/wms?', {\n            layers: 'geowave:kmeans-centroids',\n            format: 'image/png',\n            transparent: true\n        }),\n        \n        KMeansHulls:L.tileLayer.wms('http://'+host+':8000/geoserver/geowave/wms?', {\n            layers: 'geowave:kmeans-hulls',\n            format: 'image/png',\n            transparent: true\n        })\n    };\n\n    L.control.layers(basemaps, overlays).addTo(map);\n    \n    basemaps.OSM.addTo(map);\n}\n\n// ensure we only load the script once, seems to cause issues otherwise\nif (window.L) {\n    initMap();\n} else {\n    console.log('Loading Leaflet library');\n    var sc = document.createElement('script');\n    sc.type = 'text/javascript';\n    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js';\n    sc.onload = initMap;\n    sc.onerror = function(err) { alert(err); }\n    document.getElementsByTagName('head')[0].appendChild(sc);\n}\n</script>\n",
-			"dateUpdated": "2017-08-17T14:25:09+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"tableHide": false,
 				"editorSetting": {
@@ -258,20 +252,18 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887595_-1740081962",
+			"jobName": "paragraph_1505412249535_-579000119",
 			"id": "20170817-030613_874309201",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1786",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:25:09+0000",
-			"dateStarted": "2017-08-17T14:25:09+0000"
+			"$$hashKey": "object:4331"
 		},
 		{
 			"title": "Export KMeans Centroids to CSV",
 			"text": "%sh\n# Set up the temp folder\ncd /mnt/tmp\nrm -rf kmeans\nmkdir kmeans\n\n# Query kmeans centroids and write to local temp file\ngeowave analytic sql \"select * from kmeans_hbase|kmeans-centroids\" --csv /mnt/tmp/kmeans\n\n# Move the csv output to hdfs\nmv kmeans/part*.csv kmeans-centroids.csv\nhdfs dfs -rm /user/zeppelin/kmeans-centroids.csv\nhdfs dfs -put kmeans-centroids.csv /user/zeppelin/kmeans-centroids.csv",
-			"dateUpdated": "2017-08-17T14:21:26+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"tableHide": true,
 				"editorSetting": {
@@ -303,20 +295,18 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887596_-1742005706",
+			"jobName": "paragraph_1505412249536_-593235829",
 			"id": "20170809-201803_119430460",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1787",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:21:23+0000",
-			"dateStarted": "2017-08-17T14:21:14+0000"
+			"$$hashKey": "object:4332"
 		},
 		{
 			"title": "Load KMeans Centroid CSV into DataFrame",
 			"text": "// load centroid data from hdfs\nval kmeansText = sc.textFile(\"/user/zeppelin/kmeans-centroids.csv\")\n\ncase class KMeansRow(lat: Double, lon: Double, data : String)\n\ndef parseLat (wkt: String) : Double = {\n   val latStart = wkt.lastIndexOf(\" \") + 1\n   val latStop = wkt.lastIndexOf(\")\")\n   val latStr = wkt.substring(latStart, latStop)\n   return latStr.toDouble\n}\n\ndef parseLon (wkt: String) : Double = {\n   val lonStart = wkt.indexOf(\"(\") + 1\n   val lonStop = wkt.indexOf(\" \", lonStart)\n   val lonStr = wkt.substring(lonStart, lonStop)\n   return lonStr.toDouble\n}\n\n// split each line, filter out header (starts with \"geom\"), and map it into data class\nval kmeansData = kmeansText.map(s=>s.split(\",\")).filter(s=>s(0)!=\"geom\").map(\n    s=>KMeansRow(parseLat(s(0)), parseLon(s(0)), s(1))\n)\n\n// send the results to the front end (Leaflet map)\nz.angularBind(\"pins\", kmeansData.collect())\n\n// register a view for SQL queries\nkmeansData.toDF().registerTempTable(\"kmeans\")\n",
-			"dateUpdated": "2017-08-17T14:22:10+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"tableHide": true,
 				"editorSetting": {
@@ -348,20 +338,18 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887596_-1742005706",
+			"jobName": "paragraph_1505412249536_-593235829",
 			"id": "20170814-174640_830156690",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1788",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:22:06+0000",
-			"dateStarted": "2017-08-17T14:21:33+0000"
+			"$$hashKey": "object:4333"
 		},
 		{
 			"title": "Display the KMeans Centroids Table",
 			"text": "%sql\nselect lat as Latitude, lon as Longitude from kmeans",
-			"dateUpdated": "2017-08-17T14:22:17+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"editorSetting": {
 					"language": "sql",
@@ -401,19 +389,17 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887597_-1742390455",
+			"jobName": "paragraph_1505412249537_-593620577",
 			"id": "20170809-203309_1972137502",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1789",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:22:18+0000",
-			"dateStarted": "2017-08-17T14:22:17+0000"
+			"$$hashKey": "object:4334"
 		},
 		{
 			"text": "%angular\r\n\r\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css\" />\r\n<h3>Client-side Integration</h3>\r\n<div id=\"map2\" style=\"height: 600px; width: 100%\"></div>\r\n\r\n<script type=\"text/javascript\">\r\nfunction initMap2() {\r\n    var map2 = L.map('map2').setView([52.5, 13.4], 11);\r\n\r\n    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {\r\n        attribution: 'Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors',\r\n        maxZoom: 15,\r\n        minZoom: 2\r\n    }).addTo(map2);\r\n\r\n    var geoMarkers = L.layerGroup().addTo(map2);\r\n    var markerIcon = L.icon({\r\n        iconUrl: 'https://openstationmap.org/0.2.0/client/leaflet/images/marker-icon.png',\r\n        iconSize: [24, 32],\r\n    });\r\n\r\n    var el = angular.element($('#map2').parent('.ng-scope'));\r\n    angular.element(el).ready(function() {\r\n        window.pinWatcher = el.scope().compiledScope.$watch('pins', function(pinList, oldValue) {\r\n            geoMarkers.clearLayers();\r\n            angular.forEach(pinList, function(pin) {\r\n                var marker = L.marker([ pin.lat, pin.lon ], {icon: markerIcon})\r\n                  .bindPopup(pin.data)\r\n                  .addTo(geoMarkers);\r\n            });\r\n        })\r\n    });}\r\n\r\nif (window.pinWatcher) {\r\n    // clear existing watcher otherwise we'll have duplicates\r\n    window.pinWatcher();\r\n}\r\n\r\n// ensure we only load the script once, seems to cause issues otherwise\r\nif (window.L) {\r\n    initMap2();\r\n} else {\r\n    console.log('Loading Leaflet library');\r\n    var sc = document.createElement('script');\r\n    sc.type = 'text/javascript';\r\n    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js';\r\n    sc.onload = initMap2;\r\n    sc.onerror = function(err) { alert(err); }\r\n    document.getElementsByTagName('head')[0].appendChild(sc);\r\n}\r\n</script>",
-			"dateUpdated": "2017-08-17T14:23:57+0000",
+			"dateUpdated": "2017-09-14T11:04:09-0700",
 			"config": {
 				"tableHide": false,
 				"editorSetting": {
@@ -444,29 +430,55 @@
 			},
 			"apps": [
 			],
-			"jobName": "paragraph_1502978887597_-1742390455",
+			"jobName": "paragraph_1505412249537_-593620577",
 			"id": "20170809-021534_2122057818",
-			"dateCreated": "2017-08-17T14:08:07+0000",
-			"status": "FINISHED",
+			"dateCreated": "2017-09-14T11:04:09-0700",
+			"status": "READY",
+			"errorMessage": "",
 			"progressUpdateIntervalMs": 500,
-			"$$hashKey": "object:1790",
-			"user": "anonymous",
-			"dateFinished": "2017-08-17T14:23:57+0000",
-			"dateStarted": "2017-08-17T14:23:57+0000"
+			"$$hashKey": "object:4335"
 		}
 	],
-	"name": "GeoWave GPX KMeans",
-	"id": "2CREFHU51",
+	"name": "GeoWave GPX Demo",
+	"id": "2CTK23QFD",
 	"angularObjects": {
-		"2BRWU4WXC:shared_process": [
+		"2CQ45EQN3:shared_process": [
 		],
-		"2AM1YV5CU:shared_process": [
+		"2CRMR95VM:shared_process": [
 		],
-		"2AJXGMUUJ:shared_process": [
+		"2CR7HU4K5:shared_process": [
 		],
-		"2ANGGHHMQ:shared_process": [
+		"2CNZDBXB1:shared_process": [
 		],
-		"2AKK3QQXU:shared_process": [
+		"2CSSPJY6E:shared_process": [
+		],
+		"2CR9SXZU2:shared_process": [
+		],
+		"2CP794URS:shared_process": [
+		],
+		"2CS1T6Z8H:shared_process": [
+		],
+		"2CRRSU11A:shared_process": [
+		],
+		"2CQ6DYKSD:shared_process": [
+		],
+		"2CQUHQ6N9:shared_process": [
+		],
+		"2CSM6GRR3:shared_process": [
+		],
+		"2CRS36YKB:shared_process": [
+		],
+		"2CQDNDSDA:shared_process": [
+		],
+		"2CS7FBNVX:shared_process": [
+		],
+		"2CP5MBF4A:shared_process": [
+		],
+		"2CQQKN5PH:shared_process": [
+		],
+		"2CQDTRBTZ:shared_process": [
+		],
+		"2CR7ANRVS:shared_process": [
 		]
 	},
 	"config": {
