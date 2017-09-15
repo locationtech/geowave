@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>mil.nga.giat</groupId>
@@ -21,26 +22,19 @@
 			<artifactId>geowave-core-ingest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		 <dependency>
+		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-mbtiles</artifactId>
 		</dependency>
 		<dependency>
-    		<groupId>com.wdtinc</groupId>
-    		<artifactId>mapbox-vector-tile</artifactId>
-    		<version>1.2.0</version>
-		</dependency>	
+			<groupId>com.wdtinc</groupId>
+			<artifactId>mapbox-vector-tile</artifactId>
+			<version>1.2.0-protobuf2.5</version>
+		</dependency>
 		<dependency>
-    		<groupId>org.geotools</groupId>
-    		<artifactId>gt-imagemosaic</artifactId>
-		</dependency>	
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imagemosaic</artifactId>
+		</dependency>
 	</dependencies>
-	<!-- <build>
-		<plugins>
-			<plugin>
-				<groupId>com.github.os72</groupId>
-				<artifactId>protoc-jar-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build> -->
+
 </project>

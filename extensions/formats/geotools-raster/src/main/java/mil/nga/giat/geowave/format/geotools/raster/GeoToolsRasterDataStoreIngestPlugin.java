@@ -103,6 +103,9 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 				LOGGER.warn("Unable to support raster file " + input.getAbsolutePath());
 				return null;
 			}
+			if (formats.size() == 1){
+				return formats.iterator().next();
+			}
 			// world image and geotiff can both open tif files, give
 			// priority to gdalgeotiff, followed by geotiff
 			for (final AbstractGridFormat f : formats) {
@@ -115,7 +118,13 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 					return f;
 				}
 			}
-
+			//MBTiles can be either GeoWave's extension or the original
+			// priority goes to the GeoWave extension 
+			for (final AbstractGridFormat f : formats) {
+				if ("GWMBTiles".equals(f.getName())) {
+					return f;
+				}
+			}
 			// otherwise just pick the first
 			final Iterator<AbstractGridFormat> it = formats.iterator();
 			if (it.hasNext()) {

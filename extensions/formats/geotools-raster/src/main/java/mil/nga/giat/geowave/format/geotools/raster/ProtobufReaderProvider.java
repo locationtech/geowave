@@ -24,7 +24,8 @@ public class ProtobufReaderProvider extends
 	public ImageReader createReaderInstance(
 			Object extension )
 			throws IOException {
-		ProtobufReader reader = new ProtobufReader(this);
+		ProtobufReader reader = new ProtobufReader(
+				this);
 
 		return reader;
 	}
@@ -50,13 +51,12 @@ public class ProtobufReaderProvider extends
 			"VECTOR-TILE"
 		};
 	}
-	
+
 	@Override
 	public Class[] getInputTypes() {
-        return new Class[] {
-        	ImageInputStream.class,
-        	InputStream.class
-        };
-    }
+		return new Class[] {
+			ImageInputStream.class,
+		};
+	}
 
 }
