@@ -7,8 +7,10 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import javax.imageio.ImageReadParam;
@@ -121,7 +123,7 @@ public class ProtobufReader extends
 				1,
 				16,
 				null);
-		
+
 		int count;
 		int xValue = 0;
 		int yValue = 0;
@@ -145,17 +147,10 @@ public class ProtobufReader extends
 			if (geometryList.isEmpty()) {
 				return raster;
 			}
-			final double[] bounds = getBounds(
-					geometryList.get(
-							0).getCoordinates());
-			final double extentPointX = Math.abs(
-					bounds[0])
-					- Math.abs(
-							bounds[1]);
-			final double extentPointY = Math.abs(
-					bounds[2])
-					- Math.abs(
-							bounds[3]);
+			final double[] bounds = getBounds(geometryList.get(
+					0).getCoordinates());
+			final double extentPointX = Math.abs(bounds[1]) - Math.abs(bounds[0]);
+			final double extentPointY = Math.abs(bounds[3]) - Math.abs(bounds[2]);
 			final double extentRasterX = 256 * extentPointX;
 			final double extentRasterY = 256 * extentPointY;
 
@@ -164,7 +159,9 @@ public class ProtobufReader extends
 
 				xValue = (int) (extentRasterX % loopCoordinate.x);
 				yValue = (int) (extentRasterY % loopCoordinate.y);
-				count = 9; // TODO get count from geometry.getUserData()
+				final HashMap userData = new HashMap();
+				userData.putAll((Map) geometry.getUserData());
+				count = (int) (long) userData.get("count"); 
 
 				raster.setSample(
 						xValue,
@@ -185,12 +182,12 @@ public class ProtobufReader extends
 	public double[] getBounds(
 			final Coordinate[] coordinates ) {
 		final double[] bounds = new double[4];
-		// minx = 0, maxx = 1, miny = 2. maxy = 3
+		// bounds[0] = minx, bounds[1] = maxx, bounds[2] = miny, bounds[3] = maxy
 
-		bounds[0] = coordinates[2].x;
-		bounds[2] = coordinates[2].y;
-		bounds[1] = coordinates[3].x;
-		bounds[3] = coordinates[3].y;
+		bounds[0] = coordinates[0].x;
+		bounds[1] = coordinates[2].x;
+		bounds[2] = coordinates[0].y;
+		bounds[3] = coordinates[2].y;
 
 		return bounds;
 	}
@@ -209,8 +206,7 @@ public class ProtobufReader extends
 		final byte[] b = new byte[length];
 
 		for (int i = 0; i < length; i++) {
-			int val = Math.round(
-					(255 / (float) window) * ((i - level) + (window * 0.5f)));
+			int val = Math.round((255 / (float) window) * ((i - level) + (window * 0.5f)));
 			if (val > 255) {
 				val = 255;
 			}

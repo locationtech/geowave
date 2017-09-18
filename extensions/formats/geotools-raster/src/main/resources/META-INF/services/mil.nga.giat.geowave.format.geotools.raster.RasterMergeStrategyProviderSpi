@@ -1,2 +1,3 @@
 mil.nga.giat.geowave.format.geotools.raster.NoDataMergeStrategyProvider
 mil.nga.giat.geowave.format.geotools.raster.NoMergeStrategyProvider
+mil.nga.giat.geowave.format.geotools.raster.MBTilesMergeStrategyProvider

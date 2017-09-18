@@ -30,7 +30,6 @@ public class GeoWaveMBTilesReader extends
 		// extension to the MBTilesReader
 		return new GridCoverage2D(
 				coverageName,
-				super.read(
-						parameters));
+				super.read(parameters));
 	}
 }
