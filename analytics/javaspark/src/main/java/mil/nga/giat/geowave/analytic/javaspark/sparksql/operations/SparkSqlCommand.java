@@ -24,6 +24,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -32,8 +33,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 @GeowaveOperation(name = "sql", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "SparkSQL queries")
 public class SparkSqlCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SparkSqlCommand.class);
 	private final static String STORE_ADAPTER_DELIM = "|";
@@ -72,7 +72,7 @@ public class SparkSqlCommand extends
 	}
 
 	@Override
-	public Object computeResults(
+	public Void computeResults(
 			OperationParams params )
 			throws Exception {
 

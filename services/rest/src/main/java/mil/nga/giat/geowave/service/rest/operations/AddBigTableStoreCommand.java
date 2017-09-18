@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -23,36 +23,27 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
 
-@GeowaveOperation(name = "addstore/bigtable", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
-@Parameters(commandDescription = "Create a store within Geowave")
+@Parameters(commandDescription = "Create a BigTable store within Geowave")
 public class AddBigTableStoreCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	/**
-	 * A REST Operation for the AddStoreCommand where --type=bigtable 
+	 * A REST Operation for the AddStoreCommand where --type=bigtable
 	 */
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddBigTableStoreCommand.class);
 
 	public static final String PROPERTIES_CONTEXT = "properties";
 
-
-	//Default AddStore Options
+	// Default AddStore Options
 	@Parameter(description = "<name>")
-	@RestParameters(names = {
-		"name"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -62,10 +53,10 @@ public class AddBigTableStoreCommand extends
 	private Boolean makeDefault;
 
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-	
+
 	@ParametersDelegate
 	private BigTableOptions opts;
-	
+
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
@@ -98,7 +89,6 @@ public class AddBigTableStoreCommand extends
 					"Must specify store name");
 		}
 
-
 		// Make sure we're not already in the index.
 		final DataStorePluginOptions existingOptions = new DataStorePluginOptions();
 		if (existingOptions.load(
@@ -126,6 +116,16 @@ public class AddBigTableStoreCommand extends
 				existingProps);
 
 		return null;
+	}
+
+	@Override
+	public String getId() {
+		return ConfigSection.class.getName() + ".addstore/bigtable";
+	}
+
+	@Override
+	public String getPath() {
+		return "config/addstore/bigtable";
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,9 +15,15 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+import com.google.common.base.Stopwatch;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -25,13 +31,6 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
-
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-import com.google.common.base.Stopwatch;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 @GeowaveOperation(name = "bbox", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "bbox query")
@@ -68,7 +67,7 @@ public class BBOXQuery extends
 		"--useAggregation",
 		"-agg"
 	}, description = "Compute count on the server side")
-	private Boolean useAggregation = Boolean.FALSE;
+	private final Boolean useAggregation = Boolean.FALSE;
 
 	private Geometry geom;
 
@@ -117,7 +116,7 @@ public class BBOXQuery extends
 		else {
 			stopWatch.start();
 
-			CloseableIterator<Object> it = dataStore.query(
+			final CloseableIterator<Object> it = dataStore.query(
 					new QueryOptions(
 							adapterId,
 							indexId),
@@ -145,12 +144,4 @@ public class BBOXQuery extends
 		}
 		return count;
 	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params ) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

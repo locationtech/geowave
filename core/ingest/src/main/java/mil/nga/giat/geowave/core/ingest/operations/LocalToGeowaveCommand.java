@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -21,34 +21,26 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 
-@GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Ingest supported files in local file system directly, without using HDFS")
 public class LocalToGeowaveCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<file or directory> <storename> <comma delimited index/group list>")
-	@RestParameters(names = {
-		"path",
-		"storename",
-		"indices"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -74,7 +66,7 @@ public class LocalToGeowaveCommand extends
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 
 		// Based on the selected formats, select the format plugins
 		pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -87,7 +79,7 @@ public class LocalToGeowaveCommand extends
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params ) {
 		computeResults(params);
 	}
 
@@ -96,9 +88,9 @@ public class LocalToGeowaveCommand extends
 	}
 
 	public void setParameters(
-			String fileOrDirectory,
-			String storeName,
-			String commaDelimitedIndexes ) {
+			final String fileOrDirectory,
+			final String storeName,
+			final String commaDelimitedIndexes ) {
 		parameters = new ArrayList<String>();
 		parameters.add(fileOrDirectory);
 		parameters.add(storeName);
@@ -110,7 +102,7 @@ public class LocalToGeowaveCommand extends
 	}
 
 	public void setIngestOptions(
-			VisibilityOptions ingestOptions ) {
+			final VisibilityOptions ingestOptions ) {
 		this.ingestOptions = ingestOptions;
 	}
 
@@ -119,7 +111,7 @@ public class LocalToGeowaveCommand extends
 	}
 
 	public void setLocalInputOptions(
-			LocalInputCommandLineOptions localInputOptions ) {
+			final LocalInputCommandLineOptions localInputOptions ) {
 		this.localInputOptions = localInputOptions;
 	}
 
@@ -128,7 +120,7 @@ public class LocalToGeowaveCommand extends
 	}
 
 	public void setPluginFormats(
-			IngestFormatPluginOptions pluginFormats ) {
+			final IngestFormatPluginOptions pluginFormats ) {
 		this.pluginFormats = pluginFormats;
 	}
 
@@ -137,7 +129,7 @@ public class LocalToGeowaveCommand extends
 	}
 
 	public void setThreads(
-			int threads ) {
+			final int threads ) {
 		this.threads = threads;
 	}
 
@@ -146,7 +138,7 @@ public class LocalToGeowaveCommand extends
 	}
 
 	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
+			final DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
 
@@ -155,30 +147,30 @@ public class LocalToGeowaveCommand extends
 	}
 
 	public void setInputIndexOptions(
-			List<IndexPluginOptions> inputIndexOptions ) {
+			final List<IndexPluginOptions> inputIndexOptions ) {
 		this.inputIndexOptions = inputIndexOptions;
 	}
 
 	@Override
 	public Void computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 3) {
 			throw new ParameterException(
 					"Requires arguments: <file or directory> <storename> <comma delimited index/group list>");
 		}
 
-		String inputPath = parameters.get(0);
-		String inputStoreName = parameters.get(1);
-		String indexList = parameters.get(2);
+		final String inputPath = parameters.get(0);
+		final String inputStoreName = parameters.get(1);
+		final String indexList = parameters.get(2);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
@@ -189,7 +181,7 @@ public class LocalToGeowaveCommand extends
 
 		// Load the Indexes
 		if (inputIndexOptions == null) {
-			IndexLoader indexLoader = new IndexLoader(
+			final IndexLoader indexLoader = new IndexLoader(
 					indexList);
 			if (!indexLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
@@ -199,10 +191,10 @@ public class LocalToGeowaveCommand extends
 		}
 
 		// Ingest Plugins
-		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
+		final Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
 
 		// Driver
-		LocalFileIngestDriver driver = new LocalFileIngestDriver(
+		final LocalFileIngestDriver driver = new LocalFileIngestDriver(
 				inputStoreOptions,
 				inputIndexOptions,
 				ingestPlugins,

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -24,7 +24,6 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -32,18 +31,15 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
-@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddIndexCommand extends
-		DefaultOperation<Void> implements
+		DefaultOperation implements
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
 	@Parameter(description = "<name>", required = true)
-	@RestParameters(names = {
-		"name"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -153,8 +149,7 @@ public class AddIndexCommand extends
 		this.pluginOptions = pluginOptions;
 	}
 
-	@Override
-	public Void computeResults(
+	public void computeResults(
 			final OperationParams params ) {
 
 		// Ensure that a name is chosen.
@@ -201,7 +196,5 @@ public class AddIndexCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
-
-		return null;
 	}
 }

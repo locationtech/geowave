@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,9 +22,8 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -32,11 +31,10 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.query.AdapterIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
-@GeowaveOperation(name = "rmadapter", parentOperation = RemoteSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "rmadapter", parentOperation = RemoteSection.class)
 @Parameters(hidden = true, commandDescription = "Remove an adapter from the remote store and all associated data for the adapter")
 public class RemoveAdapterCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(RemoveAdapterCommand.class);
 
@@ -47,7 +45,7 @@ public class RemoveAdapterCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params ) {
 		computeResults(params);
 	}
 
@@ -56,11 +54,11 @@ public class RemoveAdapterCommand extends
 	}
 
 	public void setParameters(
-			String storeName,
-			String adapterId ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-		this.parameters.add(adapterId);
+			final String storeName,
+			final String adapterId ) {
+		parameters = new ArrayList<String>();
+		parameters.add(storeName);
+		parameters.add(adapterId);
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {
@@ -68,29 +66,29 @@ public class RemoveAdapterCommand extends
 	}
 
 	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
+			final DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	@Override
 	public Void computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 2) {
 			throw new ParameterException(
 					"Requires arguments: <store name> <adapterId>");
 		}
 
-		String inputStoreName = parameters.get(0);
-		String adapterId = parameters.get(1);
+		final String inputStoreName = parameters.get(0);
+		final String adapterId = parameters.get(1);
 
 		// Attempt to load store.
-		File configFile = (File) params.getContext().get(
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(

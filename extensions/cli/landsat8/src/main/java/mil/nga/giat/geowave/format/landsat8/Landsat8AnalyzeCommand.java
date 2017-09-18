@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,10 +18,10 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "analyze", parentOperation = Landsat8Section.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "analyze", parentOperation = Landsat8Section.class)
 @Parameters(commandDescription = "Print out basic aggregate statistics for available Landsat 8 imagery")
 public class Landsat8AnalyzeCommand extends
-		DefaultOperation<Void> implements
+		DefaultOperation implements
 		Command
 {
 	@ParametersDelegate
@@ -33,17 +33,9 @@ public class Landsat8AnalyzeCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		computeResults(params);
-	}
-
-	@Override
-	public Void computeResults(
-			OperationParams params )
-			throws Exception {
 		final AnalyzeRunner runner = new AnalyzeRunner(
 				landsatOptions);
 		runner.runInternal(params);
-		return null;
 	}
 
 }

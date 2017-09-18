@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,47 +20,41 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.IOUtils;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+
+@GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Set GeoServer Layer Style")
 public class GeoServerSetLayerStyleCommand extends
-		DefaultOperation<String> implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(names = {
 		"-sn",
 		"--styleName"
-	}, required = true, description = "<style name>")
-	private String styleName = null;
+	}, required = true, description = "style name")
+	private final String styleName = null;
 
 	@Parameter(description = "<layer name>")
-	@RestParameters(names = {
-		"layerName"
-	})
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 		if (geoserverClient == null) {
 			// Get the local config for GeoServer
-			File propFile = (File) params.getContext().get(
+			final File propFile = (File) params.getContext().get(
 					ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-			GeoServerConfig config = new GeoServerConfig(
+			final GeoServerConfig config = new GeoServerConfig(
 					propFile);
 
 			// Create the rest client
@@ -74,7 +68,7 @@ public class GeoServerSetLayerStyleCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
@@ -85,11 +79,11 @@ public class GeoServerSetLayerStyleCommand extends
 
 	@Override
 	public String computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		layerName = parameters.get(0);
 
-		Response setLayerStyleResponse = geoserverClient.setLayerStyle(
+		final Response setLayerStyleResponse = geoserverClient.setLayerStyle(
 				layerName,
 				styleName);
 

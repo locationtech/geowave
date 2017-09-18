@@ -112,8 +112,9 @@ public class DataStorePluginOptions extends
 			final StoreFactoryOptions factoryOptions ) {
 		this.factoryOptions = factoryOptions;
 	}
-	
-	public void setFactoryFamily(StoreFactoryFamilySpi factoryPlugin) {
+
+	public void setFactoryFamily(
+			StoreFactoryFamilySpi factoryPlugin ) {
 		this.factoryPlugin = factoryPlugin;
 	}
 

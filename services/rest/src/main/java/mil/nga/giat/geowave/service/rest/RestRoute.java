@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.service.rest;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 
 /**
  * Holds necessary information to create a Restlet route
@@ -9,7 +9,7 @@ public class RestRoute implements
 		Comparable<RestRoute>
 {
 	private final String path;
-	private final Class<?> operation;
+	private final ServiceEnabledCommand<?> operation;
 
 	/**
 	 * Create a new route given an operation
@@ -17,10 +17,8 @@ public class RestRoute implements
 	 * @param operation
 	 */
 	public RestRoute(
-			final Class<?> operation ) {
-		this.path = pathFor(
-				operation).substring(
-				1);
+			final ServiceEnabledCommand<?> operation ) {
+		path = operation.getPath();
 		this.operation = operation;
 	}
 
@@ -29,7 +27,7 @@ public class RestRoute implements
 	 *
 	 * @return
 	 */
-	public Class<?> getOperation() {
+	public ServiceEnabledCommand<?> getOperation() {
 		return operation;
 	}
 
@@ -40,26 +38,6 @@ public class RestRoute implements
 	 */
 	public String getPath() {
 		return path;
-	}
-
-	/**
-	 * Get the path for a command based on the operation hierarchy Return the
-	 * path as a string in the format "/first/next/next"
-	 *
-	 * @param operation
-	 *            - the operation to find the path for
-	 * @return the formatted path as a string
-	 */
-	public static String pathFor(
-			final Class<?> operation ) {
-
-		// Top level of hierarchy
-		if (operation == Object.class) {
-			return "";
-		}
-
-		final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
-		return pathFor(operationInfo.parentOperation()) + "/" + operationInfo.name();
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -32,21 +32,21 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 /**
  * Common methods for dumping, manipulating and calculating stats.
  */
-public abstract class AbstractStatsCommand extends
-		DefaultOperation
+public abstract class AbstractStatsCommand<T> extends
+		ServiceEnabledCommand<T>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@ParametersDelegate
-	private StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
+	private final StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
 
 	private DataStorePluginOptions inputStoreOptions = null;
 
 	public void run(
-			OperationParams params,
-			List<String> parameters ) {
+			final OperationParams params,
+			final List<String> parameters ) {
 
-		String storeName = parameters.get(0);
+		final String storeName = parameters.get(0);
 		String adapterIdName = null;
 		if (parameters.size() > 1) {
 			adapterIdName = parameters.get(1);
@@ -55,7 +55,7 @@ public abstract class AbstractStatsCommand extends
 		// Attempt to load input store if not already provided (test purposes).
 
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					storeName);
 			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
 				throw new ParameterException(
@@ -66,7 +66,7 @@ public abstract class AbstractStatsCommand extends
 
 		try {
 			// Various stores needed
-			AdapterStore adapterStore = inputStoreOptions.createAdapterStore();
+			final AdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 
 			if (adapterIdName != null) {
 				final ByteArrayId adapterId = new ByteArrayId(
@@ -130,7 +130,7 @@ public abstract class AbstractStatsCommand extends
 	/**
 	 * Helper method to extract a list of authorizations from a string passed in
 	 * from the command line
-	 * 
+	 *
 	 * @param auths
 	 *            - String to be parsed
 	 */
@@ -147,7 +147,7 @@ public abstract class AbstractStatsCommand extends
 	}
 
 	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
+			final DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
 

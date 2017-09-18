@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,31 +16,29 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addws", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+
+@GeowaveOperation(name = "addws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add GeoServer workspace")
 public class GeoServerAddWorkspaceCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(description = "<workspace name>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 	private String wsName = null;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 		super.prepare(params);
 		if (geoserverClient == null) {
 			// Create the rest client
@@ -55,7 +53,7 @@ public class GeoServerAddWorkspaceCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
@@ -63,7 +61,7 @@ public class GeoServerAddWorkspaceCommand extends
 
 	@Override
 	public String computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
@@ -72,7 +70,7 @@ public class GeoServerAddWorkspaceCommand extends
 
 		wsName = parameters.get(0);
 
-		Response addWorkspaceResponse = geoserverClient.addWorkspace(wsName);
+		final Response addWorkspaceResponse = geoserverClient.addWorkspace(wsName);
 		if (addWorkspaceResponse.getStatus() == Status.CREATED.getStatusCode()) {
 			return "Add workspace '" + wsName + "' to GeoServer: OK";
 		}

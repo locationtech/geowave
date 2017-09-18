@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,43 +16,41 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addds", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+
+@GeowaveOperation(name = "addds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer datastore")
 public class GeoServerAddDatastoreCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
-	}, required = false, description = "<workspace name>")
+	}, required = false, description = "workspace name")
 	private String workspace = null;
 
 	@Parameter(names = {
 		"-ds",
 		"--datastore"
-	}, required = false, description = "<datastore name>")
-	private String datastore = null;
+	}, required = false, description = "datastore name")
+	private final String datastore = null;
 
 	@Parameter(description = "<GeoWave store name>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 		super.prepare(params);
 		if (geoserverClient == null) {
 			// Create the rest client
@@ -67,7 +65,7 @@ public class GeoServerAddDatastoreCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
@@ -75,7 +73,7 @@ public class GeoServerAddDatastoreCommand extends
 
 	@Override
 	public String computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <datastore name>");
@@ -83,17 +81,17 @@ public class GeoServerAddDatastoreCommand extends
 
 		gwStore = parameters.get(0);
 
-		if (workspace == null || workspace.isEmpty()) {
+		if ((workspace == null) || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}
 
-		Response addStoreResponse = geoserverClient.addDatastore(
+		final Response addStoreResponse = geoserverClient.addDatastore(
 				workspace,
 				datastore,
 				gwStore);
 
-		if (addStoreResponse.getStatus() == Status.OK.getStatusCode()
-				|| addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
+		if ((addStoreResponse.getStatus() == Status.OK.getStatusCode())
+				|| (addStoreResponse.getStatus() == Status.CREATED.getStatusCode())) {
 			return "Add datastore for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer: OK";
 		}
 		return "Error adding datastore for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer; code = "

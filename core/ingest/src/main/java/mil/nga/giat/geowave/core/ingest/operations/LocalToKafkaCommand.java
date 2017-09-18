@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,20 +20,18 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.kafka.StageToKafkaDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 
-@GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to a Kafka topic")
 public class LocalToKafkaCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<file or directory>")
@@ -52,7 +50,7 @@ public class LocalToKafkaCommand extends
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 
 		// Based on the selected formats, select the format plugins
 		pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -62,12 +60,12 @@ public class LocalToKafkaCommand extends
 
 	/**
 	 * Prep the driver & run the operation.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		computeResults(params);
 	}
@@ -77,9 +75,9 @@ public class LocalToKafkaCommand extends
 	}
 
 	public void setParameters(
-			String fileOrDirectory ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(fileOrDirectory);
+			final String fileOrDirectory ) {
+		parameters = new ArrayList<String>();
+		parameters.add(fileOrDirectory);
 	}
 
 	public KafkaProducerCommandLineOptions getKafkaOptions() {
@@ -87,7 +85,7 @@ public class LocalToKafkaCommand extends
 	}
 
 	public void setKafkaOptions(
-			KafkaProducerCommandLineOptions kafkaOptions ) {
+			final KafkaProducerCommandLineOptions kafkaOptions ) {
 		this.kafkaOptions = kafkaOptions;
 	}
 
@@ -96,7 +94,7 @@ public class LocalToKafkaCommand extends
 	}
 
 	public void setLocalInputOptions(
-			LocalInputCommandLineOptions localInputOptions ) {
+			final LocalInputCommandLineOptions localInputOptions ) {
 		this.localInputOptions = localInputOptions;
 	}
 
@@ -105,13 +103,13 @@ public class LocalToKafkaCommand extends
 	}
 
 	public void setPluginFormats(
-			IngestFormatPluginOptions pluginFormats ) {
+			final IngestFormatPluginOptions pluginFormats ) {
 		this.pluginFormats = pluginFormats;
 	}
 
 	@Override
 	public Void computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 1) {
@@ -119,13 +117,13 @@ public class LocalToKafkaCommand extends
 					"Requires arguments: <file or directory>");
 		}
 
-		String inputPath = parameters.get(0);
+		final String inputPath = parameters.get(0);
 
 		// Ingest Plugins
-		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
+		final Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
 
 		// Driver
-		StageToKafkaDriver driver = new StageToKafkaDriver(
+		final StageToKafkaDriver driver = new StageToKafkaDriver(
 				kafkaOptions,
 				ingestPlugins,
 				localInputOptions);

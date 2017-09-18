@@ -116,12 +116,4 @@ public class NewTokenCommand extends
 		}
 		sLog.trace("EXIT :: execute");
 	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params )
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

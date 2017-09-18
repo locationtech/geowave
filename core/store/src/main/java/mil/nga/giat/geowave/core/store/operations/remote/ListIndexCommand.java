@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -24,54 +24,52 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "listindex", parentOperation = RemoteSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "listindex", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Display all indices in this remote store")
 public class ListIndexCommand extends
-		DefaultOperation<String> implements
-		Command
+		ServiceEnabledCommand<String>
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@Parameter(description = "<store name>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params ) {
 		JCommander.getConsole().println(
 				computeResults(params));
 	}
 
 	@Override
 	public String computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
 		}
 
-		String inputStoreName = parameters.get(0);
+		final String inputStoreName = parameters.get(0);
 
 		// Get the config options from the properties file
 
-		File configFile = (File) params.getContext().get(
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load the desired input store
 
 		String result;
 
-		StoreLoader inputStoreLoader = new StoreLoader(
+		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
 			result = "Cannot find store name: " + inputStoreLoader.getStoreName();
@@ -80,12 +78,12 @@ public class ListIndexCommand extends
 
 			// Now that store is loaded, pull the list of indexes
 
-			DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+			final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 			final CloseableIterator<Index<?, ?>> it = inputStoreOptions.createIndexStore().getIndices();
 			final StringBuffer buffer = new StringBuffer();
 			while (it.hasNext()) {
-				Index<?, ?> index = it.next();
+				final Index<?, ?> index = it.next();
 				buffer.append(
 						index.getId().getString()).append(
 						' ');
@@ -93,7 +91,7 @@ public class ListIndexCommand extends
 			try {
 				it.close();
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				LOGGER.error(
 						"Unable to close Iterator",
 						e);
@@ -102,5 +100,4 @@ public class ListIndexCommand extends
 		}
 		return result;
 	}
-
 }

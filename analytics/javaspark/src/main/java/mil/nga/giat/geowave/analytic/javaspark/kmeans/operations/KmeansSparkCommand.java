@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -37,7 +38,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 @GeowaveOperation(name = "kmeansspark", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans Clustering via Spark ML")
 public class KmeansSparkCommand extends
-		DefaultOperation implements
+		ServiceEnabledCommand<Void> implements
 		Command
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(KmeansSparkCommand.class);
@@ -68,7 +69,7 @@ public class KmeansSparkCommand extends
 	}
 
 	@Override
-	public Object computeResults(
+	public Void computeResults(
 			OperationParams params )
 			throws Exception {
 		final String inputStoreName = parameters.get(0);

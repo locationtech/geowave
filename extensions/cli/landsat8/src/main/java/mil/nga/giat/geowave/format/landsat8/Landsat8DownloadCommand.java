@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,10 +18,10 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "download", parentOperation = Landsat8Section.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "download", parentOperation = Landsat8Section.class)
 @Parameters(commandDescription = "Download Landsat 8 imagery to a local directory")
 public class Landsat8DownloadCommand extends
-		DefaultOperation<Void> implements
+		DefaultOperation implements
 		Command
 {
 
@@ -35,20 +35,12 @@ public class Landsat8DownloadCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
-			throws Exception {
-		computeResults(params);
-	}
-
-	@Override
-	public Void computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		final DownloadRunner runner = new DownloadRunner(
 				analyzeOptions,
 				downloadOptions);
 		runner.runInternal(params);
-		return null;
 	}
 
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -48,30 +48,30 @@ public class ResizeCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		createRunner(
 				params).runJob();
 	}
 
 	public RasterTileResizeJobRunner createRunner(
-			OperationParams params ) {
+			final OperationParams params ) {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 2) {
 			throw new ParameterException(
 					"Requires arguments: <input store name> <output store name>");
 		}
 
-		String inputStoreName = parameters.get(0);
-		String outputStoreName = parameters.get(1);
+		final String inputStoreName = parameters.get(0);
+		final String outputStoreName = parameters.get(1);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
@@ -82,7 +82,7 @@ public class ResizeCommand extends
 
 		// Attempt to load output store.
 		if (outputStoreOptions == null) {
-			StoreLoader outputStoreLoader = new StoreLoader(
+			final StoreLoader outputStoreLoader = new StoreLoader(
 					outputStoreName);
 			if (!outputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
@@ -91,7 +91,7 @@ public class ResizeCommand extends
 			outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 		}
 
-		RasterTileResizeJobRunner runner = new RasterTileResizeJobRunner(
+		final RasterTileResizeJobRunner runner = new RasterTileResizeJobRunner(
 				inputStoreOptions,
 				outputStoreOptions,
 				options);
@@ -103,11 +103,11 @@ public class ResizeCommand extends
 	}
 
 	public void setParameters(
-			String inputStore,
-			String outputStore ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(inputStore);
-		this.parameters.add(outputStore);
+			final String inputStore,
+			final String outputStore ) {
+		parameters = new ArrayList<String>();
+		parameters.add(inputStore);
+		parameters.add(outputStore);
 	}
 
 	public RasterTileResizeCommandLineOptions getOptions() {
@@ -115,7 +115,7 @@ public class ResizeCommand extends
 	}
 
 	public void setOptions(
-			RasterTileResizeCommandLineOptions options ) {
+			final RasterTileResizeCommandLineOptions options ) {
 		this.options = options;
 	}
 
@@ -124,7 +124,7 @@ public class ResizeCommand extends
 	}
 
 	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
+			final DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
 
@@ -133,14 +133,7 @@ public class ResizeCommand extends
 	}
 
 	public void setOutputStoreOptions(
-			DataStorePluginOptions outputStoreOptions ) {
+			final DataStorePluginOptions outputStoreOptions ) {
 		this.outputStoreOptions = outputStoreOptions;
-	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params ) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -46,7 +46,7 @@ public class CombineStatisticsCommand extends
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params ) {
 
 		// Ensure we have all the required arguments
 		if (parameters.size() != 2) {
@@ -54,12 +54,12 @@ public class CombineStatisticsCommand extends
 					"Requires arguments: <storename> <adapter id>");
 		}
 
-		String inputStoreName = parameters.get(0);
-		String adapterId = parameters.get(1);
+		final String inputStoreName = parameters.get(0);
+		final String adapterId = parameters.get(1);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
 				throw new ParameterException(
@@ -69,8 +69,8 @@ public class CombineStatisticsCommand extends
 		}
 
 		// Get all statistics, remove all statistics, then re-add
-		DataStatisticsStore store = inputStoreOptions.createDataStatisticsStore();
-		CloseableIterator<DataStatistics<?>> stats = store.getDataStatistics(new ByteArrayId(
+		final DataStatisticsStore store = inputStoreOptions.createDataStatisticsStore();
+		final CloseableIterator<DataStatistics<?>> stats = store.getDataStatistics(new ByteArrayId(
 				adapterId));
 
 		// Clear all existing stats
@@ -88,8 +88,8 @@ public class CombineStatisticsCommand extends
 	}
 
 	public void setParameters(
-			String storeName,
-			String adapterId ) {
+			final String storeName,
+			final String adapterId ) {
 		parameters = Arrays.asList(
 				storeName,
 				adapterId);
@@ -100,14 +100,7 @@ public class CombineStatisticsCommand extends
 	}
 
 	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
+			final DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
-	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params ) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

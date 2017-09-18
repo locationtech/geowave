@@ -4,7 +4,8 @@ import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.PartitionStrategy;
 
-public class BasicIndexOptions {
+public class BasicIndexOptions
+{
 
 	@Parameter(names = {
 		"--indexName"
@@ -27,7 +28,8 @@ public class BasicIndexOptions {
 		return nameOverride;
 	}
 
-	public void setNameOverride(String nameOverride) {
+	public void setNameOverride(
+			String nameOverride ) {
 		this.nameOverride = nameOverride;
 	}
 
@@ -35,7 +37,8 @@ public class BasicIndexOptions {
 		return numPartitions;
 	}
 
-	public void setNumPartitions(int numPartitions) {
+	public void setNumPartitions(
+			int numPartitions ) {
 		this.numPartitions = numPartitions;
 	}
 
@@ -43,7 +46,8 @@ public class BasicIndexOptions {
 		return partitionStrategy;
 	}
 
-	public void setPartitionStrategy(PartitionStrategy partitionStrategy) {
+	public void setPartitionStrategy(
+			PartitionStrategy partitionStrategy ) {
 		this.partitionStrategy = partitionStrategy;
 	}
 

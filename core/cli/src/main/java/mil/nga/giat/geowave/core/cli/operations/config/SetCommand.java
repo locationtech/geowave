@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -25,39 +25,32 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
-@GeowaveOperation(name = "set", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "set", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Set property name within cache")
 public class SetCommand extends
-		DefaultOperation<Object> implements
-		Command
+		ServiceEnabledCommand<Object>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SetCommand.class);
 
 	@Parameter(description = "<name> <value>")
-	@RestParameters(names = {
-		"key",
-		"value"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
 		"--password"
 	}, description = "boolean (true|false) - specify if the value being set is a password and should be encrypted in the configurations")
-	private String password = null;
+	private final String password = null;
 
 	private boolean isPassword;
 
 	@Override
 	public void execute(
-			OperationParams params ) {
-		if (password != null && !"".equals(password.trim())) {
+			final OperationParams params ) {
+		if ((password != null) && !"".equals(password.trim())) {
 			isPassword = Boolean.parseBoolean(password.trim());
 		}
 		computeResults(params);
@@ -66,13 +59,13 @@ public class SetCommand extends
 	/**
 	 * Add rest endpoint for the set command. Looks for GET params with keys
 	 * 'key' and 'value' to set.
-	 * 
+	 *
 	 * @return string containing json with details of success or failure of the
 	 *         set
 	 */
 	@Override
 	public Object computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 		try {
 			return setKeyValue(params);
 		}
@@ -90,20 +83,20 @@ public class SetCommand extends
 	 * in prevValue
 	 */
 	private Object setKeyValue(
-			OperationParams params ) {
+			final OperationParams params ) {
 
-		File f = (File) params.getContext().get(
+		final File f = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties p = ConfigOptions.loadProperties(
+		final Properties p = ConfigOptions.loadProperties(
 				f,
 				null);
 
 		String key = null;
 		String value = null;
-		if (parameters.size() == 1 && parameters.get(
+		if ((parameters.size() == 1) && (parameters.get(
 				0).indexOf(
-				"=") != -1) {
-			String[] parts = StringUtils.split(
+				"=") != -1)) {
+			final String[] parts = StringUtils.split(
 					parameters.get(0),
 					"=");
 			key = parts[0];
@@ -124,13 +117,13 @@ public class SetCommand extends
 					Constants.ENCRYPTION_ENABLED_KEY,
 					Constants.ENCRYPTION_ENABLED_DEFAULT))) {
 				try {
-					File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(getGeoWaveConfigFile());
+					final File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(getGeoWaveConfigFile());
 					value = SecurityUtils.encryptAndHexEncodeValue(
 							value,
 							tokenFile.getAbsolutePath());
 					LOGGER.debug("Value was successfully encrypted");
 				}
-				catch (Exception e) {
+				catch (final Exception e) {
 					LOGGER.error(
 							"An error occurred encrypting the specified value: " + e.getLocalizedMessage(),
 							e);
@@ -145,7 +138,7 @@ public class SetCommand extends
 			}
 		}
 
-		Object previousValue = p.setProperty(
+		final Object previousValue = p.setProperty(
 				key,
 				value);
 		if (!ConfigOptions.writeProperties(
@@ -164,19 +157,24 @@ public class SetCommand extends
 	}
 
 	public void setParameters(
-			String key,
-			String value ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(key);
-		this.parameters.add(value);
+			final String key,
+			final String value ) {
+		parameters = new ArrayList<String>();
+		parameters.add(key);
+		parameters.add(value);
 	}
 
 	private static class WritePropertiesException extends
 			RuntimeException
 	{
 
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
 		private WritePropertiesException(
-				String string ) {
+				final String string ) {
 			super(
 					string);
 		}

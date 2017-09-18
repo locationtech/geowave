@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -24,20 +24,20 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddStoreCommand extends
-		DefaultOperation<Void> implements
+		DefaultOperation implements
 		Command
 {
 
@@ -46,9 +46,6 @@ public class AddStoreCommand extends
 	public static final String PROPERTIES_CONTEXT = "properties";
 
 	@Parameter(description = "<name>")
-	@RestParameters(names = {
-		"name"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -118,8 +115,7 @@ public class AddStoreCommand extends
 		computeResults(params);
 	}
 
-	@Override
-	public Void computeResults(
+	public void computeResults(
 			final OperationParams params ) {
 
 		final File propFile = (File) params.getContext().get(
@@ -148,8 +144,6 @@ public class AddStoreCommand extends
 				existingProps,
 				getNamespace());
 
-
-
 		// Make default?
 		if (Boolean.TRUE.equals(makeDefault)) {
 			existingProps.setProperty(
@@ -161,8 +155,6 @@ public class AddStoreCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
-
-		return null;
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

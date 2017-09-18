@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -23,10 +23,10 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "ingest", parentOperation = Landsat8Section.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "ingest", parentOperation = Landsat8Section.class)
 @Parameters(commandDescription = "Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave's raster store and in parallel ingesting the scene metadata into GeoWave's vector store.  These two stores can actually be the same or they can be different.")
 public class Landsat8IngestCommand extends
-		DefaultOperation<Void> implements
+		DefaultOperation implements
 		Command
 {
 
@@ -51,13 +51,6 @@ public class Landsat8IngestCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		computeResults(params);
-	}
-
-	@Override
-	public Void computeResults(
-			OperationParams params )
-			throws Exception {
 		JAIExt.initJAIEXT();
 		final IngestRunner runner = new IngestRunner(
 				analyzeOptions,
@@ -66,7 +59,6 @@ public class Landsat8IngestCommand extends
 				vectorOverrideOptions,
 				parameters);
 		runner.runInternal(params);
-		return null;
 	}
 
 }

@@ -1,53 +1,49 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
+import org.restlet.resource.Patch;
 import org.restlet.resource.Post;
+import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
-
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
+import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
 import scala.actors.threadpool.Arrays;
 
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveOperationServiceWrapper.class);
-	private final DefaultOperation<T> operation;
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
+	private final ServiceEnabledCommand<T> operation;
 
 	public GeoWaveOperationServiceWrapper(
-			final DefaultOperation<T> operation ) {
+			final ServiceEnabledCommand<T> operation ) {
 		this.operation = operation;
 	}
 
 	@Get("json")
 	public T restGet()
 			throws Exception {
-		if (operation.getClass().getAnnotation(
-				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
-			return handleRequest(
-					null);
+		if (HttpMethod.GET.equals(operation.getMethod())) {
+			// TODO is this null correct?
+			return handleRequest(null);
 		}
 		else {
-			setStatus(
-					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -56,17 +52,60 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	public T restPost(
 			final Representation request )
 			throws Exception {
-		if (operation.getClass().getAnnotation(
-				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST) {
+		if (HttpMethod.POST.equals(operation.getMethod())) {
 
 			final Form form = new Form(
 					request);
-			return handleRequest(
-					form);
+			return handleRequest(form);
 		}
 		else {
-			setStatus(
-					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			return null;
+		}
+	}
+
+	@Delete("form:json")
+	public T restDelete(
+			final Representation request )
+			throws Exception {
+		if (HttpMethod.DELETE.equals(operation.getMethod())) {
+
+			final Form form = new Form(
+					request);
+			return handleRequest(form);
+		}
+		else {
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			return null;
+		}
+	}
+
+	@Patch("form:json")
+	public T restPatch(
+			final Representation request )
+			throws Exception {
+		if (HttpMethod.PATCH.equals(operation.getMethod())) {
+			final Form form = new Form(
+					request);
+			return handleRequest(form);
+		}
+		else {
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			return null;
+		}
+	}
+
+	@Put("form:json")
+	public T restPut(
+			final Representation request )
+			throws Exception {
+		if (HttpMethod.PUT.equals(operation.getMethod())) {
+			final Form form = new Form(
+					request);
+			return handleRequest(form);
+		}
+		else {
+			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -87,204 +126,65 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	 * @throws InstantiationException
 	 */
 	private void injectParameters(
-			final Form form ,
-			Object instance)
-			throws MissingArgumentException,
-			InstantiationException,
-			IllegalAccessException {
-		
-		for (final Field field : FieldUtils.getFieldsWithAnnotation(
-				// TODO Take out this loop?
-				instance.getClass(),
-				Parameter.class)) {
-				processField(
-					form,
-					instance,
-					field);
-
-
-		}
-
-		 for (final Field field : FieldUtils.getFieldsWithAnnotation(
-		 // TODO Take out this loop?
-				 instance.getClass(),
-		 ParametersDelegate.class)) {
-		 processField(
-		 form,
-		 instance,
-		 field);
-		 }
-	}
-
-	private void processField(
 			final Form form,
-			final Object instance,
-			final Field field )
+			final Object instance )
 			throws MissingArgumentException,
 			InstantiationException,
 			IllegalAccessException {
-		final Parameter parameter = field.getAnnotation(
-						Parameter.class);
+		final List<RestFieldValue<?>> fields = RestFieldFactory.createRestFieldValues(instance);
+		for (final RestFieldValue f : fields) {
 
-		ParametersDelegate parametersDelegate = null;
-		parametersDelegate = field.getAnnotation(
-						ParametersDelegate.class);
-		
-		if (parameter != null) {
-			if(field.getType().isEnum()){
-				final String value = getFieldValue(
+			Object objValue = null;
+			if (List.class.isAssignableFrom(f.getType())) {
+				final String[] parameters = getFieldValues(
 						form,
-						field.getName());
-				if (value != null) {
-					field.setAccessible(
-									true); // Get around restrictions on
-										   // private fields. JCommander
-										   // does this too.
-					try {					
-						Enum<?> retv = Enum.valueOf((Class<Enum>)field.getType(), value);
-				
-						field.set(
-							instance,
-							retv);
-						}
-					catch (final IllegalAccessException e) {
-						throw new RuntimeException(
-								e);
-					}				
-				}
-				else if (parameter.required()) {
-					throw new MissingArgumentException(
-							field.getName());
-				}
-			}
+						f.getName());
 
-			else if (field.getType() == String.class) {
-				final String value = getFieldValue(
-						form,
-						field.getName());
-				if (value != null) {
-					field.setAccessible(
-									true); // Get around restrictions on
-										   // private fields. JCommander
-										   // does this too.
-					try {
-						field.set(
-								instance,
-								value);
-					}
-					catch (final IllegalAccessException e) {
-						throw new RuntimeException(
-								e);
-					}
-				}
-				else if (parameter.required()) {
-					throw new MissingArgumentException(
-							field.getName());
-				}
-			}
-			else if ((field.getType() == Boolean.class) || (field.getType() == boolean.class)) {
-				final String value = getFieldValue(
-						form,
-						field.getName());
-				if (value != null) {
-					field.setAccessible(
-							true);
-					try {
-						field.set(
-								instance,
-								Boolean.valueOf(
-										value));
-					}
-					catch (final IllegalAccessException e) {
-						throw new RuntimeException(
-								e);
-					}
-				}
-				else if (parameter.required()) {
-					throw new MissingArgumentException(
-							field.getName());
-				}
-			}
-			else if ((field.getType() == Integer.class) || (field.getType() == int.class)) {
-				final String value = getFieldValue(
-						form,
-						field.getName());
-				if (value != null) {
-					field.setAccessible(
-							true);
-					try {
-						field.set(
-								instance,
-								Integer.valueOf(
-										value));
-					}
-					catch (final IllegalAccessException e) {
-						throw new RuntimeException(
-								e);
-					}
-				}
-				else if (parameter.required()) {
-					throw new MissingArgumentException(
-							field.getName());
-				}
-			}
-			else if ((field.getType() == Long.class) || (field.getType() == long.class)) {
-				final String value = getFieldValue(
-						form,
-						field.getName());
-				if (value != null) {
-					field.setAccessible(
-									true);
-					try {
-						field.set(
-								instance,
-								Long.valueOf(value));
-					}
-					catch (final IllegalAccessException e) {
-						throw new RuntimeException(
-								e);
-					}
-				}
-				else if (parameter.required()) {
-					throw new MissingArgumentException(
-							field.getName());
-				}
-			}
-			else if (field.getType() == List.class|| field.getType().toString().equals("class [Ljava.lang.String;")) {
-				field.setAccessible(
-						true);
-				String[] parameters = getFieldValues(
-						form,
-						field.getName());
-
-				try {
-					field.set(
-							instance,
-							Arrays.asList(
-									parameters));
-				}
-				catch (final IllegalAccessException e) {
-					throw new RuntimeException(
-							e);
-				}
+				objValue = Arrays.asList(parameters);
 			}
 			else {
-				throw new RuntimeException(
-						"Unsupported format on field " + field);
+
+				final String strValue = getFieldValue(
+						form,
+						f.getName());
+				if (Long.class.isAssignableFrom(f.getType())) {
+					objValue = Long.valueOf(strValue);
+				}
+				else if (Integer.class.isAssignableFrom(f.getType())) {
+					objValue = Integer.valueOf(strValue);
+				}
+				else if (Short.class.isAssignableFrom(f.getType())) {
+					objValue = Short.valueOf(strValue);
+				}
+				else if (Byte.class.isAssignableFrom(f.getType())) {
+					objValue = Byte.valueOf(strValue);
+				}
+				else if (Double.class.isAssignableFrom(f.getType())) {
+					objValue = Double.valueOf(strValue);
+				}
+				else if (Float.class.isAssignableFrom(f.getType())) {
+					objValue = Float.valueOf(strValue);
+				}
+				else if (Boolean.class.isAssignableFrom(f.getType())) {
+					objValue = Boolean.valueOf(strValue);
+				}
+				else if (String.class.isAssignableFrom(f.getType())) {
+					objValue = strValue;
+				}
+
+				else {
+					throw new RuntimeException(
+							"Unsupported format on field " + f);
+				}
+			}
+			if (objValue != null) {
+				f.setValue(objValue);
+			}
+			else if (f.isRequired()) {
+				throw new MissingArgumentException(
+						f.getName());
 			}
 		}
-		else if (parametersDelegate != null) {
-			Object delegateObj = field.getType().newInstance();
-
-			injectParameters(
-					form,
-					delegateObj);
-			field.setAccessible(true);
-			field.set(
-					instance,
-					delegateObj);
-		}
-
 	}
 
 	private String[] getFieldValues(
@@ -292,23 +192,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String[] val = null;
 		if (form != null) {
-			val = form.getValuesArray(
-					name);
+			val = form.getValuesArray(name);
 		}
-		if (val == null || val.length == 0) {
+		if ((val == null) || (val.length == 0)) {
 			val = getQuery().getValuesArray(
 					name);
 		}
-		String str = getFieldValue(
-				form,
-				name);
-		if (str == null) {
-			return val;
-		}
-		else {
-
-			return str.split(",");
-		}
+		return val;
 	}
 
 	private String getFieldValue(
@@ -316,12 +206,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String val = null;
 		if (form != null) {
-			val = form.getFirstValue(
-					name);
+			val = form.getFirstValue(name);
 		}
 		if (val == null) {
-			val = getQueryValue(
-					name);
+			val = getQueryValue(name);
 		}
 		return val;
 	}
@@ -329,10 +217,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	private T handleRequest(
 			final Form form )
 			throws Exception {
-		final String configFileParameter = (form == null) ? getQueryValue(
-				"config_file")
-				: form.getFirstValue(
-						"config_file");
+		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
+				.getFirstValue("config_file");
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
@@ -342,9 +228,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				configFile);
 
 		try {
-			injectParameters(form,operation);
+			injectParameters(
+					form,
+					operation);
 		}
-		
+
 		catch (final MissingArgumentException e) {
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
@@ -353,10 +241,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 
 		try {
-			operation.prepare(
-					params);
-			return operation.computeResults(
-					params);
+			operation.prepare(params);
+			return operation.computeResults(params);
 		}
 		catch (final Exception e) {
 			LOGGER.error(

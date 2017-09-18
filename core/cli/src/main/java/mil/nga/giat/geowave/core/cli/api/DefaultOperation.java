@@ -30,7 +30,7 @@ import mil.nga.giat.geowave.core.cli.spi.DefaultConfigProviderSpi;
  * The default operation prevents implementors from having to implement the
  * 'prepare' function, if they don't want to.
  */
-public abstract class DefaultOperation<T> implements
+public abstract class DefaultOperation implements
 		Operation
 {
 	private final static Logger sLog = LoggerFactory.getLogger(DefaultOperation.class);
@@ -252,8 +252,4 @@ public abstract class DefaultOperation<T> implements
 	public String usage() {
 		return null;
 	}
-
-	public abstract T computeResults(
-			OperationParams params )
-			throws Exception;
 }

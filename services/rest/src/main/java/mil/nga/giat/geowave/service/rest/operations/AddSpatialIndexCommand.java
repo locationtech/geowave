@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -23,11 +23,8 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialOptions;
@@ -35,22 +32,17 @@ import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
-@GeowaveOperation(name = "addindex/spatial", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddSpatialIndexCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	/**
 	 * A REST Operation for the AddIndexCommand where --type=spatial
 	 */
-	
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
 	@Parameter(description = "<name>", required = true)
-	@RestParameters(names = {
-		"name"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -59,15 +51,14 @@ public class AddSpatialIndexCommand extends
 	}, description = "Make this the default index creating stores")
 	private Boolean makeDefault;
 
+	@ParametersDelegate
+	private final BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
+
+	private IndexPluginOptions pluginOptions = new IndexPluginOptions();
 
 	@ParametersDelegate
-	private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
-	
-	private IndexPluginOptions pluginOptions = new IndexPluginOptions();
-		
-	@ParametersDelegate
 	SpatialOptions opts = new SpatialOptions();
-		
+
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
@@ -82,6 +73,16 @@ public class AddSpatialIndexCommand extends
 	public void execute(
 			final OperationParams params ) {
 		computeResults(params);
+	}
+
+	@Override
+	public String getId() {
+		return ConfigSection.class.getName() + ".addindex/spatial";
+	}
+
+	@Override
+	public String getPath() {
+		return "config/addindex/spatial";
 	}
 
 	public IndexPluginOptions getPluginOptions() {

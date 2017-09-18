@@ -45,7 +45,7 @@ public class IndexPluginOptions extends
 	private String indexType;
 	@ParametersDelegate
 	private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
-	
+
 	// This is the plugin loaded from SPI based on "type"
 	private DimensionalityTypeProviderSpi indexPlugin = null;
 
@@ -59,8 +59,9 @@ public class IndexPluginOptions extends
 	public IndexPluginOptions() {
 
 	}
-	
-	public void setBasicIndexOptions(BasicIndexOptions basicIndexOptions){
+
+	public void setBasicIndexOptions(
+			BasicIndexOptions basicIndexOptions ) {
 		this.basicIndexOptions = basicIndexOptions;
 	}
 
@@ -91,10 +92,12 @@ public class IndexPluginOptions extends
 	public int getNumPartitions() {
 		return basicIndexOptions.numPartitions;
 	}
-	
-	public void setDimensionalityTypeOptions(DimensionalityTypeOptions indexOptions){
+
+	public void setDimensionalityTypeOptions(
+			DimensionalityTypeOptions indexOptions ) {
 		this.indexOptions = indexOptions;
 	}
+
 	public String getNameOverride() {
 		return basicIndexOptions.nameOverride;
 	}
@@ -118,7 +121,8 @@ public class IndexPluginOptions extends
 			final PrimaryIndex index,
 			final IndexPluginOptions options ) {
 		PrimaryIndex retVal = index;
-		if ((options.basicIndexOptions.numPartitions > 1) && options.basicIndexOptions.partitionStrategy.equals(PartitionStrategy.ROUND_ROBIN)) {
+		if ((options.basicIndexOptions.numPartitions > 1)
+				&& options.basicIndexOptions.partitionStrategy.equals(PartitionStrategy.ROUND_ROBIN)) {
 			retVal = new CustomIdIndex(
 					new CompoundIndexStrategy(
 							new RoundRobinKeyIndexStrategy(

@@ -19,7 +19,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 /**
  * ServerResource to handle uploading files. Uses restlet fileupload.
  */
-@GeowaveOperation(name = "fileupload", restEnabled = GeowaveOperation.RestEnabledType.POST)
 public class FileUpload extends
 		ServerResource
 {

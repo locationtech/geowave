@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -24,18 +24,14 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
-import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.*;
-
-@GeowaveOperation(name = "list", parentOperation = ConfigSection.class, restEnabled = GET)
+@GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
-		DefaultOperation<Properties> implements
-		Command
+		ServiceEnabledCommand<Properties>
 {
 
 	@Parameter(names = {
@@ -46,21 +42,20 @@ public class ListCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params ) {
-
-		Pair<String, Properties> list = getList(params);
-		String name = list.getKey();
-		Properties p = list.getValue();
+			final OperationParams params ) {
+		final Pair<String, Properties> list = getList(params);
+		final String name = list.getKey();
+		final Properties p = list.getValue();
 
 		JCommander.getConsole().println(
 				"PROPERTIES (" + name + ")");
 
-		List<String> keys = new ArrayList<String>();
+		final List<String> keys = new ArrayList<String>();
 		keys.addAll(p.stringPropertyNames());
 		Collections.sort(keys);
 
-		for (String key : keys) {
-			String value = (String) p.get(key);
+		for (final String key : keys) {
+			final String value = (String) p.get(key);
 			JCommander.getConsole().println(
 					key + ": " + value);
 		}
@@ -68,16 +63,16 @@ public class ListCommand extends
 
 	@Override
 	public Properties computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 
 		return getList(
 				params).getValue();
 	}
 
 	private Pair<String, Properties> getList(
-			OperationParams params ) {
+			final OperationParams params ) {
 
-		File f = (File) params.getContext().get(
+		final File f = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Reload options with filter if specified.

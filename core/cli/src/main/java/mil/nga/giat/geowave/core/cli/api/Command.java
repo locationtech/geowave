@@ -22,7 +22,7 @@ public interface Command extends
 	 * 
 	 * @return
 	 */
-	void execute(
+	public void execute(
 			OperationParams params )
 			throws Exception;
 }

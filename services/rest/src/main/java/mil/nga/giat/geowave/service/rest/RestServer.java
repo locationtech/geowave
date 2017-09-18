@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.service.rest;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,17 +24,16 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 import org.restlet.service.CorsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 
 public class RestServer extends
 		ServerResource
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestServer.class);
 	private final ArrayList<RestRoute> availableRoutes;
-	private final ArrayList<String> unavailableCommands;
-	public static final String ADD_STORE_COMMAND = "mil.nga.giat.geowave.core.store.operations.config.AddStoreCommand";
-	public static final String ADD_INDEX_COMMAND = "mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand";
 
 	/**
 	 * Run the Restlet server (localhost:5152)
@@ -47,29 +47,24 @@ public class RestServer extends
 
 	public RestServer() {
 		availableRoutes = new ArrayList<RestRoute>();
-		unavailableCommands = new ArrayList<String>();
 
-		for (final Class<?> operation : new Reflections(
-				"mil.nga.giat.geowave").getTypesAnnotatedWith(GeowaveOperation.class)) {
-			if ((operation.getAnnotation(
-					GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET)
-					|| (((operation.getAnnotation(
-							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST)) && DefaultOperation.class
-							.isAssignableFrom(operation)) || ServerResource.class.isAssignableFrom(operation)) {
-				
-				if(!operation.getName().equals(ADD_STORE_COMMAND) && !operation.getName().equals(ADD_INDEX_COMMAND)){ //Take out the AddStoreCommand and AddIndexCommand operations
-				availableRoutes.add(new RestRoute(
-						operation));
+		for (final Class<? extends ServiceEnabledCommand> operation : new Reflections(
+				"mil.nga.giat.geowave").getSubTypesOf(ServiceEnabledCommand.class)) {
+			try {
+				if (!Modifier.isAbstract(operation.getModifiers())) {
+					availableRoutes.add(new RestRoute(
+							operation.newInstance()));
+				}
 			}
-			}
-			else {
-				final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
-				unavailableCommands.add(operation.getName() + " " + operationInfo.name());
 
+			catch (InstantiationException | IllegalAccessException e) {
+				LOGGER.error(
+						"Unable to instantiate Service Resource",
+						e);
 			}
 		}
-
 		Collections.sort(availableRoutes);
+
 	}
 
 	// Show a simple 404 if the route is unknown to the server
@@ -80,10 +75,6 @@ public class RestServer extends
 
 		for (final RestRoute route : availableRoutes) {
 			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
-		}
-		routeStringBuilder.append("<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
-		for (final String command : unavailableCommands) {
-			routeStringBuilder.append("<span style='color:blue'>" + command + "</span><br>");
 		}
 		return "<b>404</b>: Route not found<br><br>" + routeStringBuilder.toString();
 	}
@@ -99,23 +90,16 @@ public class RestServer extends
 				"GeoWave API",
 				"REST API for GeoWave CLI commands");
 		for (final RestRoute route : availableRoutes) {
+			router.attach(
+					route.getPath(),
+					new GeoWaveOperationFinder(
+							route.getOperation()));
 
-			if (DefaultOperation.class.isAssignableFrom(route.getOperation())) {
-				router.attach(
-						route.getPath(),
-						new GeoWaveOperationFinder(
-								(Class<? extends DefaultOperation<?>>) route.getOperation()));
-
-				final Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
-						.getOperation());
-				apiParser.addRoute(route);
-			}
-			else {
-				router.attach(
-						route.getPath(),
-						(Class<? extends ServerResource>) route.getOperation());
-			}
+			apiParser.addRoute(route);
 		}
+		router.attach(
+				"fileupload",
+				FileUpload.class);
 
 		apiParser.serializeSwaggerJson("swagger.json");
 		// Provide basic 404 error page for unknown route

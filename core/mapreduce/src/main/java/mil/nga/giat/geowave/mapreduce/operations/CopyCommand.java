@@ -138,12 +138,4 @@ public class CopyCommand extends
 			CopyCommandOptions options ) {
 		this.options = options;
 	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params )
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

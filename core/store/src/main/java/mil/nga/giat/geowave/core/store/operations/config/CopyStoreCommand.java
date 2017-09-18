@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -9,8 +9,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
-
-import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.POST;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,26 +21,19 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class, restEnabled = POST)
+@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Copy and modify existing store configuration")
 public class CopyStoreCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<name> <new name>")
-	@RestParameters(names = {
-		"name",
-		"newname"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {

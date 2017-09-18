@@ -20,15 +20,7 @@ import java.lang.annotation.Target;
 	ElementType.TYPE
 })
 public @interface GeowaveOperation {
-	public enum RestEnabledType {
-		GET,
-		POST,
-		NONE
-	}
-
 	String name();
-
-	RestEnabledType restEnabled() default RestEnabledType.NONE;
 
 	Class<?> parentOperation() default Object.class;
 }

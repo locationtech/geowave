@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,7 +14,6 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 
 @GeowaveOperation(name = "hbase", parentOperation = GeowaveTopLevelSection.class)
@@ -22,12 +21,5 @@ import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 public class HBaseSection extends
 		DefaultOperation
 {
-
-	@Override
-	public Object computeResults(
-			OperationParams params ) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

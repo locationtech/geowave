@@ -121,11 +121,4 @@ public class VectorMRExportCommand extends
 			DataStorePluginOptions storeOptions ) {
 		this.storeOptions = storeOptions;
 	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params ) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

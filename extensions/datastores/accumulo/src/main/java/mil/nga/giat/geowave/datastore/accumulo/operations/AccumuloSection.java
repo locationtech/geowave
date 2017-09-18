@@ -23,11 +23,4 @@ public class AccumuloSection extends
 		DefaultOperation
 {
 
-	@Override
-	public Object computeResults(
-			OperationParams params ) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

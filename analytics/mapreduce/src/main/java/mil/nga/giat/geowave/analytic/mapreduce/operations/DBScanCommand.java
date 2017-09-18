@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -29,17 +29,16 @@ import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
-@GeowaveOperation(name = "dbscan", parentOperation = AnalyticSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "dbscan", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "Density Based Scanner")
 public class DBScanCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<storename>")
@@ -55,7 +54,7 @@ public class DBScanCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 
 		// Ensure we have all the required arguments
@@ -72,9 +71,9 @@ public class DBScanCommand extends
 	}
 
 	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
+			final String storeName ) {
+		parameters = new ArrayList<String>();
+		parameters.add(storeName);
 	}
 
 	public CommonOptions getCommonOptions() {
@@ -82,7 +81,7 @@ public class DBScanCommand extends
 	}
 
 	public void setCommonOptions(
-			CommonOptions commonOptions ) {
+			final CommonOptions commonOptions ) {
 		this.commonOptions = commonOptions;
 	}
 
@@ -91,7 +90,7 @@ public class DBScanCommand extends
 	}
 
 	public void setDbScanOptions(
-			DBScanOptions dbScanOptions ) {
+			final DBScanOptions dbScanOptions ) {
 		this.dbScanOptions = dbScanOptions;
 	}
 
@@ -100,23 +99,23 @@ public class DBScanCommand extends
 	}
 
 	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
+			final DataStorePluginOptions inputStoreOptions ) {
 		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	@Override
 	public Void computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
-		String inputStoreName = parameters.get(0);
+		final String inputStoreName = parameters.get(0);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
@@ -126,7 +125,7 @@ public class DBScanCommand extends
 		}
 
 		// Save a reference to the store in the property management.
-		PersistableStore persistedStore = new PersistableStore(
+		final PersistableStore persistedStore = new PersistableStore(
 				inputStoreOptions);
 		final PropertyManagement properties = new PropertyManagement();
 		properties.store(
@@ -134,7 +133,7 @@ public class DBScanCommand extends
 				persistedStore);
 
 		// Convert properties from DBScanOptions and CommonOptions
-		PropertyManagementConverter converter = new PropertyManagementConverter(
+		final PropertyManagementConverter converter = new PropertyManagementConverter(
 				properties);
 		converter.readProperties(commonOptions);
 		converter.readProperties(dbScanOptions);
@@ -142,8 +141,8 @@ public class DBScanCommand extends
 				Extract.QUERY_OPTIONS,
 				commonOptions.buildQueryOptions());
 
-		DBScanIterationsJobRunner runner = new DBScanIterationsJobRunner();
-		int status = runner.run(properties);
+		final DBScanIterationsJobRunner runner = new DBScanIterationsJobRunner();
+		final int status = runner.run(properties);
 		if (status != 0) {
 			throw new RuntimeException(
 					"Failed to execute: " + status);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -24,45 +24,38 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
-@GeowaveOperation(name = "addstore/hbase", parentOperation = ConfigSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+@GeowaveOperation(name = "addstore/hbase", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddHBaseStoreCommand extends
-		DefaultOperation<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	/**
-	 * A REST Operation for the AddStoreCommand where --type=hbase 
+	 * A REST Operation for the AddStoreCommand where --type=hbase
 	 */
-	
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddHBaseStoreCommand.class);
 
 	public static final String PROPERTIES_CONTEXT = "properties";
 
-	//Default AddStore Options
+	// Default AddStore Options
 	@Parameter(description = "<name>")
-	@RestParameters(names = {
-		"name"
-	})
 	private List<String> parameters = new ArrayList<String>();
-
 
 	@Parameter(names = {
 		"-d",
 		"--default"
 	}, description = "Make this the default store in all operations")
 	private Boolean makeDefault;
-	
+
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-	
+
 	@ParametersDelegate
 	private HBaseRequiredOptions requiredOptions;
 
@@ -72,7 +65,7 @@ public class AddHBaseStoreCommand extends
 
 		pluginOptions.selectPlugin("hbase");
 		pluginOptions.setFactoryOptions(requiredOptions);
-		
+
 		return true;
 	}
 
@@ -124,6 +117,16 @@ public class AddHBaseStoreCommand extends
 				existingProps);
 
 		return null;
+	}
+
+	@Override
+	public String getId() {
+		return ConfigSection.class.getName() + ".addstore/hbase";
+	}
+
+	@Override
+	public String getPath() {
+		return "config/addstore/hbase";
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

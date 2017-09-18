@@ -156,11 +156,4 @@ public class KmeansParallelCommand extends
 			KMeansParallelOptions kmeansParallelOptions ) {
 		this.kmeansParallelOptions = kmeansParallelOptions;
 	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params ) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

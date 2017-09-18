@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.core.store.operations.remote;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +20,9 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
@@ -37,34 +36,33 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 @GeowaveOperation(name = "version", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Get the version of GeoWave running on the instance of a remote datastore")
 public class VersionCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	@Parameter(description = "<storename>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		computeResults(params);
 	}
 
 	@Override
 	public Void computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
 		}
 
-		String inputStoreName = parameters.get(0);
+		final String inputStoreName = parameters.get(0);
 
-		File configFile = (File) params.getContext().get(
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-		StoreLoader inputStoreLoader = new StoreLoader(
+		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
 			JCommander.getConsole().println(
@@ -72,18 +70,18 @@ public class VersionCommand extends
 			return null;
 		}
 
-		DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		if (inputStoreOptions != null) {
-			StoreFactoryOptions factoryOptions = inputStoreOptions.getFactoryOptions();
-			DataStore dataStore = inputStoreOptions.createDataStore();
+			final StoreFactoryOptions factoryOptions = inputStoreOptions.getFactoryOptions();
+			final DataStore dataStore = inputStoreOptions.createDataStore();
 
 			String version = null;
 			if (dataStore instanceof BaseDataStore) {
 				JCommander.getConsole().println(
 						"Looking up remote datastore version for type [" + inputStoreOptions.getType() + "] and name ["
 								+ inputStoreName + "]");
-				BaseDataStore baseDataStore = (BaseDataStore) dataStore;
+				final BaseDataStore baseDataStore = (BaseDataStore) dataStore;
 				version = baseDataStore.getVersion(factoryOptions);
 			}
 			JCommander.getConsole().println(
@@ -92,4 +90,8 @@ public class VersionCommand extends
 		return null;
 	}
 
+	@Override
+	public HttpMethod getMethod() {
+		return HttpMethod.GET;
+	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,41 +20,35 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+
+@GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer style")
 public class GeoServerAddStyleCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(names = {
 		"-sld",
 		"--stylesld"
-	}, required = true, description = "<style sld file>")
-	private String stylesld = null;
+	}, required = true, description = "style sld file")
+	private final String stylesld = null;
 
 	@Parameter(description = "<GeoWave style name>")
-	@RestParameters(names = {
-		"styleName"
-	})
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 	private String gwStyle = null;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 		super.prepare(params);
 		if (geoserverClient == null) {
 			// Create the rest client
@@ -69,7 +63,7 @@ public class GeoServerAddStyleCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
@@ -77,7 +71,7 @@ public class GeoServerAddStyleCommand extends
 
 	@Override
 	public String computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws FileNotFoundException,
 			IOException {
 		if (parameters.size() != 1) {
@@ -92,16 +86,16 @@ public class GeoServerAddStyleCommand extends
 					"Requires argument: <style xml file>");
 		}
 
-		File styleXmlFile = new File(
+		final File styleXmlFile = new File(
 				stylesld);
 		try (final FileInputStream inStream = new FileInputStream(
 				styleXmlFile)) {
-			Response addStyleResponse = geoserverClient.addStyle(
+			final Response addStyleResponse = geoserverClient.addStyle(
 					gwStyle,
 					inStream);
 
-			if (addStyleResponse.getStatus() == Status.OK.getStatusCode()
-					|| addStyleResponse.getStatus() == Status.CREATED.getStatusCode()) {
+			if ((addStyleResponse.getStatus() == Status.OK.getStatusCode())
+					|| (addStyleResponse.getStatus() == Status.CREATED.getStatusCode())) {
 				return "Add style for '" + gwStyle + "' on GeoServer: OK";
 			}
 			return "Error adding style for '" + gwStyle + "' on GeoServer; code = " + addStyleResponse.getStatus();

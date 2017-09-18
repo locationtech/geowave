@@ -64,12 +64,4 @@ public class GeowaveTopLevelSection extends
 		// Successfully prepared
 		return true;
 	}
-
-	@Override
-	public Object computeResults(
-			OperationParams params )
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,23 +20,18 @@ import java.util.Set;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
  * Common code for removing an entry from the properties file.
  */
 public abstract class AbstractRemoveCommand extends
-		DefaultOperation<Void>
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<name>", required = true, arity = 1)
-	@RestParameters(names = {
-		"name"
-	})
 	private List<String> parameters = new ArrayList<String>();
 
 	protected String pattern = null;
@@ -52,26 +47,26 @@ public abstract class AbstractRemoveCommand extends
 	}
 
 	public Void computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 
-		File propFile = (File) params.getContext().get(
+		final File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Load all properties
-		Properties existingProps = ConfigOptions.loadProperties(
+		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);
 
 		// Find properties to remove
-		Set<String> keysToRemove = new HashSet<String>();
-		for (String key : existingProps.stringPropertyNames()) {
+		final Set<String> keysToRemove = new HashSet<String>();
+		for (final String key : existingProps.stringPropertyNames()) {
 			if (key.startsWith(pattern)) {
 				keysToRemove.add(key);
 			}
 		}
 
 		// Remove each property.
-		for (String key : keysToRemove) {
+		for (final String key : keysToRemove) {
 			existingProps.remove(key);
 		}
 
@@ -84,8 +79,8 @@ public abstract class AbstractRemoveCommand extends
 	}
 
 	public void setEntryName(
-			String entryName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(entryName);
+			final String entryName ) {
+		parameters = new ArrayList<String>();
+		parameters.add(entryName);
 	}
 }

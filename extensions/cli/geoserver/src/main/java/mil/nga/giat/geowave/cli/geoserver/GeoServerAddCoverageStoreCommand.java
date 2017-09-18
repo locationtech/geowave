@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,61 +16,59 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "addcs", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+
+@GeowaveOperation(name = "addcs", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer coverage store")
 public class GeoServerAddCoverageStoreCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
-	}, required = false, description = "<workspace name>")
+	}, required = false, description = "workspace name")
 	private String workspace = null;
 
 	@Parameter(names = {
 		"-cs",
 		"--coverageStore"
-	}, required = false, description = "<coverage store name>")
-	private String coverageStore = null;
+	}, required = false, description = "coverage store name")
+	private final String coverageStore = null;
 
 	@Parameter(names = {
 		"-histo",
 		"--equalizeHistogramOverride"
 	}, required = false, description = "This parameter will override the behavior to always perform histogram equalization if a histogram exists.  Valid values are true and false.", arity = 1)
-	private Boolean equalizeHistogramOverride = null;
+	private final Boolean equalizeHistogramOverride = null;
 
 	@Parameter(names = {
 		"-interp",
 		"--interpolationOverride"
 	}, required = false, description = "This will override the default interpolation stored for each layer.  Valid values are 0, 1, 2, 3 for NearestNeighbor, Bilinear, Bicubic, and Bicubic (polynomial variant) resepctively. ")
-	private String interpolationOverride = null;
+	private final String interpolationOverride = null;
 
 	@Parameter(names = {
 		"-scale",
 		"--scaleTo8Bit"
 	}, required = false, description = "By default, integer values will automatically be scaled to 8-bit and floating point values will not.  This can be overridden setting this value to true or false.", arity = 1)
-	private Boolean scaleTo8Bit = null;
+	private final Boolean scaleTo8Bit = null;
 
 	@Parameter(description = "<GeoWave store name>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 		super.prepare(params);
 		if (geoserverClient == null) {
 			// Create the rest client
@@ -85,7 +83,7 @@ public class GeoServerAddCoverageStoreCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
@@ -93,7 +91,7 @@ public class GeoServerAddCoverageStoreCommand extends
 
 	@Override
 	public String computeResults(
-			OperationParams params ) {
+			final OperationParams params ) {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <GeoWave store name>");
@@ -101,11 +99,11 @@ public class GeoServerAddCoverageStoreCommand extends
 
 		gwStore = parameters.get(0);
 
-		if (workspace == null || workspace.isEmpty()) {
+		if ((workspace == null) || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}
 
-		Response addStoreResponse = geoserverClient.addCoverageStore(
+		final Response addStoreResponse = geoserverClient.addCoverageStore(
 				workspace,
 				coverageStore,
 				gwStore,
@@ -113,8 +111,8 @@ public class GeoServerAddCoverageStoreCommand extends
 				interpolationOverride,
 				scaleTo8Bit);
 
-		if (addStoreResponse.getStatus() == Status.OK.getStatusCode()
-				|| addStoreResponse.getStatus() == Status.CREATED.getStatusCode()) {
+		if ((addStoreResponse.getStatus() == Status.OK.getStatusCode())
+				|| (addStoreResponse.getStatus() == Status.CREATED.getStatusCode())) {
 			return "Add coverage store for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer: OK";
 		}
 		return "Error adding coverage store for '" + gwStore + "' to workspace '" + workspace
