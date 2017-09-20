@@ -43,6 +43,16 @@
 		    <version>4.0.0</version>
 		    <scope>provided</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-aop</artifactId>
+		    <version>4.0.9.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security.oauth</groupId>
+		    <artifactId>spring-security-oauth2</artifactId>
+		    <version>2.2.0.RELEASE</version>
+		</dependency>
 	</dependencies>
 	<!-- Tomcat Maven Plugin is added to facilitate testing the webapp
 	     without deploying to an actual server i.e. create a run config
