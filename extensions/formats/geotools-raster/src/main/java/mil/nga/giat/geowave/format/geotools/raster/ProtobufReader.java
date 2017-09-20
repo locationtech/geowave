@@ -2,17 +2,22 @@ package mil.nga.giat.geowave.format.geotools.raster;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
+import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
+import java.awt.image.PackedColorModel;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
+import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.ImageTypeSpecifier;
@@ -92,10 +97,7 @@ public class ProtobufReader extends
 			throws IOException {
 
 		return new BufferedImage(
-				grayColorModel(
-						256,
-						13,
-						256),
+				DirectColorModel.getRGBdefault(),
 				(WritableRaster) createRaster(),
 				false,
 				null);
@@ -111,20 +113,25 @@ public class ProtobufReader extends
 		return null;
 
 	}
+	
+	private static long i = 0;
 
 	public Raster createRaster()
 			throws IOException {
-		WritableRaster raster;
+		
+		DirectColorModel dCM = (DirectColorModel) DirectColorModel.getRGBdefault();
+		WritableRaster raster = dCM.createCompatibleWritableRaster(256, 256);
 
-		raster = Raster.createPackedRaster(
+		/*raster = Raster.createPackedRaster(
 				DataBuffer.TYPE_INT,
 				256,
 				256,
 				1,
-				16,
-				null);
+				32,
+				null);*/
 
 		int count;
+		int density;
 		int xValue = 0;
 		int yValue = 0;
 
@@ -161,13 +168,20 @@ public class ProtobufReader extends
 				yValue = (int) (extentRasterY % loopCoordinate.y);
 				final HashMap userData = new HashMap();
 				userData.putAll((Map) geometry.getUserData());
-				count = (int) (long) userData.get("count"); 
+				count = (int) (long) userData.get("count");
+				density = (int) (long) userData.get("density");
 
 				raster.setSample(
 						xValue,
 						yValue,
 						0,
 						count);
+				
+				raster.setSample(
+						xValue,
+						yValue,
+						1,
+						density);
 
 			}
 
@@ -175,6 +189,14 @@ public class ProtobufReader extends
 		catch (final IOException e) {
 			e.printStackTrace();
 		}
+		
+		/*WritableRaster wRaster = dCM.createCompatibleWritableRaster(256, 256);
+		ImageIO.write(new BufferedImage(dCM,
+				wRaster,
+				false,
+				new Properties()),
+				"png",
+				new File("C:\\Temp\\"+i++ +".png"));*/
 
 		return raster;
 	}
@@ -217,6 +239,7 @@ public class ProtobufReader extends
 			g[i] = (byte) val;
 			b[i] = (byte) val;
 		}
+
 		return (new IndexColorModel(
 				16,
 				length,
