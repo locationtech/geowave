@@ -1,11 +1,17 @@
 package mil.nga.giat.geowave.format.geotools.raster;
 
+import java.awt.Transparency;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.PackedColorModel;
 import java.awt.image.Raster;
+import java.awt.image.SampleModel;
+import java.awt.image.SinglePixelPackedSampleModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -25,12 +31,16 @@ import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.spi.ImageReaderSpi;
 import javax.imageio.stream.FileCacheImageInputStream;
 import javax.imageio.stream.ImageInputStream;
+import javax.media.jai.RasterFactory;
 
+import com.sun.media.imageioimpl.common.BogusColorSpace;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.wdtinc.mapbox_vector_tile.adapt.jts.MvtReader;
 import com.wdtinc.mapbox_vector_tile.adapt.jts.TagKeyValueMapConverter;
+
+import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 
 public class ProtobufReader extends
 		ImageReader
@@ -96,11 +106,19 @@ public class ProtobufReader extends
 			final ImageReadParam param )
 			throws IOException {
 
+		DirectColorModel d;
+		d = new DirectColorModel(32, 0, 1, 2, 0);
+		
 		return new BufferedImage(
-				DirectColorModel.getRGBdefault(),
+				getMBTColorModel(),
 				(WritableRaster) createRaster(),
 				false,
 				null);
+		/*return new BufferedImage(
+				DirectColorModel.getRGBdefault(),
+				(WritableRaster) createRaster(),
+				false,
+				null);*/
 
 	}
 
@@ -119,14 +137,22 @@ public class ProtobufReader extends
 	public Raster createRaster()
 			throws IOException {
 		
-		DirectColorModel dCM = (DirectColorModel) DirectColorModel.getRGBdefault();
-		WritableRaster raster = dCM.createCompatibleWritableRaster(256, 256);
-
-		/*raster = Raster.createPackedRaster(
+		// DirectColorModel dCM = (DirectColorModel) DirectColorModel.getRGBdefault();
+		// WritableRaster raster = dCM.createCompatibleWritableRaster(256, 256);
+		
+		final WritableRaster raster = RasterFactory.createBandedRaster(
 				DataBuffer.TYPE_INT,
 				256,
 				256,
 				1,
+				null);
+		
+		/*WritableRaster raster;
+		raster = Raster.createPackedRaster(
+				DataBuffer.TYPE_INT,
+				256,
+				256,
+				2,
 				32,
 				null);*/
 
@@ -177,11 +203,11 @@ public class ProtobufReader extends
 						0,
 						count);
 				
-				raster.setSample(
+				/*raster.setSample(
 						xValue,
 						yValue,
 						1,
-						density);
+						density);*/
 
 			}
 
@@ -190,13 +216,12 @@ public class ProtobufReader extends
 			e.printStackTrace();
 		}
 		
-		/*WritableRaster wRaster = dCM.createCompatibleWritableRaster(256, 256);
-		ImageIO.write(new BufferedImage(dCM,
-				wRaster,
+		/*ImageIO.write(new BufferedImage(getMBTColorModel(),
+				raster,
 				false,
 				new Properties()),
 				"png",
-				new File("C:\\Temp\\"+i++ +".png"));*/
+				new File("C:\\Temp\\"+ "test" +".png"));*/
 
 		return raster;
 	}
@@ -212,6 +237,20 @@ public class ProtobufReader extends
 		bounds[3] = coordinates[2].y;
 
 		return bounds;
+	}
+	
+	public ComponentColorModel getMBTColorModel() {
+		final int[] bitsPerSample = new int[1];
+		bitsPerSample[0] = 32;
+		
+		return new ComponentColorModel(
+				new BogusColorSpace(
+						1),
+				bitsPerSample,
+				false,
+				false,
+				Transparency.OPAQUE,
+				DataBuffer.TYPE_INT);
 	}
 
 	public IndexColorModel grayColorModel(
