@@ -108,6 +108,7 @@ public class KmeansSparkCommand extends
 		final KMeansRunner runner = new KMeansRunner();
 		runner.setAppName(kMeansSparkOptions.getAppName());
 		runner.setMaster(kMeansSparkOptions.getMaster());
+		runner.setHost(kMeansSparkOptions.getHost());
 		runner.setSplits(
 				kMeansSparkOptions.getMinSplits(),
 				kMeansSparkOptions.getMaxSplits());

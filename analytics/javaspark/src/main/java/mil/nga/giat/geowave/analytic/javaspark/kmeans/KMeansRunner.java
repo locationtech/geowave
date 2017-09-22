@@ -47,6 +47,8 @@ public class KMeansRunner
 
 	private JavaSparkContext jsc = null;
 	private DataStorePluginOptions inputDataStore = null;
+	private DataStorePluginOptions outputDataStore = null;
+	
 	private JavaRDD<Vector> centroidVectors;
 	private KMeansModel outputModel;
 
@@ -63,13 +65,26 @@ public class KMeansRunner
 	public KMeansRunner() {}
 
 	private void initContext() {
-		SparkConf sparkConf = new SparkConf();
+		if (jsc == null) {
+			//TODO: Possibly use SparkSession.builder for Spark 2.0+ ?
+			SparkConf sparkConf = new SparkConf();
+			sparkConf.setAppName(appName);
+			sparkConf.setMaster(master);
+			sparkConf.set("spark.driver.host", host);
 
-		sparkConf.setAppName(appName);
-		sparkConf.setMaster(master);
-
-		jsc = new JavaSparkContext(
-				sparkConf);
+			jsc = new JavaSparkContext(
+					sparkConf);
+		}
+	}
+	
+	private void initDataStores() {
+		if (inputDataStore == null) {
+			//TODO: Load input data store
+		}
+		
+		if (outputDataStore == null) {
+			//TODO: Load output data store
+		}
 	}
 
 	public void closeContext() {
@@ -82,6 +97,7 @@ public class KMeansRunner
 	public void run()
 			throws IOException {
 		initContext();
+		initDataStores();
 
 		// Validate inputs
 		if (inputDataStore == null) {
@@ -194,6 +210,11 @@ public class KMeansRunner
 	public void setInputDataStore(
 			DataStorePluginOptions inputDataStore ) {
 		this.inputDataStore = inputDataStore;
+	}
+	
+	public void setJavaSparkContext(
+			JavaSparkContext jsc) {
+		this.jsc = jsc;
 	}
 
 	public void setNumClusters(
