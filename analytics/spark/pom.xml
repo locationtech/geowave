@@ -9,7 +9,7 @@
 	<artifactId>geowave-analytic-spark</artifactId>
 	<name>GeoWave Spark Analytics</name>
 	<properties>
-		<scala.version>2.10.4</scala.version>
+		<scala.version>2.11.8</scala.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -34,18 +34,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scala-lang</groupId>
-			<artifactId>jline</artifactId>
-			<version>${scala.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-reflect</artifactId>
 			<version>${scala.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.10</artifactId>
-			<version>2.2.1</version>
+			<artifactId>scalatest_2.11</artifactId>
+			<version>3.0.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -127,8 +122,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.10</artifactId>
-			<version>1.5.1</version>
+			<artifactId>spark-core_2.11</artifactId>
+			<version>${spark.version}</version>
 		</dependency>
 	</dependencies>
 	<repositories>

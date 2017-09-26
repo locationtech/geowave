@@ -77,13 +77,13 @@ public class KMeansSparkOptions
 		"-ct",
 		"--centroidType"
 	}, description = "Feature type name (adapter ID) for centroid output")
-	private String centroidTypeName = "kmeans-centroids";
+	private String centroidTypeName = "kmeans_centroids";
 
 	@Parameter(names = {
 		"-ht",
 		"--hullType"
 	}, description = "Feature type name (adapter ID) for hull output")
-	private String hullTypeName = "kmeans-hulls";
+	private String hullTypeName = "kmeans_hulls";
 
 	public KMeansSparkOptions() {}
 
