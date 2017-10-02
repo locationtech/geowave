@@ -1,5 +1,7 @@
 <<<
 
+:linkattrs:
+
 == Raster Demo
 
 In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command 
@@ -7,35 +9,47 @@ downloads those images and combines them to create a mosaic.
 
 === Set-Up Environment Variables
 
-Download and source the GeoWave environment script. If you have already done this in the Vector Demo, you can skip this step.
+Download and source the GeoWave environment script.
+
+[NOTE]
+====
+If you have already done this in the Vector Demo, you can skip this step.
+====
+
 This script defines a number of the variables that will be used in future commands.
 
-Sandbox:
-
+. If running with the GeoWave Sandbox:
++
 [source, bash]
 ----
 cd /mnt
+
 sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env.sh
+
 source /mnt/geowave-env.sh
 ----
 
-EMR:
-
+. If running with EMR:
++
 [source, bash]
 ----
 cd /mnt
+
 sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/geowave-env.sh
+
 source /mnt/geowave-env.sh
 ----
 
 === Download and Unpack the GDAL Library
 
-GDAL (Geospatial Data Abstraction Library) is an image processing library. We need to download the proper GDAL files to process the raster data. More info on GDAL can be found http://www.gdal.org[here].
+GDAL (Geospatial Data Abstraction Library) is an image processing library. We need to download the proper GDAL files to process the raster data. More info on GDAL can be found link:http://www.gdal.org[here, window="_blank"].
 
 [source, bash]
 ----
 cd /mnt
+
 sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+
 tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
 ----
 
@@ -52,29 +66,29 @@ At this point, we should be ready to ingest the data.
 
 We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the https://landsat.usgs.gov/landsat-8[Landsat 8 Satellite].
 
-SandBox
+. If running with the GeoWave Sandbox:
 
 [source, bash]
 ----
-geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore - hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
 
 geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 ----
 
-EMR (Accumulo)
+. If running with EMR Accumulo:
 
 [source, bash]
 ----
-geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore - accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
 
 geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 ----
 
-EMR (HBase)
+. If running with EMR HBase
 
 [source, bash]
 ----
-geowave config addstore -t hbase -z sandbox.hortonworks.com:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore - hbase -z sandbox.hortonworks.com:2181 landsatraster --gwNamespace landsat_raster
 
 geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 ----
@@ -83,7 +97,7 @@ Add a spatial index.
 
 [source, bash]
 ----
-geowave config addindex -t spatial spatial
+geowave config addindex - spatial spatial
 ----
 
 Filter the dataset by calling analyze. In this example we look for Band 8 images that are in Berlin.

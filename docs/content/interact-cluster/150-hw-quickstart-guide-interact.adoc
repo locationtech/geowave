@@ -1,8 +1,10 @@
 <<< 
 
+:linkattrs:
+
 == Interacting with the Cluster
 
-If you have not successfully completed the link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration^, window="_blank"] section, please do so before continuing.
+If you have not successfully completed the link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration, window="_blank"] section, please do so before continuing.
 
 === Enable Web Connections (EMR Only)
 

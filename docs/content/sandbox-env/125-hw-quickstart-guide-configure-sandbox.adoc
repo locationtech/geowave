@@ -1,5 +1,7 @@
 <<<
 
+:linkattrs:
+
 === Configure Sandbox
 
 Before you can configure the Sandbox, you will need to edit your hosts file to make sure that you can access the sandbox through your browser. You will need root or admin permissions to change these files.
@@ -17,10 +19,9 @@ Make sure that you save `hosts` as type "all files" and not as a .txt file. That
 
 image::sandbox/hosts-linux.png[scaledwidth="100%",alt="select emr"]
 
-
 image::sandbox/hosts-windows.png[scaledwidth="100%",alt="select emr"]
 
-After this you should be able to log into the Ambari Server at http://localhost:8080
+After this you should be able to log into the Ambari Server at link:http://sandbox.hortonworks.com:8080[http://sandbox.hortonworks.com:8080, window="_blank"]
 
 - **Username:** raj_ops
 - **Password:** raj_ops
@@ -29,7 +30,5 @@ The Ambari server provides an interface that allows you to control which service
 
 To best run this demo you should stop: **Oozie, Flume, Ranger, Spark2,** and **Zeppelin Notebook**. To stop a service, select it from the list on the left, click on "Service Actions," and select "Stop" from the dropdown menu. 
 
-
 image::sandbox/ambari-gui.png[scaledwidth="100%",alt="select emr"]
-
 

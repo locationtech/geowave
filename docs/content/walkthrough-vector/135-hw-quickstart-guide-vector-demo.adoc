@@ -1,5 +1,7 @@
 == Vector Demo
 
+:linkattrs:
+
 In the Vector Demo, we use GeoWave to ingest and runs a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.
 
 === Set-Up Environment Variables
@@ -37,7 +39,7 @@ source /mnt/geowave-env.sh
 === Download GDELT Data
 
 We will be using data from the GDELT Project in this guide. For more information about the 
-GDELT Project please visit their website http://www.gdeltproject.org/[here]. 
+GDELT Project please visit their website link:http://www.gdeltproject.org/[here, window="_blank"]. 
 
 Download whatever gdelt data matches $TIME_REGEX. The example is set to 201602 by sourcing the geowave-env.sh script. **Please make sure that you 
 have sourced the environment script before calling this command.**
@@ -56,103 +58,113 @@ After the data has been downloaded, we are ready to set up the store and index u
 
 === Config and Ingest
 
-Add a GeoWave store. (SandBox)
-
+. Add a GeoWave store
+ .. If using Sandbox
++
 [source, bash]
 ----
-geowave config addstore gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper sandbox.hortonworks.com:2181
----- 
-
-Add a GeoWave store ( EMR Accumulo)
-
-[source, bash]
-----
-geowave config addstore gdelt --gwNamespace geowave.gdelt \
--t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave
+geowave config addstore gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
+sandbox.hortonworks.com:2181
 ----
 
-Add a GeoWave store (EMR HBase)
-
+ .. If using EMR Accumulo
++
 [source, bash]
 ----
 geowave config addstore gdelt --gwNamespace geowave.gdelt \
--t hbase --zookeeper $HOSTNAME:2181
+-t accumulo --zookeeper sandbox.hortonworks.com:2181 --instance accumulo \
+--user geowave --password geowave
 ----
 
-Add a spatial index.
-
+ .. If using EMR HBase
++
 [source, bash]
 ----
-geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin --numPartitions $NUM_PARTITIONS
+geowave config addstore gdelt --gwNamespace geowave.gdelt \
+-t hbase --zookeeper sandbox.hortonworks.com:2181
+----
+
+. Add a spatial index.
++
+[source, bash]
+----
+geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin \
+--numPartitions $NUM_PARTITIONS
 ---- 
 
-Ingest the data into geowave. (SandBox)
-
+. Ingest the data into geowave.
+ .. If using Sandbox
++
 [source, bash]
 ----
 geowave ingest localtogw /mnt/gdelt gdelt gdelt-spatial -f gdelt --gdelt.cql "INTERSECTS(geometry,$GERMANY)"
+----
 
----- 
-
-Ingest the data into geowave. (EMR)
-
+ .. If using EMR
++
 [source, bash]
 ----
-geowave ingest localtogw $STAGING_DIR/gdelt gdelt gdelt-spatial -f gdelt \ 
+geowave ingest localtogw $STAGING_DIR/gdelt gdelt gdelt-spatial -f gdelt \
 --gdelt.cql "BBOX(geometry,${WEST},${SOUTH},${EAST},${NORTH})"
 ----
 
-The ingest should take about ~3-5 minutes. Once the Ingest has started, you can monitor HBase status at the <<150-hw-quickstart-guide-interact.adoc#hbase-master-view, HBase web interface>>. The ingest is complete when your terminal will 
-accept user input.
+The ingest should take about ~3-5 minutes. Once the ingest has started, you can monitor HBase status at the link:http://locationtech.github.io/geowave/interact-cluster.html#hbase-master-view[HBase web interface, window="_blank"], or the Accumulo status at the link:http://locationtech.github.io/geowave/interact-cluster.html#accumulo-view[Accumulo web interface, window="_blank"]. The ingest is complete when your terminal will accept user input.
 
 === Kernel Density Estimation (KDE)
 
-Once the ingest has completed, add another store for the kde.
+Once the ingest has completed:
 
-SandBox
-
+. Add another store for the kde.
+.. If using Sandbox
++
 [source, bash]
 ----
 geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
-EMR (Accumulo)
-
+.. If using EMR Accumulo
++
 [source, bash]
 ----
 geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave
 ----
 
-EMR (HBase)
-
+.. If using EMR HBase
++
 [source, bash]
 ----
 geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
-Run the KDE analytic (SandBox)
-
+. Run the KDE analytic
+.. If using Sandbox
++
 [source, bash]
 ----
-hadoop jar /usr/local/geowave-0.9.5-hdp2/tools/geowave-tools-0.9.5-hdp2.jar analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde --hdfsHostPort sandbox.hortonworks.com:${HDFS_PORT} --jobSubmissionHostPort sandbox.hortonworks.com:${RESOURCE_MAN_PORT} --tileSize 1 gdelt gdelt-kde
+hadoop jar /usr/local/geowave-0.9.5-hdp2/tools/geowave-tools-0.9.5-hdp2.jar analytic kde \
+--featureType gdeltevent --minLevel 5 --maxLevel 26 --minSplits $NUM_PARTITIONS \
+--maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde  \
+--hdfsHostPort sandbox.hortonworks.com:${HDFS_PORT} \
+--jobSubmissionHostPort sandbox.hortonworks.com:${RESOURCE_MAN_PORT} \
+--tileSize 1 gdelt gdelt-kde
 ----
 
-Run the KDE analytic (EMR)
-
+.. If using EMR
++
 [source, bash]
 ----
-hadoop jar ${GEOWAVE_TOOLS_JAR} analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 \ 
---minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde \ 
---hdfsHostPort ${HOSTNAME}:${HDFS_PORT} --jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} --tileSize 1 gdelt gdelt-kde
+hadoop jar ${GEOWAVE_TOOLS_JAR} analytic kde --featureType gdeltevent --minLevel 5 \
+--maxLevel 26 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS \
+--coverageName gdeltevent_kde --hdfsHostPort ${HOSTNAME}:${HDFS_PORT} \
+--jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} --tileSize 1 gdelt gdelt-kde
 ----
 
-The KDE can take 5-10 minutes to complete due to the size of the dataset. Once it starts, its progress will be displayed in the terminal, and HBase status can be monitored at the <<150-hw-quickstart-guide-interact.adoc#hbase-master-view, HBase web interface>>.
+The KDE can take 5-10 minutes to complete due to the size of the dataset. Once it starts, its progress will be displayed in the terminal. The HBase status can be monitored through the link:http://locationtech.github.io/geowave/interact-cluster.html#hbase-master-view[HBase web interface, window="_blank"], or the Accumulo status at the link:http://locationtech.github.io/geowave/interact-cluster.html#accumulo-view[Accumulo web interface, window="_blank"].
 
-Once the KDE has run its course successfully, you should be able to view the heatmap generated by it, as well as a map of all of the ingested data points. If you would like to do this before completing the Raster Demo, proceed to <<145-hw-quickstart-guide-geoserver.adoc#integrate-with-geoserver-2, Integrate with Geoserver>>
-and then to the <<150-hw-quickstart-guide-interact.adoc#interacting-with-the-cluster-2, Interacting with the Cluster>> section. You will still be able to view the results for both demos after completing the Raster Demo.
+Once the KDE has run its course successfully, you should be able to view the heatmap generated by it, as well as a map of all of the ingested data points. If you would like to do this before completing the Raster Demo, proceed to link:http://locationtech.github.io/geowave/integrate-geoserver.html[Integrate with Geoserver, window="_blank"] and then to the link:http://locationtech.github.io/geowave/interact-cluster.html#cluster-interaction[Interacting with the Cluster, window="_blank"] section. You will still be able to view the results for both demos after completing the Raster Demo.
 
 === Raster Demo
 

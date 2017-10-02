@@ -1,5 +1,7 @@
 <<<
 
+:linkattrs:
+
 == Integrate with GeoServer
 
 In order to view the images generated from the vector and raster demos, use the GeoServer web interface. The following command configures and restarts GeoServer.

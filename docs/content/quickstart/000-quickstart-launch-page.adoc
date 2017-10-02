@@ -24,3 +24,4 @@ looking try out GeoWave in that manor.
 
 == Notebook Examples
 - link:https://github.com/locationtech/geowave/tree/master/examples/data/notebooks/zeppelin[Zeppelin, window="_blank"]
+
