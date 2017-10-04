@@ -250,7 +250,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 							field.getName());
 				}
 			}
-			else if (field.getType() == List.class) {
+			else if (field.getType() == List.class|| field.getType().toString().equals("class [Ljava.lang.String;")) {
 				field.setAccessible(
 						true);
 				String[] parameters = getFieldValues(
@@ -299,7 +299,16 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			val = getQuery().getValuesArray(
 					name);
 		}
-		return val;
+		String str = getFieldValue(
+				form,
+				name);
+		if (str == null) {
+			return val;
+		}
+		else {
+
+			return str.split(",");
+		}
 	}
 
 	private String getFieldValue(

@@ -46,7 +46,7 @@ public class IngestFormatPluginOptions extends
 	private Map<String, IngestFormatPluginProviderSpi<?, ?>> plugins = new HashMap<String, IngestFormatPluginProviderSpi<?, ?>>();
 
 	@ParametersDelegate
-	private Map<String, IngestFormatOptionProvider> options = new HashMap<String, IngestFormatOptionProvider>();
+	private HashMap<String, IngestFormatOptionProvider> options = new HashMap<String, IngestFormatOptionProvider>();
 
 	@Override
 	public void selectPlugin(
@@ -189,7 +189,7 @@ public class IngestFormatPluginOptions extends
 	}
 
 	public void setOptions(
-			Map<String, IngestFormatOptionProvider> options ) {
+			HashMap<String, IngestFormatOptionProvider> options ) {
 		this.options = options;
 	}
 
