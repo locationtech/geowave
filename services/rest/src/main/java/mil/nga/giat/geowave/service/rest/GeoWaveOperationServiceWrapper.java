@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
+import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
+import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.FilterParameter;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -249,6 +251,63 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					throw new MissingArgumentException(
 							field.getName());
 				}
+			}
+			else if(field.getType().toString().equals("class [Ljava.lang.String;")){
+				String[] parameters = getFieldValues(
+						form,
+						field.getName());
+					field.setAccessible(true);
+
+
+				try {
+					field.set(
+							instance,
+							parameters);
+				}
+				catch (final IllegalAccessException e) {
+					throw new RuntimeException(
+							e);
+				}
+			
+			}
+			else if (field.getType() == List.class) {
+				String[] parameters = getFieldValues(
+						form,
+						field.getName());
+					field.setAccessible(true);
+
+
+				try {
+					field.set(
+							instance,
+							Arrays.asList(parameters));
+				}
+				catch (final IllegalAccessException e) {
+					throw new RuntimeException(
+							e);
+				}
+			
+			}
+			else if (field.getType() == FilterParameter.class){
+				final String cql = getFieldValue(
+						form,
+						field.getName());
+				if (cql != null) {
+					field.setAccessible(true);
+					try {
+						field.set(
+								instance,
+								new ConvertCQLStrToFilterConverter().convert(cql));
+					}
+					catch (final IllegalAccessException e) {
+						throw new RuntimeException(
+								e);
+					}
+				}
+				else if (parameter.required()) {
+					throw new MissingArgumentException(
+							field.getName());
+				}				
 			}
 			else if (field.getType() == List.class|| field.getType().toString().equals("class [Ljava.lang.String;")) {
 				field.setAccessible(
