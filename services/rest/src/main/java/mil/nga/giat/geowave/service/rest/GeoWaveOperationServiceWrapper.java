@@ -2,9 +2,16 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.restlet.Application;
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -18,7 +25,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -28,7 +34,8 @@ import scala.actors.threadpool.Arrays;
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			GeoWaveOperationServiceWrapper.class);
 	private final DefaultOperation<T> operation;
 
 	public GeoWaveOperationServiceWrapper(
@@ -41,10 +48,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			throws Exception {
 		if (operation.getClass().getAnnotation(
 				GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET) {
-			return handleRequest(null);
+			return handleRequest(
+					null);
 		}
 		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(
+					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -58,10 +67,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 			final Form form = new Form(
 					request);
-			return handleRequest(form);
+			return handleRequest(
+					form);
 		}
 		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			setStatus(
+					Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
 	}
@@ -98,10 +109,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final Form form,
 			final Field field )
 			throws MissingArgumentException {
-		final Parameter parameter = field.getAnnotation(Parameter.class);
+		final Parameter parameter = field.getAnnotation(
+				Parameter.class);
 
 		ParametersDelegate parametersDelegate = null;
-		parametersDelegate = field.getAnnotation(ParametersDelegate.class);
+		parametersDelegate = field.getAnnotation(
+				ParametersDelegate.class);
 
 		if (parameter != null) {
 			if (field.getType() == String.class) {
@@ -109,9 +122,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(true); // Get around restrictions on
-												// private fields. JCommander
-												// does this too.
+					field.setAccessible(
+							true); // Get around restrictions on
+									// private fields. JCommander
+									// does this too.
 					try {
 						field.set(
 								operation,
@@ -132,11 +146,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(true);
+					field.setAccessible(
+							true);
 					try {
 						field.set(
 								operation,
-								Boolean.valueOf(value));
+								Boolean.valueOf(
+										value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -153,11 +169,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						field.getName());
 				if (value != null) {
-					field.setAccessible(true);
+					field.setAccessible(
+							true);
 					try {
 						field.set(
 								operation,
-								Integer.valueOf(value));
+								Integer.valueOf(
+										value));
 					}
 					catch (final IllegalAccessException e) {
 						throw new RuntimeException(
@@ -170,7 +188,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				}
 			}
 			else if (field.getType() == List.class) {
-				field.setAccessible(true);
+				field.setAccessible(
+						true);
 				String[] parameters = getFieldValues(
 						form,
 						field.getName());
@@ -178,7 +197,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				try {
 					field.set(
 							operation,
-							Arrays.asList(parameters));
+							Arrays.asList(
+									parameters));
 				}
 				catch (final IllegalAccessException e) {
 					throw new RuntimeException(
@@ -192,7 +212,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			return field;
 		}
 		else if (parametersDelegate != null) {
-			for (final Field f : FieldUtils.getAllFields(field.getType())) {
+			for (final Field f : FieldUtils.getAllFields(
+					field.getType())) {
 				return processField(
 						form,
 						f);
@@ -206,7 +227,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String[] val = null;
 		if (form != null) {
-			val = form.getValuesArray(name);
+			val = form.getValuesArray(
+					name);
 		}
 		if (val == null || val.length == 0) {
 			val = getQuery().getValuesArray(
@@ -220,10 +242,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final String name ) {
 		String val = null;
 		if (form != null) {
-			val = form.getFirstValue(name);
+			val = form.getFirstValue(
+					name);
 		}
 		if (val == null) {
-			val = getQueryValue(name);
+			val = getQueryValue(
+					name);
 		}
 		return val;
 	}
@@ -231,8 +255,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	private T handleRequest(
 			final Form form )
 			throws Exception {
-		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
-				.getFirstValue("config_file");
+		final String configFileParameter = (form == null) ? getQueryValue(
+				"config_file")
+				: form.getFirstValue(
+						"config_file");
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
@@ -241,8 +267,63 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
 
+		String apiKey = getQueryValue(
+				"apiKey");
+		if (apiKey == null) {
+			setStatus(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					"apiKey is null");
+			return null;
+		}
+		else {
+			Application app = this.getApplication();
+			Context c = app.getContext();
+			final String dbUrl = (String) c.getAttributes().get(
+					"databaseUrl");
+
+			try (Connection conn = DriverManager.getConnection(
+					dbUrl)) {
+				if (conn != null) {
+
+					final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
+					PreparedStatement query_stmnt = conn.prepareStatement(
+							sql_query);
+					query_stmnt.setString(
+							1,
+							apiKey);
+					ResultSet rs = query_stmnt.executeQuery();
+					// There is no existing row, the apiKey is invalid
+					if (!rs.next()) {
+
+						// close resources we are done with
+						rs.close();
+						query_stmnt.close();
+						conn.close();
+						setStatus(
+								Status.CLIENT_ERROR_BAD_REQUEST,
+								"apiKey is invalid");
+						return null;
+					}
+					else {
+						// final String apiKeyStr = rs.getString("apiKey");
+						// userAndKey = userAndKey + ":" + apiKeyStr;
+						// close resources we are done with
+						rs.close();
+						query_stmnt.close();
+					}
+					conn.close();
+				}
+
+			}
+			catch (SQLException e) {
+				LOGGER.error("Error SQLException: ",
+						e.getMessage());
+			}
+		}
+
 		try {
-			injectParameters(form);
+			injectParameters(
+					form);
 		}
 		catch (final MissingArgumentException e) {
 			setStatus(
@@ -252,8 +333,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 
 		try {
-			operation.prepare(params);
-			return operation.computeResults(params);
+			operation.prepare(
+					params);
+			return operation.computeResults(
+					params);
 		}
 		catch (final Exception e) {
 			LOGGER.error(

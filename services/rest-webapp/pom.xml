@@ -15,11 +15,57 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-service-rest</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>javax.servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-deploy</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+	            <exclusion>
+	                <groupId>org.mortbay.jetty</groupId>
+	                <artifactId>servlet-api</artifactId>
+	            </exclusion>
+	            <exclusion>
+	                <groupId>javax.servlet</groupId>
+	                <artifactId>servlet-api</artifactId>
+	            </exclusion>
+        	</exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>4.0.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-aop</artifactId>
+		    <version>4.0.9.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security.oauth</groupId>
+		    <artifactId>spring-security-oauth2</artifactId>
+		    <version>2.2.0.RELEASE</version>
 		</dependency>
 	</dependencies>
+	<!-- Tomcat Maven Plugin is added to facilitate testing the webapp
+	     without deploying to an actual server i.e. create a run config
+	     with tomcat7:run as a goal -->
+	<build>
+		<pluginManagement>
+	      <plugins>
+	        <plugin>
+	          <groupId>org.apache.tomcat.maven</groupId>
+	          <artifactId>tomcat7-maven-plugin</artifactId>
+	          <version>2.2</version>
+	        </plugin>
+	      </plugins>
+	    </pluginManagement>
+	</build>
 </project>

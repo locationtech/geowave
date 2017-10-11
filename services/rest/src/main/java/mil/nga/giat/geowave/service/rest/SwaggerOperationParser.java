@@ -26,7 +26,7 @@ public class SwaggerOperationParser<T>
 	private final DefaultOperation<T> operation;
 	private JsonObject json_obj = null;
 
-	public JsonObject GetJsonObject() {
+	public JsonObject getJsonObject() {
 		return this.json_obj;
 	}
 
@@ -43,7 +43,7 @@ public class SwaggerOperationParser<T>
 			parameter = f.getAnnotation(Parameter.class);
 		}
 		catch (NoClassDefFoundError e) {
-			System.out.println(e.getMessage());
+			//TODO: Log error
 		}
 
 		ParametersDelegate parametersDelegate = null;
@@ -51,7 +51,7 @@ public class SwaggerOperationParser<T>
 			parametersDelegate = f.getAnnotation(ParametersDelegate.class);
 		}
 		catch (NoClassDefFoundError e) {
-			System.out.println(e.getMessage());
+			//TODO: Log error
 		}
 
 		if (parameter != null) {
@@ -59,7 +59,6 @@ public class SwaggerOperationParser<T>
 
 			// first get the field name
 			String f_name = f.getName();
-			System.out.print(f_name + " ");
 			param_json.addProperty(
 					"name",
 					f_name);
@@ -132,7 +131,7 @@ public class SwaggerOperationParser<T>
 				desc = desc.replace(
 						">",
 						"]");
-				System.out.print(desc);
+				
 				param_json.addProperty(
 						"description",
 						desc);
@@ -140,7 +139,6 @@ public class SwaggerOperationParser<T>
 
 			// find out if this parameter is required
 			if (parameter.required() || f_name == "parameters") {
-				System.out.print(" required");
 				param_json.addProperty(
 						"required",
 						true);
@@ -151,7 +149,6 @@ public class SwaggerOperationParser<T>
 						false);
 			}
 
-			System.out.println(" ");
 			return param_json;
 		}
 		else if (parametersDelegate != null) {
@@ -224,7 +221,6 @@ public class SwaggerOperationParser<T>
 				"responses",
 				resp_json);
 
-		System.out.println(op_json.toString());
 		return op_json;
 	}
 
@@ -244,10 +240,10 @@ public class SwaggerOperationParser<T>
 		else if (type == Boolean.class || type == boolean.class) {
 			return "boolean";
 		}
-		else if (type instanceof Class && ((Class<?>) type).isEnum()) {
+		else if (((Class<?>) type).isEnum()) {
 			return "enum";
 		}
-		else if (type == List.class || (type instanceof Class && ((Class<?>) type).isArray())) {
+		else if (type == List.class || (((Class<?>) type).isArray())) {
 			return "array";
 		}
 		return "string";
