@@ -13,8 +13,7 @@
 							 http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd">
 	
 	<context:property-placeholder location="classpath:/application.properties" />
-	
-	<!--<b:bean id="successLoginHandler" class="mil.nga.giat.geowave.service.rest.webapp.RedirectLoginSuccessHandler" />-->
+
 	<security:http pattern="/api" security="none"/>
 	<security:http pattern="/geowave/**" security="none"/>
 	<security:http entry-point-ref="authenticationEntryPoint">
@@ -62,14 +61,6 @@
 		<b:property name="tokenName" value="access_token"/>
 	</b:bean>
 	
-	<!-- Custom token service (see class definition) defined for accessing GEOAxIS -->
-	<b:bean id="geoAxisTokenServices" class="mil.nga.giat.geowave.service.rest.webapp.GeoAxisTokenServices">
-		<b:property name="checkTokenEndpointUrl" value="${gx.checkTokenEndpointUri}"/>
-		<b:property name="clientId" value="${gx.client.id}"/>
-		<b:property name="clientSecret" value="${gx.client.secret}"/>
-		<b:property name="tokenName" value="access_token"/>
-	</b:bean>
-	 
 	<!-- Resource details for authenticating with Facebook (provided as an example) -->
 	<oauth:resource id="facebook"
 				    type="authorization_code"
@@ -83,45 +74,9 @@
 				    scope="${oauth.authScope}"
 				    token-name="${oauth.tokenName}"
 				    client-authentication-scheme="form" />
-	
-	<!-- Resource details for authenticating with GEOAxIS -->
-	<oauth:resource id="GeoAxis"
-					type="authorization_code"
-					client-id="${gx.client.id}"
-					client-secret="${gx.client.secret}"
-					authentication-scheme="query" 
-					access-token-uri="${gx.accessTokenUri}"
-					user-authorization-uri="${gx.userAuthorizationUri}"
-					pre-established-redirect-uri="${gx.redirect.url}"
-					use-current-uri="false"
-					scope="${gx.authScope}"
-					token-name="${gx.tokenName}"
-					client-authentication-scheme="header" />
     
 	<!-- Rest template definition using facebook resource (provided as an example) -->
 	<oauth:rest-template id="oAuth2RestTemplate" resource="facebook">
-        <b:property name="messageConverters">
-            <b:list>
-                <b:bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-                    <b:property name="supportedMediaTypes">
-                        <b:list>
-                            <b:bean class="org.springframework.http.MediaType">
-                                <b:constructor-arg value="text" />
-                                <b:constructor-arg value="javascript" />
-                            </b:bean>
-                            <b:bean class="org.springframework.http.MediaType">
-                                <b:constructor-arg value="application" />
-                                <b:constructor-arg value="json" />
-                            </b:bean>
-                        </b:list>
-                    </b:property>
-                </b:bean>
-            </b:list>
-        </b:property>
-    </oauth:rest-template>
-    
-	<!-- Rest template definition for GEOAxIS -->
-    <oauth:rest-template id="geoAxisRestTemplate" resource="GeoAxis">
         <b:property name="messageConverters">
             <b:list>
                 <b:bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
