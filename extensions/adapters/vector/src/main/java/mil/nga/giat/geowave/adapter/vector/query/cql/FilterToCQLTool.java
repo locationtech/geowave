@@ -33,20 +33,28 @@ public class FilterToCQLTool
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(FilterToCQLTool.class);
 
-	/**
-	 * Corrects any function issues.
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	public static String toCQL(
+	public static Filter fixDWithin(
 			Filter filter ) {
-
-		FilterToECQLExtension toCQL = new FilterToECQLExtension();
-		StringBuilder output = (StringBuilder) filter.accept(
-				toCQL,
-				new StringBuilder());
-		return output.toString();
+		HasDWithinFilterVisitor dwithinCheck = new HasDWithinFilterVisitor();
+		filter.accept(
+				dwithinCheck,
+				null);
+		if (dwithinCheck.hasDWithin()) {
+			try {
+				Filter retVal = (Filter) filter.accept(
+						new DWithinFilterVisitor(),
+						null);
+				// We do not have a way to transform a filter directly from one
+				// to another.
+				return FilterToCQLTool.toFilter(ECQL.toCQL(retVal));
+			}
+			catch (CQLException e) {
+				LOGGER.trace(
+						"Filter is not a CQL Expression",
+						e);
+			}
+		}
+		return filter;
 	}
 
 	public static Filter toFilter(
