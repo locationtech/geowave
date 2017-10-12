@@ -94,7 +94,8 @@ public class IngestServiceImpl implements
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response localIngest(
-			final FormDataMultiPart multiPart ) {
+			final FormDataMultiPart multiPart )
+			throws Exception {
 		ingest(
 				"localingest",
 				multiPart);
@@ -107,7 +108,8 @@ public class IngestServiceImpl implements
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response hdfsIngest(
-			final FormDataMultiPart multiPart ) {
+			final FormDataMultiPart multiPart )
+			throws Exception {
 		return ingest(
 				"hdfsingest",
 				multiPart);
@@ -116,7 +118,8 @@ public class IngestServiceImpl implements
 
 	private Response ingest(
 			final String ingestMethod,
-			final FormDataMultiPart multiPart ) {
+			final FormDataMultiPart multiPart )
+			throws Exception {
 
 		final List<FormDataBodyPart> fileFields = multiPart.getFields("file");
 		if (fileFields == null) {
@@ -199,7 +202,8 @@ public class IngestServiceImpl implements
 			final String dimType,
 			final String storeName,
 			final String visibility,
-			final boolean clear ) {
+			final boolean clear )
+			throws Exception {
 
 		// Ingest Formats
 		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();

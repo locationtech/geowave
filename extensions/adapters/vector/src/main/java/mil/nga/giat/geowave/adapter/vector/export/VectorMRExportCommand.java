@@ -68,7 +68,8 @@ public class VectorMRExportCommand extends
 		}
 
 		// Config file
-		File configFile = getGeoWaveConfigFile(params);
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load store.
 		if (storeOptions == null) {
@@ -119,5 +120,12 @@ public class VectorMRExportCommand extends
 	public void setStoreOptions(
 			DataStorePluginOptions storeOptions ) {
 		this.storeOptions = storeOptions;
+	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params ) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

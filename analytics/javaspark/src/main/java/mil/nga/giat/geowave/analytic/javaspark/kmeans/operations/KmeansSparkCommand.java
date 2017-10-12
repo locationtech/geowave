@@ -63,7 +63,14 @@ public class KmeansSparkCommand extends
 			throw new ParameterException(
 					"Requires arguments: <input storename> <output storename>");
 		}
+		computeResults(params);
 
+	}
+
+	@Override
+	public Object computeResults(
+			OperationParams params )
+			throws Exception {
 		final String inputStoreName = parameters.get(0);
 		final String outputStoreName = parameters.get(1);
 
@@ -187,6 +194,7 @@ public class KmeansSparkCommand extends
 			stopwatch.stop();
 			LOGGER.debug("KMeans hull generation took " + stopwatch.getTimeString());
 		}
+		return null;
 	}
 
 	public List<String> getParameters() {
@@ -225,4 +233,5 @@ public class KmeansSparkCommand extends
 			final KMeansSparkOptions kMeansSparkOptions ) {
 		this.kMeansSparkOptions = kMeansSparkOptions;
 	}
+
 }

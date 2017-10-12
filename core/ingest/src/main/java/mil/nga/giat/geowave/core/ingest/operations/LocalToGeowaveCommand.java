@@ -24,24 +24,31 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 
-@GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
+@GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Ingest supported files in local file system directly, without using HDFS")
 public class LocalToGeowaveCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
 	@Parameter(description = "<file or directory> <storename> <comma delimited index/group list>")
+	@RestParameters(names = {
+		"path",
+		"storename",
+		"indices"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -68,7 +75,6 @@ public class LocalToGeowaveCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 
 		// Based on the selected formats, select the format plugins
 		pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -82,59 +88,7 @@ public class LocalToGeowaveCommand extends
 	@Override
 	public void execute(
 			OperationParams params ) {
-
-		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
-			throw new ParameterException(
-					"Requires arguments: <file or directory> <storename> <comma delimited index/group list>");
-		}
-
-		String inputPath = parameters.get(0);
-		String inputStoreName = parameters.get(1);
-		String indexList = parameters.get(2);
-
-		// Config file
-		File configFile = getGeoWaveConfigFile(params);
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		}
-
-		// Load the Indexes
-		if (inputIndexOptions == null) {
-			IndexLoader indexLoader = new IndexLoader(
-					indexList);
-			if (!indexLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find index(s) by name: " + indexList);
-			}
-			inputIndexOptions = indexLoader.getLoadedIndexes();
-		}
-
-		// Ingest Plugins
-		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
-
-		// Driver
-		LocalFileIngestDriver driver = new LocalFileIngestDriver(
-				inputStoreOptions,
-				inputIndexOptions,
-				ingestPlugins,
-				ingestOptions,
-				localInputOptions,
-				threads);
-
-		// Execute
-		if (!driver.runOperation(inputPath)) {
-			throw new RuntimeException(
-					"Ingest failed to execute");
-		}
+		computeResults(params);
 	}
 
 	public List<String> getParameters() {
@@ -203,5 +157,65 @@ public class LocalToGeowaveCommand extends
 	public void setInputIndexOptions(
 			List<IndexPluginOptions> inputIndexOptions ) {
 		this.inputIndexOptions = inputIndexOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params ) {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 3) {
+			throw new ParameterException(
+					"Requires arguments: <file or directory> <storename> <comma delimited index/group list>");
+		}
+
+		String inputPath = parameters.get(0);
+		String inputStoreName = parameters.get(1);
+		String indexList = parameters.get(2);
+
+		// Config file
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		// Attempt to load input store.
+		if (inputStoreOptions == null) {
+			StoreLoader inputStoreLoader = new StoreLoader(
+					inputStoreName);
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
+			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		}
+
+		// Load the Indexes
+		if (inputIndexOptions == null) {
+			IndexLoader indexLoader = new IndexLoader(
+					indexList);
+			if (!indexLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find index(s) by name: " + indexList);
+			}
+			inputIndexOptions = indexLoader.getLoadedIndexes();
+		}
+
+		// Ingest Plugins
+		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
+
+		// Driver
+		LocalFileIngestDriver driver = new LocalFileIngestDriver(
+				inputStoreOptions,
+				inputIndexOptions,
+				ingestPlugins,
+				ingestOptions,
+				localInputOptions,
+				threads);
+
+		// Execute
+		if (!driver.runOperation(inputPath)) {
+			throw new RuntimeException(
+					"Ingest failed to execute");
+		}
+		return null;
+
 	}
 }

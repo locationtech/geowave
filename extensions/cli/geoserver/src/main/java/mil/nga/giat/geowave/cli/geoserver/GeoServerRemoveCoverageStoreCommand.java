@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +21,17 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "rmcs", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "rmcs", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Remove GeoServer Coverage Store")
 public class GeoServerRemoveCoverageStoreCommand extends
-		DefaultOperation implements
+		DefaultOperation<String> implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -46,12 +49,17 @@ public class GeoServerRemoveCoverageStoreCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -67,6 +75,14 @@ public class GeoServerRemoveCoverageStoreCommand extends
 					"Requires argument: <coverage store name>");
 		}
 
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			OperationParams params )
+			throws Exception {
 		if (workspace == null || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}
@@ -78,12 +94,9 @@ public class GeoServerRemoveCoverageStoreCommand extends
 				cvgstoreName);
 
 		if (deleteCvgStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("Delete store '" + cvgstoreName + "' from workspace '" + workspace
-					+ "' on GeoServer: OK");
+			return "Delete store '" + cvgstoreName + "' from workspace '" + workspace + "' on GeoServer: OK";
 		}
-		else {
-			System.err.println("Error deleting store '" + cvgstoreName + "' from workspace '" + workspace
-					+ "' on GeoServer; code = " + deleteCvgStoreResponse.getStatus());
-		}
+		return "Error deleting store '" + cvgstoreName + "' from workspace '" + workspace + "' on GeoServer; code = "
+				+ deleteCvgStoreResponse.getStatus();
 	}
 }

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
 
+import static mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation.RestEnabledType.POST;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -20,6 +23,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.annotations.RestParameters;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -27,14 +31,18 @@ import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class, restEnabled = POST)
 @Parameters(commandDescription = "Copy and modify existing store configuration")
 public class CopyStoreCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
 	@Parameter(description = "<name> <new name>")
+	@RestParameters(names = {
+		"name",
+		"newname"
+	})
 	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = {
@@ -44,14 +52,20 @@ public class CopyStoreCommand extends
 	private Boolean makeDefault;
 
 	@ParametersDelegate
-	private DataStorePluginOptions newPluginOptions = new DataStorePluginOptions();
+	private final DataStorePluginOptions newPluginOptions = new DataStorePluginOptions();
+
+	private File configFile;
+	private Properties existingProps;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
+			final OperationParams params ) {
 
-		Properties existingProps = getGeoWaveConfigProperties(params);
+		configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		existingProps = ConfigOptions.loadProperties(
+				configFile,
+				null);
 
 		// Load the old store, so that we can override the values
 		String oldStore = null;
@@ -71,9 +85,13 @@ public class CopyStoreCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params ) {
+		computeResults(params);
+	}
 
-		Properties existingProps = getGeoWaveConfigProperties(params);
+	@Override
+	public Void computeResults(
+			final OperationParams params ) {
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -81,11 +99,11 @@ public class CopyStoreCommand extends
 		}
 
 		// This is the new store name.
-		String newStore = parameters.get(1);
-		String newStoreNamespace = DataStorePluginOptions.getStoreNamespace(newStore);
+		final String newStore = parameters.get(1);
+		final String newStoreNamespace = DataStorePluginOptions.getStoreNamespace(newStore);
 
 		// Make sure we're not already in the index.
-		DataStorePluginOptions existPlugin = new DataStorePluginOptions();
+		final DataStorePluginOptions existPlugin = new DataStorePluginOptions();
 		if (existPlugin.load(
 				existingProps,
 				newStoreNamespace)) {
@@ -107,8 +125,10 @@ public class CopyStoreCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(params),
+				configFile,
 				existingProps);
+
+		return null;
 
 	}
 
@@ -117,10 +137,10 @@ public class CopyStoreCommand extends
 	}
 
 	public void setParameters(
-			String existingStore,
-			String newStore ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(existingStore);
-		this.parameters.add(newStore);
+			final String existingStore,
+			final String newStore ) {
+		parameters = new ArrayList<String>();
+		parameters.add(existingStore);
+		parameters.add(newStore);
 	}
 }

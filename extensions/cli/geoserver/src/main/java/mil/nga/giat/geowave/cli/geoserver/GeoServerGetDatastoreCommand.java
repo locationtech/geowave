@@ -24,14 +24,15 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONObject;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "getds", parentOperation = GeoServerSection.class)
+@GeowaveOperation(name = "getds", parentOperation = GeoServerSection.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Get GeoServer DataStore info")
 public class GeoServerGetDatastoreCommand extends
-		DefaultOperation implements
+		DefaultOperation<String> implements
 		Command
 {
 	private GeoServerRestClient geoserverClient = null;
@@ -49,12 +50,17 @@ public class GeoServerGetDatastoreCommand extends
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
-		super.prepare(params);
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -63,6 +69,14 @@ public class GeoServerGetDatastoreCommand extends
 
 	@Override
 	public void execute(
+			OperationParams params )
+			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
 			OperationParams params )
 			throws Exception {
 		if (parameters.size() != 1) {
@@ -81,15 +95,10 @@ public class GeoServerGetDatastoreCommand extends
 				datastore);
 
 		if (getStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer store info for '" + datastore + "':");
-
 			JSONObject jsonResponse = JSONObject.fromObject(getStoreResponse.getEntity());
 			JSONObject datastore = jsonResponse.getJSONObject("dataStore");
-			System.out.println(datastore.toString(2));
+			return "\nGeoServer store info for '" + datastore + "': " + datastore.toString(2);
 		}
-		else {
-			System.err.println("Error getting GeoServer store info for '" + datastore + "'; code = "
-					+ getStoreResponse.getStatus());
-		}
+		return "Error getting GeoServer store info for '" + datastore + "'; code = " + getStoreResponse.getStatus();
 	}
 }

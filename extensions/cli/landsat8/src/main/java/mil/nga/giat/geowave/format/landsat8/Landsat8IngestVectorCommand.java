@@ -22,10 +22,10 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 
-@GeowaveOperation(name = "ingestvector", parentOperation = Landsat8Section.class)
+@GeowaveOperation(name = "ingestvector", parentOperation = Landsat8Section.class, restEnabled = GeowaveOperation.RestEnabledType.POST)
 @Parameters(commandDescription = "Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store.")
 public class Landsat8IngestVectorCommand extends
-		DefaultOperation implements
+		DefaultOperation<Void> implements
 		Command
 {
 
@@ -41,10 +41,18 @@ public class Landsat8IngestVectorCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
+		computeResults(params);
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		final VectorIngestRunner runner = new VectorIngestRunner(
 				analyzeOptions,
 				parameters);
 		runner.runInternal(params);
+		return null;
 	}
 
 }
