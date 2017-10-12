@@ -214,7 +214,7 @@ public abstract class DefaultOperation implements
 			String filter ) {
 		return ConfigOptions.loadProperties(
 				getGeoWaveConfigFile(params),
-				null);
+				filter);
 	}
 
 	public Properties getGeoWaveConfigProperties(

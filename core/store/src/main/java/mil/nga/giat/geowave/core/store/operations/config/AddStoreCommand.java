@@ -57,7 +57,7 @@ public class AddStoreCommand extends
 	@Parameter(names = {
 		"-t",
 		"--type"
-	}, required = true, description = "The type of store, such as accumulo, memory, etc")
+	}, required = true, description = "The type of store, such as accumulo, hbase, etc")
 	private String storeType;
 
 	@ParametersDelegate
