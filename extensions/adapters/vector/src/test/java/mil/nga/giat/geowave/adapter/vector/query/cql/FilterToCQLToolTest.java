@@ -22,6 +22,7 @@ import org.geotools.filter.FilterFactoryImpl;
 import org.geotools.filter.identity.FeatureIdImpl;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
 import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
@@ -59,7 +60,7 @@ public class FilterToCQLToolTest
 		final FilterFactoryImpl factory = new FilterFactoryImpl();
 		final Id f = factory.id(new FeatureIdImpl(
 				"123-abc"));
-		final String ss = FilterToCQLTool.toCQL(f);
+		final String ss = ECQL.toCQL(f);
 		System.out.println(ss);
 		assertTrue(ss.contains("'123-abc'"));
 
@@ -74,7 +75,7 @@ public class FilterToCQLToolTest
 				exp1,
 				exp2,
 				false);
-		final String ss = FilterToCQLTool.toCQL(f);
+		final String ss = ECQL.toCQL(f);
 		assertTrue(ss.contains("'a89dhd-123-abc'"));
 	}
 
@@ -82,9 +83,9 @@ public class FilterToCQLToolTest
 	public void testDWithinFromCQLFilter()
 			throws CQLException {
 		final Filter filter = CQL.toFilter("DWITHIN(geom, POINT(-122.7668 0.4979), 233.7, meters)");
-		final String gtFilterStr = FilterToCQLTool.toCQL(filter);
-		assertTrue(gtFilterStr.contains("INTERSECTS(geom, POLYGON (("));
+		final String gtFilterStr = ECQL.toCQL(FilterToCQLTool.fixDWithin(filter));
 		System.out.println(gtFilterStr);
+		assertTrue(gtFilterStr.contains("INTERSECTS(geom, POLYGON (("));
 
 		testFilter(FilterToCQLTool.toFilter(gtFilterStr));
 	}
