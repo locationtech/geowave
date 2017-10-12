@@ -21,10 +21,10 @@ public class TwitterPersistableRegistry implements
 	public PersistableIdAndConstructor[] getSupportedPersistables() {
 		return new PersistableIdAndConstructor[] {
 			new PersistableIdAndConstructor(
-					(short) 600,
+					(short) 1400,
 					TwitterIngestPlugin::new),
 			new PersistableIdAndConstructor(
-					(short) 601,
+					(short) 1401,
 					IngestTwitterFromHdfs::new),
 		};
 	}
