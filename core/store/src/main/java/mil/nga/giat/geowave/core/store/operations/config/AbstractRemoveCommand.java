@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -44,21 +44,22 @@ public abstract class AbstractRemoveCommand extends
 	}
 
 	public void execute(
-			OperationParams params,
-			String pattern ) {
-
-		Properties existingProps = getGeoWaveConfigProperties(params);
+			final OperationParams params,
+			final String patternPrefix ) {
+		// this ensures we are only exact-matching rather than using the prefix
+		final String pattern = patternPrefix + ".";
+		final Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Find properties to remove
-		Set<String> keysToRemove = new HashSet<String>();
-		for (String key : existingProps.stringPropertyNames()) {
+		final Set<String> keysToRemove = new HashSet<String>();
+		for (final String key : existingProps.stringPropertyNames()) {
 			if (key.startsWith(pattern)) {
 				keysToRemove.add(key);
 			}
 		}
 
 		// Remove each property.
-		for (String key : keysToRemove) {
+		for (final String key : keysToRemove) {
 			existingProps.remove(key);
 		}
 
@@ -69,8 +70,8 @@ public abstract class AbstractRemoveCommand extends
 	}
 
 	public void setEntryName(
-			String entryName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(entryName);
+			final String entryName ) {
+		parameters = new ArrayList<String>();
+		parameters.add(entryName);
 	}
 }
