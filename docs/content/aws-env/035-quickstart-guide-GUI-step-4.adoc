@@ -25,8 +25,7 @@ Security Options
 
 Click the “Create Cluster” button to create and provision your cluster.
 
-Please view the <<running-the-steps,Running The Steps>> section of this document for a walkthrough of downloading, ingesting, 
-analyzing and visualizing data with GeoWave.  
+Please view the <<steps-overview,Connecting to the Cluster>> section of this document for description of how to connect to your provisioned cluster.  
 
 [NOTE]
 ====

@@ -3,7 +3,7 @@
 
 _v${project.version}_
 
-= GeoWave EMR Quickstart Guide image:geowave-icon-logo-cropped.png[width="28%"]
+= GeoWave Quickstart Guide AWS EMR Environment Setup image:geowave-icon-logo-cropped.png[width="28%"]
 
 == What you will need
 - <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>

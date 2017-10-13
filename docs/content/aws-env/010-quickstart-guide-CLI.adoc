@@ -67,8 +67,7 @@ cluster. There are many things that could still go wrong and cause the cluster t
 follow the progress of your cluster’s creation.
 ====
 
-Please view the <<running-the-steps,Running The Steps>> section of this document for a walkthrough of downloading, ingesting, 
-analyzing and visualizing data with GeoWave.  
+Please view the <<steps-overview,Connecting to the Cluster>> section of this document for description of how to connect to your provisioned cluster.  
 
 [NOTE]
 ====

@@ -1,0 +1,10 @@
+[[quickstart-launch-page]]
+<<<
+
+_v${project.version}_
+
+:linkattrs:
+
+= GeoWave Quickstart Guide: Jupyter Notebook image:geowave-icon-logo-cropped.png[width="28%"]
+
+== Jupyter notebook stuff here

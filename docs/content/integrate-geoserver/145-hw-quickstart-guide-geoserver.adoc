@@ -2,7 +2,7 @@
 
 :linkattrs:
 
-== Integrate with GeoServer
+= GeoWave Quickstart Guide Integrate with GeoServer image:geowave-icon-logo-cropped.png[width="28%"]
 
 In order to view the images generated from the vector and raster demos, use the GeoServer web interface. The following command configures and restarts GeoServer.
 
@@ -69,9 +69,9 @@ geowave gs addlayer landsatvector --add ALL
 
 === Cluster Interaction
 
-- link:http://locationtech.github.io/geowave/interact-cluster.html#[Interacting with the cluster, window="_blank"]
+- link:http://locationtech.github.io/geowave/interact-cluster.html#[Interacting with the cluster]
 
 === Back to the Demos
 
-- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo, window="_blank"]
-- link:http://locationtech.github.io/geowave/walkthrough-raster.html#[Raster Demo, window="_blank"]
+- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo]
+- link:http://locationtech.github.io/geowave/walkthrough-raster.html#[Raster Demo]

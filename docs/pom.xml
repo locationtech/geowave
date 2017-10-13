@@ -265,6 +265,24 @@
 						</goals>
 					</execution>
 					<execution>
+						<id>generate-integrate-geoserver</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-jupyter" dir="${project.basedir}/content/jupyter" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-jupyter">
+									<map from="${project.basedir}/content/jupyter/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/jupyter/jupyter.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>generate-commands</id>
 						<phase>generate-sources</phase>
 						<configuration>
@@ -469,6 +487,23 @@
 								</configuration>
 							</execution>
 							<execution>
+								<id>generate-pdf-jupyter</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/jupyter</sourceDirectory>
+									<sourceDocumentName>jupyter.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
 								<id>generate-pdf-commands</id>
 								<phase>generate-resources</phase>
 								<goals>
@@ -618,6 +653,19 @@
 								<configuration>
 									<sourceDirectory>${project.build.directory}/content/generate-epub-integrate-geoserver</sourceDirectory>
 									<sourceDocumentName>integrate-geoserver.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-jupyter</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/generate-epub-jupyter</sourceDirectory>
+									<sourceDocumentName>integrate-jupyter.adoc</sourceDocumentName>
 									<backend>epub3</backend>
 									<sourceHighlighter>coderay</sourceHighlighter>
 								</configuration>
@@ -825,6 +873,30 @@
 								<configuration>
 									<sourceDirectory>${project.build.directory}/content/integrate-geoserver</sourceDirectory>
 									<sourceDocumentName>integrate-geoserver.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-jupyter</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/jupyter</sourceDirectory>
+									<sourceDocumentName>jupyter.adoc</sourceDocumentName>
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>

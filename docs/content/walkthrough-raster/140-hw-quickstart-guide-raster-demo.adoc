@@ -2,7 +2,7 @@
 
 :linkattrs:
 
-== Raster Demo
+GeoWave Quickstart Guide Raster Demo image:geowave-icon-logo-cropped.png[width="28%"]
 
 In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command 
 downloads those images and combines them to create a mosaic.  
@@ -119,11 +119,11 @@ geowave landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql
 
 === Vector Demo
 
-- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo, window="_blank"]
+- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo]
 
 === GeoServer Integration
 
-- link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration, window="_blank"]
+- link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration]
 
 === Interacting with the cluster
-- link:http://locationtech.github.io/geowave/interact-cluster.html#[Interacting with the cluster, window="_blank"]
+- link:http://locationtech.github.io/geowave/interact-cluster.html#[Interacting with the cluster]

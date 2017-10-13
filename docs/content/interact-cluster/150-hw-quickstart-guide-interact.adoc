@@ -2,9 +2,9 @@
 
 :linkattrs:
 
-== Interacting with the Cluster
+= GeoWave Quickstart Guide Integrate with the Cluster image:geowave-icon-logo-cropped.png[width="28%"]
 
-If you have not successfully completed the link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration, window="_blank"] section, please do so before continuing.
+If you have not successfully completed the link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration] section, please do so before continuing.
 
 === Enable Web Connections (EMR Only)
 
@@ -50,7 +50,13 @@ This page is only available if you are using the Accumulo set-up
 
 === GeoServer
 
-The GeoServer web interface can be accessed in your browser at http://localhost:8993/geoserver/web (${Master_public_DNS}:8000/geoserver/web for EMR). Login to see the layers.
+The GeoServer web interface can be accessed in your browser:
+
+- http://localhost:8993/geoserver/web (Sandbox)
+
+- ${Master_public_DNS}:8000/geoserver/web (EMR) 
+
+Login to see the layers.
 
 - **Username:** admin
 
@@ -83,7 +89,7 @@ image::sandbox/scene-view.png[scaledwidth="100%",alt="select emr"]
 
 === Back to the Demos
 
-- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo, window="_blank"]
-- link:http://locationtech.github.io/geowave/walkthrough-raster.html#[Raster Demo, window="_blank"]
-- link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration, window="_blank"]
+- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo]
+- link:http://locationtech.github.io/geowave/walkthrough-raster.html#[Raster Demo]
+- link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration]
 
