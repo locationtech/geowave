@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -39,14 +39,14 @@ public class DefaultOperation implements
 	private File geowaveConfigFile = null;
 	private File securityTokenFile = null;
 
+	@Override
 	public boolean prepare(
-			OperationParams params )
+			final OperationParams params )
 			throws ParameterException {
 		try {
 			checkForGeoWaveDirectory(params);
-			checkForToken();
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			throw new ParameterException(
 					"Error occurred during preparing phase: " + e.getLocalizedMessage(),
 					e);
@@ -55,15 +55,13 @@ public class DefaultOperation implements
 	}
 
 	/**
-	 * Check if encryption token exists. If not, create one initially
+	 * Check if encryption token exists. If not, create one initially This
+	 * method must assume the config file is set and just names the token file
+	 * ${configfile}.key
 	 */
-	protected void checkForToken() {
-
-		File parentDir = (getGeoWaveDirectory() != null) ? getGeoWaveDirectory() : new File(
-				mil.nga.giat.geowave.core.cli.utils.FileUtils.formatFilePath("~" + File.separator
-						+ ConfigOptions.GEOWAVE_CACHE_PATH));
-		File tokenFile = SecurityUtils.getFormattedTokenKeyFileForParentDir(parentDir);
-		if (tokenFile == null || !tokenFile.exists()) {
+	private void checkForToken() {
+		final File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(geowaveConfigFile);
+		if ((tokenFile == null) || !tokenFile.exists()) {
 			generateNewEncryptionToken(tokenFile);
 		}
 		setSecurityTokenFile(tokenFile);
@@ -76,12 +74,12 @@ public class DefaultOperation implements
 	 * will try to create it. It will then set the contextual variables
 	 * 'properties' and 'properties-file', which can be used by commands to
 	 * overwrite/update the properties.
-	 * 
+	 *
 	 * @param params
 	 * @throws Exception
 	 */
 	private void checkForGeoWaveDirectory(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 
 		setGeoWaveConfigFile((File) params.getContext().get(
@@ -97,12 +95,12 @@ public class DefaultOperation implements
 				params).getParentFile());
 		if (!getGeoWaveDirectory().exists()) {
 			try {
-				boolean created = getGeoWaveDirectory().mkdir();
+				final boolean created = getGeoWaveDirectory().mkdir();
 				if (!created) {
 					sLog.error("An error occurred creating a user '.geowave' in home directory");
 				}
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				sLog.error(
 						"An error occurred creating a user '.geowave' in home directory: " + e.getLocalizedMessage(),
 						e);
@@ -121,7 +119,7 @@ public class DefaultOperation implements
 							"Could not create property cache file: " + getGeoWaveConfigFile(params));
 				}
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				sLog.error(
 						"Could not create property cache file: " + getGeoWaveConfigFile(params),
 						e);
@@ -130,20 +128,22 @@ public class DefaultOperation implements
 			}
 			setDefaultConfigProperties(params);
 		}
+
+		checkForToken();
 	}
 
 	/**
 	 * Generate a new token value in a specified file
-	 * 
+	 *
 	 * @param tokenFile
 	 * @return
 	 */
 	protected boolean generateNewEncryptionToken(
-			File tokenFile ) {
+			final File tokenFile ) {
 		try {
 			return BaseEncryption.generateNewEncryptionToken(tokenFile);
 		}
-		catch (Exception ex) {
+		catch (final Exception ex) {
 			sLog.error(
 					"An error occurred writing new encryption token to file: " + ex.getLocalizedMessage(),
 					ex);
@@ -163,7 +163,7 @@ public class DefaultOperation implements
 	 *            the securityTokenFile to set
 	 */
 	public void setSecurityTokenFile(
-			File securityTokenFile ) {
+			final File securityTokenFile ) {
 		this.securityTokenFile = securityTokenFile;
 	}
 
@@ -179,7 +179,7 @@ public class DefaultOperation implements
 	 *            the geowaveDirectory to set
 	 */
 	private void setGeowaveDirectory(
-			File geowaveDirectory ) {
+			final File geowaveDirectory ) {
 		this.geowaveDirectory = geowaveDirectory;
 	}
 
@@ -187,7 +187,7 @@ public class DefaultOperation implements
 	 * @return the geowaveConfigFile
 	 */
 	public File getGeoWaveConfigFile(
-			OperationParams params ) {
+			final OperationParams params ) {
 		if (getGeoWaveConfigFile() == null) {
 			setGeoWaveConfigFile((File) params.getContext().get(
 					ConfigOptions.PROPERTIES_FILE_CONTEXT));
@@ -205,20 +205,20 @@ public class DefaultOperation implements
 	 *            the geowaveConfigFile to set
 	 */
 	private void setGeoWaveConfigFile(
-			File geowaveConfigFile ) {
+			final File geowaveConfigFile ) {
 		this.geowaveConfigFile = geowaveConfigFile;
 	}
 
 	public Properties getGeoWaveConfigProperties(
-			OperationParams params,
-			String filter ) {
+			final OperationParams params,
+			final String filter ) {
 		return ConfigOptions.loadProperties(
 				getGeoWaveConfigFile(params),
 				filter);
 	}
 
 	public Properties getGeoWaveConfigProperties(
-			OperationParams params ) {
+			final OperationParams params ) {
 		return getGeoWaveConfigProperties(
 				params,
 				null);
@@ -235,8 +235,8 @@ public class DefaultOperation implements
 	 * config-properties file
 	 */
 	private void setDefaultConfigProperties(
-			OperationParams params ) {
-		Properties defaultProperties = new Properties();
+			final OperationParams params ) {
+		final Properties defaultProperties = new Properties();
 		final Iterator<DefaultConfigProviderSpi> defaultPropertiesProviders = ServiceLoader.load(
 				DefaultConfigProviderSpi.class).iterator();
 		while (defaultPropertiesProviders.hasNext()) {
