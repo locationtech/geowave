@@ -21,6 +21,8 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
@@ -30,7 +32,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 @GeowaveOperation(name = "cpindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Copy and modify existing index configuration")
 public class CopyIndexCommand extends
-		ServiceEnabledCommand<Void>
+		DefaultOperation implements
+		Command
 {
 	@Parameter(description = "<name> <new name>")
 	private List<String> parameters = new ArrayList<String>();
@@ -80,7 +83,6 @@ public class CopyIndexCommand extends
 
 	}
 
-	@Override
 	public Void computeResults(
 			final OperationParams params ) {
 

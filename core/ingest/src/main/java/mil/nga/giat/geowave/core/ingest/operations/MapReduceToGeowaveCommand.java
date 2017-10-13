@@ -178,11 +178,6 @@ public class MapReduceToGeowaveCommand extends
 		final String inputStoreName = parameters.get(2);
 		final String indexList = parameters.get(3);
 
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
-
 		// Config file
 		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);

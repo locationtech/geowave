@@ -58,11 +58,6 @@ public class StageOSMToHDFSCommand extends
 		String hdfsHostPort = parameters.get(1);
 		final String basePath = parameters.get(2);
 
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
-
 		if (!basePath.startsWith("/")) {
 			throw new ParameterException(
 					"HDFS Base path must start with forward slash /");

@@ -35,7 +35,8 @@ public class RestFieldFactory
 	private interface MainParamInitializer<T extends RestField<?>>
 	{
 		public T apply(
-				BasicRestField<String> subfield,
+				String name,
+				boolean isList,
 				Field mainParamField,
 				int subfieldOrdinal,
 				int totalSize,
@@ -57,11 +58,12 @@ public class RestFieldFactory
 								field,
 								parameter),
 				(
-						final BasicRestField<String> subfield,
+						String name,
+						boolean isList,
 						final Field mainParamField,
 						final int subfieldOrdinal,
 						final int totalSize,
-						final Object instance ) -> subfield);
+						final Object instance ) -> new BasicRestField(name, isList ? List.class : String.class, "main parameter", true) );
 	}
 
 	public static List<RestFieldValue<?>> createRestFieldValues(
@@ -77,16 +79,22 @@ public class RestFieldFactory
 								parameter,
 								i),
 				(
-						final BasicRestField<String> subfield,
+						String name,
+						boolean isList,
 						final Field mainParamField,
 						final int subfieldOrdinal,
 						final int totalSize,
-						final Object i ) -> new MainParamRestFieldValue(
+						final Object i ) -> isList? new ListMainParam(
 								subfieldOrdinal,
 								totalSize,
 								mainParamField,
-								subfield,
-								instance));
+								new BasicRestField<List>(name, List.class, "main parameter", true),
+								instance) : new StringMainParam(
+										subfieldOrdinal,
+										totalSize,
+										mainParamField,
+										new BasicRestField<>(name, String.class, "main parameter", true),
+										instance));
 	}
 
 	private static <T extends RestField<?>> List<T> internalCreateRestFields(
@@ -115,7 +123,12 @@ public class RestFieldFactory
 				// here just assume if instance was null we don't need to waste
 				// time on reflection to make delegate instance
 				final Object delegateInstance = instance == null ? null : delegateInstanceType.newInstance();
-
+				if (instance != null) {
+					field.setAccessible(true);
+					field.set(
+							instance,
+							delegateInstance);
+				}
 				retVal.addAll(internalCreateRestFields(
 						delegateInstance,
 						delegateInstanceType,
@@ -194,11 +207,8 @@ public class RestFieldFactory
 						public T apply(
 								final Pair<String, Boolean> input ) {
 							return (T) mainParamInitializer.apply(
-									new BasicRestField(
-											input.getLeft(),
-											input.getRight() ? List.class : String.class,
-											"main parameter",
-											true),
+									input.getLeft(),
+									input.getRight(),
 									field,
 									i++,
 									totalSize,

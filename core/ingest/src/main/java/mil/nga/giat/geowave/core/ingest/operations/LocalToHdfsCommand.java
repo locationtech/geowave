@@ -113,10 +113,6 @@ public class LocalToHdfsCommand extends
 		String hdfsHostPort = parameters.get(1);
 		final String basePath = parameters.get(2);
 
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
 
 		// Ingest Plugins
 		final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();

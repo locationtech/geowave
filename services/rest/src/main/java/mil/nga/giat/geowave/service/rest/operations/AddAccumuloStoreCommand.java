@@ -25,6 +25,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -77,6 +78,11 @@ public class AddAccumuloStoreCommand extends
 	public Void computeResults(
 			final OperationParams params ) {
 
+		// Converts the PW manually for rest calls
+		if (requiredOptions.getPassword() != null) {
+			requiredOptions.setPassword(new PasswordConverter(
+					"password").convert(requiredOptions.getPassword()));
+		}
 		final File propFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 		final Properties existingProps = ConfigOptions.loadProperties(
@@ -141,7 +147,7 @@ public class AddAccumuloStoreCommand extends
 
 	@Override
 	public String getPath() {
-		return "config/addstore/accumulo";
+		return "v0/config/addstore/accumulo";
 	}
 
 	public void setParameters(

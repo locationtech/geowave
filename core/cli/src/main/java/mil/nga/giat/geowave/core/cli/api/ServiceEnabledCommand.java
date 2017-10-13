@@ -34,7 +34,7 @@ public abstract class ServiceEnabledCommand<T> extends
 		if (path == null) {
 			path = defaultGetPath();
 		}
-		return path;
+		return path.replace("geowave", "v0");
 	}
 
 	public String getId() {

@@ -82,7 +82,7 @@ public class AddSpatialIndexCommand extends
 
 	@Override
 	public String getPath() {
-		return "config/addindex/spatial";
+		return "v0/config/addindex/spatial";
 	}
 
 	public IndexPluginOptions getPluginOptions() {

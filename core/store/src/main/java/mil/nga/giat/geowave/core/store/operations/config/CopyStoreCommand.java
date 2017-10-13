@@ -21,6 +21,8 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.Command;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
@@ -30,7 +32,8 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 @GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Copy and modify existing store configuration")
 public class CopyStoreCommand extends
-		ServiceEnabledCommand<Void>
+		DefaultOperation implements
+		Command
 {
 
 	@Parameter(description = "<name> <new name>")
@@ -80,7 +83,6 @@ public class CopyStoreCommand extends
 		computeResults(params);
 	}
 
-	@Override
 	public Void computeResults(
 			final OperationParams params ) {
 

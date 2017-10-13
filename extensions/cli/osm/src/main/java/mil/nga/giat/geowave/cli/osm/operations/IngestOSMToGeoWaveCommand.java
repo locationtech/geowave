@@ -151,10 +151,6 @@ public class IngestOSMToGeoWaveCommand extends
 		final String basePath = parameters.get(1);
 		final String inputStoreName = parameters.get(2);
 
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
 
 		if (!basePath.startsWith("/")) {
 			throw new ParameterException(

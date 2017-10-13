@@ -15,6 +15,13 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
+
+import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
+import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.FilterParameter;
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
@@ -135,6 +142,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		for (final RestFieldValue f : fields) {
 
 			Object objValue = null;
+
 			if (List.class.isAssignableFrom(f.getType())) {
 				final String[] parameters = getFieldValues(
 						form,
@@ -142,39 +150,55 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 				objValue = Arrays.asList(parameters);
 			}
+			else if (f.getType().isArray()) {
+				final String[] parameters = getFieldValues(
+						form,
+						f.getName());
+
+				objValue = parameters;
+			}
 			else {
 
 				final String strValue = getFieldValue(
 						form,
 						f.getName());
-				if (Long.class.isAssignableFrom(f.getType())) {
-					objValue = Long.valueOf(strValue);
-				}
-				else if (Integer.class.isAssignableFrom(f.getType())) {
-					objValue = Integer.valueOf(strValue);
-				}
-				else if (Short.class.isAssignableFrom(f.getType())) {
-					objValue = Short.valueOf(strValue);
-				}
-				else if (Byte.class.isAssignableFrom(f.getType())) {
-					objValue = Byte.valueOf(strValue);
-				}
-				else if (Double.class.isAssignableFrom(f.getType())) {
-					objValue = Double.valueOf(strValue);
-				}
-				else if (Float.class.isAssignableFrom(f.getType())) {
-					objValue = Float.valueOf(strValue);
-				}
-				else if (Boolean.class.isAssignableFrom(f.getType())) {
-					objValue = Boolean.valueOf(strValue);
-				}
-				else if (String.class.isAssignableFrom(f.getType())) {
-					objValue = strValue;
-				}
-
-				else {
-					throw new RuntimeException(
-							"Unsupported format on field " + f);
+				if (strValue != null) {
+					if (Long.class.isAssignableFrom(f.getType())) {
+						objValue = Long.valueOf(strValue);
+					}
+					else if (Integer.class.isAssignableFrom(f.getType()) || int.class.isAssignableFrom(f.getType())) {
+						objValue = Integer.valueOf(strValue);
+					}
+					else if (Short.class.isAssignableFrom(f.getType()) || short.class.isAssignableFrom(f.getType())) {
+						objValue = Short.valueOf(strValue);
+					}
+					else if (Byte.class.isAssignableFrom(f.getType()) || byte.class.isAssignableFrom(f.getType())) {
+						objValue = Byte.valueOf(strValue);
+					}
+					else if (Double.class.isAssignableFrom(f.getType()) || double.class.isAssignableFrom(f.getType())) {
+						objValue = Double.valueOf(strValue);
+					}
+					else if (Float.class.isAssignableFrom(f.getType()) || float.class.isAssignableFrom(f.getType())) {
+						objValue = Float.valueOf(strValue);
+					}
+					else if (Boolean.class.isAssignableFrom(f.getType()) || boolean.class.isAssignableFrom(f.getType())) {
+						objValue = Boolean.valueOf(strValue);
+					}
+					else if (String.class.isAssignableFrom(f.getType())) {
+						objValue = strValue;
+					}
+					else if (Enum.class.isAssignableFrom(f.getType())) {
+						objValue = Enum.valueOf(
+								(Class<Enum>) f.getType(),
+								strValue);
+					}
+					else if (FilterParameter.class.isAssignableFrom(f.getType())) {
+						objValue = new ConvertCQLStrToFilterConverter().convert(strValue);
+					}
+					else {
+						throw new RuntimeException(
+								"Unsupported format on field " + f.getType());
+					}
 				}
 			}
 			if (objValue != null) {
@@ -198,7 +222,16 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			val = getQuery().getValuesArray(
 					name);
 		}
-		return val;
+		String str = getFieldValue(
+				form,
+				name);
+		if (str == null) {
+			return val;
+		}
+		else {
+
+			return str.split(",");
+		}
 	}
 
 	private String getFieldValue(

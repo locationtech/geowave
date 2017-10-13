@@ -126,7 +126,7 @@ public class AddHBaseStoreCommand extends
 
 	@Override
 	public String getPath() {
-		return "config/addstore/hbase";
+		return "v0/config/addstore/hbase";
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

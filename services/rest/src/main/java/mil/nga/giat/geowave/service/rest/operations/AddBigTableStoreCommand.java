@@ -125,7 +125,7 @@ public class AddBigTableStoreCommand extends
 
 	@Override
 	public String getPath() {
-		return "config/addstore/bigtable";
+		return "v0/config/addstore/bigtable";
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

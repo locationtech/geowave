@@ -83,7 +83,7 @@ public class AddSpatialTemporalIndexCommand extends
 
 	@Override
 	public String getPath() {
-		return "config/addindex/spatial_temporal";
+		return "v0/config/addindex/spatial_temporal";
 	}
 
 	public IndexPluginOptions getPluginOptions() {

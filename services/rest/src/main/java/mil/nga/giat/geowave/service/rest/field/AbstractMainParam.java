@@ -4,20 +4,20 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainParamRestFieldValue implements
-		RestFieldValue<String>
+abstract public class AbstractMainParam<T> implements
+		RestFieldValue<T>
 {
-	private final int ordinal;
-	private final int totalMainParams;
-	private final Field listMainParamField;
-	private final Object instance;
-	private final RestField<String> delegateField;
+	protected final int ordinal;
+	protected final int totalMainParams;
+	protected final Field listMainParamField;
+	protected final Object instance;
+	protected final RestField<T> delegateField;
 
-	public MainParamRestFieldValue(
+	public AbstractMainParam(
 			final int ordinal,
 			final int totalMainParams,
 			final Field listMainParamField,
-			final RestField<String> delegateField,
+			final RestField<T> delegateField,
 			final Object instance ) {
 		this.ordinal = ordinal;
 		this.totalMainParams = totalMainParams;
@@ -32,7 +32,7 @@ public class MainParamRestFieldValue implements
 	}
 
 	@Override
-	public Class<String> getType() {
+	public Class<T> getType() {
 		return delegateField.getType();
 	}
 
@@ -48,12 +48,12 @@ public class MainParamRestFieldValue implements
 
 	@Override
 	public void setValue(
-			final String value )
+			final T value )
 			throws IllegalArgumentException,
 			IllegalAccessException {
 		listMainParamField.setAccessible(true);
 		List<String> currentValue = (List<String>) listMainParamField.get(instance);
-		if (currentValue == null) {
+		if (currentValue == null || currentValue.size() == 0) {
 			currentValue = new ArrayList<>(
 					totalMainParams);
 			for (int i = 0; i < totalMainParams; i++) {
@@ -66,7 +66,10 @@ public class MainParamRestFieldValue implements
 
 		currentValue.set(
 				ordinal,
-				value);
+				valueToString(value));
 	}
+
+	abstract protected String valueToString(
+			T value );
 
 }

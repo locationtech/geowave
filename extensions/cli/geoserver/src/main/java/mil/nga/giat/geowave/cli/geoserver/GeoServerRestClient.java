@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -129,7 +132,15 @@ public class GeoServerRestClient
 					client.register(HttpAuthenticationFeature.basic(
 							getConfig().getUser(),
 							getConfig().getPass()));
-					webTarget = client.target(url);
+					try {
+						webTarget = client.target(new URI(
+								url));
+					}
+					catch (URISyntaxException e) {
+						LOGGER.error(
+								"Unable to parse geoserver URL: " + url,
+								e);
+					}
 				}
 			}
 		}
