@@ -135,23 +135,6 @@ public class SecurityUtils
 	}
 
 	/**
-	 * Utility method to format the file path for the token key file associated
-	 * with a specific parent directory
-	 * 
-	 * @param parentDir
-	 *            Parent directory where token file is (or will be) stored
-	 * @return Token key file associated with parent directory
-	 */
-	public static File getFormattedTokenKeyFileForParentDir(
-			File parentDir ) {
-		return new File(
-				// get the resource location
-				parentDir,
-				// get the formatted token file name with version
-				BaseEncryption.getFormattedTokenFileName());
-	}
-
-	/**
 	 * Utilty method to format the file path for the token key file associated
 	 * with a config file
 	 * 
@@ -161,7 +144,10 @@ public class SecurityUtils
 	 */
 	public static File getFormattedTokenKeyFileForConfig(
 			File configFile ) {
-		// get the parent directory for the config properties file
-		return getFormattedTokenKeyFileForParentDir(configFile.getParentFile());
+		return new File(
+				// get the resource location
+				configFile.getParentFile(),
+				// get the formatted token file name with version
+				BaseEncryption.getFormattedTokenFileName(configFile.getName()));
 	}
 }
