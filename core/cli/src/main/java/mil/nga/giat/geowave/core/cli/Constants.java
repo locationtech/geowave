@@ -33,5 +33,5 @@ public interface Constants
 	 * Default setting for encryption turned on. Currently defaults to disabled.
 	 * Must be a boolean string.
 	 */
-	public static final String ENCRYPTION_ENABLED_DEFAULT = Boolean.FALSE.toString();
+	public static final String ENCRYPTION_ENABLED_DEFAULT = Boolean.TRUE.toString();
 }
