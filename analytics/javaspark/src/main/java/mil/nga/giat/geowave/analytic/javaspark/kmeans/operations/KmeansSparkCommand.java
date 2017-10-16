@@ -121,6 +121,7 @@ public class KmeansSparkCommand extends
 		runner.setGenerateHulls(kMeansSparkOptions.isGenerateHulls());
 		runner.setComputeHullData(kMeansSparkOptions.isComputeHullData());
 		runner.setHullTypeName(kMeansSparkOptions.getHullTypeName());
+		runner.setCentroidTypeName(kMeansSparkOptions.getCentroidTypeName());
 		runner.setOutputDataStore(outputDataStore);
 		try {
 			runner.run();

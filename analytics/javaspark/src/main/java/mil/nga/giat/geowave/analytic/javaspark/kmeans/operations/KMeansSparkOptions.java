@@ -59,7 +59,7 @@ public class KMeansSparkOptions
 	private Boolean computeHullData = false;
 
 	@Parameter(names = "--cqlFilter", description = "An optional CQL filter applied to the input data")
-	private String cqlFilter;
+	private String cqlFilter = null;
 
 	@Parameter(names = {
 		"-f",
