@@ -265,7 +265,7 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>generate-integrate-geoserver</id>
+						<id>generate-jupyter</id>
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
