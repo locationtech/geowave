@@ -145,6 +145,9 @@ public class WRS2GeometryStore
 								new File(
 										wsDir,
 										entry.getName()));
+						// HP Fortify "Path Traversal" false positive
+						// What Fortify considers "user input" comes only
+						// from users with OS-level access anyway
 					}
 				}
 			}

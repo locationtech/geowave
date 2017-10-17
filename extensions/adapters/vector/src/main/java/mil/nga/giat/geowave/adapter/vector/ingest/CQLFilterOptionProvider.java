@@ -125,6 +125,9 @@ public class CQLFilterOptionProvider implements
 				try {
 					convertedFilter = asFilter(value);
 				}
+				// HP Fortify "Log Forging" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				catch (final CQLException e) {
 					LOGGER.error(
 							"Cannot parse CQL expression '" + value + "'",

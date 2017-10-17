@@ -92,7 +92,13 @@ abstract public class StoreFactoryOptions
 				if (annotation.annotationType() == Parameter.class) {
 					Parameter parameter = (Parameter) annotation;
 					if (JCommanderParameterUtils.isRequired(parameter)) {
-						field.setAccessible(true);
+						field.setAccessible(true); // HPFortify
+													// "Access Specifier Manipulation"
+													// False Positive: These
+													// fields are being modified
+													// by trusted code,
+													// in a way that is not
+													// influenced by user input
 						Object value = null;
 						try {
 							value = field.get(this);
@@ -108,6 +114,8 @@ abstract public class StoreFactoryOptions
 										echoEnabled);
 								String strPassword = new String(
 										password);
+								password = null;
+
 								if (!"".equals(strPassword.trim())) {
 									value = (strPassword != null && !"".equals(strPassword.trim())) ? strPassword
 											.trim() : null;

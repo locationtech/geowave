@@ -171,6 +171,8 @@ public class PropertiesUtils implements
 			if (val != null && val instanceof String && ((String) val).isEmpty()) {
 				val = null;
 			}
+			// HP Fortify "Privacy Violation" false positive
+			// The information in the Properties file is not private or sensitive
 			if (val == null && req) {
 				throw new IllegalArgumentException(
 						"Missing required property: " + name);

@@ -135,6 +135,9 @@ public class InfoServiceImpl implements
 					indicesObj.toString(defaultIndentation)).build();
 		}
 		catch (final IOException e) {
+			// HP Fortify "Log Forging" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 			LOGGER.error(
 					"Unable to read from index store for store '" + storeName + "'",
 					e);
@@ -187,6 +190,9 @@ public class InfoServiceImpl implements
 					dataAdaptersObj.toString(defaultIndentation)).build();
 		}
 		catch (final IOException e) {
+			// HP Fortify "Log Forging" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 			LOGGER.error(
 					"Unable to read from adapter store for store '" + storeName + "'",
 					e);

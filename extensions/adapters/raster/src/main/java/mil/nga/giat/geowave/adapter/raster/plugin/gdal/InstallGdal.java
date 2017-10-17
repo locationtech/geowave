@@ -16,8 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.Locale;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
@@ -47,6 +47,9 @@ public class InstallGdal
 		if ((args != null) && (args.length > 0) && (args[0] != null) && !args[0].trim().isEmpty()) {
 			gdalDir = new File(
 					args[0]);
+			// HP Fortify "Path Traversal" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 		}
 		else {
 			gdalDir = new File(
@@ -164,9 +167,11 @@ public class InstallGdal
 	}
 
 	private static boolean isWindows() {
-		final String name = System.getProperty(
-				"os.name").toLowerCase();
-		return name.startsWith("windows");
+		String OS = System.getProperty(
+				"os.name",
+				"generic").toLowerCase(
+				Locale.ENGLISH);
+		return (OS.indexOf("win") > -1);
 	}
 
 }
