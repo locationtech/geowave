@@ -74,6 +74,7 @@ public class DownloadRunner extends
 				in = new URL(
 						downloadUrl).openStream();
 				success = true;
+
 				final FileOutputStream outStream = new FileOutputStream(
 						localPath);
 				IOUtils.copyLarge(
