@@ -44,6 +44,8 @@ public class PropertiesUtils implements
 		if (propsFile != null && propsFile.exists()) {
 			properties = new Properties();
 			try {
+				// HP Fortify "Improper Resource Shutdown or Release" false positive
+				// FileInputStream is closed automatically below as a result of isr.close();
 				InputStreamReader isr = new InputStreamReader(
 						new FileInputStream(
 								propsFile),

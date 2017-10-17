@@ -238,6 +238,8 @@ public class KMeansUtils
 					}
 
 					try {
+						// HP Fortify "NULL Pointer Dereference" false positive
+						// Exception handling will catch if polyCalc is null
 						area = polyCalc.getAreaDensify(geom);
 
 						density = (double) count / area;

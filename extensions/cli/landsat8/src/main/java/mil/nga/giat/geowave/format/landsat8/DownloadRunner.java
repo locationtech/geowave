@@ -74,12 +74,12 @@ public class DownloadRunner extends
 				in = new URL(
 						downloadUrl).openStream();
 				success = true;
+				
 				final FileOutputStream outStream = new FileOutputStream(
 						localPath);
 				IOUtils.copyLarge(
 						in,
 						outStream);
-				outStream.close();
 			}
 			catch (final IOException | InterruptedException e) {
 				LOGGER.error(
@@ -87,6 +87,10 @@ public class DownloadRunner extends
 						e);
 			}
 			finally {
+				if(outStream != null) {
+					outStream.close();
+				}
+				
 				if (in != null) {
 					IOUtils.closeQuietly(in);
 				}
