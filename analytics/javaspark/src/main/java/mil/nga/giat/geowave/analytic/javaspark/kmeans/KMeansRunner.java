@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.analytic.javaspark.kmeans;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +64,20 @@ public class KMeansRunner
 	public KMeansRunner() {}
 
 	private void initContext() {
-		SparkConf sparkConf = new SparkConf();
+		final SparkConf sparkConf = new SparkConf();
 
 		sparkConf.setAppName(appName);
 		sparkConf.setMaster(master);
-
+		try {
+			sparkConf.setJars(new String[] {
+				KMeansRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()
+			});
+		}
+		catch (final URISyntaxException e) {
+			LOGGER.error(
+					"Unable to set jar location in spark configuration",
+					e);
+		}
 		jsc = new JavaSparkContext(
 				sparkConf);
 	}
@@ -103,11 +113,11 @@ public class KMeansRunner
 			featureAdapterIds = FeatureDataUtils.getFeatureAdapterIds(inputDataStore);
 		}
 
-		QueryOptions queryOptions = new QueryOptions();
+		final QueryOptions queryOptions = new QueryOptions();
 		queryOptions.setAdapter(featureAdapterIds);
 
 		// This is required due to some funkiness in GeoWaveInputFormat
-		AdapterStore adapterStore = inputDataStore.createAdapterStore();
+		final AdapterStore adapterStore = inputDataStore.createAdapterStore();
 		queryOptions.getAdaptersArray(adapterStore);
 
 		// Add a spatial filter if requested
@@ -124,7 +134,7 @@ public class KMeansRunner
 							adapterId);
 				}
 
-				DataAdapter adapter = adapterStore.getAdapter(cqlAdapterId);
+				final DataAdapter adapter = adapterStore.getAdapter(cqlAdapterId);
 
 				if (adapter instanceof FeatureDataAdapter) {
 					final String geometryAttribute = ((FeatureDataAdapter) adapter)
@@ -149,12 +159,12 @@ public class KMeansRunner
 				}
 			}
 		}
-		catch (CQLException e) {
+		catch (final CQLException e) {
 			LOGGER.error("Unable to parse CQL: " + cqlFilter);
 		}
 
 		// Load RDD from datastore
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> featureRdd = GeoWaveRDD.rddForSimpleFeatures(
+		final JavaPairRDD<GeoWaveInputKey, SimpleFeature> featureRdd = GeoWaveRDD.rddForSimpleFeatures(
 				jsc.sc(),
 				inputDataStore,
 				query,
@@ -170,7 +180,7 @@ public class KMeansRunner
 		centroidVectors.cache();
 
 		// Init the algorithm
-		KMeans kmeans = new KMeans();
+		final KMeans kmeans = new KMeans();
 		kmeans.setInitializationMode("kmeans||");
 		kmeans.setK(numClusters);
 		kmeans.setMaxIterations(numIterations);
@@ -192,22 +202,22 @@ public class KMeansRunner
 	}
 
 	public void setInputDataStore(
-			DataStorePluginOptions inputDataStore ) {
+			final DataStorePluginOptions inputDataStore ) {
 		this.inputDataStore = inputDataStore;
 	}
 
 	public void setNumClusters(
-			int numClusters ) {
+			final int numClusters ) {
 		this.numClusters = numClusters;
 	}
 
 	public void setNumIterations(
-			int numIterations ) {
+			final int numIterations ) {
 		this.numIterations = numIterations;
 	}
 
 	public void setEpsilon(
-			Double epsilon ) {
+			final Double epsilon ) {
 		this.epsilon = epsilon;
 	}
 
@@ -216,41 +226,41 @@ public class KMeansRunner
 	}
 
 	public void setAppName(
-			String appName ) {
+			final String appName ) {
 		this.appName = appName;
 	}
 
 	public void setMaster(
-			String master ) {
+			final String master ) {
 		this.master = master;
 	}
 
 	public void setHost(
-			String host ) {
+			final String host ) {
 		this.host = host;
 	}
 
 	public void setCqlFilter(
-			String cqlFilter ) {
+			final String cqlFilter ) {
 		this.cqlFilter = cqlFilter;
 	}
 
 	public void setAdapterId(
-			String adapterId ) {
+			final String adapterId ) {
 		this.adapterId = adapterId;
 	}
 
 	public void setTimeParams(
-			String timeField,
-			ScaledTemporalRange timeRange ) {
+			final String timeField,
+			final ScaledTemporalRange timeRange ) {
 		this.timeField = timeField;
-		this.scaledTimeRange = timeRange;
+		scaledTimeRange = timeRange;
 	}
 
 	public void setSplits(
-			int min,
-			int max ) {
-		this.minSplits = min;
-		this.maxSplits = max;
+			final int min,
+			final int max ) {
+		minSplits = min;
+		maxSplits = max;
 	}
 }
