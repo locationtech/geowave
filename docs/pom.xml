@@ -157,6 +157,132 @@
 						</goals>
 					</execution>
 					<execution>
+						<id>generate-aws-env</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-aws-env" dir="${project.basedir}/content/aws-env" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-aws-env">
+									<map from="${project.basedir}/content/aws-env/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/aws-env/aws-env.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-sandbox-env</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-sandbox-env" dir="${project.basedir}/content/sandbox-env" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-sandbox-env">
+									<map from="${project.basedir}/content/sandbox-env/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/sandbox-env/sandbox-env.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-walkthrough-vector</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-walkthrough-vector" dir="${project.basedir}/content/walkthrough-vector" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-walkthrough-vector">
+									<map from="${project.basedir}/content/walkthrough-vector/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/walkthrough-vector/walkthrough-vector.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-walkthrough-raster</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-walkthrough-raster" dir="${project.basedir}/content/walkthrough-raster" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-walkthrough-raster">
+									<map from="${project.basedir}/content/walkthrough-raster/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/walkthrough-raster/walkthrough-raster.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-interact-cluster</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-interact-cluster" dir="${project.basedir}/content/interact-cluster" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-interact-cluster">
+									<map from="${project.basedir}/content/interact-cluster/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/interact-cluster/interact-cluster.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-integrate-geoserver</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-integrate-geoserver" dir="${project.basedir}/content/integrate-geoserver" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-integrate-geoserver">
+									<map from="${project.basedir}/content/integrate-geoserver/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/integrate-geoserver/integrate-geoserver.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-jupyter</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-jupyter" dir="${project.basedir}/content/jupyter" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-jupyter">
+									<map from="${project.basedir}/content/jupyter/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/jupyter/jupyter.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>generate-commands</id>
 						<phase>generate-sources</phase>
 						<configuration>
@@ -259,6 +385,125 @@
 								</configuration>
 							</execution>
 							<execution>
+								<id>generate-pdf-aws-env</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/aws-env</sourceDirectory>
+									<sourceDocumentName>aws-env.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-sandbox-env</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/sandbox-env</sourceDirectory>
+									<sourceDocumentName>sandbox-env.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-walkthrough-vector</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/walkthrough-vector</sourceDirectory>
+									<sourceDocumentName>walkthrough-vector.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-walkthrough-raster</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/walkthrough-raster</sourceDirectory>
+									<sourceDocumentName>walkthrough-raster.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-interact-cluster</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/interact-cluster</sourceDirectory>
+									<sourceDocumentName>interact-cluster.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-integrate-geoserver</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/integrate-geoserver</sourceDirectory>
+									<sourceDocumentName>integrate-geoserver.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-jupyter</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/jupyter</sourceDirectory>
+									<sourceDocumentName>jupyter.adoc</sourceDocumentName>
+									<requires>
+										<require>asciidoctor-pdf</require>
+									</requires>
+									<backend>pdf</backend>
+									<compact>true</compact>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
 								<id>generate-pdf-commands</id>
 								<phase>generate-resources</phase>
 								<goals>
@@ -330,6 +575,97 @@
 								<configuration>
 									<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory>
 									<sourceDocumentName>quickstart.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-aws-env</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/aws-env</sourceDirectory>
+									<sourceDocumentName>aws-env.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-sandbox-env</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/sandbox-env</sourceDirectory>
+									<sourceDocumentName>sandbox-env.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-walkthrough-vector</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/walkthrough-vector</sourceDirectory>
+									<sourceDocumentName>walkthrough-vector.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-walkthrough-raster</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/walkthrough-raster</sourceDirectory>
+									<sourceDocumentName>walkthrough-raster.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-interact-cluster</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/generate-epub-interact-cluster</sourceDirectory>
+									<sourceDocumentName>interact-cluster.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-integrate-geoserver</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/generate-epub-integrate-geoserver</sourceDirectory>
+									<sourceDocumentName>integrate-geoserver.adoc</sourceDocumentName>
+									<backend>epub3</backend>
+									<sourceHighlighter>coderay</sourceHighlighter>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-epub-jupyter</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/generate-epub-jupyter</sourceDirectory>
+									<sourceDocumentName>integrate-jupyter.adoc</sourceDocumentName>
 									<backend>epub3</backend>
 									<sourceHighlighter>coderay</sourceHighlighter>
 								</configuration>
@@ -417,6 +753,174 @@
 								<configuration>
 									<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory>
 									<sourceDocumentName>quickstart.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-aws-env</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/aws-env</sourceDirectory>
+									<sourceDocumentName>aws-env.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-walkthrough-vector</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/walkthrough-vector</sourceDirectory>
+									<sourceDocumentName>walkthrough-vector.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-walkthrough-raster</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/walkthrough-raster</sourceDirectory>
+									<sourceDocumentName>walkthrough-raster.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-interact-cluster</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/interact-cluster</sourceDirectory>
+									<sourceDocumentName>interact-cluster.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-integrate-geoserver</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/integrate-geoserver</sourceDirectory>
+									<sourceDocumentName>integrate-geoserver.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-jupyter</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/jupyter</sourceDirectory>
+									<sourceDocumentName>jupyter.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<toc>right</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-sandbox-env</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/sandbox-env</sourceDirectory>
+									<sourceDocumentName>sandbox-env.adoc</sourceDocumentName>
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
