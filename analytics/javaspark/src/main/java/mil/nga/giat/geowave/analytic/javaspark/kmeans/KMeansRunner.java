@@ -18,6 +18,7 @@ import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
@@ -47,6 +48,11 @@ public class KMeansRunner
 
 	private JavaSparkContext jsc = null;
 	private DataStorePluginOptions inputDataStore = null;
+
+	private DataStorePluginOptions outputDataStore = null;
+	private String centroidTypeName = "kmeans_centroids";
+	private String hullTypeName = "kmeans_hulls";
+
 	private JavaRDD<Vector> centroidVectors;
 	private KMeansModel outputModel;
 
@@ -57,19 +63,29 @@ public class KMeansRunner
 	private String adapterId = null;
 	private String timeField = null;
 	private ScaledTemporalRange scaledTimeRange = null;
+	private ScaledTemporalRange scaledRange = null;
 	private int minSplits = -1;
 	private int maxSplits = -1;
+	private Boolean useTime = false;
+	private Boolean generateHulls = false;
+	private Boolean computeHullData = false;
 
 	public KMeansRunner() {}
 
 	private void initContext() {
-		SparkConf sparkConf = new SparkConf();
+		if (jsc == null) {
+			// TODO: Possibly use SparkSession.builder for Spark 2.0+ ?
+			// TODO: Will need to modify to properly support yarn as well
+			SparkConf sparkConf = new SparkConf();
+			sparkConf.setAppName(appName);
+			sparkConf.setMaster(master);
+			sparkConf.set(
+					"spark.driver.host",
+					host);
 
-		sparkConf.setAppName(appName);
-		sparkConf.setMaster(master);
-
-		jsc = new JavaSparkContext(
-				sparkConf);
+			jsc = new JavaSparkContext(
+					sparkConf);
+		}
 	}
 
 	public void closeContext() {
@@ -88,6 +104,25 @@ public class KMeansRunner
 			LOGGER.error("You must supply an input datastore!");
 			throw new IOException(
 					"You must supply an input datastore!");
+		}
+
+		if (isUseTime()) {
+			ByteArrayId adapterByte = null;
+			if (adapterId != null) {
+				adapterByte = new ByteArrayId(
+						adapterId);
+			}
+
+			scaledRange = KMeansUtils.setRunnerTimeParams(
+					this,
+					inputDataStore,
+					adapterByte);
+
+			if (scaledRange == null) {
+				LOGGER.error("Failed to set time params for kmeans. Please specify a valid feature type.");
+				throw new ParameterException(
+						"--useTime option: Failed to set time params");
+			}
 		}
 
 		// Retrieve the feature adapters
@@ -181,6 +216,73 @@ public class KMeansRunner
 
 		// Run KMeans
 		outputModel = kmeans.run(centroidVectors.rdd());
+
+		writeToOutputStore();
+	}
+
+	public void writeToOutputStore() {
+		if (outputDataStore != null) {
+			// output cluster centroids (and hulls) to output datastore
+			KMeansUtils.writeClusterCentroids(
+					outputModel,
+					outputDataStore,
+					centroidTypeName,
+					scaledRange);
+
+			if (isGenerateHulls()) {
+				KMeansUtils.writeClusterHulls(
+						centroidVectors,
+						outputModel,
+						outputDataStore,
+						hullTypeName,
+						isComputeHullData());
+			}
+		}
+	}
+
+	public Boolean isUseTime() {
+		return useTime;
+	}
+
+	public void setUseTime(
+			Boolean useTime ) {
+		this.useTime = useTime;
+	}
+
+	public String getCentroidTypeName() {
+		return centroidTypeName;
+	}
+
+	public void setCentroidTypeName(
+			String centroidTypeName ) {
+		this.centroidTypeName = centroidTypeName;
+	}
+
+	public String getHullTypeName() {
+		return hullTypeName;
+	}
+
+	public void setHullTypeName(
+			String hullTypeName ) {
+		this.hullTypeName = hullTypeName;
+	}
+
+	public Boolean isGenerateHulls() {
+		return generateHulls;
+	}
+
+	public void setGenerateHulls(
+			Boolean generateHulls ) {
+		this.generateHulls = generateHulls;
+	}
+
+	public Boolean isComputeHullData() {
+		return computeHullData;
+	}
+
+	public void setComputeHullData(
+			Boolean computeHullData ) {
+		this.computeHullData = computeHullData;
 	}
 
 	public JavaRDD<Vector> getInputCentroids() {
@@ -194,6 +296,20 @@ public class KMeansRunner
 	public void setInputDataStore(
 			DataStorePluginOptions inputDataStore ) {
 		this.inputDataStore = inputDataStore;
+	}
+
+	public DataStorePluginOptions getOutputDataStore() {
+		return outputDataStore;
+	}
+
+	public void setOutputDataStore(
+			DataStorePluginOptions outputDataStore ) {
+		this.outputDataStore = outputDataStore;
+	}
+
+	public void setJavaSparkContext(
+			JavaSparkContext jsc ) {
+		this.jsc = jsc;
 	}
 
 	public void setNumClusters(

@@ -11,6 +11,12 @@ public class KMeansSparkOptions
 	private String appName = "KMeans Spark";
 
 	@Parameter(names = {
+		"-ho",
+		"--host"
+	}, description = "The spark driver host")
+	private String host = "localhost";
+
+	@Parameter(names = {
 		"-m",
 		"--master"
 	}, description = "The spark master designation")
@@ -53,7 +59,7 @@ public class KMeansSparkOptions
 	private Boolean computeHullData = false;
 
 	@Parameter(names = "--cqlFilter", description = "An optional CQL filter applied to the input data")
-	private String cqlFilter;
+	private String cqlFilter = null;
 
 	@Parameter(names = {
 		"-f",
@@ -71,13 +77,13 @@ public class KMeansSparkOptions
 		"-ct",
 		"--centroidType"
 	}, description = "Feature type name (adapter ID) for centroid output")
-	private String centroidTypeName = "kmeans-centroids";
+	private String centroidTypeName = "kmeans_centroids";
 
 	@Parameter(names = {
 		"-ht",
 		"--hullType"
 	}, description = "Feature type name (adapter ID) for hull output")
-	private String hullTypeName = "kmeans-hulls";
+	private String hullTypeName = "kmeans_hulls";
 
 	public KMeansSparkOptions() {}
 
@@ -88,6 +94,15 @@ public class KMeansSparkOptions
 	public void setAppName(
 			String appName ) {
 		this.appName = appName;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(
+			String host ) {
+		this.host = host;
 	}
 
 	public String getMaster() {
