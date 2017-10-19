@@ -48,6 +48,8 @@ mkdir -p $TARGET_ROOT/quickstart
 cp $TEMPLATE_ROOT/bootstrap-geowave.sh.template $TEMPLATE_ROOT/bootstrap-geowave.sh
 cp $TEMPLATE_ROOT/geowave-install-lib.sh.template $TEMPLATE_ROOT/geowave-install-lib.sh
 cp $TEMPLATE_ROOT/quickstart/geowave-env.sh.template $TARGET_ROOT/quickstart/geowave-env.sh
+cp $TEMPLATE_ROOT/bootstrap-jupyter.sh.template $TEMPLATE_ROOT/bootstrap-jupyter.sh
+cp $TEMPLATE_ROOT/create-configure-kernel.sh.template $TEMPLATE_ROOT/create-configure-kernel.sh
 
 # copy permanent resources that don't need a template
 cp $TEMPLATE_ROOT/quickstart/setup-geoserver-geowave-workspace.sh $TARGET_ROOT/quickstart/setup-geoserver-geowave-workspace.sh
@@ -62,6 +64,11 @@ sed -i -e s~'$GEOWAVE_REPO_BASE_URL_TOKEN'~${GEOWAVE_REPO_BASE_URL_TOKEN}~g $TEM
 sed -i -e s/'$GEOWAVE_REPO_NAME_TOKEN'/${GEOWAVE_REPO_NAME_TOKEN}/g $TEMPLATE_ROOT/geowave-install-lib.sh
 
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TARGET_ROOT/quickstart/geowave-env.sh
+
+# replacing tokens for jupyter bootstrap scripts
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
+sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/create-configure-kernel.sh
 
 for datastore in "${DATASTORES[@]}"
 do
@@ -89,3 +96,6 @@ done
 # clean up temporary templates
 rm $TEMPLATE_ROOT/bootstrap-geowave.sh
 rm $TEMPLATE_ROOT/geowave-install-lib.sh
+rm $TEMPLATE_ROOT/bootstrap-jupyter.sh
+rm $TEMPLATE_ROOT/create-configure-kernel.sh
+
