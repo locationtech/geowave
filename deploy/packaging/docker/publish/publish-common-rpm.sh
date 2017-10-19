@@ -71,7 +71,7 @@ if command -v aws >/dev/null 2>&1 ; then
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/sandbox/
 		
 		# Adding copy for example jupyter notebooks to s3 bucket. TODO: Will only use GDELT for now (gpx notebook not ready) should be entire notebook directory copy
-		aws s3 cp --acl public-read ${WORKSPACE}/examples/data/notebooks/jupyter/geowave-gdelt.ipynb s3://geowave/${GEOWAVE_VERSION_URL}/notebooks/geowave-gdelt.ipynb
+		aws s3 cp --acl public-read ${WORKSPACE}/examples/data/notebooks/jupyter/geowave-gdelt.ipynb s3://geowave-notebooks/${GEOWAVE_VERSION_URL}/notebooks/geowave-gdelt.ipynb
 	else
 		echo '###### Skipping publish to S3: GEOWAVE_VERSION_URL not defined'
 	fi
