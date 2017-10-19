@@ -99,7 +99,7 @@ public class KMeansRunner
 		}
 	}
 
-	public void closeContext() {
+	public void close() {
 		if (jsc != null) {
 			jsc.close();
 			jsc = null;
