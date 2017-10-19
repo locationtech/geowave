@@ -33,65 +33,28 @@ Below are the recommended hardware settings to change for the cluster:
 
 == Install Python and Jupyter
 
-To properly run and visualize the results from the Jupyter demo we need to first install python and a few additional packages. We've created a script to do that for you that can be found here:
+To properly run and visualize the results from the Jupyter notebook demo we need to first install python and a few additional packages. We've created a bootstrap script to do that for you that can be found here:
 
-- Jupyter Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh
+- Jupyter Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/bootstrap-jupyter.sh
 
-This script will install python and all necessary packages needed for this demo, and it can be run a couple of ways.
-
-. As an additional bootstrap action
-** For more information on setting up bootstrap actions: http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
+This bootstrap script will install python, all necessary packages needed for this demo, and create the jupyter kernel to run the notebooks. This script needs to be run as a bootstrap action when creating the EMR cluster.
 
 [NOTE]
 ====
 It is recommended to use the Accumulo bootstrap script as the first bootstrap script to setup your cluster. Doing so will let you use both HBase and Accumulo as long as you select HBase as a default application to add to your cluster from AWS. 
 
 - Accumulo Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh
+
+For more information on setting up bootstrap actions visit this link: http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
 ====
-. Manually after connecting to the cluster
-** Once connected to the cluster simply run the commands below to download and run the script.
-+
-[source, bash]
-----
-aws s3 cp s3://geowave-jupyter/install-jupyter-bootstrap.sh ./
-chmod +x ./install-jupyter-bootstrap.sh
-./install-jupyter-bootstrap.sh
-----
 
-== Create and configure the Kernel
+== Run the Jupyter notebook
 
-In addition to the bootstrap steps that install python and jupyter, you'll need to create the Kernel to run and visualize results from the notebook. The script to create the Kernel can be found at the following link, and it can be run after the cluster has been created and connected to:
-
-- Create Kernel: http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/create-configure-kernel.sh
-
-This script depends on spark being installed when it is run, so unfortunately it cannot be run at the same bootstrap step like the script to install python and jupyter. 
-
-. Connect to the EMR Cluster and run the following commands to create the Kernel.
-+
-[source, bash]
-----
-aws s3 cp s3://geowave-jupyter/create-configure-kernel.sh ./
-chmod +x ./create-configure-kernel.sh
-./create-configure-kernel.sh
-----
-
+After your cluster has been created with the script above, you are ready to connect to the cluster and run the demo. Once you are connected to the cluster run the commands below to launch the notebook server.
 [NOTE]
 ====
 For more information on connecting to the EMR cluster follow the instructions here: http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
 ====
-
-The script creates the python kernel with environment settings applied so that when the notebook is run pyspark will run spark-submit to set up a yarn application when the kernel is initialized.
-
-== Run the Jupyter notebook
-
-Once the scripts to install python and create the jupyter kernel have been run. You are ready to download the example notebook and run through the KMeans demo.
-
-. Download the example notebook.
-+
-[source, bash]
-----
-aws s3 cp s3://geowave-jupyter/notebooks/geowave-gdelt.ipynb ./notebooks/
-----
 
 . Launch the jupyter notebook server
 +
@@ -107,7 +70,7 @@ jupyter notebook ./notebooks --ip=0.0.0.0 --no-browser
 http://0.0.0.0:8888/?token=87a7c6eb2d2723b9f2999b7c0d57d66c9a82dd9eae94af8f
 ----
 
-. Copy and paste that url into your browser, and replace the "0.0.0.0" with the Master Public DNS of your EMR cluster.
+. Copy and paste the output url into your browser, and replace the "0.0.0.0" with the Master Public DNS of your EMR cluster.
 +
 image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
 
