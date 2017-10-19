@@ -4,7 +4,7 @@ GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
 
 # I've externalized commands into library functions for clarity, download and source
 if [ ! -f /tmp/create-configure-kernel.sh ]; then
-	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/create-configure-kernel.sh /tmp/create-configure-kernel.sh
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
 fi
 source /tmp/create-configure-kernel.sh
 

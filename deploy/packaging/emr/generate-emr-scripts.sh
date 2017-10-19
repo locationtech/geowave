@@ -93,6 +93,12 @@ do
 	sed -e '/$DATASTORE_PARAMS_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_PARAMS_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/quickstart/$datastore/ingest-and-kde-gdelt.sh
 done
 
+# Copy jupyter additions to separate generated folder
+# This will put scripts into separate jupyter folder on s3 when published.
+mkdir -p $TARGET_ROOT/jupyter
+cp $TEMPLATE_ROOT/bootstrap-jupyter.sh $TARGET_ROOT/jupyter/bootstrap-jupyter.sh
+cp $TEMPLATE_ROOT/create-configure-kernel.sh $TARGET_ROOT/jupyter/create-configure-kernel.sh
+
 # clean up temporary templates
 rm $TEMPLATE_ROOT/bootstrap-geowave.sh
 rm $TEMPLATE_ROOT/geowave-install-lib.sh

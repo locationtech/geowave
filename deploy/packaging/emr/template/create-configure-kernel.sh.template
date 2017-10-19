@@ -62,47 +62,47 @@ wait_until_spark_is_available() {
 }
 
 install_kernel() {
-	wait_until_spark_is_available
-	
-	# Create the jupyter kernel
-	jupyter pixiedust install <<END
-	y
-	n
-	/usr/lib/spark
-	y
-	y
-	y
-	END
-	
-	#Use jq to remove unnecessary keys
-	GEOWAVE_INSTALL=/usr/local/geowave/tools/geowave-tools-${GEOWAVE_VER}-apache.jar
-	KERNEL_JSON=$HOME/.local/share/jupyter/kernels/pythonwithpixiedustspark22/kernel.json
-	jq 'del(.env["SPARK_LOCAL_IP"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
-	jq 'del(.env["SPARK_DRIVER_MEMORY"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
-	
-	#Disable shell file globbing
-	set -f
-	
-	#Use jq to read submit args into array
-	submit_args=($(jq -r '.env["PYSPARK_SUBMIT_ARGS"]' $KERNEL_JSON))
-	
-	#Enable shell file globbing
-	set +f
-	
-	#Add geowave jar to submit --jars option
-	submit_args[1]=${submit_args[1]},${GEOWAVE_INSTALL}
-	
-	#Modify master to use yarn/local
-	submit_args[5]=${MASTER_ARG}
-	
-	#Pulling array out to string so it can be passed properly to jq
-	submit_string=${submit_args[@]}
-	
-	echo ${submit_string}
-	
-	#Write the new submit_args to the kernel.json
-	jq --arg submit_args "${submit_string}" '.env["PYSPARK_SUBMIT_ARGS"]= $submit_args' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
-	
-	echo "Modified Kernel to use yarn by default"
-	return 0
+wait_until_spark_is_available
+
+# Create the jupyter kernel
+jupyter pixiedust install <<END
+y
+n
+/usr/lib/spark
+y
+y
+y
+END
+
+#Use jq to remove unnecessary keys
+GEOWAVE_INSTALL=/usr/local/geowave/tools/geowave-tools-${GEOWAVE_VER}-apache.jar
+KERNEL_JSON=$HOME/.local/share/jupyter/kernels/pythonwithpixiedustspark22/kernel.json
+jq 'del(.env["SPARK_LOCAL_IP"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+jq 'del(.env["SPARK_DRIVER_MEMORY"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+
+#Disable shell file globbing
+set -f
+
+#Use jq to read submit args into array
+submit_args=($(jq -r '.env["PYSPARK_SUBMIT_ARGS"]' $KERNEL_JSON))
+
+#Enable shell file globbing
+set +f
+
+#Add geowave jar to submit --jars option
+submit_args[1]=${submit_args[1]},${GEOWAVE_INSTALL}
+
+#Modify master to use yarn/local
+submit_args[5]=${MASTER_ARG}
+
+#Pulling array out to string so it can be passed properly to jq
+submit_string=${submit_args[@]}
+
+echo ${submit_string}
+
+#Write the new submit_args to the kernel.json
+jq --arg submit_args "${submit_string}" '.env["PYSPARK_SUBMIT_ARGS"]= $submit_args' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+
+echo "Modified Kernel to use yarn by default"
+return 0
 }
