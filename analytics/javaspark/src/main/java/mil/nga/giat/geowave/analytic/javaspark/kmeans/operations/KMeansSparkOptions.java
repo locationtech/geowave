@@ -20,7 +20,7 @@ public class KMeansSparkOptions
 		"-m",
 		"--master"
 	}, description = "The spark master designation")
-	private String master = "local";
+	private String master = "yarn";
 
 	@Parameter(names = {
 		"-k",
